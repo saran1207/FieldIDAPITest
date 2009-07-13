@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fieldid-admin" default="default">
+	<import file="../fieldid/build-vars.xml" />
+	<description>FieldID Admin Project</description>
+
+	<property name="proj" value="${fieldidAdmin}" />
+	
+	<import file="../fieldid/build-common.xml" />
+	
+    <target name="build-deps">
+    	<ant dir="${fieldidEjb.home}" inheritAll="false"/>
+    </target>
+	
+	<target name="default" depends="build-deps, clean, package-war" />
+</project>

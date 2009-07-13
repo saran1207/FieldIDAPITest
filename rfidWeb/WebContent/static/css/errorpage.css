@@ -1,0 +1,60 @@
+.messageBox {
+	width: 480px;
+	border: 4px solid #555555;
+	margin: 100px auto;
+}
+
+.messageTitle {
+	text-align: center;
+	font-size: large;
+	font-weight: bold;
+	background-color:#D0DAFD;
+	border-bottom:2px solid #555555;
+	margin: 0;
+	padding: 5px 0;
+}
+
+.messageBody {
+	text-align: center;
+	font-size: large;
+	width: 100%;
+	margin: 0;
+	padding:20px 0;
+}
+
+.messageBodyText {
+	padding-top: 10px;
+}
+
+.messageBodyLinks {
+	padding-top: 25px;
+	overflow:hidden;
+}
+
+.messageBodyLinks div   {
+	background-color:#EAEAEA;
+	border:1px solid #555555;
+	float:left;
+	margin-left:25px;
+	padding:5px 15px;
+}
+
+.messageBodyLinks a:link {
+	text-decoration: none;
+	color: blue;
+}
+
+.messageBodyLinks a:visited {
+	text-decoration: none;
+	color: blue;
+}
+
+.messageBodyLinks a:active {
+	text-decoration: none;
+	color: blue;
+}
+
+.messageBodyLinks a:hover {
+	text-decoration: underline;
+	color: blue;
+}

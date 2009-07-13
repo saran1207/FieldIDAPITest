@@ -1,0 +1,482 @@
+package rfid.ejb.session;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+import rfid.ejb.entity.ProductCodeMappingBean;
+
+import com.n4systems.ejb.AutoAttributeManager;
+import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.interceptor.TimingInterceptor;
+import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.ImageAttachmentException;
+import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.InspectionType;
+import com.n4systems.model.Product;
+import com.n4systems.model.ProductType;
+import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.reporting.PathHandler;
+import com.n4systems.tools.Page;
+import com.n4systems.tools.Pager;
+import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.QueryBuilder;
+
+@Interceptors({TimingInterceptor.class})
+@Stateless 
+public class LegacyProductTypeManager implements LegacyProductType {
+	private static Logger logger = Logger.getLogger( LegacyProductTypeManager.class );
+	
+	@PersistenceContext (unitName="rfidEM")
+	protected EntityManager em;
+
+	@EJB protected PersistenceManager persistenceManager;
+	@EJB protected ProductCodeMapping productCodeMappingManager;
+	@EJB protected AutoAttributeManager autoAttributeManager;	
+	@EJB protected LegacyProductSerial productSerialManager;
+	@EJB protected InspectionScheduleManager inspectionScheduleManager;
+	
+	
+	public ProductType findProductType(Long uniqueID) {
+		return (ProductType)em.find(ProductType.class, uniqueID);
+	}
+	
+	/**
+	 * Provides a secure way to lookup a product type by unique id only for a single tenant
+	 */
+	public ProductType findProductType(Long uniqueID, Long tenantId) {
+		ProductType productTypeBean = null;
+		
+		try {
+			Query query = em.createQuery("from " + ProductType.class.getName() + " pi where pi.id = :id and pi.tenant.id = :tenantId AND state = :activeState");
+			query.setParameter("id", uniqueID);
+			query.setParameter("tenantId", tenantId);
+			query.setParameter("activeState", EntityState.ACTIVE);
+			
+			productTypeBean = (ProductType)query.getSingleResult();
+		} catch(NoResultException e) {}
+		
+		return productTypeBean;
+	}
+	
+	public ProductType findProductTypeAllFields(Long uniqueID, Long tenantId) {
+		ProductType productTypeBean = null;
+		
+		try {
+			productTypeBean = (ProductType)em.createQuery("from " + ProductType.class.getName() + " pi where pi.id = :id and " +
+					"pi.tenant.id = :tenantId and pi.state = :activeState")
+					.setParameter("id", uniqueID)
+					.setParameter("tenantId", tenantId)
+					.setParameter("activeState", EntityState.ACTIVE)
+					.getSingleResult();
+			
+		} catch(NoResultException e) {}
+		
+		return persistenceManager.postFetchFields(productTypeBean, "infoFields", "inspectionTypes", "attachments", "subTypes");
+	}
+	
+	public ProductType findProductTypeForProduct(Long productId) throws InvalidQueryException {
+		ProductType productTypeBean = null;
+		try {
+			
+			QueryBuilder<ProductType> qbuilder = new QueryBuilder<ProductType>(Product.class, "p");
+			qbuilder.setSimpleSelect("type");
+			qbuilder.addSimpleWhere("id", productId);
+			
+			productTypeBean = (ProductType)qbuilder.createQuery(em).getSingleResult();
+			
+		} catch(NoResultException e) {}
+		
+		return productTypeBean;
+	}
+	
+	public ProductType findDefaultProductType(Long tenantId) {
+		return findProductTypeForItemNum(ProductType.DEFAULT_ITEM_NUMBER, tenantId);
+	}
+	
+	public ProductType findProductTypeForItemNum(String name, Long tenantId) {
+		ProductType productTypeBean = null;
+		
+		try {
+			Query query = em.createQuery("from " + ProductType.class.getName() + " pi where upper(pi.name) = :name and " +
+					"pi.tenant.id = :tenantId AND pi.state = :activeState");
+			query.setParameter("name", name.toUpperCase())
+				.setParameter("tenantId", tenantId)
+				.setParameter("activeState", EntityState.ACTIVE);
+			productTypeBean = (ProductType)query.getSingleResult();
+			
+		} catch(NoResultException e) {}
+		
+		return productTypeBean;
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<ProductType> getProductTypesForTenant(Long tenantId) {
+		Query query = em.createQuery("from " + ProductType.class.getName() + " pi where pi.tenant.id = :tenantId AND " +
+				"pi.state = :activeState");
+		query.setParameter("tenantId", tenantId).setParameter("activeState", EntityState.ACTIVE);
+		
+
+		List<ProductType> productTypes = (List<ProductType>)query.getResultList();
+		
+		return (List<ProductType>) persistenceManager.postFetchFields(productTypes, "infoFields", "inspectionTypes", "subTypes");
+	}
+	
+	public ProductType updateProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException {
+			ProductType oldPI = null;
+			if( productTypeBean.getId() != null ) {
+				oldPI = (ProductType)em.find( ProductType.class, productTypeBean.getId() );
+			}
+			if( oldPI != null ) {
+				cleanInfoFields( productTypeBean, oldPI );
+				
+				cleanSchedules( productTypeBean, oldPI );
+			}
+			
+			productTypeBean.touch();
+			productTypeBean = em.merge( productTypeBean );
+			processUploadedFiles( productTypeBean, uploadedFiles );
+ 			processProductImage( productTypeBean, productImage );
+			return productTypeBean;
+		
+	}
+
+	private void cleanSchedules( ProductType productType, ProductType oldPI ) {
+
+		// remove any product type schedules that have inspection types no longer associated.
+		List<ProductTypeSchedule> removeSchedules = new ArrayList<ProductTypeSchedule>();
+		
+		
+		List<InspectionType> removeInspectionTypes = new ArrayList<InspectionType>();
+		List<InspectionType> types = new ArrayList<InspectionType>( productType.getInspectionTypes() );
+		
+		// find what inspection types have been removed.
+		for( InspectionType type : oldPI.getInspectionTypes() ) {
+			if( !types.contains( type ) ) {
+				removeInspectionTypes.add( type );
+			}
+		}
+		
+		// remove the schedules that don't have inspection types.
+		for ( ProductTypeSchedule schedule : productType.getSchedules() ) {
+			for( InspectionType inspectionType: removeInspectionTypes ) {
+				if( schedule.getInspectionType().equals( inspectionType ) ) {
+					removeSchedules.add(schedule);
+				}
+			}
+		}
+		productType.getSchedules().removeAll( removeSchedules );
+		
+		for (InspectionType inspectionType : removeInspectionTypes ) {
+			inspectionScheduleManager.removeAllSchedulesFor(productType, inspectionType);
+		}
+		
+				
+		List<ProductTypeSchedule> schedules = new ArrayList<ProductTypeSchedule>( productType.getSchedules() );
+		List<ProductTypeSchedule> schedulesToBeRemoved = new ArrayList<ProductTypeSchedule>();
+		
+		// find the removed inspection schedules.
+		for( ProductTypeSchedule schedule : oldPI.getSchedules() ) {
+		    if( !schedules.contains( schedule ) ) {
+		    	if( !schedulesToBeRemoved.contains( schedule ) ) {
+		    		schedulesToBeRemoved.add( schedule );
+		    	}
+		    	// mark customeroverrides.
+		    	if( schedule.isCustomerOverride() ) {
+		    		for( ProductTypeSchedule schedule2 : oldPI.getSchedules() ) {
+		    			if( schedule2.getInspectionType().equals( schedule.getInspectionType() ) ) {
+			    			if( !schedulesToBeRemoved.contains( schedule2 ) ) {
+					    		schedulesToBeRemoved.add( schedule2 );
+					    	}
+		    			}
+		    		}
+		    	}
+		    }
+		}
+		productType.getSchedules().removeAll( schedulesToBeRemoved );
+		
+		for( ProductTypeSchedule schedule : schedulesToBeRemoved ) {
+			em.remove( schedule );
+		}
+	}
+
+	
+	private void cleanInfoFields( ProductType productTypeBean, ProductType oldPI ) {
+		productCodeMappingManager.clearRetiredInfoFields( productTypeBean );
+		autoAttributeManager.clearRetiredInfoFields( productTypeBean );
+		
+		// the removal of old infofields needs to be done after the clearing of retired fields otherwise
+		// they will get a persit with deleted entity exception.
+		for( InfoFieldBean field : oldPI.getInfoFields() ) {
+		    if (!productTypeBean.getInfoFields().contains( field )) {
+		    	for (InfoOptionBean infoOpiton : field.getUnfilteredInfoOptions() ) {
+		    		em.remove(infoOpiton);
+				}
+		        em.remove(field);
+		    }
+		}
+	}
+	
+	
+	private void processProductImage( ProductType productType, File productImage ) throws ImageAttachmentException{
+		File imageDirectory = PathHandler.getProductTypeImageFile( productType );
+		// clear the old file if we have a new one uploaded or the image has been removed.
+		if( productType.getImageName() == null || productImage != null ) {
+			if( imageDirectory.exists() && imageDirectory.isDirectory() ) {
+				try {
+					FileUtils.cleanDirectory( imageDirectory );
+				} catch (Exception e) {
+					throw new ImageAttachmentException( e );
+				}
+			}
+		}
+		
+		if( productImage != null ) {
+			try {
+				File imageFile = new File( imageDirectory, productType.getImageName() );
+				FileUtils.copyFile( productImage, imageFile );
+				productImage.delete();
+			} catch (Exception e) {
+				throw new ImageAttachmentException( e );
+			}
+		}
+	}
+	
+	
+	public Long persistProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException {
+		em.persist(productTypeBean);
+		processUploadedFiles( productTypeBean, uploadedFiles );
+		processProductImage( productTypeBean, productImage );
+		return productTypeBean.getId();
+	}
+
+		
+	@SuppressWarnings("unchecked")
+	public List<ListingPair> getProductTypeListForTenant(Long tenantId) {
+		Query query = em.createQuery("select new " + ListingPair.class.getName() + "( pi.id, pi.name ) from " + ProductType.class.getName() + " pi where pi.tenant.id = :tenantId AND state=:activeState order by pi.name ");
+		query.setParameter("tenantId", tenantId).setParameter("activeState", EntityState.ACTIVE);
+		
+		List<ListingPair> piList = (List<ListingPair>)query.getResultList();
+		
+		return piList;
+	}
+	
+	/**
+	 * finds the infoFields that are currently in Use.
+	 * @param infoFields
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<Long> infoFieldsInUse( Collection<InfoFieldBean> infoFields ) {
+
+		Collection<Long> infoFieldsCurrentlyInUse = new ArrayList<Long>();
+		
+		
+		if( infoFields == null ) {
+			return infoFieldsCurrentlyInUse;
+		}
+		
+		// make sure all the info fields have been persisted and remove the ones that aren't.
+		Collection<InfoFieldBean> cleanedInfoFields = new ArrayList<InfoFieldBean>();
+		for (InfoFieldBean infoFieldBean : infoFields ) {
+			if( infoFieldBean.getUniqueID() != null ) {
+				cleanedInfoFields.add( infoFieldBean );
+			}
+		}
+
+		if( infoFields != null && cleanedInfoFields.size() > 0 ) {
+			Query query = em.createQuery("select DISTINCT ifb.uniqueID  from " + Product.class.getName() + " ps inner join  ps.infoOptions as io inner join io.infoField as ifb where ps.type.id = :productInfo and ifb in( :infoFieldIds )" );
+			
+			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("infoFieldIds", infoFields );
+			
+			infoFieldsCurrentlyInUse.addAll( query.getResultList() );
+			
+						
+			query = em.createQuery("select DISTINCT ifb.uniqueID from " + ProductCodeMappingBean.class.getName() + " as pcm inner join pcm.infoOptions as io inner join io.infoField as ifb where pcm.productInfo.id = :productInfo and ifb in( :infoFieldIds )" );
+			
+			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("infoFieldIds", infoFields );
+			
+			infoFieldsCurrentlyInUse.addAll( query.getResultList() );
+			
+			
+			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AutoAttributeCriteria.class.getName() + " as aac inner join aac.inputs as ifb where aac.productType.id = :productInfo and ifb in( :infoFieldIds )" );
+			
+			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("infoFieldIds", infoFields );
+			
+			
+			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AutoAttributeCriteria.class.getName() + " as aac inner join aac.outputs as ifb where aac.productType.id = :productInfo and ifb in( :infoFieldIds )" );
+			
+			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("infoFieldIds", infoFields );
+			infoFieldsCurrentlyInUse.addAll( query.getResultList() );
+		}
+
+		return infoFieldsCurrentlyInUse;
+	}
+	
+	/**
+	 * returns the set of non static info option ids
+	 * based on the page number and size sent in.
+	 *
+	 * @return
+	 */
+	private Pager<Long> findInfoOptions( int pageNumber, int pageSize ) {
+		Query idQuery;
+		Query countQuery;
+		idQuery = em.createQuery( "select io.uniqueID FROM InfoOptionBean as io WHERE io.staticData = false ORDER BY uniqueID" );
+		countQuery = em.createQuery( "select count(*) FROM InfoOptionBean as io WHERE io.staticData = false" );
+		return new Page<Long>( idQuery, countQuery, pageNumber, pageSize );
+	}
+	
+	
+	/**
+	 * removes all orphaned info options and updates the modify time of the product type.
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean cleanInfoOptions( int pageNumber, int pageSize ) {
+		Collection<Long> orphanInfoOptionIds;
+		
+		Pager<Long> infoOptionsToScan = findInfoOptions(pageNumber, pageSize);
+		
+		// look for info options that don't have a connection to a product serial.
+		Query query = em.createQuery( "select DISTINCT io.uniqueID  from ProductSerialInfoOptionBean as psio right join psio.infoOption as io where io.uniqueID IN (:infoOptions) AND psio.uniqueID IS NULL " );
+		query.setParameter( "infoOptions", infoOptionsToScan.getList() );
+		orphanInfoOptionIds = (Collection<Long>)query.getResultList();
+		if( orphanInfoOptionIds.size() > 0 ) {
+			// look for info options that are not on product info histories.
+			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select io.uniqueID from AddProductHistoryBean as aph left join aph.infoOptions as io where io.uniqueID IN (:infoOptions)  )  " );
+			query.setParameter( "infoOptions", orphanInfoOptionIds );
+			orphanInfoOptionIds = (Collection<Long>)query.getResultList();
+		}
+	
+		
+		if( orphanInfoOptionIds.size() > 0 ) {
+			// look for info options that are not used on a ps template and where not used by any product serial.
+			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select pcmio.uniqueID from ProductCodeMappingBean as pcm inner join pcm.infoOptions as pcmio )  " );
+			query.setParameter( "infoOptions", orphanInfoOptionIds );
+			orphanInfoOptionIds = query.getResultList();
+		}
+		
+		if( orphanInfoOptionIds.size() > 0 ) {
+			// look for info options that are not used on a ps template and where not used by any product serial.
+			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select aadio.uniqueID from AutoAttributeDefinition as aad inner join aad.inputs as aadio )  " );
+			query.setParameter( "infoOptions", orphanInfoOptionIds );
+			orphanInfoOptionIds = query.getResultList();
+		}
+		
+		if( orphanInfoOptionIds.size() > 0 ) {
+			// look for info options that are not used on a ps template and where not used by any product serial.
+			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select aadio.uniqueID from AutoAttributeDefinition as aad inner join aad.outputs as aadio )  " );
+			query.setParameter( "infoOptions", orphanInfoOptionIds );
+			orphanInfoOptionIds = query.getResultList();
+		}
+		
+		// remove the orphans.
+		for ( Long infoOptionId : orphanInfoOptionIds) {
+			InfoOptionBean infoOption = em.find(InfoOptionBean.class, infoOptionId );
+			em.remove( infoOption ) ;
+		}
+		 
+		return infoOptionsToScan.isHasNextPage();
+	}
+
+	private void processUploadedFiles( ProductType productType, List<FileAttachment> uploadedFiles ) throws FileAttachmentException {
+		File attachmentDirectory = PathHandler.getProductTypeAttachmentFile(productType);
+		File tmpDirectory = PathHandler.getTempRoot();
+		
+		if( uploadedFiles != null ) {
+			File tmpFile;
+			// move and attach each uploaded file
+			for(FileAttachment uploadedFile: uploadedFiles) {
+
+				try {	
+					// move the file to it's new location, note that it's location is currently relative to the tmpDirectory
+					tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
+					FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+					
+					// clean up the temp file
+					tmpFile.delete();
+					
+					// now we need to set the correct file name for the attachment and set the modifiedBy
+					uploadedFile.setFileName(tmpFile.getName());
+					uploadedFile.setTenant(productType.getTenant());
+					uploadedFile.setModifiedBy(productType.getModifiedBy());
+					
+					// attach the attachment
+					productType.getAttachments().add(uploadedFile);
+				} catch (IOException e) {
+					logger.error("failed to copy uploaded file ", e);
+					throw new FileAttachmentException(e);
+				}
+				
+			}
+			
+			persistenceManager.update(productType);
+		}
+		
+		// Now we need to cleanup any files that are no longer attached to the producttype
+		if(attachmentDirectory.exists()) {
+			
+			/*
+			 * We'll start by constructing a list of attached file names which will be used in 
+			 * a directory filter
+			 */
+			final List<String> attachedFiles = new ArrayList<String>();
+			for(FileAttachment file: productType.getAttachments()) {
+				attachedFiles.add(file.getFileName());
+			}
+		
+			/*
+			 * This lists all files in the attachment directory 
+			 */
+			for(File detachedFile: attachmentDirectory.listFiles(
+					new FilenameFilter() {
+						public boolean accept(File dir, String name) {
+							// accept only files that are not in our attachedFiles list
+							return !attachedFiles.contains(name);
+						}
+					}
+			)) {
+				/* 
+				 * any file returned from our fileNotAttachedFilter, is not in our attached file list
+				 * and should be removed
+				 */
+				detachedFile.delete();
+				
+			}
+		}
+		
+	}
+	
+	public ProductType updateProductType(ProductType productTypeBean ) throws FileAttachmentException, ImageAttachmentException {
+		return updateProductType(productTypeBean, (List<FileAttachment>)null, null );
+	}
+	public Long persistProductType(ProductType productTypeBean) throws FileAttachmentException, ImageAttachmentException {
+		return persistProductType(productTypeBean, (List<FileAttachment>)null, null );
+	}
+}

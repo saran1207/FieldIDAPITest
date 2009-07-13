@@ -1,0 +1,1705 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<package name="web" extends="default" namespace="/">
+		<global-results>
+			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
+		</global-results>
+
+		<action name="administration" class="com.n4systems.fieldid.actions.SimpleAction">
+			<result name="success" type="freemarker">/templates/html/administration/view.ftl</result>
+			<result name="error" type="freemarker">/templates/html/administration/view.ftl</result>
+			<result name="input" type="freemarker">/templates/html/administration/view.ftl</result>
+		</action>
+
+		<action name="productTypeImage" method="productImage"
+			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="success"></result>
+			<result name="error" type="httpheader">
+				<param name="status">404</param>
+			</result>
+		</action>
+
+		<action name="viewProductTypeImage" method="viewImage"
+			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeCrud/viewImage.ftl</result>
+		</action>
+
+		<action name="productTypes" method="list" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeCrud/list.ftl</result>
+		</action>
+
+		<action name="productType" method="show" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeCrud/show.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+		</action>
+
+		<action name="productTypeEdit" method="loadEdit"
+			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="input" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
+
+		</action>
+
+		<action name="productTypeUpdate" method="save" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="input" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">productType</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="error" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
+		</action>
+
+		<action name="productTypeCopy" method="loadCopy"
+			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="input" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
+
+		</action>
+		
+		<action name="productTypeConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeCrud/confirmDelete.ftl</result>
+		</action>
+		
+		<action name="productTypeDelete" method="delete" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+			<result name="success" type="redirectAction">productTypes</result>
+		</action>
+		
+
+		<action name="productTypeConfiguration" method="edit"
+			class="com.n4systems.fieldid.actions.product.ProductTypeConfigurationCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeConfiguration/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+		</action>
+
+		<action name="productTypeConfigurationUpdate" method="save"
+			class="com.n4systems.fieldid.actions.product.ProductTypeConfigurationCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">productTypeConfiguration</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="input" type="freemarker">/templates/html/productTypeConfiguration/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productTypeConfiguration/form.ftl</result>
+
+		</action>
+
+		<action name="inspectionFrequencies" method="list"
+			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeScheduleCrud/list.ftl</result>
+		</action>
+
+		<action name="inspectionScheduleList" method="list"
+			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/list.ftl</result>
+		</action>
+
+		<action name="inspectionScheduleAdd" method="list" class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			<result name="error" type="freemarker">/templates/html/inspectionScheduleCrud/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/add.ftl</result>
+		</action>
+
+		<action name="commentTemplateList" method="list" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+			<result name="success" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateList.ftl</result>
+		</action>
+		
+		<!-- TODO: get rid of the chain response. -->
+		<action name="commentTemplateEdit" method="loadEdit"
+			class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+			<result name="input" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateForm.ftl</result>
+			<result name="success" type="chain">commentTemplateList</result>
+			<result name="error" type="chain">commentTemplateList</result>
+		</action>
+
+		<action name="commentTemplateRemove" method="remove"
+			class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+			<result name="success" type="chain">commentTemplateList</result>
+			<result name="error" type="chain">commentTemplateList</result>
+		</action>
+
+		<action name="download" class="com.n4systems.fieldid.actions.SimpleAction">
+			<result name="success" type="freemarker">/templates/html/secureFileAccess/secureFileAccess.ftl</result>
+			<result name="error" type="freemarker">/templates/html/secureFileAccess/secureFileAccess.ftl</result>
+		</action>
+
+		<action name="pushFile" method="fileDownload" class="com.n4systems.fieldid.actions.SecureFileAccess">
+			<result name="success"></result>
+			<result name="input" type="freemarker">/templates/html/common/error.ftl</result>
+		</action>
+
+		<action name="customerShow" method="show" class="com.n4systems.fieldid.actions.CustomerCrud">
+			<result name="success" type="freemarker">/templates/html/customerCrud/show.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">customerList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+
+		<action name="customerEdit" method="loadEdit" class="com.n4systems.fieldid.actions.CustomerCrud">
+			<result name="input" type="freemarker">/templates/html/customerCrud/customerForm.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">customerShow</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">customerList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+
+		<action name="customerList" method="list" class="com.n4systems.fieldid.actions.CustomerCrud">
+			<result name="success" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
+
+			<result name="input" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
+		</action>
+
+		<action name="customerRemove" method="remove" class="com.n4systems.fieldid.actions.CustomerCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">customerList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+
+			<result name="error" type="redirectAction">
+				<param name="actionName">customerList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+
+
+		<action name="productStatusEdit" method="loadEdit"
+			class="com.n4systems.fieldid.actions.product.ProductStatusCrud">
+			<result name="input" type="freemarker">/templates/html/ProductStatusCrud/ProductStatusForm.ftl</result>
+			<result name="success" type="redirectAction">productStatusList</result>
+			<result name="error" type="redirectAction">productStatusList</result>
+		</action>
+
+		<action name="productStatusList" method="list"
+			class="com.n4systems.fieldid.actions.product.ProductStatusCrud">
+			<result name="success" type="freemarker">/templates/html/ProductStatusCrud/ProductStatusList.ftl</result>
+		</action>
+
+		<action name="productStatusRemove" method="remove"
+			class="com.n4systems.fieldid.actions.product.ProductStatusCrud">
+			<result name="success" type="freemarker">/templates/html/ProductStatusCrud/ProductStatusList.ftl</result>
+			<result name="error" type="freemarker">/templates/html/ProductStatusCrud/ProductStatusList.ftl</result>
+		</action>
+
+		<action name="notificationSettings" method="list" class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
+			<result name="success" type="freemarker">/templates/html/notificationSettings/list.ftl</result>
+		</action>
+		
+		<action name="notificationSettingAdd" method="add"
+			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
+			<result name="error" type="chain">notificationSettings</result>
+		</action>
+		
+		<action name="notificationSettingEdit" method="edit"
+			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
+			<result name="error" type="redirectAction">notificationSettings</result>
+		</action>
+		
+		<action name="notificationSettingCreate" method="save"
+			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
+			<result name="success" type="redirectAction">notificationSettings</result>
+		</action>
+		
+		<action name="notificationSettingUpdate" method="save"
+			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
+			<result name="success" type="redirectAction">notificationSettings</result>
+		</action>
+		
+		<action name="notificationSettingDelete" method="delete"
+			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
+			<result name="success" type="redirectAction">notificationSettings</result>
+			<result name="error" type="redirectAction">notificationSettings</result>
+		</action>
+
+		<action name="search" method="searchCriteria" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
+
+			<result name="input" type="freemarker">/templates/html/search/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/search/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">searchResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+		<action name="searchResults" method="search" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
+			<result name="input" type="redirect-action">search</result>
+			<result name="error" type="redirect-action">search</result>
+			<result name="success" type="freemarker">/templates/html/search/list.ftl</result>
+		</action>
+
+
+		<action name="report" method="reportCriteria" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+			<result name="input" type="freemarker">/templates/html/report/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/report/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+		<action name="returnToReport" method="returnToReport"
+			class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+
+		<action name="reportResults" method="search" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+			<result name="input" type="redirect-action">report</result>
+			<result name="error" type="redirect-action">report</result>
+			<result name="success" type="freemarker">/templates/html/report/list.ftl</result>
+		</action>
+
+
+
+		<action name="productCodeMappingEdit" method="edit"
+			class="com.n4systems.fieldid.actions.ProductCodeMappingCrud">
+			<result name="input" type="freemarker">/templates/html/productCodeMappingCrud/form.ftl</result>
+			<result name="success" type="chain">productCodeMappingList</result>
+			<result name="error" type="chain">productCodeMappingList</result>
+		</action>
+
+		<action name="productCodeMappingList" method="list"
+			class="com.n4systems.fieldid.actions.ProductCodeMappingCrud">
+			<result name="success" type="freemarker">/templates/html/productCodeMappingCrud/list.ftl</result>
+		</action>
+
+		<action name="productCodeMappingRemove" method="remove"
+			class="com.n4systems.fieldid.actions.ProductCodeMappingCrud">
+			<result name="success" type="freemarker">/templates/html/productCodeMappingCrud/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productCodeMappingCrud/list.ftl</result>
+		</action>
+
+		<action name="safetyNetworkList" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkCrud">
+			<result name="success" type="freemarker">/templates/html/safetyNetwork/list.ftl</result>
+		</action>
+
+
+		<action name="autoAttributeCriteriaList" method="list"
+			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+
+			<result name="success" type="freemarker">/templates/html/autoAttributeCriteria/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/autoAttributeCriteria/list.ftl</result>
+		</action>
+
+		<action name="autoAttributeCriteriaOpen" method="open"
+			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+			<result name="new" type="redirect-action">
+				<param name="actionName">autoAttributeCriteriaEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="found" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionList</param>
+				<param name="criteriaId">${autoAttributeCriteria.id}</param>
+			</result>
+			<result name="error" type="redirect-action">autoAttributeCriteriaList</result>
+		</action>
+
+		<action name="autoAttributeCriteriaEdit" method="edit"
+			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+			<result name="error" type="redirect-action">autoAttributeCriteriaList</result>
+			<result name="success" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
+			<result name="saved" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionList</param>
+				<param name="criteriaId">${autoAttributeCriteria.id}</param>
+			</result>
+
+		</action>
+
+		<action name="autoAttributeCriteriaRemove" method="remove"
+			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+
+			<result name="success" type="redirect-action">
+				<param name="actionName">autoAttributeCriteriaList</param>
+			</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">autoAttributeCriteriaList</param>
+			</result>
+
+		</action>
+
+
+		<action name="autoAttributeDefinitionList" method="list"
+			class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+
+			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/list.ftl</result>
+		</action>
+
+		<action name="autoAttributeDefinitionEdit" method="edit"
+			class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+
+			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">autoAttributeDefinitionList</param>
+				<param name="criteriaId">${autoAttributeCriteria.id}</param>
+			</result>
+
+		</action>
+
+		<action name="autoAttributeDefinitionSave" method="save"
+			class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+
+			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionList</param>
+				<param name="criteriaId">${autoAttributeCriteria.id}</param>
+
+			</result>
+			<result name="saved" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionEdit</param>
+				<param name="criteriaId">${autoAttributeCriteria.id}</param>
+				<param name="uniqueID">${autoAttributeDefinition.id}</param>
+			</result>
+			<result name="saveandadd" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionEdit</param>
+				<param name="criteriaId">${autoAttributeCriteria.id}</param>
+
+			</result>
+
+		</action>
+
+		<action name="autoAttributeDefinitionRemove" method="remove"
+			class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+
+			<result name="success" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionList</param>
+				<param name="criteriaId">${criteriaId}</param>
+			</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">autoAttributeDefinitionList</param>
+				<param name="criteriaId">${criteriaId}</param>
+			</result>
+		</action>
+
+
+		<action name="productCompliance" method="show"
+			class="com.n4systems.fieldid.actions.product.ComplianceAction">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/compliance.ftl</result>
+
+		</action>
+
+
+		<action name="productInformation" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/html/productCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/list.ftl</result>
+			<result name="oneFound" type="redirectAction">
+				<param name="actionName">product</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="productInspections" method="inspections"
+			class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/inspections.ftl</result>
+
+		</action>
+
+		<action name="product" method="show" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/show.ftl</result>
+
+		</action>
+
+		<action name="productAdd" method="add" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
+		</action>
+
+		<action name="productAddWithOrder" method="addWithOrder"
+			class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
+		</action>
+
+		<action name="productCreate" method="save" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
+			<result name="saved" type="redirectAction">
+				<param name="actionName">productAdd</param>
+			</result>
+			<result name="saveprint" type="redirectAction">
+				<param name="actionName">productPrint</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="saveinspect" type="redirectAction">
+				<param name="actionName">quickInspect</param>
+				<param name="productId">${uniqueID}</param>
+			</result>
+			<result name="saveschedule" type="redirectAction">
+				<param name="actionName">inspectionScheduleAdd</param>
+				<param name="productId">${uniqueID}</param>
+			</result>
+			<result name="savedWithOrder" type="redirectAction">
+				<param name="actionName">searchOrder</param>
+				<param name="tagOptionId">${tagOptionId}</param>
+				<param name="orderNumber">${lineItem.order.orderNumber}</param>
+			</result>
+		</action>
+
+		<action name="productPrint" method="print" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/print.ftl</result>
+
+		</action>
+
+		<action name="productEdit" method="edit" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productCrud/edit.ftl</result>
+		</action>
+
+		<action name="productConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="success" type="freemarker">/templates/html/productCrud/confirmDelete.ftl</result>
+		</action>
+
+		<action name="productDelete" method="delete" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="redirectAction">
+				<param name="actionName">productEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="success" type="redirectAction">productInformation</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">productEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="productUpdate" method="save" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="input" type="freemarker">templates/html/productCrud/edit.ftl</result>
+			<result name="success" type="freemarker">templates/html/productCrud/edit.ftl</result>
+			<result name="saved" type="redirect-action">
+				<param name="actionName">product</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="savedWithCustomerOrder" type="redirect-action">
+				<param name="actionName">searchOrder</param>
+				<param name="tagOptionId">${tagOptionId}</param>
+				<param name="orderNumber">${customerOrder.orderNumber}</param>
+			</result>
+		</action>
+
+
+		<action name="subProductConfiguration" method="show"
+			class="com.n4systems.fieldid.actions.product.SubProductCrud">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subProductCrud/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subProductCrud/show.ftl</result>
+		</action>
+
+
+		<action name="registerUser" method="add" class="com.n4systems.fieldid.actions.UserRegistrationCrud">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="error" type="redirect">/</result>
+
+			<result name="input" type="freemarker">templates/html/userRequest/add.ftl</result>
+			<result name="success" type="freemarker">templates/html/userRequest/add.ftl</result>
+			<result name="saved" type="freemarker">templates/html/userRequest/confirm.ftl</result>
+		</action>
+
+
+		<action name="userRequestList" method="list" class="com.n4systems.fieldid.actions.UserRequestCrud">
+			<result name="input" type="freemarker">/templates/html/userRequest/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/userRequest/list.ftl</result>
+		</action>
+
+		<action name="userRequestView" method="show" class="com.n4systems.fieldid.actions.UserRequestCrud">
+			<result name="error" type="redirect-action">userRequestList</result>
+			<result name="success" type="freemarker">/templates/html/userRequest/show.ftl</result>
+		</action>
+
+		<action name="userRequestDeny" method="deny" class="com.n4systems.fieldid.actions.UserRequestCrud">
+			<result name="error" type="redirect-action">userRequestList</result>
+			<result name="input" type="freemarker">templates/html/userRequest/deny.ftl</result>
+			<result name="success" type="redirect-action">userRequestList</result>
+		</action>
+
+		<action name="userRequestAccept" method="acceptRequest" class="com.n4systems.fieldid.actions.UserRequestCrud">
+			<result name="error" type="redirect-action">userRequestList</result>
+			<result name="input" type="freemarker">templates/html/userRequest/accept.ftl</result>
+			<result name="success" type="redirect-action">userRequestList</result>
+		</action>
+
+
+		<action name="userList" method="list" class="com.n4systems.fieldid.actions.UserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/list.ftl</result>
+		</action>
+
+		<action name="userEdit" method="edit" class="com.n4systems.fieldid.actions.UserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/form.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/form.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+
+		</action>
+
+		<action name="addCustomerUser" method="edit" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+
+
+		</action>
+
+		<action name="addCustomerSave" method="save" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+			<result name="saved" type="redirect-action">
+				<param name="actionName">userEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+
+		</action>
+
+
+		<action name="addEmployeeUser" method="edit" class="com.n4systems.fieldid.actions.UserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/form.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/form.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">userlist</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+
+		</action>
+
+
+		<action name="userSave" method="save" class="com.n4systems.fieldid.actions.UserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/form.ftl</result>
+			<result name="saved" type="redirect-action">
+				<param name="actionName">userEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+
+		</action>
+
+
+
+		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.DefinedCustomerUserCrud">
+			<interceptor-ref name="flashSecureStack" />
+			<result name="success" type="freemarker">templates/html/userCrud/customerUserForm.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/customerUserForm.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">customerEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+
+		</action>
+
+		<action name="customerUserSave" method="save" class="com.n4systems.fieldid.actions.DefinedCustomerUserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/customerUserForm.ftl</result>
+			<result name="saved" type="redirect-action">
+				<param name="actionName">customerUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="customer">${customer}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+
+		</action>
+
+
+		<action name="userSignature" method="signature" class="com.n4systems.fieldid.actions.UserCrud">
+			<result name="success"></result>
+			<result name="error" type="httpheader">
+				<param name="status">404</param>
+			</result>
+		</action>
+
+		<action name="userUploadSignature" method="uploadSignature" class="com.n4systems.fieldid.actions.UserCrud">
+			<result name="success" type="freemarker">/templates/html/userCrud/uploadSignature.ftl</result>
+			<result name="input" type="freemarker">/templates/html/userCrud/uploadSignature.ftl</result>
+		</action>
+
+		<action name="schedule" method="searchCriteria"
+			class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
+			<result name="input" type="freemarker">/templates/html/schedule/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/schedule/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">scheduleResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+		<action name="scheduleResults" method="search" class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
+			<result name="input" type="redirectAction">schedule</result>
+			<result name="error" type="redirectAction">schedule</result>
+			<result name="success" type="freemarker">/templates/html/schedule/list.ftl</result>
+		</action>
+		
+		
+		<action name="startAssignSchedulesToJob" method="startSearch" class="com.n4systems.fieldid.actions.search.InspectionScheduleJobAssignment">
+			<result name="input" type="redirectAction">
+				<param name="actionName">jobs</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">jobs</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">assignSchedulesToJob</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+		<action name="assignSchedulesToJob" method="search" class="com.n4systems.fieldid.actions.search.InspectionScheduleJobAssignment">
+			<result name="input" type="freemarker">/templates/html/projectEvents/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projectEvents/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/projectEvents/edit.ftl</result>
+		</action>
+
+
+		<action name="selectInspectionTypes" method="list"
+			class="com.n4systems.fieldid.actions.product.ProductTypeInspectionTypeCrud">
+			<result name="error" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
+		</action>
+		<action name="productTypeEventTypesSave" method="save"
+			class="com.n4systems.fieldid.actions.product.ProductTypeInspectionTypeCrud">
+			<result name="error" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">selectInspectionTypes</param>
+				<param name="productTypeId">${productTypeId}</param>
+			</result>
+		</action>
+
+		<action name="massUpdateProducts" method="edit" class="com.n4systems.fieldid.actions.ProductMassUpdate">
+			<result name="error" type="redirect-action">search</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/product/form.ftl</result>
+		</action>
+
+		<action name="massUpdateProductsSave" method="save" class="com.n4systems.fieldid.actions.ProductMassUpdate">
+			<result name="error" type="redirect-action">search</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/product/form.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">searchResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+		<action name="massUpdateInspections" method="edit" class="com.n4systems.fieldid.actions.InspectionMassUpdate">
+			<result name="error" type="redirect-action">report</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/inspection/form.ftl</result>
+		</action>
+
+		<action name="massUpdateInspectionsSave" method="save"
+			class="com.n4systems.fieldid.actions.InspectionMassUpdate">
+			<result name="error" type="redirect-action">search</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/inspection/form.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+		<action name="massUpdateInspectionSchedule" method="edit"
+			class="com.n4systems.fieldid.actions.InspectionScheduleMassUpdate">
+			<result name="error" type="redirect-action">schedule</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/inspectionSchedule/form.ftl</result>
+		</action>
+
+		<action name="massUpdateInspectionScheduleSave" method="save"
+			class="com.n4systems.fieldid.actions.InspectionScheduleMassUpdate">
+			<result name="error" type="redirect-action">schedule</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/inspectionSchedule/form.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">scheduleResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+		<action name="selectJobToAssignTo" method="edit" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
+			<result name="error" type="redirectAction">schedule</result>
+			<result name="success" type="freemarker">/templates/html/assignToJob/form.ftl</result>
+		</action>
+
+		<action name="assignToJob" method="save" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
+			<result name="error" type="redirect-action">schedule</result>
+			<result name="input" type="freemarker">/templates/html/assignToJob/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">scheduleResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+		
+		<action name="selectJobToAssignInspectionsTo" method="editInspections" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
+			<result name="error" type="redirectAction">report</result>
+			<result name="success" type="freemarker">/templates/html/assignToJob/formInspections.ftl</result>
+		</action>
+
+		<action name="assignInspectionsToJob" method="saveInspections" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
+			<result name="error" type="redirect-action">report</result>
+			<result name="input" type="freemarker">/templates/html/assignToJob/formInspections.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+
+		<action name="compliance" method="show" class="com.n4systems.fieldid.actions.ComplianceAction">
+			<result name="success" type="freemarker">/templates/html/compliance/show.ftl</result>
+		</action>
+
+		<action name="inspectionTypes" method="list"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionType/list.ftl</result>
+		</action>
+
+		<action name="inspectionType" method="show"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionType/show.ftl</result>
+		</action>
+
+		<action name="inspectionTypeAdd" method="add"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionType/add.ftl</result>
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+		</action>
+		<action name="inspectionTypeCreate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+
+			<result name="input" type="freemarker">/templates/html/inspectionType/add.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">inspectionType</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="createInspectionForm" type="redirect-action">
+				<param name="actionName">inspectionTypeForm</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+
+			<result name="error" type="freemarker">/templates/html/inspectionType/add.ftl</result>
+		</action>
+
+		<action name="inspectionTypeEdit" method="edit"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+		</action>
+		<action name="inspectionTypeUpdate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="input" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">inspectionType</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="error" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+		</action>
+
+		<action name="buttonGroups" method="list" class="com.n4systems.fieldid.actions.inspection.ButtonGroupCrud">
+			<result name="success" type="freemarker">/templates/html/buttonGroupCrud/list.ftl</result>
+		</action>
+
+		<action name="inspectionTypeForm" method="edit"
+			class="com.n4systems.fieldid.actions.inspection.InspectionFormCrud">
+			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionFormCrud/form.ftl</result>
+		</action>
+		<action name="inspectionTypeFormSave" method="save"
+			class="com.n4systems.fieldid.actions.inspection.InspectionFormCrud">
+			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="error" type="freemarker">/templates/html/inspectionFormCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionFormCrud/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspectionTypeForm</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+
+		<action name="inspect" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionGroupCrud">
+			<result name="error" type="freemarker">/templates/html/inspectionGroup/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionGroup/list.ftl</result>
+			<result name="oneFound" type="redirectAction">
+				<param name="actionName">inspectionGroups</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="inspectionGroups" method="show"
+			class="com.n4systems.fieldid.actions.inspection.InspectionGroupCrud">
+
+			<result name="success" type="freemarker">/templates/html/inspectionGroup/show.ftl</result>
+		</action>
+
+		<action name="quickInspect" method="quickInspect" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionCrud/quickInspect.ftl</result>
+			<result name="oneFound" type="redirectAction">
+				<param name="actionName">inspectionAdd</param>
+				<param name="productId">${productId}</param>
+				<param name="type">${type}</param>
+			</result>
+			<result name="oneFoundMaster" type="redirectAction">
+				<param name="actionName">masterInspectionAdd</param>
+				<param name="productId">${productId}</param>
+				<param name="type">${type}</param>
+			</result>
+		</action>
+		
+		<action name="selectInspectionAdd" method="select" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="regular" type="redirectAction">
+				<param name="actionName">inspectionAdd</param>
+				<param name="productId">${productId}</param>
+				<param name="type">${type}</param>
+			</result>
+			<result name="master" type="redirectAction">
+				<param name="actionName">masterInspectionAdd</param>
+				<param name="productId">${productId}</param>
+				<param name="type">${type}</param>
+			</result>
+		</action>
+		
+		<action name="selectInspectionAdd" method="select" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="regular" type="redirectAction">
+				<param name="actionName">inspectionAdd</param>
+				<param name="productId">${productId}</param>
+				<param name="type">${type}</param>
+				<param name="inspectionGroupId">${inspectionGroupId}</param>
+				<param name="scheduleId">${scheduleId}</param>
+			</result>
+			<result name="master" type="redirectAction">
+				<param name="actionName">masterInspectionAdd</param>
+				<param name="productId">${productId}</param>
+				<param name="type">${type}</param>
+				<param name="inspectionGroupId">${inspectionGroupId}</param>
+				<param name="scheduleId">${scheduleId}</param>
+			</result>
+		</action>
+		
+		<action name="selectInspectionEdit" method="select" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="regular" type="redirectAction">
+				<param name="actionName">inspectionEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="master" type="redirectAction">
+				<param name="actionName">masterInspectionEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+
+		<action name="inspectionAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
+		</action>
+
+		<action name="inspectionCreate" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="error" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspection</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="inspection" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionCrud/show.ftl</result>
+		</action>
+		<action name="inspectionEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
+
+		</action>
+
+		<action name="inspectionUpdate" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="error" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspection</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="inspectionDelete" method="delete"
+			class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="error" type="redirectAction">
+				<param name="actionName">inspectionEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspectionGroups</param>
+				<param name="uniqueID">${productId}</param>
+			</result>
+		</action>
+
+
+
+
+		<action name="masterInspectionAdd" method="add"
+			class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
+			<result name="success" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
+		</action>
+
+		<action name="masterInspectionCreate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
+			<result name="error" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspection</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="masterInspectionEdit" method="edit"
+			class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
+			<result name="success" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
+		</action>
+
+		<action name="masterInspectionUpdate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
+			<result name="error" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspection</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+
+		<action name="subInspectionAdd" method="add"
+			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
+			<result name="success" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+		</action>
+
+
+		<action name="baseInspectionCreate" method="storeMaster"
+			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
+			<result name="input" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">masterInspectionAdd</param>
+				<param name="productId">${parentProductId}</param>
+				<param name="token">${token}</param>
+			</result>
+		</action>
+
+		<action name="subInspectionCreate" method="storeSubInspection"
+			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
+			<result name="input" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">masterInspectionAdd</param>
+				<param name="productId">${parentProductId}</param>
+				<param name="token">${token}</param>
+			</result>
+		</action>
+
+		<action name="subInspectionEdit" method="edit"
+			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
+			<result name="success" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+		</action>
+
+		<action name="baseInspectionUpdate" method="storeMaster"
+			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
+			<result name="input" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">masterInspectionEdit</param>
+				<param name="uniqueID">${masterInspection.inspection.id}</param>
+				<param name="token">${token}</param>
+			</result>
+		</action>
+
+		<action name="subInspectionUpdate" method="storeSubInspection"
+			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
+			<result name="input" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">masterInspectionEdit</param>
+				<param name="uniqueID">${masterInspection.inspection.id}</param>
+				<param name="token">${token}</param>
+			</result>
+		</action>
+
+		<action name="masterInspectionDelete" method="delete"
+			class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="error" type="redirectAction">
+				<param name="actionName">masterInspectionEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspectionGroups</param>
+				<param name="uniqueID">${productId}</param>
+			</result>
+		</action>
+
+
+		<action name="inspectionBooks" method="list"
+			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionBook/list.ftl</result>
+		</action>
+
+		<action name="inspectionBookAdd" method="add"
+			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionBook/add.ftl</result>
+		</action>
+
+		<action name="inspectionBookCreate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			<result name="error" type="freemarker">/templates/html/inspectionBook/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionBook/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspectionBooks</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+
+
+		<action name="inspectionBookEdit" method="edit"
+			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>
+
+		</action>
+
+		<action name="inspectionBookUpdate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			<result name="error" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspectionBooks</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+
+		<action name="multiProofTest" method="add"
+			class="com.n4systems.fieldid.actions.inspection.MultiProofTestUpload">
+			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/add.ftl</result>
+		</action>
+
+		<action name="multiProofTestCreate" method="save"
+			class="com.n4systems.fieldid.actions.inspection.MultiProofTestUpload">
+			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/results.ftl</result>
+			<result name="input" type="freemarker">/templates/html/multiProofTestUpload/results.ftl</result>
+			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/results.ftl</result>
+		</action>
+
+		<action name="multiProofTestUpload" method="upload"
+			class="com.n4systems.fieldid.actions.inspection.MultiProofTestUpload">
+			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
+			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
+		</action>
+
+		<action name="jobSites" method="list" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
+			<result name="success" type="freemarker">/templates/html/jobSites/list.ftl</result>
+		</action>
+
+		<action name="jobSiteAdd" method="add" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
+			<result name="success" type="freemarker">/templates/html/jobSites/add.ftl</result>
+		</action>
+
+		<action name="jobSiteCreate" method="save" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
+			<result name="error" type="freemarker">/templates/html/jobSites/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/jobSites/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobSites</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+
+
+		<action name="jobSiteEdit" method="edit" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
+			<result name="success" type="freemarker">/templates/html/jobSites/edit.ftl</result>
+
+		</action>
+
+		<action name="jobSiteUpdate" method="save" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
+			<result name="error" type="freemarker">/templates/html/jobSites/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/jobSites/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobSites</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+
+		<action name="summaryReport" method="show"
+			class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
+			<result name="error" type="redirect-action">report</result>
+			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
+		</action>
+
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="success" type="freemarker">/templates/html/login/form.ftl</result>
+			<result name="alreadyLoggedIn" type="redirectAction">home</result>
+		</action>
+
+		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.LoginAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="input" type="freemarker">/templates/html/login/form.ftl</result>
+			<result name="success" type="redirectAction">home</result>
+			<result name="redirect" type="redirect">
+				<param name="location">${previousUrl}</param>
+			</result>
+		</action>
+
+		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="success" type="redirectAction">login</result>
+		</action>
+
+		<action name="home" class="com.n4systems.fieldid.actions.HomeAction">
+			<result name="success" type="freemarker">/templates/html/home/show.ftl</result>
+		</action>
+
+		<action name="chooseCompany" method="add" class="com.n4systems.fieldid.actions.SelectTenantAction">
+			<interceptor-ref name="flashPublicStack" />
+			<result name="success" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+		</action>
+		
+		<action name="signInToCompany" method="create" class="com.n4systems.fieldid.actions.SelectTenantAction">
+			<interceptor-ref name="flashPublicStack" />
+			<result name="success" type="redirectAction">login</result>
+			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+		</action>
+
+		<action name="forgotPassword" method="add" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="success" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
+		</action>
+
+		<action name="sendPassword" method="create" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="success" type="freemarker">/templates/html/forgotPassword/passwordSent.ftl</result>
+			<result name="input" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
+			<result name="error" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
+		</action>
+		
+		<action name="adminSendResetPassword" method="create" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">userEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
+			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
+		</action>
+
+		<action name="resetPassword" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
+			<result name="success" type="redirectAction">editPassword</result>
+		</action>
+		
+		<action name="editSecurityCard" method="edit" class="com.n4systems.fieldid.actions.user.ChangeSecurityCard">
+			<result name="success" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
+		</action>
+
+		<action name="updateSecurityCard" method="update" class="com.n4systems.fieldid.actions.user.ChangeSecurityCard">
+			<result name="input" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
+			<result name="success" type="redirectAction">editSecurityCard</result>
+		</action>
+		
+		<action name="editPassword" method="edit" class="com.n4systems.fieldid.actions.ChangePasswordCrud">
+			<result name="success" type="freemarker">/templates/html/changePassword/form.ftl</result>
+		</action>
+
+		<action name="updatePassword" method="update" class="com.n4systems.fieldid.actions.ChangePasswordCrud">
+			<result name="input" type="freemarker">/templates/html/changePassword/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/changePassword/form.ftl</result>
+			<result name="success" type="redirectAction">editPassword</result>
+		</action>
+		
+		<action name="adminEditPassword" method="edit" class="com.n4systems.fieldid.actions.AdminChangePasswordCrud">
+			<result name="success" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
+		</action>
+
+		<action name="adminUpdatePassword" method="update" class="com.n4systems.fieldid.actions.AdminChangePasswordCrud">
+			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
+			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">userEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="instructionalVideos" method="list"
+			class="com.n4systems.fieldid.actions.InstructionalVideoAction">
+			<result name="success" type="freemarker">/templates/html/instructionalVideos/list.ftl</result>
+		</action>
+
+		<action name="jobs" method="list" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="success" type="freemarker">/templates/html/projects/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projects/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/projects/list.ftl</result>
+		</action>
+
+		<action name="job" method="show" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="success" type="freemarker">/templates/html/projects/show.ftl</result>
+		</action>
+
+		<action name="jobAdd" method="add" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="success" type="freemarker">/templates/html/projects/add.ftl</result>
+		</action>
+
+		<action name="jobCreate" method="create" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="error" type="freemarker">/templates/html/projects/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/projects/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">job</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="jobEdit" method="edit" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="success" type="freemarker">/templates/html/projects/edit.ftl</result>
+		</action>
+
+		<action name="jobUpdate" method="update" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="input" type="freemarker">/templates/html/projects/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projects/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">job</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="identify" method="search" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
+		</action>
+
+		<action name="searchOrder" method="showOrder" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
+		</action>
+
+		<action name="jobDelete" method="delete" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobs</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="justAssignedOn">${justAssignedOn}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">jobs</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="justAssignedOn">${justAssignedOn}</param>
+			</result>
+		</action>
+
+		<action name="jobNotes" method="list" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+			<result name="success" type="freemarker">/templates/html/projectNotes/list.ftl</result>
+		</action>
+
+		<action name="jobNoteAdd" method="add" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+			<result name="success" type="freemarker">/templates/html/projectNotes/add.ftl</result>
+		</action>
+
+		<action name="jobNoteCreate" method="create"
+			class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+			<result name="input" type="freemarker">/templates/html/projectNotes/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projectNotes/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobNotes</param>
+				<param name="projectId">${project.id}</param>
+			</result>
+		</action>
+
+		<action name="jobNoteDelete" method="delete"
+			class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobNotes</param>
+				<param name="projectId">${project.id}</param>
+			</result>
+		</action>
+		
+		<action name="jobEvents" method="list" class="com.n4systems.fieldid.actions.projects.ProjectEventCrud">
+			<result name="success" type="freemarker">/templates/html/projectEvents/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projectEvents/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/projectEvents/list.ftl</result>
+		</action>
+		
+		
+
+		<action name="jobAssets" method="list" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+			<result name="success" type="freemarker">/templates/html/projectAssets/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projectAssets/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/projectAssets/list.ftl</result>
+		</action>
+
+		<action name="jobAssetAdd" method="add" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+			<result name="success" type="freemarker">/templates/html/projectAssets/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/projectAssets/add.ftl</result>
+		</action>
+
+		<action name="jobAssetCreate" method="create"
+			class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+			<result name="input" type="freemarker">/templates/html/projectAssets/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/projectAssets/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobAssets</param>
+				<param name="projectId">${project.id}</param>
+			</result>
+		</action>
+
+		<action name="jobAssetDelete" method="delete"
+			class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+			<result name="input" type="redirectAction">
+				<param name="actionName">jobAssets</param>
+				<param name="projectId">${project.id}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">jobAssets</param>
+				<param name="projectId">${project.id}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">jobAssets</param>
+				<param name="projectId">${project.id}</param>
+			</result>
+		</action>
+
+
+		<action name="myAccount" method="show" class="com.n4systems.fieldid.actions.user.MyAccount">
+			<result name="success" type="freemarker">/templates/html/myAccount/show.ftl</result>
+		</action>
+
+	
+		<action name="eventTypeGroups" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/list.ftl</result>
+		</action>
+
+		<action name="eventTypeGroup" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/show.ftl</result>
+		</action>
+
+		<action name="eventTypeGroupAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
+		</action>
+
+		<action name="eventTypeGroupCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">eventTypeGroup</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="eventTypeGroupEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
+		</action>
+
+		<action name="eventTypeGroupUpdate" method="update" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">eventTypeGroups</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="eventTypeGroupDelete" method="delete" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/delete.ftl</result>
+			<result name="error" type="redirectAction">eventTypeGroups</result>
+			<result name="success" type="redirectAction">eventTypeGroups</result>
+		</action>
+
+		<action name="savedReportLoad" method="load" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
+
+		<action name="savedReportAdd" method="add" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="success" type="freemarker">/templates/html/savedReport/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/savedReport/add.ftl</result>
+			<result name="invalidSearchId" type="redirectAction">
+				<param name="actionName">report</param>
+			</result>
+		</action>
+
+		<action name="savedReportCreate" method="create" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="input" type="freemarker">/templates/html/savedReport/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/savedReport/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+			<result name="invalidSearchId" type="redirectAction">
+				<param name="actionName">report</param>
+			</result>
+		</action>
+		
+		<action name="savedReportEdit" method="edit" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="success" type="freemarker">/templates/html/savedReport/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/savedReport/edit.ftl</result>
+			<result name="invalidSearchId" type="redirectAction">
+				<param name="actionName">report</param>
+			</result>
+		</action>
+
+		<action name="savedReportUpdate" method="update" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="input" type="freemarker">/templates/html/savedReport/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/savedReport/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+			<result name="invalidSearchId" type="redirectAction">
+				<param name="actionName">report</param>
+			</result>
+		</action>
+
+		<action name="savedReportDelete" method="delete" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="input" type="redirectAction">savedReports</result>
+			<result name="error" type="redirectAction">savedReports</result>
+			<result name="success" type="redirectAction">savedReports</result>
+		</action>
+		
+		<action name="savedReports" method="list" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="success" type="freemarker">/templates/html/savedReport/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/savedReport/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/savedReport/list.ftl</result>
+		</action>
+		
+		
+		<action name="savedReportShare" method="load" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="success" type="freemarker">/templates/html/savedReport/shareForm.ftl</result>
+			<result name="input" type="freemarker">/templates/html/savedReport/shareForm.ftl</result>
+		</action>
+		
+		<action name="savedReportShareCreate" method="share" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
+			<result name="success" type="redirectAction">savedReports</result>
+			<result name="input" type="redirectAction">savedReports</result>
+		</action>
+		
+		<action name="productTypeGroups" method="list" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeGroup/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productTypeGroup/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/list.ftl</result>
+		</action>
+		
+		<action name="reorderProductTypeGroups" method="list" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeGroup/reorder.ftl</result>
+			<result name="error" type="redirectAction">productTypeGroups</result>
+			<result name="input" type="redirectAction">productTypeGroups</result>
+		</action>
+
+		<action name="productTypeGroup" method="show" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeGroup/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/show.ftl</result>
+		</action>
+
+		<action name="productTypeGroupAdd" method="add" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeGroup/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/add.ftl</result>
+		</action>
+
+		<action name="productTypeGroupCreate" method="create"	class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productTypeGroup/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">productTypeGroup</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="productTypeGroupEdit" method="edit" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="success" type="freemarker">/templates/html/productTypeGroup/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/edit.ftl</result>
+		</action>
+
+		<action name="productTypeGroupUpdate" method="update"	class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productTypeGroup/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">productTypeGroup</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="productTypeGroupDeleteConfirm" method="deleteConfirm" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/productTypeGroup/deleteConfirm.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productTypeGroup/deleteConfirm.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productTypeGroup/deleteConfirm.ftl</result>
+		</action>
+
+		<action name="productTypeGroupDelete" method="delete" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+			<result name="input" type="redirectAction">
+				<param name="actionName">productTypeGroupDeleteConfirm</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">productTypeGroupDeleteConfirm</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="success" type="redirectAction">productTypeGroups</result>
+		</action>
+		
+		
+		<action name="catalog" method="edit" class="com.n4systems.fieldid.actions.safetyNetwork.CatalogCrud">
+			<result name="success" type="freemarker">/templates/html/catalog/publish.ftl</result>
+			<result name="input" type="freemarker">/templates/html/catalog/publish.ftl</result>
+		</action>
+		<action name="publishCatalog" method="update" class="com.n4systems.fieldid.actions.safetyNetwork.CatalogCrud">
+			<result name="success" type="redirectAction">catalog</result>
+			<result name="input" type="freemarker">/templates/html/catalog/publish.ftl</result>
+		</action>
+		
+		<action name="publishedCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+			<result name="success" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
+		</action>
+		
+		
+		
+		
+		
+		
+		<action name="organizations" method="list" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="freemarker">/templates/html/organization/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/organization/list.ftl</result>
+		</action>
+
+
+		<action name="organizationAdd" method="add" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="freemarker">/templates/html/organization/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/organization/add.ftl</result>
+		</action>
+
+		<action name="organizationCreate" method="create"	class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="input" type="freemarker">/templates/html/organization/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/organization/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">organizations</param>
+			</result>
+		</action>
+		
+		<action name="organizationEdit" method="edit" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
+		</action>
+
+		<action name="organizationUpdate" method="update" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">organizations</param>
+			</result>
+		</action>
+		
+		<action name="dataLog" method="add" class="com.n4systems.fieldid.actions.DataLogAction">
+			<result name="success" type="freemarker">/templates/html/dataLog/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/dataLog/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/dataLog/add.ftl</result>
+		</action>
+				
+		<action name="dataLogSearch" method="list" class="com.n4systems.fieldid.actions.DataLogAction">
+			<result name="success" type="freemarker">/templates/html/dataLog/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/dataLog/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/dataLog/list.ftl</result>
+		</action>
+
+		<action name="productMergeAdd" method="add" class="com.n4systems.fieldid.actions.product.ProductMergeAction">
+			<result name="success" type="freemarker">/templates/html/productMerge/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productMerge/add.ftl</result>
+		</action>
+		
+		<action name="productMergeCreate" method="create" class="com.n4systems.fieldid.actions.product.ProductMergeAction">
+			<result name="success" type="freemarker">/templates/html/productMerge/create.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productMerge/add.ftl</result>
+		</action>
+		
+		<action name="productMultiAdd" method="form" class="com.n4systems.fieldid.actions.product.MultiAddProductCrud">
+			<result name="success" type="freemarker">/templates/html/multiProductCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/multiProductCrud/form.ftl</result>
+		</action>
+
+		<action name="productMultiAddCreate" method="create" class="com.n4systems.fieldid.actions.product.MultiAddProductCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">productMultiAdd</param>
+			</result>
+			
+			<result name="error" type="freemarker">/templates/html/multiProductCrud/form.ftl</result>
+		</action>
+		
+			
+		<action name="systemSettingsEdit" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="success" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
+		</action>
+
+		<action name="systemSettingsUpdate" method="update" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
+			<result name="success" type="redirectAction">systemSettingsEdit</result>
+		</action>
+		
+		<action name="customerInformationEdit" method="edit" class="com.n4systems.fieldid.actions.product.CustomerInformationCrud">
+			<result name="success" type="freemarker">/templates/html/productCrud/customerInformationEdit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/productCrud/customerInformationEdit.ftl</result>
+		</action>
+
+		<action name="customerInformationUpdate" method="update" class="com.n4systems.fieldid.actions.product.CustomerInformationCrud">
+			<result name="input" type="freemarker">/templates/html/productCrud/customerInformationEdit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productCrud/customerInformationEdit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">product</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+	</package>
+</struts>

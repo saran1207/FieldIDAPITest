@@ -1,0 +1,1 @@
+<th><@s.text name="label.links"/></th>

@@ -1,0 +1,21 @@
+#complianceGraph {
+	float:left;
+	width:801px;
+	height: 350px;
+	margin-top: 10px;
+}
+
+#complianceLegend {
+	margin-top: 20px;
+	float:right;
+	width:170px;
+	clear:right;
+	height: 350px;
+}
+
+.serialNumberStatus {
+	margin-left: 25px;
+	font-weight: bold;
+	padding:0px
+}
+

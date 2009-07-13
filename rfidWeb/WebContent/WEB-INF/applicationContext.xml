@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+               
+     <context:annotation-config/>
+     
+	<!-- EJB MANAGERS -->
+
+    <bean id="productTypeManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/LegacyProductTypeManager/local" />
+    </bean>
+    
+
+    
+    <bean id="productSerialManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/LegacyProductSerialManager/local" />
+    </bean>
+    
+	<bean id="safetyNetworkManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/SafetyNetworkManagerImpl/local" />
+    </bean>
+
+	<bean id="optionManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/OptionManager/local" />
+    </bean>
+    
+    <bean id="userManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/UserManager/local" />
+    </bean>
+    
+    <bean id="customerManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/CustomerManagerImpl/local"/>
+    </bean>
+    
+    <bean id="unitOfMeasureManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/UnitOfMeasureManagerImpl/local" />
+    </bean>
+    
+    <bean id="orderMappingManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/OrderMappingManager/local" />
+    </bean>
+    
+    <bean id="serialNumberCounterManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/SerialNumberCounterManager/local" />
+    </bean>
+    
+    <bean id="productCodeMappingManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ProductCodeMappingManager/local"/>
+    </bean>
+    
+    <bean id="commentTemplateManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/CommentTempManager/local" />
+    </bean>
+    
+    <bean id="downloadManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+        	<property name="jndiName" value="fieldid/DownloadManagerImpl/local" />
+    </bean>
+    
+    <bean id="persistenceManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="fieldid/PersistenceManagerImpl/local" />
+	</bean>
+	
+	<bean id="autoAttributeManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/AutoAttributeManagerImpl/local" />
+    </bean>
+    
+    <bean id="scheduleManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/InspectionScheduleManagerImpl/local" />
+    </bean>
+    
+    <bean id="massUpdateManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/MassUpdateManagerImpl/local" />
+    </bean>
+    
+    <bean id="complianceManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ComplianceManagerImpl/local" />
+    </bean>
+    
+    <bean id="configManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ConfigManagerImpl/local" />
+    </bean>
+    
+    <bean id="inspectionManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/InspectionManagerImpl/local" />
+    </bean>
+    
+    <bean id="reportFactoryManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ReportFactoryImpl/local" />
+    </bean>
+    
+    <bean id="proofTestHandler" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ProofTestHandlerImpl/local" />
+    </bean>
+    
+    <bean id="jobSiteManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/JobSiteManagerImpl/local" />
+    </bean>
+    
+    <bean id="aggregateReportManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/AggregateReportManagerImpl/local" />
+    </bean>
+    
+    <bean id="orderManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/OrderManagerImpl/local" />
+    </bean>
+    
+    <bean id="productManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ProductManagerImpl/local" />
+    </bean>
+    <bean id="projectManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ProjectManagerImpl/local" />
+    </bean>
+    
+     <bean id="populatorLog" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/PopulatorLogManager/local" />
+    </bean>
+    
+    <bean id="notificationSettingManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/NotificationSettingManagerImpl/local" />
+    </bean>
+</beans>

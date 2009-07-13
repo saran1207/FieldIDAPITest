@@ -1,0 +1,133 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.ui.theme" value="css_xhtml" />
+	<constant name="struts.url.includeParams" value="none" />
+	<constant name="struts.multipart.maxSize" value="10000000" />
+	<package name="default" extends="struts-default">
+
+		<interceptors>
+			<interceptor name="login" class="com.n4systems.fieldid.utils.LoginInterceptor" />
+			<interceptor name="enabledFeatures" class="com.n4systems.fieldid.permissions.ExtendedFeatureInterceptor" />
+			<interceptor name="security" class="com.n4systems.fieldid.security.SecurityInterceptor" />
+			<interceptor name="flashScope" class="com.n4systems.fieldid.utils.FlashScopeInterceptor" />
+			<interceptor name="tenatRequired" class="com.n4systems.fieldid.utils.RequiredTenantInterceptor" />
+			<interceptor name="missingEntity" class="com.n4systems.fieldid.utils.MissingEntityInterceptor" />
+			
+			<interceptor-stack name="tenantContextStack">
+				<interceptor-ref name="tenatRequired" />
+				<interceptor-ref name="enabledFeatures"/>
+			</interceptor-stack>
+			
+			<interceptor-stack name="publicStack">
+				<interceptor-ref name="paramsPrepareParamsStack" />
+				<interceptor-ref name="missingEntity" />
+			</interceptor-stack>
+			
+			<interceptor-stack name="brandedPublicStack">
+				<interceptor-ref name="publicStack" />
+				<interceptor-ref name="tenatRequired" />
+				<interceptor-ref name="enabledFeatures"/>
+			</interceptor-stack>
+			
+			<interceptor-stack name="secureStack">
+				<interceptor-ref name="tenatRequired" />
+				<interceptor-ref name="login" />
+				<interceptor-ref name="security" />
+				<interceptor-ref name="enabledFeatures"/>
+				<interceptor-ref name="publicStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="flashSecureStack">
+				<interceptor-ref name="flashScope" />
+				<interceptor-ref name="secureStack" />
+			</interceptor-stack>
+			
+			<interceptor-stack name="flashPublicStack">
+				<interceptor-ref name="flashScope" />
+				<interceptor-ref name="publicStack" />
+			</interceptor-stack>
+			
+			<interceptor-stack name="brandedFlashPublicStack">
+				<interceptor-ref name="flashScope" />
+				<interceptor-ref name="brandedPublicStack" />
+			</interceptor-stack>
+
+		</interceptors>
+
+		<default-interceptor-ref name="flashSecureStack" />
+
+		<global-results>
+			<result name="login" type="redirectAction">login</result>
+			<result name="tenant_missing" type="redirectAction">chooseCompany</result>
+			<result name="no_permission" type="freemarker">/templates/html/common/featureRequired.ftl</result>
+		</global-results>
+
+		
+	</package>
+
+	<package name="embedded" extends="default" namespace="/embedded">
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction" >
+			<interceptor-ref name="flashPublicStack" />
+			<result name="success" type="freemarker">/templates/html/login/embedded.ftl</result>
+			<result name="alreadyLoggedIn" type="freemarker">/templates/html/login/embedded.ftl</result>
+		</action>
+	</package>
+
+	<include file="webPackageStruts.xml"/>
+
+	<include file="ajaxPackageStruts.xml"/>
+	<include file="aHtmlPackageStruts.xml"/>
+	
+	<package name="xmlActions" extends="default" namespace="/xml">
+		<global-results>
+			<result name="no_permission" type="httpheader">
+				<param name="error">404</param>
+			</result>
+		</global-results>
+		<action name="productComplianceRisk" method="show" class="com.n4systems.fieldid.actions.product.ComplianceAction" >
+			<result name="error" type="freemarker">/templates/xml/productCrud/complianceRisk.ftl</result>
+			<result name="success" type="freemarker">/templates/xml/productCrud/complianceRisk.ftl</result>
+		</action>
+	</package>
+	
+	<package name="files" extends="default" namespace="/file">
+		<global-results>
+			<result name="missing" type="httpheader">
+				<param name="error">404</param>
+			</result>
+			<result name="invalid_security" type="httpheader">
+				<param name="error">403</param>
+			</result>
+			<result name="error" type="httpheader">
+				<param name="error">404</param>
+			</result>
+		</global-results>
+		<action name="downloadAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedInspectionFile" />
+		<action name="downloadSubAttachedFile" method="downloadSubInspection" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedInspectionFile" />
+		<action name="downloadProofTestChart" method="downloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedInspectionFile" />
+		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
+		<action name="downloadInspectionCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadInspectionCert" />
+		<action name="downloadLinkedInspectionCert" method="downloadLinkedInspection" class="com.n4systems.fieldid.actions.downloaders.DownloadInspectionCert" />
+		<action name="downloadProductTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeAttachedFile" />
+		<action name="downloadProductTypeImage" method="downloadImage" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeAttachedFile" />
+		<action name="downloadCertLogo" method="downloadCertLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
+		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
+		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
+		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
+		</action>
+		<action name="downloadLinkedManufacturerCert" method="downloadLinked" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
+		</action>
+		<action name="downloadTenantLogo" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" >
+			<interceptor-ref name="publicStack" />
+		</action>		
+		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
+		
+	</package>
+</struts>

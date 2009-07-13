@@ -1,0 +1,16 @@
+.viewTreeContainer {
+}
+
+.viewTreeNode {
+	padding-left: 15px;
+}
+
+.viewTreeNodeTitle {
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.viewTreeNodeItem {
+	padding-left: 20px;
+}

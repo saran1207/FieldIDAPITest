@@ -1,0 +1,207 @@
+package com.n4systems.fieldid.actions.safetyNetwork;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+
+import rfid.ejb.session.LegacyProductType;
+
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.NoAccessToTenantException;
+import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.model.TenantOrganization;
+import com.n4systems.services.safetyNetwork.CatalogService;
+import com.n4systems.services.safetyNetwork.ImportCatalogService;
+import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
+import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.CatalogImportTask;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ListingPair;
+
+public class PublishedCatalogCrud extends AbstractCrud {
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(PublishedCatalogCrud.class);
+	
+	
+	private TenantOrganization linkedTenant;
+	private CatalogService linkedCatalogAccess;
+	private LegacyProductType productTypeManager;
+	
+	private Map<String,Boolean> importProductTypeIds = new HashMap<String, Boolean>();
+	private Map<String,Boolean> importInspectionTypeIds = new HashMap<String, Boolean>();
+	private boolean usingPackage = false;
+	
+	private CatalogImportSummary summary;
+	private Map<Long,List<ListingPair>> cacheSubTypes = new HashMap<Long, List<ListingPair>>();
+	private Map<Long,List<ListingPair>> cacheInpsectionTypes = new HashMap<Long, List<ListingPair>>();
+	
+	
+	public PublishedCatalogCrud(PersistenceManager persistenceManager, LegacyProductType productTypeManager) {
+		super(persistenceManager);
+		this.productTypeManager = productTypeManager;
+		
+	}
+
+	@Override
+	protected void initMemberFields() {
+	}
+
+	@Override
+	protected void loadMemberFields(Long uniqueId) {
+		linkedTenant = persistenceManager.find(TenantOrganization.class, uniqueId);
+		
+	}
+	
+	public String doShow() {
+		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, getTenant());
+		try { 
+			linkedCatalogAccess = safetyNetwork.getCatalogAccess(linkedTenant);
+		} catch (NoAccessToTenantException e) {
+			logger.warn(getLogLinePrefix() + "attempt to access non linked tenant catalog for " + linkedTenant.getName() + " by " + getTenant().getName());
+			addActionErrorText("error.no_access_to_linked_catalog");
+			throw new MissingEntityException();
+		}
+		return SUCCESS;
+	}
+
+	public String doConfirm() {
+		doShow();
+		Set<Long> importTheseProductTypeIds = covertSelectedIdsToSet(importProductTypeIds);
+		Set<Long> importTheseInspectionTypeIds = covertSelectedIdsToSet(importInspectionTypeIds);
+		
+		try {
+			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getTenant(), linkedCatalogAccess, productTypeManager);
+			importCatalogService.setImportProductTypeIds(importTheseProductTypeIds);
+			importCatalogService.setImportInspectionTypeIds(importTheseInspectionTypeIds);
+			importCatalogService.setImportAllRelations(usingPackage);
+			summary = importCatalogService.importSelectionSummary();
+		} catch (Exception e) {
+			logger.error(getLogLinePrefix() + " could create import confirm page for " + getTenant().getName() + " on catalog " + linkedTenant.getName(), e);
+			addActionErrorText("error.importing_catalog");
+			return ERROR;
+		}
+		
+		return SUCCESS;
+	}
+
+	private Set<Long> covertSelectedIdsToSet(Map<String,Boolean> idSet) {
+		Set<Long> importIds = new HashSet<Long>();
+		for (Entry<String,Boolean> entry : idSet.entrySet()) {
+			if (entry.getValue()) { 
+				importIds.add(Long.parseLong(entry.getKey()));
+			}
+		}
+		return importIds;
+	}
+	
+	
+	public String doImport() {
+		doShow();
+
+		try {
+			CatalogImportTask importTask = new CatalogImportTask();
+			
+			importTask.setImportInspectionTypeIds(covertSelectedIdsToSet(importInspectionTypeIds));
+			importTask.setImportProductTypeIds(covertSelectedIdsToSet(importProductTypeIds));
+			importTask.setTenant(getTenant());
+			importTask.setLinkedTenant(getLinkedTenant());
+			importTask.setUsingPackages(usingPackage);
+			importTask.setUser(fetchCurrentUser());
+
+			TaskExecutor.getInstance().execute(importTask);
+
+			logger.info(getLogLinePrefix() + "secheduled imported product types from " + linkedTenant.getName() + " catalog");
+			
+		} catch (Exception e) {
+			logger.error(getLogLinePrefix() + " could not import product types from " + linkedTenant.getName() + " catalog", e);
+			addActionErrorText("error.importing_catalog");
+			return ERROR;
+		}
+		
+		return SUCCESS;
+	}
+	
+	public TenantOrganization getLinkedTenant() {
+		return linkedTenant;
+	}
+	
+	public List<ListingPair> getPublishedProductTypes() {
+		return linkedCatalogAccess.getPublishedProductTypesLP();
+		
+	}
+
+	public Map<String, Boolean> getImportInspectionTypeIds() {
+		return importInspectionTypeIds;
+	}
+	
+	public List<ListingPair> getPublishedInspectionTypes() {
+		return linkedCatalogAccess.getPublishedInspectionTypesLP();
+		
+	}
+
+	public Map<String, Boolean> getImportProductTypeIds() {
+		return importProductTypeIds;
+	}
+
+
+	public List<ListingPair> getInspectionTypesFor(Long productTypeId) {
+		if (!cacheInpsectionTypes.containsKey(productTypeId)) {
+			Set<Long> ids = new HashSet<Long>();
+			ids.add(productTypeId);
+			Set<Long> inspectionTypeIds = linkedCatalogAccess.getPublishedInspectionTypeIdsConnectedTo(ids);
+			List<ListingPair> inspectionTypes = new ArrayList<ListingPair>();
+			for (ListingPair inspectionType : getPublishedInspectionTypes()) {
+				if (inspectionTypeIds.contains(inspectionType.getId())) {
+					inspectionTypes.add(inspectionType);
+				}
+			}
+			cacheInpsectionTypes.put(productTypeId, inspectionTypes);
+		}
+		return cacheInpsectionTypes.get(productTypeId);
+	}
+	
+	public List<ListingPair> getSubTypesFor(Long productTypeId) {
+		if (!cacheSubTypes.containsKey(productTypeId)) {
+			List<Long> subTypeIds = linkedCatalogAccess.getAllPublishedSubTypesFor(productTypeId);
+			List<ListingPair> subTypes = new ArrayList<ListingPair>();
+			for (ListingPair productType : getPublishedProductTypes()) {
+				if (subTypeIds.contains(productType.getId())) {
+					subTypes.add(productType);
+				}
+			}
+			cacheSubTypes.put(productTypeId, subTypes);
+		}
+		return cacheSubTypes.get(productTypeId);
+	}
+	
+	public CatalogImportSummary getSummary() {
+		return summary;
+	}
+
+	public boolean isUsingPackage() {
+		return usingPackage;
+	}
+
+	public void setUsingPackage(boolean usingPackage) {
+		this.usingPackage = usingPackage;
+	}
+
+
+	public Date getNow() {
+		return new Date();
+	}
+	
+	public int getEstimatedImportTime() {
+		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.ESTIMATED_CATALOG_IMPORT_TIME_IN_MINUTES);
+	}
+}

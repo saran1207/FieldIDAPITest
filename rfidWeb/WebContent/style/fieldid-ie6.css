@@ -1,0 +1,31 @@
+.userRequest .label {
+	display: inline;
+	float:none;
+	
+}
+.userRequest .field {
+	display: inline;
+	float:none;
+	clear:none;
+}
+
+.complianceMessage {
+	height: 200px; 
+}
+
+
+#pageContent * {
+	zoom:1;
+}
+
+body {
+	behavior: url(/fieldid/javascript/csshover2.htc);
+}
+
+#pageNavigation ul li a #menuAdministraion {
+	width: 75px;
+}
+
+#pageNavigation ul li a {
+	width:60px;
+}

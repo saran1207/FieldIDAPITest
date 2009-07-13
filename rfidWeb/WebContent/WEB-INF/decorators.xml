@@ -1,0 +1,56 @@
+<decorators defaultdir="/templates/html/layout"> 
+
+	<excludes>
+		<pattern>*pushFile.action*</pattern>
+		<pattern>*excel/*.action*</pattern>
+		<pattern>*productTypeImageUpload.action*</pattern>
+		<pattern>*viewProductTypeImage.action*</pattern>
+		<pattern>*userUploadSignature.action*</pattern>
+		<pattern>*xml/*.action*</pattern>
+		<pattern>*file/*.action*</pattern>
+		
+	</excludes>
+
+	<decorator name="embedded" page="/templates/html/layout/embeddedLayout.ftl">
+		<pattern>/embedded/*.action*</pattern>
+	</decorator>
+	
+	<decorator name="ajaxHtmlLayout" page="/templates/ajax/layout/htmlLayout.ftl">
+		<pattern>*ajax/uploadForm.action*</pattern>
+		<pattern>*ajax/uploadFile.action*</pattern>
+		<pattern>*ajax/uploadImageForm.action*</pattern>
+		<pattern>*ajax/uploadImage.action*</pattern>
+		<pattern>*ajax/inspection.action*</pattern>
+		<pattern>*ajax/linkedInspection.action*</pattern>
+	</decorator>
+	
+	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
+		<pattern>*ajax/*.action*</pattern>
+		
+	</decorator>
+	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
+		<pattern>*aHtml/*.action*</pattern>
+	</decorator>
+	
+	
+	<decorator name="nonLoggedInBrandedLayout" page="brandedPublicLayout.ftl">     	
+        <pattern>*register*.action</pattern>
+        <pattern>*forgotPassword*.action</pattern>
+        <pattern>*sendPassword*.action</pattern>
+        <pattern>*resetPassword*.action</pattern>
+    </decorator>
+    
+    <decorator name="loginLayout" page="loginLayout.ftl">
+    	<pattern>/login.action*</pattern>
+        <pattern>/logIntoSystem.action*</pattern>
+    </decorator>
+    
+    <decorator name="publicLayout" page="publicLayout.ftl" >
+    	<pattern>/chooseCompany.action*</pattern>
+    	<pattern>/signInToCompany.action*</pattern>
+    </decorator>
+	
+    <decorator name="layout" page="layout.ftl">     	
+        <pattern>*.action</pattern>
+    </decorator> 
+</decorators> 

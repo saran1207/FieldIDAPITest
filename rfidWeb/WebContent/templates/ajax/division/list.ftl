@@ -1,0 +1,1 @@
+updateDivisionList( ${json.toJSON(divisions)} );

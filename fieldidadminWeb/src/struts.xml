@@ -1,0 +1,265 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.url.includeParams" value="none" />
+    
+	<package name="default" extends="struts-default">
+	
+		<interceptors>
+			<interceptor name="login" class="com.n4systems.fieldidadmin.utils.LoginInterceptor" />
+			<interceptor-stack name="secureStack">
+				<interceptor-ref name="login" />
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+	
+		<default-interceptor-ref name="secureStack" />
+		
+		<global-results>
+			<result name="login">/jsp/login.jsp</result>
+		</global-results>
+		
+		<action name="login" method="login" class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
+			<result name="success" type="redirect-action">organizationList</result>
+			<interceptor-ref name="defaultStack" />
+		</action>
+		
+		<action name="organizationList" method="list" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success">jsp/organization/list.jsp</result>
+		</action>
+		
+
+		<action name="organizationCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<interceptor-ref name="fileUpload"/>
+		    <interceptor-ref name="secureStack"/>		
+			<result name="input">jsp/organization/organizationForm.jsp</result>
+			<result name="success" type="redirect-action">organizationList</result>
+			<result name="error">jsp/organization/organizationForm.jsp</result>
+		</action>
+		
+		
+		
+				
+		
+		
+		<action name="findProductOptionList" method="list" class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
+			<result name="success">jsp/findproductoption/list.jsp</result>
+		</action>
+
+		<action name="findProductOptionCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
+			<result name="input">jsp/findproductoption/findProductOptionForm.jsp</result>
+			<result name="success" type="redirect-action">findProductOptionList</result>
+		</action>
+		
+		<action name="importerList" method="list" class="com.n4systems.fieldidadmin.actions.ImporterAction">
+			<result name="success">jsp/importer/list.jsp</result>
+		</action>
+		
+		<action name="importAllData" method="listAllFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
+			<result name="success">jsp/importer/importListAll.jsp</result>
+		</action>
+		
+		<action name="importEndUsers" method="listEndUserFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
+			<result name="success">jsp/importer/importListEndUser.jsp</result>
+		</action>
+		
+		<action name="importProductSerials" method="listProductSerialFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
+			<result name="success">jsp/importer/importListProductSerial.jsp</result>
+		</action>
+		
+		<action name="importInspections" method="listInspectionFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
+			<result name="success">jsp/importer/importListInspection.jsp</result>
+		</action>
+		
+		<action name="unitOfMeasureList" method="list" class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
+			<result name="success">jsp/unitofmeasure/list.jsp</result>
+		</action>
+		
+		<action name="unitOfMeasureCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
+			<result name="input">jsp/unitofmeasure/unitOfMeasureForm.jsp</result>
+			<result name="success" type="redirect-action">unitOfMeasureList</result>
+		</action>
+		
+		<action name="orderMappingList" method="list" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<result name="success">jsp/ordermapping/list.jsp</result>
+		</action>
+		
+		<action name="uploadOrderMappingXml" method="fileFormInput" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<interceptor-ref name="fileUpload"/>
+		    <interceptor-ref name="basicStack"/>
+    		<result name="input">jsp/ordermapping/list.jsp</result>
+			<result name="success" type="redirect-action">orderMappingList</result>
+			<result name="error" type="redirect-action">orderMappingList</result>
+		</action>
+	
+		<action name="orderMappingCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+    		<result name="input">jsp/ordermapping/orderMappingForm.jsp</result>
+			<result name="success" type="redirect-action">orderMappingList</result>
+		</action>
+
+		<action name="orderMappingDelete" method="delete" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<result name="success" type="redirect-action">orderMappingList</result>
+		</action>
+		
+		<action name="mailTest" method="input" class="com.n4systems.fieldidadmin.actions.MailAction">
+			<result name="input">jsp/mail/mail.jsp</result>
+			<result name="success">jsp/mail/mail.jsp</result>
+			<result name="error">jsp/mail/mail.jsp</result>
+		</action>
+		
+		<action name="configCrud" method="load" class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
+			<result name="success">jsp/config/config.jsp</result>
+			<result name="error">jsp/config/config.jsp</result>
+		</action>
+		
+		<action name="importObservations" method="show" class="com.n4systems.fieldidadmin.actions.ObservationImporterAction">
+			<result name="success">jsp/observations/show.jsp</result>
+			<result name="error">jsp/observations/show.jsp</result>
+		</action>
+		
+		<action name="importAutoAttributes" method="show" class="com.n4systems.fieldidadmin.actions.AutoAttributeImporterAction">
+			<result name="success">jsp/autoattributes/show.jsp</result>
+			<result name="error">jsp/autoattributes/show.jsp</result>
+		</action>
+		
+		
+		<action name="instructionalVideos" method="list" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success">jsp/instructionalVideos/list.jsp</result>
+			<result name="error">jsp/instructionalVideos/list.jsp</result>
+		</action>
+		
+		<action name="instructionalVideoAdd" method="add" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success">jsp/instructionalVideos/add.jsp</result>
+		</action>
+		
+		<action name="instructionalVideoEdit" method="edit" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success">jsp/instructionalVideos/edit.jsp</result>
+		</action>
+		
+		<action name="instructionalVideoCreate" method="save" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="error">jsp/instructionalVideos/add.jsp</result>
+			<result name="input">jsp/instructionalVideos/add.jsp</result>
+			<result name="success" type="redirectAction">instructionalVideos</result>
+		</action>
+		
+		
+		
+		<action name="instructionalVideoUpdate" method="save" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="error">jsp/instructionalVideos/edit.jsp</result>
+			<result name="input">jsp/instructionalVideos/edit.jsp</result>
+			<result name="success" type="redirectAction">instructionalVideos</result>
+		</action>
+		<action name="instructionalVideoDelete" method="delete" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success" type="redirectAction">instructionalVideos</result>
+			<result name="error" type="redirectAction">instructionalVideos</result>
+		</action>
+		
+		<action name="certSelection" class="com.n4systems.fieldidadmin.actions.SimpleAction">
+			<result name="success">jsp/certSelection/show.jsp</result>
+		</action>
+		
+		<action name="defaultPrintOuts" method="list" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success">jsp/defaultPrintOuts/list.jsp</result>
+			<result name="error">jsp/defaultPrintOuts/list.jsp</result>
+		</action>
+		
+		<action name="defaultPrintOutAdd" method="add" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success">jsp/defaultPrintOuts/add.jsp</result>
+		</action>
+		
+		<action name="defaultPrintOutEdit" method="edit" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success">jsp/defaultPrintOuts/edit.jsp</result>
+		</action>
+		
+		<action name="defaultPrintOutCreate" method="create" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="error">jsp/defaultPrintOuts/add.jsp</result>
+			<result name="input">jsp/defaultPrintOuts/add.jsp</result>
+			<result name="success" type="redirectAction">defaultPrintOuts</result>
+		</action>
+		
+		
+		
+		<action name="defaultPrintOutUpdate" method="update" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="error">jsp/defaultPrintOuts/edit.jsp</result>
+			<result name="input">jsp/defaultPrintOuts/edit.jsp</result>
+			<result name="success" type="redirectAction">defaultPrintOuts</result>
+		</action>
+		<action name="defaultPrintOutDelete" method="delete" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success" type="redirectAction">defaultPrintOuts</result>
+			<result name="error" type="redirectAction">defaultPrintOuts</result>
+		</action>
+		
+		<action name="customPrintOuts" method="list" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success">jsp/customPrintOuts/list.jsp</result>
+			<result name="error">jsp/customPrintOuts/list.jsp</result>
+		</action>
+		
+		<action name="customPrintOutAdd" method="add" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success">jsp/customPrintOuts/add.jsp</result>
+		</action>
+		
+		<action name="customPrintOutEdit" method="edit" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success">jsp/customPrintOuts/edit.jsp</result>
+		</action>
+		
+		<action name="customPrintOutCreate" method="create" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="error">jsp/customPrintOuts/add.jsp</result>
+			<result name="input">jsp/customPrintOuts/add.jsp</result>
+			<result name="success" type="redirectAction">customPrintOuts</result>
+		</action>
+		
+		
+		
+		<action name="customPrintOutUpdate" method="update" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="error">jsp/customPrintOuts/edit.jsp</result>
+			<result name="input">jsp/customPrintOuts/edit.jsp</result>
+			<result name="success" type="redirectAction">customPrintOuts</result>
+		</action>
+		<action name="customPrintOutDelete" method="delete" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success" type="redirectAction">customPrintOuts</result>
+			<result name="error" type="redirectAction">customPrintOuts</result>
+		</action>
+		
+		<action name="taskCrud" method="load" class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success">jsp/tasks/tasks.jsp</result>
+			<result name="error">jsp/tasks/tasks.jsp</result>
+		</action>
+		
+		<action name="enableDisableTask" method="enableDisableTask" class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirect-action">taskCrud</result>
+			<result name="error" type="redirect-action">taskCrud</result>
+		</action>
+		
+		<action name="enableDisableScheduler" method="enableDisableScheduler" class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirect-action">taskCrud</result>
+			<result name="error" type="redirect-action">taskCrud</result>
+		</action>
+		
+		<action name="reloadScheduler" method="reloadScheduler" class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirect-action">taskCrud</result>
+			<result name="error" type="redirect-action">taskCrud</result>
+		</action>
+		
+		<action name="changeAdminPass" method="load" class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
+			<result name="success">jsp/changeadminpass/form.jsp</result>
+			<result name="error">jsp/changeadminpass/form.jsp</result>
+		</action>
+	</package>
+	
+	
+	<package name="ajaxAction" extends="default" namespace="/ajax">
+		<action name="getConfigValue" method="getConfiguration" class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
+			<result name="success">config/ajaxConfigValue.jsp</result>
+		</action>
+		
+		<action name="createSuperUser" method="createUser" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success">/jsp/ajax_pieces/createUser.jsp</result>
+		</action>
+		
+	</package>
+</struts>

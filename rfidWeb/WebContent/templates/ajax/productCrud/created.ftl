@@ -1,0 +1,1 @@
+attachProduct( null, ${product.id} );

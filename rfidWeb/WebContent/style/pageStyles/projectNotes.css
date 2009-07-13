@@ -1,0 +1,50 @@
+#addNote {
+	margin:5px 0;
+}
+#addNote textarea {
+	width: 690px;
+	height:75px;
+}
+
+
+#emptyNotes {
+	padding:5px;
+	border-bottom: 1px solid #D0DAFD;
+}
+.note {
+	border-bottom: 1px solid #D0DAFD;
+	overflow: hidden;
+	padding:5px;
+	padding-left:15px;
+}
+
+.note:hover {
+	background-color: #D0DAFD
+}
+
+.noteInformation, .noteRemoval{
+	float:left;
+	width:700px;
+	
+	
+}
+
+.noteRemoval {
+	width: 30px;
+}
+
+.noteText {
+	margin-bottom: 5px;
+}
+
+
+.noteCreation {
+	color: grey;
+	font-size: 0.9em;
+}
+
+.noteRemoval {
+	width: 100px;
+	float:left;
+	margin-top:0.5em;
+}

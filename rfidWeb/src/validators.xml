@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC
+     "-//OpenSymphony Group//XWork Validator Config 1.0//EN"
+     "http://www.opensymphony.com/xwork/xwork-validator-config-1.0.dtd">
+<validators>
+ <validator name="moneyValidator" class="com.n4systems.fieldid.validators.MoneyValidator" />
+ <validator name="infoFields" class="com.n4systems.fieldid.validators.InfoFieldValidator" />
+ <validator name="infoOptions" class="com.n4systems.fieldid.validators.InfoOptionValidator" />
+ <validator name="infoFieldComboBox" class="com.n4systems.fieldid.validators.InfoFieldComboBoxValidator" />
+ <validator name="fileSizeValidator" class="com.n4systems.fieldid.validators.FileValidator" />
+ <validator name="imageUploadContentType" class="com.n4systems.fieldid.validators.FileContentValidator" />
+ <validator name="listNotEmptyValidator" class="com.n4systems.fieldid.validators.ListNotEmptyValidator" />
+ <validator name="uniqueValue" class="com.n4systems.fieldid.validators.UniqueValueValidator" />
+ <validator name="requiredInfoFields" class="com.n4systems.fieldid.validators.RequiredInfoFieldsValidator" />
+ <validator name="productDescriptionTemplate" class="com.n4systems.fieldid.validators.ProductDescriptionTemplateValidator" />
+ <validator name="duplicateRfidValidator" class="com.n4systems.fieldid.validators.DuplicateRfidValidator" />
+ <validator name="selectCheckListValidator" class="com.n4systems.fieldid.validators.SelectCheckListValidator" />
+ <validator name="n4systemsDateValidator" class="com.n4systems.fieldid.validators.DateValidator" />
+ <validator name="fileExistsValidator" class="com.n4systems.fieldid.validators.FileExistsValidator" />
+ <validator name="requiredStringSet" class="com.n4systems.fieldid.validators.RequiredStringSet" />
+ <validator name="requiredSet" class="com.n4systems.fieldid.validators.RequiredSetValidator" />
+ <validator name="requiredNameSet" class="com.n4systems.fieldid.validators.RequiredNameSetValidator" />
+ <validator name="requiredCriteriaName" class="com.n4systems.fieldid.validators.inspection.CriteriaNameValidator" />
+ <validator name="requiredCriteriaSets" class="com.n4systems.fieldid.validators.inspection.CriteriaSetValidator" />
+ <validator name="requiredCriteriaStateSet" class="com.n4systems.fieldid.validators.inspection.CriteriaStateSetValidator" />  		
+ <validator name="requiredSetsResult" class="com.n4systems.fieldid.validators.inspection.RequiredSetsResultValidator" />
+ <validator name="requiredIfFeature" class="com.n4systems.fieldid.validators.RequiredIfFeatureValidator" />
+ <validator name="uploadFileLimitValidator" class="com.n4systems.fieldid.validators.UploadFileLimitValidator" />
+ <validator name="uploadAttachmentLimitValidator" class="com.n4systems.fieldid.validators.UploadAttachmentLimitValidator" />
+ <validator name="fileSecurityValidator" class="com.n4systems.fieldid.validators.FileSecurityValidator" />
+ <validator name="uploadFileSecurityValidator" class="com.n4systems.fieldid.validators.UploadFileSecurityValidator" />
+ <validator name="uploadAttachmentSecurityValidator" class="com.n4systems.fieldid.validators.UploadAttachmentSecurityValidator" />
+ <validator name="uploadFileValidator" class="com.n4systems.fieldid.validators.UploadFileValidator" />
+ <validator name="uploadAttachmentValidator" class="com.n4systems.fieldid.validators.UploadAttachmentValidator" />
+ <validator name="subProductValidator" class="com.n4systems.fieldid.validators.SubProductTypeValidator" />
+</validators>

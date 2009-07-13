@@ -1,0 +1,20 @@
+.administration {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+h3.administration {
+	font-size: 1.3em;
+	font-weight:normal;
+}
+
+.administration label {
+	font-size: 1.2em;
+	color: #333;
+	
+}
+
+.administration label a, .administration label a:hover, .administration label a:active, .administration label a:visited {
+	color: #333;
+	
+}

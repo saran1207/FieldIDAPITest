@@ -1,0 +1,1031 @@
+package com.n4systems.fieldid.actions.product;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import rfid.ejb.entity.AddProductHistoryBean;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+import rfid.ejb.entity.ProductCodeMappingBean;
+import rfid.ejb.entity.ProductSerialExtensionBean;
+import rfid.ejb.entity.ProductSerialExtensionValueBean;
+import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.UserBean;
+import rfid.ejb.session.CommentTemp;
+import rfid.ejb.session.LegacyProductSerial;
+import rfid.ejb.session.LegacyProductType;
+import rfid.ejb.session.ProductCodeMapping;
+import rfid.ejb.session.User;
+
+import com.n4systems.ejb.CustomerManager;
+import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.OrderManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.ProjectManager;
+import com.n4systems.ejb.SafetyNetworkManager;
+import com.n4systems.exceptions.UsedOnMasterInspectionException;
+import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
+import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
+import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
+import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
+import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
+import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.Customer;
+import com.n4systems.model.Division;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.Inspection;
+import com.n4systems.model.JobSite;
+import com.n4systems.model.LineItem;
+import com.n4systems.model.Order;
+import com.n4systems.model.Product;
+import com.n4systems.model.ProductType;
+import com.n4systems.model.Project;
+import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.services.product.ProductSaveService;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DateHelper;
+import com.n4systems.util.ListingPair;
+import com.n4systems.util.ProductRemovalSummary;
+import com.n4systems.util.StringListingPair;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+
+public class ProductCrud extends UploadAttachmentSupport {
+	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(ProductCrud.class);
+
+	// drop down lists
+	private Collection<ListingPair> customers;
+	private Collection<ListingPair> divisions;
+	private Collection<ProductStatusBean> productStatuses;
+	private Collection<ListingPair> commentTemplates;
+	private List<ListingPair> jobSites;
+	private ProductType productType;
+	private Collection<ProductSerialExtensionBean> extentions;
+	private AutoAttributeCriteria autoAttributeCriteria;
+	
+	private List<Product> products;
+	private List<ListingPair> employees;
+	
+	private List<ProductAttachment> productAttachments;
+
+	// form inputs
+	private List<InfoOptionInput> productInfoOptions;
+	private List<ProductExtensionValueInput> productExtentionValues;
+	private Product product;
+	private AddProductHistoryBean addProductHistory;
+	private String search;
+	private String identified;
+	private LineItem lineItem;
+
+	/**
+	 * Set only when coming from searchOrder.action, when attached a customer
+	 * order through editWithCustomerOrder()
+	 */
+	private Order customerOrder;
+
+	/**
+	 * Set only when coming from searchOrder.action, and used to recreate the
+	 * URL going back to search
+	 */
+	private Long tagOptionId;
+
+	// viewextras
+	private AllInspectionHelper allInspectionHelper;
+	private List<Product> linkedProducts;
+	private List<Project> projects;
+	
+
+	private Product parentProduct;
+	private boolean lookedUpParent = false;
+
+	// save buttons.z
+	private String save;
+	private String saveAndInspect;
+	private String saveAndPrint;
+	private String saveAndSchedule;
+
+	private ProductRemovalSummary removalSummary;
+
+	// managers
+	private LegacyProductType productTypeManager;
+	private LegacyProductSerial legacyProductSerialManager;
+	private CustomerManager customerManager;
+	private CommentTemp commentTemplateManager;
+	private User userManager;
+	private SafetyNetworkManager safetyNetworkManager;
+	
+	private ProductCodeMapping productCodeMappingManager;
+	private InspectionScheduleManager inspectionScheduleManager;
+	private ProductManager productManager;
+	private OrderManager orderManager;
+	private ProjectManager projectManager;
+	private ProductTypeLister productTypes;
+	private ProductSaveService productSaverService;
+	private Long excludeId;
+	
+	
+
+	
+	//XXX:  this needs access to way to many managers to be healthy!!! AA
+	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, CustomerManager customerManager, CommentTemp commentTemplateManager,
+			PersistenceManager persistenceManager, User userManager, SafetyNetworkManager safetyNetworkManager, ProductCodeMapping productCodeMappingManager,
+			ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
+		super(persistenceManager);
+		this.productTypeManager = productTypeManager;
+		this.legacyProductSerialManager = legacyProductSerialManager;
+		this.customerManager = customerManager;
+		this.commentTemplateManager = commentTemplateManager;
+		this.userManager = userManager;
+		this.safetyNetworkManager = safetyNetworkManager;
+		this.productCodeMappingManager = productCodeMappingManager;
+		this.productManager = productManager;
+		this.orderManager = orderManager;
+		this.projectManager = projectManager;
+		this.inspectionScheduleManager = inspectionScheduleManager;
+		
+	}
+
+	@Override
+	protected void initMemberFields() {
+		product = new Product();
+	}
+
+	@Override
+	protected void loadMemberFields(Long uniqueId) {
+		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		
+	}
+
+	private void loadAddProductHistory() {
+		addProductHistory = legacyProductSerialManager.getAddProductHistory(getSessionUser().getUniqueID());
+
+	}
+
+	private void applyDefaults() {
+		product.setIdentified(DateHelper.getToday());
+
+		loadAddProductHistory();
+		if (addProductHistory != null) {
+			product.setOwner(addProductHistory.getOwner());
+			product.setDivision(addProductHistory.getDivision());
+
+			if (addProductHistory.getJobSite() != null) {
+				product.setJobSite(addProductHistory.getJobSite());
+				product.setAssignedUser(addProductHistory.getAssignedUser());
+				product.setOwner(addProductHistory.getJobSite().getCustomer());
+				product.setDivision(addProductHistory.getJobSite().getDivision());
+			}
+
+			// we need to make sure we load the producttype with its info fields
+			setProductTypeId(addProductHistory.getProductType().getId());
+
+			product.setProductStatus(addProductHistory.getProductStatus());
+			product.setPurchaseOrder(addProductHistory.getPurchaseOrder());
+			product.setLocation(addProductHistory.getLocation());
+			product.setInfoOptions(new TreeSet<InfoOptionBean>(addProductHistory.getInfoOptions()));
+
+		} else {
+			// set the default product id.
+			getProductTypes();
+			Long productId = productTypes.getProductTypes().iterator().next().getId();
+			setProductTypeId(productId);
+		}
+
+		if (getSessionUser().isAnEndUser()) {
+			setOwner(getSessionUser().getR_EndUser());
+		}
+		if (getSessionUser().isInDivision()) {
+			setDivision(getSessionUser().getR_Division());
+		}
+
+	}
+
+	private void convertInputsToInfoOptions() {
+
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(productInfoOptions, product.getType().getInfoFields());
+
+		product.setInfoOptions(new TreeSet<InfoOptionBean>(options));
+	}
+
+	// XXX - This logic has been duplicated in ProductViewModeConverter.  ProductCrud should be refactored to use that.
+	private void convertInputsToExtensionValues() {
+		if (productExtentionValues != null) {
+			Set<ProductSerialExtensionValueBean> newExtensionValues = new TreeSet<ProductSerialExtensionValueBean>();
+			for (ProductExtensionValueInput input : productExtentionValues) {
+				if (input != null) { // some of the inputs can be null due to
+					// the retired info fields.
+					for (ProductSerialExtensionBean extension : getExtentions()) {
+						if (extension.getUniqueID().equals(input.getExtensionId())) {
+							ProductSerialExtensionValueBean extensionValue = input.convertToExtensionValueBean(extension, product);
+							if (extensionValue != null) {
+								newExtensionValues.add(extensionValue);
+							}
+						}
+					}
+				}
+			}
+			product.setProductSerialExtensionValues(newExtensionValues);
+		}
+	}
+
+	@SkipValidation
+	public String doList() {
+		// if no search param came just show the form.
+		if (search != null && search.length() > 0) {
+			try {
+				products = productManager.findProductByIdentifiers(getSecurityFilter(), search, productType);
+				
+				// remove the product given.  ( this is for product merging, you don't want to merge the product with itself.)
+				 
+				if (excludeId != null) {
+					Product excludeProduct = new Product();
+					excludeProduct.setId(excludeId);
+					products.remove(excludeProduct);
+				}
+				// if there is only one forward. directly to the group view
+				// screen.
+				if (products.size() == 1) {
+					product = products.get(0);
+					uniqueID = product.getId();
+					return "oneFound";
+				}
+			} catch (Exception e) {
+				logger.error("Failed to look up Products", e);
+				addActionErrorText("error.failedtoload");
+				return ERROR;
+			}
+		}
+
+		return SUCCESS;
+	}
+
+	
+
+	@SkipValidation
+	public String doAddNoHistory() {
+		product.setIdentified(DateHelper.getToday());
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doAdd() {
+		applyDefaults();
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doAddWithOrder() {
+
+		if (lineItem == null || lineItem.getId() == null) {
+			addActionErrorText("error.noorder");
+			return MISSING;
+		}
+
+		// find the product code mapping by product code. This will return the
+		// default product code if one could not be found.
+		ProductCodeMappingBean productCodeMapping = productCodeMappingManager.getProductCodeByProductCodeAndTenant(lineItem.getProductCode(), getTenantId());
+
+		if (productCodeMapping.getProductInfo() != null) {
+			setProductTypeId(productCodeMapping.getProductInfo().getId());
+		}
+		if (product.getType() == null) {
+			applyDefaults();
+		}
+
+		if (productCodeMapping.getInfoOptions() != null) {
+			product.setInfoOptions(new TreeSet<InfoOptionBean>(productCodeMapping.getInfoOptions()));
+		}
+
+		product.setCustomerRefNumber(productCodeMapping.getCustomerRefNumber());
+		product.setShopOrder(lineItem);
+		product.setOwner(lineItem.getOrder().getCustomer());
+		product.setDivision(lineItem.getOrder().getDivision());
+		product.setPurchaseOrder(lineItem.getOrder().getPoNumber());
+
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doShow() {
+		testExistingProduct();
+		setProductTypeId(product.getType().getId());
+		// persistenceManager.reattchAndFetch( product, "projects" );
+		
+		loadAttachments();
+		return SUCCESS;
+	}
+
+	//TODO this shouldn't be in this class this is not really about the product - AA
+	@SkipValidation
+	public String doInspections() {
+		testExistingProduct();
+		
+		return SUCCESS;
+	}
+
+	private void loadAttachments() {
+		setAttachments(getLoaderFactory().createProductAttachmentListLoader().setProduct(product).load());
+	}
+
+	@SkipValidation
+	public String doEdit() {
+		testExistingProduct();
+		setProductTypeId(product.getType().getId());
+		loadAttachments();
+		return SUCCESS;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String doSave() {
+		testProduct();
+
+		product.setTenant(getTenant());
+		product.setOrganization(getSessionUser().getOrganization());
+		product.setIdentified(convertDate(identified));
+		UserBean user = fetchCurrentUser();
+
+		if (user != null) {
+			product.setIdentifiedBy(user);
+		}
+
+		try {
+			convertInputsToInfoOptions();
+			convertInputsToExtensionValues();
+			processOrderMasters();
+
+			if (product.isNew()) {
+				ProductSaveService saver = getProductSaveService();
+				saver.setUploadedAttachments(getUploadedFiles());
+				saver.setProduct(product);
+				
+				product = saver.create();
+				
+				uniqueID = product.getId();
+				addFlashMessageText("message.productcreated");
+				if (product.isLinkedToManufacturer()) {
+					addFlashMessageText("message.linkedproduct");
+				}
+
+			} else {
+				// on edit, we need to know if the product type has changed
+				ProductType oldType = productTypeManager.findProductTypeForProduct(product.getId());
+
+				
+				// if the new product type is not equal to the old then the type
+				// has changed
+				if (!product.getType().equals(oldType)) {
+					inspectionScheduleManager.removeAllSchedulesFor(product);
+				}
+
+				ProductSaveService saver = getProductSaveService();
+				saver.setUploadedAttachments(getUploadedFiles());
+				saver.setExistingAttachments(getAttachments());
+				saver.setProduct(product);
+				
+				product = saver.update();
+				
+				addFlashMessageText("message.productupdated");
+				
+			}
+
+		} catch (Exception e) {
+			addActionErrorText("error.productsave");
+			logger.error("failed to save Product", e);
+			return INPUT;
+		}
+
+		if (saveAndInspect != null) {
+			getSession().put("productSerialId", uniqueID);
+			return "saveinspect";
+		}
+
+		if (saveAndPrint != null) {
+			// only forward to the print call if the product type has save and
+			// print.
+			if (product.getType().isHasManufactureCertificate()) {
+				return "saveprint";
+			} else {
+				addFlashMessageText("message.nomanufacturercert");
+			}
+		}
+
+		if (saveAndSchedule != null) {
+			return "saveschedule";
+		}
+
+		if (lineItem != null) {
+			return "savedWithOrder";
+		}
+
+		return "saved";
+	}
+
+	@SkipValidation
+	public String doConnectToShopOrder() {
+		testExistingProduct();
+
+		if (lineItem == null || lineItem.getId() == null) {
+			addActionErrorText("error.noorder");
+			return ERROR;
+		}
+
+		processOrderMasters();
+
+		// update the product
+		try {
+			ProductSaveService saver = getProductSaveService();
+			saver.setProduct(product).update();
+			addFlashMessageText("message.productupdated");
+		} catch (Exception e) {
+			logger.error("Failed connecting shop order to product", e);
+			addActionErrorText("error.productsave");
+			return ERROR;
+		}
+
+		return SUCCESS;
+	}
+
+	private void testProduct() {
+		if (product == null) {
+			addActionErrorText("error.noproduct");
+			throw new MissingEntityException();
+		}
+	}
+
+	private void testExistingProduct() {
+		testProduct();
+		if (product.getId() == null) {
+			addActionErrorText("error.noproduct");
+			throw new MissingEntityException();
+		}
+	}
+
+	@SkipValidation
+	public String doConnectToCustomerOrder() {
+		testExistingProduct();
+
+		if (customerOrder == null || customerOrder.getId() == null) {
+			addActionErrorText("error.noorder");
+			throw new MissingEntityException();
+		}
+
+		product.setCustomerOrder(customerOrder);
+		product.setPurchaseOrder(customerOrder.getPoNumber());
+		product.setOwner(customerOrder.getCustomer());
+		product.setDivision(customerOrder.getDivision());
+
+		processOrderMasters();
+
+		// update the product
+		try {
+			getProductSaveService().setProduct(product).update();
+			String updateMessage = getText("message.productupdated.customer", Arrays.asList(product.getSerialNumber(), product.getOwner().getName()));
+			if (product.getDivision() != null) {
+				updateMessage += getText("message.productupdated.division", Arrays.asList(product.getDivision().getName()));
+			}
+			addFlashMessage(updateMessage);
+
+		} catch (Exception e) {
+			logger.error("Failed connecting customer order to product", e);
+			addActionErrorText("error.productsave");
+			return ERROR;
+		}
+
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doConfirmDelete() {
+		testExistingProduct();
+		try {
+			removalSummary = productManager.testArchive(product);
+		} catch (Exception e) {
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doDelete() {
+		testExistingProduct();
+		try {
+			productManager.archive(product, fetchCurrentUser());
+			addFlashMessageText("message.productdeleted");
+			return SUCCESS;
+		} catch (UsedOnMasterInspectionException e) {
+			addFlashErrorText("error.deleteusedonmasterinspection");
+		} catch (Exception e) {
+			logger.error("failed to archive a product", e);
+			addFlashErrorText("error.deleteproduct");
+		}
+
+		return INPUT;
+	}
+
+	@SkipValidation
+	public String doProductTypeChange() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doPrint() {
+		return SUCCESS;
+	}
+
+
+	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")
+	public List<InfoOptionInput> getProductInfoOptions() {
+		if (productInfoOptions == null) {
+			productInfoOptions = new ArrayList<InfoOptionInput>();
+			if (product.getType() != null) {
+				List<InfoOptionBean> tmpOptions = new ArrayList<InfoOptionBean>();
+				if (product.getInfoOptions() != null) {
+					tmpOptions.addAll(product.getInfoOptions());
+				}
+				productInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getProductInfoFields());
+			}
+		}
+		return productInfoOptions;
+	}
+
+	private void processOrderMasters() {
+		if (lineItem != null) {
+			product.setShopOrder(lineItem);
+		}
+
+		if (customerOrder != null) {
+			product.setCustomerOrder(customerOrder);
+		}
+	}
+
+	public void setProductInfoOptions(List<InfoOptionInput> productInfoOptions) {
+		this.productInfoOptions = productInfoOptions;
+	}
+
+	public Collection<ListingPair> getCustomers() {
+		if (customers == null) {
+			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
+		}
+		return customers;
+	}
+
+	public Collection<ListingPair> getDivisions() {
+		if (divisions == null) {
+			if (getOwner() != null) {
+				divisions = customerManager.findDivisionsLP(getOwner(), getSecurityFilter());
+			}
+		}
+		return divisions;
+	}
+
+	public Collection<ProductStatusBean> getProductStatuses() {
+		if (productStatuses == null) {
+			productStatuses = legacyProductSerialManager.getAllProductStatus(getTenantId());
+		}
+		return productStatuses;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public String getSerialNumber() {
+		return product.getSerialNumber();
+	}
+
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength="50")
+	public void setSerialNumber(String serialNumber) {
+		product.setSerialNumber(serialNumber);
+	}
+
+	public String getRfidNumber() {
+		return product.getRfidNumber();
+	}
+
+	public void setRfidNumber(String rfidNumber) {
+		product.setRfidNumber(rfidNumber);
+	}
+
+	@RequiredStringValidator(message = "", key = "error.identifiedrequired")
+	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
+	public void setIdentified(String identified) {
+		this.identified = identified;
+	}
+
+	public String getIdentified() {
+		if (identified == null) {
+			return convertDate(product.getIdentified());
+		}
+
+		return identified;
+	}
+
+	public String getPurchaseOrder() {
+		return product.getPurchaseOrder();
+	}
+
+	public void setPurchaseOrder(String purchaseOrder) {
+		product.setPurchaseOrder(purchaseOrder);
+	}
+
+	public String getComments() {
+		return product.getComments();
+	}
+
+	public void setComments(String comments) {
+		product.setComments(comments);
+	}
+
+	public String getCustomerRefNumber() {
+		return product.getCustomerRefNumber();
+	}
+
+	public void setCustomerRefNumber(String customerRefNumber) {
+		product.setCustomerRefNumber(customerRefNumber);
+	}
+
+	public String getLocation() {
+		return product.getLocation();
+	}
+
+	public void setLocation(String location) {
+		product.setLocation(location);
+	}
+
+	public Long getProductStatus() {
+		return (product.getProductStatus() != null) ? product.getProductStatus().getUniqueID() : null;
+	}
+
+	public void setProductStatus(Long productStatusId) {
+		ProductStatusBean productStatus = null;
+		if (productStatusId != null) {
+			productStatus = legacyProductSerialManager.findProductStatus(productStatusId, getTenantId());
+		}
+		this.product.setProductStatus(productStatus);
+	}
+
+	public Long getOwner() {
+		return (product.getOwner() != null) ? product.getOwner().getId() : null;
+	}
+
+	public void setOwner(Long ownerId) {
+		Customer customer = null;
+		if (ownerId != null) {
+			customer = customerManager.findCustomer(ownerId, getSecurityFilter());
+		}
+		this.product.setOwner(customer);
+	}
+
+	public Long getDivision() {
+		return (product.getDivision() != null) ? product.getDivision().getId() : null;
+	}
+
+	public void setDivision(Long divisionId) {
+		Division division = null;
+		if (divisionId != null) {
+			division = customerManager.findDivision(divisionId, getSecurityFilter());
+		}
+		this.product.setDivision(division);
+	}
+
+	public AutoAttributeCriteria getAutoAttributeCriteria() {
+		if (autoAttributeCriteria == null) {
+			if (productType != null && productType.getAutoAttributeCriteria() != null) {
+				String[] fetches = { "inputs" };
+				autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, productType.getAutoAttributeCriteria().getId(), getTenant(), fetches);
+			}
+		}
+		return autoAttributeCriteria;
+	}
+
+	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
+	public Long getProductTypeId() {
+		return (product.getType() != null) ? product.getType().getId() : null;
+	}
+
+	public ProductType getProductType() {
+		return product.getType();
+	}
+
+	public void setProductTypeId(Long productTypeId) {
+		productType = null;
+		if (productTypeId != null) {
+			QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class);
+			query.addSimpleWhere("tenant", getTenant()).addSimpleWhere("id", productTypeId).addSimpleWhere("state", EntityState.ACTIVE);
+			query.addPostFetchPaths("infoFields", "inspectionTypes", "attachments", "subTypes");
+			productType = persistenceManager.find(query);
+		}
+		this.product.setType(productType);
+	}
+
+	public Collection<InfoFieldBean> getProductInfoFields() {
+		if (getProductTypeId() != null) {
+			if (product.getId() == null) {
+				return productType.getAvailableInfoFields();
+			} else {
+				return productType.getInfoFields();
+			}
+		}
+		return null;
+	}
+
+	public void setSave(String save) {
+		this.save = save;
+	}
+
+	public String getSave() {
+		return save;
+	}
+
+	public void setSaveAndInspect(String saveAndInspect) {
+		this.saveAndInspect = saveAndInspect;
+	}
+
+	public Collection<ListingPair> getCommentTemplates() {
+		if (commentTemplates == null) {
+			commentTemplates = commentTemplateManager.findCommentTemplatesLP(getTenantId());
+		}
+		return commentTemplates;
+	}
+
+	public Long getCommentTemplate() {
+		return 0L;
+	}
+
+	
+	public List<ProductExtensionValueInput> getProductExtentionValues() {
+		if (productExtentionValues == null) {
+			productExtentionValues = new ArrayList<ProductExtensionValueInput>();
+			for (ProductSerialExtensionBean extention : getExtentions()) {
+				ProductExtensionValueInput input = null;
+				if (product.getProductSerialExtensionValues() != null) {
+					for (ProductSerialExtensionValueBean value : product.getProductSerialExtensionValues()) {
+						if (extention.getUniqueID().equals(value.getProductSerialExtension().getUniqueID())) {
+							input = new ProductExtensionValueInput(value);
+						}
+					}
+				}
+				if (input == null) {
+					input = new ProductExtensionValueInput();
+					input.setExtensionId(extention.getUniqueID());
+				}
+				productExtentionValues.add(input);
+			}
+		}
+		return productExtentionValues;
+	}
+
+	public void setProductExtentionValues(List<ProductExtensionValueInput> productExtentionValues) {
+		this.productExtentionValues = productExtentionValues;
+	}
+
+	public Collection<ProductSerialExtensionBean> getExtentions() {
+		if (extentions == null) {
+			extentions = legacyProductSerialManager.getProductSerialExtensions(getTenantId());
+		}
+		return extentions;
+	}
+
+	public void setSaveAndPrint(String saveAndPrint) {
+		this.saveAndPrint = saveAndPrint;
+	}
+
+	public void setSaveAndSchedule(String saveAndSchedule) {
+		this.saveAndSchedule = saveAndSchedule;
+	}
+
+
+	public List<Product> getLinkedProducts() {
+		if (linkedProducts == null) {
+			linkedProducts = safetyNetworkManager.findLinkedProducts(product);
+		}
+		return linkedProducts;
+	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		if (search != null) {
+			search = search.trim();
+		}
+		this.search = search;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
+		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
+	}
+
+	public List<ListingPair> getJobSites() {
+		if (jobSites == null) {
+			jobSites = persistenceManager.findAllLP(JobSite.class, getSecurityFilter().setDefaultTargets(), "name");
+		}
+		return jobSites;
+	}
+
+	public Long getJobSite() {
+		return (product.getJobSite() != null) ? product.getJobSite().getId() : null;
+	}
+
+	@CustomValidator(type = "requiredIfFeature", message = "", key = "error.jobsiterequired", parameters = { @ValidationParameter(name = "extendedFeature", value = "JobSites") })
+	public void setJobSite(Long jobSite) {
+		if (jobSite == null) {
+			product.setJobSite(null);
+		} else if (product.getJobSite() == null || !jobSite.equals(product.getJobSite().getId())) {
+			product.setJobSite(persistenceManager.find(JobSite.class, jobSite, getSecurityFilter().setDefaultTargets()));
+		}
+	}
+
+	public Long getTagOptionId() {
+		return tagOptionId;
+	}
+
+	public void setTagOptionId(Long tagOptionId) {
+		this.tagOptionId = tagOptionId;
+	}
+
+	public Product getParentProduct() {
+		if (!lookedUpParent && !product.isNew()) {
+			parentProduct = productManager.parentProduct(product);
+			lookedUpParent = true;
+		}
+
+		return parentProduct;
+	}
+
+	public List<ListingPair> getEmployees() {
+		if (employees == null) {
+			employees = userManager.getEmployeeList(getSecurityFilter());
+		}
+		return employees;
+	}
+
+	
+
+	public Long getAssignedUser() {
+		return (product.getAssignedUser() != null) ? product.getAssignedUser().getUniqueID() : null;
+	}
+
+	public void setAssignedUser(Long user) {
+		if (user == null) {
+			product.setAssignedUser(null);
+		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getUniqueID())) {
+			product.setAssignedUser(userManager.findUser(user, getTenantId()));
+		}
+	}
+
+	public Long getLineItemId() {
+		return (lineItem != null) ? lineItem.getId() : null;
+	}
+
+	public void setLineItemId(Long lineItemId) {
+		if (lineItem == null && lineItemId != null) {
+			setLineItem(persistenceManager.find(LineItem.class, lineItemId));
+		}
+	}
+
+	public void setLineItem(LineItem lineItem) {
+		this.lineItem = lineItem;
+	}
+
+	public LineItem getLineItem() {
+		return lineItem;
+	}
+
+	public int getIdentifiedProductCount(LineItem lineItem) {
+		return orderManager.countProductsTagged(lineItem);
+	}
+
+	public Order getCustomerOrder() {
+		return customerOrder;
+	}
+
+	public void setCustomerOrder(Order customerOrder) {
+		this.customerOrder = customerOrder;
+	}
+
+	public Long getCustomerOrderId() {
+		return (customerOrder != null) ? customerOrder.getId() : null;
+	}
+
+	public void setCustomerOrderId(Long customerOrderId) {
+		if (customerOrder == null && customerOrderId != null) {
+			setCustomerOrder(persistenceManager.find(Order.class, customerOrderId));
+		}
+	}
+
+	public String getNonIntegrationOrderNumber() {
+		if (!getSecurityGuard().isIntegrationEnabled()) {
+			if (product.getShopOrder() != null) {
+				return product.getShopOrder().getOrder().getOrderNumber();
+			}
+		}
+
+		return null;
+	}
+
+	public void setNonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
+		if (nonIntegrationOrderNumber != null) {
+			String orderNumber = nonIntegrationOrderNumber.trim();
+			// only do this for customers without integration
+			if (!getSecurityGuard().isIntegrationEnabled()) {
+				// if the product doesn't have a shop order, we need to create
+				// one
+				if (product.getShopOrder() == null) {
+					product.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
+				} else {
+					// otherwise we'll just change the order number
+					Order order = product.getShopOrder().getOrder();
+					order.setOrderNumber(orderNumber);
+					persistenceManager.update(order);
+				}
+			}
+		}
+	}
+
+	public ProductRemovalSummary getRemovalSummary() {
+		return removalSummary;
+	}
+
+	public List<Project> getProjects() {
+		if (projects == null) {
+			projects = projectManager.getProjectsForAsset(product, getSecurityFilter());
+		}
+		return projects;
+	}
+	
+	public ProductTypeLister getProductTypes() {
+		if (productTypes == null) {
+			productTypes = new ProductTypeLister(persistenceManager, getSecurityFilter());
+		}
+
+		return productTypes;
+	}
+
+	public AllInspectionHelper getAllInspectionHelper() {
+		if (allInspectionHelper == null)
+			allInspectionHelper = new AllInspectionHelper(legacyProductSerialManager, product, getSecurityFilter());
+		return allInspectionHelper;
+	}
+	
+	
+	public Long getInspectionCount() {
+		return getAllInspectionHelper().getInspectionCount();
+	}
+
+	public List<Inspection> getInspections() {
+		return getAllInspectionHelper().getInspections();
+	}
+
+	public Inspection getLastInspection() {
+		return getAllInspectionHelper().getLastInspection();
+	}
+
+	public Long getExcludeId() {
+		return excludeId;
+	}
+
+	public void setExcludeId(Long excludeId) {
+		this.excludeId = excludeId;
+	}
+	
+	public ProductSaveService getProductSaveService() {
+		if (productSaverService == null) {
+			productSaverService = new ProductSaveService(legacyProductSerialManager, persistenceManager, fetchCurrentUser());
+		}
+		return productSaverService;
+	}
+
+	public List<ProductAttachment> getProductAttachments() {
+		if (productAttachments == null) {
+			productAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(product).load();
+		}
+		return productAttachments;
+	}
+	
+	
+}

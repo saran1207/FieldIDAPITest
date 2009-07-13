@@ -1,0 +1,29 @@
+#page {
+	width: 500px;
+}
+#pageHeader {
+	background-image: none;
+}
+#companyLogo {
+	padding:11px 0 0 10px;
+}
+
+
+#sslCert p {
+	text-align: center;
+}
+#sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active{
+	color: #AD0034;
+	font-size: 8px;
+}
+
+div.oneLine span, div.oneLine label {
+	display: inline;
+}
+div.oneLine {
+	padding: 5px 0 0 0;
+}
+
+
+
+

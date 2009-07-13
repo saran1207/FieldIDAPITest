@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<bean id="userSecurityManager"
+		class="com.n4systems.fieldidadmin.managers.UserSecurityManagerImpl" />
+
+
+	<!-- EJB MANAGERS -->
+	<bean id="configManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/ConfigManagerImpl/local" />
+	</bean>
+
+	<bean id="mailManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="fieldid/MailManagerImpl/local" />
+	</bean>
+
+	<bean id="persistenceManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/PersistenceManagerImpl/local" />
+	</bean>
+
+	<bean id="safetyNetworkManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/SafetyNetworkManagerImpl/local" />
+	</bean>
+
+	<bean id="productTypeManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/LegacyProductTypeManager/local" />
+	</bean>
+
+	
+
+	<bean id="productSerialManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/LegacyProductSerialManager/local" />
+	</bean>
+
+
+	<bean id="optionManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="fieldid/OptionManager/local" />
+	</bean>
+
+	<bean id="userManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="fieldid/UserManager/local" />
+	</bean>
+
+	<bean id="customerManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="fieldid/CustomerManagerImpl/local" />
+	</bean>
+
+	
+
+	<bean id="orderMappingManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/OrderMappingManager/local" />
+	</bean>
+
+	<bean id="serialNumberCounterManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/SerialNumberCounterManager/local" />
+	</bean>
+
+	<bean id="productCodeMappingManager"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"
+			value="fieldid/ProductCodeMappingManager/local" />
+	</bean>
+	
+	<bean id="jobSiteManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/JobSiteManagerImpl/local" />
+    </bean>
+	
+	<bean id="importManager" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="fieldid/ImportManagerImpl/local" />
+    </bean>
+	
+
+
+	<!-- STRUTS 2 ACTIONS -->
+	<bean id="authenticationAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
+		<property name="userSecurityManager" ref="userSecurityManager" />
+	</bean>
+
+	<bean id="organizationAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+		<property name="productSerialManager"
+			ref="productSerialManager" />
+		<property name="optionManager" ref="optionManager" />
+		<property name="productInfoManager" ref="productInfoManager" />
+		<property name="serialNumberCounterManager"
+			ref="serialNumberCounterManager" />
+		<property name="safetyNetworkManager" ref="safetyNetworkManager" />
+		<property name="jobSiteManager" ref="jobSiteManager" />
+	</bean>
+
+	
+
+	
+
+	<bean id="findProductOptionAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
+		<property name="optionManager" ref="optionManager" />
+		<property name="persistenceManager" ref="persistenceManager" />
+	</bean>
+
+	<bean id="unitOfMeasureAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
+		<property name="persistenceManager"
+			ref="persistenceManager" />
+	</bean>
+
+	<bean id="orderMappingAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+		<property name="orderMappingManager" ref="orderMappingManager" />
+	</bean>
+
+	<bean id="ImporterAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.ImporterAction">
+		<property name="persistenceManager" ref="persistenceManager" />
+		<property name="productInfoManager" ref="productInfoManager" />
+		<property name="customerManager" ref="customerManager" />
+		<property name="productSerialManager" ref="productSerialManager" />
+		<property name="userManager" ref="userManager" />
+	</bean>
+
+	<bean id="mailAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.MailAction">
+		<property name="mailManager" ref="mailManager" />
+	</bean>
+
+	<bean id="configurationAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
+		<property name="configManager" ref="configManager" />
+		<property name="persistenceManager" ref="persistenceManager" />
+	</bean>
+	
+	<bean id="observationImporterAction" scope="prototype"
+		class="com.n4systems.fieldidadmin.actions.ObservationImporterAction">
+		<property name="persistenceManager" ref="persistenceManager" />
+		<property name="configManager" ref="configManager" />
+		<property name="importManager" ref="importManager" />
+	</bean>
+	
+	
+	
+</beans>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fieldid-ejb" default="default">
+	<import file="../fieldid/build-vars.xml" />
+	<description>FieldID EJB Project</description>
+
+	<property name="proj" value="${fieldidEjb}" />
+
+	<import file="../fieldid/build-common.xml" />
+	
+	<target name="default" depends="clean, package-jar" />
+	
+	
+	<target name="compile-tests" depends="compile-war" >
+		<copy todir="${build.test}">
+			<fileset id="test.resources" dir="${test}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}">
+			<classpath refid="classpath.deps" />
+			<classpath path="${build}"/>
+			<classpath refid="classpath.ear" />
+			<classpath refid="classpath.jboss" />
+			<classpath refid="classpath.tests"/>
+			
+		</javac>
+	</target>
+	
+	<target name="test" depends="compile-tests" >
+		
+		<junit haltonfailure="true" >
+			<classpath refid="classpath.deps" />
+			<classpath path="${build}"/>
+			<classpath path="${build.test}"/>
+			<classpath refid="classpath.jboss" />
+			<classpath refid="classpath.ear" />
+			<classpath refid="classpath.tests"/>
+			<formatter type="brief" usefile="false"/>
+			<batchtest>
+				<fileset dir="${build.test}" includes="**/*Test.class" />
+			</batchtest>
+		</junit>
+	</target>
+	
+	
+</project>
