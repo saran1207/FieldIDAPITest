@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fieldid-common" default="clean">
+	<description>FieldID Common Build File</description>
+
+	<property name="buildfile.path" location="${dist}/${proj}" />
+
+	<path id="classpath.tests">
+		<fileset dir="${ear_home.test_lib}" includes="*.jar" />
+	</path>
+	
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${build.test}"/>
+	</target>
+	
+	
+
+	<target name="init-dirs">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build.test}" />
+		<mkdir dir="${dist}" />
+	</target>
+
+	<target name="init-jar" depends="init-dirs">
+		<path id="classpath.ear">
+			<fileset dir="${ear_home.lib}" includes="*.jar" />
+		</path>
+
+		<path id="classpath.jboss">
+			<fileset dir="${jboss_home.client}" includes="*.jar" />
+			<fileset dir="${jboss_home.lib}" includes="*.jar" />
+			<fileset dir="${jboss_home.server}" includes="*.jar" />
+		</path>
+
+		<pathconvert property="manifest.classpath" refid="classpath.ear" pathsep=" ">
+			<map from="${ear_home.lib}" to="${ear_home.lib_path}" />
+		</pathconvert>
+
+
+		<copy todir="${build}">
+			<fileset id="resources" dir="${src}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="init-war" depends="init-jar">
+		<path id="classpath.webinf">
+			<fileset dir="${web-inf.lib}" includes="*.jar" />
+		</path>
+
+		<path id="classpath.deps">
+			<!-- This is a total hackjob -->
+			<fileset file="${fieldidEjb.home}/dist/${fieldidEjb}" />
+		</path>
+	</target>
+
+	<target name="compile-jar" depends="init-jar">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
+			<classpath refid="classpath.ear" />
+			<classpath refid="classpath.jboss" />
+		</javac>
+	</target>
+
+	<target name="compile-war" depends="init-war">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
+			<classpath refid="classpath.deps" />
+			<classpath refid="classpath.webinf" />
+			<classpath refid="classpath.ear" />
+			<classpath refid="classpath.jboss" />
+		</javac>
+	</target>
+	
+	<target name="compile-tests" depends="compile-war" >
+		<copy todir="${build.test}">
+			<fileset id="test.resources" dir="${test}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}" target="${source.level}">
+			<classpath refid="classpath.deps" />
+			<classpath path="${build}"/>
+			<classpath refid="classpath.webinf" />
+			<classpath refid="classpath.ear" />
+			<classpath refid="classpath.jboss" />
+			<classpath refid="classpath.tests"/>
+			
+		</javac>
+	</target>
+	
+	<target name="test" depends="compile-tests" >
+		
+		<junit haltonfailure="false" >
+			<classpath refid="classpath.deps" />
+			<classpath path="${build}"/>
+			<classpath path="${build.test}"/>
+			<classpath refid="classpath.webinf" />
+			<classpath refid="classpath.ear" />
+			<classpath refid="classpath.jboss" />
+			<classpath refid="classpath.tests"/>
+			<formatter type="brief" usefile="false"/>
+			<batchtest>
+				<fileset dir="${build.test}" includes="**/*Test.class" />
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="package-jar" depends="compile-jar">
+		<jar jarfile="${buildfile.path}" basedir="${build}" level="9">
+			<metainf dir="${src}/META-INF" />
+			<manifest>
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="package-war" depends="compile-war">
+		<war destfile="${buildfile.path}" webxml="${web-inf}/web.xml" level="9">
+			<metainf dir="${webroot}/META-INF" />
+			<classes dir="${build}" />
+			<manifest>
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+			<zipfileset dir="${webroot}" prefix="" />
+		</war>
+	</target>
+
+</project>

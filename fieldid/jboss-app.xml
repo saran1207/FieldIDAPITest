@@ -1,0 +1,8 @@
+<jboss-app>
+  <loader-repository> 
+  com.n4systems:archive=fieldidear
+     <loader-repository-config> 
+     java2ParentDelegation=false 
+     </loader-repository-config> 
+  </loader-repository>
+</jboss-app>
