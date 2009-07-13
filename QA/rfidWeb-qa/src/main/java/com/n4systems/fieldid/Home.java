@@ -1,0 +1,429 @@
+package com.n4systems.fieldid;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import junit.framework.TestCase;
+import static watij.finders.FinderFactory.*;
+import watij.elements.*;
+import watij.finders.Finder;
+import watij.runtime.ie.IE;
+
+public class Home extends TestCase {
+
+	IE ie = null;
+	Schedule schedule = null;
+	Reporting reporting = null;
+	Assets assets = null;
+	MyAccount myAccount = null;
+	FieldIDMisc misc = null;
+	Admin admin = null;
+	Properties p;
+	InputStream in;
+	String propertyFile = "home.properties";
+	Finder homeFinder;
+	Finder homeContentHeaderFinder;
+	Finder homeSmartSearchTextFieldFinder;
+	Finder homeViewUpcomingInspectionsFinder;
+	Finder homeViewTheInspectionHistoryForAProductFinder;
+	Finder homeFindAProductFinder;
+	Finder homeChangeYourPasswordFinder;
+	Finder homeSearchButtonFinder;
+	Finder homeNewFeatureFinder;
+	Finder homeInstructionalVideosFinder;
+	Finder instructionalVideosContentHeaderFinder;
+	Finder jobsSectionHeaderFinder;
+	Finder homeJobsTableMessageFinder;
+	Finder homeJobsTableHeaderFinder;
+	Finder jobTitlesFinder;
+	int maxJobsOnHomePage;
+	String jobsTextPart1;
+	String jobsTextPart2;
+	String jobsTableHeader1;
+	String jobsTableHeader2;
+	String jobsTableHeader3;
+	Finder newFeatureListFinder;
+	Finder videoListFinder;
+	Finder gotoSectionFinder;
+	Finder gotoSectionHeaderFinder;
+	Finder companyWebSiteURLFinder;
+	
+	/**
+	 * Assumes the home.properties file is in the correct directory.
+	 *  
+	 * @param ie - An initialized instance of Internet Explorer, logged into Field ID.
+	 */
+	public Home(IE ie) {
+		this.ie = ie;
+		try {
+			schedule = new Schedule(ie);
+			reporting = new Reporting(ie);
+			assets = new Assets(ie);
+			myAccount = new MyAccount(ie);
+			misc = new FieldIDMisc(ie);
+			admin = new Admin(ie);
+			in = new FileInputStream(propertyFile);
+			p = new Properties();
+			p.load(in);
+			homeFinder = id(p.getProperty("link"));
+			homeContentHeaderFinder = xpath(p.getProperty("contentheader"));
+			homeSmartSearchTextFieldFinder = id(p.getProperty("smartsearchtextfield"));
+			homeViewUpcomingInspectionsFinder = text(p.getProperty("viewupcominginspections"));
+			homeViewTheInspectionHistoryForAProductFinder = text(p.getProperty("viewinspectionhistory"));
+			homeFindAProductFinder = text(p.getProperty("findaproduct"));
+			homeChangeYourPasswordFinder = text(p.getProperty("changeyourpassword"));
+			homeSearchButtonFinder = id(p.getProperty("searchbutton"));
+			homeNewFeatureFinder = xpath(p.getProperty("newfeatures"));
+			homeInstructionalVideosFinder = xpath(p.getProperty("instructionalvideos"));
+			instructionalVideosContentHeaderFinder = xpath(p.getProperty("instructionalvideoscontentheader"));
+			jobsSectionHeaderFinder = xpath(p.getProperty("jobssectionheader"));
+			homeJobsTableMessageFinder = xpath(p.getProperty("jobtablemessage"));
+			homeJobsTableHeaderFinder = xpath(p.getProperty("jobtableheader"));
+			jobTitlesFinder = xpath(p.getProperty("jobtitles"));
+			maxJobsOnHomePage = Integer.parseInt(p.getProperty("maxjobslisted"));
+			jobsTextPart1 = p.getProperty("jobstextpart1");
+			jobsTextPart2 = p.getProperty("jobstextpart2");
+			jobsTableHeader1 = p.getProperty("jobstableheader1");
+			jobsTableHeader2 = p.getProperty("jobstableheader2");
+			jobsTableHeader3 = p.getProperty("jobstableheader3");
+			newFeatureListFinder = xpath(p.getProperty("newfeaturelist"));
+			videoListFinder = xpath(p.getProperty("videolist"));
+			gotoSectionFinder = id(p.getProperty("gotosection"));
+			gotoSectionHeaderFinder = xpath(p.getProperty("gotosectionheader"));
+			companyWebSiteURLFinder = xpath(p.getProperty("companywebsiteurl"));
+		} catch (FileNotFoundException e) {
+			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
+		} catch (IOException e) {
+			fail("File I/O error while trying to load '" + propertyFile + "'.");
+		} catch (Exception e) {
+			fail("Unknown exception");
+		}
+	}
+
+	/**
+	 * Go to the Home page by clicking on the Home icon in the navigation bar.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoHome() throws Exception {
+		Link homeLink = ie.link(homeFinder);
+		assertTrue("Could not find the anchor to Home page", homeLink.exists());
+		homeLink.click();
+		ie.waitUntilReady();
+		checkHomePageContentHeader();
+	}
+	
+	public void validateHomePage(boolean jobs) throws Exception {
+		checkHomePageContentHeader();
+		checkHomePageGoToSection();
+		checkGotoViewUpcomingInspections();
+		checkGotoViewTheInspectionHistoryForAProduct();
+		checkGotoFindAProduct();
+		checkGotoChangeYourPassword();
+		if(jobs) {
+			checkJobsSectionHeader();
+		}
+	}
+	
+	private void checkHomePageGoToSection() throws Exception {
+		Div gotoSection = ie.div(gotoSectionFinder);
+		assertTrue("Could not find the section for 'Go To'", gotoSection.exists());
+		HtmlElement header = ie.htmlElement(gotoSectionHeaderFinder);
+		assertTrue("Could not find the 'Go To: ' header", header.exists());
+	}
+
+	public void checkHomePageContentHeader() throws Exception {
+		HtmlElement homeContentHeader = ie.htmlElement(homeContentHeaderFinder);
+		assertTrue("Could not find Home page content header '" + p.getProperty("contentheader") + "'", homeContentHeader.exists());
+	}
+
+	/**
+	 * Puts focus on the Smart Search text field.
+	 * 
+	 * @throws Exception
+	 * @deprecated
+	 */
+	public void gotoHomeSmartSearchTextBox() throws Exception {
+		TextField ss = helperSmartSearch();
+		ss.click();
+	}
+	
+	/**
+	 * Go to the Product Information page using the Smart Search on
+	 * the Home page. This is like the gotoProductInformation method
+	 * but much faster.
+	 * 
+	 * As of 2009.5 the smart search has been moved to be available on
+	 * the main header section, i.e. every main page.
+	 * 
+	 * @param serialNumber
+	 * @throws Exception
+	 */
+	public void gotoProductInformationViaSmartSearch(String serialNumber) throws Exception {
+		assertNotNull(serialNumber);
+		assertFalse(serialNumber.equals(""));
+		assets.SmartSearch(serialNumber);
+	}
+	
+	private TextField helperSmartSearch() throws Exception {
+		gotoHome();
+		TextField ss = ie.textField(homeSmartSearchTextFieldFinder);
+		assertTrue("Could not find Home page Smart Search Text Field '" + p.getProperty("homesmartsearchtextfield") + "'", ss.exists());
+		return ss;
+	}
+	
+	/**
+	 * Goes to the View Upcoming Inspections page and checks the page header.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoViewUpcomingInspections() throws Exception {
+		gotoHome();
+		Link viewUpcomingInspections = checkGotoViewUpcomingInspections();
+		viewUpcomingInspections.click();
+		ie.waitUntilReady();
+		schedule.checkSchedulePageContentHeader();
+	}
+	
+	private Link checkGotoViewUpcomingInspections() throws Exception {
+		Link viewUpcomingInspections = ie.link(homeViewUpcomingInspectionsFinder);
+		assertTrue(viewUpcomingInspections.exists());
+		return viewUpcomingInspections;
+	}
+	
+	/**
+	 * goes to the View The Inspection History For A Product link.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoViewTheInspectionHistoryForAProduct() throws Exception {
+		gotoHome();
+		Link viewInspectionHistory = checkGotoViewTheInspectionHistoryForAProduct();
+		viewInspectionHistory.click();
+		ie.waitUntilReady();
+		reporting.checkReportingPageContentHeader();
+	}
+	
+	private Link checkGotoViewTheInspectionHistoryForAProduct() throws Exception {
+		Link viewInspectionHistory = ie.link(homeViewTheInspectionHistoryForAProductFinder);
+		assertTrue(viewInspectionHistory.exists());
+		return viewInspectionHistory;
+	}
+	
+	/**
+	 * Goes to the Find A Product link on Home page.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoFindAProduct() throws Exception {
+		gotoHome();
+		Link findAProduct = checkGotoFindAProduct();
+		findAProduct.click();
+		assets.checkAssetsPageContentHeader();
+	}
+	
+	private Link checkGotoFindAProduct() throws Exception {
+		Link findAProduct = ie.link(homeFindAProductFinder);
+		assertTrue("Could not find a link to 'Find A Product'", findAProduct.exists());
+		return findAProduct;
+	}
+	
+	/**
+	 * Goes to the Change Your Password link on the Home page.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoChangeYourPassword() throws Exception {
+		gotoHome();
+		Link changeYourPassword = checkGotoChangeYourPassword();
+		changeYourPassword.click();
+		myAccount.checkChangePasswordContentHeader();
+	}
+	
+	private Link checkGotoChangeYourPassword() throws Exception {
+		Link changeYourPassword = ie.link(homeChangeYourPasswordFinder);
+		assertTrue("Could not find a link to 'Change your password'", changeYourPassword.exists());
+		return changeYourPassword;
+	}
+	
+	/**
+	 * Goes to the New Feature link.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoNewFeatures() throws Exception {
+		Link newFeatureLink = ie.link(homeNewFeatureFinder);
+		assertTrue("Could not find the 'More' link to New Features", newFeatureLink.exists());
+		newFeatureLink.click();
+		ie.waitUntilReady();
+		
+		// Release Notes will open in a new browser.
+		IE child = ie.childBrowser(0);
+		assertTrue("A new window with the release notes could not be found.", child.exists());
+		child.close();
+	}
+	
+	/**
+	 * Goes to the Instructional Video link.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoInstructionalVideos() throws Exception {
+		Link instructionalVideosLink = ie.link(homeInstructionalVideosFinder);
+		assertTrue("Could not find the 'More' link to Instructional Videos", instructionalVideosLink.exists());
+		instructionalVideosLink.click();
+		checkInstructionalVideosContentHeader();
+	}
+	
+	/**
+	 * Checks the Instructional Video page header.
+	 * 
+	 * @throws Exception
+	 */
+	private void checkInstructionalVideosContentHeader() throws Exception {
+		HtmlElement instVideosContentHeader = ie.htmlElement(instructionalVideosContentHeaderFinder);
+		assertTrue("Could not find Instructional Videos page content header '" + p.getProperty("contentheader") + "'", instVideosContentHeader.exists());
+	}
+	
+	/**
+	 * Returns a list of the Jobs listed on the Home page.
+	 * If there are no open jobs assigned to the user, this
+	 * will return an empty list, i.e. the result will have
+	 * (getJobsOnHomePage().isEmpty() == true) if there are
+	 * no open jobs.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> getJobsOnHomePage() throws Exception {
+		List<String> results = new ArrayList<String>();
+		boolean nojobs = checkForNoOpenJobs();
+		if(!nojobs) {
+			checkJobsSectionHeader();
+			checkJobsTable();
+			TableCells jobTitles = ie.cells(jobTitlesFinder);
+			assertNotNull("Could not find the cells of the Jobs table", jobTitles);
+			int numJobs = jobTitles.length();
+			assertTrue("More than " + maxJobsOnHomePage + " jobs on Jobs table.", numJobs <= maxJobsOnHomePage);
+			for(int i = 0; i < numJobs; i++) {
+				TableCell jobTitle = jobTitles.get(i);
+				assertTrue("Could not find the title for job " + i, jobTitle.exists());
+				results.add(jobTitle.text());
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Checks to see if there are not open jobs. Returns
+	 * true if no jobs.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean checkForNoOpenJobs() throws Exception {
+		boolean result = true;
+		TableCell jobsMessage = ie.cell(homeJobsTableMessageFinder);
+		String message = jobsMessage.text();
+		result = message.contains("You currently have no open jobs assigned to you.");
+		return result;
+	}
+
+	/**
+	 * If there are jobs, this checks the table to make sure
+	 * it is well formed.
+	 * 
+	 * @throws Exception
+	 */
+	private void checkJobsTable() throws Exception {
+		TableCell jobsMessage = ie.cell(homeJobsTableMessageFinder);
+		String message = jobsMessage.text();
+		assertTrue("The message '" + jobsTextPart1 + "' is missing from the Jobs table.", message.contains(jobsTextPart1));
+		assertTrue("The message '" + jobsTextPart2 + "' is missing from the Jobs table.", message.contains(jobsTextPart2));
+		TableRow jobsTableHeader = ie.row(homeJobsTableHeaderFinder);
+		TableCell jobID = jobsTableHeader.cell(0);
+		TableCell jobTitle = jobsTableHeader.cell(1);
+		TableCell jobStatus = jobsTableHeader.cell(2);
+		String jobIDText = jobID.text();
+		String jobTitleText = jobTitle.text();
+		String jobStatusText = jobStatus.text();
+		assertTrue("First column of Jobs table is not '" + jobsTableHeader1 + "'. Got '" + jobIDText + "'.", jobsTableHeader1.equals(jobIDText));
+		assertTrue("Second column of Jobs table is not '" + jobsTableHeader2 + "'. Got '" + jobTitleText + "'.", jobsTableHeader2.equals(jobTitleText));
+		assertTrue("Third column of Jobs table is not '" + jobsTableHeader3 + "'. Got '" + jobStatusText + "'.", jobsTableHeader3.equals(jobStatusText));
+	}
+
+	/**
+	 * Checks for the Jobs header tag on the Jobs section of the Home page.
+	 * 
+	 * @throws Exception
+	 */
+	public void checkJobsSectionHeader() throws Exception {
+		HtmlElement jobsSectionHeader = ie.htmlElement(jobsSectionHeaderFinder);
+		assertTrue("Could not find Jobs section header '" + p.getProperty("jobssectionheader") + "'", jobsSectionHeader.exists());
+	}
+	
+	/**
+	 * Get the list of bullets under the New Features section.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> getNewFeatures() throws Exception {
+		List<String> results = new ArrayList<String>();
+		HtmlElement newFeatureList = ie.htmlElement(newFeatureListFinder);
+		assertTrue("Could not find the New Feature list.", newFeatureList.exists());
+		HtmlElements newFeatures = newFeatureList.htmlElements(tag("LI"));
+		for(int i = 0; i < newFeatures.length(); i++) {
+			String newFeature = newFeatures.get(i).text().trim();
+			results.add(newFeature);
+		}
+		return results;
+	}
+	
+	/**
+	 * Get a list of the bullets under the Instructional Videos section.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> getInstructionalVideoList() throws Exception {
+		List<String> results = new ArrayList<String>();
+		HtmlElement videoList = ie.htmlElement(videoListFinder);
+		assertTrue("Could not find the Instructional Video list.", videoList.exists());
+		HtmlElements videos = videoList.htmlElements(tag("LI"));
+		for(int i = 0; i < videos.length(); i++) {
+			String video = videos.get(i).text().trim();
+			results.add(video);
+		}
+		return results;
+	}
+
+	public Link getCompanyWebSiteLink() throws Exception {
+		Link companyURL = ie.link(companyWebSiteURLFinder);
+		assertTrue("Could not find a link to the company website", companyURL.exists());
+		return companyURL;
+	}
+
+	public void checkCompanyWebSiteLink() throws Exception {
+		admin.gotoAdministration();
+		String linkText = admin.getCompanyName() + " Web Site";
+		gotoHome();
+		Link companyLink = getCompanyWebSiteLink();
+		assertTrue("The text for the company web site does not match the company name", linkText.equals(companyLink.text()));
+	}
+
+	public void gotoCompanyWebsite() throws Exception {
+		Link companyLink = getCompanyWebSiteLink();
+		companyLink.click();
+	}
+
+	public boolean isCompanyWebsite() throws Exception {
+		Link companyURL = ie.link(companyWebSiteURLFinder);
+		return companyURL.exists();
+	}
+}

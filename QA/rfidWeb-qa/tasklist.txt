@@ -1,0 +1,36 @@
+This is a file to keep track of which areas are complete and working for Field ID 2009.5.
+
+package com.n4systems.fieldid
+
+- Login:
+	complete
+- MyAccount:
+- Home:
+- Identify:
+- Inspect:
+- Assets:
+- Reporting:
+- Schedule:
+- Jobs:
+- Admin:
+	complete
+- Compliance:
+- FieldIDMisc:
+
+package com.n4systems.fieldid.admin
+
+- ManageCustomers:
+- ManageEventTypeGroups:
+- ManageInspectionTypes:
+- ManageProductCodeMappings:
+- ManageProductStatuses:
+- ManageProductTypeGroups:
+- ManageProductTypes:
+- ManageSystemUsers:
+- ManageOrganizationalUnits:
+- ManageUserRegistrationRequest:
+- ManageInspectionBooks:
+- AutoAttributesWizard:
+- ManageCommentTemplates:
+- DataLog:
+- ManageYourSafetyNetwork:
