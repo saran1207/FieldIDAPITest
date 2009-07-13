@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+    name="com.n4systems.service.ordermapper.destination:service=Queue,name=fieldid_ordermapper_Request_esb">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+    name="com.n4systems.service.ordermapper.destination:service=Queue,name=fieldid_ordermapper_Request_gw">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean>
+</server>

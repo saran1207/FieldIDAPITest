@@ -1,0 +1,50 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<jbossesb xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.0.1.xsd" parameterReloadSecs="5">
+
+    <providers>
+          <jms-provider name="JBossMQ" connection-factory="ConnectionFactory"
+                        jndi-URL="jnp://66.11.155.202:1099" jndi-context-factory="org.jnp.interfaces.NamingContextFactory"
+                        jndi-pkg-prefix="org.jboss.naming:org.jnp.interfaces">
+                      
+              <jms-bus busid="orderMapperGwChannel">
+                  <jms-message-filter
+                      dest-type="QUEUE"
+                      dest-name="queue/fieldid_ordermapper_Request_gw"
+                   />
+              </jms-bus>
+              <jms-bus busid="orderMapperEsbChannel">
+                  <jms-message-filter
+                      dest-type="QUEUE"
+                      dest-name="queue/fieldid_ordermapper_Request_esb"
+                  />
+              </jms-bus>
+
+          </jms-provider>
+      </providers>
+      
+      <services>
+        <service 
+        	category="OrderMapperServiceESB" 
+        	name="OrderMapper" 
+        	description="Order Mapper">
+            <listeners>
+                <jms-listener name="JMS-Gateway"
+                    busidref="orderMapperGwChannel"
+                    maxThreads="1"
+                    is-gateway="true"
+                />
+                <jms-listener name="orderMapper"
+                              busidref="orderMapperEsbChannel"
+                              maxThreads="1"
+                />
+            </listeners>
+            <actions mep="OneWay">
+                   <action name="action1" 
+                   	class="com.n4systems.service.ordermapper.OrderJMSListenerAction" 
+                   	process="mapMessage,storeMessage" 
+                   	/>      
+            </actions>
+        </service>
+      </services>
+     
+</jbossesb>
