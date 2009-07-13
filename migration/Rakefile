@@ -1,0 +1,83 @@
+
+require "./lib/create_environment"
+
+task :connect => :environment do
+  ActiveRecord::Base.establish_connection( ActiveRecord::Base.configurations[ ENV["ENVIRONMENT"] ] )
+end
+
+task :environment do
+  
+  ENV[ "ENVIRONMENT" ] ||= "development" 
+  ENV["ENVIRONMENT"] += "_non_java" unless RUBY_PLATFORM =~ /java/
+  puts ENV["ENVIRONMENT"]
+  ENV[ "DBCONFIG" ] ||= 'config/database.yml'
+  puts ENV[ "DBCONFIG" ]
+  ActiveRecord::Base.configurations = YAML::load( File.open( ENV[ "DBCONFIG" ] ) ) 
+  ActiveRecord::Base.logger = Logger.new(File.open('log/database.log', 'a'))
+  
+end
+
+
+desc 'Create the database defined in config/database.yml for the current ENVIRONMENT'
+task :create => :environment do
+  config = ActiveRecord::Base.configurations
+  create_database( config[ ENV[ "ENVIRONMENT" ] ] )
+end
+
+
+desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x. Turn off output with VERBOSE=false."
+task :migrate => :connect do
+  ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
+  ActiveRecord::Migrator.migrate("db/migrations/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+ 
+end
+
+desc 'Rolls the schema back to the previous version. Specify the number of steps with STEP=n'
+task :rollback => :connect do
+  step = ENV['STEP'] ? ENV['STEP'].to_i : 1
+  ActiveRecord::Migrator.rollback('db/migrations/', step)
+  
+end
+
+
+desc "Retrieves the current schema version number"
+task :version => :connect do
+  puts "Current version: #{ActiveRecord::Migrator.current_version}"
+end
+
+desc "Migrate the database through scripts in db/maintenance. Target specific version with VERSION=x. Turn off output with VERBOSE=false."
+task :maintenance => :connect do
+  ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
+  ActiveRecord::Migrator.migrate("db/maintenance/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+ 
+end
+
+
+desc "Clean the database for testing and development" 
+task :cleandb => :connect do
+  ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
+  if ENV["LOCATION"].nil?
+    puts "you must specify a location for the clean scripts  normally rake cleandb LOCATION=db/cleanScripts "
+  else
+    ActiveRecord::Migrator.migrate( ENV["LOCATION"])
+  end
+end
+
+
+
+desc "Create a db/schema.rb file that can be portably used against any DB supported by AR"
+task :dump => :connect do
+  require 'active_record/schema_dumper'
+  File.open(ENV['SCHEMA'] || "./db/schema.rb", "w") do |file|
+    ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
+  end
+  Rake::Task["dump"].reenable
+end
+
+desc "Load a schema.rb file into the database"
+task :load => :connect do
+  file = ENV['SCHEMA'] || "./db/schema.rb"
+  load(file)
+end
+
+

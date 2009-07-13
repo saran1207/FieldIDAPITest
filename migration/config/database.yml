@@ -1,0 +1,31 @@
+development:
+  adapter: jdbcpostgresql
+  database: fieldid
+  host: localhost
+  username: fieldid-sys
+  password: fieldid#9 
+  encoding: utf8
+
+development_non_java:
+  adapter: postgresql
+  database: fieldid
+  host: localhost
+  username: fieldid-sys
+  password: fieldid#9 
+  encoding: utf8
+
+staging_non_java:
+  adapter: mysql
+  database: fieldid
+  host: localhost
+  username: root
+  encoding: utf8
+ 
+production:
+  adapter: jdbcpostgresql
+  database: fieldid
+  host: localhost
+  username: fieldid-sys
+  password: fieldid#9
+  encoding: utf8
+  
