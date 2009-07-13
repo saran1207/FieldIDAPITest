@@ -3,7 +3,7 @@
   <module id="WebModule_1247497444055">
     <web>
       <web-uri>rfidWeb.war</web-uri>
-      <context-root>rfidWeb</context-root>
+      <context-root>fieldid</context-root>
     </web>
   </module>
   <module>
@@ -12,7 +12,7 @@
   <module id="WebModule_1247497201592">
     <web>
       <web-uri>fieldidadminWeb.war</web-uri>
-      <context-root>fieldidadminWeb</context-root>
+      <context-root>fieldidadmin</context-root>
     </web>
   </module>
 </application>
