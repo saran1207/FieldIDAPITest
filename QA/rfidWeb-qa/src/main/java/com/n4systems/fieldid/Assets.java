@@ -32,7 +32,6 @@ public class Assets extends TestCase {
 	Finder productInformationContentHeaderFinder;
 	Finder viewAllInspectionsFinder;
 	Finder inspectionForFinder;
-	String inspectionForContentHeaderText;
 	Finder productSearchRFIDNumberFinder;
 	Finder productSearchSerialNumberFinder;
 	Finder productSearchOrderNumberFinder;
@@ -147,9 +146,8 @@ public class Assets extends TestCase {
 			assetsFinder = id(p.getProperty("link"));
 			assetsContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			productInformationContentHeaderFinder = xpath(p.getProperty("productinfocontentheader"));
-			viewAllInspectionsFinder = text(p.getProperty("viewallinspections"));
+			viewAllInspectionsFinder = xpath(p.getProperty("viewallinspections"));
 			inspectionForFinder = xpath(p.getProperty("inspectionforcontentheader"));
-			inspectionForContentHeaderText = p.getProperty("inspectionforcontentheadertext");
 			productSearchRFIDNumberFinder = id(p.getProperty("productsearchrfidnumber"));
 			productSearchSerialNumberFinder = id(p.getProperty("productsearchserialnumber"));
 			productSearchOrderNumberFinder = id(p.getProperty("productsearchordernumber"));
@@ -204,8 +202,8 @@ public class Assets extends TestCase {
 			massUpdateContentHeaderFinder = xpath(p.getProperty("massupdatecontentheader"));
 			massUpdateWarningFinder = xpath(p.getProperty("massupdatewarning"));
 			massUpdateWarningToolTipFinder = id(p.getProperty("massupdatewarningtooltip"));
-			massUpdateCustomerNameFinder = id(p.getProperty("massupdatecustomername"));
-			massUpdateDivisionFinder = id(p.getProperty("massupdatedivision"));
+			massUpdateCustomerNameFinder = xpath(p.getProperty("massupdatecustomername"));
+			massUpdateDivisionFinder = xpath(p.getProperty("massupdatedivision"));
 			massUpdateCustomerDivisionSelectFinder = id(p.getProperty("massupdatecustomerdivisonselect"));
 			massUpdateJobSiteFinder = id(p.getProperty("massupdatejobsite"));
 			massUpdateJobSiteSelectFinder = id(p.getProperty("massupdatejobsiteselect"));
@@ -226,7 +224,7 @@ public class Assets extends TestCase {
 			editProductPageContentHeaderFinder = xpath(p.getProperty("editproductcontentheader"));
 			productConfigurationLinkFinder = xpath(p.getProperty("productconfigurationlink"));
 			productConfigurationPageContentHeaderFinder = xpath(p.getProperty("productconfigurationcontentheader"));
-			inspectionScheduleLinkFinder = text(p.getProperty("inspectionschedulelink"));
+			inspectionScheduleLinkFinder = xpath(p.getProperty("inspectionschedulelink"));
 			inspectionSchedulePageContentHeaderFinder = xpath(p.getProperty("inspectionschedulecontentheader"));
 			addScheduleDateFinder = id(p.getProperty("addscheduledate"));
 			addScheduleInspectionTypeFinder = id(p.getProperty("addscheduleinspectiontype"));
@@ -293,7 +291,7 @@ public class Assets extends TestCase {
 	public void checkProductInformationPageContentHeader(String serialNumber) throws Exception {
 		HtmlElement productInformationContentHeader = ie.htmlElement(productInformationContentHeaderFinder);
 		assertTrue("Could not find Product Information page content header", productInformationContentHeader.exists());
-		assertTrue("Could not find 'Product Information - " + serialNumber + "'", productInformationContentHeader.text().equals("Product Information - " + serialNumber));
+		assertTrue("Could not find 'Asset - " + serialNumber + "'", productInformationContentHeader.text().contains(serialNumber));
 	}
 
 	/**
@@ -529,14 +527,8 @@ public class Assets extends TestCase {
 			location.set(p.getLocation());
 		}
 
-		TextField salesAgent = ie.textField(productSearchSalesAgentFinder);
-		assertTrue("Could not find the Sales Agent text field", salesAgent.exists());
-		if(p.getSalesAgent() != null) {
-			salesAgent.set(p.getSalesAgent());
-		}
-		
 		TextField referenceNumber = ie.textField(productSearchReferenceNumberFinder);
-//		assertTrue("Could not find the Reference Number text field", referenceNumber.exists());
+		assertTrue("Could not find the Reference Number text field", referenceNumber.exists());
 		if(p.getReferenceNumber() != null) {
 			referenceNumber.set(p.getReferenceNumber());
 		}
@@ -621,7 +613,7 @@ public class Assets extends TestCase {
 	public void gotoInspectionsFor(String serialNumber) throws Exception {
 		assertNotNull(serialNumber);
 		Link viewAllInspections = ie.link(viewAllInspectionsFinder);
-		assertTrue("Could not find 'View All Inspections' link on Product Information page", viewAllInspections.exists());
+		assertTrue("Could not find 'Inspections' link on Product Information page", viewAllInspections.exists());
 		viewAllInspections.click();
 		checkInspectionsForContentHeader();
 	}
@@ -634,7 +626,6 @@ public class Assets extends TestCase {
 	public void checkInspectionsForContentHeader() throws Exception {
 		HtmlElement inspectionForContentHeader = ie.htmlElement(inspectionForFinder);
 		assertTrue("Could not find Inspection For page content header '" + p.getProperty("inspectionforcontentheader") + "'", inspectionForContentHeader.exists());
-		assertTrue("Inspection For page header does not start with " + inspectionForContentHeaderText, inspectionForContentHeader.text().startsWith(inspectionForContentHeaderText));
 	}
 	
 	/**
@@ -858,8 +849,8 @@ public class Assets extends TestCase {
 
 	private void checkInspectionGroupsContentHeader(String serialNumber) throws Exception {
 		HtmlElement inspectionGroupsContentHeader = ie.htmlElement(inspectionGroupsContentHeaderFinder);
-		assertTrue("Could not find Inspection Groups page content header", inspectionGroupsContentHeader.exists());
-		assertTrue("Could not find 'Inspection Groups - " + serialNumber + "'", inspectionGroupsContentHeader.text().equals("Inspection Groups - " + serialNumber));
+		assertTrue("Could not find Inspect page content header", inspectionGroupsContentHeader.exists());
+		assertTrue("Could not find 'Inspect - " + serialNumber + "'", inspectionGroupsContentHeader.text().contains(serialNumber));
 	}
 
 	/**
@@ -1115,10 +1106,10 @@ public class Assets extends TestCase {
 
 	private void checkEditProductPageContentHeader(String serialNumber) throws Exception {
 		HtmlElement contentHeader = ie.htmlElement(editProductPageContentHeaderFinder);
-		String expected = "Edit Product - " + serialNumber;
+		String expected = "Asset - " + serialNumber;
 		assertTrue("Could not find the '" + expected + "' header", contentHeader.exists());
 		String s = contentHeader.text();
-		assertTrue("Expected '" + expected + "' but found '" + s + "'", s.equals(expected));
+		assertTrue("Expected '" + expected + "' but found '" + s + "'", s.contains(expected));
 	}
 
 	public void gotoProductConfiguration(String serialNumber) throws Exception {
@@ -1141,14 +1132,15 @@ public class Assets extends TestCase {
 		assertTrue("Could not find the link to Inspection Schedule", inspectionSchedule.exists());
 		inspectionSchedule.click();
 		checkInspectionSchedulePageContentHeader(serialNumber);
+		ie.waitUntilReady();
 	}
 
 	private void checkInspectionSchedulePageContentHeader(String serialNumber) throws Exception {
 		HtmlElement contentHeader = ie.htmlElement(inspectionSchedulePageContentHeaderFinder);
-		String expected = "Schedules For - " + serialNumber;
+		String expected = "Asset - " + serialNumber;
 		assertTrue("Could not find the '" + expected + "' header", contentHeader.exists());
-		String s = contentHeader.text();
-		assertTrue("Expected '" + expected + "' but found '" + s + "'", s.equals(expected));
+		String s = contentHeader.text().trim();
+		assertTrue("Expected '" + expected + "' but found '" + s + "'", s.contains(expected));
 	}
 	
 	/**
@@ -1188,6 +1180,7 @@ public class Assets extends TestCase {
 		assertNotNull(scheduleDate);
 		assertNotNull(inspectionType);
 		assertNotNull(newScheduleDate);
+		misc.stopMonitorStatus();
 		TableRows trs = ie.rows(scheduleForScheduleRowsFinder);
 		assertNotNull("Could not find the rows containing schedule for product", trs);
 		Iterator<TableRow> i = trs.iterator();
@@ -1199,19 +1192,23 @@ public class Assets extends TestCase {
 			if(it.equals(inspectionType) && nsd.equals(scheduleDate)) {
 				Link edit = tr.link(xpath("TD/SPAN/A[text()='Edit']"));
 				assertTrue("Could not find the edit link for the schedule to be edited.", edit.exists());
+				String id = tr.id().replace("type_", "");
 				edit.click();
-				TextField date = tr.textField(xpath("TD[2]/SPAN/FORM/INPUT[4]"));
+				misc.waitForJavascript();
+				TextField date = ie.textField(id("schedule_" + id + "_nextDate"));
 				assertTrue("Could not find the date text field after clicking Edit", date.exists());
 				date.set(newScheduleDate);
 				Link save = date.link(xpath("../SPAN/A[1]"));
 				assertTrue("Could not find the Save link to save the new date", save.exists());
+				save.click();
 				misc.checkForErrorMessagesOnCurrentPage();
 				break;
 			}
 		}
+		misc.startMonitorStatus();
 	}
 	
-	public void SmartSearch(String searchString) throws Exception {
+	public int SmartSearch(String searchString) throws Exception {
 		TextField find = ie.textField(smartSearchTextFieldFinder);
 		assertTrue("Could not find the Smart Search text field", find.exists());
 		find.focus();
@@ -1219,10 +1216,7 @@ public class Assets extends TestCase {
 		Button search = ie.button(smartSearchSearchButtonFinder);
 		assertTrue("Could not find the Smart Search Search button", search.exists());
 		search.click();
-		// validate we got the right page
-		// if there is 0 matches: Product Information
-		// if there is 1 match: Product Information - $serialnumber
-		// if there are 2 or more: Product Information
+		return misc.getSmartSearchResultCount();
 	}
 
 	public String getSelectDisplayColumnsHeader() throws Exception {
@@ -1431,6 +1425,97 @@ public class Assets extends TestCase {
 			Options o = division.options();
 			assertTrue("There is more than one division to select", o.length() == 1);
 		}
+	}
+
+	/**
+	 * Validate all the methods in this library.
+	 * 
+	 * @throws Exception
+	 */
+	public void validate() throws Exception {
+		gotoAssets();
+		List<String> customers = getCustomersOnSearchCriteria();
+		int n = misc.getRandomInteger(customers.size());
+		List<String> divisions = getDivisionsOnSearchCriteria(customers.get(n));	// sets a random customer
+		List<String> productStatuses = getProductStatusesOnSearchCriteria();
+		List<String> productTypes = getProductTypesOnSearchCriteria();
+		getDynamicSelectColumns();
+		ProductSearchCriteria prop = new ProductSearchCriteria();
+		String today = misc.getDateString();
+		String lastMonth = misc.getDateStringLastMonth();
+		prop.setFromDate(lastMonth);
+		prop.setToDate(today);
+		prop.setCustomer("");														// clears customer
+		setProductSearchCriteria(prop);
+		expandProductSearchSelectColumns();
+		ProductSearchSelectColumns c = new ProductSearchSelectColumns();
+		c.setAllOn();
+		setProductSearchColumns(c);
+		gotoProductSearchResults();
+		List<String> filteredCustomers = getProductSearchResultsColumn("Customer Name");
+		String customerName = filteredCustomers.get(0);
+		prop.setCustomer(customerName);
+		gotoProductSearchResults();
+		if(getTotalNumberOfProducts() > 1000) {
+			fail("You need to set up so there are less than 1000 assets.");
+		}
+		gotoMassUpdate();
+		gotoProductSearchResultsFromMassUpdate();
+		printAllManufacturerCertificates();
+		exportToExcel();
+		List<String> serialNumbers = getProductSearchResultsSerialNumbers();
+		String sdc = getSelectDisplayColumnsHeader();
+
+		gotoMassUpdate();
+		MassUpdateForm m = new MassUpdateForm();
+		m.setCustomerName(customerName);
+		setMassUpdate(m);
+		gotoSaveMassUpdate();
+
+		expandProductSearchResultsSearchCriteria();
+		gotoProductSearchClearForm();
+		gotoProductSearchResults();
+		printAllManufacturerCertificatesWarningOver1000Products();
+		gotoMassUpdateWarningOver1000Products();
+		exportToExcelWarningOver10000Products();
+		
+		String serialNumber = serialNumbers.get(0);
+		gotoProductInformationViaInfoLink(serialNumber);
+		gotoEditProduct(serialNumber);
+		gotoInspectionsFor(serialNumber);
+		gotoProductInformation(serialNumber);
+		gotoInspectionSchedule(serialNumber);
+		List<String> inspectionTypes = getInspectionTypesFromAssetAddSchedulePage();
+		String scheduleDate = today;
+		String inspectionType = inspectionTypes.get(0);
+		String job = null;
+		addScheduleFor(scheduleDate, inspectionType, job);
+		String newJob = null;
+		String newScheduleDate = misc.getDateStringNextMonth();
+		editScheduleFor(scheduleDate, inspectionType, job, newScheduleDate, newJob);
+		gotoProductInformation(serialNumber);
+//		gotoInspectionGroups(serialNumber);	// Waiting for WEB-1034 to be fixed
+		assertTrue(SmartSearch(serialNumber) > 0);
+		
+		// no master products on Hercules. These get exercised by the Smoke Test
+//		this.gotoProductConfiguration(serialNumber);
+//		this.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
+//		this.editEmployeeProduct(p);
+//		this.checkEndUserEditProduct(divisional);
+		fail("Not fully implemented");
+	}
+
+	private List<String> getInspectionTypesFromAssetAddSchedulePage() throws Exception {
+		List<String> results = new ArrayList<String>();
+		SelectList addScheduleInspectionType = ie.selectList(addScheduleInspectionTypeFinder);
+		assertTrue("Could not find the select list for Inspection Type", addScheduleInspectionType.exists());
+		Options os = addScheduleInspectionType.options();
+		Iterator<Option> i = os.iterator();
+		while(i.hasNext()) {
+			Option o = i.next();
+			results.add(o.text().trim());
+		}
+		return results;
 	}
 	
 	/*

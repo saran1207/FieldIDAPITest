@@ -925,6 +925,7 @@ public class Reporting extends TestCase {
 		gotoReportSearchResults();
 
 		// attempt to print
+		assertTrue("You need to use a tenant with more than 10000 reports.", getTotalNumberOfInspections() >= 10000);
 		exportToExcelWarningOver10000Reports();
 		printWarningOver1000Reports();
 		

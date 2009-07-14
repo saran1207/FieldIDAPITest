@@ -57,7 +57,7 @@ public class Stub extends TestCase {
 		String method = getName();
 
 		try {
-			
+			admin.validate();
 			Thread.sleep(1);
 //			FileInputStream in = new FileInputStream("charge-2009.4.2.csv");
 //			BufferedInputStream csv = new BufferedInputStream(in);

@@ -45,7 +45,7 @@ public class SmokeTestEx extends TestCase {
 	final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS ");
 	static Random r = new Random();
 
-	String loginURL = "https://team.n4systems.com/fieldid/";
+	String loginURL = "https://localhost.localdomain/fieldid/";
 	String company = "unirope";
 	boolean jobs = false;			// end users do not have Jobs
 	String password = "makemore$";

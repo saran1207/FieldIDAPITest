@@ -15,6 +15,7 @@ public class WEB_186 extends TestCase {
 
 	IE ie = new IE();
 	commonFieldIDMethods helper = new commonFieldIDMethods();
+	
 	Random n = new Random();
 	final String tenant = "unirope";
 	final String user = "n4systems";

@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,8 @@ import static watij.finders.FinderFactory.*;
 public class FieldIDMisc extends TestCase {
 
 	IE ie = null;
-	static long hack = 5000;	// wait 2 seconds for Javascript actions to complete
+	static long hack = 5000;	// wait 5 seconds for Javascript actions to complete
+	static long lightBoxHack = 10000;
 	public static long dayInMilliseconds = 86400000;	// used for scheduling inspections
 	Random r = new Random();
 	private Finder lightBoxOKButtonFinder;
@@ -33,6 +35,8 @@ public class FieldIDMisc extends TestCase {
 	private Finder errorMessageFinder;
 	private Finder backToAdministationLinkFinder;
 	private Finder successMessageFinder;
+	private Finder contentTitleFinder;
+	private Finder assetsViewAllFinder;
 	
 	public FieldIDMisc(IE ie) {
 		this.ie = ie;
@@ -42,6 +46,8 @@ public class FieldIDMisc extends TestCase {
 		errorMessageFinder = xpath("//DIV[@class='errorMessage']");
 		backToAdministationLinkFinder = xpath("//DIV[@id='contentTitle']/DIV[@class='backToLink']/A[contains(text(),'back to administration')]");
 		successMessageFinder = xpath("//DIV[@id='message']/UL/LI/SPAN[@class='actionMessage']");
+		contentTitleFinder = xpath("//DIV[@id='contentTitle']/H1");
+		assetsViewAllFinder = xpath("//DIV[@id='resultsTable']/TABLE/TBODY/TR/TD/BUTTON[contains(text(),'Select')]");
 	}
 	
 	/**
@@ -263,6 +269,15 @@ public class FieldIDMisc extends TestCase {
 	}
 
 	/**
+	 * For some reason the lightbox is taking a long time to come up.
+	 * 
+	 * @throws Exception
+	 */
+	public void waitForLightBox() throws Exception {
+		Thread.sleep(lightBoxHack);
+	}
+
+	/**
 	 * Returns a random positive long value as a string.
 	 * 
 	 * @return
@@ -440,7 +455,7 @@ public class FieldIDMisc extends TestCase {
 	}
 
 	public void clickLightboxOKbutton(String message) throws Exception {
-		waitForJavascript();
+		waitForLightBox();
 		HtmlElement b = ie.htmlElement(lightBoxOKButtonFinder);
 		assertTrue("Could not find the OK button of the lightbox", b.exists());
 		HtmlElement header = ie.htmlElement(lightBoxMessageHeaderFinder);
@@ -524,5 +539,56 @@ public class FieldIDMisc extends TestCase {
 			s = actionMessage.text().trim();
 		}
 		return s;
+	}
+
+	public String getDateStringLastYear() {
+		String lastYear = null;
+		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.YEAR, -1);
+		lastYear = now.format(c.getTime());
+		return lastYear;
+	}
+
+	public String getDateStringLastMonth() {
+		String lastYear = null;
+		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MONTH, -1);
+		lastYear = now.format(c.getTime());
+		return lastYear;
+	}
+
+	public String getDateStringNextYear() {
+		String lastYear = null;
+		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.YEAR, 1);
+		lastYear = now.format(c.getTime());
+		return lastYear;
+	}
+
+	public String getDateStringNextMonth() {
+		String lastYear = null;
+		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MONTH, 1);
+		lastYear = now.format(c.getTime());
+		return lastYear;
+	}
+
+	public String getContentTitle() throws Exception {
+		HtmlElement he = ie.htmlElement(contentTitleFinder);
+		assertTrue("Could not find the content title element", he.exists());
+		String result = he.text().trim();
+		return result;
+	}
+
+	public int getSmartSearchResultCount() throws Exception {
+		String contentTitle = getContentTitle();
+		if(contentTitle.contains("Asset - "))
+			return 1;
+		Buttons b = ie.buttons(assetsViewAllFinder);
+		return b.length();
 	}
 }

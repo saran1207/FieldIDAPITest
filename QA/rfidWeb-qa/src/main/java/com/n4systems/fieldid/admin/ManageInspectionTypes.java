@@ -692,6 +692,7 @@ public class ManageInspectionTypes extends TestCase {
 		Button save = ie.button(inspectionFormSaveButtonFinder);
 		assertTrue("Could not find the Save button for Inspection Form", save.exists());
 		save.click();
+		ie.waitUntilReady();
 		misc.checkForErrorMessagesOnCurrentPage();
 		String msg = misc.getSuccessMessageOnCurrentPage();
 		assertNotSame("", msg);

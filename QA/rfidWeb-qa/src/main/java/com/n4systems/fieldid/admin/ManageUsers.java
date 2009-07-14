@@ -81,8 +81,8 @@ public class ManageUsers extends TestCase {
 			listUsersFilterUserTypeFinder = id(p.getProperty("listusersfilterusertype"));
 			listUsersSearchButtonFinder = id(p.getProperty("listusersfiltersearchbutton"));
 			listUsersClearButtonFinder = id(p.getProperty("listusersfilterclearbutton"));
-			listUsersAddEmployeeUserFinder = text(p.getProperty("listusersaddemployee"));
-			listUsersAddCustomerUserFinder = id(p.getProperty("listusersaddcustomer"));
+			listUsersAddEmployeeUserFinder = xpath(p.getProperty("listusersaddemployee"));
+			listUsersAddCustomerUserFinder = xpath(p.getProperty("listusersaddcustomer"));
 			listAddUserPageContentHeaderFinder = xpath(p.getProperty("addusercontentheader"));
 			tagProductsRowFinder = xpath(p.getProperty("addusertagproductsrow"));
 			manageSystemConfigurationRowFinder = xpath(p.getProperty("addusermanagesystemconfigurationrow"));
@@ -318,8 +318,9 @@ public class ManageUsers extends TestCase {
 
 		SelectList addCustomerUserTimeZone = ie.selectList(addCustomerUserTimeZoneFinder);
 		assertTrue("Could not find the Time Zone select list on Add User", addCustomerUserTimeZone.exists());
-		String tz = "/" + u.getTimeZone() + "/";
+		String tz = u.getTimeZone();
 		if(tz != null) {
+			tz = "/" + u.getTimeZone() + "/";
 			Option o = addCustomerUserTimeZone.option(text(tz));
 			assertTrue("Could not find the time zone '" + tz + "'", o.exists());
 			o.select();
@@ -397,7 +398,14 @@ public class ManageUsers extends TestCase {
 		String password = "makemore$";
 		CustomerUser u = new CustomerUser(userID, email, firstName, lastName, password);
 		addCustomerUser(u);
-		fail("Not fully implemented");
+		gotoViewAll();
+		setListUsersNameFilter(u.getUserID());
+		gotoListUsersSearch();
+		gotoEditCustomerUser(u);
+		if(isUser(u.getUserID())) {
+			u.setPosition("edit");
+			editCustomerUser(u);
+		}
 	}
 
 	public void gotoViewAll() throws Exception {
