@@ -65,6 +65,7 @@ public class RobertsFileProcessorTest {
 	@Test
 	public void test_process_file_with_misformed_test_method() {
 		FileDataContainer dataContainer = new FileDataContainer();
+		
 		try {
 			processor.processFile(dataContainer, produceRobertsFile("roberts_testMethod_invalid.log"));
 		} catch (FileProcessingException fpe) {
