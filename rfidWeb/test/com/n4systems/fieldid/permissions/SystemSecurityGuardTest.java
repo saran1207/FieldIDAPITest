@@ -8,7 +8,7 @@ import com.n4systems.model.ExtendedFeature;
 
 
 
-public class SystemSecurityGuardTest extends SecurityGuardTest {
+public class SystemSecurityGuardTest extends SecurityGuardTestCase {
 
 	/**
 	 * all extended feature should have accessor method in the form "is[FeatureName]Enabled()"

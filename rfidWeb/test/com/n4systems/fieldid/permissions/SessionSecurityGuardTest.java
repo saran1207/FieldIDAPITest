@@ -12,7 +12,7 @@ import com.n4systems.model.TenantOrganization;
 
 
 
-public class SessionSecurityGuardTest extends SecurityGuardTest{
+public class SessionSecurityGuardTest extends SecurityGuardTestCase{
 
 	
 	@Test
