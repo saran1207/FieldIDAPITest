@@ -56,13 +56,13 @@
 
 <div id="relaseInformation" class="dashboardBlock dashboardBoardBottom">
 	<div id="releaseNotes" class="dashboardSection">
-		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
+		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes-${action.getText('app.majorversion')}.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
 		<ul class="informationList">
-			<li>Removed serial number constraints</li>
-			<li>Ability to merge assets together</li>
-			<li>Enhanced email alerts for upcoming events and inspections</li>
-			<li>Search for your assets by Reference Number</li>
-			<li>Time is now recorded on all events</li>
+			<li>New Menu with Improved Navigation</li>
+		    <li>Multi-Add Assets</li>
+		    <li>Integrated Smart Search</li>
+		    <li>Asset Search on Field ID Mobile</li>
+		    <li>Simplified Field ID Mobile Sync Process</li>
 		</ul>
 	</div>
 	<div id="helpVideos" class="dashboardSection">
