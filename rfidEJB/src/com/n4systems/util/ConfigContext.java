@@ -22,10 +22,10 @@ public class ConfigContext {
 	
 	private static ConfigContext currentContext;
 	
-	private final CopyOnWriteArrayList<Configuration> configruations = new CopyOnWriteArrayList<Configuration>();
+	protected final CopyOnWriteArrayList<Configuration> configruations = new CopyOnWriteArrayList<Configuration>();
 	private final AtomicBoolean dirty = new AtomicBoolean();
 	
-	private ConfigContext() {
+	protected ConfigContext() {
 		// mark us dirty now, so a load will happen on access
 		markDirty();
 	}
@@ -41,6 +41,11 @@ public class ConfigContext {
 		return currentContext;
 	}
 	
+	
+	public static synchronized void setCurrentContext(ConfigContext newContext) {
+		currentContext = newContext;
+	}
+	
 	/**
 	 * Marks the current context as dirty, forcing a configuration reload on next access.<br />
 	 * This MUST be called on any persistent change to system configurations, tenant specific or global.<br />
@@ -53,7 +58,7 @@ public class ConfigContext {
 	/**
 	 * Reloads the master configuration list.
 	 */
-	private void reloadConfigurations() {
+	protected void reloadConfigurations() {
 		logger.debug("Reloading configruations");
 		
 		/*

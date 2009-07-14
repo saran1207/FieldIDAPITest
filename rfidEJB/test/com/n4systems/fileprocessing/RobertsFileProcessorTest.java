@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.NonDataSourceBackedConfigContext;
 
 public class RobertsFileProcessorTest {
 
@@ -20,6 +22,7 @@ public class RobertsFileProcessorTest {
 	@Before
 	public void setUp() throws Exception {
 		processor = new RobertsFileProcessor();
+		ConfigContext.setCurrentContext(new NonDataSourceBackedConfigContext());
 	}
 
 	@After
