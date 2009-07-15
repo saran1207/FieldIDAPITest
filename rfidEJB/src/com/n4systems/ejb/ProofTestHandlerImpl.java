@@ -122,7 +122,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// parse our inspection date to a Date object
-		Date inspectionDate = parseInspectionDateInInspectorLocalTime(fileData.getInspectionDate());  // FIXME look at date here.
+		Date inspectionDate = parseInspectionDateInInspectorLocalTime(fileData.getInspectionDate());  
 		
 		
 		
