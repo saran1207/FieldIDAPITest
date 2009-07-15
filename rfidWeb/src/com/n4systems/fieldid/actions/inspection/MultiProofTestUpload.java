@@ -13,7 +13,6 @@ import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;

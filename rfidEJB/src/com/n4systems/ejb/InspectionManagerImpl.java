@@ -68,6 +68,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
@@ -195,13 +196,13 @@ public class InspectionManagerImpl implements InspectionManager {
 		return inspection;
 	}
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDate, Product product, SecurityFilter filter) {
-		filter.setTargets("tenant.id", "customer.id", "division.id");
+	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter) {
+		
 
-		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
+		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter.prepareFor(Inspection.class));
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-		queryBuilder.addSimpleWhere("date", inspectionDate);
+		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", inspectionDateRangeStart).addWhere(Comparator.LE, "endingDate", "date", inspectionDateRangeEnd); 
 		queryBuilder.addSimpleWhere("product", product);
 
 		List<Inspection> inspections;

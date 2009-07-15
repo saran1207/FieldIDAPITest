@@ -463,6 +463,10 @@ public class DateHelper {
 		return setToDay( d ).getTime();
 	}
 	
+	public static Date getBeginingOfDay(Date date) {
+		return getDateWithOutTime(date);
+	}
+	
 	public static Date getEndOfDay(Date date) {
 		Calendar d = Calendar.getInstance();
 		d.setTime(date);

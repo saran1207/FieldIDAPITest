@@ -53,7 +53,7 @@ public interface InspectionManager {
 
 	public Date findLastInspectionDate(Product product, InspectionType inspectionType);
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDate, Product product, SecurityFilter filter);
+	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter);
 
 	public FileDataContainer createFileDataContainer(Inspection inspection, File proofTestFile) throws ProcessingProofTestException;
 

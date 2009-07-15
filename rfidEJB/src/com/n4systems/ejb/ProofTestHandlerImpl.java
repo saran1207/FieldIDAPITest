@@ -40,6 +40,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.FuzzyResolver;
 import com.n4systems.util.SecurityFilter;
 
@@ -121,13 +122,15 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// parse our inspection date to a Date object
-		Date inspectionDate = parseInspectionDate(fileData.getInspectionDate());
+		Date inspectionDate = parseInspectionDateInInspectorLocalTime(fileData.getInspectionDate());  // FIXME look at date here.
+		
+		
 		
 		Product product;
 		List<Inspection> inspections;
 		Inspection inspection;
 		// since proof tests may have multiple serial numbers, we'll need to do this process for each
-		for(String serialNumber : fileData.getSerialNumbers()) {
+		for (String serialNumber : fileData.getSerialNumbers()) {
 			inspection = null;
 			try {
 				// find a product for this tenant, serial and customer
@@ -139,7 +142,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 			
 			// if the product is null, log it and move on to the next serial
-			if(product == null) {
+			if (product == null) {
 				writeLogMessage(tenant, "Could not find/create Product [" + serialNumber + "] referenced in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
 				continue;
@@ -149,15 +152,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			 *  If the product identifiedBy is set to override the inspector (databridge upload uses this)
 			 *  and the two are different, then set the inspector to be the identifiedBy from the product
 			 */
-			if(productOverridesInspector) {
+			if (productOverridesInspector) {
 				inspector = product.getIdentifiedBy();
 			}
 			
-			// if we find a product then it's time to try and find an inspection
-			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDate, product, new SecurityFilter(tenant.getId(), customerId, null));
+			// convert date to utc using the inspectors time.
+			Date inspectionDateInUTC = DateHelper.convertToUTC(inspectionDate, inspector.getTimeZone());
+			Date inspectionDateRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(inspectionDate), inspector.getTimeZone());
+			Date inspectionDateRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(inspectionDate), inspector.getTimeZone());
+
+			// if we find a product then it's time to try and find an inspection inside the same day as given.
+			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, new SecurityFilter(tenant.getId(), customerId, null));
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
-			for(Inspection insp: inspections) {
+			for (Inspection insp: inspections) {
 				if(insp.getType().supports(fileData.getFileType()) && !chartImageExists(insp)) {
 					// we have found our inspection, move on
 					inspection = insp;
@@ -166,8 +174,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
-			if(inspection == null) {
-				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDate, fileData);
+			if (inspection == null) {
+				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
@@ -238,19 +246,19 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// find a product for this tenant, serial and customer
-		Product productSerial = productManager.findProductBySerialNumber( serial, tenant.getId(), customerId);
+		Product product = productManager.findProductBySerialNumber(serial, tenant.getId(), customerId);
 		
-		if(productSerial == null) {
+		if(product == null) {
 			if(!fileData.isCreateProduct()) {
 				// if we're not supposted to create new products and we could not find one, return null
 				return null;
 			} else {
 				// create product is set, lets create a default
-				productSerial = createProduct(tenant, user, customer, serial, fileData.getExtraInfo());
+				product = createProduct(tenant, user, customer, serial, fileData.getExtraInfo());
 			}
 		}
 		
-		return productSerial;
+		return product;
 	}
 
 	private Product createProduct(TenantOrganization tenant, UserBean user, Customer customer, String serialNumber, Map<String, String> productOptions) {
@@ -414,7 +422,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return PathHandler.getChartImageFile(inspection).exists();
 	}
 	
-	private Date parseInspectionDate(String inspectionDateString) throws FileProcessingException {
+	private Date parseInspectionDateInInspectorLocalTime(String inspectionDateString) throws FileProcessingException {
 		Date inspectionDate = null;
 		
 		try {
