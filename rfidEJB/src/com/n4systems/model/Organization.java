@@ -1,7 +1,5 @@
 package com.n4systems.model;
 
-import com.n4systems.util.StringListingPair;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +12,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.n4systems.util.StringListingPair;
 
 @Entity
 @Table(name = "Organization")

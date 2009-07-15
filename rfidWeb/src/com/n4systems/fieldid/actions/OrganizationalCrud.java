@@ -13,6 +13,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.NonTenantOrganization;
 import com.n4systems.model.Organization;
@@ -21,13 +22,16 @@ import com.n4systems.model.TenantOrganization;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-public class OrganizationalCrud extends AbstractCrud {
+public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final Logger logger = Logger.getLogger(OrganizationalCrud.class);
 	private static final long serialVersionUID = 1L;
 
@@ -176,6 +180,7 @@ public class OrganizationalCrud extends AbstractCrud {
 		return organization.getDisplayName();
 	}
 
+	
 	public void setAddressInfo(AddressInfo addressInfo) {
 		organization.setAddressInfo(addressInfo);
 	}
@@ -192,6 +197,8 @@ public class OrganizationalCrud extends AbstractCrud {
 
 	
 	@RequiredStringValidator(message="", key="error.namerequired")
+	@StringLengthFieldValidator( type=ValidatorType.FIELD, message = "" , key = "errors.organization_name_too_long", maxLength="255")
+	@CustomValidator(type="uniqueValue", message = "", key="errors.organization_name_used")
 	public void setDisplayName(String displayName) {
 		organization.setDisplayName(displayName);
 	}
@@ -205,7 +212,7 @@ public class OrganizationalCrud extends AbstractCrud {
 		return certImage;
 	}
 
-	@CustomValidator(type = "fileSizeValidator", message = "", key = "errors.filetoolarge", parameters = { @ValidationParameter(name = "fileSize", value = "524288") })
+	@CustomValidator(type = "fileSizeValidator", message = "", key = "errors.file_too_large", parameters = { @ValidationParameter(name = "fileSize", value = "524288") })
 	public void setCertImage(File certImage) {
 		this.certImage = certImage;
 	}
@@ -232,5 +239,17 @@ public class OrganizationalCrud extends AbstractCrud {
 
 	public void setNewImage(boolean newImage) {
 		this.newImage = newImage;
+	}
+
+	public boolean duplicateValueExists(String formValue) {
+		if (formValue != null) {
+			QueryBuilder<Organization> query = new QueryBuilder<Organization>(Organization.class, getSecurityFilter().prepareFor(Organization.class));
+			query.setCountSelect().addWhere(Comparator.EQ, "displayName", "displayName", formValue.trim(), WhereParameter.IGNORE_CASE);
+			if (uniqueID != null) {
+				query.addWhere(Comparator.NE, "id", "id", uniqueID);
+			}
+			return 0 != persistenceManager.findCount(query);
+		} 
+		return false;
 	}
 }
