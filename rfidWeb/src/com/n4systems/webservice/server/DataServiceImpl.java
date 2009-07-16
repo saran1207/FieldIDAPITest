@@ -1181,7 +1181,10 @@ public class DataServiceImpl implements DataService {
 	public MobileUpdateInfo getMobileUpdateInfo(String currentVersion) throws ServiceException {
 		MobileUpdateInfo mobileUpdateInfo = new MobileUpdateInfo();
 		
-		
+		mobileUpdateInfo.setMajorVersion(ConfigContext.getCurrentContext().getInteger(ConfigEntry.CURRENT_MOBILE_MAJOR_VERSION));
+		mobileUpdateInfo.setMinorVersion(ConfigContext.getCurrentContext().getInteger(ConfigEntry.CURRENT_MOBILE_MINOR_VERSION));
+		mobileUpdateInfo.setBuildVersion(ConfigContext.getCurrentContext().getInteger(ConfigEntry.CURRENT_MOBILE_BUILD_VERSION));
+		mobileUpdateInfo.setFileName(ConfigContext.getCurrentContext().getString(ConfigEntry.CURRENT_MOBILE_FILE_NAME));
 		
 		return mobileUpdateInfo;
 	}
