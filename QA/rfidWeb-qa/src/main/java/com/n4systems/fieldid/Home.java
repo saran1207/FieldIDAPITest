@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.n4systems.fieldid.admin.ManageSystemSettings;
+
 import junit.framework.TestCase;
 import static watij.finders.FinderFactory.*;
 import watij.elements.*;
@@ -23,6 +25,7 @@ public class Home extends TestCase {
 	MyAccount myAccount = null;
 	FieldIDMisc misc = null;
 	Admin admin = null;
+	ManageSystemSettings mss = null;
 	Properties p;
 	InputStream in;
 	String propertyFile = "home.properties";
@@ -67,6 +70,7 @@ public class Home extends TestCase {
 			myAccount = new MyAccount(ie);
 			misc = new FieldIDMisc(ie);
 			admin = new Admin(ie);
+			mss = new ManageSystemSettings(ie);
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
@@ -76,7 +80,7 @@ public class Home extends TestCase {
 			homeViewUpcomingInspectionsFinder = text(p.getProperty("viewupcominginspections"));
 			homeViewTheInspectionHistoryForAProductFinder = text(p.getProperty("viewinspectionhistory"));
 			homeFindAProductFinder = text(p.getProperty("findaproduct"));
-			homeChangeYourPasswordFinder = text(p.getProperty("changeyourpassword"));
+			homeChangeYourPasswordFinder = xpath(p.getProperty("changeyourpassword"));
 			homeSearchButtonFinder = id(p.getProperty("searchbutton"));
 			homeNewFeatureFinder = xpath(p.getProperty("newfeatures"));
 			homeInstructionalVideosFinder = xpath(p.getProperty("instructionalvideos"));
@@ -242,7 +246,7 @@ public class Home extends TestCase {
 		gotoHome();
 		Link changeYourPassword = checkGotoChangeYourPassword();
 		changeYourPassword.click();
-		myAccount.checkChangePasswordContentHeader();
+		myAccount.checkMyAccountChangePasswordContent();
 	}
 	
 	private Link checkGotoChangeYourPassword() throws Exception {
@@ -425,5 +429,63 @@ public class Home extends TestCase {
 	public boolean isCompanyWebsite() throws Exception {
 		Link companyURL = ie.link(companyWebSiteURLFinder);
 		return companyURL.exists();
+	}
+
+	public void validate(boolean jobs) throws Exception {
+		String testURL = "http://www.google.com/";
+		String testTitle = "Google";	// can be full title or part of title
+		admin.gotoAdministration();
+		mss.gotoManageSystemSettings();
+		String original = mss.getWebSiteAddress();
+		mss.setWebSiteAddress(testURL);
+		mss.saveChangesToSystemSettings();
+		try {
+			gotoHome();
+			validateHomePage(jobs);
+			if(isCompanyWebsite()) {
+				checkCompanyWebSiteLink();
+				Link url = getCompanyWebSiteLink();
+				assertEquals("The getCompanyWebSiteLink() method did not return the correct value.", testURL, url.href());
+				gotoCompanyWebsite();
+				IE ie2 = ie.childBrowser();
+				assertNotNull("Could not find the new browser with the 'company' website", ie2);
+				String title = ie2.title();
+				assertTrue("Was expecting the 'company' website to be " + testTitle + " but found '" + title + "'", title.contains(testTitle));
+				ie2.close();
+			}
+			admin.gotoAdministration();
+			mss.gotoManageSystemSettings();
+			mss.setWebSiteAddress(original);
+			mss.saveChangesToSystemSettings();
+			gotoHome();
+			if(jobs) {
+				checkJobsSectionHeader();
+				getJobsOnHomePage();
+				
+			}
+			List<String> videos = getInstructionalVideoList();
+			gotoInstructionalVideos();
+			gotoHome();
+			List<String> newFeatures = getNewFeatures();
+			gotoNewFeatures();
+			gotoHome();
+			gotoChangeYourPassword();
+			gotoHome();
+			gotoViewTheInspectionHistoryForAProduct();
+			gotoHome();
+			gotoFindAProduct();
+			gotoHome();
+			gotoViewUpcomingInspections();
+			gotoHome();
+//			gotoProductInformationViaSmartSearch(serialNumber);	// tested by Smoke Test
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// if anything fails, restore the original company website
+			admin.gotoAdministration();
+			mss.gotoManageSystemSettings();
+			mss.setWebSiteAddress(original);
+			mss.saveChangesToSystemSettings();
+		}
 	}
 }

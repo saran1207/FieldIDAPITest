@@ -20,28 +20,24 @@ import junit.framework.TestCase;
 
 public class Validate extends TestCase {
 	IE ie = new IE();
-	Admin admin = new Admin(ie);
-	Assets assets = new Assets(ie);
 	FieldIDMisc misc = new FieldIDMisc(ie);
+	Login login = new Login(ie);
 	Home home = new Home(ie);
 	Identify identify = new Identify(ie);
-	Login login = new Login(ie);
-	MyAccount myAccount = new MyAccount(ie);
+	Assets assets = new Assets(ie);
 	Reporting reporting = new Reporting(ie);
-
+	MyAccount myAccount = new MyAccount(ie);
+	Admin admin = new Admin(ie);
 	ManageCustomers mcs = new ManageCustomers(ie);
-	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
-	ManageProductTypes mpts = new ManageProductTypes(ie);
-	ManageSystemSettings mss = new ManageSystemSettings(ie);
 	ManageUsers mus = new ManageUsers(ie);
+	ManageSystemSettings mss = new ManageSystemSettings(ie);
+	ManageProductTypes mpts = new ManageProductTypes(ie);
+	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
+
 
 	static String timestamp = null;
 	static boolean once = true;
 	String loginURL = "https://localhost.localdomain/fieldid/";
-	String company = "hercules";
-	String customer = "ABB Inc.";
-	String userid = "n4systems";
-	String password = "makemore$";
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -50,33 +46,65 @@ public class Validate extends TestCase {
 		if (once) {
 			once = false;
 			timestamp = misc.createTimestampDirectory();
+		}
+	}
+
+	public void testAdministration() throws Exception {
+		String method = getName();
+		String company = "unirope";
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			admin.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	// Manage Organizations
+
+	public void testAdministrationManageCustomers() throws Exception {
+		String method = getName();
+		String company = "halo";		// someone with more than 20 customers but not too many
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mcs.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
 		}
 	}
 
-	public void testLibraries() throws Exception {
+	public void testAdministrationManageUsers() throws Exception {
 		String method = getName();
+		String company = "unirope";
+		String userid = "n4systems";
+		String password = "makemore$";
 
 		try {
-//			admin.validate();
-			assets.validate();
-//			misc.validate();
-//			home.validate();
-			identify.validate();
-//			login.validate();
-			myAccount.validate();
-			reporting.validate();
-			admin.gotoAdministration();
-			mcs.validate();
-			admin.gotoAdministration();
-			mits.validate();
-			admin.gotoAdministration();
-			mpts.validate();
-			admin.gotoAdministration();
-			mss.validate();
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
 			admin.gotoAdministration();
 			mus.validate();
 		} catch (Exception e) {
@@ -87,9 +115,206 @@ public class Validate extends TestCase {
 			throw err;
 		}
 	}
+
+	// Manage User Registrations
+	
+	public void testAdministrationManageSystemSettings() throws Exception {
+		String method = getName();
+		String company = "unirope";
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mss.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
+	public void testAdministrationManageProductTypes() throws Exception {
+		String method = getName();
+		String company = "unirope";		// someone with more than 20 product types but not much more
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mpts.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
+	// Manage Product Type Groups
+	
+	// Manage Product Code Mappings
+	
+	// Manage Product Statuses
+		
+	public void testAdministrationManageInspectionTypes() throws Exception {
+		String method = getName();
+		String company = "halo";	// more than 20 inspection types but not many more
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mits.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
+	// Manage Event Type Groups
+	
+	// Manage Inspection Books
+	
+	// Auto Attribute Wizard
+	
+	// Manage Comment Templates
+	
+	// Data Log
+	
+	// Manage Your Safety Network
+	
+	public void testHome() throws Exception {
+		String method = getName();
+		String company = "unirope";		// someone with jobs
+		String userid = "n4systems";
+		String password = "makemore$";
+		boolean jobs = true;
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			home.validate(jobs);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
+	public void testIdentify() throws Exception {
+		String method = getName();
+		String company = "unirope";		// someone with integration and a known order number
+		String userid = "n4systems";
+		String password = "makemore$";
+		String orderNumber = "100203";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			identify.validate(orderNumber);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
+	// Inspect
+	
+	public void testAssets() throws Exception {
+		String method = getName();
+		String company = "cglift";	// need a tenant with 10000+ assets
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			assets.validate("Reel/ID");
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
+	public void testReporting() throws Exception {
+		String method = getName();
+		String company = "hercules";	// need a tenant with 10000+ inspections
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			reporting.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	// need a validate for Schedule
+
+	public void testMyAccount() throws Exception {
+		String method = getName();
+		String company = "uts";
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			myAccount.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		login.close();
 	}
-
 }

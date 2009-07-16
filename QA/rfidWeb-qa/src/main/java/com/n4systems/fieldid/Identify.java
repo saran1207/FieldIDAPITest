@@ -109,6 +109,8 @@ public class Identify extends TestCase {
 	private Finder addMultipleAssetsStep3GenerateFinder;
 	private Finder addMultipleAssetsSaveButtonFinder;
 	private Finder addMultipleAssetsCancelButtonFinder;
+	private Finder productAttributesFinder;
+	private Finder productTypeAttributesFinder;
 	
 	public Identify(IE ie) {
 		this.ie = ie;
@@ -202,6 +204,7 @@ public class Identify extends TestCase {
 			addMultipleAssetsStep3GenerateFinder = xpath(p.getProperty("step3generatebutton"));
 			addMultipleAssetsSaveButtonFinder = xpath(p.getProperty("step4saveandcreatebutton"));
 			addMultipleAssetsCancelButtonFinder = xpath(p.getProperty("addmultipleassetscancelbutton"));
+			productTypeAttributesFinder = xpath(p.getProperty("producttypeattributesfinder"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -706,6 +709,7 @@ public class Identify extends TestCase {
 	
 	private void handleRequiredFieldsOnAddProduct(TextField comments) throws Exception {
 		// handle text fields, select lists and combo boxes
+		misc.waitForJavascript();	// seems to be a timing problem here so I'm adding a little more sleep
 		Labels requiredFields = ie.labels(addProductRequiredInputFieldsFinder);
 		int numberOfRequiredFields = requiredFields.length();
 		for(int i = 0; i < numberOfRequiredFields; i++) {
@@ -720,7 +724,9 @@ public class Identify extends TestCase {
 					TextField t = ie.textField(id(inputID));
 					assertNotNull(t);
 					assertTrue("Could not find a required product type attribute text field", t.exists());
-					setTextFieldRandomly(t);
+					if(t.value().equals("")) {
+						setTextFieldRandomly(t);
+					}
 				} else if(tag.equals("SELECT")) {	// combo box or select list
 					SelectList sl = ie.selectList(id(inputID));
 					assertNotNull(sl);
@@ -745,8 +751,10 @@ public class Identify extends TestCase {
 				assertTrue("Could not find a required product type attribute input field", field.exists());
 				String tag = field.tag();
 				if(tag.equals("INPUT")) {		// unit of measure
-					setUnitOfMeasureRandomly(inputID);
-					comments.focus();	// move focus away. helps
+					if(field.value().equals("")) {
+						setUnitOfMeasureRandomly(inputID);
+						comments.focus();	// move focus away. helps
+					}
 				} else {
 					fail("Unexpected required unit of measure input. Update automation.");
 				}
@@ -1043,7 +1051,7 @@ public class Identify extends TestCase {
 		handleRequiredFieldsOnAddProduct(comments);
 	}
 	
-	public void validate() throws Exception {
+	public void validate(String orderNumber) throws Exception {
 		String today = misc.getDateString();
 		Product product = new Product(today);
 		int n;
@@ -1052,7 +1060,6 @@ public class Identify extends TestCase {
 		boolean integration = isIntegration();
 		if(integration) {
 			gotoIdentifyProducts();
-			String orderNumber = "100203";	// Unirope order number
 			gotoOrderNumber(orderNumber);
 			s = getOrderNumber();
 			s = getOrderPurchaseOrder();

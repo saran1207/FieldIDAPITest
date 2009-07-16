@@ -772,14 +772,14 @@ public class Assets extends TestCase {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<String> getProductSearchResultsSerialNumbers() throws Exception {
+	public List<String> getProductSearchResultsSerialNumbers(String s) throws Exception {
 		List<String> results = new ArrayList<String>();
 		Link next;
 		boolean more;
 		do {
 			next = ie.link(text("Next>"));
 			more = next.exists(); 
-			results.addAll(getProductSearchResultsCurrentPage());
+			results.addAll(getProductSearchResultsCurrentPage(s));
 			if(more) {
 				next.click();
 			}
@@ -788,7 +788,7 @@ public class Assets extends TestCase {
 		return results;
 	}
 
-	private Collection<String> getProductSearchResultsCurrentPage() throws Exception {
+	private Collection<String> getProductSearchResultsCurrentPage(String s) throws Exception {
 		List<String> results = new ArrayList<String>();
 		HtmlElement p = ie.htmlElement(searchHasNoResultsFinder);
 		if(p.exists()) {
@@ -799,14 +799,14 @@ public class Assets extends TestCase {
 		int index = 0, serialNumberColumn = -1;
 		for(index = 0; index < tr.columnCount(); index++) {
 			TableCell th = tr.cell(index);
-			if(th.text().trim().equals("Serial Number")) {
+			if(th.text().trim().equals(s)) {
 				serialNumberColumn = index;
 				break;
 			}
 		}
-		assertFalse("Could not find the column for Serial Numbers.", serialNumberColumn == -1);
+		assertFalse("Could not find the column for " + s + ".", serialNumberColumn == -1);
 		Links serialNumbers = ie.links(xpath("//TABLE[@id='resultsTable']/TBODY/TR/TD[" + (serialNumberColumn+1) + "]/A"));
-		assertNotNull("Could not find any serial number links.", serialNumbers);
+		assertNotNull("Could not find any " + s + " links.", serialNumbers);
 		Iterator<Link> i = serialNumbers.iterator();
 		while(i.hasNext()) {
 			results.add(i.next().text().trim());
@@ -1173,6 +1173,7 @@ public class Assets extends TestCase {
 		Button save = ie.button(addScheduleSaveButtonFinder);
 		assertTrue("Could not find the Save button for adding a schedule", save.exists());
 		save.click();
+		misc.waitForJavascript();
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 
@@ -1432,11 +1433,10 @@ public class Assets extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void validate() throws Exception {
+	public void validate(String column) throws Exception {
 		gotoAssets();
 		List<String> customers = getCustomersOnSearchCriteria();
 		int n = misc.getRandomInteger(customers.size());
-		List<String> divisions = getDivisionsOnSearchCriteria(customers.get(n));	// sets a random customer
 		List<String> productStatuses = getProductStatusesOnSearchCriteria();
 		List<String> productTypes = getProductTypesOnSearchCriteria();
 		getDynamicSelectColumns();
@@ -1454,7 +1454,9 @@ public class Assets extends TestCase {
 		gotoProductSearchResults();
 		List<String> filteredCustomers = getProductSearchResultsColumn("Customer Name");
 		String customerName = filteredCustomers.get(0);
+		List<String> divisions = getDivisionsOnSearchCriteria(customerName);
 		prop.setCustomer(customerName);
+		prop.setDivision(divisions.get(0));
 		gotoProductSearchResults();
 		if(getTotalNumberOfProducts() > 1000) {
 			fail("You need to set up so there are less than 1000 assets.");
@@ -1463,7 +1465,7 @@ public class Assets extends TestCase {
 		gotoProductSearchResultsFromMassUpdate();
 		printAllManufacturerCertificates();
 		exportToExcel();
-		List<String> serialNumbers = getProductSearchResultsSerialNumbers();
+		List<String> serialNumbers = getProductSearchResultsSerialNumbers(column);
 		String sdc = getSelectDisplayColumnsHeader();
 
 		gotoMassUpdate();
@@ -1487,6 +1489,9 @@ public class Assets extends TestCase {
 		gotoInspectionSchedule(serialNumber);
 		List<String> inspectionTypes = getInspectionTypesFromAssetAddSchedulePage();
 		String scheduleDate = today;
+		if(inspectionTypes.size() == 0) {
+			fail("Serial Number: " + serialNumber + " has no inspection types. Did not test add/edit schedules");
+		}
 		String inspectionType = inspectionTypes.get(0);
 		String job = null;
 		addScheduleFor(scheduleDate, inspectionType, job);
@@ -1497,12 +1502,11 @@ public class Assets extends TestCase {
 //		gotoInspectionGroups(serialNumber);	// Waiting for WEB-1034 to be fixed
 		assertTrue(SmartSearch(serialNumber) > 0);
 		
-		// no master products on Hercules. These get exercised by the Smoke Test
+		// These get exercised by the Smoke Test
 //		this.gotoProductConfiguration(serialNumber);
 //		this.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
 //		this.editEmployeeProduct(p);
 //		this.checkEndUserEditProduct(divisional);
-		fail("Not fully implemented");
 	}
 
 	private List<String> getInspectionTypesFromAssetAddSchedulePage() throws Exception {

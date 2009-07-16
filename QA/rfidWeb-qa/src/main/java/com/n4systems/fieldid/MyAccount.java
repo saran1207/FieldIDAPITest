@@ -775,7 +775,7 @@ public class MyAccount extends TestCase {
 		checkMyAccountChangePasswordContent();
 	}
 
-	private void checkMyAccountChangePasswordContent() throws Exception {
+	public void checkMyAccountChangePasswordContent() throws Exception {
 		checkMyAccountContentHeader();
 		Link l = ie.link(changePasswordFinder);
 		assertFalse("Found the link to Change Password but was not expecting to", l.exists());

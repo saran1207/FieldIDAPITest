@@ -557,9 +557,9 @@ public class ManageCustomers extends TestCase {
 		Iterator<Link> i = customers.iterator();
 		while(i.hasNext()) {
 			Link customer = i.next();
-			String s = customer.text().trim();
-			int j = s.indexOf(" - ");
-			String c = s.substring(0, j);
+			String s = customer.text();
+			int j = s.indexOf("- (");
+			String c = s.substring(0, j).trim();
 			results.add(c);
 		}
 
