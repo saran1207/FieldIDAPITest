@@ -14,6 +14,7 @@ import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeListResponse;
 import com.n4systems.webservice.dto.JobListResponse;
 import com.n4systems.webservice.dto.JobSiteListResponse;
+import com.n4systems.webservice.dto.MobileUpdateInfo;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.dto.PaginatedUpdateRequestInfo;
 import com.n4systems.webservice.dto.ProductListResponse;
@@ -61,4 +62,5 @@ public interface DataService {
 	public InspectionListResponse getInspectionsByJob(PaginatedRequestInformation requestInformation, WSJobSearchCriteria searchCriteria) throws ServiceException;
 	public JobListResponse getAllJobs(PaginatedUpdateRequestInfo request) throws ServiceException;
 	public SetupDataLastModDatesServiceDTO getSetupDataLastModDates(RequestInformation requestInformation) throws ServiceException;
+	public MobileUpdateInfo getMobileUpdateInfo(String currentVersion) throws ServiceException;
 }

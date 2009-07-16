@@ -72,6 +72,7 @@ import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeListResponse;
 import com.n4systems.webservice.dto.JobListResponse;
 import com.n4systems.webservice.dto.JobSiteListResponse;
+import com.n4systems.webservice.dto.MobileUpdateInfo;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.dto.PaginatedUpdateRequestInfo;
 import com.n4systems.webservice.dto.ProductListResponse;
@@ -1175,5 +1176,13 @@ public class DataServiceImpl implements DataService {
 		SetupDataLastModDatesServiceDTO setupLastModDatesDTO = converter.convert(setupLastModDates);
 		
 		return setupLastModDatesDTO;
+	}
+	
+	public MobileUpdateInfo getMobileUpdateInfo(String currentVersion) throws ServiceException {
+		MobileUpdateInfo mobileUpdateInfo = new MobileUpdateInfo();
+		
+		
+		
+		return mobileUpdateInfo;
 	}
 }
