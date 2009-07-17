@@ -14,7 +14,6 @@ import javax.activation.FileTypeMap;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -76,7 +75,6 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	private boolean removeImage = false;
 	private boolean newImage = false;
 
-	@Autowired
 	public ProductTypeCrud(PersistenceManager persistenceManager, LegacyProductType productTypeManager, ProductManager productManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;

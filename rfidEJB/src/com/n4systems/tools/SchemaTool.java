@@ -46,7 +46,7 @@ public class SchemaTool {
 		
 		Ejb3Configuration config = new Ejb3Configuration();
 		
-		config.configure("rfidEM", hibernateProperties);
+		config.configure("fieldid", hibernateProperties);
 		
 		SchemaExport export = new SchemaExport(config.getHibernateConfiguration());
 		

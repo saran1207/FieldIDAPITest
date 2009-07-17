@@ -6,18 +6,15 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.importing.ImportManager;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class ObservationImporterAction extends ActionSupport {
+public class ObservationImporterAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	
-	private PersistenceManager persistenceManager;
 	private ImportManager importManager;
 	
 	private Long tenantId;
@@ -54,9 +51,6 @@ public class ObservationImporterAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 	
 	public void setImportManager(ImportManager importManager) {
 		this.importManager = importManager;

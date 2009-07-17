@@ -2,9 +2,8 @@ package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.ejb.MailManager;
 import com.n4systems.util.mail.MailMessage;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class MailAction extends ActionSupport {
+public class MailAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	private MailManager mailManager;
 	

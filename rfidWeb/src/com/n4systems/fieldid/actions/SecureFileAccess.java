@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
@@ -24,7 +23,6 @@ public class SecureFileAccess extends AbstractAction {
 	private User userManager;
 	private String downloadPath; 
 	
-	@Autowired
 	public SecureFileAccess(DownloadManager downloadManager, User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.downloadManager = downloadManager;

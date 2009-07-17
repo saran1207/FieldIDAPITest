@@ -27,9 +27,13 @@ public class UrlArchive {
 			redirectLink += "?" + request.getQueryString();
 		}
 
-		session.setAttribute(storageName, redirectLink);
+		replaceUrl(redirectLink);
 	}
 	
+	
+	public void replaceUrl(String url) {
+		session.setAttribute(storageName, url);
+	}
 	
 	public String fetchUrl() {
 		return (String)session.getAttribute(storageName);

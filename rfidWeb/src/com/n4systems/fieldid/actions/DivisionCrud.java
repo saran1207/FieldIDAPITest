@@ -5,7 +5,6 @@ import java.util.Collection;
 import net.sf.json.JSONSerializer;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -38,7 +37,6 @@ public class DivisionCrud extends AbstractAction {
 	private Collection<ListingPair> divisions;
 	
 	
-	@Autowired
 	public DivisionCrud(CustomerManager customerManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.customerManager = customerManager;

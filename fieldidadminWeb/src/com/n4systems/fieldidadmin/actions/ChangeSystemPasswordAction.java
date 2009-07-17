@@ -3,20 +3,17 @@ package com.n4systems.fieldidadmin.actions;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.ConfigManager;
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.user.InsecurePasswordException;
 import com.n4systems.model.user.SystemAccountPasswordSynchronizer;
 import com.n4systems.security.PasswordComplexityChecker;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class ChangeSystemPasswordAction extends ActionSupport {
+public class ChangeSystemPasswordAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ChangeSystemPasswordAction.class);
 
 	private ConfigManager configManager;
-	private PersistenceManager persistenceManager;
 
 	private String pass1;
 	private String pass2;
@@ -59,9 +56,6 @@ public class ChangeSystemPasswordAction extends ActionSupport {
 		this.configManager = configManager;
 	}
 
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 	
 	public String getPass1() {
 		return pass1;

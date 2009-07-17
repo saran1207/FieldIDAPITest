@@ -6,6 +6,8 @@ import com.n4systems.model.customer.CustomerFilteredLoader;
 import com.n4systems.model.customer.CustomerListableLoader;
 import com.n4systems.model.division.DivisionFilteredLoader;
 import com.n4systems.model.division.DivisionListableLoader;
+import com.n4systems.model.eula.CurrentEulaLoader;
+import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.jobsites.JobSiteFilteredLoader;
@@ -53,6 +55,10 @@ public class LoaderFactory {
 		return new CommentTemplateListableLoader(pm, filter);
 	}
 	
+	public CurrentEulaLoader createCurrentEulaLoader() {
+		return new CurrentEulaLoader(pm);
+	}
+	
 	public CustomerFilteredLoader createCustomerFilteredLoader() {
 		return new CustomerFilteredLoader(pm, filter);
 	}
@@ -85,6 +91,10 @@ public class LoaderFactory {
 		return new JobSiteListableLoader(pm, filter);
 	}
 	
+	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
+		return new LatestEulaAcceptanceLoader(pm, filter);
+	}
+	
 	public NotificationSettingByIdLoader createNotificationSettingByIdLoader() {
 		return new NotificationSettingByIdLoader(pm , filter);
 	}
@@ -104,7 +114,7 @@ public class LoaderFactory {
 	public ProductAttachmentListLoader createProductAttachmentListLoader() {
 		return new ProductAttachmentListLoader(pm, filter);
 	}
-	
+
 	public ProductSerialExtensionListLoader createProductSerialExtensionListLoader() {
 		return new ProductSerialExtensionListLoader(pm, filter);
 	}
@@ -112,7 +122,7 @@ public class LoaderFactory {
 	public ProductStatusFilteredLoader createProductStatusFilteredLoader() {
 		return new ProductStatusFilteredLoader(pm, filter);
 	}
-
+	
 	public ProductStatusListLoader createProductStatusListLoader() {
 		return new ProductStatusListLoader(pm, filter);
 	}

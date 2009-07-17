@@ -4,11 +4,14 @@ import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
 
+import com.n4systems.ejb.PersistenceManager;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class AbstractAdminAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected  PersistenceManager persistenceManager;
 	
 	private Map<String, Object> session;
 	
@@ -20,6 +23,10 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 
 	protected Map<String, Object> getSession() {
 		return session;
+	}
+
+	public void setPersistenceManager(PersistenceManager persistenceManager) {
+		this.persistenceManager = persistenceManager;
 	}
 
 }

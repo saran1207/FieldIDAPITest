@@ -13,9 +13,8 @@ import rfid.ejb.session.OrderMapping;
 
 import com.n4systems.model.OrderKey;
 import com.n4systems.util.ListHelper;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class OrderMappingAction extends ActionSupport {
+public class OrderMappingAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
 	private OrderMapping orderMappingManager;

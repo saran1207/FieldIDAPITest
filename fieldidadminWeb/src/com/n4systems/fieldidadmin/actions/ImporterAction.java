@@ -15,7 +15,6 @@ import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldidadmin.jobs.EndUserImporterJob;
 import com.n4systems.fieldidadmin.jobs.ImportAllJob;
 import com.n4systems.fieldidadmin.jobs.InspectionImporterJob;
@@ -25,12 +24,10 @@ import com.n4systems.fieldidadmin.utils.importer.InspectionImporter;
 import com.n4systems.fieldidadmin.utils.importer.ProductSerialImporter;
 import com.n4systems.model.OrganizationalUnitType;
 import com.n4systems.model.TenantOrganization;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class ImporterAction extends ActionSupport {
+public class ImporterAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
-	private PersistenceManager persistenceManager;
 	
 	private Integer numberOfSerials;
 	private Collection<TenantOrganization> tenants;
@@ -64,13 +61,6 @@ public class ImporterAction extends ActionSupport {
 		this.tenantName = manufacturer;
 	}
 
-	public PersistenceManager getPersistenceManager() {
-		return persistenceManager;
-	}
-
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 	
 	public Collection<File> getProcessingFiles() {
 		return processingFiles;

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
@@ -41,7 +40,6 @@ public class CustomerCrud extends AbstractCrud {
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
 	private static final int USER_RESULTS_MAX = 100000;
 
-	@Autowired
 	public CustomerCrud(CustomerManager customerManager, User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.customerManager = customerManager;

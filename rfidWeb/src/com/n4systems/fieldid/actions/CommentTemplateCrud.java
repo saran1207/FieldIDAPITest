@@ -5,7 +5,6 @@ import java.util.Collection;
 import net.sf.json.JSONSerializer;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.ejb.entity.CommentTempBean;
 import rfid.ejb.session.CommentTemp;
@@ -28,7 +27,6 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	
 	private JSONSerializer json = new JSONSerializer();
 	
-	@Autowired
 	public CommentTemplateCrud(CommentTemp commentTemplateManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.commentTemplateManager = commentTemplateManager;

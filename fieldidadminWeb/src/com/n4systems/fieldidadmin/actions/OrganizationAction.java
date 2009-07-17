@@ -13,16 +13,12 @@ import java.util.Map.Entry;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.FindProductOptionBean;
-import rfid.ejb.entity.FindProductOptionManufactureBean;
 import rfid.ejb.entity.SerialNumberCounterBean;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.Option;
 import rfid.ejb.session.SerialNumberCounter;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
@@ -51,16 +47,13 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-public class OrganizationAction extends ActionSupport implements Preparable {
+public class OrganizationAction extends AbstractAdminAction implements Preparable {
 	private static Logger logger = Logger.getLogger(OrganizationAction.class);
 
 	private static final long serialVersionUID = 1L;
-	private PersistenceManager persistenceManager;
 	private LegacyProductSerial productSerialManager;
-	private Option optionManager;
 	private LegacyProductType productTypeManager;
 	private SerialNumberCounter serialNumberCounterManager;
 	private Collection<TenantOrganization> organizations;
@@ -159,8 +152,6 @@ public class OrganizationAction extends ActionSupport implements Preparable {
 				//TODO move to a service for creating a tenant in the system.
 				createDefaultSetupDataLastModDates();
 
-				createDefaultProductOptionManufacture(tenant, "serial", 1L, 2);
-				createDefaultProductOptionManufacture(tenant, "rfid", 2L, 1);
 
 				createDefaultTagOptionManufacture(tenant, TagOption.OptionKey.SHOPORDER);
 
@@ -210,19 +201,7 @@ public class OrganizationAction extends ActionSupport implements Preparable {
 		}
 	}
 
-	private void createDefaultProductOptionManufacture(TenantOrganization tenant, String optionKey, Long weight, int mobileWeight) {
-		FindProductOptionManufactureBean findProdOptMan = new FindProductOptionManufactureBean();
-
-		FindProductOptionBean findProdOpt = optionManager.getFindProductOption(optionKey);
-
-		findProdOptMan.setFindProductOption(findProdOpt);
-		findProdOptMan.setTenant(tenant);
-
-		findProdOptMan.setWeight(weight);
-		findProdOptMan.setMobileWeight(mobileWeight);
-
-		optionManager.persistFindProductOptionManufacture(findProdOptMan);
-	}
+	
 
 	private void createDefaultTagOptionManufacture(TenantOrganization tenant, TagOption.OptionKey optionKey) {
 		TagOption tagOption = new TagOption();
@@ -437,13 +416,6 @@ public class OrganizationAction extends ActionSupport implements Preparable {
 		this.size = size;
 	}
 
-	public Option getOptionManager() {
-		return optionManager;
-	}
-
-	public void setOptionManager(Option optionManager) {
-		this.optionManager = optionManager;
-	}
 
 	public LegacyProductType getProductTypeManager() {
 		return productTypeManager;
@@ -512,10 +484,6 @@ public class OrganizationAction extends ActionSupport implements Preparable {
 		this.extendedFeatures = extendedFeatures;
 	}
 
-	// inject setters.
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 
 	public void setSafetyNetworkManager(SafetyNetworkManager safetyNetworkManager) {
 		this.safetyNetworkManager = safetyNetworkManager;

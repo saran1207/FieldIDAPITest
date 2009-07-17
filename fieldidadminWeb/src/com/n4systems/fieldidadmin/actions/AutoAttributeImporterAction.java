@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldidadmin.utils.DualListView;
 import com.n4systems.importing.ImportManager;
 import com.n4systems.model.ProductType;
@@ -14,12 +13,10 @@ import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.api.Listable;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class AutoAttributeImporterAction extends ActionSupport {
+public class AutoAttributeImporterAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	
-	private PersistenceManager persistenceManager;
 	private ImportManager importManager;
 	
 	private Long tenantId;
@@ -64,9 +61,6 @@ public class AutoAttributeImporterAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 	
 	public void setImportManager(ImportManager importManager) {
 		this.importManager = importManager;

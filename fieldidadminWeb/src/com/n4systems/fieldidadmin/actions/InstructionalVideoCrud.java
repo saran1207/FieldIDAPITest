@@ -3,19 +3,16 @@ package com.n4systems.fieldidadmin.actions;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.InstructionalVidoeHelper;
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.InstructionalVideo;
 import com.n4systems.tools.Pager;
-import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-public class InstructionalVideoCrud extends ActionSupport implements Preparable {
+public class InstructionalVideoCrud extends AbstractAdminAction implements Preparable {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger( InstructionalVideoCrud.class );
 	
-	private PersistenceManager persistenceManager;
 	
 	private Long id;
 	
@@ -82,9 +79,6 @@ public class InstructionalVideoCrud extends ActionSupport implements Preparable 
 		}
 	}
 
-	public void setPersistenceManager( PersistenceManager persistenceManager ) {
-		this.persistenceManager = persistenceManager;
-	}
 
 	public Integer getPageNumber() {
 		if( pageNumber == null ) {

@@ -1182,6 +1182,7 @@
 			<result name="redirect" type="redirect">
 				<param name="location">${previousUrl}</param>
 			</result>
+			<result name="eula" type="redirectAction">eulaAcceptanceAdd</result>
 		</action>
 
 		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
@@ -1703,5 +1704,18 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
+		
+		<action name="eulaAcceptanceAdd" method="add" class="com.n4systems.fieldid.actions.EulaAcceptanceAction">
+			<result name="success" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
+			<result name="alreadyAccepted" type="redirectAction">home</result>
+		</action>
+
+		<action name="eulaAcceptanceCreate" method="create"	class="com.n4systems.fieldid.actions.EulaAcceptanceAction">
+			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
+			<result name="success" type="redirectAction">home</result>
+		</action>
+
 	</package>
 </struts>

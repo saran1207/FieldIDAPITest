@@ -2,14 +2,11 @@ package com.n4systems.fieldidadmin.actions;
 
 import java.util.Collection;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.UnitOfMeasure;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class UnitOfMeasureAction extends ActionSupport {
+public class UnitOfMeasureAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
-	private PersistenceManager persistenceManager;
 	
 	private Long id;
 	private UnitOfMeasure unitOfMeasure;
@@ -58,9 +55,6 @@ public class UnitOfMeasureAction extends ActionSupport {
 		this.unitOfMeasure = unitOfMeasure;
 	}
 
-	public void setPersistenceManager( PersistenceManager persistenceManager ) {
-		this.persistenceManager = persistenceManager;
-	}
 
 	
 }

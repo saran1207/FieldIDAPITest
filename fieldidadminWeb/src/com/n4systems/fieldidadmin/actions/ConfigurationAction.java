@@ -4,18 +4,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.n4systems.ejb.ConfigManager;
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class ConfigurationAction extends ActionSupport {
+public class ConfigurationAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
 	private ConfigManager configManager;
-	private PersistenceManager persistenceManager;
 	
 	private ConfigEntry key;
 	private Long tenantId;
@@ -29,13 +26,6 @@ public class ConfigurationAction extends ActionSupport {
 		this.configManager = configManager;
 	}
 	
-	public PersistenceManager getPersistenceManager() {
-		return persistenceManager;
-	}
-
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 
 	public String doLoad() {
 		return SUCCESS;

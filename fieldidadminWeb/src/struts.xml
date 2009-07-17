@@ -249,6 +249,46 @@
 			<result name="success">jsp/changeadminpass/form.jsp</result>
 			<result name="error">jsp/changeadminpass/form.jsp</result>
 		</action>
+		
+		<action name="eulas" method="list" class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="success" >/jsp/eula/list.jsp</result>
+			<result name="error" >/jsp/eula/list.jsp</result>
+			<result name="input" >/jsp/eula/list.jsp</result>
+		</action>
+
+
+		<action name="eulaAdd" method="add" class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="success" >/jsp/eula/add.jsp</result>
+			<result name="input" >/jsp/eula/add.jsp</result>
+		</action>
+
+		<action name="eulaCreate" method="create"	class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="input" >/jsp/eula/add.jsp</result>
+			<result name="error" >/jsp/eula/add.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">eulas</param>
+			</result>
+		</action>
+		
+		<action name="eulaEdit" method="edit" class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="success" >/jsp/eula/edit.jsp</result>
+			<result name="input" >/jsp/eula/edit.jsp</result>
+		</action>
+
+		<action name="eulaUpdate" method="update" class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="input" >/jsp/eula/edit.jsp</result>
+			<result name="error" >/jsp/eula/edit.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">eulas</param>
+			</result>
+		</action>
+		
+
+		<action name="eulaDelete" method="delete" class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="input" type="redirectAction">eulas</result>
+			<result name="error" type="redirectAction">eulas</result>
+			<result name="success" type="redirectAction">eulas</result>
+		</action>
 	</package>
 	
 	

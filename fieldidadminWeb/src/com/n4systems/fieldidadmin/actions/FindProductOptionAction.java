@@ -5,13 +5,9 @@ import java.util.Collection;
 import rfid.ejb.entity.FindProductOptionManufactureBean;
 import rfid.ejb.session.Option;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.opensymphony.xwork2.ActionSupport;
-
-public class FindProductOptionAction extends ActionSupport {
+public class FindProductOptionAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	
-	private PersistenceManager persistenceManager;
 	private Option optionManager;
 	
 	private FindProductOptionManufactureBean findProductOption;
@@ -80,12 +76,6 @@ public class FindProductOptionAction extends ActionSupport {
 		this.id = id;
 	}
 
-	public PersistenceManager getPersistenceManager() {
-		return persistenceManager;
-	}
-
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
+	
 	
 }

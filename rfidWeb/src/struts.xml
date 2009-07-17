@@ -8,6 +8,7 @@
 	<constant name="struts.ui.theme" value="css_xhtml" />
 	<constant name="struts.url.includeParams" value="none" />
 	<constant name="struts.multipart.maxSize" value="10000000" />
+
 	<package name="default" extends="struts-default">
 
 		<interceptors>

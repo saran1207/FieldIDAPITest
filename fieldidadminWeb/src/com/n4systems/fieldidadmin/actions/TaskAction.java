@@ -13,9 +13,8 @@ import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.taskscheduling.SchedulingException;
 import com.n4systems.taskscheduling.TaskScheduler;
 import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class TaskAction extends ActionSupport {
+public class TaskAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(TaskAction.class);
 	

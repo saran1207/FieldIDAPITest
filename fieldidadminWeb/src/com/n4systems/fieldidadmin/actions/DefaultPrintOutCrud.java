@@ -2,7 +2,6 @@ package com.n4systems.fieldidadmin.actions;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
@@ -17,7 +16,6 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 
 	protected Long uniqueID;
 	
-	protected PersistenceManager persistenceManager;
 	protected PrintOut printOut;
 	
 	protected Pager<PrintOut> page;
@@ -114,9 +112,6 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 		this.uniqueID = uniqueID;
 	}
 
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
 	
 	public Integer getPageNumber() {
 		if( pageNumber == null ) {
