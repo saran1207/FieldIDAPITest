@@ -78,10 +78,6 @@ public class LoginAction extends AbstractAction {
 				logUserIn(loginUser);
 				
 				if (loginUser.isAdmin()) {
-					if (previousUrl != null) {
-						UrlArchive urlArchive =  new UrlArchive("preLoginContext", getServletRequest(), getServletRequest().getSession());
-						urlArchive.replaceUrl(previousUrl);
-					}
 					return "eula";
 				}
 				

@@ -27,8 +27,12 @@
 			height: 200px;
 			width: 800px;
 			overflow: auto;
+			padding:5px;
 			border: 1px solid #888;
 		}
+		#eulaLegalText, #eualQuestions, #eulaWarning {
+			margin-left: 15px;
+			}
 	</style>
 </head>
 
@@ -45,12 +49,15 @@
 			<label for="version"><@s.text name="label.version"/></label>
 			<span id="version">${currentEULA.version?html}</span>
 		</div>
-		<p id="eulaWarning">
-			<@s.text name="warning.read_eula"/>
-		</p>
-		<p id="eualQuestions">
-			<@s.text name="label.questions_on_eula"/> <@s.text name="label.print_eula"/>
-		</p>
+	
+		<div class="infoSet"> 
+			<span id="eulaWarning">
+				<@s.text name="warning.read_eula"/>
+			</span>
+			<span id="eualQuestions">
+				<@s.text name="label.questions_on_eula"/> <@s.text name="label.print_eula"/>
+			</span>
+		</div>
 		<div class="infoSet">
 			<p id="eulaLegalText">
 				${action.replaceCR(currentEULA.legalText?html)}

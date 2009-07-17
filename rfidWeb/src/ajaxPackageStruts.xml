@@ -342,6 +342,7 @@
 			<interceptor-ref name="publicStack" />
 			<result name="input" type="freemarker">/templates/ajax/login/form.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/login/complete.ftl</result>
+			<result name="eula" type="freemarker">/templates/ajax/login/complete.ftl</result>
 		</action>
 		
 		<action name="jobEventDelete" method="delete"
