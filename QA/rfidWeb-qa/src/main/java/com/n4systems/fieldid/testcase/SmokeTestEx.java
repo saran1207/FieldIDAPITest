@@ -20,32 +20,8 @@ import com.n4systems.fieldid.datatypes.ProductType;
 import com.n4systems.fieldid.datatypes.Section;
 import com.n4systems.fieldid.datatypes.Criteria;
 
-import junit.framework.TestCase;
+public class SmokeTestEx extends FieldIDTestCase {
 
-public class SmokeTestEx extends TestCase {
-
-	IE ie = new IE();
-	FieldIDMisc misc = new FieldIDMisc(ie);
-	Login login = new Login(ie);
-	Admin admin = new Admin(ie);
-	ManageCustomers mcs = new ManageCustomers(ie); 
-	ManageUsers mus = new ManageUsers(ie);
-	ManageProductTypes mpts = new ManageProductTypes(ie);
-	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
-	Identify identify = new Identify(ie);
-	Home home = new Home(ie);
-	Assets assets = new Assets(ie);
-	MyAccount myAccount = new MyAccount(ie);
-	Inspect inspect = new Inspect(ie);
-	Reporting reporting = new Reporting(ie);
-	Schedule schedule = new Schedule(ie);
-
-	static String timestamp = null;
-	static boolean once = true;
-	final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS ");
-	static Random r = new Random();
-
-	String loginURL = "https://localhost.localdomain/fieldid/";
 	String company = "unirope";
 	boolean jobs = false;			// end users do not have Jobs
 	String password = "makemore$";
@@ -102,11 +78,7 @@ public class SmokeTestEx extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		misc.start();
-		login.gotoLoginPage(loginURL);
 		if(once) {
-			once = false;
-			timestamp = misc.createTimestampDirectory() + "/";
 			customer.setContactName(customerContact);
 			customer.setContactEmail(customerEmail);
 			customer.setStreetAddress(customerStreet);
@@ -733,7 +705,6 @@ public class SmokeTestEx extends TestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		ie.close();
 	}
 
 }

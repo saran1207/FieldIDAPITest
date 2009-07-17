@@ -5,11 +5,9 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import com.jniwrapper.win32.shdocvw.IWebBrowser2;
@@ -37,6 +35,7 @@ public class FieldIDMisc extends TestCase {
 	private Finder successMessageFinder;
 	private Finder contentTitleFinder;
 	private Finder assetsViewAllFinder;
+	private Finder loadingIndicatorDivFinder;
 	
 	public FieldIDMisc(IE ie) {
 		this.ie = ie;
@@ -48,6 +47,7 @@ public class FieldIDMisc extends TestCase {
 		successMessageFinder = xpath("//DIV[@id='message']/UL/LI/SPAN[@class='actionMessage']");
 		contentTitleFinder = xpath("//DIV[@id='contentTitle']/H1");
 		assetsViewAllFinder = xpath("//DIV[@id='resultsTable']/TABLE/TBODY/TR/TD/BUTTON[contains(text(),'Select')]");
+		loadingIndicatorDivFinder = xpath("//DIV[@class='loading']/..");
 	}
 	
 	/**
@@ -332,7 +332,7 @@ public class FieldIDMisc extends TestCase {
 	 * @throws Exception
 	 */
 	public int getRandomInteger(int low, int high) throws Exception {
-		assertTrue("low value must be less than high value.", low < high);
+		assertTrue("low value must be less than high value.", low <= high);
 		int range = (high - low) + 1;
 		return r.nextInt(range) + low;
 	}
@@ -590,5 +590,19 @@ public class FieldIDMisc extends TestCase {
 			return 1;
 		Buttons b = ie.buttons(assetsViewAllFinder);
 		return b.length();
+	}
+
+	public void waitForLoading() throws Exception {
+		boolean waiting = true;
+		waitForJavascript();
+		while(waiting) {
+			Div loading = ie.div(loadingIndicatorDivFinder);
+			assertTrue("Could not find the parent DIV of the loading image", loading.exists());
+			String html = loading.html();
+			int i =  html.indexOf(">");
+			String tag = html.substring(0, i).toLowerCase();
+			waiting = !tag.contains("display: none");
+			Thread.sleep(250);	// wait a 1/4 second between checks.
+		}
 	}
 }

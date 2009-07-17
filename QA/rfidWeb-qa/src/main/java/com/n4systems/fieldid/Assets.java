@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 public class Assets extends TestCase {
 	
+	private static final int expectedTextFieldsOnEditAsset = 3;
 	IE ie = null;
 	Properties p;
 	InputStream in;
@@ -135,6 +136,7 @@ public class Assets extends TestCase {
 	private Finder editProductCommentsFinder;
 	private Finder editProductCommentTemplatesFinder;
 	private Finder editProductGenerateLinkFinder;
+	private Finder customerInformationEditFormTextFieldFinder;
 	
 	public Assets(IE ie) {
 		this.ie = ie;
@@ -251,6 +253,7 @@ public class Assets extends TestCase {
 			editProductCommentsFinder = xpath(p.getProperty("editproductcomments"));
 			editProductCommentTemplatesFinder = xpath(p.getProperty("editproductcommenttemplates"));
 			editProductGenerateLinkFinder = xpath(p.getProperty("editproductgeneratelink"));
+			customerInformationEditFormTextFieldFinder = xpath(p.getProperty("editproductformtextfields"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -1426,6 +1429,10 @@ public class Assets extends TestCase {
 			Options o = division.options();
 			assertTrue("There is more than one division to select", o.length() == 1);
 		}
+		
+		TextFields tfcount = ie.textFields(customerInformationEditFormTextFieldFinder);
+		assertNotNull(tfcount);
+		assertTrue("There are " + tfcount.length() + " text fields but I was expecting " + expectedTextFieldsOnEditAsset + ".", tfcount.length() == expectedTextFieldsOnEditAsset);
 	}
 
 	/**

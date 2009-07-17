@@ -11,10 +11,13 @@ import com.n4systems.fieldid.Login;
 import com.n4systems.fieldid.MyAccount;
 import com.n4systems.fieldid.Reporting;
 import com.n4systems.fieldid.admin.ManageCustomers;
+import com.n4systems.fieldid.admin.ManageEventTypeGroups;
 import com.n4systems.fieldid.admin.ManageInspectionTypes;
+import com.n4systems.fieldid.admin.ManageOrganizations;
 import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.admin.ManageSystemSettings;
 import com.n4systems.fieldid.admin.ManageUsers;
+import com.n4systems.fieldid.admin.ManageYourSafetyNetwork;
 
 import junit.framework.TestCase;
 
@@ -28,13 +31,14 @@ public class Validate extends TestCase {
 	Reporting reporting = new Reporting(ie);
 	MyAccount myAccount = new MyAccount(ie);
 	Admin admin = new Admin(ie);
+	ManageOrganizations mos = new ManageOrganizations(ie);
 	ManageCustomers mcs = new ManageCustomers(ie);
 	ManageUsers mus = new ManageUsers(ie);
 	ManageSystemSettings mss = new ManageSystemSettings(ie);
 	ManageProductTypes mpts = new ManageProductTypes(ie);
 	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
-
-
+	ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
+	ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 	static String timestamp = null;
 	static boolean once = true;
 	String loginURL = "https://localhost.localdomain/fieldid/";
@@ -70,8 +74,28 @@ public class Validate extends TestCase {
 		}
 	}
 	
-	// Manage Organizations
+	public void testAdministrationManageOrganizations() throws Exception {
+		String method = getName();
+		String company = "unirope";
+		String userid = "n4systems";
+		String password = "makemore$";
 
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mos.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
 	public void testAdministrationManageCustomers() throws Exception {
 		String method = getName();
 		String company = "halo";		// someone with more than 20 customers but not too many
@@ -190,8 +214,28 @@ public class Validate extends TestCase {
 		}
 	}
 
-	// Manage Event Type Groups
-	
+	public void testAdministrationManageEventTypeGroups() throws Exception {
+		String method = getName();
+		String company = "halo";	// more than 20 inspection types but not many more
+		String userid = "n4systems";
+		String password = "makemore$";
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			metgs.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
 	// Manage Inspection Books
 	
 	// Auto Attribute Wizard
@@ -200,7 +244,51 @@ public class Validate extends TestCase {
 	
 	// Data Log
 	
-	// Manage Your Safety Network
+	public void testAdministrationManageYourSafetyNetwork() throws Exception {
+		String method = getName();
+		String company = "jergens";	// Need to log in as a manufacturer
+		String userid = "n4systems";
+		String password = "makemore$";
+		String linkedCompany = "swwr";
+		String linkedUserid = "n4systems";
+		String linkedPassword = "makemore$";
+
+		try {
+			// Log into a company and get its Field ID Access Code
+			login.setCompany(linkedCompany);
+			login.setUserName(linkedUserid);
+			login.setPassword(linkedPassword);
+			login.login();
+			admin.gotoAdministration();
+			mysn.gotoManageYourSafetyNetwork();
+			String FIDAC = mysn.getFIDAC();
+			misc.logout();
+
+			// Test publishing your catalog
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mysn.validateManufacturer(FIDAC);
+			String companyName = admin.getCompanyName();
+			misc.logout();
+
+			// Test importing a manufacturer's catalog
+			login.setCompany(linkedCompany);
+			login.setUserName(linkedUserid);
+			login.setPassword(linkedPassword);
+			login.login();
+			admin.gotoAdministration();
+			mysn.validateTenant(companyName);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
 	
 	public void testHome() throws Exception {
 		String method = getName();

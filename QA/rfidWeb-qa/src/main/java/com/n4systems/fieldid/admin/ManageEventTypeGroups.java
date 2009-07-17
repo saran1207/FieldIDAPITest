@@ -35,7 +35,7 @@ public class ManageEventTypeGroups extends TestCase {
 	Finder addEventTypeGroupReportTitleFinder;
 	Finder addEventTypeGroupSaveButtonFinder;
 	Finder eventTypeGroupInspectionTypeLinksFinder;
-	String textForAddingNewInspectionTypeToEventTypeGroup;
+	Finder addingNewInspectionTypeToEventTypeGroupLinkFinder;
 	Finder backToEventTypeGroupsFinder;
 	Finder eventTypeGroupsPageContentFinder;
 	Finder eventTypeGroupUpdateNameFinder;
@@ -46,6 +46,7 @@ public class ManageEventTypeGroups extends TestCase {
 	Finder editLinkFromPageContentOptionsSectionFinder;
 	Finder editLinkFromGroupDetailsFinder;
 	Finder editEventTypeGroupDeleteButtonFinder;
+	private Finder eventTypeGroupViewLinkFinder;
 	
 	public ManageEventTypeGroups(IE ie) {
 		this.ie = ie;
@@ -59,15 +60,15 @@ public class ManageEventTypeGroups extends TestCase {
 			eventTypeGroupsPageContentHeaderFinder = xpath(p.getProperty("eventtypegroupscontentheader"));
 			eventTypeGroupPageContentHeaderFinder = xpath(p.getProperty("eventtypegroupcontentheader"));
 			eventTypeGroupLinksFinder = xpath(p.getProperty("eventtypelinks"));
-			addEventTypeGroupFinder = text(p.getProperty("addeventtypegroup"));
+			addEventTypeGroupFinder = xpath(p.getProperty("addeventtypegroup"));
 			pdfReportStyleFinder = xpath(p.getProperty("pdfreportstyles"));
 			observationReportStyleFinder = xpath(p.getProperty("observationreportstyles"));
 			addEventTypeGroupNameFinder = id(p.getProperty("addeventtypegroupname"));
 			addEventTypeGroupReportTitleFinder = id(p.getProperty("addeventtypegroupreportname"));
 			addEventTypeGroupSaveButtonFinder = id(p.getProperty("addeventtypegroupsavebutton"));
 			eventTypeGroupInspectionTypeLinksFinder = xpath(p.getProperty("eventtypegroupinspectiontypelinks"));
-			textForAddingNewInspectionTypeToEventTypeGroup = p.getProperty("textforaddnewinspectiontypetoeventtypegroup");
-			backToEventTypeGroupsFinder = text(p.getProperty("backtoeventtypegroupslink"));
+			addingNewInspectionTypeToEventTypeGroupLinkFinder = xpath(p.getProperty("addnewinspectiontypetoeventtypegroup"));
+			backToEventTypeGroupsFinder = xpath(p.getProperty("backtoeventtypegroupslink"));
 			eventTypeGroupsPageContentFinder = xpath(p.getProperty("eventtypepagecontent"));
 			eventTypeGroupUpdateNameFinder = id(p.getProperty("editeventtypegroupname"));
 			eventTypeGroupUpdateTitleFinder = id(p.getProperty("editeventtypegrouptitle"));
@@ -77,6 +78,7 @@ public class ManageEventTypeGroups extends TestCase {
 			editLinkFromPageContentOptionsSectionFinder = xpath(p.getProperty("editlinkfromoptionssection"));
 			editLinkFromGroupDetailsFinder =xpath(p.getProperty("editlinkfromgroupdetails"));
 			editEventTypeGroupDeleteButtonFinder = value(p.getProperty("editeventtypegroupdeletebutton"));
+			eventTypeGroupViewLinkFinder = xpath(p.getProperty("eventtypegroupviewlink"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -271,8 +273,8 @@ public class ManageEventTypeGroups extends TestCase {
 			Link l = i.next();
 			assertTrue("Could not find one of the links for inspection types.", l.exists());
 			String s = l.text();
-			if(!s.contains(textForAddingNewInspectionTypeToEventTypeGroup)) {
-				results.add(l.text());
+			if(l.href().contains("inspectionType.action")) {	// Don't add the "Add a new Inspection Type to this group." link
+				results.add(s);
 			}
 		}
 		return results;
@@ -351,8 +353,8 @@ public class ManageEventTypeGroups extends TestCase {
 	public void checkEditEventTypeGroupPageContentHeader(String eventTypeName) throws Exception {
 		HtmlElement contentHeader = ie.htmlElement(eventTypeGroupPageContentHeaderFinder);
 		assertTrue("Could not find the content header on Event Type Group page.", contentHeader.exists());
-		String header = "Edit Event Type Group - " + eventTypeName;
-		assertEquals("Was expecting '" + header + "' but found '" + contentHeader.text() + "'", header, contentHeader.text());
+		String header = "Manage Event Type Group - " + eventTypeName;
+		assertTrue("Was expecting '" + header + "' but found '" + contentHeader.text() + "'", contentHeader.text().contains(header));
 	}
 	
 	/**
@@ -414,14 +416,89 @@ public class ManageEventTypeGroups extends TestCase {
 		checkEventTypeGroupsPageContentHeader();
 	}
 	
-	public void addInspectionTypeToEventTypeGroup(InspectionType it) throws Exception {
-		Link addInspectionType = ie.link(text("/" + textForAddingNewInspectionTypeToEventTypeGroup + "/"));
+	public void gotoAddInspectionTypeToEventTypeGroup() throws Exception {
+		Link addInspectionType = ie.link(addingNewInspectionTypeToEventTypeGroupLinkFinder);
 		assertTrue("Could not find the link to add a new inspection type to an event type group.", addInspectionType.exists());
 		addInspectionType.click();
+		ie.waitUntilReady();
 		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	public void addInspectionTypeToEventTypeGroup(InspectionType it) throws Exception {
 		mits.checkAddInspectionTypePageContentHeader();
 		mits.addInspectionType(it);
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 
+	public void validate() throws Exception {
+		gotoManageEventTypeGroups();
+		gotoAddEventTypeGroup();
+		List<String> pdfReportStyles = getPDFReportStyles();
+		assertNotNull(pdfReportStyles);
+		assertTrue("There has to be at least one PDF Report Style", pdfReportStyles.size() > 1);
+		List<String> observationReportStyles = getObservationReportStyles();
+		assertNotNull(observationReportStyles);
+		assertTrue("There has to be at least one Observation Report Style", observationReportStyles.size() > 1);
+		int n = misc.getRandomInteger();
+		String newEventTypeGroup = "validate-" + n;
+		String reportTitle = "Report Title " + n;
+		n = misc.getRandomInteger(1, pdfReportStyles.size()-1);
+		String pdfReportStyle = pdfReportStyles.get(n);
+		n = misc.getRandomInteger(1, observationReportStyles.size()-1);
+		String observationReportStyle = observationReportStyles.get(n);
+		addEventTypeGroup(newEventTypeGroup , reportTitle, pdfReportStyle, observationReportStyle);
+		gotoEventTypeGroupsFromEventTypeGroup();
+		List<String> eventTypeGroups = getEventTypeGroups();
+		assertNotNull(eventTypeGroups);
+		assertTrue("Just added an Event Type Group, so there should be at least one.", eventTypeGroups.size() > 0);
+		n = misc.getRandomInteger(eventTypeGroups.size());
+		String eventTypeGroup = eventTypeGroups.get(n);
+		gotoEditEventTypeGroupFromEventTypeGroupsPage(eventTypeGroup);
+		gotoViewEventTypeGroupFromEditOrAdd(eventTypeGroup);
+		gotoEditEventTypeGroupFromEventTypeGroupPage(eventTypeGroup);
+		gotoViewAll();
+		gotoEventTypeGroup(newEventTypeGroup);
+		gotoEditEventTypeGroupFromEventTypeGroupPage2(newEventTypeGroup);
+		gotoViewEventTypeGroupFromEditOrAdd(newEventTypeGroup);
+		n = misc.getRandomInteger();
+		String inspectionTypeName = "validate-" + n;
+		InspectionType it = new InspectionType(inspectionTypeName);
+		it.setMasterInspection(true);
+		it.setPrintable(true);
+		List<String> proofTestTypes = new ArrayList<String>();
+		proofTestTypes.add(InspectionType.other);
+		it.setProofTestTypes(proofTestTypes);
+		List<String> inspectionAttributes = new ArrayList<String>();
+		inspectionAttributes.add("validate-" + n);
+		it.setInspectionAttributes(inspectionAttributes);
+		gotoAddInspectionTypeToEventTypeGroup();
+		addInspectionTypeToEventTypeGroup(it);
+		misc.gotoBackToAdministration();
+		gotoManageEventTypeGroups();
+		gotoEventTypeGroup(newEventTypeGroup);
+		List<String> inspectionTypes = getInspectionTypesFromEventTypeGroupPage();
+		assertNotNull(inspectionTypes);
+		assertTrue("Just added an inspection type so there should be at least one.", inspectionTypes.size() > 0);
+		String inspectionType = it.getName();
+		gotoInspectionTypeFromEventTypeGroupPage(inspectionType);
+		misc.gotoBackToAdministration();
+		gotoManageEventTypeGroups();
+		gotoEventTypeGroup(newEventTypeGroup);
+//		this.deleteEventTypeGroup();
+//		this.deleteEventTypeGroupFromEventTypeGroupsPage(eventTypeGroup);
+//		this.editEventTypeGroup(oldEventTypeName, newEventTypeName, reportTitle, pdfReportStyle, observationReportStyle);
+//		this.gotoEventTypeGroupsFromEventTypeGroup();
+//		this.gotoEventTypeGroup(eventTypeGroup);
+	}
+
+	public void gotoViewEventTypeGroupFromEditOrAdd(String eventTypeGroup) throws Exception {
+		Link l = ie.link(eventTypeGroupViewLinkFinder);
+		assertTrue("Could not find the link to View current Event Type Group", l.exists());
+		l.click();
+		checkEventTypeGroupPageContentHeader(eventTypeGroup);
+	}
+
+	public void gotoViewAll() throws Exception {
+		gotoEventTypeGroupsFromEventTypeGroup();
+	}
 }

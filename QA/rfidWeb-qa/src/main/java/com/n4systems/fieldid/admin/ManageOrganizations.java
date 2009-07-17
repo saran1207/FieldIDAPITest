@@ -290,13 +290,14 @@ public class ManageOrganizations extends TestCase {
 		gotoManageOrganizations();
 		gotoBackToAdministration();
 		gotoManageOrganizations();
-		List<String> units = getOrganizationNames();
 		gotoAddOrganizationalUnit();
 		String name = "validate-" + misc.getRandomString();
 		String email = "dev@n4systems.com";
 		Organization o = new Organization(name, email);
 		setAddOrganizationForm(o);
 		saveAddOrganization();
+		List<String> units = getOrganizationNames();
+		assertTrue(units.contains(name));
 		gotoAddOrganizationalUnit();
 		cancelAddOrganization();
 		o.setNameOnCert("N4 System");
@@ -310,7 +311,6 @@ public class ManageOrganizations extends TestCase {
 		gotoEditOrganization(o.getName());
 		setEditOrganizationForm(o);
 		saveEditOrganization();
-		Thread.sleep(1);
 	}
 
 	public void saveEditOrganization() throws Exception {
