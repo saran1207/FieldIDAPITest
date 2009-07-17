@@ -1202,7 +1202,9 @@
 		
 		<action name="signInToCompany" method="create" class="com.n4systems.fieldid.actions.SelectTenantAction">
 			<interceptor-ref name="flashPublicStack" />
-			<result name="success" type="redirectAction">login</result>
+			<result name="success" type="redirect">
+				<param name="location">${brandedUrl}</param>
+			</result>
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>

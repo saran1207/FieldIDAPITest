@@ -11,7 +11,7 @@
 	</s:if>
 	
 	<s:label name="tenant.fidAC" label="FidAC" />
-	<s:textfield name="tenant.name" value="%{tenant.name}" label="Name" />
+	<s:textfield name="tenant.name" value="%{tenant.name}" label="Name (Site Address)" />
 	<s:textfield name="tenant.displayName" value="%{tenant.displayName}" label="Display Name" />
 	<s:textfield name="tenant.adminEmail" value="%{tenant.adminEmail}" label="Admin Email" />
 	<s:checkbox name="tenant.usingSerialNumber" value="%{tenant.usingSerialNumber}" label="Using serial number" />

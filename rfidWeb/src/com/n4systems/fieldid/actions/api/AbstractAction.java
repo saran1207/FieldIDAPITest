@@ -32,6 +32,7 @@ import com.n4systems.model.TenantOrganization;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
+import com.n4systems.util.HostNameParser;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -386,10 +387,17 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return getText(text, new String[] {param.toString()});
 	}
 	
+	public String getBaseBrandedUrl() {
+		HostNameParser hostParser = HostNameParser.create(getBaseURI());
+		String newHostname = hostParser.replaceFirstSubDomain(getTenant().getName());
+		
+		return "https://" + newHostname + "/fieldid/" ;
+	}
+	
 	public String getLoginUrl() {
-		return getBaseURI().resolve("").toString().replaceFirst("http://", "https://") + "login/"+  getTenant().getName();
+		return getBaseBrandedUrl() + "login.action" ;
 	}
 	public String getEmbeddedLoginUrl() {
-		return getBaseURI().resolve("").toString().replaceFirst("http://", "https://") + "embedded/login/" + getTenant().getName();
+		return getBaseBrandedUrl() + "embedded/login.action";
 	}
 }

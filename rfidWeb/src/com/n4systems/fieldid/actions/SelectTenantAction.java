@@ -11,11 +11,11 @@ import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class SelectTenantAction extends AbstractAction {
-
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SelectTenantAction.class);
 	
 	private String companyID;
+	private String brandedUrl;
 	
 	public SelectTenantAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -29,6 +29,10 @@ public class SelectTenantAction extends AbstractAction {
 	public String doCreate() {
 		try {
 			loadCompany();
+			
+			// assuming loadCopmany was sucessful, we need to redirect them to the branded url
+			setBrandedUrl(getLoginUrl());
+			
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + "Error loading the tenant company", e);
@@ -43,15 +47,21 @@ public class SelectTenantAction extends AbstractAction {
 		intializer.forceTenantReload().init(companyID);
 	}
 	
-	
 	public String getCompanyID() {
 		return companyID;
 	}
-	
 		
 	@RequiredStringValidator(message="", key="error.company_id_required")
 	public void setCompanyID(String companyID) {
 		this.companyID = companyID;
 	}
+
+	public String getBrandedUrl() {
+		return brandedUrl;
+	}
+
+	public void setBrandedUrl(String brandedUrl) {
+		this.brandedUrl = brandedUrl;
+	} 
 	
 }

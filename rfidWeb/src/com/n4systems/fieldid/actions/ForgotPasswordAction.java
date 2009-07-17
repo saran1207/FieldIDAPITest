@@ -81,6 +81,22 @@ public class ForgotPasswordAction extends LoginAction {
 	public void setLoginKey(String loginKey) {
 		this.loginKey = loginKey;
 	}
+	
+	public String getU() {
+		return getUserName();
+	}
+
+	public void setU(String userName) {
+		setUserName(userName);
+	}
+
+	public String getK() {
+		return getLoginKey();
+	}
+
+	public void setK(String loginKey) {
+		setLoginKey(loginKey);
+	}
 
 	public Long getUniqueID() {
 		return uniqueID;

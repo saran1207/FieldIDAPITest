@@ -55,7 +55,9 @@ public enum ConfigEntry {
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB (	"100"				),
 	SYSTEM_USER_USERNAME							(	"n4systems"			),
 	SYSTEM_USER_PASSWORD							(	"2a3bb4bc2f0cf8f2c09cd8aef2824a901d186fe7"	),
-	SYSTEM_USER_ADDRESS								(	"admin@n4systems.com"						);
+	SYSTEM_USER_ADDRESS								(	"admin@n4systems.com"						),
+	UNBRANDED_SUBDOMAIN								(	"www"						);
+	
 	
 	private String defaultValue;
 	

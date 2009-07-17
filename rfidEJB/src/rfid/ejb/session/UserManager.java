@@ -422,8 +422,8 @@ public class UserManager implements User {
 		
 		logger.info("Created loginkey for User [" + user.getUserID() + "], Tenant [" + user.getTenant().getName() + "]");
 		
-		String resetPasswordUrl = baseUri.resolve("resetPassword").toString() + "/" + user.getTenant().getName() + "/"+ user.getUserID() + "/" + user.getResetPasswordKey();
-		String loginUrl =  baseUri.resolve("").toString() + "login/"+  user.getTenant().getName();
+		String resetPasswordUrl = baseUri.resolve("resetPassword.action").toString() + "?u=" + user.getUserID() + "&k=" + user.getResetPasswordKey();
+		String loginUrl =  baseUri.toString();
 		String messageBody = "You have requested to reset your Field ID Password. To reset your password please visit the following link: <br/><br/>" +
 							"<a href=\"" + resetPasswordUrl + "\">" + resetPasswordUrl + "</a><br/><br/>" +
 							"You can then login securely to your account at:<br/><br/>" +
