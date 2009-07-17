@@ -1705,13 +1705,13 @@
 			</result>
 		</action>
 		
-		<action name="eulaAcceptanceAdd" method="add" class="com.n4systems.fieldid.actions.EulaAcceptanceAction">
+		<action name="eulaAcceptanceAdd" method="add" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
 			<result name="success" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="alreadyAccepted" type="redirectAction">home</result>
 		</action>
 
-		<action name="eulaAcceptanceCreate" method="create"	class="com.n4systems.fieldid.actions.EulaAcceptanceAction">
+		<action name="eulaAcceptanceCreate" method="create"	class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="success" type="redirectAction">home</result>

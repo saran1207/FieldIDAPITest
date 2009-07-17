@@ -130,5 +130,9 @@
 		</action>		
 		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
 		
+		<action name="currentEula" method="show" class="com.n4systems.fieldid.actions.eula.CurrentEulaAction" >
+			<result name="success" type="freemarker">/templates/html/currentEula/show.ftl</result>
+		</action>
+		
 	</package>
 </struts>

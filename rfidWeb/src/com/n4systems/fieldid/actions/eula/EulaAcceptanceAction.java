@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions;
+package com.n4systems.fieldid.actions.eula;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;

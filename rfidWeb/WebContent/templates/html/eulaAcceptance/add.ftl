@@ -55,13 +55,13 @@
 				<@s.text name="warning.read_eula"/>
 			</span>
 			<span id="eualQuestions">
-				<@s.text name="label.questions_on_eula"/> <@s.text name="label.print_eula"/>
+				<@s.text name="label.questions_on_eula"/> <a href="<@s.url action="currentEula" namespace="/file"/>" target="_blank"><@s.text name="label.print_eula"/></a>
 			</span>
 		</div>
 		<div class="infoSet">
-			<p id="eulaLegalText">
-				${action.replaceCR(currentEULA.legalText?html)}
-			</p>
+			<div id="eulaLegalText">
+				<pre>${currentEULA.legalText}</pre>
+			</div>
 		</div>
 		<div class="formAction">
 			<@s.submit key="label.scroll_to_bottom" id="acceptEula" disabled="true"/>
