@@ -131,17 +131,38 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 	@Override
 	protected void onCreate() {
 		super.onCreate();
-		trimSerialNumber();
-		removeBlankInfoOptions();
+		adjustProductForSave();
 	}
 	
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
+		adjustProductForSave();
+	}
+
+	private void adjustProductForSave() {
 		trimSerialNumber();
+		trimRfidNumber();
 		removeBlankInfoOptions();
 	}
 	
+	
+	private void trimSerialNumber() {
+		serialNumber = trimIdentifier(serialNumber);
+	}
+	
+	private void trimRfidNumber() {
+		rfidNumber = trimIdentifier(rfidNumber);
+	}
+	
+	private String trimIdentifier(String identifier) {
+		if (identifier != null && identifier.trim().length() != 0) {
+			return  identifier.trim();
+		}
+		
+		return null;
+	}
+
 	@Deprecated
 	public Long getUniqueID() {
 		return getId();
@@ -171,11 +192,7 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 		this.serialNumber = serialNumber;
 	}
 	
-	private void trimSerialNumber() {
-		if(serialNumber != null) {
-			serialNumber = serialNumber.trim();
-		}
-	}
+
 
 	public String getComments() {
 		return comments;
