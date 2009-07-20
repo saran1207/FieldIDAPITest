@@ -75,8 +75,17 @@ public class NavOptionsController {
 					urlParams.put((String) key, urlProps.getString((String) key));
 				}
 
-				navOptions.add(new NavOption(props.getString("label"), props.getString("name"), props.getString("action"), props.getInteger("order"), props.getString("permissionRequired"), props
-						.getString("extendedFeatureRequired"), props.getString("type"), urlParams, props.getString("conditionalView")));
+				navOptions.add(new NavOption(
+											props.getString("label"), 
+											props.getString("name"), 
+											props.getString("action"), 
+											props.getInteger("order"), 
+											props.getString("permissionRequired"), 
+											props.getString("extendedFeatureRequired"), 
+											props.getString("type"), 
+											urlParams, 
+											props.getString("conditionalView"), 
+											props.getBoolean("useEntityTitle")));
 			}
 
 			Collections.sort(navOptions, new Comparator<NavOption>() {
@@ -141,6 +150,10 @@ public class NavOptionsController {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean useEntityTitle() {
+		return (entityLoaded() || currentActionOption.isUseEntityTitle());
 	}
 
 	public boolean isOnAdmin() {

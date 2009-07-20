@@ -36,9 +36,9 @@ public class NavOptionsControllerTest {
 	public void should_have_list_of_nav_options() {
 		List<NavOption> options = new ArrayList<NavOption>();
 		
-		options.add(new NavOption("some_label", "show", null, 1, null, null, null, null, null));
-		options.add(new NavOption("some_label", "list", null, 1, null, null, null, null, null));
-		options.add(new NavOption("some_label", "add", null, 1, null, null, null, null, null));
+		options.add(new NavOption("some_label", "show", null, 1, null, null, null, null, null, false));
+		options.add(new NavOption("some_label", "list", null, 1, null, null, null, null, null, false));
+		options.add(new NavOption("some_label", "add", null, 1, null, null, null, null, null, false));
 		
 		NavOptionsController sut = new NavOptionsController(null, null, "test_options", "list");
 		

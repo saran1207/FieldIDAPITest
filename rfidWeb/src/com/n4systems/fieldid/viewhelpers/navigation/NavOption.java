@@ -12,10 +12,11 @@ public class NavOption {
 	private String type;
 	private String conditionalView;
 	private Integer order;
+	private boolean useEntityTitle;
 	private Map<String,String> urlParams;
 	
 	
-	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView) {
+	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView, boolean useEntityTitle) {
 		super();
 		this.label = label;
 		this.name = name;
@@ -26,6 +27,7 @@ public class NavOption {
 		this.type = type;
 		this.conditionalView = conditionalView;
 		this.urlParams = urlParams;
+		this.useEntityTitle = useEntityTitle;
 	}
 
 	
@@ -87,5 +89,12 @@ public class NavOption {
 
 	public String getConditionalView() {
 		return (conditionalView != null) ? conditionalView : "true";
+	}
+
+
+
+
+	public boolean isUseEntityTitle() {
+		return useEntityTitle;
 	}
 }
