@@ -30,16 +30,14 @@
 			</interceptor-stack>
 			
 			<interceptor-stack name="brandedPublicStack">
+				<interceptor-ref name="tenantContextStack" />
 				<interceptor-ref name="publicStack" />
-				<interceptor-ref name="tenatRequired" />
-				<interceptor-ref name="enabledFeatures"/>
 			</interceptor-stack>
 			
 			<interceptor-stack name="secureStack">
-				<interceptor-ref name="tenatRequired" />
+				<interceptor-ref name="tenantContextStack" />
 				<interceptor-ref name="login" />
 				<interceptor-ref name="security" />
-				<interceptor-ref name="enabledFeatures"/>
 				<interceptor-ref name="publicStack" />
 			</interceptor-stack>
 

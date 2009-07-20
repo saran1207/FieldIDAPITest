@@ -18,7 +18,7 @@ public class RequiredTenantInterceptor extends AbstractInterceptor {
 			TenantContextInitializer selectedTenant = new ActionInvocationTexentContextInitializer(invocationWrapper, ServiceLocator.getPersistenceManager());
 			selectedTenant.init();
 		} catch (NoValidTenantSelectedException e) {
-			invocationWrapper.getAction().addFlashErrorText("error.companyidrequired");
+			invocationWrapper.getAction().addFlashErrorText("error.cannot_find_company_id");
 			return "tenant_missing";
 		}
 		
