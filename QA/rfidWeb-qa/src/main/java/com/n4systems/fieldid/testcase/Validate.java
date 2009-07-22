@@ -7,6 +7,7 @@ import com.n4systems.fieldid.Assets;
 import com.n4systems.fieldid.FieldIDMisc;
 import com.n4systems.fieldid.Home;
 import com.n4systems.fieldid.Identify;
+import com.n4systems.fieldid.Jobs;
 import com.n4systems.fieldid.Login;
 import com.n4systems.fieldid.MyAccount;
 import com.n4systems.fieldid.Reporting;
@@ -18,6 +19,7 @@ import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.admin.ManageSystemSettings;
 import com.n4systems.fieldid.admin.ManageUsers;
 import com.n4systems.fieldid.admin.ManageYourSafetyNetwork;
+import com.n4systems.fieldid.datatypes.Job;
 
 import junit.framework.TestCase;
 
@@ -29,6 +31,7 @@ public class Validate extends TestCase {
 	Identify identify = new Identify(ie);
 	Assets assets = new Assets(ie);
 	Reporting reporting = new Reporting(ie);
+	Jobs jobs = new Jobs(ie);
 	MyAccount myAccount = new MyAccount(ie);
 	Admin admin = new Admin(ie);
 	ManageOrganizations mos = new ManageOrganizations(ie);
@@ -41,12 +44,11 @@ public class Validate extends TestCase {
 	ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 	static String timestamp = null;
 	static boolean once = true;
-	String loginURL = "https://localhost.localdomain/fieldid/";
+	String loginURL = "https://www.grumpy.n4/fieldid/";
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		misc.start();
-		login.gotoLoginPage(loginURL);
 		if (once) {
 			once = false;
 			timestamp = misc.createTimestampDirectory();
@@ -60,6 +62,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -81,6 +84,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -103,6 +107,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -125,6 +130,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -149,6 +155,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -171,6 +178,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -199,6 +207,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -221,6 +230,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -254,6 +264,8 @@ public class Validate extends TestCase {
 		String linkedPassword = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
+
 			// Log into a company and get its Field ID Access Code
 			login.setCompany(linkedCompany);
 			login.setUserName(linkedUserid);
@@ -298,6 +310,7 @@ public class Validate extends TestCase {
 		boolean jobs = true;
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -320,6 +333,7 @@ public class Validate extends TestCase {
 		String orderNumber = "100203";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -343,6 +357,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -364,6 +379,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -380,6 +396,28 @@ public class Validate extends TestCase {
 	
 	// need a validate for Schedule
 
+	public void testJobs() throws Exception {
+		String method = getName();
+		String company = "cglift";
+		String userid = "dg";
+		String password = "makemore$";
+
+		try {
+			login.gotoLoginPage(loginURL);
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			jobs.validate();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+
 	public void testMyAccount() throws Exception {
 		String method = getName();
 		String company = "uts";
@@ -387,6 +425,7 @@ public class Validate extends TestCase {
 		String password = "makemore$";
 
 		try {
+			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);

@@ -22,7 +22,7 @@ import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "unirope";
+	String company = "cglift";
 	boolean jobs = false;			// end users do not have Jobs
 	String password = "makemore$";
 	
@@ -372,6 +372,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		p.setLocation(userid + "-location");
 		p.setProductType(productType);
 		identify.addProduct(p, true, "Save");
+		misc.myWindowCapture(userid + "-" + p.getSerialNumber() + ".png");
 		return p.getSerialNumber();
 	}
 

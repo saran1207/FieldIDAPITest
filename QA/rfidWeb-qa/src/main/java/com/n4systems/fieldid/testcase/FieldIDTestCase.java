@@ -9,41 +9,47 @@ import com.n4systems.fieldid.FieldIDMisc;
 import com.n4systems.fieldid.Home;
 import com.n4systems.fieldid.Identify;
 import com.n4systems.fieldid.Inspect;
+import com.n4systems.fieldid.Jobs;
 import com.n4systems.fieldid.Login;
 import com.n4systems.fieldid.MyAccount;
 import com.n4systems.fieldid.Reporting;
 import com.n4systems.fieldid.Schedule;
 import com.n4systems.fieldid.admin.ManageCustomers;
+import com.n4systems.fieldid.admin.ManageEventTypeGroups;
 import com.n4systems.fieldid.admin.ManageInspectionTypes;
+import com.n4systems.fieldid.admin.ManageOrganizations;
 import com.n4systems.fieldid.admin.ManageProductTypes;
+import com.n4systems.fieldid.admin.ManageSystemSettings;
 import com.n4systems.fieldid.admin.ManageUsers;
+import com.n4systems.fieldid.admin.ManageYourSafetyNetwork;
 
 import junit.framework.TestCase;
 
 public abstract class FieldIDTestCase extends TestCase {
+
 	IE ie = new IE();
 	FieldIDMisc misc = new FieldIDMisc(ie);
 	Login login = new Login(ie);
+	Home home = new Home(ie);
+	Identify identify = new Identify(ie);
+	Assets assets = new Assets(ie);
+	Reporting reporting = new Reporting(ie);
+	Jobs jobs = new Jobs(ie);
+	MyAccount myAccount = new MyAccount(ie);
 	Admin admin = new Admin(ie);
-	ManageCustomers mcs = new ManageCustomers(ie); 
+	ManageOrganizations mos = new ManageOrganizations(ie);
+	ManageCustomers mcs = new ManageCustomers(ie);
 	ManageUsers mus = new ManageUsers(ie);
+	ManageSystemSettings mss = new ManageSystemSettings(ie);
 	ManageProductTypes mpts = new ManageProductTypes(ie);
 	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
-	Identify identify = new Identify(ie);
-	Home home = new Home(ie);
-	Assets assets = new Assets(ie);
-	MyAccount myAccount = new MyAccount(ie);
-	Inspect inspect = new Inspect(ie);
-	Reporting reporting = new Reporting(ie);
-	Schedule schedule = new Schedule(ie);
-
+	ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
+	ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 	static String timestamp = null;
 	static boolean once = true;
-	final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS ");
-	static Random r = new Random();
-
-	String loginURL = "https://localhost.localdomain/fieldid/";
-
+	String loginURL = "https://www.grumpy.n4/fieldid/";
+	
+	
 	protected void setUp() throws Exception {
 		super.setUp();
 		misc.start();
@@ -56,6 +62,7 @@ public abstract class FieldIDTestCase extends TestCase {
 	
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		ie.close();
+		misc.myWindowCapture(timestamp + "/tearDown-" + getName() + ".png");
+		login.close();
 	}
 }

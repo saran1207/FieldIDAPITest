@@ -694,9 +694,9 @@ public class Identify extends TestCase {
 			productType.fireEvent("onchange");
 			misc.waitForJavascript();
 		}
-		
+
 		handleRequiredFieldsOnAddProduct(comments);
-		
+
 		Button submit = ie.button(value(button));
 		assertNotNull(submit);
 		assertTrue("Could not find a button with the value '" + button +"'.", submit.exists());

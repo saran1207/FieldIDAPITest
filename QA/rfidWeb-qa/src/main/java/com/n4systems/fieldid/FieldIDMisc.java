@@ -36,6 +36,9 @@ public class FieldIDMisc extends TestCase {
 	private Finder contentTitleFinder;
 	private Finder assetsViewAllFinder;
 	private Finder loadingIndicatorDivFinder;
+	private Finder labelForOfXPagesFinder;
+	private Finder nextPageLinkFinder;
+	private Finder firstPageLinkFinder;
 	
 	public FieldIDMisc(IE ie) {
 		this.ie = ie;
@@ -48,6 +51,9 @@ public class FieldIDMisc extends TestCase {
 		contentTitleFinder = xpath("//DIV[@id='contentTitle']/H1");
 		assetsViewAllFinder = xpath("//DIV[@id='resultsTable']/TABLE/TBODY/TR/TD/BUTTON[contains(text(),'Select')]");
 		loadingIndicatorDivFinder = xpath("//DIV[@class='loading']/..");
+		labelForOfXPagesFinder = xpath("//DIV[@id='pageContent']/DIV[@class='paginationWrapper']/UL/LI/SPAN[@class='gotoPage']/LABEL[@for='lastPage']");
+		nextPageLinkFinder = xpath("//DIV[@id='pageContent']/DIV[@class='paginationWrapper']/UL/LI/A[contains(text(),'Next')]");
+		firstPageLinkFinder = xpath("//DIV[@id='pageContent']/DIV[@class='paginationWrapper']/UL/LI/A[contains(text(),'First')]");
 	}
 	
 	/**
@@ -604,5 +610,50 @@ public class FieldIDMisc extends TestCase {
 			waiting = !tag.contains("display: none");
 			Thread.sleep(250);	// wait a 1/4 second between checks.
 		}
+	}
+
+	public String getDateStringWithTime() {
+		String today = null;
+		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy h:mm aa");
+		today = now.format(new Date());
+		return today;
+	}
+
+	public int getNumberOfPages() throws Exception {
+		Label lastPage = ie.label(labelForOfXPagesFinder);
+		int n = 1;
+		if(lastPage.exists()) {
+			String s = lastPage.text().trim();
+			s = s.replace("of ", "");
+			s = s.replace(" pages", "");
+			n = Integer.parseInt(s);
+		}
+		return n;
+	}
+
+	public void gotoNextPage() throws Exception {
+		Link next = ie.link(nextPageLinkFinder);
+		assertTrue("Could not find the 'Next>' link", next.exists());
+		next.click();
+		ie.waitUntilReady();
+		checkForErrorMessagesOnCurrentPage();
+	}
+
+	public boolean isLastPage() throws Exception {
+		Link next = ie.link(nextPageLinkFinder);
+		return !next.exists();
+	}
+
+	public void gotoFirstPage() throws Exception {
+		Link first = ie.link(firstPageLinkFinder);
+		assertTrue("Could not find the 'First' link", first.exists());
+		first.click();
+		ie.waitUntilReady();
+		checkForErrorMessagesOnCurrentPage();
+	}
+
+	public boolean isFirstPage() throws Exception {
+		Link first = ie.link(firstPageLinkFinder);
+		return !first.exists();
 	}
 }

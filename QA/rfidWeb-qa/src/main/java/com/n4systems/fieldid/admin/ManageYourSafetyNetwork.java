@@ -321,13 +321,13 @@ public class ManageYourSafetyNetwork extends TestCase {
 			msg += a.next();
 			msg += "\n";
 		}
-		msg += "Check the Inspection Types for:\n\n";
+		msg += "\nCheck the Inspection Types for:\n\n";
 		Iterator<String> i = eventTypes.iterator();
 		while(i.hasNext()) {
 			msg += i.next();
 			msg += "\n";
 		}
-		msg += "Some things will be renamed as follows:\n\n";
+		msg += "\nSome things will be renamed as follows:\n\n";
 		Iterator<String> r = renames.iterator();
 		while(r.hasNext()) {
 			msg += r.next();

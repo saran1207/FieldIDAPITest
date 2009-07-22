@@ -19,6 +19,7 @@ public class Login extends TestCase {
 	IE ie = null;
 	Properties p;
 	InputStream in;
+	FieldIDMisc misc = null;
 	String propertyFile = "login.properties";
 	Finder loginUserNameFinder;
 	Finder loginPasswordFinder;
@@ -74,6 +75,7 @@ public class Login extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			misc = new FieldIDMisc(ie);
 			loginUserNameFinder = id(p.getProperty("username"));
 			loginPasswordFinder = id(p.getProperty("password"));
 			loginRegularLoginFinder = xpath(p.getProperty("regularlogin"));
@@ -212,6 +214,7 @@ public class Login extends TestCase {
 	 * @throws Exception
 	 */
 	public void close() throws Exception {
+		misc.stopMonitorStatus();
 		ie.close();
 		assertFalse("Closed Internet Explorer but it still exists.", ie.exists());
 	}
