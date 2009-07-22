@@ -22,7 +22,7 @@ import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "cglift";
+	String company = "illinois";
 	boolean jobs = false;			// end users do not have Jobs
 	String password = "makemore$";
 	

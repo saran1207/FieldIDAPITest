@@ -1,90 +1,39 @@
 package com.n4systems.fieldid.testcase;
 
-import watij.runtime.ie.IE;
+import com.n4systems.fieldid.datatypes.EmployeeUser;
 
-import com.n4systems.fieldid.Admin;
-import com.n4systems.fieldid.Assets;
-import com.n4systems.fieldid.FieldIDMisc;
-import com.n4systems.fieldid.Home;
-import com.n4systems.fieldid.Identify;
-import com.n4systems.fieldid.Jobs;
-import com.n4systems.fieldid.Login;
-import com.n4systems.fieldid.MyAccount;
-import com.n4systems.fieldid.Reporting;
-import com.n4systems.fieldid.admin.ManageCustomers;
-import com.n4systems.fieldid.admin.ManageEventTypeGroups;
-import com.n4systems.fieldid.admin.ManageInspectionTypes;
-import com.n4systems.fieldid.admin.ManageOrganizations;
-import com.n4systems.fieldid.admin.ManageProductTypes;
-import com.n4systems.fieldid.admin.ManageSystemSettings;
-import com.n4systems.fieldid.admin.ManageUsers;
-import com.n4systems.fieldid.admin.ManageYourSafetyNetwork;
-import com.n4systems.fieldid.datatypes.Job;
-
-import junit.framework.TestCase;
-
-public class Validate extends TestCase {
-	IE ie = new IE();
-	FieldIDMisc misc = new FieldIDMisc(ie);
-	Login login = new Login(ie);
-	Home home = new Home(ie);
-	Identify identify = new Identify(ie);
-	Assets assets = new Assets(ie);
-	Reporting reporting = new Reporting(ie);
-	Jobs jobs = new Jobs(ie);
-	MyAccount myAccount = new MyAccount(ie);
-	Admin admin = new Admin(ie);
-	ManageOrganizations mos = new ManageOrganizations(ie);
-	ManageCustomers mcs = new ManageCustomers(ie);
-	ManageUsers mus = new ManageUsers(ie);
-	ManageSystemSettings mss = new ManageSystemSettings(ie);
-	ManageProductTypes mpts = new ManageProductTypes(ie);
-	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
-	ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
-	ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
-	static String timestamp = null;
-	static boolean once = true;
-	String loginURL = "https://www.grumpy.n4/fieldid/";
+public class Validate extends FieldIDTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		misc.start();
-		if (once) {
-			once = false;
-			timestamp = misc.createTimestampDirectory();
-		}
 	}
 
 	public void testAdministration() throws Exception {
-		String method = getName();
-		String company = "unirope";
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			admin.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 	
 	public void testAdministrationManageOrganizations() throws Exception {
-		String method = getName();
-		String company = "unirope";
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -92,22 +41,20 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mos.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 	
 	public void testAdministrationManageCustomers() throws Exception {
-		String method = getName();
-		String company = "halo";		// someone with more than 20 customers but not too many
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");	// tenant with more than 20 customers
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -115,22 +62,20 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mcs.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	public void testAdministrationManageUsers() throws Exception {
-		String method = getName();
-		String company = "unirope";
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -138,10 +83,10 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mus.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
@@ -149,13 +94,11 @@ public class Validate extends TestCase {
 	// Manage User Registrations
 	
 	public void testAdministrationManageSystemSettings() throws Exception {
-		String method = getName();
-		String company = "unirope";
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -163,22 +106,20 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mss.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	public void testAdministrationManageProductTypes() throws Exception {
-		String method = getName();
-		String company = "unirope";		// someone with more than 20 product types but not much more
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");	// someone with more than 20 product types but not much more
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -186,10 +127,10 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mpts.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
@@ -201,13 +142,11 @@ public class Validate extends TestCase {
 	// Manage Product Statuses
 		
 	public void testAdministrationManageInspectionTypes() throws Exception {
-		String method = getName();
-		String company = "halo";	// more than 20 inspection types but not many more
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");	// more than 20 inspection types but not many more
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -215,22 +154,20 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mits.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	public void testAdministrationManageEventTypeGroups() throws Exception {
-		String method = getName();
-		String company = "halo";	// more than 20 inspection types but not many more
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");	// more than 20 inspection types but not many more
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
@@ -238,10 +175,10 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			metgs.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
@@ -255,17 +192,14 @@ public class Validate extends TestCase {
 	// Data Log
 	
 	public void testAdministrationManageYourSafetyNetwork() throws Exception {
-		String method = getName();
-		String company = "jergens";	// Need to log in as a manufacturer
-		String userid = "n4systems";
-		String password = "makemore$";
-		String linkedCompany = "swwr";
-		String linkedUserid = "n4systems";
-		String linkedPassword = "makemore$";
+		String company = p.getProperty("company");	// Needs to be a manufacturer tenant
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
+		String linkedCompany = p.getProperty("linkedcompany");
+		String linkedUserid = p.getProperty("linkeduserid");
+		String linkedPassword = p.getProperty("linkedpassword");
 
 		try {
-			login.gotoLoginPage(loginURL);
-
 			// Log into a company and get its Field ID Access Code
 			login.setCompany(linkedCompany);
 			login.setUserName(linkedUserid);
@@ -294,56 +228,52 @@ public class Validate extends TestCase {
 			admin.gotoAdministration();
 			mysn.validateTenant(companyName);
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 	
 	public void testHome() throws Exception {
-		String method = getName();
-		String company = "unirope";		// someone with jobs
-		String userid = "n4systems";
-		String password = "makemore$";
-		boolean jobs = true;
+		String company = p.getProperty("company");	// tenant with jobs
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
+		boolean jobs = Boolean.parseBoolean(p.getProperty("jobs"));
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			home.validate(jobs);
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	public void testIdentify() throws Exception {
-		String method = getName();
-		String company = "unirope";		// someone with integration and a known order number
-		String userid = "n4systems";
-		String password = "makemore$";
-		String orderNumber = "100203";
+		String company = p.getProperty("company");	// tenant with integration and known order number
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
+		String orderNumber = p.getProperty("ordernumber");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			identify.validate(orderNumber);
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
@@ -351,45 +281,41 @@ public class Validate extends TestCase {
 	// Inspect
 	
 	public void testAssets() throws Exception {
-		String method = getName();
-		String company = "cglift";	// need a tenant with 10000+ assets
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");	// tenant with 10000+ assets
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			assets.validate("Reel/ID");
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	public void testReporting() throws Exception {
-		String method = getName();
-		String company = "hercules";	// need a tenant with 10000+ inspections
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");	// tenant with 10000+ inspections
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			reporting.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
@@ -397,51 +323,71 @@ public class Validate extends TestCase {
 	// need a validate for Schedule
 
 	public void testJobs() throws Exception {
-		String method = getName();
-		String company = "cglift";
-		String userid = "dg";
-		String password = "makemore$";
+		String n4systems = p.getProperty("n4systems");
+		String n4password = p.getProperty("n4password");
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
+		String email = p.getProperty("email");
+		String firstName = p.getProperty("firstname");
+		String lastName = p.getProperty("lastname");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
+			login.setUserName(n4systems);
+			login.setPassword(n4password);
+			admin.gotoAdministration();
+			mus.gotoManageUsers();
+			mus.setListUsersNameFilter(userid);
+			mus.gotoListUsersSearch();
+			if(mus.isUser(userid)) {
+				mus.gotoAddEmployeeUser();
+				EmployeeUser u = new EmployeeUser(userid, email, firstName, lastName, password);
+				u.addPermission(EmployeeUser.tag);
+				u.addPermission(EmployeeUser.sysconfig);
+				u.addPermission(EmployeeUser.sysusers);
+				u.addPermission(EmployeeUser.endusers);
+				u.addPermission(EmployeeUser.create);
+				u.addPermission(EmployeeUser.edit);
+				u.addPermission(EmployeeUser.jobs);
+// TODO:				mus.addEmployeeUser(u);
+			}
+			misc.logout();
+
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			jobs.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	public void testMyAccount() throws Exception {
-		String method = getName();
-		String company = "uts";
-		String userid = "n4systems";
-		String password = "makemore$";
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
 
 		try {
-			login.gotoLoginPage(loginURL);
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
 			myAccount.validate();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		login.close();
 	}
 }

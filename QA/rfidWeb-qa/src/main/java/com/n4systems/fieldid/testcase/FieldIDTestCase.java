@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.testcase;
 
-import java.text.SimpleDateFormat;
-import java.util.Random;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import watij.runtime.ie.IE;
 import com.n4systems.fieldid.Admin;
 import com.n4systems.fieldid.Assets;
@@ -27,37 +31,51 @@ import junit.framework.TestCase;
 
 public abstract class FieldIDTestCase extends TestCase {
 
-	IE ie = new IE();
-	FieldIDMisc misc = new FieldIDMisc(ie);
-	Login login = new Login(ie);
-	Home home = new Home(ie);
-	Identify identify = new Identify(ie);
-	Assets assets = new Assets(ie);
-	Reporting reporting = new Reporting(ie);
-	Jobs jobs = new Jobs(ie);
-	MyAccount myAccount = new MyAccount(ie);
-	Admin admin = new Admin(ie);
-	ManageOrganizations mos = new ManageOrganizations(ie);
-	ManageCustomers mcs = new ManageCustomers(ie);
-	ManageUsers mus = new ManageUsers(ie);
-	ManageSystemSettings mss = new ManageSystemSettings(ie);
-	ManageProductTypes mpts = new ManageProductTypes(ie);
-	ManageInspectionTypes mits = new ManageInspectionTypes(ie);
-	ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
-	ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
-	static String timestamp = null;
-	static boolean once = true;
-	String loginURL = "https://www.grumpy.n4/fieldid/";
-	
-	
+	protected IE ie = new IE();
+	protected FieldIDMisc misc = new FieldIDMisc(ie);
+	protected Login login = new Login(ie);
+	protected Home home = new Home(ie);
+	protected Identify identify = new Identify(ie);
+	protected Inspect inspect = new Inspect(ie);
+	protected Assets assets = new Assets(ie);
+	protected Reporting reporting = new Reporting(ie);
+	protected Schedule schedule = new Schedule(ie);
+	protected Jobs jobs = new Jobs(ie);
+	protected MyAccount myAccount = new MyAccount(ie);
+	protected Admin admin = new Admin(ie);
+	protected ManageOrganizations mos = new ManageOrganizations(ie);
+	protected ManageCustomers mcs = new ManageCustomers(ie);
+	protected ManageUsers mus = new ManageUsers(ie);
+	protected ManageSystemSettings mss = new ManageSystemSettings(ie);
+	protected ManageProductTypes mpts = new ManageProductTypes(ie);
+	protected ManageInspectionTypes mits = new ManageInspectionTypes(ie);
+	protected ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
+	protected ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
+	protected static String timestamp = null;
+	protected static boolean once = true;
+	protected String loginURL = "https://www.grumpy.n4/fieldid/";
+	protected Properties p;
+	protected InputStream in;
+	protected String propertyFile;
+		
 	protected void setUp() throws Exception {
 		super.setUp();
-		misc.start();
-		login.gotoLoginPage(loginURL);
 		if(once) {
 			once = false;
 			timestamp = misc.createTimestampDirectory() + "/";
+			propertyFile = getName() + ".properties";
+			try {
+				in = new FileInputStream(propertyFile);
+				p = new Properties();
+				p.load(in);
+			} catch (FileNotFoundException e) {
+				fail("Could not find the file '" + propertyFile + "' when initializing the test case");
+			} catch (IOException e) {
+				fail("File I/O error while trying to load '" + propertyFile + "'.");
+			}
 		}
+		misc.start();
+		login.gotoLoginPage(loginURL);
 	}
 	
 	protected void tearDown() throws Exception {

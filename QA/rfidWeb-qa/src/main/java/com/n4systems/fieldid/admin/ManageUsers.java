@@ -420,6 +420,19 @@ public class ManageUsers extends TestCase {
 		assertTrue("Could not find the content header on Manage Users page.", contentHeader.exists());
 	}
 
+	/**
+	 * Checks to see if there is a link for the userid on the current page.
+	 * It is recommended you do something like:
+	 * 
+	 *		gotoManageUsers();
+	 *		setListUsersNameFilter(userid);
+	 *		gotoListUsersSearch();
+	 *		boolean b = isUser(userid);
+	 * 
+	 * @param userid
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean isUser(String userid) throws Exception {
 		boolean result = false;
 		
