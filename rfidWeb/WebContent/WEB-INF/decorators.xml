@@ -33,23 +33,19 @@
 	</decorator>
 	
 	
-	<decorator name="nonLoggedInBrandedLayout" page="brandedPublicLayout.ftl">     	
+	<decorator name="brandedLayout" page="brandedPublicLayout.ftl">
+		<pattern>*chooseCompany.action*</pattern>
+    	<pattern>*signInToCompany.action*</pattern>     	
         <pattern>*register*.action</pattern>
         <pattern>*forgotPassword*.action</pattern>
         <pattern>*sendPassword*.action</pattern>
         <pattern>*resetPassword*.action</pattern>
+        <pattern>*login.action*</pattern>
+        <pattern>*logIntoSystem.action*</pattern>
     </decorator>
     
-    <decorator name="loginLayout" page="loginLayout.ftl">
-    	<pattern>/login.action*</pattern>
-        <pattern>/logIntoSystem.action*</pattern>
-    </decorator>
     
-    <decorator name="publicLayout" page="publicLayout.ftl" >
-    	<pattern>/chooseCompany.action*</pattern>
-    	<pattern>/signInToCompany.action*</pattern>
-    </decorator>
-	
+    
     <decorator name="layout" page="layout.ftl">     	
         <pattern>*.action</pattern>
     </decorator> 

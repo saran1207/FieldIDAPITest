@@ -2,22 +2,24 @@
 <#include "/templates/common/nocacheHeaders.ftl"><html>
 	<head>
 		<#include "head.ftl">
+		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/public.css"/>"/>
 	</head>
 	<body>
 		
 		<div id="page">
 			<div id="pageHeader">
 				<div id="companyLogo">
-					<img width="215" height="61" src="<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${securityGuard.tenantId!}" />"/>
+					<#if securityGuard?exists>
+						<img width="215" height="61" src="<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${securityGuard.tenantId!}" />"/>
+					<#else>
+						<img width="215" height="61" src="<@s.url value="/images/FieldIDLogo.jpg"/>"/>
+					</#if>
 				</div>
-			</div>
-			<div id="contentHeader">
+				
 				<#include "_notificationArea.ftl"/>
-				<h1>${title}</h1>
-				<#include "_options.ftl"/>
 		    </div>
 			
-			<div id="pageContent">
+			<div id="pageContent" class="brandedContainer">
 				${body}
 			</div>
 			

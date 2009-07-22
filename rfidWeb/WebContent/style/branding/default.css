@@ -1,0 +1,21 @@
+body {
+	color: #333333;
+	background-color: #fff;
+}
+
+.brandedContainer {
+	border: 6px solid #bbb;
+}
+
+#pageContent {
+	background: #F6F6F6;
+}
+
+#mainContent {
+	background: #FFF;
+}
+
+
+#sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active {
+	color: #AD0034;
+}

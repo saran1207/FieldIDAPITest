@@ -1,3 +1,18 @@
+dl {
+	overflow:auto;
+}
+dt, dd { 
+	float:left;
+	padding: 5px 0;
+}
+dt {
+	clear:left;
+	font-weight:bold;
+	margin-right: 0.5em;
+}
+
+
+
 .secondaryNav {
 	overflow: hidden;
 	margin: 10px 0;
@@ -7,7 +22,6 @@
 	margin-right: 10px;
 	cursor: pointer;
 }
-
 
 .secondaryNav li.button a {
 	background: #fff repeat-x url(../images/button_background.jpg);
@@ -32,3 +46,83 @@
 }
 
 
+
+.minForm input, .minForm button  {
+	font-size: 1.2em;
+	padding:5px 0;
+	
+}
+.minForm input[type="text"], .minForm input[type="password"], .minForm input.textbox, .minForm input.passwordBox {
+	width: 444px;
+	
+}
+
+.minForm input[type="submit"], .minForm button {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.minForm .fieldHolder, .minForm .label{
+	font-size: 1.2em;
+	display:block;
+	padding: 5px 0 0 0;
+}
+
+.minForm .label {
+	font-weight: bold;
+}
+
+.minForm .actions {
+	padding: 10px 0 0 0;
+}
+
+
+
+.fullForm input, .fullForm button  {
+	padding:1px 0;
+	
+}
+.fullForm input[type="text"], .fullForm input[type="password"], .fullForm input.textbox, .fullForm input.passwordBox, .fullForm textArea, .fullForm select {
+	width: 250px;
+}
+.fullForm textArea {
+	height: 100px;
+}
+
+.fullForm input[type="submit"], .fullForm button {
+	padding-left: 2px;
+	padding-right: 2px;
+	font-size: 1.2em;
+}
+
+.fullForm .fieldHolder, .fullForm .label{
+	display:block;
+	padding: 5px 0 0 0;
+}
+
+.fullForm .label {
+	font-weight: bold;
+}
+
+.fullForm .actions {
+	padding: 10px 0 0 0;
+}
+
+
+.actionInstructions {
+	font-size: 1.3em;
+	margin:5px 0;
+}
+
+.actionInstructions.important {
+	font-weight:bold;
+	padding: 10px 0;
+}
+
+.multiColumn {
+	overflow:hidden;
+}
+.multiColumn .infoBlock {
+	float:left;
+	margin-right: 15px;
+}

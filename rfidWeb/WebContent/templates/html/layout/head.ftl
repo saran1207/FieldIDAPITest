@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="<@s.url value="/style/fieldid-ie7.css" />" />
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<@s.url value="/style/site_wide.css"/>" />
+<link rel="stylesheet" type="text/css" href="<@s.url value="/style/branding/default.css"/>" />
 <title><@s.text name="app.title" /> - ${title!}</title>
 <link rel="shortcut icon" href="<@s.url value="/images/favicon.ico" />" type="image/x-icon" />		
 

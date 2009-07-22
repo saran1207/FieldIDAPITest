@@ -80,10 +80,6 @@ img.displayImage {
 	overflow: hidden;
 }
 
-#pageHeader div {
-	float: left;
-}
-
 #pageContent {
 	width: 100%;
 	margin-bottom: 10px;
@@ -151,7 +147,7 @@ img.displayImage {
 
 
 #companyLogo {
-	
+	float:left;
 	padding-left:20px;
 	width: 215px;
 	
@@ -979,7 +975,7 @@ strong.fail {
 
 .formErrors {
 	margin: 10px;
-	border: 2px solid #ffe0e0;
+	border: 2px solid #FF3030;
 	background-color:#ffebeb;
 	padding: 10px;
 }
@@ -1311,9 +1307,10 @@ li.buttonGroupLabels{
 
 .instructions {
 	color: #666;
-	font-size:1.5em;
 	padding:5px 0 0 5px;
+	font-size: 1.5em;
 }
+
 .smallInstructions {
 	font-size: 1em;
 	padding-left:0;

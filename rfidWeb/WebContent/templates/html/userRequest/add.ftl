@@ -1,42 +1,81 @@
-<title>
-	<@s.text name="title.register" />
-	
-</title>
+<title><@s.text name="title.register" /></title>
 
 
-<@s.form action="registerUser!save" cssClass="inputForm" theme="css_xhtml" >
-	<div class="formRowHolder">
-		<@s.textfield key="label.userid" name="userId" labelposition="left" required="true"/>
-		<@s.textfield key="label.emailaddress" name="emailAddress" labelposition="left" required="true"/>
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.firstname" name="firstName" labelposition="left" required="true"/>
-		<@s.textfield key="label.lastname" name="lastName" labelposition="left" required="true"/>
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.position" name="position" labelposition="left"/>
-		<@s.select key="label.timezone" name="timeZone" list="timeZones" listKey="id" listValue="name" labelposition="left"/>
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.companyname" name="companyName" labelposition="left" required="true"/>
-		<@s.textfield key="label.phonenumber" name="phoneNumber" labelposition="left" required="true"/>
+<div id="mainContent">
+	<div class="titleBlock">
+		<h1><@s.text name="title.register"/></h1>
+		<p class="titleSummary"><@s.text name="label.request_account"/></p>
 	</div>
 	
-	<div class="formRowHolder">
-		<@s.password key="label.password" name="password" labelposition="left" required="true"/>
-		<@s.password key="label.vpassword" name="passwordConfirmation" labelposition="left" required="true"/>
-	</div>
-	<div class="formRowHolder">
-		<@s.textarea key="label.comments" name="comment" labelposition="left"/>
+	<@s.form action="registerUserCreate" cssClass="fullForm multiColumn" theme="fieldid" >
+		<#include "/templates/html/common/_formErrors.ftl"/>
+		<div class="multiColumn">
+			<div class="infoBlock">
+				<h2><@s.text name="label.company_details"/></h2>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.companyname"/> <@s.text name="indicator.required"/></label>
+					<@s.textfield  name="companyName" id="companyName"/>
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.firstname"/> <@s.text name="indicator.required"/></label>
+					<@s.textfield name="firstName" />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.lastname"/> <@s.text name="indicator.required"/></label>
+					<@s.textfield  name="lastName"  />
+				</div>
+				
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.emailaddress"/> <@s.text name="indicator.required"/></label>
+					<@s.textfield  name="emailAddress"  />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.timezone"/></label>
+					<@s.select name="timeZone" list="timeZones" listKey="id" listValue="name" />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.position"/></label>
+					<@s.textfield  name="position" />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.phonenumber"/> <@s.text name="indicator.required"/></label>
+					<@s.textfield  name="phoneNumber"  />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.comments"/></label>
+					<@s.textarea name="comment" />
+					
+				</div>
+			</div>
+			<div class="infoBlock">
+				<h2><@s.text name="label.sign_in_details"/></h2>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.user_name"/> <@s.text name="indicator.required"/></label>
+					<@s.textfield name="userId"  />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.password"/> <@s.text name="indicator.required"/></label>
+					<@s.password  name="password"  />
+				</div>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.vpassword"/> <@s.text name="indicator.required"/></label>
+					<@s.password  name="passwordConfirmation"  />
+				</div>
+			</div>
+		</div>
+		<div class="actions">
+			<@s.submit name="save" key="label.send_request" /> <@s.text name="label.or"/>  <a href="<@s.url action="login"/>"/><@s.text name="label.return_to_sign_in"/></a>
+		</div>
 		
-	</div>
-	
-	<div class="formAction">
-		<a href="<@s.url action="login"/>" ><@s.text name="error.page.sign.link"/></a>
-		<@s.reset key="hbutton.reset" />
-		<@s.submit name="save" key="hbutton.submit" />
-		
-	</div>
-	
-</@s.form >
+	</@s.form >
+</div>
+<div id="secondaryContent">
+	<h2><@s.text name="label.how_soon_can_i_login"/></h2>
+	<p class="titleSummary"><@s.text name="label.how_soon_can_i_login.full"><@s.param>${securityGuard.tenant.displayName?html}</@s.param></@s.text></p>
+	<h2><@s.text name="label.will_i_get_notified_when_i_can_sign_in"/></h2>
+	<p class="titleSummary"><@s.text name="label.will_i_get_notified_when_i_can_sign_in.full"/></p>
+</div>
 
+<script type="text/javascript">
+	$('companyName').select();
+</script>

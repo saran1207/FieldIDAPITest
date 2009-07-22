@@ -1,14 +1,20 @@
-<title><@s.text name="title.forgotpassword"/></title>
-<head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/public.css"/>"/>
-</head>
+<title><@s.text name="title.password_reset"/></title>
 
-<div class="easyForm">
-	<p class="instructions">
-		<@s.text name="message.passwordsent"/>
-	</p>
-	<div class="formAction">
-		<input type="submit" value="<@s.text name="label.login"/>" onclick="return redirect( '<@s.url action="login"/>' );" />
+<div id="mainContent">
+	<div class="titleBlock">
+		<h1><@s.text name="title.password_reset"/></h1>
 	</div>
 	
+	<div class="minForm">
+		<p class="actionInstructions">
+			<@s.text name="message.passwordsent"/>
+		</p>
+		<div class="actions">
+			<input type="submit" value="<@s.text name="label.return_to_sign_in"/>" onclick="return redirect( '<@s.url action="login"/>' );" />
+		</div>
+	</div>
+</div>
+
+<div id="secondaryContent">
+	<#include "../public/_requestAccount.ftl"/>
 </div>

@@ -1,64 +1,93 @@
-<title><@s.text name="title.login"/></title>
+<title>${(securityGuard.tenant.displayName?html)!} <@s.text name="title.sign_in"/></title>
 <head>
-	<link rel="StyleSheet" href="/fieldid/style/tabNav.css" type="text/css"/>
-	<script type="text/javascript" src="<@s.url value="/javascript/tabNav.js"/>"></script>
+	<style type="text/css">
+		#signInForm {
+			margin: 10px 0px;
+			border-bottom: 1px dotted #999;
+		}
+	</style>
 </head>
-<@s.form action="logIntoSystem" theme="fieldid" cssClass="easyForm">
-	<#include "/templates/html/common/_formErrors.ftl" />
-	<@s.hidden name="normalLogin" id="loginType"/>
-	<div class="oneLine">
-		<label><@s.text name="label.logininto"/>: </label>
-		<label>${(securityGuard.tenantName?html)!}</label>
-		<@s.hidden name="companyID" id="companyID" value="${securityGuard.tenantName}"/>
+<div id="mainContent">
+	<div class="titleBlock">
+		<h1>${(securityGuard.tenant.displayName?html)!} <@s.text name="title.sign_in"/></h1>
+		<p class="titleSummary"><@s.text name="instruction.already_have_a_field_id_account"/></p>
 	</div>
-	<p ><a href="<@s.url action="chooseCompany"/>"><@s.text name="label.anothercompany"/></a></p>
 	
-	
-	<ul id="tabnav" class="tabnav">
-		<li id="normal" class="selectedTab"><a href="javascript: void(0);" onclick="toggleTab('tabnav', 'normal'); $('loginType').value ='true';"><@s.text name="label.normal"/></a></li>
-		<li id="secureRfid"><a href="javascript: void(0);" onclick="toggleTab('tabnav', 'secureRfid'); $('loginType').value ='false';"><@s.text name="label.securerfid"/></a></li>
-	</ul>
-	<div id="normal_container">
-		<label class="label"><@s.text name="label.username"/></label>
-		<@s.textfield name="userName" id="userName"/>
+	<@s.form action="logIntoSystem" theme="fieldid" cssClass="minForm" id="signInForm">
+		<#include "/templates/html/common/_formErrors.ftl" />
+		<@s.hidden name="normalLogin" id="normalLogin"/>
+		<div id="normal_container" class="togglable">
+			<label class="label"><@s.text name="label.username"/></label>
+			<@s.textfield name="userName" id="userName"/>
+			
+			<label class="label"><@s.text name="label.password"/></label>
+			<@s.password name="password" id="password"/>
+		</div>
 		
-		<label class="label"><@s.text name="label.password"/></label>
-		<@s.password name="password" id="password"/>
-	</div>
+		<div id="secureRfid_container" class="togglable" style="display:none">
+			<label class="label"><@s.text name="label.securityrfidnumber"/></label>
+			<@s.password name="secureRfid" id="secureRfidNumber"/>
+		</div>
+		<div class="oneLine">
+			<span class="fieldHolder"><@s.checkbox name="rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
+		</div>
+		
+		
+		<div class="actions togglable" id="normalActions_container" style="display:none" > 
+			<@s.submit key="label.sign_in" id="signInButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showSecurityCardSignIn();"/><@s.text name="label.sign_in_with_security_card"/></a>
+		</div>
+		
+		<div class="actions togglable" id="secureRfidActions_container" > 
+			<@s.submit key="label.sign_in" id="signInWithSecurityButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showNormalSignIn();"/><@s.text name="label.sign_in_with_user_name"/></a>
+		</div>
+				
+	</@s.form>
 	
-	<div id="secureRfid_container" style="display:none">
-		<label class="label"><@s.text name="label.securityrfidnumber"/></label>
-		<@s.password name="secureRfid" id="secureRfidNumber"/>
-	</div>
-	<div class="oneLine">
-		<span class="fieldHolder"><@s.checkbox name="rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
-	</div>
-	
-	<div class="formAction"> 
-		<@s.submit key="hbutton.login" id="loginButton"/>
-	</div>
-	
-	<p>
-		<a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a>
-	</p>
-	
-	<#if securityGuard.partnerCenterEnabled>
-		<p>
-			<a href="<@s.url action="registerUser"/>"><@s.text name="label.requestanaccount"/></a>
-		</p>
-	</#if>
+	<dl>
+  		<dt>Help:</dt>
+   		<dd><a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a></dd>
+  		<dt>${securityGuard.tenantName?html}:</dt>
+    	<dd><a href="<@s.url action="chooseCompany"/>"><@s.text name="label.is_not_the_company_i_want"/></a></dd>
+	</dl>
 
-		
-		
-</@s.form>
+</div>
+<div id="secondaryContent">
+	<#include "../public/_requestAccount.ftl"/>
+</div>
+
 
 
 
 <script type="text/javascript">
-	<#if normalLogin > 
-		$('userName').focus();
-	<#else>
+	function showSecurityCardSignIn() {
+		hideAllTogglable();
+		
+		$('normalLogin').value ='false';
+		$('secureRfid_container').show();
+		$('secureRfidActions_container').show();	
 		$('secureRfidNumber').focus();
-		toggleTab('tabnav', 'secureRfid');
-	</#if> 
+		return false;
+	}
+	
+	function showNormalSignIn() {
+		hideAllTogglable();
+		
+		$('normalLogin').value ='true';
+		$('normal_container').show();
+		$('normalActions_container').show();	
+		$('userName').focus();
+		return false;
+	}
+	
+	function hideAllTogglable() {
+		$$(".togglable").each( function(element) {
+				element.hide();
+			});
+	}
+	
+	<#if normalLogin > 
+		showNormalSignIn();
+	<#else>
+		showSecurityCardSignIn();
+	</#if>
 </script>

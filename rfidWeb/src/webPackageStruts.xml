@@ -522,7 +522,13 @@
 		<action name="registerUser" method="add" class="com.n4systems.fieldid.actions.UserRegistrationCrud">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="redirect">/</result>
-
+			<result name="input" type="freemarker">templates/html/userRequest/add.ftl</result>
+			<result name="success" type="freemarker">templates/html/userRequest/add.ftl</result>
+		</action>
+		
+		<action name="registerUserCreate" method="save" class="com.n4systems.fieldid.actions.UserRegistrationCrud">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="error" type="redirect">/</result>
 			<result name="input" type="freemarker">templates/html/userRequest/add.ftl</result>
 			<result name="success" type="freemarker">templates/html/userRequest/add.ftl</result>
 			<result name="saved" type="freemarker">templates/html/userRequest/confirm.ftl</result>
