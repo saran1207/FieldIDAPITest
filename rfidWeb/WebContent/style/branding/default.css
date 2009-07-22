@@ -7,7 +7,7 @@ body {
 	border: 6px solid #bbb;
 }
 
-#pageContent {
+#pageContent.public {
 	background: #F6F6F6;
 }
 

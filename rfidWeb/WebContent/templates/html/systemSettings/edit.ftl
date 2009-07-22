@@ -53,8 +53,17 @@ ${action.setPageType('account_settings', 'show')!}
 			<span class="fieldHolder">${sessionUser.tenant.displayName?html}</span>
 		</div>
 		<div class="infoSet">
-			<label ><@s.text name="label.login_url"/></label>
+			<label><@s.text name="label.login_url"/></label>
 			<span class="fieldHolder">${loginUrl?html}</span>
+		</div>
+		
+		<div class="infoSet">
+			<label><@s.text name="label.disk_usage"/></label>
+			<div class="fieldHolder" style="float:left">
+				
+				<div style="width:300px"><@n4.percentbar total="1000" progress="400"/></div>
+				<div >400 of 1000</div>
+			</div>
 		</div>
 		
 		<div class="infoSet">

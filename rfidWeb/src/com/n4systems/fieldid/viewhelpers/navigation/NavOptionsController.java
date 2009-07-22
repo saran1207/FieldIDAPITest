@@ -153,7 +153,7 @@ public class NavOptionsController {
 	}
 	
 	public boolean useEntityTitle() {
-		return (entityLoaded() || currentActionOption.isUseEntityTitle());
+		return (entityLoaded() || (currentActionOption != null && currentActionOption.isUseEntityTitle()));
 	}
 
 	public boolean isOnAdmin() {
