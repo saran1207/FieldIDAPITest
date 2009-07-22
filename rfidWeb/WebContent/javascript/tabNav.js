@@ -21,10 +21,6 @@
 			    		if( target.tagName == "LI"	&&  Element.hasClassName( target, "selectedTab") ) {
 							
 			    			Element.removeClassName( target, "selectedTab" );
-			    			
-			    				alert('3');
-			    				}
-			    			
 			    			toggleDisp( $( target.id + containerPostfix ) );
 			    			
 			    		}

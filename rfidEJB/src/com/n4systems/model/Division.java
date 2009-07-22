@@ -6,8 +6,15 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.util.SecurityFilter;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 //XXX - move into com.n4systems.model.division package
@@ -17,10 +24,20 @@ public class Division extends EntityWithTenant implements NamedEntity, Listable<
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
+	
+	@Embedded
+	@AttributeOverrides({ 
+		@AttributeOverride(name="name", column = @Column(name="contactname")),
+		@AttributeOverride(name="email", column = @Column(name="contactemail"))
+	})
+	private Contact contact = new Contact();
 
 	@ManyToOne(optional = false)
 	private Customer customer;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private AddressInfo addressInfo = new AddressInfo();
+	
 	public Division() {}
 
 	
@@ -69,5 +86,25 @@ public class Division extends EntityWithTenant implements NamedEntity, Listable<
     public String toString() {
 	    return getName() + " (" + getId() + ")";
     }
+
+
+	public AddressInfo getAddressInfo() {
+		return addressInfo;
+	}
+
+
+	public void setAddressInfo(AddressInfo addressInfo) {
+		this.addressInfo = addressInfo;
+	}
+
+
+	public Contact getContact() {
+		return contact;
+	}
+
+
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
 	
 }
