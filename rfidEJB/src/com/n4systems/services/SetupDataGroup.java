@@ -44,7 +44,9 @@ public enum SetupDataGroup {
 	OWNERS (
 			Customer.class,
 			Division.class,
-			JobSite.class,
+			JobSite.class
+	),
+	JOBS (
 			Project.class
 	);
 	

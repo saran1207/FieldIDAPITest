@@ -22,6 +22,7 @@ import com.n4systems.util.SecurityFilter;
 @Entity
 @Table(name = "setupdatalastmoddates")
 public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -51,6 +52,10 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date owners = new Date();
 
+	@Column(name="jobs", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date jobs = new Date();
+	
 	public SetupDataLastModDates() {}
 	
 	public boolean isNew() {
@@ -77,6 +82,9 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 			case OWNERS:
 				owners = newDate;
 				break;
+			case JOBS:
+				jobs = newDate;
+				break;
 		}
 	}
 	
@@ -90,6 +98,8 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 				return autoAttributes;
 			case OWNERS:
 				return owners;
+			case JOBS:
+				return jobs;
 		}
 		return null;
 	}
@@ -143,6 +153,14 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 
 	public void setOwners(Date owners) {
 		this.owners = owners;
+	}
+
+	public Date getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(Date jobs) {
+		this.jobs = jobs;
 	}
 
 }

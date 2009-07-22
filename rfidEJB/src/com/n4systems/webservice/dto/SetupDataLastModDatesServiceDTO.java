@@ -10,6 +10,7 @@ public class SetupDataLastModDatesServiceDTO implements Serializable {
 	private Date inspectionTypes;
 	private Date autoAttributes;
 	private Date owners;
+	private Date jobs;
 
 	public SetupDataLastModDatesServiceDTO() {}
 
@@ -44,5 +45,12 @@ public class SetupDataLastModDatesServiceDTO implements Serializable {
 	public void setOwners(Date owners) {
 		this.owners = owners;
 	}
-	
+
+	public Date getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(Date jobs) {
+		this.jobs = jobs;
+	}
 }
