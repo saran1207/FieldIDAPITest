@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 
 import org.hibernate.annotations.CollectionOfElements;
+
+import com.n4systems.model.tenant.TenantLimit;
 
 
 @SuppressWarnings("serial")
@@ -23,6 +26,9 @@ public abstract class TenantOrganization extends Organization {
 	
 	@Column(length=2056)
 	private String webSite;
+	
+	@Embedded
+	private TenantLimit limits = new TenantLimit();
 	
 	@CollectionOfElements(fetch= FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
@@ -61,5 +67,13 @@ public abstract class TenantOrganization extends Organization {
 
 	public void setWebSite(String webSite) {
 		this.webSite = webSite;
+	}
+
+	public TenantLimit getLimits() {
+		return limits;
+	}
+
+	public void setLimits(TenantLimit limits) {
+		this.limits = limits;
 	}
 }
