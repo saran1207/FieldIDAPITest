@@ -19,3 +19,12 @@ body {
 #sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active {
 	color: #AD0034;
 }
+
+.percentBarUsed {
+	border-right: 1px solid #238fbd;
+	background: url(../../images/barForeground.png) repeat-x;
+}
+.percentBar {
+	border: 2px solid #79c5e5;
+	background: url(../../images/barBackground.png) repeat-x;
+}

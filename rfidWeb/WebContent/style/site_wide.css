@@ -126,3 +126,7 @@ dt {
 	float:left;
 	margin-right: 15px;
 }
+
+.percentBarUsed, .percentBar {
+	height:18px;
+}
