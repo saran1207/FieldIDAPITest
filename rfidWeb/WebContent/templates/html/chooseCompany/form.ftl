@@ -20,7 +20,7 @@
 	
 </div>
 <div id="secondaryContent">
-	<#include "../public/_plansAndPrices.ftl"/>
+	<#include "../public/_plansAndPricing.ftl"/>
 </div>
 
 <script type="text/javascript">
