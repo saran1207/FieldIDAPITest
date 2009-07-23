@@ -336,13 +336,14 @@ public class Validate extends FieldIDTestCase {
 			login.setCompany(company);
 			login.setUserName(n4systems);
 			login.setPassword(n4password);
+			login.login();
 			admin.gotoAdministration();
 			mus.gotoManageUsers();
 			mus.setListUsersNameFilter(userid);
 			mus.gotoListUsersSearch();
-			if(mus.isUser(userid)) {
+			EmployeeUser u = new EmployeeUser(userid, email, firstName, lastName, password);
+			if(!mus.isUser(userid)) {
 				mus.gotoAddEmployeeUser();
-				EmployeeUser u = new EmployeeUser(userid, email, firstName, lastName, password);
 				u.addPermission(EmployeeUser.tag);
 				u.addPermission(EmployeeUser.sysconfig);
 				u.addPermission(EmployeeUser.sysusers);
@@ -350,14 +351,14 @@ public class Validate extends FieldIDTestCase {
 				u.addPermission(EmployeeUser.create);
 				u.addPermission(EmployeeUser.edit);
 				u.addPermission(EmployeeUser.jobs);
-// TODO:				mus.addEmployeeUser(u);
+				mus.addEmployeeUser(u);
 			}
 			misc.logout();
 
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
-			jobs.validate();
+			jobs.validate(u);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;

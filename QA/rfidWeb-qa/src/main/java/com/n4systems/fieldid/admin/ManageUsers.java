@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import com.n4systems.fieldid.FieldIDMisc;
 import com.n4systems.fieldid.datatypes.CustomerUser;
+import com.n4systems.fieldid.datatypes.EmployeeUser;
 
 import watij.elements.*;
 import watij.finders.Finder;
@@ -67,6 +68,19 @@ public class ManageUsers extends TestCase {
 	private Finder editCustomerUserDivisionFinder;
 	private Finder editCustomerUserAllOffButtonFinder;
 	private Finder editCustomerUserSubmitButtonFinder;
+	private Finder addEmployeeUserUserIDFinder;
+	private Finder addEmployeeUserEmailFinder;
+	private Finder addEmployeeUserFirstNameFinder;
+	private Finder addEmployeeUserLastNameFinder;
+	private Finder addEmployeeUserPositionFinder;
+	private Finder addEmployeeUserInitialsFinder;
+	private Finder addEmployeeUserSecurityRFIDNumberFinder;
+	private Finder addEmployeeUserTimeZoneFinder;
+	private Finder addEmployeeUserOrgUnitFinder;
+	private Finder addEmployeeUserPasswordFinder;
+	private Finder addEmployeeUserVerifyPasswordFinder;
+	private Finder addEmployeeUserAllOffButtonFinder;
+	private Finder addEmployeeUserSubmitButtonFinder;
 
 	public ManageUsers(IE ie) {
 		this.ie = ie;
@@ -75,7 +89,7 @@ public class ManageUsers extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
-			listUsersFinder = text(p.getProperty("link"));
+			listUsersFinder = xpath(p.getProperty("link"));
 			listUsersPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			listUsersFilterNameFinder = id(p.getProperty("listusersfiltername"));
 			listUsersFilterUserTypeFinder = id(p.getProperty("listusersfilterusertype"));
@@ -119,6 +133,19 @@ public class ManageUsers extends TestCase {
 			editCustomerUserDivisionFinder = xpath(p.getProperty("edituserdivision"));
 			editCustomerUserAllOffButtonFinder = xpath(p.getProperty("edituseralloffbutton"));
 			editCustomerUserSubmitButtonFinder = xpath(p.getProperty("editusersubmitbutton"));
+			addEmployeeUserUserIDFinder = xpath(p.getProperty("addemployeeuserid"));
+			addEmployeeUserEmailFinder = xpath(p.getProperty("addemployeeemail"));
+			addEmployeeUserFirstNameFinder = xpath(p.getProperty("addemployeefirstname"));
+			addEmployeeUserLastNameFinder = xpath(p.getProperty("addemployeelastname"));
+			addEmployeeUserPositionFinder = xpath(p.getProperty("addemployeeposition"));
+			addEmployeeUserInitialsFinder = xpath(p.getProperty("addemployeeinitials"));
+			addEmployeeUserSecurityRFIDNumberFinder = xpath(p.getProperty("addemployeerfid"));
+			addEmployeeUserTimeZoneFinder = xpath(p.getProperty("addemployeetimezone"));		
+			addEmployeeUserOrgUnitFinder = xpath(p.getProperty("addemployeeorgunit"));
+			addEmployeeUserPasswordFinder = xpath(p.getProperty("addemployeepassword"));
+			addEmployeeUserVerifyPasswordFinder = xpath(p.getProperty("addemployeeverifypassword"));
+			addEmployeeUserAllOffButtonFinder = xpath(p.getProperty("addemployeealloffbutton"));
+			addEmployeeUserSubmitButtonFinder = xpath(p.getProperty("addemployeesubmitbutton"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -549,5 +576,105 @@ public class ManageUsers extends TestCase {
 
 	private void checkEditUserCustomerPermissions() throws Exception {
 		checkAddUserCustomerPermissions();
+	}
+
+	public void addEmployeeUser(EmployeeUser u) throws Exception {
+		misc.stopMonitorStatus();
+		assertNotNull(u);
+		assertNotNull("Must set a User ID for the customer", u.getUserID());
+		assertNotNull("Must set an email address for the customer", u.getEmail());
+		assertNotNull("Must set a first name for the customer", u.getFirstName());
+		assertNotNull("Must set a last name for the customer", u.getLastName());
+		assertNotNull("Must set a password for the customer", u.getPassword());
+		assertFalse("User ID cannot be blank", u.getUserID().trim().equals(""));
+		assertFalse("Email cannot be blank", u.getEmail().trim().equals(""));
+		assertFalse("First Name cannot be blank", u.getFirstName().trim().equals(""));
+		assertFalse("Last Name cannot be blank", u.getLastName().trim().equals(""));
+		assertFalse("Password cannot be blank", u.getPassword().trim().equals(""));
+		TextField addEmployeeUserUserID = ie.textField(addEmployeeUserUserIDFinder);
+		assertTrue("Could not find the User ID text field on Add User", addEmployeeUserUserID.exists());
+		addEmployeeUserUserID.set(u.getUserID());
+
+		TextField addEmployeeUserEmail = ie.textField(addEmployeeUserEmailFinder);
+		assertTrue("Could not find the Email text field on Add User", addEmployeeUserEmail.exists());
+		addEmployeeUserEmail.set(u.getEmail());
+
+		TextField addEmployeeUserFirstName = ie.textField(addEmployeeUserFirstNameFinder);
+		assertTrue("Could not find the First Name text field on Add User", addEmployeeUserFirstName.exists());
+		addEmployeeUserFirstName.set(u.getFirstName());
+
+		TextField addEmployeeUserLastName = ie.textField(addEmployeeUserLastNameFinder);
+		assertTrue("Could not find the Last Name text field on Add User", addEmployeeUserLastName.exists());
+		addEmployeeUserLastName.set(u.getLastName());
+
+		TextField addEmployeeUserPosition = ie.textField(addEmployeeUserPositionFinder);
+		assertTrue("Could not find the Position text field on Add User", addEmployeeUserPosition.exists());
+		if(u.getPosition() != null) {
+			addEmployeeUserPosition.set(u.getPosition());
+		}
+
+		TextField addEmployeeUserInitials = ie.textField(addEmployeeUserInitialsFinder);
+		assertTrue("Could not find the Initials text field on Add User", addEmployeeUserInitials.exists());
+		if(u.getInitials() != null) {
+			addEmployeeUserInitials.set(u.getInitials());
+		}
+
+		TextField addEmployeeUserSecurityRFIDNumber = ie.textField(addEmployeeUserSecurityRFIDNumberFinder);
+		assertTrue("Could not find the Security Rfid Number text field on Add User", addEmployeeUserSecurityRFIDNumber.exists());
+		if(u.getSecurityRFIDNumber() != null) {
+			addEmployeeUserSecurityRFIDNumber.set(u.getSecurityRFIDNumber());
+		}
+
+		SelectList addEmployeeUserTimeZone = ie.selectList(addEmployeeUserTimeZoneFinder);
+		assertTrue("Could not find the Time Zone select list on Add User", addEmployeeUserTimeZone.exists());
+		String tz = u.getTimeZone();
+		if(tz != null) {
+			tz = "/" + u.getTimeZone() + "/";
+			Option o = addEmployeeUserTimeZone.option(text(tz));
+			assertTrue("Could not find the time zone '" + tz + "'", o.exists());
+			o.select();
+		}
+
+		SelectList addEmployeeUserOrgUnit = ie.selectList(addEmployeeUserOrgUnitFinder);
+		assertTrue("Could not find the Organizational Unit select list on Add User", addEmployeeUserOrgUnit.exists());
+		String org = u.getOrgUnit();
+		if(org != null) {
+			Option o = addEmployeeUserOrgUnit.option(text(org));
+			assertTrue("Could not find the organizational unit '" + org + "'", o.exists());
+			o.select();
+		}
+		
+		TextField addEmployeeUserPassword = ie.textField(addEmployeeUserPasswordFinder);
+		assertTrue("Could not find the Password text field on Add User", addEmployeeUserPassword.exists());
+		addEmployeeUserPassword.set(u.getPassword());
+
+		TextField addEmployeeUserVerifyPassword = ie.textField(addEmployeeUserVerifyPasswordFinder);
+		assertTrue("Could not find the Verify Password text field on Add User", addEmployeeUserVerifyPassword.exists());
+		addEmployeeUserVerifyPassword.set(u.getPassword());
+
+		checkAddUserEmployeePermissions();
+		
+		// Turn all the permissions off...
+		Button allOff = ie.button(addEmployeeUserAllOffButtonFinder);
+		assertTrue("Could not find the All Off button for Permissions", allOff.exists());
+		allOff.click();
+		
+		// then turn on the ones we need on
+		List<String> p = u.getPermissions();
+		Iterator<String> i = p.iterator();
+		while(i.hasNext()) {
+			String permission = i.next();
+			String xpath = "//DIV[@id='pageContent']/FORM/DIV/TABLE[@class='list']/TBODY/TR/TD[contains(text(),'" + permission + "')]/..";
+			TableRow tr = ie.row(xpath(xpath));
+			assertTrue("Could not find the Permission row containing '" + permission + "'", tr.exists());
+			Radio r = tr.radio(xpath("TD/INPUT[@value='true']"));
+			assertTrue("Could not find a radio button with value='true' on permission '" + permission + "'", r.exists());
+			r.set();
+		}
+		
+		Button submit = ie.button(addEmployeeUserSubmitButtonFinder);
+		assertTrue("Could not find the Submit button", submit.exists());
+		submit.click();
+		misc.startMonitorStatus();
 	}
 }

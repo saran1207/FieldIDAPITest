@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.n4systems.fieldid.datatypes.Job;
+import com.n4systems.fieldid.datatypes.SystemUser;
 
 import static watij.finders.FinderFactory.*;
 import watij.elements.Button;
@@ -25,8 +26,6 @@ import watij.elements.Radio;
 import watij.elements.SelectList;
 import watij.elements.Span;
 import watij.elements.Spans;
-import watij.elements.TableCell;
-import watij.elements.TableCells;
 import watij.elements.TextField;
 import watij.finders.Finder;
 import watij.runtime.ie.IE;
@@ -126,7 +125,7 @@ public class Jobs extends TestCase {
 		assertTrue("Could not find Jobs page content header '" + p.getProperty("contentheader") + "'", contentHeader.exists());
 	}
 	
-	public void validate() throws Exception {
+	public void validate(SystemUser u) throws Exception {
 		gotoJobs();
 		gotoOnlyJobsIamAssignedTo();
 		gotoAllJobs();
@@ -177,14 +176,16 @@ public class Jobs extends TestCase {
 		gotoJob(jobTitle);
 		misc.stopMonitorStatus();
 		gotoAddResource(jobTitle);
+		String qauser = u.getFirstName() + " " + u.getLastName();
 		List<String> employees = getEmployeesFromAddResourceList();
+		assertTrue("Could not find the user '" + qauser + "' on list of assignable resources", employees.contains(qauser));
 		List<String> assigned = getAssignedEmployees();
 		Iterator<String> i = assigned.iterator();
 		while(i.hasNext()) {
 			String s = i.next();
 			assertFalse("Assigned employee '" + s + "' is still available on the employee list of assignable resources", employees.contains(s));
 		}
-		addEmployeeResource(employees.get(0));
+		addEmployeeResource(qauser);
 		misc.startMonitorStatus();
 	}
 
