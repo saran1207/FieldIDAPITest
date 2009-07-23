@@ -14,33 +14,40 @@ if RUBY_PLATFORM =~ /java/
   require 'active_record/connection_adapters/jdbcpostgresql_adapter'
 end
 
-
+require 'active_record/connection_adapters/postgresql_adapter'
 
 class ActiveRecord::Migration 
   extend MigrationHelpers
 end
 
 # monkey patch the postgres defaut types.
-  
-class PostgreSQLColumn #:nodoc:
-  def native_database_types #:nodoc:
-      {
-        :primary_key => "bigserial primary key",
-        :string      => { :name => "character varying", :limit => 255 },
-        :text        => { :name => "text" },
-        :integer     => { :name => "integer", :limit => 8 },
-        :float       => { :name => "float" },
-        :decimal     => { :name => "decimal" },
-        :datetime    => { :name => "timestamp" },
-        :timestamp   => { :name => "timestamp" },
-        :time        => { :name => "time" },
-        :date        => { :name => "date" },
-        :binary      => { :name => "bytea" },
-        :boolean     => { :name => "boolean" }
-      }
+module ActiveRecord
+  module ConnectionAdapters
+    class PostgreSQLAdapter < AbstractAdapter
+      def native_database_types()
+        types = NATIVE_DATABASE_TYPES
+        types[:primary_key] = "bigserial primary key"
+        types[:string] = { :name => "character varying", :limit => 500 }
+        types[:integer] = { :name => "integer", :limit => 8  }
+        types
+      end
+      
+      # Maps logical Rails types to PostgreSQL-specific data types.
+      def type_to_sql(type, limit = nil, precision = nil, scale = nil)
+        return super unless type.to_s == 'integer'
+        
+
+        case limit
+          when 1..2;      'smallint'
+          when 3..4;      'integer'
+          when 5..8, nil;      'bigint'
+          else raise(ActiveRecordError, "No integer type has byte size #{limit}. Use a numeric with precision 0 instead.")
+        end
+      end
+
+    end     
+    
   end
 end
-
-# auto load the model directory.
 
 
