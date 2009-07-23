@@ -67,11 +67,6 @@ public class Identify extends TestCase {
 	Finder addProductProductTypeFinder;
 	Finder addProductCommentsFinder;
 	Finder addProductCommentTemplatesFinder;
-	Finder addProductResetFormFinder;
-	Finder addProductSaveFinder;
-	Finder addProductSaveAndInspectFinder;
-	Finder addProductSaveAndPrintFinder;
-	Finder addProductSaveAndScheduleFinder;
 	Finder addProductRequiredInputFieldsFinder;	// LABELS; FOR attribute will hold ID for input fields required
 	Finder addProductRequiredUOMFieldsFinder;	// Unit Of Measure inputs are slightly different xpath
 	Finder orderResultsDivFinder;
@@ -109,8 +104,14 @@ public class Identify extends TestCase {
 	private Finder addMultipleAssetsStep3GenerateFinder;
 	private Finder addMultipleAssetsSaveButtonFinder;
 	private Finder addMultipleAssetsCancelButtonFinder;
-	private Finder productAttributesFinder;
-	private Finder productTypeAttributesFinder;
+	private Finder addProductSaveButtonFinder;
+	private Finder addProductSaveAndInspectButtonFinder;
+	private Finder addProductSaveAndPrintButtonFinder;
+	private Finder addProductSaveAndScheduleButtonFinder;
+	private Finder addProductResetFormButtonFinder;
+	private Finder attachFileButtonFinder;
+	private Finder attachFileFieldFinder;
+	private Finder attachFileFrameFinder;
 	
 	public Identify(IE ie) {
 		this.ie = ie;
@@ -162,11 +163,6 @@ public class Identify extends TestCase {
 			addProductProductTypeFinder = id(p.getProperty("producttype"));
 			addProductCommentsFinder = id(p.getProperty("comments"));
 			addProductCommentTemplatesFinder = id(p.getProperty("commenttemplate"));
-			addProductResetFormFinder = value(p.getProperty("resetformbutton"));
-			addProductSaveFinder = id(p.getProperty("savebutton"));
-			addProductSaveAndInspectFinder = id(p.getProperty("saveandinspectbutton"));
-			addProductSaveAndPrintFinder = id(p.getProperty("saveandprintbutton"));
-			addProductSaveAndScheduleFinder = id(p.getProperty("saveandschedulebutton"));
 			addProductRequiredInputFieldsFinder = xpath(p.getProperty("requiredinputfields"));
 			addProductRequiredUOMFieldsFinder = xpath(p.getProperty("requireduomfields"));
 			orderResultsDivFinder = xpath(p.getProperty("orderresultsdiv"));
@@ -204,7 +200,14 @@ public class Identify extends TestCase {
 			addMultipleAssetsStep3GenerateFinder = xpath(p.getProperty("step3generatebutton"));
 			addMultipleAssetsSaveButtonFinder = xpath(p.getProperty("step4saveandcreatebutton"));
 			addMultipleAssetsCancelButtonFinder = xpath(p.getProperty("addmultipleassetscancelbutton"));
-			productTypeAttributesFinder = xpath(p.getProperty("producttypeattributesfinder"));
+			addProductSaveButtonFinder = xpath(p.getProperty("addproductsavebutton"));
+			addProductSaveAndInspectButtonFinder = xpath(p.getProperty("addproductsaveinspectbutton"));
+			addProductSaveAndPrintButtonFinder = xpath(p.getProperty("addproductsaveprintbutton"));
+			addProductSaveAndScheduleButtonFinder = xpath(p.getProperty("addproductsaveschedulebutton"));
+			addProductResetFormButtonFinder = xpath(p.getProperty("addproductresetformbutton"));
+			attachFileButtonFinder = xpath(p.getProperty("attachfilebutton"));
+			attachFileFieldFinder = xpath(p.getProperty("attachfilefield"));
+			attachFileFrameFinder = xpath(p.getProperty("attachfileuploadframe"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -265,11 +268,6 @@ public class Identify extends TestCase {
 		return addProduct;
 	}
 	
-	private boolean checkForIdentifyProduct() throws Exception {
-		HtmlElement identifyProductContentHeader = ie.htmlElement(identifyProductContentHeaderFinder);
-		return identifyProductContentHeader.exists();
-	}
-
 	private void checkAddProductPageContentHeader() throws Exception {
 		HtmlElement addProductContentHeader = ie.htmlElement(addProductContentHeaderFinder);
 		assertTrue("Could not find Add Product page content header '" + p.getProperty("addproductcontentheader") + "'", addProductContentHeader.exists());
@@ -534,10 +532,13 @@ public class Identify extends TestCase {
 	}
 	
 	/**
-	 * Will add the product to the system. It will scan the product type
-	 * used for required fields. Any required fields it finds it will fill
-	 * in random amounts. If generate is true, this will generate a serial
-	 * number and update the Product p with the generated serial number.
+	 * Will set the information on the add product form. Need to call
+	 * One of the addProduct*() methods to save the information.
+	 * 
+	 * It will scan the product type used for required fields. Any required
+	 * fields it finds it will fill in random amounts. If generate is true,
+	 * this will generate a serial number and update the Product p with the
+	 * generated serial number.
 	 * 
 	 * Assumes you are already on the Add Product page.
 	 * 
@@ -549,10 +550,9 @@ public class Identify extends TestCase {
 	 * 
 	 * @param p - all the common fields
 	 * @param generate - if set to true, generate a new serial number
-	 * @param button - which button will be pressed to save the product
 	 * @throws Exception
 	 */
-	public void addProduct(Product p, boolean generate, String button) throws Exception {
+	public void setProduct(Product p, boolean generate) throws Exception {
 		assertNotNull(p);
 		assertTrue("You either have to generate a serial number or provide one.", generate || (p.getSerialNumber() != null));
 		
@@ -607,15 +607,15 @@ public class Identify extends TestCase {
 		SelectList commentTemplates = ie.selectList(addProductCommentTemplatesFinder);
 		assertTrue("Could not find the select list for comment templates", commentTemplates.exists());
 		
-		Button resetForm = ie.button(addProductResetFormFinder);
+		Button resetForm = ie.button(addProductResetFormButtonFinder);
 		assertTrue("Could not find the 'Reset Form' button", resetForm.exists());
-		Button save = ie.button(addProductSaveFinder);
+		Button save = ie.button(addProductSaveButtonFinder);
 		assertTrue("Could not find the 'Save' button", save.exists());
-		Button saveInspect = ie.button(addProductSaveAndInspectFinder);
+		Button saveInspect = ie.button(addProductSaveAndInspectButtonFinder);
 		assertTrue("Could not find the 'Save And Inspect' button", saveInspect.exists());
-		Button savePrint = ie.button(addProductSaveAndPrintFinder);
+		Button savePrint = ie.button(addProductSaveAndPrintButtonFinder);
 		assertTrue("Could not find the 'Save And Print' button", savePrint.exists());
-		Button saveSchedule = ie.button(addProductSaveAndScheduleFinder);
+		Button saveSchedule = ie.button(addProductSaveAndScheduleButtonFinder);
 		assertTrue("Could not find the 'Save and Schedule' button", saveSchedule.exists());
 		
 		if(p.getSerialNumber() != null) {
@@ -697,13 +697,51 @@ public class Identify extends TestCase {
 
 		handleRequiredFieldsOnAddProduct(comments);
 
-		Button submit = ie.button(value(button));
-		assertNotNull(submit);
-		assertTrue("Could not find a button with the value '" + button +"'.", submit.exists());
-		submit.click();
 		misc.startMonitorStatus();	// turn the monitor back on
+	}
+	
+	public void addProductSave() throws Exception {
+		Button submit = ie.button(addProductSaveButtonFinder);
+		assertNotNull(submit);
+		assertTrue("Could not find 'Save' button.", submit.exists());
+		submit.click();
 		ie.waitUntilReady();
-
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	public void addProductSaveAndInspect() throws Exception {
+		Button submit = ie.button(addProductSaveAndInspectButtonFinder);
+		assertNotNull(submit);
+		assertTrue("Could not find 'Save and Inspect' button.", submit.exists());
+		submit.click();
+		ie.waitUntilReady();
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	public void addProductSaveAndPrint() throws Exception {
+		Button submit = ie.button(addProductSaveAndPrintButtonFinder);
+		assertNotNull(submit);
+		assertTrue("Could not find 'Save And Print' button.", submit.exists());
+		submit.click();
+		ie.waitUntilReady();
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	public void addProductSaveAndSchedule() throws Exception {
+		Button submit = ie.button(addProductSaveAndScheduleButtonFinder);
+		assertNotNull(submit);
+		assertTrue("Could not find 'Save And Schedule' button.", submit.exists());
+		submit.click();
+		ie.waitUntilReady();
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	public void addProductResetForm() throws Exception {
+		Button reset = ie.button(addProductResetFormButtonFinder);
+		assertNotNull(reset);
+		assertTrue("Could not find 'Reset Form' button.", reset.exists());
+		reset.click();
+		ie.waitUntilReady();
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 	
@@ -867,15 +905,15 @@ public class Identify extends TestCase {
 	}
 
 	private void checkButtons() throws Exception {
-		Button resetForm = ie.button(addProductResetFormFinder);
+		Button resetForm = ie.button(addProductResetFormButtonFinder);
 		assertTrue("Could not find the 'Reset Form' button", resetForm.exists());
-		Button save = ie.button(addProductSaveFinder);
+		Button save = ie.button(addProductSaveButtonFinder);
 		assertTrue("Could not find the 'Save' button", save.exists());
-		Button saveInspect = ie.button(addProductSaveAndInspectFinder);
+		Button saveInspect = ie.button(addProductSaveAndInspectButtonFinder);
 		assertTrue("Could not find the 'Save And Inspect' button", saveInspect.exists());
-		Button savePrint = ie.button(addProductSaveAndPrintFinder);
+		Button savePrint = ie.button(addProductSaveAndPrintButtonFinder);
 		assertTrue("Could not find the 'Save And Print' button", savePrint.exists());
-		Button saveSchedule = ie.button(addProductSaveAndScheduleFinder);
+		Button saveSchedule = ie.button(addProductSaveAndScheduleButtonFinder);
 		assertTrue("Could not find the 'Save and Schedule' button", saveSchedule.exists());
 	}
 
@@ -1054,11 +1092,10 @@ public class Identify extends TestCase {
 	public void validate(String orderNumber) throws Exception {
 		String today = misc.getDateString();
 		Product product = new Product(today);
-		int n;
-		String s;
 		gotoIdentify();
 		boolean integration = isIntegration();
 		if(integration) {
+			String s;
 			gotoIdentifyProducts();
 			gotoOrderNumber(orderNumber);
 			s = getOrderNumber();
@@ -1068,18 +1105,23 @@ public class Identify extends TestCase {
 			s = getOrderDescription();
 			s = getOrderDivision();
 			if(getNumberOfLineItems() > 0) {
+				int n;
 				s = getDescriptionOfLineItem(0);
+				assertNotNull(s);	// should return something
 				n = getQuantityOfLineItem(0);
+				assertTrue(n >= 0);	// shouldn't be negative
 				n = getNumberIdentifiedOfLineItem(0);
+				assertTrue(n >= 0);	// shouldn't be negative
 			}
 			gotoAddProductOnOrderNumber(0);
-			addProduct(product , true, "Save");
+			setProduct(product , true);
+			addProductSave();
 			gotoIdentify();
 			gotoAdd();
 		}
 
 		gotoAddProduct();
-		addProduct(product , true, "Save");
+		setProduct(product , true);
 		gotoAddMultipleAssets();
 		String quantity = "8";
 		misc.stopMonitorStatus();
@@ -1106,6 +1148,16 @@ public class Identify extends TestCase {
 		addMultipleAssetsSaveAndCreate();
 		misc.startMonitorStatus();
 		addMultipleAssetsCancel();	// takes you to the Home page WEB-1024
+	}
+	
+	public void gotoAddProductAttachFile() throws Exception {
+		misc.stopMonitorStatus();
+		Button attachFile = ie.button(attachFileButtonFinder);
+		assertTrue("Could not find the button to attach a file", attachFile.exists());
+		attachFile.click();
+		misc.waitForJavascript();
+		fail("not implemented");
+		misc.startMonitorStatus();
 	}
 
 	public void addMultipleAssetsSaveAndCreate() throws Exception {

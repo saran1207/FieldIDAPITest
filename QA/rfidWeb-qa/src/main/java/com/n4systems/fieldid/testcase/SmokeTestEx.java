@@ -1,30 +1,27 @@
 package com.n4systems.fieldid.testcase;
 
 import java.io.PrintStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import watij.runtime.ie.IE;
-import com.n4systems.fieldid.*;
-import com.n4systems.fieldid.admin.*;
 import com.n4systems.fieldid.datatypes.ButtonGroup;
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerUser;
+import com.n4systems.fieldid.datatypes.Inspection;
 import com.n4systems.fieldid.datatypes.InspectionForm;
 import com.n4systems.fieldid.datatypes.InspectionType;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.ProductType;
+import com.n4systems.fieldid.datatypes.ReportSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.Section;
 import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
 	String company = "illinois";
-	boolean jobs = false;			// end users do not have Jobs
 	String password = "makemore$";
+	boolean jobs = false;			// end users do not have Jobs
 	
 	// Smoke Test products
 	// Everything is static so it can be used across test cases 
@@ -130,7 +127,6 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	public void testSmokeTestSetup() throws Exception {
-		String method = getName();
 		loginN4Systems();
 		try {
 			createCustomerAndUsers();
@@ -138,10 +134,10 @@ public class SmokeTestEx extends FieldIDTestCase {
 			createProducts();
 			configureProducts();
 		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw err;
 		}
 	}
@@ -164,19 +160,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginAdminUser();
 		try {
-			assets.gotoAssets();
-			assets.expandProductSearchSelectColumns();
-			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-			c.setAllOn();
-			assets.setProductSearchColumns(c);
-			assets.gotoProductSearchResults();
-			List<String> customers = assets.getProductSearchResultsColumn("Customer Name");
-			Iterator<String> i = customers.iterator();
-			while(i.hasNext()) {
-				String cus = i.next();
-				assertEquals(customer.getCustomerName(), cus);
-			}
-			misc.myWindowCapture(timestamp + "/" + method + ".png");
+			helperAssetsSearch();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -186,10 +170,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		}
 	}
 	
-	public void testCreateAssetsSearch() throws Exception {
-		String method = getName();
-		loginCreateUser();
-		try {
+	private void helperAssetsSearch() throws Exception {
 			assets.gotoAssets();
 			assets.expandProductSearchSelectColumns();
 			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
@@ -202,7 +183,16 @@ public class SmokeTestEx extends FieldIDTestCase {
 				String cus = i.next();
 				assertEquals(customer.getCustomerName(), cus);
 			}
-			misc.myWindowCapture(timestamp + "/" + method + ".png");
+			assets.printAllManufacturerCertificates();
+			assets.exportToExcel();
+			assertFalse("Mass Update is available to end users", assets.isMassUpdate());
+	}
+	
+	public void testCreateAssetsSearch() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperAssetsSearch();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -216,19 +206,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginEditorUser();
 		try {
-			assets.gotoAssets();
-			assets.expandProductSearchSelectColumns();
-			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-			c.setAllOn();
-			assets.setProductSearchColumns(c);
-			assets.gotoProductSearchResults();
-			List<String> customers = assets.getProductSearchResultsColumn("Customer Name");
-			Iterator<String> i = customers.iterator();
-			while(i.hasNext()) {
-				String cus = i.next();
-				assertEquals(customer.getCustomerName(), cus);
-			}
-			misc.myWindowCapture(timestamp + "/" + method + ".png");
+			helperAssetsSearch();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -242,19 +220,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginBothUser();
 		try {
-			assets.gotoAssets();
-			assets.expandProductSearchSelectColumns();
-			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-			c.setAllOn();
-			assets.setProductSearchColumns(c);
-			assets.gotoProductSearchResults();
-			List<String> customers = assets.getProductSearchResultsColumn("Customer Name");
-			Iterator<String> i = customers.iterator();
-			while(i.hasNext()) {
-				String cus = i.next();
-				assertEquals(customer.getCustomerName(), cus);
-			}
-			misc.myWindowCapture(timestamp + "/" + method + ".png");
+			helperAssetsSearch();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -268,19 +234,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginNeitherUser();
 		try {
-			assets.gotoAssets();
-			assets.expandProductSearchSelectColumns();
-			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-			c.setAllOn();
-			assets.setProductSearchColumns(c);
-			assets.gotoProductSearchResults();
-			List<String> customers = assets.getProductSearchResultsColumn("Customer Name");
-			Iterator<String> i = customers.iterator();
-			while(i.hasNext()) {
-				String cus = i.next();
-				assertEquals(customer.getCustomerName(), cus);
-			}
-			misc.myWindowCapture(timestamp + "/" + method + ".png");
+			helperAssetsSearch();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -294,9 +248,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginAdminUser();
 		try {
-			home.gotoProductInformationViaSmartSearch(adminMasterProductSerialNumber);
-			assets.gotoEditProduct(adminMasterProductSerialNumber);
-			assets.checkEndUserEditProduct(false);
+			helperEditingAProduct(adminMasterProductSerialNumber, false);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -306,6 +258,69 @@ public class SmokeTestEx extends FieldIDTestCase {
 		}
 	}
 	
+	public void testCreateEditingAProduct() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperEditingAProduct(createMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorEditingAProduct() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			helperEditingAProduct(editorMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothEditingAProduct() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperEditingAProduct(bothMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherEditingAProduct() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			helperEditingAProduct(neitherMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperEditingAProduct(String serialNumber, boolean divisional) throws Exception {
+		home.gotoProductInformationViaSmartSearch(serialNumber);
+		assets.gotoEditProduct(serialNumber);
+		assets.checkEndUserEditProduct(divisional);
+		assets.saveCustomerProduct(serialNumber);
+	}
+
 	private void configureProducts() throws Exception {
 		home.gotoProductInformationViaSmartSearch(adminMasterProductSerialNumber);
 		assets.gotoProductConfiguration(adminMasterProductSerialNumber);
@@ -364,15 +379,14 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String today = misc.getDateString();
 		Product p = new Product(today);
 		
-		// Create a sub product for admin
 		p.setCustomer(customerName);
 		p.setDivision(division);
 		p.setReferenceNumber(userid + "-ref");
 		p.setPurchaseOrder(userid + "-po");
 		p.setLocation(userid + "-location");
 		p.setProductType(productType);
-		identify.addProduct(p, true, "Save");
-		misc.myWindowCapture(userid + "-" + p.getSerialNumber() + ".png");
+		identify.setProduct(p, true);
+		identify.addProductSave();
 		return p.getSerialNumber();
 	}
 
@@ -703,6 +717,91 @@ public class SmokeTestEx extends FieldIDTestCase {
 			mus.editCustomerUser(u);
 		}
 	}
+	
+	public void testAdminReportingSearch() throws Exception {
+		String method = getName();
+		loginAdminUser();
+		try {
+			helperReportingSearch();
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperReportingSearch() throws Exception {
+		reporting.gotoReporting();
+		reporting.expandReportSelectColumns();
+		ReportSearchSelectColumns r = new ReportSearchSelectColumns();
+		r.setAllOn();
+		reporting.setReportSelectColumns(r);
+		reporting.gotoReportSearchResults();
+		List<String> customers = reporting.getReportingSearchResultsColumn("Customer Name");
+		Iterator<String> i = customers.iterator();
+		while(i.hasNext()) {
+			String cus = i.next();
+			assertEquals(customer.getCustomerName(), cus);
+		}
+		reporting.printThisReport();
+		reporting.printAllPDFReports();
+		reporting.printAllObservationReports();
+		reporting.exportToExcel();
+		reporting.gotoMassUpdate();
+		reporting.checkEndUserMassUpdate();
+		Inspection inspection = new Inspection();
+		inspection.setCustomer(customer.getCustomerName());
+		inspection.setLocation("massupdate");
+		inspection.setPrintable(true);
+		reporting.setMassUpdate(inspection);
+		reporting.gotoSaveMassUpdate();
+//		reporting.gotoSummaryReport();
+		//		mass update (inspection book, location, printable; admin can update division)
+		//		summary report
+	}
+	
+	// test Schedule
+	//		everyone can see schedules in their division only
+	//		admin can see all schedules for current company
+	//		export to excel
+	//		mass update (next inspection date)
+	//		inspect now
+
+	// test inspecting a product
+	//		admin inspects admin product
+	//		create inspects create product
+	//		both inspects both product
+	//		editor should not be able to inspect
+	//		neither should not be able to inspect
+	//		admin inspects editor product
+	//		admin inspects neither product
+	
+	// test editing an inspection
+	//		should be able to edit location, inspector, inspection date, event is schedule for, inspection book, result, comments, printable
+	//		admin edits admin inspection
+	//		create cannot edit inspections
+	//		both edits both inspection
+	//		editor edits editor inspection
+	//		neither cannot edit inspections
+	
+	// test editing a master inspection
+	//		should be able to edit location, inspector, inspection date, event is schedule for, inspection book, result, comments, printable
+	//		admin edits admin inspection
+	//		create cannot edit inspections
+	//		both edits both inspection
+	//		editor edits editor inspection
+	//		neither cannot edit inspections
+
+	// test adding a schedule for master products
+	//		admin adds a schedule to admin product
+	//		create adds a schedule to create product
+	//		both adds a schedule to both product
+	//		editor cannot add a schedule
+	//		neither cannot add a schedule
+	//		admin adds a schedule to editor product
+	//		admin adds a schedule to neither product
 
 	protected void tearDown() throws Exception {
 		super.tearDown();

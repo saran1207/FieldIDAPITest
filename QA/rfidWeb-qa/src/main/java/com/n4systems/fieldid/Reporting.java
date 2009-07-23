@@ -1,15 +1,19 @@
 package com.n4systems.fieldid;
 
 import static watij.finders.FinderFactory.*;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
+import com.n4systems.fieldid.datatypes.Inspection;
 import com.n4systems.fieldid.datatypes.ReportSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.ReportingSearchCriteria;
 import watij.elements.*;
@@ -95,6 +99,14 @@ public class Reporting extends TestCase {
 	Finder runSavedReportLinksFinder;
 	Finder reportResultsStartNewReportFinder;
 	Finder reportResultsUpdateReportCancelButtonFinder;
+	private Finder reportingMassUpdateLinkFinder;
+	private Finder reportingMassUpdateContentHeaderFinder;
+	private Finder reportingMassUpdateCustomerNameFinder;
+	private Finder reportingMassUpdateDivisionFinder;
+	private Finder reportingMassUpdateInspectionBookFinder;
+	private Finder reportingMassUpdateLocationFinder;
+	private Finder reportingMassUpdatePrintableFinder;
+	private Finder reportingMassUpdateSaveButtonFinder;
 	
 	public Reporting(IE ie) {
 		this.ie = ie;
@@ -174,6 +186,14 @@ public class Reporting extends TestCase {
 			runSavedReportLinksFinder = xpath(p.getProperty("savedreportsrunlinks"));
 			reportResultsStartNewReportFinder = xpath(p.getProperty("reportresultsstartnewreport"));
 			reportResultsUpdateReportCancelButtonFinder = xpath(p.getProperty("reportresultsupdatereportcancelbutton"));
+			reportingMassUpdateLinkFinder = xpath(p.getProperty("massupdatelink"));
+			reportingMassUpdateContentHeaderFinder = xpath(p.getProperty("massupdatepageheader"));
+			reportingMassUpdateCustomerNameFinder = xpath(p.getProperty("massupdatecustomer"));
+			reportingMassUpdateDivisionFinder = xpath(p.getProperty("massupdatedivision"));
+			reportingMassUpdateInspectionBookFinder = xpath(p.getProperty("massupdateinspectionbook"));
+			reportingMassUpdateLocationFinder = xpath(p.getProperty("massupdatelocation"));
+			reportingMassUpdatePrintableFinder = xpath(p.getProperty("massupdateprintable"));
+			reportingMassUpdateSaveButtonFinder = xpath(p.getProperty("massupdatesavebutton"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -999,5 +1019,81 @@ public class Reporting extends TestCase {
 		cancel.click();
 		checkReportingSearchResultsForPage();
 		misc.checkForErrorMessagesOnCurrentPage();
+	}
+
+	public List<String> getReportingSearchResultsColumn(String s) throws Exception {
+		List<String> results = new ArrayList<String>();
+		Link next;
+		boolean more;
+		do {
+			next = ie.link(text("Next>"));
+			more = next.exists(); 
+			results.addAll(getReportingSearchResultsColumnCurrentPage(s));
+			if(more) {
+				next.click();
+			}
+		} while(more);
+		
+		return results;
+	}
+
+	private List<String> getReportingSearchResultsColumnCurrentPage(String s) throws Exception {
+		List<String> results = new ArrayList<String>();
+		TableCells ths = ie.cells(xpath("//TABLE[@id='resultsTable']/TBODY/TR[1]/TH"));
+		int index = 0;
+		for(index = 0; index < ths.length(); index++) {
+			TableCell th = ths.get(index);
+			if(th.text().contains(s)) {
+				break;
+			}
+		}
+		assertFalse("Scanned all the column headers and did not find '" + s + "'", index == ths.length());
+		TableCells tds = ie.cells(xpath("//TABLE[@id='resultsTable']/TBODY/TR/TD[" + (index+1) + "]"));
+		Iterator<TableCell> i = tds.iterator();
+		while(i.hasNext()) {
+			TableCell td = i.next();
+			String v = td.text().trim();
+			results.add(v);
+		}
+		return results;
+	}
+
+	public void gotoMassUpdate() throws Exception {
+		Link mass = ie.link(reportingMassUpdateLinkFinder);
+		assertTrue("Could not find the link to Mass Update", mass.exists());
+		mass.click();
+		checkMassUpdatePageContentHeader();
+	}
+
+	private void checkMassUpdatePageContentHeader() throws Exception {
+		HtmlElement reportingMassUpdateContentHeader = ie.htmlElement(reportingMassUpdateContentHeaderFinder);
+		assertTrue("Could not find Report Mass Update page content header", reportingMassUpdateContentHeader.exists());
+	}
+
+	public void checkEndUserMassUpdate() throws Exception {
+		SelectList customer = ie.selectList(reportingMassUpdateCustomerNameFinder);
+		assertTrue("Could not find the Customer Name", customer.exists());
+		SelectList division = ie.selectList(reportingMassUpdateDivisionFinder);
+		assertTrue("Could not find the Division", division.exists());
+		SelectList book = ie.selectList(reportingMassUpdateInspectionBookFinder);
+		assertTrue("Could not find the Inspection Book", book.exists());
+		TextField location = ie.textField(reportingMassUpdateLocationFinder);
+		assertTrue("Could not find the Location field", location.exists());
+		Checkbox printable = ie.checkbox(reportingMassUpdatePrintableFinder);
+		assertTrue("Could not find the Printable checkbox", printable.exists());
+	}
+
+	public void setMassUpdate(Inspection i) {
+		assertNotNull(i);
+		fail("Not implemented");
+	}
+
+	public void gotoSaveMassUpdate() throws Exception {
+		Button save = ie.button(reportingMassUpdateSaveButtonFinder);
+		assertTrue("Could not find the Save button", save.exists());
+		misc.createThreadToCloseAreYouSureDialog();
+		save.click();
+		misc.checkForErrorMessagesOnCurrentPage();
+		checkReportingSearchResultsPage();
 	}
 }

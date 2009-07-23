@@ -137,6 +137,8 @@ public class Assets extends TestCase {
 	private Finder editProductCommentTemplatesFinder;
 	private Finder editProductGenerateLinkFinder;
 	private Finder customerInformationEditFormTextFieldFinder;
+	private Finder editCustomerProductSaveButtonFinder;
+	private Finder editEmployeeProductSaveButtonFinder;
 	
 	public Assets(IE ie) {
 		this.ie = ie;
@@ -254,6 +256,8 @@ public class Assets extends TestCase {
 			editProductCommentTemplatesFinder = xpath(p.getProperty("editproductcommenttemplates"));
 			editProductGenerateLinkFinder = xpath(p.getProperty("editproductgeneratelink"));
 			customerInformationEditFormTextFieldFinder = xpath(p.getProperty("editproductformtextfields"));
+			editCustomerProductSaveButtonFinder = xpath(p.getProperty("editcustomerproductsavebutton"));
+			editEmployeeProductSaveButtonFinder = xpath(p.getProperty("editemployeeproductsavebutton"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -1300,6 +1304,49 @@ public class Assets extends TestCase {
 		return results;
 	}
 	
+	public void editCustomerProduct(Product p) throws Exception {
+		TextField reference = ie.textField(editProductReferenceNumberFinder);
+		assertTrue("Could not find the Reference number text field", reference.exists());
+		SelectList division = ie.selectList(editProductDivisionFinder);
+		assertTrue("Could not find the division select list", division.exists());
+		TextField location = ie.textField(editProductLocationFinder);
+		assertTrue("Could not find the Location text field", location.exists());
+		TextField po = ie.textField(editProductPurchaseOrderFinder);
+		assertTrue("Could not find the Purchase Order text field", po.exists());
+
+		if(p.getDivision() != null) {
+			Option o = division.option(text(p.getDivision()));
+			assertTrue("Could not find the division '" + p.getDivision() + "'", o.exists());
+			o.select();
+		}
+		
+		if(p.getLocation() != null) {
+			location.set(p.getLocation());
+		}
+		
+		if(p.getReferenceNumber() != null) {
+			reference.set(p.getReferenceNumber());
+		}
+		
+		if(p.getPurchaseOrder() != null) {
+			po.set(p.getPurchaseOrder());
+		}
+	}
+	
+	public void saveCustomerProduct(String serialNumber) throws Exception {
+		Button save = ie.button(editCustomerProductSaveButtonFinder);
+		assertTrue("Could not find the Save button", save.exists());
+		save.click();
+		checkProductInformationPageContentHeader(serialNumber);
+	}
+	
+	public void saveEmployeeProduct(String serialNumber) throws Exception {
+		Button save = ie.button(editEmployeeProductSaveButtonFinder);
+		assertTrue("Could not find the Save button", save.exists());
+		save.click();
+		checkProductInformationPageContentHeader(serialNumber);
+	}
+	
 	public void editEmployeeProduct(Product p) throws Exception {
 		Link generate = ie.link(editProductGenerateLinkFinder);
 		assertTrue("Could not find the link to generate serial numbers", generate.exists());
@@ -1527,6 +1574,11 @@ public class Assets extends TestCase {
 			results.add(o.text().trim());
 		}
 		return results;
+	}
+
+	public boolean isMassUpdate() throws Exception {
+		Link massUpdate = ie.link(massUpdateLinkFinder);
+		return massUpdate.exists();
 	}
 	
 	/*
