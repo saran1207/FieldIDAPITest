@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.services.Initializer;
 import com.n4systems.services.SetupDataLastModUpdateServiceInitializer;
+import com.n4systems.services.TenantLimitServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
 
 public class ApplicationBootstrap extends HttpServlet {
@@ -15,7 +16,8 @@ public class ApplicationBootstrap extends HttpServlet {
 	/** Array of startup services. Will be initialized in order.*/
 	private static final Initializer[] initializers = { 
 		new TaskSchedulerBootstraper(), 
-		new SetupDataLastModUpdateServiceInitializer() 
+		new SetupDataLastModUpdateServiceInitializer(),
+		new TenantLimitServiceInitializer()
 	}; 
 	
 	private static Logger logger = Logger.getLogger(ApplicationBootstrap.class);

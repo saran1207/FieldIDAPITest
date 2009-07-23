@@ -2,6 +2,7 @@ package com.n4systems.taskscheduling.task;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -15,8 +16,7 @@ import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.taskscheduling.ScheduledTask;
-import com.n4systems.usage.DiskUsageCalculator;
-import com.n4systems.usage.TenantDiskUsageSummary;
+import com.n4systems.usage.TenantDiskUsageCalculator;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -32,16 +32,13 @@ public class DiskUsageTask extends ScheduledTask {
 
 	@Override
 	protected void runTask(TaskConfig config) throws Exception {
-		List<TenantOrganization> tenants = getTenants();
-		List<TenantDiskUsageSummary> summaries = calculateUsage(tenants);
+		List<TenantDiskUsageCalculator> summaries = new ArrayList<TenantDiskUsageCalculator>();
+		
+		for (TenantOrganization tenant: getTenants()) {
+			summaries.add(new TenantDiskUsageCalculator(tenant));
+		}
 		
 		emailSummary(summaries);
-	}
-
-	private List<TenantDiskUsageSummary> calculateUsage(List<TenantOrganization> tenants) {
-		DiskUsageCalculator calculator = new DiskUsageCalculator(tenants);
-		return calculator.calculateUsages();
-
 	}
 
 	private List<TenantOrganization> getTenants() {
@@ -50,18 +47,18 @@ public class DiskUsageTask extends ScheduledTask {
 		return tenants;
 	}
 
-	private File createSummaryFileOutput(List<TenantDiskUsageSummary> summaries) throws IOException {
+	private File createSummaryFileOutput(List<TenantDiskUsageCalculator> summaries) throws IOException {
 		String csv = createCsvContent(summaries);
 		return saveFile(csv); 
 	}
 
-	private String createCsvContent(List<TenantDiskUsageSummary> summaries) {
+	private String createCsvContent(List<TenantDiskUsageCalculator> summaries) {
 		String csv = "Tenant, tenant file size, tenant file count, Inspection Attachment file size,	Inspection Attachment file count," +
 						"Inspection Chart Image file size, Inspection Chart Image file count, Inspection Prooftest File file size, Inspection Prooftest File file count," + 
 						"Product Attachment file size, Product Attachment file count, Product Type Image file size,	Product Type Image file count," +
 						"Product Type Attachment file size, Product Type Attachment file count, Job Note file size, Job Note file count, User file size," +
 						"User file count\n";
-		for (TenantDiskUsageSummary summary : summaries) {
+		for (TenantDiskUsageCalculator summary : summaries) {
 			csv += summary.getTenant().getName() + ",";
 			csv += summary.totalSpaceUsed() + ",";
 			csv += summary.totalFiles() + ",";
@@ -92,7 +89,7 @@ public class DiskUsageTask extends ScheduledTask {
 		return tmp;
 	}
 
-	private void emailSummary(List<TenantDiskUsageSummary> summaries) {
+	private void emailSummary(List<TenantDiskUsageCalculator> summaries) {
 		MailMessage message = createMessage(summaries);
 		
 		try {
@@ -102,7 +99,7 @@ public class DiskUsageTask extends ScheduledTask {
 		}
 	}
 
-	private MailMessage createMessage(List<TenantDiskUsageSummary> summaries) {
+	private MailMessage createMessage(List<TenantDiskUsageCalculator> summaries) {
 		
 		String subject = "Disk Usage for " + DateHelper.date2String("yyyy-MM-dd", new Date());
 		String body = "<h1>Disk Usage Attached</h1>";

@@ -32,6 +32,7 @@ public class UserListableLoader extends ListableLoader {
 		 */
 		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(UserBean.class, filter.newFilter().setTargets("tenant.id"));
 		builder.setSelectArgument(new ListableSelect("uniqueID", "CONCAT(firstName, ' ', lastName)"));
+		builder.addSimpleWhere("system", false);
 		builder.addOrder("firstName", "lastName");
 		
 		if (activeOnly) {

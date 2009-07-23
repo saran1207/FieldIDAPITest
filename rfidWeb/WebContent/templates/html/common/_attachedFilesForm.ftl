@@ -50,6 +50,13 @@
 		</#if>
 	</#list>
 </div>
+
+<#if limits.diskSpaceMaxed>
+<div class="limitWarning">
+	<@s.text name="warning.disk_space_maxed"/>
+</div>
+<#else>
 <p>
 	<button onclick="addUploadFile('${uploadFileType!}'); return false;" ><@s.text name="label.attachfile"/></button>
 </p>
+</#if>

@@ -26,6 +26,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.model.TenantOrganization;
@@ -55,6 +56,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	private Collection<FindProductOptionManufactureBean> searchOptions;
 	private LoaderFactory loaderFactory;
 	private JSONSerializer json;
+	private TenantLimitProxy limitProxy;
 	
 	protected final PersistenceManager persistenceManager;
 	
@@ -399,5 +401,12 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	public String getEmbeddedLoginUrl() {
 		return getBaseBrandedUrl() + "embedded/login.action";
+	}
+	
+	public TenantLimitProxy getLimits() {
+		if (limitProxy == null) { 
+			limitProxy = new TenantLimitProxy(getTenantId());
+		}
+		return limitProxy;
 	}
 }

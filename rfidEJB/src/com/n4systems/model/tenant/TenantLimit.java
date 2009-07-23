@@ -8,6 +8,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TenantLimit implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static Long UNLIMITED = -1L;
 	
 	@Column(name="diskspace_limit", nullable = false)
 	private Long diskSpace = 0L;
@@ -20,9 +21,17 @@ public class TenantLimit implements Serializable {
 	public Long getDiskSpace() {
 		return diskSpace;
 	}
+	
+	public boolean isDiskSpaceUnlimited() {
+		return (getDiskSpace() == UNLIMITED);
+	}
 
 	public void setDiskSpace(Long diskSpace) {
 		this.diskSpace = diskSpace;
+	}
+	
+	public void setDiskSpaceUnlimited() {
+		setDiskSpace(UNLIMITED);
 	}
 
 	public Long getUsers() {
@@ -33,4 +42,11 @@ public class TenantLimit implements Serializable {
 		this.users = users;
 	}
 	
+	public boolean isUsersUnlimited() {
+		return (getUsers() == UNLIMITED);
+	}
+	
+	public void setUsersUnlimited() {
+		setUsers(UNLIMITED);
+	}
 }
