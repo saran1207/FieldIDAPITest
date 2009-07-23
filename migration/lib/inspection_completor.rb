@@ -17,10 +17,12 @@ class InspectionCompletor
   end
   
   def complete_all_inspection_of_type(inspectionType) 
-    AbstractInspection.find(:all, :conditions => { :type_id => inspectionType.id }, :order => :id).each do |inspection|
-      fill_out inspection, inspectionType
-      puts inspection.id.to_s
-      inspection.save
+    AbstractInspection.find_in_batches(:conditions => { :type_id => inspectionType.id }) do |inspections|
+      inspections.each do |inspection|
+        fill_out inspection, inspectionType
+        puts inspection.id.to_s
+        inspection.save
+      end
     end
   end
   
@@ -31,9 +33,10 @@ class InspectionCompletor
         criteria_list.concat(section.criterias)
       end
        
-      missing_criteria = criteria_list.select do |criteria| 
+      missing_criteria = criteria_list.select do |criteria|
         found_results = inspection.results.select do |item|
-          item.criteria_id == criteria.id
+          
+          item.criteria_id == criteria.id.to_i
         end
         found_results.empty?
       end
@@ -49,10 +52,9 @@ class InspectionCompletor
         filled_in_result.inspection_id = inspection.id
         filled_in_result.created = Time.new
         filled_in_result.modified = Time.new
+        puts criteria.displaytext
         inspection.results << filled_in_result
       end
-      
-      
       
     end
   end
