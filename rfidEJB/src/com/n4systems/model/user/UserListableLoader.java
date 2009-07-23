@@ -42,6 +42,7 @@ public class UserListableLoader extends ListableLoader {
 			builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "r_EndUser"));
 		}
 		
+		
 		if (noDeleted) {
 			builder.addSimpleWhere("deleted", false);
 		}

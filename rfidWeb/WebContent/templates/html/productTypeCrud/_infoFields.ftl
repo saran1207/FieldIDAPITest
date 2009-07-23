@@ -113,7 +113,7 @@
 	
 	arrayIndexOptions = ${editInfoOptions.size() };
 	arrayIndex = ${infoFields.size()} ;
-	addEvent( window, 'load', prepInterface );
+	Element.extend(document).observer('dom:loaded', prepInterface );
 	createLineItemSortables();
 	setupRemoved();
 	

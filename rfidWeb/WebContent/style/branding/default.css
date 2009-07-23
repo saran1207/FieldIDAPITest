@@ -28,3 +28,8 @@ body {
 	border: 2px solid #79c5e5;
 	background: url(../../images/barBackground.png) repeat-x;
 }
+
+.actions {
+	border-color: #D0DAFA;
+}
+	

@@ -6,6 +6,7 @@ import com.n4systems.model.customer.CustomerFilteredLoader;
 import com.n4systems.model.customer.CustomerListableLoader;
 import com.n4systems.model.division.DivisionFilteredLoader;
 import com.n4systems.model.division.DivisionListableLoader;
+import com.n4systems.model.division.DivisionUniqueNameUsedLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
@@ -50,7 +51,6 @@ public class LoaderFactory {
 	public AutoAttributeCriteriaByProductTypeIdLoader createAutoAttributeCriteriaByProductTypeIdLoader() {
 		return new AutoAttributeCriteriaByProductTypeIdLoader(pm, filter);
 	}
-	
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
 		return new CommentTemplateListableLoader(pm, filter);
 	}
@@ -73,6 +73,10 @@ public class LoaderFactory {
 	
 	public DivisionListableLoader createDivisionListableLoader() {
 		return new DivisionListableLoader(pm, filter);
+	}
+	
+	public DivisionUniqueNameUsedLoader createDivisionUniqueNameUsedLoader() {
+		return new DivisionUniqueNameUsedLoader(pm, filter);
 	}
 	
 	public InspectionScheduleCountListLoader createInspectionScheduleCountListLoader() {

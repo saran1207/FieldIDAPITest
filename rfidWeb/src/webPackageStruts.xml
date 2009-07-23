@@ -574,7 +574,7 @@
 
 		</action>
 
-		<action name="addCustomerUser" method="edit" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+		<action name="addCustomerUser" method="edit" class="com.n4systems.fieldid.actions.AnyCustomerUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="error" type="redirect-action">
@@ -587,7 +587,7 @@
 
 		</action>
 
-		<action name="addCustomerSave" method="save" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+		<action name="addCustomerSave" method="save" class="com.n4systems.fieldid.actions.AnyCustomerUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="error" type="redirect-action">
 				<param name="actionName">userList</param>
@@ -1722,6 +1722,110 @@
 			<result name="error" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="success" type="redirectAction">home</result>
 		</action>
+		
+		<action name="divisions" method="list" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="success" type="freemarker">/templates/html/division/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/division/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/division/list.ftl</result>
+		</action>
 
+		<action name="divisionAdd" method="add" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="success" type="freemarker">/templates/html/division/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/division/add.ftl</result>
+		</action>
+
+		<action name="divisionCreate" method="create"	class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="input" type="freemarker">/templates/html/division/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/division/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+		
+		<action name="divisionEdit" method="edit" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="success" type="freemarker">/templates/html/division/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/division/edit.ftl</result>
+		</action>
+
+		<action name="divisionUpdate" method="update" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="input" type="freemarker">/templates/html/division/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/division/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+		
+
+		<action name="divisionDelete" method="delete" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="input" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+
+		<action name="customerUsers" method="list" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="success" type="freemarker">/templates/html/customerUser/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customerUser/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerUser/list.ftl</result>
+		</action>
+
+		<action name="customerUser" method="show" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="success" type="freemarker">/templates/html/customerUser/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerUser/show.ftl</result>
+		</action>
+
+		<action name="customerUserAdd" method="add" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="success" type="freemarker">/templates/html/customerUser/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerUser/add.ftl</result>
+		</action>
+
+		<action name="customerUserCreate" method="create"	class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="input" type="freemarker">/templates/html/customerUser/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customerUser/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">customerUsers</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+		
+		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="success" type="freemarker">/templates/html/customerUser/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerUser/edit.ftl</result>
+		</action>
+
+		<action name="customerUserUpdate" method="update" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="input" type="freemarker">/templates/html/customerUser/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customerUser/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">customerUsers</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+		
+
+		<action name="customerUserDelete" method="delete" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+			<result name="input" type="redirectAction">
+				<param name="actionName">customerUsers</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">customerUsers</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">customerUsers</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
 	</package>
 </struts>

@@ -7,7 +7,7 @@
 		<p class="titleSummary"><@s.text name="label.request_account"/></p>
 	</div>
 	
-	<@s.form action="registerUserCreate" cssClass="fullForm multiColumn" theme="fieldid" >
+	<@s.form action="registerUserCreate" cssClass="fullForm" theme="fieldid" >
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<div class="multiColumn">
 			<div class="infoBlock">

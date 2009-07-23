@@ -1,11 +1,9 @@
-<title>
 	<#if uniqueID?exists >
 		${action.setPageType('user', 'edit')!}
 	<#else>
 		${action.setPageType('user', 'addcustomer')!}
 	</#if>
 	
-</title>
 
 <#assign userSaveAction='addCustomerSave' >
 <#assign backToList>

@@ -29,9 +29,9 @@
 	<#if customer?exists || customerRequired?exists >
 		<div class="formRowHolder">
 			<#if customerOnlyAdd?exists >
-				<@s.hidden name="customer" />
+				<@s.hidden name="customerId" />
 			<#else>
-				<@s.select key="label.customer" id="customer" name="customer" list="customers" listKey="id" listValue="name" labelposition="left" onchange="customerChanged( this )" />
+				<@s.select key="label.customer" id="customer" name="customerId" list="customers" listKey="id" listValue="name" labelposition="left" onchange="customerChanged( this )" />
 			</#if>
 			<@s.select key="label.division" id="division" name="division" list="divisions" listKey="id" listValue="name" labelposition="left" emptyOption="true"/>
 		</div>

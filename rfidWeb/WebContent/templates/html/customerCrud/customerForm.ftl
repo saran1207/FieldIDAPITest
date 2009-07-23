@@ -53,6 +53,3 @@
 		<@s.submit key="hbutton.save" />
 	</div>
 </@s.form>
-<#if uniqueID?exists  >
-	<#include "_lists.ftl" />
-</#if>

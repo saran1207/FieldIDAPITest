@@ -38,11 +38,7 @@ ${action.setPageType('customer','show')!}
 		<span class="label" ><@s.text name="label.fax"/>:</span><span class="field">${addressInfo.fax1!}</span>
 	</div>
 
-	<div class="formAction" >
-		<a href="<@s.url action="customerList" currentPage="${currentPage!}" />" ><@s.text name="label.backtocustomerlist"/></a> | <a href="<@s.url action="customerEdit" uniqueID="${uniqueID}" />" ><@s.text name="label.edit" /></a>	 
-	</div>
-	
 	
 </div>
 
-<#include "_lists.ftl" />
+

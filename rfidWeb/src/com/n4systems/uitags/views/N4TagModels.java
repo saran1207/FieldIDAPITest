@@ -27,5 +27,17 @@ public class N4TagModels {
 
          return this.percentBar;
     }
+    
+    public void getIncludeJs() {
+    	
+    }
+    
+    public void getIncludeStyle() {
+    	
+    }
+    
+    public void getIncludeVendorJs() {
+    	
+    }
 
 }

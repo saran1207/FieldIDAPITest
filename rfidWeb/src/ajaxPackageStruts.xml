@@ -17,11 +17,7 @@
 			<result name="tenant_missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 		</global-results>
 
-		<action name="divisionChange" method="add" class="com.n4systems.fieldid.actions.DivisionCrud">
-			<result name="success" type="freemarker">/templates/ajax/division/result.ftl</result>
-			<result name="input" type="freemarker">/templates/ajax/division/result.ftl</result>
-		</action>
-
+	
 		<action name="divisionList" method="list"
 			class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="success" type="freemarker">/templates/ajax/division/list.ftl</result>

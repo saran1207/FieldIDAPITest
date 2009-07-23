@@ -15,7 +15,6 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
@@ -171,10 +170,6 @@ public class CustomerCrud extends AbstractCrud {
 
 	public void setAddressInfo(AddressInfo addressInfo) {
 		customer.setAddressInfo(addressInfo);
-	}
-
-	public List<Division> getDivisions() {
-		return customerManager.findDivisions(customer, getSecurityFilter());
 	}
 
 	public String getListFilter() {

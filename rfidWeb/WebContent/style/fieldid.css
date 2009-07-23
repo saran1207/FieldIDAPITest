@@ -52,11 +52,15 @@ h1 {
 	font-size: 1.5em;
 }
 
-h2 {
+h2, h2.oldHeader {
 	font-size: 1.2em;
 	padding: 5px 15px;
 	line-height: 21px;
 	
+}
+
+h2.clean {
+	padding: 0;
 }
 
 h2 a {

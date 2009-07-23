@@ -20,7 +20,7 @@ function updateDivisionList( list ) {
 	divisionList.options[0] = blankOption;
 	if( list != null ) {
 		for( var i = 0; i < list.length; i++ ) {
-			divisionList.options[i+1] = new Option( list[i].name, list[i].id );
+			divisionList.options[i+1] = new Option( list[i].displayName, list[i].id );
 		}
 	}
 }

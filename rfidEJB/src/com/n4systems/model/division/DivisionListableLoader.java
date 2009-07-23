@@ -29,8 +29,9 @@ public class DivisionListableLoader extends ListableLoader {
 		return builder;
 	}
 
-	public void setCustomerId(Long customerId) {
+	public DivisionListableLoader setCustomerId(Long customerId) {
 		this.customerId = customerId;
+		return this;
 	}
 
 

@@ -14,8 +14,6 @@
 <link rel="shortcut icon" href="<@s.url value="/images/favicon.ico" />" type="image/x-icon" />		
 
 
-<script type="text/javascript" src="<@s.url value="/javascript/imageReplacement.js" />"></script>
-<script type="text/javascript" src="<@s.url value="/javascript/addEvent.js" />"></script>
 <script type="text/javascript" src="<@s.url value="/javascript/prototype.js" />"> </script>
 <script type="text/javascript" src="<@s.url value="/javascript/scriptaculous.js" />"> </script>
 <script type="text/javascript" src="<@s.url value="/javascript/json2.js" />"> </script>

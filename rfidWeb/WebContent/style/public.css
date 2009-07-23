@@ -37,8 +37,6 @@ a, a:hover, a:visited, a:active {
 #mainContent {
 	width: 564px;
 	float:left;
-	padding:15px;
-	min-height:160px;
 }
 
 #secondaryContent {

@@ -758,6 +758,19 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		if (division != null) {
 			params.put("division", division.getName());
+			params.put("divisionID", division.getDivisionID());
+			params.put("divisionContactName", division.getContact().getName());
+			params.put("divisionContactEmail", division.getContact().getEmail());
+			AddressInfo addressInfo = division.getAddressInfo();
+			if (addressInfo != null) {
+				params.put("divisionAddress", addressInfo.getStreetAddress());
+				params.put("divisionCity", addressInfo.getCity());
+				params.put("divisionState", addressInfo.getState());
+				params.put("divisionPostalCode", addressInfo.getZip());
+				params.put("divisionPhoneNumber", addressInfo.getPhone1());
+				params.put("divisionPhoneNumber2", addressInfo.getPhone2());
+				params.put("divisionFaxNumber", addressInfo.getFax1());
+			}
 		}
 	}
 

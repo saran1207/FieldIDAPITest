@@ -277,11 +277,11 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return ERROR;
 	}
 	
-	public Long getCustomer() {
+	public Long getCustomerId() {
 		return user.getR_EndUser();
 	}
 	
-	public void setCustomer( Long customer ) {
+	public void setCustomerId( Long customer ) {
 		user.setR_EndUser( customer );
 	}
 
@@ -323,8 +323,8 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public Collection<ListingPair> getDivisions() {
 		if( divisions == null ) {
 			divisions = new ArrayList<ListingPair>();
-			if( getCustomer() != null ) {
-				divisions = customerManager.findDivisionsLP(getCustomer(), getSecurityFilter());
+			if( getCustomerId() != null ) {
+				divisions = customerManager.findDivisionsLP(getCustomerId(), getSecurityFilter());
 			}
 		}
 		return divisions;

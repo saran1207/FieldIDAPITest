@@ -25,6 +25,8 @@ public class Division extends EntityWithTenant implements NamedEntity, Listable<
 	
 	private String name;
 	
+	private String divisionID;
+	
 	@Embedded
 	@AttributeOverrides({ 
 		@AttributeOverride(name="name", column = @Column(name="contactname")),
@@ -105,6 +107,16 @@ public class Division extends EntityWithTenant implements NamedEntity, Listable<
 
 	public void setContact(Contact contact) {
 		this.contact = contact;
+	}
+
+
+	public String getDivisionID() {
+		return divisionID;
+	}
+
+
+	public void setDivisionID(String divisionID) {
+		this.divisionID = divisionID;
 	}
 	
 }

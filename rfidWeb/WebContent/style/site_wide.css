@@ -12,6 +12,11 @@ dt {
 }
 
 
+#mainContent {
+	padding:15px;
+	min-height:160px;
+}
+
 
 .secondaryNav {
 	overflow: hidden;
@@ -46,7 +51,9 @@ dt {
 }
 
 
-
+.actions {
+	margin-top: 5px;
+}
 .minForm input, .minForm button  {
 	font-size: 1.2em;
 	padding:5px 0;
@@ -124,9 +131,13 @@ dt {
 }
 .multiColumn .infoBlock {
 	float:left;
-	margin-right: 15px;
+	margin-right: 25px;
 }
 
 .percentBarUsed, .percentBar {
 	height:18px;
+}
+
+.actions {
+	border-top: 1px solid;
 }
