@@ -1,4 +1,4 @@
-<title><@s.text name="title.massupdateproducts" /></title>
+<title><@s.text name="title.massupdateinspections" /></title>
 <head>
 	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" includeParams="none" />"></script>
 	<script type="text/javascript">
