@@ -46,6 +46,7 @@ import freemarker.template.utility.StringUtil;
 abstract public class AbstractAction extends ActionSupport implements ServletResponseAware, ServletRequestAware {
 	public static final String MISSING = "missing";
 	public static final String INVALID_SECURITY = "invalid_security";
+	public static final String REDIRECT_TO_URL = "redirect_to_url";
 	
 	@SuppressWarnings("unchecked")
 	private Map session;
@@ -63,6 +64,8 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	private UserBean user = null;
 	
 	private NavOptionsController navOptions;
+	
+	private String redirectUrl;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -181,14 +184,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return ( searchContainer != null && searchContainer.getSearchId() != null );
 	}
 	
-	public URI getBaseURI() {
-		// creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
-		return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
-	}
 	
-	public URI createActionURI(String action) {
-		return getBaseURI().resolve(action);
-	}
 	
 	
 	public void addFlashMessage( String message ) {
@@ -390,17 +386,31 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	
 	public String getBaseBrandedUrl() {
+		return baseBrandedUrlFor(getTenant().getName()) + "fieldid/" ;
+	}
+
+	public String baseBrandedUrlFor(String tenantName) {
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
-		String newHostname = hostParser.replaceFirstSubDomain(getTenant().getName());
+		String newHostname = hostParser.replaceFirstSubDomain(tenantName);
 		
-		return "https://" + newHostname + "/fieldid/" ;
+		return "https://" + newHostname + "/";
 	}
 	
 	public String getLoginUrl() {
 		return getBaseBrandedUrl() + "login.action" ;
 	}
+	
 	public String getEmbeddedLoginUrl() {
 		return getBaseBrandedUrl() + "embedded/login.action";
+	}
+	
+	public URI getBaseURI() {
+		// creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
+		return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
+	}
+	
+	public URI createActionURI(String action) {
+		return getBaseURI().resolve(action);
 	}
 	
 	public TenantLimitProxy getLimits() {
@@ -408,5 +418,13 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 			limitProxy = new TenantLimitProxy(getTenantId());
 		}
 		return limitProxy;
+	}
+
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+
+	public void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
 	}
 }

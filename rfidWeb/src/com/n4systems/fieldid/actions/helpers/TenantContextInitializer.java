@@ -19,9 +19,6 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.HostNameParser;
 
 public abstract class TenantContextInitializer {
-
-	private static final String COMPANY_ID = "companyID";
-	
 	private final PersistenceManager persistenceManager;
 	private boolean forceTenantReload = false;
 	private String unbrandedSubDomain;
@@ -38,12 +35,12 @@ public abstract class TenantContextInitializer {
 		return this;
 	}
 
-	public void init(String tenantName) throws NoValidTenantSelectedException {
+	public void init(String tenantName) throws NoValidTenantSelectedException, IncorrectTenantDomain {
 		setBrandedCompanyId(tenantName);
 		init();
 	}
 
-	public void init() throws NoValidTenantSelectedException {
+	public void init() throws NoValidTenantSelectedException, IncorrectTenantDomain {
 		unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		
 		try {
@@ -51,8 +48,19 @@ public abstract class TenantContextInitializer {
 			loadSecurityGuard();
 		} catch (NoValidTenantSelectedException e) {
 			forgetSecurityGuard();
-			throw e;
+			if (storedCookieForTenant()) {
+				throw new IncorrectTenantDomain();
+			} else {
+				throw e;
+			}
 		}
+	}
+	public void destroyContext() {
+		forgetSecurityGuard();
+	}
+
+	private boolean storedCookieForTenant() {
+		return !companySpecifiedInURI() && CookieFactory.findCookieValue("companyID", getRequest()) != null;
 	}
 
 	public void refreshSecurityGaurd() throws NoValidTenantSelectedException {
@@ -92,20 +100,13 @@ public abstract class TenantContextInitializer {
 		return tenant;
 	}
 
-	private void setCompanyCookie(String tenantName) {
-		tenantName = (tenantName != null) ? tenantName.trim().toLowerCase() : null;
-		getResponse().addCookie(CookieFactory.createCookie(COMPANY_ID, tenantName, CookieFactory.TTL_DEFAULT));
-	}
+	
 
 	private void findCurrentTenant() {
 		if (brandedCompanyId == null) {
 			if (companySpecifiedInURI()) {
 				setBrandedCompanyId(getCompanyNameInURI());
-			} else if (getSecurityGuard() != null) {
-				setBrandedCompanyId(getSecurityGuard().getTenantName());
-			} else {
-				setBrandedCompanyId(CookieFactory.findCookieValue(COMPANY_ID, getRequest()));
-			}
+			} 
 		}
 	}
 
@@ -135,8 +136,6 @@ public abstract class TenantContextInitializer {
 	@SuppressWarnings("unchecked")
 	private void rememberSecurityGuard(SystemSecurityGuard securityGuard) {
 		getSession().put(Constants.SECURITY_GUARD, securityGuard);
-		setCompanyCookie(securityGuard.getTenantName());
-
 	}
 
 	private void forgetSecurityGuard() {

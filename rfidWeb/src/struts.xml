@@ -19,6 +19,7 @@
 			<interceptor name="flashScope" class="com.n4systems.fieldid.utils.FlashScopeInterceptor" />
 			<interceptor name="tenatRequired" class="com.n4systems.fieldid.utils.RequiredTenantInterceptor" />
 			<interceptor name="missingEntity" class="com.n4systems.fieldid.utils.MissingEntityInterceptor" />
+			<interceptor name="forceNonBranded" class="com.n4systems.fieldid.utils.NonBrandedInterceptor"/>
 			
 			<interceptor-stack name="tenantContextStack">
 				<interceptor-ref name="tenatRequired" />
@@ -47,10 +48,13 @@
 				<interceptor-ref name="secureStack" />
 			</interceptor-stack>
 			
-			<interceptor-stack name="flashPublicStack">
+			
+			<interceptor-stack name="nonBrandedFlashStack">
+				<interceptor-ref name="forceNonBranded" />
 				<interceptor-ref name="flashScope" />
 				<interceptor-ref name="publicStack" />
 			</interceptor-stack>
+			
 			
 			<interceptor-stack name="brandedFlashPublicStack">
 				<interceptor-ref name="flashScope" />
@@ -65,6 +69,10 @@
 			<result name="login" type="redirectAction">login</result>
 			<result name="tenant_missing" type="redirectAction">chooseCompany</result>
 			<result name="no_permission" type="freemarker">/templates/html/common/featureRequired.ftl</result>
+			<result name="redirect_to_url" type="redirect">
+				<param name="location">${redirectUrl}</param>
+				
+			</result>
 		</global-results>
 
 		
@@ -72,7 +80,7 @@
 
 	<package name="embedded" extends="default" namespace="/embedded">
 		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction" >
-			<interceptor-ref name="flashPublicStack" />
+			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="success" type="freemarker">/templates/html/login/embedded.ftl</result>
 			<result name="alreadyLoggedIn" type="freemarker">/templates/html/login/embedded.ftl</result>
 		</action>

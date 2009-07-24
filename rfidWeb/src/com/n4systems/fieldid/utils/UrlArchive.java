@@ -17,7 +17,17 @@ public class UrlArchive {
 	}
 
 
+	
+	
 	public void storeUrl() {
+		String redirectLink = extractCurrentUrl();
+		replaceUrl(redirectLink);
+	}
+
+
+
+
+	public String extractCurrentUrl() {
 		String redirectLink = request.getRequestURI();
 		if (redirectLink.startsWith(request.getContextPath())) {
 			redirectLink = redirectLink.substring(request.getContextPath().length());
@@ -26,8 +36,7 @@ public class UrlArchive {
 		if (request.getQueryString() != null) {
 			redirectLink += "?" + request.getQueryString();
 		}
-
-		replaceUrl(redirectLink);
+		return redirectLink;
 	}
 	
 	

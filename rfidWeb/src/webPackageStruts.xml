@@ -1200,18 +1200,16 @@
 			<result name="success" type="freemarker">/templates/html/home/show.ftl</result>
 		</action>
 
+		
 		<action name="chooseCompany" method="add" class="com.n4systems.fieldid.actions.SelectTenantAction">
-			<interceptor-ref name="flashPublicStack" />
+			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="success" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>
 		
 		<action name="signInToCompany" method="create" class="com.n4systems.fieldid.actions.SelectTenantAction">
-			<interceptor-ref name="flashPublicStack" />
-			<result name="success" type="redirect">
-				<param name="location">${brandedUrl}</param>
-			</result>
+			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>

@@ -4,8 +4,6 @@
 	</style>
 </head>
 <@s.form action="logIntoSystem" theme="fieldid" namespace="/" cssClass="easyForm" target="_parent">
-	<@s.hidden name="companyID" value="${securityGuard.tenantName}"/>
-	
 	<label class="label"><@s.text name="label.username"/></label>
 	<@s.textfield name="userName" id="userName"/>
 	

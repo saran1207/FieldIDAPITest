@@ -6,6 +6,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
+import com.n4systems.fieldid.actions.helpers.IncorrectTenantDomain;
 import com.n4systems.fieldid.actions.helpers.TenantContextInitializer;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -15,7 +16,6 @@ public class SelectTenantAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger(SelectTenantAction.class);
 	
 	private String companyID;
-	private String brandedUrl;
 	
 	public SelectTenantAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -31,9 +31,9 @@ public class SelectTenantAction extends AbstractAction {
 			loadCompany();
 			
 			// assuming loadCopmany was sucessful, we need to redirect them to the branded url
-			setBrandedUrl(getLoginUrl());
+			setRedirectUrl(getLoginUrl());
 			
-			return SUCCESS;
+			return REDIRECT_TO_URL;
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + "Error loading the tenant company", e);
 		}
@@ -42,7 +42,7 @@ public class SelectTenantAction extends AbstractAction {
 		return INPUT;
 	}
 
-	private void loadCompany() throws NoValidTenantSelectedException {
+	private void loadCompany() throws NoValidTenantSelectedException, IncorrectTenantDomain {
 		TenantContextInitializer intializer = new AbstractActionTenantContextInitializer(this, persistenceManager);
 		intializer.forceTenantReload().init(companyID);
 	}
@@ -56,12 +56,5 @@ public class SelectTenantAction extends AbstractAction {
 		this.companyID = companyID;
 	}
 
-	public String getBrandedUrl() {
-		return brandedUrl;
-	}
-
-	public void setBrandedUrl(String brandedUrl) {
-		this.brandedUrl = brandedUrl;
-	} 
-	
+		
 }
