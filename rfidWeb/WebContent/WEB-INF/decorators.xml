@@ -34,6 +34,7 @@
 	
 	
 	<decorator name="brandedLayout" page="brandedPublicLayout.ftl">
+		<pattern>*eulaAcceptance*.action*</pattern>
 		<pattern>*chooseCompany.action*</pattern>
     	<pattern>*signInToCompany.action*</pattern>     	
         <pattern>*register*.action</pattern>
