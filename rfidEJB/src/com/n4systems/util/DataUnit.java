@@ -2,6 +2,7 @@ package com.n4systems.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 /*
  * Copyright (c) 2007, Mark Frederiksen
@@ -128,6 +129,14 @@ public enum DataUnit {
 		BigDecimal toMultiplier = new BigDecimal(to.getMultiplier());
 		
 		return value.multiply(fromMultiplier.divide(toMultiplier));
+	}
+	
+	public String format(BigInteger value) {
+		return String.format("%s %s", value.toString(), getSymbol());
+	}
+	
+	public String format(BigDecimal value, int precision) {
+		return String.format("%s %s", value.setScale(precision, RoundingMode.HALF_EVEN).toString(), getSymbol());
 	}
 	
 	private BigInteger getMultiplier() {

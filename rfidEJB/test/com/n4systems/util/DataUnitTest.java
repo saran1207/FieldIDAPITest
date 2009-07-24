@@ -97,7 +97,18 @@ public class DataUnitTest {
 
 		assertEquals("B", DataUnit.BYTES.getSymbol());
 		assertEquals("b", DataUnit.BITS.getSymbol());
-		
 	}
 	
+	@Test
+	public void test_format() {
+		assertEquals("123 MB", DataUnit.MEGABYTES.format(BigInteger.valueOf(123)));
+		
+		BigInteger converted = DataUnit.BITS.convertFrom(BigInteger.valueOf(123), DataUnit.YOBIBYTES);
+		assertEquals("1189583006500795107910877184 b", DataUnit.BITS.format(converted));
+		
+		assertEquals("123.457 GiB", DataUnit.GIBIBYTES.format(BigDecimal.valueOf(123.456789), 3));
+		
+		BigDecimal convertedDec = DataUnit.BYTES.convertTo(BigDecimal.valueOf(1024 * 5), DataUnit.MEBIBYTES);
+		assertEquals("0.005 MiB", DataUnit.MEBIBYTES.format(convertedDec, 3));
+	}
 }
