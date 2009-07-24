@@ -21,6 +21,9 @@
 	<s:label name="otherDateFormat" label="Other Date Format" />
 	<s:label name="formattedDate" label="Example Date" />
 	
+	<s:textfield name="tenant.limits.diskSpace" label="Total disk space in Bytes" />
+	<s:textfield name="tenant.limits.users" label="Max number of employee Users" />
+	
 	<s:if test="!id">
 		<s:textfield name="userId" value="%{userId}" label="Admin UserID" />
 		<s:password name="userPass" label="Admin Pass" />

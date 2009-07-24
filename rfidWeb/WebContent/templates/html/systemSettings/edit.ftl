@@ -57,14 +57,7 @@ ${action.setPageType('account_settings', 'show')!}
 			<span class="fieldHolder">${loginUrl?html}</span>
 		</div>
 		
-		<div class="infoSet">
-			<label><@s.text name="label.disk_usage"/></label>
-			<div class="fieldHolder" style="float:left">
-				
-				<div style="width:300px"><@n4.percentbar total="1000" progress="400"/></div>
-				<div >400 of 1000</div>
-			</div>
-		</div>
+		
 		
 		<div class="infoSet">
 			<label >
@@ -79,6 +72,27 @@ ${action.setPageType('account_settings', 'show')!}
 				<#assign snipit><iframe src="${embeddedLoginUrl}" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="300" ></iframe></#assign>
 				${snipit?html}
 			</span>
+		</div>
+		<div class="infoSet">
+			<label><@s.text name="label.disk_space"/></label>
+			<div class="fieldHolder" style="float:left; padding: 5px 0;">
+				
+				<div style="width:300px; float:left;">
+					<@n4.percentbar progress="${limits.diskSpaceUsed}" total="${limits.diskSpaceMax}"/>
+				</div>
+				<div style="float:left; margin:5px;">${action.getHumanReadableFileSize(limits.diskSpaceUsed)} <@s.text name="label.of"/> <#if limits.diskSpaceUnlimited><@s.text name="label.unlimited"/><#else>${action.getHumanReadableFileSize(limits.diskSpaceMax)}</#if></div>
+			</div>
+		</div>
+		<div class="infoSet">
+			<label><@s.text name="label.staff_accounts"/></label>
+			<div class="fieldHolder" style="float:left; padding: 5px 0;">
+				
+				<div style="width:300px; float:left;">
+					<@n4.percentbar progress="${limits.employeeUsersUsed}" total="${limits.employeeUsersMax}"/>
+				</div>
+				<div style="float:left; margin:5px;">${limits.employeeUsersUsed} <@s.text name="label.of"/> <#if limits.employeeUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.employeeUsersMax}</#if></div>
+			</div>
+		</div>
 	</div>
 </div>
 <#if securityGuard.brandingEnabled>

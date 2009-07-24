@@ -21,7 +21,6 @@ body {
 }
 
 .percentBarUsed {
-	border-right: 1px solid #238fbd;
 	background: url(../../images/barForeground.png) repeat-x;
 }
 .percentBar {
@@ -32,4 +31,7 @@ body {
 .actions {
 	border-color: #D0DAFA;
 }
-	
+.limitWarning {
+	background-color: #FFEBEB;
+	color: #FF0000;
+}

@@ -12,5 +12,10 @@
 <#assign backToList>
 	<a href="<@s.url action="userList" currentPage="${currentPage!}" listFilter="${listFilter!}" userType="${userType!}"/>"><@s.text name="label.cancel" /></a>
 </#assign>
-
-<#include "_userForm.ftl">
+<#if uniqueID?exists || limits.employeeUsersMaxed>
+	<@s.text name="label.exceeded_your_employee_user_limit">
+		<@s.param>${limits.employeeUser}</@s.param>
+	</@s.text>
+<#else>
+	<#include "_userForm.ftl">
+</#if>

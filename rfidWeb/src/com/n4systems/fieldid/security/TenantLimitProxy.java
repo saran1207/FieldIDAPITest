@@ -15,7 +15,34 @@ public class TenantLimitProxy {
 		return limitService.getDiskSpace(tenantId).isMaxed();
 	}
 	
+	public Long getDiskSpaceUsed() {
+		return limitService.getDiskSpace(tenantId).getUsed();
+	}
+	
+	public Long getDiskSpaceMax() {
+		return limitService.getDiskSpace(tenantId).getMaximum();
+	}
+	
+	public boolean isDiskSpaceUnlimited() {
+		return limitService.getDiskSpace(tenantId).isUnlimited();
+	}
+	
+	
 	public boolean isEmployeeUsersMaxed() {
 		return limitService.getEmployeeUsers(tenantId).isMaxed();
 	}
+	
+	public Long getEmployeeUsersUsed() {
+		return limitService.getEmployeeUsers(tenantId).getUsed();
+	}
+	
+	
+	public Long getEmployeeUsersMax() {
+		return limitService.getEmployeeUsers(tenantId).getMaximum();
+	}
+	
+	public boolean isEmployeeUsersUnlimited() {
+		return limitService.getEmployeeUsers(tenantId).isUnlimited();
+	}
+
 }

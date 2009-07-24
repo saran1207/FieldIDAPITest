@@ -9,6 +9,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.reporting.PathHandler;
@@ -35,7 +36,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		myTenant = persistenceManager.find(TenantOrganization.class, getTenantId());
-		
 	}
 	
 	@Override

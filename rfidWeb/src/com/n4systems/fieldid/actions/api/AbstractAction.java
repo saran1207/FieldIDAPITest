@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONSerializer;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
@@ -426,5 +427,11 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
+	}
+	
+	
+	public String getHumanReadableFileSize(Long fileSize) {
+		String byteCountToDisplaySize = FileUtils.byteCountToDisplaySize(fileSize);
+		return byteCountToDisplaySize;
 	}
 }
