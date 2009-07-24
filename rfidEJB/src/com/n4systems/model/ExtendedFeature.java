@@ -14,13 +14,13 @@ package com.n4systems.model;
  */
 
 public enum ExtendedFeature {
-	Integration("integration", "allows access to orders."),
-	Compliance("compliance", "allows access to compliance check and risk analysis."),
-	JobSites("jobSites", "allows the use of jobsites to control the assignment of assets and inspections."),
-	Projects("projects", "allows the use of projects to track larger safety systems."),
-	Branding("branding", "allows the user to up load their own image for the tenant logo."),
-	PartnerCenter("Partner Center", "allows the tenant to add customer users"),
-	EmailAlerts("Email Alerts", "allows the tenant to use Notifications");
+	Integration("feature.integration", "allows access to orders."),
+	Compliance("feature.compliance", "allows access to compliance check and risk analysis."),
+	JobSites("feature.job_sites", "allows the use of jobsites to control the assignment of assets and inspections."),
+	Projects("feature.jobs", "allows the use of projects to track larger safety systems."),
+	Branding("feature.branding", "allows the user to up load their own image for the tenant logo."),
+	PartnerCenter("feature.partner_center", "allows the tenant to add customer users"),
+	EmailAlerts("feature.email_alerts", "allows the tenant to use Notifications");
 	
 	private String label;
 	private String description;

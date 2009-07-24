@@ -21,10 +21,6 @@
 			<interceptor name="missingEntity" class="com.n4systems.fieldid.utils.MissingEntityInterceptor" />
 			<interceptor name="forceNonBranded" class="com.n4systems.fieldid.utils.NonBrandedInterceptor"/>
 			
-			<interceptor-stack name="tenantContextStack">
-				<interceptor-ref name="tenatRequired" />
-				<interceptor-ref name="enabledFeatures"/>
-			</interceptor-stack>
 			
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
@@ -32,15 +28,17 @@
 			</interceptor-stack>
 			
 			<interceptor-stack name="brandedPublicStack">
-				<interceptor-ref name="tenantContextStack" />
+				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="publicStack" />
+				<interceptor-ref name="enabledFeatures"/>
 			</interceptor-stack>
 			
 			<interceptor-stack name="secureStack">
-				<interceptor-ref name="tenantContextStack" />
+				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="login" />
 				<interceptor-ref name="security" />
 				<interceptor-ref name="publicStack" />
+				<interceptor-ref name="enabledFeatures"/>
 			</interceptor-stack>
 
 			<interceptor-stack name="flashSecureStack">

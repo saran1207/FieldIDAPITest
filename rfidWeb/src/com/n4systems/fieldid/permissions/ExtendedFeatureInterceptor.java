@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.permissions;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.ActionInvocationWrapper;
 import com.n4systems.model.ExtendedFeature;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -12,14 +13,17 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 	
 	@Override
 	public String intercept(ActionInvocation call) throws Exception {
-		AbstractAction action = (AbstractAction)call.getAction();
+		ActionInvocationWrapper wrapper = new ActionInvocationWrapper(call);
+		AbstractAction action = wrapper.getAction();
 		String methodName = getMethodName(call);
 		Class<?> actionClass = action.getClass();
 		
 		if (action.getTenant() != null) {
 			ExtendedFeature requiredFeature = findRequiredExtendedFeature(action, methodName, actionClass);
 			if (requiredFeature != null && !action.getTenant().hasExtendedFeature(requiredFeature)) {
-				action.addActionError(action.getText("permission.require_extended_feature", "${getText('" + requiredFeature.getLabel() + "')}"));
+				action.addActionErrorText("permission.require_extended_feature");
+				wrapper.getRequest().setAttribute("requiredFeature", requiredFeature);
+						
 				return "no_permission";
 			}
 		}
