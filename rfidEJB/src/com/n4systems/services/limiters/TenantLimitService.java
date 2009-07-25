@@ -37,6 +37,21 @@ public class TenantLimitService implements Serializable {
 		return employeeUsers.get(tenantId);
 	}
 	
+	public Map<Long, ResourceLimit> getLimitForType(LimitType type) {
+		Map<Long, ResourceLimit> limits = null;
+		
+		switch (type) {
+			case DISK_SPACE:
+				limits = diskSpace;
+				break;
+			case EMPLOYEE_USERS:
+				limits = employeeUsers;
+				break;
+		}
+		
+		return limits;
+	}
+	
 	/**
 	 * Updates all limits for all tenants
 	 */
@@ -69,7 +84,7 @@ public class TenantLimitService implements Serializable {
 		EmployeeUserCountLoader loader = new EmployeeUserCountLoader();
 		loader.setTenantId(tenant.getId());
 		
-		ResourceLimit limit = new ResourceLimit();
+		ResourceLimit limit = new AccountResourceLimit();
 		limit.setUsed(loader.load());
 		limit.setMaximum(tenant.getLimits().getUsers());
 		
@@ -84,7 +99,7 @@ public class TenantLimitService implements Serializable {
 		logger.debug("Updating disk space limits for [" + tenant.getName() + "]");
 		TenantDiskUsageCalculator usageCalc = new TenantDiskUsageCalculator(tenant);
 		
-		ResourceLimit limit = new ResourceLimit();
+		ResourceLimit limit = new DiskResourceLimit();
 		limit.setUsed(usageCalc.totalLimitingSize());
 		limit.setMaximum(tenant.getLimits().getDiskSpace());
 		

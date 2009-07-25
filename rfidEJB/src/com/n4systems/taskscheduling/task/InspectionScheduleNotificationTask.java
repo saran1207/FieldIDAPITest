@@ -1,9 +1,10 @@
 package com.n4systems.taskscheduling.task;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
@@ -121,7 +122,7 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		MailMessage message = new MailMessage(messageSubject, messageBody.toString());
 		
 		// we need to make sure all our addresses are valid
-		List<String> addresses = new ArrayList<String>();
+		Set<String> addresses = new HashSet<String>();
 		for (String address: setting.getAddresses()) {
 			try {
 				InternetAddress.parse(address, true);

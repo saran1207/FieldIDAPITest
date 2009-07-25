@@ -2,7 +2,9 @@ package com.n4systems.services.limiters;
 
 import java.io.Serializable;
 
-public class ResourceLimit implements Serializable {
+import com.n4systems.model.tenant.TenantLimit;
+
+public abstract class ResourceLimit implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private long used = 0;
@@ -46,11 +48,23 @@ public class ResourceLimit implements Serializable {
 	public void setMaximum(long maximum) {
 		this.maximum = maximum;
 	}
+	
+	public long getAvailable() {
+		if (isMaxed()) {
+			// this ensures that if they're over 100%, we don't return a negative 
+			return 0;
+		} else if (isUnlimited()) {
+			// Use the TenantLimits representation of unlimited
+			return TenantLimit.UNLIMITED;
+		} else {
+			return maximum - used;
+		}
+	}
 
 	@Override
 	public String toString() {
-		return String.format("%d/%d (%.2f%%) :: Maxed:%b", getUsed(), getMaximum(), getUsagePercent() * 100.0, isMaxed());
+		String max = (isUnlimited()) ? "unlimited" : String.valueOf(getMaximum());
+		return String.format("%d/%s (%.2f%%) :: Maxed:%b", getUsed(), max, getUsagePercent() * 100.0, isMaxed());
 	}
-	
 	
 }

@@ -180,6 +180,9 @@ public class ServiceLocator {
 		return get(PersistenceManager.class, PersistenceManagerImpl.class, persistenceManager);
 	}
 	
+	public static final PersistenceManager createPersistenceManager() {
+		return lookup(PersistenceManagerImpl.class);
+	}
 	
 	private static final ThreadLocal<ProductCodeMapping> productCodeMapping = new ThreadLocal<ProductCodeMapping>();
 	

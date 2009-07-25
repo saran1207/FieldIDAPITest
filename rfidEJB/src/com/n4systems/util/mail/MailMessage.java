@@ -7,10 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.activation.DataHandler;
 import javax.activation.FileTypeMap;
@@ -41,9 +41,9 @@ public class MailMessage implements Serializable {
 	private String fromAddress;
 	private String replyTo;
 	private ContentType contentType = ContentType.HTML;
-	private List<String> toAddresses = new ArrayList<String>();
-	private List<String> ccAddresses = new ArrayList<String>();
-	private List<String> bccAddresses = new ArrayList<String>();
+	private Set<String> toAddresses = new HashSet<String>();
+	private Set<String> ccAddresses = new HashSet<String>();
+	private Set<String> bccAddresses = new HashSet<String>();
 	private Map<String, byte[]> attachments = new HashMap<String, byte[]>();
 	
 	// this is only used in compiling the message
@@ -109,7 +109,7 @@ public class MailMessage implements Serializable {
 		this.bodyHeader = bodyHeader;
 	}
 
-	public String getBody() {
+	public String getBody() throws MessagingException {
 		return body;
 	}
 
@@ -141,27 +141,27 @@ public class MailMessage implements Serializable {
 		this.contentType = contentType;
 	}
 
-	public List<String> getToAddresses() {
+	public Set<String> getToAddresses() {
 		return toAddresses;
 	}
 
-	public void setToAddresses(List<String> toAddresses) {
+	public void setToAddresses(Set<String> toAddresses) {
 		this.toAddresses = toAddresses;
 	}
 
-	public List<String> getCcAddresses() {
+	public Set<String> getCcAddresses() {
 		return ccAddresses;
 	}
 
-	public void setCcAddresses(List<String> ccAddresses) {
+	public void setCcAddresses(Set<String> ccAddresses) {
 		this.ccAddresses = ccAddresses;
 	}
 
-	public List<String> getBccAddresses() {
+	public Set<String> getBccAddresses() {
 		return bccAddresses;
 	}
 
-	public void setBccAddresses(List<String> bccAddresses) {
+	public void setBccAddresses(Set<String> bccAddresses) {
 		this.bccAddresses = bccAddresses;
 	}
 
@@ -244,7 +244,7 @@ public class MailMessage implements Serializable {
 		return message;
 	}
 
-	private void attachRecipients(Message.RecipientType type, List<String> addrs) throws MessagingException {
+	private void attachRecipients(Message.RecipientType type, Set<String> addrs) throws MessagingException {
 		for (String addr: addrs) {
 			message.addRecipient(type, stringToAddress(addr));
 		}

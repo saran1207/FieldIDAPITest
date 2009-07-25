@@ -93,6 +93,17 @@ public enum DataUnit {
 	}
 	
 	/**
+	 * Converts fixed-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
+	 * @see #convertTo(BigInteger, DataUnit)
+	 * @param value	Value to convert
+	 * @param to 	DataUnit to convert <code>value<code> to
+	 * @return		long representing the converted value
+	 */
+	public long convertTo(long value, DataUnit to) {
+		return convertTo(BigInteger.valueOf(value), to).longValue();
+	}
+	
+	/**
 	 * Converts floating-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
 	 * @see #convertTo(BigInteger, DataUnit)
 	 * @param value	Value to convert
@@ -101,6 +112,17 @@ public enum DataUnit {
 	 */
 	public BigDecimal convertTo(BigDecimal value, DataUnit to) {
 		return convert(value, this, to);
+	}
+	
+	/**
+	 * Converts floating-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
+	 * @see #convertTo(BigDecimal, DataUnit)
+	 * @param value	Value to convert
+	 * @param to 	DataUnit to convert <code>value<code> to
+	 * @return		double representing the converted value
+	 */
+	public double convertTo(double value, DataUnit to) {
+		return convertTo(BigDecimal.valueOf(value), to).doubleValue();
 	}
 	
 	/**

@@ -53,6 +53,7 @@ public class PathHandler {
 	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/all_tenants";
 	private static final String DEFAULT_INSPECTION_REPORTNAME = "default_inspection_cert" + REPORT_FILE_EXT;
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
+	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
 	private static final String BUTTON_IMAGE_PATH_BASE = COMMON_IMAGE_PATH_BASE + "/buttons";
 	private static final String BUTTON_IMAGE_EXT = ".png";
 	
@@ -407,11 +408,13 @@ public class PathHandler {
 		return absolutize(mergePaths(COMMON_IMAGE_PATH_BASE, fileName));
 	}
 	
+	public static File getCommonTemplatePath() {
+		return absolutize(COMMON_TEMPLATE_BASE);
+	}
+	
 	public static File getProductTypeAttachmentFile(ProductType productType) {
 		return absolutize(mergePaths(getProductTypeAttachmentBasePath(productType.getTenant()), getProductTypePath(productType)));
 	}
-	
-		
 	
 	private static String getProductTypeAttachmentBasePath(TenantOrganization tenant) {
 		return mergePaths(PRODUCT_TYPE_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
