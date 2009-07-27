@@ -75,7 +75,6 @@ public class ConfigContext {
 			configruations.addAll(ServiceLocator.getPersistenceManager().findAll(Configuration.class));
 			dirty.set(false);
 		} catch(Exception e) {
-			// TODO: throw something?
 			logger.error("Failed loading configurations", e);
 		}
 	}

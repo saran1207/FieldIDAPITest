@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.persistence.deleters.Deleter;
+import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 
@@ -54,30 +54,30 @@ public class PersistenceManager {
 		return result;
 	}
 
-	public static void executeSaver(Saver<?> saver) {
+	public static <T extends Saveable> void executeSaver(Saver<T> saver, T entity) {
 		Transaction transaction = startTransaction();
 		try {
-			saver.save(transaction);
+			saver.save(transaction, entity);
 		} finally {
 			transaction.commit();
 		}
 	}
 
-	public static <T> T executeUpdater(Saver<T> saver) {
+	public static <T extends Saveable> T executeUpdater(Saver<T> saver, T entity) {
 		T managedEntity = null;
 		Transaction transaction = startTransaction();
 		try {
-			saver.update(transaction);
+			saver.update(transaction, entity);
 		} finally {
 			transaction.commit();
 		}
 		return managedEntity;
 	}
 
-	public static void executeDeleter(Deleter deleter) {
+	public static <T extends Saveable> void executeDeleter(Saver<T> deleter, T entity) {
 		Transaction transaction = startTransaction();
 		try {
-			deleter.delete(transaction);
+			deleter.remove(transaction, entity);
 		} finally {
 			transaction.commit();
 		}

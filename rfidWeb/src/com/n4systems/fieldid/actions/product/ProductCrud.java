@@ -42,7 +42,6 @@ import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.LineItem;
@@ -53,8 +52,6 @@ import com.n4systems.model.Project;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.services.product.ProductSaveService;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
@@ -1015,7 +1012,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	public ProductSaveService getProductSaveService() {
 		if (productSaverService == null) {
-			productSaverService = new ProductSaveService(legacyProductSerialManager, persistenceManager, fetchCurrentUser());
+			productSaverService = new ProductSaveService(legacyProductSerialManager, fetchCurrentUser());
 		}
 		return productSaverService;
 	}

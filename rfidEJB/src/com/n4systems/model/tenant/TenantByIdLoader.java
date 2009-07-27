@@ -1,27 +1,24 @@
 package com.n4systems.model.tenant;
 
-import com.n4systems.ejb.PersistenceManager;
+import javax.persistence.EntityManager;
+
 import com.n4systems.model.TenantOrganization;
-import com.n4systems.persistence.loaders.legacy.EntityLoader;
+import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class TenantByIdLoader extends EntityLoader<TenantOrganization> {
+public class TenantByIdLoader extends Loader<TenantOrganization> {
 	private Long tenantId;
 	
 	public TenantByIdLoader() {
 		super();
 	}
 
-	public TenantByIdLoader(PersistenceManager pm) {
-		super(pm);
-	}
-
 	@Override
-	protected TenantOrganization load(PersistenceManager pm) {
+	protected TenantOrganization load(EntityManager em) {
 		QueryBuilder<TenantOrganization> builder = new QueryBuilder<TenantOrganization>(TenantOrganization.class);
 		builder.addSimpleWhere("id", tenantId);
 		
-		TenantOrganization tenant = pm.find(builder);
+		TenantOrganization tenant = builder.getSingleResult(em);
 		return tenant;
 	}
 	

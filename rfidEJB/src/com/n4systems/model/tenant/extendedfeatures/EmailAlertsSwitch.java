@@ -21,10 +21,10 @@ public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
 	@Override
 	protected void featureTearDown() {
 		// removes all current notification settings for this tenant
-		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(persistenceManager, new SecurityFilter(tenant.getId()));
+		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(new SecurityFilter(tenant.getId()));
 		loader.setTenantId(tenant.getId());
 		
-		NotificationSettingSaver deleter = new NotificationSettingSaver(persistenceManager);
+		NotificationSettingSaver deleter = new NotificationSettingSaver();
 		
 		for (NotificationSetting setting: loader.load()) {
 			deleter.remove(setting);

@@ -19,7 +19,6 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.LegacyButtonStateMapping;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.tools.FileDataContainer;
@@ -92,8 +91,6 @@ public interface InspectionManager {
 	public List<InspectionBook> findAvailableInspectionBooks(SecurityFilter filter, boolean withClosed);
 
 	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId);
-
-	public LegacyButtonStateMapping findLegacyButtonStateMapping(Long buttonStateId, Long tenantId);
 
 	public Pager<InspectionGroup> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	

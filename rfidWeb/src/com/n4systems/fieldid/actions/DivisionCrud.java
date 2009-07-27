@@ -48,7 +48,7 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		division = getLoaderFactory().createDivisionFilteredLoader().setId(uniqueId).load();
+		division = getLoaderFactory().createFilteredIdLoader(Division.class).setId(uniqueId).load();
 	}
 	
 	private void testRequiredEntities(boolean existing) {
@@ -143,7 +143,7 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 		if (customerId == null) {
 			customer = null; 
 		} else if(customer == null || !customer.getId().equals(customerId)) {
-			customer = getLoaderFactory().createCustomerFilteredLoader().setId(customerId).load();
+			customer = getLoaderFactory().createFilteredIdLoader(Customer.class).setId(customerId).load();
 		}
 		
 	}

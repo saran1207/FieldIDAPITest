@@ -8,8 +8,8 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public abstract class ListableLoader extends FilteredListLoader<Listable<Long>> {
-
+public abstract class ListableLoader extends ListLoader<Listable<Long>> {
+	
 	public ListableLoader(SecurityFilter filter) {
 		super(filter);
 	}

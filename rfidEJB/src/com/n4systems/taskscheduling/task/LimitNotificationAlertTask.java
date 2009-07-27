@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.tenant.AlertStatus;
 import com.n4systems.model.tenant.AlertStatusSaver;
@@ -26,15 +25,11 @@ public class LimitNotificationAlertTask implements Runnable {
 	private LimitType type;
 	private AlertStatus alertStatus;
 	
-	private final PersistenceManager pm;
-	
 	public LimitNotificationAlertTask(Long tenantId, ResourceLimit limit, LimitType type, AlertStatus alertStatus) {
 		this.tenantId = tenantId;
 		this.limit = limit;
 		this.type = type;
 		this.alertStatus = alertStatus;
-		
-		this.pm = ServiceLocator.createPersistenceManager();
 	}
 
 	public void run() {
@@ -71,7 +66,7 @@ public class LimitNotificationAlertTask implements Runnable {
 	}
 
 	private void addNotificationAddresses(TemplateMailMessage alertMessage) {
-		TenantByIdLoader tenantLoader = new TenantByIdLoader(pm);
+		TenantByIdLoader tenantLoader = new TenantByIdLoader();
 		tenantLoader.setTenantId(tenantId);
 		TenantOrganization tenant = tenantLoader.load();
 		
@@ -79,7 +74,7 @@ public class LimitNotificationAlertTask implements Runnable {
 		alertMessage.getToAddresses().add(tenant.getAdminEmail());
 		
 		// load and add all the admin users
-		AdminUserListLoader adminLoader = new AdminUserListLoader(pm, new SecurityFilter(tenantId)); 
+		AdminUserListLoader adminLoader = new AdminUserListLoader(new SecurityFilter(tenantId)); 
 		for (UserBean user: adminLoader.load()) {
 			alertMessage.getToAddresses().add(user.getEmailAddress());
 		}
@@ -88,7 +83,7 @@ public class LimitNotificationAlertTask implements Runnable {
 	private void updateAlertStatus(int threshold) {
 		alertStatus.setLevel(type, threshold);
 		
-		AlertStatusSaver statusSaver = new AlertStatusSaver(pm);
+		AlertStatusSaver statusSaver = new AlertStatusSaver();
 		statusSaver.update(alertStatus);
 	}
 

@@ -5,13 +5,11 @@ import java.util.List;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
-import com.n4systems.model.product.ProductAttachmentDeleter;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductAttachmentSaver;
 import com.n4systems.util.SecurityFilter;
@@ -19,17 +17,14 @@ import com.n4systems.util.SecurityFilter;
 public class ProductSaveService {
 
 	private final LegacyProductSerial productManager;
-	private final PersistenceManager persistenceManager;
 	private final UserBean user;
 	private SecurityFilter filter;
-
 	private Product product;
 	private List<ProductAttachment> existingAttachments;
 	private List<ProductAttachment> uploadedAttachments;
 
-	public ProductSaveService(LegacyProductSerial productManager, PersistenceManager persistenceManager, UserBean user) {
+	public ProductSaveService(LegacyProductSerial productManager, UserBean user) {
 		super();
-		this.persistenceManager = persistenceManager;
 		this.productManager = productManager;
 		this.user = user;
 		filter = new SecurityFilter(user);
@@ -81,7 +76,7 @@ public class ProductSaveService {
 
 	private void saveUploadedAttachments() {
 		if (uploadedAttachments != null) {
-			ProductAttachmentSaver saver = new ProductAttachmentSaver(product, persistenceManager);
+			ProductAttachmentSaver saver = new ProductAttachmentSaver(user, product);
 			for (ProductAttachment attachment : uploadedAttachments) {
 				saver.save(attachment);
 			}
@@ -98,7 +93,7 @@ public class ProductSaveService {
 	}
 
 	private void reattachAttachments() {
-		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(persistenceManager, filter).setProduct(product).load();
+		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(product).load();
 		for (ProductAttachment loadedAttachment : loadedAttachments) {
 			if (existingAttachments.contains(loadedAttachment)) {
 				ProductAttachment existingAttachment = existingAttachments.get(existingAttachments.indexOf(loadedAttachment));
@@ -107,18 +102,18 @@ public class ProductSaveService {
 		}
 	}
 	private void updateAttachments() {
-		ProductAttachmentSaver saver = new ProductAttachmentSaver(product, persistenceManager);
+		ProductAttachmentSaver saver = new ProductAttachmentSaver(user, product);
 		for (ProductAttachment attachment : existingAttachments) {
 			saver.update(attachment);
 		}
 	}
 	
 	private void removeAttachments() {
-		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(persistenceManager, filter).setProduct(product).load();
-		ProductAttachmentDeleter deleter = new ProductAttachmentDeleter(persistenceManager);
+		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(product).load();
+		ProductAttachmentSaver deleter = new ProductAttachmentSaver(product);
 		for (ProductAttachment loadedAttachment : loadedAttachments) {
 			if (!existingAttachments.contains(loadedAttachment)) {
-				deleter.delete(loadedAttachment);
+				deleter.remove(loadedAttachment);
 			}
 		}
 	}

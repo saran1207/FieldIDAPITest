@@ -47,7 +47,6 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.LegacyButtonStateMapping;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Status;
@@ -867,19 +866,6 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 
 		return inspectionType;
-	}
-
-	/**
-	 * Returns a LegacyButtonStateMapping using it's legacy button state id XXX -
-	 * this should be removed once the legacy button state id is no longer
-	 * needed
-	 */
-	public LegacyButtonStateMapping findLegacyButtonStateMapping(Long buttonStateId, Long tenantId) {
-		Query query = em.createQuery("from LegacyButtonStateMapping l where l.buttonStateId = :buttonStateId and l.tenant.id = :tenantId");
-		query.setParameter("buttonStateId", buttonStateId);
-		query.setParameter("tenantId", tenantId);
-
-		return (LegacyButtonStateMapping) query.getSingleResult();
 	}
 
 	public Pager<InspectionGroup> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {

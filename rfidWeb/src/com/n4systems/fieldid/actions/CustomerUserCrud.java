@@ -107,7 +107,7 @@ public class CustomerUserCrud extends AnyCustomerUserCrud {
 		if (customerId == null) {
 			customer = null; 
 		} else if(customer == null || !customer.getId().equals(customerId)) {
-			customer = getLoaderFactory().createCustomerFilteredLoader().setId(customerId).load();
+			customer = getLoaderFactory().createFilteredIdLoader(Customer.class).setId(customerId).load();
 		}
 		super.setCustomerId(customerId);
 	}

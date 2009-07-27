@@ -3,7 +3,7 @@ package com.n4systems.taskscheduling;
 import org.jboss.logging.Logger;
 
 import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.model.taskconfig.TaskConfigListLoader;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.Initializer;
 import com.n4systems.taskscheduling.task.WatcherTask;
 
@@ -28,7 +28,7 @@ public class TaskSchedulerBootstraper implements Initializer {
         	logger.error("Could not schedule watcher task", e);
         }
 		
-		TaskConfigListLoader loader = new TaskConfigListLoader(null);
+		AllEntityListLoader<TaskConfig> loader = new AllEntityListLoader<TaskConfig>(TaskConfig.class);
 		
 		for (TaskConfig task: loader.load()) {
 			try {

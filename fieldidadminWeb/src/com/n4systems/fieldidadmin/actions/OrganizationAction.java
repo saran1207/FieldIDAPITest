@@ -363,7 +363,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		SetupDataLastModDates setupModDates = new SetupDataLastModDates();
 		setupModDates.setTenant(tenant);
 		
-		SetupDataLastModDatesSaver saver = new SetupDataLastModDatesSaver(persistenceManager);
+		SetupDataLastModDatesSaver saver = new SetupDataLastModDatesSaver();
 		saver.save(setupModDates);
 	}
 

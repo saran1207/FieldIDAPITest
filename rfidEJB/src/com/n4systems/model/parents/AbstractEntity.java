@@ -16,11 +16,13 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.n4systems.model.api.HasModifiedBy;
+
 import rfid.ejb.entity.UserBean;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-abstract public class AbstractEntity implements Serializable {
+abstract public class AbstractEntity implements Serializable, HasModifiedBy {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

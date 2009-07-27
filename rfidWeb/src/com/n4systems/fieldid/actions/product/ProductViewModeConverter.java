@@ -21,12 +21,9 @@ import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.TenantOrganization;
-import com.n4systems.model.customer.CustomerFilteredLoader;
-import com.n4systems.model.division.DivisionFilteredLoader;
-import com.n4systems.model.jobsites.JobSiteFilteredLoader;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
-import com.n4systems.model.producttype.ProductTypeFilteredLoader;
 import com.n4systems.model.user.UserFilteredLoader;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class ProductViewModeConverter {
@@ -78,7 +75,7 @@ public class ProductViewModeConverter {
 	private Customer resolveCustomer(Long customerId) {
 		Customer customer = null;
 		if (customerId != null) {
-			CustomerFilteredLoader loader = loaderFactory.createCustomerFilteredLoader().setId(customerId);
+			FilteredIdLoader<Customer> loader = loaderFactory.createFilteredIdLoader(Customer.class).setId(customerId);
 			customer = loader.load();
 		}
 		return customer;
@@ -87,7 +84,7 @@ public class ProductViewModeConverter {
 	private Division resolveDivision(Long divisionId) {
 		Division division = null;
 		if (divisionId != null) {
-			DivisionFilteredLoader loader = loaderFactory.createDivisionFilteredLoader().setId(divisionId);
+			FilteredIdLoader<Division> loader = loaderFactory.createFilteredIdLoader(Division.class).setId(divisionId);
 			division = loader.load();
 		}
 		return division;
@@ -96,7 +93,7 @@ public class ProductViewModeConverter {
 	private JobSite resolveJobSite(Long jobSiteId) {
 		JobSite jobSite = null;
 		if (jobSiteId != null) {
-			JobSiteFilteredLoader loader = loaderFactory.createJobSiteFilteredLoader().setId(jobSiteId);
+			FilteredIdLoader<JobSite> loader = loaderFactory.createFilteredIdLoader(JobSite.class).setId(jobSiteId);
 			jobSite = loader.load();
 		}
 		return jobSite;
@@ -105,7 +102,7 @@ public class ProductViewModeConverter {
 	private ProductType resolveProductType(Long productTypeId) {
 		ProductType productType = null;
 		if (productTypeId != null) {
-			ProductTypeFilteredLoader loader = loaderFactory.createProductTypeFilteredLoader().setId(productTypeId);
+			FilteredIdLoader<ProductType> loader = loaderFactory.createFilteredIdLoader(ProductType.class).setId(productTypeId);
 			productType = loader.load();
 		}
 		return productType;

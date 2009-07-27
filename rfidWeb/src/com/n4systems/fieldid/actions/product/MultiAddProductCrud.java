@@ -12,7 +12,6 @@ import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
@@ -83,7 +82,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		Product product = converter.viewToModel(productView);
 		
 		try {
-			ProductSaveService saver = new ProductSaveService(legacyProductManager, persistenceManager, fetchCurrentUser());
+			ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
 			int i = 1;
 			for (ProductIdentifierView productIdent: identifiers) {
 				logger.info("Saving product " + i + " of " + identifiers.size());

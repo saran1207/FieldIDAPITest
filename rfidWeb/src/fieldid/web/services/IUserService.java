@@ -9,7 +9,6 @@ import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
 import fieldid.web.services.dto.CommentTemplateServiceDTO;
 import fieldid.web.services.dto.EndUserServiceDTO;
 import fieldid.web.services.dto.FindProductOptionServiceDTO;
-import fieldid.web.services.dto.InspectionServiceDTO;
 import fieldid.web.services.dto.ProductSerialServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 import fieldid.web.services.dto.SerialNumberCounterServiceDTO;
@@ -30,7 +29,6 @@ public interface IUserService  {
 	public ArrayList<CommentTemplateServiceDTO> getCommentTemplateForDate(Long rManufacturerId, Date beginDate);
 	public ArrayList<CommentTemplateServiceDTO> findCommentTemplateForDate(Long versionNumber, Long rManufacturerId, Date beginDate);
 
-	public Long createInspection(InspectionServiceDTO inspectionServiceDTO) throws Exception;
 	public Long TagProduct(ProductSerialServiceDTO productSerialServiceDTO) throws Exception;
 	public Long UpdateProduct( ProductSerialServiceDTO productSerialServiceDTO ) throws Exception;
 	public void changeRFIDNumber(Long rProductSerial, String newRFIDNumber);

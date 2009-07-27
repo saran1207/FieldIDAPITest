@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.model.taskconfig.TaskConfigListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.taskconfig.TaskConfigSaver;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.Initializer;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.taskscheduling.SchedulingException;
@@ -29,7 +29,7 @@ public class TaskAction extends AbstractAdminAction {
 	public String doLoad() {
 		scheduledTasks = scheduler.getScheduledTasks();
 		
-		TaskConfigListLoader loader = new TaskConfigListLoader(null);
+		AllEntityListLoader<TaskConfig> loader = new AllEntityListLoader<TaskConfig>(TaskConfig.class);
 		taskConfigs = loader.load();
 		
 		return SUCCESS;

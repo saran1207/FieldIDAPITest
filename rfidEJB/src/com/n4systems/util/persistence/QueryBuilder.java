@@ -1,10 +1,5 @@
 package com.n4systems.util.persistence;
 
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.util.SecurityFilter;
-import com.n4systems.util.persistence.JoinClause.JoinType;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +10,13 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+
+import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.util.SecurityFilter;
+import com.n4systems.util.persistence.JoinClause.JoinType;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 
 /**
@@ -539,11 +540,35 @@ public class QueryBuilder<E> {
 	
 	@SuppressWarnings("unchecked")
 	public E getSingleResult(EntityManager em) throws InvalidQueryException {
-		return (E)createQuery(em).getSingleResult();
+		E result = null;
+		try {
+			result = (E)createQuery(em).getSingleResult();
+		} catch (NoResultException e) {
+			// silently ignored
+		}
+		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> getResultList(EntityManager em) throws InvalidQueryException {
-		return (List<E>)createQuery(em).getResultList();
+		return getResultList(em, -1, -1);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> getResultList(EntityManager em, int firstResult, int maxResults) throws InvalidQueryException {
+		Query query = createQuery(em);
+		
+		if (firstResult > -1) {
+			query.setFirstResult(firstResult);
+		}
+		
+		if (maxResults > -1) {
+			query.setMaxResults(maxResults);
+		}
+
+		return (List<E>)query.getResultList();
+	}
+	
+	public Long getCount(EntityManager em) throws InvalidQueryException {
+		return (Long)setCountSelect().createQuery(em).getSingleResult();
 	}
 }

@@ -1,20 +1,14 @@
 package com.n4systems.model.division;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Division;
 import com.n4systems.model.api.Listable;
-import com.n4systems.persistence.loaders.legacy.ListableLoader;
+import com.n4systems.persistence.loaders.ListableLoader;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.ListableSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 
-//TODO: Update this class to extend com.n4systems.persistence.loaders.ListableLoader
 public class DivisionListableLoader extends ListableLoader {
 	private Long customerId;
-	
-	public DivisionListableLoader(PersistenceManager pm, SecurityFilter filter) {
-		super(pm, filter);
-	}
 
 	public DivisionListableLoader(SecurityFilter filter) {
 		super(filter);

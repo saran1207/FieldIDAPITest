@@ -1,23 +1,22 @@
 package com.n4systems.model.taskconfig;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.persistence.loaders.legacy.EntityLoader;
+import javax.persistence.EntityManager;
 
-//TODO: Update this class to extend Loader
-public class TaskConfigLoader extends EntityLoader<TaskConfig> {
+import com.n4systems.persistence.loaders.Loader;
+import com.n4systems.util.persistence.QueryBuilder;
+
+public class TaskConfigLoader extends Loader<TaskConfig> {
 	private String id;
 	
-	public TaskConfigLoader() {
-		super();
-	}
-
-	public TaskConfigLoader(PersistenceManager pm) {
-		super(pm);
-	}
+	public TaskConfigLoader() {}
 	
-	protected TaskConfig load(PersistenceManager pm) {
-		TaskConfig config = pm.find(TaskConfig.class, id);
-	    return (config != null) ? config : new TaskConfig();
+	protected TaskConfig load(EntityManager em) {
+		QueryBuilder<TaskConfig> builder = new QueryBuilder<TaskConfig>(TaskConfig.class);
+		builder.addSimpleWhere("id", id);
+		
+		TaskConfig config = builder.getSingleResult(em);
+	    
+		return (config != null) ? config : new TaskConfig();
     }
 	
 	public void setId(String id) {

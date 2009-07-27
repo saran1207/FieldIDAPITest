@@ -3,7 +3,6 @@ package rfid.ejb.session;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,11 +21,8 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -102,15 +98,12 @@ import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
 import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
 import fieldid.web.services.dto.AutoAttributeDefinitionServiceDTO;
 import fieldid.web.services.dto.EndUserServiceDTO;
 import fieldid.web.services.dto.InfoOptionServiceDTO;
-import fieldid.web.services.dto.InspectionDocServiceDTO;
-import fieldid.web.services.dto.InspectionServiceDTO;
 import fieldid.web.services.dto.ProductSerialServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 import fieldid.web.services.dto.UserServiceDTO;
@@ -435,135 +428,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		infoOptionServiceDTO.setWeight( infoOption.getWeight().toString() );
 		
 		return infoOptionServiceDTO;		
-	}
-	
-	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert( InspectionServiceDTO inspectionServiceDTO ) {
-		
-		List<com.n4systems.webservice.dto.InspectionServiceDTO> newInspectionServiceDTOs = new ArrayList<com.n4systems.webservice.dto.InspectionServiceDTO>();
-		com.n4systems.webservice.dto.InspectionServiceDTO newInspectionServiceDTO = null;
-		
-		for (InspectionDocServiceDTO inspectionDoc : inspectionServiceDTO.getInspectionDocServiceDTOs()) {
-			
-			newInspectionServiceDTO = new com.n4systems.webservice.dto.InspectionServiceDTO();
-			
-			newInspectionServiceDTO.setComments( inspectionDoc.getComments() );
-			newInspectionServiceDTO.setCustomerId( inspectionServiceDTO.getR_EndUserLong() );
-			newInspectionServiceDTO.setDate( inspectionServiceDTO.getInspectionDate() );
-			if (inspectionServiceDTO.getR_DivisionLong() != null) {
-				newInspectionServiceDTO.setDivisionId( inspectionServiceDTO.getR_DivisionLong() );
-			}
-			newInspectionServiceDTO.setDtoVersion( inspectionServiceDTO.dtoVersion() );
-			newInspectionServiceDTO.setId(0L);
-			if (inspectionServiceDTO.getR_InspectionBookLong() != null) {
-				newInspectionServiceDTO.setInspectionBookId( inspectionServiceDTO.getR_InspectionBookLong() );
-			}
-			newInspectionServiceDTO.setInspectionBookTitle( inspectionServiceDTO.getInspectionBookString() );
-			newInspectionServiceDTO.setInspectionTypeId( inspectionManager.findInspectionTypeByLegacyEventId(inspectionDoc.getR_EventTypeLong(), inspectionServiceDTO.getR_ManufacturerLong()).getId() );
-			newInspectionServiceDTO.setInspectorId( convertStringToLong(inspectionServiceDTO.getR_User()) );
-			newInspectionServiceDTO.setLocation( inspectionDoc.getLocationPath() );
-			newInspectionServiceDTO.setNextDate( inspectionDoc.getNextInspectionDate() );
-			newInspectionServiceDTO.setOrganizationId(((UserBean)em.find(UserBean.class, convertStringToLong(inspectionServiceDTO.getR_User()))).getOrganization().getId());
-			newInspectionServiceDTO.setPrintable( inspectionDoc.isPrintable() );
-			newInspectionServiceDTO.setProduct( convert(inspectionServiceDTO.getOfflineProductSerialDTO()) );
-			Long productId = convertStringToLong(inspectionServiceDTO.getR_ProductSerial());
-			if (productId != null) {
-				newInspectionServiceDTO.setProductId( productId );
-			}
-			newInspectionServiceDTO.setProductMobileGuid( inspectionServiceDTO.getProductSerialMobileGUID() );
-			Long productStatusId = convertStringToLong(inspectionDoc.getProductStatusId());
-			if (productStatusId != null) {
-				newInspectionServiceDTO.setProductStatusId( productStatusId );
-			}
-			newInspectionServiceDTO.setResults(convertOldXMLToCriteriaResults(inspectionDoc.getXmlValues(), inspectionServiceDTO.getR_ManufacturerLong()));
-			newInspectionServiceDTO.setStatus(inspectionDoc.getInspectionStatus());
-			newInspectionServiceDTO.setFormVersion(0);
-			
-			newInspectionServiceDTOs.add(newInspectionServiceDTO);
-		}
-		
-		return newInspectionServiceDTOs;
-	}
-
-	/*
-	public InspectionGroup convert( InspectionServiceDTO inspectionServiceDTO ) {
-		
-		InspectionGroup inspectionGroup = new InspectionGroup();
-
-		inspectionGroup.setMobileGuid( inspectionServiceDTO.getMobileGuid() );
-		inspectionGroup.setTenant( persistenceManager.find(TenantOrganization.class, inspectionServiceDTO.getTenantIdLong()) );
-		
-		return inspectionGroup;
-	}
-	
-	public Inspection convert( InspectionDocServiceDTO inspectionDocServiceDTO, InspectionServiceDTO inspectionServiceDTO, InspectionGroup inspectionGroup ) {
-		
-		Inspection inspection = new Inspection();
-		UserBean inspector = (UserBean)em.find(UserBean.class, convertStringToLong(inspectionServiceDTO.getR_User()));
-		
-		inspection.setTenant( persistenceManager.find(TenantOrganization.class, inspectionServiceDTO.getTenantIdLong()) );
-		inspection.setOrganization( inspector.getOrganization() );
-		if( inspectionServiceDTO.getR_EndUserLong() != null  ) {
-			inspection.setCustomer( (Customer)em.find(Customer.class, inspectionServiceDTO.getR_EndUserLong()) );
-		}
-		if( inspectionServiceDTO.getR_DivisionLong() != null ) {
-			inspection.setDivision( (Division)em.find(Division.class, inspectionServiceDTO.getR_DivisionLong()) );
-		}
-		
-		
-		if( inspectionServiceDTO.getR_InspectionBookLong() != null ) {
-			inspection.setBook( persistenceManager.find(InspectionBook.class, inspectionServiceDTO.getR_InspectionBookLong()) );
-		}
-		inspection.setComments( inspectionDocServiceDTO.getComments() );
-		inspection.setDate( inspectionServiceDTO.retrieveInspectionDate() );
-		inspection.setGroup( inspectionGroup );		
-		inspection.setInspector( inspector );		
-		inspection.setLocation( inspectionServiceDTO.getLocation() );
-		inspection.setPrintable( inspectionDocServiceDTO.isPrintable() );
-		inspection.setProduct( (Product)em.find(Product.class, convertStringToLong(inspectionServiceDTO.getR_ProductSerial())) );
-		
-		try {
-			setCriteriaResultFromXml(inspectionDocServiceDTO.getXmlValues(), inspectionServiceDTO.getTenantIdLong(), inspection);
-		} catch (Exception e) {
-			logger.error("Could not parse XML for inspection", e);
-		}
-		
-		
-		inspection.setType( inspectionManager.findInspectionTypeByLegacyEventId(inspectionDocServiceDTO.getR_EventTypeLong(), inspectionServiceDTO.getTenantIdLong()) );
-		return inspection;
-	}
-	*/
-	
-	private List<CriteriaResultServiceDTO> convertOldXMLToCriteriaResults(String xml, Long tenantId) {
-		try {		
-			DOMParser parser = new DOMParser();
-			parser.parse(new InputSource(new StringReader(xml)));
-			Document document = parser.getDocument();
-			NodeList nodes = document.getElementsByTagName("attribute");
-				
-			List<CriteriaResultServiceDTO> criteriaResults = new ArrayList<CriteriaResultServiceDTO>();
-			CriteriaResult result = null;
-			CriteriaResultServiceDTO resultServiceDTO = null;
-			
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Element attributeElement = (Element) nodes.item(i);
-				NodeList idNodes = attributeElement.getElementsByTagName("id");
-				Element idElement = (Element) idNodes.item(0);
-				Long buttonStateId = Long.parseLong(getCharacterDataFromElement(idElement));
-				
-				result = new CriteriaResult(inspectionManager.findLegacyButtonStateMapping(buttonStateId, tenantId));
-				
-				resultServiceDTO = new CriteriaResultServiceDTO();
-				resultServiceDTO.setCriteriaId(result.getCriteria().getId());
-				//resultServiceDTO.setId(result.getId());
-				resultServiceDTO.setStateId(result.getState().getId());
-				
-				criteriaResults.add(resultServiceDTO);			
-			}
-			
-			return criteriaResults;
-		} catch (Exception e) {
-			return null;
-		}
 	}
 	
 	private static String getCharacterDataFromElement(Element e) {

@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.tenant.SetupDataLastModDates;
-import com.n4systems.model.tenant.SetupDataLastModDatesListLoader;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
@@ -108,7 +108,7 @@ public class SetupDataLastModUpdateService {
 		tenantModDates.clear();
 		
 		logger.debug("Reloading SetupDataLastModDates cache");
-		SetupDataLastModDatesListLoader loader = new SetupDataLastModDatesListLoader();
+		AllEntityListLoader<SetupDataLastModDates> loader = new AllEntityListLoader<SetupDataLastModDates>(SetupDataLastModDates.class);
 		
 		for (SetupDataLastModDates modDates: loader.load()) {
 			updateModDates(modDates);

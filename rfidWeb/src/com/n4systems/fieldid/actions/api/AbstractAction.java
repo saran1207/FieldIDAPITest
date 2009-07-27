@@ -377,7 +377,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	
 	protected LoaderFactory getLoaderFactory() {
 		if (loaderFactory == null) {
-			loaderFactory = new LoaderFactory(persistenceManager, getSecurityFilter());
+			loaderFactory = new LoaderFactory(getSecurityFilter());
 		}
 		return loaderFactory;
 	}

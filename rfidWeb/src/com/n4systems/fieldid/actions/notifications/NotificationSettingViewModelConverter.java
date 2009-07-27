@@ -5,15 +5,16 @@ import java.util.Date;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.Customer;
+import com.n4systems.model.Division;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
-import com.n4systems.model.customer.CustomerFilteredLoader;
-import com.n4systems.model.division.DivisionFilteredLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingOwner;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.SecurityFilter;
 
 public class NotificationSettingViewModelConverter {
@@ -124,13 +125,13 @@ public class NotificationSettingViewModelConverter {
 			}
 		} else {
 			if (view.getCustomerId() != null) {
-				CustomerFilteredLoader customerLoader = new CustomerFilteredLoader(pm, filter);
+				FilteredIdLoader<Customer> customerLoader = new FilteredIdLoader<Customer>(filter, Customer.class);
 				customerLoader.setId(view.getCustomerId());
 
 				owner.setCustomer(customerLoader.load());
 				
 				if (view.getDivisionId() != null) {
-					DivisionFilteredLoader divisionLoader = new DivisionFilteredLoader(pm, filter);
+					FilteredIdLoader<Division> divisionLoader = new FilteredIdLoader<Division>(filter, Division.class);
 					divisionLoader.setId(view.getDivisionId());
 					
 					owner.setDivision(divisionLoader.load());

@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.n4systems.util.SecurityFilter;
 
-public abstract class FilteredListLoader<T> extends FilteredLoader<List<T>> {
-
-	public FilteredListLoader(SecurityFilter filter) {
+abstract public class ListLoader<T> extends SecurityFilteredLoader<List<T>> {
+	
+	public ListLoader(SecurityFilter filter) {
 		super(filter);
 	}
-
+	
 }

@@ -1,28 +1,25 @@
 package com.n4systems.model.tenant;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.persistence.savers.legacy.EntitySaver;
+import javax.persistence.EntityManager;
+
+import com.n4systems.persistence.savers.Saver;
 import com.n4systems.services.SetupDataLastModUpdateService;
 
-public class SetupDataLastModDatesSaver extends EntitySaver<SetupDataLastModDates> {
+public class SetupDataLastModDatesSaver extends Saver<SetupDataLastModDates> {
 
 	private boolean notifiyUpdateService = true;
 	
 	public SetupDataLastModDatesSaver() {}
 
-	public SetupDataLastModDatesSaver(PersistenceManager pm) {
-		super(pm);
-	}
-
 	@Override
-	protected void save(PersistenceManager pm, SetupDataLastModDates entity) {
-		pm.saveAny(entity);
+	protected void save(EntityManager em, SetupDataLastModDates entity) {
+		em.persist(entity);
 		checkAndNotifyUpdateService(entity);
 	}
 
 	@Override
-	protected SetupDataLastModDates update(PersistenceManager pm, SetupDataLastModDates entity) {
-		SetupDataLastModDates updateEntity = pm.updateAny(entity);
+	protected SetupDataLastModDates update(EntityManager em, SetupDataLastModDates entity) {
+		SetupDataLastModDates updateEntity = em.merge(entity);
 		checkAndNotifyUpdateService(updateEntity);
 		return updateEntity;
 	}

@@ -1,40 +1,36 @@
 package com.n4systems.model.notificationsettings;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.persistence.savers.legacy.EntitySaver;
-import com.n4systems.util.SecurityFilter;
+import javax.persistence.EntityManager;
 
-public class NotificationSettingSaver extends EntitySaver<NotificationSetting> {
+import rfid.ejb.entity.UserBean;
 
+import com.n4systems.persistence.savers.ModifiedBySaver;
+
+public class NotificationSettingSaver extends ModifiedBySaver<NotificationSetting> {
+	
 	public NotificationSettingSaver() {
-	    super();
-    }
+		super();
+	}
+	
+	public NotificationSettingSaver(Long modifiedBy) {
+		super(modifiedBy);
+	}
 
-	public NotificationSettingSaver(PersistenceManager pm) {
-	    super(pm);
-    }
-
-	@Override
-    protected void save(PersistenceManager pm, NotificationSetting entity) {
-		pm.save(entity, getModifiedById());	
-    }
-
-	@Override
-    protected NotificationSetting update(PersistenceManager pm, NotificationSetting entity) {
-	    return pm.update(entity, getModifiedById());
-    }
+	public NotificationSettingSaver(UserBean modifiedBy) {
+		super(modifiedBy);
+	}
 
 	@Override
-	protected void remove(PersistenceManager pm, NotificationSetting entity) {
+	protected void remove(EntityManager em, NotificationSetting entity) {
 		// we need to load and remove the owners first
-		NotificationSettingOwnerListLoader ownerLoader = new NotificationSettingOwnerListLoader(pm, new SecurityFilter(entity.getTenant().getId()));
+		NotificationSettingOwnerListLoader ownerLoader = new NotificationSettingOwnerListLoader();
 		ownerLoader.setNotificationSettingId(entity.getId());
 		
 		for (NotificationSettingOwner owner: ownerLoader.load()) {
-			pm.deleteAny(owner);
+			em.remove(owner);
 		}
 		
-		pm.delete(entity);
+		em.remove(entity);
 	}
 
 }

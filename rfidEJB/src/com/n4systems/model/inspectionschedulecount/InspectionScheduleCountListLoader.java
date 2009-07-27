@@ -4,36 +4,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.ejb.PersistenceManager;
+import javax.persistence.EntityManager;
+
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingOwner;
-import com.n4systems.persistence.loaders.legacy.ListLoader;
+import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-//TODO: Update this class to extend FilteredListLoader
 public class InspectionScheduleCountListLoader extends ListLoader<InspectionScheduleCount> {
 	private Date fromDate;
 	private Date toDate;
 	private NotificationSetting notification;
 	private List<NotificationSettingOwner> owners;
-	
-	public InspectionScheduleCountListLoader(PersistenceManager pm, SecurityFilter filter) {
-		super(pm, filter);
-	}
 
 	public InspectionScheduleCountListLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
-	protected List<InspectionScheduleCount> load(PersistenceManager pm, SecurityFilter filter) {
+	protected List<InspectionScheduleCount> load(EntityManager em, SecurityFilter filter) {
 		
 		List<InspectionScheduleCount> scheduleCounts = new ArrayList<InspectionScheduleCount>();
 		QueryBuilder<InspectionScheduleCount> builder;
@@ -49,7 +45,7 @@ public class InspectionScheduleCountListLoader extends ListLoader<InspectionSche
 				builder.addWhere(new WhereParameter<List<JobSite>>(Comparator.IN, "jobSite", jobs));
 			}
 			
-			scheduleCounts.addAll(pm.findAll(builder));
+			scheduleCounts.addAll(builder.getResultList(em));
 			
 		} else {
 			/*
@@ -70,7 +66,7 @@ public class InspectionScheduleCountListLoader extends ListLoader<InspectionSche
 					}
 				}
 				
-				scheduleCounts.addAll(pm.findAll(builder));
+				scheduleCounts.addAll(builder.getResultList(em));
 			}
 		}
 		

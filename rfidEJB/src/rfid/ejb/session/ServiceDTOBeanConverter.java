@@ -1,5 +1,15 @@
 package rfid.ejb.session;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import javax.ejb.Local;
+
+import rfid.ejb.entity.InfoOptionBean;
+import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.UserBean;
+
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Customer;
@@ -30,20 +40,9 @@ import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
 
-import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.Local;
-
 import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
 import fieldid.web.services.dto.EndUserServiceDTO;
 import fieldid.web.services.dto.InfoOptionServiceDTO;
-import fieldid.web.services.dto.InspectionServiceDTO;
 import fieldid.web.services.dto.ProductSerialServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 import fieldid.web.services.dto.UserServiceDTO;
@@ -57,11 +56,6 @@ public interface ServiceDTOBeanConverter {
 	public Product convert( ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId );
 	public ProductServiceDTO convert(Product product);
 	public InfoOptionBean convert( InfoOptionServiceDTO infoOptionServiceDTO );
-	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert( InspectionServiceDTO inspectionServiceDTO );
-	/*
-	public InspectionGroup convert( InspectionServiceDTO inspectionServiceDTO );
-	public Inspection convert( InspectionDocServiceDTO inspectionDocServiceDTO, InspectionServiceDTO inspectionServiceDTO, InspectionGroup inspectionGroup );
-	*/
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
 	
@@ -87,6 +81,7 @@ public interface ServiceDTOBeanConverter {
 	@Deprecated
 	public fieldid.web.services.dto.DivisionServiceDTO convertLegacy(Division customer);
 	public CustomerServiceDTO convert(Customer customer, List<Division> divisions);
+	
 	public DivisionServiceDTO convert(Division division);
 	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup);
 	public Date convertStringToDate(String stringDate);

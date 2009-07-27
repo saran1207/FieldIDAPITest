@@ -7,8 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.TenantOrganization;
-import com.n4systems.model.tenant.AllTenantsListLoader;
 import com.n4systems.model.user.EmployeeUserCountLoader;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.usage.TenantDiskUsageCalculator;
 
 public class TenantLimitService implements Serializable {
@@ -57,7 +57,7 @@ public class TenantLimitService implements Serializable {
 	 */
 	public void updateAll() {
 		logger.info("Reloading all limits");
-		AllTenantsListLoader loader = new AllTenantsListLoader();
+		AllEntityListLoader<TenantOrganization> loader = new AllEntityListLoader<TenantOrganization>(TenantOrganization.class);
 	
 		for (TenantOrganization tenant: loader.load()) {
 			updateDiskSpace(tenant);

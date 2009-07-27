@@ -1,6 +1,15 @@
 
 package com.n4systems.fieldid.actions.notifications;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import com.n4systems.ejb.NotificationSettingManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -14,22 +23,13 @@ import com.n4systems.model.customer.CustomerListableLoader;
 import com.n4systems.model.division.DivisionListableLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.notificationsettings.NotificationSettingByIdLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingOwner;
 import com.n4systems.model.notificationsettings.NotificationSettingOwnerListLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class NotificationSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
@@ -113,7 +113,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	@SkipValidation
 	public String doEdit() {
-		NotificationSettingByIdLoader settingLoader = new NotificationSettingByIdLoader(getSecurityFilter());
+		FilteredIdLoader<NotificationSetting> settingLoader = getLoaderFactory().createFilteredIdLoader(NotificationSetting.class);
 		settingLoader.setId(getUniqueID());
 		
 		NotificationSetting setting = settingLoader.load();
@@ -123,7 +123,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 			return MISSING;
 		}
 			
-		NotificationSettingOwnerListLoader ownerLoader = new NotificationSettingOwnerListLoader(persistenceManager, getSecurityFilter());
+		NotificationSettingOwnerListLoader ownerLoader = new NotificationSettingOwnerListLoader();
 		ownerLoader.setNotificationSettingId(setting.getId());
 		List<NotificationSettingOwner> owners = ownerLoader.load();
 		
@@ -192,7 +192,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	public List<NotificationSetting> getSettingsList() {
 		if (settingsList == null) {
-			NotificationSettingByUserListLoader loader = new NotificationSettingByUserListLoader(persistenceManager, getSecurityFilter());
+			NotificationSettingByUserListLoader loader = getLoaderFactory().createNotificationSettingByUserListLoader();
 			loader.setUserId(getSessionUserId());
 			settingsList = loader.load();
 		}
@@ -224,7 +224,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	public List<Listable<Long>> getInspectionTypeList() {
 		if (inspectionTypeList == null) {
-			InspectionTypeListableLoader loader = new InspectionTypeListableLoader(persistenceManager, getSecurityFilter());
+			InspectionTypeListableLoader loader = getLoaderFactory().createInspectionTypeListableLoader();
 			inspectionTypeList = loader.load();
 		}
     	return inspectionTypeList;
@@ -232,7 +232,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	public List<Listable<Long>> getProductTypeList() {
 		if (productTypeList == null) {
-			ProductTypeListableLoader loader = new ProductTypeListableLoader(persistenceManager, getSecurityFilter());
+			ProductTypeListableLoader loader = getLoaderFactory().createProductTypeListableLoader();
 			productTypeList = loader.load();
 		}
     	return productTypeList;
@@ -240,7 +240,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	public List<Listable<Long>> getCustomers() {
 		if (customers == null) {
-			CustomerListableLoader customerListLoader = new CustomerListableLoader(persistenceManager, getSecurityFilter());
+			CustomerListableLoader customerListLoader = getLoaderFactory().createCustomerListableLoader();
 			customers = customerListLoader.load();
 		}
 		return customers;
@@ -249,7 +249,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	public List<Listable<Long>> getDivisions() {
 		if (divisions == null) {
 			if (view.getCustomerId() != null) {
-				DivisionListableLoader divisionListLoader = new DivisionListableLoader(persistenceManager, getSecurityFilter());
+				DivisionListableLoader divisionListLoader = getLoaderFactory().createDivisionListableLoader();
 				divisionListLoader.setCustomerId(view.getCustomerId());
 				
 				divisions = divisionListLoader.load();

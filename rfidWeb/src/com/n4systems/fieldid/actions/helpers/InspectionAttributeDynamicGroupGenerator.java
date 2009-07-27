@@ -41,7 +41,7 @@ public class InspectionAttributeDynamicGroupGenerator {
 					order++;
 				}
 			} else {
-				CommonInspectionAttributeNameListLoader loader = new CommonInspectionAttributeNameListLoader(persistenceManager, filter);
+				CommonInspectionAttributeNameListLoader loader = new CommonInspectionAttributeNameListLoader(filter);
 				
 				// if no product type was selected we need to compute all the common infofields
 				for (String fieldName: loader.load()) {

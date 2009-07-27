@@ -45,7 +45,6 @@ import fieldid.web.services.dto.CommentTemplateServiceDTO;
 import fieldid.web.services.dto.EndUserServiceDTO;
 import fieldid.web.services.dto.FindProductOptionServiceDTO;
 import fieldid.web.services.dto.InspectionBookServiceDTO;
-import fieldid.web.services.dto.InspectionServiceDTO;
 import fieldid.web.services.dto.ProductSerialServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 import fieldid.web.services.dto.SerialNumberCounterServiceDTO;
@@ -279,25 +278,6 @@ public class UserServiceImpl implements IUserService {
 		}
 		
 		return true;
-	}
-	
-	public Long createInspection(InspectionServiceDTO inspectionServiceDTO) throws Exception {
-		
-		try {
-			DataService dataService = new DataServiceImpl();
-			
-			RequestInformation requestInformation = new RequestInformation();		
-			requestInformation.setTenantId(inspectionServiceDTO.getR_ManufacturerLong());
-			requestInformation.setMobileGuid(inspectionServiceDTO.getMobileGuid());
-			
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			
-			dataService.createInspections(requestInformation, converter.convert(inspectionServiceDTO));
-		} catch (Exception e) {
-			throw e;
-		}
-		
-		return 0L;
 	}
 	
 	/**

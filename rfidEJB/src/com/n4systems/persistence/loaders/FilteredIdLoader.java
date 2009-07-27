@@ -7,8 +7,7 @@ import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class FilteredIdLoader<T extends AbstractEntity & FilteredEntity> extends FilteredLoader<T> {
-
+public class FilteredIdLoader<T extends AbstractEntity & FilteredEntity> extends SecurityFilteredLoader<T> {
 	private final Class<T> clazz;
 	private Long id;
 	
@@ -17,8 +16,9 @@ public class FilteredIdLoader<T extends AbstractEntity & FilteredEntity> extends
 		this.clazz = clazz;
 	}
 
-	public void setId(Long id) {
+	public FilteredIdLoader<T> setId(Long id) {
 		this.id = id;
+		return this;
 	}
 
 	@Override

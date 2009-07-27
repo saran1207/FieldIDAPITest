@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.model.tenant.AlertStatus;
 import com.n4systems.model.tenant.AlertStatusSaver;
-import com.n4systems.model.tenant.AllAlertStatusLoader;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.limiters.LimitType;
 import com.n4systems.services.limiters.ResourceLimit;
 import com.n4systems.services.limiters.TenantLimitService;
@@ -110,7 +110,7 @@ public class TenantLimitUpdaterTask extends ScheduledTask {
 	private Map<Long, AlertStatus> loadTenantStatusMap() {
 		tenantAlertStatusMap = new HashMap<Long, AlertStatus>();
 		
-		AllAlertStatusLoader statusLoader = new AllAlertStatusLoader(null);
+		AllEntityListLoader<AlertStatus> statusLoader = new AllEntityListLoader<AlertStatus>(AlertStatus.class);
 		
 		for (AlertStatus status: statusLoader.load()) {
 			tenantAlertStatusMap.put(status.getTenantId(), status);

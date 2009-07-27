@@ -18,9 +18,9 @@ import org.apache.log4j.Logger;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.notificationsettings.NotificationSettingListLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingOwnerListLoader;
 import com.n4systems.model.taskconfig.TaskConfig;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.LogUtils;
 import com.n4systems.util.SecurityFilter;
@@ -44,8 +44,8 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 	@Override
     protected void runTask(TaskConfig config) throws Exception {
 		logger.info("Starting Inspection Schedule Notification Task");
-	
-		NotificationSettingListLoader loader = new NotificationSettingListLoader(null); // doesn't need a security filter
+		
+		AllEntityListLoader<NotificationSetting> loader = new AllEntityListLoader<NotificationSetting>(NotificationSetting.class);
 		
 		Date now = new Date();
 		Date startDate, endDate;
@@ -72,7 +72,7 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		logger.info(LogUtils.prepare("Generating inspection schedule report for Tenant [$0], Name [$1], User [$2], Start [$3], End [$4]", 
 				setting.getTenant(), setting.getName(), setting.getUser().getUserID(), start, end));
 		
-		NotificationSettingOwnerListLoader customerLoader = new NotificationSettingOwnerListLoader(null);
+		NotificationSettingOwnerListLoader customerLoader = new NotificationSettingOwnerListLoader();
 		customerLoader.setNotificationSettingId(setting.getId());
 		
 		SecurityFilter settingUserFilter = new SecurityFilter(setting.getUser());		

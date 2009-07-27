@@ -47,11 +47,6 @@ public class CriteriaResult extends EntityWithTenant {
 		this.criteria = criteria;
 		this.state = state;
 	}
-	
-	@SuppressWarnings("deprecation")
-	public CriteriaResult(LegacyButtonStateMapping legacyButtonStateMapping) {
-		this(legacyButtonStateMapping.getTenant(), legacyButtonStateMapping.getCriteria(), legacyButtonStateMapping.getState());
-	}
 
 	public Criteria getCriteria() {
 		return criteria;

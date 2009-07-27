@@ -32,13 +32,13 @@ public class ProductSaveServiceTest {
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void should_not_allow_create_on_no_product() {
-		ProductSaveService sut = new ProductSaveService(null, null, user);
+		ProductSaveService sut = new ProductSaveService(null, user);
 		sut.create();
 	}
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void should_not_allow_update_on_no_product() {
-		ProductSaveService sut = new ProductSaveService(null, null, user);
+		ProductSaveService sut = new ProductSaveService(null, user);
 		sut.update();
 	}
 	
@@ -54,7 +54,7 @@ public class ProductSaveServiceTest {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
-		ProductSaveService sut = new ProductSaveService(mockProductManager, null, user);
+		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
 		sut.setProduct(product);
 		
 		Product actualProduct = sut.create();
@@ -75,7 +75,7 @@ public class ProductSaveServiceTest {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
-		ProductSaveService sut = new ProductSaveService(mockProductManager, null, user);
+		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
 		sut.setProduct(product);
 		
 		Product actualProduct = sut.create();
@@ -96,7 +96,7 @@ public class ProductSaveServiceTest {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
-		ProductSaveService sut = new ProductSaveService(mockProductManager, null, user);
+		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
 		sut.setProduct(product);
 		
 		Product actualProduct = sut.update();
@@ -116,7 +116,7 @@ public class ProductSaveServiceTest {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
-		ProductSaveService sut = new ProductSaveService(mockProductManager, null, user);
+		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
 		sut.setProduct(product);
 		
 		Product actualProduct = sut.update();

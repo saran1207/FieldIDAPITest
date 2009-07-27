@@ -5,7 +5,8 @@ import javax.persistence.EntityManager;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 
-public abstract class Loader<T> {
+
+abstract public class Loader<T> {
 	protected abstract T load(EntityManager em);
 
 	public T load() {
@@ -15,5 +16,4 @@ public abstract class Loader<T> {
 	public T load(Transaction transaction) {
 		return load(transaction.getEntityManager());
 	}
-
 }
