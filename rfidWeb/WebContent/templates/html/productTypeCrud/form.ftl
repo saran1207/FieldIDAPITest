@@ -169,14 +169,10 @@
 	
 	<h2><@s.text name="label.attributes"/></h2>
 	<p>
-		
-		
 		<#include "_infoFields.ftl"/>
-		
 	</p>
 	
 	<#include "../common/_attachedFilesForm.ftl"/>
-	<script type="text/javascript">uploadFileLimit = ${fileUploadMax};</script>
 	<div class="formAction">
 		
 		<#if uniqueID?exists  >

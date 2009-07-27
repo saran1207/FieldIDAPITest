@@ -8,6 +8,8 @@
 		uploadUrl = '<@s.url action="uploadForm" namespace="/ajax"/>';
 		uploadWarning = "<@s.text name="warning.filesstilluploading"/>";
 		frameCount = ${(uploadedFiles?size)!0};
+		uploadFileLimit = ${fileUploadMax};
+		tooManyFileMessage = "<@s.text name="warning.max_files_uploaded"><@s.param>${fileUploadMax}</@s.param></@s.text>";
 	</script>
 </head>
 <h2><@s.text name="label.attachments"/></h2>

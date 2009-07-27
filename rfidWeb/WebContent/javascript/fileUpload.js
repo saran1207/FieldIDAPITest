@@ -39,8 +39,8 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 var frameCount = 0;
 var activeFileUploads = 0;
 var uploadUrl = '' ;
-var uploadFileLimit = 100;
-var tooManyFileMessage = "Too many files already attached. You can have a total of " + uploadFileLimit + " attachments";
+var uploadFileLimit = 10;
+var tooManyFileMessage = "Too many files already attached.";
 function addUploadFile(type) {
 	if (type == undefined) {
 		type = ""; 
