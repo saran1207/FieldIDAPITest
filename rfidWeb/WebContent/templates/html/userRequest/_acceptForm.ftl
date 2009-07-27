@@ -16,7 +16,7 @@
 			<@s.select key="label.organizationalunit" name="organizationalUnit" list="organizationalUnits" listKey="id" listValue="name" labelposition="left" required="true"/>
 		</div>
 		<div class="formRowHolder">
-			<@s.select key="label.customer" name="customer" list="customers" listKey="id" listValue="name" labelposition="left" onchange="customerChanged(this);"  required="true"/>
+			<@s.select id="customerList" key="label.customer" name="customer" list="customers" listKey="id" listValue="name" labelposition="left" onchange="customerChanged(this);"  required="true"/>
 		</div>
 		<div class="formRowHolder">
 			<@s.select key="label.division" id="division" name="division" list="divisions" listKey="id" listValue="name" labelposition="left" emptyOption="true"/>
@@ -82,5 +82,7 @@
 			} 
 		
 		}
+		
+		customerChanged($('customerList'));
 	</script>
 </div>
