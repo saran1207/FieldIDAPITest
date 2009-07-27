@@ -19,7 +19,7 @@ import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "illinois";
+	String company = "swwr";
 	String password = "makemore$";
 	boolean jobs = false;			// end users do not have Jobs
 	
@@ -722,7 +722,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginAdminUser();
 		try {
-			helperReportingSearch();
+			helperReportingSearch(neitherDivision);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -732,7 +732,63 @@ public class SmokeTestEx extends FieldIDTestCase {
 		}
 	}
 	
-	private void helperReportingSearch() throws Exception {
+	public void testCreateReportingSearch() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperReportingSearch(null);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorReportingSearch() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			helperReportingSearch(null);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothReportingSearch() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperReportingSearch(null);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherReportingSearch() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			helperReportingSearch(null);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperReportingSearch(String division) throws Exception {
 		reporting.gotoReporting();
 		reporting.expandReportSelectColumns();
 		ReportSearchSelectColumns r = new ReportSearchSelectColumns();
@@ -755,11 +811,13 @@ public class SmokeTestEx extends FieldIDTestCase {
 		inspection.setCustomer(customer.getCustomerName());
 		inspection.setLocation("massupdate");
 		inspection.setPrintable(true);
+		if(division != null) {
+			inspection.setDivision(division);
+		}
 		reporting.setMassUpdate(inspection);
 		reporting.gotoSaveMassUpdate();
-//		reporting.gotoSummaryReport();
-		//		mass update (inspection book, location, printable; admin can update division)
-		//		summary report
+		reporting.gotoSummaryReport();
+		reporting.expandSummaryReport();
 	}
 	
 	// test Schedule

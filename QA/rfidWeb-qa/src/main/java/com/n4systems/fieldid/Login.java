@@ -58,6 +58,9 @@ public class Login extends TestCase {
 	Finder requestAccountSubmitFinder;
 	Finder requestAccountReturnToLoginPageFinder;
 	Finder requestAccountConfirmMessageFinder;
+	private String position;
+	private String timeZone;
+	private Finder passwordResetEmailSentContentHeaderFinder;
 
 	/**
 	 * Initialize the class and load up all the Finder information. This
@@ -83,15 +86,15 @@ public class Login extends TestCase {
 			loginButtonFinder = id(p.getProperty("loginbutton"));
 			loginURL = p.getProperty("url");
 			loginContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			loginChooseCompanyFinder = text(p.getProperty("choosecompany"));
+			loginChooseCompanyFinder = xpath(p.getProperty("choosecompany"));
 			loginCompanyIDFinder = id(p.getProperty("companyid"));
 			chooseCompanyContentHeaderFinder = xpath(p.getProperty("choosecontentheader"));
-			chooseCompanyContinueButtonFinder = id(p.getProperty("choosecontinuebutton"));
-			rememberLoginInfoFinder = id(p.getProperty("rememberlogininfo"));
+			chooseCompanyContinueButtonFinder = xpath(p.getProperty("choosecontinuebutton"));
+			rememberLoginInfoFinder = xpath(p.getProperty("rememberlogininfo"));
 			n4systemsLinkFinder = xpath(p.getProperty("n4systems"));
 			n4systemsTitle = p.getProperty("n4systemstitle");
 			n4systemsURL = p.getProperty("n4systemsurl");
-			loginForgotMyPasswordFinder = text(p.getProperty("forgotpassword"));
+			loginForgotMyPasswordFinder = xpath(p.getProperty("forgotpassword"));
 			forgotPasswordContentHeaderFinder = xpath(p.getProperty("forgotpasswordcontentheader"));
 			forgotPasswordSendButtonFinder = id(p.getProperty("sendPassword_hbutton_send"));
 			forgotPasswordLoginFinder = xpath(p.getProperty("forgotpasswordlogin"));
@@ -113,6 +116,7 @@ public class Login extends TestCase {
 			requestAccountSubmitFinder = id(p.getProperty("registernewusersubmit"));
 			requestAccountReturnToLoginPageFinder = text(p.getProperty("registernewuserreturntologin"));
 			requestAccountConfirmMessageFinder = xpath(p.getProperty("registernewuserconfirmmessage"));
+			passwordResetEmailSentContentHeaderFinder = xpath(p.getProperty("passwordresetemailsentheader"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile	+ "' when initializing Home class");
 		} catch (IOException e) {
@@ -280,7 +284,7 @@ public class Login extends TestCase {
 		assertTrue("Could not find the Company ID text field on Choose A Company page", companyIDTextField.exists());
 		companyIDTextField.set(company);
 		Button chooseContinueButton = ie.button(chooseCompanyContinueButtonFinder);
-		assertTrue("Could not find the Continue button on Choose A Company page", chooseContinueButton.exists());
+		assertTrue("Could not find the Find Sign In Page button on Choose A Company page", chooseContinueButton.exists());
 		chooseContinueButton.click();
 	}
 
@@ -393,7 +397,12 @@ public class Login extends TestCase {
 		assertTrue("Could not find the Send button on Forgot Password page", send.exists());
 		send.click();
 		ie.waitUntilReady();
-		checkForgotMyPasswordContentHeader();
+		checkPasswordResetEmailSentContentHeader();
+	}
+
+	private void checkPasswordResetEmailSentContentHeader() throws Exception {
+		HtmlElement contentHeader = ie.htmlElement(passwordResetEmailSentContentHeaderFinder);
+		assertTrue("Could not find the Forgot Password content header", contentHeader.exists());
 	}
 
 	/**
@@ -532,5 +541,40 @@ public class Login extends TestCase {
 		Link returnToLoginPage = ie.link(requestAccountReturnToLoginPageFinder);
 		assertTrue("Could not find the link to return to the login page", returnToLoginPage.exists());
 		returnToLoginPage.click();
+	}
+	
+	public void validate(String company, String name, String password) throws Exception {
+		IE ie2 = getIE();
+		setIE(ie2);
+		gotoLoginPage();
+		gotoLoginPage(loginURL);
+		setRememberLoginInformation();
+		unsetRememberLoginInformation();
+		setRememberLoginInformation(false);
+		gotoSecurityCardLogin();
+		gotoRegularLogin();
+		setCompany(company);
+		gotoForgotMyPassword();
+		gotoLoginFromForgotPassword();
+		setForgotPassword(name);
+		gotoLoginFromForgotPassword2();
+		gotoN4Systems();
+		gotoRequestAnAccount();
+		String userID = "val-" + misc.getRandomString(10);
+		String email = "dev@n4systems.com";
+		String firstName = "Dev";
+		String lastName = "Validate";
+		String position = "seated";
+		String timeZone = "Toronto";
+		String phoneNumber = "416-599-6464";
+		String comments = "This is an account requested by the Login.validate() method.";
+		FieldIDUser newuser = new FieldIDUser(userID, email, firstName, lastName, position, timeZone, company, phoneNumber, password, comments);
+		gotoRequestAnAccount();
+		setRequestAnAccount(newuser);
+		setUserName(name);
+		setPassword(password);
+		login();
+		misc.logout();
+		close();
 	}
 }

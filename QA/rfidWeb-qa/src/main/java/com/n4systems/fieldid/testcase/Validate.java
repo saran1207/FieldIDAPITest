@@ -8,6 +8,22 @@ public class Validate extends FieldIDTestCase {
 		super.setUp();
 	}
 
+	public void testLogin() throws Exception {
+		String company = p.getProperty("company");
+		String userid = p.getProperty("userid");
+		String password = p.getProperty("password");
+
+		try {
+			login.validate(company, userid, password);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
 	public void testAdministration() throws Exception {
 		String company = p.getProperty("company");
 		String userid = p.getProperty("userid");

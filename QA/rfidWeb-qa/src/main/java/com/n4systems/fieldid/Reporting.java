@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -107,6 +106,15 @@ public class Reporting extends TestCase {
 	private Finder reportingMassUpdateLocationFinder;
 	private Finder reportingMassUpdatePrintableFinder;
 	private Finder reportingMassUpdateSaveButtonFinder;
+	private Finder massUpdateCustomerFinder;
+	private Finder massUpdateDivisionFinder;
+	private Finder massUpdateInspectionBookFinder;
+	private Finder massUpdateLocationFinder;
+	private Finder massUpdatePrintableFinder;
+	private Finder summaryReportPageHeaderFinder;
+	private Finder reportingSummaryReportLinkFinder;
+	private Finder summaryReportProductTypeExpandLinkFinder;
+	private Finder summaryReportEventTypeGroupExpandLinkFinder;
 	
 	public Reporting(IE ie) {
 		this.ie = ie;
@@ -194,6 +202,15 @@ public class Reporting extends TestCase {
 			reportingMassUpdateLocationFinder = xpath(p.getProperty("massupdatelocation"));
 			reportingMassUpdatePrintableFinder = xpath(p.getProperty("massupdateprintable"));
 			reportingMassUpdateSaveButtonFinder = xpath(p.getProperty("massupdatesavebutton"));
+			massUpdateCustomerFinder = xpath(p.getProperty("massupdatecustomer"));
+			massUpdateDivisionFinder = xpath(p.getProperty("massupdatedivision"));
+			massUpdateInspectionBookFinder = xpath(p.getProperty("massupdateinspectionbook"));
+			massUpdateLocationFinder = xpath(p.getProperty("massupdatelocation"));
+			massUpdatePrintableFinder = xpath(p.getProperty("massupdateprintable"));
+			summaryReportPageHeaderFinder = xpath(p.getProperty("summaryreportpageheader"));
+			reportingSummaryReportLinkFinder = xpath(p.getProperty("reportingsummaryreportlink"));
+			summaryReportProductTypeExpandLinkFinder = xpath(p.getProperty("summaryreportproducttypeexpandlinks"));
+			summaryReportEventTypeGroupExpandLinkFinder = xpath(p.getProperty("summaryreporteventtypegroupexpandlinks"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -1083,9 +1100,39 @@ public class Reporting extends TestCase {
 		assertTrue("Could not find the Printable checkbox", printable.exists());
 	}
 
-	public void setMassUpdate(Inspection i) {
+	public void setMassUpdate(Inspection i) throws Exception {
 		assertNotNull(i);
-		fail("Not implemented");
+		SelectList customer = ie.selectList(massUpdateCustomerFinder);
+		assertTrue("Could not find the customer list", customer.exists());
+		SelectList division = ie.selectList(massUpdateDivisionFinder);
+		assertTrue("Could not find the division list", division.exists());
+		SelectList inspectionBook = ie.selectList(massUpdateInspectionBookFinder);
+		assertTrue("Could not find the inspection book list", inspectionBook.exists());
+		TextField location = ie.textField(massUpdateLocationFinder);
+		assertTrue("Could not find the location field", location.exists());
+		Checkbox printable = ie.checkbox(massUpdatePrintableFinder);
+		assertTrue("Could not find the printable checkbox", printable.exists());
+		if(i.getCustomer() != null) {
+			Option o = customer.option(text(i.getCustomer()));
+			assertTrue("Could not find '" + i.getCustomer() + "' in the customer list", o.exists());
+			misc.waitForJavascript();
+		}
+		if(i.getDivision() != null) {
+			Option o = division.option(text(i.getDivision()));
+			assertTrue("Could not find '" + i.getDivision() + "' in the division list", o.exists());
+			misc.waitForJavascript();
+		}
+		if(i.getBook() != null) {
+			Option o = inspectionBook.option(text(i.getBook()));
+			assertTrue("Could not find '" + i.getBook() + "' in the inspection book list", o.exists());
+			misc.waitForJavascript();
+		}
+		if(i.getLocation() != null) {
+			location.set(i.getLocation());
+		}
+		if(i.getPrintable()) {
+			printable.set(true);
+		}
 	}
 
 	public void gotoSaveMassUpdate() throws Exception {
@@ -1095,5 +1142,44 @@ public class Reporting extends TestCase {
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
 		checkReportingSearchResultsPage();
+	}
+
+	public void gotoSummaryReport() throws Exception {
+		Link l = ie.link(reportingSummaryReportLinkFinder);
+		assertTrue("Could not find the link to Summary Report", l.exists());
+		l.click();
+		checkSummaryReportPageHeader();
+	}
+
+	private void checkSummaryReportPageHeader() throws Exception {
+		HtmlElement summaryReportContentHeader = ie.htmlElement(summaryReportPageHeaderFinder);
+		assertTrue("Could not find Summary Report page content header", summaryReportContentHeader.exists());
+	}
+
+	public void expandSummaryReport() throws Exception {
+		expandSummaryReportProductTypes();
+		expandSummaryReportEventTypeGroups();
+	}
+
+	private void expandSummaryReportEventTypeGroups() throws Exception {
+		Links expands = ie.links(summaryReportEventTypeGroupExpandLinkFinder);
+		assertNotNull(expands);
+		Iterator<Link> i = expands.iterator();
+		while(i.hasNext()) {
+			Link expand = i.next();
+			assertTrue("Could not find a link to expand an event type group", expand.exists());
+			expand.click();
+		}
+	}
+
+	private void expandSummaryReportProductTypes() throws Exception {
+		Links expands = ie.links(summaryReportProductTypeExpandLinkFinder);
+		assertNotNull(expands);
+		Iterator<Link> i = expands.iterator();
+		while(i.hasNext()) {
+			Link expand = i.next();
+			assertTrue("Could not find a link to expand a product type", expand.exists());
+			expand.click();
+		}
 	}
 }
