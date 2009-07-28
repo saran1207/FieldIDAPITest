@@ -423,9 +423,7 @@
 			<result name="input" type="freemarker">/templates/ajax/publishedCatalog/importStarted.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/publishedCatalog/importStarted.ftl</result>
 		</action>
-		
-	
-		
+			
 		<action name="mergeFindProduct" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="error" type="freemarker">/templates/ajax/produtMerge/list.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/produtMerge/list.ftl</result>
@@ -435,6 +433,10 @@
 		<action name="generateSerials" method="generate" class="com.n4systems.fieldid.actions.product.MultiAddProductSerialNumberGenAction">
 			<result name="error" type="freemarker">/templates/ajax/multiProductCrud/otherIdentifiersForm.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/multiProductCrud/otherIdentifiersForm.ftl</result>
+		</action>
+		
+		<action name="calcNextDate" method="calculate" class="com.n4systems.fieldid.actions.inspection.CalcNextDateAction">
+			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/nextDate.ftl</result>
 		</action>
 	</package>
 </struts>

@@ -18,6 +18,7 @@ import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.productstatus.ProductStatusListLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
+import com.n4systems.model.producttype.ProductTypeScheduleLoader;
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.user.UserFilteredLoader;
@@ -125,5 +126,9 @@ public class LoaderFactory {
 	
 	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
 		return new AllEntityListLoader<T>(clazz);
+	}
+	
+	public ProductTypeScheduleLoader createProductTypeScheduleLoader() {
+		return new ProductTypeScheduleLoader(filter);
 	}
 }

@@ -6,13 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "producttypeschedules")
-public class ProductTypeSchedule extends EntityWithTenant {
+public class ProductTypeSchedule extends EntityWithTenant implements FilteredEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional=false)
@@ -30,6 +31,10 @@ public class ProductTypeSchedule extends EntityWithTenant {
 	
 	public ProductTypeSchedule() {}
 
+	public static final void prepareFilter(SecurityFilter filter) {
+		filter.setTargets(TENANT_ID_FIELD, "customer.id", null, null, null);
+	}
+	
 	public ProductType getProductType() {
 		return productType;
 	}

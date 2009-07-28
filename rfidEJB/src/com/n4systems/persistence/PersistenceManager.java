@@ -48,6 +48,9 @@ public class PersistenceManager {
 		Transaction transaction = startTransaction();
 		try {
 			result = loader.load(transaction);
+		} catch(RuntimeException e) {
+			transaction.rollback();
+			throw e;
 		} finally {
 			transaction.commit();
 		}
@@ -58,6 +61,9 @@ public class PersistenceManager {
 		Transaction transaction = startTransaction();
 		try {
 			saver.save(transaction, entity);
+		} catch(RuntimeException e) {
+			transaction.rollback();
+			throw e;
 		} finally {
 			transaction.commit();
 		}
@@ -68,6 +74,9 @@ public class PersistenceManager {
 		Transaction transaction = startTransaction();
 		try {
 			saver.update(transaction, entity);
+		} catch(RuntimeException e) {
+			transaction.rollback();
+			throw e;
 		} finally {
 			transaction.commit();
 		}
@@ -78,6 +87,9 @@ public class PersistenceManager {
 		Transaction transaction = startTransaction();
 		try {
 			deleter.remove(transaction, entity);
+		} catch(RuntimeException e) {
+			transaction.rollback();
+			throw e;
 		} finally {
 			transaction.commit();
 		}

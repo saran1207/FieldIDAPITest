@@ -1,7 +1,7 @@
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <@s.hidden name="productId"/>
 <@s.hidden name="inspectionGroupId"/>
-<@s.hidden name="type"/>
+<@s.hidden id="inspectionTypeId" name="type"/>
 <div id="productSummary">
 	<h2><@s.text name="label.productsummary"/></h2>
 	<p>
@@ -54,7 +54,7 @@
 			<@s.hidden name="customer" id="customer" />
 		<#else>
 			<span>
-				<@s.select name="customer" id="customer" list="customers" listKey="id" listValue="name" onchange="customerChanged(this); updateInspectionBooks(this.id, ${(unqiueID?exists)?string});">
+				<@s.select name="customer" id="customer" list="customers" listKey="id" listValue="name" onchange="customerChanged(this); updateInspectionBooks(this.id, ${(unqiueID?exists)?string}); updateNextDate();">
 					<#if !Session.sessionUser.anEndUser >
 						<@s.param name="headerKey"></@s.param>
 						<@s.param name="headerValue"></@s.param>
@@ -106,7 +106,7 @@
 	<p>
 		<label><@s.text name="label.inspectiondate"/></label>
 		<span class="date">
-			<@s.datetimepicker id="inspectionDate" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
+			<@s.datetimepicker id="inspectionDate" onchange="updateNextDate();" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
 		</span>
 		
 	</p>

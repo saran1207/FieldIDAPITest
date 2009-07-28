@@ -569,6 +569,20 @@ public class QueryBuilder<E> {
 	}
 	
 	public Long getCount(EntityManager em) throws InvalidQueryException {
-		return (Long)setCountSelect().createQuery(em).getSingleResult();
+		// we'll capture the old select clause, so we can set it back after
+		SelectClause oldSelectArgument = getSelectArgument();
+		
+		// now set the select to be a simple count, and get the result
+		Long count = (Long)setCountSelect().createQuery(em).getSingleResult();
+		
+		// set the old select argument back
+		setSelectArgument(oldSelectArgument);
+		
+		return count; 
+	}
+	
+	public boolean entityExists(EntityManager em) throws InvalidQueryException {
+		Long count = getCount(em);
+		return (count != null && count > 0);
 	}
 }

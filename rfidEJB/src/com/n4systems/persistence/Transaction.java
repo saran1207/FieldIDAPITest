@@ -21,6 +21,16 @@ public class Transaction {
 		return entityTransaction;
 	}
 	
+	public void rollback() {
+		try {
+			if (entityTransaction != null) {
+				entityTransaction.rollback();
+			}
+		} finally {
+			closeEntityManager();
+		}
+	}
+	
 	public void commit() {
 		try {
 			if (entityTransaction != null && entityTransaction.getRollbackOnly()) {
@@ -29,9 +39,13 @@ public class Transaction {
 				entityTransaction.commit();
 			}
 		} finally {
-			if (entityManager != null) {
-				entityManager.close();
-			}
+			closeEntityManager();
+		}
+	}
+
+	private void closeEntityManager() {
+		if (entityManager != null) {
+			entityManager.close();
 		}
 	}
 }
