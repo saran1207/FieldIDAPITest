@@ -23,6 +23,7 @@
 	
 	<s:textfield name="tenant.limits.diskSpace" label="Total disk space in Bytes" />
 	<s:textfield name="tenant.limits.users" label="Max number of employee Users" />
+	<s:textfield name="tenant.limits.assets" label="Max Assets (-1 for Unlimited)" />
 	
 	<s:if test="!id">
 		<s:textfield name="userId" value="%{userId}" label="Admin UserID" />

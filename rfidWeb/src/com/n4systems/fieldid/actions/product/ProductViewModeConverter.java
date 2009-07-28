@@ -23,6 +23,8 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.user.UserFilteredLoader;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
@@ -30,6 +32,7 @@ public class ProductViewModeConverter {
 	private final LoaderFactory loaderFactory;
 	private final OrderManager orderManager;
 	private final UserBean identifier;
+	private Transaction transaction;
 	
 	public ProductViewModeConverter(LoaderFactory loaderFactory, OrderManager orderManager, UserBean identifier) {
 		this.loaderFactory = loaderFactory;
@@ -40,25 +43,31 @@ public class ProductViewModeConverter {
 	public Product viewToModel(ProductView view) {
 		Product model = new Product();
 
-		model.setTenant(identifier.getTenant());
-		model.setOrganization(identifier.getOrganization());
-		model.setIdentifiedBy(identifier);	
-		model.setOwner(resolveCustomer(view.getOwner()));
-		model.setDivision(resolveDivision(view.getDivision()));
-		model.setJobSite(resolveJobSite(view.getJobSite()));
-		model.setType(resolveProductType(view.getProductTypeId()));
-		model.setAssignedUser(resolveUser(view.getAssignedUser()));
-		model.setProductStatus(resolveProductStatus(view.getProductStatus()));
-		model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), identifier.getTenant()));
-		model.setIdentified(view.getIdentified());
-		model.setLocation(view.getLocation());
-		model.setPurchaseOrder(view.getPurchaseOrder());
-		model.setComments(view.getComments());
+		transaction = PersistenceManager.startTransaction();
 		
-		List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getProductInfoOptions(), model.getType().getInfoFields());
-		model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
-		
-		resolveExtensionValues(view.getProductExtentionValues(), model);
+		try {
+			model.setTenant(identifier.getTenant());
+			model.setOrganization(identifier.getOrganization());
+			model.setIdentifiedBy(identifier);	
+			model.setOwner(resolveCustomer(view.getOwner()));
+			model.setDivision(resolveDivision(view.getDivision()));
+			model.setJobSite(resolveJobSite(view.getJobSite()));
+			model.setType(resolveProductType(view.getProductTypeId()));
+			model.setAssignedUser(resolveUser(view.getAssignedUser()));
+			model.setProductStatus(resolveProductStatus(view.getProductStatus()));
+			model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), identifier.getTenant()));
+			model.setIdentified(view.getIdentified());
+			model.setLocation(view.getLocation());
+			model.setPurchaseOrder(view.getPurchaseOrder());
+			model.setComments(view.getComments());
+			
+			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getProductInfoOptions(), model.getType().getInfoFields());
+			model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
+			
+			resolveExtensionValues(view.getProductExtentionValues(), model);
+		} finally {
+			transaction.commit();
+		}
 		
 		return model;
 	}
@@ -76,7 +85,7 @@ public class ProductViewModeConverter {
 		Customer customer = null;
 		if (customerId != null) {
 			FilteredIdLoader<Customer> loader = loaderFactory.createFilteredIdLoader(Customer.class).setId(customerId);
-			customer = loader.load();
+			customer = loader.load(transaction);
 		}
 		return customer;
 	}
@@ -85,7 +94,7 @@ public class ProductViewModeConverter {
 		Division division = null;
 		if (divisionId != null) {
 			FilteredIdLoader<Division> loader = loaderFactory.createFilteredIdLoader(Division.class).setId(divisionId);
-			division = loader.load();
+			division = loader.load(transaction);
 		}
 		return division;
 	}
@@ -94,7 +103,7 @@ public class ProductViewModeConverter {
 		JobSite jobSite = null;
 		if (jobSiteId != null) {
 			FilteredIdLoader<JobSite> loader = loaderFactory.createFilteredIdLoader(JobSite.class).setId(jobSiteId);
-			jobSite = loader.load();
+			jobSite = loader.load(transaction);
 		}
 		return jobSite;
 	}
@@ -103,7 +112,7 @@ public class ProductViewModeConverter {
 		ProductType productType = null;
 		if (productTypeId != null) {
 			FilteredIdLoader<ProductType> loader = loaderFactory.createFilteredIdLoader(ProductType.class).setId(productTypeId);
-			productType = loader.load();
+			productType = loader.load(transaction);
 		}
 		return productType;
 	}
@@ -112,7 +121,7 @@ public class ProductViewModeConverter {
 		UserBean user = null;
 		if (userId != null) {
 			UserFilteredLoader loader = loaderFactory.createUserFilteredLoader().setId(userId);
-			user = loader.load();
+			user = loader.load(transaction);
 		}
 		return user;
 	}
@@ -121,14 +130,14 @@ public class ProductViewModeConverter {
 		ProductStatusBean status = null;
 		if (statusId != null) {
 			ProductStatusFilteredLoader loader = loaderFactory.createProductStatusFilteredLoader().setId(statusId);
-			status = loader.load();
+			status = loader.load(transaction);
 		}
 		return status;
 	}
 	
 	private void resolveExtensionValues(List<ProductExtensionValueInput> productExtentionValues, Product product) {		
 		if (productExtentionValues != null) {
-			List<ProductSerialExtensionBean> extensions = loaderFactory.createProductSerialExtensionListLoader().load();
+			List<ProductSerialExtensionBean> extensions = loaderFactory.createProductSerialExtensionListLoader().load(transaction);
 			
 			Set<ProductSerialExtensionValueBean> newExtensionValues = new TreeSet<ProductSerialExtensionValueBean>();
 			for (ProductExtensionValueInput input : productExtentionValues) {

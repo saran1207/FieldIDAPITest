@@ -200,7 +200,10 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	}
 	
 	public Integer getMaxProducts() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());  
+		Integer configMax = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
+		Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
+		
+		return (configMax < limitMax) ? configMax : limitMax;
 	}
 	
 	/*************** Form input get/set's go below here **********************/

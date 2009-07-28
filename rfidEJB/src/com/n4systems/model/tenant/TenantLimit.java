@@ -16,6 +16,9 @@ public class TenantLimit implements Serializable {
 	@Column(name="user_limit", nullable = false)
 	private Long users = 0L;
 
+	@Column(name="asset_limit", nullable = false)
+	private Long assets = 0L;
+	
 	public TenantLimit() {}
 
 	public Long getDiskSpace() {
@@ -48,5 +51,21 @@ public class TenantLimit implements Serializable {
 	
 	public void setUsersUnlimited() {
 		setUsers(UNLIMITED);
+	}
+
+	public Long getAssets() {
+		return assets;
+	}
+
+	public void setAssets(Long assets) {
+		this.assets = assets;
+	}
+	
+	public boolean isAssetsUnlimited() {
+		return (getAssets() == UNLIMITED);
+	}
+	
+	public void setAssetsUnlimited() {
+		setAssets(UNLIMITED);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.product.ProductCountLoader;
 import com.n4systems.model.user.EmployeeUserCountLoader;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.usage.TenantDiskUsageCalculator;
@@ -23,6 +24,7 @@ public class TenantLimitService implements Serializable {
 	
 	private Map<Long, ResourceLimit> diskSpace = new ConcurrentHashMap<Long, ResourceLimit>();
 	private Map<Long, ResourceLimit> employeeUsers = new ConcurrentHashMap<Long, ResourceLimit>();
+	private Map<Long, ResourceLimit> assets = new ConcurrentHashMap<Long, ResourceLimit>();
 	
 	private TenantLimitService() {}
 	
@@ -37,6 +39,13 @@ public class TenantLimitService implements Serializable {
 		return employeeUsers.get(tenantId);
 	}
 	
+	public ResourceLimit getAssets(Long tenantId) {
+		// asset counts are refreshed in real-time
+		refreshAssetCount(tenantId);
+		
+		return assets.get(tenantId);
+	}
+	
 	public Map<Long, ResourceLimit> getLimitForType(LimitType type) {
 		Map<Long, ResourceLimit> limits = null;
 		
@@ -46,6 +55,9 @@ public class TenantLimitService implements Serializable {
 				break;
 			case EMPLOYEE_USERS:
 				limits = employeeUsers;
+				break;
+			case ASSETS:
+				limits = assets;
 				break;
 		}
 		
@@ -57,18 +69,21 @@ public class TenantLimitService implements Serializable {
 	 */
 	public void updateAll() {
 		logger.info("Reloading all limits");
+		long startTime = System.currentTimeMillis();
 		AllEntityListLoader<TenantOrganization> loader = new AllEntityListLoader<TenantOrganization>(TenantOrganization.class);
 	
 		for (TenantOrganization tenant: loader.load()) {
 			updateDiskSpace(tenant);
 			updateEmployeeUsers(tenant);
+			updateAssets(tenant);
 		}
+		logger.info("All limits reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 	
 	/**
 	 * Updates the user count but does not reload the tenant limit.
 	 */
-	public void refreshEmployeeUserCount(Long tenantId) {
+	private void refreshEmployeeUserCount(Long tenantId) {
 		EmployeeUserCountLoader loader = new EmployeeUserCountLoader();
 		loader.setTenantId(tenantId);
 		
@@ -76,9 +91,19 @@ public class TenantLimitService implements Serializable {
 	}
 	
 	/**
+	 * Updates the asset count but does not reload the tenant limit.
+	 */
+	private void refreshAssetCount(Long tenantId) {
+		ProductCountLoader loader = new ProductCountLoader();
+		loader.setTenantId(tenantId);
+		
+		assets.get(tenantId).setUsed(loader.load());
+	}
+	
+	/**
 	 * Updates the employee user limit for a single tenant
 	 */
-	public void updateEmployeeUsers(TenantOrganization tenant) {
+	private void updateEmployeeUsers(TenantOrganization tenant) {
 		logger.debug("Updating employee limits for [" + tenant.getName() + "]");
 		
 		EmployeeUserCountLoader loader = new EmployeeUserCountLoader();
@@ -95,7 +120,7 @@ public class TenantLimitService implements Serializable {
 	/**
 	 * Updates the disk space limit for a single tenant
 	 */
-	public void updateDiskSpace(TenantOrganization tenant) {
+	private void updateDiskSpace(TenantOrganization tenant) {
 		logger.debug("Updating disk space limits for [" + tenant.getName() + "]");
 		TenantDiskUsageCalculator usageCalc = new TenantDiskUsageCalculator(tenant);
 		
@@ -105,5 +130,22 @@ public class TenantLimitService implements Serializable {
 		
 		diskSpace.put(tenant.getId(), limit);
 		logger.debug("Disk Limit [" + tenant.getName() + "]: " + limit.toString());
+	}
+	
+	/**
+	 * Updates the asset limit for a single tenant
+	 */
+	private void updateAssets(TenantOrganization tenant) {
+		logger.debug("Updating asset limits for [" + tenant.getName() + "]");
+		
+		ProductCountLoader loader = new ProductCountLoader();
+		loader.setTenantId(tenant.getId());
+		
+		ResourceLimit limit = new AssetResourceLimit();
+		limit.setUsed(loader.load());
+		limit.setMaximum(tenant.getLimits().getAssets());
+		
+		assets.put(tenant.getId(), limit);
+		logger.debug("Asset Limit [" + tenant.getName() + "]: " + limit.toString());
 	}
 }

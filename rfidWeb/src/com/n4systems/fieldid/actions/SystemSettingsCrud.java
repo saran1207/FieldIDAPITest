@@ -15,34 +15,30 @@ import com.n4systems.model.TenantOrganization;
 import com.n4systems.reporting.PathHandler;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 
-
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
-	
-	private TenantOrganization myTenant;
-	
-	
-	private File uploadedImage;
 
+	private TenantOrganization myTenant;
+	private File uploadedImage;
 	private String imageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
-	
+
 	public SystemSettingsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 
-	
 	@Override
 	protected void initMemberFields() {
 		myTenant = persistenceManager.find(TenantOrganization.class, getTenantId());
 	}
-	
+
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		initMemberFields();
-		
+
 	}
+
 	@SkipValidation
 	public String doEdit() {
 		File privateLogoPath = PathHandler.getTenantLogo(myTenant);
@@ -52,9 +48,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Branding)
+	@ExtendedFeatureFilter(requiredFeature = ExtendedFeature.Branding)
 	public String doUpdate() {
-		
+
 		try {
 			persistenceManager.update(myTenant, fetchCurrentUser());
 			processLogo();
@@ -63,10 +59,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 		} catch (Exception e) {
 			addActionErrorText("error.updating_system_settings");
 		}
-		
+
 		return SUCCESS;
 	}
-
 
 	private void processLogo() throws IOException {
 		File privateLogoPath = PathHandler.getTenantLogo(myTenant);
@@ -87,7 +82,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return myTenant.getWebSite();
 	}
 
-	@UrlValidator(key="error.web_site_must_be_a_url", message="")
+	@UrlValidator(key = "error.web_site_must_be_a_url", message = "")
 	public void setWebSite(String webSite) {
 		if (webSite == null || webSite.trim().length() == 0) {
 			myTenant.setWebSite(null);

@@ -93,6 +93,16 @@ ${action.setPageType('account_settings', 'show')!}
 				<div style="float:left; margin:5px;">${limits.employeeUsersUsed} <@s.text name="label.of"/> <#if limits.employeeUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.employeeUsersMax}</#if></div>
 			</div>
 		</div>
+		<div class="infoSet">
+			<label><@s.text name="label.assets"/></label>
+			<div class="fieldHolder" style="float:left; padding: 5px 0;">
+				
+				<div style="width:300px; float:left;">
+					<@n4.percentbar progress="${limits.assetsUsed}" total="${limits.assetsMax}"/>
+				</div>
+				<div style="float:left; margin:5px;">${limits.assetsUsed} <@s.text name="label.of"/> <#if limits.assetsUnlimited><@s.text name="label.unlimited"/><#else>${limits.assetsMax}</#if></div>
+			</div>
+		</div>
 	</div>
 </div>
 <#if securityGuard.brandingEnabled>

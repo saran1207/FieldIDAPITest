@@ -22,8 +22,11 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 	@Column(name="r_tenant")
 	private Long tenantId;
 	
-	@Column(name="diskspace")
+	@Column(name="diskspace", nullable=false)
 	private int diskSpace = NORMAL_STATUS;
+
+	@Column(name="assets", nullable=false)
+	private int assets = NORMAL_STATUS;
 	
 	public AlertStatus() {}
 	
@@ -51,6 +54,14 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 		this.diskSpace = diskSpace;
 	}
 	
+	public int getAssets() {
+		return assets;
+	}
+
+	public void setAssets(int assets) {
+		this.assets = assets;
+	}
+
 	public boolean isLevelAtNormal(LimitType type) {
 		return (alertLevel(type) == NORMAL_STATUS);
 	}
@@ -63,6 +74,8 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 		switch (type) {
 			case DISK_SPACE:
 				return diskSpace;
+			case ASSETS:
+				return assets;
 			default:
 				return NORMAL_STATUS;
 		}
@@ -73,6 +86,9 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 			case DISK_SPACE:
 				diskSpace = level;
 				break;
+			case ASSETS:
+				assets = level;
+				break;
 		}
 	}
 	
@@ -80,6 +96,9 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 		switch (type) {
 			case DISK_SPACE:
 				diskSpace = NORMAL_STATUS;
+				break;
+			case ASSETS:
+				assets = NORMAL_STATUS;
 				break;
 		}
 	}
