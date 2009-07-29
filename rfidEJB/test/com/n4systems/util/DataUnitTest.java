@@ -85,6 +85,11 @@ public class DataUnitTest {
 	}
 	
 	@Test
+	public void test_convert_to_smaller() {
+		assertEquals(15728640L, DataUnit.MEBIBYTES.convertTo(15L, DataUnit.BYTES));
+	}
+	
+	@Test
 	public void test_symbols() {
 		assertEquals("GiB", DataUnit.GIBIBYTES.getSymbol());
 		assertEquals("GB", DataUnit.GIGABYTES.getSymbol());

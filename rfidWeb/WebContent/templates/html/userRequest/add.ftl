@@ -13,20 +13,20 @@
 			<div class="infoBlock">
 				<h2><@s.text name="label.company_details"/></h2>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.companyname"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.companyname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield  name="companyName" id="companyName"/>
 				</div>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.firstname"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.firstname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield name="firstName" />
 				</div>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.lastname"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.lastname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield  name="lastName"  />
 				</div>
 				
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.emailaddress"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.emailaddress"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield  name="emailAddress"  />
 				</div>
 				<div class="infoSet">
@@ -38,7 +38,7 @@
 					<@s.textfield  name="position" />
 				</div>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.phonenumber"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.phonenumber"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield  name="phoneNumber"  />
 				</div>
 				<div class="infoSet">
@@ -50,15 +50,15 @@
 			<div class="infoBlock">
 				<h2><@s.text name="label.sign_in_details"/></h2>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.user_name"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.user_name"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield name="userId"  />
 				</div>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.password"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.password"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.password  name="password"  />
 				</div>
 				<div class="infoSet">
-					<label class="label"><@s.text name="label.vpassword"/> <@s.text name="indicator.required"/></label>
+					<label class="label"><@s.text name="label.vpassword"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.password  name="passwordConfirmation"  />
 				</div>
 			</div>

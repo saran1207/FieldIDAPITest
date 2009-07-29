@@ -84,12 +84,8 @@ public class FieldIDMisc extends TestCase {
 	 * 
 	 * BMP bmp jpeg wbmp gif png JPG jpg JPEG WBMP
 	 * 
-	 * @param filename
-	 *            - the filename the image will be saved to
-	 * @param ie
-	 *            - a reference to the Internet Explorer
-	 * @param format
-	 *            - one of bmp, gif, jpeg, jpg, png, wbmp (case-sensitive)
+	 * @param filename - the filename the image will be saved to
+	 * @param format - one of bmp, gif, jpeg, jpg, png, wbmp (case-sensitive)
 	 * @throws Exception
 	 */
 	public void myWindowCapture(String filename, String format) throws Exception {
@@ -97,6 +93,7 @@ public class FieldIDMisc extends TestCase {
 		assertFalse(filename.equals(""));
 		assertNotNull(format);
 		assertFalse(format.equals(""));
+		ie.waitUntilReady();
 		int x = ie.top();
 		int y = ie.left();
 		int h = ie.height();
@@ -479,7 +476,7 @@ public class FieldIDMisc extends TestCase {
 	}
 
 	public void logout() throws Exception {
-		Link logout = ie.link(text("Logout"));
+		Link logout = ie.link(text("/Sign Out/"));
 		assertTrue("Could not find the logout link", logout.exists());
 		logout.click();
 	}

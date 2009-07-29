@@ -42,6 +42,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DataUnit;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
@@ -520,5 +521,23 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	public void setUserLastName(String userLastName) {
 		this.userLastName = userLastName;
 	}
+	
+	public void setDiskSpaceMB(Long diskSpace) {
+		if (diskSpace == -1) {
+			tenant.getLimits().setDiskSpaceUnlimited();
+		} else {
+			tenant.getLimits().setDiskSpace(DataUnit.BYTES.convertFrom(diskSpace, DataUnit.MEBIBYTES));
+		}	
+	}
 
+	public Long getDiskSpaceMB() {
+		Long diskSpace;
+		if (tenant.getLimits().isDiskSpaceUnlimited()) {
+			diskSpace = -1L;
+		} else {
+			diskSpace = DataUnit.BYTES.convertTo(tenant.getLimits().getDiskSpace(), DataUnit.MEBIBYTES);
+		}
+		
+		return diskSpace;
+	}
 }

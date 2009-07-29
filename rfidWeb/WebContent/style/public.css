@@ -6,6 +6,15 @@ a, a:hover, a:visited, a:active {
 	color: #333;
 }
 
+#otherActions li{
+	padding: 5px 0;
+}
+#otherActions {
+	padding-top:5px;
+	border-top: 1px dotted #999;
+}
+
+
 #page {
 	width: 900px;
 }

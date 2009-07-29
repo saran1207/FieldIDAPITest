@@ -79,11 +79,11 @@ public class Login extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
-			loginUserNameFinder = id(p.getProperty("username"));
-			loginPasswordFinder = id(p.getProperty("password"));
+			loginUserNameFinder = xpath(p.getProperty("username"));
+			loginPasswordFinder = xpath(p.getProperty("password"));
 			loginRegularLoginFinder = xpath(p.getProperty("regularlogin"));
 			loginSecurityCardFinder = xpath(p.getProperty("securitycard"));
-			loginButtonFinder = id(p.getProperty("loginbutton"));
+			loginButtonFinder = xpath(p.getProperty("loginbutton"));
 			loginURL = p.getProperty("url");
 			loginContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			loginChooseCompanyFinder = xpath(p.getProperty("choosecompany"));
@@ -100,21 +100,21 @@ public class Login extends TestCase {
 			forgotPasswordLoginFinder = xpath(p.getProperty("forgotpasswordlogin"));
 			forgotPasswordUserNameFinder = id(p.getProperty("forgotpasswordusername"));
 			forgotPasswordLoginButtonFinder = xpath(p.getProperty("forgotpasswordloginbutton"));
-			loginRequestAnAccountFinder = text(p.getProperty("requestanaccount"));
+			loginRequestAnAccountFinder = xpath(p.getProperty("requestanaccount"));
 			requestAccountContentHeaderFinder = xpath(p.getProperty("registernewusercontentheader"));
-			requestAccountUserIDFinder = id(p.getProperty("registernewuseruserid"));
-			requestAccountEmailAddressFinder = id(p.getProperty("registernewuseremail"));
-			requestAccountFirstNameFinder = id(p.getProperty("registernewuserfirstname"));
-			requestAccountLastNameFinder = id(p.getProperty("registernewuserlastname"));
-			requestAccountPositionFinder = id(p.getProperty("registernewuserposition"));
-			requestAccountTimeZoneFinder = id(p.getProperty("registernewusertimezone"));
-			requestAccountCompanyNameFinder = id(p.getProperty("registernewusercompanyname"));
-			requestAccountPhoneNumberFinder = id(p.getProperty("registernewuserphonenumber"));
-			requestAccountPasswordFinder = id(p.getProperty("registernewuserpassword"));
-			requestAccountVerifyPasswordFinder = id(p.getProperty("registernewuserverifypassword"));
-			requestAccountCommentsFinder = id(p.getProperty("registernewusercomments"));
-			requestAccountSubmitFinder = id(p.getProperty("registernewusersubmit"));
-			requestAccountReturnToLoginPageFinder = text(p.getProperty("registernewuserreturntologin"));
+			requestAccountUserIDFinder = xpath(p.getProperty("registernewuseruserid"));
+			requestAccountEmailAddressFinder = xpath(p.getProperty("registernewuseremail"));
+			requestAccountFirstNameFinder = xpath(p.getProperty("registernewuserfirstname"));
+			requestAccountLastNameFinder = xpath(p.getProperty("registernewuserlastname"));
+			requestAccountPositionFinder = xpath(p.getProperty("registernewuserposition"));
+			requestAccountTimeZoneFinder = xpath(p.getProperty("registernewusertimezone"));
+			requestAccountCompanyNameFinder = xpath(p.getProperty("registernewusercompanyname"));
+			requestAccountPhoneNumberFinder = xpath(p.getProperty("registernewuserphonenumber"));
+			requestAccountPasswordFinder = xpath(p.getProperty("registernewuserpassword"));
+			requestAccountVerifyPasswordFinder = xpath(p.getProperty("registernewuserverifypassword"));
+			requestAccountCommentsFinder = xpath(p.getProperty("registernewusercomments"));
+			requestAccountSubmitFinder = xpath(p.getProperty("registernewusersubmit"));
+			requestAccountReturnToLoginPageFinder = xpath(p.getProperty("registernewuserreturntologin"));
 			requestAccountConfirmMessageFinder = xpath(p.getProperty("registernewuserconfirmmessage"));
 			passwordResetEmailSentContentHeaderFinder = xpath(p.getProperty("passwordresetemailsentheader"));
 		} catch (FileNotFoundException e) {
@@ -484,9 +484,11 @@ public class Login extends TestCase {
 
 		SelectList timeZone = ie.selectList(requestAccountTimeZoneFinder);
 		assertTrue("Could not find the time zone select list on Register New User page", timeZone.exists());
-		if (newuser.getTimeZone() != null) {
-			Option tz = timeZone.option(text(newuser.getTimeZone()));
-			assertTrue("Could not find the option '" + newuser.getTimeZone() + "' in the time zone list.", tz.exists());
+		String tZone = newuser.getTimeZone();
+		if (tZone != null) {
+			tZone = "/" + tZone + "/";	// change to regex
+			Option tz = timeZone.option(text(tZone));
+			assertTrue("Could not find the option '" + tZone + "' in the time zone list.", tz.exists());
 			tz.select();
 		}
 
@@ -516,12 +518,13 @@ public class Login extends TestCase {
 		assertTrue("Could not find the submit button on the Register New User page", submit.exists());
 		submit.click();
 		ie.waitUntilReady();
+		misc.checkForErrorMessagesOnCurrentPage();
 
 		// Confirm we got the correct message
 		HtmlElement confirm = ie.htmlElement(requestAccountConfirmMessageFinder);
 		assertTrue("Could not find the confirmation message that the account request was submitted.", confirm.exists());
 		String confirmMessage1 = "Your account has been created with the user name " + newuser.getUserID();
-		String confirmMessage2 = "email address " + newuser.getEmailAddress();
+		String confirmMessage2 = "and email address " + newuser.getEmailAddress();
 		String confirmMessage3 = "The administrator of the account will need to verify your information before you can log in.";
 		String confirmMessage4 = "You will receive an email when your login has been activated.";
 		assertTrue(confirm.text().contains(confirmMessage1));
@@ -538,7 +541,7 @@ public class Login extends TestCase {
 	 * @throws Exception
 	 */
 	public void gotoLoginPageFromRequestAccount() throws Exception {
-		Link returnToLoginPage = ie.link(requestAccountReturnToLoginPageFinder);
+		Button returnToLoginPage = ie.button(requestAccountReturnToLoginPageFinder);
 		assertTrue("Could not find the link to return to the login page", returnToLoginPage.exists());
 		returnToLoginPage.click();
 	}
@@ -559,7 +562,6 @@ public class Login extends TestCase {
 		setForgotPassword(name);
 		gotoLoginFromForgotPassword2();
 		gotoN4Systems();
-		gotoRequestAnAccount();
 		String userID = "val-" + misc.getRandomString(10);
 		String email = "dev@n4systems.com";
 		String firstName = "Dev";
@@ -575,6 +577,5 @@ public class Login extends TestCase {
 		setPassword(password);
 		login();
 		misc.logout();
-		close();
 	}
 }

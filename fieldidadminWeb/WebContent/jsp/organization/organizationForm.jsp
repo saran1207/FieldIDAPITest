@@ -20,9 +20,10 @@
 	<s:textfield name="tenant.website" value="%{tenant.webSite}" label="Web Site url" />
 	<s:label name="otherDateFormat" label="Other Date Format" />
 	<s:label name="formattedDate" label="Example Date" />
+
+	<s:textfield name="diskSpaceMB" label="Max Disk Space (MB) (-1 for Unlimited)" />
+	<s:textfield name="tenant.limits.users" label="Max Employee Users (-1 for Unlimited)" />
 	
-	<s:textfield name="tenant.limits.diskSpace" label="Total disk space in Bytes" />
-	<s:textfield name="tenant.limits.users" label="Max number of employee Users" />
 	<s:textfield name="tenant.limits.assets" label="Max Assets (-1 for Unlimited)" />
 	
 	<s:if test="!id">

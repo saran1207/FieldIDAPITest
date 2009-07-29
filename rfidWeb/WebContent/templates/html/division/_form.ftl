@@ -6,11 +6,11 @@
 		<div class="infoBlock">
 			<h2 class="clean"><@s.text name="label.identification_information"/></h2>
 			<div class="infoSet">
-				<label class="label" for="divsionID"><@s.text name="label.division_id"/> <@s.text name="indicator.required"/></label>
+				<label class="label" for="divsionID"><@s.text name="label.division_id"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 				<@s.textfield name="divisionID" />
 			</div>
 			<div class="infoSet">
-				<label class="label" for="name"><@s.text name="label.name"/> <@s.text name="indicator.required"/></label>
+				<label class="label" for="name"><@s.text name="label.name"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 				<@s.textfield  name="name" />
 			</div>
 			<div class="infoSet">

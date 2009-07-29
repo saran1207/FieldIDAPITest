@@ -3,7 +3,6 @@
 	<style type="text/css">
 		#signInForm {
 			margin: 10px 0px;
-			border-bottom: 1px dotted #999;
 		}
 	</style>
 </head>
@@ -43,20 +42,15 @@
 				
 	</@s.form>
 	
-	<dl>
-  		<dt>Help:</dt>
-   		<dd><a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a></dd>
-  		<dt>${securityGuard.tenantName?html}:</dt>
-    	<dd><a href="<@s.url action="chooseCompany"/>"><@s.text name="label.is_not_the_company_i_want"/></a></dd>
-	</dl>
+	<ul id="otherActions">
+  		<li><label class="label"><@s.text name="label.help"/>:</label> <span><a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a></span></li>
+  		<li><label class="label">${securityGuard.tenantName?html}</label> <span><a href="<@s.url action="chooseCompany"/>"><@s.text name="label.is_not_the_company_i_want"/></a></span></li>
+	</ul>
 
 </div>
 <div id="secondaryContent">
 	<#include "../public/_requestAccount.ftl"/>
 </div>
-
-
-
 
 <script type="text/javascript">
 	function showSecurityCardSignIn() {

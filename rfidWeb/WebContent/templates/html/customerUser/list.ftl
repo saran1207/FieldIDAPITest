@@ -23,7 +23,7 @@ ${action.setPageType('customer', 'users')!}
 				<#if user.r_Division?exists>
 					<#list divisions as division >	
 						<#if division.id == user.r_Division >
-							${customer.name?html}
+							${division.name?html}
 						</#if>
 					</#list>
 				</#if>

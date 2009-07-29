@@ -63,7 +63,7 @@ public enum DataUnit {
 	 * Converts fixed-point <code>value</code> from DataUnit <code>from</code> to <code>this</code> DataUnit.
 	 * @see #convertFrom(BigDecimal, DataUnit)
 	 * @param value	Value to convert
-	 * @param from 	<code>value<code>'s DataUnit
+	 * @param from 	<code>value</code>'s DataUnit
 	 * @return		BigInteger representing the converted value
 	 */
 	public BigInteger convertFrom(BigInteger value, DataUnit from) {
@@ -74,7 +74,7 @@ public enum DataUnit {
 	 * Converts floating-point <code>value</code> from DataUnit <code>from</code> to <code>this</code> DataUnit.
 	 * @see #convertFrom(BigInteger, DataUnit)
 	 * @param value	Value to convert
-	 * @param from 	<code>value<code>'s DataUnit
+	 * @param from 	<code>value</code>'s DataUnit
 	 * @return		BigDecimal representing the converted value
 	 */
 	public BigDecimal convertFrom(BigDecimal value, DataUnit from) {
@@ -82,10 +82,32 @@ public enum DataUnit {
 	}
 	
 	/**
+	 * Converts fixed-point <code>value</code> from DataUnit <code>from</code> to <code>this</code> DataUnit.
+	 * @see #convertFrom(BigInteger, DataUnit)
+	 * @param value	Value to convert
+	 * @param from 	<code>value</code>'s DataUnit
+	 * @return		BigInteger representing the converted value
+	 */
+	public long convertFrom(long value, DataUnit from) {
+		return convert(BigInteger.valueOf(value), from, this).longValue();
+	}
+
+	/**
+	 * Converts floating-point <code>value</code> from DataUnit <code>from</code> to <code>this</code> DataUnit.
+	 * @see #convertFrom(BigDecimal, DataUnit)
+	 * @param value	Value to convert
+	 * @param from 	<code>value</code>'s DataUnit
+	 * @return		BigDecimal representing the converted value
+	 */
+	public double convertFrom(double value, DataUnit from) {
+		return convert(BigDecimal.valueOf(value), from, this).doubleValue();
+	}
+	
+	/**
 	 * Converts fixed-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
 	 * @see #convertTo(BigDecimal, DataUnit)
 	 * @param value	Value to convert
-	 * @param to 	DataUnit to convert <code>value<code> to
+	 * @param to 	DataUnit to convert <code>value</code> to
 	 * @return		BigInteger representing the converted value
 	 */
 	public BigInteger convertTo(BigInteger value, DataUnit to) {
@@ -96,7 +118,7 @@ public enum DataUnit {
 	 * Converts fixed-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
 	 * @see #convertTo(BigInteger, DataUnit)
 	 * @param value	Value to convert
-	 * @param to 	DataUnit to convert <code>value<code> to
+	 * @param to 	DataUnit to convert <code>value</code> to
 	 * @return		long representing the converted value
 	 */
 	public long convertTo(long value, DataUnit to) {
@@ -107,7 +129,7 @@ public enum DataUnit {
 	 * Converts floating-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
 	 * @see #convertTo(BigInteger, DataUnit)
 	 * @param value	Value to convert
-	 * @param to 	DataUnit to convert <code>value<code> to
+	 * @param to 	DataUnit to convert <code>value</code> to
 	 * @return		BigDecimal representing the converted value
 	 */
 	public BigDecimal convertTo(BigDecimal value, DataUnit to) {
@@ -118,7 +140,7 @@ public enum DataUnit {
 	 * Converts floating-point <code>value</code> from <code>this</code> DataUnit to <code>to</code> DataUnit.
 	 * @see #convertTo(BigDecimal, DataUnit)
 	 * @param value	Value to convert
-	 * @param to 	DataUnit to convert <code>value<code> to
+	 * @param to 	DataUnit to convert <code>value</code> to
 	 * @return		double representing the converted value
 	 */
 	public double convertTo(double value, DataUnit to) {
@@ -129,28 +151,28 @@ public enum DataUnit {
 	 * Converts a fixed-point value from one unit to another.
 	 * @param value	Value to convert
 	 * @param from	<code>value</code>'s current unit
-	 * @param to	DataUnit to convert <code>value<code> to
+	 * @param to	DataUnit to convert <code>value</code> to
 	 * @return		BigInteger representing the converted value
 	 */
 	static public BigInteger convert(BigInteger value, DataUnit from, DataUnit to) {
 		BigInteger fromMultiplier = from.getMultiplier();
 		BigInteger toMultiplier = to.getMultiplier();
 		
-		return value.multiply(fromMultiplier.divide(toMultiplier));
+		return value.multiply(fromMultiplier).divide(toMultiplier);
 	}
 	
 	/**
 	 * Converts a floating-point value from one unit to another.
 	 * @param value	Value to convert
 	 * @param from	<code>value</code>'s current unit
-	 * @param to	DataUnit to convert <code>value<code> to
+	 * @param to	DataUnit to convert <code>value</code> to
 	 * @return		BigDecimal representing the converted value
 	 */
 	static public BigDecimal convert(BigDecimal value, DataUnit from, DataUnit to) {
 		BigDecimal fromMultiplier = new BigDecimal(from.getMultiplier());
 		BigDecimal toMultiplier = new BigDecimal(to.getMultiplier());
 		
-		return value.multiply(fromMultiplier.divide(toMultiplier));
+		return value.multiply(fromMultiplier).divide(toMultiplier);
 	}
 	
 	public String format(BigInteger value) {
