@@ -208,9 +208,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		JobSiteServiceDTO jobSiteDTO = new JobSiteServiceDTO();
 		jobSiteDTO.setId(jobSite.getId());
 		jobSiteDTO.setName(jobSite.getName());
-		if (jobSite.getCustomer() != null) {
-			jobSiteDTO.setCustomerId(jobSite.getCustomer().getId());
-		}
+		jobSiteDTO.setCustomerId(jobSite.getCustomer() != null ? jobSite.getCustomer().getId() : NULL_ID);
 		if (jobSite.getDivision() != null) {	
 			jobSiteDTO.setDivisionId(jobSite.getDivision().getId());
 		}
@@ -220,9 +218,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook) {
 		
 		InspectionBookServiceDTO bookDTO = new InspectionBookServiceDTO();
-		if (inspectionBook.getCustomer() != null) {
-			bookDTO.setCustomerId(inspectionBook.getCustomer().getId());
-		}
+		bookDTO.setCustomerId(inspectionBook.getCustomer() != null ? inspectionBook.getCustomer().getId() : NULL_ID);
 		bookDTO.setName(inspectionBook.getName());
 		bookDTO.setBookOpen(inspectionBook.isOpen());
 		bookDTO.setId(inspectionBook.getId());
