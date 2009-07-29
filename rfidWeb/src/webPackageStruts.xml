@@ -1412,8 +1412,14 @@
 		</action>
 
 
-		<action name="myAccount" method="show" class="com.n4systems.fieldid.actions.user.MyAccount">
-			<result name="success" type="freemarker">/templates/html/myAccount/show.ftl</result>
+		<action name="myAccount" method="edit" class="com.n4systems.fieldid.actions.user.MyAccount">
+			<result name="success" type="freemarker">/templates/html/myAccount/edit.ftl</result>
+		</action>
+		
+		<action name="myAccountUpdate" method="create" class="com.n4systems.fieldid.actions.user.MyAccount">
+			<result name="input" type="freemarker">/templates/html/myAccount/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/myAccount/edit.ftl</result>
+			<result name="success" type="redirectAction">myAccount</result>
 		</action>
 
 	

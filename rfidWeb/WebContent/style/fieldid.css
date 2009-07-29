@@ -3,14 +3,15 @@ img {
 }
 
 .datePicker {
-	padding-left:5px;
-}
-.container {
-	overflow:hidden;	
+	padding-left: 5px;
 }
 
-.hidden { 
-	display:none;
+.container {
+	overflow: hidden;
+}
+
+.hidden {
+	display: none;
 }
 
 .inputError {
@@ -20,7 +21,6 @@ img {
 .clearBoth {
 	clear: both;
 }
-
 
 body {
 	text-align: left;
@@ -34,29 +34,28 @@ strong {
 	font-weight: bold;
 }
 
-a, a:hover, a:visited, a:active {
+a,a:hover,a:visited,a:active {
 	color: #0000CC;
 }
 
-a.disabled, a:hover.disabled, a:visited.disabled, a:active.disabled {
+a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	color: #999;
 }
 
 h1,h2,h3,h4 {
 	font-weight: bold;
 	color: #333;
-	text-align : left;
+	text-align: left;
 }
 
 h1 {
 	font-size: 1.5em;
 }
 
-h2, h2.oldHeader {
+h2,h2.oldHeader {
 	font-size: 1.2em;
 	padding: 5px 15px;
 	line-height: 21px;
-	
 }
 
 h2.clean {
@@ -65,11 +64,7 @@ h2.clean {
 
 h2 a {
 	font-size: 0.9em;
-	font-weight:normal;
-}
-
-img.displayImage {
-	border: 1px solid #939393
+	font-weight: normal;
 }
 
 #page {
@@ -94,29 +89,31 @@ img.displayImage {
 #contentHeader {
 	width: 100%;
 	overflow: hidden;
-	margin-bottom:5px;
+	margin-bottom: 5px;
 }
 
 #contentTitle {
-	overflow:hidden;
+	overflow: hidden;
 }
 
 #contentHeader h1 {
 	float: left;
 	padding: 10px 15px 10px 0;
 	text-align: left;
-	
 }
 
 #pageHeader #pageActions {
 	float: none;
 	overflow: hidden;
 }
+
 #pageActions .listOfLinks {
 	margin-bottom: 15px;
-	text-align:right;
+	text-align: right;
 }
-#pageActions .listOfLinks a, #pageActions .listOfLinks a:hover, #pageActions .listOfLinks a:visited, #pageActions .listOfLinks a:active {
+
+#pageActions .listOfLinks a,#pageActions .listOfLinks a:hover,#pageActions .listOfLinks a:visited,#pageActions .listOfLinks a:active
+	{
 	color: #333;
 }
 
@@ -124,7 +121,6 @@ img.displayImage {
 	padding: 15px;
 	text-align: center;
 }
-
 
 #contentHeader #notifications span {
 	line-height: 30px;
@@ -149,12 +145,10 @@ img.displayImage {
 	float: right;
 }
 
-
 #companyLogo {
-	float:left;
-	padding-left:20px;
+	float: left;
+	padding-left: 20px;
 	width: 215px;
-	
 }
 
 #pageHeader #pageNavigation {
@@ -174,56 +168,73 @@ img.displayImage {
 	margin: 0px 8px;
 	float: left;
 }
-#pageNavigation a, #pageNavigation a:hover, #pageNavigation a:active, #pageNavigation a:visited {
-	color:#556DA5;
+
+#pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
+	{
+	color: #556DA5;
 }
+
 #pageNavigation ul li a {
 	display: block;
-	padding-top:50px;
+	padding-top: 50px;
 	min-width: 48px;
 	background-position: top center;
 	background-repeat: no-repeat;
 }
+
 #menuHome {
 	background-image: url(../images/menu/home.jpg);
 }
-#menuHome:hover {
+
+#menuHome :hover {
 	background-image: url(../images/menu/home_hot.jpg);
 }
+
 #menuIdentify {
 	background-image: url(../images/menu/identify.jpg);
 }
-#menuIdentify:hover {
+
+#menuIdentify :hover {
 	background-image: url(../images/menu/identify_hot.jpg);
 }
+
 #menuInspect {
 	background-image: url(../images/menu/inspect.jpg);
 }
-#menuInspect:hover {
+
+#menuInspect :hover {
 	background-image: url(../images/menu/inspect_hot.jpg);
 }
+
 #menuAssets {
 	background-image: url(../images/menu/search.jpg);
 }
-#menuAssets:hover {
+
+#menuAssets :hover {
 	background-image: url(../images/menu/search_hot.jpg);
 }
+
 #menuReport {
 	background-image: url(../images/menu/reporting.jpg);
 }
-#menuReport:hover {
+
+#menuReport :hover {
 	background-image: url(../images/menu/reporting_hot.jpg);
 }
+
 #menuSchedule {
 	background-image: url(../images/menu/schedule.jpg);
 }
-#menuSchedule:hover {
+
+#menuSchedule :hover {
 	background-image: url(../images/menu/schedule_hot.jpg);
 }
+
 #menuAdministration {
 	background-image: url(../images/menu/administration.jpg);
 }
-#menuAdministration:hover {
+
+#menuAdministration :hover {
 	background-image: url(../images/menu/administration_hot.jpg);
 }
 
@@ -231,40 +242,40 @@ img.displayImage {
 	background-image: url(../images/menu/compliance.jpg);
 }
 
-#menuCompliance:hover {
+#menuCompliance :hover {
 	background-image: url(../images/menu/compliance_hot.jpg);
 }
 
 #menuProject {
 	background-image: url(../images/menu/project.jpg);
 }
-#menuProject:hover {
+
+#menuProject :hover {
 	background-image: url(../images/menu/project_hot.jpg);
 }
 
-
-.errorMessage   , .error {
+.errorMessage,.error {
 	color: #F00;
-	
 }
 
 .error ul {
 	border: 1px solid #FF3030;
-	background-color:#ffebeb;
-	font-weight:bold;
+	background-color: #ffebeb;
+	font-weight: bold;
 }
-.message ul{
-	background-color:#CDEB8B;
-	border:1px solid #008C00;
-	font-weight:bold;
+
+.message ul {
+	background-color: #CDEB8B;
+	border: 1px solid #008C00;
+	font-weight: bold;
 }
-	
+
 .largeText * {
 	font-size: 1.1em;
 }
 
 .list {
-	width:100%;
+	width: 100%;
 	margin: 5px 0px;
 	border-collapse: separate;
 	border-spacing: 2px 2px;
@@ -300,22 +311,22 @@ img.displayImage {
 }
 
 .list th.sorted {
-	padding-right:17px;
+	padding-right: 17px;
 	background-repeat: no-repeat;
-	background-position:right;
+	background-position: right;
 	background-color: #c6cbdd;
 	overflow: hidden;
 }
+
 .list th.down {
 	background-image: url(../images/sort_arrow_down.gif);
-			
 }
 
 .list th.up {
 	background-image: url(../images/sort_arrow_up.gif);
 }
 
-.simpleTable { 
+.simpleTable {
 	border-collapse: separate;
 	border-spacing: 0 2px;
 	border-bottom: 1px solid #D0DAFD;
@@ -323,13 +334,14 @@ img.displayImage {
 }
 
 .simpleTable th {
-	font-weight:bold;
+	font-weight: bold;
 }
+
 .decorated th {
 	background-color: #D0DAFD;
 }
-.simpleTable td, .decorated th{
-	
+
+.simpleTable td,.decorated th {
 	border-top: 1px solid #D0DAFD;
 	padding: 5px;
 }
@@ -338,25 +350,15 @@ img.displayImage {
 	background-color: #D0DAFD;
 }
 
-
-
-
 .rowName {
 	width: 300px;
 }
 
 
-.dataRow {
-	background-color: #ffffff;
-}
-
 .pastDue {
 	background-color: #ffebeb;
 }
 
-.altDataRow {
-	background-color: #e0ffff;
-}
 
 tr.pastDue:hover {
 	background-color: #ffe0e0;
@@ -366,8 +368,6 @@ tr.pastDue:hover {
 	margin: 5px 5px 5px 0px;
 	font-size: 1.1em;
 }
-
-
 
 .inputForm table td {
 	padding: 2px 4px;
@@ -405,7 +405,7 @@ td.formAction {
 	padding: 2px;
 }
 
-.handle   , .infoFieldHeader {
+.handle,.infoFieldHeader {
 	overflow: hidden;
 	clear: both;
 }
@@ -451,8 +451,9 @@ td.formAction {
 	font-weight: bold;
 	margin: 20px 0px;
 	border: 2px solid #cfdddd;
-	clear:both;
+	clear: both;
 }
+
 .emptyList h2 {
 	background-color: #D0DAFA;
 }
@@ -496,8 +497,6 @@ td.formAction {
 	padding-left: 0px;
 }
 
-
-
 ul.navOptions {
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -519,16 +518,11 @@ ul.navOptions li.last {
 	padding-right: 0px;
 }
 
-
-
-
-
 table.inputForm tr {
 	background-image: url( ../images/grayline.gif );
 	background-repeat: repeat-x;
 	background-position: bottom;
 }
-
 
 /* form styling */
 form.inputForm {
@@ -536,47 +530,40 @@ form.inputForm {
 	width: 901px;
 }
 
-
 .inputForm p {
-	
 	overflow: hidden;
-	width:450px;
-	padding:5px 0px;
+	width: 450px;
+	padding: 5px 0px;
 	border-bottom: 1px solid #D0DAFD;
 }
 
-	.inputForm p label{
-		float: left;
-		display: block;
-		width: 200px;
-		font-weight: bold;
-	}
-	
-	.inputForm p span {
-		float: left;
-		display: block;
-		
-	}
-	
-	.inputForm p span select,.inputForm p span textarea {
-		width: 229px;
-	}
+.inputForm p label {
+	float: left;
+	display: block;
+	width: 200px;
+	font-weight: bold;
+}
 
-	.inputForm p span input[type="text"] {
-		width: 229px;
-	}
+.inputForm p span {
+	float: left;
+	display: block;
+}
 
-	.inputForm p span  input.textbox{
-		width: 229px;
-	}
+.inputForm p span select,.inputForm p span textarea {
+	width: 229px;
+}
 
-	.inputForm p span  textarea {
-		height: 100px;
-	}
+.inputForm p span input[type="text"] {
+	width: 229px;
+}
 
-	
+.inputForm p span  input.textbox {
+	width: 229px;
+}
 
-
+.inputForm p span  textarea {
+	height: 100px;
+}
 
 form.oneColumn,.oneColumn {
 	width: 651px;
@@ -598,9 +585,11 @@ form.oneColumn,.oneColumn {
 .wwerr .errorMessage {
 	padding-left: 200px;
 }
-.dates { 
-	overflow:auto;
+
+.dates {
+	overflow: auto;
 }
+
 .dates .wwgrp {
 	width: 350px;
 }
@@ -624,7 +613,6 @@ form.oneColumn,.oneColumn {
 }
 
 div.formAction {
-	
 	overflow: hidden;
 	clear: both;
 	padding: 10px 0px;
@@ -636,7 +624,7 @@ div.formAction {
 	font-size: 1.2em;
 }
 
-.formAction button, .formAction input {
+.formAction button,.formAction input {
 	margin-left: 10px;
 	padding: 2px 5px;
 }
@@ -658,7 +646,7 @@ div.formAction {
 	width: 229px;
 }
 
-.wwctrl input.textbox   , .listForm input.textbox {
+.wwctrl input.textbox,.listForm input.textbox {
 	width: 229px;
 }
 
@@ -666,7 +654,7 @@ div.formAction {
 	height: 100px;
 }
 
-.dates .wwctrl input[type="text"], .wwctrl input.dates {
+.dates .wwctrl input[type="text"],.wwctrl input.dates {
 	width: 140px;
 }
 
@@ -870,7 +858,6 @@ table.legend td,table.legend th {
 .complianceMessage {
 	padding: 5px 15px 5px 100px;
 	background-repeat: no-repeat;
-	
 	min-height: 120px;
 }
 
@@ -902,15 +889,17 @@ table.legend td,table.legend th {
 }
 
 .viewSection p span.heading {
-	color:#333;	
+	color: #333;
 }
+
 .viewSection p span input {
 	width: 90px;
 }
+
 .viewSection p span input[type="button"] {
 	width: auto;
 }
-                             
+
 .smallViewSection {
 	width: 450px;
 }
@@ -971,82 +960,82 @@ strong.fail {
 	clear: right;
 }
 
-
-
 #formErrors {
-	width:100%;
+	width: 100%;
 }
 
 .formErrors {
 	margin: 10px;
 	border: 2px solid #FF3030;
-	background-color:#ffebeb;
+	background-color: # limit;
 	padding: 10px;
 }
 
 .formErrors ul li span {
-	width:auto;
+	width: auto;
 }
 
-#formErrors h2{
+#formErrors h2 {
 	background-color: transparent;
-	padding:0px;
-	margin:0px;
+	padding: 0px;
+	margin: 0px;
 }
+
 #formErrors * {
 	float: none;
 }
 
-
-
-
-.buttonGroup  {
-	overflow:hidden;
+.buttonGroup {
+	overflow: hidden;
 }
-	.buttonGroup li {
-		float:left;
-		width:40px;
-		text-align: center;
-		padding: 5px 15px;
-	}
-	.buttonGroup div {
-		height:35px;
-	}
-	
+
+.buttonGroup li {
+	float: left;
+	width: 40px;
+	text-align: center;
+	padding: 5px 15px;
+}
+
+.buttonGroup div {
+	height: 35px;
+}
+
 div.inspectionButton {
-	height:40px;
+	height: 40px;
 }
-li.buttonGroupLabels{
-	width:100px;
+
+li.buttonGroupLabels {
+	width: 100px;
 	text-align: left;
-	}
-.buttons input{
+}
+
+.buttons input {
 	width: 150px;
 }
 
-
 .buttonGroup input {
-	width:50px;
+	width: 50px;
 }
+
 .buttonGroup select {
-	width:65px;
+	width: 65px;
 }
 
 .disabledInput {
-	display:none;
+	display: none;
 }
+
 .buttonGroup input {
-	width:50px;
+	width: 50px;
 }
 
 .buttonGroup select {
-	width:60px;
+	width: 60px;
 }
-
 
 #productSearch {
 	border-bottom: 1px solid #D0DAFD;
-	padding:5px 15px;
+	padding: 5px 15px;
 }
 
 #productSearch input {
@@ -1058,9 +1047,8 @@ li.buttonGroupLabels{
 }
 
 #productSearch input[type="text"],#productSearch input.textfield {
-	width:350px;
+	width: 350px;
 }
-
 
 .ajaxView {
 	width: 500px;
@@ -1068,16 +1056,14 @@ li.buttonGroupLabels{
 	overflow: auto;
 }
 
-
 .crudForm {
 	overflow: hidden;
-	width:500px;
+	width: 500px;
 }
 
-.crudForm .list { 
+.crudForm .list {
 	width: 450px;
 }
-
 
 .crudForm h2 {
 	margin: 5px 0px;
@@ -1085,217 +1071,202 @@ li.buttonGroupLabels{
 }
 
 .largeForm {
-	overflow:hidden;
-	width:901px;
+	overflow: hidden;
+	width: 901px;
 }
 
-.largeForm .list { 
+.largeForm .list {
 	width: 850px;
 }
 
-	.crudForm p {
-		
-		overflow: hidden;
-		
-		padding:5px 0px;
-		border-top: 1px solid #D0DAFD;
-	}
-	
-	.crudForm p label{
-		float: left;
-		display: block;
-		width: 150px;
-		padding:5px 15px;
-		padding-left:30px;
-		color: #333;
-		
-	}
-	
-	.crudForm p span, .crudForm .infoSet div.simpleContainer {
-		float: left;
-		display: block;
-		padding:5px 0px;
-		width:305px;
-	}
-	
-	.crudForm p span.unitOfMeasure, .crudForm p span.date {
-		width:200px;
-	}
-	
-	.crudForm p span.timeZone, .crudForm .infoSet span.timeZone  {
-		display:inline;
-		float:none;
-		width:auto;
-	}
-	
-	.crudForm .infoSet span input.dateTime { 
-		width: 200px;
-	}
-	
-	.crudForm p span.action {
-		width: auto;
-	}
-	
-	
-	.crudForm p  select {
-		width: 229px;
-	}
+.crudForm p {
+	overflow: hidden;
+	padding: 5px 0px;
+	border-top: 1px solid #D0DAFD;
+}
 
-	.crudForm p input[type="text"], .crudForm p input[type="password"], .crudForm p input.textbox {
-		width: 229px;
-	}
-	
-	
-	.crudForm p span.unitOfMeasure input, .crudForm p span.date input {
-		width: 140px;
-	}
+.crudForm p label {
+	float: left;
+	display: block;
+	width: 150px;
+	padding: 5px 15px;
+	padding-left: 30px;
+	color: #333;
+}
 
-	.crudForm p input.textbox{
-		
-		width: 229px;
-		
-	}
+.crudForm p span,.crudForm .infoSet div.simpleContainer {
+	float: left;
+	display: block;
+	padding: 5px 0px;
+	width: 305px;
+}
 
-	.crudForm p textarea {
-		height: 100px;
-	}
+.crudForm p span.unitOfMeasure,.crudForm p span.date {
+	width: 200px;
+}
 
-	.crudForm .formAction {
-		margin:0px;
-		padding-right: 5px;
-		border-top: 1px solid #D0DAFD;
-	}
-	
-	.crudForm br {
-		margin: 5px 0px;
-	}
-	.largeForm p span {
-		width: 700px;
-	}
-	
+.crudForm p span.timeZone,.crudForm .infoSet span.timeZone {
+	display: inline;
+	float: none;
+	width: auto;
+}
+
+.crudForm .infoSet span input.dateTime {
+	width: 200px;
+}
+
+.crudForm p span.action {
+	width: auto;
+}
+
+.crudForm p  select {
+	width: 229px;
+}
+
+.crudForm p input[type="text"],.crudForm p input[type="password"],.crudForm p input.textbox
+	{
+	width: 229px;
+}
+
+.crudForm p span.unitOfMeasure input,.crudForm p span.date input {
+	width: 140px;
+}
+
+.crudForm p input.textbox {
+	width: 229px;
+}
+
+.crudForm p textarea {
+	height: 100px;
+}
+
+.crudForm .formAction {
+	margin: 0px;
+	padding-right: 5px;
+	border-top: 1px solid #D0DAFD;
+}
+
+.crudForm br {
+	margin: 5px 0px;
+}
+
+.largeForm p span {
+	width: 700px;
+}
+
 .crudForm .infoSet {
-		
-		overflow: hidden;
-		
-		padding:5px 0px;
-		border-top: 1px solid #D0DAFD;
-	}
+	overflow: hidden;
+	padding: 5px 0px;
+	border-top: 1px solid #D0DAFD;
+}
 
+.crudForm .infoSet label {
+	float: left;
+	display: block;
+	width: 150px;
+	padding: 5px 15px;
+	padding-left: 20px;
+	color: #333;
+}
 
-	
-	
-	.crudForm .infoSet label{
-		float: left;
-		display: block;
-		width: 150px;
-		padding:5px 15px;
-		padding-left:20px;
-		color: #333;
-		
-	}
-	.crudForm .infoSet label.line {
-		width:auto;
-	}
-	
-	
-	.crudForm .infoSet span, .crudForm .infoSet div.simpleContainer {
-		float: left;
-		display: block;
-		padding:5px 0px;
-		width:305px;
-		line-height: 18px;
-		
-	}
-	
-	.crudForm .infoSet label, .crudForm .infoSet span {
-		line-height:18px;
-		overflow:hidden;
-	}
-	.crudForm .infoSet span.unitOfMeasure, .crudForm .infoSet span.date {
-		width:200px;
-	}
-	
-	
-	.crudForm .infoSet span.action {
-		width: auto;
-	}
-	
-	.crudForm .infoSet  textarea {
-				
-		
-	}
-	.crudForm .infoSet  select, .crudForm .infoSet  textarea {
-		width: 229px;
-	}
+.crudForm .infoSet label.line {
+	width: auto;
+}
 
-	.crudForm .infoSet input[type="text"], .crudForm .infoSet input.textbox {
-		width: 229px;
-	}
-	.infoSet {
-		min-height: 32px;
-	}
-	
-	.crudForm .infoSet span.unitOfMeasure input, .crudForm .infoSet span.date input {
-		width: 140px;
-	}
+.crudForm .infoSet span,.crudForm .infoSet div.simpleContainer {
+	float: left;
+	display: block;
+	padding: 5px 0px;
+	width: 305px;
+	line-height: 18px;
+}
 
-		.crudForm .infoSet textarea {
-		height: 100px;
-	}
+.crudForm .infoSet label,.crudForm .infoSet span {
+	line-height: 18px;
+	overflow: hidden;
+}
 
-	
-	.largeForm .infoSet span {
-		width: 700px;
-	}
-	
+.crudForm .infoSet span.unitOfMeasure,.crudForm .infoSet span.date {
+	width: 200px;
+}
 
-	
-.ajaxWindow {
-	width:800px;
-	text-align:left;
+.crudForm .infoSet span.action {
+	width: auto;
+}
+
+.crudForm .infoSet  textarea {
 	
 }
+
+.crudForm .infoSet  select,.crudForm .infoSet  textarea {
+	width: 229px;
+}
+
+.crudForm .infoSet input[type="text"],.crudForm .infoSet input.textbox {
+	width: 229px;
+}
+
+.infoSet {
+	min-height: 32px;
+}
+
+.crudForm .infoSet span.unitOfMeasure input,.crudForm .infoSet span.date input
+	{
+	width: 140px;
+}
+
+.crudForm .infoSet textarea {
+	height: 100px;
+}
+
+.largeForm .infoSet span {
+	width: 700px;
+}
+
+.ajaxWindow {
+	width: 800px;
+	text-align: left;
+}
+
 .ajaxWindow .list {
-	width:750px;
+	width: 750px;
 }
 
 #modalBoxHolder {
-	position:absolute;
+	position: absolute;
 	left: -100000000px;
 	top: 1px;
 }
 
 .invisible {
 	visibility: hidden;
-	}
-
-
+}
 
 .easyForm {
 	width: 450px;
 	padding: 0 5px;
-	margin-left:auto;
-	margin-right:auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.easyForm input, .easyForm button  {
+.easyForm input,.easyForm button {
 	font-size: 1.2em;
-	padding:5px 0;
-	
-}
-.easyForm input[type="text"], .easyForm input[type="password"], .easyForm input.textbox, .easyForm input.passwordBox {
-	width: 444px;
-	
+	padding: 5px 0;
 }
 
-.easyForm input[type="submit"], .easyForm button {
+.easyForm input[type="text"],.easyForm input[type="password"],.easyForm input.textbox,.easyForm input.passwordBox
+	{
+	width: 444px;
+}
+
+.easyForm input[type="submit"],.easyForm button {
 	padding-left: 5px;
 	padding-right: 5px;
 }
 
-.easyForm .fieldHolder, .easyForm .label{
+.easyForm .fieldHolder,.easyForm .label {
 	font-size: 1.2em;
-	display:block;
+	display: block;
 	padding: 5px 0 0 0;
 }
 
@@ -1304,122 +1275,120 @@ li.buttonGroupLabels{
 }
 
 .easyForm .formAction {
-	
 	padding: 5px 0 0 0;
 }
 
-
 .instructions {
 	color: #666;
-	padding:5px 0 0 5px;
+	padding: 5px 0 0 5px;
 	font-size: 1.5em;
 }
 
 .smallInstructions {
 	font-size: 1em;
-	padding-left:0;
-}
+	padding-left: 0;
 }
 
+}
 .viewMore {
 	text-align: right;
 	padding: 5px 10px;
 }
 
 .pageSection {
-	width:950px;
+	width: 950px;
 	margin: 5px 0;
 }
-	.pageSection h2 {
-		background-color: #D0DAFA;
-	}
+
+.pageSection h2 {
+	background-color: #D0DAFA;
+}
 
 .sectionContent {
-	margin-top:5px;
-	border-top:1px solid #D0DAFD;
+	margin-top: 5px;
+	border-top: 1px solid #D0DAFD;
 	overflow: hidden;
 }
 
-
-
-pageSection.largeForm { 
+pageSection.largeForm {
 	width: 950px;
 }
+
 .twoColumn {
-	float:left;
-	width:470px;
+	float: left;
+	width: 470px;
 }
 
 .lastColumn {
-	
-	float:right;
+	float: right;
 }
 
 .twoColumn .infoSet span {
 	width: 270px;
 }
+
 .bigForm {
 	width: 950px;
 }
 
-
-.pageSection .infoSet, .pageSection .formAction {
+.pageSection .infoSet,.pageSection .formAction {
 	border-top: none;
-	border-bottom:1px solid #D0DAFD;
+	border-bottom: 1px solid #D0DAFD;
 }
 
-	
 .pageSection .infoSet label {
-	padding-left:15px;
-	padding-right:10px;
-	width:170px;
+	padding-left: 15px;
+	padding-right: 10px;
+	width: 170px;
 }
-
 
 .twoColumns {
 	width: 811px;
 }
+
 .twoColumns .infoSet {
-	float:left;
-}
-.twoColumns .container {
-	float:left;
-	clear:both;
-	width:100%;
+	float: left;
 }
 
-	.twoColumns .infoSet label{
-		width: 150px;
-	}
-	
-	.twoColumns .infoSet span, .twoColumns .infoSet div.simpleContainer {
-		width:230px;
-	}
-	
-	.twoColumns .infoSet  select, .twoColumns .infoSet  textarea, .twoColumns .infoSet input[type="text"], .twoColumns .infoSet input.textbox {
-		width: 180px;
-	}
-	
-	.twoColumns .infoSet span.unitOfMeasure input, .twoColumns .infoSet input.date {
-		width: 150px;
-	}
-	
-	
+.twoColumns .container {
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+.twoColumns .infoSet label {
+	width: 150px;
+}
+
+.twoColumns .infoSet span,.twoColumns .infoSet div.simpleContainer {
+	width: 230px;
+}
+
+.twoColumns .infoSet  select,.twoColumns .infoSet  textarea,.twoColumns .infoSet input[type="text"],.twoColumns .infoSet input.textbox
+	{
+	width: 180px;
+}
+
+.twoColumns .infoSet span.unitOfMeasure input,.twoColumns .infoSet input.date
+	{
+	width: 150px;
+}
 
 .box {
 	margin-top: 5px;
 	width: 180px;
-	
 }
+
 .rightBox {
-	float:right;
+	float: right;
 }
-	.box h2 { 
-		line-height: 21px;
-		padding-left:5px;	
-		background-color: #D0DAFA;
-	}
-	
+
+.box h2 {
+	line-height: 21px;
+	padding-left: 5px;
+	background-color: #D0DAFA;
+}
+
 .boxContent {
 	border-color: #D0DAFD;
 	border-style: solid;
@@ -1431,21 +1400,24 @@ pageSection.largeForm {
 	background-color: #fff;
 	padding: 15px;
 	width: 300px;
-	height:auto;
+	height: auto;
 }
 
 .inline {
-	display:inline;
-	width:auto;
+	display: inline;
+	width: auto;
 }
-	h3.inline {
-		padding-right: 10px;
-	}
+
+h3.inline {
+	padding-right: 10px;
+}
+
 .description {
 	font-size: 0.9em;
 	font-weight: lighter;
 }
-.suggested, .warning {
+
+.suggested,.warning {
 	background-color: #FFFF66;
 }
 
@@ -1454,94 +1426,94 @@ pageSection.largeForm {
 	float: left;
 	font-size: 2.5em;
 	color: #999;
-	width:65px;
+	width: 65px;
 }
 
 .alternateActions {
 	background-color: #eee;
 	padding: 5px;
 }
-.alternateActions a.disabled, .alternateActions a.disabled:hover, .alternateActions a.disabled:active, .alternateActions a.disabled:visited  {
+
+.alternateActions a.disabled,.alternateActions a.disabled:hover,.alternateActions a.disabled:active,.alternateActions a.disabled:visited
+	{
 	color: #333;
 }
 
-.timeZone { 
-	display:auto;
-	width:auto;
+.timeZone {
+	display: auto;
+	width: auto;
 }
 
-
 .options {
-	float: left;  /* needed to create the tab effect */
+	float: left; /* needed to create the tab effect */
 	width: 100%;
 	clear: both;
 	background-color: #eaeaea;
 	padding-top: 8px;
 	border-bottom: 1px solid #999999;
-}	
+}
 
 .options li {
-	float:left;
+	float: left;
 	margin-left: 10px;
-	border-left:1px solid #999999;
-	border-right:1px solid #999999;
-	border-top:1px solid #999999;
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-top: 1px solid #999999;
 	font-size: 1.3em;
 	background-color: #d6d6d6;
 }
 
-
 .options li.add {
-	float:right;
-	margin-left:0px;
+	float: right;
+	margin-left: 0px;
 	margin-right: 10px;
-	
 }
 
-.options li a, .options li.selected {
+.options li a,.options li.selected {
 	padding: 5px 10px;
-	text-decoration:none;
-	display:block;
+	text-decoration: none;
+	display: block;
 }
 
 .options li a:hover {
-	text-decoration:underline;
+	text-decoration: underline;
 }
-	
 
-.options li.selected, .options li:hover {
+.options li.selected,.options li:hover {
 	background-color: #fff;
 }
+
 .options li.selected {
 	position: relative;
 	bottom: -1px;
 }
 
-.options a, .options a:hover, .options a:visited, .options a:active {
+.options a,.options a:hover,.options a:visited,.options a:active {
 	color: #333;
 }
 
 #smartSearch {
-	float:right;
-	padding-bottom:3px;
+	float: right;
+	padding-bottom: 3px;
 }
 
 #smartSearch label {
 	font-size: 1.2em;
-	padding:5px 0;
+	padding: 5px 0;
 }
 
-#smartSearch input  {
+#smartSearch input {
 	font-size: 1.2em;
-	padding:5px;
-	
+	padding: 5px;
 }
-#smartSearch input[type="text"], #smartSearch input.textbox {
+
+#smartSearch input[type="text"],#smartSearch input.textbox {
 	width: 230px;
 	border: 1px solid #999;
 }
+
 #smartSearch input[type="submit"] {
-	padding:3px;
+	padding: 3px;
 }
 
 input.description {
@@ -1549,7 +1521,7 @@ input.description {
 }
 
 .backToLink {
-	float:left;
+	float: left;
 	margin-left: 5px;
-	margin-top:1.2em;
+	margin-top: 1.2em;
 }
