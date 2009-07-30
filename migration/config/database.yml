@@ -1,4 +1,4 @@
-development:
+old:
   adapter: jdbcpostgresql
   database: fieldid
   host: localhost
@@ -6,7 +6,7 @@ development:
   password: fieldid#9 
   encoding: utf8
 
-development_non_java:
+old_non_java:
   adapter: postgresql
   database: fieldid
   host: localhost
@@ -14,8 +14,15 @@ development_non_java:
   password: fieldid#9 
   encoding: utf8
 
-staging_non_java:
+development_non_java:
   adapter: mysql
+  database: fieldid
+  host: localhost
+  username: root
+  encoding: utf8
+
+development:
+  adapter: jdbcmysql
   database: fieldid
   host: localhost
   username: root

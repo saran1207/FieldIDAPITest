@@ -4,7 +4,7 @@ class AddAssetsToAlertStatus < ActiveRecord::Migration
     add_column(:alertstatus, :assets, :integer)
     
     execute ("update alertstatus set assets = 0")
-    execute ("ALTER TABLE alertstatus ALTER assets SET NOT NULL")
+    change_column(:alertstatus, :assets, :integer, :null => false)
   end
   
   def self.down

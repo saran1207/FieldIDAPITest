@@ -10,39 +10,39 @@ require 'active_record'
 require 'migration_helper'
 puts RUBY_PLATFORM
 if RUBY_PLATFORM =~ /java/
-  gem 'activerecord-jdbcpostgresql-adapter', '= 0.9'
-  require 'active_record/connection_adapters/jdbcpostgresql_adapter'
+  gem 'activerecord-jdbcmysql-adapter', "= 0.9.0"
+  require 'active_record/connection_adapters/jdbcmysql_adapter'
 end
 
-require 'active_record/connection_adapters/postgresql_adapter'
+require 'active_record/connection_adapters/mysql_adapter'
 
 class ActiveRecord::Migration 
   extend MigrationHelpers
 end
 
-# monkey patch the postgres defaut types.
+
 module ActiveRecord
   module ConnectionAdapters
-    class PostgreSQLAdapter < AbstractAdapter
+    class MysqlAdapter < AbstractAdapter
       def native_database_types()
         types = NATIVE_DATABASE_TYPES
-        types[:primary_key] = "bigserial primary key"
-        types[:string] = { :name => "character varying", :limit => 500 }
-        types[:integer] = { :name => "integer", :limit => 8  }
+        types[:primary_key] = "bigint(21) DEFAULT NULL auto_increment PRIMARY KEY"
+        types[:integer] = { :name => "bigint", :limit => 21 }
         types
       end
       
-      # Maps logical Rails types to PostgreSQL-specific data types.
+        # Maps logical Rails types to MySQL-specific data types.
       def type_to_sql(type, limit = nil, precision = nil, scale = nil)
         return super unless type.to_s == 'integer'
-        
 
         case limit
-          when 1..2;      'smallint'
-          when 3..4;      'integer'
-          when 5..8, nil;      'bigint'
-          else raise(ActiveRecordError, "No integer type has byte size #{limit}. Use a numeric with precision 0 instead.")
+          when 1; 'tinyint'
+          when 2; 'smallint'
+          when 3; 'mediumint'
+          when nil, 4..21; 'bigint'  # compatibility with MySQL default
+          else raise(ActiveRecordError, "No integer type has byte size #{limit}")
         end
+
       end
 
     end     
@@ -50,4 +50,6 @@ module ActiveRecord
   end
 end
 
+
+require "migration_pieces"
 
