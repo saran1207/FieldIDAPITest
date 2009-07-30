@@ -26,8 +26,8 @@ public class ProductServiceDTO extends AbstractBaseServiceDTO {
 	private String serverRequestGuid;
 	private List<SubProductMapServiceDTO> subProducts = new ArrayList<SubProductMapServiceDTO>();
 	private List<InspectionScheduleServiceDTO> schedules = new ArrayList<InspectionScheduleServiceDTO>();
-	
-	
+	private String description;
+
 	public String getSerialNumber() {
 		return serialNumber;
 	}
@@ -178,4 +178,10 @@ public class ProductServiceDTO extends AbstractBaseServiceDTO {
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
