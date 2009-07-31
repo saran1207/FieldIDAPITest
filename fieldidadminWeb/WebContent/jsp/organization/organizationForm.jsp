@@ -3,6 +3,7 @@
 <p> you can only have integration or job sites selected as extended features.</p>
 <s:form action="organizationCrud!save" method="post" enctype="multipart/form-data">
 	<s:hidden name="id" value="%{id}" /> 
+	<s:fielderror/>
 	<s:if test="!id" >
 		<s:select name="accountType" label="Account Type" list="%{tenantTypes}" listKey="id" listValue="name" />
 	</s:if>

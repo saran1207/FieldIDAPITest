@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.SerialNumberCounterBean;
 import rfid.ejb.entity.UserBean;
@@ -49,7 +50,11 @@ import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.Preparable;
+import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 
+@Validations
 public class OrganizationAction extends AbstractAdminAction implements Preparable {
 	private static Logger logger = Logger.getLogger(OrganizationAction.class);
 
@@ -102,6 +107,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 
 	}
 
+	@SkipValidation
 	public String doList() {
 		QueryBuilder<TenantOrganization> query = new QueryBuilder<TenantOrganization>(TenantOrganization.class);
 		query.addOrder("displayName");
@@ -113,10 +119,12 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		return SUCCESS;
 	}
 
+	@SkipValidation
 	public String doFormInput() {
 		return INPUT;
 	}
 
+	
 	public String doSave() throws Exception {
 		
 		try {
@@ -174,6 +182,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 			processExtendedFeatures();
 		} catch (Exception e) {
 			logger.error("Failed creating tenant", e);
+			return INPUT;
 		}
 		return Action.SUCCESS;
 	}
@@ -493,6 +502,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		return userId;
 	}
 
+	@FieldExpressionValidator(expression="(userId != 'n4systems')", message = "you can't call the admin user n4systems.")
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
