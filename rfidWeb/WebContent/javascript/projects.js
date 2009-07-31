@@ -17,10 +17,7 @@ function clearNoteForm() {
 	$( 'noteComments' ).clear();
 	addUploadFile();
 	cleanAjaxForm( $( 'addNote' ), "addNote_" );
-	
 }
-
-
 
 
 function openAssetSearch() {
@@ -106,10 +103,18 @@ function removeNote( event ) {
 
 	
 
-function addUploadFile() {
-	var iframe = '<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
+var uploadUrl = '';
+function addUploadFile(limitReached, limitReachedHTML) {
+	var iframe = '';
+	if (limitReached) {
+		iframe = limitReachedHTML;
+	} else {
+		iframe = '<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
+	}
 	$('attachment').replace( iframe );
 }
+
+var removeText = '';
 
 function fileUploaded( frameId, frameCount, fileName, directory ){
 

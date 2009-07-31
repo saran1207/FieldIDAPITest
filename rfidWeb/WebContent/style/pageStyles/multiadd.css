@@ -51,7 +51,9 @@
 .identifierRow {
 	float: none;
 	clear: both;
-	padding-left: 20px;
+	padding: 5px 20px 5px 0;
+	overflow:hidden;
+	
 }
 
 .identifierRow div {
@@ -71,7 +73,7 @@
 .identifierRow .shortCol {
 	width: 40px;
 	float: left;
-	padding-top: 10px;
+	padding-top: 4px;
 }
 
 #masterForm input {
@@ -97,9 +99,7 @@
 	padding-left: 60px;
 }
 
-.titleRow {
-	padding-bottom: 20px;
-}
+
 
 #form1required {
 	border:1px solid;
