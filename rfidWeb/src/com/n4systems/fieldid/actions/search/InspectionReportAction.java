@@ -79,17 +79,12 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
-		try {
 		List<ColumnMappingGroup> dynamicGroups = new ArrayList<ColumnMappingGroup>();
 		
 		dynamicGroups.addAll(infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_search", "product", getSecurityFilter()));
 		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
 		
 		return dynamicGroups;
-		}catch (Exception e) {
-			e.printStackTrace();
-			return null;// TODO: handle exception
-		}
 	}
 
 	@Override
@@ -263,7 +258,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		}
 		return jobSites;
 	}
-	
+	 
 	public List<ListingPair> getEmployees() {
 		if(employees == null) {
 			employees = userManager.getEmployeeList(getSecurityFilter());

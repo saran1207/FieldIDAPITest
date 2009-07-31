@@ -105,7 +105,7 @@
 	</p>
 	<p>
 		<label><@s.text name="label.inspectiondate"/></label>
-		<span class="date">
+		<span >
 			<@s.datetimepicker id="inspectionDate" onchange="updateNextDate();" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
 		</span>
 		

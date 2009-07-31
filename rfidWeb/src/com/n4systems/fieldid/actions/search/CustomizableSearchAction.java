@@ -74,7 +74,6 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 				registerCellHandler(mapping.getId(), mapping.getOutputHandler());
 			}
 		}
-		
 	}
 	
 	private void registerCellHandler(String columnId, String className) {

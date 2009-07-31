@@ -178,7 +178,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		
 		if( user.getUniqueID() != null ) {
 			try {
-				user.setDeleted(true); 
+				user.archiveUser(); 
 				userManager.updateUser( user );
 			} catch( Exception e ) {
 				addFlashErrorText( "error.failedtodelete" );

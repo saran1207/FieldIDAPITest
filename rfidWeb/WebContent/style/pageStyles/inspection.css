@@ -105,18 +105,18 @@
 	width: 10em;
 }
 
-.youAreOn, .sectionIndex, .sectionTitle {
+.youAreOn, .inspectionSectionIndex, .inspectionSectionTitle {
 	display: block;
 	float:left;
 }
 
-.youAreOn, .sectionIndex {
+.youAreOn, .inspectionSectionIndex {
 	padding-right: 5px;
 	font-weight: normal;
 	color:#333399;
 }
 
-.sectionIndex {
+.inspectionSectionIndex {
 	float:right;
 	font-size: 1.3em;
 }

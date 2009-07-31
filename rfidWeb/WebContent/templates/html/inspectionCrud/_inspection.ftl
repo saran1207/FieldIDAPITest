@@ -17,8 +17,8 @@
 		<#list action.getAvailableSections( formInspection ) as section >
 			<div id="section_${identifier}_${section_index}" <#if section_index != 0 >style="display:none"</#if> >
 				<h3>
-					<span class="youAreOn"><@s.text name="label.youareon"/>: </span><span class="sectionTitle">${section.title}</span> 
-					<span class="sectionIndex"><a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}" selectedIndex="${section_index-1}"><img  width="17" src="<@s.url value="/images/nav_blue_left.png"/>" alt="&lt; "/></a> [ ${section_index +1} / ${action.getAvailableSections( formInspection )?size} ] <a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}" selectedIndex="${section_index+1}"><img width="17" src="<@s.url value="/images/nav_blue_right.png"/>" alt="&gt; "/></a></span>
+					<span class="youAreOn"><@s.text name="label.youareon"/>: </span><span class="inspectionSectionTitle">${section.title}</span> 
+					<span class="inspectionSectionIndex"><a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}" selectedIndex="${section_index-1}"><img  width="17" src="<@s.url value="/images/nav_blue_left.png"/>" alt="&lt; "/></a> [ ${section_index +1} / ${action.getAvailableSections( formInspection )?size} ] <a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}" selectedIndex="${section_index+1}"><img width="17" src="<@s.url value="/images/nav_blue_right.png"/>" alt="&gt; "/></a></span>
 				</h3>
 				<script type="text/javascript">
 					$( 'downIndex_${identifier}_${section_index}' ).observe( 'click', jumpLinkToSection );

@@ -21,6 +21,7 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 	
 	private String modifiedBy;
 	private String userID;
+	private String archivedUserID;
 	private String firstName;
 	private String lastName;
 	private String emailAddress;	
@@ -28,7 +29,7 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 	private String hashPassword;
 	private String position;
 	private String initials;
-	private boolean active;
+	
 	private String resetPasswordKey;
 	private String hashSecurityCardNumber;
 	
@@ -36,6 +37,7 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 	private Long r_EndUser;
 	private Long r_Division;
 	
+	private boolean active = false;
 	private boolean deleted = false;
 	private boolean system = false;
 	private boolean admin = false;
@@ -127,9 +129,16 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 		return deleted;
 	}
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public void archiveUser() {
+		archivedName();
+		deleted = true;
 	}
+	
+	private void archivedName() {
+		archivedUserID = userID;
+		userID = null;
+	}
+	
 
 	public boolean isSystem() {
 		return system;
@@ -295,5 +304,9 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 	
 	public TimeZone getTimeZone() { 
 		return TimeZone.getTimeZone(timeZoneID);
+	}
+
+	public String getArchivedUserID() {
+		return archivedUserID;
 	}
 } 
