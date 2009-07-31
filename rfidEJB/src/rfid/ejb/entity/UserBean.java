@@ -13,6 +13,7 @@ import com.n4systems.model.parents.legacy.LegacyBeanOrganizationWithCreateModify
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.SecurityFilter;
+import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
@@ -303,7 +304,7 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 	}
 	
 	public TimeZone getTimeZone() { 
-		return TimeZone.getTimeZone(timeZoneID);
+		return CountryList.getInstance().getRegionByFullId(timeZoneID).getTimeZone();
 	}
 
 	public String getArchivedUserID() {

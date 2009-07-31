@@ -44,7 +44,7 @@ public class Transaction {
 	}
 
 	private void closeEntityManager() {
-		if (entityManager != null) {
+		if (entityManager != null && entityManager.isOpen()) {
 			entityManager.close();
 		}
 	}

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -16,10 +17,14 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.UserRequest;
-import com.n4systems.util.DateHelper;
+import com.n4systems.model.api.Listable;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.StringListingPair;
 import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.timezone.Region;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
@@ -32,17 +37,16 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(UserRegistrationCrud.class);
-
-	private Collection<StringListingPair> timeZones;
-
+	
 	private TenantOrganization tenant;
 	private UserBean userAccount;
 
 	private UserRequest userRequest;
 	private String password;
 	private String passwordConfirmation;
-
 	private User userManager;
+	private Country country;
+	private Region region;
 
 	public UserRegistrationCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -53,6 +57,9 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	protected void initMemberFields() {
 		userAccount = new UserBean();
 		userRequest = new UserRequest();
+		String defaultZoneId = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
+		country = CountryList.getInstance().getCountryByFullId(defaultZoneId);
+		region = CountryList.getInstance().getRegionByFullId(defaultZoneId);
 	}
 
 	@Override
@@ -62,7 +69,6 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 	@SkipValidation
 	public String doAdd() {
-
 		return SUCCESS;
 	}
 
@@ -168,12 +174,14 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	}
 
 	public String getTimeZone() {
-		return userAccount.getTimeZoneID();
+		return region.getId();
 	}
 
-	public void setTimeZone(String timeZone) {
-		userAccount.setTimeZoneID(timeZone);
-
+	public void setTimeZone(String regionId) {
+		if (country != null) {
+			region = country.getRegionById(regionId);
+			userAccount.setTimeZoneID(country.getFullId(region));
+		}
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.companynamerequired")
@@ -202,13 +210,22 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		userRequest.setComment(comment);
 	}
 
-	public Collection<StringListingPair> getTimeZones() {
-		if (timeZones == null) {
-			timeZones = DateHelper.getTimeZones();
-		}
-		return timeZones;
+	public SortedSet<? extends Listable<String>> getCountries() {
+		return CountryList.getInstance().getCountries();
 	}
 
+	public SortedSet<? extends Listable<String>> getTimeZones() {
+		return (country != null) ? country.getRegions() : new TreeSet<Listable<String>>();
+	}
+	
+	public String getCountryId() {
+		return country.getId();
+	}
+
+	public void setCountryId(String countryId) {
+		country = CountryList.getInstance().getCountryById(countryId);
+	}
+	
 	public boolean duplicateValueExists(String formValue) {
 		getTenant();
 		if (tenant != null) {

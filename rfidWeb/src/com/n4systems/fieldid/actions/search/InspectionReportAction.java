@@ -81,8 +81,15 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		List<ColumnMappingGroup> dynamicGroups = new ArrayList<ColumnMappingGroup>();
 		
-		dynamicGroups.addAll(infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_search", "product", getSecurityFilter()));
-		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
+		try {	
+			
+			dynamicGroups.addAll(infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_search", "product", getSecurityFilter()));
+			
+			dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
+			
+		} catch (RuntimeException e) {
+			logger.error("Failed loading dynamic groups", e);
+		}
 		
 		return dynamicGroups;
 	}

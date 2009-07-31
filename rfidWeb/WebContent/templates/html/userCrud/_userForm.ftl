@@ -18,12 +18,16 @@
 		<@s.textfield key="label.position" name="position" labelposition="left"/>
 		<@s.textfield id="initials" key="label.initials" name="initials" labelposition="left" ondblclick="updateInitials()" />
 	</div>
-		
-	<div class="formRowHolder">
-		<#if !uniqueID?exists >
+	
+	<#if !uniqueID?exists >
+		<div class="formRowHolder">
 			<@s.textfield key="label.securityrfidnumber" name="securityRfidNumber" labelposition="left"/>
-		</#if>
-		<@s.select key="label.timezone" name="timeZoneID" list="timeZones" listKey="id" listValue="name" labelposition="left"/>
+		</div>
+	</#if>
+	
+	<div class="formRowHolder">
+		<@s.select key="label.country" name="countryId" list="countries" listKey="id" listValue="displayName" labelposition="left" onchange="countryChanged( this )"/>
+		<@s.select id="tzlist" key="label.timezone" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName" labelposition="left" emptyOption="false"/>
 	</div>
 
 	<#if customer?exists || customerRequired?exists >
@@ -106,9 +110,10 @@
 		}
 	</style>
 	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" />"></script>
+	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
 	<script type="text/javascript" >
-
 		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
 		
 		function updateInitials() {
 			var initials = $('initials');

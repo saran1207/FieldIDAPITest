@@ -1,6 +1,11 @@
 <title><@s.text name="title.register" /></title>
 
-
+<head>
+	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
+	<script type="text/javascript">
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
+	</script>
+</head>
 <div id="mainContent">
 	<div class="titleBlock">
 		<h1><@s.text name="title.register"/></h1>
@@ -29,10 +34,16 @@
 					<label class="label"><@s.text name="label.emailaddress"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield  name="emailAddress"  />
 				</div>
+				
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.country"/></label>
+					<@s.select name="countryId" list="countries" listKey="id" listValue="displayName" onchange="countryChanged(this); return false;"/>
+				</div>
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.timezone"/></label>
-					<@s.select name="timeZone" list="timeZones" listKey="id" listValue="name" />
+					<@s.select id="tzlist" name="timeZone" list="timeZones" listKey="id" listValue="displayName" emptyOption="false"/>
 				</div>
+				
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.position"/></label>
 					<@s.textfield  name="position" />

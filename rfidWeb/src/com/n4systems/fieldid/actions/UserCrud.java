@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -25,16 +27,21 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Organization;
+import com.n4systems.model.api.Listable;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.BitField;
-import com.n4systems.util.DateHelper;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.timezone.Region;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
@@ -57,7 +64,6 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	
 	private Collection<ListingPair> organizationalUnits;
 	protected List<ListingPair> permissions;
-	private List<StringListingPair> timeZones;
 	private Collection<ListingPair> customers;
 	protected Collection<ListingPair> divisions;
 	
@@ -65,7 +71,8 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	private String listFilter;
 	private String userType = UserType.ALL.name();
 	private String securityCardNumber;
-	
+	private Country country;
+	private Region region;
 	private File signature;
 	
 	public UserCrud( User userManager, PersistenceManager persistenceManager, CustomerManager customerManager ) {
@@ -78,12 +85,17 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	@Override
 	protected void initMemberFields() {
 		user = new UserBean();
+		String defaultZoneId = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
+		country = CountryList.getInstance().getCountryByFullId(defaultZoneId);
+		region = CountryList.getInstance().getRegionByFullId(defaultZoneId);	
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		if( user == null ) {
-			user = userManager.findUser( uniqueId, getTenantId() ); 
+			user = userManager.findUser( uniqueId, getTenantId() );
+			country = CountryList.getInstance().getCountryByFullId(user.getTimeZoneID());
+			region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
 		}
 	}
 	
@@ -405,11 +417,14 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	}
 	
 	public String getTimeZoneID() {
-		return user.getTimeZoneID();
+		return region.getId();
 	}
 
-	public void setTimeZoneID(String timeZoneID) {
-		user.setTimeZoneID( timeZoneID );
+	public void setTimeZoneID(String regionId) {
+		if (country != null) {
+			region = country.getRegionById(regionId);
+			user.setTimeZoneID(country.getFullId(region));
+		}
 	}
 
 	@RequiredStringValidator( type=ValidatorType.FIELD, message="", key="error.emailrequired" )
@@ -439,6 +454,14 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		securityCardNumber = securityRfidNumber;
 	}
 	
+	public String getCountryId() {
+		return country.getId();
+	}
+
+	public void setCountryId(String countryId) {
+		country = CountryList.getInstance().getCountryById(countryId);
+	}
+
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.passwordrequired")
 	@StringLengthFieldValidator( type=ValidatorType.FIELD, message = "" , key = "errors.passwordlength", minLength="5") 
 	public String getPassword() {
@@ -471,15 +494,14 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return page;
 	}
 
-	
-	public List<StringListingPair> getTimeZones() {
-		if (timeZones == null) {
-			timeZones = DateHelper.getTimeZones();
-		}
-		return timeZones;
+	public SortedSet<? extends Listable<String>> getCountries() {
+		return CountryList.getInstance().getCountries();
+	}
+
+	public SortedSet<? extends Listable<String>> getTimeZones() {
+		return (country != null) ? country.getRegions() : new TreeSet<Listable<String>>();
 	}
 	
-
 	public boolean duplicateValueExists(String formValue) {
 		return !userManager.userIdIsUnique( getTenantId() , formValue, uniqueID );
 	}

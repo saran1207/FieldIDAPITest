@@ -1,0 +1,1 @@
+updateTimezoneList( ${json.toJSON(regionList)} );

@@ -1,7 +1,9 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" includeParams="none" />"></script>
+	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
 	<script type="text/javascript">
 		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" includeParams="none"/>";
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
 	</script>
 </head>
 <div id="acceptForm" style="width:652px">

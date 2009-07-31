@@ -1,18 +1,16 @@
 package com.n4systems.util;
 
-import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.utils.PlainDate;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
+
+import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.utils.PlainDate;
 
 // TODO change class to use the calendar to properly handle dates.  using millisecond addition does not handle time zones
 @SuppressWarnings("serial")
@@ -29,6 +27,7 @@ public class DateHelper {
 	public static final int MONTH = 6;
 	public static final int YEAR = 7;
 
+	/*
 	private static final ThreadLocal<List<StringListingPair>> timeZones = new ThreadLocal<List<StringListingPair>>();
 	
 	public static List<StringListingPair> getTimeZones() {
@@ -264,7 +263,7 @@ public class DateHelper {
 		}
 		return timeZones.get();
 	}
-	
+	*/
 	
 	/**
 	 * Used to convert SimpleDateFormat formats into Unix style formats for use
