@@ -7,6 +7,8 @@ class MigrateTimezones < ActiveRecord::Migration
     users = User.find(:all)
     
     users.each do |user|
+      puts user.userid
+      puts user.timezoneid
       user.timezoneid = self.resolveTimeZone(user.timezoneid)
       user.save
     end
@@ -37,7 +39,11 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Adak":          return "United States:Alaska - Adak"
       when "America/Montserrat":    return "Montserrat:Montserrat"
       when "America/Boise":         return "United States:Idaho - Boise"
-      else raise "Unknown TimeZone [" + name + "]"
+      when "America/Vancouver":     return "British Columbia - Vancouver"
+      else
+        if !zoneid.starts_with?("United States:") && zoneid.starts_with?("Montserrat:") && zoneid.starts_with?("Canada:") && zoneid.starts_with?("Australia:") && zoneid.starts_with?("Mexico:")   
+          raise "Unknown TimeZone [" + zoneid + "]"
+        end
     end
   end
   
