@@ -11,9 +11,9 @@
 	<package name="default" extends="struts-default">
 	
 		<interceptors>
-			<interceptor name="login" class="com.n4systems.fieldidadmin.utils.LoginInterceptor" />
+			<interceptor name="signedIn" class="com.n4systems.fieldidadmin.utils.LoginInterceptor" />
 			<interceptor-stack name="secureStack">
-				<interceptor-ref name="login" />
+				<interceptor-ref name="signedIn" />
 				<interceptor-ref name="paramsPrepareParamsStack" />
 			</interceptor-stack>
 		</interceptors>
@@ -21,25 +21,30 @@
 		<default-interceptor-ref name="secureStack" />
 		
 		<global-results>
-			<result name="login">/jsp/login.jsp</result>
+			<result name="signIn" type="redirectAction">signIn</result>
 		</global-results>
 		
-		<action name="login" method="login" class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
-			<result name="success" type="redirect-action">organizationList</result>
+		<action name="signIn" method="add" class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
+			<result name="success" type="freemarker">/templates/html/login.ftl</result>
+			<interceptor-ref name="defaultStack" />
+		</action>
+		
+		<action name="signIntoSystem" method="create" class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
+			<result name="success" type="redirectAction">organizationList</result>
 			<interceptor-ref name="defaultStack" />
 		</action>
 		
 		<action name="organizationList" method="list" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success">jsp/organization/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/organization/list.ftl</result>
 		</action>
 		
 
 		<action name="organizationCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<interceptor-ref name="fileUpload"/>
 		    <interceptor-ref name="secureStack"/>		
-			<result name="input">jsp/organization/organizationForm.jsp</result>
-			<result name="success" type="redirect-action">organizationList</result>
-			<result name="error">jsp/organization/organizationForm.jsp</result>
+			<result name="input" type="freemarker">/templates/html/organization/organizationForm.ftl</result>
+			<result name="success" type="redirectAction">organizationList</result>
+			<result name="error" type="freemarker">/templates/html/organization/organizationForm.ftl</result>
 		</action>
 		
 		
@@ -48,110 +53,110 @@
 		
 		
 		<action name="findProductOptionList" method="list" class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
-			<result name="success">jsp/findproductoption/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/findproductoption/list.ftl</result>
 		</action>
 
 		<action name="findProductOptionCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
-			<result name="input">jsp/findproductoption/findProductOptionForm.jsp</result>
-			<result name="success" type="redirect-action">findProductOptionList</result>
+			<result name="input" type="freemarker">/templates/html/findproductoption/findProductOptionForm.ftl</result>
+			<result name="success" type="redirectAction">findProductOptionList</result>
 		</action>
 		
 		<action name="importerList" method="list" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success">jsp/importer/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/importer/list.ftl</result>
 		</action>
 		
 		<action name="importAllData" method="listAllFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success">jsp/importer/importListAll.jsp</result>
+			<result name="success" type="freemarker">/templates/html/importer/importListAll.ftl</result>
 		</action>
 		
 		<action name="importEndUsers" method="listEndUserFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success">jsp/importer/importListEndUser.jsp</result>
+			<result name="success" type="freemarker">/templates/html/importer/importListEndUser.ftl</result>
 		</action>
 		
 		<action name="importProductSerials" method="listProductSerialFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success">jsp/importer/importListProductSerial.jsp</result>
+			<result name="success" type="freemarker">/templates/html/importer/importListProductSerial.ftl</result>
 		</action>
 		
 		<action name="importInspections" method="listInspectionFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success">jsp/importer/importListInspection.jsp</result>
+			<result name="success" type="freemarker">/templates/html/importer/importListInspection.ftl</result>
 		</action>
 		
 		<action name="unitOfMeasureList" method="list" class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
-			<result name="success">jsp/unitofmeasure/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/unitofmeasure/list.ftl</result>
 		</action>
 		
 		<action name="unitOfMeasureCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
-			<result name="input">jsp/unitofmeasure/unitOfMeasureForm.jsp</result>
-			<result name="success" type="redirect-action">unitOfMeasureList</result>
+			<result name="input" type="freemarker">/templates/html/unitofmeasure/unitOfMeasureForm.ftl</result>
+			<result name="success" type="redirectAction">unitOfMeasureList</result>
 		</action>
 		
 		<action name="orderMappingList" method="list" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
-			<result name="success">jsp/ordermapping/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/ordermapping/list.ftl</result>
 		</action>
 		
 		<action name="uploadOrderMappingXml" method="fileFormInput" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<interceptor-ref name="fileUpload"/>
 		    <interceptor-ref name="basicStack"/>
-    		<result name="input">jsp/ordermapping/list.jsp</result>
-			<result name="success" type="redirect-action">orderMappingList</result>
-			<result name="error" type="redirect-action">orderMappingList</result>
+    		<result name="input" type="freemarker">/templates/html/ordermapping/list.ftl</result>
+			<result name="success" type="redirectAction">orderMappingList</result>
+			<result name="error" type="redirectAction">orderMappingList</result>
 		</action>
 	
 		<action name="orderMappingCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
-    		<result name="input">jsp/ordermapping/orderMappingForm.jsp</result>
-			<result name="success" type="redirect-action">orderMappingList</result>
+    		<result name="input" type="freemarker">/templates/html/ordermapping/orderMappingForm.ftl</result>
+			<result name="success" type="redirectAction">orderMappingList</result>
 		</action>
 
 		<action name="orderMappingDelete" method="delete" class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
-			<result name="success" type="redirect-action">orderMappingList</result>
+			<result name="success" type="redirectAction">orderMappingList</result>
 		</action>
 		
 		<action name="mailTest" method="input" class="com.n4systems.fieldidadmin.actions.MailAction">
-			<result name="input">jsp/mail/mail.jsp</result>
-			<result name="success">jsp/mail/mail.jsp</result>
-			<result name="error">jsp/mail/mail.jsp</result>
+			<result name="input" type="freemarker">/templates/html/mail/mail.ftl</result>
+			<result name="success" type="freemarker">/templates/html/mail/mail.ftl</result>
+			<result name="error" type="freemarker">/templates/html/mail/mail.ftl</result>
 		</action>
 		
 		<action name="configCrud" method="load" class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
-			<result name="success">jsp/config/config.jsp</result>
-			<result name="error">jsp/config/config.jsp</result>
+			<result name="success" type="freemarker">/templates/html/config/config.ftl</result>
+			<result name="error" type="freemarker">/templates/html/config/config.ftl</result>
 		</action>
 		
 		<action name="importObservations" method="show" class="com.n4systems.fieldidadmin.actions.ObservationImporterAction">
-			<result name="success">jsp/observations/show.jsp</result>
-			<result name="error">jsp/observations/show.jsp</result>
+			<result name="success" type="freemarker">/templates/html/observations/show.ftl</result>
+			<result name="error" type="freemarker">/templates/html/observations/show.ftl</result>
 		</action>
 		
 		<action name="importAutoAttributes" method="show" class="com.n4systems.fieldidadmin.actions.AutoAttributeImporterAction">
-			<result name="success">jsp/autoattributes/show.jsp</result>
-			<result name="error">jsp/autoattributes/show.jsp</result>
+			<result name="success" type="freemarker">/templates/html/autoattributes/show.ftl</result>
+			<result name="error" type="freemarker">/templates/html/autoattributes/show.ftl</result>
 		</action>
 		
 		
 		<action name="instructionalVideos" method="list" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success">jsp/instructionalVideos/list.jsp</result>
-			<result name="error">jsp/instructionalVideos/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/instructionalVideos/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/instructionalVideos/list.ftl</result>
 		</action>
 		
 		<action name="instructionalVideoAdd" method="add" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success">jsp/instructionalVideos/add.jsp</result>
+			<result name="success" type="freemarker">/templates/html/instructionalVideos/add.ftl</result>
 		</action>
 		
 		<action name="instructionalVideoEdit" method="edit" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success">jsp/instructionalVideos/edit.jsp</result>
+			<result name="success" type="freemarker">/templates/html/instructionalVideos/edit.ftl</result>
 		</action>
 		
 		<action name="instructionalVideoCreate" method="save" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="error">jsp/instructionalVideos/add.jsp</result>
-			<result name="input">jsp/instructionalVideos/add.jsp</result>
+			<result name="error" type="freemarker">/templates/html/instructionalVideos/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/instructionalVideos/add.ftl</result>
 			<result name="success" type="redirectAction">instructionalVideos</result>
 		</action>
 		
 		
 		
 		<action name="instructionalVideoUpdate" method="save" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="error">jsp/instructionalVideos/edit.jsp</result>
-			<result name="input">jsp/instructionalVideos/edit.jsp</result>
+			<result name="error" type="freemarker">/templates/html/instructionalVideos/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/instructionalVideos/edit.ftl</result>
 			<result name="success" type="redirectAction">instructionalVideos</result>
 		</action>
 		<action name="instructionalVideoDelete" method="delete" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
@@ -160,33 +165,33 @@
 		</action>
 		
 		<action name="certSelection" class="com.n4systems.fieldidadmin.actions.SimpleAction">
-			<result name="success">jsp/certSelection/show.jsp</result>
+			<result name="success" type="freemarker">/templates/html/certSelection/show.ftl</result>
 		</action>
 		
 		<action name="defaultPrintOuts" method="list" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
-			<result name="success">jsp/defaultPrintOuts/list.jsp</result>
-			<result name="error">jsp/defaultPrintOuts/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/defaultPrintOuts/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/defaultPrintOuts/list.ftl</result>
 		</action>
 		
 		<action name="defaultPrintOutAdd" method="add" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
-			<result name="success">jsp/defaultPrintOuts/add.jsp</result>
+			<result name="success" type="freemarker">/templates/html/defaultPrintOuts/add.ftl</result>
 		</action>
 		
 		<action name="defaultPrintOutEdit" method="edit" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
-			<result name="success">jsp/defaultPrintOuts/edit.jsp</result>
+			<result name="success" type="freemarker">/templates/html/defaultPrintOuts/edit.ftl</result>
 		</action>
 		
 		<action name="defaultPrintOutCreate" method="create" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
-			<result name="error">jsp/defaultPrintOuts/add.jsp</result>
-			<result name="input">jsp/defaultPrintOuts/add.jsp</result>
+			<result name="error" type="freemarker">/templates/html/defaultPrintOuts/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/defaultPrintOuts/add.ftl</result>
 			<result name="success" type="redirectAction">defaultPrintOuts</result>
 		</action>
 		
 		
 		
 		<action name="defaultPrintOutUpdate" method="update" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
-			<result name="error">jsp/defaultPrintOuts/edit.jsp</result>
-			<result name="input">jsp/defaultPrintOuts/edit.jsp</result>
+			<result name="error" type="freemarker">/templates/html/defaultPrintOuts/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/defaultPrintOuts/edit.ftl</result>
 			<result name="success" type="redirectAction">defaultPrintOuts</result>
 		</action>
 		<action name="defaultPrintOutDelete" method="delete" class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
@@ -195,29 +200,29 @@
 		</action>
 		
 		<action name="customPrintOuts" method="list" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
-			<result name="success">jsp/customPrintOuts/list.jsp</result>
-			<result name="error">jsp/customPrintOuts/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/customPrintOuts/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customPrintOuts/list.ftl</result>
 		</action>
 		
 		<action name="customPrintOutAdd" method="add" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
-			<result name="success">jsp/customPrintOuts/add.jsp</result>
+			<result name="success" type="freemarker">/templates/html/customPrintOuts/add.ftl</result>
 		</action>
 		
 		<action name="customPrintOutEdit" method="edit" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
-			<result name="success">jsp/customPrintOuts/edit.jsp</result>
+			<result name="success" type="freemarker">/templates/html/customPrintOuts/edit.ftl</result>
 		</action>
 		
 		<action name="customPrintOutCreate" method="create" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
-			<result name="error">jsp/customPrintOuts/add.jsp</result>
-			<result name="input">jsp/customPrintOuts/add.jsp</result>
+			<result name="error" type="freemarker">/templates/html/customPrintOuts/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customPrintOuts/add.ftl</result>
 			<result name="success" type="redirectAction">customPrintOuts</result>
 		</action>
 		
 		
 		
 		<action name="customPrintOutUpdate" method="update" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
-			<result name="error">jsp/customPrintOuts/edit.jsp</result>
-			<result name="input">jsp/customPrintOuts/edit.jsp</result>
+			<result name="error" type="freemarker">/templates/html/customPrintOuts/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customPrintOuts/edit.ftl</result>
 			<result name="success" type="redirectAction">customPrintOuts</result>
 		</action>
 		<action name="customPrintOutDelete" method="delete" class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
@@ -226,58 +231,58 @@
 		</action>
 		
 		<action name="taskCrud" method="load" class="com.n4systems.fieldidadmin.actions.TaskAction">
-			<result name="success">jsp/tasks/tasks.jsp</result>
-			<result name="error">jsp/tasks/tasks.jsp</result>
+			<result name="success" type="freemarker">/templates/html/tasks/tasks.ftl</result>
+			<result name="error" type="freemarker">/templates/html/tasks/tasks.ftl</result>
 		</action>
 		
 		<action name="enableDisableTask" method="enableDisableTask" class="com.n4systems.fieldidadmin.actions.TaskAction">
-			<result name="success" type="redirect-action">taskCrud</result>
-			<result name="error" type="redirect-action">taskCrud</result>
+			<result name="success" type="redirectAction">taskCrud</result>
+			<result name="error" type="redirectAction">taskCrud</result>
 		</action>
 		
 		<action name="enableDisableScheduler" method="enableDisableScheduler" class="com.n4systems.fieldidadmin.actions.TaskAction">
-			<result name="success" type="redirect-action">taskCrud</result>
-			<result name="error" type="redirect-action">taskCrud</result>
+			<result name="success" type="redirectAction">taskCrud</result>
+			<result name="error" type="redirectAction">taskCrud</result>
 		</action>
 		
 		<action name="reloadScheduler" method="reloadScheduler" class="com.n4systems.fieldidadmin.actions.TaskAction">
-			<result name="success" type="redirect-action">taskCrud</result>
-			<result name="error" type="redirect-action">taskCrud</result>
+			<result name="success" type="redirectAction">taskCrud</result>
+			<result name="error" type="redirectAction">taskCrud</result>
 		</action>
 		
 		<action name="changeAdminPass" method="load" class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
-			<result name="success">jsp/changeadminpass/form.jsp</result>
-			<result name="error">jsp/changeadminpass/form.jsp</result>
+			<result name="success" type="freemarker">/templates/html/changeadminpass/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/changeadminpass/form.ftl</result>
 		</action>
 		
 		<action name="eulas" method="list" class="com.n4systems.fieldidadmin.actions.EulaCrud">
-			<result name="success" >/jsp/eula/list.jsp</result>
-			<result name="error" >/jsp/eula/list.jsp</result>
-			<result name="input" >/jsp/eula/list.jsp</result>
+			<result name="success" type="freemarker">/templates/html/eula/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eula/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eula/list.ftl</result>
 		</action>
 
 
 		<action name="eulaAdd" method="add" class="com.n4systems.fieldidadmin.actions.EulaCrud">
-			<result name="success" >/jsp/eula/add.jsp</result>
-			<result name="input" >/jsp/eula/add.jsp</result>
+			<result name="success" type="freemarker">/templates/html/eula/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eula/add.ftl</result>
 		</action>
 
 		<action name="eulaCreate" method="create"	class="com.n4systems.fieldidadmin.actions.EulaCrud">
-			<result name="input" >/jsp/eula/add.jsp</result>
-			<result name="error" >/jsp/eula/add.jsp</result>
+			<result name="input" type="freemarker">/templates/html/eula/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eula/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eulas</param>
 			</result>
 		</action>
 		
 		<action name="eulaEdit" method="edit" class="com.n4systems.fieldidadmin.actions.EulaCrud">
-			<result name="success" >/jsp/eula/edit.jsp</result>
-			<result name="input" >/jsp/eula/edit.jsp</result>
+			<result name="success" type="freemarker">/templates/html/eula/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eula/edit.ftl</result>
 		</action>
 
 		<action name="eulaUpdate" method="update" class="com.n4systems.fieldidadmin.actions.EulaCrud">
-			<result name="input" >/jsp/eula/edit.jsp</result>
-			<result name="error" >/jsp/eula/edit.jsp</result>
+			<result name="input" type="freemarker">/templates/html/eula/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eula/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eulas</param>
 			</result>
@@ -294,11 +299,11 @@
 	
 	<package name="ajaxAction" extends="default" namespace="/ajax">
 		<action name="getConfigValue" method="getConfiguration" class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
-			<result name="success">config/ajaxConfigValue.jsp</result>
+			<result name="success" type="freemarker">/templates/html/config/ajaxConfigValue.ftl</result>
 		</action>
 		
 		<action name="createSuperUser" method="createUser" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success">/jsp/ajax_pieces/createUser.jsp</result>
+			<result name="success" type="freemarker">/templates/ajax/ajax_pieces/createUser.ftl</result>
 		</action>
 		
 	</package>

@@ -25,7 +25,7 @@ public class LoginInterceptor extends AbstractInterceptor implements StrutsStati
 		Object user = session.getAttribute(Constants.SESSION_USER);
 		if (user == null) {
 			// User not logged in
-			return "login";
+			return "signIn";
 		}
 		
 		return invocation.invoke();

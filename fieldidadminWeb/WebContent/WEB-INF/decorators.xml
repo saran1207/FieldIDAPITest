@@ -3,11 +3,11 @@
         <pattern>/styles/*</pattern> 
         <pattern>/scripts/*</pattern> 
         <pattern>/images/*</pattern> 
-        <pattern>/jsp/ajax_pieces/*</pattern>
+        <pattern>/temaplates/ajax_pieces/*</pattern>
         <pattern>/ajax/*</pattern>
     </excludes> 
  
-    <decorator name="layout" page="/jsp/layout.jsp"> 
+    <decorator name="layout" page="/templates/html/layout.ftl"> 
         <pattern>/*</pattern> 
     </decorator> 
 </decorators> 
