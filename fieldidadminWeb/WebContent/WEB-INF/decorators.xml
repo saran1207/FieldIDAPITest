@@ -1,13 +1,13 @@
-<decorators defaultdir="/WEB-INF/decorators"> 
+<decorators defaultdir="/templates/html"> 
     <excludes> 
         <pattern>/styles/*</pattern> 
         <pattern>/scripts/*</pattern> 
         <pattern>/images/*</pattern> 
-        <pattern>/temaplates/ajax_pieces/*</pattern>
+        <pattern>/templates/ajax_pieces/*</pattern>
         <pattern>/ajax/*</pattern>
     </excludes> 
  
     <decorator name="layout" page="/templates/html/layout.ftl"> 
-        <pattern>/*</pattern> 
+        <pattern>*.action</pattern> 
     </decorator> 
 </decorators> 

@@ -10,11 +10,11 @@
 				onComplete: 
 					function( response ) {
 						try { 
-						var forms = document.getElementsByClassName( "superUserForm" );
-						for( var i = 0; i < forms.length; i++ ) {
-							forms[i].style.display = "none";
-							
-						}
+							var forms = document.getElementsByClassName( "superUserForm" );
+							for( var i = 0; i < forms.length; i++ ) {
+								forms[i].style.display = "none";
+								
+							}
 						} catch( e ) {
 							alert( e );
 						}
@@ -24,6 +24,7 @@
 		
 	
 	</script>
+</head>
 <table>
 <#list organizations as tenant>
 <tr>
@@ -46,7 +47,7 @@
 </table>
 
 <a href="<@s.url action="organizationCrud" />">Add New Tenant</a><br />
-Size: ${organizations.size}
+Size: ${organizations?size}
 
 
 

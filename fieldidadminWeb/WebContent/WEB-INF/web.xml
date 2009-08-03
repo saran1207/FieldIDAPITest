@@ -4,8 +4,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
 	<filter>
+		<filter-name>struts-cleanup</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp
+		</filter-class>
+	</filter>
+	<filter>
 		<filter-name>sitemesh</filter-name>
-		<filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+		<filter-class>org.apache.struts2.sitemesh.FreeMarkerPageFilter
+		</filter-class>
 	</filter>
 	<filter>
 		<filter-name>struts</filter-name>
@@ -16,9 +22,12 @@
 		</init-param>
 	</filter>
 	<filter-mapping>
+		<filter-name>struts-cleanup</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
 		<filter-name>sitemesh</filter-name>
-		<url-pattern>/*</url-pattern>
-		<dispatcher>FORWARD</dispatcher>
+		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>struts</filter-name>
