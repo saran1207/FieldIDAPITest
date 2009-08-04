@@ -47,6 +47,7 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Anchorage":     return "United States:Alaska - Anchorage"
       when "Australia/Perth":       return "Australia:Western Australia - Perth"
       when "America/Phoenix":       return "United States:Arizona - Phoenix"
+      when "Australia/NSW":         return "Australia:New South Wales - Sydney";
       else
         if (zoneid.slice(":") == ":")
           return zoneid
