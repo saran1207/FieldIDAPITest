@@ -53,6 +53,9 @@
     <Region name="Ontario - Toronto" zone="America/Toronto"/>
     <Region name="Quebec - Montreal" zone="America/Montreal"/>
   </Country>
+  <Country name="Cayman Islands">
+  	<Region name="Cayman Islands" zone="America/Cayman"/>
+  </Country>
   <Country name="Chile">
     <Region name="Santiago" zone="America/Santiago"/>
   </Country>

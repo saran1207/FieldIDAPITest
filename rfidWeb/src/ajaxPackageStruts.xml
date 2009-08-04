@@ -440,6 +440,7 @@
 		</action>
 		
 		<action name="getRegions" method="list" class="com.n4systems.fieldid.actions.user.RegionListAction">
+			<interceptor-ref name="publicStack" />
 			<result name="success" type="freemarker">/templates/ajax/userCrud/regions.ftl</result>
 		</action>
 	</package>
