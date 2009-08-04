@@ -40,8 +40,8 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Montserrat":    return "Montserrat:Montserrat"
       when "America/Boise":         return "United States:Idaho - Boise"
       when "America/Vancouver":     return "Canada:British Columbia - Vancouver"
-      when "British Columbia - Vancouver":     return "Canada:British Columbia - Vancouver"
       when "America/Kentucky/Louisville": return "United States:Kentucky - Louisville"
+      when "America/Cayman":        return "Cayman Islands:Cayman Islands"
       else
         if (zoneid.slice(":") == ":")
           return zoneid
