@@ -1,6 +1,6 @@
 <title><@s.text name="label.administration" /></title>
 <head>
-	<link rel="stylesheet" type="text/css" href="style/pageStyles/administration.css" />
+	<@n4.includeStyle href="pageStyles/administration" />
  </head>  
    <div class="viewSection administration">
 		<h2 id="systemAccess"><@s.text name="label.systemaccessandsetup" /></h2>

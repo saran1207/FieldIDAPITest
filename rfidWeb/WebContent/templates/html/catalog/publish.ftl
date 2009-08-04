@@ -1,6 +1,6 @@
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/publishedCatalog.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
+	<@n4.includeStyle href="pageStyles/publishedCatalog"/>
+	<@n4.includeStyle href="steps"/>
 	</head>
 
 ${action.setPageType('safety_network', 'catalog')!}

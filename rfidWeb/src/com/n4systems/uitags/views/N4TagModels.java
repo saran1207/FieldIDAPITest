@@ -12,6 +12,8 @@ public class N4TagModels {
     private HttpServletResponse res;
     
     private PercentBarModel percentBar;
+    private IncludeScriptModel includeScript;
+    private IncludeStyleModel includeStyle;
 
     public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         this.stack = stack;
@@ -28,16 +30,21 @@ public class N4TagModels {
          return this.percentBar;
     }
     
-    public void getIncludeJs() {
-    	
+    public IncludeScriptModel getIncludeScript() {
+    	if (this.includeScript == null) {
+            this.includeScript = new IncludeScriptModel(this.stack, this.req, this.res);
+        }
+
+        return this.includeScript;
     }
     
-    public void getIncludeStyle() {
-    	
+    public IncludeStyleModel getIncludeStyle() {
+    	if (this.includeStyle == null) {
+    		this.includeStyle = new IncludeStyleModel(stack, req, res);
+    	}
+    	return includeStyle;
     }
     
-    public void getIncludeVendorJs() {
-    	
-    }
+   
 
 }

@@ -1,6 +1,6 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/featureStyles/pagination.css"/>"/>
+	<@n4.includeStyle href="featureStyles/pagination"/>
 	<script type="text/javascript">
 		goToPageURL = '<@s.url action="${currentAction}" currentPage="${currentPage}" includeParams="get"/>';
 	</script>

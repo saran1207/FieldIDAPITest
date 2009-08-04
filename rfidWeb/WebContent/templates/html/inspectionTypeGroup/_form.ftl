@@ -1,5 +1,5 @@
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/eventTypeGroup.css"/>"/>
+	<@n4.includeStyle href="pageStyles/eventTypeGroup"/>
 </head>
 <#include "/templates/html/common/_formErrors.ftl" />
 

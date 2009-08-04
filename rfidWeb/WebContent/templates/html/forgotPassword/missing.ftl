@@ -1,6 +1,6 @@
 <title><@s.text name="title.resetpassword"/></title>
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/public.css"/>"/>
+	<@n4.includeStyle href="public"/>
 </head>
 <div class="easyForm">
 	<p class="instructions">

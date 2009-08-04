@@ -1,6 +1,6 @@
 <title><@s.text name="title.home"/></title>
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/home.css"/>" />
+	<@n4.includeStyle href="pageStyles/home" />
 </head>
 <div id="dashboardShortCuts" class="dashboardBlock">
 	<div id="quickLinks" class="dashboardSection">

@@ -2,7 +2,7 @@
 <#include "/templates/common/nocacheHeaders.ftl"><html>
 	<head>
 		<#include "head.ftl">
-		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/public.css"/>"/>
+		<@n4.includeStyle href="public"/>
 	</head>
 	<body>
 		

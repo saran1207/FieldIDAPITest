@@ -1,6 +1,6 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/myaccount.js"/>"></script>
-	<link rel="StyleSheet" href="/fieldid/style/viewTree.css" type="text/css"/>
+	<@n4.includeStyle href="viewTree"/>
 </head>
 
 ${action.setPageType('my_account', 'details')!}

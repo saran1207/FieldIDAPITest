@@ -1,6 +1,6 @@
 ${action.setPageType('product', 'add_with_order')!}
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/identify.css"/>" />
+	<<@n4.includeStyle href="pageStyles/identify" />
 </head>
 <#if Session.sessionUser.hasAccess("tag") >
 	<#include "_searchForm.ftl"/>

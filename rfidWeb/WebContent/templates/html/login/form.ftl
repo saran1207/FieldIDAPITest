@@ -33,11 +33,11 @@
 		
 		
 		<div class="actions togglable" id="normalActions_container" style="display:none" > 
-			<@s.submit key="label.sign_in" id="signInButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showSecurityCardSignIn();"/><@s.text name="label.sign_in_with_security_card"/></a>
+			<@s.submit key="label.sign_in" id="signInButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showSecurityCardSignIn();"><@s.text name="label.sign_in_with_security_card"/></a>
 		</div>
 		
 		<div class="actions togglable" id="secureRfidActions_container" > 
-			<@s.submit key="label.sign_in" id="signInWithSecurityButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showNormalSignIn();"/><@s.text name="label.sign_in_with_user_name"/></a>
+			<@s.submit key="label.sign_in" id="signInWithSecurityButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showNormalSignIn();"><@s.text name="label.sign_in_with_user_name"/></a>
 		</div>
 				
 	</@s.form>
@@ -52,7 +52,7 @@
 	<#include "../public/_requestAccount.ftl"/>
 </div>
 
-<script type="text/javascript">
+<@n4.includeScript>
 	function showSecurityCardSignIn() {
 		hideAllTogglable();
 		
@@ -84,4 +84,4 @@
 	<#else>
 		showSecurityCardSignIn();
 	</#if>
-</script>
+</@n4.includeScript>

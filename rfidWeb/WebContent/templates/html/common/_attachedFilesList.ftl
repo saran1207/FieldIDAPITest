@@ -1,6 +1,6 @@
 <#escape x as x?html >
 	<head>
-		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/featureStyles/fileUpload.css" />" />
+		<@n4.includeStyle href="featureStyles/fileUpload" />
 	</head>
 	<div id="attachedfiles" >
 		<#list attachments as attachedFile >

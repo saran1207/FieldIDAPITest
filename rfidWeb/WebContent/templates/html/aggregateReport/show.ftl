@@ -1,7 +1,7 @@
 <title><@s.text name="title.summaryreport"/></title>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/aggregateReport.css"/>"/>
+	<@n4.includeStyle href="pageStyles/aggregateReport"/>
 </head>
 <div class="adminLink">	
 	<a href="<@s.url action="reportResults"  searchId="${searchId!1}" currentPage="${currentPage!1}"/>"><@s.text name="label.returntoreport"/></a>

@@ -2,7 +2,7 @@
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>
 </#assign>
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
+	<@n4.includeStyle href="steps" />
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/product.js" />" ></script>
@@ -10,8 +10,8 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js"  />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/changeJobSite.js" />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/multiAddProduct.js" />"></script>
-	<link rel="styleSheet" type="text/css" href="<@s.url value="/style/pageStyles/product.css" />">
-	<link rel="styleSheet" type="text/css" href="<@s.url value="/style/pageStyles/multiadd.css" />">
+	<@n4.includeStyle href="pageStyles/product"/>
+	<@n4.includeStyle href="pageStyles/multiadd"/>
 	<script type="text/javascript">
 		var loading_holder = '${loaderDiv?js_string}';
 

@@ -11,10 +11,10 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/subProduct.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/masterInspection.js"/>"></script>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/product.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/subProduct.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/inspection.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/masterInspection.css"/>" />
+	<@n4.includeStyle href="pageStyles/product" />
+	<@n4.includeStyle href="pageStyles/subProduct" />
+	<@n4.includeStyle href="pageStyles/inspection" />
+	<@n4.includeStyle href="pageStyles/masterInspection" />
 	
 	<#include "/templates/html/common/_calendar.ftl"/>
 	

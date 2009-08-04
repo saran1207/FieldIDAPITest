@@ -33,7 +33,7 @@
 			
 		</script>
 		
-		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/inspection.css" />" />
+		<@n4.includeStyle href="pageStyles/inspection" />
 		
 		
 		<#include "/templates/html/common/_calendar.ftl"/>

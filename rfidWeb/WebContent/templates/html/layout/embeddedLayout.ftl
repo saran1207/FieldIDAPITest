@@ -1,9 +1,9 @@
 <!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <#include "/templates/common/nocacheHeaders.ftl"><html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/reset.css" />" /> 
-		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/fieldid.css"/>" />
-		<link rel="stylesheet" type="text/css" href="<@s.url value="/style/public.css"/>"/>
+		<@n4.includeStyle href="reset" /> 
+		<@n4.includeStyle href="fieldid"/>
+		<@n4.includeStyle href="public"/>
 		${head!}
 	</head>
 	<body>

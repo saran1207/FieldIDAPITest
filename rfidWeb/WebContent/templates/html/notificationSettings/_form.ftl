@@ -4,7 +4,7 @@
 		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
 	</script>
 	<script type="text/javascript" src="javascript/notificationSettings.js"> </script>
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/notifications.css"/>"/>
+	<@n4.includeStyle href="pageStyles/notifications"/>
 	
 </head>
 ${action.setPageType('my_account', 'notification_settings')!}
