@@ -41,9 +41,7 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Boise":         return "United States:Idaho - Boise"
       when "America/Vancouver":     return "British Columbia - Vancouver"
       else
-        if !zoneid.starts_with?("United States:") && zoneid.starts_with?("Montserrat:") && zoneid.starts_with?("Canada:") && zoneid.starts_with?("Australia:") && zoneid.starts_with?("Mexico:")   
-          raise "Unknown TimeZone [" + zoneid + "]"
-        end
+        raise "Unknown TimeZone [" + zoneid + "]"
     end
   end
   
