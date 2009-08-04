@@ -44,7 +44,7 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Cayman":        return "Cayman Islands:Cayman Islands"
       when "America/La_Paz":        return "Bolivia:La Paz"
       when "America/Goose_Bay":     return "Canada:Nova Scotia - Halifax"
-      
+      when "America/Anchorage":     return "UnitedStates:Alaska - Anchorage"
       else
         if (zoneid.slice(":") == ":")
           return zoneid
