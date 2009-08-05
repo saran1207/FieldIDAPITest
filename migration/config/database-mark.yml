@@ -1,0 +1,7 @@
+development_non_java:
+  adapter: mysql
+  database: fieldid
+  host: localhost
+  username: fieldid
+  password: fieldid
+  encoding: utf8
