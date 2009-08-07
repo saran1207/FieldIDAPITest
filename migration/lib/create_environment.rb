@@ -10,7 +10,7 @@ require 'active_record'
 require 'migration_helper'
 puts RUBY_PLATFORM
 if RUBY_PLATFORM =~ /java/
-  gem 'activerecord-jdbcmysql-adapter', "= 0.9.0"
+  gem 'activerecord-jdbcmysql-adapter', ">= 0.9.0"
   require 'active_record/connection_adapters/jdbcmysql_adapter'
 end
 
