@@ -227,9 +227,9 @@ public class ManageProductTypes extends TestCase {
 		if(pat != null) {
 			setProductAttributes(pat);
 		}
-		Button attachAFile = ie.button(addProductTypeAttachAFileButtonFinder);
-		assertTrue("Could not find the button to attach a file", attachAFile.exists());
 		if(npt.getAttachments() != null && !npt.getAttachments().isEmpty()) {
+			Button attachAFile = ie.button(addProductTypeAttachAFileButtonFinder);
+			assertTrue("Could not find the button to attach a file", attachAFile.exists());
 			fail("Add Attachments not supported");
 		}
 		misc.startMonitorStatus();

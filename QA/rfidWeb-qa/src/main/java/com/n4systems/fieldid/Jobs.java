@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.n4systems.fieldid.datatypes.Job;
+import com.n4systems.fieldid.datatypes.ScheduleSearchCriteria;
 import com.n4systems.fieldid.datatypes.SystemUser;
 
 import static watij.finders.FinderFactory.*;
@@ -67,6 +68,19 @@ public class Jobs extends TestCase {
 	private Finder assignResourceEmployeeSelectListFinder;
 	private Finder assignEmployeeResourceButtonFinder;
 	private Finder assignedResourcesFinder;
+	private Finder jobEventsLinkFinder;
+	private Finder jobEventsAddEventLinkFinder;
+	private Finder scheduleStatusFinder;
+	private Finder serialNumberFinder;
+	private Finder customerFinder;
+	private Finder divisionFinder;
+	private Finder eventTypeGroupFinder;
+	private Finder productTypeFinder;
+	private Finder productStatusFinder;
+	private Finder fromDateFinder;
+	private Finder toDateFinder;
+	private Finder scheduleCriteriaRunButtonFinder;
+	private Finder scheduleCriteriaAssignAllToJobFinder;
 	
 	public Jobs(IE ie) {
 		this.ie = ie;
@@ -75,6 +89,19 @@ public class Jobs extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			scheduleCriteriaAssignAllToJobFinder = xpath(p.getProperty("assignalltojob"));
+			scheduleCriteriaRunButtonFinder = xpath(p.getProperty("setscheduleschedulecriteriarunbutton"));
+			scheduleStatusFinder = xpath(p.getProperty("setscheduleschedulestatus"));
+			serialNumberFinder = xpath(p.getProperty("setscheduleserialnumber"));
+			customerFinder = xpath(p.getProperty("setschedulecustomer"));
+			divisionFinder = xpath(p.getProperty("setscheduledivision"));
+			eventTypeGroupFinder = xpath(p.getProperty("setscheduleeventtypegroup"));
+			productTypeFinder = xpath(p.getProperty("setscheduleproducttype"));
+			productStatusFinder = xpath(p.getProperty("setscheduleproductstatus"));
+			fromDateFinder = xpath(p.getProperty("setschedulefromdate"));
+			toDateFinder = xpath(p.getProperty("setscheduletodate"));
+			jobEventsAddEventLinkFinder = xpath(p.getProperty("jobeventsaddeventlink"));
+			jobEventsLinkFinder = xpath(p.getProperty("jobevents"));
 			jobsFinder = xpath(p.getProperty("link"));
 			jobsContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			onlyMyJobsLinkFinder = xpath(p.getProperty("onlyjobsiamassignedto"));
@@ -420,5 +447,112 @@ public class Jobs extends TestCase {
 		assertTrue("Could not find Job page content header", contentHeader.exists());
 		String s = contentHeader.text();
 		assertTrue("Page content header does not contain job title '" + jobTitle + "'", s.contains(jobTitle));
+	}
+
+	private void checkJobPageContentHeader() throws Exception {
+		HtmlElement contentHeader = ie.htmlElement(jobContentHeaderFinder);
+		assertTrue("Could not find Job page content header", contentHeader.exists());
+	}
+
+	public void gotoEvents() throws Exception {
+		Link l = ie.link(jobEventsLinkFinder);
+		assertTrue("Could not find the link to Events", l.exists());
+		l.click();
+		checkJobPageContentHeader();
+	}
+
+	public void gotoAddEvent() throws Exception {
+		Link l = ie.link(jobEventsAddEventLinkFinder);
+		assertTrue("Could not find the link to add an event", l.exists());
+		l.click();
+		this.checkJobPageContentHeader();
+	}
+
+	public void setScheduleCriteria(ScheduleSearchCriteria sc) throws Exception {
+		assertNotNull(sc);
+		misc.stopMonitorStatus();
+		String s;
+		SelectList scheduleStatus = ie.selectList(scheduleStatusFinder);
+		assertTrue("Could not find the Schedule Status select list", scheduleStatus.exists());
+		s = sc.getScheduleStatus();
+		if(s != null) {
+			Option o = scheduleStatus.option(text(s));
+			assertTrue("Could not find the option '" + s + "' in list.", o.exists());
+			o.select();
+		}
+		TextField serialNumber = ie.textField(serialNumberFinder);
+		assertTrue("Could not find the Serial Number text field", serialNumber.exists());
+		s = sc.getSerialNumber();
+		if(s != null) {
+			serialNumber.set(s);
+		}
+		SelectList customer = ie.selectList(customerFinder);
+		assertTrue("Could not find the Customer select list", customer.exists());
+		s = sc.getCustomer();
+		if(s != null) {
+			Option o = customer.option(text(s));
+			assertTrue("Could not find the option '" + s + "' in list.", o.exists());
+			o.select();
+			misc.waitForJavascript();
+		}
+		SelectList division = ie.selectList(divisionFinder);
+		assertTrue("Could not find the Division select list", division.exists());
+		s = sc.getDivision();
+		if(s != null) {
+			Option o = division.option(text(s));
+			assertTrue("Could not find the option '" + s + "' in list.", o.exists());
+			o.select();
+		}
+		SelectList eventTypeGroup = ie.selectList(eventTypeGroupFinder);
+		assertTrue("Could not find the Event Type Group select list", eventTypeGroup.exists());
+		s = sc.getEventTypeGroup();
+		if(s != null) {
+			Option o = eventTypeGroup.option(text(s));
+			assertTrue("Could not find the option '" + s + "' in list.", o.exists());
+			o.select();
+		}
+		SelectList productType = ie.selectList(productTypeFinder);
+		assertTrue("Could not find the Product Type select list", productType.exists());
+		s = sc.getProductType();
+		if(s != null) {
+			Option o = productType.option(text(s));
+			assertTrue("Could not find the option '" + s + "' in list.", o.exists());
+			o.select();
+		}
+		SelectList productStatus = ie.selectList(productStatusFinder);
+		assertTrue("Could not find the Product Status select list", productStatus.exists());
+		s = sc.getProductStatus();
+		if(s != null) {
+			Option o = productStatus.option(text(s));
+			assertTrue("Could not find the option '" + s + "' in list.", o.exists());
+			o.select();
+		}
+		TextField fromDate = ie.textField(fromDateFinder);
+		assertTrue("Could not find the From Date text field", fromDate.exists());
+		s = sc.getFromDate();
+		if(s != null) {
+			fromDate.set(s);
+		}
+		TextField toDate = ie.textField(toDateFinder);
+		assertTrue("Could not find the To Date text field", toDate.exists());
+		s = sc.getToDate();
+		if(s != null) {
+			toDate.set(s);
+		}
+		misc.startMonitorStatus();
+	}
+
+	public void gotoRunScheduleCriteria() throws Exception {
+		Button run = ie.button(scheduleCriteriaRunButtonFinder);
+		assertTrue("Could not find the Run button", run.exists());
+		run.click();
+		checkJobPageContentHeader();
+	}
+
+	public void assignAllToJob() throws Exception {
+		Link l = ie.link(scheduleCriteriaAssignAllToJobFinder);
+		assertTrue("Could not find the 'Assign all to Job' link", l.exists());
+		l.click();
+		misc.checkForErrorMessagesOnCurrentPage();
 	}
 }

@@ -1074,9 +1074,14 @@ public class Reporting extends TestCase {
 		}
 		return results;
 	}
+	
+	private Link getMassUpdateLink() throws Exception {
+		Link mass = ie.link(reportingMassUpdateLinkFinder);
+		return mass;
+	}
 
 	public void gotoMassUpdate() throws Exception {
-		Link mass = ie.link(reportingMassUpdateLinkFinder);
+		Link mass = getMassUpdateLink();
 		assertTrue("Could not find the link to Mass Update", mass.exists());
 		mass.click();
 		checkMassUpdatePageContentHeader();
@@ -1181,5 +1186,10 @@ public class Reporting extends TestCase {
 			assertTrue("Could not find a link to expand a product type", expand.exists());
 			expand.click();
 		}
+	}
+
+	public boolean isMassUpdateAvailable() throws Exception {
+		Link mass = getMassUpdateLink();
+		return mass.exists();
 	}
 }

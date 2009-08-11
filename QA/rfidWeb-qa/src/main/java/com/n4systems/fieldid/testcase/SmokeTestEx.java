@@ -4,22 +4,30 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import watij.elements.Link;
+
 import com.n4systems.fieldid.datatypes.ButtonGroup;
+import com.n4systems.fieldid.datatypes.ButtonGroupType;
 import com.n4systems.fieldid.datatypes.Customer;
+import com.n4systems.fieldid.datatypes.CustomerDivision;
 import com.n4systems.fieldid.datatypes.CustomerUser;
 import com.n4systems.fieldid.datatypes.Inspection;
 import com.n4systems.fieldid.datatypes.InspectionForm;
 import com.n4systems.fieldid.datatypes.InspectionType;
+import com.n4systems.fieldid.datatypes.MassUpdateScheduleForm;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.ProductType;
 import com.n4systems.fieldid.datatypes.ReportSearchSelectColumns;
+import com.n4systems.fieldid.datatypes.ScheduleSearchCriteria;
+import com.n4systems.fieldid.datatypes.ScheduleSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.Section;
 import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "swwr";
+	String company = "halo";
 	String password = "makemore$";
 	boolean jobs = false;			// end users do not have Jobs
 	
@@ -60,7 +68,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	static String editorDivision = new String("editor-div");
 	static String bothDivision = new String("both-div");
 	static String neitherDivision = new String("neither-div");
-	static String adminDivision = "";
+	static String adminDivision = null;
 	static String userEmail = "darrell.grainger@n4systems.com";
 	static String createFirstName = "Create";
 	static String editorFirstName = "Editor";
@@ -244,6 +252,81 @@ public class SmokeTestEx extends FieldIDTestCase {
 		}
 	}
 	
+	public void testAdminPrintingACertificate() throws Exception {
+		String method = getName();
+		loginAdminUser();
+		try {
+			helperPrintingACertificate(adminMasterProductSerialNumber);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testCreatePrintingACertificate() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperPrintingACertificate(createMasterProductSerialNumber);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorPrintingACertificate() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			helperPrintingACertificate(editorMasterProductSerialNumber);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothPrintingACertificate() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperPrintingACertificate(bothMasterProductSerialNumber);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherPrintingACertificate() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			helperPrintingACertificate(neitherMasterProductSerialNumber);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperPrintingACertificate(String serialNumber) throws Exception {
+		home.gotoProductInformationViaSmartSearch(serialNumber);
+		assets.downloadManufactureCertificate();
+	}
+	
 	public void testAdminEditingAProduct() throws Exception {
 		String method = getName();
 		loginAdminUser();
@@ -319,6 +402,101 @@ public class SmokeTestEx extends FieldIDTestCase {
 		assets.gotoEditProduct(serialNumber);
 		assets.checkEndUserEditProduct(divisional);
 		assets.saveCustomerProduct(serialNumber);
+	}
+	
+	public void testAdminInspectingAProduct() throws Exception {
+		String method = getName();
+		loginAdminUser();
+		try {
+			helperInspectingAProduct(adminMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testCreateInspectingAProduct() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperInspectingAProduct(createMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorFailingToInspectAProduct() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			inspect.gotoInspect();
+			inspect.loadAssetViaSmartSearch(editorMasterProductSerialNumber);
+			assertFalse("The ability to start a new inspection exists for a user without permission", inspect.isStartNewInspectionAvailable());
+			
+			// Logout, login as admin and create an inspect for editor to edit later
+			misc.logout();
+			loginAdminUser();
+			helperInspectingAProduct(editorMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothInspectingAProduct() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperInspectingAProduct(bothMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherFailingToInspectAProduct() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			inspect.gotoInspect();
+			inspect.loadAssetViaSmartSearch(neitherMasterProductSerialNumber);
+			assertFalse("The ability to start a new inspection exists for a user without permission", inspect.isStartNewInspectionAvailable());
+			
+			// Logout, login as admin and create an inspect for neither to fail editing later
+			misc.logout();
+			loginAdminUser();
+			helperInspectingAProduct(neitherMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperInspectingAProduct(String serialNumber, String inspectionType, boolean master) throws Exception {
+		home.gotoProductInformationViaSmartSearch(serialNumber);
+		assets.gotoInspectionGroups(serialNumber);
+		inspect.gotoStartNewInspection(inspectionType, true);
+		Inspection inspection = new Inspection();
+		inspect.gotoStartMasterInspection(inspectionType);
+		inspect.setMasterInspection(inspection, null);
+		inspect.gotoStoreMasterInspection();
+		inspect.gotoSaveMasterInspection(serialNumber);
 	}
 
 	private void configureProducts() throws Exception {
@@ -403,6 +581,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	static String masterInspectionType = "N4 Master Visual Inspection";
+	static String masterInspectionEventTypeGroup = "Visual Inspection";
 	static InspectionForm masterInspectionForm = null;
 	static String masterProductType = "n4master";
 	static String subInspectionType = null;	// This gets filled in later
@@ -519,6 +698,13 @@ public class SmokeTestEx extends FieldIDTestCase {
 		if(masterInspectionForm == null) {
 			mits.gotoManageButtonGroups();
 			List<String> buttonGroupNames = mits.getButtonGroupNames();
+//			if(buttonGroupNames.size() < 1) {
+//				mits.gotoAddButtonGroup();
+//				ButtonGroupType bgt = new ButtonGroupType("Pass/Fail");
+//				bgt.setLabel(0, "PASS");
+//				bgt.setLabel(1, "FAIL", ButtonGroupType.FAIL, ButtonGroupType.FAIL_IMAGE);\
+//				// TODO: add the button group
+//			}
 			mits.gotoImDoneFromManageButtonGroups();
 			masterInspectionForm = new InspectionForm();
 			int numSections = 2;
@@ -551,6 +737,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 
 	private void createMasterInspectonType() throws Exception {
 		InspectionType it = new InspectionType(masterInspectionType);
+		it.setGroup(masterInspectionEventTypeGroup);
 		it.setPrintable(true);
 		it.setMasterInspection(true);
 		List<String> proofTestTypes = new ArrayList<String>();
@@ -609,14 +796,35 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 */
 	private void createDivisions() throws Exception {
 		mcs.gotoCustomerDivisions();
-		if(!mcs.isCustomerDivision(createDivision))
-			mcs.addCustomerDivision(createDivision);
-		if(!mcs.isCustomerDivision(editorDivision))
-			mcs.addCustomerDivision(editorDivision);
-		if(!mcs.isCustomerDivision(bothDivision))
-			mcs.addCustomerDivision(bothDivision);
-		if(!mcs.isCustomerDivision(neitherDivision))
-			mcs.addCustomerDivision(neitherDivision);
+		CustomerDivision d = new CustomerDivision(null,null);
+		if(!mcs.isCustomerDivision(createDivision)) {
+			mcs.gotoAddCustomerDivision();
+			d.setDivisionID(createDivision);
+			d.setDivisionName(createDivision);
+			mcs.setCustomerDivision(d);
+			mcs.addCustomerDivision();
+		}
+		if(!mcs.isCustomerDivision(editorDivision)) {
+			mcs.gotoAddCustomerDivision();
+			d.setDivisionID(editorDivision);
+			d.setDivisionName(editorDivision);
+			mcs.setCustomerDivision(d);
+			mcs.addCustomerDivision();
+		}
+		if(!mcs.isCustomerDivision(bothDivision)) {
+			mcs.gotoAddCustomerDivision();
+			d.setDivisionID(bothDivision);
+			d.setDivisionName(bothDivision);
+			mcs.setCustomerDivision(d);
+			mcs.addCustomerDivision();
+		}
+		if(!mcs.isCustomerDivision(neitherDivision)) {
+			mcs.gotoAddCustomerDivision();
+			d.setDivisionID(neitherDivision);
+			d.setDivisionName(neitherDivision);
+			mcs.setCustomerDivision(d);
+			mcs.addCustomerDivision();
+		}
 	}
 
 	/**
@@ -633,8 +841,12 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 */
 	private void createUsers() throws Exception {
 		admin.gotoAdministration();
-		mus.gotoManageUsers();
-		
+		mcs.gotoManageCustomers();
+		mcs.setAddCustomerFilter(customer.getCustomerName());
+		mcs.gotoAddCustomerFilter();
+		mcs.gotoCustomer(customer);
+		mcs.gotoUsers();
+
 		// Create User
 		CustomerUser u = new CustomerUser(createUser, userEmail, createFirstName, createLastName, password);
 		u.setDivision(createDivision);
@@ -648,7 +860,6 @@ public class SmokeTestEx extends FieldIDTestCase {
 		addUser(u);
 		
 		// Edit User
-		mus.gotoViewAll();
 		u.setUserID(editorUser);
 		u.setFirstName(editorFirstName);
 		u.setLastName(editorLastName);
@@ -660,7 +871,6 @@ public class SmokeTestEx extends FieldIDTestCase {
 		addUser(u);
 		
 		// Both User
-		mus.gotoViewAll();
 		u.setUserID(bothUser);
 		u.setFirstName(bothFirstName);
 		u.setLastName(bothLastName);
@@ -673,7 +883,6 @@ public class SmokeTestEx extends FieldIDTestCase {
 		addUser(u);
 		
 		// Neither User
-		mus.gotoViewAll();
 		u.setUserID(neitherUser);
 		u.setFirstName(neitherFirstName);
 		u.setLastName(neitherLastName);
@@ -684,7 +893,6 @@ public class SmokeTestEx extends FieldIDTestCase {
 		addUser(u);
 		
 		// Admin User
-		mus.gotoViewAll();
 		u.setUserID(adminUser);
 		u.setFirstName(adminFirstName);
 		u.setLastName(adminLastName);
@@ -706,15 +914,12 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void addUser(CustomerUser u) throws Exception {
-		mus.setListUsersNameFilter(u.getUserID());
-		mus.setListUsersUserType("Customers");
-		mus.gotoListUsersSearch();
-		if(!mus.isUser(u.getUserID())) {
-			mus.gotoAddCustomerUser();
-			mus.addCustomerUser(u);
+		 if(!mcs.isUser(u.getUserID())) {
+			mcs.gotoAddUser();
+			mcs.addCustomerUser(u);
 		} else {
-			mus.gotoEditCustomerUser(u);
-			mus.editCustomerUser(u);
+			mcs.gotoEditUser(u.getUserID());
+			mcs.editCustomerUser(u);
 		}
 	}
 	
@@ -722,7 +927,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginAdminUser();
 		try {
-			helperReportingSearch(neitherDivision);
+			helperReportingSearch(neitherDivision, true);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -736,7 +941,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginCreateUser();
 		try {
-			helperReportingSearch(null);
+			helperReportingSearch(null, false);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -750,7 +955,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginEditorUser();
 		try {
-			helperReportingSearch(null);
+			helperReportingSearch(null, true);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -764,7 +969,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginBothUser();
 		try {
-			helperReportingSearch(null);
+			helperReportingSearch(null, true);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -778,7 +983,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginNeitherUser();
 		try {
-			helperReportingSearch(null);
+			helperReportingSearch(null, false);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
@@ -788,7 +993,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		}
 	}
 	
-	private void helperReportingSearch(String division) throws Exception {
+	private void helperReportingSearch(String division, boolean massUpdate) throws Exception {
 		reporting.gotoReporting();
 		reporting.expandReportSelectColumns();
 		ReportSearchSelectColumns r = new ReportSearchSelectColumns();
@@ -805,61 +1010,307 @@ public class SmokeTestEx extends FieldIDTestCase {
 		reporting.printAllPDFReports();
 		reporting.printAllObservationReports();
 		reporting.exportToExcel();
-		reporting.gotoMassUpdate();
-		reporting.checkEndUserMassUpdate();
-		Inspection inspection = new Inspection();
-		inspection.setCustomer(customer.getCustomerName());
-		inspection.setLocation("massupdate");
-		inspection.setPrintable(true);
-		if(division != null) {
-			inspection.setDivision(division);
+		if(massUpdate) {
+			reporting.gotoMassUpdate();
+			reporting.checkEndUserMassUpdate();
+			Inspection inspection = new Inspection();
+			inspection.setCustomer(customer.getCustomerName());
+			inspection.setLocation("massupdate");
+			inspection.setPrintable(true);
+			if(division != null) {
+				inspection.setDivision(division);
+			}
+			reporting.setMassUpdate(inspection);
+			reporting.gotoSaveMassUpdate();
+		} else {
+			assertFalse("Mass update is available for a user without edit permission.", reporting.isMassUpdateAvailable());
 		}
-		reporting.setMassUpdate(inspection);
-		reporting.gotoSaveMassUpdate();
 		reporting.gotoSummaryReport();
 		reporting.expandSummaryReport();
 	}
 	
+	public void testAdminEditingAnInspection() throws Exception {
+		String method = getName();
+		loginAdminUser();
+		try {
+			helperEditInspection(adminMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorEditingAnInspection() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			helperEditInspection(editorMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothEditingAnInspection() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperEditInspection(bothMasterProductSerialNumber, masterInspectionType, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testCreateFailingToEditingAnInspection() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			inspect.gotoInspect();
+			inspect.loadAssetViaSmartSearch(createMasterProductSerialNumber);
+			assertFalse("I can edit an inspection with a user without Edit permission", inspect.isInspectionEditable());
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherFailingToEditingAnInspection() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			inspect.gotoInspect();
+			inspect.loadAssetViaSmartSearch(neitherMasterProductSerialNumber);
+			assertFalse("I can edit an inspection with a user without Edit permission", inspect.isInspectionEditable());
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperEditInspection(String serialNumber, String inspectionType, boolean master) throws Exception {
+		home.gotoProductInformationViaSmartSearch(serialNumber);
+		assets.gotoInspectionGroups(serialNumber);
+		List<Link> inspections = inspect.getInspectionsFromManageInspections(inspectionType);
+		assertTrue("Could not find an inspection of type '" + inspectionType + "' to edit.", inspections.size() > 0);
+		Link inspection = inspections.get(0);
+		inspection.click();
+		inspect.gotoEdit(serialNumber);
+		if(master) {
+			inspect.gotoEditMasterInspection(serialNumber, inspectionType);
+			inspect.gotoStoreEditMasterInspection(serialNumber);
+			inspect.gotoSaveMasterInspection(serialNumber);
+		} else {
+			inspect.gotoSaveStandardInspection(serialNumber);
+		}
+	}
+
+	public void testAdminAddingASchedule() throws Exception {
+		String method = getName();
+		loginAdminUser();
+		try {
+			helperAddASchedule(adminMasterProductSerialNumber, masterInspectionType);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	private void helperAddASchedule(String serialNumber, String inspectionType) throws Exception {
+		String scheduleDate = misc.getDateStringNextMonth();
+		home.gotoProductInformationViaSmartSearch(serialNumber);
+		assets.gotoInspectionSchedule(serialNumber);
+		assets.addScheduleFor(scheduleDate, inspectionType, null);
+		scheduleDate = misc.getDateStringLastMonth();
+		assets.addScheduleFor(scheduleDate, inspectionType, null);
+		schedule.gotoSchedule();
+		schedule.gotoScheduleSearchResults();
+	}
+	
+	public void testCreateAddingASchedule() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperAddASchedule(createMasterProductSerialNumber, masterInspectionType);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothAddingASchedule() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperAddASchedule(bothMasterProductSerialNumber, masterInspectionType);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorFailingToAddASchedule() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			home.gotoProductInformationViaSmartSearch(editorMasterProductSerialNumber);
+			assertFalse("I can get to Edit Schedules on a user without Create permission", assets.isSchedulesAvailable());
+			misc.logout();
+			loginAdminUser();
+			helperAddASchedule(editorMasterProductSerialNumber, masterInspectionType);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherFailingToAddASchedule() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			home.gotoProductInformationViaSmartSearch(neitherMasterProductSerialNumber);
+			assertFalse("I can get to Edit Schedules on a user without Create permission", assets.isSchedulesAvailable());
+			misc.logout();
+			loginAdminUser();
+			helperAddASchedule(neitherMasterProductSerialNumber, masterInspectionType);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testAdminViewingScheduleSearchResults() throws Exception {
+		String method = getName();
+		loginAdminUser();
+		try {
+			helperViewingScheduleSearchResults(masterInspectionType, adminMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testCreateViewingScheduleSearchResults() throws Exception {
+		String method = getName();
+		loginCreateUser();
+		try {
+			helperViewingScheduleSearchResults(masterInspectionType, createMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testEditorViewingScheduleSearchResults() throws Exception {
+		String method = getName();
+		loginEditorUser();
+		try {
+			helperViewingScheduleSearchResults(masterInspectionType, editorMasterProductSerialNumber, false);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testBothViewingScheduleSearchResults() throws Exception {
+		String method = getName();
+		loginBothUser();
+		try {
+			helperViewingScheduleSearchResults(masterInspectionType, bothMasterProductSerialNumber, true);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	public void testNeitherViewingScheduleSearchResults() throws Exception {
+		String method = getName();
+		loginNeitherUser();
+		try {
+			helperViewingScheduleSearchResults(masterInspectionType, neitherMasterProductSerialNumber, false);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+			throw err;
+		}
+	}
+	
+	/**
+	 * Assumes we are inspecting a masterProductType
+	 * 
+	 * @param inspectionType
+	 * @param serialNumber
+	 * @throws Exception
+	 */
+	private void helperViewingScheduleSearchResults(String inspectionType, String serialNumber, boolean create) throws Exception {
+		String nextInspectionDate = misc.getDateString();
+		schedule.gotoSchedule();
+		ScheduleSearchCriteria s = new ScheduleSearchCriteria();
+		s.setEventTypeGroup(masterInspectionEventTypeGroup);
+		s.setProductType(masterProductType);
+		schedule.setScheduleSearchCriteria(s);
+		schedule.expandProductSearchSelectColumns();
+		ScheduleSearchSelectColumns c = new ScheduleSearchSelectColumns();
+		c.setAllOn();
+		schedule.setScheduleSearchColumns(c);
+		schedule.gotoScheduleSearchResults();
+		schedule.exportToExcel();
+		if(create) {
+			schedule.gotoMassUpdate();
+			MassUpdateScheduleForm m = new MassUpdateScheduleForm(nextInspectionDate);
+			schedule.setMassUpdate(m);
+			schedule.gotoSaveMassUpdate();
+		} else {
+			assertFalse("Someone without create permission can mass update schedules", schedule.isMassUpdateAvailable());
+		}
+	}
+
 	// test Schedule
-	//		everyone can see schedules in their division only
-	//		admin can see all schedules for current company
-	//		export to excel
-	//		mass update (next inspection date)
-	//		inspect now
-
-	// test inspecting a product
-	//		admin inspects admin product
-	//		create inspects create product
-	//		both inspects both product
-	//		editor should not be able to inspect
-	//		neither should not be able to inspect
-	//		admin inspects editor product
-	//		admin inspects neither product
-	
-	// test editing an inspection
-	//		should be able to edit location, inspector, inspection date, event is schedule for, inspection book, result, comments, printable
-	//		admin edits admin inspection
-	//		create cannot edit inspections
-	//		both edits both inspection
-	//		editor edits editor inspection
-	//		neither cannot edit inspections
-	
-	// test editing a master inspection
-	//		should be able to edit location, inspector, inspection date, event is schedule for, inspection book, result, comments, printable
-	//		admin edits admin inspection
-	//		create cannot edit inspections
-	//		both edits both inspection
-	//		editor edits editor inspection
-	//		neither cannot edit inspections
-
-	// test adding a schedule for master products
-	//		admin adds a schedule to admin product
-	//		create adds a schedule to create product
-	//		both adds a schedule to both product
-	//		editor cannot add a schedule
-	//		neither cannot add a schedule
-	//		admin adds a schedule to editor product
-	//		admin adds a schedule to neither product
+	//		edit a schedule
 
 	protected void tearDown() throws Exception {
 		super.tearDown();

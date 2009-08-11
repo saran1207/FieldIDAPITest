@@ -54,7 +54,14 @@ public class Division extends EntityWithTenant implements NamedEntity, Listable<
 		super.onUpdate();
 		trimName();
 	}
-	
+
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		if (contact == null) {
+			contact = new Contact();
+		}
+	}
 
 	private void trimName() {
 		this.name = (name != null) ? name.trim() : null;

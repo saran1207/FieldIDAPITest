@@ -68,6 +68,8 @@ public class ManageInspectionTypes extends TestCase {
 	private Finder manageButtonGroupsImDoneButtonFinder;
 	private Finder viewInspectionTypeFinder;
 	private Finder inspectionFormSectionNameFinder;
+	private Finder addNewButtonGroupButtonFinder;
+	private Finder buttonGroupPageContentHeaderFinder;
 	
 	public ManageInspectionTypes(IE ie) {
 		this.ie = ie;
@@ -76,6 +78,8 @@ public class ManageInspectionTypes extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			buttonGroupPageContentHeaderFinder = xpath(p.getProperty("managebuttongrouppagecontentheader"));
+			addNewButtonGroupButtonFinder = xpath(p.getProperty("addnewbuttongroupbutton"));
 			inspectionTypesFinder = text(p.getProperty("link"));
 			inspectionTypesPageContentHeaderFinder = xpath(p.getProperty("inspectiontypescontentheader"));
 			inspectionTypePageContentHeaderFinder = xpath(p.getProperty("inspectiontypecontentheader"));
@@ -600,6 +604,7 @@ public class ManageInspectionTypes extends TestCase {
 		Link manageButtonGroups = ie.link(manageButtonGroupsLinkFinder);
 		assertTrue("Could not find the 'manage' link to the Button Groups", manageButtonGroups.exists());
 		manageButtonGroups.click();
+		checkButtonSetupPageContentHeader();
 	}
 
 	public boolean isInspectionType(String it) throws Exception {
@@ -775,5 +780,17 @@ public class ManageInspectionTypes extends TestCase {
 			}
 		}
 		return result;
+	}
+
+	public void gotoAddButtonGroup() throws Exception {
+		Button addGroup = ie.button(addNewButtonGroupButtonFinder);
+		assertTrue("Could not find a button to add a new button group", addGroup.exists());
+		addGroup.click();
+		checkButtonSetupPageContentHeader();
+	}
+
+	private void checkButtonSetupPageContentHeader() throws Exception {
+		HtmlElement header = ie.htmlElement(buttonGroupPageContentHeaderFinder);
+		assertTrue("Could not find the page content header for managing button groups", header.exists());
 	}
 }

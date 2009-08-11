@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import com.n4systems.fieldid.*;
 import com.n4systems.fieldid.datatypes.Customer;
+import com.n4systems.fieldid.datatypes.CustomerDivision;
 import com.n4systems.fieldid.datatypes.CustomerUser;
 
 import watij.elements.*;
@@ -23,6 +24,7 @@ import junit.framework.TestCase;
 public class ManageCustomers extends TestCase {
 	IE ie = null;
 	FieldIDMisc misc = null;
+	ManageUsers mus = null;
 	Properties p;
 	InputStream in;
 	String propertyFile = "managecustomers.properties";
@@ -88,14 +90,33 @@ public class ManageCustomers extends TestCase {
 	private Finder editCustomerUserPermissionsTableFinder;
 	private Finder editCustomerUserSaveButtonFinder;
 	private Finder divisionContainerFinder;
+	private Finder manageCustomerAddDivisionFinder;
+	private Finder manageCustomerAddDivisionIDFinder;
+	private Finder manageCustomerAddDivisionNameFinder;
+	private Finder manageCustomerAddDivisionContactNameFinder;
+	private Finder manageCustomerAddDivisionContactEmailFinder;
+	private Finder manageCustomerAddDivisionStreetAddressFinder;
+	private Finder manageCustomerAddDivisionCityFinder;
+	private Finder manageCustomerAddDivisionStateFinder;
+	private Finder manageCustomerAddDivisionZipFinder;
+	private Finder manageCustomerAddDivisionCountryFinder;
+	private Finder manageCustomerAddDivisionPhone1Finder;
+	private Finder manageCustomerAddDivisionPhone2Finder;
+	private Finder manageCustomerAddDivisionFaxFinder;
+	private Finder manageCustomerAddDivisionSaveFinder;
+	private Finder manageCustomerUsersLinkFinder;
+	private Finder manageCustomerAddUserLinkFinder;
 
 	public ManageCustomers(IE ie) {
 		this.ie = ie;
 		try {
 			misc = new FieldIDMisc(ie);
+			mus = new ManageUsers(ie);
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			manageCustomerAddUserLinkFinder = xpath(p.getProperty("managecustomeradduser"));
+			manageCustomerUsersLinkFinder = xpath(p.getProperty("managecustomeruserslink"));
 			manageCustomersFinder = text(p.getProperty("link"));
 			manageCustomersPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			manageCustomersFilterTextFieldFinder = id(p.getProperty("managecustomersfiltertextfield"));
@@ -158,6 +179,20 @@ public class ManageCustomers extends TestCase {
 			editCustomerUserPermissionsTableFinder = xpath(p.getProperty("editcustomeruserpermissiontable"));
 			editCustomerUserSaveButtonFinder = xpath(p.getProperty("editcustomerusersavebutton"));
 			divisionContainerFinder = xpath(p.getProperty("divisioncontainer"));
+			manageCustomerAddDivisionFinder = xpath(p.getProperty("adddivisionlink"));
+			manageCustomerAddDivisionIDFinder = xpath(p.getProperty("managecustomeradddivisionid"));
+			manageCustomerAddDivisionNameFinder = xpath(p.getProperty("managecustomeradddivisionname"));
+			manageCustomerAddDivisionContactNameFinder = xpath(p.getProperty("managecustomeradddivisioncontactname"));
+			manageCustomerAddDivisionContactEmailFinder = xpath(p.getProperty("managecustomeradddivisioncontactemail"));
+			manageCustomerAddDivisionStreetAddressFinder = xpath(p.getProperty("managecustomeradddivisionstreetaddress"));
+			manageCustomerAddDivisionCityFinder = xpath(p.getProperty("managecustomeradddivisioncity"));
+			manageCustomerAddDivisionStateFinder = xpath(p.getProperty("managecustomeradddivisionstate"));
+			manageCustomerAddDivisionZipFinder = xpath(p.getProperty("managecustomeradddivisionzip"));
+			manageCustomerAddDivisionCountryFinder = xpath(p.getProperty("managecustomeradddivisioncountry"));
+			manageCustomerAddDivisionPhone1Finder = xpath(p.getProperty("managecustomeradddivisionphone1"));
+			manageCustomerAddDivisionPhone2Finder = xpath(p.getProperty("managecustomeradddivisionphone2"));
+			manageCustomerAddDivisionFaxFinder = xpath(p.getProperty("managecustomeradddivisionfax"));
+			manageCustomerAddDivisionSaveFinder = xpath(p.getProperty("managecustomeradddivisionsavebutton"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -694,7 +729,7 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the Submit button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		checkManageUserPageContentHeader(u.getUserID());
+		checkManageCustomerPageContentHeader();
 	}
 
 	private void checkManageUserPageContentHeader(String userID) throws Exception {
@@ -702,7 +737,82 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the title to Manage User page", header.exists());
 		assertTrue("Could not find the User ID in the header", header.text().contains(userID));
 	}
+	
+	public void gotoAddCustomerDivision() throws Exception {
+		Link add = ie.link(manageCustomerAddDivisionFinder);
+		assertTrue("Could not find the link to add a division", add.exists());
+		add.click();
+		checkManageCustomerPageContentHeader();
+	}
+	
+	public void setCustomerDivision(CustomerDivision d) throws Exception {
+		assertNotNull(d);
+		assertNotNull("Must supply a division ID", d.getDivisionID());
+		assertNotNull("Must supply a division Name", d.getDivisionName());
+		TextField divisionID = ie.textField(manageCustomerAddDivisionIDFinder);
+		assertTrue("Could not find the Division ID text field", divisionID.exists());
+		TextField divisionName = ie.textField(manageCustomerAddDivisionNameFinder);
+		assertTrue("Could not find the Division Name text field", divisionName.exists());
+		TextField contactName = ie.textField(manageCustomerAddDivisionContactNameFinder);
+		assertTrue("Could not find the Contact Name text field", contactName.exists());
+		TextField contactEmail = ie.textField(manageCustomerAddDivisionContactEmailFinder);
+		assertTrue("Could not find the Contact Email text field", contactEmail.exists());
+		TextField streetAddress = ie.textField(manageCustomerAddDivisionStreetAddressFinder);
+		assertTrue("Could not find the Street Address text field", streetAddress.exists());
+		TextField city = ie.textField(manageCustomerAddDivisionCityFinder);
+		assertTrue("Could not find the City text field", city.exists());
+		TextField state = ie.textField(manageCustomerAddDivisionStateFinder);
+		assertTrue("Could not find the State text field", state.exists());
+		TextField zip = ie.textField(manageCustomerAddDivisionZipFinder);
+		assertTrue("Could not find the Zip text field", zip.exists());
+		TextField country = ie.textField(manageCustomerAddDivisionCountryFinder);
+		assertTrue("Could not find the Country text field", country.exists());
+		TextField phone1 = ie.textField(manageCustomerAddDivisionPhone1Finder);
+		assertTrue("Could not find the Phone 1 text field", phone1.exists());
+		TextField phone2 = ie.textField(manageCustomerAddDivisionPhone2Finder);
+		assertTrue("Could not find the Phone 2 text field", phone2.exists());
+		TextField fax = ie.textField(manageCustomerAddDivisionFaxFinder);
+		assertTrue("Could not find the Fax text field", fax.exists());
+		
+		divisionID.set(d.getDivisionID());
+		divisionName.set(d.getDivisionName());
+		if(d.getContactName() != null) {
+			contactName.set(d.getContactName());
+		}
+		if(d.getContactEmail() != null) {
+			contactEmail.set(d.getContactEmail());
+		}
+		if(d.getStreetAddress() != null) {
+			streetAddress.set(d.getStreetAddress());
+		}
+		if(d.getCity() != null) {
+			city.set(d.getCity());
+		}
+		if(d.getState() != null) {
+			state.set(d.getState());
+		}
+		if(d.getZip() != null) {
+			zip.set(d.getZip());
+		}
+		if(d.getCountry() != null) {
+			country.set(d.getCountry());
+		}
+		if(d.getPhone1() != null) {
+			phone1.set(d.getPhone1());
+		}
+		if(d.getPhone2() != null) {
+			phone2.set(d.getPhone2());
+		}
+		if(d.getFax() != null) {
+			fax.set(d.getFax());
+		}
+	}
 
+	/**
+	 * @deprecated
+	 * @param d
+	 * @throws Exception
+	 */
 	public void addCustomerDivision(String d) throws Exception {
 		TextField division = ie.textField(manageCustomerDivisionFinder);
 		assertTrue("Could not find the text field to add a division", division.exists());
@@ -825,7 +935,7 @@ public class ManageCustomers extends TestCase {
 		}
 
 		saveEditCustomerUser();
-		checkManageUserPageContentHeader(u.getUserID());
+		checkManageCustomerPageContentHeader();
 		misc.startMonitorStatus();
 	}
 
@@ -864,12 +974,23 @@ public class ManageCustomers extends TestCase {
 		return result;
 	}
 	
+	/**
+	 * @deprecated
+	 * @return
+	 * @throws Exception
+	 */
 	private Div getDivisionContainer() throws Exception {
 		Div d = ie.div(divisionContainerFinder);
 		assertTrue("Could not find the division container", d.exists());
 		return d;
 	}
 	
+	/**
+	 * @deprecated
+	 * @param oldDivision
+	 * @param newDivision
+	 * @throws Exception
+	 */
 	public void editCustomerDivision(String oldDivision, String newDivision) throws Exception {
 		Div d = this.getDivisionContainer();
 		TextField division = d.textField(xpath("//INPUT[@value='" + oldDivision + "']"));
@@ -883,9 +1004,43 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Update failed: '" + result + "'", result.contains("successfully updated"));
 	}
 
-	public boolean isCustomerDivision(String division) throws Exception {
-		Div d = this.getDivisionContainer();
-		TextField div = d.textField(xpath("//INPUT[@value='" + division + "']"));
+	public boolean isCustomerDivision(String divisionName) throws Exception {
+		// TODO support more than one page of divisions
+		TableCell div = ie.cell(xpath("//TD[contains(text(),'" + divisionName + "')]"));
 		return div.exists();
+	}
+
+	public void addCustomerDivision() throws Exception {
+		Button save = ie.button(manageCustomerAddDivisionSaveFinder);
+		assertTrue("Could not find the Save button on Add Division", save.exists());
+		save.click();
+		misc.checkForErrorMessagesOnCurrentPage();
+		checkManageCustomerPageContentHeader();
+	}
+
+	public boolean isUser(String userID) throws Exception {
+		Link l = ie.link(xpath("//TABLE[@id='userList']/TBODY/TR/TD[1]/A[contains(text(),'" + userID + "')]"));
+		return l.exists();
+	}
+
+	public void gotoAddUser() throws Exception {
+		Link l = ie.link(manageCustomerAddUserLinkFinder);
+		assertTrue("Could not find the link to Add User", l.exists());
+		l.click();
+		checkManageCustomerPageContentHeader();
+	}
+
+	public void gotoUsers() throws Exception {
+		Link l = ie.link(manageCustomerUsersLinkFinder);
+		assertTrue("Could not find the link to this customer's Users", l.exists());
+		l.click();
+		checkManageCustomerPageContentHeader();
+	}
+
+	public void gotoEditUser(String userID) throws Exception {
+		Link l = ie.link(xpath("//TABLE[@id='userList']/TBODY/TR/TD[1]/A[contains(text(),'" + userID + "')]"));
+		assertTrue("Could not find the link to user '" + userID + "'", l.exists());
+		l.click();
+		checkManageCustomerPageContentHeader();
 	}
 }

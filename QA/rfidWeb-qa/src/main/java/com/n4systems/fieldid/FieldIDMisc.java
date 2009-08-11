@@ -39,9 +39,11 @@ public class FieldIDMisc extends TestCase {
 	private Finder labelForOfXPagesFinder;
 	private Finder nextPageLinkFinder;
 	private Finder firstPageLinkFinder;
+	private Finder tellUsWhatHappenedLinkFinder;
 	
 	public FieldIDMisc(IE ie) {
 		this.ie = ie;
+		tellUsWhatHappenedLinkFinder = xpath("//A[contains(text(),'Tell us what happened')]");
 		lightBoxOKButtonFinder = tag("button");
 		lightBoxMessageFinder = xpath("//P[@id='modalBox_message']");
 		lightBoxMessageHeaderFinder = xpath("//DIV[@class='ajaxView']/H2[text()='Messages']");
@@ -652,5 +654,14 @@ public class FieldIDMisc extends TestCase {
 	public boolean isFirstPage() throws Exception {
 		Link first = ie.link(firstPageLinkFinder);
 		return !first.exists();
+	}
+
+	public void checkForOopsPage(IE ie) throws Exception {
+		String title = ie.title();
+		String badTitle = "Oops!";
+		assertFalse("Title of the page is '" + badTitle + "', something bad must have happened.", title.contains(badTitle));
+		String tellUsWhatHappened = "Tell us what happened";
+		Link helpServe = ie.link(tellUsWhatHappenedLinkFinder);
+		assertFalse("Link to '" + tellUsWhatHappened + "' exists.", helpServe.exists());
 	}
 }

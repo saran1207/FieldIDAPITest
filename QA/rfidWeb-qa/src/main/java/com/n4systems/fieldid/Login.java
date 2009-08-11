@@ -249,7 +249,7 @@ public class Login extends TestCase {
 		checkLoginPageContentHeader();
 	}
 
-	private void checkLoginPageContentHeader() throws Exception {
+	public void checkLoginPageContentHeader() throws Exception {
 		HtmlElement loginContentHeader = ie.htmlElement(loginContentHeaderFinder);
 		assertTrue("Could not find the Login page content header.", loginContentHeader.exists());
 	}
@@ -350,7 +350,7 @@ public class Login extends TestCase {
 		checkForgotMyPasswordContentHeader();
 	}
 
-	private void checkForgotMyPasswordContentHeader() throws Exception {
+	public void checkForgotMyPasswordContentHeader() throws Exception {
 		HtmlElement forgotContentHeader = ie.htmlElement(forgotPasswordContentHeaderFinder);
 		assertTrue("Could not find the Forgot Password content header", forgotContentHeader.exists());
 	}
@@ -432,7 +432,7 @@ public class Login extends TestCase {
 		checkRequestAnAccountContentHeader();
 	}
 
-	private void checkRequestAnAccountContentHeader() throws Exception {
+	public void checkRequestAnAccountContentHeader() throws Exception {
 		HtmlElement requestAccountContentHeader = ie.htmlElement(requestAccountContentHeaderFinder);
 		assertTrue("Could not find the Register New User content header", requestAccountContentHeader.exists());
 	}

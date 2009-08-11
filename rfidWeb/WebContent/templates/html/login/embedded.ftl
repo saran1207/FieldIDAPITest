@@ -1,6 +1,7 @@
 <head>
 	<style>
 		#page {	width:460px; }
+		#pageContent { width:460px; }
 	</style>
 </head>
 <@s.form action="logIntoSystem" theme="fieldid" namespace="/" cssClass="easyForm" target="_parent">

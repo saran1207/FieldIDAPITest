@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.testcase;
 
+import com.n4systems.fieldid.datatypes.Inspection;
+import com.n4systems.fieldid.datatypes.Job;
+import com.n4systems.fieldid.datatypes.ScheduleSearchCriteria;
+
 public class Stub extends FieldIDTestCase {
 
 	protected void setUp() throws Exception {
@@ -10,12 +14,11 @@ public class Stub extends FieldIDTestCase {
 		String method = getName();
 
 		try {
-			login.setUserName(p.getProperty("userid"));
-			login.setPassword(p.getProperty("password"));
+			login.setCompany("cglift");
+			login.setUserName("n4systems");
+			login.setPassword("makemore$");
 			login.login();
-			identify.gotoAddProduct();
-			identify.gotoAddProductAttachFile();
-			Thread.sleep(1);
+			assets.validate("Reel/ID");
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;

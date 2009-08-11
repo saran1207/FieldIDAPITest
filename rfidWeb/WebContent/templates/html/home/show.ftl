@@ -58,11 +58,10 @@
 	<div id="releaseNotes" class="dashboardSection">
 		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes-${action.getText('app.majorversion')}.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
 		<ul class="informationList">
-			<li>New Menu with Improved Navigation</li>
-		    <li>Multi-Add Assets</li>
-		    <li>Integrated Smart Search</li>
-		    <li>Asset Search on Field ID Mobile</li>
-		    <li>Simplified Field ID Mobile Sync Process</li>
+			<li>Improved pagination</li>
+			<li>Record address information on divisions</li>
+			<li>New branded login screen</li>
+			<li>Upload attachments when identifying assets</li>
 		</ul>
 	</div>
 	<div id="helpVideos" class="dashboardSection">

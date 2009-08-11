@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.w3c.dom.Element;
+
 import com.n4systems.fieldid.datatypes.MassUpdateForm;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductSearchCriteria;
@@ -139,6 +141,8 @@ public class Assets extends TestCase {
 	private Finder customerInformationEditFormTextFieldFinder;
 	private Finder editCustomerProductSaveButtonFinder;
 	private Finder editEmployeeProductSaveButtonFinder;
+	private Finder manufactureCertificateDownloadNowLinkFinder;
+	private Finder assetNextScheduledDateCellFinder;
 	
 	public Assets(IE ie) {
 		this.ie = ie;
@@ -147,6 +151,8 @@ public class Assets extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
+			assetNextScheduledDateCellFinder = xpath(p.getProperty("nextscheduleddatecells"));
+			manufactureCertificateDownloadNowLinkFinder = xpath(p.getProperty("manufacturecertificatedownloadnowlink"));
 			assetsFinder = id(p.getProperty("link"));
 			assetsContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			productInformationContentHeaderFinder = xpath(p.getProperty("productinfocontentheader"));
@@ -1483,8 +1489,13 @@ public class Assets extends TestCase {
 	}
 
 	/**
-	 * Validate all the methods in this library.
+	 * Validate all the methods in this library. This method assumes:
+	 * - That column is set to the header for the Serial Number column.
+	 * - The first customer on the Customer drop down has divisions.
 	 * 
+	 * Typically, I run this against cglift with column set to "Reel/ID".
+	 * 
+	 * @param column - this is the header for the column with serial numbers, i.e. "Serial Number" or "Reel/ID"
 	 * @throws Exception
 	 */
 	public void validate(String column) throws Exception {
@@ -1517,11 +1528,12 @@ public class Assets extends TestCase {
 		}
 		gotoMassUpdate();
 		gotoProductSearchResultsFromMassUpdate();
+		String filename = "Assets-validate-manufacturer-certs.png";
+		misc.myWindowCapture(filename);
 		printAllManufacturerCertificates();
 		exportToExcel();
 		List<String> serialNumbers = getProductSearchResultsSerialNumbers(column);
 		String sdc = getSelectDisplayColumnsHeader();
-
 		gotoMassUpdate();
 		MassUpdateForm m = new MassUpdateForm();
 		m.setCustomerName(customerName);
@@ -1553,7 +1565,10 @@ public class Assets extends TestCase {
 		String newScheduleDate = misc.getDateStringNextMonth();
 		editScheduleFor(scheduleDate, inspectionType, job, newScheduleDate, newJob);
 		gotoProductInformation(serialNumber);
-//		gotoInspectionGroups(serialNumber);	// Waiting for WEB-1034 to be fixed
+		gotoInspectionSchedule(serialNumber);
+		removeScheduleFor(newScheduleDate, inspectionType, newJob);
+		gotoProductInformation(serialNumber);
+		gotoInspectionGroups(serialNumber);	// Waiting for WEB-1034 to be fixed
 		assertTrue(SmartSearch(serialNumber) > 0);
 		
 		// These get exercised by the Smoke Test
@@ -1580,11 +1595,76 @@ public class Assets extends TestCase {
 		Link massUpdate = ie.link(massUpdateLinkFinder);
 		return massUpdate.exists();
 	}
+
+	public boolean isSchedulesAvailable() throws Exception {
+		boolean result = false;
+		Link inspectionSchedule = ie.link(inspectionScheduleLinkFinder);
+		result = inspectionSchedule.exists();
+		return result;
+	}
+
+	public void downloadManufactureCertificate() throws Exception {
+		Link l = ie.link(manufactureCertificateDownloadNowLinkFinder);
+		assertTrue("Cannot find the link to download a manufacture certificate", l.exists());
+		l.click();
+		IE certBrowser = ie.childBrowser();
+		try {
+			String html = certBrowser.html();
+			// html() called on application/pdf should lock up
+			// this means it never makes it to this point
+			// if we get to here, something went wrong.
+			fail("Downloading manufacture certificate failed"); 
+		} catch(Exception e) {
+			// if the certificate printed okay, Watij will lock up
+			// and we will end up here. So getting to here means a
+			// pass and we do nothing.
+		} finally {
+			certBrowser.close();
+		}
+	}
+	
+	public void removeScheduleFor(String scheduleDate, String inspectionType, String job) throws Exception {
+		if(job == null) {
+			job = "no job";
+		}
+		TableCell td = findScheduleForCell(scheduleDate, inspectionType, job);
+		Link remove = td.link(xpath("SPAN[3]/A[contains(text(),'Remove')]"));
+		assertTrue("Could not find the Remove link", remove.exists());
+		remove.click();
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	private TableCell findScheduleForCell(String scheduleDate, String inspectionType, String job) throws Exception {
+		TableCell result = null;
+		TableCells tds = ie.cells(assetNextScheduledDateCellFinder);
+		assertNotNull(tds);
+		Iterator<TableCell> i = tds.iterator();
+		while(i.hasNext()) {
+			TableCell td = i.next();
+			String type = td.cell(xpath("../TD[1]")).text().trim();
+			String date = td.span(0).text().trim();
+			String j = td.span(1).text().trim();
+			if(date.equals(scheduleDate) && type.equals(inspectionType) && j.equals(job)) {
+				result = td;
+			}
+		}
+		assertNotNull("Could not find a row with inspection type: '" + inspectionType + "' job: '" + job + "' and date: '" + scheduleDate + "'", result);
+		return result;
+	}
+
+	public void inspectNowScheduleFor(String scheduleDate, String inspectionType, String job) throws Exception {
+		if(job == null) {
+			job = "no job";
+		}
+		TableCell td = findScheduleForCell(scheduleDate, inspectionType, job);
+		Link inspect = td.link(xpath("SPAN[3]/A[contains(text(),'inspect now')]"));
+		assertTrue("Could not find the Remove link", inspect.exists());
+		inspect.click();
+		// TODO check
+	}
 	
 	/*
 	 * TODO
-	 * public void removeScheduleFor(String scheduleDate, String inspectionType, String job) throws Exception {
-	 * public void inspectNowScheduleFor(String scheduleDate, String inspectionType, String job) throws Exception {
 	 * public void connectProductToOrder(String orderNumber) {
 	 * public void gotoManageInspections() throws Exception {
 	 * public void viewLastInspection() throws Exception {

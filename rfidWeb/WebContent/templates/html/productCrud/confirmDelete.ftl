@@ -37,7 +37,7 @@ ${action.setPageType('product', 'edit')!}
 		</div>
 		
 		
-		<#if securityGuard.projectssEnabled>
+		<#if securityGuard.projectsEnabled>
 			<div class="infoSet">
 				<label for="">${removalSummary.projectToDetachFrom}</label>
 				<span><@s.text name="label.productsbeingdetachedfromproject"/></span>

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.testcase;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,8 +54,9 @@ public abstract class FieldIDTestCase extends TestCase {
 	protected ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 	protected static String timestamp = null;
 	protected static boolean once = true;
-	protected String loginURL = "https://www.grumpy.n4/fieldid/";
-	protected Properties p;
+	protected String loginURL = "https://n4.team.n4systems.com/fieldid/";
+//	protected String loginURL = "https://n4.fieldid.com/fieldid/";	// !!! use with caution !!!
+	protected Properties prop;
 	protected InputStream in;
 	protected String propertyFile;
 		
@@ -63,17 +65,26 @@ public abstract class FieldIDTestCase extends TestCase {
 		if(once) {
 			once = false;
 			timestamp = misc.createTimestampDirectory() + "/";
-			propertyFile = getName() + ".properties";
-			try {
-				in = new FileInputStream(propertyFile);
-				p = new Properties();
-				p.load(in);
-			} catch (FileNotFoundException e) {
-				fail("Could not find the file '" + propertyFile + "' when initializing the test case");
-			} catch (IOException e) {
-				fail("File I/O error while trying to load '" + propertyFile + "'.");
-			}
 		}
+		// If the testCase.properties exists, use that
+		// otherwise, default to the Class.properties
+		propertyFile = getName() + ".properties";
+		File f = new File(propertyFile);
+		if(!f.exists()) {
+			propertyFile = getClass().getName() + ".properties";
+		}
+		try {
+			in = new FileInputStream(propertyFile);
+			prop = new Properties();
+			prop.load(in);
+		} catch (FileNotFoundException e) {
+			fail("Could not find the file '" + propertyFile + "' when initializing the test case");
+		} catch (IOException e) {
+			fail("File I/O error while trying to load '" + propertyFile + "'.");
+		}
+
+		// if loginurl is defined, override the default
+		loginURL = prop.getProperty("loginurl", loginURL);
 		misc.start();
 		login.gotoLoginPage(loginURL);
 	}
