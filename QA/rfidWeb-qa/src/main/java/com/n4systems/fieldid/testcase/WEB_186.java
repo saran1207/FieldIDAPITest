@@ -11,7 +11,7 @@ import watij.runtime.ie.IE;
  * @author Darrell
  *
  */
-public class WEB_186 extends TestCase {
+public class WEB_186 extends FieldIDTestCase {
 
 	IE ie = new IE();
 	commonFieldIDMethods helper = new commonFieldIDMethods();

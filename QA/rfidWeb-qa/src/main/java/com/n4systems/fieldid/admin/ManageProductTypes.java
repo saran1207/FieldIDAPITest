@@ -474,10 +474,35 @@ public class ManageProductTypes extends TestCase {
 		checkListProductTypesContentHeader();
 	}
 	
+	/**
+	 * Assumes you are on the Manage Product Types page.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> getMasterProductTypeNames() throws Exception {
+		List<String> results = new ArrayList<String>();
+		Links productTypes = helperGetProductTypeLinks();
+		Iterator<Link> i = productTypes.iterator();
+		while(i.hasNext()) {
+			Link pt = i.next();
+			String name = pt.text().trim();
+			pt.click();
+			gotoSubComponents(name);
+			List<String> tmp = getSubComponents();
+			if(tmp.size() > 0) {
+				results.add(name);
+			}
+			ie.back();
+			ie.back();
+		}
+		
+		return results;
+	}
+	
 	public List<String> getProductTypeNames() throws Exception {
 		List<String> names = new ArrayList<String>();
-		Links productTypes = ie.links(manageProductTypesLinksFinder);
-		assertNotNull(productTypes);
+		Links productTypes = helperGetProductTypeLinks();
 		Iterator<Link> i = productTypes.iterator();
 		while(i.hasNext()) {
 			Link pt = i.next();
@@ -485,6 +510,12 @@ public class ManageProductTypes extends TestCase {
 			names.add(name);
 		}
 		return names;
+	}
+	
+	private Links helperGetProductTypeLinks() throws Exception {
+		Links productTypes = ie.links(manageProductTypesLinksFinder);
+		assertNotNull(productTypes);
+		return productTypes;
 	}
 
 	public void gotoInspectionTypes(String name) throws Exception {

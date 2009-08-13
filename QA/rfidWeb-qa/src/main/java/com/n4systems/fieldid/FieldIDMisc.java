@@ -156,6 +156,7 @@ public class FieldIDMisc extends TestCase {
 	 * @throws Exception
 	 */
 	public void stopMonitorStatus() throws Exception {
+		System.out.println("stop monitor");
 		FieldIDMisc.running = false;
 	}
 	
@@ -178,6 +179,7 @@ public class FieldIDMisc extends TestCase {
 	 * @throws Exception
 	 */
 	public synchronized void startMonitorStatus() throws Exception {
+		System.err.println("start monitor");
 		// no point in having this run multiple times.
 		if(FieldIDMisc.running)	return;
 		FieldIDMisc.running = true;
@@ -197,7 +199,7 @@ public class FieldIDMisc extends TestCase {
 						} else {
 							cycle = 0;
 						}
-						if(cycle > max) {
+						if(FieldIDMisc.running && cycle > max) {
 							wb2.refresh();
 							cycle = 0;
 						}

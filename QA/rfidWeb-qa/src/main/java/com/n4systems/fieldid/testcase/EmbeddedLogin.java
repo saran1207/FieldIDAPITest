@@ -31,15 +31,14 @@ public class EmbeddedLogin extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		ie = new IE();
+		misc = new FieldIDMisc(ie);
+		login = new Login(ie);
+		home = new Home(ie);
 		
 		if(once) {
 			once = false;
 			timestamp = misc.createTimestampDirectory() + "/";
 		}
-		
-		misc = new FieldIDMisc(ie);
-		login = new Login(ie);
-		home = new Home(ie);
 		
 		ie.start(embeddedLoginURL);
 		ie.maximize();

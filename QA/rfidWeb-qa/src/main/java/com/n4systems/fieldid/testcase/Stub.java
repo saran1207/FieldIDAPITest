@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.testcase;
 
+import java.util.List;
+
 import com.n4systems.fieldid.datatypes.Inspection;
 import com.n4systems.fieldid.datatypes.Job;
+import com.n4systems.fieldid.datatypes.ProductSearchCriteria;
+import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.ScheduleSearchCriteria;
 
 public class Stub extends FieldIDTestCase {
@@ -18,7 +22,18 @@ public class Stub extends FieldIDTestCase {
 			login.setUserName("n4systems");
 			login.setPassword("makemore$");
 			login.login();
-			assets.validate("Reel/ID");
+			String customer = "ALRO STEEL-AKRON";
+//			assets.validate("Reel/ID", customer);
+			assets.gotoAssets();
+			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
+			c.setOrderNumber(true);
+			assets.setProductSearchColumns(c);
+			ProductSearchCriteria prop = new ProductSearchCriteria();
+			prop.setCustomer(customer);
+			assets.setProductSearchCriteria(prop);
+			assets.gotoProductSearchResults();
+			List<String> orderNumbers = assets.getProductSearchResultsColumn("Order Number");
+			System.out.println(orderNumbers);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;

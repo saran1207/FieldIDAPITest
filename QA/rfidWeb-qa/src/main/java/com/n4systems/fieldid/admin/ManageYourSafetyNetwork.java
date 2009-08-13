@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import com.n4systems.fieldid.Admin;
 import com.n4systems.fieldid.FieldIDMisc;
 
 import watij.elements.Button;
@@ -38,6 +39,8 @@ public class ManageYourSafetyNetwork extends TestCase {
 	InputStream in;
 	String propertyFile = "manageyoursafetynetwork.properties";
 	FieldIDMisc misc;
+	ManageProductTypes mpts;
+	ManageInspectionTypes mits;
 	Finder manageYourSafetyNetworkFinder;
 	Finder manageYourSafetyNetworkContentHeaderFinder;
 	Finder companyFIDACFinder;
@@ -81,6 +84,8 @@ public class ManageYourSafetyNetwork extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
+			mpts = new ManageProductTypes(ie);
+			mits = new ManageInspectionTypes(ie);
 			manageYourSafetyNetworkFinder = text(p.getProperty("link"));
 			manageYourSafetyNetworkContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			companyFIDACFinder = xpath(p.getProperty("companyfidac"));
@@ -314,26 +319,48 @@ public class ManageYourSafetyNetwork extends TestCase {
 		String s = getStep4YouAreDoneMessage();
 		gotoReturnToFieldIDSafetyNetwork();
 		misc.startMonitorStatus();
-		String msg = "\nCheck for an email confirming the catalog import completed.\n\n";
-		msg += "Check the Product Types for:\n\n";
+		List<String> importedInspectionTypes = new ArrayList<String>();
+		List<String> importedProductTypes = new ArrayList<String>();
 		Iterator<String> a = assetTypes.iterator();
 		while(a.hasNext()) {
-			msg += a.next();
-			msg += "\n";
+			String temp = a.next();
+			importedProductTypes.add(temp);
 		}
-		msg += "\nCheck the Inspection Types for:\n\n";
 		Iterator<String> i = eventTypes.iterator();
 		while(i.hasNext()) {
-			msg += i.next();
-			msg += "\n";
+			String temp = i.next();
+			importedInspectionTypes.add(temp);
 		}
-		msg += "\nSome things will be renamed as follows:\n\n";
 		Iterator<String> r = renames.iterator();
 		while(r.hasNext()) {
-			msg += r.next();
-			msg += "\n";
+			String temp = r.next();
+			String original = temp.split("'")[1];
+			String renamed = temp.split("'")[3];
+			if(importedProductTypes.contains(original)) {
+				importedProductTypes.add(renamed);
+			}
+			if(importedInspectionTypes.contains(original)) {
+				importedInspectionTypes.add(renamed);
+			}
 		}
-		fail(msg);
+		Thread.sleep(10*60*1000);	// sleep for 10 minutes
+		
+		misc.gotoBackToAdministration();
+		mpts.gotoManageProductTypes();
+		List<String> pts = mpts.getProductTypeNames();
+		Iterator<String> j = importedProductTypes.iterator();
+		while(j.hasNext()) {
+			String pt = j.next();
+			assertTrue("The imported product type '" + pt + "' did not import correctly.", pts.contains(pt));
+		}
+		misc.gotoBackToAdministration();
+		mits.gotoManageInspectionTypes();
+		List<String> its = mits.getInspectionTypes();
+		Iterator<String> k = importedInspectionTypes.iterator();
+		while(k.hasNext()) {
+			String it = k.next();
+			assertTrue("The imported inspect type '" + it + "' did not import correctly.", its.contains(it));
+		}
 	}
 
 	public String getStep4YouAreDoneMessage() throws Exception {

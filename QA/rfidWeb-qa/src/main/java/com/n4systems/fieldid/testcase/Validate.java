@@ -300,13 +300,15 @@ public class Validate extends FieldIDTestCase {
 		String company = prop.getProperty("company");	// tenant with 10000+ assets
 		String userid = prop.getProperty("userid");
 		String password = prop.getProperty("password");
+		String serialtext = prop.getProperty("serialtext");
+		String customer = prop.getProperty("customer");
 
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
-			assets.validate("Reel/ID");
+			assets.validate(serialtext, customer);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;

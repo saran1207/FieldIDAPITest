@@ -27,7 +27,7 @@ import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "halo";
+	String company = "cglift";
 	String password = "makemore$";
 	boolean jobs = false;			// end users do not have Jobs
 	

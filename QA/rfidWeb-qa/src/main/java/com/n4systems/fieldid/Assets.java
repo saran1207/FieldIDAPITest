@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.w3c.dom.Element;
 
+import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.datatypes.MassUpdateForm;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductSearchCriteria;
@@ -29,6 +30,9 @@ public class Assets extends TestCase {
 	Properties p;
 	InputStream in;
 	FieldIDMisc misc;
+	Inspect inspect;
+	Admin admin;
+	ManageProductTypes mpts;
 	String propertyFile = "assets.properties";
 	Finder assetsFinder;
 	Finder assetsContentHeaderFinder;
@@ -143,6 +147,18 @@ public class Assets extends TestCase {
 	private Finder editEmployeeProductSaveButtonFinder;
 	private Finder manufactureCertificateDownloadNowLinkFinder;
 	private Finder assetNextScheduledDateCellFinder;
+	private Finder viewLastInspectionFromAssetsViewFinder;
+	private Finder viewLastInspectionCloseButtonFinder;
+	private Finder printPDFReportFromViewLastInspectionFinder;
+	private Finder printObservationReportFromViewLastInspectionFinder;
+	private Finder deleteAssetButtonFinder;
+	private Finder confirmDeleteAssetButtonFinder;
+	private Finder inspectionsWillBeDeletedFinder;
+	private Finder schedulesWillBeDeletedFinder;
+	private Finder subproductsWillBeDetachedFinder;
+	private Finder productsWillBeDetachedFromJobsFinder;
+	private Finder subProductLinksFinder;
+	private Finder subProductPartOfMasterProductLinkFinder;
 	
 	public Assets(IE ie) {
 		this.ie = ie;
@@ -151,6 +167,21 @@ public class Assets extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
+			inspect = new Inspect(ie);
+			admin = new Admin(ie);
+			mpts = new ManageProductTypes(ie);
+			subProductPartOfMasterProductLinkFinder = xpath(p.getProperty("subproductlinktomasterproduct"));
+			subProductLinksFinder = xpath(p.getProperty("subproductlinksonmasterproductview"));
+			schedulesWillBeDeletedFinder = xpath(p.getProperty("scheduleswillbedeleted"));
+			subproductsWillBeDetachedFinder = xpath(p.getProperty("subproductswillbedetached"));
+			productsWillBeDetachedFromJobsFinder = xpath(p.getProperty("productswillbedetachedfromjobs"));
+			inspectionsWillBeDeletedFinder = xpath(p.getProperty("inspectionswillbedeleted"));
+			confirmDeleteAssetButtonFinder = xpath(p.getProperty("confirmdeleteproductbutton"));
+			deleteAssetButtonFinder = xpath(p.getProperty("deleteproductbutton"));
+			printObservationReportFromViewLastInspectionFinder = xpath(p.getProperty("viewlastinspectionprintobservationreport"));
+			printPDFReportFromViewLastInspectionFinder = xpath(p.getProperty("viewlastinspectionprintpdfreport"));
+			viewLastInspectionCloseButtonFinder = xpath(p.getProperty("viewlastinspectionclosebutton"));
+			viewLastInspectionFromAssetsViewFinder = xpath(p.getProperty("viewlastinspection"));
 			assetNextScheduledDateCellFinder = xpath(p.getProperty("nextscheduleddatecells"));
 			manufactureCertificateDownloadNowLinkFinder = xpath(p.getProperty("manufacturecertificatedownloadnowlink"));
 			assetsFinder = id(p.getProperty("link"));
@@ -297,6 +328,7 @@ public class Assets extends TestCase {
 	
 	/**
 	 * Checks the header tag at the top of the body to make sure we are on the correct page.
+	 * If you don't know serial number passing in "Asset" will work.
 	 * 
 	 * @param serialNumber
 	 * @throws Exception
@@ -304,7 +336,7 @@ public class Assets extends TestCase {
 	public void checkProductInformationPageContentHeader(String serialNumber) throws Exception {
 		HtmlElement productInformationContentHeader = ie.htmlElement(productInformationContentHeaderFinder);
 		assertTrue("Could not find Product Information page content header", productInformationContentHeader.exists());
-		assertTrue("Could not find 'Asset - " + serialNumber + "'", productInformationContentHeader.text().contains(serialNumber));
+		assertTrue("Could not find serial number '" + serialNumber + "'", productInformationContentHeader.text().contains(serialNumber));
 	}
 
 	/**
@@ -1278,7 +1310,7 @@ public class Assets extends TestCase {
 		Link next;
 		boolean more;
 		do {
-			next = ie.link(text("Next>"));
+			next = ie.link(text("Next >"));
 			more = next.exists(); 
 			results.addAll(getProductSearchResultsColumnCurrentPage(s));
 			if(more) {
@@ -1288,10 +1320,16 @@ public class Assets extends TestCase {
 		
 		return results;
 	}
+	
+	private TableCells helperGetProductSearchResultsColumnHeaders() throws Exception {
+		TableCells ths = ie.cells(xpath("//TABLE[@id='resultsTable']/TBODY/TR[1]/TH"));
+		assertNotNull(ths);
+		return ths;
+	}
 
 	private Collection<String> getProductSearchResultsColumnCurrentPage(String s) throws Exception {
 		List<String> results = new ArrayList<String>();
-		TableCells ths = ie.cells(xpath("//TABLE[@id='resultsTable']/TBODY/TR[1]/TH"));
+		TableCells ths = helperGetProductSearchResultsColumnHeaders();
 		int index = 0;
 		for(index = 0; index < ths.length(); index++) {
 			TableCell th = ths.get(index);
@@ -1305,7 +1343,9 @@ public class Assets extends TestCase {
 		while(i.hasNext()) {
 			TableCell td = i.next();
 			String v = td.text().trim();
-			results.add(v);
+			if(!v.equals("")) {			// don't add blank strings
+				results.add(v);
+			}
 		}
 		return results;
 	}
@@ -1488,96 +1528,6 @@ public class Assets extends TestCase {
 		assertTrue("There are " + tfcount.length() + " text fields but I was expecting " + expectedTextFieldsOnEditAsset + ".", tfcount.length() == expectedTextFieldsOnEditAsset);
 	}
 
-	/**
-	 * Validate all the methods in this library. This method assumes:
-	 * - That column is set to the header for the Serial Number column.
-	 * - The first customer on the Customer drop down has divisions.
-	 * 
-	 * Typically, I run this against cglift with column set to "Reel/ID".
-	 * 
-	 * @param column - this is the header for the column with serial numbers, i.e. "Serial Number" or "Reel/ID"
-	 * @throws Exception
-	 */
-	public void validate(String column) throws Exception {
-		gotoAssets();
-		List<String> customers = getCustomersOnSearchCriteria();
-		int n = misc.getRandomInteger(customers.size());
-		List<String> productStatuses = getProductStatusesOnSearchCriteria();
-		List<String> productTypes = getProductTypesOnSearchCriteria();
-		getDynamicSelectColumns();
-		ProductSearchCriteria prop = new ProductSearchCriteria();
-		String today = misc.getDateString();
-		String lastMonth = misc.getDateStringLastMonth();
-		prop.setFromDate(lastMonth);
-		prop.setToDate(today);
-		prop.setCustomer("");														// clears customer
-		setProductSearchCriteria(prop);
-		expandProductSearchSelectColumns();
-		ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-		c.setAllOn();
-		setProductSearchColumns(c);
-		gotoProductSearchResults();
-		List<String> filteredCustomers = getProductSearchResultsColumn("Customer Name");
-		String customerName = filteredCustomers.get(0);
-		List<String> divisions = getDivisionsOnSearchCriteria(customerName);
-		prop.setCustomer(customerName);
-		prop.setDivision(divisions.get(0));
-		gotoProductSearchResults();
-		if(getTotalNumberOfProducts() > 1000) {
-			fail("You need to set up so there are less than 1000 assets.");
-		}
-		gotoMassUpdate();
-		gotoProductSearchResultsFromMassUpdate();
-		String filename = "Assets-validate-manufacturer-certs.png";
-		misc.myWindowCapture(filename);
-		printAllManufacturerCertificates();
-		exportToExcel();
-		List<String> serialNumbers = getProductSearchResultsSerialNumbers(column);
-		String sdc = getSelectDisplayColumnsHeader();
-		gotoMassUpdate();
-		MassUpdateForm m = new MassUpdateForm();
-		m.setCustomerName(customerName);
-		setMassUpdate(m);
-		gotoSaveMassUpdate();
-
-		expandProductSearchResultsSearchCriteria();
-		gotoProductSearchClearForm();
-		gotoProductSearchResults();
-		printAllManufacturerCertificatesWarningOver1000Products();
-		gotoMassUpdateWarningOver1000Products();
-		exportToExcelWarningOver10000Products();
-		
-		String serialNumber = serialNumbers.get(0);
-		gotoProductInformationViaInfoLink(serialNumber);
-		gotoEditProduct(serialNumber);
-		gotoInspectionsFor(serialNumber);
-		gotoProductInformation(serialNumber);
-		gotoInspectionSchedule(serialNumber);
-		List<String> inspectionTypes = getInspectionTypesFromAssetAddSchedulePage();
-		String scheduleDate = today;
-		if(inspectionTypes.size() == 0) {
-			fail("Serial Number: " + serialNumber + " has no inspection types. Did not test add/edit schedules");
-		}
-		String inspectionType = inspectionTypes.get(0);
-		String job = null;
-		addScheduleFor(scheduleDate, inspectionType, job);
-		String newJob = null;
-		String newScheduleDate = misc.getDateStringNextMonth();
-		editScheduleFor(scheduleDate, inspectionType, job, newScheduleDate, newJob);
-		gotoProductInformation(serialNumber);
-		gotoInspectionSchedule(serialNumber);
-		removeScheduleFor(newScheduleDate, inspectionType, newJob);
-		gotoProductInformation(serialNumber);
-		gotoInspectionGroups(serialNumber);	// Waiting for WEB-1034 to be fixed
-		assertTrue(SmartSearch(serialNumber) > 0);
-		
-		// These get exercised by the Smoke Test
-//		this.gotoProductConfiguration(serialNumber);
-//		this.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
-//		this.editEmployeeProduct(p);
-//		this.checkEndUserEditProduct(divisional);
-	}
-
 	private List<String> getInspectionTypesFromAssetAddSchedulePage() throws Exception {
 		List<String> results = new ArrayList<String>();
 		SelectList addScheduleInspectionType = ie.selectList(addScheduleInspectionTypeFinder);
@@ -1608,18 +1558,22 @@ public class Assets extends TestCase {
 		assertTrue("Cannot find the link to download a manufacture certificate", l.exists());
 		l.click();
 		IE certBrowser = ie.childBrowser();
+		helperNewWindowPDFCheck(certBrowser);
+	}
+	
+	private void helperNewWindowPDFCheck(IE child) throws Exception {
 		try {
-			String html = certBrowser.html();
+			String html = child.html();
 			// html() called on application/pdf should lock up
 			// this means it never makes it to this point
 			// if we get to here, something went wrong.
-			fail("Downloading manufacture certificate failed"); 
+			fail("Failed to open PDF in a new window"); 
 		} catch(Exception e) {
 			// if the certificate printed okay, Watij will lock up
 			// and we will end up here. So getting to here means a
 			// pass and we do nothing.
 		} finally {
-			certBrowser.close();
+			child.close();
 		}
 	}
 	
@@ -1657,24 +1611,323 @@ public class Assets extends TestCase {
 			job = "no job";
 		}
 		TableCell td = findScheduleForCell(scheduleDate, inspectionType, job);
-		Link inspect = td.link(xpath("SPAN[3]/A[contains(text(),'inspect now')]"));
-		assertTrue("Could not find the Remove link", inspect.exists());
-		inspect.click();
-		// TODO check
+		Link inspectNow = td.link(xpath("SPAN[3]/A[contains(text(),'inspect now')]"));
+		assertTrue("Could not find the inspect now link", inspectNow.exists());
+		inspectNow.click();
+		inspect.checkInspectionPageContentHeader(inspectionType);
+		misc.checkForErrorMessagesOnCurrentPage();
 	}
 	
-	/*
-	 * TODO
-	 * public void connectProductToOrder(String orderNumber) {
-	 * public void gotoManageInspections() throws Exception {
-	 * public void viewLastInspection() throws Exception {
-	 * public void printPDFReportFromViewLastInspection() throws Exception {
-	 * public void printObservationReportFromViewLastInspection() throws Exception {
-	 * public void closeViewLastInspection() throws Exception {
-	 * public List<String> getSubProducts() throws Exception {
-	 * public void gotoSubProduct(String label) throws Exception {
-	 * public void gotoSubProduct(int index) throws Exception {
-	 * public void deleteProduct() throws Exception { // goto to Product Information, then Edit Product, then delete
+	public void viewLastInspection() throws Exception {
+		Link view = ie.link(viewLastInspectionFromAssetsViewFinder);
+		assertTrue("Could not find the link to viwe the last inspection", view.exists());
+		view.click();
+		misc.waitForLightBox();
+	}
+	
+	public void closeViewLastInspection(String serialNumber) throws Exception {
+		Div close = ie.div(viewLastInspectionCloseButtonFinder);
+		assertTrue("Could not find the Close button for the view last inspection light box", close.exists());
+		close.click();
+		checkProductInformationPageContentHeader(serialNumber);
+	}
+
+	public void gotoManageInspections(String serialNumber) throws Exception {
+		gotoInspectionGroups(serialNumber);
+	}
+
+	public void printPDFReportFromViewLastInspection() throws Exception {
+		Frame lightbox = ie.frame(id("lightviewContent"));
+		Link l = lightbox.link(printPDFReportFromViewLastInspectionFinder);
+		assertNotNull("Could not find the 'PDF Report' from the view last inspection lightbox", l);
+		l.click();
+		IE report = ie.childBrowser();
+		helperNewWindowPDFCheck(report);
+	}
+
+	public void printObservationReportFromViewLastInspection() throws Exception {
+		Frame lightbox = ie.frame(id("lightviewContent"));
+		Link l = lightbox.link(printObservationReportFromViewLastInspectionFinder);
+		assertNotNull("Could not find the 'Observation Report' from the view last inspection lightbox", l);
+		l.click();
+		IE report = ie.childBrowser();
+		helperNewWindowPDFCheck(report);
+	}
+
+	/**
+	 * Assumes you are already on Edit Product. Easiest way to use this is
+	 * go to product via smart search, go to edit product, call this method.
 	 * 
+	 * To confirm the results have a look at the PNG generated.
+	 * 
+	 * If the second to last parameters are not null, it will also check to
+	 * see of the Removal Detail page numbers match the given numbers.
+	 * 
+	 * @param serialNumber - serial number of the product being deleted
+	 * @param inspectionsDeleted - number of inspections which will get deleted with the product
+	 * @param schedulesDeleted - number of scheduled inspections which will get deleted with the product
+	 * @param subProductsDetached - number of subproducts attach to this product
+	 * @param productsDetached - number of products detached from Jobs.
+	 * @throws Exception
 	 */
+	public void deleteProduct(String serialNumber, String inspectionsDeleted, String schedulesDeleted, String subProductsDetached, String productsDetached) throws Exception {
+		Button delete = ie.button(deleteAssetButtonFinder);
+		assertTrue("Could not find the Delete button on Edit asset", delete.exists());
+		delete.click();
+		checkProductInformationPageContentHeader(serialNumber);
+		String filename = "deleteProduct-Removal-Details-" + serialNumber + ".png";
+		misc.myWindowCapture(filename);
+		String inspDeleted = getInspectionsDeleted();
+		String scheDeleted = getInspectionSchedulesDeleted();
+		String subDetached = getSubProductsDetached();
+		String jobDetached = getProductsDetachedFromJobs();
+		if(inspectionsDeleted != null) {
+			assertEquals(inspectionsDeleted, inspDeleted);
+		}
+		if(schedulesDeleted != null) {
+			assertEquals(schedulesDeleted, scheDeleted);
+		}
+		if(subProductsDetached != null) {
+			assertEquals(subProductsDetached, subDetached);
+		}
+		if(productsDetached != null) {
+			assertEquals(productsDetached, jobDetached);
+		}
+	}
+	
+	private String getProductsDetachedFromJobs() throws Exception {
+		Label n = ie.label(productsWillBeDetachedFromJobsFinder);
+		assertTrue("Could not find the number of products which will be detached from jobs", n.exists());
+		return n.text().trim();
+	}
+
+	private String getSubProductsDetached() throws Exception {
+		Label n = ie.label(subproductsWillBeDetachedFinder);
+		assertTrue("Could not find the number of sub products which will be detached", n.exists());
+		return n.text().trim();
+	}
+
+	private String getInspectionSchedulesDeleted() throws Exception {
+		Label n = ie.label(schedulesWillBeDeletedFinder);
+		assertTrue("Could not find the number of inspection schedules which will be deleted", n.exists());
+		return n.text().trim();
+	}
+
+	private String getInspectionsDeleted() throws Exception {
+		Label n = ie.label(inspectionsWillBeDeletedFinder);
+		assertTrue("Could not find the number of inspections which will be deleted", n.exists());
+		return n.text().trim();
+	}
+
+	public void confirmDeleteProduct() throws Exception {
+		Button delete = ie.button(confirmDeleteAssetButtonFinder);
+		assertTrue("Could not find the Delete button on Removal Details page", delete.exists());
+		delete.click();
+		misc.checkForErrorMessagesOnCurrentPage();
+		checkAssetsPageContentHeader();
+	}
+	
+	private Links helperGetSubProductLinks() throws Exception {
+		Links subProducts = ie.links(subProductLinksFinder);
+		assertNotNull(subProducts);
+		return subProducts;
+	}
+
+	public List<String> getSubProducts() throws Exception {
+		List<String> results = new ArrayList<String>();
+		Links subProducts = helperGetSubProductLinks();
+		Iterator<Link> i = subProducts.iterator();
+		while(i.hasNext()) {
+			Link l = i.next();
+			String label = l.text().trim();
+			results.add(label);
+		}
+		return results;
+	}
+
+	public void gotoSubProduct(String label) throws Exception {
+		assertNotNull(label);
+		assertFalse("Label cannot be blank", label.equals(""));
+		Link l = ie.link(text(label));
+		assertTrue("Could not find a subproduct with label '" + label + "'", l.exists());
+		l.click();
+		checkProductInformationPageContentHeader("Asset");	// If you don't know serial number passing in "Asset" will work.
+	}
+
+	public void gotoMasterProductUsingPartOf() throws Exception {
+		Link l = ie.link(subProductPartOfMasterProductLinkFinder);
+		assertTrue("Could not find a link to a master product", l.exists());
+		l.click();
+		checkProductInformationPageContentHeader("Asset");	// If you don't know serial number passing in "Asset" will work.
+	}
+
+	public void gotoSubProduct(int index) throws Exception {
+		Links ls = helperGetSubProductLinks();
+		Link l = ls.get(index);
+		l.click();
+		checkProductInformationPageContentHeader("Asset");	// If you don't know serial number passing in "Asset" will work.
+	}
+	
+	public void connectProductToOrder(String orderNumber) throws Exception {
+		// TODO
+	}
+
+	List<Link> getSortableColumnsFromSearchResults() throws Exception {
+		List<Link> results = new ArrayList<Link>();
+		TableCells ths = helperGetProductSearchResultsColumnHeaders();
+		Iterator<TableCell> i = ths.iterator();
+		while(i.hasNext()) {
+			TableCell th = i.next();
+			Link l = th.link(0);
+			if(l.exists()) {
+				results.add(l);
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Validate all the methods in this library. This method assumes:
+	 * 
+	 * - That 'column' is set to the header for the Serial Number column.
+	 * - The first customer on the Customer drop down has divisions.
+	 * 
+	 * Typically, I run this against cglift with column set to "Reel/ID".
+	 * 
+	 * @param column - this is the header for the column with serial numbers, i.e. "Serial Number" or "Reel/ID"
+	 * @param customer - this is the name of a customer who has order numbers associated with assets
+	 * @throws Exception
+	 */
+	public void validate(String column, String customer) throws Exception {
+		admin.gotoAdministration();
+		mpts.gotoManageProductTypes();
+		List<String> mpt = mpts.getMasterProductTypeNames();
+		gotoAssets();
+		List<String> customers = getCustomersOnSearchCriteria();
+		int n = misc.getRandomInteger(customers.size());
+		List<String> productStatuses = getProductStatusesOnSearchCriteria();
+		List<String> productTypes = getProductTypesOnSearchCriteria();
+		getDynamicSelectColumns();
+		ProductSearchCriteria prop = new ProductSearchCriteria();
+		String today = misc.getDateString();
+		String lastMonth = misc.getDateStringLastMonth();
+		prop.setFromDate(lastMonth);
+		prop.setToDate(today);
+		prop.setCustomer("");														// clears customer
+		setProductSearchCriteria(prop);
+		expandProductSearchSelectColumns();
+		ProductSearchSelectColumns c = new ProductSearchSelectColumns();
+		c.setAllOn();
+		setProductSearchColumns(c);
+		gotoProductSearchResults();
+		List<String> filteredCustomers = getProductSearchResultsColumn("Customer Name");
+		String customerName = filteredCustomers.get(0);
+		List<String> divisions = getDivisionsOnSearchCriteria(customerName);
+		prop.setCustomer(customerName);
+		prop.setDivision(divisions.get(0));
+		gotoProductSearchResults();
+		if(getTotalNumberOfProducts() > 1000) {
+			fail("You need to set up so there are less than 1000 assets.");
+		}
+		gotoMassUpdate();
+		gotoProductSearchResultsFromMassUpdate();
+		printAllManufacturerCertificates();
+		exportToExcel();
+		List<String> serialNumbers = getProductSearchResultsSerialNumbers(column);
+		String sdc = getSelectDisplayColumnsHeader();
+		gotoMassUpdate();
+		MassUpdateForm m = new MassUpdateForm();
+		m.setCustomerName(customerName);
+		setMassUpdate(m);
+		gotoSaveMassUpdate();
+
+		expandProductSearchResultsSearchCriteria();
+		gotoProductSearchClearForm();
+		gotoProductSearchResults();
+		printAllManufacturerCertificatesWarningOver1000Products();
+		gotoMassUpdateWarningOver1000Products();
+		exportToExcelWarningOver10000Products();
+		
+		String serialNumber = serialNumbers.get(0);
+		gotoProductInformationViaInfoLink(serialNumber);
+		gotoEditProduct(serialNumber);
+		gotoInspectionsFor(serialNumber);
+		gotoProductInformation(serialNumber);
+		gotoInspectionSchedule(serialNumber);
+		List<String> inspectionTypes = getInspectionTypesFromAssetAddSchedulePage();
+		String scheduleDate = today;
+		if(inspectionTypes.size() == 0) {
+			fail("Serial Number: " + serialNumber + " has no inspection types. Did not test add/edit schedules");
+		}
+		String inspectionType = inspectionTypes.get(0);
+		String job = null;
+		addScheduleFor(scheduleDate, inspectionType, job);
+		String newJob = null;
+		String newScheduleDate = misc.getDateStringNextMonth();
+		editScheduleFor(scheduleDate, inspectionType, job, newScheduleDate, newJob);
+		gotoProductInformation(serialNumber);
+		gotoInspectionSchedule(serialNumber);
+		removeScheduleFor(newScheduleDate, inspectionType, newJob);
+		addScheduleFor(scheduleDate, inspectionType, job);
+		inspectNowScheduleFor(scheduleDate, inspectionType, job);
+		if(inspect.isMasterInspection()) {
+			inspect.gotoStartMasterInspection(inspectionType);
+			inspect.gotoStoreMasterInspection();
+			inspect.gotoSaveMasterInspection(serialNumber);
+		} else {
+			inspect.gotoSaveStandardInspection(serialNumber);			// guarantees there is a last inspection
+		}
+		gotoProductInformation(serialNumber);
+		viewLastInspection();
+		printPDFReportFromViewLastInspection();
+		viewLastInspection();											// timeout causes lightbox to close
+		printObservationReportFromViewLastInspection();
+		closeViewLastInspection(serialNumber);
+		gotoInspectionGroups(serialNumber);
+		assertTrue(SmartSearch(serialNumber) > 0);
+		
+		
+		// product is gone at this point
+		gotoEditProduct(serialNumber);
+		deleteProduct(serialNumber, null, null, null, null);
+		confirmDeleteProduct();
+		
+		if(mpt.size() > 0) {
+			gotoAssets();
+			prop = new ProductSearchCriteria();
+			prop.setProductType(mpt.get(0));
+			setProductSearchCriteria(prop);
+			gotoProductSearchResults();
+			serialNumbers = getProductSearchResultsSerialNumbers(column);
+			gotoProductInformationViaInfoLink(serialNumber);
+			List<String> subs = getSubProducts();
+			gotoSubProduct(subs.get(0));					// goto first sub-product
+			gotoMasterProductUsingPartOf();					// return to master product
+			int index = subs.size()-1;
+			gotoSubProduct(index);							// goto last sub-product
+		}
+		
+		gotoAssets();
+		c = new ProductSearchSelectColumns();
+		c.setOrderNumber(true);
+		setProductSearchColumns(c);
+		prop = new ProductSearchCriteria();
+		prop.setCustomer(customer);
+		setProductSearchCriteria(prop);
+		gotoProductSearchResults();
+		
+		List<String> orderNumbers = getProductSearchResultsColumn("Order Number");
+		// sort the columns once, we'll be on the last page and order numbers will be on page 1
+		// the getProductSearchResultsSerialNumbers will return the last page only if we are on last page
+		serialNumbers = getProductSearchResultsSerialNumbers(column);
+		// find a product not connected to an order, serialNumbers.get(last)
+		// go to the product
+		// connect to order
+		
+		// These get exercised by the Smoke Test
+//		this.gotoProductConfiguration(serialNumber);
+//		this.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
+//		this.editEmployeeProduct(p);
+//		this.checkEndUserEditProduct(divisional);
+	}
 }
