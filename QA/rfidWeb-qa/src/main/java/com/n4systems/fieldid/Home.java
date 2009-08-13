@@ -463,9 +463,11 @@ public class Home extends TestCase {
 				getJobsOnHomePage();
 				
 			}
+			@SuppressWarnings("unused")
 			List<String> videos = getInstructionalVideoList();
 			gotoInstructionalVideos();
 			gotoHome();
+			@SuppressWarnings("unused")
 			List<String> newFeatures = getNewFeatures();
 			gotoNewFeatures();
 			gotoHome();

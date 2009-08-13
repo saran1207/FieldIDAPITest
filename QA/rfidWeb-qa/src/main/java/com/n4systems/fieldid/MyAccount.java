@@ -435,6 +435,7 @@ public class MyAccount extends TestCase {
 	 * @deprecated
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private void checkAddUpcomingInspectionsNotificationContentHeader() throws Exception {
 		HtmlElement contentHeader = ie.htmlElement(addNotificationContentHeaderFinder);
 		assertTrue("Could not find Add Upcoming Inspections Notification page content header '" + p.getProperty("addnotificationcontentheader") + "'", contentHeader.exists());
@@ -473,7 +474,7 @@ public class MyAccount extends TestCase {
 	 */
 	public void addNotification(Notification n) throws Exception {
 		assertNotNull(n);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		TextField name = ie.textField(addNotificationNameFinder);
 		assertTrue("Could not find the Name field for adding a notification", name.exists());
 		if(n.getName() != null) {
@@ -565,7 +566,7 @@ public class MyAccount extends TestCase {
 		Button save = ie.button(addNotificationSaveButtonFinder);
 		assertTrue("Could not find the save button", save.exists());
 		save.click();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 	
 	/**

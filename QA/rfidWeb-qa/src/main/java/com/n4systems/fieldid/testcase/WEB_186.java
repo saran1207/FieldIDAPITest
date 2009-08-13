@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.testcase;
 
 import java.util.Random;
-
-import junit.framework.TestCase;
 import watij.runtime.ie.IE;
 
 /**

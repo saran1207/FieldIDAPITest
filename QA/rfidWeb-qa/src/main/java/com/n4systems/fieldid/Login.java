@@ -58,8 +58,6 @@ public class Login extends TestCase {
 	Finder requestAccountSubmitFinder;
 	Finder requestAccountReturnToLoginPageFinder;
 	Finder requestAccountConfirmMessageFinder;
-	private String position;
-	private String timeZone;
 	private Finder passwordResetEmailSentContentHeaderFinder;
 
 	/**
@@ -218,7 +216,7 @@ public class Login extends TestCase {
 	 * @throws Exception
 	 */
 	public void close() throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		ie.close();
 		assertFalse("Closed Internet Explorer but it still exists.", ie.exists());
 	}

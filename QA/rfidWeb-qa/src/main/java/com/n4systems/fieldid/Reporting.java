@@ -645,7 +645,7 @@ public class Reporting extends TestCase {
 	}
 
 	private List<ReportingSearchCriteria> getReportingSearchResultsFromCurrentPage() throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		TableRows trs = ie.rows(reportResultsTableRowFinder);
 		assertNotNull("Could not find the rows for the Report Results table", trs);
 		TableRow header = ie.row(reportResultsTableHeaderFinder);
@@ -699,7 +699,7 @@ public class Reporting extends TestCase {
 			}
 			results.add(rsc);
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 
@@ -757,7 +757,7 @@ public class Reporting extends TestCase {
 	}
 
 	public List<String> getInspectionBookOptions() throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		List<String> results = new ArrayList<String>();
 		SelectList inspectionBook = getInspectionBookSelectList();
 		Options os = inspectionBook.options();
@@ -770,7 +770,7 @@ public class Reporting extends TestCase {
 			String book = o.text();
 			results.add(book);
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 
@@ -848,6 +848,7 @@ public class Reporting extends TestCase {
 	 * @deprecated
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private void checkUpdateReportPageContentHeader() throws Exception {
 		HtmlElement reportResultsUpdateReportContentHeader = ie.htmlElement(reportResultsUpdateReportContentHeaderFinder);
 		assertTrue("Could not find Reporting page content header", reportResultsUpdateReportContentHeader.exists());
@@ -913,7 +914,7 @@ public class Reporting extends TestCase {
 
 	public void gotoSavedReport(String reportName) throws Exception {
 		assertNotNull(reportName);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		Links runs = ie.links(runSavedReportLinksFinder);
 		boolean found = false;
 		assertNotNull("Could not find any Saved Reports", runs);
@@ -932,7 +933,7 @@ public class Reporting extends TestCase {
 		if(found) {
 			checkReportingSearchResultsForPage();
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void gotoStartNewReport() throws Exception {

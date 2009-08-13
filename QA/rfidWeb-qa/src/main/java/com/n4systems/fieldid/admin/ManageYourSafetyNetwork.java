@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import com.n4systems.fieldid.Admin;
 import com.n4systems.fieldid.FieldIDMisc;
-
 import watij.elements.Button;
 import watij.elements.Checkbox;
 import watij.elements.Div;
@@ -162,7 +159,9 @@ public class ManageYourSafetyNetwork extends TestCase {
 	 */
 	public void validateManufacturer(String FIDAC) throws Exception {
 		gotoManageYourSafetyNetwork();
+		@SuppressWarnings("unused")
 		String s = getFIDAC();
+		@SuppressWarnings("unused")
 		List<String> linkedCompanyNames = getLinkedCompanyNames();
 		linkToAnotherCompany(FIDAC);
 		gotoPublish();
@@ -294,7 +293,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 		gotoImportCatalog(companyName);
 		gotoCancelCatalogImport();
 		gotoImportCatalog(companyName);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		gotoStep2SelectItemsToImport();
 		step2SelectItemsSelectAll();
 		step2SelectItemsSelectNone();
@@ -316,9 +315,10 @@ public class ManageYourSafetyNetwork extends TestCase {
 		viewDetailsForStep3();
 		List<String> renames = getStep3DetailsOnRenaming();
 		gotoStep4();
+		@SuppressWarnings("unused")
 		String s = getStep4YouAreDoneMessage();
 		gotoReturnToFieldIDSafetyNetwork();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		List<String> importedInspectionTypes = new ArrayList<String>();
 		List<String> importedProductTypes = new ArrayList<String>();
 		Iterator<String> a = assetTypes.iterator();

@@ -10,9 +10,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import org.w3c.dom.Element;
-
 import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.datatypes.MassUpdateForm;
 import com.n4systems.fieldid.datatypes.Product;
@@ -689,7 +686,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = customers.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String c = o.text();
@@ -698,7 +695,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 	
@@ -722,7 +719,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = divisions.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String d = o.text();
@@ -731,7 +728,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 
@@ -751,7 +748,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = statuses.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String ps = o.text();
@@ -760,7 +757,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 	
@@ -780,7 +777,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = types.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String pt = o.text();
@@ -789,7 +786,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return results;
 		
 	}
@@ -1020,7 +1017,7 @@ public class Assets extends TestCase {
 	
 	public void setMassUpdate(MassUpdateForm m) throws Exception {
 		assertNotNull(m);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		String customerName = m.getCustomerName();
 		if(customerName != null) {
 			SelectList customer = ie.selectList(massUpdateCustomerNameFinder);
@@ -1112,7 +1109,7 @@ public class Assets extends TestCase {
 			assertTrue("Could not find the Select checkbox for identified", identifiedSelected.exists());
 			identifiedSelected.set(true);
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void gotoSaveMassUpdate() throws Exception {
@@ -1226,7 +1223,7 @@ public class Assets extends TestCase {
 		assertNotNull(scheduleDate);
 		assertNotNull(inspectionType);
 		assertNotNull(newScheduleDate);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		TableRows trs = ie.rows(scheduleForScheduleRowsFinder);
 		assertNotNull("Could not find the rows containing schedule for product", trs);
 		Iterator<TableRow> i = trs.iterator();
@@ -1251,7 +1248,7 @@ public class Assets extends TestCase {
 				break;
 			}
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 	
 	public int SmartSearch(String searchString) throws Exception {
@@ -1567,7 +1564,8 @@ public class Assets extends TestCase {
 			// html() called on application/pdf should lock up
 			// this means it never makes it to this point
 			// if we get to here, something went wrong.
-			fail("Failed to open PDF in a new window"); 
+			fail("Failed to open PDF in a new window");
+			html.compareTo(html);
 		} catch(Exception e) {
 			// if the certificate printed okay, Watij will lock up
 			// and we will end up here. So getting to here means a
@@ -1804,8 +1802,11 @@ public class Assets extends TestCase {
 		List<String> mpt = mpts.getMasterProductTypeNames();
 		gotoAssets();
 		List<String> customers = getCustomersOnSearchCriteria();
+		@SuppressWarnings("unused")
 		int n = misc.getRandomInteger(customers.size());
+		@SuppressWarnings("unused")
 		List<String> productStatuses = getProductStatusesOnSearchCriteria();
+		@SuppressWarnings("unused")
 		List<String> productTypes = getProductTypesOnSearchCriteria();
 		getDynamicSelectColumns();
 		ProductSearchCriteria prop = new ProductSearchCriteria();
@@ -1834,6 +1835,7 @@ public class Assets extends TestCase {
 		printAllManufacturerCertificates();
 		exportToExcel();
 		List<String> serialNumbers = getProductSearchResultsSerialNumbers(column);
+		@SuppressWarnings("unused")
 		String sdc = getSelectDisplayColumnsHeader();
 		gotoMassUpdate();
 		MassUpdateForm m = new MassUpdateForm();

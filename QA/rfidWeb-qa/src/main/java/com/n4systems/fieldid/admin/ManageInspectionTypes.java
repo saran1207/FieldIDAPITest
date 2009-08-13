@@ -153,7 +153,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 
 	public void addInspectionType(InspectionType it) throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(it);
 		assertNotNull(it.getName());
 		assertFalse("Inspection type must have a name.", it.getName().equals(""));
@@ -182,7 +182,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
 	}
 
@@ -283,7 +283,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 	
 	public void editInspectionType(InspectionType it) throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(it);
 		assertNotNull(it.getName());
 		assertFalse("Inspection type must have a name.", it.getName().equals(""));
@@ -312,7 +312,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
 	}
 	
@@ -488,6 +488,7 @@ public class ManageInspectionTypes extends TestCase {
 		List<String> groups = metgs.getEventTypeGroups();
 		misc.gotoBackToAdministration();
 		gotoManageInspectionTypes();
+		@SuppressWarnings("unused")
 		List<String> mits = getMasterInspectionTypes();
 		List<String> its = getInspectionTypes();
 		String inspectionType = its.get(0);						// assumes there is at least one inspection type
@@ -617,7 +618,7 @@ public class ManageInspectionTypes extends TestCase {
 	
 	public void addInspectionForm(InspectionForm form) throws Exception {
 		assertNotNull(form);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		int sections = form.getNumberOfSections();
 		for(int i = 0; i < sections; i++) {
 			Section s = form.getSection(i);
@@ -690,7 +691,7 @@ public class ManageInspectionTypes extends TestCase {
 				}
 			}
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 	
 	public void saveInspectionForm() throws Exception {

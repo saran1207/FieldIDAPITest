@@ -176,7 +176,7 @@ public class ManageProductTypes extends TestCase {
 		assertNotNull("Product Type Name is a required field.", npt.getName());
 		assertFalse("Product Type Name is a required field.", npt.getName().equals(""));
 		
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		SelectList group = ie.selectList(addProductTypeGroupFinder);
 		assertTrue("Could not find the select list for Group", group.exists());
 		String groupOption = npt.getGroup(); 
@@ -232,14 +232,14 @@ public class ManageProductTypes extends TestCase {
 			assertTrue("Could not find the button to attach a file", attachAFile.exists());
 			fail("Add Attachments not supported");
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	// TODO: TEST
 	private void setProductAttributes(ProductAttribute[] pat) throws Exception {
 		assertNotNull(pat);
 		assertTrue(pat.length > 0);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		int dropDownOptionIndex = 0;
 		for(int i = 0; i < pat.length; i++) {
 			ProductAttribute pa = pat[i];
@@ -299,7 +299,7 @@ public class ManageProductTypes extends TestCase {
 				o2.select();
 			}
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	private void checkViewProductTypePageContentHeader(String name) throws Exception {

@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import com.jniwrapper.win32.shdocvw.IWebBrowser2;
 import com.jniwrapper.win32.ui.Wnd;
 
 import watij.elements.*;
@@ -22,7 +21,8 @@ import static watij.finders.FinderFactory.*;
 
 public class FieldIDMisc extends TestCase {
 
-	IE ie = null;
+	static IE ie = null;
+	static Refresh monitor;
 	static long hack = 5000;	// wait 5 seconds for Javascript actions to complete
 	static long lightBoxHack = 10000;
 	public static long dayInMilliseconds = 86400000;	// used for scheduling inspections
@@ -42,7 +42,7 @@ public class FieldIDMisc extends TestCase {
 	private Finder tellUsWhatHappenedLinkFinder;
 	
 	public FieldIDMisc(IE ie) {
-		this.ie = ie;
+		FieldIDMisc.ie = ie;
 		tellUsWhatHappenedLinkFinder = xpath("//A[contains(text(),'Tell us what happened')]");
 		lightBoxOKButtonFinder = tag("button");
 		lightBoxMessageFinder = xpath("//P[@id='modalBox_message']");
@@ -147,20 +147,6 @@ public class FieldIDMisc extends TestCase {
 	public static boolean running = false;
 	
 	/**
-	 * The running variable keeps the thread created in startMonitorStatus
-	 * looping. If this variable is set to false then the thread in
-	 * startMonitorStatus exits.
-	 * 
-	 * You should call this method before you call ie.close() or ie = null.
-	 * 
-	 * @throws Exception
-	 */
-	public void stopMonitorStatus() throws Exception {
-		System.out.println("stop monitor");
-		FieldIDMisc.running = false;
-	}
-	
-	/**
 	 * For various reasons, e.g. transparent PNGs cause pages to occasionally
 	 * fail to load in Internet Explorer, you need to run this method once the
 	 * IE window is open. It will monitor the status bar of the window. Every
@@ -178,38 +164,22 @@ public class FieldIDMisc extends TestCase {
 	 * @param ie
 	 * @throws Exception
 	 */
-	public synchronized void startMonitorStatus() throws Exception {
-		System.err.println("start monitor");
-		// no point in having this run multiple times.
-		if(FieldIDMisc.running)	return;
-		FieldIDMisc.running = true;
+	public static void startMonitor() {
+		monitor = new Refresh("monitor", ie);
+		monitor.start();
+	}
 		
-		final IWebBrowser2 wb2 = ie.iWebBrowser2();
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					int cycle = 0;
-					int max = TIMEOUT / 3;
-					while(FieldIDMisc.running) {
-						String previous = wb2.getStatusText().toString();
-						Thread.sleep(1000);
-						String current = wb2.getStatusText().toString();
-						if(current.equals(previous)) {
-							cycle++;
-						} else {
-							cycle = 0;
-						}
-						if(FieldIDMisc.running && cycle > max) {
-							wb2.refresh();
-							cycle = 0;
-						}
-					}
-				} catch (Exception e) {
-				} finally {
-					FieldIDMisc.running = false;
-				}
-			}
-		}).start();
+	/**
+	 * The running variable keeps the thread created in startMonitorStatus
+	 * looping. If this variable is set to false then the thread in
+	 * startMonitorStatus exits.
+	 * 
+	 * You should call this method before you call ie.close() or ie = null.
+	 * 
+	 * @throws Exception
+	 */
+	public static void stopMonitor() {
+		monitor.quit();
 	}
 	
 	/**
@@ -247,7 +217,7 @@ public class FieldIDMisc extends TestCase {
 		assertNotNull(loginURL);
 		assertFalse(loginURL.equals(""));
 		ie.start(loginURL);
-		startMonitorStatus();
+		startMonitor();
 	}
 
 	/**
@@ -258,7 +228,7 @@ public class FieldIDMisc extends TestCase {
 	 */
 	public void start() throws Exception {
 		ie.start();
-		startMonitorStatus();
+		startMonitor();
 	}
 	
 	/**

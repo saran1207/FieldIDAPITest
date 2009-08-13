@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Properties;
 
 import com.n4systems.fieldid.datatypes.MassUpdateScheduleForm;
-import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.ScheduleSearchCriteria;
 import com.n4systems.fieldid.datatypes.ScheduleSearchSelectColumns;
 
@@ -273,11 +272,11 @@ public class Schedule extends TestCase {
 
 	public void setMassUpdate(MassUpdateScheduleForm m) throws Exception {
 		assertNotNull(m);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		TextField nextInspectionDate = ie.textField(massUpdateNextInspectionDateFinder);
 		assertTrue("Could not find the next inspection date field for mass update", nextInspectionDate.exists());
 		nextInspectionDate.set(m.getNextInspectionDate());
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void gotoSaveMassUpdate() throws Exception {

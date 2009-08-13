@@ -201,7 +201,7 @@ public class Jobs extends TestCase {
 		if(!misc.isFirstPage())
 			misc.gotoFirstPage();
 		gotoJob(jobTitle);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		gotoAddResource(jobTitle);
 		String qauser = u.getFirstName() + " " + u.getLastName();
 		List<String> employees = getEmployeesFromAddResourceList();
@@ -213,7 +213,7 @@ public class Jobs extends TestCase {
 			assertFalse("Assigned employee '" + s + "' is still available on the employee list of assignable resources", employees.contains(s));
 		}
 		addEmployeeResource(qauser);
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public List<String> getAssignedEmployees() throws Exception {
@@ -308,7 +308,7 @@ public class Jobs extends TestCase {
 
 	private List<String> getJobTitlesCurrentPage(Finder f) throws Exception {
 		List<String> tmp = new ArrayList<String>();
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		Links jobTitles = ie.links(f);
 		assertNotNull(jobTitles);
 		Iterator<Link> i = jobTitles.iterator();
@@ -317,7 +317,7 @@ public class Jobs extends TestCase {
 			String title = l.text().trim();
 			tmp.add(title);
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		return tmp;
 	}
 
@@ -350,7 +350,7 @@ public class Jobs extends TestCase {
 	}
 
 	public void setJob(Job j) throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		Radio jobType = null;
 		Labels jobTypeLabels = ie.labels(jobTypeLabelFinder);
 		assertNotNull(jobTypeLabels);
@@ -431,7 +431,7 @@ public class Jobs extends TestCase {
 		if(j.getWorkPerformed() != null) {
 			workPerformed.set(j.getWorkPerformed());
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void addJob(String jobTitle) throws Exception {
@@ -470,7 +470,7 @@ public class Jobs extends TestCase {
 
 	public void setScheduleCriteria(ScheduleSearchCriteria sc) throws Exception {
 		assertNotNull(sc);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		String s;
 		SelectList scheduleStatus = ie.selectList(scheduleStatusFinder);
 		assertTrue("Could not find the Schedule Status select list", scheduleStatus.exists());
@@ -539,7 +539,7 @@ public class Jobs extends TestCase {
 		if(s != null) {
 			toDate.set(s);
 		}
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void gotoRunScheduleCriteria() throws Exception {

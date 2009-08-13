@@ -110,8 +110,6 @@ public class Identify extends TestCase {
 	private Finder addProductSaveAndScheduleButtonFinder;
 	private Finder addProductResetFormButtonFinder;
 	private Finder attachFileButtonFinder;
-	private Finder attachFileFieldFinder;
-	private Finder attachFileFrameFinder;
 	
 	public Identify(IE ie) {
 		this.ie = ie;
@@ -206,8 +204,6 @@ public class Identify extends TestCase {
 			addProductSaveAndScheduleButtonFinder = xpath(p.getProperty("addproductsaveschedulebutton"));
 			addProductResetFormButtonFinder = xpath(p.getProperty("addproductresetformbutton"));
 			attachFileButtonFinder = xpath(p.getProperty("attachfilebutton"));
-			attachFileFieldFinder = xpath(p.getProperty("attachfilefield"));
-			attachFileFrameFinder = xpath(p.getProperty("attachfileuploadframe"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -556,7 +552,7 @@ public class Identify extends TestCase {
 		assertNotNull(p);
 		assertTrue("You either have to generate a serial number or provide one.", generate || (p.getSerialNumber() != null));
 		
-		misc.stopMonitorStatus();	// turn the refresh monitor off while filling out the product form
+		FieldIDMisc.stopMonitor();	// turn the refresh monitor off while filling out the product form
 		
 		boolean jobsiteset = (p.getJobSite() != null);
 		boolean assignedtoset = (p.getAssignedTo() != null);
@@ -697,7 +693,7 @@ public class Identify extends TestCase {
 
 		handleRequiredFieldsOnAddProduct(comments);
 
-		misc.startMonitorStatus();	// turn the monitor back on
+		FieldIDMisc.startMonitor();	// turn the monitor back on
 	}
 	
 	public void addProductSave() throws Exception {
@@ -1124,7 +1120,7 @@ public class Identify extends TestCase {
 		setProduct(product , true);
 		gotoAddMultipleAssets();
 		String quantity = "8";
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		addMultipleAssetsStep1(product);
 		addMultipleAssetsContinueToStep2();
 		addMultipleAssetsBackToStep1();
@@ -1146,18 +1142,18 @@ public class Identify extends TestCase {
 		addMultipleAssetsBackToStep3();
 		addMultipleAssetsContinueToStep4();
 		addMultipleAssetsSaveAndCreate();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 		addMultipleAssetsCancel();	// takes you to the Home page WEB-1024
 	}
 	
 	public void gotoAddProductAttachFile() throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		Button attachFile = ie.button(attachFileButtonFinder);
 		assertTrue("Could not find the button to attach a file", attachFile.exists());
 		attachFile.click();
 		misc.waitForJavascript();
 		fail("not implemented");
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void addMultipleAssetsSaveAndCreate() throws Exception {

@@ -297,7 +297,7 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void addCustomerUser(CustomerUser u) throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertNotNull("Must set a User ID for the customer", u.getUserID());
 		assertNotNull("Must set an email address for the customer", u.getEmail());
@@ -404,7 +404,7 @@ public class ManageUsers extends TestCase {
 		Button submit = ie.button(addCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 	
 	public void validate() throws Exception {
@@ -478,7 +478,7 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void editCustomerUser(CustomerUser u) throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertFalse("User ID cannot be blank", u.getUserID().trim().equals(""));
 		assertFalse("Email cannot be blank", u.getEmail().trim().equals(""));
@@ -571,7 +571,7 @@ public class ManageUsers extends TestCase {
 		Button submit = ie.button(editCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	private void checkEditUserCustomerPermissions() throws Exception {
@@ -579,7 +579,7 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void addEmployeeUser(EmployeeUser u) throws Exception {
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertNotNull("Must set a User ID for the customer", u.getUserID());
 		assertNotNull("Must set an email address for the customer", u.getEmail());
@@ -675,6 +675,6 @@ public class ManageUsers extends TestCase {
 		Button submit = ie.button(addEmployeeUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 }

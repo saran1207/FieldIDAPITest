@@ -2,11 +2,8 @@ package com.n4systems.fieldid.testcase;
 
 import java.util.List;
 
-import com.n4systems.fieldid.datatypes.Inspection;
-import com.n4systems.fieldid.datatypes.Job;
 import com.n4systems.fieldid.datatypes.ProductSearchCriteria;
 import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
-import com.n4systems.fieldid.datatypes.ScheduleSearchCriteria;
 
 public class Stub extends FieldIDTestCase {
 

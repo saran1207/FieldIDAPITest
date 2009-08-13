@@ -33,8 +33,6 @@ public class ManageCustomers extends TestCase {
 	private Finder manageCustomersFilterTextFieldFinder;
 	private Finder manageCustomersFilterButtonFinder;
 	private Finder manageCustomersAddCustomerFinder;
-	private Finder manageCustomersBackToAdministrationFinder;
-	private Finder addCustomerPageContentHeaderFinder;
 	private Finder editCustomerPageContentHeaderFinder;
 	private Finder editCustomerCustomerIDFinder;
 	private Finder editCustomerCustomerNameFinder;
@@ -122,8 +120,6 @@ public class ManageCustomers extends TestCase {
 			manageCustomersFilterTextFieldFinder = id(p.getProperty("managecustomersfiltertextfield"));
 			manageCustomersFilterButtonFinder = id(p.getProperty("managecustomersfilterbutton"));
 			manageCustomersAddCustomerFinder = xpath(p.getProperty("managecustomersaddcustomer"));
-			manageCustomersBackToAdministrationFinder = text(p.getProperty("managecustomersbacktoadmin"));
-			addCustomerPageContentHeaderFinder = xpath(p.getProperty("addcustomercontentheader"));
 			editCustomerPageContentHeaderFinder = xpath(p.getProperty("editcustomercontentheader"));
 			editCustomerCustomerIDFinder = id(p.getProperty("editcustomercustomerid"));
 			editCustomerCustomerNameFinder = id(p.getProperty("editcustomercustomername"));
@@ -475,14 +471,17 @@ public class ManageCustomers extends TestCase {
 		customer.setFax("(416) 599-6463");
 		editCustomer(customer);
 		gotoBackToCustomerList();
+		@SuppressWarnings("unused")
 		List<String> customers = getCustomerNames();
 		gotoBackToAdministration();
 		gotoManageCustomers();
+		@SuppressWarnings("unused")
 		List<String> customerIDs = getCustomerIDs();
 		setAddCustomerFilter(customer.getCustomerName());
 		gotoAddCustomerFilter();
 		assertTrue(isCustomer(customer));
 		deleteCustomer(customer.getCustomerName());
+		@SuppressWarnings("unused")
 		int n = getNumberOfCustomers();
 //		addCustomerUser
 //		addCustomerDivision
@@ -567,7 +566,7 @@ public class ManageCustomers extends TestCase {
 
 	public List<String> getCustomerNames() throws Exception {
 		List<String> results = new ArrayList<String>();
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		boolean loopFlag = true;
 		do {
 			List<String> tmp = getCustomerNamesFromCurrentPage();
@@ -579,7 +578,7 @@ public class ManageCustomers extends TestCase {
 				loopFlag = false;
 			}
 		} while (loopFlag);
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 
 		return results;
 	}
@@ -604,7 +603,7 @@ public class ManageCustomers extends TestCase {
 	public List<String> getCustomerIDs() throws Exception {
 		List<String> results = new ArrayList<String>();
 		
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		boolean loopFlag = true;
 		do {
 			List<String> tmp = getCustomerIDsFromCurrentPage();
@@ -616,7 +615,7 @@ public class ManageCustomers extends TestCase {
 				loopFlag = false;
 			}
 		} while (loopFlag);
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 
 		return results;
 	}
@@ -874,7 +873,7 @@ public class ManageCustomers extends TestCase {
 
 	public void editCustomerUser(CustomerUser u) throws Exception {
 		assertNotNull(u);
-		misc.stopMonitorStatus();
+		FieldIDMisc.stopMonitor();
 		TextField userID = ie.textField(editCustomerUserUserIDFinder);
 		assertTrue("Could not find the User ID field", userID.exists());
 		userID.set(u.getUserID());
@@ -936,7 +935,7 @@ public class ManageCustomers extends TestCase {
 
 		saveEditCustomerUser();
 		checkManageCustomerPageContentHeader();
-		misc.startMonitorStatus();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void editCustomerUserAllPermissionsOn() throws Exception {
