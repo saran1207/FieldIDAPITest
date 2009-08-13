@@ -566,7 +566,7 @@ public class ManageCustomers extends TestCase {
 
 	public List<String> getCustomerNames() throws Exception {
 		List<String> results = new ArrayList<String>();
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		boolean loopFlag = true;
 		do {
 			List<String> tmp = getCustomerNamesFromCurrentPage();
@@ -578,7 +578,7 @@ public class ManageCustomers extends TestCase {
 				loopFlag = false;
 			}
 		} while (loopFlag);
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 
 		return results;
 	}
@@ -603,7 +603,7 @@ public class ManageCustomers extends TestCase {
 	public List<String> getCustomerIDs() throws Exception {
 		List<String> results = new ArrayList<String>();
 		
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		boolean loopFlag = true;
 		do {
 			List<String> tmp = getCustomerIDsFromCurrentPage();
@@ -615,7 +615,7 @@ public class ManageCustomers extends TestCase {
 				loopFlag = false;
 			}
 		} while (loopFlag);
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 
 		return results;
 	}
@@ -873,7 +873,7 @@ public class ManageCustomers extends TestCase {
 
 	public void editCustomerUser(CustomerUser u) throws Exception {
 		assertNotNull(u);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		TextField userID = ie.textField(editCustomerUserUserIDFinder);
 		assertTrue("Could not find the User ID field", userID.exists());
 		userID.set(u.getUserID());
@@ -935,7 +935,7 @@ public class ManageCustomers extends TestCase {
 
 		saveEditCustomerUser();
 		checkManageCustomerPageContentHeader();
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 
 	public void editCustomerUserAllPermissionsOn() throws Exception {

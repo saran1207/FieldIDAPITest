@@ -21,8 +21,8 @@ import static watij.finders.FinderFactory.*;
 
 public class FieldIDMisc extends TestCase {
 
-	static IE ie = null;
-	static Refresh monitor;
+	IE ie = null;
+	Refresh monitor;
 	static long hack = 5000;	// wait 5 seconds for Javascript actions to complete
 	static long lightBoxHack = 10000;
 	public static long dayInMilliseconds = 86400000;	// used for scheduling inspections
@@ -42,7 +42,7 @@ public class FieldIDMisc extends TestCase {
 	private Finder tellUsWhatHappenedLinkFinder;
 	
 	public FieldIDMisc(IE ie) {
-		FieldIDMisc.ie = ie;
+		this.ie = ie;
 		tellUsWhatHappenedLinkFinder = xpath("//A[contains(text(),'Tell us what happened')]");
 		lightBoxOKButtonFinder = tag("button");
 		lightBoxMessageFinder = xpath("//P[@id='modalBox_message']");
@@ -164,7 +164,7 @@ public class FieldIDMisc extends TestCase {
 	 * @param ie
 	 * @throws Exception
 	 */
-	public static void startMonitor() {
+	public synchronized void startMonitor() {
 		monitor = new Refresh("monitor", ie);
 		monitor.start();
 	}
@@ -178,8 +178,10 @@ public class FieldIDMisc extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public static void stopMonitor() {
-		monitor.quit();
+	public synchronized void stopMonitor() {
+		if(monitor != null) {
+			monitor.quit();
+		}
 	}
 	
 	/**

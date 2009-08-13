@@ -645,7 +645,7 @@ public class Reporting extends TestCase {
 	}
 
 	private List<ReportingSearchCriteria> getReportingSearchResultsFromCurrentPage() throws Exception {
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		TableRows trs = ie.rows(reportResultsTableRowFinder);
 		assertNotNull("Could not find the rows for the Report Results table", trs);
 		TableRow header = ie.row(reportResultsTableHeaderFinder);
@@ -699,7 +699,7 @@ public class Reporting extends TestCase {
 			}
 			results.add(rsc);
 		}
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 		return results;
 	}
 
@@ -757,7 +757,7 @@ public class Reporting extends TestCase {
 	}
 
 	public List<String> getInspectionBookOptions() throws Exception {
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		List<String> results = new ArrayList<String>();
 		SelectList inspectionBook = getInspectionBookSelectList();
 		Options os = inspectionBook.options();
@@ -770,7 +770,7 @@ public class Reporting extends TestCase {
 			String book = o.text();
 			results.add(book);
 		}
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 		return results;
 	}
 
@@ -914,7 +914,7 @@ public class Reporting extends TestCase {
 
 	public void gotoSavedReport(String reportName) throws Exception {
 		assertNotNull(reportName);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		Links runs = ie.links(runSavedReportLinksFinder);
 		boolean found = false;
 		assertNotNull("Could not find any Saved Reports", runs);
@@ -933,7 +933,7 @@ public class Reporting extends TestCase {
 		if(found) {
 			checkReportingSearchResultsForPage();
 		}
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 
 	public void gotoStartNewReport() throws Exception {

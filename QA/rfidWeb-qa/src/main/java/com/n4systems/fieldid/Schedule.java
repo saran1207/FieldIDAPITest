@@ -272,11 +272,11 @@ public class Schedule extends TestCase {
 
 	public void setMassUpdate(MassUpdateScheduleForm m) throws Exception {
 		assertNotNull(m);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		TextField nextInspectionDate = ie.textField(massUpdateNextInspectionDateFinder);
 		assertTrue("Could not find the next inspection date field for mass update", nextInspectionDate.exists());
 		nextInspectionDate.set(m.getNextInspectionDate());
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 
 	public void gotoSaveMassUpdate() throws Exception {

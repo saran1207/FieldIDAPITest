@@ -293,7 +293,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 		gotoImportCatalog(companyName);
 		gotoCancelCatalogImport();
 		gotoImportCatalog(companyName);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		gotoStep2SelectItemsToImport();
 		step2SelectItemsSelectAll();
 		step2SelectItemsSelectNone();
@@ -318,7 +318,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 		@SuppressWarnings("unused")
 		String s = getStep4YouAreDoneMessage();
 		gotoReturnToFieldIDSafetyNetwork();
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 		List<String> importedInspectionTypes = new ArrayList<String>();
 		List<String> importedProductTypes = new ArrayList<String>();
 		Iterator<String> a = assetTypes.iterator();

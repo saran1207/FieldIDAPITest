@@ -153,7 +153,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 
 	public void addInspectionType(InspectionType it) throws Exception {
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		assertNotNull(it);
 		assertNotNull(it.getName());
 		assertFalse("Inspection type must have a name.", it.getName().equals(""));
@@ -182,7 +182,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
 	}
 
@@ -283,7 +283,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 	
 	public void editInspectionType(InspectionType it) throws Exception {
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		assertNotNull(it);
 		assertNotNull(it.getName());
 		assertFalse("Inspection type must have a name.", it.getName().equals(""));
@@ -312,7 +312,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
 	}
 	
@@ -618,7 +618,7 @@ public class ManageInspectionTypes extends TestCase {
 	
 	public void addInspectionForm(InspectionForm form) throws Exception {
 		assertNotNull(form);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		int sections = form.getNumberOfSections();
 		for(int i = 0; i < sections; i++) {
 			Section s = form.getSection(i);
@@ -691,7 +691,7 @@ public class ManageInspectionTypes extends TestCase {
 				}
 			}
 		}
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 	
 	public void saveInspectionForm() throws Exception {

@@ -216,7 +216,7 @@ public class Login extends TestCase {
 	 * @throws Exception
 	 */
 	public void close() throws Exception {
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		ie.close();
 		assertFalse("Closed Internet Explorer but it still exists.", ie.exists());
 	}

@@ -174,7 +174,7 @@ public class Inspect extends TestCase {
 
 	public void setMasterInspection(Inspection i, String book) throws Exception {
 		assertNotNull(i);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		SelectList customer = ie.selectList(customerBaseSelectListFinder);
 		assertTrue("Could not find the customer select list", customer.exists());
 		if(i.getCustomer() != null) {
@@ -257,7 +257,7 @@ public class Inspect extends TestCase {
 			nextInspectionDate.set(i.getNextInspectionDate());
 		}
 		// Attach A File
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 
 	/**

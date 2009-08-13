@@ -552,7 +552,7 @@ public class Identify extends TestCase {
 		assertNotNull(p);
 		assertTrue("You either have to generate a serial number or provide one.", generate || (p.getSerialNumber() != null));
 		
-		FieldIDMisc.stopMonitor();	// turn the refresh monitor off while filling out the product form
+		misc.stopMonitor();	// turn the refresh monitor off while filling out the product form
 		
 		boolean jobsiteset = (p.getJobSite() != null);
 		boolean assignedtoset = (p.getAssignedTo() != null);
@@ -693,7 +693,7 @@ public class Identify extends TestCase {
 
 		handleRequiredFieldsOnAddProduct(comments);
 
-		FieldIDMisc.startMonitor();	// turn the monitor back on
+		misc.startMonitor();	// turn the monitor back on
 	}
 	
 	public void addProductSave() throws Exception {
@@ -1120,7 +1120,7 @@ public class Identify extends TestCase {
 		setProduct(product , true);
 		gotoAddMultipleAssets();
 		String quantity = "8";
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		addMultipleAssetsStep1(product);
 		addMultipleAssetsContinueToStep2();
 		addMultipleAssetsBackToStep1();
@@ -1142,18 +1142,18 @@ public class Identify extends TestCase {
 		addMultipleAssetsBackToStep3();
 		addMultipleAssetsContinueToStep4();
 		addMultipleAssetsSaveAndCreate();
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 		addMultipleAssetsCancel();	// takes you to the Home page WEB-1024
 	}
 	
 	public void gotoAddProductAttachFile() throws Exception {
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		Button attachFile = ie.button(attachFileButtonFinder);
 		assertTrue("Could not find the button to attach a file", attachFile.exists());
 		attachFile.click();
 		misc.waitForJavascript();
 		fail("not implemented");
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 
 	public void addMultipleAssetsSaveAndCreate() throws Exception {

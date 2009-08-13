@@ -474,7 +474,7 @@ public class MyAccount extends TestCase {
 	 */
 	public void addNotification(Notification n) throws Exception {
 		assertNotNull(n);
-		FieldIDMisc.stopMonitor();
+		misc.stopMonitor();
 		TextField name = ie.textField(addNotificationNameFinder);
 		assertTrue("Could not find the Name field for adding a notification", name.exists());
 		if(n.getName() != null) {
@@ -566,7 +566,7 @@ public class MyAccount extends TestCase {
 		Button save = ie.button(addNotificationSaveButtonFinder);
 		assertTrue("Could not find the save button", save.exists());
 		save.click();
-		FieldIDMisc.startMonitor();
+		misc.startMonitor();
 	}
 	
 	/**
