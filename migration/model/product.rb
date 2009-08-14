@@ -4,6 +4,7 @@ require "customer"
 require "division"
 require "info_option"
 require "productserial_infooption"
+require "sub_product"
 
 class Product < ActiveRecord::Base
   set_table_name :products
@@ -17,6 +18,7 @@ class Product < ActiveRecord::Base
   has_many    :infoOptions,                                             :class_name => 'InfoOption',              :through => :infoOptionsFK
   belongs_to  :identifiedBy,  :foreign_key => 'identifiedby_uniqueid',  :class_name => 'User'
   belongs_to  :assignedUser,  :foreign_key => 'assigneduser_id',        :class_name => 'User'
+  has_many    :subProducts,   :foreign_key => 'product_id',             :class_name => 'SubProduct'
   
   def findInfoOptionByInfoField(infoField)
     
