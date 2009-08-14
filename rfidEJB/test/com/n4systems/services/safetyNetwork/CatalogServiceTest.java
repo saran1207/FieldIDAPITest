@@ -16,9 +16,9 @@ import org.easymock.Capture;
 import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Catalog;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.catalog.Catalog;
 import com.n4systems.test.helpers.BasicAnswer;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;

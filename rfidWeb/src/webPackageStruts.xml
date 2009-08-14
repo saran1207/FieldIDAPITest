@@ -708,12 +708,12 @@
 
 
 		<action name="selectInspectionTypes" method="list"
-			class="com.n4systems.fieldid.actions.product.ProductTypeInspectionTypeCrud">
+			class="com.n4systems.fieldid.actions.product.AssociatedInspectionTypeCrud">
 			<result name="error" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
 		</action>
 		<action name="productTypeEventTypesSave" method="save"
-			class="com.n4systems.fieldid.actions.product.ProductTypeInspectionTypeCrud">
+			class="com.n4systems.fieldid.actions.product.AssociatedInspectionTypeCrud">
 			<result name="error" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/productTypeInspectionTypeCrud/list.ftl</result>
 			<result name="success" type="redirectAction">
@@ -843,6 +843,22 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 			<result name="error" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+		</action>
+		<action name="inspectionTypeDeleteConfirm" method="deleteConfirm" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="input" type="freemarker">/templates/html/inspectionType/confirmDelete.ftl</result>
+			<result name="error" type="freemarker">/templates/html/inspectionType/confirmDelete.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionType/confirmDelete.ftl</result>
+		</action>
+		<action name="inspectionTypeDelete" method="delete" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="error" type="redirectAction">
+				<param name="actionName">inspectionTypeDeleteConfirm</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">inspectionTypeDeleteConfirm</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="success" type="redirectAction">inspectionTypes</result>
 		</action>
 
 		<action name="buttonGroups" method="list" class="com.n4systems.fieldid.actions.inspection.ButtonGroupCrud">

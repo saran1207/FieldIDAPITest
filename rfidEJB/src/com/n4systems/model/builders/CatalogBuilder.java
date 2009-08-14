@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.n4systems.model.Catalog;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.catalog.Catalog;
 
 public class CatalogBuilder extends BaseBuilder<Catalog> {
 

@@ -14,11 +14,15 @@ import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.Customer;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -84,37 +88,58 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	
 	@SkipValidation
 	public String doDelete() {
-		if( schedule.getId() != null ) {
-			productType.getSchedules().remove( schedule );
-			
-		}
+		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		try {
-			productTypeManager.updateProductType( productType );
-			schedule.setId( null );
-			schedules = null;
-			addFlashMessage( getText( "message.schdeuledeleted"  ) );
+			List<ProductTypeSchedule> schedulesToRemove = schedulesToRemove(transaction);
+			removeSchedules(transaction, schedulesToRemove);
+			transaction.commit();
 			
+			addFlashMessageText("message.schdeuledeleted");
 		} catch (Exception e) {
-			addActionError( getText( "error.failedtodelete" ) );
+			
+			addActionErrorText("error.failedtodelete");
+			transaction.rollback();
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+
+	private void removeSchedules(Transaction transaction, List<ProductTypeSchedule> schedulesToRemove) {
+		InspectionFrequencySaver saver = new InspectionFrequencySaver();
+		for (ProductTypeSchedule scheduleToRemove : schedulesToRemove) {
+			saver.remove(transaction, scheduleToRemove);
+		}
+	}
+
+	private List<ProductTypeSchedule> schedulesToRemove(Transaction transaction) {
+		List<ProductTypeSchedule> schedulesToRemove = new ArrayList<ProductTypeSchedule>();
+		
+		if (!schedule.isCustomerOverride()) {
+			schedulesToRemove.addAll(getLoaderFactory().createInspectionFrequenciesListLoader().setInspectionTypeId(inspectionTypeId).setProductTypeId(productTypeId).load(transaction));
+		} else {
+			schedulesToRemove.add(new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class).addSimpleWhere("id", schedule.getId()).getSingleResult(transaction.getEntityManager()));
+		}
+	
+		return schedulesToRemove;
 	}
 	
 	
 	public String doSave() {
 		getProductType();
 		getInspectionType();
-		if( schedule.getId() == null ) {
-			schedule.setProductType( productType );
-			schedule.setInspectionType( inspectionType );
-			schedule.setTenant( getTenant() ); 
-			schedule.setCustomer( customer );
-			productType.getSchedules().add( schedule );
-		}
-		
 		try {
-			productType = productTypeManager.updateProductType( productType );
+			if( schedule.getId() == null ) {
+				schedule.setProductType( productType );
+				schedule.setInspectionType( inspectionType );
+				schedule.setTenant( getTenant() ); 
+				schedule.setCustomer( customer );
+				persistenceManager.save(schedule);
+				productType.getSchedules().add( schedule );
+			} else {
+				schedule = persistenceManager.update(schedule);
+			}
+			
+			productType = productTypeManager.updateProductType(productType);
 			schedule = productType.getSchedule( schedule.getInspectionType(), schedule.getCustomer() );
 		} catch (Exception e) {
 			addActionError( getText( "error.failedtosave" ) );
@@ -150,11 +175,16 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 
 	public List<InspectionType> getInspectionTypes() {
 		if( inspectionTypes == null ) {
-			getProductType();
-			inspectionTypes = new ArrayList<InspectionType>( productType.getInspectionTypes() );
+			inspectionTypes = new ArrayList<InspectionType>();
+			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getProductType()).load();
+			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
+				inspectionTypes.add(associatedInspectionType.getInspectionType());
+			}
 		}
 		return inspectionTypes;
 	}
+	
+	
 	
 	
 	public Map<String,ProductTypeSchedule> getSchedules() {

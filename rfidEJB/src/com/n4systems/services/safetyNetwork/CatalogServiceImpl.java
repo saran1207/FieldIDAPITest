@@ -7,15 +7,16 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Catalog;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.catalog.Catalog;
 import com.n4systems.services.safetyNetwork.exception.NotPublishedException;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
@@ -245,9 +246,9 @@ public class CatalogServiceImpl implements CatalogService {
 		SimpleSelect inspectionTypeId = new SimpleSelect("inspectionType.id", true);
 		inspectionTypeId.setDistinct(true);
 		
-		QueryBuilder<Long> additionalInspectionTypeIdQuery = new QueryBuilder<Long>(ProductType.class, filter);
-		additionalInspectionTypeIdQuery.addLeftJoin("inspectionTypes", "inspectionType").setSelectArgument(inspectionTypeId);
-		additionalInspectionTypeIdQuery.addWhere(Comparator.IN, "ptIds", "id", productTypeIds);
+		QueryBuilder<Long> additionalInspectionTypeIdQuery = new QueryBuilder<Long>(AssociatedInspectionType.class, filter);
+		additionalInspectionTypeIdQuery.setSelectArgument(inspectionTypeId);
+		additionalInspectionTypeIdQuery.addWhere(Comparator.IN, "ptIds", "productType.id", productTypeIds);
 		
 		additionalInspectionTypeIdQuery.addWhere(new WhereParameter<Collection<Long>>(Comparator.IN, "inspectionTypeIds", "inspectionType.id", inspectionTypeIdsPublished, null, true));
 		

@@ -9,7 +9,7 @@ import com.n4systems.persistence.Transaction;
 abstract public class Saver<T extends Saveable> {
 	
 	protected void save(EntityManager em, T entity) {
-		em.persist(em);
+		em.persist(entity);
 	}
 	
 	protected T update(EntityManager em, T entity) {

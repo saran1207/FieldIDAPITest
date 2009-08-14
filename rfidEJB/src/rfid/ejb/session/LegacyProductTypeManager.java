@@ -31,10 +31,8 @@ import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Page;
@@ -151,8 +149,6 @@ public class LegacyProductTypeManager implements LegacyProductType {
 			}
 			if( oldPI != null ) {
 				cleanInfoFields( productTypeBean, oldPI );
-				
-				cleanSchedules( productTypeBean, oldPI );
 			}
 			
 			productTypeBean.touch();
@@ -163,65 +159,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		
 	}
 
-	private void cleanSchedules( ProductType productType, ProductType oldPI ) {
-
-		// remove any product type schedules that have inspection types no longer associated.
-		List<ProductTypeSchedule> removeSchedules = new ArrayList<ProductTypeSchedule>();
-		
-		
-		List<InspectionType> removeInspectionTypes = new ArrayList<InspectionType>();
-		List<InspectionType> types = new ArrayList<InspectionType>( productType.getInspectionTypes() );
-		
-		// find what inspection types have been removed.
-		for( InspectionType type : oldPI.getInspectionTypes() ) {
-			if( !types.contains( type ) ) {
-				removeInspectionTypes.add( type );
-			}
-		}
-		
-		// remove the schedules that don't have inspection types.
-		for ( ProductTypeSchedule schedule : productType.getSchedules() ) {
-			for( InspectionType inspectionType: removeInspectionTypes ) {
-				if( schedule.getInspectionType().equals( inspectionType ) ) {
-					removeSchedules.add(schedule);
-				}
-			}
-		}
-		productType.getSchedules().removeAll( removeSchedules );
-		
-		for (InspectionType inspectionType : removeInspectionTypes ) {
-			inspectionScheduleManager.removeAllSchedulesFor(productType, inspectionType);
-		}
-		
-				
-		List<ProductTypeSchedule> schedules = new ArrayList<ProductTypeSchedule>( productType.getSchedules() );
-		List<ProductTypeSchedule> schedulesToBeRemoved = new ArrayList<ProductTypeSchedule>();
-		
-		// find the removed inspection schedules.
-		for( ProductTypeSchedule schedule : oldPI.getSchedules() ) {
-		    if( !schedules.contains( schedule ) ) {
-		    	if( !schedulesToBeRemoved.contains( schedule ) ) {
-		    		schedulesToBeRemoved.add( schedule );
-		    	}
-		    	// mark customeroverrides.
-		    	if( schedule.isCustomerOverride() ) {
-		    		for( ProductTypeSchedule schedule2 : oldPI.getSchedules() ) {
-		    			if( schedule2.getInspectionType().equals( schedule.getInspectionType() ) ) {
-			    			if( !schedulesToBeRemoved.contains( schedule2 ) ) {
-					    		schedulesToBeRemoved.add( schedule2 );
-					    	}
-		    			}
-		    		}
-		    	}
-		    }
-		}
-		productType.getSchedules().removeAll( schedulesToBeRemoved );
-		
-		for( ProductTypeSchedule schedule : schedulesToBeRemoved ) {
-			em.remove( schedule );
-		}
-	}
-
+	
 	
 	private void cleanInfoFields( ProductType productTypeBean, ProductType oldPI ) {
 		productCodeMappingManager.clearRetiredInfoFields( productTypeBean );

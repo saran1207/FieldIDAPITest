@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
@@ -53,7 +54,7 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 
 	private void importConnectionsToInspectionTypes(ProductType originalProductType, ProductType importedProductType, InspectionType connectedInspectionType) {
 		if (importedInspectionTypeMapping.get(connectedInspectionType.getId()) != null) {
-			importedProductType.getInspectionTypes().add(importedInspectionTypeMapping.get(connectedInspectionType.getId()));
+			persistenceManager.save(new AssociatedInspectionType(importedInspectionTypeMapping.get(connectedInspectionType.getId()), importedProductType));
 			importProductTypeSchedules(originalProductType, importedProductType, connectedInspectionType);
 		}
 	}

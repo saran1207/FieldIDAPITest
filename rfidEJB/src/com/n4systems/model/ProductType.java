@@ -29,6 +29,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -64,12 +65,8 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 	private String manufactureCertificateText;	
 	private boolean hasManufactureCertificate;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "productType")
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "productType")
 	private Set<ProductTypeSchedule> schedules = new HashSet<ProductTypeSchedule>();
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@OrderBy("name ASC")
-	private Set<InspectionType> inspectionTypes = new HashSet<InspectionType>();
 
 	@OneToMany(mappedBy = "productInfo", targetEntity = InfoFieldBean.class, cascade = CascadeType.ALL)
 	@OrderBy("weight, name ASC")
@@ -88,6 +85,9 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 	private EntityState state = EntityState.ACTIVE;
 	
 	private String archivedName;
+	
+	@OneToMany(mappedBy="productType")
+	private Set<AssociatedInspectionType> inspectionTypes;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private ProductTypeGroup group;
@@ -134,18 +134,15 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 		this.descriptionTemplate = descriptionTemplate;
 	}
 
-	public void setName(String itemNumber) {
-		this.name = itemNumber;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
 		return name;
 	}
 	
-	@Deprecated
-	public String getItemNumber() {
-		return getName();
-	}
+	
 	
 	@Deprecated
 	public String getProductType() {
@@ -191,13 +188,15 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 		return instructions;
 	}
 
+	@Deprecated
 	public Set<InspectionType> getInspectionTypes() {
-		return inspectionTypes;
+		Set<InspectionType> types = new HashSet<InspectionType>();
+		for (AssociatedInspectionType inspectionType : inspectionTypes) {
+			types.add(inspectionType.getInspectionType());
+		}
+		return types;
 	}
 
-	public void setInspectionTypes(Set<InspectionType> inspectionTypes) {
-		this.inspectionTypes = inspectionTypes;
-	}
 
 	public Collection<InfoFieldBean> getInfoFields() {
 		return infoFields;

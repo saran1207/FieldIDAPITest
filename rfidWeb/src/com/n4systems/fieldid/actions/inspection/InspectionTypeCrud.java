@@ -14,8 +14,26 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.handlers.remover.AssociatedInspectionTypeDeleteHandler;
+import com.n4systems.handlers.remover.AssociatedInspectionTypeDeleteHandlerImpl;
+import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandler;
+import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandlerImpl;
+import com.n4systems.handlers.remover.CatalogElementRemovalHandlerImpl;
+import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
+import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
+import com.n4systems.handlers.remover.InspectionTypeArchiveHandlerImpl;
+import com.n4systems.handlers.remover.ScheduleListDeleteHandler;
+import com.n4systems.handlers.remover.ScheduleListDeleteHandlerImpl;
+import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.catalog.CatalogSaver;
+import com.n4systems.model.inspection.InspectionListDeleter;
+import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
+import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
+import com.n4systems.model.inspectiontype.InspectionTypeSaver;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -33,6 +51,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 	private List<String> infoFields;
 	private String saveAndAdd;
 	private Map<String,Boolean> types;
+	private InspectionTypeArchiveSummary archiveSummary;
 	
 	public InspectionTypeCrud( PersistenceManager persistenceManager ) {
 		super(persistenceManager);
@@ -45,7 +64,10 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		inspectionType = persistenceManager.find( InspectionType.class, uniqueId, getTenantId(), "sections", "supportedProofTests", "infoFieldNames" );
+		QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter().prepareFor(InspectionType.class));
+		query.addSimpleWhere("id", uniqueId);
+		query.addPostFetchPaths("sections", "supportedProofTests", "infoFieldNames");
+		inspectionType = persistenceManager.find(query);
 	}
 	
 	@SkipValidation
@@ -61,6 +83,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 		}
 		return SUCCESS;
 	}
+	
 	@SkipValidation
 	public String doAdd() {
 		if( inspectionType == null ) {
@@ -113,6 +136,50 @@ public class InspectionTypeCrud extends AbstractCrud {
 		}
 	}
 
+	public String doDeleteConfirm() {
+		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
+		
+		try {
+			archiveSummary = getArchiveHandler().forInspectionType(inspectionType).summary(transaction);
+			transaction.commit();
+		} catch (Exception e) {
+			transaction.rollback();
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String doDelete() {
+		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
+		try {
+			getArchiveHandler().forInspectionType(inspectionType).remove(transaction);
+			transaction.commit();
+			addFlashMessageText("message.deleted_inspection_type");
+		} catch (Exception e) {
+			transaction.rollback();
+			logger.error(getLogLinePrefix() + "could not archive inspection type", e);
+			addFlashErrorText("error.delete_inspection_type");
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+
+	private InspectionTypeArchiveHandlerImpl getArchiveHandler() {
+		return new InspectionTypeArchiveHandlerImpl(new InspectionTypeSaver(), new InspectionListDeleter(), getAssociatedInspectionTypeListDeleter(), new CatalogElementRemovalHandlerImpl(getLoaderFactory().createCatalogLoader(), new CatalogSaver()));
+	}
+	
+	private AssociatedInspectionTypeListDeleteHandler getAssociatedInspectionTypeListDeleter() {
+		return new AssociatedInspectionTypeListDeleteHandlerImpl(getLoaderFactory().createAssociatedInspectionTypesLoader(), getAssociatedInspectionTypeDeleter());
+	}
+
+	private AssociatedInspectionTypeDeleteHandler getAssociatedInspectionTypeDeleter() {
+		return new AssociatedInspectionTypeDeleteHandlerImpl(getInspectionFrequenciesDeleteHandler(), new AssociatedInspectionTypeSaver(), getScheduleDeleter());
+	}
+
+	private ScheduleListDeleteHandler getScheduleDeleter() {
+		return new ScheduleListDeleteHandlerImpl();
+	}
+
 	public List<InspectionType> getInspectionTypes() {
 		if( inspectionTypes == null ) {
 			try{
@@ -121,9 +188,9 @@ public class InspectionTypeCrud extends AbstractCrud {
 				filter.setTargets( "tenant.id", null, null );
 				queryBuilder.setSecurityFilter( filter );
 				queryBuilder.addOrder( "name" );
+				queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 				queryBuilder.setSimpleSelect();
 				inspectionTypes = persistenceManager.findAll( queryBuilder );
-				
 			} catch (Exception e) {
 				logger.error("Failed finding InspectionTypes", e);
 			}
@@ -239,6 +306,14 @@ public class InspectionTypeCrud extends AbstractCrud {
 	@CustomValidator( type="requiredStringSet", message="", key="error.inspectionattributeblank" )
 	public void setInfoFields( List<String> infoFieldNames ) {
 		infoFields = infoFieldNames;
+	}
+
+	public InspectionTypeArchiveSummary getArchiveSummary() {
+		return archiveSummary;
+	}
+	
+	public InspectionFrequenciesDeleteHandler getInspectionFrequenciesDeleteHandler() {
+		return new InspectionFrequenciesDeleteHandlerImpl(getLoaderFactory().createInspectionFrequenciesListLoader(), new InspectionFrequencySaver());
 	}
 	
 }

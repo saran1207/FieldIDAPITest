@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
@@ -204,8 +206,14 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		return inspectionType;
 	}
 
-	public Set<InspectionType> getInspectionTypes() {
-		return product.getType().getInspectionTypes();
+	public List<InspectionType> getInspectionTypes() {
+		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(product.getType()).load();
+		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
+			inspectionTypes.add(associatedInspectionType.getInspectionType());
+		}
+		return inspectionTypes;
+		
 	}
 
 	public String getNextDate() {

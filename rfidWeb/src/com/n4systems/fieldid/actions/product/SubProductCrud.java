@@ -18,6 +18,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
@@ -294,8 +295,14 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		this.subProductId = subProductId;
 	}
 
-	public Collection<InspectionType> getInspectionTypes(Long productTypeId) {
-		return (subProduct.getProduct().getType().getInspectionTypes());
+	public List<InspectionType> getInspectionTypes() {		
+		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(subProduct.getProduct().getType()).load();
+		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
+			inspectionTypes.add(associatedInspectionType.getInspectionType());
+		}
+		return inspectionTypes;
+		
 	}
 
 	public boolean duplicateValueExists(String formValue) {

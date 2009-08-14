@@ -71,7 +71,6 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
-@SuppressWarnings("deprecation")
 @Interceptors( { TimingInterceptor.class })
 @Stateless
 public class InspectionManagerImpl implements InspectionManager {

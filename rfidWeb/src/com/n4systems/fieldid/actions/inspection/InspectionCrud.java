@@ -36,6 +36,7 @@ import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
@@ -181,9 +182,9 @@ public class InspectionCrud extends UploadFileSupport {
 			addActionError(getText("error.noinspection"));
 			return MISSING;
 		}
-
-		if (product.getType().getInspectionTypes().size() == 1) {
-			setType(product.getType().getInspectionTypes().iterator().next().getId());
+		
+		if (getInspectionTypes().size() == 1) {
+			setType(getInspectionTypes().get(0).getInspectionType().getId());
 			if (inspection.getType().isMaster()) {
 				return "oneFoundMaster";
 			}
@@ -191,6 +192,10 @@ public class InspectionCrud extends UploadFileSupport {
 		}
 
 		return SUCCESS;
+	}
+
+	private List<AssociatedInspectionType> getInspectionTypes() {
+		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(product.getType()).load();
 	}
 	
 	@SkipValidation

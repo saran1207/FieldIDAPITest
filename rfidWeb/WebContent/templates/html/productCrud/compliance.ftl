@@ -1,5 +1,5 @@
 <head>
-	<link type="text/css" rel="stylesheet" href="/fieldid/style/pageStyles/product.css" />
+	<@n4.includeStyle href="pageStyles/product"/>
 </head>
 	
 ${action.setPageType('product', 'compliancecheck')!}

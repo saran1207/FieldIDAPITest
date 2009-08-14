@@ -1,4 +1,4 @@
-package com.n4systems.model;
+package com.n4systems.model.catalog;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,11 +8,15 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.n4systems.model.InspectionType;
+import com.n4systems.model.ProductType;
+import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name="catalogs")
-public class Catalog extends EntityWithTenant {
+public class Catalog extends EntityWithTenant implements Saveable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,6 +25,7 @@ public class Catalog extends EntityWithTenant {
 	
 	@OneToMany(fetch=FetchType.LAZY)
 	private Set<InspectionType> publishedInspectionTypes = new HashSet<InspectionType>();
+	
 	
 	public Catalog() {
 	}

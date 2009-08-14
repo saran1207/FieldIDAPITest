@@ -73,12 +73,17 @@
 </div>
 
 
-<div class="formAction">
-	<@s.submit key="hbutton.cancel" onclick="return redirect('${cancelUrl}');" />
-	<@s.submit key="hbutton.save" name="save"/>
+<div class="formAction actions">
+	<@s.submit key="hbutton.save" name="save"/> 
 	<#if !uniqueID?exists >
-		<@s.submit key="hbutton.saveandaddinspectionform" name="saveAndAdd"/>
-	</#if>	
+		<@s.submit key="hbutton.saveandaddinspectionform" name="saveAndAdd"/> 
+	<#else >
+		<@s.url id="deleteConfirmUrl" action="inspectionTypeDeleteConfirm" uniqueID="${uniqueID}"/>
+		<@s.submit key="label.delete" name="delete" cssClass="delete" onclick="return redirect('${deleteConfirmUrl}');"/> 
+	</#if>
+	<@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
+	
+	
 </div>
 
 

@@ -44,6 +44,22 @@ public class InspectionSchedule extends EntityWithTenant implements Archivable, 
 		}
 	}
 	
+	public enum ScheduleStatusGrouping  {
+		NON_COMPLETE(ScheduleStatus.SCHEDULED, ScheduleStatus.IN_PROGRESS), COMPLETE(ScheduleStatus.COMPLETED);
+		
+		private ScheduleStatus[] members;
+		
+		private ScheduleStatusGrouping(ScheduleStatus...members) {
+			this.members = members;
+		}
+
+		public ScheduleStatus[] getMembers() {
+			return members;
+		}
+		
+	}
+	
+	
 	@ManyToOne(fetch = FetchType.EAGER, optional=false)
 	private Product product;
 	

@@ -11,6 +11,7 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
@@ -121,13 +122,14 @@ public class InspectionGroupCrud extends AbstractCrud {
 		return inspectionGroups;
 	}
 
-	public List<InspectionType> getInspectionTypes() {
-		if (productType == null) {
-			productType = productTypeManager.findProductTypeAllFields(product.getType().getId(), getTenantId());
+	public List<InspectionType> getInspectionTypes(Long productTypeId) {
+		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getProduct().getType()).load();
+		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
+			inspectionTypes.add(associatedInspectionType.getInspectionType());
 		}
-
-		return new ArrayList<InspectionType>(productType.getInspectionTypes());
-
+		return inspectionTypes;
+		
 	}
 
 	public boolean isMasterInspection(Long id) {

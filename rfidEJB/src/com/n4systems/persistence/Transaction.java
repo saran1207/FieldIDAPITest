@@ -23,7 +23,7 @@ public class Transaction {
 	
 	public void rollback() {
 		try {
-			if (entityTransaction != null) {
+			if (entityTransaction != null && entityTransaction.isActive()) {
 				entityTransaction.rollback();
 			}
 		} finally {

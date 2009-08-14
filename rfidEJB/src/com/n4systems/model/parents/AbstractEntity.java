@@ -141,6 +141,14 @@ abstract public class AbstractEntity implements Serializable, HasModifiedBy {
 		}
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		if (!isNew()) {
+			return id.hashCode();
+		}
+		return super.hashCode();
+	}
 
 	public boolean isNew() {
 		return (id == null);

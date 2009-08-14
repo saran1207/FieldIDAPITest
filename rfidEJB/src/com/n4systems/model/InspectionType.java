@@ -1,16 +1,10 @@
 package com.n4systems.model;
 
-import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,14 +19,25 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
+import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.util.SecurityFilter;
+
 @Entity
 @Table(name = "inspectiontypes")
-public class InspectionType extends EntityWithTenant implements NamedEntity, Listable<Long>, FilteredEntity {
+public class InspectionType extends EntityWithTenant implements NamedEntity, Listable<Long>, FilteredEntity, Archivable, Saveable {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 
 	@Column(nullable=false)
 	private String name;
+	
+	private String archivedName;
 	
 	private String description;
 	
@@ -64,7 +69,12 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
 	private long formVersion = DEFAULT_FORM_VERSION;
 	
 	private Long legacyEventId;
+	
+	@Enumerated(EnumType.STRING)
+	private EntityState state = EntityState.ACTIVE;
 
+	
+		
 	public InspectionType() {
 		this(null);
 	}
@@ -75,7 +85,7 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
 	}
 	
 	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, null, null, null, null);
+		filter.setTargets(TENANT_ID_FIELD, null, null, null, "state");
 	}
 	
 	protected void onCreate() {
@@ -212,5 +222,42 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
 	public void setFormVersion(long formVersion) {
     	this.formVersion = formVersion;
     }
+
+	public void activateEntity() {
+		state = EntityState.ACTIVE;
+		
+	}
+
+	public void archiveEntity() {
+		if (state != EntityState.ARCHIVED) {
+			state = EntityState.ARCHIVED;
+			archiveName();
+		}
+	}
+	
+	private void archiveName() {
+		archivedName = name;
+		name = UUID.randomUUID().toString();
+	}
+
+	public EntityState getEntityState() {
+		return state;
+	}
+
+	public boolean isActive() {
+		return state == EntityState.ACTIVE;
+	}
+
+	public boolean isArchived() {
+		return state == EntityState.ARCHIVED;
+	}
+
+	public void retireEntity() {
+		state = EntityState.RETIRED;
+	}
+
+	public String getArchivedName() {
+		return archivedName;
+	}
 	
 }

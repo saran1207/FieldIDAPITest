@@ -1,6 +1,6 @@
 ${action.setPageType('product', 'edit')!}
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
+	<@n4.includeStyle href="steps" />
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	<script type="text/javascript">
 		function findAssets() {

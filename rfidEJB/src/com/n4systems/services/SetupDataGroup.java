@@ -3,6 +3,7 @@ package com.n4systems.services;
 import rfid.ejb.entity.CommentTempBean;
 import rfid.ejb.entity.ProductStatusBean;
 
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Customer;
@@ -12,6 +13,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.UnitOfMeasure;
@@ -28,7 +30,9 @@ public enum SetupDataGroup {
 	PRODUCT_TYPE (
 			ProductType.class,
 			ProductStatusBean.class,
-			ProductTypeGroup.class
+			ProductTypeGroup.class,
+			AssociatedInspectionType.class,
+			ProductTypeSchedule.class
 	),
 	INSPECTION_TYPE (
 			InspectionType.class,

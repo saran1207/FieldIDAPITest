@@ -6,7 +6,7 @@
 <@n4.includeStyle href="fieldid-ie6" />
 <![endif]-->
 <!--[if IE 7]>
-<@n4.includeStyle href="fieldid-ie7" />
+<@n4.includeStyle href="fieldid-ie7"/>
 <![endif]-->
 <@n4.includeStyle href="site_wide"/>
 <@n4.includeStyle href="branding/default"/>

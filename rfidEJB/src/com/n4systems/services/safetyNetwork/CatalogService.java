@@ -5,12 +5,12 @@ import java.util.Set;
 
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Catalog;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.catalog.Catalog;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 

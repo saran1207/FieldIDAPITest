@@ -1,5 +1,6 @@
 package com.n4systems.persistence.loaders;
 
+import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.customer.CustomerListableLoader;
 import com.n4systems.model.division.DivisionListableLoader;
@@ -7,6 +8,7 @@ import com.n4systems.model.division.DivisionUniqueNameUsedLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
+import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.jobsites.JobSiteListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
@@ -17,6 +19,7 @@ import com.n4systems.model.product.ProductSerialExtensionListLoader;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.productstatus.ProductStatusListLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
+import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
 import com.n4systems.model.producttype.ProductTypeScheduleLoader;
 import com.n4systems.model.security.FilteredEntity;
@@ -41,9 +44,21 @@ public class LoaderFactory {
 		this.filter = filter;
 	}
 	
+	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
+		return new AllEntityListLoader<T>(clazz);
+	}
+	
+	public AssociatedInspectionTypesLoader createAssociatedInspectionTypesLoader() {
+		return new AssociatedInspectionTypesLoader(filter);
+	}
+	
 	public AutoAttributeCriteriaByProductTypeIdLoader createAutoAttributeCriteriaByProductTypeIdLoader() {
 		return new AutoAttributeCriteriaByProductTypeIdLoader(filter);
 	}
+	public CatalogLoader createCatalogLoader() {
+		return new CatalogLoader();
+	}
+	
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
 		return new CommentTemplateListableLoader(filter);
 	}
@@ -62,6 +77,14 @@ public class LoaderFactory {
 	
 	public DivisionUniqueNameUsedLoader createDivisionUniqueNameUsedLoader() {
 		return new DivisionUniqueNameUsedLoader(filter);
+	}
+	
+	public <T extends AbstractEntity & FilteredEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
+		return new FilteredIdLoader<T>(filter, clazz);
+	}
+	
+	public InspectionFrequencyListLoader createInspectionFrequenciesListLoader() {
+		return new InspectionFrequencyListLoader(filter);
 	}
 	
 	public InspectionScheduleCountListLoader createInspectionScheduleCountListLoader() {
@@ -83,7 +106,7 @@ public class LoaderFactory {
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
 	}
-	
+
 	public NotificationSettingOwnerListLoader createNotificationSettingOwnerListLoader() {
 		return new NotificationSettingOwnerListLoader();
 	}
@@ -91,7 +114,7 @@ public class LoaderFactory {
 	public ProductAttachmentListLoader createProductAttachmentListLoader() {
 		return new ProductAttachmentListLoader(filter);
 	}
-
+	
 	public ProductSerialExtensionListLoader createProductSerialExtensionListLoader() {
 		return new ProductSerialExtensionListLoader(filter);
 	}
@@ -108,6 +131,10 @@ public class LoaderFactory {
 		return new ProductTypeListableLoader(filter);
 	}
 	
+	public ProductTypeScheduleLoader createProductTypeScheduleLoader() {
+		return new ProductTypeScheduleLoader(filter);
+	}
+	
 	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
@@ -118,17 +145,5 @@ public class LoaderFactory {
 	
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
-	}
-	
-	public <T extends AbstractEntity & FilteredEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
-		return new FilteredIdLoader<T>(filter, clazz);
-	}
-	
-	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
-		return new AllEntityListLoader<T>(clazz);
-	}
-	
-	public ProductTypeScheduleLoader createProductTypeScheduleLoader() {
-		return new ProductTypeScheduleLoader(filter);
 	}
 }

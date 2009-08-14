@@ -145,7 +145,7 @@ public class DataServiceImpl implements DataService {
 			
 			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
 			securityFilter.setTargets("tenant.id", null, null);
-			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, securityFilter);
+			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, securityFilter.prepareFor(InspectionType.class));
 			queryBuilder.setSimpleSelect();
 			queryBuilder.addPostFetchPaths("sections", "infoFieldNames");
 			

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.util.DateHelper;
@@ -13,7 +14,7 @@ import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "producttypeschedules")
-public class ProductTypeSchedule extends EntityWithTenant implements FilteredEntity {
+public class ProductTypeSchedule extends EntityWithTenant implements FilteredEntity, Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional=false)
@@ -75,8 +76,8 @@ public class ProductTypeSchedule extends EntityWithTenant implements FilteredEnt
 		if (obj == null) {
 			return false;
 		}
-		if (obj instanceof ProductTypeSchedule) {
 
+		if (obj instanceof ProductTypeSchedule) {
 			return this.equals((ProductTypeSchedule) obj);
 		} else {
 			return super.equals(obj);
@@ -85,14 +86,12 @@ public class ProductTypeSchedule extends EntityWithTenant implements FilteredEnt
 	}
 
 	public boolean equals(ProductTypeSchedule schedule) {
-
 		if (schedule == null)
 			return false;
 		if (getId() == null)
-			return false;
+			return super.equals(schedule);
 
 		return getId().equals(schedule.getId());
-
 	}
 
 	public boolean isAutoSchedule() {

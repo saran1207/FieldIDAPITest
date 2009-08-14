@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js"  />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/changeJobSite.js" />"></script>
-	<link rel="styleSheet" type="text/css" href="<@s.url value="/style/pageStyles/product.css" />"></script>
+	<@n4.includeStyle href="pageStyles/product"/>
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
 		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/ajax"  />';
