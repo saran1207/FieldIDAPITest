@@ -1,25 +1,36 @@
 package com.n4systems.taskscheduling.task;
 
+import org.apache.log4j.Logger;
+
+import rfid.ejb.entity.UserBean;
+
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.InspectionType;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.mail.MailMessage;
 
 
 public class InspectionTypeArchiveTask implements Runnable {
-
+	private static final Logger logger = Logger.getLogger(InspectionTypeArchiveTask.class);	
+	
+	
 	private final InspectionType inspectionType;
 	private final RemovalHandlerFactory handlerFactory;
+	private final UserBean currentUser;
 	
 	private Transaction transaction;
 	private InspectionTypeArchiveHandler archiveHandler;
 	
 	
-	public InspectionTypeArchiveTask(InspectionType inspectionType, RemovalHandlerFactory handlerFactory) {
+	
+	public InspectionTypeArchiveTask(InspectionType inspectionType, UserBean user, RemovalHandlerFactory handlerFactory) {
 		super();
 		this.inspectionType = inspectionType;
 		this.handlerFactory = handlerFactory;
+		this.currentUser = user;
 	}
 
 	
@@ -48,7 +59,15 @@ public class InspectionTypeArchiveTask implements Runnable {
 
 
 	private void sendEmailResponse() {
-		//TODO Send email.
+		String subject = "Inspection Type Removal Completed";
+		String body = "<h2>Inspection Type Removed " + inspectionType.getArchivedName() + "</h2>";
+		
+		logger.info("Sending email [" + currentUser.getEmailAddress() + "]");
+		try {
+	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, currentUser.getEmailAddress()));
+        } catch (Exception e) {
+	        logger.error("Unable to send Inspection Type removal email", e);
+        }
 	}
 	
 	

@@ -15,28 +15,14 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.handlers.remover.AssociatedInspectionTypeDeleteHandler;
-import com.n4systems.handlers.remover.AssociatedInspectionTypeDeleteHandlerImpl;
-import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandler;
-import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandlerImpl;
-import com.n4systems.handlers.remover.CatalogElementRemovalHandlerImpl;
-import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
-import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
-import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
-import com.n4systems.handlers.remover.InspectionTypeArchiveHandlerImpl;
-import com.n4systems.handlers.remover.NotificationSettingDeleteHandlerImpl;
-import com.n4systems.handlers.remover.ScheduleListDeleteHandler;
-import com.n4systems.handlers.remover.ScheduleListDeleteHandlerImpl;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.catalog.CatalogSaver;
-import com.n4systems.model.inspection.InspectionListDeleter;
-import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
-import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.InspectionTypeArchiveTask;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -149,8 +135,10 @@ public class InspectionTypeCrud extends AbstractCrud {
 		
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 
+		
+		
 		try {
-			archiveSummary = getRemovalHandlerFactory().getInspectionTypeArchiveHandler().forInspectionType(inspectionType).summary(transaction);
+			fillArchiveSummary(transaction);
 			transaction.commit();
 		} catch (Exception e) {
 			transaction.rollback();
@@ -161,13 +149,29 @@ public class InspectionTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
+	private InspectionTypeArchiveSummary fillArchiveSummary(Transaction transaction) {
+		archiveSummary = getRemovalHandlerFactory().getInspectionTypeArchiveHandler().forInspectionType(inspectionType).summary(transaction);
+		return archiveSummary;
+	}
+
 	public String doDelete() {
 		testRequiredEntities(true);
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		try {
-			getRemovalHandlerFactory().getInspectionTypeArchiveHandler().forInspectionType(inspectionType).remove(transaction);
-			transaction.commit();
-			addFlashMessageText("message.deleted_inspection_type");
+			if (fillArchiveSummary(transaction).canBeRemoved()) {
+			
+				inspectionType.archiveEntity();
+				new InspectionTypeSaver().update(transaction, inspectionType);
+				
+				InspectionTypeArchiveTask task = new InspectionTypeArchiveTask(inspectionType, fetchCurrentUser(), getRemovalHandlerFactory());
+				TaskExecutor.getInstance().execute(task);
+				
+				transaction.commit();
+				addFlashMessageText("message.deleted_inspection_type");
+			} else {
+				addFlashErrorText("error.can_not_delete_inspection_type");
+				return ERROR;
+			}
 		} catch (Exception e) {
 			transaction.rollback();
 			logger.error(getLogLinePrefix() + "could not archive inspection type", e);

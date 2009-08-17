@@ -385,7 +385,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	
 	protected RemovalHandlerFactory getRemovalHandlerFactory() {
-		if (rhFactory != null) {
+		if (rhFactory == null) {
 			rhFactory = new RemovalHandlerFactory(getLoaderFactory());
 		}
 		return rhFactory;
