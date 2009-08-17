@@ -1,16 +1,21 @@
 package com.n4systems.model.inspection;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
+import com.n4systems.model.Product;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.utils.LargeInClauseSelect;
 import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
@@ -38,8 +43,39 @@ public class InspectionListDeleter {
 		Query query = em.createQuery(archiveQuery);
 		query.setParameter("archived", EntityState.ARCHIVED);
 		query.setParameter("now", new Date());
-		//TODO: move to object that helps do queries with in clauses of more than 1000 elements. 
+ 
 		new LargeUpdateQueryRunner(query, ids).executeUpdate();
+		
+		
+		List<Long> productsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class)
+																							.setSimpleSelect("product.id", true)
+																							.addSimpleWhere("product.state", EntityState.ACTIVE),
+																					  ids,
+																					  em).getResultList();
+		
+		for (Long productId : new HashSet<Long>(productsToUpdateInspectionDate)) {
+			Product product = em.find(Product.class, productId);
+			
+			
+			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, "i");
+			qBuilder.setMaxSelect("date");
+			qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
+			qBuilder.addSimpleWhere("product", product);
+
+
+			Date lastInspectionDate = null;
+			try {
+				lastInspectionDate = qBuilder.getSingleResult(em);
+			} catch (Exception e) {
+				throw new ProcessFailureException("could not archive the inspections", e);
+			}
+
+			product.setLastInspectionDate(lastInspectionDate);
+			
+			em.merge(product);
+		}
+		
+		
 		return ids.size();
 	}
 
@@ -93,8 +129,6 @@ public class InspectionListDeleter {
 	
 	public InspectionListDeleter setInspectionType(InspectionType inspectionType) {
 		this.inspectionType = inspectionType;
-		
-		
 		
 		return this;
 	}

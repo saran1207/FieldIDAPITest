@@ -12,55 +12,66 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 	private final CatalogElementRemovalHandler catalogElementRemovalHandler;
 	private final InspectionListDeleter inspectionDeleter;
 	private final AssociatedInspectionTypeListDeleteHandler associatedInspectionTypesDeleteHandler;
+	private final NotificationSettingDeleteHandler notificationSettingDeleteHandler;
 	
 	private InspectionType inspectionType;
 	private Transaction transaction;
 	private InspectionTypeArchiveSummary summary;
 	
-	public InspectionTypeArchiveHandlerImpl(InspectionTypeSaver inspectionTypeSaver, InspectionListDeleter inspectionListDeleter, AssociatedInspectionTypeListDeleteHandler associatedInspectionTypesDeleteHandler, CatalogElementRemovalHandler catalogElementRemovalHandler) {
+	public InspectionTypeArchiveHandlerImpl(InspectionTypeSaver inspectionTypeSaver, InspectionListDeleter inspectionListDeleter, AssociatedInspectionTypeListDeleteHandler associatedInspectionTypesDeleteHandler, CatalogElementRemovalHandler catalogElementRemovalHandler, NotificationSettingDeleteHandler notificationSettingDeleteHandler) {
 		super();
 		this.inspectionTypeSaver = inspectionTypeSaver;
 		this.inspectionDeleter = inspectionListDeleter;
 		this.associatedInspectionTypesDeleteHandler = associatedInspectionTypesDeleteHandler;
 		this.catalogElementRemovalHandler = catalogElementRemovalHandler;
+		this.notificationSettingDeleteHandler = notificationSettingDeleteHandler;
 	}
 
 
 	public void remove(Transaction transaction) {
 		this.transaction = transaction;
 		
-		breakConnectionsToProductType(inspectionType);
-		archiveInspectionsOfType(inspectionType);
-		removeInspectionTypeFromCatalog(inspectionType);
-		archiveInspectionType(inspectionType);
+		breakConnectionsToProductType();
+		archiveInspectionsOfType();
+		removeInspectionTypeFromCatalog();
+		deleteNotificationSettingsUsing();
+		archiveInspectionType();
+		
+		this.transaction = null;
 	}
 
-	
-	private void breakConnectionsToProductType(InspectionType inspectionType) {
+
+	private void breakConnectionsToProductType() {
 		associatedInspectionTypesDeleteHandler.setInspectionType(inspectionType).remove(transaction);
 	}
 	
 
-	private void archiveInspectionsOfType(InspectionType inspectionType) {
+	private void archiveInspectionsOfType() {
 		inspectionDeleter.setInspectionType(inspectionType).archive(transaction);
 	}
 
+
+	private void removeInspectionTypeFromCatalog() {
+		catalogElementRemovalHandler.setInspectionType(inspectionType).cleanUp(transaction);
+	}
 	
-	private void archiveInspectionType(InspectionType inspectionType) {
+	private void deleteNotificationSettingsUsing() {
+		notificationSettingDeleteHandler.forInspectionType(inspectionType).remove(transaction);
+	}
+	
+	
+	private void archiveInspectionType() {
 		inspectionType.archiveEntity();
 		inspectionTypeSaver.update(transaction, inspectionType);
 	}
 
-
-	private void removeInspectionTypeFromCatalog(InspectionType inspectionType) {
-		catalogElementRemovalHandler.setInspectionType(inspectionType).cleanUp(transaction);
-	}
-
-
 	public InspectionTypeArchiveSummary summary(Transaction transaction) {
 		summary = new InspectionTypeArchiveSummary();
+		
 		summary.setAssociatedInspectionTypeDeleteSummary(associatedInspectionTypesDeleteHandler.setInspectionType(inspectionType).summary(transaction));
 		summary.setInspectionArchiveSummary(inspectionDeleter.setInspectionType(inspectionType).summary(transaction));
+		summary.setNotificationSettingDeleteSummary(notificationSettingDeleteHandler.forInspectionType(inspectionType).summary(transaction));
+		
 		return summary;
 	}
 	

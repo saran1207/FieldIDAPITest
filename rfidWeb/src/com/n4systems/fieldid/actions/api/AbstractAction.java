@@ -30,6 +30,7 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
+import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.TenantOrganization;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
@@ -67,6 +68,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	private NavOptionsController navOptions;
 	
 	private String redirectUrl;
+	private RemovalHandlerFactory rhFactory;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -380,6 +382,13 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 			loaderFactory = new LoaderFactory(getSecurityFilter());
 		}
 		return loaderFactory;
+	}
+	
+	protected RemovalHandlerFactory getRemovalHandlerFactory() {
+		if (rhFactory != null) {
+			rhFactory = new RemovalHandlerFactory(getLoaderFactory());
+		}
+		return rhFactory;
 	}
 	
 	public String getTextArg(String text, Object param) {

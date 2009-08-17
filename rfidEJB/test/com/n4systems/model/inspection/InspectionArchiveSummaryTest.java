@@ -4,12 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
+
 
 public class InspectionArchiveSummaryTest {
 
 	@Test
 	public void should_be_archivable_in_default_state() {
-		assertTrue(new InspectionArchiveSummary().inspectionsCanBeArchived());
+		assertTrue(new InspectionArchiveSummary().canBeRemoved());
 	}
 	
 	@Test
@@ -17,7 +19,7 @@ public class InspectionArchiveSummaryTest {
 		InspectionArchiveSummary sut = new InspectionArchiveSummary();
 		sut.setInspectionsPartOfMaster(0L);
 		sut.setDeleteInspections(10021L);
-		assertTrue(sut.inspectionsCanBeArchived());
+		assertTrue(sut.canBeRemoved());
 	}
 	
 	@Test
@@ -25,7 +27,7 @@ public class InspectionArchiveSummaryTest {
 		InspectionArchiveSummary sut = new InspectionArchiveSummary();
 		sut.setInspectionsPartOfMaster(4L);
 		sut.setDeleteInspections(10021L);
-		assertFalse(sut.inspectionsCanBeArchived());
+		assertFalse(sut.canBeRemoved());
 	}
 	
 }

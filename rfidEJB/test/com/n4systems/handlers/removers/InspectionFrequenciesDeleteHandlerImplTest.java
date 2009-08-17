@@ -1,14 +1,13 @@
 package com.n4systems.handlers.removers;
 import static com.n4systems.model.builders.InspectionTypeBuilder.*;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
-import com.n4systems.handlers.remover.summary.SimpleLongRemovalSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
@@ -55,6 +54,11 @@ public class InspectionFrequenciesDeleteHandlerImplTest {
 		verify(mockListLoader);
 		verify(mockSaver);
 	}
+	
+	
+	
+	
+	
 	
 	
 	

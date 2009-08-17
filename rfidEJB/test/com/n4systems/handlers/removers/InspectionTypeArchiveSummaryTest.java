@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
-import com.n4systems.model.inspection.InspectionArchiveSummary;
 
 
 public class InspectionTypeArchiveSummaryTest {
@@ -20,7 +20,7 @@ public class InspectionTypeArchiveSummaryTest {
 	@Test
 	public void should_not_be_archiveable_if_inspection_archive_summary_is_not() {
 		InspectionArchiveSummary stubSummary = new InspectionArchiveSummary() {
-													public boolean inspectionsCanBeArchived() {
+													public boolean canBeRemoved() {
 														return false;
 													}
 												};

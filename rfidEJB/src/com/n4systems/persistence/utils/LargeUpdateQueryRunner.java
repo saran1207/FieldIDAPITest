@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.apache.commons.collections.CollectionUtils;
-
 public class LargeUpdateQueryRunner {
 	protected static int MAX_IDS_IN_AN_IN_CLAUSE = 1000;
 	

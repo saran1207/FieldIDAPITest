@@ -452,7 +452,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		// Required object lookups
 		inspection.setTenant( tenant );
-		inspection.setType( persistenceManager.find(InspectionType.class, inspectionServiceDTO.getInspectionTypeId()) );
+		inspection.setType( persistenceManager.find(InspectionType.class, inspectionServiceDTO.getInspectionTypeId(), new SecurityFilter(tenant.getId()).prepareFor(InspectionType.class)) );
 		inspection.setProduct( (Product)em.find(Product.class, inspectionServiceDTO.getProductId()) );
 		
 		// Optional object lookups

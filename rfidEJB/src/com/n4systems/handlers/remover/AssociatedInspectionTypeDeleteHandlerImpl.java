@@ -57,7 +57,9 @@ public class AssociatedInspectionTypeDeleteHandlerImpl implements AssociatedInsp
 
 	public AssociatedInspectionTypeDeleteSummary summary(Transaction transaction) {
 		this.transaction = transaction;
-		return null;
+		AssociatedInspectionTypeDeleteSummary summary = new AssociatedInspectionTypeDeleteSummary();
+		summary.setDeleteInspectionFrequencies(inspectionFrequencyHandler.forAssociatedInspectionType(associatedInspectionType).summary(transaction).getElementsToRemove());
+		return summary;
 	}
 
 	public AssociatedInspectionTypeDeleteHandler setAssociatedInspectionType(AssociatedInspectionType associatedInspectionType) {

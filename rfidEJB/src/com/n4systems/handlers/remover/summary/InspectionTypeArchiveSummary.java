@@ -1,19 +1,18 @@
 package com.n4systems.handlers.remover.summary;
 
-import com.n4systems.model.inspection.InspectionArchiveSummary;
 
 public class InspectionTypeArchiveSummary extends RemovalSummary {
 
 	private AssociatedInspectionTypeDeleteSummary associatedInspectionTypeDeleteSummary = new  AssociatedInspectionTypeDeleteSummary();
 	private InspectionArchiveSummary inspectionArchiveSummary = new InspectionArchiveSummary();
-	
+	private NotificationSettingDeleteSummary notificationSettingDeleteSummary = new NotificationSettingDeleteSummary();
 	
 	public InspectionTypeArchiveSummary() {
 	}
 
 	@Override
 	public boolean canBeRemoved() {
-		return (inspectionArchiveSummary.inspectionsCanBeArchived() && associatedInspectionTypeDeleteSummary.canBeRemoved());
+		return (inspectionArchiveSummary.canBeRemoved() && associatedInspectionTypeDeleteSummary.canBeRemoved());
 	}
 	
 	public InspectionArchiveSummary getInspectionArchiveSummary() {
@@ -33,6 +32,14 @@ public class InspectionTypeArchiveSummary extends RemovalSummary {
 		this.associatedInspectionTypeDeleteSummary = associatedInspectionTypeDeleteSummary;
 	}
 
+	
+	public NotificationSettingDeleteSummary getNotificationSettingDeleteSummary() {
+		return notificationSettingDeleteSummary;
+	}
+
+	public void setNotificationSettingDeleteSummary(NotificationSettingDeleteSummary notificationSettingDeleteSummary) {
+		this.notificationSettingDeleteSummary = notificationSettingDeleteSummary;
+	}
 
 	
 	public Long getRemoveFromProductTypes() {
@@ -56,6 +63,9 @@ public class InspectionTypeArchiveSummary extends RemovalSummary {
 		return inspectionArchiveSummary.getInspectionsPartOfMaster();
 	}
 
-
+	
+	public Long getNotificationsToDelete() {
+		return notificationSettingDeleteSummary.getNotificationsToDelete();
+	}
 	
 }

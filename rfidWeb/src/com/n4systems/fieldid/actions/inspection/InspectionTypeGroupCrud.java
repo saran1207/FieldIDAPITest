@@ -173,7 +173,7 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
-			QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter().setTargets("tenant.id"));
+			QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter().prepareFor(InspectionType.class));
 			query.addSimpleWhere("group", inspectionTypeGroup).addOrder("name");
 			inspectionTypes = persistenceManager.findAll(query);
 		}

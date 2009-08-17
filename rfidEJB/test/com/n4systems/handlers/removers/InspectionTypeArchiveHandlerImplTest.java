@@ -12,10 +12,12 @@ import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandler;
 import com.n4systems.handlers.remover.CatalogElementRemovalHandler;
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandlerImpl;
+import com.n4systems.handlers.remover.NotificationSettingDeleteHandler;
 import com.n4systems.handlers.remover.summary.AssociatedInspectionTypeDeleteSummary;
+import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
+import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspection.InspectionArchiveSummary;
 import com.n4systems.model.inspection.InspectionListDeleter;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.persistence.Transaction;
@@ -56,7 +58,12 @@ public class InspectionTypeArchiveHandlerImplTest {
 		CatalogElementRemovalHandler mockCatalogElementRemovalHandler = createMock(CatalogElementRemovalHandler.class);
 		replay(mockCatalogElementRemovalHandler);
 		
-		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(null, mockListDeleter,  mockAssociatedInspectionTypeListDeleteHandler, mockCatalogElementRemovalHandler);
+		NotificationSettingDeleteHandler mockNotificationSettingDeleteHandler = createMock(NotificationSettingDeleteHandler.class);
+		expect(mockNotificationSettingDeleteHandler.forInspectionType(inspectionTypeToDelete)).andReturn(mockNotificationSettingDeleteHandler);
+		expect(mockNotificationSettingDeleteHandler.summary(mockTransaction)).andReturn(new NotificationSettingDeleteSummary());
+		replay(mockNotificationSettingDeleteHandler);
+		
+		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(null, mockListDeleter,  mockAssociatedInspectionTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
 		
 		
 		InspectionTypeArchiveSummary summary = sut.forInspectionType(inspectionTypeToDelete).summary(mockTransaction);
@@ -66,6 +73,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 		verify(mockListDeleter);
 		verify(mockAssociatedInspectionTypeListDeleteHandler);
 		verify(mockCatalogElementRemovalHandler);
+		verify(mockNotificationSettingDeleteHandler);
 	}
 	
 	@Test
@@ -92,7 +100,13 @@ public class InspectionTypeArchiveHandlerImplTest {
 		mockCatalogElementRemovalHandler.cleanUp(mockTransaction);
 		replay(mockCatalogElementRemovalHandler);
 		
-		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(mockInspectionTypeSaver, mockListDeleter, mockAssociatedInspectionTypeListDeleteHandler, mockCatalogElementRemovalHandler);
+		NotificationSettingDeleteHandler mockNotificationSettingDeleteHandler = createMock(NotificationSettingDeleteHandler.class);
+		expect(mockNotificationSettingDeleteHandler.forInspectionType(inspectionTypeToDelete)).andReturn(mockNotificationSettingDeleteHandler);
+		mockNotificationSettingDeleteHandler.remove(mockTransaction);
+		replay(mockNotificationSettingDeleteHandler);
+		
+		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(mockInspectionTypeSaver, mockListDeleter, mockAssociatedInspectionTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
+		
 		
 		sut.forInspectionType(inspectionTypeToDelete).remove(mockTransaction);
 		
@@ -100,7 +114,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 		verify(mockAssociatedInspectionTypeListDeleteHandler);
 		verify(mockListDeleter);
 		verify(mockCatalogElementRemovalHandler);
-		
+		verify(mockNotificationSettingDeleteHandler);
 	}
 
 	
@@ -121,8 +135,12 @@ public class InspectionTypeArchiveHandlerImplTest {
 		CatalogElementRemovalHandler mockCatalogElementRemovalHandler = createMock(CatalogElementRemovalHandler.class);
 		replay(mockCatalogElementRemovalHandler);
 		
+		NotificationSettingDeleteHandler mockNotificationSettingDeleteHandler = createMock(NotificationSettingDeleteHandler.class);
+		expect(mockNotificationSettingDeleteHandler.forInspectionType(inspectionTypeToDelete)).andReturn(mockNotificationSettingDeleteHandler);
+		expect(mockNotificationSettingDeleteHandler.summary(mockTransaction)).andReturn(new NotificationSettingDeleteSummary());
+		replay(mockNotificationSettingDeleteHandler);
 		
-		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(null, mockInspectionListDeleter, mockAssociatedInspectionTypeListDeleteHandler, mockCatalogElementRemovalHandler);
+		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(null, mockInspectionListDeleter, mockAssociatedInspectionTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
 		
 		InspectionTypeArchiveSummary summary = sut.forInspectionType(inspectionTypeToDelete).summary(mockTransaction);
 		
@@ -132,6 +150,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 		verify(mockInspectionListDeleter);
 		verify(mockAssociatedInspectionTypeListDeleteHandler);
 		verify(mockCatalogElementRemovalHandler);
+		verify(mockNotificationSettingDeleteHandler);
 	}
 	
 	@Test
@@ -158,7 +177,12 @@ public class InspectionTypeArchiveHandlerImplTest {
 		mockCatalogElementRemovalHandler.cleanUp(mockTransaction);
 		replay(mockCatalogElementRemovalHandler);
 		
-		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(mockInspectionTypeSaver, mockListDeleter, mockAssociatedInspectionListTypeDeleteHandler, mockCatalogElementRemovalHandler);
+		NotificationSettingDeleteHandler mockNotificationSettingDeleteHandler = createMock(NotificationSettingDeleteHandler.class);
+		expect(mockNotificationSettingDeleteHandler.forInspectionType(inspectionTypeToDelete)).andReturn(mockNotificationSettingDeleteHandler);
+		mockNotificationSettingDeleteHandler.remove(mockTransaction);
+		replay(mockNotificationSettingDeleteHandler);
+		
+		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(mockInspectionTypeSaver, mockListDeleter, mockAssociatedInspectionListTypeDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
 		
 		sut.forInspectionType(inspectionTypeToDelete).remove(mockTransaction);
 		
@@ -166,6 +190,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 		verify(mockListDeleter);
 		verify(mockAssociatedInspectionListTypeDeleteHandler);
 		verify(mockCatalogElementRemovalHandler);
+		verify(mockNotificationSettingDeleteHandler);
 	}
 	
 	@Test
@@ -183,8 +208,12 @@ public class InspectionTypeArchiveHandlerImplTest {
 		expect(mockAssociatedInspectionListTypeDeleteHandler.summary(mockTransaction)).andReturn(new AssociatedInspectionTypeDeleteSummary(1L, 0L, 0L));
 		replay(mockAssociatedInspectionListTypeDeleteHandler);
 		
+		NotificationSettingDeleteHandler mockNotificationSettingDeleteHandler = createMock(NotificationSettingDeleteHandler.class);
+		expect(mockNotificationSettingDeleteHandler.forInspectionType(inspectionTypeToDelete)).andReturn(mockNotificationSettingDeleteHandler);
+		expect(mockNotificationSettingDeleteHandler.summary(mockTransaction)).andReturn(new NotificationSettingDeleteSummary());
+		replay(mockNotificationSettingDeleteHandler);
 		
-		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(null, mockListDeleter, mockAssociatedInspectionListTypeDeleteHandler, null);
+		InspectionTypeArchiveHandler sut = new InspectionTypeArchiveHandlerImpl(null, mockListDeleter, mockAssociatedInspectionListTypeDeleteHandler, null, mockNotificationSettingDeleteHandler);
 		
 		InspectionTypeArchiveSummary summary = sut.forInspectionType(inspectionTypeToDelete).summary(mockTransaction);
 		
@@ -192,6 +221,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 		assertEquals(new Long(5), summary.getInspectionArchiveSummary().getInspectionsPartOfMaster());
 		verify(mockListDeleter);
 		verify(mockAssociatedInspectionListTypeDeleteHandler);
+		verify(mockNotificationSettingDeleteHandler);
 	}
 	
 }

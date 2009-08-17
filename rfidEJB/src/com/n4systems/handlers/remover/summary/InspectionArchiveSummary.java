@@ -1,6 +1,7 @@
-package com.n4systems.model.inspection;
+package com.n4systems.handlers.remover.summary;
 
-public class InspectionArchiveSummary {
+
+public class InspectionArchiveSummary  extends RemovalSummary {
 	private Long deleteInspections;
 	private Long inspectionsPartOfMaster;
 	private Long deleteSchedules;
@@ -18,7 +19,7 @@ public class InspectionArchiveSummary {
 		this.deleteSchedules = deleteSchedules;
 	}
 
-	public boolean inspectionsCanBeArchived() {
+	public boolean canBeRemoved() {
 		return inspectionsPartOfMaster == 0L;
 	}
 	
