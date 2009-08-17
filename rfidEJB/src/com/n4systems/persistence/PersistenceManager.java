@@ -17,21 +17,21 @@ public class PersistenceManager {
 
 	private static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (entityManagerFactory == null) {
-			logger.info("Creating EntityManagerFactory");
+			logger.debug("Creating EntityManagerFactory");
 			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
 		}
 		return entityManagerFactory;
 	}
 
 	private static EntityManager getEntityManager() {
-		logger.info("Creating EntityManager");
+		logger.debug("Creating EntityManager");
 		EntityManager createEntityManager = getEntityManagerFactory().createEntityManager();
 		return createEntityManager;
 	}
 
 	public static void shutdown() {
 		if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
-			logger.info("Destroying EntityManagerFactory");
+			logger.debug("Destroying EntityManagerFactory");
 			entityManagerFactory.close();
 			entityManagerFactory = null;
 		} else {
