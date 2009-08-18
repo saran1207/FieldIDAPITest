@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.apache.solr.util.ArraysUtils;
-
 import com.n4systems.handlers.remover.summary.ScheduleListRemovalSummary;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
@@ -30,6 +28,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 	
 	private Transaction transaction;
 	
+	
 	public void remove(Transaction transaction) {
 		this.transaction = transaction;
 		
@@ -40,16 +39,17 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 			String archiveQuery = "DELETE FROM " + InspectionSchedule.class.getName() +	" WHERE id IN (:ids)";
 			query = this.transaction.getEntityManager().createQuery(archiveQuery);
 		} else {
-			String archiveQuery = "UPDATE " + InspectionSchedule.class.getName() + " SET state = ARCHVIED, modified = :now " +	
+			String archiveQuery = "UPDATE " + InspectionSchedule.class.getName() + " SET state = :archivedState, modified = :now " +	
 					" WHERE id IN (:ids)";
 			query = this.transaction.getEntityManager().createQuery(archiveQuery);
-			query.setParameter("state", EntityState.ARCHIVED);
-			query.setParameter("modified", new Date());
+			query.setParameter("archivedState", EntityState.ARCHIVED);
+			query.setParameter("now", new Date());
 		}
 		
 		new LargeUpdateQueryRunner(query, ids).executeUpdate();
 	}
 
+	
 	private List<Long> scheduleIds() {
 		QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(InspectionSchedule.class);
 		schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("inspectionType", inspectionType);
@@ -63,37 +63,39 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 		return ids;
 	}
 
+	
 	public ScheduleListRemovalSummary summary(Transaction transaction) {
 		this.transaction = transaction;
-		return new ScheduleListRemovalSummary(scheduleIds().size());
+		return new ScheduleListRemovalSummary(new Long(scheduleIds().size()));
 	}
 
+	
 	public ScheduleListDeleteHandler setInspectionType(InspectionType inspectionType) {
 		this.inspectionType = inspectionType;
 		return this;
 	}
 
+	
 	public ScheduleListDeleteHandler setAssociatedInspectionType(AssociatedInspectionType associatedInspectionType) {
 		this.productType = associatedInspectionType.getProductType();
 		this.inspectionType = associatedInspectionType.getInspectionType();
 		return this;
 	}
 
-	
 
 	public ScheduleListDeleteHandler targetCompleted() {
 		target = ScheduleStatusGrouping.COMPLETE;
 		return this;
 	}
 
+	
 	public ScheduleListDeleteHandler targetNonCompleted() {
 		target = ScheduleStatusGrouping.NON_COMPLETE;
 		return this;
 	}
 
+	
 	public void setTransaction(Transaction transaction) {
 		this.transaction = transaction;
 	}
-
-	
 }

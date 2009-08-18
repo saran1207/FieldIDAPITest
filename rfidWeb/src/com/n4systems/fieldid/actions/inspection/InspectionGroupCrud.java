@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.session.LegacyProductType;
-
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -15,7 +13,6 @@ import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 
 public class InspectionGroupCrud extends AbstractCrud {
 
@@ -25,7 +22,6 @@ public class InspectionGroupCrud extends AbstractCrud {
 
 	private InspectionGroup inspectionGroup;
 	private Product product;
-	private ProductType productType;
 
 	private List<Product> products;
 
@@ -34,13 +30,13 @@ public class InspectionGroupCrud extends AbstractCrud {
 	private String search;
 
 	private InspectionManager inspectionManager;
-	private LegacyProductType productTypeManager;
 	private ProductManager productManager;
 
-	public InspectionGroupCrud(InspectionManager inspectionManager, LegacyProductType productTypeManager, ProductManager productManager, PersistenceManager persistenceManager) {
+	private List<InspectionType> inspectionTypes;
+
+	public InspectionGroupCrud(InspectionManager inspectionManager, ProductManager productManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
-		this.productTypeManager = productTypeManager;
 		this.productManager = productManager;
 	}
 
@@ -122,11 +118,13 @@ public class InspectionGroupCrud extends AbstractCrud {
 		return inspectionGroups;
 	}
 
-	public List<InspectionType> getInspectionTypes(Long productTypeId) {
-		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
-		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getProduct().getType()).load();
-		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
-			inspectionTypes.add(associatedInspectionType.getInspectionType());
+	public List<InspectionType> getInspectionTypes() {
+		if (inspectionTypes == null) {
+			inspectionTypes = new ArrayList<InspectionType>();
+			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getProduct().getType()).load();
+			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
+				inspectionTypes.add(associatedInspectionType.getInspectionType());
+			}
 		}
 		return inspectionTypes;
 		

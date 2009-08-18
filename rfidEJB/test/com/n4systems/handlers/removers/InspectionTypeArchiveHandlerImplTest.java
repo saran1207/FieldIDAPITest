@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandler;
 import com.n4systems.handlers.remover.CatalogElementRemovalHandler;
+import com.n4systems.handlers.remover.InspectionListArchiveHandlerImp;
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandlerImpl;
 import com.n4systems.handlers.remover.NotificationSettingDeleteHandler;
@@ -18,7 +19,6 @@ import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspection.InspectionListDeleter;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.persistence.Transaction;
 
@@ -44,7 +44,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 	public void should_be_able_to_archive_inspection_type_not_used_by_anything() {
 		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
 		
-		InspectionListDeleter mockListDeleter = createNiceMock(InspectionListDeleter.class);
+		InspectionListArchiveHandlerImp mockListDeleter = createNiceMock(InspectionListArchiveHandlerImp.class);
 		expect(mockListDeleter.setInspectionType(inspectionTypeToDelete)).andReturn(mockListDeleter);
 		expect(mockListDeleter.summary(mockTransaction)).andReturn(new InspectionArchiveSummary());
 		replay(mockListDeleter);
@@ -85,9 +85,9 @@ public class InspectionTypeArchiveHandlerImplTest {
 		replay(mockInspectionTypeSaver);
 		
 		
-		InspectionListDeleter mockListDeleter = createMock(InspectionListDeleter.class);
+		InspectionListArchiveHandlerImp mockListDeleter = createMock(InspectionListArchiveHandlerImp.class);
 		expect(mockListDeleter.setInspectionType(inspectionTypeToDelete)).andReturn(mockListDeleter);
-		expect(mockListDeleter.archive(mockTransaction)).andReturn(0);
+		mockListDeleter.remove(mockTransaction);
 		replay(mockListDeleter);
 		
 		AssociatedInspectionTypeListDeleteHandler mockAssociatedInspectionTypeListDeleteHandler = createMock(AssociatedInspectionTypeListDeleteHandler.class);
@@ -122,7 +122,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 	public void should_be_able_to_archive_inspection_type_tied_to_1_product_type() {
 		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
 		
-		InspectionListDeleter mockInspectionListDeleter = createMock(InspectionListDeleter.class);
+		InspectionListArchiveHandlerImp mockInspectionListDeleter = createMock(InspectionListArchiveHandlerImp.class);
 		expect(mockInspectionListDeleter.setInspectionType(inspectionTypeToDelete)).andReturn(mockInspectionListDeleter);
 		expect(mockInspectionListDeleter.summary(mockTransaction)).andReturn(new InspectionArchiveSummary());
 		replay(mockInspectionListDeleter);
@@ -162,9 +162,9 @@ public class InspectionTypeArchiveHandlerImplTest {
 		expect(mockInspectionTypeSaver.update(mockTransaction, inspectionTypeToDelete)).andReturn(inspectionTypeToDelete);
 		replay(mockInspectionTypeSaver);
 		
-		InspectionListDeleter mockListDeleter = createMock(InspectionListDeleter.class);
+		InspectionListArchiveHandlerImp mockListDeleter = createMock(InspectionListArchiveHandlerImp.class);
 		expect(mockListDeleter.setInspectionType(inspectionTypeToDelete)).andReturn(mockListDeleter);
-		expect(mockListDeleter.archive(mockTransaction)).andReturn(0);
+		mockListDeleter.remove(mockTransaction);
 		replay(mockListDeleter);
 		
 		AssociatedInspectionTypeListDeleteHandler mockAssociatedInspectionListTypeDeleteHandler = createMock(AssociatedInspectionTypeListDeleteHandler.class);
@@ -198,7 +198,7 @@ public class InspectionTypeArchiveHandlerImplTest {
 		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
 		
 	
-		InspectionListDeleter mockListDeleter = createMock(InspectionListDeleter.class);
+		InspectionListArchiveHandlerImp mockListDeleter = createMock(InspectionListArchiveHandlerImp.class);
 		expect(mockListDeleter.setInspectionType(inspectionTypeToDelete)).andReturn(mockListDeleter);
 		expect(mockListDeleter.summary(mockTransaction)).andReturn(new InspectionArchiveSummary().setInspectionsPartOfMaster(5L));
 		replay(mockListDeleter);

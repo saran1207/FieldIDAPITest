@@ -33,10 +33,13 @@ public class AssociatedInspectionTypeDeleteHandlerImpl implements AssociatedInsp
 			throw new InvalidArgumentException("you must give an associatedInspectionType");
 		}
 		
-		this.transaction = transaction;
+		setTransaction(transaction);
+		
 		deleteNonCompleteSchedules();
 		deleteInspectionFrequencies();
 		deleteAssociatedInspectionType();
+		
+		clearTransaction();
 	}
 
 
@@ -56,9 +59,14 @@ public class AssociatedInspectionTypeDeleteHandlerImpl implements AssociatedInsp
 
 
 	public AssociatedInspectionTypeDeleteSummary summary(Transaction transaction) {
-		this.transaction = transaction;
+		setTransaction(transaction);
+		
 		AssociatedInspectionTypeDeleteSummary summary = new AssociatedInspectionTypeDeleteSummary();
+		
 		summary.setDeleteInspectionFrequencies(inspectionFrequencyHandler.forAssociatedInspectionType(associatedInspectionType).summary(transaction).getElementsToRemove());
+		summary.setDeleteNonCompletedInspection(scheduleListDeleter.targetNonCompleted().setAssociatedInspectionType(associatedInspectionType).summary(transaction).getSchedulesToRemove());
+		
+		clearTransaction();
 		return summary;
 	}
 
@@ -68,5 +76,11 @@ public class AssociatedInspectionTypeDeleteHandlerImpl implements AssociatedInsp
 	}
 	
 	
-
+	private void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
+	}
+	
+	private void clearTransaction() {
+		this.transaction = null;
+	}
 }

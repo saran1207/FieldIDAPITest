@@ -7,6 +7,7 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.InspectionType;
+import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ServiceLocator;
@@ -38,12 +39,31 @@ public class InspectionTypeArchiveTask implements Runnable {
 		try {
 			setUp();
 			executeArchiving();
-			sendEmailResponse();
+			sendSuccessEmailResponse();
 			transaction.commit();
 		} catch (Exception e) {
-			transaction.rollback();
-			//TODO:  send failure!
+			failure(e);
 		}
+	}
+
+
+	private void failure(Exception e) {
+		logger.error("failed to archive inspection type", e);
+		transaction.rollback();
+		
+		PersistenceManager.shutdown();
+		
+		sendFailureEmailResponse();
+		
+		revertInspectionTypeToNonArchivedState();
+	}
+
+
+	private void revertInspectionTypeToNonArchivedState() {
+		transaction = PersistenceManager.startTransaction();
+		inspectionType.activateEntity();
+		new InspectionTypeSaver().update(transaction, inspectionType);
+		transaction.commit();
 	}
 
 
@@ -58,7 +78,20 @@ public class InspectionTypeArchiveTask implements Runnable {
 	}
 
 
-	private void sendEmailResponse() {
+	private void sendFailureEmailResponse() {
+		String subject = "Inspection Type Removal Failed To Complete";
+		String body = "<h2>Inspection Type Removed " + inspectionType.getArchivedName() + "</h2>" +
+				"The inspection type and all other associated elements have been restored.  You may try to delete the inspection type again or contact support@n4systems for more insformations.";
+		
+		logger.info("Sending failure email [" + currentUser.getEmailAddress() + "]");
+		try {
+	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, currentUser.getEmailAddress()));
+        } catch (Exception e) {
+	        logger.error("Unable to send Inspection Type removal email", e);
+        }
+	}
+	
+	private void sendSuccessEmailResponse() {
 		String subject = "Inspection Type Removal Completed";
 		String body = "<h2>Inspection Type Removed " + inspectionType.getArchivedName() + "</h2>";
 		

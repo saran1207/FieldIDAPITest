@@ -224,6 +224,9 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
     }
 
 	public void activateEntity() {
+		if (state == EntityState.ARCHIVED) {
+			name = archivedName;
+		}
 		state = EntityState.ACTIVE;
 		
 	}

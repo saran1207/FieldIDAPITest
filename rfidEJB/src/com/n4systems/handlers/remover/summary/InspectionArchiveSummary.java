@@ -26,6 +26,7 @@ public class InspectionArchiveSummary  extends RemovalSummary {
 	public Long getInspectionsPartOfMaster() {
 		return inspectionsPartOfMaster;
 	}
+	
 	public InspectionArchiveSummary setInspectionsPartOfMaster(Long inspectionsPartOfMaster) {
 		this.inspectionsPartOfMaster = inspectionsPartOfMaster;
 		return this;

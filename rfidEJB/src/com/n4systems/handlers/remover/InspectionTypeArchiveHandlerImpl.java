@@ -2,7 +2,6 @@ package com.n4systems.handlers.remover;
 
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspection.InspectionListDeleter;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.persistence.Transaction;
 
@@ -10,7 +9,7 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 
 	private final InspectionTypeSaver inspectionTypeSaver;
 	private final CatalogElementRemovalHandler catalogElementRemovalHandler;
-	private final InspectionListDeleter inspectionDeleter;
+	private final InspectionTypeListArchiveHandler inspectionDeleter;
 	private final AssociatedInspectionTypeListDeleteHandler associatedInspectionTypesDeleteHandler;
 	private final NotificationSettingDeleteHandler notificationSettingDeleteHandler;
 	
@@ -18,7 +17,7 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 	private Transaction transaction;
 	private InspectionTypeArchiveSummary summary;
 	
-	public InspectionTypeArchiveHandlerImpl(InspectionTypeSaver inspectionTypeSaver, InspectionListDeleter inspectionListDeleter, AssociatedInspectionTypeListDeleteHandler associatedInspectionTypesDeleteHandler, CatalogElementRemovalHandler catalogElementRemovalHandler, NotificationSettingDeleteHandler notificationSettingDeleteHandler) {
+	public InspectionTypeArchiveHandlerImpl(InspectionTypeSaver inspectionTypeSaver, InspectionTypeListArchiveHandler inspectionListDeleter, AssociatedInspectionTypeListDeleteHandler associatedInspectionTypesDeleteHandler, CatalogElementRemovalHandler catalogElementRemovalHandler, NotificationSettingDeleteHandler notificationSettingDeleteHandler) {
 		super();
 		this.inspectionTypeSaver = inspectionTypeSaver;
 		this.inspectionDeleter = inspectionListDeleter;
@@ -47,7 +46,7 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 	
 
 	private void archiveInspectionsOfType() {
-		inspectionDeleter.setInspectionType(inspectionType).archive(transaction);
+		inspectionDeleter.setInspectionType(inspectionType).remove(transaction);
 	}
 
 

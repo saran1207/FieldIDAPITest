@@ -37,6 +37,10 @@ public class AssociatedInspectionTypeDeleteSummary extends RemovalSummary {
 	public void setDeleteInspectionFrequencies(Long deleteInspectionFrequencies) {
 		this.deleteInspectionFrequencies = deleteInspectionFrequencies;
 	}
+	
+	public void addToDeleteInspectionFrequencies(Long deleteInspectionFrequencies) {
+		this.deleteInspectionFrequencies += deleteInspectionFrequencies;
+	}
 
 	public Long getDeleteNonCompletedInspection() {
 		return deleteNonCompletedInspection;
@@ -44,6 +48,10 @@ public class AssociatedInspectionTypeDeleteSummary extends RemovalSummary {
 
 	public void setDeleteNonCompletedInspection(Long deleteNonCompletedInspection) {
 		this.deleteNonCompletedInspection = deleteNonCompletedInspection;
+	}
+	
+	public void addToDeleteNonCompletedInspection(Long deleteNonCompletedInspection) {
+		this.deleteNonCompletedInspection += deleteNonCompletedInspection;
 	}
 
 }

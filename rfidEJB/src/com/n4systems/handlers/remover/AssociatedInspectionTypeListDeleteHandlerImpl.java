@@ -22,17 +22,28 @@ public class AssociatedInspectionTypeListDeleteHandlerImpl  implements Associate
 	}
 	
 	public void remove(Transaction transaction) {
-		List<AssociatedInspectionType> associations = associatedInspectionTypeLoader.setInspectionType(inspectionType).load(transaction);
+		List<AssociatedInspectionType> associations = getAssociatedInspections(transaction);
 		for (AssociatedInspectionType associatedInspectionType : associations) {
 			associatedInspectionTypeDeleteHandler.setAssociatedInspectionType(associatedInspectionType).remove(transaction);
 		}
 	}
 
+	private List<AssociatedInspectionType> getAssociatedInspections(Transaction transaction) {
+		List<AssociatedInspectionType> associations = associatedInspectionTypeLoader.setInspectionType(inspectionType).load(transaction);
+		return associations;
+	}
+
 	public AssociatedInspectionTypeDeleteSummary summary(Transaction transaction) {
 		AssociatedInspectionTypeDeleteSummary summary = new AssociatedInspectionTypeDeleteSummary();
 		summary.setRemoveFromProductTypes(new Long(associatedInspectionTypeLoader.setInspectionType(inspectionType).load(transaction).size()));
-		summary.setDeleteNonCompletedInspection(0L); //FIXME find all schedules that are non completed of type X may iterate on list above and get summaries from the aitdeleter.
-		summary.setDeleteInspectionFrequencies(0L); //FIXME find all inspection frequencies for type X
+		
+		List<AssociatedInspectionType> associations = getAssociatedInspections(transaction);
+		for (AssociatedInspectionType associatedInspectionType : associations) {
+			AssociatedInspectionTypeDeleteSummary singleAITSummary = associatedInspectionTypeDeleteHandler.setAssociatedInspectionType(associatedInspectionType).summary(transaction);
+			summary.addToDeleteInspectionFrequencies(singleAITSummary.getDeleteInspectionFrequencies());
+			summary.addToDeleteNonCompletedInspection(singleAITSummary.getDeleteNonCompletedInspection());
+		}
+		
 		return summary;
 	}
 	

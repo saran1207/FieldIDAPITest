@@ -1,7 +1,6 @@
 package com.n4systems.handlers.remover;
 
 import com.n4systems.model.catalog.CatalogSaver;
-import com.n4systems.model.inspection.InspectionListDeleter;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
@@ -18,7 +17,7 @@ public class RemovalHandlerFactory {
 	
 	public InspectionTypeArchiveHandler getInspectionTypeArchiveHandler() {
 		return new InspectionTypeArchiveHandlerImpl(new InspectionTypeSaver(), 
-													new InspectionListDeleter(), 
+													new InspectionListArchiveHandlerImp(getScheduleDeleter()), 
 													getAssociatedInspectionTypeListDeleter(), 
 													getCatalogElementRemovalHandler(), 
 													new NotificationSettingDeleteHandlerImpl());

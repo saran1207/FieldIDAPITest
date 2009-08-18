@@ -2,13 +2,13 @@ package com.n4systems.handlers.remover.summary;
 
 public class ScheduleListRemovalSummary extends RemovalSummary {
 
-	private int schedulesToRemove;
+	private Long schedulesToRemove;
 	
 	public ScheduleListRemovalSummary() {
-		this(0);
+		this(0L);
 	}
 	
-	public ScheduleListRemovalSummary(int schedulesToRemove) {
+	public ScheduleListRemovalSummary(Long schedulesToRemove) {
 		super();
 		this.schedulesToRemove = schedulesToRemove;
 	}
@@ -18,11 +18,11 @@ public class ScheduleListRemovalSummary extends RemovalSummary {
 		return true;
 	}
 
-	public int getSchedulesToRemove() {
+	public Long getSchedulesToRemove() {
 		return schedulesToRemove;
 	}
 
-	public void setSchedulesToRemove(int schedulesToRemove) {
+	public void setSchedulesToRemove(Long schedulesToRemove) {
 		this.schedulesToRemove = schedulesToRemove;
 	}
 

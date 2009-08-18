@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.inspection;
+ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
