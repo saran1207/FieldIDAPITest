@@ -4,11 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
-@Table(name = "contractpricing")
-public class ContractPricing extends AbstractEntity {
+@Table(name = "contractpricings")
+public class ContractPricing extends AbstractEntity implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	private String netsuiteRecordId;

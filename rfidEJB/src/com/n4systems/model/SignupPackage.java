@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,7 +23,7 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.tenant.TenantLimit;
 
 @Entity
-@Table(name = "signuppackage")
+@Table(name = "signuppackages")
 public class SignupPackage extends AbstractEntity implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
@@ -33,11 +35,9 @@ public class SignupPackage extends AbstractEntity implements Saveable {
 	
 	@CollectionOfElements(fetch= FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
+	@JoinTable(joinColumns = @JoinColumn(name="signuppackage_id"))
 	private Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>();
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "signupPackage", cascade=CascadeType.ALL)
-	private List<ContractPricing> contractPricing = new ArrayList<ContractPricing>();
-	
 	public TenantLimit getLimits() {
 		return limits;
 	}
@@ -52,14 +52,6 @@ public class SignupPackage extends AbstractEntity implements Saveable {
 
 	public void setExtendedFeatures(Set<ExtendedFeature> extendedFeatures) {
 		this.extendedFeatures = extendedFeatures;
-	}
-
-	public List<ContractPricing> getContractPricing() {
-		return contractPricing;
-	}
-
-	public void setContractPricing(List<ContractPricing> contractPricing) {
-		this.contractPricing = contractPricing;
 	}
 
 	public String getName() {
