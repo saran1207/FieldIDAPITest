@@ -1,5 +1,5 @@
 <head>
-	<@n4.includeStyle href="pageStyles/eventTypeGroup"/>
+	<@n4.includeStyle type="page" href="eventTypeGroup"/>
 </head>
 <#include "/templates/html/common/_formErrors.ftl" />
 

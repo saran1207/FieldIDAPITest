@@ -43,6 +43,7 @@
         <pattern>*resetPassword*.action</pattern>
         <pattern>*login.action*</pattern>
         <pattern>*logIntoSystem.action*</pattern>
+        <pattern>*public/*.action*</pattern>
     </decorator>
     
     

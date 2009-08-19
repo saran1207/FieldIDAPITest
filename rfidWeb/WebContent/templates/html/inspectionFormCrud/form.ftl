@@ -1,7 +1,7 @@
 
 ${action.setPageType('inspection_type', 'inspection_form')!}
 <head>
-	<@n4.includeStyle href="pageStyles/inspectionForm" />
+	<@n4.includeStyle type="page" href="inspectionForm" />
 	<script type="text/javascript" src="<@s.url value="/javascript/inspectionForm.js" />" ></script>
 
 	<script type="text/javascript" >

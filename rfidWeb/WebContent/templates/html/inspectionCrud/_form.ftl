@@ -33,7 +33,7 @@
 			
 		</script>
 		
-		<@n4.includeStyle href="pageStyles/inspection" />
+		<@n4.includeStyle type="page" href="inspection" />
 		
 		
 		<#include "/templates/html/common/_calendar.ftl"/>

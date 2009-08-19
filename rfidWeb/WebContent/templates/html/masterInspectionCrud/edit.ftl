@@ -2,9 +2,9 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/subProduct.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/masterInspection.js"/>"></script>
-	<@n4.includeStyle href="pageStyles/subProduct" />
-	<@n4.includeStyle href="pageStyles/inspection" />
-	<@n4.includeStyle href="pageStyles/masterInspection" />
+	<@n4.includeStyle type="page" href="subProduct" />
+	<@n4.includeStyle type="page" href="inspection" />
+	<@n4.includeStyle type="page" href="masterInspection" />
 </head>
 
 

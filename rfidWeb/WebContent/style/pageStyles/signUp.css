@@ -1,0 +1,38 @@
+#packages {
+	width:100%;
+	border-collapse:separated;
+	text-align: center;	
+}
+
+#packages th {
+	font-size: 1.2em;
+}
+
+#packages #priceRow {
+	font-weight: bold;
+}
+
+#packages td, #packages th {
+	padding:5px;
+	text-align: center;
+}
+#packages .description {
+	text-align: right;
+}
+
+#packages .preferred {
+	border: 2px solid black;
+	font-size:1.5em;
+	font-weight: bold;
+}		
+#packages thead .preferred {
+	border-bottom: none;
+}
+
+#packages tbody .preferred {
+	border-top:none;
+	border-bottom:none;
+}
+#packages tfoot .preferred {
+	border-top:none;
+}

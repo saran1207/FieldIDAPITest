@@ -65,11 +65,13 @@
 
 		<global-results>
 			<result name="login" type="redirectAction">login</result>
-			<result name="tenant_missing" type="redirectAction">chooseCompany</result>
+			<result name="tenant_missing" type="redirectAction">
+				<param name="actionName">chooseCompany</param>
+            	<param name="namespace">/</param>
+			</result>
 			<result name="no_permission" type="freemarker">/templates/html/common/featureRequired.ftl</result>
 			<result name="redirect_to_url" type="redirect">
 				<param name="location">${redirectUrl}</param>
-				
 			</result>
 		</global-results>
 
@@ -84,8 +86,9 @@
 		</action>
 	</package>
 
+	<include file="publicWebPackageStruts.xml"/>
 	<include file="webPackageStruts.xml"/>
-
+	
 	<include file="ajaxPackageStruts.xml"/>
 	<include file="aHtmlPackageStruts.xml"/>
 	

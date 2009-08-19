@@ -1,5 +1,5 @@
 <head>
-	<@n4.includeStyle href="pageStyles/inspection" />
+	<@n4.includeStyle type="page" href="inspection" />
 	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>" ></script>
 </head>
 

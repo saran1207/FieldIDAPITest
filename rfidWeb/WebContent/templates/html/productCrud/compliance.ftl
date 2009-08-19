@@ -1,5 +1,5 @@
 <head>
-	<@n4.includeStyle href="pageStyles/product"/>
+	<@n4.includeStyle type="page" href="product"/>
 </head>
 	
 ${action.setPageType('product', 'compliancecheck')!}

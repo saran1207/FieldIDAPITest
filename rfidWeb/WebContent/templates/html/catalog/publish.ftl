@@ -1,5 +1,5 @@
 <head>
-	<@n4.includeStyle href="pageStyles/publishedCatalog"/>
+	<@n4.includeStyle type="page" href="publishedCatalog"/>
 	<@n4.includeStyle href="steps"/>
 	</head>
 

@@ -9,14 +9,26 @@ import org.apache.struts2.views.util.UrlHelper;
 import com.opensymphony.xwork2.util.ValueStack;
 
 public class IncludeStyleComponent extends UIBean {
+	public static final String TEMPLATE = "includeStyle";
+	
+	private enum StyleType {
+		DEFAULT(""), PAGE("pageStyles/"), FEATURE("featureStyles/");
+		
+		private String directory;
+		private StyleType(String directory) {
+			this.directory = directory;
+		}
+	}
+	
 	private static final String DEFAULT_STYLE_SHEET_MEDIA = "all";
 	private static final String STYLE_DIRECTORY = "style";
 	private static final String STYLE_EXTENSION = "css";
-	public static final String TEMPLATE = "includeStyle";
 	
 	
 	private String href;
 	private String media;
+	private StyleType type = StyleType.DEFAULT;
+	
 	
 	protected IncludeStyleComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
@@ -27,6 +39,7 @@ public class IncludeStyleComponent extends UIBean {
         super.evaluateParams();
         buildCssSource();
         setupMediaType();
+        
     }
 
 	private void buildCssSource() {
@@ -42,10 +55,19 @@ public class IncludeStyleComponent extends UIBean {
 			return;
 		}
 		
-		href = "/" + STYLE_DIRECTORY + "/" + href;
+		String directoryOfFile = formatStyleDirectory();
+		
+		href = directoryOfFile + href;
+		
+		
 		if (!href.toLowerCase().endsWith("." + STYLE_EXTENSION)) {
 			href += "." + STYLE_EXTENSION;
 		}
+	}
+
+
+	private String formatStyleDirectory() {
+		return "/" + STYLE_DIRECTORY + "/" + type.directory;
 	}
 	
 	private void setupMediaType() {
@@ -58,7 +80,6 @@ public class IncludeStyleComponent extends UIBean {
 	
 	@Override
 	protected String getDefaultTemplate() {
-		// TODO Auto-generated method stub
 		return TEMPLATE;
 	}
 
@@ -82,6 +103,16 @@ public class IncludeStyleComponent extends UIBean {
 
 	public void setMedia(String media) {
 		this.media = media;
+	}
+
+
+	public String getType() {
+		return type.name();
+	}
+
+
+	public void setType(String type) {
+		this.type = StyleType.valueOf(type.toUpperCase());
 	}
 
 	

@@ -395,8 +395,8 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return getText(text, new String[] {param.toString()});
 	}
 	
-	public String getBaseBrandedUrl() {
-		return baseBrandedUrlFor(getTenant().getName()) + "fieldid/" ;
+	public String getBaseBrandedUrl(String tenantName) {
+		return baseBrandedUrlFor(tenantName) + "fieldid/" ;
 	}
 
 	public String baseBrandedUrlFor(String tenantName) {
@@ -407,11 +407,15 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	
 	public String getLoginUrl() {
-		return getBaseBrandedUrl() + "login.action" ;
+		return getLoginUrlForTenant(getTenant().getName());
+	}
+	
+	public String getLoginUrlForTenant(String tenantName) {
+		return getBaseBrandedUrl(tenantName) + "login.action" ;
 	}
 	
 	public String getEmbeddedLoginUrl() {
-		return getBaseBrandedUrl() + "embedded/login.action";
+		return getBaseBrandedUrl(getTenant().getName()) + "embedded/login.action";
 	}
 	
 	public URI getBaseURI() {

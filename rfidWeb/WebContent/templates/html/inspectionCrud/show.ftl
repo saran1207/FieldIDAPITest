@@ -1,6 +1,6 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js" />" ></script>
-	<@n4.includeStyle href="pageStyles/inspection" />
+	<@n4.includeStyle type="page" href="inspection" />
 </head>
 
 <#assign form_action="SHOW" /> 

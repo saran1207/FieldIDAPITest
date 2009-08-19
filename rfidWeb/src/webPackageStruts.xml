@@ -1847,5 +1847,9 @@
 				<param name="customerId">${customerId}</param>
 			</result>
 		</action>
+		
+		
+		
+		
 	</package>
 </struts>

@@ -1,6 +1,6 @@
 <title><@s.text name="title.home"/></title>
 <head>
-	<@n4.includeStyle href="pageStyles/home" />
+	<@n4.includeStyle type="page" href="home" />
 </head>
 <div id="dashboardShortCuts" class="dashboardBlock">
 	<div id="quickLinks" class="dashboardSection">

@@ -10,8 +10,8 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js"  />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/changeJobSite.js" />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/multiAddProduct.js" />"></script>
-	<@n4.includeStyle href="pageStyles/product"/>
-	<@n4.includeStyle href="pageStyles/multiadd"/>
+	<@n4.includeStyle type="page" href="product"/>
+	<@n4.includeStyle type="page" href="multiadd"/>
 	<script type="text/javascript">
 		var loading_holder = '${loaderDiv?js_string}';
 

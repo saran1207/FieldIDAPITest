@@ -1,5 +1,5 @@
 <head>
-	<@n4.includeStyle href="pageStyles/inspection" />
+	<@n4.includeStyle type="page" href="inspection" />
 </head>
 ${action.setPageType('inspection', 'select_product')!}
 
