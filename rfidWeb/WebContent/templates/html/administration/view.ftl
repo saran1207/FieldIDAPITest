@@ -123,11 +123,7 @@
 			<p>
 				<label><a href="safetyNetworkList.action" class="blue"><@s.text name="title.safety_network.plural" /></a></label>
 				<span>
-					<#if sessionUser.tenant.manufacturer  >
-						View and add Inspection companies to your safety network.
-					<#else>
-						View companies in your safety network.
-					</#if>
+				View and add Inspection companies to your safety network.
 				</span>
 			</p>
 		</div>

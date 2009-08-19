@@ -16,7 +16,7 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Observation;
 import com.n4systems.model.State;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 /**
  * A helper class for the InspectionCrud and SubInspectionCrud.  Consolidates form processing, 
@@ -159,7 +159,7 @@ public class InspectionHelper {
 	 * @param result		A CriteriaResult
 	 * @param modifiedBy	A modifiedBy user to set on the result
 	 */
-	public void processObservations(CriteriaResult result, TenantOrganization tenant, UserBean modifiedBy) {
+	public void processObservations(CriteriaResult result, Tenant tenant, UserBean modifiedBy) {
 		// these lists can have nulls in them
 		ListHelper.clearNulls(result.getDeficiencies());
 		ListHelper.clearNulls(result.getRecommendations());

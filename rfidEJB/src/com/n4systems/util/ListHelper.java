@@ -1,16 +1,17 @@
 package com.n4systems.util;
 
-import com.n4systems.model.api.Listable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.api.Listable;
+
 public class ListHelper {
 
-	public static <T extends Listable<Long>> Map<Long, String> longListableToMap(List<T> list) {
+	public static <T extends Listable<Long>> Map<Long, String> longListableToMap(Collection<T> list) {
 		Map<Long, String> listMap = new LinkedHashMap<Long, String>();
 		
 		for(Listable<Long> listable: list) {

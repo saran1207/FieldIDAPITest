@@ -2,14 +2,14 @@ package com.n4systems.model.utils;
 
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class CleanStateSetFactory {
 
 	private StateSet originalStateSet;
-	private TenantOrganization targetTenant;
+	private Tenant targetTenant;
 	
-	public CleanStateSetFactory(StateSet originalStateSet, TenantOrganization targetTenant) {
+	public CleanStateSetFactory(StateSet originalStateSet, Tenant targetTenant) {
 		super();
 		this.originalStateSet = originalStateSet;
 		this.targetTenant = targetTenant;

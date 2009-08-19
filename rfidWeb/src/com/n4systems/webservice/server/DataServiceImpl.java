@@ -46,9 +46,11 @@ import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.SubProduct;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.services.SetupDataLastModUpdateService;
+import com.n4systems.services.TenantCache;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -681,14 +683,15 @@ public class DataServiceImpl implements DataService {
 		try {
 			User userManager = ServiceLocator.getUser();
 
-			TenantOrganization tenant = ServiceLocator.getPersistenceManager().find(TenantOrganization.class, requestInformation.getTenantId());
-		
+			Tenant tenant = getTenantCache().findTenant(requestInformation.getTenantId());
+			PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(tenant.getId());
+			
 			// if the userid is unique, we can assume it does not exist
 			if (userManager.userIdIsUnique(requestInformation.getTenantId(), userId)) {
 				// set the basic information
 				UserBean user = ServiceLocator.getServiceDTOBeanConverter().convert(userDTO);
 				user.setTenant(tenant);
-				user.setOrganization(tenant);
+				user.setOrganization(primaryOrg);
 				
 				// make sure the id is cleared
 				user.setUniqueID(null);
@@ -697,9 +700,8 @@ public class DataServiceImpl implements DataService {
 				// and set them inactive
 				user.assignPassword(UUID.randomUUID().toString());
 				user.setActive(false);
-				
-				//default the email to the admin address
-				user.setEmailAddress(tenant.getAdminEmail());
+				user.setTimeZoneID("United States:New York - New York");
+				user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
 				
 				// since we don't have a first name/last name, we'll have to just use the userId
 				user.setFirstName(user.getUserID());
@@ -713,6 +715,10 @@ public class DataServiceImpl implements DataService {
 		}
 		
 		return response;
+	}
+	
+	protected TenantCache getTenantCache() {
+		return TenantCache.getInstance();
 	}
 
 	private SecurityFilter createFilterFromRequest(RequestInformation requestInformation) {

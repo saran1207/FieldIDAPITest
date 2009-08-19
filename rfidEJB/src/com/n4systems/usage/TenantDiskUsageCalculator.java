@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.Directory;
 
 /**
@@ -25,10 +25,10 @@ public class TenantDiskUsageCalculator {
 		TenantDirType.INSPECTION_ATTACH, TenantDirType.PRODUCT_ATTACH, TenantDirType.PRODUCT_TYPE_ATTACH, TenantDirType.JOB_NOTE
 	};
 	
-	private final TenantOrganization tenant;
+	private final Tenant tenant;
 	private final Map<TenantDirType, Directory> dirs;
 
-	public TenantDiskUsageCalculator(TenantOrganization tenant) {
+	public TenantDiskUsageCalculator(Tenant tenant) {
 		this.tenant = tenant;
 		
 		dirs = new HashMap<TenantDirType, Directory>();
@@ -42,7 +42,7 @@ public class TenantDiskUsageCalculator {
 		dirs.put(TenantDirType.USER,  					new Directory(getAbsoluteUserBaseFile(tenant)));
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 	

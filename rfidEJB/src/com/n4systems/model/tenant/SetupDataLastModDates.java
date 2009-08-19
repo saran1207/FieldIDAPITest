@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.services.SetupDataGroup;
@@ -30,11 +30,11 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 	 * Note the PrimaryKeyJoinColumn annotation on the tenant field.
 	 */
 	@Id
-	private Long r_tenant;
+	private Long tenant_id;
 
-	@PrimaryKeyJoinColumn(name="r_tenant")
+	@PrimaryKeyJoinColumn(name="tenant_id")
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
-	private TenantOrganization tenant;
+	private Tenant tenant;
 
 	@Column(name="producttypes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -104,23 +104,23 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 		return null;
 	}
 	
-	protected Long getR_tenant() {
-		return r_tenant;
+	protected Long getTenant_id() {
+		return tenant_id;
 	}
 
-	protected void setR_tenant(Long r_tenant) {
-		this.r_tenant = r_tenant;
+	protected void setTenant_id(Long r_tenant) {
+		this.tenant_id = r_tenant;
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 
-	public void setTenant(TenantOrganization tenant) {
+	public void setTenant(Tenant tenant) {
 		// need to set both here ... I thought Hibernate would manage setting the r_tenant
 		// from the tenant given the PrimaryKeyJoinColumn annotation but it doesn't ...
 		this.tenant = tenant;
-		this.r_tenant = tenant.getId();
+		this.tenant_id = tenant.getId();
 	}
 
 	public Date getProductTypes() {

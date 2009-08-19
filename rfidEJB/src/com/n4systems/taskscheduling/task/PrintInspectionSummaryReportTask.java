@@ -1,7 +1,7 @@
 package com.n4systems.taskscheduling.task;
 
 import com.n4systems.exceptions.EmptyReportException;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.FileHelper;
 import com.n4systems.util.ServiceLocator;
@@ -28,7 +28,7 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 	private String dateFormat;
 	private String downloadLocation;
 	private Long userId;
-	private TenantOrganization tenant; 
+	private Tenant tenant; 
 	
 	public PrintInspectionSummaryReportTask() {}
 	
@@ -128,11 +128,11 @@ public class PrintInspectionSummaryReportTask implements Runnable {
     	this.userId = userId;
     }
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
     	return tenant;
     }
 
-	public void setTenant(TenantOrganization tenant) {
+	public void setTenant(Tenant tenant) {
     	this.tenant = tenant;
     }
 

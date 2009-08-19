@@ -5,7 +5,7 @@ import java.util.Set;
 import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeGroupHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeImportHandler;
@@ -30,7 +30,7 @@ public class ImportCatalogService {
 	private CatalogImportSummary summary = new CatalogImportSummary();
 	
 	
-	public ImportCatalogService(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, LegacyProductType legacyProductTypeManager) {
+	public ImportCatalogService(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType legacyProductTypeManager) {
 		super();
 		importProductType = new CatalogProductTypeImportHandler(persistenceManager, tenant, importCatalog, legacyProductTypeManager, summary.getProductTypeImportSummary());
 		importInspectionType = new CatalogInspectionTypeImportHandler(persistenceManager, tenant, importCatalog, summary.getInspectionTypeImportSummary());

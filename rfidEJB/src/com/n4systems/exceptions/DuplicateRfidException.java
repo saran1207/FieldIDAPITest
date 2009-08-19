@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class DuplicateRfidException extends Exception {
+public class DuplicateRfidException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private String userId;
 	private String rfidNumber;

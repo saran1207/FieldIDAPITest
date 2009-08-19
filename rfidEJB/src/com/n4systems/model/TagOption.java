@@ -8,11 +8,12 @@ import javax.persistence.Table;
 
 import com.n4systems.model.Order.OrderType;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "tagoptions")
-public class TagOption extends EntityWithTenant implements Listable<Long> {
+public class TagOption extends EntityWithTenant implements Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 
 	public enum OptionKey implements Listable<String> {
@@ -51,7 +52,7 @@ public class TagOption extends EntityWithTenant implements Listable<Long> {
 		}
 	}
 	
-	@Column(nullable=false)
+	@Column(name="optionkey", nullable=false)
 	@Enumerated(EnumType.STRING)
 	private OptionKey key;
 	

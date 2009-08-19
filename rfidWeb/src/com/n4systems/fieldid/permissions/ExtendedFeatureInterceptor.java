@@ -8,8 +8,6 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 	private static final long serialVersionUID = 1L;
-
-	
 	
 	@Override
 	public String intercept(ActionInvocation call) throws Exception {
@@ -20,7 +18,7 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 		
 		if (action.getTenant() != null) {
 			ExtendedFeature requiredFeature = findRequiredExtendedFeature(action, methodName, actionClass);
-			if (requiredFeature != null && !action.getTenant().hasExtendedFeature(requiredFeature)) {
+			if (requiredFeature != null && !action.getSecurityGuard().isExtendedFeatureEnabled(requiredFeature)) {
 				action.addActionErrorText("permission.require_extended_feature");
 				wrapper.getRequest().setAttribute("requiredFeature", requiredFeature);
 						
@@ -29,7 +27,6 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 		}
 		return call.invoke();
 	}
-
 
 	private ExtendedFeature findRequiredExtendedFeature(AbstractAction action, String methodName, Class<?> actionClass) throws NoSuchMethodException {
 		ExtendedFeature requiredFeature = null;
@@ -43,7 +40,6 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 		}
 		return requiredFeature;
 	}
-	
 
 	private String getMethodName(ActionInvocation call) {
 		String methodName = call.getProxy().getMethod();

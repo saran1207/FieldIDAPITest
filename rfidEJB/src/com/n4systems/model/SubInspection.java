@@ -26,7 +26,7 @@ public class SubInspection extends AbstractInspection {
 
 	public SubInspection() {}
 
-	public SubInspection(TenantOrganization tenant) {
+	public SubInspection(Tenant tenant) {
 		super(tenant);
 	}
 

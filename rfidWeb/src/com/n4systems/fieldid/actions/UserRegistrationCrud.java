@@ -15,11 +15,13 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.timezone.Country;
@@ -38,7 +40,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(UserRegistrationCrud.class);
 	
-	private TenantOrganization tenant;
+	private Tenant tenant;
 	private UserBean userAccount;
 
 	private UserRequest userRequest;
@@ -76,7 +78,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 		userAccount.setActive(false);
 		userAccount.setTenant(getTenant());
-		userAccount.setOrganization(getTenant());
+		userAccount.setOrganization(getPrimaryOrg());
 		userAccount.assignPassword(password);
 		userRequest.setTenant(getTenant());
 		userRequest.setUserAccount(userAccount);
@@ -93,10 +95,13 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 		MailMessage message = new MailMessage();
 		message.setSubject("Customer Account Request");
-		message.setBody("A user has requested a customer account. To view the request <a href=\"" + createActionURI("userRequestList.action").toString() + "?companyID=" + getTenant().getName()
-				+ "\">click here</a>.");
-		message.getToAddresses().add(userRequest.getTenant().getAdminEmail());
-
+		message.setBody(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList.action").toString(), getTenant().getName()));
+		
+		AdminUserListLoader userLoader = new AdminUserListLoader(new SecurityFilter(getTenant().getId()));
+		for (UserBean user: userLoader.load()) {
+			message.getToAddresses().add(user.getEmailAddress());
+		}
+		
 		try {
 			ServiceLocator.getMailManager().sendMessage(message);
 			logger.warn(getLogLinePrefix() + " request notification message admin of " + userRequest.getTenant().getName() + " for user " + userRequest.getUserAccount().getUserID());

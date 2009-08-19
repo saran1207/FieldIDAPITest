@@ -81,7 +81,7 @@ public class MultiAddProductSerialNumberGenAction extends AbstractAction {
 	}
 	
 	private String getNextAutoSerial() {
-		return serialNumberCounter.generateSerialNumber(getTenantId());
+		return serialNumberCounter.generateSerialNumber(getPrimaryOrg());
 	}
 
 	public Integer getQuantity() {

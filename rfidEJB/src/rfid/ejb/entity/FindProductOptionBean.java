@@ -1,5 +1,6 @@
 package rfid.ejb.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -10,6 +11,7 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 public class FindProductOptionBean extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 	
+	@Column(name="optionkey")
 	private String key;
 	private String value;
 	private String description;

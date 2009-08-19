@@ -24,6 +24,7 @@ import org.hibernate.annotations.IndexColumn;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.EntityStateField;
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.util.DateHelper;
@@ -55,7 +56,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	private InspectionBook book;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private Organization organization;
+	private BaseOrg organization;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Customer customer;
@@ -90,7 +91,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		filter.setTargets(TENANT_ID_FIELD, "customer.id", "division.id", null, "state");
 	}
 	
-	public Inspection(TenantOrganization tenant) {
+	public Inspection(Tenant tenant) {
 		super(tenant);
 	}
 
@@ -145,11 +146,11 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.book = book;
 	}
 
-	public Organization getOrganization() {
+	public BaseOrg getOrganization() {
 		return organization;
 	}
 
-	public void setOrganization(Organization organization) {
+	public void setOrganization(BaseOrg organization) {
 		this.organization = organization;
 	}
 	

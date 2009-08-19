@@ -31,6 +31,7 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.EntityStateField;
 import com.n4systems.model.security.FilteredEntity;
@@ -63,7 +64,7 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 	private String mobileGUID;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Organization organization;
+	private BaseOrg organization;
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -233,11 +234,11 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 		setType( productType );
 	}
 	
-	public Organization getOrganization() {
+	public BaseOrg getOrganization() {
 		return organization;
 	}
 
-	public void setOrganization(Organization organization) {
+	public void setOrganization(BaseOrg organization) {
 		this.organization = organization;
 	}
 	

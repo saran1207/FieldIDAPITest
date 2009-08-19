@@ -14,6 +14,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.persistence.SimplePager;
+import com.n4systems.tools.Pager;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -566,6 +568,17 @@ public class QueryBuilder<E> {
 		}
 
 		return (List<E>)query.getResultList();
+	}
+	
+	public Pager<E> getPaginatedResults(EntityManager em, int page, int pageSize) {
+		int firstResult = page * pageSize;
+		
+		long totalResults = getCount(em);
+		List<E> results = getResultList(em, firstResult, pageSize);
+		
+		Pager<E> pager = new SimplePager<E>(page, pageSize, totalResults, results);
+		
+		return pager;
 	}
 	
 	public Long getCount(EntityManager em) throws InvalidQueryException {

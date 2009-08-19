@@ -1,23 +1,21 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.persistence.Query;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 
 public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
-
 	
-	
-	public PartnerCenterSwitch(TenantOrganization tenant, PersistenceManager persistenceManager) {
-		super(tenant, persistenceManager, ExtendedFeature.PartnerCenter);
+	public PartnerCenterSwitch(PrimaryOrg primaryOrg) {
+		super(primaryOrg, ExtendedFeature.PartnerCenter);
 	}
-
 
 	@Override
 	protected void featureSetup() {
@@ -28,13 +26,18 @@ public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 		deleteAllCustomerUsers();
 	}
 	
-	
 	private void deleteAllCustomerUsers() {
-		String deleteCustomerUserSql = "UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE r_EndUser IS NOT NULL";
-		Map<String,Object> updateValues = new HashMap<String, Object>();
-		updateValues.put("now", new Date());
-		
-		persistenceManager.executeUpdate(deleteCustomerUserSql, updateValues);
+		Transaction transaction = null;
+		try {
+			transaction = PersistenceManager.startTransaction();
+			
+			Query query = transaction.getEntityManager().createQuery("UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE r_EndUser IS NOT NULL");
+			query.setParameter("now", new Date());
+			query.executeUpdate();
+			
+		} finally {
+			PersistenceManager.finishTransaction(transaction);
+		}
 	}
 
 }

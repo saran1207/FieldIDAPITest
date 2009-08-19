@@ -15,7 +15,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.services.safetyNetwork.exception.NotPublishedException;
 import com.n4systems.tools.Pager;
@@ -30,10 +30,10 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class CatalogServiceImpl implements CatalogService {
 
 	private final PersistenceManager persistenceManager;
-	private final TenantOrganization tenant;
+	private final Tenant tenant;
 	private final SecurityFilter filter;
 
-	public CatalogServiceImpl(PersistenceManager persistenceManager, TenantOrganization tenant) {
+	public CatalogServiceImpl(PersistenceManager persistenceManager, Tenant tenant) {
 		super();
 		this.persistenceManager = persistenceManager;
 		this.tenant = tenant;
@@ -129,7 +129,7 @@ public class CatalogServiceImpl implements CatalogService {
 		return catalog;
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 

@@ -1,11 +1,5 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,9 +7,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.util.SecurityFilter;
+
 @Entity
 @Table( name="jobsites" )
-public class JobSite extends EntityWithTenant implements NamedEntity, Listable<Long>, FilteredEntity {
+public class JobSite extends EntityWithTenant implements NamedEntity, Listable<Long>, FilteredEntity, Saveable {
 
 	private static final long serialVersionUID = 1L;
 

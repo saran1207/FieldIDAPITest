@@ -1,15 +1,16 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.JobSite;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.jobsites.JobSiteSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class JobSiteSwitch extends ExtendedFeatureSwitch {
 
-	protected JobSiteSwitch(TenantOrganization tenant, PersistenceManager persistenceManager) {
-		super(tenant, persistenceManager, ExtendedFeature.JobSites);
+	protected JobSiteSwitch(PrimaryOrg primaryOrg) {
+		super(primaryOrg, ExtendedFeature.JobSites);
 	}
 
 	@Override
@@ -21,21 +22,23 @@ public class JobSiteSwitch extends ExtendedFeatureSwitch {
 
 	private boolean anyJobSitesDefined() {
 		QueryBuilder<JobSite> queryBuilder = new QueryBuilder<JobSite>(JobSite.class);
-		queryBuilder.addSimpleWhere("tenant.id", tenant.getId());
+		queryBuilder.addSimpleWhere("tenant.id", primaryOrg.getTenant().getId());
 	
-		return (0L < persistenceManager.findCount(queryBuilder));
+		return PersistenceManager.entityExists(queryBuilder);
 	}
 		
 	private void createDefaultJobSite() {
 		JobSite defaultJobSite = buildDefaultJobSite();
-		persistenceManager.save(defaultJobSite);
+		
+		JobSiteSaver saver = new JobSiteSaver();
+		saver.save(defaultJobSite);
 	}
 
 	private JobSite buildDefaultJobSite() {
 		JobSite defaultJobSite = new JobSite();
 		
 		defaultJobSite.setName("General Store");
-		defaultJobSite.setTenant(tenant);
+		defaultJobSite.setTenant(primaryOrg.getTenant());
 		
 		return defaultJobSite;
 	}
@@ -43,7 +46,6 @@ public class JobSiteSwitch extends ExtendedFeatureSwitch {
 	@Override
 	protected void featureTearDown() {
 		// TODO:  remove all job sites from system.
-		
 	}
 
 }

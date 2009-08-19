@@ -20,9 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -52,7 +49,6 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.Observation;
-import com.n4systems.model.Organization;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
@@ -64,11 +60,14 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
@@ -321,7 +320,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	public Product convert( ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId ) {
 		
-		TenantOrganization tenantOrganization = em.find(TenantOrganization.class, tenantId); 
+		Tenant tenantOrganization = TenantCache.getInstance().findTenant(tenantId); 
+		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenantOrganization.getId());
 		
 		targetProduct.setComments(productServiceDTO.getComments());
 		targetProduct.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());		
@@ -332,7 +332,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		targetProduct.setTenant( tenantOrganization );
 		
 		if (productServiceDTO.getSerialNumber().equals(GENERATE_SERIAL_NUMBER)) {
-			targetProduct.setSerialNumber(serialNumberCounter.generateSerialNumber(tenantId));
+			targetProduct.setSerialNumber(serialNumberCounter.generateSerialNumber(primaryOrg));
 		} else {
 			targetProduct.setSerialNumber(productServiceDTO.getSerialNumber());
 		}
@@ -362,7 +362,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetProduct.setIdentifiedBy( user );			
 			targetProduct.setOrganization(user.getOrganization());
 		} else {
-			targetProduct.setOrganization( tenantOrganization );
+			targetProduct.setOrganization(primaryOrg);
 		}
 	
 		if ( productServiceDTO.getInfoOptions() != null ) {			
@@ -431,22 +431,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		return infoOptionServiceDTO;		
 	}
-	
-	private static String getCharacterDataFromElement(Element e) {
-		Node child = e.getFirstChild();
-		if (child instanceof CharacterData) {
-			CharacterData cd = (CharacterData) child;
-			return cd.getData();
-		}
-		return "";
-	}	
 
 	/**
 	 * Populates an abstract inspection with the fields from an abstract inspection service dto
 	 * @param inspection
 	 * @param inspectionDTO
 	 */
-	private void populate( AbstractInspection inspection, AbstractInspectionServiceDTO inspectionServiceDTO, TenantOrganization tenant ) {
+	private void populate( AbstractInspection inspection, AbstractInspectionServiceDTO inspectionServiceDTO, Tenant tenant ) {
 
 		inspection.setComments( inspectionServiceDTO.getComments() );
 
@@ -471,7 +462,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException {
 		
-		TenantOrganization tenant = persistenceManager.find(TenantOrganization.class, tenantId);
+		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
 		Inspection inspection = new Inspection();
 		
@@ -492,7 +483,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		UserBean inspector = (UserBean)em.find(UserBean.class, inspectionServiceDTO.getInspectorId());
 		inspection.setModifiedBy( inspector );		
 		inspection.setInspector( inspector );
-		inspection.setOrganization( persistenceManager.find(Organization.class, inspectionServiceDTO.getOrganizationId()) );
+		inspection.setOrganization( persistenceManager.find(BaseOrg.class, inspectionServiceDTO.getOrganizationId()) );
 
 		// Optional object lookups
 		
@@ -553,7 +544,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return inspection;
 	}
 	
-	private List<FileAttachment> convertToFileAttachments(List<ImageServiceDTO> images, TenantOrganization tenant, UserBean modifiedBy) throws IOException {
+	private List<FileAttachment> convertToFileAttachments(List<ImageServiceDTO> images, Tenant tenant, UserBean modifiedBy) throws IOException {
 
 		List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>(); 
 		
@@ -585,7 +576,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return fileAttachments;
 	}
 	
-	private SubInspection convert(SubInspectionServiceDTO subInspectionServiceDTO, TenantOrganization tenant, UserBean inspector) throws IOException {		
+	private SubInspection convert(SubInspectionServiceDTO subInspectionServiceDTO, Tenant tenant, UserBean inspector) throws IOException {		
 		SubInspection subInspection = new SubInspection();
 		populate(subInspection, subInspectionServiceDTO, tenant);
 		subInspection.setName(subInspectionServiceDTO.getName());
@@ -594,7 +585,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return subInspection;
 	}
 	
-	private Set<CriteriaResult> convert(List<CriteriaResultServiceDTO> resultDTOs, TenantOrganization tenant, AbstractInspection inspection) {
+	private Set<CriteriaResult> convert(List<CriteriaResultServiceDTO> resultDTOs, Tenant tenant, AbstractInspection inspection) {
 		
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 		
@@ -623,7 +614,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return results;
 	}
 	
-	private Recommendation convertRecommendation(ObservationResultServiceDTO recommendationDTO, TenantOrganization tenant) {
+	private Recommendation convertRecommendation(ObservationResultServiceDTO recommendationDTO, Tenant tenant) {
 		Recommendation recommendation = new Recommendation();
 		recommendation.setText(recommendationDTO.getText());
 		recommendation.setTenant(tenant);
@@ -631,7 +622,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return recommendation;
 	}
 	
-	private Deficiency convertDeficiency(ObservationResultServiceDTO deficiencyDTO, TenantOrganization tenant) {
+	private Deficiency convertDeficiency(ObservationResultServiceDTO deficiencyDTO, Tenant tenant) {
 		Deficiency deficiency = new Deficiency();
 		deficiency.setTenant(tenant);
 		deficiency.setText(deficiencyDTO.getText());
@@ -1029,12 +1020,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return groupServiceDTO;
 	}
 	
-	public TenantServiceDTO convert(TenantOrganization tenant) {
+	public TenantServiceDTO convert(PrimaryOrg tenant) {
 		
 		TenantServiceDTO tenantService = new TenantServiceDTO();
-		tenantService.setId(tenant.getId());
-		tenantService.setName(tenant.getName());
-		tenantService.setDisplayName(tenant.getDisplayName());
+		tenantService.setId(tenant.getTenant().getId());
+		tenantService.setName(tenant.getTenant().getName());
+		tenantService.setDisplayName(tenant.getName());
 		tenantService.setSerialNumberFormat(tenant.getSerialNumberFormat());
 		tenantService.setUsingJobSites(tenant.getExtendedFeatures().contains(ExtendedFeature.JobSites));
 		tenantService.setUsingJobs(tenant.getExtendedFeatures().contains(ExtendedFeature.Projects));
@@ -1059,9 +1050,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		theDTO.setR_EndUser(user.getR_EndUser());
 		theDTO.setHashSecurityCardNumber(user.getHashSecurityCardNumber());
 		
-		theDTO.setSerialNumberFormat(user.getTenant().getSerialNumberFormat());
+		theDTO.setSerialNumberFormat(user.getOrganization().getPrimaryOrg().getSerialNumberFormat());
 		
-		theDTO.setUsingJobSites( user.getTenant().getExtendedFeatures().contains(ExtendedFeature.JobSites) );
+		theDTO.setUsingJobSites( user.getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.JobSites) );
 		
 		return theDTO;
 		

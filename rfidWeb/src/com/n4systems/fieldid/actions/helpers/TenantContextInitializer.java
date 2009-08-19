@@ -13,7 +13,7 @@ import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.n4systems.fieldid.permissions.SessionSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.CookieFactory;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.HostNameParser;
@@ -87,7 +87,7 @@ public abstract class TenantContextInitializer {
 	}
 
 	private void setUpSecurityGuard() throws NoValidTenantSelectedException {
-		TenantOrganization tenant = loadTenant();
+		Tenant tenant = loadTenant();
 		try {
 			resetSecurityGuard(tenant);
 		} catch (Exception e) {
@@ -95,8 +95,8 @@ public abstract class TenantContextInitializer {
 		}
 	}
 
-	private TenantOrganization loadTenant() {
-		TenantOrganization tenant = persistenceManager.findByName(TenantOrganization.class, brandedCompanyId);
+	private Tenant loadTenant() {
+		Tenant tenant = persistenceManager.findByName(Tenant.class, brandedCompanyId);
 		return tenant;
 	}
 
@@ -127,7 +127,7 @@ public abstract class TenantContextInitializer {
 		return securityGuard;
 	}
 
-	private void resetSecurityGuard(TenantOrganization tenant) {
+	private void resetSecurityGuard(Tenant tenant) {
 		forgetSecurityGuard();
 		securityGuard = new SessionSecurityGuard(tenant);
 		rememberSecurityGuard(securityGuard);

@@ -14,8 +14,8 @@ import rfid.ejb.entity.ProductStatusBean;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Organization;
 import com.n4systems.model.Product;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.SecurityFilter;
 
 @Local 
@@ -29,7 +29,7 @@ public interface LegacyProductSerial {
 	
 	public Product createWithHistory( Product product, Long userId ) throws SubProductUniquenessException;	
 	
-	public boolean duplicateSerialNumber( String serialNumber, Long uniqueID, Organization tenant );
+	public boolean duplicateSerialNumber( String serialNumber, Long uniqueID, Tenant tenant );
 	
 	public List<Inspection> findAllInspections( Product product, SecurityFilter securityFilter );
 	public Inspection findLastInspections( Product product, SecurityFilter securityFilter );

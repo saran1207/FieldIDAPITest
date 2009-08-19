@@ -17,7 +17,8 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.Organization;
+import com.n4systems.model.BaseEntity;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.AbstractStringIdEntity;
@@ -37,19 +38,19 @@ import com.n4systems.util.persistence.search.SortTerm;
 public interface PersistenceManager {
 	public EntityManager getEntityManager();
 
-	public <T extends AbstractEntity> T find(Class<T> entityClass, Long entityId);
+	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId);
 	
 	public <T extends AbstractStringIdEntity> T find(Class<T> entityClass, String id);
 
-	public <T extends AbstractEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields);
+	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields);
 
-	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Organization tenant, String... postFetchFields);
+	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant, String... postFetchFields);
 
 	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId);
 
 	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter);
 	
-	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Organization tenant);
+	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant);
 
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Long tenantId);
 
@@ -57,27 +58,27 @@ public interface PersistenceManager {
 
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, SecurityFilter filter, String... postFetchFields);
 
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass);
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass);
 	
 	public <T> List<T> findAll(Class<T> entityClass, String jpqlQuery, Map<String, Object> parameters);
 
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass, String orderBy);
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, String orderBy);
 
-	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Organization tenant, String... postFetchFields);
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Tenant tenant, String... postFetchFields);
 
-	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Organization tenant);
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Tenant tenant);
 
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Long tenantId);
 
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Long tenantId, Map<String, Boolean> orderBy);
 
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses);
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses);
 
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses, Map<String, Boolean> orderBy);
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses, Map<String, Boolean> orderBy);
 
 	public <T extends EntityWithTenant> List<T> findAllByDate(Class<T> entityClass, Long tenantId, Date startDate, Date endDate, Long beginningId, Integer limit);
 
-	public <T extends AbstractEntity & NamedEntity> T findByName(Class<T> entityClass, String entityName);
+	public <T extends BaseEntity & NamedEntity> T findByName(Class<T> entityClass, String entityName);
 
 	public <T extends EntityWithTenant & NamedEntity> T findByName(Class<T> entityClass, Long tenantId, String entityName);
 	
@@ -107,13 +108,13 @@ public interface PersistenceManager {
 
 	public <T> void saveAny(T entity);
 	
-	public <T extends AbstractEntity> Long save(T entity);
+	public <T extends BaseEntity> Long save(T entity);
 	
 	public <T extends AbstractStringIdEntity> void save(T entity);
 
 	public <T> T updateAny(T entity);
 	
-	public <T extends AbstractEntity> T update(T entity);
+	public <T extends BaseEntity> T update(T entity);
 
 	public <T extends AbstractStringIdEntity> T update(T entity);
 	
@@ -127,7 +128,7 @@ public interface PersistenceManager {
 	
 	public <T extends AbstractEntity> List<T> updateAll(List<T> entity, Long userId);
 	
-	public <T extends AbstractEntity> void delete(T entity);
+	public <T extends BaseEntity> void delete(T entity);
 	public <T> void deleteAny(T entity);
 	
 	/**
@@ -136,7 +137,7 @@ public interface PersistenceManager {
 	 * @param entity The entity to remove
 	 * @throws If a ConstraintViolationException is thrown in the process of deleting.
 	 */
-	public <T extends AbstractEntity> void deleteSafe(T entity) throws EntityStillReferencedException;
+	public <T extends BaseEntity> void deleteSafe(T entity) throws EntityStillReferencedException;
 
 	public <E extends Collection<T>, T> E postFetchFields(E entities, String... postFetchFields);
 
@@ -173,7 +174,7 @@ public interface PersistenceManager {
 	/**
 	 * Returns a list of entity id's as defined by the {@link BaseSearchDefiner}.  Note that although
 	 * the BaseSearchDefiner does not enforce the search class ({@link BaseSearchDefiner#getSearchClass()}) to be
-	 * a subclass of {@link AbstractEntity}, <code>"id"</code> is still assumed to be the identity field.  This means 
+	 * a subclass of {@link BaseEntity}, <code>"id"</code> is still assumed to be the identity field.  This means 
 	 * that legacy entities will fail handed to this method.
 	 * @param definer	The search definition
 	 * @return			A list of Long entity ids.

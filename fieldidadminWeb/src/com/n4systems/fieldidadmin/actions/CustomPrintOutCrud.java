@@ -5,14 +5,14 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.model.PrintOut;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 	private static final long serialVersionUID = 1L;
 
-	private List<TenantOrganization> tenants;
+	private List<Tenant> tenants;
 		
 	
 	@SkipValidation
@@ -40,9 +40,9 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 
 
 	
-	public List<TenantOrganization> getTenants() {
+	public List<Tenant> getTenants() {
 		if (tenants == null) {
-			QueryBuilder<TenantOrganization> tenantQuery = new QueryBuilder<TenantOrganization>(TenantOrganization.class);
+			QueryBuilder<Tenant> tenantQuery = new QueryBuilder<Tenant>(Tenant.class);
 			tenantQuery.addOrder("name");
 			tenants = persistenceManager.findAll(tenantQuery);
 		}
@@ -58,7 +58,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 		if (tenantId == null) {
 			printOut.setTenant(null);
 		} else if (printOut.getTenant() == null || !tenantId.equals(printOut.getTenant())) {
-			printOut.setTenant(persistenceManager.find(TenantOrganization.class, tenantId));
+			printOut.setTenant(persistenceManager.find(Tenant.class, tenantId));
 		}
 	}
 }

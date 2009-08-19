@@ -16,7 +16,7 @@ import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigEntry;
 
 @Local
@@ -76,7 +76,7 @@ public interface ReportFactory {
 	 * generates the jasper print object of the pdf version of the inspection report screen.
 	 * @throws ReportException	On any problem generating the report.
 	 */
-	public JasperPrint generateInspectionReport(ReportDefiner reportDefiner, UserBean user, TenantOrganization tenant) throws ReportException;
+	public JasperPrint generateInspectionReport(ReportDefiner reportDefiner, UserBean user, Tenant tenant) throws ReportException;
 	
 	/**
 	 * Renders the JasperPrint object to a pdf and writes it to an OutputStream

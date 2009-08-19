@@ -6,14 +6,14 @@ import java.util.List;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class CleanInspectionTypeFactory {
 	
 	private InspectionType originalType;
-	private TenantOrganization targetTenant;
+	private Tenant targetTenant;
 	
-	public CleanInspectionTypeFactory(InspectionType originalType, TenantOrganization targetTenant) {
+	public CleanInspectionTypeFactory(InspectionType originalType, Tenant targetTenant) {
 		super();
 		this.originalType = originalType;
 		this.targetTenant = targetTenant;

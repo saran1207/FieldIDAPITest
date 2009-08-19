@@ -1,17 +1,16 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingByTenantListLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.util.SecurityFilter;
 
 public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
 
-	protected EmailAlertsSwitch(TenantOrganization tenant, PersistenceManager persistenceManager) {
-		super(tenant, persistenceManager, ExtendedFeature.EmailAlerts);
+	protected EmailAlertsSwitch(PrimaryOrg primaryOrg) {
+		super(primaryOrg, ExtendedFeature.EmailAlerts);
 	}
 
 	@Override
@@ -21,8 +20,7 @@ public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
 	@Override
 	protected void featureTearDown() {
 		// removes all current notification settings for this tenant
-		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(new SecurityFilter(tenant.getId()));
-		loader.setTenantId(tenant.getId());
+		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(new SecurityFilter(primaryOrg.getTenant().getId()));
 		
 		NotificationSettingSaver deleter = new NotificationSettingSaver();
 		

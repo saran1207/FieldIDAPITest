@@ -1,16 +1,5 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.api.HasFileAttachments;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -37,10 +26,22 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.HasFileAttachments;
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.util.SecurityFilter;
+
 
 @Entity
 @Table(name = "producttypes")
-public class ProductType extends EntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Archivable, FilteredEntity  {
+public class ProductType extends EntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Archivable, FilteredEntity, Saveable  {
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
 	private static final String descVariableStart = "{";

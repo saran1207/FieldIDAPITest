@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 import com.n4systems.fieldidadmin.utils.DualListView;
 import com.n4systems.importing.ImportManager;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Listable;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -74,7 +74,7 @@ public class AutoAttributeImporterAction extends AbstractAdminAction {
 	}
 	
 	public List<DualListView> loadTenantView() {
-		QueryBuilder<Listable<Long>> tenantBuilder = new QueryBuilder<Listable<Long>>(TenantOrganization.class);
+		QueryBuilder<Listable<Long>> tenantBuilder = new QueryBuilder<Listable<Long>>(Tenant.class);
 		tenantBuilder.setSimpleSelect();
 		tenantBuilder.setOrder("displayName");
 		

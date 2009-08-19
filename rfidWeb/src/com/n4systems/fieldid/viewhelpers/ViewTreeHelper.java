@@ -3,7 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.utils.UserComparator;
 import com.n4systems.util.SecurityFilter;
 
@@ -28,7 +28,7 @@ public class ViewTreeHelper {
 	 * @see #addUserToTree(UserBean, ViewTree, SecurityFilter)
 	 * @return				A constructed ViewTree of User id's
 	 */
-	public ViewTree<Long> getUserViewTree(TenantOrganization tenant, Long customerId, Long divisionId, Long userId, SecurityFilter filter) {
+	public ViewTree<Long> getUserViewTree(Tenant tenant, Long customerId, Long divisionId, Long userId, SecurityFilter filter) {
 		List<UserBean> users = userManager.getOuterUserList(tenant.getId(), customerId, divisionId, userId, filter);
 		
 		// sort the users by customer and division, so the tree nodes are added in order

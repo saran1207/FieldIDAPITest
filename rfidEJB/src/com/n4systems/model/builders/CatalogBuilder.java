@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 
 public class CatalogBuilder extends BaseBuilder<Catalog> {
@@ -15,18 +15,18 @@ public class CatalogBuilder extends BaseBuilder<Catalog> {
 	}
 	
 	private final Set<ProductType> publishedProductTypes;
-	private final TenantOrganization tenant;
+	private final Tenant tenant;
 	
 	public CatalogBuilder() {
 		this(TenantBuilder.aTenant().build(), new HashSet<ProductType>());
 	}
 	
-	public CatalogBuilder(TenantOrganization tenant, Set<ProductType> publishedProductTypes) {
+	public CatalogBuilder(Tenant tenant, Set<ProductType> publishedProductTypes) {
 		this.publishedProductTypes = publishedProductTypes;
 		this.tenant = tenant;
 	}
 	
-	public CatalogBuilder belongingTo(TenantOrganization tenant) {
+	public CatalogBuilder belongingTo(Tenant tenant) {
 		return new CatalogBuilder(tenant, this.publishedProductTypes);
 	}
 	

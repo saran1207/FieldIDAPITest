@@ -12,7 +12,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.opensymphony.xwork2.Preparable;
 
 @SuppressWarnings("serial")
-abstract public class AbstractCrud extends AbstractAction implements   Preparable {
+abstract public class AbstractCrud extends AbstractAction implements Preparable {
 	protected Long uniqueID;
 	private Integer currentPage;
 	
@@ -20,7 +20,6 @@ abstract public class AbstractCrud extends AbstractAction implements   Preparabl
 		super(persistenceManager);
 		getSession();
 	}
-	
 	
 	public Long getUniqueID() {
 		return uniqueID;

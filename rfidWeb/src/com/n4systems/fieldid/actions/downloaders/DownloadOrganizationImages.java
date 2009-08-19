@@ -2,14 +2,6 @@ package com.n4systems.fieldid.actions.downloaders;
 
 
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.Organization;
-import com.n4systems.model.TenantOrganization;
-import com.n4systems.reporting.PathHandler;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,12 +10,19 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.TenantCache;
+
 public class DownloadOrganizationImages extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( DownloadOrganizationImages.class );
 
-	private Organization organization;
-	private TenantOrganization tenant;
+	private BaseOrg organization;
+	private Tenant tenant;
 	
 	private String tenantName;
 	
@@ -31,22 +30,12 @@ public class DownloadOrganizationImages extends DownloadAction {
 		super(persistenceManager);
 	}
 
-
 	@Override
 	public String doDownload() {
 		if( uniqueID != null ) {
-			tenant = persistenceManager.find(TenantOrganization.class, uniqueID);
+			tenant = TenantCache.getInstance().findTenant(uniqueID);
 		} else if( tenantName != null ) {
-			QueryBuilder<TenantOrganization> queryBuilder = new QueryBuilder<TenantOrganization>( TenantOrganization.class );
-			queryBuilder.addWhere(WhereParameter.Comparator.EQ, "name", "name", tenantName, WhereParameter.IGNORE_CASE);
-			queryBuilder.setSimpleSelect();
-			try {
-				tenant = persistenceManager.find( queryBuilder );
-			} catch( InvalidQueryException i ) {
-				logger.error( "failed find tenant" );
-				return ERROR;
-			}
-			
+			tenant = TenantCache.getInstance().findTenant(tenantName);
 		}
 		
 		if(tenant != null) {
@@ -69,7 +58,6 @@ public class DownloadOrganizationImages extends DownloadAction {
 				IOUtils.closeQuietly(input);
 			}
 			
-			
 		} else {
 			logger.error("Tenant was null");
 			return ERROR;
@@ -77,16 +65,12 @@ public class DownloadOrganizationImages extends DownloadAction {
 		
 		return null;
 	}
-
 	
 	public String doDownloadCertLogo() {
 		if( uniqueID != null ) {
-			try {
-				QueryBuilder<Organization> builder = new QueryBuilder<Organization>(Organization.class, getSecurityFilter().setDefaultTargets());
-				organization = persistenceManager.find(builder.addSimpleWhere("id", uniqueID));
-			} catch(InvalidQueryException e) {
-				logger.error("Unable to load Organization", e);
-			}
+			FilteredIdLoader<BaseOrg> loader = getLoaderFactory().createFilteredIdLoader(BaseOrg.class);
+			loader.setId(uniqueID);
+			organization = loader.load();
 			
 			if(organization != null) {
 				File certLogoFile = PathHandler.getCertificateLogo(organization);
@@ -108,7 +92,7 @@ public class DownloadOrganizationImages extends DownloadAction {
 					IOUtils.closeQuietly(input);
 				}
 			} else {
-				logger.error( "failed find organization" );
+				logger.error("Could not find organization");
 				return ERROR;
 			}
 		}

@@ -62,7 +62,7 @@ abstract public class Observation extends EntityWithTenant {
 		this( type, null );
 	}
 
-	public Observation(Type type, TenantOrganization tenant) {
+	public Observation(Type type, Tenant tenant) {
 		super( tenant );
 		this.type = type;
 	}

@@ -37,7 +37,8 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
@@ -100,8 +101,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
-		// let's reload the tenant since the inspector may not be in managed scope
-		TenantOrganization tenant = persistenceManager.reattach(inspector.getTenant());
+		Tenant tenant = inspector.getOrganization().getTenant();
+		PrimaryOrg primaryOrg = inspector.getOrganization().getPrimaryOrg();
 		
 		// sending a null customer will lookup products with no customer (rather then products for any customer)
 		Long customerId = (customer != null) ? customer.getId() : null;
@@ -109,7 +110,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		//if our customer is null, then let's see if we're supposed to resolve a customer by name from the FileDataContainer
 		if(customerId == null && fileData.isResolveCustomer()) {
 			// lets resolve a customer from the file data container.  This will also create a customer if resolution fails and createCustomer is set
-			customer = findOrCreateCustomer(tenant, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
+			customer = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
 			
 			// If the customer is still null then, we were unalbe to find or create a customer.  Let's assume we we're supposed to use no customer
 			if(customer == null) {
@@ -122,10 +123,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// parse our inspection date to a Date object
-		Date inspectionDate = parseInspectionDateInInspectorLocalTime(fileData.getInspectionDate());  
-		
-		
-		
+		Date inspectionDate = parseInspectionDateInInspectorLocalTime(fileData.getInspectionDate());
+
 		Product product;
 		List<Inspection> inspections;
 		Inspection inspection;
@@ -134,7 +133,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			inspection = null;
 			try {
 				// find a product for this tenant, serial and customer
-				product = findOrCreateProduct(tenant, inspector, serialNumber, customer, fileData);
+				product = findOrCreateProduct(primaryOrg, inspector, serialNumber, customer, fileData);
 			} catch (NonUniqueProductException e) {
 				writeLogMessage(tenant, "There are multiple Product with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
@@ -198,21 +197,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return inspectionMap;
 	}
 	
-	private Customer findOrCreateCustomer(TenantOrganization tenant, UserBean user, String customerName, boolean createCustomer) {
-		Customer customer = customerManager.findCustomerFussySearch(customerName, customerName, tenant.getId(), null);
+	private Customer findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) {
+		Customer customer = customerManager.findCustomerFussySearch(customerName, customerName, primaryOrg.getTenant().getId(), null);
 		
 		// if the customer is still null then lets just create one
 		if(customer == null && createCustomer) {
 			customer = new Customer();
-			customer.setTenant(tenant);
-			customer.getContact().setEmail(tenant.getAdminEmail());
+			customer.setTenant(primaryOrg.getTenant());
 			customer.setName(customerName.trim());
 			
-			String customerId = findUniqueCustomerId(FuzzyResolver.mungString(customerName), customerManager.findCustomers(tenant.getId(), null));
+			String customerId = findUniqueCustomerId(FuzzyResolver.mungString(customerName), customerManager.findCustomers(primaryOrg.getTenant().getId(), null));
 			customer.setCustomerId(customerId);
 			
 			customerManager.saveCustomer(customer, user);
-			writeLogMessage(tenant, "Created Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCustomerId() + "]");
+			writeLogMessage(primaryOrg.getTenant(), "Created Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCustomerId() + "]");
 		} else if(customer != null){
 			logger.debug("Found Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCustomerId() + "]");
 		}
@@ -237,7 +235,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return newId;
 	}
 	
-	private Product findOrCreateProduct(TenantOrganization tenant, UserBean user, String serial, Customer customer, FileDataContainer fileData) throws NonUniqueProductException {
+	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, Customer customer, FileDataContainer fileData) throws NonUniqueProductException {
 		Long customerId = (customer != null) ?  customer.getId() : null;
 		
 		// we must have a valid serial number
@@ -246,7 +244,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// find a product for this tenant, serial and customer
-		Product product = productManager.findProductBySerialNumber(serial, tenant.getId(), customerId);
+		Product product = productManager.findProductBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
 		
 		if(product == null) {
 			if(!fileData.isCreateProduct()) {
@@ -254,27 +252,27 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				return null;
 			} else {
 				// create product is set, lets create a default
-				product = createProduct(tenant, user, customer, serial, fileData.getExtraInfo());
+				product = createProduct(primaryOrg, user, customer, serial, fileData.getExtraInfo());
 			}
 		}
 		
 		return product;
 	}
 
-	private Product createProduct(TenantOrganization tenant, UserBean user, Customer customer, String serialNumber, Map<String, String> productOptions) {
+	private Product createProduct(PrimaryOrg primaryOrg, UserBean user, Customer customer, String serialNumber, Map<String, String> productOptions) {
 		Product product = new Product();
 		
-		product.setTenant(tenant);
+		product.setTenant(primaryOrg.getTenant());
 		product.setSerialNumber(serialNumber);
 		
-		ProductType productType = productTypeManager.findDefaultProductType(tenant.getId());
+		ProductType productType = productTypeManager.findDefaultProductType(primaryOrg.getTenant().getId());
 		product.setType(productType);
 		
 		product.setIdentifiedBy(user);
 		product.setModifiedBy(user);
 		
 		product.setOwner(customer);
-		product.setOrganization(tenant);
+		product.setOrganization(primaryOrg);
 		
 		Date now = new Date();
 		product.setIdentified(now);
@@ -338,12 +336,12 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				
 		String customerName = (customer == null) ? "" : customer.getName();
 		String message = "Created Product [" + product.getId() +  "] serial [" + serialNumber + "] customer [" + customerName + "]";
-		writeLogMessage(tenant, message);
+		writeLogMessage(primaryOrg.getTenant(), message);
 		
 		return product;
 	}
 	
-	private Inspection createInspection(TenantOrganization tenant, UserBean inspector, Customer customer, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData ) {
+	private Inspection createInspection(Tenant tenant, UserBean inspector, Customer customer, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData ) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		inspection.setCustomer(customer);
@@ -434,11 +432,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return inspectionDate;
 	}
 	
-	private void writeLogMessage(TenantOrganization tenant, String message) {
+	private void writeLogMessage(Tenant tenant, String message) {
 		writeLogMessage(tenant, message, true, null);
 	}
 	
-	private void writeLogMessage(TenantOrganization tenant, String message, boolean success, Exception e) {
+	private void writeLogMessage(Tenant tenant, String message, boolean success, Exception e) {
 		
 		if(success) {
 			logger.info("<" + tenant.getName() + "> " + message);

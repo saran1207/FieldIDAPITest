@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 
 
@@ -18,7 +18,7 @@ public class SessionSecurityGuardTest extends SecurityGuardTestCase{
 	@Test
 	public void should_return_false_to_each_feature_menthod_with_no_enabled_features() {
 		for (ExtendedFeature feature : ExtendedFeature.values()) {
-			TenantOrganization tenant = aTenant().build();
+			Tenant tenant = aTenant().build();
 			
 			SessionSecurityGuard sut = new SessionSecurityGuard(tenant);
 			
@@ -29,7 +29,7 @@ public class SessionSecurityGuardTest extends SecurityGuardTestCase{
 	@Test
 	public void should_respond_to_each_feature_menthod() {
 		for (ExtendedFeature feature : ExtendedFeature.values()) {
-			TenantOrganization tenant = aTenant().withExtendedFeatures(feature).build();
+			Tenant tenant = aTenant().withExtendedFeatures(feature).build();
 
 			SessionSecurityGuard sut = new SessionSecurityGuard(tenant);
 			

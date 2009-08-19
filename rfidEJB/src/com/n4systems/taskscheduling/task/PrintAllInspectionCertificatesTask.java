@@ -3,7 +3,7 @@ package com.n4systems.taskscheduling.task;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -23,7 +23,7 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 	private static Logger logger = Logger.getLogger(PrintAllInspectionCertificatesTask.class);
 	private static final String FILE_NAME_DATE_FORMAT = "yyyy-MM-dd";
 	
-	private TenantOrganization tenant;
+	private Tenant tenant;
 	private List<Long> inspectionDocs = new ArrayList<Long>(); 
 	private String dateFormat;
 	private Long userId;
@@ -93,11 +93,11 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
         }
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
     	return tenant;
     }
 
-	public void setTenant(TenantOrganization tenant) {
+	public void setTenant(Tenant tenant) {
     	this.tenant = tenant;
     }
 

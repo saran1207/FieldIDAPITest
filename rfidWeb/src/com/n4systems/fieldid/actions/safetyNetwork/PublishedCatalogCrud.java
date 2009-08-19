@@ -17,7 +17,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -33,7 +33,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(PublishedCatalogCrud.class);
 	
 	
-	private TenantOrganization linkedTenant;
+	private Tenant linkedTenant;
 	private CatalogService linkedCatalogAccess;
 	private LegacyProductType productTypeManager;
 	
@@ -58,7 +58,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		linkedTenant = persistenceManager.find(TenantOrganization.class, uniqueId);
+		linkedTenant = persistenceManager.find(Tenant.class, uniqueId);
 		
 	}
 	
@@ -131,7 +131,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	public TenantOrganization getLinkedTenant() {
+	public Tenant getLinkedTenant() {
 		return linkedTenant;
 	}
 	

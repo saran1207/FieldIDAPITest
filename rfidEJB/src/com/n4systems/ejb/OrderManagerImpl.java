@@ -24,7 +24,7 @@ import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Product;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.Order.OrderType;
 import com.n4systems.plugins.PluginException;
 import com.n4systems.plugins.integration.CustomerOrderTransfer;
@@ -140,7 +140,7 @@ public class OrderManagerImpl implements OrderManager {
 		String sourceId = (String)unmappedOrders.get(EXTERNAL_SOURCE_ID);
 		
 		// First lets ensure we know this organization
-		TenantOrganization tenant = persistenceManager.findByName(TenantOrganization.class, tenantName);
+		Tenant tenant = persistenceManager.findByName(Tenant.class, tenantName);
 		
 		if (tenant == null) {
 			logger.error("Unable to locate Tenant for organizationID [" + tenantName + "] externalSourceID [" + sourceId + "]");
@@ -170,12 +170,12 @@ public class OrderManagerImpl implements OrderManager {
 		return orders;
 	}
 	
-	public Order processOrder(TenantOrganization tenant, String sourceId, Map<String, Object> rawOrderData) throws OrderProcessingException {
+	public Order processOrder(Tenant tenant, String sourceId, Map<String, Object> rawOrderData) throws OrderProcessingException {
 		return processOrder(tenant, sourceId, rawOrderData, null);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Order processOrder(TenantOrganization tenant, String sourceId, Map<String, Object> rawOrderData, Map<String, OrderKey> keyMappings) throws OrderProcessingException {
+	public Order processOrder(Tenant tenant, String sourceId, Map<String, Object> rawOrderData, Map<String, OrderKey> keyMappings) throws OrderProcessingException {
 		
 		// lookup the key mappings if they're not set
 		if(keyMappings == null) {
@@ -375,7 +375,7 @@ public class OrderManagerImpl implements OrderManager {
 	 * @param tenant		a Tenant
 	 * @return				A customer or null
 	 */
-	private Customer processCustomer(String customerName, String customerId, TenantOrganization tenant) {
+	private Customer processCustomer(String customerName, String customerId, Tenant tenant) {
 		// if neither are set, do nothing
 		if(customerName == null && customerId == null) {
 			return null;
@@ -452,7 +452,7 @@ public class OrderManagerImpl implements OrderManager {
 			return null;
 		}
 		
-		TenantOrganization tenant = persistenceManager.find(TenantOrganization.class, tenantId);
+		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 		
 		// for non integration customers, orders, lineitems and products are all 1 to 1
 		Order order = new Order(OrderType.SHOP, orderNumber);
@@ -490,7 +490,7 @@ public class OrderManagerImpl implements OrderManager {
 	 * @throws OrderProcessingException
 	 */
 	private Order processShopOrderFromPlugin(OrderResolver resolver, String orderNumber, Long tenantId) throws OrderProcessingException {
-		TenantOrganization tenant = persistenceManager.find(TenantOrganization.class, tenantId);
+		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 		
 		ShopOrderTransfer orderTransfer;
 		try {
@@ -544,7 +544,7 @@ public class OrderManagerImpl implements OrderManager {
 	 * @throws OrderProcessingException
 	 */
 	private Order processCustomerOrderFromPlugin(OrderResolver resolver, String orderNumber, Long tenantId) throws OrderProcessingException {
-		TenantOrganization tenant = persistenceManager.find(TenantOrganization.class, tenantId);
+		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 		
 		CustomerOrderTransfer orderTransfer;
 		try {
@@ -560,7 +560,7 @@ public class OrderManagerImpl implements OrderManager {
 		return processAbstractPluginOrder(orderTransfer, OrderType.CUSTOMER, tenant);
 	}
 	
-	private Order processAbstractPluginOrder(OrderTransfer orderTransfer, OrderType type, TenantOrganization tenant) throws OrderProcessingException {
+	private Order processAbstractPluginOrder(OrderTransfer orderTransfer, OrderType type, Tenant tenant) throws OrderProcessingException {
 		// must have an order number
 		if(orderTransfer.getOrderNumber() == null || orderTransfer.getOrderNumber().trim().length() == 0) {
 			throw new OrderProcessingException("Plugin returned Order with blank OrderNumber");

@@ -12,7 +12,7 @@ public class Recommendation extends Observation {
 		super(Type.RECOMMENDATION);
 	}
 
-	public Recommendation(TenantOrganization tenant) {
+	public Recommendation(Tenant tenant) {
 		super(Type.RECOMMENDATION, tenant);
 	}
 }

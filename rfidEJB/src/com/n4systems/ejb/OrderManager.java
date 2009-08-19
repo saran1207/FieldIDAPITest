@@ -11,7 +11,7 @@ import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderKey;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.Order.OrderType;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.util.SecurityFilter;
@@ -32,7 +32,7 @@ public interface OrderManager {
 	 * the clients mapping configuration, to a collection of OrderMasterBeans.
 	 * This also supports updating.  That is, if the line item already exists, it will load that bean and pass it with
 	 * the updated information.
-	 * @see #processOrder(TenantOrganization, String, Map, Map)
+	 * @see #processOrder(Tenant, String, Map, Map)
 	 * @param unmappedOrders	Map of order data
 	 * @return					List of created orders
 	 * @throws OrderProcessingException	On any unrecoverable problem.
@@ -42,19 +42,19 @@ public interface OrderManager {
 	/**
 	 * Processes a single order and its line items from raw data.  Attempts to resolve orders by type and orderNumber before processing.
 	 * Resolved orders will be updated, new orders will be saved.  Force loads key mappings.
-	 * @see #processOrder(TenantOrganization, String, Map, Map)
+	 * @see #processOrder(Tenant, String, Map, Map)
 	 * @param tenant		A tenant
 	 * @param sourceId		The integration source address {@link OrderMappingBean#getExternalSourceID()}
 	 * @param rawOrderData	Raw order data
 	 * @return				The new or updated order
 	 * @throws OrderProcessingException		On any unrecoverable problem
 	 */
-	public Order processOrder(TenantOrganization tenant, String sourceId, Map<String, Object> rawOrderData) throws OrderProcessingException;
+	public Order processOrder(Tenant tenant, String sourceId, Map<String, Object> rawOrderData) throws OrderProcessingException;
 	
 	/**
 	 * Processes a single order and its line items from raw data.  Attempts to resolve orders by type and orderNumber before processing.
 	 * Resolved orders will be updated, new orders will be saved.
-	 * @see #processLineItem(TenantOrganization, String, Order, Map, Map)
+	 * @see #processLineItem(Tenant, String, Order, Map, Map)
 	 * @param tenant		A tenant
 	 * @param sourceId		The integration source address {@link OrderMappingBean#getExternalSourceID()}
 	 * @param rawOrderData	Raw order data
@@ -62,7 +62,7 @@ public interface OrderManager {
 	 * @return				The new or updated order
 	 * @throws OrderProcessingException	On any unrecoverable problem
 	 */
-	public Order processOrder(TenantOrganization tenant, String sourceId, Map<String, Object> rawOrderData, Map<String, OrderKey> keyMappings) throws OrderProcessingException;
+	public Order processOrder(Tenant tenant, String sourceId, Map<String, Object> rawOrderData, Map<String, OrderKey> keyMappings) throws OrderProcessingException;
 	
 	/**
 	 * Processes a single line item.  Attempts to resolve line items by lineId and order before processing.

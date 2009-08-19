@@ -12,7 +12,7 @@ import javax.mail.MessagingException;
 import org.apache.commons.io.FileUtils;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.taskscheduling.ScheduledTask;
@@ -34,16 +34,16 @@ public class DiskUsageTask extends ScheduledTask {
 	protected void runTask(TaskConfig config) throws Exception {
 		List<TenantDiskUsageCalculator> summaries = new ArrayList<TenantDiskUsageCalculator>();
 		
-		for (TenantOrganization tenant: getTenants()) {
+		for (Tenant tenant: getTenants()) {
 			summaries.add(new TenantDiskUsageCalculator(tenant));
 		}
 		
 		emailSummary(summaries);
 	}
 
-	private List<TenantOrganization> getTenants() {
+	private List<Tenant> getTenants() {
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-		List<TenantOrganization> tenants = persistenceManager.findAll(new QueryBuilder<TenantOrganization>(TenantOrganization.class).addOrder("name"));
+		List<Tenant> tenants = persistenceManager.findAll(new QueryBuilder<Tenant>(Tenant.class).addOrder("name"));
 		return tenants;
 	}
 

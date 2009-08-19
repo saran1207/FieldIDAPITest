@@ -31,7 +31,8 @@ import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
@@ -92,7 +93,6 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return sessionUser;
 	}
 	
-	
 	public Long getSessionUserId() {
 		return getSessionUser().getId();
 	}
@@ -134,7 +134,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		loadSessionUser(getSessionUser().getId());
 	}
 	protected void loadSessionUser(Long userId) {
-		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions"));
+		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "organization.primaryOrg.id"));
 		setupSessionUser(user);
 	}
 	
@@ -150,8 +150,12 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return getTenant().getId();
 	}
 	
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return getSecurityGuard().getTenant();
+	}
+	
+	public PrimaryOrg getPrimaryOrg() {
+		return getSecurityGuard().getPrimaryOrg();
 	}
 	
 	public void setServletRequest(HttpServletRequest request) {
@@ -186,9 +190,6 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		SearchContainer searchContainer = (SearchContainer)getSession().get( InspectionReportAction.REPORT_CRITERIA );
 		return ( searchContainer != null && searchContainer.getSearchId() != null );
 	}
-	
-	
-	
 	
 	public void addFlashMessage( String message ) {
 		flashMessages.add( message );

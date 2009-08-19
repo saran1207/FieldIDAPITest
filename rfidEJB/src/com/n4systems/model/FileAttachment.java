@@ -21,7 +21,7 @@ public class FileAttachment extends EntityWithTenant {
 	
 	public FileAttachment() {}
 
-	public FileAttachment(TenantOrganization tenant, UserBean modifiedBy, String fileName) {
+	public FileAttachment(Tenant tenant, UserBean modifiedBy, String fileName) {
 		super(tenant);
 		setModifiedBy(modifiedBy);
 		setFileName(fileName);

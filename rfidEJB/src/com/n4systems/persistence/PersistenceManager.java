@@ -1,5 +1,7 @@
 package com.n4systems.persistence;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -7,8 +9,10 @@ import javax.persistence.Persistence;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.api.Saveable;
+import com.n4systems.persistence.deleters.Deleter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.util.persistence.QueryBuilder;
 
 public class PersistenceManager {
 	private static final String PERSISTENCE_UNIT = "fieldid";
@@ -43,17 +47,30 @@ public class PersistenceManager {
 		return new Transaction(getEntityManager());
 	}
 	
+	public static void rollbackTransaction(Transaction transaction) {
+		if (transaction != null) {
+			transaction.rollback();
+		}
+	}
+	
+	public static void finishTransaction(Transaction transaction) {
+		if (transaction != null) {
+			transaction.commit();
+		}
+	}
+	
 	public static <T> T executeLoader(Loader<T> loader) {
 		T result = null;
 		Transaction transaction = startTransaction();
 		try {
 			result = loader.load(transaction);
 		} catch(RuntimeException e) {
-			transaction.rollback();
+			rollbackTransaction(transaction);
 			throw e;
 		} finally {
-			transaction.commit();
+			finishTransaction(transaction);
 		}
+		
 		return result;
 	}
 
@@ -62,10 +79,10 @@ public class PersistenceManager {
 		try {
 			saver.save(transaction, entity);
 		} catch(RuntimeException e) {
-			transaction.rollback();
+			rollbackTransaction(transaction);
 			throw e;
 		} finally {
-			transaction.commit();
+			finishTransaction(transaction);
 		}
 	}
 
@@ -73,26 +90,82 @@ public class PersistenceManager {
 		T managedEntity = null;
 		Transaction transaction = startTransaction();
 		try {
-			saver.update(transaction, entity);
+			managedEntity = saver.update(transaction, entity);
 		} catch(RuntimeException e) {
-			transaction.rollback();
+			rollbackTransaction(transaction);
 			throw e;
 		} finally {
-			transaction.commit();
+			finishTransaction(transaction);
 		}
 		return managedEntity;
 	}
 
-	public static <T extends Saveable> void executeDeleter(Saver<T> deleter, T entity) {
+	public static <T extends Saveable> void executeDeleter(Deleter<T> deleter, T entity) {
 		Transaction transaction = startTransaction();
 		try {
 			deleter.remove(transaction, entity);
 		} catch(RuntimeException e) {
-			transaction.rollback();
+			rollbackTransaction(transaction);
 			throw e;
 		} finally {
-			transaction.commit();
+			finishTransaction(transaction);
 		}
 	}
 
+	public static <E> E find(QueryBuilder<E> builder) {
+		E result = null;
+		Transaction transaction = startTransaction();
+		try {
+			result = builder.getSingleResult(transaction.getEntityManager());
+		} catch(RuntimeException e) {
+			rollbackTransaction(transaction);
+			throw e;
+		} finally {
+			finishTransaction(transaction);
+		}
+
+		return result;
+	}
+	
+	public static <E> List<E> findAll(QueryBuilder<E> builder) {
+		List<E> results = null;
+		Transaction transaction = startTransaction();
+		try {
+			results = builder.getResultList(transaction.getEntityManager());
+		} catch(RuntimeException e) {
+			rollbackTransaction(transaction);
+			throw e;
+		} finally {
+			finishTransaction(transaction);
+		}
+		return results;
+	}
+	
+	public static Long findCount(QueryBuilder<?> builder) {
+		Long count;
+		Transaction transaction = startTransaction();
+		try {
+			count = builder.getCount(transaction.getEntityManager());
+		} catch(RuntimeException e) {
+			rollbackTransaction(transaction);
+			throw e;
+		} finally {
+			finishTransaction(transaction);
+		}
+		return count;
+	}
+	
+	public static boolean entityExists(QueryBuilder<?> builder) {
+		boolean exists;
+		Transaction transaction = startTransaction();
+		try {
+			exists = builder.entityExists(transaction.getEntityManager());
+		} catch(RuntimeException e) {
+			rollbackTransaction(transaction);
+			throw e;
+		} finally {
+			finishTransaction(transaction);
+		}
+		return exists;
+	}
 }

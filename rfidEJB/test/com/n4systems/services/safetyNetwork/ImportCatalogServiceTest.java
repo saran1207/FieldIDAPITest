@@ -19,7 +19,7 @@ import rfid.ejb.session.LegacyProductType;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.test.helpers.BasicAnswer;
 
 public class ImportCatalogServiceTest {
@@ -27,8 +27,8 @@ public class ImportCatalogServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_import_one_product_type() {
-		TenantOrganization n4 = aTenant().named("n4").build();
-		TenantOrganization linkedTenant = aTenant().named("nischain").build();
+		Tenant n4 = aTenant().named("n4").build();
+		Tenant linkedTenant = aTenant().named("nischain").build();
 		
 		ProductType productType = aProductType().named("chain").build();
 		Capture<ProductType> captureType = new Capture<ProductType>();

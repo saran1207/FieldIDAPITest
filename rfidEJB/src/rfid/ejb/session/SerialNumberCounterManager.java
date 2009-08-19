@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collection;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
@@ -13,9 +12,8 @@ import javax.persistence.Query;
 
 import rfid.ejb.entity.SerialNumberCounterBean;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
-import com.n4systems.model.Organization;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 @Interceptors({TimingInterceptor.class})
 @Stateless
@@ -23,9 +21,6 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 
 	@PersistenceContext (unitName="rfidEM")
 	protected EntityManager em;
-
-	@EJB
-	private PersistenceManager persistenceManager;
 	
 	public void updateSerialNumberCounter(SerialNumberCounterBean serialNumberCounter) {
 		em.merge(serialNumberCounter);
@@ -66,18 +61,14 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 		return counterValueString;
 	}
 	
-	public String generateSerialNumber(Long tenantId) {
-		return generateSerialNumber(persistenceManager.find(Organization.class, tenantId));
-	}
-	
-	public String generateSerialNumber(Organization tenant) {
+	public String generateSerialNumber(PrimaryOrg primaryOrg) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		
 		DecimalFormat padTwoSpaces = new DecimalFormat("00");
 		DecimalFormat padThreeSpaces = new DecimalFormat("000");
 		
-		String serialNumber = tenant.getSerialNumberFormat();
+		String serialNumber = primaryOrg.getSerialNumberFormat();
 
 		// go through and replace the appropriate symbols with their meaning
 		serialNumber = serialNumber.replaceAll("%m", padTwoSpaces.format(calendar.get(Calendar.MONTH)+1));
@@ -92,7 +83,7 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 		
 		// see if we need to do the counter
 		if (serialNumber.indexOf("%g") >= 0) {
-			serialNumber = serialNumber.replaceAll("%g", getNextCounterValue(tenant.getId()));
+			serialNumber = serialNumber.replaceAll("%g", getNextCounterValue(primaryOrg.getTenant().getId()));
 		}
 		
 		return serialNumber;

@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class DuplicateUserException extends Exception {
+public class DuplicateUserException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private String userId;
 	

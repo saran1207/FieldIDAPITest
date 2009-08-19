@@ -62,7 +62,7 @@ public class ProductUtilAction extends AbstractAction {
 	
 	public String doGenerateSerialNumber() {
 		try {
-			serialNumber = serialNumberCounter.generateSerialNumber( getTenantId() );
+			serialNumber = serialNumberCounter.generateSerialNumber(getPrimaryOrg());
 		} catch (Exception e) {
 			logger.error("Generating serial number", e);
 			return ERROR;

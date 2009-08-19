@@ -9,7 +9,7 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeGroupImportSummary;
@@ -24,11 +24,11 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 	private InspectionTypeGroupImportSummary summary;
 	private Set<Long> inspectionTypeIds;
 	
-	public CatalogInspectionTypeGroupHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog) {
+	public CatalogInspectionTypeGroupHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new InspectionTypeGroupImportSummary());
 	}
 	
-	public CatalogInspectionTypeGroupHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, InspectionTypeGroupImportSummary summary) {
+	public CatalogInspectionTypeGroupHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, InspectionTypeGroupImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary;
 	}

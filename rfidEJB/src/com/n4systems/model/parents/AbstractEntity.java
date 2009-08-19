@@ -4,29 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.n4systems.model.api.HasModifiedBy;
-
 import rfid.ejb.entity.UserBean;
+
+import com.n4systems.model.BaseEntity;
+import com.n4systems.model.api.HasModifiedBy;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-abstract public class AbstractEntity implements Serializable, HasModifiedBy {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+abstract public class AbstractEntity extends BaseEntity implements Serializable, HasModifiedBy {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
@@ -38,55 +29,23 @@ abstract public class AbstractEntity implements Serializable, HasModifiedBy {
 	@JoinColumn(name = "modifiedBy")
 	private UserBean modifiedBy;
 
-	@SuppressWarnings("unused")
-	@PrePersist
-	private void prePersist() {
+	public AbstractEntity() {}
+	
+	@Override
+	protected void onCreate() {
+		super.onCreate();
 		if (created == null) {
 			created = new Date();
 		}
 		modified = new Date();
-		onCreate();
 	}
-
-	@SuppressWarnings("unused")
-	@PreUpdate
-	private void preMerge() {
+	
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
 		modified = new Date();
-		onUpdate();
 	}
-
-	@SuppressWarnings("unused")
-	@PostLoad
-	private void postLoad() {
-		onLoad();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * methods here as alias' so that struts will assign values for us.
-	 * 
-	 * @return
-	 */
-	public Long getID() {
-		return getId();
-	}
-
-	/**
-	 * methods here as alias' so that struts will assign values for us.
-	 * 
-	 * @return
-	 */
-	public void setID(Long id) {
-		setId(id);
-	}
-
+	
 	public Date getCreated() {
 		return created;
 	}
@@ -103,7 +62,6 @@ abstract public class AbstractEntity implements Serializable, HasModifiedBy {
 		this.modified = dateModified;
 	}
 	
-		
 	public UserBean getModifiedBy() {
 		return modifiedBy;
 	}
@@ -112,46 +70,17 @@ abstract public class AbstractEntity implements Serializable, HasModifiedBy {
 		this.modifiedBy = modifiedBy;
 	}
 
-	/**
-	 * this method will force the entity to be saved when you merge it.
-	 */
+	/** Nulls the modified field.  Will force Hibernate to save on merge. */
 	public void touch() {
 		modified = null;
 	}
 
-	protected void onLoad() {
-	}
-
-	protected void onUpdate() {
-	}
-
-	protected void onCreate() {
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-
-		if (obj != null && obj.getClass().isInstance(this)) {
-			AbstractEntity entity = (AbstractEntity) obj;
-			if (entity.id != null) {
-				return entity.id.equals(this.id);
-			} else {
-				return super.equals(obj);
-			}
-		}
-		return false;
-	}
-	
 	@Override
 	public int hashCode() {
 		if (!isNew()) {
 			return id.hashCode();
 		}
 		return super.hashCode();
-	}
-
-	public boolean isNew() {
-		return (id == null);
 	}
 
 }

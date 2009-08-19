@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import com.n4systems.importing.ImportManager;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -57,7 +57,7 @@ public class ObservationImporterAction extends AbstractAdminAction {
 	}
 	
 	public Map<Long, String> getTenants() {
-		QueryBuilder<TenantOrganization> builder = new QueryBuilder<TenantOrganization>(TenantOrganization.class);
+		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class);
 		builder.setSimpleSelect();
 		builder.setOrder("displayName");
 		

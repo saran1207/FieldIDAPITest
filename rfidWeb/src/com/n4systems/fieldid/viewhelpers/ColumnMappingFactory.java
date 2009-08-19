@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.properties.HierarchicalProperties;
 import com.n4systems.util.properties.HirarchicalPropertiesLoader;
 
@@ -27,7 +27,7 @@ public class ColumnMappingFactory {
 	 * @param clazz			The class to load properties from
 	 * @return				A list of ColumnMappingGroups populated with ColumnMappings
 	 */
-	public static SortedSet<ColumnMappingGroup> getMappings(Class<?> clazz, TenantOrganization tenant) {
+	public static SortedSet<ColumnMappingGroup> getMappings(Class<?> clazz, Tenant tenant) {
 		return getMappings(clazz, tenant, true);
 	}
 	
@@ -39,7 +39,7 @@ public class ColumnMappingFactory {
 	 * @param forceReload	Forces a reload from the properties file
 	 * @return				A list of ColumnMappingGroups populated with ColumnMappings
 	 */
-	public static SortedSet<ColumnMappingGroup> getMappings(Class<?> clazz, TenantOrganization tenant, boolean forceReload) {
+	public static SortedSet<ColumnMappingGroup> getMappings(Class<?> clazz, Tenant tenant, boolean forceReload) {
 		
 		SortedSet<ColumnMappingGroup> mappings = classDataMap.get(clazz);
 		if(mappings == null || forceReload) {
@@ -57,7 +57,7 @@ public class ColumnMappingFactory {
 	 * @param clazz		The class to load properties from
 	 * @return			A SortedSet of ColumnMappingGroups populated with ColumnMappings
 	 */
-	private static SortedSet<ColumnMappingGroup> loadMappings(Class<?> clazz, TenantOrganization tenant) {
+	private static SortedSet<ColumnMappingGroup> loadMappings(Class<?> clazz, Tenant tenant) {
 		HierarchicalProperties properties = HirarchicalPropertiesLoader.load(clazz, tenant);
 		
 		// we'll start by populating a map as it'll make it easier to add the mappings later

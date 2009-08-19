@@ -18,7 +18,7 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -40,11 +40,11 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 	private Set<Long> importProductTypeIds;
 
 	
-	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, LegacyProductType productTypeManager) {
+	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType productTypeManager) {
 		this(persistenceManager, tenant, importCatalog, productTypeManager, new ProductTypeImportSummary());
 	}
 	 
-	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, LegacyProductType productTypeManager, ProductTypeImportSummary summary) {
+	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType productTypeManager, ProductTypeImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.productTypeManager = productTypeManager;
 		this.summary = summary;

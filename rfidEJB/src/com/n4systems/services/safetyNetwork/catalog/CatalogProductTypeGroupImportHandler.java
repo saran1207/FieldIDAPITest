@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ProductTypeGroup;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -21,11 +21,11 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	private ProductTypeGroupImportSummary summary;
 	private Set<Long> productTypeIds;
 	
-	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog) {
+	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new ProductTypeGroupImportSummary());;
 	}
 	
-	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, ProductTypeGroupImportSummary summary) {
+	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, ProductTypeGroupImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary; 
 	}

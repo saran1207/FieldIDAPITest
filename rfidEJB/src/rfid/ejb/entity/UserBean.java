@@ -4,12 +4,18 @@ import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.HasOrganization;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.legacy.LegacyBeanOrganizationWithCreateModifyDate;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.SecurityFilter;
@@ -17,7 +23,7 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate implements Listable<Long>, FilteredEntity {
+public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Listable<Long>, FilteredEntity, Saveable, HasOrganization {
 	private static final long serialVersionUID = 1L;
 	
 	private String modifiedBy;
@@ -45,6 +51,10 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 	
 	@Column(name="permissions", nullable=false)
 	private int permissions = 0; // permissions should always start out empty
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "organization_id")
+	private BaseOrg organization;
 	
 	@PrePersist
     protected void prePersist() {
@@ -309,5 +319,17 @@ public class UserBean extends LegacyBeanOrganizationWithCreateModifyDate impleme
 
 	public String getArchivedUserID() {
 		return archivedUserID;
+	}
+
+	public boolean isNew() {
+		return (getUniqueID() == null);
+	}
+	
+	public BaseOrg getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(BaseOrg organization) {
+		this.organization = organization;
 	}
 } 

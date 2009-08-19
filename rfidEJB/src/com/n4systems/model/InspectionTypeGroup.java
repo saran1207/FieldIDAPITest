@@ -1,18 +1,19 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.parents.EntityWithTenant;
+
 @Entity
 @Table(name="inspectiontypegroups")
-public class InspectionTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long> {
+public class InspectionTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)

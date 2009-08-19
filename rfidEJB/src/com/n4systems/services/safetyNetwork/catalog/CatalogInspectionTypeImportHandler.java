@@ -10,7 +10,7 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.utils.CleanInspectionTypeFactory;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeImportSummary;
@@ -25,11 +25,11 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	private Set<Long> originalInspectionTypeIds;
 	private InspectionTypeImportSummary summary = new InspectionTypeImportSummary();
 	
-	public CatalogInspectionTypeImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog) {
+	public CatalogInspectionTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new InspectionTypeImportSummary());
 	}
 	
-	public CatalogInspectionTypeImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, InspectionTypeImportSummary summary) {
+	public CatalogInspectionTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, InspectionTypeImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary;
 	}

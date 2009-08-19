@@ -1,36 +1,26 @@
- 
-<p> you can only have integration or job sites selected as extended features.</p>
+ <p> you can only have integration or job sites selected as extended features.</p>
 <@s.form action="organizationCrud!save" method="post" enctype="multipart/form-data">
 	<@s.hidden name="id" value="%{id}" /> 
 	<@s.fielderror/>
-	<@s.if test="!id" >
-		<@s.select name="accountType" label="Account Type" list="%{tenantTypes}" listKey="id" listValue="name" />
-	</@s.if>
-	<@s.if test="id">
-		<@s.select name="accountType" label="Account Type" list="%{tenantTypes}" listKey="id" listValue="name" disabled="true"/>
-	</@s.if>
 	
-	<@s.label name="tenant.fidAC" label="FidAC" />
 	<@s.textfield name="tenant.name" value="%{tenant.name}" label="Name (Site Address)" />
-	<@s.textfield name="tenant.displayName" value="%{tenant.displayName}" label="Display Name" />
-	<@s.textfield name="tenant.adminEmail" value="%{tenant.adminEmail}" label="Admin Email" />
-	<@s.checkbox name="tenant.usingSerialNumber" value="%{tenant.usingSerialNumber}" label="Using serial number" />
-	<@s.textfield name="tenant.serialNumberFormat" value="%{tenant.serialNumberFormat}" label="Serial Number Format" />
-	<@s.textfield name="tenant.dateFormat" value="%{tenant.dateFormat}" label="Date Format" />
-	<@s.textfield name="tenant.website" value="%{tenant.webSite}" label="Web Site url" />
+	<@s.textfield name="primaryOrg.name" value="%{primaryOrg.name}" label="Display Name" />
+	<@s.textfield name="primaryOrg.serialNumberFormat" value="%{primaryOrg.serialNumberFormat}" label="Serial Number Format" />
+	<@s.textfield name="primaryOrg.dateFormat" value="%{primaryOrg.dateFormat}" label="Date Format" />
+	<@s.textfield name="primaryOrg.webSite" value="%{primaryOrg.webSite}" label="Web Site url" />
 	<@s.label name="otherDateFormat" label="Other Date Format" />
 	<@s.label name="formattedDate" label="Example Date" />
 
 	<@s.textfield name="diskSpaceMB" label="Max Disk Space (MB) (-1 for Unlimited)" />
-	<@s.textfield name="tenant.limits.users" label="Max Employee Users (-1 for Unlimited)" />
-	
-	<@s.textfield name="tenant.limits.assets" label="Max Assets (-1 for Unlimited)" />
+	<@s.textfield name="primaryOrg.limits.users" label="Max Employee Users (-1 for Unlimited)" />
+	<@s.textfield name="primaryOrg.limits.assets" label="Max Assets (-1 for Unlimited)" />
 	
 	<#if !id?exists>
-		<@s.textfield name="userId" value="%{userId}" label="Admin UserID" />
-		<@s.password name="userPass" label="Admin Pass" />
-		<@s.textfield name="userFirstName"  label="First Name" />
-		<@s.textfield name="userLastName" label="Last Name" />
+		<@s.textfield name="adminUser.userID" label="Admin UserID" />
+		<@s.password name="adminUserPass" label="Admin Pass" />
+		<@s.textfield name="adminUser.firstName"  label="First Name" />
+		<@s.textfield name="adminUser.lastName" label="Last Name" />
+		<@s.textfield name="adminUser.emailAddress" label="Admin Email" />
 	</#if>
 	
 	<@s.iterator  value="availableExtendedFeatures" >

@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import com.n4systems.compliance.ComplianceCheck;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Organization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.util.DateHelper;
 
@@ -20,7 +20,7 @@ public class ComplianceManagerImpl implements ComplianceManager {
 	@PersistenceContext(unitName = unitName)
 	private EntityManager em;
 
-	public ComplianceCheck multiAssetComplianceCheck(Organization tenant) {
+	public ComplianceCheck multiAssetComplianceCheck(Tenant tenant) {
 		Long assetCount = (Long) em.createQuery(
 				"SELECT DISTINCT count( schedule.product.id ) FROM " + InspectionSchedule.class.getName()
 						+ " schedule left join schedule.product where schedule.tenant = :tenant AND schedule.status != :completedStatus").setParameter("tenant", tenant).setParameter(

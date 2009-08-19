@@ -9,8 +9,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.n4systems.fieldidadmin.utils.importer.ProductSerialImporter;
-import com.n4systems.model.TenantOrganization;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantCache;
 
 public class ProductSerialImporterJob implements Job {
 
@@ -22,9 +23,10 @@ public class ProductSerialImporterJob implements Job {
 			String tenantName = (String)map.get( "tenantName" );
 			Boolean createMissingDivision = (Boolean)map.get( "createMissingDivision" );
 
-			TenantOrganization tenant = ServiceLocator.getPersistenceManager().findByName(TenantOrganization.class, tenantName );
+			Tenant tenant = TenantCache.getInstance().findTenant(tenantName);
+			PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenant.getId());
 			
-			ProductSerialImporter importer = new ProductSerialImporter( defaultDirectory, tenant, createMissingDivision.booleanValue() );
+			ProductSerialImporter importer = new ProductSerialImporter( defaultDirectory, primaryOrg, createMissingDivision.booleanValue() );
 			Collection<File> importingFiles = ProductSerialImporter.filesAvailableForProcessing( tenant, defaultDirectory );
 			for (File targetFile : importingFiles) {
 				importer.processFile( targetFile );

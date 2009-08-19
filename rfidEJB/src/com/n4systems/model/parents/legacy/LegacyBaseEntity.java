@@ -35,6 +35,8 @@ abstract public class LegacyBaseEntity implements Serializable {
 		return false;
 	}
     
-	
+	public boolean isNew() {
+		return (uniqueID == null);
+	}
 	
 }

@@ -10,7 +10,7 @@ import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeRelationshipsImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -22,11 +22,11 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 	private Map<Long, InspectionType> importedInspectionTypeMapping = new HashMap<Long, InspectionType>();
 	private ProductTypeRelationshipsImportSummary summary;
 	
-	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog) {
+	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new ProductTypeRelationshipsImportSummary());
 	}
 	
-	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, ProductTypeRelationshipsImportSummary summary) {
+	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, ProductTypeRelationshipsImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary;
 	}

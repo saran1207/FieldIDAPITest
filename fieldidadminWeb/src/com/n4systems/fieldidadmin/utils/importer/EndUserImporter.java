@@ -12,7 +12,8 @@ import javax.naming.NamingException;
 import org.ho.yaml.Yaml;
 
 import com.n4systems.ejb.CustomerManager;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.util.ServiceLocator;
 
 public class EndUserImporter extends Importer {
@@ -20,16 +21,15 @@ public class EndUserImporter extends Importer {
 	public static final String FILE_NAME_PREFIX = "endUsers";
 	public static final String FAILURE_REASON = "failureReason";
 	private CustomerManager endUserManager;
-
-	public EndUserImporter(File importerBaseDirectory, TenantOrganization tenant, boolean createMissingDivisions) throws NamingException {
-		super(importerBaseDirectory, tenant, createMissingDivisions);
-
+	
+	public EndUserImporter( File importerBaseDirectory, PrimaryOrg primaryOrg, boolean createMissingDivisions ) throws NamingException {
+		super( importerBaseDirectory, primaryOrg, createMissingDivisions );
 		this.endUserManager = ServiceLocator.getCustomerManager();
 	}
 
-	public static Collection<File> filesProcessing(TenantOrganization tenant, File importerBaseDirectory) {
-		File processingDirectory = new File(processingDirectoryName(tenant, importerBaseDirectory));
-
+	public static Collection<File> filesProcessing( Tenant tenant, File importerBaseDirectory ) {
+		File processingDirectory = new File( processingDirectoryName( tenant, importerBaseDirectory ) );
+		
 		Collection<File> availableFiles = new ArrayList<File>();
 		File[] files = processingDirectory.listFiles();
 		if (files != null) {
@@ -42,9 +42,9 @@ public class EndUserImporter extends Importer {
 		return availableFiles;
 	}
 
-	public static Collection<File> filesAvailableForProcessing(TenantOrganization tenant, File importerBaseDirectory) {
-		File uploadDirectory = new File(uploadDirectoryName(tenant, importerBaseDirectory));
-
+	public static Collection<File> filesAvailableForProcessing(Tenant tenant, File importerBaseDirectory ) {
+		File uploadDirectory = new File( uploadDirectoryName( tenant, importerBaseDirectory ) );
+		
 		Collection<File> availableFiles = new ArrayList<File>();
 		File[] files = uploadDirectory.listFiles();
 		if (files != null) {
@@ -64,10 +64,10 @@ public class EndUserImporter extends Importer {
 		try {
 			Collection<Map> endUsers = (Collection<Map>) Yaml.load(currentFile);
 			for (Map endUser : endUsers) {
-				try {
-					endUserManager.findOrCreateCustomer((String) endUser.get("endUserName"), (String) endUser.get("endUserId"), tenant.getId(), null);
-					successes.add(endUser);
-				} catch (Exception e) {
+				try{
+					endUserManager.findOrCreateCustomer((String)endUser.get("endUserName"), (String)endUser.get("endUserId"), primaryOrg.getTenant().getId(), null);
+					successes.add( endUser );
+				} catch ( Exception e ) {
 					StringWriter message = new StringWriter();
 					e.printStackTrace(new PrintWriter(message));
 

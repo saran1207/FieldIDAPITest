@@ -7,33 +7,28 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.util.DateTimeDefinition;
 
 public class DateTimeDefiner implements DateTimeDefinition {
-	
+
 	private String dateFormat;
 	private TimeZone timeZone;
 
-	
 	public DateTimeDefiner(String dateFormat, TimeZone timeZone) {
 		super();
 		this.dateFormat = dateFormat;
 		this.timeZone = timeZone;
 	}
 
-	
 	public DateTimeDefiner(UserBean user) {
-		this(user.getTenant().getDateFormat(), user.getTimeZone());
+		this(user.getOrganization().getPrimaryOrg().getDateFormat(), user.getTimeZone());
 	}
-	
-	
+
 	public String getDateFormat() {
 		return dateFormat;
 	}
 
-
 	public String getDateTimeFormat() {
-		return dateFormat +  " h:mm a";
+		return dateFormat + " h:mm a";
 	}
 
-	
 	public TimeZone getTimeZone() {
 		return timeZone;
 	}

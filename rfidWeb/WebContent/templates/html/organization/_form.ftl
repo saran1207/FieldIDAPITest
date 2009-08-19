@@ -44,11 +44,6 @@
 			<@s.textfield name="displayName"/>
 		</div>
 		<div class="infoSet">
-			<label><@s.text name="indicator.required"/> <@s.text name="label.admin_email"/></label>
-			<@s.textfield name="adminEmail"/>
-		</div>
-		
-		<div class="infoSet">
 			<label><@s.text name="label.name_on_cert"/></label>
 			<@s.textfield name="certificateName"/>
 		</div>

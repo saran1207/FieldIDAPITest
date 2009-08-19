@@ -39,7 +39,7 @@ public class SchemaTool {
 	public void generateSchema() {
 		Properties hibernateProperties = new Properties();
 		
-		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
 		hibernateProperties.setProperty("hibernate.show_sql", "false");
 		hibernateProperties.setProperty("hibernate.format_sql", "true");
 		hibernateProperties.setProperty("hibernate.use_sql_comments", "false");

@@ -1,21 +1,17 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class DefaultExtendedFeatureSwitch extends ExtendedFeatureSwitch {
 
-	
-	protected DefaultExtendedFeatureSwitch(TenantOrganization tenant, PersistenceManager persistenceManager, ExtendedFeature feature) {
-		super(tenant, persistenceManager, feature);
+	protected DefaultExtendedFeatureSwitch(PrimaryOrg primaryOrg, ExtendedFeature feature) {
+		super(primaryOrg, feature);
 	}
 
 	@Override
-	protected void featureSetup() {
-	}
+	protected void featureSetup() {}
 
 	@Override
-	protected void featureTearDown() {
-	}
+	protected void featureTearDown() {}
 }

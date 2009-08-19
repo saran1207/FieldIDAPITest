@@ -6,7 +6,7 @@ import java.util.Map;
 import rfid.ejb.entity.OrderMappingBean;
 
 import com.n4systems.model.OrderKey;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public interface OrderMapping {
 	
@@ -16,7 +16,7 @@ public interface OrderMapping {
 	 * @param externalSourceID
 	 * @return a hashMap who's key is the internal order key name and value is the external source orders key name
 	 */
-	public Map<String, OrderKey> getKeyMappings(TenantOrganization tenant, String externalSourceID);
+	public Map<String, OrderKey> getKeyMappings(Tenant tenant, String externalSourceID);
 	
 	/**
 	 * Loads all the mappings  

@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -22,15 +20,14 @@ import com.n4systems.fieldidadmin.jobs.ProductSerialImporterJob;
 import com.n4systems.fieldidadmin.utils.importer.EndUserImporter;
 import com.n4systems.fieldidadmin.utils.importer.InspectionImporter;
 import com.n4systems.fieldidadmin.utils.importer.ProductSerialImporter;
-import com.n4systems.model.OrganizationalUnitType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class ImporterAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
 	
 	private Integer numberOfSerials;
-	private Collection<TenantOrganization> tenants;
+	private Collection<Tenant> tenants;
 	private String tenantName;
 	
 	private File defaultDirectory = new File( "/var/fieldid/importer" );
@@ -74,7 +71,7 @@ public class ImporterAction extends AbstractAdminAction {
 		this.importingFiles = importingFiles;
 	}
 
-	public Collection<TenantOrganization> getTenants() {
+	public Collection<Tenant> getTenants() {
 		return tenants;
 	}
 
@@ -91,15 +88,12 @@ public class ImporterAction extends AbstractAdminAction {
 	}
 	
 	public void fillManufacturers() {
-		Map<String, Object> whereParams = new HashMap<String, Object>();
-		whereParams.put("type", OrganizationalUnitType.ORGANIZATION);
-		
-		tenants = persistenceManager.findAll(TenantOrganization.class, whereParams);
+		tenants = persistenceManager.findAll(Tenant.class);
 	}
 	
 	public String listEndUserFiles() {
 		fillManufacturers();
-		TenantOrganization man = persistenceManager.findByName(TenantOrganization.class, tenantName);
+		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
 		importingFiles = EndUserImporter.filesAvailableForProcessing( man, defaultDirectory );
 		processingFiles = EndUserImporter.filesProcessing( man, defaultDirectory );
 		return SUCCESS;
@@ -107,7 +101,7 @@ public class ImporterAction extends AbstractAdminAction {
 	
 	public String listProductSerialFiles() {
 		fillManufacturers();
-		TenantOrganization man = persistenceManager.findByName(TenantOrganization.class, tenantName);
+		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
 		importingFiles = ProductSerialImporter.filesAvailableForProcessing( man, defaultDirectory );
 		processingFiles = ProductSerialImporter.filesProcessing( man, defaultDirectory );
 		return SUCCESS;
@@ -115,7 +109,7 @@ public class ImporterAction extends AbstractAdminAction {
 	
 	public String listInspectionFiles() {
 		fillManufacturers();
-		TenantOrganization man = persistenceManager.findByName(TenantOrganization.class, tenantName);
+		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
 		importingFiles = InspectionImporter.filesAvailableForProcessing( man, defaultDirectory );
 		processingFiles = InspectionImporter.filesProcessing( man, defaultDirectory );
 		return SUCCESS;
@@ -123,7 +117,7 @@ public class ImporterAction extends AbstractAdminAction {
 	
 	public String listAllFiles() {
 		fillManufacturers();
-		TenantOrganization man = persistenceManager.findByName(TenantOrganization.class, tenantName);
+		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
 		importingFiles = new ArrayList<File>();
 		processingFiles = new ArrayList<File>();
 		importingFiles.addAll( EndUserImporter.filesAvailableForProcessing( man, defaultDirectory ) );

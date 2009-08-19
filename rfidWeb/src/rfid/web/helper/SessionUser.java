@@ -5,8 +5,8 @@ import java.util.TimeZone;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.model.Organization;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
@@ -14,8 +14,8 @@ import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.SecurityFilter;
 
 public class SessionUser implements DateTimeDefinition {
-	private TenantOrganization tenant;
-	private Organization organization;
+	private Tenant tenant;
+	private BaseOrg organization;
 	private Long r_EndUser;
 	private Long r_Division;
 	private String userID;
@@ -44,11 +44,11 @@ public class SessionUser implements DateTimeDefinition {
 		this.fromQuickLogin = true;
 		this.permissions = user.getPermissions();
 		this.timeZone = user.getTimeZone();
-		this.dateFormat = user.getTenant().getDateFormat();
+		this.dateFormat = user.getOrganization().getPrimaryOrg().getDateFormat();
 		this.otherDateFormat = DateHelper.java2Unix(dateFormat);
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		tenant.getName();
 		return tenant;
 	}
@@ -217,11 +217,11 @@ public class SessionUser implements DateTimeDefinition {
 		return firstName + " " + lastName;
 	}
 
-	public Organization getOrganization() {
+	public BaseOrg getOrganization() {
 		return organization;
 	}
 
-	public void setOrganization(Organization organization) {
+	public void setOrganization(BaseOrg organization) {
 		this.organization = organization;
 	}
 	
@@ -243,7 +243,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public String getSerialNumberLabel(){
-		if( tenant.isUsingSerialNumber() ) {
+		if( organization.getPrimaryOrg().isUsingSerialNumber() ) {
 			return "label.serialnumber";
 		}
 		return "label.reelid";

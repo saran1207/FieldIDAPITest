@@ -9,14 +9,14 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 
 public interface CatalogService {
 
-	public TenantOrganization getTenant();
+	public Tenant getTenant();
 	
 	public boolean hasCatalog();
 	

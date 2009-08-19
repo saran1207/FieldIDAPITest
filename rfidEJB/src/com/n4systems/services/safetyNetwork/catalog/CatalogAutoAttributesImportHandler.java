@@ -12,7 +12,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.tools.Pager;
@@ -28,7 +28,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	private ProductType originalType;
 	private ProductType importedProductType;
 	
-	public CatalogAutoAttributesImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog) {
+	public CatalogAutoAttributesImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		super(persistenceManager, tenant, importCatalog);
 	}
 	

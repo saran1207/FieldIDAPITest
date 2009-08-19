@@ -84,22 +84,6 @@ public class UserManager implements User {
 		
 	}
 	
-	@Deprecated
-	public UserBean findUserBySecurityRFID(String rfidNumber) {
-		UserBean userBean = null;
-		
-		// XXX - this is just crazy ... let's get rid of this asap
-		
-		try {
-			userBean = (UserBean)em.createQuery("from UserBean u where u.hashSecurityCardNumber = :rfidNumber and u.deleted = false and u.active=true")
-				.setParameter ("rfidNumber", UserBean.hashSecurityCardNumber(rfidNumber))
-				.getSingleResult();
-			
-		} catch(NoResultException e) {}
-		
-		return userBean;
-	}
-	
 	public boolean userIdIsUnique(Long tenantId, String userId) {
 		return userIdIsUnique(tenantId, userId, null);
 	}

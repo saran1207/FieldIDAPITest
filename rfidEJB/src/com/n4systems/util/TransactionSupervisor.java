@@ -6,7 +6,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.RequestTransaction;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class TransactionSupervisor {
 
@@ -27,15 +27,15 @@ public class TransactionSupervisor {
 	
 	
 	
-	public void completeProductTransaction( String transactionGUID, TenantOrganization tenant ) throws TransactionAlreadyProcessedException {
+	public void completeProductTransaction( String transactionGUID, Tenant tenant ) throws TransactionAlreadyProcessedException {
 		completeTransaction( transactionGUID, tenant, "create product" );
 	}
 	
-	public void completeInspectionTransaction( String transactionGUID, TenantOrganization tenant ) throws TransactionAlreadyProcessedException {
+	public void completeInspectionTransaction( String transactionGUID, Tenant tenant ) throws TransactionAlreadyProcessedException {
 		completeTransaction( transactionGUID, tenant, "create inspections" );
 	}
 	
-	private void completeTransaction( String transactionGUID, TenantOrganization tenant, String transactiontype ) throws TransactionAlreadyProcessedException { 
+	private void completeTransaction( String transactionGUID, Tenant tenant, String transactiontype ) throws TransactionAlreadyProcessedException { 
 		try {
 			
 			RequestTransaction transaction = new RequestTransaction();

@@ -42,7 +42,7 @@ public class CriteriaResult extends EntityWithTenant {
 	
 	public CriteriaResult() {}
 	
-	public CriteriaResult(TenantOrganization tenant, Criteria criteria, State state) {
+	public CriteriaResult(Tenant tenant, Criteria criteria, State state) {
 		super(tenant);
 		this.criteria = criteria;
 		this.state = state;

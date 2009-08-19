@@ -1,17 +1,16 @@
 package com.n4systems.util.properties;
 
-import com.n4systems.exceptions.UncheckedLoadingException;
-import com.n4systems.model.TenantOrganization;
-import com.n4systems.reporting.PathHandler;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+
+import com.n4systems.exceptions.UncheckedLoadingException;
+import com.n4systems.model.Tenant;
+import com.n4systems.reporting.PathHandler;
 
 
 public class HirarchicalPropertiesLoader {
@@ -43,7 +42,7 @@ public class HirarchicalPropertiesLoader {
 	 * @param tenant	Tenant to find the override file for
 	 * @return			HirarchicalProperties
 	 */
-	public static HierarchicalProperties load(Class<?> clazz, TenantOrganization tenant) {
+	public static HierarchicalProperties load(Class<?> clazz, Tenant tenant) {
 		return load(clazz, tenant, (Properties)null);
 	}
 	
@@ -53,27 +52,8 @@ public class HirarchicalPropertiesLoader {
 	 * @param clazz		Class of properties file to load
 	 * @return			HirarchicalProperties with global overrides
 	 */
-	@SuppressWarnings("serial")
-    public static HierarchicalProperties loadGlobal(Class<?> clazz) {
-		/*
-		 * This loader works by faking out the tenant specific loader with a fake tenant.
-		 * We use an anon-private TenantOrganization since all we need is a name field
-		 * and using the most basic TenantOrganization possible seems safest .... 
-		 */
-		TenantOrganization globalOrg = new TenantOrganization() {
-			@Override
-            public List<? extends TenantOrganization> getLinkedTenants() {
-	            return null;
-            }
-		};
-		
-		// set this for safety (I don't want it to look like a real tenant in any way)
-		globalOrg.setId(Long.MIN_VALUE);
-		
-		// set the name for this global tenant (this will be used for the file system name)
-		globalOrg.setName(GLOBAL_TENANT_NAME);
-		
-		return load(clazz, globalOrg);
+    public static HierarchicalProperties loadGlobal(Class<?> clazz) {		
+		return load(clazz, new Tenant(Long.MIN_VALUE, GLOBAL_TENANT_NAME));
 	}
 	
 	/**
@@ -121,7 +101,7 @@ public class HirarchicalPropertiesLoader {
 	 * @param defaults	Properties to use as defaults
 	 * @return			HirarchicalProperties
 	 */
-	public static HierarchicalProperties load(Class<?> clazz, TenantOrganization tenant, Properties defaults) {
+	public static HierarchicalProperties load(Class<?> clazz, Tenant tenant, Properties defaults) {
 		HierarchicalProperties properties = new HierarchicalProperties(load(clazz, defaults));
 		
 		File propertiesFile = PathHandler.getPropertiesFile(tenant, clazz);

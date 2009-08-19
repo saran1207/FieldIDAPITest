@@ -9,12 +9,12 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.n4systems.fieldidadmin.utils.importer.InspectionImporter;
-import com.n4systems.model.TenantOrganization;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantCache;
 
 
 public class InspectionImporterJob implements Job {
-
 		
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		JobDataMap map = arg0.getTrigger().getJobDataMap();
@@ -25,9 +25,10 @@ public class InspectionImporterJob implements Job {
 			String tenantName = (String)map.get( "tenantName" );
 			Boolean createMissingDivision = (Boolean)map.get( "createMissingDivision" );
 			
-			TenantOrganization tenant = ServiceLocator.getPersistenceManager().findByName(TenantOrganization.class, tenantName);
+			Tenant tenant = TenantCache.getInstance().findTenant(tenantName);
+			PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenant.getId());
 			
-			InspectionImporter importer = new InspectionImporter(defaultDirectory, tenant, createMissingDivision.booleanValue());
+			InspectionImporter importer = new InspectionImporter(defaultDirectory, primaryOrg, createMissingDivision.booleanValue());
 			
 			Collection<File> importingFiles = InspectionImporter.filesAvailableForProcessing( tenant, defaultDirectory );
 			for (File targetFile : importingFiles) {

@@ -27,7 +27,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.util.ServiceLocator;
 
 public class ProductSerialImporter extends Importer {
@@ -53,9 +54,9 @@ public class ProductSerialImporter extends Importer {
 	private ProductManager productManager;
 	private PersistenceManager persistenceManager;
 
-	public ProductSerialImporter(File importerBaseDirectory, TenantOrganization tenant, boolean createMissingDivisions)
+	public ProductSerialImporter(File importerBaseDirectory, PrimaryOrg primaryOrg, boolean createMissingDivisions)
 			throws NamingException {
-		super(importerBaseDirectory, tenant, createMissingDivisions);
+		super(importerBaseDirectory, primaryOrg, createMissingDivisions);
 
 		this.productTypeManager = ServiceLocator.getProductType();
 		this.customerManager = ServiceLocator.getCustomerManager();
@@ -64,7 +65,7 @@ public class ProductSerialImporter extends Importer {
 		this.persistenceManager = ServiceLocator.getPersistenceManager();
 	}
 
-	public static Collection<File> filesProcessing(TenantOrganization tenant, File importerBaseDirectory) {
+	public static Collection<File> filesProcessing(Tenant tenant, File importerBaseDirectory) {
 		File processingDirectory = new File(processingDirectoryName(tenant, importerBaseDirectory));
 
 		Collection<File> availableFiles = new ArrayList<File>();
@@ -79,7 +80,7 @@ public class ProductSerialImporter extends Importer {
 		return availableFiles;
 	}
 
-	public static Collection<File> filesAvailableForProcessing(TenantOrganization tenant, File importerBaseDirectory) {
+	public static Collection<File> filesAvailableForProcessing(Tenant tenant, File importerBaseDirectory) {
 		File uploadDirectory = new File(uploadDirectoryName(tenant, importerBaseDirectory));
 
 		Collection<File> availableFiles = new ArrayList<File>();
@@ -104,9 +105,9 @@ public class ProductSerialImporter extends Importer {
 				try {
 					Product ps = new Product();
 					String serialNumber = (String) productSerial.get(SERIAL_NUMBER);
-					if (tenant.hasExtendedFeature(ExtendedFeature.JobSites)) {
+					if (primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites)) {
 						if (productSerial.get(JOB_SITE) != null) {
-							JobSite jobSite = persistenceManager.findByName(JobSite.class, tenant.getId(), (String)productSerial.get(JOB_SITE));
+							JobSite jobSite = persistenceManager.findByName(JobSite.class, primaryOrg.getTenant().getId(), (String)productSerial.get(JOB_SITE));
 							if (jobSite != null) {
 								ps.setJobSite(jobSite);
 								ps.setOwner(jobSite.getCustomer());
@@ -118,9 +119,7 @@ public class ProductSerialImporter extends Importer {
 							throw new Exception("no job site");
 						}
 					} else {
-						Customer customer = customerManager.findCustomerFussySearch((String) productSerial
-								.get(ENDUSER_IDENTIFIER), (String) productSerial.get(ENDUSER_IDENTIFIER), tenant.getId(),
-								null);
+						Customer customer = customerManager.findCustomerFussySearch((String) productSerial.get(ENDUSER_IDENTIFIER), (String) productSerial.get(ENDUSER_IDENTIFIER), primaryOrg.getTenant().getId(), null);
 						if (customer == null) {
 							throw new Exception("no customer");
 						} else {
@@ -128,15 +127,13 @@ public class ProductSerialImporter extends Importer {
 						}
 					}
 
-					if (productManager.findProductBySerialNumber(serialNumber, tenant.getId(), (ps.getOwner() != null) ? ps.getOwner().getId() : null) == null) {
+					if (productManager.findProductBySerialNumber(serialNumber, primaryOrg.getTenant().getId(), (ps.getOwner() != null) ? ps.getOwner().getId() : null) == null) {
 
-						ProductType productType = productTypeManager.findProductTypeForItemNum((String) productSerial
-								.get(PRODUCT_TYPE), tenant.getId());
+						ProductType productType = productTypeManager.findProductTypeForItemNum((String) productSerial.get(PRODUCT_TYPE), primaryOrg.getTenant().getId());
 						if (productType == null) {
 							throw new Exception("no product type");
 						} else {
-							productType = productTypeManager.findProductTypeAllFields(productType.getId(), tenant
-									.getId());
+							productType = productTypeManager.findProductTypeAllFields(productType.getId(), primaryOrg.getTenant().getId());
 							ps.setType(productType);
 						}
 
@@ -161,10 +158,10 @@ public class ProductSerialImporter extends Importer {
 
 						ps.setSerialNumber(serialNumber);
 
-						ps.setOrganization(tenant);
+						ps.setOrganization(primaryOrg);
 
 						ps.setComments((String) productSerial.get(COMMENT));
-						ps.setTenant(tenant);
+						ps.setTenant(primaryOrg.getTenant());
 						if (productSerial.get(IDENTIFIED_DATE) != null) {
 							ps.setIdentified((Date) productSerial.get(IDENTIFIED_DATE));
 						}

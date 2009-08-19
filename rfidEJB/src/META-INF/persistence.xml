@@ -7,9 +7,9 @@
 		<jta-data-source>java:/RFID_DS</jta-data-source>
 		<properties>
 			<property name="hibernate.cache.use_query_cache" value="true" />
-			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
+			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
+			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
+			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			
 		</properties>
 	</persistence-unit>
@@ -18,7 +18,7 @@
 		<non-jta-data-source>java:/fieldid</non-jta-data-source>
 		<properties>
 			<property name="hibernate.archive.autodetection" value="class" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 		
 			
 			<!--  
@@ -29,9 +29,9 @@
 			<property name="hibernate.generate_statistics" value="true" />
 			-->
 			
-			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
+			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
+			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
+			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			
 			
 			<!-- 

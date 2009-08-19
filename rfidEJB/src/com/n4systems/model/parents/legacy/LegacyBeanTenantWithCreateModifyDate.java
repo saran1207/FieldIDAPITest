@@ -5,7 +5,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
 
 // this class this just temporary while we refactor the legacy beans to use the new AbstractEntity
@@ -14,18 +14,18 @@ import com.n4systems.model.api.HasTenant;
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class LegacyBeanTenantWithCreateModifyDate extends LegacyEntityCreateModifyDate implements HasTenant {
-	public static final String columnName = "r_tenant";
+	public static final String columnName = "tenant_id";
 	public static final String TENANT_ID_FIELD = "tenant.id";
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = columnName)
-	private TenantOrganization tenant;
+	private Tenant tenant;
 	
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 	
-	public void setTenant( TenantOrganization tenant) {
+	public void setTenant( Tenant tenant) {
 		this.tenant = tenant;
 	}
 	

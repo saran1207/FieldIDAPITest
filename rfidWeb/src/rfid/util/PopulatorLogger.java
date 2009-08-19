@@ -3,7 +3,7 @@ package rfid.util;
 import rfid.ejb.entity.PopulatorLogBean;
 import rfid.ejb.session.PopulatorLog;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.ServiceLocator;
 
 public class PopulatorLogger {
@@ -21,7 +21,7 @@ public class PopulatorLogger {
 		try {
 			
 			PopulatorLog populatorLog = ServiceLocator.getPopulatorLog();
-			TenantOrganization tenant = ServiceLocator.getPersistenceManager().find(TenantOrganization.class, tenantId);
+			Tenant tenant = ServiceLocator.getPersistenceManager().find(Tenant.class, tenantId);
 			populatorLog.createPopulatorLog(new PopulatorLogBean(tenant, logMessage, logStatus, logType));
 			
 		} catch (Exception e) {

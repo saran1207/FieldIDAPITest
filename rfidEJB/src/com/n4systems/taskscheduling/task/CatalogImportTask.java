@@ -12,7 +12,7 @@ import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -25,8 +25,8 @@ public class CatalogImportTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(CatalogImportTask.class);
 
 	private UserBean user;
-	private TenantOrganization tenant;
-	private TenantOrganization linkedTenant;
+	private Tenant tenant;
+	private Tenant linkedTenant;
 	private Set<Long> importProductTypeIds;
 	private Set<Long> importInspectionTypeIds;
 	private boolean usingPackages;
@@ -133,19 +133,19 @@ public class CatalogImportTask implements Runnable {
 		this.user = user;
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 
-	public void setTenant(TenantOrganization tenant) {
+	public void setTenant(Tenant tenant) {
 		this.tenant = tenant;
 	}
 
-	public TenantOrganization getLinkedTenant() {
+	public Tenant getLinkedTenant() {
 		return linkedTenant;
 	}
 
-	public void setLinkedTenant(TenantOrganization linkedTenant) {
+	public void setLinkedTenant(Tenant linkedTenant) {
 		this.linkedTenant = linkedTenant;
 	}
 

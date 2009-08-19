@@ -1,6 +1,6 @@
 package com.n4systems.model.parents;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.security.TenantField;
 
@@ -12,25 +12,25 @@ import javax.persistence.MappedSuperclass;
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class EntityWithTenant extends AbstractEntity implements HasTenant {
-	public static final String columnName = "r_tenant";
+	public static final String columnName = "tenant_id";
 	protected static final String TENANT_ID_FIELD = "tenant.id";
 	
 	@TenantField
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = columnName)
-	private TenantOrganization tenant;
+	private Tenant tenant;
 	
 	public EntityWithTenant() {}
 	
-	public EntityWithTenant(TenantOrganization tenant) {
+	public EntityWithTenant(Tenant tenant) {
 		this.tenant = tenant;
 	}
 	
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 	
-	public void setTenant( TenantOrganization tenant) {
+	public void setTenant( Tenant tenant) {
 		this.tenant = tenant;
 	}
 	

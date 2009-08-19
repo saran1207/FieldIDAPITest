@@ -3,31 +3,23 @@ package com.n4systems.model.tenant;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Test;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class SetupDataLastModDatesTest {
 
 	@SuppressWarnings("serial")
 	private class _SetupDataLastModDates extends SetupDataLastModDates {
 		@Override
-		public Long getR_tenant() {
-			return super.getR_tenant();
+		public Long getTenant_id() {
+			return super.getTenant_id();
 		}
 	}
 	
-	@SuppressWarnings("serial")
 	@Test
 	public void test_tenantid_set_by_tenant_setter() {
-		TenantOrganization tenant = new TenantOrganization() {
-			@Override
-			public List<? extends TenantOrganization> getLinkedTenants() {
-				return null;
-			}
-		};
+		Tenant tenant = new Tenant();
 		
 		tenant.setId(12345L);
 		
@@ -36,7 +28,7 @@ public class SetupDataLastModDatesTest {
 		setupModDates.setTenant(tenant);
 		
 		assertSame(tenant, setupModDates.getTenant());
-		assertEquals(tenant.getId(), setupModDates.getR_tenant());
+		assertEquals(tenant.getId(), setupModDates.getTenant_id());
 	}
 	
 }

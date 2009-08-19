@@ -7,11 +7,11 @@ import java.util.Arrays;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Project;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class JobBuilder extends BaseBuilder<Project> {
 
-	private final TenantOrganization tenantOrganization;
+	private final Tenant tenantOrganization;
 	private final boolean eventJob;
 	private final UserBean[] employees;
 	
@@ -21,11 +21,11 @@ public class JobBuilder extends BaseBuilder<Project> {
 	
 	
 	
-	public JobBuilder(TenantOrganization tenant) {
+	public JobBuilder(Tenant tenant) {
 		this(tenant, true, null);
 	}
 	
-	public JobBuilder(TenantOrganization tenant, boolean eventJob, UserBean[] employees) {
+	public JobBuilder(Tenant tenant, boolean eventJob, UserBean[] employees) {
 		super();
 		this.eventJob = eventJob;
 		this.tenantOrganization = tenant;

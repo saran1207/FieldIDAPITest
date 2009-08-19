@@ -50,7 +50,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	
 	public AbstractInspection() {}
 
-	public AbstractInspection(TenantOrganization tenant) {
+	public AbstractInspection(Tenant tenant) {
 		super(tenant);
 	}
 	

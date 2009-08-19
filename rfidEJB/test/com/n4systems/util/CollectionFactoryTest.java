@@ -15,6 +15,7 @@ import org.junit.Test;
 
 public class CollectionFactoryTest {
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_create_collection() {
 		assertTrue(CollectionFactory.createCollection(	new ArrayList<Object>())	instanceof List);

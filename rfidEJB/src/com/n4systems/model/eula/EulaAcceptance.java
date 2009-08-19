@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.exceptions.NotUpdatableException;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.FilteredEntity;
@@ -53,7 +53,7 @@ public class EulaAcceptance extends EntityWithTenant implements FilteredEntity {
 	
 	
 
-	public EulaAcceptance(TenantOrganization tenant) {
+	public EulaAcceptance(Tenant tenant) {
 		super(tenant);
 	}
 

@@ -33,10 +33,12 @@ public class Transaction {
 	
 	public void commit() {
 		try {
-			if (entityTransaction != null && entityTransaction.getRollbackOnly()) {
-				entityTransaction.rollback();
-			} else {
-				entityTransaction.commit();
+			if (entityTransaction != null && entityTransaction.isActive()) {
+				if (entityTransaction.getRollbackOnly()) {
+					entityTransaction.rollback();
+				} else {
+					entityTransaction.commit();
+				}
 			}
 		} finally {
 			closeEntityManager();

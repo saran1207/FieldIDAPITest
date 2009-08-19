@@ -10,7 +10,8 @@ import java.util.Map;
 
 import org.ho.yaml.Yaml;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public abstract class Importer {
 
@@ -30,14 +31,14 @@ public abstract class Importer {
 	
 	protected File currentFile;
 	protected File importerBaseDirectory;
-	protected TenantOrganization tenant;
+	protected PrimaryOrg primaryOrg;
 	protected Date startTime;
 	protected SimpleDateFormat format; 
 	protected boolean createMissingDivisions;
 	
-	public Importer( File importerBaseDirectory, TenantOrganization tenant, boolean createMissingDivisions ) {
+	public Importer( File importerBaseDirectory, PrimaryOrg primaryOrg, boolean createMissingDivisions ) {
 		this.importerBaseDirectory = importerBaseDirectory;
-		this.tenant = tenant;
+		this.primaryOrg = primaryOrg;
 		
 		startTime = new Date();
 		format = new SimpleDateFormat( "yyyy-MM-dd_HH:mm" );
@@ -49,16 +50,16 @@ public abstract class Importer {
 	
 	
 	
-	public static String uploadDirectoryName( TenantOrganization tenant, File importerBaseDirectory ) {
+	public static String uploadDirectoryName( Tenant tenant, File importerBaseDirectory ) {
 		return importerBaseDirectory.getAbsolutePath() + "/" + tenant.getName() + "/" + TO_BE_PROCESSED_DIRECTORY; 
 	}
 	
-	public static String processingDirectoryName( TenantOrganization tenant, File importerBaseDirectory ) {
+	public static String processingDirectoryName( Tenant tenant, File importerBaseDirectory ) {
 		return importerBaseDirectory.getAbsolutePath() + "/" + tenant.getName() + "/" + PROCESSING_DIRECTORY; 
 	}
 	
 	protected String constructFileName( int type, String fileName ) {
-		String filePath = importerBaseDirectory.getAbsolutePath() + "/" + tenant.getName();
+		String filePath = importerBaseDirectory.getAbsolutePath() + "/" + primaryOrg.getTenant().getName();
 		switch( type ) {
 			case PROCESSING:
 				filePath += "/" + PROCESSING_DIRECTORY;

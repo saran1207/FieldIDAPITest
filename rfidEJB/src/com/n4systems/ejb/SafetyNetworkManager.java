@@ -4,12 +4,11 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectorOrganization;
-import com.n4systems.model.Organization;
 import com.n4systems.model.Product;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 
 @Local
 public interface SafetyNetworkManager {
@@ -17,9 +16,9 @@ public interface SafetyNetworkManager {
 	public String findNewFidAC();
 
 	
-	public InspectorOrganization findByFidAC( String fidAC );
+	public Tenant findByFidAC( String fidAC );
 	
-	public String findProductLink( String rfidNumber, Organization tenant ) ;
+	public String findProductLink( String rfidNumber, BaseOrg tenant ) ;
 	
 	public List<Product> findLinkedProducts( Product product );
 	public List<Inspection> findLinkedProductInspections( Product product ) throws InvalidQueryException;

@@ -18,7 +18,7 @@ import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.FuzzyResolver;
@@ -147,7 +147,7 @@ public class CustomerManagerImpl implements CustomerManager {
 		Customer customer = findCustomerFussySearch(name, customerId, tenantId, filter);
 		
 		if(customer == null) {
-			TenantOrganization tenant = persistenceManager.find(TenantOrganization.class, tenantId);
+			Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 			
 			customer = new Customer();
 			customer.setTenant(tenant);

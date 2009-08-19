@@ -19,7 +19,7 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 	public static final int NORMAL_STATUS = 0;
 	
 	@Id
-	@Column(name="r_tenant")
+	@Column(name="tenant_id")
 	private Long tenantId;
 	
 	@Column(name="diskspace", nullable=false)

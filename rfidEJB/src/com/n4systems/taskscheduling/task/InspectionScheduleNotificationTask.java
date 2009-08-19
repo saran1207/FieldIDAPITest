@@ -19,8 +19,10 @@ import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingOwnerListLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
+import com.n4systems.services.TenantCache;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.LogUtils;
 import com.n4systems.util.SecurityFilter;
@@ -56,7 +58,9 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 				continue;
 			}
 			
-			dateFormatter = new SimpleDateFormat(setting.getTenant().getDateFormat());
+			PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(setting.getTenant().getId());
+			
+			dateFormatter = new SimpleDateFormat(primaryOrg.getDateFormat());
 			
 			// resolve the relative times to hard dates, so they can be used in a query
 			startDate = setting.getPeriodStart().getRelative(now);

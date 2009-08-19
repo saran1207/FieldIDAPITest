@@ -10,14 +10,14 @@ import rfid.ejb.entity.InfoOptionBean;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class CleanProductTypeFactory {
 
 	private ProductType originalType;
-	private TenantOrganization targetTenant;
+	private Tenant targetTenant;
 
-	public CleanProductTypeFactory(ProductType originalType , TenantOrganization targetTenant) {
+	public CleanProductTypeFactory(ProductType originalType , Tenant targetTenant) {
 		super();
 		this.originalType = originalType;
 		this.targetTenant = targetTenant;

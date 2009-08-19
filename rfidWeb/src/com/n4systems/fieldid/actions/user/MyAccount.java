@@ -12,7 +12,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
-import com.n4systems.model.Organization;
+import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -127,7 +127,7 @@ public class MyAccount extends AbstractCrud implements HasDuplicateValueValidato
 		return !userManager.userIdIsUnique(getTenantId(), formValue, currentUser.getId());
 	}
 
-	public Organization getOrganization() {
+	public BaseOrg getOrganization() {
 		return currentUser.getOrganization();
 	}
 	

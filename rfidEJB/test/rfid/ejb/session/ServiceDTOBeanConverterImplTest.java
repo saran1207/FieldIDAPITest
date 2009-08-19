@@ -25,13 +25,12 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.InspectorOrganization;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.test.helpers.EJBTestCase;
@@ -164,21 +163,17 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 	}
 	
 	private void test_product_non_optional_fields( Product product, ProductServiceDTO productServiceDTO  ) {
-		
-		
-		
-		
 		ProductType foundProductType = new ProductType();
 		foundProductType.setId( 5L );
 		
-		TenantOrganization foundTenant = new InspectorOrganization();
+		Tenant foundTenant = new Tenant();
 		foundTenant.setId( 10L );
 		productServiceDTO.setProductTypeId( foundProductType.getId() );
 		
 		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
 		
 		EasyMock.expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
-		EasyMock.expect( mockEntityManager.find( TenantOrganization.class, foundTenant.getId() ) ).andReturn( foundTenant );
+		EasyMock.expect( mockEntityManager.find( Tenant.class, foundTenant.getId() ) ).andReturn( foundTenant );
 		EasyMock.replay( mockEntityManager );
 		injectEntityManager( converter, mockEntityManager );
 		
@@ -277,7 +272,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		assertEquals( productServiceDTO.getMobileGuid(), product.getMobileGUID() );
 	}
 	private void assertAssignedValuesWereCopiedToProduct( ProductServiceDTO productServiceDTO, Product product, ProductType foundProductType,
-			TenantOrganization foundTenant ) {
+			Tenant foundTenant ) {
 		assertEquals( foundTenant, product.getTenant() );
 		assertEquals( foundProductType, product.getType() );
 		assertEquals( productServiceDTO.getComments(), product.getComments() );

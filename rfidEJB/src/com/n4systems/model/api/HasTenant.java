@@ -1,9 +1,9 @@
 package com.n4systems.model.api;
 
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public interface HasTenant {
-	public TenantOrganization getTenant();
-	public void setTenant( TenantOrganization tenant);
+	public Tenant getTenant();
+	public void setTenant( Tenant tenant);
 }

@@ -18,10 +18,9 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.InspectorOrganization;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.test.helpers.EJBTestCase;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -37,7 +36,7 @@ public class ProductManagerTest extends EJBTestCase {
 	private PersistenceManager mockPersitenceManager;
 	private UserBean testUser;
 	private Product product;
-	private TenantOrganization tenant;
+	private Tenant tenant;
 
 	@Before
 	public void setUp() throws Exception {
@@ -50,7 +49,7 @@ public class ProductManagerTest extends EJBTestCase {
 		testUser.setUniqueID(1L);
 		testUser.setTenant(tenant);
 
-		tenant = new InspectorOrganization();
+		tenant = new Tenant();
 		tenant.setName("test_tenant");
 		
 		product = new Product();

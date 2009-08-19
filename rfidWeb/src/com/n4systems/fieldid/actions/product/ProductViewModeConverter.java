@@ -20,13 +20,14 @@ import com.n4systems.model.JobSite;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.services.TenantCache;
 
 public class ProductViewModeConverter {
 	private final LoaderFactory loaderFactory;
@@ -43,6 +44,8 @@ public class ProductViewModeConverter {
 	public Product viewToModel(ProductView view) {
 		Product model = new Product();
 
+		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(identifier.getTenant().getId());
+		
 		transaction = PersistenceManager.startTransaction();
 		
 		try {
@@ -55,7 +58,7 @@ public class ProductViewModeConverter {
 			model.setType(resolveProductType(view.getProductTypeId()));
 			model.setAssignedUser(resolveUser(view.getAssignedUser()));
 			model.setProductStatus(resolveProductStatus(view.getProductStatus()));
-			model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), identifier.getTenant()));
+			model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), primaryOrg));
 			model.setIdentified(view.getIdentified());
 			model.setLocation(view.getLocation());
 			model.setPurchaseOrder(view.getPurchaseOrder());
@@ -72,11 +75,11 @@ public class ProductViewModeConverter {
 		return model;
 	}
 	
-	private LineItem createNonIntegrationOrder(String orderNumber, TenantOrganization tenant) {
+	private LineItem createNonIntegrationOrder(String orderNumber, PrimaryOrg primaryOrg) {
 		LineItem line = null;
 		// only do this if the order nuberm is not null and the tenant does not have Integration
-		if (orderNumber != null && !tenant.hasExtendedFeature(ExtendedFeature.Integration)) {
-			line = orderManager.createNonIntegrationShopOrder(orderNumber, tenant.getId());
+		if (orderNumber != null && !primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
+			line = orderManager.createNonIntegrationShopOrder(orderNumber, primaryOrg.getTenant().getId());
 		}
 		return line;
 	}

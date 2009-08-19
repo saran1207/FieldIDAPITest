@@ -52,7 +52,7 @@ import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.CreateInspectionAuditHandler;
@@ -267,7 +267,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		persistenceManager.reattach(managedProduct);
 		
 		InspectionGroup createdInspectionGroup = null;
-		TenantOrganization tenant = null;
+		Tenant tenant = null;
 		Inspection savedInspection = null;
 		for (Inspection inspection : inspections) {
 			if (tenant == null) {
@@ -353,7 +353,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		setProofTestData(inspection, fileData);
 
 		// set the inspection's customer and division from the job site
-		checkJobSite(inspection);
+		copyCustomerDivisionFromJobSite(inspection);
 
 		confirmSubInspectionsAreAgainstAttachedSubProducts(inspection);
 
@@ -402,8 +402,8 @@ public class InspectionManagerImpl implements InspectionManager {
 		
 	}
 
-	private void checkJobSite(Inspection inspection) {
-		if (inspection.getTenant().hasExtendedFeature(ExtendedFeature.JobSites)) {
+	private void copyCustomerDivisionFromJobSite(Inspection inspection) {
+		if (inspection.getOrganization().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites)) {
 			inspection.setCustomer(inspection.getJobSite().getCustomer());
 			inspection.setDivision(inspection.getJobSite().getDivision());
 		}
@@ -469,7 +469,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		inspection.setOrganization(inspection.getInspector().getOrganization());
 
 		setProofTestData(inspection, fileData);
-		checkJobSite(inspection);
+		copyCustomerDivisionFromJobSite(inspection);
 		updateDeficiencies(inspection.getResults());
 		inspection = persistenceManager.update(inspection, userId);
 		
@@ -515,7 +515,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	public Inspection retireInspection(Inspection inspection, Long userId) {
 		inspection.retireEntity();
-		checkJobSite(inspection);
+		copyCustomerDivisionFromJobSite(inspection);
 		inspection = persistenceManager.update(inspection, userId);
 		updateProductInspectionDate(inspection.getProduct());
 		inspection.setProduct(persistenceManager.update(inspection.getProduct()));

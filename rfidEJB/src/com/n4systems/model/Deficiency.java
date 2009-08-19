@@ -13,7 +13,7 @@ public class Deficiency extends Observation {
 	}
 	
 	
-	public Deficiency(TenantOrganization tenant) {
+	public Deficiency(Tenant tenant) {
 		super(Type.DEFICIENCY, tenant);
 	}
 }

@@ -2,9 +2,9 @@ package rfid.ejb.session;
 
 import java.util.Collection;
 
-import com.n4systems.model.Organization;
-
 import rfid.ejb.entity.SerialNumberCounterBean;
+
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public interface SerialNumberCounter {
 
@@ -13,7 +13,6 @@ public interface SerialNumberCounter {
 	public Collection<SerialNumberCounterBean> getSerialNumberCounters();	
 	public SerialNumberCounterBean getSerialNumberCounter(Long tenantId);
 	public String getNextCounterValue(Long tenantId);
-	public String generateSerialNumber(Long tenantId);
-	public String generateSerialNumber(Organization tenant);
+	public String generateSerialNumber(PrimaryOrg primaryOrg);
 	
 }

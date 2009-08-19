@@ -2,11 +2,11 @@ package com.n4systems.model.tenant;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class TenantByIdLoader extends Loader<TenantOrganization> {
+public class TenantByIdLoader extends Loader<Tenant> {
 	private Long tenantId;
 	
 	public TenantByIdLoader() {
@@ -14,11 +14,11 @@ public class TenantByIdLoader extends Loader<TenantOrganization> {
 	}
 
 	@Override
-	protected TenantOrganization load(EntityManager em) {
-		QueryBuilder<TenantOrganization> builder = new QueryBuilder<TenantOrganization>(TenantOrganization.class);
+	protected Tenant load(EntityManager em) {
+		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class);
 		builder.addSimpleWhere("id", tenantId);
 		
-		TenantOrganization tenant = builder.getSingleResult(em);
+		Tenant tenant = builder.getSingleResult(em);
 		return tenant;
 	}
 	

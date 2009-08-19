@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
-Class-Path: rfidEJB.jar
+Class-Path: rfidEJB.jar 
+ APP-INF/lib/jasperreports-2.0.5.jar 
+ APP-INF/lib/junit-4.4.jar
 

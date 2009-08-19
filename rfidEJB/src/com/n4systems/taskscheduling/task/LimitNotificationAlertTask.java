@@ -6,10 +6,8 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.tenant.AlertStatus;
 import com.n4systems.model.tenant.AlertStatusSaver;
-import com.n4systems.model.tenant.TenantByIdLoader;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.services.limiters.LimitType;
 import com.n4systems.services.limiters.ResourceLimit;
@@ -50,8 +48,10 @@ public class LimitNotificationAlertTask implements Runnable {
 			ServiceLocator.getMailManager().sendMessage(alertMessage);
 		
 			updateAlertStatus(threshold);
-		} catch(MessagingException e) {
+		} catch (MessagingException e) {
 			logger.error("Could not send alert limit notification", e);
+		} catch (RuntimeException e) {
+			logger.error("Could not update alert status", e);
 		}
 	}
 
@@ -60,22 +60,12 @@ public class LimitNotificationAlertTask implements Runnable {
 			// create a new alert status if one was not already provided
 			alertStatus = new AlertStatus();
 			alertStatus.setTenantId(tenantId);
-			
-			
 		}
 	}
 
 	private void addNotificationAddresses(TemplateMailMessage alertMessage) {
-		TenantByIdLoader tenantLoader = new TenantByIdLoader();
-		tenantLoader.setTenantId(tenantId);
-		TenantOrganization tenant = tenantLoader.load();
-		
-		// the the tenant admin email always gets added
-		alertMessage.getToAddresses().add(tenant.getAdminEmail());
-		
-		// load and add all the admin users
-		AdminUserListLoader adminLoader = new AdminUserListLoader(new SecurityFilter(tenantId)); 
-		for (UserBean user: adminLoader.load()) {
+		AdminUserListLoader userLoader = new AdminUserListLoader(new SecurityFilter(tenantId));
+		for (UserBean user: userLoader.load()) {
 			alertMessage.getToAddresses().add(user.getEmailAddress());
 		}
 	}

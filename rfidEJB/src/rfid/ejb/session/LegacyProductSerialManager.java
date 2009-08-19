@@ -40,9 +40,9 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Organization;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.utils.FindSubProducts;
@@ -290,7 +290,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 	
 	private void linkProductOverTheSafetyNetwork(Product product) {
-		String linkedId = safetyNetworkManager.findProductLink(product.getRfidNumber(), product.getTenant());
+		String linkedId = safetyNetworkManager.findProductLink(product.getRfidNumber(), product.getOrganization());
 		if (linkedId != null) {
 			product.setLinkedUuid(linkedId);
 		}
@@ -339,7 +339,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	private void processOwnership(Product product) {
 		// if this customer has a jobsite feature then the customer and division
 		// must match the job site.
-		if (product.getTenant().hasExtendedFeature(ExtendedFeature.JobSites)) {
+		if (product.getOrganization().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites)) {
 			product.setOwner(product.getJobSite().getCustomer());
 			product.setDivision(product.getJobSite().getDivision());
 		}
@@ -487,7 +487,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		em.merge(productSerialExtensionValue);
 	}
 
-	public boolean duplicateSerialNumber(String serialNumber, Long uniqueID, Organization tenant) {
+	public boolean duplicateSerialNumber(String serialNumber, Long uniqueID, Tenant tenant) {
 		String queryString = "select count(p.id) from Product p where p.tenant = :tenant " + " and lower(p.serialNumber) = :serialNumber";
 		
 		if (uniqueID != null) {

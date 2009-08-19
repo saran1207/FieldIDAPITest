@@ -1,54 +1,41 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public abstract class ExtendedFeatureSwitch {
 	
-	protected final TenantOrganization tenant;
-	protected final PersistenceManager persistenceManager;
+	protected final PrimaryOrg primaryOrg;
 	protected final ExtendedFeature feature;
 	
-	protected ExtendedFeatureSwitch(TenantOrganization tenant, PersistenceManager persistenceManager, ExtendedFeature feature) {
-		this.tenant = tenant;
-		this.persistenceManager = persistenceManager;
+	protected ExtendedFeatureSwitch(PrimaryOrg primaryOrg, ExtendedFeature feature) {
+		this.primaryOrg = primaryOrg;
 		this.feature = feature;
 	}
 	
+	protected abstract void featureSetup();
+	protected abstract void featureTearDown();
 	
 	public final void enableFeature() {
-		if (!tenant.hasExtendedFeature(feature)) {
+		if (!primaryOrg.hasExtendedFeature(feature)) {
 			featureSetup();
 			addFeatureToTenant(feature);
-			updateTenant();
 		}
 	}
 	
-	protected abstract void featureSetup();
-	
 	protected void addFeatureToTenant(ExtendedFeature feature) {
-		tenant.getExtendedFeatures().add(feature);
+		primaryOrg.getExtendedFeatures().add(feature);
 	}
 	
-	
 	public final void disableFeature() {
-		if (tenant.hasExtendedFeature(feature)) {
+		if (primaryOrg.hasExtendedFeature(feature)) {
 			featureTearDown();
 			removeFeatureFromTenant(feature);
-			updateTenant();
 		}
 	}
 
-	protected abstract void featureTearDown();
-	
-	
 	protected void removeFeatureFromTenant(ExtendedFeature feature) {
-		tenant.getExtendedFeatures().remove(feature);
-	}
-	
-	protected void updateTenant() {
-		persistenceManager.update(tenant);
+		primaryOrg.getExtendedFeatures().remove(feature);
 	}
 	
 }

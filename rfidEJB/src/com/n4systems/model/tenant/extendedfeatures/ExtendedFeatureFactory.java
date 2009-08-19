@@ -1,21 +1,20 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class ExtendedFeatureFactory {
 
-	public static ExtendedFeatureSwitch getSwitchFor(ExtendedFeature feature, TenantOrganization tenant, PersistenceManager persistenceManager) {
+	public static ExtendedFeatureSwitch getSwitchFor(ExtendedFeature feature, PrimaryOrg primaryOrg) {
 		switch (feature) {
 			case PartnerCenter:
-				return new PartnerCenterSwitch(tenant, persistenceManager);
+				return new PartnerCenterSwitch(primaryOrg);
 			case JobSites:
-				return new JobSiteSwitch(tenant, persistenceManager);
+				return new JobSiteSwitch(primaryOrg);
 			case EmailAlerts:
-				return new EmailAlertsSwitch(tenant, persistenceManager);
+				return new EmailAlertsSwitch(primaryOrg);
 			default:
-				return new DefaultExtendedFeatureSwitch(tenant, persistenceManager, feature);
+				return new DefaultExtendedFeatureSwitch(primaryOrg, feature);
 		}
 	}
 }

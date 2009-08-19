@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.test.helpers.BasicAnswer;
 import com.n4systems.util.ListingPair;
@@ -25,7 +25,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class CatalogServiceTest {
 
-	private TenantOrganization n4;
+	private Tenant n4;
 
 	public CatalogServiceTest() {
 		n4 = aTenant().named("n4").build();

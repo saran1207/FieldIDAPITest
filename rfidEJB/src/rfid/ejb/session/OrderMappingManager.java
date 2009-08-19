@@ -14,7 +14,7 @@ import rfid.ejb.entity.OrderMappingBean;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.model.OrderKey;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.OrderMappingXmlParser;
 
 @Interceptors({TimingInterceptor.class})
@@ -23,7 +23,7 @@ public class OrderMappingManager implements OrderMapping {
 	@EJB private PersistenceManager persistenceManager;
 
 	@SuppressWarnings("unchecked")
-	public Map<String, OrderKey> getKeyMappings(TenantOrganization tenant, String externalSourceID) {
+	public Map<String, OrderKey> getKeyMappings(Tenant tenant, String externalSourceID) {
 		Query query = persistenceManager.getEntityManager().createQuery("from OrderMappingBean om where om.organizationID = :oID and om.externalSourceID = :esID");
 		query.setParameter("oID", tenant.getName());
 		query.setParameter("esID", externalSourceID);

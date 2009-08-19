@@ -9,14 +9,15 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.Organization;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.util.ConfigContext;
 
@@ -167,25 +168,23 @@ public class PathHandler {
 	 * @param 	tenant	A Tenant
 	 * @return			A string path representing a Tenants private path
 	 */
-	private static String getTenantPathPart(TenantOrganization tenant) {
+	private static String getTenantPathPart(Tenant tenant) {
 		return tenant.getName();
 	}
 	
 	/**
 	 * Constructs a relative path for a organizations private directory.  If the Organization is a TenantOrganization,
-	 * the path will be the same as {@link #getTenantPathPart(TenantOrganization)}.
+	 * the path will be the same as {@link #getTenantPathPart(Tenant)}.
 	 * @param 	organization	An Organization
 	 * @return					A string path representing an Organizations private path
 	 */
-	private static String getOrganizationPathPart(Organization organization) {
+	private static String getOrganizationPathPart(BaseOrg organization) {
 		String path;
-		
-		if (organization instanceof TenantOrganization) {
-			path = getTenantPathPart(organization.getTenant());
-		} else {
+		if (organization instanceof SecondaryOrg) {
 			path = mergePaths(getTenantPathPart(organization.getTenant()), ORGANIZATION_PATH_PART, organization.getId().toString());
+		} else {
+			path = getTenantPathPart(organization.getTenant());
 		}
-		
 		return path;
 	}
 	
@@ -201,18 +200,18 @@ public class PathHandler {
 	/**
 	 * Returns the base directory for user files for the given tenant.
 	 */
-	public static File getAbsoluteUserBaseFile(TenantOrganization tenant) {
+	public static File getAbsoluteUserBaseFile(Tenant tenant) {
 		return absolutize(getUserBasePath(tenant));
 	}
 	
 	
-	private static String getUserBasePath(TenantOrganization tenant) {
+	private static String getUserBasePath(Tenant tenant) {
 		return mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(tenant), USER_PATH_PART);
 	}
 	
 	/**
 	 * Finds the relative Tenant specific path to Product report.  Uses the Tenant from the Product to resolve the Teanant path part
-	 * @see 	#getTenantPathPart(TenantOrganization)
+	 * @see 	#getTenantPathPart(Tenant)
 	 * @see 	#getReportPath(Product)
 	 * @param 	product	A Product
 	 * @return	A string path relative to the application root
@@ -246,7 +245,7 @@ public class PathHandler {
 	
 	/**
 	 * Finds the relative Tenant specific path to an InspectionTypeGroup's report.  Uses the Tenant from the InspectionTypeGroup to resolve the Teanant path part. Appends the master suffix if isMaster is true.
-	 * @see 	#getTenantPathPart(TenantOrganization)
+	 * @see 	#getTenantPathPart(Tenant)
 	 * @see 	#getReportFileName(InspectionTypeGroup)
 	 * @param 	group		An InspectionTypeGroup
 	 * @param 	isMaster	Appends the master suffix when true.
@@ -291,12 +290,12 @@ public class PathHandler {
 
 	/**
 	 * Finds a summary report for a Tenant.  Defaults to the all tenant report directory if the Tenant specific report does not exist.
-	 * @see 	#getSummaryReportPath(TenantOrganization)
+	 * @see 	#getSummaryReportPath(Tenant)
 	 * @param	getAppRoot()	A base directory to resolve the file from
 	 * @param 	tenant			A Tenant
 	 * @return					A File object for the resolved report
 	 */
-	public static File getSummaryReportFile(TenantOrganization tenant) {
+	public static File getSummaryReportFile(Tenant tenant) {
 		File tenantReport = absolutize(mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), SUMMARY_REPORT_FILE_NAME));
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(SUMMARY_REPORT_FILE_NAME);
 	}
@@ -311,7 +310,7 @@ public class PathHandler {
 		return mergePaths(dateCreatedPath, project.getId().toString());
 	}
 	
-	private static String getJobAttachmentBasePath(TenantOrganization tenant) {
+	private static String getJobAttachmentBasePath(Tenant tenant) {
 		return mergePaths(PROJECT_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
@@ -348,11 +347,11 @@ public class PathHandler {
 		return absolutize(mergePaths(getInspectionAttachmentBasePath(inspection.getTenant()), getAttachmentPath(inspection)));
 	}
 	
-	public static File getInspectionAttachmentBaseFile(TenantOrganization tenant) {
+	public static File getInspectionAttachmentBaseFile(Tenant tenant) {
 		return absolutize(getInspectionAttachmentBasePath(tenant));
 	}
 	
-	private static String getInspectionAttachmentBasePath(TenantOrganization tenant) {
+	private static String getInspectionAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
@@ -360,7 +359,7 @@ public class PathHandler {
 		return absolutize(mergePaths(getJobAttachmentBasePath(project.getTenant()), getProjectPath(project), getNotePath(note)));
 	}
 	
-	public static File getJobAttachmentFileBaseFile(TenantOrganization tenant) {
+	public static File getJobAttachmentFileBaseFile(Tenant tenant) {
 		return absolutize(getJobAttachmentBasePath(tenant));
 	}
 	
@@ -368,11 +367,11 @@ public class PathHandler {
 		return absolutize(mergePaths(getProductAttachmentBasePath(note.getTenant()), getProductPath(note.getProduct()), getNotePath(note)));
 	}
 	
-	public static File getProductAttachmentBaseFile(TenantOrganization tenant) {
+	public static File getProductAttachmentBaseFile(Tenant tenant) {
 		return absolutize(getProductAttachmentBasePath(tenant));
 	}
 	
-	private static String getProductAttachmentBasePath(TenantOrganization tenant) {
+	private static String getProductAttachmentBasePath(Tenant tenant) {
 		return mergePaths(PRODUCT_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
@@ -380,11 +379,11 @@ public class PathHandler {
 		return absolutize(mergePaths(getInspectionChartImageBasePath(inspection.getTenant()), getInspectionPath(inspection), CHART_FILE_NAME));
 	}
 	
-	public static File getInspectionChartImageBaseFile(TenantOrganization tenant) {
+	public static File getInspectionChartImageBaseFile(Tenant tenant) {
 		return absolutize(getInspectionChartImageBasePath(tenant));
 	}
 	
-	private static String getInspectionChartImageBasePath(TenantOrganization tenant) {
+	private static String getInspectionChartImageBasePath(Tenant tenant) {
 		return mergePaths(CHART_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
@@ -392,11 +391,11 @@ public class PathHandler {
 		return absolutize(mergePaths(getInspectionProoftestBasePath(inspection.getTenant()), getInspectionPath(inspection), PROOF_TEST_FILE_NAME));
 	}
 	
-	public static File getInspectionProoftestBaseFile(TenantOrganization tenant) {
+	public static File getInspectionProoftestBaseFile(Tenant tenant) {
 		return absolutize(getInspectionProoftestBasePath(tenant));
 	}
 	
-	private static String getInspectionProoftestBasePath(TenantOrganization tenant) {
+	private static String getInspectionProoftestBasePath(Tenant tenant) {
 		return mergePaths(PROOF_TEST_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
@@ -416,11 +415,11 @@ public class PathHandler {
 		return absolutize(mergePaths(getProductTypeAttachmentBasePath(productType.getTenant()), getProductTypePath(productType)));
 	}
 	
-	private static String getProductTypeAttachmentBasePath(TenantOrganization tenant) {
+	private static String getProductTypeAttachmentBasePath(Tenant tenant) {
 		return mergePaths(PRODUCT_TYPE_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	public static File getProductTypeAttachmentBaseFile(TenantOrganization tenant) {
+	public static File getProductTypeAttachmentBaseFile(Tenant tenant) {
 		return absolutize(getProductTypeAttachmentBasePath(tenant));
 	}
 	
@@ -428,32 +427,39 @@ public class PathHandler {
 		return absolutize(mergePaths(getProductTypeImageBasePath(productType.getTenant()), getProductTypePath(productType)));
 	}
 	
-	public static File getProductTypeImageBaseFile(TenantOrganization tenant) {
+	public static File getProductTypeImageBaseFile(Tenant tenant) {
 		return absolutize(getProductTypeImageBasePath(tenant));
 	}
 	
-	public static String getProductTypeImageBasePath(TenantOrganization tenant) {
+	public static String getProductTypeImageBasePath(Tenant tenant) {
 		return mergePaths(PRODUCT_TYPE_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
 
 	/** @return The Tenant specific configuration directory for a tenant */
-	public static File getConfDir(TenantOrganization tenant) {
+	public static File getConfDir(Tenant tenant) {
 		return absolutize(mergePaths(CONF_PATH_BASE, getTenantPathPart(tenant)));
 	}
 	
 	/** @return The Tenant specific configuration properties file for a Tenant and Class */
-	public static File getPropertiesFile(TenantOrganization tenant, Class<?> clazz) {
+	public static File getPropertiesFile(Tenant tenant, Class<?> clazz) {
 		return parentize(getConfDir(tenant), mergePaths(clazz.getPackage().getName(), clazz.getSimpleName() + PROPERTIES_FILE_EXT));
 	}
 	
 	/** @return The Tenant main logo */
-	public static File getTenantLogo(TenantOrganization tenant) {
+	public static File getTenantLogo(Tenant tenant) {
 		return absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(tenant), LOGO_IMAGE_FILE_NAME));
 	}
 	
 	/** @return The certificate logo for an Organization */
-	public static File getCertificateLogo(Organization organization) {
-		return absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getOrganizationPathPart(organization), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
+	public static File getCertificateLogo(BaseOrg organization) {
+		File logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getOrganizationPathPart(organization), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
+		
+		// if we're dealing with a SecondaryOrg and the file does not exist, fall back to the tenant
+		if (!logo.exists() && (organization instanceof SecondaryOrg)) {
+			logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(organization.getTenant()), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
+		}
+		
+		return logo;
 	}
 	
 	/** @return The signature image for a user  */

@@ -28,7 +28,7 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
 import com.n4systems.model.Product;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -239,13 +239,13 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@SuppressWarnings("unused")
-	private TenantOrganization getTenantBean( Long tenantId ) throws InvalidTenantException {
+	private Tenant getTenantBean( Long tenantId ) throws InvalidTenantException {
 		// For backwards compatability.  If they didn't send over the user, we use the manufacturers default organizational unit
 		// need to load the product serial to look at which one that is
-		TenantOrganization tenant = null ;
+		Tenant tenant = null ;
 		try {
 			
-			tenant =  (TenantOrganization)ServiceLocator.getPersistenceManager().find( TenantOrganization.class, tenantId );
+			tenant =  (Tenant)ServiceLocator.getPersistenceManager().find( Tenant.class, tenantId );
 		} catch (Exception e) {
 			logger.error("Loading tenant organizational unit", e);
 			throw new InvalidTenantException(e);

@@ -9,16 +9,15 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
-import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.reporting.PathHandler;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
-	private TenantOrganization myTenant;
+	private PrimaryOrg primaryOrg;
 	private File uploadedImage;
 	private String imageDirectory;
 	private boolean removeImage = false;
@@ -30,7 +29,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		myTenant = persistenceManager.find(TenantOrganization.class, getTenantId());
+		primaryOrg = getPrimaryOrg();
 	}
 
 	@Override
@@ -41,18 +40,18 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doEdit() {
-		File privateLogoPath = PathHandler.getTenantLogo(myTenant);
+		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
 		if (privateLogoPath.exists()) {
 			imageDirectory = privateLogoPath.getName();
 		}
 		return SUCCESS;
 	}
-
+	
 	@ExtendedFeatureFilter(requiredFeature = ExtendedFeature.Branding)
 	public String doUpdate() {
 
 		try {
-			persistenceManager.update(myTenant, fetchCurrentUser());
+			persistenceManager.update(primaryOrg, fetchCurrentUser());
 			processLogo();
 			refreshSessionUser();
 			addFlashMessageText("message.system_settings_updated");
@@ -64,7 +63,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	private void processLogo() throws IOException {
-		File privateLogoPath = PathHandler.getTenantLogo(myTenant);
+		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
 		if (newImage == true && imageDirectory != null && imageDirectory.length() != 0) {
 			if (!privateLogoPath.getParentFile().exists()) {
 				privateLogoPath.getParentFile().mkdirs();
@@ -79,15 +78,15 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	public String getWebSite() {
-		return myTenant.getWebSite();
+		return primaryOrg.getWebSite();
 	}
 
 	@UrlValidator(key = "error.web_site_must_be_a_url", message = "")
 	public void setWebSite(String webSite) {
 		if (webSite == null || webSite.trim().length() == 0) {
-			myTenant.setWebSite(null);
+			primaryOrg.setWebSite(null);
 		} else {
-			myTenant.setWebSite(webSite);
+			primaryOrg.setWebSite(webSite);
 		}
 	}
 

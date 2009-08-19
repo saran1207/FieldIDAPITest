@@ -37,7 +37,7 @@ public class PrintOut extends AbstractEntity implements NamedEntity {
 	private String pdfTemplate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private TenantOrganization tenant;
+	private Tenant tenant;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
@@ -107,11 +107,11 @@ public class PrintOut extends AbstractEntity implements NamedEntity {
 		this.type = type;
 	}
 
-	public TenantOrganization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 
-	public void setTenant(TenantOrganization tenant) {
+	public void setTenant(Tenant tenant) {
 		this.tenant = tenant;
 	}
 

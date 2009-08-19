@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.utils;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import rfid.ejb.entity.UserBean;
@@ -41,7 +41,7 @@ public class ListHelper {
 		}
 	}
 	
-	public static <T extends EntityWithTenant> void setSecurity( Collection<T> list, TenantOrganization tenant, UserBean modifiedBy ) {
+	public static <T extends EntityWithTenant> void setSecurity( Collection<T> list, Tenant tenant, UserBean modifiedBy ) {
 		for( EntityWithTenant entity : list ) {
 			if( entity != null ) { 
 				entity.setTenant( tenant );
@@ -54,7 +54,7 @@ public class ListHelper {
 		}
 	}
 	
-	public static <T extends EntityWithTenant> void setTenants( Collection<T> list, TenantOrganization tenant ) {
+	public static <T extends EntityWithTenant> void setTenants( Collection<T> list, Tenant tenant ) {
 		setSecurity(list, tenant, null);
 	}
 	

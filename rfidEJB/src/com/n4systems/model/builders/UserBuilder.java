@@ -3,11 +3,11 @@ package com.n4systems.model.builders;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 
-	private final TenantOrganization tenantOrganization;
+	private final Tenant tenantOrganization;
 	private final Long customer;
 	
 	public static UserBuilder aUser() {
@@ -22,11 +22,11 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 		return new UserBuilder(aTenant().build(), 1L);
 	}
 	
-	public UserBuilder(TenantOrganization tenantOrganization) {
+	public UserBuilder(Tenant tenantOrganization) {
 		this(tenantOrganization, null);
 	}
 	
-	public UserBuilder(TenantOrganization tenantOrganization, Long customer) {
+	public UserBuilder(Tenant tenantOrganization, Long customer) {
 		super();
 		this.tenantOrganization = tenantOrganization;
 		this.customer = customer;

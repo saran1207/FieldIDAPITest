@@ -1,24 +1,24 @@
 package com.n4systems.services.safetyNetwork;
 
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.exceptions.NotImplementedException;
+import com.n4systems.model.Tenant;
 
 public class SafetyNetworkAccessService {
 
 	private PersistenceManager persistenceManager;
-	private TenantOrganization tenant;
+//	private Tenant tenant;
 	
-	
-	public SafetyNetworkAccessService(PersistenceManager persistenceManager, TenantOrganization tenant) {
+	public SafetyNetworkAccessService(PersistenceManager persistenceManager, Tenant tenant) {
 		super();
 		this.persistenceManager = persistenceManager;
-		this.tenant = persistenceManager.find(TenantOrganization.class, tenant.getId(), "linkedTenants");
-		
+//		this.tenant = persistenceManager.find(Tenant.class, tenant.getId(), "linkedTenants");
 	}
 	
 	
-	public CatalogService getCatalogAccess(TenantOrganization linkedTenant) throws NoAccessToTenantException {
+	public CatalogService getCatalogAccess(Tenant linkedTenant) throws NoAccessToTenantException {
 		if (hasAccessToLinkedTenant(linkedTenant)) {
 			return new CatalogServiceImpl(persistenceManager, linkedTenant);
 		} 
@@ -26,8 +26,8 @@ public class SafetyNetworkAccessService {
 	}
 
 
-	private boolean hasAccessToLinkedTenant(TenantOrganization linkedTenant) {
-		return tenant.getLinkedTenants().contains(linkedTenant);
+	private boolean hasAccessToLinkedTenant(Tenant linkedTenant) {
+		throw new NotImplementedException("Disabled for Tenant refactor");
 	}
 	
 	

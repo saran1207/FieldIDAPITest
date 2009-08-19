@@ -25,7 +25,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.webservice.dto.CustomerServiceDTO;
 import com.n4systems.webservice.dto.DivisionServiceDTO;
@@ -70,7 +70,7 @@ public interface ServiceDTOBeanConverter {
 	public AutoAttributeCriteriaServiceDTO convert_old( AutoAttributeCriteria criteriaIn );
 	public ProductStatusServiceDTO convert( ProductStatusBean productStatus );
 	public ProductTypeServiceDTO convert_new( ProductType productType );
-	public TenantServiceDTO convert(TenantOrganization tenant);
+	public TenantServiceDTO convert(PrimaryOrg tenant);
 	public com.n4systems.webservice.dto.UserServiceDTO convert(UserBean user);
 	public UserBean convert(com.n4systems.webservice.dto.UserServiceDTO user);
 	public UserServiceDTO convert_old( UserBean user );

@@ -9,28 +9,28 @@ import com.n4systems.model.Customer;
 import com.n4systems.model.Division;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.JobSite;
-import com.n4systems.model.TenantOrganization;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingOwner;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.SecurityFilter;
 
 public class NotificationSettingViewModelConverter {
 	
 	private final PersistenceManager pm;
-	private final TenantOrganization tenant;
+	private final PrimaryOrg primaryOrg;
 	private final UserBean user;
 	private final SecurityFilter filter;
 	private final boolean usingJobSites;
 	
-	public NotificationSettingViewModelConverter(PersistenceManager pm, TenantOrganization tenant, UserBean user, SecurityFilter filter) {
+	public NotificationSettingViewModelConverter(PersistenceManager pm, PrimaryOrg primaryOrg, UserBean user, SecurityFilter filter) {
 		this.pm = pm;
-		this.tenant = tenant;
+		this.primaryOrg = primaryOrg;
 		this.user = user;
 		this.filter = filter;
-		this.usingJobSites = tenant.hasExtendedFeature(ExtendedFeature.JobSites);
+		this.usingJobSites = primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class NotificationSettingViewModelConverter {
 		
 		// setup the model object
 		model.setId(view.getId());
-		model.setTenant(tenant);
+		model.setTenant(primaryOrg.getTenant());
 		model.setUser(user);
 		model.setUsingJobSite(usingJobSites);
 		model.setName(view.getName());

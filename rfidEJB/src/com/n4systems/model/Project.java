@@ -95,7 +95,7 @@ public class Project extends EntityWithTenant implements NamedEntity, Listable<L
 	public Project() {
 	}
 
-	public Project( TenantOrganization tenant ) {
+	public Project( Tenant tenant ) {
 		super( tenant );
 	}
 	

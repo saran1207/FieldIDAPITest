@@ -29,7 +29,8 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.Organization;
+import com.n4systems.model.BaseEntity;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
@@ -73,7 +74,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return em;
 	}
 
-	public <T extends AbstractEntity> T find(Class<T> entityClass, Long entityId) {
+	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId) {
 		return em.find(entityClass, entityId);
 	}
 
@@ -92,15 +93,15 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return find(queryBuilder);
 	}
 
-	public <T extends AbstractEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields) {
+	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields) {
 		return postFetchFields(find(entityClass, entityId), postFetchFields);
 	}
 
-	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Organization tenant, String... postFetchFields) {
+	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant, String... postFetchFields) {
 		return postFetchFields(find(entityClass, entityId, tenant), postFetchFields);
 	}
 
-	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Organization tenant) {
+	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant) {
 		return find(entityClass, entityId, tenant.getId());
 	}
 
@@ -139,7 +140,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends AbstractEntity & NamedEntity> T findByName(Class<T> entityClass, String entityName) {
+	public <T extends BaseEntity & NamedEntity> T findByName(Class<T> entityClass, String entityName) {
 		T entity;
 
 		try {
@@ -209,21 +210,21 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 	
 	@SuppressWarnings("unchecked")
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass) {
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass) {
 		return (List<T>) em.createQuery(generateFromClause(defaultTableAlias, entityClass)).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass, String orderBy) {
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, String orderBy) {
 		return (List<T>) em.createQuery(generateFromClause(defaultTableAlias, entityClass) + " ORDER BY " + orderBy + " ASC ").getResultList();
 	}
 
-	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Organization tenant) {
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Tenant tenant) {
 		return findAll(entityClass, tenant.getId());
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Organization tenant, String... postFetchFields) {
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Tenant tenant, String... postFetchFields) {
 		Query query = em.createQuery(generateFromClause(defaultTableAlias, entityClass) + "where " + defaultTableAlias + ".tenant.id = :tenantId and " + defaultTableAlias + ".id in (:idlist)");
 
 		query.setParameter("tenantId", tenant.getId());
@@ -262,12 +263,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return findAll(entityClass, whereClause, orderBy);
 	}
 
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses) {
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses) {
 		return findAll(entityClass, whereClauses, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends AbstractEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses, Map<String, Boolean> orderBy) {
+	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses, Map<String, Boolean> orderBy) {
 		String paramPrefix = "param";
 		int position;
 		List<Object> paramValues = new ArrayList<Object>();
@@ -331,13 +332,13 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
 		Query createQuery = queryBuilder.createQuery(em);
 		List<T> resultList = (List<T>) createQuery.getResultList();
-		return (List<T>) postFetchFields(resultList, queryBuilder.getPostFetchPaths());
+		return postFetchFields(resultList, queryBuilder.getPostFetchPaths());
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
 		List<T> resultList = (List<T>) queryBuilder.createQuery(em).setFirstResult(pageSize * page).setMaxResults(pageSize).getResultList();
-		return (List<T>) postFetchFields(resultList, queryBuilder.getPostFetchPaths());
+		return postFetchFields(resultList, queryBuilder.getPostFetchPaths());
 	}
 
 	public <T> Pager<T> findAllPaged(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
@@ -356,7 +357,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		em.persist(entity);
 	}
 	
-	public <T extends AbstractEntity> Long save(T entity) {
+	public <T extends BaseEntity> Long save(T entity) {
 		em.persist(entity);
 		return entity.getId();
 	}
@@ -369,7 +370,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return em.merge(entity);
 	}
 	
-	public <T extends AbstractEntity> T update(T entity) {
+	public <T extends BaseEntity> T update(T entity) {
 		return em.merge(entity);
 	}
 
@@ -402,7 +403,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return updatedEntities;
 	}
 
-	public <T extends AbstractEntity> void delete(T entity) {
+	public <T extends BaseEntity> void delete(T entity) {
 		em.remove(update(entity));
 	}
 	
@@ -410,7 +411,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		em.remove(updateAny(entity));
 	}
 	
-	public <T extends AbstractEntity> void deleteSafe(T entity) throws EntityStillReferencedException {
+	public <T extends BaseEntity> void deleteSafe(T entity) throws EntityStillReferencedException {
 		try {
 			delete(entity);
 			/*
@@ -486,6 +487,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return postFetchFields(entity, Arrays.asList(postFetchFields));
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T postFetchFields(T entity, List<String> postFetchFields) {
 		if (entity == null) {
 			return null;
@@ -680,7 +682,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		QueryBuilder<Long> idBuilder = createBaseSearchQueryBuilder(Long.class, definer);
 		
 		addSortTermsToBuilder(idBuilder, definer.getSortTerms());
-		// note that this will fail for entities not implementing AbstractEntity (unless you get lucky)
+		// note that this will fail for entities not implementing BaseEntity (unless you get lucky)
 		List<Long> ids = findAll(idBuilder.setSimpleSelect("id"));
 		
 		return ids;

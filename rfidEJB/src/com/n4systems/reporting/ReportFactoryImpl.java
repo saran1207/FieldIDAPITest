@@ -57,11 +57,12 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.JobSite;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Organization;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.ConfigContext;
@@ -406,9 +407,9 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 
-		addImageStreams(reportMap, inspection.getTenant(), inspection.getOrganization());
+		addImageStreams(reportMap, inspection.getOrganization());
 
-		addTenantParams(reportMap, inspection.getTenant());
+		addTenantParams(reportMap, inspection.getOrganization().getPrimaryOrg());
 		addOrganizationParams(reportMap, inspection.getOrganization());
 		addUserParams(reportMap, inspection.getInspector());
 		reportMap.putAll(new ProductReportMapProducer(inspection.getProduct(), new DateTimeDefiner(user)).produceMap());
@@ -454,8 +455,8 @@ public class ReportFactoryImpl implements ReportFactory {
 			reportMap.put("product", inspectionReportMap.get("product"));
 			addInspectionTypeGroupParams(reportMap, inspection.getType().getGroup());
 			reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-			addImageStreams(reportMap, inspection.getTenant(), inspection.getOrganization());
-			addTenantParams(reportMap, inspection.getTenant());
+			addImageStreams(reportMap, inspection.getOrganization());
+			addTenantParams(reportMap, inspection.getOrganization().getPrimaryOrg());
 			addOrganizationParams(reportMap, inspection.getOrganization());
 			addUserParams(reportMap, inspection.getInspector());
 			addCustomerParams(reportMap, inspection.getCustomer());
@@ -524,8 +525,8 @@ public class ReportFactoryImpl implements ReportFactory {
 		ReportMap<Object> reportMap = createAbstractInspectionReportMap(inspection, user);
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-		addImageStreams(reportMap, inspection.getTenant(), inspection.getOrganization());
-		addTenantParams(reportMap, inspection.getTenant());
+		addImageStreams(reportMap, inspection.getOrganization());
+		addTenantParams(reportMap, inspection.getOrganization().getPrimaryOrg());
 		addOrganizationParams(reportMap, inspection.getOrganization());
 		addUserParams(reportMap, inspection.getInspector());
 		addCustomerParams(reportMap, inspection.getCustomer());
@@ -578,9 +579,9 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 
-		addImageStreams(reportMap, productSerial.getTenant(), productSerial.getOrganization());
+		addImageStreams(reportMap, productSerial.getOrganization());
 
-		addTenantParams(reportMap, productSerial.getTenant());
+		addTenantParams(reportMap, productSerial.getOrganization().getPrimaryOrg());
 		addOrganizationParams(reportMap, productSerial.getOrganization());
 		addUserParams(reportMap, productSerial.getIdentifiedBy());
 
@@ -610,9 +611,9 @@ public class ReportFactoryImpl implements ReportFactory {
 
 	/**
 	 * @see com.n4systems.reporting.ReportFactory#generateInspectionReport(com.n4systems.util.ReportCriteria,
-	 *      java.lang.String, com.n4systems.model.TenantOrganization)
+	 *      java.lang.String, com.n4systems.model.Tenant)
 	 */
-	public JasperPrint generateInspectionReport(ReportDefiner reportDefiner, UserBean user, TenantOrganization tenant) throws ReportException {
+	public JasperPrint generateInspectionReport(ReportDefiner reportDefiner, UserBean user, Tenant tenant) throws ReportException {
 		File jasperFile = PathHandler.getSummaryReportFile(tenant);
 
 		// check to see if the report exists
@@ -622,12 +623,12 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner);
 
-		ReportMap<Object> reportMap = criteriaMap(reportDefiner, tenant, jasperFile);
+		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOrganization().getPrimaryOrg(), jasperFile);
 		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();
 
 		// we don't have access to a user here so we'll always use the tenant's
 		// image
-		addImageStreams(reportMap, tenant, null);
+		addImageStreams(reportMap, user.getOrganization().getPrimaryOrg());
 
 		try {
 			Inspection inspection;
@@ -639,7 +640,7 @@ public class ReportFactoryImpl implements ReportFactory {
 				inspectionMap.put("productType", inspection.getProduct().getType().getName());
 				inspectionMap.put("serialNumber", inspection.getProduct().getSerialNumber());
 				inspectionMap.put("description", inspection.getProduct().getDescription());
-				inspectionMap.put("organization", inspection.getOrganization().getDisplayName());
+				inspectionMap.put("organization", inspection.getOrganization().getName());
 				inspectionMap.put("division", (inspection.getDivision() != null) ? inspection.getDivision().getDisplayName() : null);
 				inspectionMap.put("inspectionType", inspection.getType().getName());
 				inspectionMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
@@ -670,7 +671,7 @@ public class ReportFactoryImpl implements ReportFactory {
 	}
 
 	// XXX - document me
-	private ReportMap<Object> criteriaMap(ReportDefiner reportDefiner, TenantOrganization tenant, File jasperFile) {
+	private ReportMap<Object> criteriaMap(ReportDefiner reportDefiner, PrimaryOrg primaryOrg, File jasperFile) {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
@@ -680,8 +681,8 @@ public class ReportFactoryImpl implements ReportFactory {
 		reportMap.put("purchaseOrder", reportDefiner.getPurchaseOrder());
 		reportMap.put("toDate", reportDefiner.getToDate());
 		reportMap.put("fromDate", reportDefiner.getFromDate());
-		reportMap.put("hasIntegration", tenant.hasExtendedFeature(ExtendedFeature.Integration));
-		reportMap.put("hasJobSites", tenant.hasExtendedFeature(ExtendedFeature.JobSites));
+		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
+		reportMap.put("hasJobSites", primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 
 		if (reportDefiner.getProductType() != null) {
 			reportMap.put("productType", productTypeManger.findProductType(reportDefiner.getProductType()).getName());
@@ -716,20 +717,20 @@ public class ReportFactoryImpl implements ReportFactory {
 		return reportMap;
 	}
 
-	private void addImageStreams(ReportMap<Object> params, TenantOrganization tenant, Organization org) throws ReportException {
-		InputStream logoImage = resolveCertificateMainLogo(org, tenant);
+	private void addImageStreams(ReportMap<Object> params, BaseOrg org) throws ReportException {
+		InputStream logoImage = resolveCertificateMainLogo(org);
 		InputStream n4LogoImage = getImageFileStream(PathHandler.getCommonImageFile(n4LogoFileName));
 
 		params.put("n4LogoImage", n4LogoImage);
 		params.put("logoImage", logoImage);
 	}
 
-	private void addTenantParams(ReportMap<Object> params, TenantOrganization tenant) {
+	private void addTenantParams(ReportMap<Object> params, PrimaryOrg primaryOrg) {
 		params.putEmpty("manName", "manAddress");
 
-		params.put("manName", tenant.getDisplayName());
-		if (tenant.getAddressInfo() != null) {
-			params.put("manAddress", tenant.getAddressInfo().getDisplay());
+		params.put("manName", primaryOrg.getName());
+		if (primaryOrg.getAddressInfo() != null) {
+			params.put("manAddress", primaryOrg.getAddressInfo().getDisplay());
 		}
 	}
 
@@ -759,10 +760,12 @@ public class ReportFactoryImpl implements ReportFactory {
 		if (division != null) {
 			params.put("division", division.getName());
 			params.put("divisionID", division.getDivisionID());
+
 			if (division.getContact() != null) {
 				params.put("divisionContactName", division.getContact().getName());
 				params.put("divisionContactEmail", division.getContact().getEmail());
 			}
+			
 			AddressInfo addressInfo = division.getAddressInfo();
 			if (addressInfo != null) {
 				params.put("divisionAddress", addressInfo.getStreetAddress());
@@ -810,12 +813,12 @@ public class ReportFactoryImpl implements ReportFactory {
 		}
 	}
 
-	private void addOrganizationParams(ReportMap<Object> params, Organization org) {
+	private void addOrganizationParams(ReportMap<Object> params, BaseOrg org) {
 		params.putEmpty("organizationalPrintName", "organizationalAddress", "organizationalCity", "organizationalState", "organizationalPostalCode", "organizationalPhoneNumber",
 				"organizationalFaxNumber");
 
 		if (org != null) {
-			params.put("organizationalPrintName", org.getCertificateName());
+			params.put("organizationalPrintName", org.getPrimaryOrg().getCertificateName());
 
 			AddressInfo addressInfo = org.getAddressInfo();
 			if (addressInfo != null) {
@@ -896,22 +899,13 @@ public class ReportFactoryImpl implements ReportFactory {
 	 * @return An InputStream or null if no logo could be resolved.
 	 * @throws ReportException
 	 */
-	private InputStream resolveCertificateMainLogo(Organization organization, TenantOrganization tenant) throws ReportException {
+	private InputStream resolveCertificateMainLogo(BaseOrg organization) throws ReportException {
 		InputStream logoStream = null;
-		File tenantLogo = PathHandler.getCertificateLogo(tenant);
+		File tenantLogo = PathHandler.getCertificateLogo(organization);
 
 		try {
-			if (organization != null) {
-				File orgLogo = PathHandler.getCertificateLogo(organization);
-
-				if (orgLogo.exists()) {
-					logoStream = new FileInputStream(orgLogo);
-				}
-			}
-
-			if (logoStream == null && tenantLogo.exists()) {
-				logoStream = new FileInputStream(tenantLogo);
-			}
+			logoStream = new FileInputStream(tenantLogo);
+			
 		} catch (FileNotFoundException e) {
 			throw new ReportException("Failed creating certificate logo input stream", e);
 		}

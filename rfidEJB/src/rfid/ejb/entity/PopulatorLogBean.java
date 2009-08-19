@@ -11,7 +11,7 @@ import javax.persistence.TemporalType;
 
 import rfid.ejb.session.PopulatorLog;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 
 @Entity
@@ -32,7 +32,7 @@ public class PopulatorLogBean extends LegacyBeanTenant {
 	public PopulatorLogBean() {
 	}
 
-	public PopulatorLogBean(TenantOrganization tenant, String logMessage,
+	public PopulatorLogBean(Tenant tenant, String logMessage,
 			PopulatorLog.logStatus logStatus, PopulatorLog.logType logType) {
 
 		setTenant(tenant);

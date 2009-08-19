@@ -6,10 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.ProductCountLoader;
 import com.n4systems.model.user.EmployeeUserCountLoader;
-import com.n4systems.persistence.loaders.AllEntityListLoader;
+import com.n4systems.services.TenantCache;
 import com.n4systems.usage.TenantDiskUsageCalculator;
 
 public class TenantLimitService implements Serializable {
@@ -70,12 +70,10 @@ public class TenantLimitService implements Serializable {
 	public void updateAll() {
 		logger.info("Reloading all limits");
 		long startTime = System.currentTimeMillis();
-		AllEntityListLoader<TenantOrganization> loader = new AllEntityListLoader<TenantOrganization>(TenantOrganization.class);
-	
-		for (TenantOrganization tenant: loader.load()) {
-			updateDiskSpace(tenant);
-			updateEmployeeUsers(tenant);
-			updateAssets(tenant);
+		for (PrimaryOrg primaryOrg: TenantCache.getInstance().findAllPrimaryOrgs()) {
+			updateDiskSpace(primaryOrg);
+			updateEmployeeUsers(primaryOrg);
+			updateAssets(primaryOrg);
 		}
 		logger.info("All limits reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
 	}
@@ -103,49 +101,49 @@ public class TenantLimitService implements Serializable {
 	/**
 	 * Updates the employee user limit for a single tenant
 	 */
-	private void updateEmployeeUsers(TenantOrganization tenant) {
-		logger.debug("Updating employee limits for [" + tenant.getName() + "]");
+	private void updateEmployeeUsers(PrimaryOrg primaryOrg) {
+		logger.debug("Updating employee limits for [" + primaryOrg.toString() + "]");
 		
 		EmployeeUserCountLoader loader = new EmployeeUserCountLoader();
-		loader.setTenantId(tenant.getId());
+		loader.setTenantId(primaryOrg.getId());
 		
 		ResourceLimit limit = new AccountResourceLimit();
 		limit.setUsed(loader.load());
-		limit.setMaximum(tenant.getLimits().getUsers());
+		limit.setMaximum(primaryOrg.getLimits().getUsers());
 		
-		employeeUsers.put(tenant.getId(), limit);
-		logger.debug("Employee Limit [" + tenant.getName() + "]: " + limit.toString());
+		employeeUsers.put(primaryOrg.getId(), limit);
+		logger.debug("Employee Limit [" + primaryOrg.toString() + "]: " + limit.toString());
 	}
 	
 	/**
 	 * Updates the disk space limit for a single tenant
 	 */
-	private void updateDiskSpace(TenantOrganization tenant) {
-		logger.debug("Updating disk space limits for [" + tenant.getName() + "]");
-		TenantDiskUsageCalculator usageCalc = new TenantDiskUsageCalculator(tenant);
+	private void updateDiskSpace(PrimaryOrg primaryOrg) {
+		logger.debug("Updating disk space limits for [" + primaryOrg.toString() + "]");
+		TenantDiskUsageCalculator usageCalc = new TenantDiskUsageCalculator(primaryOrg.getTenant());
 		
 		ResourceLimit limit = new DiskResourceLimit();
 		limit.setUsed(usageCalc.totalLimitingSize());
-		limit.setMaximum(tenant.getLimits().getDiskSpace());
+		limit.setMaximum(primaryOrg.getLimits().getDiskSpace());
 		
-		diskSpace.put(tenant.getId(), limit);
-		logger.debug("Disk Limit [" + tenant.getName() + "]: " + limit.toString());
+		diskSpace.put(primaryOrg.getId(), limit);
+		logger.debug("Disk Limit [" + primaryOrg.toString() + "]: " + limit.toString());
 	}
 	
 	/**
 	 * Updates the asset limit for a single tenant
 	 */
-	private void updateAssets(TenantOrganization tenant) {
-		logger.debug("Updating asset limits for [" + tenant.getName() + "]");
+	private void updateAssets(PrimaryOrg primaryOrg) {
+		logger.debug("Updating asset limits for [" + primaryOrg.toString() + "]");
 		
 		ProductCountLoader loader = new ProductCountLoader();
-		loader.setTenantId(tenant.getId());
+		loader.setTenantId(primaryOrg.getId());
 		
 		ResourceLimit limit = new AssetResourceLimit();
 		limit.setUsed(loader.load());
-		limit.setMaximum(tenant.getLimits().getAssets());
+		limit.setMaximum(primaryOrg.getLimits().getAssets());
 		
-		assets.put(tenant.getId(), limit);
-		logger.debug("Asset Limit [" + tenant.getName() + "]: " + limit.toString());
+		assets.put(primaryOrg.getId(), limit);
+		logger.debug("Asset Limit [" + primaryOrg.toString() + "]: " + limit.toString());
 	}
 }

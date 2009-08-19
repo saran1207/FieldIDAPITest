@@ -2,25 +2,24 @@
 	<script src="javascripts/json2.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	function selectConfig() {
-		var configKey = document.getElementById("keySelect").value;
-		var tenantId = document.getElementById("tenantIdSelect").value;
+		var configKey = $("keySelect").getValue();
+		var tenantId = $("tenantIdSelect").getValue();
 	
-		document.getElementById('configValue').disabled = true;
-		document.getElementById('ajaxStatus').innerHTML = "working ... "
+		$('configValue').disabled = true;
+		$('ajaxStatus').innerHTML = "working ... "
 			
 	   	var url = "<@s.url action="getConfigValue" namespace="/ajax" />?key=" + configKey + "&tenantId=" + tenantId;
 	   	new Ajax.Request(url, {
 			method: 'post',
-			asynchronou@s.false,
-			onSucces@s. function(transport) {
+			asynchronous: false,
+			onSuccess: function(transport) {
 				if(transport.statusText == "OK") {
-					var jsonObj = JSON.parse(transport.responseText);
-					document.getElementById('configValue').value = jsonObj.value;
-					document.getElementById('ajaxStatus').innerHTML += "done"
+					eval(transport.responseText);
+					$('ajaxStatus').innerHTML += "done"
 	   			} else {
-	   				document.getElementById('ajaxStatus').innerHTML = "Ajax request failed: status=" + transport.statusText + ", response code=" + transport.status;
+	   				$('ajaxStatus').innerHTML = "Ajax request failed: status=" + transport.statusText + ", response code=" + transport.status;
 	   			}
-				document.getElementById('configValue').disabled = false;
+				$('configValue').disabled = false;
 	   		}
 		});
 	}
@@ -52,5 +51,7 @@
 <br />
 
 <script type="text/javascript">
+	$('keySelect').selectedIndex = 0;
+	$('tenantIdSelect').selectedIndex = 0;
 	selectConfig();
 </script>

@@ -10,7 +10,7 @@ ${action.setPageType('organization','list')!}
 		</tr>
 		<#list page.getList() as organization > 
 			<tr id="organization_${organization.id}" >
-				<td>${organization.displayName?html}</td>
+				<td>${organization.name?html}</td>
 				<td>
 					<a href="<@s.url action="organizationEdit" uniqueID="${organization.id}"/>"><@s.text name="label.edit"/></a>
 				</td>

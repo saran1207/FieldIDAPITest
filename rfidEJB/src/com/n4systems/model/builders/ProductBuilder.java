@@ -4,18 +4,18 @@ import static com.n4systems.model.builders.ProductTypeBuilder.*;
 
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 public class ProductBuilder extends BaseBuilder<Product>{
 
-	private final TenantOrganization tenantOrganization;
+	private final Tenant tenantOrganization;
 	private final ProductType type;
 	
 	public static ProductBuilder aProduct() {
 		return new ProductBuilder(TenantBuilder.n4(), aProductType().build());
 	}
 	
-	public ProductBuilder(TenantOrganization tenantOrganization, ProductType type) {
+	public ProductBuilder(Tenant tenantOrganization, ProductType type) {
 		super();
 		this.type = type;
 		this.tenantOrganization = tenantOrganization;
@@ -25,7 +25,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		return new ProductBuilder(tenantOrganization, type);
 	}
 	
-	public ProductBuilder forTenant(TenantOrganization tenantOrganization) {
+	public ProductBuilder forTenant(Tenant tenantOrganization) {
 		return new ProductBuilder(tenantOrganization, type);
 	}
 	

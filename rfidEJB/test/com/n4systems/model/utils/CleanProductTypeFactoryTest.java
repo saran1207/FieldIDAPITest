@@ -13,7 +13,7 @@ import org.junit.Test;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 
 
 
@@ -21,7 +21,7 @@ public class CleanProductTypeFactoryTest {
 
 	@Test
 	public void test_copy_basic() {
-		TenantOrganization n4 = aTenant().named("n4").build();
+		Tenant n4 = aTenant().named("n4").build();
 		ProductType originalProductType = aProductType().named("chain").build();
 		
 		CleanProductTypeFactory sut = new CleanProductTypeFactory(originalProductType, n4);
@@ -35,7 +35,7 @@ public class CleanProductTypeFactoryTest {
 	
 	@Test
 	public void test_copying_info_feilds() {
-		TenantOrganization n4 = aTenant().named("n4").build();
+		Tenant n4 = aTenant().named("n4").build();
 		List<InfoFieldBean> infoFields =  new ArrayList<InfoFieldBean>();
 		infoFields.add(anInfoField().build());
 		

@@ -19,8 +19,8 @@ import rfid.ejb.entity.InfoOptionBean;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Organization;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.Tenant;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -35,7 +35,7 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 	@EJB
 	private PersistenceManager persistenceManager;
 
-	public Pager<AutoAttributeDefinition> findAllPage(AutoAttributeCriteria criteria, Organization tenant, Integer pageNumber, Integer pageSize) {
+	public Pager<AutoAttributeDefinition> findAllPage(AutoAttributeCriteria criteria, Tenant tenant, Integer pageNumber, Integer pageSize) {
 
 		String lookup = "from AutoAttributeDefinition def where def.criteria = :criteria and def.tenant = :tenant";
 		Query query = em.createQuery(lookup + " ORDER BY def.id");

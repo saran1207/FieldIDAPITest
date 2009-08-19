@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.services.Initializer;
 import com.n4systems.services.SetupDataLastModUpdateServiceInitializer;
+import com.n4systems.services.TenantCachePreloader;
 import com.n4systems.services.TenantLimitServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
 
@@ -14,7 +15,8 @@ public class ApplicationBootstrap extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/** Array of startup services. Will be initialized in order.*/
-	private static final Initializer[] initializers = { 
+	private static final Initializer[] initializers = {
+		new TenantCachePreloader(),
 		new TaskSchedulerBootstraper(), 
 		new SetupDataLastModUpdateServiceInitializer(),
 		new TenantLimitServiceInitializer()

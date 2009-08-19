@@ -29,7 +29,8 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Status;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 
@@ -60,10 +61,10 @@ public class InspectionImporter extends Importer {
 	private User userManager;
 	private InspectionManager inspectionManager;
 
-	public InspectionImporter(File importerBaseDirectory, TenantOrganization tenant, boolean createMissingDivisions)
+	public InspectionImporter(File importerBaseDirectory, PrimaryOrg primaryOrg, boolean createMissingDivisions)
 			throws NamingException {
 
-		super(importerBaseDirectory, tenant, createMissingDivisions);
+		super(importerBaseDirectory, primaryOrg, createMissingDivisions);
 
 		this.endUserManager = ServiceLocator.getCustomerManager();
 		this.productSerialManager = ServiceLocator.getProductSerialManager();
@@ -73,7 +74,7 @@ public class InspectionImporter extends Importer {
 
 	}
 
-	public static Collection<File> filesProcessing(TenantOrganization man, File importerBaseDirectory) {
+	public static Collection<File> filesProcessing(Tenant man, File importerBaseDirectory) {
 		File processingDirectory = new File(processingDirectoryName(man, importerBaseDirectory));
 
 		Collection<File> availableFiles = new ArrayList<File>();
@@ -88,7 +89,7 @@ public class InspectionImporter extends Importer {
 		return availableFiles;
 	}
 
-	public static Collection<File> filesAvailableForProcessing(TenantOrganization tenant, File importerBaseDirectory) {
+	public static Collection<File> filesAvailableForProcessing(Tenant tenant, File importerBaseDirectory) {
 		File uploadDirectory = new File(uploadDirectoryName(tenant, importerBaseDirectory));
 
 		Collection<File> availableFiles = new ArrayList<File>();
@@ -113,18 +114,18 @@ public class InspectionImporter extends Importer {
 				try {
 
 					Inspection inspection = new Inspection();
-					inspection.setTenant(tenant);
+					inspection.setTenant(primaryOrg.getTenant());
 
 					String serialNumber = (String) inspectionMap.get(SERIAL_NUMBER);
 
 					Customer endUser = endUserManager.findCustomerFussySearch((String) inspectionMap
-							.get(ENDUSER_IDENTIFIER), (String) inspectionMap.get(ENDUSER_IDENTIFIER), tenant.getId(),
+							.get(ENDUSER_IDENTIFIER), (String) inspectionMap.get(ENDUSER_IDENTIFIER), primaryOrg.getTenant().getId(),
 							null);
 					if (endUser == null) {
 						throw new Exception("no end user");
 					}
 
-					Product product = productManager.findProductBySerialNumber(serialNumber, tenant.getId(), endUser
+					Product product = productManager.findProductBySerialNumber(serialNumber, primaryOrg.getTenant().getId(), endUser
 							.getId());
 					if (product == null) {
 						throw new Exception("no product ");
@@ -133,7 +134,7 @@ public class InspectionImporter extends Importer {
 					ProductStatusBean productStatus = null;
 					if ((String) inspectionMap.get(PRODUCT_STATUS) != null) {
 						try {
-							productStatus = productSerialManager.FindProductStatusByName(tenant.getId(),
+							productStatus = productSerialManager.FindProductStatusByName(primaryOrg.getTenant().getId(),
 									(String) inspectionMap.get(PRODUCT_STATUS));
 						} catch (Exception e) {
 							throw new Exception("failed to load product status");
@@ -179,7 +180,7 @@ public class InspectionImporter extends Importer {
 					if (inspectionBookName != null) {
 						try {
 							// look up inspection book by name and customer.
-							SecurityFilter filter = new SecurityFilter(tenant.getId(), endUser.getId());
+							SecurityFilter filter = new SecurityFilter(primaryOrg.getTenant().getId(), endUser.getId());
 							InspectionBook inspectionBook = inspectionManager.findInspectionBook(inspectionBookName,
 									filter);
 							if (inspectionBook != null) {
@@ -211,7 +212,7 @@ public class InspectionImporter extends Importer {
 						}
 					}
 
-					inspection.setOrganization(tenant);
+					inspection.setOrganization(primaryOrg);
 					inspection.setLocation((String) inspectionMap.get(LOCATION));
 					inspection.setCustomer(endUser);
 					inspection.setDate(inspectionDate);
@@ -224,10 +225,10 @@ public class InspectionImporter extends Importer {
 								+ "] for ProductType: [" + product.getType().getName() + "]");
 					}
 
-					UserBean inspector = userManager.findUserBeanByID(tenant.getName(), (String) inspectionMap
+					UserBean inspector = userManager.findUserBeanByID(primaryOrg.getTenant().getName(), (String) inspectionMap
 							.get(INSPECTOR));
 					if (inspector == null) {
-						inspector = userManager.findUserBeanByID(tenant.getName(), DEFAULT_INSPECTOR);
+						inspector = userManager.findUserBeanByID(primaryOrg.getTenant().getName(), DEFAULT_INSPECTOR);
 						if (inspector == null) {
 							throw new Exception("no Inspector found, default also not found.");
 						}

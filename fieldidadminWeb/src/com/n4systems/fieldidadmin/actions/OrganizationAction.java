@@ -1,12 +1,12 @@
 package com.n4systems.fieldidadmin.actions;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -16,105 +16,72 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.SerialNumberCounterBean;
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.SerialNumberCounter;
 
-import com.n4systems.ejb.SafetyNetworkManager;
-import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.InspectorOrganization;
-import com.n4systems.model.ManufacturerOrganization;
-import com.n4systems.model.Organization;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.SiteSafetyOraganization;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.TagOption;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.producttype.ProductTypeSaver;
+import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
+import com.n4systems.model.stateset.StateSetSaver;
+import com.n4systems.model.tagoption.TagOptionSaver;
+import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
+import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.model.user.UserSaver;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.TenantCache;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DataUnit;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.StringListingPair;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @Validations
 public class OrganizationAction extends AbstractAdminAction implements Preparable {
-	private static Logger logger = Logger.getLogger(OrganizationAction.class);
-
 	private static final long serialVersionUID = 1L;
-	private LegacyProductSerial productSerialManager;
-	private LegacyProductType productTypeManager;
-	private SerialNumberCounter serialNumberCounterManager;
-	private Collection<TenantOrganization> organizations;
-	private TenantOrganization tenant;
-	private SafetyNetworkManager safetyNetworkManager;
-	private String accountType;
-
+	private static Logger logger = Logger.getLogger(OrganizationAction.class);
+	
+	private Long id;
+	private Tenant tenant;
+	private PrimaryOrg primaryOrg;
+	private UserBean adminUser = new UserBean();
 	private File logoFile;
 	private File certificateLogoFile;
-
 	private ExtendedFeature[] availableExtendedFeatures = ExtendedFeature.values();
 	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();
-	private Long id;
-	private int page;
-	private int size;
-	
-	private String userId;
-	private String userPass;
-	private String userFirstName;
-	private String userLastName;
 
 	public void prepare() throws Exception {
 		if (id != null) {
-			tenant = persistenceManager.find(TenantOrganization.class, id, "extendedFeatures");
-			for (ExtendedFeature feature : tenant.getExtendedFeatures()) {
+			tenant = TenantCache.getInstance().findTenant(id); 
+			primaryOrg = TenantCache.getInstance().findPrimaryOrg(id);
+			
+			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
 				extendedFeatures.put(feature.name(), true);
 			}
-
-			if (tenant.isManufacturer()) {
-				accountType = "manufacturer";
-			} else if (tenant.isInspector()) {
-				accountType = "inspector";
-			} else {
-				accountType = "siteSafety";
-			}
 		} else {
-			if ("manufacturer".equals(accountType)) {
-				tenant = new ManufacturerOrganization();
-			} else if ("inspector".equals(accountType)) {
-				tenant = new InspectorOrganization();
-			} else if ("siteSafety".equals(accountType)) {
-				tenant = new SiteSafetyOraganization();
-			}
+			tenant = new Tenant();
+			primaryOrg = new PrimaryOrg();
 		}
 
 	}
 
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<TenantOrganization> query = new QueryBuilder<TenantOrganization>(TenantOrganization.class);
-		query.addOrder("displayName");
-		try {
-			organizations = persistenceManager.findAll(query);
-		} catch (Exception e) {
-			logger.error("could not load list", e);
-		}
 		return SUCCESS;
 	}
 
@@ -122,80 +89,102 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	public String doFormInput() {
 		return INPUT;
 	}
-
 	
 	public String doSave() throws Exception {
+		TenantSaver tenantSaver = new TenantSaver();
+		OrganizationSaver orgSaver = new OrganizationSaver();
+		
+		Transaction transaction = PersistenceManager.startTransaction();
 		
 		try {
-			// deal with the logo files
-			if (logoFile != null && logoFile.exists()) {
-				File privateLogoPath = PathHandler.getTenantLogo(tenant);
-
-				if (!privateLogoPath.getParentFile().exists()) {
-					privateLogoPath.getParentFile().mkdirs();
-				}
-
-				FileUtils.copyFile(logoFile, privateLogoPath);
+			
+			moveMainLogo();
+			moveCertLogo();
+			
+			if (id != null) {	
+				updateTenant(tenantSaver, orgSaver, transaction);
+			} else {					
+				createTenant(tenantSaver, orgSaver, transaction);
 			}
-			if (certificateLogoFile != null && certificateLogoFile.exists()) {
-				File privateLogoPath = PathHandler.getCertificateLogo(tenant);
-
-				if (!privateLogoPath.getParentFile().exists()) {
-					privateLogoPath.getParentFile().mkdirs();
-				}
-
-				FileUtils.copyFile(certificateLogoFile, privateLogoPath);
-			}
-			if (id != null) {
-				tenant.setId(id);
-				persistenceManager.update(tenant);
-			} else {
-				tenant.setUsingSerialNumber(true);
-				tenant.setFidAC(safetyNetworkManager.findNewFidAC());
-
-				persistenceManager.save(tenant);
-				tenant.setTenant(tenant);
-				persistenceManager.update(tenant);
-
-				//TODO move to a service for creating a tenant in the system.
-				createDefaultSetupDataLastModDates();
-
-
-				createDefaultTagOptionManufacture(tenant, TagOption.OptionKey.SHOPORDER);
-
-				createDefaultProductType(tenant, "*");
-
-				createSystemAccount();
-				createAdminAccount();
-
-				createDefaultStateSets();
-
-				createDefaultInspectionTypeGroups();
-
-				try {
-					createDefaultSerialNumberCounter(tenant, 1L, "000000", 365L, getFirstDayOfYear());
-				} catch (ParseException e) {
-					logger.error("failed on default serial", e);
-				}
-			}
-			processExtendedFeatures();
+			
+			processExtendedFeatures(orgSaver, transaction);
+			
+			PersistenceManager.finishTransaction(transaction);
+			
 		} catch (Exception e) {
+			PersistenceManager.rollbackTransaction(transaction);
+			
 			logger.error("Failed creating tenant", e);
+			addActionError("Failed Creating Tenant: " + e.getMessage());
 			return INPUT;
+			
 		}
-		return Action.SUCCESS;
+		
+		return SUCCESS;
 	}
 
-	private void processExtendedFeatures() {
+	private void createTenant(TenantSaver tenantSaver, OrganizationSaver orgSaver, Transaction transaction) throws ParseException {
+		tenantSaver.save(transaction, tenant);
+		
+		primaryOrg.setTenant(tenant);
+		primaryOrg.setUsingSerialNumber(true);
+		primaryOrg.setCertificateName(primaryOrg.getName());
+		primaryOrg.setDefaultTimeZone("United States:New York - New York");
+		
+		orgSaver.save(transaction, primaryOrg);
+
+		//TODO move to a service for creating a tenant in the system.
+		createDefaultSetupDataLastModDates(transaction);
+		createDefaultTagOptionManufacture(TagOption.OptionKey.SHOPORDER, transaction);
+		createDefaultProductType("*", transaction);
+		createSystemAccount(transaction);
+		createAdminAccount(transaction);
+		createDefaultStateSets(transaction);
+		createDefaultInspectionTypeGroups(transaction);
+		createDefaultSerialNumberCounter(1L, "000000", 365L, getFirstDayOfYear(), transaction);
+		
+	}
+
+	private void updateTenant(TenantSaver tenantSaver, OrganizationSaver orgSaver, Transaction transaction) {
+		tenantSaver.update(transaction, tenant);
+		orgSaver.update(transaction, primaryOrg);
+	}
+
+	private void moveMainLogo() throws IOException {
+		if (logoFile != null && logoFile.exists()) {
+			File privateLogoPath = PathHandler.getTenantLogo(tenant);
+
+			if (!privateLogoPath.getParentFile().exists()) {
+				privateLogoPath.getParentFile().mkdirs();
+			}
+
+			FileUtils.copyFile(logoFile, privateLogoPath);
+		}
+	}
+
+	private void moveCertLogo() throws IOException {
+		if (certificateLogoFile != null && certificateLogoFile.exists()) {
+			File privateLogoPath = PathHandler.getCertificateLogo(primaryOrg);
+
+			if (!privateLogoPath.getParentFile().exists()) {
+				privateLogoPath.getParentFile().mkdirs();
+			}
+
+			FileUtils.copyFile(certificateLogoFile, privateLogoPath);
+		}
+	}
+	
+	private void processExtendedFeatures(OrganizationSaver orgSaver, Transaction transaction) {
 		for (Entry<String, Boolean> inputFeature : extendedFeatures.entrySet()) {
 			processFeature(inputFeature.getKey(), inputFeature.getValue());
 		}
+		orgSaver.update(transaction, primaryOrg);
 	}
 
 	private void processFeature(String featureName, boolean featureOn) {
 		try {
 			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
-			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, tenant, persistenceManager);
+			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
 			
 			if (featureOn) {
 				featureSwitch.enableFeature();
@@ -204,35 +193,28 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 			}
 		} catch (IllegalArgumentException e) {
 			addFieldError("extendedFeatures", "incorrect type of extended feature");
-		} catch (Exception e) {
-			addFieldError("extendedFeatures", "could not setup");
-			throw new RuntimeException("woo", e);
 		}
 	}
 
-	
-
-	private void createDefaultTagOptionManufacture(TenantOrganization tenant, TagOption.OptionKey optionKey) {
+	private void createDefaultTagOptionManufacture(TagOption.OptionKey optionKey, Transaction transaction) {
 		TagOption tagOption = new TagOption();
 
 		tagOption.setTenant(tenant);
 		tagOption.setKey(optionKey);
 
-		persistenceManager.save(tagOption);
+		TagOptionSaver saver = new TagOptionSaver();
+		
+		saver.save(transaction, tagOption);
 	}
 
-	private void createDefaultProductType(TenantOrganization manufacture, String itemNumber) {
+	private void createDefaultProductType(String itemNumber, Transaction transaction) {
 		ProductType productType = new ProductType();
 
-		productType.setTenant(manufacture);
+		productType.setTenant(tenant);
 		productType.setName(itemNumber);
-		try {
-			productTypeManager.persistProductType(productType);
-		} catch (FileAttachmentException fileAttachmentException) {
-			logger.error("failed to create default product type", fileAttachmentException);
-		} catch (ImageAttachmentException imageAttachmentException) {
-			logger.error("failed to create default product type", imageAttachmentException);
-		}
+		
+		ProductTypeSaver saver = new ProductTypeSaver();
+		saver.save(transaction, productType);
 	}
 
 	private Date getFirstDayOfYear() throws ParseException {
@@ -241,62 +223,51 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		return fullFormat.parse("01-01-" + year);
 	}
 
-	private void createDefaultSerialNumberCounter(TenantOrganization tenant, Long counter, String decimalFormat, Long daysToReset, Date lastReset) {
+	private void createDefaultSerialNumberCounter(Long counter, String decimalFormat, Long daysToReset, Date lastReset, Transaction transaction) {
 		SerialNumberCounterBean serialNumberCounter = new SerialNumberCounterBean();
-
 		serialNumberCounter.setTenant(tenant);
 		serialNumberCounter.setCounter(counter);
 		serialNumberCounter.setDecimalFormat(decimalFormat);
 		serialNumberCounter.setDaysToReset(daysToReset);
 		serialNumberCounter.setLastReset(lastReset);
 
-		serialNumberCounterManager.persistSerialNumberCounter(serialNumberCounter);
+		SerialNumberCounterSaver saver = new SerialNumberCounterSaver();
+		saver.save(transaction, serialNumberCounter);
 	}
 	
-	private UserBean createAccount(boolean system, boolean admin, int permissions) {
-		UserBean user = new UserBean();
+	private void setCommonUserAttribs(UserBean user, int permissions) {
 		user.setTenant(tenant);
-		user.setOrganization(tenant);
-		user.setTimeZoneID("America/New_York");
+		user.setOrganization(primaryOrg);
+		user.setTimeZoneID("United States:New York - New York");
 		user.setActive(true);
-		user.setSystem(system);
-		user.setAdmin(admin);
 		user.setPermissions(permissions);
-		
-		return user;
 	}
 
-	private void createSystemAccount() {
-		UserBean user = createAccount(true, false, Permissions.SYSTEM);
+	private void createSystemAccount(Transaction transaction) {
+		UserBean user = new UserBean();
+		setCommonUserAttribs(user, Permissions.SYSTEM);
+		user.setSystem(true);
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
 		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
 		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));
 		user.setFirstName("N4");
 		user.setLastName("Admin");
-
-		try {
-			ServiceLocator.getUser().createUser(user);
-		} catch (Exception e) {
-			logger.error("Failed creating user", e);
-		}
+		
+		UserSaver saver = new UserSaver();
+		saver.save(transaction, user);
 	}
 	
-	private void createAdminAccount() {
-		UserBean user = createAccount(false, true, Permissions.ADMIN);
-		user.setUserID(userId);
-		user.assignPassword(userPass);
-		user.setEmailAddress(tenant.getAdminEmail());
-		user.setFirstName(userFirstName);
-		user.setLastName(userLastName);
+	private void createAdminAccount(Transaction transaction) {
+		adminUser.setAdmin(true);
+		setCommonUserAttribs(adminUser, Permissions.ADMIN);
 
-		try {
-			ServiceLocator.getUser().createUser(user);
-		} catch (Exception e) {
-			logger.error("Failed creating user", e);
-		}
+		UserSaver saver = new UserSaver();
+		saver.save(transaction, adminUser);
 	}
 
-	private void createDefaultStateSets() {
+	private void createDefaultStateSets(Transaction transaction) {
+		StateSetSaver saver = new StateSetSaver();
+		
 		StateSet passFail = new StateSet();
 		passFail.setName("Pass, Fail");
 		passFail.setTenant(tenant);
@@ -316,7 +287,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		fail.setStatus(Status.FAIL);
 		passFail.getStates().add(fail);
 
-		persistenceManager.save(passFail);
+		saver.save(transaction, passFail);
 
 		StateSet naPassFail = new StateSet();
 		naPassFail.setName("NA, Pass, Fail");
@@ -343,40 +314,49 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		fail.setStatus(Status.FAIL);
 		naPassFail.getStates().add(fail);
 
-		persistenceManager.save(naPassFail);
-
+		saver.save(transaction, passFail);
 	}
 
-	private void createDefaultInspectionTypeGroups() {
+	private void createDefaultInspectionTypeGroups(Transaction transaction) {
+		InspectionTypeGroupSaver saver = new InspectionTypeGroupSaver();
+		
 		InspectionTypeGroup visualInspection = new InspectionTypeGroup();
 		visualInspection.setName("Visual Inspection");
 		visualInspection.setReportTitle("Visual Inspection");
 		visualInspection.setTenant(tenant);
-		persistenceManager.save(visualInspection);
+		saver.save(transaction, visualInspection);
 
 		InspectionTypeGroup prooftest = new InspectionTypeGroup();
 		prooftest.setName("Proof Test");
 		prooftest.setReportTitle("Proof Test");
 		prooftest.setTenant(tenant);
-		persistenceManager.save(prooftest);
+		saver.save(transaction, prooftest);
 
 		InspectionTypeGroup repair = new InspectionTypeGroup();
 		repair.setName("Repair");
 		repair.setReportTitle("Repair");
 		repair.setTenant(tenant);
-		persistenceManager.save(repair);
+		saver.save(transaction, repair);
 	}
 	
-	private void createDefaultSetupDataLastModDates() {
+	private void createDefaultSetupDataLastModDates(Transaction transaction) {
 		SetupDataLastModDates setupModDates = new SetupDataLastModDates();
 		setupModDates.setTenant(tenant);
 		
 		SetupDataLastModDatesSaver saver = new SetupDataLastModDatesSaver();
-		saver.save(setupModDates);
+		saver.save(transaction, setupModDates);
 	}
 
 	public String doCreateUser() {
-		createSystemAccount();
+		Transaction transaction = null;
+		try {
+			transaction = PersistenceManager.startTransaction();
+			
+			createSystemAccount(transaction);
+		} finally {
+			PersistenceManager.finishTransaction(transaction);
+		}
+		
 		return SUCCESS;
 	}
 
@@ -388,57 +368,37 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		this.id = id;
 	}
 
-	public Organization getTenant() {
+	public Tenant getTenant() {
 		return tenant;
 	}
 
-	public void setTenant(TenantOrganization manufacture) {
+	public void setTenant(Tenant manufacture) {
 		this.tenant = manufacture;
 	}
-
-	public Collection<TenantOrganization> getOrganizations() {
-		return organizations;
+	
+	public UserBean getAdminUser() {
+		return adminUser;
+	}
+	
+	@FieldExpressionValidator(expression="(adminUser.userID != 'n4systems')", message = "Admin user cannot have a userid of n4systems.")
+	public void setAdminUser(UserBean adminUser) {
+		this.adminUser = adminUser;
+	}
+	
+	public void setAdminUserPass(String pass) {
+		adminUser.assignPassword(pass);
+	}
+	
+	public PrimaryOrg getPrimaryOrg() {
+		return primaryOrg;
 	}
 
-	public LegacyProductSerial getProductSerialManager() {
-		return productSerialManager;
+	public void setPrimaryOrg(PrimaryOrg primaryOrg) {
+		this.primaryOrg = primaryOrg;
 	}
 
-	public void setProductSerialManager(LegacyProductSerial productSerialManager) {
-		this.productSerialManager = productSerialManager;
-	}
-
-	public int getPage() {
-		return page;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-
-	public LegacyProductType getProductTypeManager() {
-		return productTypeManager;
-	}
-
-	public void setProductTypeManager(LegacyProductType productTypeManager) {
-		this.productTypeManager = productTypeManager;
-	}
-
-	public SerialNumberCounter getSerialNumberCounterManager() {
-		return serialNumberCounterManager;
-	}
-
-	public void setSerialNumberCounterManager(SerialNumberCounter serialNumberCounterManager) {
-		this.serialNumberCounterManager = serialNumberCounterManager;
+	public Collection<PrimaryOrg> getPrimaryOrgs() {
+		return TenantCache.getInstance().findAllPrimaryOrgs();
 	}
 
 	public File getLogoFile() {
@@ -457,25 +417,12 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		this.certificateLogoFile = certificateLogoFile;
 	}
 
-	public String getAccountType() {
-
-		return accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-	public List<StringListingPair> getTenantTypes() {
-		return Organization.tenantTypes();
-	}
-
 	public String getOtherDateFormat() {
-		return (tenant.getDateFormat() != null) ? DateHelper.java2Unix(tenant.getDateFormat()) : "";
+		return (primaryOrg.getDateFormat() != null) ? DateHelper.java2Unix(primaryOrg.getDateFormat()) : "";
 	}
 
 	public String getFormattedDate() {
-		return (tenant.getDateFormat() != null) ? (new SimpleDateFormat(tenant.getDateFormat())).format(new Date()) : "";
+		return (primaryOrg.getDateFormat() != null) ? (new SimpleDateFormat(primaryOrg.getDateFormat())).format(new Date()) : "";
 	}
 
 	public ExtendedFeature[] getAvailableExtendedFeatures() {
@@ -491,59 +438,21 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	public void setExtendedFeatures(Map extendedFeatures) {
 		this.extendedFeatures = extendedFeatures;
 	}
-
-
-	public void setSafetyNetworkManager(SafetyNetworkManager safetyNetworkManager) {
-		this.safetyNetworkManager = safetyNetworkManager;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	@FieldExpressionValidator(expression="(userId != 'n4systems')", message = "you can't call the admin user n4systems.")
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getUserPass() {
-		return userPass;
-	}
-
-	public void setUserPass(String userPass) {
-		this.userPass = userPass;
-	}
-
-	public String getUserFirstName() {
-		return userFirstName;
-	}
-
-	public void setUserFirstName(String userFirstName) {
-		this.userFirstName = userFirstName;
-	}
-
-	public String getUserLastName() {
-		return userLastName;
-	}
-
-	public void setUserLastName(String userLastName) {
-		this.userLastName = userLastName;
-	}
 	
 	public void setDiskSpaceMB(Long diskSpace) {
 		if (diskSpace == -1) {
-			tenant.getLimits().setDiskSpaceUnlimited();
+			primaryOrg.getLimits().setDiskSpaceUnlimited();
 		} else {
-			tenant.getLimits().setDiskSpace(DataUnit.BYTES.convertFrom(diskSpace, DataUnit.MEBIBYTES));
+			primaryOrg.getLimits().setDiskSpace(DataUnit.BYTES.convertFrom(diskSpace, DataUnit.MEBIBYTES));
 		}	
 	}
 
 	public Long getDiskSpaceMB() {
 		Long diskSpace;
-		if (tenant.getLimits().isDiskSpaceUnlimited()) {
+		if (primaryOrg.getLimits().isDiskSpaceUnlimited()) {
 			diskSpace = -1L;
 		} else {
-			diskSpace = DataUnit.BYTES.convertTo(tenant.getLimits().getDiskSpace(), DataUnit.MEBIBYTES);
+			diskSpace = DataUnit.BYTES.convertTo(primaryOrg.getLimits().getDiskSpace(), DataUnit.MEBIBYTES);
 		}
 		
 		return diskSpace;

@@ -88,12 +88,12 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		converter = new NotificationSettingViewModelConverter(persistenceManager, getTenant(), getUser(), getSecurityFilter());
+		converter = new NotificationSettingViewModelConverter(persistenceManager, getPrimaryOrg(), getUser(), getSecurityFilter());
 	}
 	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		converter = new NotificationSettingViewModelConverter(persistenceManager, getTenant(), getUser(), getSecurityFilter());
+		converter = new NotificationSettingViewModelConverter(persistenceManager, getPrimaryOrg(), getUser(), getSecurityFilter());
 	}
 	
 	@SkipValidation

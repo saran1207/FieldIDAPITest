@@ -9,8 +9,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.n4systems.fieldidadmin.utils.importer.EndUserImporter;
-import com.n4systems.model.TenantOrganization;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantCache;
 
 public class EndUserImporterJob implements Job {
 
@@ -22,8 +23,10 @@ public class EndUserImporterJob implements Job {
 			String tenantName = (String)map.get( "tenantName" );
 			Boolean createMissingDivision = (Boolean)map.get( "createMissingDivision" );
 			
-			TenantOrganization tenant = ServiceLocator.getPersistenceManager().findByName(TenantOrganization.class, tenantName);
-			EndUserImporter importer =  new EndUserImporter( defaultDirectory, tenant, createMissingDivision.booleanValue() );
+			Tenant tenant = TenantCache.getInstance().findTenant(tenantName);
+			PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenant.getId());
+			
+			EndUserImporter importer =  new EndUserImporter( defaultDirectory, primaryOrg, createMissingDivision.booleanValue() );
 		
 			Collection<File> importingFiles = EndUserImporter.filesAvailableForProcessing( tenant, defaultDirectory );
 			

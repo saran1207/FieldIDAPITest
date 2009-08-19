@@ -8,9 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.InspectorOrganization;
 import com.n4systems.model.PrintOut;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
 
 public class PrintOutPathTest {
@@ -19,7 +18,7 @@ public class PrintOutPathTest {
 	private static String DEFAULT_DIR = REPORT_DIR + "/all_tenants";
 	
 	private PrintOut printOut;
-	private TenantOrganization tenant;
+	private Tenant tenant;
 
 	@Before
 	public void setUp() throws Exception {
@@ -27,7 +26,7 @@ public class PrintOutPathTest {
 		printOut.setPdfTemplate("default_inspection_cert");
 		printOut.setType(PrintOutType.CERT);
 		printOut.setCustom(false);
-		tenant = new InspectorOrganization();
+		tenant = new Tenant();
 		tenant.setName("tenant1");
 	}
 

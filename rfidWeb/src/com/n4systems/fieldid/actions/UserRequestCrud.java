@@ -17,15 +17,16 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Organization;
 import com.n4systems.model.UserRequest;
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
-import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
@@ -219,8 +220,10 @@ public class UserRequestCrud extends AbstractCrud {
 
 	public void setOrganizationalUnit(Long orgId) {
 		try {
-			QueryBuilder<Organization> builder = new QueryBuilder<Organization>(Organization.class, getSecurityFilter().setDefaultTargets());
-			Organization org = persistenceManager.find(builder.addSimpleWhere("id", orgId));
+			FilteredIdLoader<BaseOrg> loader = getLoaderFactory().createFilteredIdLoader(BaseOrg.class);
+			loader.setId(orgId);
+			
+			BaseOrg org = loader.load();
 			userRequest.getUserAccount().setOrganization(org);
 		} catch (InvalidQueryException e) {
 			logger.error("Unable to load Organization", e);
@@ -246,12 +249,8 @@ public class UserRequestCrud extends AbstractCrud {
 
 	public Collection<ListingPair> getOrganizationalUnits() {
 		if (organizationalUnits == null) {
-			try {
-				QueryBuilder<Organization> builder = new QueryBuilder<Organization>(Organization.class, getSecurityFilter().setDefaultTargets());
-				organizationalUnits = ListHelper.longListableToListingPair(persistenceManager.findAll(builder));
-			} catch (InvalidQueryException e) {
-				logger.error("Unable to get list of Organizations", e);
-			}
+			List<Listable<Long>> orgList = getLoaderFactory().createSecondaryOrgListableLoader().load();
+			organizationalUnits = ListHelper.longListableToListingPair(orgList);
 		}
 		return organizationalUnits;
 	}

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.utils.CleanStateSetFactory;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary;
@@ -19,11 +19,11 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 	private StateSetImportSummary summary = new StateSetImportSummary();
 	private Set<Long> inspectionTypeIds;
 	
-	public CatalogStateSetsImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog) {
+	public CatalogStateSetsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new StateSetImportSummary());
 	}
 	
-	public CatalogStateSetsImportHandler(PersistenceManager persistenceManager, TenantOrganization tenant, CatalogService importCatalog, StateSetImportSummary summary) {
+	public CatalogStateSetsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, StateSetImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary;
 		
