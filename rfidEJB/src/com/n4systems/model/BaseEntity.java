@@ -61,6 +61,14 @@ abstract public class BaseEntity implements Serializable {
 		}
 		return false;
 	}
+	
+	@Override
+    public int hashCode() {
+        if (!isNew()) {
+                return id.hashCode();
+        }
+        return super.hashCode();
+    }
 
 	public boolean isNew() {
 		return (id == null);

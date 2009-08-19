@@ -75,12 +75,4 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		modified = null;
 	}
 
-	@Override
-	public int hashCode() {
-		if (!isNew()) {
-			return id.hashCode();
-		}
-		return super.hashCode();
-	}
-
 }

@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 
@@ -30,7 +30,7 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	public Catalog() {
 	}
 
-	public Catalog(TenantOrganization tenant) {
+	public Catalog(Tenant tenant) {
 		super(tenant);
 	}
 

@@ -2,7 +2,7 @@ package com.n4systems.handlers.remover;
 
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.TenantOrganization;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.catalog.CatalogSaver;
@@ -39,7 +39,7 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 		}
 	}
 	
-	private TenantOrganization getTenant() {
+	private Tenant getTenant() {
 		if (inspectionType != null) {
 			return inspectionType.getTenant();
 		}
