@@ -12,6 +12,7 @@ public class SystemUser {
 	String position = null;
 	String initials = null;
 	String securityRFIDNumber = null;
+	String country = null;
 	String timeZone = null;
 	String password = null;
 	List<String> permissions = new ArrayList<String>();
@@ -113,5 +114,13 @@ public class SystemUser {
 	
 	public String getPermission(int index) {
 		return permissions.get(index);
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

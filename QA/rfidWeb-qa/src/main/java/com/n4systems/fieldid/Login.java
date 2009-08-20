@@ -49,6 +49,7 @@ public class Login extends TestCase {
 	Finder requestAccountFirstNameFinder;
 	Finder requestAccountLastNameFinder;
 	Finder requestAccountPositionFinder;
+	Finder requestAccountCountryFinder;
 	Finder requestAccountTimeZoneFinder;
 	Finder requestAccountCompanyNameFinder;
 	Finder requestAccountPhoneNumberFinder;
@@ -59,6 +60,8 @@ public class Login extends TestCase {
 	Finder requestAccountReturnToLoginPageFinder;
 	Finder requestAccountConfirmMessageFinder;
 	private Finder passwordResetEmailSentContentHeaderFinder;
+	private Finder securedByThawteLogoFinder;
+	private Finder securedByThawteImageFinder;
 
 	/**
 	 * Initialize the class and load up all the Finder information. This
@@ -77,6 +80,8 @@ public class Login extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
+			securedByThawteLogoFinder = xpath(p.getProperty("securedbythawtelink"));
+			securedByThawteImageFinder = xpath(p.getProperty("securedbythawtelogo"));
 			loginUserNameFinder = xpath(p.getProperty("username"));
 			loginPasswordFinder = xpath(p.getProperty("password"));
 			loginRegularLoginFinder = xpath(p.getProperty("regularlogin"));
@@ -105,6 +110,7 @@ public class Login extends TestCase {
 			requestAccountFirstNameFinder = xpath(p.getProperty("registernewuserfirstname"));
 			requestAccountLastNameFinder = xpath(p.getProperty("registernewuserlastname"));
 			requestAccountPositionFinder = xpath(p.getProperty("registernewuserposition"));
+			requestAccountCountryFinder = xpath(p.getProperty("registernewusercountry"));
 			requestAccountTimeZoneFinder = xpath(p.getProperty("registernewusertimezone"));
 			requestAccountCompanyNameFinder = xpath(p.getProperty("registernewusercompanyname"));
 			requestAccountPhoneNumberFinder = xpath(p.getProperty("registernewuserphonenumber"));
@@ -216,7 +222,9 @@ public class Login extends TestCase {
 	 * @throws Exception
 	 */
 	public void close() throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
+		FieldIDMisc.quitMonitor();
+		Thread.sleep(2000);	// give the thread a few seconds to stop before killing IE.
 		ie.close();
 		assertFalse("Closed Internet Explorer but it still exists.", ie.exists());
 	}
@@ -247,6 +255,13 @@ public class Login extends TestCase {
 		checkLoginPageContentHeader();
 	}
 
+	public void checkForThawteLogo() throws Exception {
+		Link securedByThawteLogo = ie.link(securedByThawteLogoFinder);
+		assertTrue("Could not find the link for the Secured by Thawte logo", securedByThawteLogo.exists());
+		HtmlElement ThawteImage = ie.htmlElement(securedByThawteImageFinder);
+		assertTrue("Could not find the Secured by Thawte logo", ThawteImage.exists());
+	}
+
 	public void checkLoginPageContentHeader() throws Exception {
 		HtmlElement loginContentHeader = ie.htmlElement(loginContentHeaderFinder);
 		assertTrue("Could not find the Login page content header.", loginContentHeader.exists());
@@ -266,7 +281,7 @@ public class Login extends TestCase {
 	}
 
 	/**
-	 * After using gotoChooseCompany(), sets the company name field and clicks
+	 * sets the company name field and clicks
 	 * the Continue button. If a Cancel button is added to the choose a company
 	 * page, this needs to be refactored to just set the company field and a
 	 * separate clickChooseACompanyContinue method needs to be created.
@@ -479,6 +494,17 @@ public class Login extends TestCase {
 		if (newuser.getPosition() != null) {
 			position.set(newuser.getUserID());
 		}
+		
+		SelectList country = ie.selectList(requestAccountCountryFinder);
+		assertTrue("Could not find the country select list on Register New User page", country.exists());
+		String c = newuser.getCountry();
+		if (c != null) {
+			c = "/" + c + "/";	// change to regex
+			Option cc = country.option(text(c));
+			assertTrue("Could not find the option '" + c + "' in the country list.", cc.exists());
+			cc.select();
+			misc.waitForJavascript();
+		}
 
 		SelectList timeZone = ie.selectList(requestAccountTimeZoneFinder);
 		assertTrue("Could not find the time zone select list on Register New User page", timeZone.exists());
@@ -544,6 +570,13 @@ public class Login extends TestCase {
 		returnToLoginPage.click();
 	}
 	
+	/**
+	 * 
+	 * @param company - the name of a valid tenant
+	 * @param name - login name
+	 * @param password - for requesting a new account
+	 * @throws Exception
+	 */
 	public void validate(String company, String name, String password) throws Exception {
 		IE ie2 = getIE();
 		setIE(ie2);

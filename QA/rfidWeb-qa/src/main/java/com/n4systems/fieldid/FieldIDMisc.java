@@ -22,7 +22,7 @@ import static watij.finders.FinderFactory.*;
 public class FieldIDMisc extends TestCase {
 
 	IE ie = null;
-	Refresh monitor;
+	public static Refresh monitor = null;
 	static long hack = 5000;	// wait 5 seconds for Javascript actions to complete
 	static long lightBoxHack = 10000;
 	public static long dayInMilliseconds = 86400000;	// used for scheduling inspections
@@ -43,6 +43,9 @@ public class FieldIDMisc extends TestCase {
 	
 	public FieldIDMisc(IE ie) {
 		this.ie = ie;
+		if(monitor == null) {
+			monitor = new Refresh("refresh", ie);
+		}
 		tellUsWhatHappenedLinkFinder = xpath("//A[contains(text(),'Tell us what happened')]");
 		lightBoxOKButtonFinder = tag("button");
 		lightBoxMessageFinder = xpath("//P[@id='modalBox_message']");
@@ -132,20 +135,6 @@ public class FieldIDMisc extends TestCase {
 		return null;
 	}
 
-	/*
-	 * There are startMonitorStatus and stopMonitorStatus methods. The
-	 * startMonitorStatus will check the status bar of IE once a second.
-	 * If the status bar does not change after a period of time (max)
-	 * we assume IE is hung and send a refresh signal. If the period of
-	 * time gets reset, i.e. the status bar changes, we record the reset.
-	 * If the page appears to be hung, we refresh the page and reset the
-	 * counter.
-	 */
-	static long refreshes = 1;
-	static long resets = 1;
-	static final int TIMEOUT = 180;	// number of seconds before Watij times out 
-	public static boolean running = false;
-	
 	/**
 	 * For various reasons, e.g. transparent PNGs cause pages to occasionally
 	 * fail to load in Internet Explorer, you need to run this method once the
@@ -158,52 +147,10 @@ public class FieldIDMisc extends TestCase {
 	 * 
 	 * Any time you do an ie.start(), ie.attach(), ie.navigate(), ie.goTo()
 	 * you should call this method and start a monitoring thread for that
-	 * instance of IE. When you are going to quit IE, call the stopMonitorStatus
-	 * method to kill the thread.
+	 * instance of IE. When you are going to quit IE, call the quitMonitor
+	 * method to kill the thread. 
 	 * 
-	 * @param ie
-	 * @throws Exception
 	 */
-	public synchronized void startMonitor() {
-		monitor = new Refresh("monitor", ie);
-		monitor.start();
-	}
-		
-	/**
-	 * The running variable keeps the thread created in startMonitorStatus
-	 * looping. If this variable is set to false then the thread in
-	 * startMonitorStatus exits.
-	 * 
-	 * You should call this method before you call ie.close() or ie = null.
-	 * 
-	 * @throws Exception
-	 */
-	public synchronized void stopMonitor() {
-		if(monitor != null) {
-			monitor.quit();
-		}
-	}
-	
-	/**
-	 * return the number of times the startMonitorStatus has reset
-	 * the counter for the web browser.
-	 * 
-	 * @return
-	 */
-	public long getNumberOfResets() {
-		return resets;
-	}
-	
-	/**
-	 * return the number of times the startMonitorStatus has needed
-	 * to refresh the web browser because it appears to have gotten
-	 * stuck.
-	 * 
-	 * @return
-	 */
-	public long getNumberOfRefreshes() {
-		return refreshes;
-	}
 
 	/**
 	 * Whenever you start IE, use this method instead of calling the ie.start()
@@ -219,7 +166,6 @@ public class FieldIDMisc extends TestCase {
 		assertNotNull(loginURL);
 		assertFalse(loginURL.equals(""));
 		ie.start(loginURL);
-		startMonitor();
 	}
 
 	/**
@@ -230,7 +176,6 @@ public class FieldIDMisc extends TestCase {
 	 */
 	public void start() throws Exception {
 		ie.start();
-		startMonitor();
 	}
 	
 	/**
@@ -637,5 +582,30 @@ public class FieldIDMisc extends TestCase {
 		String tellUsWhatHappened = "Tell us what happened";
 		Link helpServe = ie.link(tellUsWhatHappenedLinkFinder);
 		assertFalse("Link to '" + tellUsWhatHappened + "' exists.", helpServe.exists());
+	}
+
+	public static void stopMonitor() {
+		if(monitor != null) {
+			monitor.disable();
+		}
+	}
+
+	public static void startMonitor() {
+		if(monitor != null) {
+			monitor.enable();
+		}
+	}
+
+	public static void initMonitor() {
+		if(monitor != null && !monitor.isRunning()) {
+			monitor.start();
+		}
+	}
+	
+	public static void quitMonitor() {
+		if(monitor != null) {
+			monitor.quit();
+			monitor = null;
+		}
 	}
 }

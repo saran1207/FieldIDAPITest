@@ -104,6 +104,8 @@ public class ManageCustomers extends TestCase {
 	private Finder manageCustomerAddDivisionSaveFinder;
 	private Finder manageCustomerUsersLinkFinder;
 	private Finder manageCustomerAddUserLinkFinder;
+	private Finder editCustomerUserCountryFinder;
+	private Finder addCustomerUserCountryFinder;
 
 	public ManageCustomers(IE ie) {
 		this.ie = ie;
@@ -149,6 +151,7 @@ public class ManageCustomers extends TestCase {
 			addCustomerUserPositionFinder = xpath(p.getProperty("addcustomeruserposition"));
 			addCustomerUserInitialsFinder = xpath(p.getProperty("addcustomeruserinitials"));
 			addCustomerUserSecurityRFIDFinder = xpath(p.getProperty("addcustomeruserrfid"));
+			addCustomerUserCountryFinder = xpath(p.getProperty("addcustomerusercountry"));
 			addCustomerUserTimeZoneFinder = xpath(p.getProperty("addcustomerusertimezone"));
 			addCustomerUserDivisionFinder = xpath(p.getProperty("addcustomeruserdivision"));
 			addCustomerUserPasswordFinder = xpath(p.getProperty("addcustomeruserpassword"));
@@ -170,6 +173,7 @@ public class ManageCustomers extends TestCase {
 			editCustomerUserLastNameFinder = xpath(p.getProperty("editcustomeruserlastname"));
 			editCustomerUserPositionFinder = xpath(p.getProperty("editcustomeruserposition"));
 			editCustomerUserInitialsFinder = xpath(p.getProperty("editcustomeruserinitials"));
+			editCustomerUserCountryFinder = xpath(p.getProperty("editcustomerusercountry"));
 			editCustomerUserTimeZoneFinder = xpath(p.getProperty("editcustomerusertimezone"));
 			editCustomerUserDivisionFinder = xpath(p.getProperty("editcustomeruserdivision"));
 			editCustomerUserPermissionsTableFinder = xpath(p.getProperty("editcustomeruserpermissiontable"));
@@ -566,7 +570,7 @@ public class ManageCustomers extends TestCase {
 
 	public List<String> getCustomerNames() throws Exception {
 		List<String> results = new ArrayList<String>();
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		boolean loopFlag = true;
 		do {
 			List<String> tmp = getCustomerNamesFromCurrentPage();
@@ -578,7 +582,7 @@ public class ManageCustomers extends TestCase {
 				loopFlag = false;
 			}
 		} while (loopFlag);
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 
 		return results;
 	}
@@ -603,7 +607,7 @@ public class ManageCustomers extends TestCase {
 	public List<String> getCustomerIDs() throws Exception {
 		List<String> results = new ArrayList<String>();
 		
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		boolean loopFlag = true;
 		do {
 			List<String> tmp = getCustomerIDsFromCurrentPage();
@@ -615,7 +619,7 @@ public class ManageCustomers extends TestCase {
 				loopFlag = false;
 			}
 		} while (loopFlag);
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 
 		return results;
 	}
@@ -686,6 +690,15 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the Security Rfid Number field", rfid.exists());
 		if(u.getSecurityRFIDNumber() != null) {
 			rfid.set(u.getSecurityRFIDNumber());
+		}
+		SelectList country = ie.selectList(addCustomerUserCountryFinder);
+		assertTrue("Could not find the Country field", country.exists());
+		String c = u.getCountry();
+		if(c != null) {
+			Option o = country.option(text(c));
+			assertTrue("Could not find the Country '" + c + "' in the list of countries", o.exists());
+			o.select();
+			misc.waitForJavascript();
 		}
 		SelectList timeZone = ie.selectList(addCustomerUserTimeZoneFinder);
 		assertTrue("Could not find the Time Zone field", timeZone.exists());
@@ -873,7 +886,7 @@ public class ManageCustomers extends TestCase {
 
 	public void editCustomerUser(CustomerUser u) throws Exception {
 		assertNotNull(u);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		TextField userID = ie.textField(editCustomerUserUserIDFinder);
 		assertTrue("Could not find the User ID field", userID.exists());
 		userID.set(u.getUserID());
@@ -896,6 +909,15 @@ public class ManageCustomers extends TestCase {
 		if(u.getInitials() != null) {
 			initials.set(u.getInitials());
 		}
+//		SelectList country = ie.selectList(editCustomerUserCountryFinder);
+//		assertTrue("Could not find the Country field", country.exists());
+//		String c = u.getCountry();
+//		if(c != null) {
+//			Option o = country.option(text(c));
+//			assertTrue("Could not find the Country '" + c + "' in the list of countries", o.exists());
+//			o.select();
+//			misc.waitForJavascript();
+//		}
 		SelectList timeZone = ie.selectList(editCustomerUserTimeZoneFinder);
 		assertTrue("Could not find the Time Zone field", timeZone.exists());
 		String tz = u.getTimeZone();
@@ -935,7 +957,7 @@ public class ManageCustomers extends TestCase {
 
 		saveEditCustomerUser();
 		checkManageCustomerPageContentHeader();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void editCustomerUserAllPermissionsOn() throws Exception {

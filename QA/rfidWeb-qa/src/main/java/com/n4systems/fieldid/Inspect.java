@@ -16,10 +16,12 @@ import com.n4systems.fieldid.datatypes.Inspection;
 import watij.elements.Button;
 import watij.elements.Checkbox;
 import watij.elements.HtmlElement;
+import watij.elements.Label;
 import watij.elements.Link;
 import watij.elements.Links;
 import watij.elements.Option;
 import watij.elements.SelectList;
+import watij.elements.Span;
 import watij.elements.TextField;
 import watij.finders.Finder;
 import watij.runtime.ie.IE;
@@ -64,6 +66,7 @@ public class Inspect extends TestCase {
 	private Finder saveEditStandardInspectionFinder;
 	private Finder editOnManageInspectionsLinkFinder;
 	private Finder saveStandardInspectionFinder;
+	private Finder inspectionDetailsHeaderFinder;
 	
 	public Inspect(IE ie) {
 		this.ie = ie;
@@ -72,6 +75,7 @@ public class Inspect extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
+			inspectionDetailsHeaderFinder = xpath(p.getProperty("inspectiondetailsheader"));
 			saveStandardInspectionFinder = xpath(p.getProperty("saveinspection"));
 			editOnManageInspectionsLinkFinder = xpath(p.getProperty("editonmanageinspectionslinks"));
 			saveEditStandardInspectionFinder = xpath(p.getProperty("saveeditinspection"));
@@ -157,7 +161,7 @@ public class Inspect extends TestCase {
 		HtmlElement header = ie.htmlElement(inspectionPageContentHeaderFinder);
 		assertTrue("Could not find the page content header", header.exists());
 		String s = header.text().trim();
-// TODO waiting for WEB-1102 to be fixed		assertTrue("Could not find the page header for inspection type '" + inspectionType + "'", s.contains(inspectionType));
+		assertTrue("Could not find the page header for inspection type '" + inspectionType + "'", s.contains(inspectionType));
 	}
 	
 	private Link helperStartMasterInspection() throws Exception {
@@ -174,7 +178,7 @@ public class Inspect extends TestCase {
 
 	public void setMasterInspection(Inspection i, String book) throws Exception {
 		assertNotNull(i);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		SelectList customer = ie.selectList(customerBaseSelectListFinder);
 		assertTrue("Could not find the customer select list", customer.exists());
 		if(i.getCustomer() != null) {
@@ -257,7 +261,7 @@ public class Inspect extends TestCase {
 			nextInspectionDate.set(i.getNextInspectionDate());
 		}
 		// Attach A File
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	/**
@@ -388,6 +392,41 @@ public class Inspect extends TestCase {
 		boolean result = false;
 		Link l = helperStartMasterInspection();
 		result = l.exists();
+		return result;
+	}
+
+	/**
+	 * Edits an attribute on an inspection. Assumes you are editing the inspection.
+	 * 
+	 * @param attributeName
+	 * @param attributeValue
+	 * @throws Exception
+	 */
+	public void setEditInspectionAttribute(String attributeName, String attributeValue) throws Exception {
+		Finder attributeLabelFinder = xpath("//LABEL[contains(text(),'" + attributeName + "')]");
+		Finder attributeTextFieldFinder = xpath("../SPAN/INPUT");
+		Label attrib = ie.label(attributeLabelFinder);
+		assertTrue("Could not find the attribute '" + attributeName + "'", attrib.exists());
+		TextField attr = attrib.textField(attributeTextFieldFinder);
+		assertTrue("Could not find the attribute text field '" + attributeName + "'", attr.exists());
+		attr.set(attributeValue);
+	}
+
+	/**
+	 * Assumes you are on the View inspection page
+	 * 
+	 * @param attributeName
+	 * @return
+	 * @throws Exception
+	 */
+	public String getInspectionAttribute(String attributeName) throws Exception {
+		String result = null;
+		HtmlElement inspectionDetails = ie.htmlElement(inspectionDetailsHeaderFinder);
+		assertTrue("Could not find the header 'Inspection Details'", inspectionDetails.exists());
+		Label attributeLabel = inspectionDetails.label(xpath("../P/LABEL[contains(text(),'" + attributeName + ":')]"));
+		assertTrue("Could not find the label for attribute '" + attributeName + "'", attributeLabel.exists());
+		Span attribValue = attributeLabel.span(xpath("../SPAN"));
+		result = attribValue.text().trim();
 		return result;
 	}
 }

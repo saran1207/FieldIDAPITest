@@ -87,6 +87,8 @@ public abstract class FieldIDTestCase extends TestCase {
 		// if loginurl is defined, override the default
 		loginURL = prop.getProperty("loginurl", loginURL);
 		misc.start();
+		FieldIDMisc.initMonitor();
+		FieldIDMisc.startMonitor();
 		login.gotoLoginPage(loginURL);
 	}
 	

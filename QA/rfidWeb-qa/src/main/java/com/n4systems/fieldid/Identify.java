@@ -264,7 +264,7 @@ public class Identify extends TestCase {
 		return addProduct;
 	}
 	
-	private void checkAddProductPageContentHeader() throws Exception {
+	public void checkAddProductPageContentHeader() throws Exception {
 		HtmlElement addProductContentHeader = ie.htmlElement(addProductContentHeaderFinder);
 		assertTrue("Could not find Add Product page content header '" + p.getProperty("addproductcontentheader") + "'", addProductContentHeader.exists());
 	}
@@ -552,7 +552,7 @@ public class Identify extends TestCase {
 		assertNotNull(p);
 		assertTrue("You either have to generate a serial number or provide one.", generate || (p.getSerialNumber() != null));
 		
-		misc.stopMonitor();	// turn the refresh monitor off while filling out the product form
+		FieldIDMisc.stopMonitor();	// turn the refresh monitor off while filling out the product form
 		
 		boolean jobsiteset = (p.getJobSite() != null);
 		boolean assignedtoset = (p.getAssignedTo() != null);
@@ -693,7 +693,7 @@ public class Identify extends TestCase {
 
 		handleRequiredFieldsOnAddProduct(comments);
 
-		misc.startMonitor();	// turn the monitor back on
+		FieldIDMisc.startMonitor();	// turn the monitor back on
 	}
 	
 	public void addProductSave() throws Exception {
@@ -739,6 +739,11 @@ public class Identify extends TestCase {
 		reset.click();
 		ie.waitUntilReady();
 		misc.checkForErrorMessagesOnCurrentPage();
+	}
+	
+	public void handleRequiredFieldsOnAddProduct() throws Exception {
+		TextField comments = ie.textField(addProductCommentsFinder);
+		handleRequiredFieldsOnAddProduct(comments);
 	}
 	
 	private void handleRequiredFieldsOnAddProduct(TextField comments) throws Exception {
@@ -1110,7 +1115,7 @@ public class Identify extends TestCase {
 				assertTrue(n >= 0);	// shouldn't be negative
 			}
 			gotoAddProductOnOrderNumber(0);
-			setProduct(product , true);
+			setProduct(product, true);
 			addProductSave();
 			gotoIdentify();
 			gotoAdd();
@@ -1120,7 +1125,7 @@ public class Identify extends TestCase {
 		setProduct(product , true);
 		gotoAddMultipleAssets();
 		String quantity = "8";
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		addMultipleAssetsStep1(product);
 		addMultipleAssetsContinueToStep2();
 		addMultipleAssetsBackToStep1();
@@ -1142,18 +1147,18 @@ public class Identify extends TestCase {
 		addMultipleAssetsBackToStep3();
 		addMultipleAssetsContinueToStep4();
 		addMultipleAssetsSaveAndCreate();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		addMultipleAssetsCancel();	// takes you to the Home page WEB-1024
 	}
 	
 	public void gotoAddProductAttachFile() throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		Button attachFile = ie.button(attachFileButtonFinder);
 		assertTrue("Could not find the button to attach a file", attachFile.exists());
 		attachFile.click();
 		misc.waitForJavascript();
 		fail("not implemented");
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void addMultipleAssetsSaveAndCreate() throws Exception {

@@ -236,7 +236,7 @@ public class ManageSystemUsers extends TestCase {
 	}
 
 	public void addCustomerUser(CustomerUser u) throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertNotNull("Must set a User ID for the customer", u.getUserID());
 		assertNotNull("Must set an email address for the customer", u.getEmail());
@@ -342,6 +342,6 @@ public class ManageSystemUsers extends TestCase {
 		Button submit = ie.button(addCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 }

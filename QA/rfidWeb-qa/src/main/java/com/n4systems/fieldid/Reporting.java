@@ -645,7 +645,7 @@ public class Reporting extends TestCase {
 	}
 
 	private List<ReportingSearchCriteria> getReportingSearchResultsFromCurrentPage() throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		TableRows trs = ie.rows(reportResultsTableRowFinder);
 		assertNotNull("Could not find the rows for the Report Results table", trs);
 		TableRow header = ie.row(reportResultsTableHeaderFinder);
@@ -699,7 +699,7 @@ public class Reporting extends TestCase {
 			}
 			results.add(rsc);
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 
@@ -757,7 +757,7 @@ public class Reporting extends TestCase {
 	}
 
 	public List<String> getInspectionBookOptions() throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		List<String> results = new ArrayList<String>();
 		SelectList inspectionBook = getInspectionBookSelectList();
 		Options os = inspectionBook.options();
@@ -770,7 +770,7 @@ public class Reporting extends TestCase {
 			String book = o.text();
 			results.add(book);
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 
@@ -914,7 +914,7 @@ public class Reporting extends TestCase {
 
 	public void gotoSavedReport(String reportName) throws Exception {
 		assertNotNull(reportName);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		Links runs = ie.links(runSavedReportLinksFinder);
 		boolean found = false;
 		assertNotNull("Could not find any Saved Reports", runs);
@@ -933,7 +933,7 @@ public class Reporting extends TestCase {
 		if(found) {
 			checkReportingSearchResultsForPage();
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void gotoStartNewReport() throws Exception {
@@ -974,12 +974,6 @@ public class Reporting extends TestCase {
 		saveSaveReport();
 
 		// filter down to smaller list
-		List<String> books = getInspectionBookOptions();
-		String book = books.get(0);
-		expandReportSearchResultsSearchCriteria();
-		criteria.setInspectionBook(book);
-		setReportingSearchCriteria(criteria);
-		expandReportSelectColumns();
 		columns.setAllOff();
 		columns.setInspectionType(true);
 		columns.setCustomerName(true);
@@ -989,8 +983,16 @@ public class Reporting extends TestCase {
 		columns.setProductType(true);
 		columns.setRFIDNumber(true);
 		columns.setInspectionDate(true);
+		FieldIDMisc.stopMonitor();
+		List<String> books = getInspectionBookOptions();
+		String book = books.get(0);
+		criteria.setInspectionBook(book);
+		expandReportSearchResultsSearchCriteria();
+		setReportingSearchCriteria(criteria);
+		expandReportSelectColumns();
 		setReportSelectColumns(columns);
 		gotoReportSearchResults();
+		FieldIDMisc.startMonitor();
 
 		// 'save as' the refined results
 		gotoSaveReportAs();

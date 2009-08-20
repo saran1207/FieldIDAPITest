@@ -7,6 +7,7 @@ import java.util.List;
 
 import watij.elements.Link;
 
+import com.n4systems.fieldid.FieldIDMisc;
 import com.n4systems.fieldid.datatypes.ButtonGroup;
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerDivision;
@@ -691,7 +692,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	private void addMasterInspectionForm() throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		mits.gotoInspectionForm(masterInspectionType);
 		masterInspectionForm = mits.getInspectionForm();
 		if(masterInspectionForm == null) {
@@ -731,7 +732,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 			mits.addInspectionForm(masterInspectionForm);
 			mits.saveInspectionForm();
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	private void createMasterInspectonType() throws Exception {
@@ -852,7 +853,8 @@ public class SmokeTestEx extends FieldIDTestCase {
 		u.setCustomer(customerName);
 		u.setPosition("seated");
 		u.setInitials("cu");
-		u.setTimeZone("New York");
+		u.setCountry("Canada");
+		u.setTimeZone("Toronto");
 		List<String> permissions = new ArrayList<String>();
 		permissions.add(CustomerUser.create);
 		u.setPermissions(permissions);

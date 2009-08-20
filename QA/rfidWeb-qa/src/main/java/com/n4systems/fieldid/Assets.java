@@ -686,7 +686,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = customers.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String c = o.text();
@@ -695,7 +695,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 	
@@ -719,7 +719,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = divisions.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String d = o.text();
@@ -728,7 +728,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 
@@ -748,7 +748,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = statuses.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String ps = o.text();
@@ -757,7 +757,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		return results;
 	}
 	
@@ -777,7 +777,7 @@ public class Assets extends TestCase {
 		Iterator<Option> i = types.iterator();
 		// If there are many options on the select list, we don't want
 		// to refresh the page while processing the list of options.
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		while(i.hasNext()) {
 			Option o = i.next();
 			String pt = o.text();
@@ -786,7 +786,7 @@ public class Assets extends TestCase {
 			}
 		}
 		// Turn the refresh monitor back on
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		return results;
 		
 	}
@@ -1017,7 +1017,7 @@ public class Assets extends TestCase {
 	
 	public void setMassUpdate(MassUpdateForm m) throws Exception {
 		assertNotNull(m);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		String customerName = m.getCustomerName();
 		if(customerName != null) {
 			SelectList customer = ie.selectList(massUpdateCustomerNameFinder);
@@ -1109,7 +1109,7 @@ public class Assets extends TestCase {
 			assertTrue("Could not find the Select checkbox for identified", identifiedSelected.exists());
 			identifiedSelected.set(true);
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	public void gotoSaveMassUpdate() throws Exception {
@@ -1223,7 +1223,7 @@ public class Assets extends TestCase {
 		assertNotNull(scheduleDate);
 		assertNotNull(inspectionType);
 		assertNotNull(newScheduleDate);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		TableRows trs = ie.rows(scheduleForScheduleRowsFinder);
 		assertNotNull("Could not find the rows containing schedule for product", trs);
 		Iterator<TableRow> i = trs.iterator();
@@ -1248,7 +1248,7 @@ public class Assets extends TestCase {
 				break;
 			}
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 	
 	public int SmartSearch(String searchString) throws Exception {
@@ -1695,8 +1695,10 @@ public class Assets extends TestCase {
 	
 	private String getProductsDetachedFromJobs() throws Exception {
 		Label n = ie.label(productsWillBeDetachedFromJobsFinder);
-		assertTrue("Could not find the number of products which will be detached from jobs", n.exists());
-		return n.text().trim();
+		if(n.exists()) {
+			return n.text().trim();
+		}
+		return null;
 	}
 
 	private String getSubProductsDetached() throws Exception {
@@ -1718,11 +1720,12 @@ public class Assets extends TestCase {
 	}
 
 	public void confirmDeleteProduct() throws Exception {
+		Identify identify = new Identify(ie);
 		Button delete = ie.button(confirmDeleteAssetButtonFinder);
 		assertTrue("Could not find the Delete button on Removal Details page", delete.exists());
 		delete.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		checkAssetsPageContentHeader();
+		identify.checkAddProductPageContentHeader();
 	}
 	
 	private Links helperGetSubProductLinks() throws Exception {

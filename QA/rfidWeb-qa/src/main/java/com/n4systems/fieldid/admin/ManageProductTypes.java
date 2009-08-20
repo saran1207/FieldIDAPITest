@@ -176,7 +176,7 @@ public class ManageProductTypes extends TestCase {
 		assertNotNull("Product Type Name is a required field.", npt.getName());
 		assertFalse("Product Type Name is a required field.", npt.getName().equals(""));
 		
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		SelectList group = ie.selectList(addProductTypeGroupFinder);
 		assertTrue("Could not find the select list for Group", group.exists());
 		String groupOption = npt.getGroup(); 
@@ -232,14 +232,14 @@ public class ManageProductTypes extends TestCase {
 			assertTrue("Could not find the button to attach a file", attachAFile.exists());
 			fail("Add Attachments not supported");
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	// TODO: TEST
 	private void setProductAttributes(ProductAttribute[] pat) throws Exception {
 		assertNotNull(pat);
 		assertTrue(pat.length > 0);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		int dropDownOptionIndex = 0;
 		for(int i = 0; i < pat.length; i++) {
 			ProductAttribute pa = pat[i];
@@ -299,7 +299,7 @@ public class ManageProductTypes extends TestCase {
 				o2.select();
 			}
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	private void checkViewProductTypePageContentHeader(String name) throws Exception {
@@ -577,5 +577,14 @@ public class ManageProductTypes extends TestCase {
 		assertTrue("Could not find the Save button on Sub-Components", save.exists());
 		save.click();
 		checkManageProductTypePageContentHeader(masterProductType);
+	}
+
+	public void gotoProductType(String productType) throws Exception {
+		assertNotNull(productType);
+		Links pts = helperGetProductTypeLinks();
+		Link pt = pts.link(productType);
+		assertTrue("Could not find a link to view '" + productType + "'", pt.exists());
+		pt.click();
+		checkViewProductTypePageContentHeader(productType);
 	}
 }

@@ -11,6 +11,7 @@ public class FieldIDUser {
 	String firstName = null;
 	String lastName = null;
 	String position = null;
+	String country = "Canada";
 	String timeZone = null;
 	String companyName = null;
 	String phoneNumber = null;
@@ -23,6 +24,20 @@ public class FieldIDUser {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.position = position;
+		this.timeZone = timeZone;
+		this.companyName = companyName;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+		this.comments = comments;
+	}
+	
+	public FieldIDUser(String userID, String email, String firstName, String lastName, String position, String country, String timeZone, String companyName, String phoneNumber, String password, String comments) {
+		this.userID = userID;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.position = position;
+		this.country = country;
 		this.timeZone = timeZone;
 		this.companyName = companyName;
 		this.phoneNumber = phoneNumber;
@@ -67,6 +82,14 @@ public class FieldIDUser {
 	
 	public String getPosition() {
 		return position;
+	}
+	
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCountry() {
+		return this.country;
 	}
 	
 	public void setTimeZone(String timeZone) {

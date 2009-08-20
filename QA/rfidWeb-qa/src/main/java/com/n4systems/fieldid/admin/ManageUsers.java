@@ -81,6 +81,7 @@ public class ManageUsers extends TestCase {
 	private Finder addEmployeeUserVerifyPasswordFinder;
 	private Finder addEmployeeUserAllOffButtonFinder;
 	private Finder addEmployeeUserSubmitButtonFinder;
+	private Finder addCustomerUserCountryFinder;
 
 	public ManageUsers(IE ie) {
 		this.ie = ie;
@@ -112,6 +113,7 @@ public class ManageUsers extends TestCase {
 			addCustomerUserPositionFinder = id(p.getProperty("addcustomerposition"));
 			addCustomerUserInitialsFinder = id(p.getProperty("addcustomerinitials"));
 			addCustomerUserSecurityRFIDNumberFinder = id(p.getProperty("addcustomersecurityrfidnumber"));
+			addCustomerUserCountryFinder = id(p.getProperty("addcustomercountry"));
 			addCustomerUserTimeZoneFinder = id(p.getProperty("addcustomertimezone"));
 			addCustomerUserCustomerFinder = id(p.getProperty("addcustomercustomer"));
 			addCustomerUserDivisionFinder = id(p.getProperty("addcustomerdivision"));
@@ -297,7 +299,7 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void addCustomerUser(CustomerUser u) throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertNotNull("Must set a User ID for the customer", u.getUserID());
 		assertNotNull("Must set an email address for the customer", u.getEmail());
@@ -341,6 +343,17 @@ public class ManageUsers extends TestCase {
 		assertTrue("Could not find the Security Rfid Number text field on Add User", addCustomerUserSecurityRFIDNumber.exists());
 		if(u.getSecurityRFIDNumber() != null) {
 			addCustomerUserSecurityRFIDNumber.set(u.getSecurityRFIDNumber());
+		}
+
+		SelectList addCustomerUserCountry = ie.selectList(addCustomerUserCountryFinder);
+		assertTrue("Could not find the Country select list on Add User", addCustomerUserCountry.exists());
+		String c = u.getCountry();
+		if(c != null) {
+			c = "/" + c + "/";
+			Option o = addCustomerUserCountry.option(text(c));
+			assertTrue("Could not find the country '" + c + "'", o.exists());
+			o.select();
+			misc.waitForJavascript();
 		}
 
 		SelectList addCustomerUserTimeZone = ie.selectList(addCustomerUserTimeZoneFinder);
@@ -404,7 +417,7 @@ public class ManageUsers extends TestCase {
 		Button submit = ie.button(addCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 	
 	public void validate() throws Exception {
@@ -478,7 +491,7 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void editCustomerUser(CustomerUser u) throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertFalse("User ID cannot be blank", u.getUserID().trim().equals(""));
 		assertFalse("Email cannot be blank", u.getEmail().trim().equals(""));
@@ -571,7 +584,7 @@ public class ManageUsers extends TestCase {
 		Button submit = ie.button(editCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 
 	private void checkEditUserCustomerPermissions() throws Exception {
@@ -579,7 +592,7 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void addEmployeeUser(EmployeeUser u) throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(u);
 		assertNotNull("Must set a User ID for the customer", u.getUserID());
 		assertNotNull("Must set an email address for the customer", u.getEmail());
@@ -625,6 +638,8 @@ public class ManageUsers extends TestCase {
 			addEmployeeUserSecurityRFIDNumber.set(u.getSecurityRFIDNumber());
 		}
 
+		// TODO: add support for country
+		
 		SelectList addEmployeeUserTimeZone = ie.selectList(addEmployeeUserTimeZoneFinder);
 		assertTrue("Could not find the Time Zone select list on Add User", addEmployeeUserTimeZone.exists());
 		String tz = u.getTimeZone();
@@ -675,6 +690,6 @@ public class ManageUsers extends TestCase {
 		Button submit = ie.button(addEmployeeUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 }

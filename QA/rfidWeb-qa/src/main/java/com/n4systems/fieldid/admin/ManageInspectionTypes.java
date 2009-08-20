@@ -153,7 +153,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 
 	public void addInspectionType(InspectionType it) throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(it);
 		assertNotNull(it.getName());
 		assertFalse("Inspection type must have a name.", it.getName().equals(""));
@@ -182,7 +182,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
 	}
 
@@ -283,7 +283,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 	
 	public void editInspectionType(InspectionType it) throws Exception {
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		assertNotNull(it);
 		assertNotNull(it.getName());
 		assertFalse("Inspection type must have a name.", it.getName().equals(""));
@@ -312,7 +312,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
 	}
 	
@@ -618,7 +618,7 @@ public class ManageInspectionTypes extends TestCase {
 	
 	public void addInspectionForm(InspectionForm form) throws Exception {
 		assertNotNull(form);
-		misc.stopMonitor();
+		FieldIDMisc.stopMonitor();
 		int sections = form.getNumberOfSections();
 		for(int i = 0; i < sections; i++) {
 			Section s = form.getSection(i);
@@ -691,7 +691,7 @@ public class ManageInspectionTypes extends TestCase {
 				}
 			}
 		}
-		misc.startMonitor();
+		FieldIDMisc.startMonitor();
 	}
 	
 	public void saveInspectionForm() throws Exception {
@@ -701,7 +701,8 @@ public class ManageInspectionTypes extends TestCase {
 		ie.waitUntilReady();
 		misc.checkForErrorMessagesOnCurrentPage();
 		String msg = misc.getSuccessMessageOnCurrentPage();
-		assertNotSame("", msg);
+		String expected = "";
+		assertNotSame("Got '" + msg + "' but expected '" + expected + "'", expected, msg);
 	}
 	
 	public List<String> getButtonGroupNames() throws Exception {
