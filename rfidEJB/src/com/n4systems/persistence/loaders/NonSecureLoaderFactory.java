@@ -1,6 +1,6 @@
 package com.n4systems.persistence.loaders;
 
-import com.n4systems.model.signuppackage.SignupPackageBySyncIdLoader;
+import com.n4systems.model.signuppackage.ContractPricingByNsRecordIdLoader;
 
 public class NonSecureLoaderFactory {
 
@@ -9,8 +9,7 @@ public class NonSecureLoaderFactory {
 	 */
 
 	
-	public static SignupPackageBySyncIdLoader createSignupPackageBySyncIdLoader() {
-		return new SignupPackageBySyncIdLoader();
+	public static ContractPricingByNsRecordIdLoader createContractPricingByNsRecordIdLoader() {
+		return new ContractPricingByNsRecordIdLoader();
 	}
-	
 }

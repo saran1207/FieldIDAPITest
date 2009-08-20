@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.Saveable;
@@ -15,9 +14,7 @@ public class ContractPricing extends AbstractEntity implements Saveable {
 	private String netsuiteRecordId;
 	private String contractLength; // in months
 	private String price; // per user per month
-	
-	@ManyToOne(optional=false)
-	private SignupPackage signupPackage;
+	private String syncId;
 
 	public String getNetsuiteRecordId() {
 		return netsuiteRecordId;
@@ -37,10 +34,10 @@ public class ContractPricing extends AbstractEntity implements Saveable {
 	public void setPrice(String price) {
 		this.price = price;
 	}
-	public SignupPackage getSignupPackage() {
-		return signupPackage;
+	public String getSyncId() {
+		return syncId;
 	}
-	public void setSignupPackage(SignupPackage signupPackage) {
-		this.signupPackage = signupPackage;
-	}
+	public void setSyncId(String syncId) {
+		this.syncId = syncId;
+	}	
 }
