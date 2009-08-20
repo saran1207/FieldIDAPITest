@@ -60,6 +60,7 @@ public abstract class FieldIDTestCase extends TestCase {
 	protected Properties prop;
 	protected InputStream in;
 	protected String propertyFile;
+	protected File f;
 		
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -67,17 +68,26 @@ public abstract class FieldIDTestCase extends TestCase {
 			once = false;
 			timestamp = misc.createTimestampDirectory() + "/";
 		}
-		// If the testCase.properties exists, use that
-		// otherwise, default to the Class.properties
-		propertyFile = getName() + ".properties";
-		File f = new File(propertyFile);
-		if(!f.exists()) {
-			propertyFile = getClass().getName() + ".properties";
-		}
 		try {
-			in = new FileInputStream(propertyFile);
 			prop = new Properties();
-			prop.load(in);
+			// if className.properties exists, load it
+			propertyFile = getClass().getName() + ".properties";
+			f = new File(propertyFile);
+			if(f.exists()) {
+				in = new FileInputStream(propertyFile);
+				prop.load(in);
+				in.close();
+			}
+	
+			// if testCase.properties exists, load it
+			propertyFile = getName() + ".properties";
+			f = new File(propertyFile);
+			if(f.exists()) {
+				in = new FileInputStream(propertyFile);
+				prop.load(in);
+				in.close();
+			}
+			// NOTE: if the same property exists in both files, testCase.properties overwrites
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing the test case");
 		} catch (IOException e) {
