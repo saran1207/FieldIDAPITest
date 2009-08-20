@@ -1,5 +1,10 @@
 package rfid.ejb.session;
 
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
+import static com.n4systems.model.builders.TenantBuilder.*;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,8 +36,10 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.TenantCache;
 import com.n4systems.test.helpers.EJBTestCase;
 import com.n4systems.webservice.dto.CustomerServiceDTO;
 import com.n4systems.webservice.dto.DivisionServiceDTO;
@@ -156,30 +163,31 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		
 	}
 	
-	@Test
-	public void test_set_all_optional_product_fields() {
-		
-		
-	}
-	
 	private void test_product_non_optional_fields( Product product, ProductServiceDTO productServiceDTO  ) {
 		ProductType foundProductType = new ProductType();
 		foundProductType.setId( 5L );
 		
-		Tenant foundTenant = new Tenant();
-		foundTenant.setId( 10L );
+		Tenant foundTenant = aTenant().build();
 		productServiceDTO.setProductTypeId( foundProductType.getId() );
 		
 		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
 		
 		EasyMock.expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
-		EasyMock.expect( mockEntityManager.find( Tenant.class, foundTenant.getId() ) ).andReturn( foundTenant );
 		EasyMock.replay( mockEntityManager );
 		injectEntityManager( converter, mockEntityManager );
 		
+		
+		PrimaryOrg primaryOrg = aPrimaryOrg().onTenant(foundTenant).build();
+
+		TenantCache mockCache = createMock(TenantCache.class);
+		expect(mockCache.findTenant(foundTenant.getId())).andReturn(foundTenant);
+		expect(mockCache.findPrimaryOrg(foundTenant.getId())).andReturn(primaryOrg);
+		replay(mockCache);
+		TenantCache.setInstance(mockCache);
+		
 		product = converter.convert( productServiceDTO, product, foundTenant.getId() );
 		
-		assertAssignedValuesWereCopiedToProduct( productServiceDTO, product, foundProductType, foundTenant );
+		assertAssignedValuesWereCopiedToProduct( productServiceDTO, product, foundProductType, foundTenant, primaryOrg );
 		
 		EasyMock.verify( mockEntityManager );
 	}
@@ -272,7 +280,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		assertEquals( productServiceDTO.getMobileGuid(), product.getMobileGUID() );
 	}
 	private void assertAssignedValuesWereCopiedToProduct( ProductServiceDTO productServiceDTO, Product product, ProductType foundProductType,
-			Tenant foundTenant ) {
+			Tenant foundTenant, PrimaryOrg primaryOrg ) {
 		assertEquals( foundTenant, product.getTenant() );
 		assertEquals( foundProductType, product.getType() );
 		assertEquals( productServiceDTO.getComments(), product.getComments() );
@@ -305,7 +313,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 			assertEquals( new Long( product.getIdentifiedBy().getOrganization().getId() ), product.getOrganization().getId() );
 		} else {
 			assertNull( product.getIdentifiedBy() );
-			assertEquals( foundTenant, product.getOrganization() );
+			assertEquals( primaryOrg, product.getOrganization() );
 		}
 		
 		if (productServiceDTO.getProductStatusId() > 0) {
@@ -318,7 +326,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 			}
 		}
 		
-		// TODO check infooptions.
+		
 		
 		
 	}
