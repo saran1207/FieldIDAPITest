@@ -1,8 +1,8 @@
 class FixSignupPackageTablesToPlural < ActiveRecord::Migration
 	def self.up
-		drop_table :signuppackage
-		drop_table :signuppackage_extendedfeatures
-		drop_table :contractpricing
+    drop_table :signuppackage_extendedfeatures
+    drop_table :contractpricing 
+		drop_table :signuppackage	
 	
 		create_table "signuppackages" do |t|
 			create_abstract_entity_fields_on(t)
