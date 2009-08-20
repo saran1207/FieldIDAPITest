@@ -26,6 +26,7 @@
 	
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
 		<pattern>*ajax/*.action*</pattern>
+		<pattern>*public/ajax/*.action*</pattern>
 		
 	</decorator>
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">

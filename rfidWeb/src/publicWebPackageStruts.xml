@@ -41,4 +41,18 @@
 		</action>
 		
 	</package>
+	
+	<package name="publicAjax" extends="default" namespace="/public/ajax">
+		<default-interceptor-ref name="brandedFlashPublicStack" />
+		
+		<global-results>
+			<result name="error" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="input" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+		</global-results>
+	
+		<action name="signUpPackagePrice" method="show" class="com.n4systems.fieldid.actions.signup.SignUpPackagePriceCrud">
+			<result name="success" type="freemarker">/templates/ajax/signUpPackagePrice/show.ftl</result>
+		</action>
+	</package>
 </struts>

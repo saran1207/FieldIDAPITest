@@ -1,17 +1,26 @@
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
+	<@n4.includeScript src="signUp"/>
+	<@n4.includeScript>
+		pricingUrl = '<@s.url namespace="/public/ajax" action="signUpPackagePrice"/>';
+	</@n4.includeScript>
 </head>
 
 <title><@s.text name="title.create_your_account"/></title>
 
-<h1><@s.text name="title.create_your_account"/></h1>
+
 
 <@s.form action="signUpCreate" theme="fieldid" id="mainContent" cssClass="fullForm">
+	<h1><@s.text name="title.create_your_account"/></h1>
 	<#include "../common/_formErrors.ftl"/>
-	<@s.hidden name="signUpPackageId"/>
-	<div class="infoSection">
+	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
+	<div class="infoSection multiColumn">
 		
 		<div class="infoBlock">
+			<div class="infoSet">
+				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
+				<@s.textfield name="signUp.companyName"/>
+			</div>
 			<div class="infoSet">
 				<label class="label" for="firstName"><@s.text name="label.first_name"/></label>
 				<@s.textfield name="signUp.firstName"/>
@@ -24,6 +33,16 @@
 				<label class="label" for="email"><@s.text name="label.email"/></label>
 				<@s.textfield name="signUp.email"/>
 			</div>
+			
+			<div class="infoSet">
+				<label class="label"><@s.text name="label.country"/></label>
+				<@s.select name="signUp.countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone"/>
+			</div>
+			<div class="infoSet">
+				<label class="label"><@s.text name="label.timezone"/></label>
+				<@s.select id="tzlist" name="signUp.timeZone" list="timeZones" listKey="id" listValue="displayName" emptyOption="false"/>
+			</div>
+			
 		</div>
 		
 		<div class="infoBlock">
@@ -42,10 +61,7 @@
 		</div>
 		
 		<div class="infoBlock">
-			<div class="infoSet">
-				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
-				<@s.textfield name="signUp.companyName"/>
-			</div>
+			
 		</div>
 	</div>
 	
@@ -60,24 +76,24 @@
 		<div class="infoBlock">
 			<div class="infoSet">
 				<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
-				<@s.textfield name="signUp.numberOfUsers"/>
+				<@s.textfield name="signUp.numberOfUsers" cssClass="changesPrice"/>
 			</div>
 			<div class="infoSet">
 				<label class="label" for="phoneSupport"><@s.text name="label.phone_support"/></label>
-				<@s.checkbox name="signUp.phoneSupport"/>
+				<@s.checkbox name="signUp.phoneSupport" cssClass="changesPrice"/>
 			</div>
 		</div>
 	</div>
 	
+	
 	<div class="infoSection">
-		<div class="infoSet infoBlock">
-			<label class="label" for="refcode"><@s.text name="label.referrer_code"/></label>
-			<@s.textfield name="signUp.refcode"/>
+		<div class="infoBlock">
+			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">????</span>  <@s.reset key="label.update_price" cssClass="updatePrice"/>
 		</div>
 	</div>
 	
 	<div class="actions">
-		<@s.submit key="label.finalize_order"/> <@s.text name="label.or"/> <a href="<@s.url action="signUpPackages"/>"><@s.text name="label.choose_another_package"/></a> 
+		<@s.submit key="label.create_my_account"/> <@s.text name="label.or"/> <a href="<@s.url action="signUpPackages"/>"><@s.text name="label.choose_another_package"/></a> 
 	</div>
 </@s.form>
 
