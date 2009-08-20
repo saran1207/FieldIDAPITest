@@ -1,22 +1,23 @@
 package com.n4systems.model.signuppackage;
 
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.tenant.TenantLimit;
 
 
 public enum SignUpPackage {
 	
-	Free("FIDFREE", "Free", 5L, 1L, 5L, new ExtendedFeature[0]),
+	Free("FIDFREE", "Free", 5L, 1L, 5L),
 	
-	Basic("FIDBASIC", "Basic", 50L, 5L, 250L, new ExtendedFeature[] {ExtendedFeature.EmailAlerts}),
+	Basic("FIDBASIC", "Basic", 50L, 5L, 250L, ExtendedFeature.EmailAlerts),
 	
-	Plus("FIDPLUS", "Plus", 1000L, -1L, -1L, new ExtendedFeature[] {ExtendedFeature.EmailAlerts, 
-																	ExtendedFeature.Projects}),
+	Plus("FIDPLUS", "Plus", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
+																	ExtendedFeature.Projects),
 																	
-	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, -1L, -1L, new ExtendedFeature[] {ExtendedFeature.EmailAlerts, 
-				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter}),
+	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
+				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter),
 				
-	Unlimited("FIDUNLIMITED", "Unlimited", 1000L, -1L, -1L, new ExtendedFeature[] {ExtendedFeature.EmailAlerts, 
-				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter});
+	Unlimited("FIDUNLIMITED", "Unlimited", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
+				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter);
 	
 	private String syncId;
 	private String name;
@@ -25,7 +26,7 @@ public enum SignUpPackage {
 	private Long assets;
 	private ExtendedFeature[] extendedFeatures;
 	
-	private SignUpPackage(String syncId, String name, Long diskSpace, Long users, Long assets, ExtendedFeature[] extendedFeatures) {
+	private SignUpPackage(String syncId, String name, Long diskSpace, Long users, Long assets, ExtendedFeature...extendedFeatures) {
 		this.syncId = syncId;
 		this.name = name;
 		this.diskSpace = diskSpace;
