@@ -1,12 +1,14 @@
 class RemoveSignupPackageTable < ActiveRecord::Migration
 	def self.up
-    drop_foreign_key(:contractpricings, :signuppackages,  :source_column => :signuppackage_id, :foreign_key => :id)
-		drop_table :signuppackages_extendedfeatures
-    drop_table :signuppackages
-		
-		remove_column :contractpricings, :signuppackage_id
-		add_column :contractpricings, :syncid, :string
+		execute("delete from signuppackages")
 		execute("delete from contractpricings;")
+
+    	drop_foreign_key(:contractpricings, :signuppackages)
+		add_column :contractpricings, :syncid, :string
+		remove_column :contractpricings, :signuppackage_id
+
+		drop_table :signuppackages_extendedfeatures
+        drop_table :signuppackages		
 	end
 	
 	def self.down
