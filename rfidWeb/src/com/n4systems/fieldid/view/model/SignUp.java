@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.actions.helpers.TimeZoneSelectionHelper;
+import com.n4systems.model.signup.AccountCreationInformation;
+import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
@@ -9,7 +11,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
-public class SignUp implements SignUpPriceModifier {
+public class SignUp implements SignUpPriceModifier, AccountCreationInformation {
 	private Long signUpPackageId;
 	
 	private String companyName;
@@ -24,13 +26,11 @@ public class SignUp implements SignUpPriceModifier {
 	private String password;
 	private String passwordConfirm;
 	
-	
-	
+		
 	private String tenantName;
 	
-	private int numberOfUsers = 1;
+	private Integer numberOfUsers = 1;
 	private boolean phoneSupport;
-	private String refCode;
 	
 	public SignUp() {
 		this.country = TimeZoneSelectionHelper.defaultCountry();
@@ -87,7 +87,7 @@ public class SignUp implements SignUpPriceModifier {
 	}
 	
 	public String getTimeZone() {
-		return region.getId();
+		return country.getFullId(region);
 	}
 
 	public void setTimeZone(String regionId) {
@@ -143,13 +143,13 @@ public class SignUp implements SignUpPriceModifier {
 	public void setTenantName(String tenantName) {
 		this.tenantName = tenantName;
 	}
-	public int getNumberOfUsers() {
+	public Integer getNumberOfUsers() {
 		return numberOfUsers;
 	}
 	
 	@RequiredFieldValidator(message="", key="error.number_of_users_required")
 	@IntRangeFieldValidator(message="", key="error.number_of_users_minimum", min="1")
-	public void setNumberOfUsers(int numberOfUsers) {
+	public void setNumberOfUsers(Integer numberOfUsers) {
 		this.numberOfUsers = numberOfUsers;
 	}
 	
@@ -158,13 +158,6 @@ public class SignUp implements SignUpPriceModifier {
 	}
 	public void setPhoneSupport(boolean phoneSupport) {
 		this.phoneSupport = phoneSupport;
-	}
-	
-	public String getRefCode() {
-		return refCode;
-	}
-	public void setRefCode(String refCode) {
-		this.refCode = refCode;
 	}
 	
 	public Long getSignUpPackageId() {
@@ -178,6 +171,8 @@ public class SignUp implements SignUpPriceModifier {
 		return tenantName == null;
 	}
 
+	public SignUpPackage getSignUpPackage() {
+		return null;
+	}
 
-	
 }

@@ -14,16 +14,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.SerialNumberCounterBean;
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.handlers.creator.BaseSystemSetupDataCreateHandlerImpl;
+import com.n4systems.handlers.creator.BaseSystemStructureCreateHandler;
+import com.n4systems.handlers.creator.BaseSystemStructureCreateHandlerImpl;
+import com.n4systems.handlers.creator.BaseSystemTenantStructureCreateHandlerImpl;
+import com.n4systems.handlers.creator.PrimaryOrgCreateHandler;
+import com.n4systems.handlers.creator.PrimaryOrgCreateHandlerImpl;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
-import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -32,7 +31,6 @@ import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.model.tenant.OrganizationSaver;
-import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
@@ -126,22 +124,12 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	private void createTenant(TenantSaver tenantSaver, OrganizationSaver orgSaver, Transaction transaction) throws ParseException {
 		tenantSaver.save(transaction, tenant);
 		
-		primaryOrg.setTenant(tenant);
-		primaryOrg.setUsingSerialNumber(true);
-		primaryOrg.setCertificateName(primaryOrg.getName());
-		primaryOrg.setDefaultTimeZone("United States:New York - New York");
+		BaseSystemStructureCreateHandler createHandler = new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(), new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
+		createHandler.forTenant(tenant).create(transaction);
 		
-		orgSaver.save(transaction, primaryOrg);
-
-		//TODO move to a service for creating a tenant in the system.
-		createDefaultSetupDataLastModDates(transaction);
-		createDefaultTagOptionManufacture(TagOption.OptionKey.SHOPORDER, transaction);
-		createDefaultProductType("*", transaction);
-		createSystemAccount(transaction);
-		createAdminAccount(transaction);
-		createDefaultStateSets(transaction);
-		createDefaultInspectionTypeGroups(transaction);
-		createDefaultSerialNumberCounter(1L, "000000", 365L, getFirstDayOfYear(), transaction);
+		PrimaryOrgCreateHandler orgCreateHandler = new PrimaryOrgCreateHandlerImpl(new OrganizationSaver(), new UserSaver());
+		orgCreateHandler.forTenant(tenant).forAccountInfo(null).create(transaction);
+		
 		
 	}
 
@@ -196,44 +184,9 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		}
 	}
 
-	private void createDefaultTagOptionManufacture(TagOption.OptionKey optionKey, Transaction transaction) {
-		TagOption tagOption = new TagOption();
 
-		tagOption.setTenant(tenant);
-		tagOption.setKey(optionKey);
 
-		TagOptionSaver saver = new TagOptionSaver();
-		
-		saver.save(transaction, tagOption);
-	}
 
-	private void createDefaultProductType(String itemNumber, Transaction transaction) {
-		ProductType productType = new ProductType();
-
-		productType.setTenant(tenant);
-		productType.setName(itemNumber);
-		
-		ProductTypeSaver saver = new ProductTypeSaver();
-		saver.save(transaction, productType);
-	}
-
-	private Date getFirstDayOfYear() throws ParseException {
-		SimpleDateFormat fullFormat = new SimpleDateFormat("dd-MM-yyyy");
-		String year = new SimpleDateFormat("yyyy").format(new Date());
-		return fullFormat.parse("01-01-" + year);
-	}
-
-	private void createDefaultSerialNumberCounter(Long counter, String decimalFormat, Long daysToReset, Date lastReset, Transaction transaction) {
-		SerialNumberCounterBean serialNumberCounter = new SerialNumberCounterBean();
-		serialNumberCounter.setTenant(tenant);
-		serialNumberCounter.setCounter(counter);
-		serialNumberCounter.setDecimalFormat(decimalFormat);
-		serialNumberCounter.setDaysToReset(daysToReset);
-		serialNumberCounter.setLastReset(lastReset);
-
-		SerialNumberCounterSaver saver = new SerialNumberCounterSaver();
-		saver.save(transaction, serialNumberCounter);
-	}
 	
 	private void setCommonUserAttribs(UserBean user, int permissions) {
 		user.setTenant(tenant);
@@ -265,87 +218,8 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		saver.save(transaction, adminUser);
 	}
 
-	private void createDefaultStateSets(Transaction transaction) {
-		StateSetSaver saver = new StateSetSaver();
-		
-		StateSet passFail = new StateSet();
-		passFail.setName("Pass, Fail");
-		passFail.setTenant(tenant);
-
-		State pass = new State();
-		pass.setTenant(tenant);
-		pass.setButtonName("btn0");
-		pass.setDisplayText("Pass");
-		pass.setStatus(Status.PASS);
-
-		passFail.getStates().add(pass);
-
-		State fail = new State();
-		fail.setTenant(tenant);
-		fail.setButtonName("btn1");
-		fail.setDisplayText("Fail");
-		fail.setStatus(Status.FAIL);
-		passFail.getStates().add(fail);
-
-		saver.save(transaction, passFail);
-
-		StateSet naPassFail = new StateSet();
-		naPassFail.setName("NA, Pass, Fail");
-		naPassFail.setTenant(tenant);
-
-		State na = new State();
-		na.setTenant(tenant);
-		na.setButtonName("btn2");
-		na.setDisplayText("NA");
-		na.setStatus(Status.NA);
-		naPassFail.getStates().add(na);
-
-		pass = new State();
-		pass.setTenant(tenant);
-		pass.setButtonName("btn0");
-		pass.setDisplayText("Pass");
-		pass.setStatus(Status.PASS);
-		naPassFail.getStates().add(pass);
-
-		fail = new State();
-		fail.setTenant(tenant);
-		fail.setButtonName("btn1");
-		fail.setDisplayText("Fail");
-		fail.setStatus(Status.FAIL);
-		naPassFail.getStates().add(fail);
-
-		saver.save(transaction, passFail);
-	}
-
-	private void createDefaultInspectionTypeGroups(Transaction transaction) {
-		InspectionTypeGroupSaver saver = new InspectionTypeGroupSaver();
-		
-		InspectionTypeGroup visualInspection = new InspectionTypeGroup();
-		visualInspection.setName("Visual Inspection");
-		visualInspection.setReportTitle("Visual Inspection");
-		visualInspection.setTenant(tenant);
-		saver.save(transaction, visualInspection);
-
-		InspectionTypeGroup prooftest = new InspectionTypeGroup();
-		prooftest.setName("Proof Test");
-		prooftest.setReportTitle("Proof Test");
-		prooftest.setTenant(tenant);
-		saver.save(transaction, prooftest);
-
-		InspectionTypeGroup repair = new InspectionTypeGroup();
-		repair.setName("Repair");
-		repair.setReportTitle("Repair");
-		repair.setTenant(tenant);
-		saver.save(transaction, repair);
-	}
 	
-	private void createDefaultSetupDataLastModDates(Transaction transaction) {
-		SetupDataLastModDates setupModDates = new SetupDataLastModDates();
-		setupModDates.setTenant(tenant);
-		
-		SetupDataLastModDatesSaver saver = new SetupDataLastModDatesSaver();
-		saver.save(transaction, setupModDates);
-	}
+	
 
 	public String doCreateUser() {
 		Transaction transaction = null;

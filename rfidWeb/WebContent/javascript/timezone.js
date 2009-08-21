@@ -1,6 +1,9 @@
 var countryChangeUrl;
 
-function countryChanged( countrySelect ) {
+function countryChanged(event) {
+	event.stop();
+	var countrySelect = Event.element(event);
+	
 	if(countrySelect.options[countrySelect.selectedIndex].value != "") {
 		var countryId = countrySelect.options[countrySelect.selectedIndex].value;
 		var url =  countryChangeUrl + '?countryId='+ countryId;
@@ -23,3 +26,10 @@ function updateTimezoneList(list) {
 		}
 	}
 }
+
+Element.extend(document).observe("dom:loaded", function() {
+	$$(".changesTimeZone").each(function(element) {
+		element.observe("change", countryChanged);
+	});
+
+});

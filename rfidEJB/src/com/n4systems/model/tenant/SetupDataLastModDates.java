@@ -58,6 +58,10 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 	
 	public SetupDataLastModDates() {}
 	
+	public SetupDataLastModDates(Tenant tenant) {
+		setTenant(tenant);
+	}
+	
 	public boolean isNew() {
 		// This entity has no auto-gen id so there's really no way to tell if it's new or not
 		// we'll assume it's not since merge() can handle a new entity

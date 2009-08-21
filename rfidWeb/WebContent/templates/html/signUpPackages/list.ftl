@@ -36,7 +36,7 @@
 			
 			
 			<tr>
-				<td class="description"><@s.text name="label.users"/></td>
+				<td class="description"></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<a href="<@s.url action="signUpAdd" signUpPackageId="${package.id}"/>"><@s.text name="label.sign_up_now"/></a>

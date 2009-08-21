@@ -1,7 +1,9 @@
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
 	<@n4.includeScript src="signUp"/>
+	<@n4.includeScript src="timezone.js" />
 	<@n4.includeScript>
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
 		pricingUrl = '<@s.url namespace="/public/ajax" action="signUpPackagePrice"/>';
 	</@n4.includeScript>
 </head>
@@ -15,7 +17,6 @@
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<div class="infoSection multiColumn">
-		
 		<div class="infoBlock">
 			<div class="infoSet">
 				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
@@ -35,6 +36,11 @@
 			</div>
 			
 			<div class="infoSet">
+				<label class="label"><@s.text name="label.phonenumber"/></label>
+				<@s.textfield  name="phoneNumber"  />
+			</div>
+			
+			<div class="infoSet">
 				<label class="label"><@s.text name="label.country"/></label>
 				<@s.select name="signUp.countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone"/>
 			</div>
@@ -42,7 +48,6 @@
 				<label class="label"><@s.text name="label.timezone"/></label>
 				<@s.select id="tzlist" name="signUp.timeZone" list="timeZones" listKey="id" listValue="displayName" emptyOption="false"/>
 			</div>
-			
 		</div>
 		
 		<div class="infoBlock">
@@ -60,31 +65,33 @@
 			</div>
 		</div>
 		
-		<div class="infoBlock">
-			
-		</div>
+		
 	</div>
 	
-	
+	<hr/>
 	<div class="infoSection infoBlock">
 		<div class="infoSet">
-			<label class="label" for="tenantName">http://</label>
-			<@s.textfield name="signUp.tenantName"/><label>.fieldid.com</label>
+			<label for="tenantName">http://</label>
+			<span class="shortField"><@s.textfield theme="simple" name="signUp.tenantName"/></span><label>.fieldid.com</label>
 		</div>
 	</div>
+	<hr/>
 	<div class="infoSection">
-		<div class="infoBlock">
+		<div class="infoBlock fluidSets">
 			<div class="infoSet">
 				<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
-				<@s.textfield name="signUp.numberOfUsers" cssClass="changesPrice"/>
+				<span class="fieldHolder shortField"><@s.textfield name="signUp.numberOfUsers" theme="simple" cssClass="changesPrice"/></span>
 			</div>
+			
 			<div class="infoSet">
 				<label class="label" for="phoneSupport"><@s.text name="label.phone_support"/></label>
-				<@s.checkbox name="signUp.phoneSupport" cssClass="changesPrice"/>
+				<span class="fieldHolder shortField"><@s.checkbox name="signUp.phoneSupport" theme="simple" cssClass="changesPrice"/></span>
 			</div>
+		
 		</div>
 	</div>
 	
+	<hr/>
 	
 	<div class="infoSection">
 		<div class="infoBlock">

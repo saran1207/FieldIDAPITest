@@ -48,7 +48,7 @@ public class PrimaryOrg extends InternalOrg {
 	private String webSite;
 
 	@Column(name="dateformat", nullable = false)
-	private String dateFormat;
+	private String dateFormat = "MM/DD/YY";
 	
 	public PrimaryOrg() {}
 	

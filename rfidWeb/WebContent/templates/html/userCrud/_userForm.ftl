@@ -26,7 +26,7 @@
 	</#if>
 	
 	<div class="formRowHolder">
-		<@s.select key="label.country" name="countryId" list="countries" listKey="id" listValue="displayName" labelposition="left" onchange="countryChanged( this )"/>
+		<@s.select key="label.country" name="countryId" list="countries" listKey="id" listValue="displayName" labelposition="left" cssClass="changesTimeZone"/>
 		<@s.select id="tzlist" key="label.timezone" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName" labelposition="left" emptyOption="false"/>
 	</div>
 
