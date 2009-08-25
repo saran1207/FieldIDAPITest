@@ -34,7 +34,7 @@ public class SignUp implements SignUpPriceModifier, AccountCreationInformation, 
 	}
 	
 	public boolean duplicateValueExists(String formValue) {
-		return uniqueNameLoader.setUniqueName(formValue).load();
+		return !uniqueNameLoader.setUniqueName(formValue).load();
 	}
 
 	public String getCompanyName() {
@@ -177,7 +177,7 @@ public class SignUp implements SignUpPriceModifier, AccountCreationInformation, 
 
 	@RequiredStringValidator(message="", key="error.tenant_name_required")
 	@StringLengthFieldValidator(message="", key="error.tenant_name_length", minLength="3", maxLength="255")
-	@RegexFieldValidator(expression="^[a-zA-Z][a-zA-Z\\-]*[a-zA-Z]$", message = "", key="error.tenant_name_format")
+	@RegexFieldValidator(expression="^[\\w][\\w\\-]*[\\w]$", message = "", key="error.tenant_name_format")
 	@CustomValidator(type="uniqueValue", message = "", key="error.name_already_used")
 	public void setTenantName(String tenantName) {
 		signUpStorage.setTenantName(tenantName);
