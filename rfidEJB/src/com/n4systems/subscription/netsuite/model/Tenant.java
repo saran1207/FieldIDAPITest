@@ -1,4 +1,4 @@
-package com.n4systems.netsuite.model;
+package com.n4systems.subscription.netsuite.model;
 
 public class Tenant {
 	private String companyName;
@@ -10,6 +10,7 @@ public class Tenant {
 	private String url;
 	private boolean usingCreditCard;
 	private CreditCard creditCard;
+	private String nsrecordid;
 
 	public String getPhone() {
 		return phone;
@@ -64,5 +65,12 @@ public class Tenant {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
-	}	
+	}
+	public String getNsrecordid() {
+		return nsrecordid;
+	}
+	public void setNsrecordid(String nsrecordid) {
+		this.nsrecordid = nsrecordid;
+	}
+	
 }

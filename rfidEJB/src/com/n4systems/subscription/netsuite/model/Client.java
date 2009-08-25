@@ -1,10 +1,11 @@
-package com.n4systems.netsuite.model;
+package com.n4systems.subscription.netsuite.model;
 
 public class Client {
 	
 	private String firstName;
 	private String lastName;
 	private String fieldId;
+	private String nsrecordid;
 
 	public String getFirstName() {
 		return firstName;
@@ -24,4 +25,10 @@ public class Client {
 	public void setFieldId(String fieldId) {
 		this.fieldId = fieldId;
 	}
+	public String getNsrecordid() {
+		return nsrecordid;
+	}
+	public void setNsrecordid(String nsrecordid) {
+		this.nsrecordid = nsrecordid;
+	}	
 }

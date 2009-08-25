@@ -1,4 +1,4 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

@@ -1,7 +1,7 @@
 package com.n4systems.model.signuppackage;
 
 import com.n4systems.model.ContractPricing;
-import com.n4systems.netsuite.model.ContractLength;
+import com.n4systems.subscription.netsuite.model.ContractLength;
 
 public class ContractPricingPopulator {
 

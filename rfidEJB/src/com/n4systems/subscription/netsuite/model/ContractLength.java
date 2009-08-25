@@ -1,4 +1,4 @@
-package com.n4systems.netsuite.model;
+package com.n4systems.subscription.netsuite.model;
 
 public class ContractLength {
 

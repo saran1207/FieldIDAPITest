@@ -1,9 +1,9 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
-import com.n4systems.netsuite.model.Client;
-import com.n4systems.netsuite.model.SignUpTenantResponse;
-import com.n4systems.netsuite.model.Subscription;
-import com.n4systems.netsuite.model.Tenant;
+import com.n4systems.subscription.netsuite.model.Client;
+import com.n4systems.subscription.netsuite.model.SignUpTenantResponse;
+import com.n4systems.subscription.netsuite.model.Subscription;
+import com.n4systems.subscription.netsuite.model.Tenant;
 
 public class SignUpTenantClient extends AbstractNetsuiteClient<SignUpTenantResponse>{
 

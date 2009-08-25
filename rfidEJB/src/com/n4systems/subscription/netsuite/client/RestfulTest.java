@@ -1,19 +1,19 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
 import java.io.IOException;
 
-import com.n4systems.netsuite.model.AddressInfo;
-import com.n4systems.netsuite.model.Client;
-import com.n4systems.netsuite.model.ContractLength;
-import com.n4systems.netsuite.model.CreditCard;
-import com.n4systems.netsuite.model.CreditCardType;
-import com.n4systems.netsuite.model.GetItemDetailsResponse;
-import com.n4systems.netsuite.model.GetPricingDetailsResponse;
-import com.n4systems.netsuite.model.ProductInformation;
-import com.n4systems.netsuite.model.SignUpTenantResponse;
-import com.n4systems.netsuite.model.Subscription;
-import com.n4systems.netsuite.model.PaymentFrequency;
-import com.n4systems.netsuite.model.Tenant;
+import com.n4systems.subscription.netsuite.model.AddressInfo;
+import com.n4systems.subscription.netsuite.model.Client;
+import com.n4systems.subscription.netsuite.model.ContractLength;
+import com.n4systems.subscription.netsuite.model.CreditCard;
+import com.n4systems.subscription.netsuite.model.CreditCardType;
+import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
+import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
+import com.n4systems.subscription.netsuite.model.PaymentFrequency;
+import com.n4systems.subscription.netsuite.model.ProductInformation;
+import com.n4systems.subscription.netsuite.model.SignUpTenantResponse;
+import com.n4systems.subscription.netsuite.model.Subscription;
+import com.n4systems.subscription.netsuite.model.Tenant;
 
 public class RestfulTest {
 
@@ -106,6 +106,10 @@ public class RestfulTest {
 		
 		try {
 			SignUpTenantResponse tenantResponse = signUpTenantClient.execute();
+			
+			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getNsrecordid());
+			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getNsrecordid());
+			System.out.println("Subscription netsuite id: "+tenantResponse.getSubscription().getNsrecordid());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

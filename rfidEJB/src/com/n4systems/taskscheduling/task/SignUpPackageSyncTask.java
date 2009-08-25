@@ -4,10 +4,10 @@ import java.util.concurrent.TimeUnit;
 
 import com.n4systems.model.signuppackage.SignUpPackageSyncHandler;
 import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.netsuite.client.ProductDetailsClient;
-import com.n4systems.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
+import com.n4systems.subscription.netsuite.client.ProductDetailsClient;
+import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.taskscheduling.ScheduledTask;
 
 public class SignUpPackageSyncTask extends ScheduledTask {

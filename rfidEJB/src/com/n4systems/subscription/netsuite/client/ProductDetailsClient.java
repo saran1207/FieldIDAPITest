@@ -1,8 +1,8 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
-import com.n4systems.netsuite.model.ContractLength;
-import com.n4systems.netsuite.model.GetItemDetailsResponse;
-import com.n4systems.netsuite.model.ProductInformation;
+import com.n4systems.subscription.netsuite.model.ContractLength;
+import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
+import com.n4systems.subscription.netsuite.model.ProductInformation;
 
 public class ProductDetailsClient extends AbstractNetsuiteClient<GetItemDetailsResponse> {
 

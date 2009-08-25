@@ -1,4 +1,4 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
 public class ManageClientClient extends AbstractNetsuiteClient {
 

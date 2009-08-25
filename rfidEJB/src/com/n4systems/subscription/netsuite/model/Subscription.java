@@ -1,4 +1,4 @@
-package com.n4systems.netsuite.model;
+package com.n4systems.subscription.netsuite.model;
 
 public class Subscription {
 
@@ -8,6 +8,7 @@ public class Subscription {
 	private PaymentFrequency frequency;
 	private String referralCode;
 	private boolean purchasingPhoneSupport;
+	private Long nsrecordid;
 
 	public Long getNetsuiteRecordId() {
 		return netsuiteRecordId;
@@ -44,5 +45,12 @@ public class Subscription {
 	}
 	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
 		this.purchasingPhoneSupport = purchasingPhoneSupport;
-	}	
+	}
+	public Long getNsrecordid() {
+		return nsrecordid;
+	}
+	public void setNsrecordid(Long nsrecordid) {
+		this.nsrecordid = nsrecordid;
+	}
+	
 }

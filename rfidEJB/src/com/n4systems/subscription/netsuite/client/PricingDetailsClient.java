@@ -1,7 +1,7 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
-import com.n4systems.netsuite.model.GetPricingDetailsResponse;
-import com.n4systems.netsuite.model.PricingDetails;
+import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
+import com.n4systems.subscription.netsuite.model.PricingDetails;
 
 public class PricingDetailsClient extends AbstractNetsuiteClient<GetPricingDetailsResponse> {
 

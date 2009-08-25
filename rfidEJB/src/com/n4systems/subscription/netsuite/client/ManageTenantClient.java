@@ -1,6 +1,6 @@
-package com.n4systems.netsuite.client;
+package com.n4systems.subscription.netsuite.client;
 
-import com.n4systems.netsuite.model.Tenant;
+import com.n4systems.subscription.netsuite.model.Tenant;
 
 public class ManageTenantClient extends AbstractNetsuiteClient {
 
