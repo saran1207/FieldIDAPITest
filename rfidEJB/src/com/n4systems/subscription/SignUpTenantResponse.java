@@ -2,8 +2,8 @@ package com.n4systems.subscription;
 
 public interface SignUpTenantResponse extends Response {
 	
-	public Tenant getTenant();
-	public Client getClient();
-	public Subscription getSubscription();
+	public ExternalIdResponse getTenant();
+	public ExternalIdResponse getClient();
+	public ExternalIdResponse getSubscription();
 	
 }

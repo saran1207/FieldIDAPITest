@@ -1,12 +1,15 @@
 package com.n4systems.subscription.netsuite.model;
 
 import com.n4systems.subscription.Client;
+import com.n4systems.subscription.ExternalIdResponse;
 
-public class NetsuiteClient extends Client {
+public class NetsuiteClient implements Client, ExternalIdResponse {
 	
+	private String firstName;
+	private String lastName;
+	private String fieldId;
 	private Long nsrecordid;
 
-	@Override
 	public Long getExternalId() {
 		return getNsrecordid();
 	}
@@ -17,5 +20,29 @@ public class NetsuiteClient extends Client {
 
 	public void setNsrecordid(Long nsrecordid) {
 		this.nsrecordid = nsrecordid;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFieldId() {
+		return fieldId;
+	}
+
+	public void setFieldId(String fieldId) {
+		this.fieldId = fieldId;
 	}
 }
