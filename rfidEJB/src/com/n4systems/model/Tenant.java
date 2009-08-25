@@ -16,7 +16,7 @@ import com.n4systems.util.HashCode;
 public final class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, Saveable, Comparable<Tenant> {
 	private static final long serialVersionUID = 1L;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=255)
 	private String name;
 	
 	public Tenant() {}
