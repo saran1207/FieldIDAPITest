@@ -31,16 +31,19 @@ import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
+import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.SubscriptionAgentFactory;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 public class SignUpCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
-	
+
 	private SignUpPackage signUpPackage;
 	private SignUp signUp;
-	
 
 	public SignUpCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -48,82 +51,112 @@ public class SignUpCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		signUp = (sessionContains("signUp")) ? new SignUp((SignUpStorage)getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) 
-			: new SignUp(NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader());
+		signUp = (sessionContains("signUp")) ? new SignUp((SignUpStorage) getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) : new SignUp(NonSecureLoaderFactory
+				.createTenantUniqueAvailableNameLoader());
 		setSignUpPackageId(signUp.getSignUpPackageId());
 	}
 
-	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		initMemberFields();
 	}
-	
-	
+
 	private void testRequiredEntities(boolean exists) {
 		if (exists && signUp.isNew()) {
 			addFlashErrorText("error.you_must_go_through_sign_up");
 			throw new MissingEntityException("you must go through the sign up process");
 		}
-		
+
 		if (signUpPackage == null) {
 			addFlashErrorText("error.no_sign_up_package");
 			throw new MissingEntityException("you must select a package");
 		}
 	}
 
-	
 	@SkipValidation
 	public String doShow() {
 		testRequiredEntities(true);
 		clearSessionVar("signUp");
 		return SUCCESS;
 	}
-	
-	
+
 	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
 		return SUCCESS;
 	}
-	
-	
+
 	public String doCreate() {
 		testRequiredEntities(false);
 		logger.info(getLogLinePrefix() + "signing up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
-		
+
 		setSessionVar("signUp", signUp.getSignUpStorage());
-		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
+		
 		
 		try {
-			createAccount(transaction);
-			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
+			createAccount();
 		} catch (Exception e) {
-			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
 			addActionErrorText("error.could_not_create_account");
 			logger.error(getLogLinePrefix() + "signing up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]", e);
 			return ERROR;
-		} 
-		
+		}
+
 		addFlashMessageText("message.your_account_has_been_created");
 		logger.info(getLogLinePrefix() + "signed up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
 		return SUCCESS;
 	}
 
-	
-	private void createAccount(Transaction transaction) {
-		BaseSystemStructureCreateHandler baseSystemCreator = new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(), new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
-		TenantSaver tenantSaver = new TenantSaver();
+	private void createAccount() {
 		
-		Tenant tenant = new Tenant();
-		tenant.setName(signUp.getTenantName());
-		tenantSaver.save(transaction, tenant);
+		Tenant tenant = null;
+		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
+		try {
+			tenant = createTenant(transaction);
+			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
+		} catch (RuntimeException e) {
+			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
+			throw e;
+		}
+		
+		transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
+		try {
+			confirmSubscription();
+			completeSystemSetup(transaction, tenant);
+			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
+		} catch (RuntimeException e) {
+			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
+			removeTenant(transaction, tenant);
+			throw e;
+		}
+	}
+
+	private void completeSystemSetup(Transaction transaction, Tenant tenant) {
+		BaseSystemStructureCreateHandler baseSystemCreator = new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
+				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
+		
+		PrimaryOrgCreateHandler orgCreateHandler = new PrimaryOrgCreateHandlerImpl(new OrganizationSaver(), new UserSaver());
 		
 		baseSystemCreator.forTenant(tenant).create(transaction);
-		PrimaryOrgCreateHandler orgCreateHandler = new PrimaryOrgCreateHandlerImpl(new OrganizationSaver(), new UserSaver());
 		orgCreateHandler.forTenant(tenant).forAccountInfo(signUp).create(transaction);
 	}
 
+	private void confirmSubscription() {
+		SubscriptionAgent subscriptionAgent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+		subscriptionAgent.buy(signUp, signUp, null);
+	}
+
+	private Tenant createTenant(Transaction transaction) {
+		TenantSaver tenantSaver = new TenantSaver();
+		Tenant tenant = new Tenant();
+		tenant.setName(signUp.getTenantName());
+		tenantSaver.save(transaction, tenant);
+		return tenant;
+	}
+	
+	private void removeTenant(Transaction transaction, Tenant tenant) {
+		TenantSaver tenantSaver = new TenantSaver();
+		tenantSaver.remove(transaction, tenant);
+	}
 
 	public SortedSet<? extends Listable<String>> getCountries() {
 		return TimeZoneSelectionHelper.getCountries();
@@ -132,24 +165,21 @@ public class SignUpCrud extends AbstractCrud {
 	public SortedSet<? extends Listable<String>> getTimeZones() {
 		return TimeZoneSelectionHelper.getTimeZones(signUp.getCountry());
 	}
-	
+
 	public SignUpPackage getSignUpPackage() {
 		return signUpPackage;
 	}
-	
-	
+
 	public Long getSignUpPackageId() {
 		return signUpPackage.getId();
 	}
 
-	
 	public void setSignUpPackageId(Long signUpPackageId) {
 		signUp.setSignUpPackageId(signUpPackageId);
 		this.signUpPackage = new SignUpPackage(signUpPackageId, "Basic", 40, false, 1L);
 	}
 
-
-	@VisitorFieldValidator(message="")
+	@VisitorFieldValidator(message = "")
 	public SignUp getSignUp() {
 		return signUp;
 	}

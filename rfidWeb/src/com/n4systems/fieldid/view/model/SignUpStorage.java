@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.actions.helpers.TimeZoneSelectionHelper;
-import com.n4systems.model.signup.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.subscription.AccountCreationInformation;
+import com.n4systems.subscription.SignUpPriceModifier;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
 

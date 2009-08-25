@@ -1,4 +1,4 @@
-package com.n4systems.model.signup;
+package com.n4systems.subscription;
 
 import com.n4systems.model.signuppackage.SignUpPackage;
 

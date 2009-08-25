@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.signup.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
+import com.n4systems.subscription.AccountCreationInformation;
+import com.n4systems.subscription.SignUpPriceModifier;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.timezone.Country;
@@ -157,7 +158,7 @@ public class SignUp implements SignUpPriceModifier, AccountCreationInformation, 
 		signUpStorage.setPassword(password);
 	}
 	
-	@FieldExpressionValidator(expression="passwordConfirmation == password", message="", key="error.passwordsmustmatch")
+	@FieldExpressionValidator(expression="passwordConfirm == password", message="", key="error.passwordsmustmatch")
 	public void setPasswordConfirm(String passwordConfirm) {
 		signUpStorage.setPasswordConfirm(passwordConfirm);
 	}
