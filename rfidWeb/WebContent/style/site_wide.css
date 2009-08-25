@@ -145,6 +145,10 @@ pre {
 	border-top: 1px solid;
 }
 
+.fluidSets .infoSet {
+	min-width:430px;
+}
+
 .fluidSets .infoSet .label, .fluidSets .infoSet .fieldHolder {
 	display:block;
 	float:left;
