@@ -21,20 +21,22 @@ public class TenantLimit implements Serializable {
 	
 	public TenantLimit() {}
 
-	public Long getDiskSpace() {
+	public Long getDiskSpaceInBytes() {
 		return diskSpace;
 	}
 	
 	public boolean isDiskSpaceUnlimited() {
-		return (getDiskSpace() == UNLIMITED);
+		return (getDiskSpaceInBytes() == UNLIMITED);
 	}
 
-	public void setDiskSpace(Long diskSpace) {
-		this.diskSpace = diskSpace;
+	public void setDiskSpaceInBytes(Long diskSpace) {
+		this.diskSpace = diskSpace ;
 	}
 	
+	
+	
 	public void setDiskSpaceUnlimited() {
-		setDiskSpace(UNLIMITED);
+		setDiskSpaceInBytes(UNLIMITED);
 	}
 
 	public Long getUsers() {

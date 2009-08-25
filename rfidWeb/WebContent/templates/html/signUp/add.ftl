@@ -36,8 +36,8 @@
 			</div>
 			
 			<div class="infoSet">
-				<label class="label"><@s.text name="label.phonenumber"/></label>
-				<@s.textfield  name="phoneNumber"  />
+				<label class="label" for="phoneNumber"><@s.text name="label.phonenumber"/></label>
+				<@s.textfield  name="signUp.phoneNumber"  />
 			</div>
 			
 			<div class="infoSet">
@@ -72,7 +72,7 @@
 	<div class="infoSection infoBlock">
 		<div class="infoSet">
 			<label for="tenantName">http://</label>
-			<span class="shortField"><@s.textfield theme="simple" name="signUp.tenantName"/></span><label>.fieldid.com</label>
+			<span class="shortField"><@s.textfield theme="fieldidSimple" name="signUp.tenantName"/></span><label>.fieldid.com</label>
 		</div>
 	</div>
 	<hr/>

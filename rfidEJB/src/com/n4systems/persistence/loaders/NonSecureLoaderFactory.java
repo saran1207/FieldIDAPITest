@@ -1,6 +1,7 @@
 package com.n4systems.persistence.loaders;
 
 import com.n4systems.model.signuppackage.ContractPricingByNsRecordIdLoader;
+import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 
 public class NonSecureLoaderFactory {
 
@@ -11,5 +12,9 @@ public class NonSecureLoaderFactory {
 	
 	public static ContractPricingByNsRecordIdLoader createContractPricingByNsRecordIdLoader() {
 		return new ContractPricingByNsRecordIdLoader();
+	}
+	
+	public static TenantUniqueAvailableNameLoader createTenantUniqueAvailableNameLoader() {
+		return new TenantUniqueAvailableNameLoader();
 	}
 }

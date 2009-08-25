@@ -13,7 +13,6 @@ public abstract class ResourceLimit implements Serializable {
 	public ResourceLimit() {}
 
 	public boolean isMaxed() {
-		// if max is less then 0, then they have no max.  Otherwise check if used is less or equal to max
 		return (isUnlimited()) ? false : (used >= maximum);
 	}
 	

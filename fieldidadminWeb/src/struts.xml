@@ -30,27 +30,32 @@
 		</action>
 		
 		<action name="signIntoSystem" method="create" class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
-			<result name="success" type="redirectAction">organizationList</result>
+			<result name="success" type="redirectAction">organizations</result>
 			<interceptor-ref name="defaultStack" />
 		</action>
 		
-		<action name="organizationList" method="list" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+		<action name="organizations" method="list" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/templates/html/organization/list.ftl</result>
 		</action>
 		
 
-		<action name="organizationCrud" method="formInput" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<interceptor-ref name="fileUpload"/>
-		    <interceptor-ref name="secureStack"/>		
-			<result name="input" type="freemarker">/templates/html/organization/organizationForm.ftl</result>
-			<result name="success" type="redirectAction">organizationList</result>
-			<result name="error" type="freemarker">/templates/html/organization/organizationForm.ftl</result>
+		<action name="organizationEdit" method="edit" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
 		</action>
 		
-		
-		
+		<action name="organizationUpdate" method="update" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="success" type="redirectAction">organizations</result>
+			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
+		</action>
 				
-		
+		<action name="organization" method="show" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/templates/html/organization/show.ftl</result>
+			<result name="error" type="freemarker">/templates/html/organization/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/organization/show.ftl</result>
+		</action>
 		
 		<action name="findProductOptionList" method="list" class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
 			<result name="success" type="freemarker">/templates/html/findproductoption/list.ftl</result>

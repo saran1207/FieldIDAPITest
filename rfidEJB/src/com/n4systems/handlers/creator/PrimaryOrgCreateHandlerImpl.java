@@ -3,15 +3,20 @@ package com.n4systems.handlers.creator;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signup.AccountCreationInformation;
 import com.n4systems.model.tenant.OrganizationSaver;
+import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
+import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DataUnit;
 
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	private final OrganizationSaver orgSaver;
@@ -38,7 +43,11 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		orgSaver.save(transaction, primaryOrg);
 		userSaver.save(transaction, createSystemUser(primaryOrg));
 		userSaver.save(transaction, createAdminUser(primaryOrg));
+		
+		
 	}
+	
+
 
 	private UserBean createAdminUser(PrimaryOrg primaryOrg) {
 		UserBean user = new UserBean();
@@ -51,7 +60,7 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		user.setEmailAddress(accountInfo.getEmail());
 		user.setFirstName(accountInfo.getFirstName());
 		user.setLastName(accountInfo.getLastName());
-		user.setTimeZoneID(accountInfo.getTimeZone());
+		user.setTimeZoneID(accountInfo.getFullTimeZone());
 		
 		return user;
 	}
@@ -82,12 +91,31 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		PrimaryOrg primaryOrg = new PrimaryOrg();
 		primaryOrg.setTenant(tenant);
 		primaryOrg.setUsingSerialNumber(true);
-		primaryOrg.setSerialNumberFormat("MM/dd/yy"); //FIXME THIS NEEDS TO BE A GOOD DEFAULT.
+		primaryOrg.setSerialNumberFormat(""); //FIXME THIS NEEDS TO BE A GOOD DEFAULT.
+		primaryOrg.setDateFormat("MM/dd/yy"); //FIXME THIS NEEDS TO BE A GOOD DEFAULT.
 		primaryOrg.setName(accountInfo.getCompanyName());
 		primaryOrg.setCertificateName(accountInfo.getCompanyName());
-		primaryOrg.setDefaultTimeZone(accountInfo.getTenantName());
+		primaryOrg.setDefaultTimeZone(accountInfo.getFullTimeZone());
+		
+		processSignUpPackage(primaryOrg);
 		
 		return primaryOrg;
+	}
+	
+	
+	private void processSignUpPackage(PrimaryOrg primaryOrg) {
+		for (ExtendedFeature feature : accountInfo.getSignUpPackage().getExtendedFeatures()) {
+			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
+			featureSwitch.enableFeature();
+		}
+		
+		TenantLimit limits = new TenantLimit();
+		
+		limits.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(accountInfo.getSignUpPackage().getDiskSpaceInMB(), DataUnit.BYTES));
+		limits.setAssets(accountInfo.getSignUpPackage().getAssets());
+		limits.setUsers(accountInfo.getNumberOfUsers().longValue());
+		
+		primaryOrg.setLimits(limits);
 	}
 
 	private void guards() {

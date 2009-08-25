@@ -31,7 +31,7 @@ Total Tenants: ${primaryOrgs?size}
 <tr>
 	<td>${primaryOrg.displayName?html}</td>
 	<td>${primaryOrg.tenant.name?html}</td>
-	<td><a href="organizationCrud.action?id=${primaryOrg.tenant.id}">Edit</a></td>
+	<td><a href="<@s.url action="organizationEdit"/>?id=${primaryOrg.tenant.id}">Edit</a></td>
 	<td>
 		<a href="#" onclick="createSuper('${primaryOrg.tenant.id}'); return false;">Create Super User</a> 
 		<div id="superUser_${primaryOrg.tenant.id}" class="superUserForm" style="display:none">
@@ -47,4 +47,3 @@ Total Tenants: ${primaryOrgs?size}
 </#list>
 </table>
 
-<a href="<@s.url action="organizationCrud" />">Add New Tenant</a><br />

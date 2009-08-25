@@ -7,16 +7,16 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.view.model.SignUp;
 import com.n4systems.fieldid.view.model.SignUpPackage;
 import com.n4systems.fieldid.view.model.SignUpPriceModifier;
+import com.n4systems.fieldid.view.model.SignUpStorage;
 
 public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private SignUpPackage signUpPackage;
 	
-	private SignUpPriceModifier priceModifier = new SignUp();
+	private SignUpPriceModifier priceModifier = new SignUpStorage();
 	
 	public SignUpPackagePriceCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);

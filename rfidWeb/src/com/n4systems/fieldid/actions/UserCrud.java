@@ -490,7 +490,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 					userTypeFilter = UserType.valueOf( userType );
 				} catch (IllegalArgumentException e) { }
 			}
-			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(),	Constants.PAGE_SIZE, listFilter, userTypeFilter );
+			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, listFilter, userTypeFilter );
 		}
 		return page;
 	}

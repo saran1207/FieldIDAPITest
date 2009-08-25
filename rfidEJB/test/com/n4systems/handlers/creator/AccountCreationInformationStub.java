@@ -20,7 +20,7 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 	private Integer numberOfUsers = 1;
 	
 	private SignUpPackage signUpPackage;
-	private String timeZone;
+	private String fullTimeZone;
 	
 	public String getCompanyName() {
 		return companyName;
@@ -40,12 +40,12 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 		return this;
 	}
 
-	public String getTimeZone() {
-		return timeZone;
+	public String getFullTimeZone() {
+		return fullTimeZone;
 	}
 
-	public AccountCreationInformationStub setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
+	public AccountCreationInformationStub setFullTimeZone(String fullTimeZone) {
+		this.fullTimeZone = fullTimeZone;
 		return this;
 	}
 

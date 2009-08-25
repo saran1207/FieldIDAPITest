@@ -11,7 +11,7 @@ public interface AccountCreationInformation {
 	
 	public String getEmail();
 	
-	public String getTimeZone();
+	public String getFullTimeZone();
 
 	public String getUsername() ;
 

@@ -41,7 +41,7 @@ public enum SignUpPackage {
 	public String getName() {
 		return name;
 	}
-	public Long getDiskSpace() {
+	public Long getDiskSpaceInMB() {
 		return diskSpace;
 	}
 	public Long getUsers() {

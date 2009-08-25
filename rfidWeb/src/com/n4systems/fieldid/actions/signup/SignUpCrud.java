@@ -11,6 +11,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.TimeZoneSelectionHelper;
 import com.n4systems.fieldid.view.model.SignUp;
 import com.n4systems.fieldid.view.model.SignUpPackage;
+import com.n4systems.fieldid.view.model.SignUpStorage;
 import com.n4systems.handlers.creator.BaseSystemSetupDataCreateHandlerImpl;
 import com.n4systems.handlers.creator.BaseSystemStructureCreateHandler;
 import com.n4systems.handlers.creator.BaseSystemStructureCreateHandlerImpl;
@@ -29,6 +30,7 @@ import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 public class SignUpCrud extends AbstractCrud {
@@ -46,7 +48,8 @@ public class SignUpCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		signUp = (sessionContains("signUp")) ? (SignUp)getSessionVar("signUp") : new SignUp();
+		signUp = (sessionContains("signUp")) ? new SignUp((SignUpStorage)getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) 
+			: new SignUp(NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader());
 		setSignUpPackageId(signUp.getSignUpPackageId());
 	}
 
@@ -89,7 +92,7 @@ public class SignUpCrud extends AbstractCrud {
 		testRequiredEntities(false);
 		logger.info(getLogLinePrefix() + "signing up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
 		
-		setSessionVar("signUp", signUp);
+		setSessionVar("signUp", signUp.getSignUpStorage());
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
@@ -142,7 +145,7 @@ public class SignUpCrud extends AbstractCrud {
 	
 	public void setSignUpPackageId(Long signUpPackageId) {
 		signUp.setSignUpPackageId(signUpPackageId);
-		this.signUpPackage = new SignUpPackage(signUpPackageId, "basic", 40, false, 1L);
+		this.signUpPackage = new SignUpPackage(signUpPackageId, "Basic", 40, false, 1L);
 	}
 
 

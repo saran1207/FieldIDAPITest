@@ -124,7 +124,7 @@ public class TenantLimitService implements Serializable {
 		
 		ResourceLimit limit = new DiskResourceLimit();
 		limit.setUsed(usageCalc.totalLimitingSize());
-		limit.setMaximum(primaryOrg.getLimits().getDiskSpace());
+		limit.setMaximum(primaryOrg.getLimits().getDiskSpaceInBytes());
 		
 		diskSpace.put(primaryOrg.getId(), limit);
 		logger.debug("Disk Limit [" + primaryOrg.toString() + "]: " + limit.toString());

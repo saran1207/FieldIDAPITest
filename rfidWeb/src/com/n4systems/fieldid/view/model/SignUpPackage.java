@@ -2,23 +2,25 @@ package com.n4systems.fieldid.view.model;
 
 public class SignUpPackage {
 	private Long id;
-	private String name;
 	private int priceInDollars;
 	private boolean preferred;
-	private Long numberOfUsers;
+	private com.n4systems.model.signuppackage.SignUpPackage signUpPackage;
 	
-	
+
 	public SignUpPackage(Long id, String name, int priceInDollars, boolean preferred, Long numberOfUsers) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.signUpPackage = com.n4systems.model.signuppackage.SignUpPackage.valueOf(name);
 		this.priceInDollars = priceInDollars;
 		this.preferred = preferred;
-		this.numberOfUsers = numberOfUsers;
 	}
 
+	public com.n4systems.model.signuppackage.SignUpPackage getSignUpPackage() {
+		return signUpPackage;
+	}
+	
 	public String getName() {
-		return name;
+		return signUpPackage.getName();
 	}
 
 	public int getPriceInDollars() {
@@ -30,7 +32,7 @@ public class SignUpPackage {
 	}
 
 	public Long getNumberOfUsers() {
-		return numberOfUsers;
+		return signUpPackage.getUsers();
 	}
 
 	public Long getId() {

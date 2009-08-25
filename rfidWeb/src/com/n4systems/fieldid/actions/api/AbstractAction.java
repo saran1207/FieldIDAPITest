@@ -34,6 +34,7 @@ import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.HostNameParser;
@@ -70,6 +71,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	
 	private String redirectUrl;
 	private RemovalHandlerFactory rhFactory;
+	private NonSecureLoaderFactory nonSecureLoaderFactory;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -383,6 +385,13 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 			loaderFactory = new LoaderFactory(getSecurityFilter());
 		}
 		return loaderFactory;
+	}
+	
+	protected NonSecureLoaderFactory getNonSecureLoaderFactory() {
+		if (nonSecureLoaderFactory == null) {
+			nonSecureLoaderFactory = new NonSecureLoaderFactory();
+		}
+		return nonSecureLoaderFactory;
 	}
 	
 	protected RemovalHandlerFactory getRemovalHandlerFactory() {
