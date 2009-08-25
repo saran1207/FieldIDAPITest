@@ -1,4 +1,4 @@
-package com.n4systems.subscription.netsuite.model;
+package com.n4systems.subscription;
 
 public enum PaymentFrequency {
 

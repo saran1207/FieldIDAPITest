@@ -1,6 +1,6 @@
 package com.n4systems.subscription;
 
-public interface Client {
+public interface Person {
 
 	public String getFirstName();
 	public String getLastName();

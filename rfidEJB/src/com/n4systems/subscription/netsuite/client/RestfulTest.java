@@ -2,14 +2,14 @@ package com.n4systems.subscription.netsuite.client;
 
 import java.io.IOException;
 
-import com.n4systems.subscription.netsuite.model.AddressInfo;
+import com.n4systems.subscription.AddressInfo;
+import com.n4systems.subscription.PaymentFrequency;
 import com.n4systems.subscription.netsuite.model.NetsuiteClient;
 import com.n4systems.subscription.netsuite.model.ContractLength;
 import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.subscription.netsuite.model.CreditCardType;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
-import com.n4systems.subscription.netsuite.model.PaymentFrequency;
 import com.n4systems.subscription.netsuite.model.ProductInformation;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;

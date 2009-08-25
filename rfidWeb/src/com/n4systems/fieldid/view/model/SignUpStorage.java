@@ -1,13 +1,18 @@
 package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.actions.helpers.TimeZoneSelectionHelper;
+import com.n4systems.handlers.creator.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
-import com.n4systems.subscription.AccountCreationInformation;
-import com.n4systems.subscription.SignUpPriceModifier;
+import com.n4systems.subscription.AddressInfo;
+import com.n4systems.subscription.Person;
+import com.n4systems.subscription.Company;
+import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.Subscription;
+import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
 
-public class SignUpStorage implements SignUpPriceModifier, AccountCreationInformation {
+public class SignUpStorage implements Subscription, AccountCreationInformation, Company, Person {
 	private static final long serialVersionUID = 1L;
 	
 	private Long signUpPackageId;
@@ -173,5 +178,74 @@ public class SignUpStorage implements SignUpPriceModifier, AccountCreationInform
 
 	public SignUpPackage getSignUpPackage() {
 		return SignUpPackage.Basic;
+	}
+
+
+	public Long getExternalId() {
+		return null;
+	}
+
+
+	public PaymentFrequency getFrequency() {
+		return null;
+	}
+
+
+	public int getMonths() {
+		return 0;
+	}
+
+
+	public String getReferralCode() {
+		return null;
+	}
+
+
+	public int getUsers() {
+		return getNumberOfUsers();
+	}
+
+
+	public boolean isPurchasingPhoneSupport() {
+		return isPhoneSupport();
+	}
+
+
+	public AddressInfo getBillingAddress() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public CreditCard getCreditCard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public String getFieldId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public String getPhone() {
+		return getPhoneNumber();
+	}
+
+
+	public AddressInfo getShippingAddress() {
+		return null;
+	}
+
+
+	public String getUrl() {
+		
+		return null;
+	}
+
+
+	public boolean isUsingCreditCard() {
+		return false;
 	}
 }

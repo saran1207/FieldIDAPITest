@@ -1,7 +1,6 @@
 package com.n4systems.handlers.creator;
 
 import com.n4systems.model.signuppackage.SignUpPackage;
-import com.n4systems.subscription.AccountCreationInformation;
 import com.n4systems.util.timezone.Region;
 
 public class AccountCreationInformationStub implements AccountCreationInformation {

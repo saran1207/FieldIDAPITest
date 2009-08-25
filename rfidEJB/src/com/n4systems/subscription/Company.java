@@ -1,9 +1,8 @@
 package com.n4systems.subscription;
 
-import com.n4systems.subscription.netsuite.model.AddressInfo;
 import com.n4systems.subscription.netsuite.model.CreditCard;
 
-public interface Tenant {
+public interface Company {
 
 	public String getCompanyName();
 	public String getPhone();

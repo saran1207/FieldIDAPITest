@@ -1,10 +1,15 @@
 package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.handlers.creator.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
-import com.n4systems.subscription.AccountCreationInformation;
-import com.n4systems.subscription.SignUpPriceModifier;
+import com.n4systems.subscription.AddressInfo;
+import com.n4systems.subscription.Person;
+import com.n4systems.subscription.Company;
+import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.Subscription;
+import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.timezone.Country;
@@ -19,7 +24,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-public class SignUp implements SignUpPriceModifier, AccountCreationInformation, HasDuplicateValueValidator {
+public class SignUp implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
 	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
 	
 	private final SignUpStorage signUpStorage;
@@ -201,6 +206,60 @@ public class SignUp implements SignUpPriceModifier, AccountCreationInformation, 
 	public String getRestrictedUsername() {
 		return ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME);
 	}
+
+	public AddressInfo getBillingAddress() {
+		return signUpStorage.getBillingAddress();
+	}
+
+	public CreditCard getCreditCard() {
+		return signUpStorage.getCreditCard();
+	}
+
+	public Long getExternalId() {
+		return signUpStorage.getExternalId();
+	}
+
+	public String getFieldId() {
+		return signUpStorage.getFieldId();
+	}
+
+	public PaymentFrequency getFrequency() {
+		return signUpStorage.getFrequency();
+	}
+
+	public int getMonths() {
+		return signUpStorage.getMonths();
+	}
+
+	public String getPhone() {
+		return signUpStorage.getPhone();
+	}
+
+	public String getReferralCode() {
+		return signUpStorage.getReferralCode();
+	}
+
+	public AddressInfo getShippingAddress() {
+		return signUpStorage.getShippingAddress();
+	}
+
+	public String getUrl() {
+		return signUpStorage.getUrl();
+	}
+
+	public int getUsers() {
+		return signUpStorage.getUsers();
+	}
+
+	public boolean isPurchasingPhoneSupport() {
+		return signUpStorage.isPurchasingPhoneSupport();
+	}
+
+	public boolean isUsingCreditCard() {
+		return signUpStorage.isUsingCreditCard();
+	}
+
+
 
 
 }

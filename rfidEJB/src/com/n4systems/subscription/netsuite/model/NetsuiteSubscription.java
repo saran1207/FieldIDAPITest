@@ -1,6 +1,7 @@
 package com.n4systems.subscription.netsuite.model;
 
 import com.n4systems.subscription.ExternalIdResponse;
+import com.n4systems.subscription.PaymentFrequency;
 import com.n4systems.subscription.Subscription;
 
 public class NetsuiteSubscription implements Subscription, ExternalIdResponse {

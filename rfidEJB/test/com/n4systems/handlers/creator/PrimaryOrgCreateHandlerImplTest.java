@@ -23,6 +23,7 @@ import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.util.DataUnit;
 
 
@@ -44,7 +45,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 	@Test(expected=InvalidArgumentException.class)
 	public void should_throw_exception_if_tenant_is_not_set() {
 		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null, null);
-		sut.forAccountInfo(new AccountCreationInformationStub());
+		sut.forAccountInfo(new AccountCreationInformationStub()).withApprovedSubscription(new SignUpTenantResponseStub());
 		
 		sut.create(mockTransaction);
 	}
@@ -52,11 +53,18 @@ public class PrimaryOrgCreateHandlerImplTest {
 	@Test(expected=InvalidArgumentException.class)
 	public void should_throw_exception_if_account_info_is_not_set() {
 		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null, null);
-		sut.forTenant(aTenant().build());
+		sut.forTenant(aTenant().build()).withApprovedSubscription(new SignUpTenantResponseStub());
 		
 		sut.create(mockTransaction);
 	}
 	
+	@Test(expected=InvalidArgumentException.class)
+	public void should_throw_exception_if_approved_subscription_is_not_set() {
+		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null, null);
+		sut.forTenant(aTenant().build()).forAccountInfo(new AccountCreationInformationStub());
+		
+		sut.create(mockTransaction);
+	}
 	
 	@Test
 	public void should_create_new_primary_org() {
@@ -66,6 +74,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 		accountInfo.setCompanyName("some company").setTenantName("some-tenant").setFullTimeZone("Cananda:Ontario - Toronto")
 				.setSignUpPackage(SignUpPackage.Basic).setNumberOfUsers(10);
 		
+		SignUpTenantResponse stubResponse = new SignUpTenantResponseStub();
 		
 		Capture<PrimaryOrg> capturedPrimaryOrg = new Capture<PrimaryOrg>(); 
 		
@@ -81,7 +90,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 		
 		
 		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(mockOrgSaver, mockUserSaver);
-		sut.forTenant(tenant).forAccountInfo(accountInfo);
+		sut.forTenant(tenant).forAccountInfo(accountInfo).withApprovedSubscription(stubResponse);
 		
 		sut.create(mockTransaction);
 		
@@ -95,6 +104,8 @@ public class PrimaryOrgCreateHandlerImplTest {
 		assertEquals(SignUpPackage.Basic.getAssets(), createdPrimaryOrg.getLimits().getAssets());
 		assertEquals(new Long(10), createdPrimaryOrg.getLimits().getUsers());
 		assertEquals(SignUpPackage.Basic.getDiskSpaceInMB(), new Long(DataUnit.convert(BigInteger.valueOf(createdPrimaryOrg.getLimits().getDiskSpaceInBytes()), DataUnit.BYTES, DataUnit.MEGABYTES).longValue()));
+		
+		
 	}
 
 }

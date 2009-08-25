@@ -1,9 +1,9 @@
 package com.n4systems.subscription.netsuite.model;
 
-import com.n4systems.subscription.Client;
+import com.n4systems.subscription.Person;
 import com.n4systems.subscription.ExternalIdResponse;
 
-public class NetsuiteClient implements Client, ExternalIdResponse {
+public class NetsuiteClient implements Person, ExternalIdResponse {
 	
 	private String firstName;
 	private String lastName;

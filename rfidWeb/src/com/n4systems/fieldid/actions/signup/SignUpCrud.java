@@ -31,6 +31,7 @@ import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
+import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.SubscriptionAgentFactory;
 import com.n4systems.util.ConfigContext;
@@ -120,8 +121,8 @@ public class SignUpCrud extends AbstractCrud {
 		
 		transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		try {
-			confirmSubscription();
-			completeSystemSetup(transaction, tenant);
+			SignUpTenantResponse signUpTenantResponse = confirmSubscription();
+			completeSystemSetup(transaction, tenant, signUpTenantResponse);
 			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
@@ -130,7 +131,7 @@ public class SignUpCrud extends AbstractCrud {
 		}
 	}
 
-	private void completeSystemSetup(Transaction transaction, Tenant tenant) {
+	private void completeSystemSetup(Transaction transaction, Tenant tenant, SignUpTenantResponse signUpTenantResponse) {
 		BaseSystemStructureCreateHandler baseSystemCreator = new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
 				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
 		
@@ -140,9 +141,9 @@ public class SignUpCrud extends AbstractCrud {
 		orgCreateHandler.forTenant(tenant).forAccountInfo(signUp).create(transaction);
 	}
 
-	private void confirmSubscription() {
+	private SignUpTenantResponse confirmSubscription() {
 		SubscriptionAgent subscriptionAgent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
-		subscriptionAgent.buy(signUp, signUp, null);
+		return subscriptionAgent.buy(signUp.getSignUpStorage(), signUp.getSignUpStorage(), signUp.getSignUpStorage());
 	}
 
 	private Tenant createTenant(Transaction transaction) {

@@ -13,7 +13,7 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
-import com.n4systems.subscription.AccountCreationInformation;
+import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DataUnit;
@@ -24,6 +24,7 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	
 	private AccountCreationInformation accountInfo;
 	private Tenant tenant;
+	private SignUpTenantResponse signUpTenantResponse;
 
 
 
@@ -71,7 +72,7 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		
 		setCommonUserFields(primaryOrg, user);
 		
-		user.setTimeZoneID("Canada:Ontario - Toronto");
+		user.setTimeZoneID("Canada:Ontario - Toronto"); 
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
 		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
 		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));
@@ -126,6 +127,10 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		if (invalidTenant()) {
 			throw new InvalidArgumentException("you must set a saved tenant.");
 		}
+		
+		if (signUpTenantResponse == null) {
+			throw new InvalidArgumentException("you must have an approved subscription.");
+		}
 	}
 
 	private boolean invalidTenant() {
@@ -140,6 +145,11 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 
 	public PrimaryOrgCreateHandler forTenant(Tenant tenant) {
 		this.tenant = tenant;
+		return this;
+	}
+
+	public PrimaryOrgCreateHandler withApprovedSubscription(SignUpTenantResponse signUpTenantResponse) {
+		this.signUpTenantResponse = signUpTenantResponse;
 		return this;
 	}
 }
