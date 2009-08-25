@@ -69,6 +69,10 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	}
 
 	public String doForm() {
+		if (getMaxProducts() == 0) {
+			addActionMessageText("error.you_can_not_and_anymore_products");
+			return ERROR;
+		}
 		return SUCCESS;
 	}
 	
@@ -200,10 +204,18 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	}
 	
 	public Integer getMaxProducts() {
-		Integer configMax = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
-		Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
+		Integer result;
 		
-		return (configMax < limitMax) ? configMax : limitMax;
+		if (getLimits().isAssetsMaxed()) {
+			result = 0;
+		} else {
+			Integer configMax = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
+			Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
+
+			result = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;
+		}
+		
+		return result;
 	}
 	
 	/*************** Form input get/set's go below here **********************/
