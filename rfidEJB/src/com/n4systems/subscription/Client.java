@@ -1,12 +1,13 @@
-package com.n4systems.subscription.netsuite.model;
+package com.n4systems.subscription;
 
-public class Client {
-	
+public abstract class Client {
+
 	private String firstName;
 	private String lastName;
 	private String fieldId;
-	private String nsrecordid;
 
+	public abstract Long getExternalId();
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -25,10 +26,5 @@ public class Client {
 	public void setFieldId(String fieldId) {
 		this.fieldId = fieldId;
 	}
-	public String getNsrecordid() {
-		return nsrecordid;
-	}
-	public void setNsrecordid(String nsrecordid) {
-		this.nsrecordid = nsrecordid;
-	}	
+	
 }

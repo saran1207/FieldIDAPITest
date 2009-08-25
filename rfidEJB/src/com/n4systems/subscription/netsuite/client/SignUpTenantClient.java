@@ -1,18 +1,18 @@
 package com.n4systems.subscription.netsuite.client;
 
-import com.n4systems.subscription.netsuite.model.Client;
-import com.n4systems.subscription.netsuite.model.SignUpTenantResponse;
-import com.n4systems.subscription.netsuite.model.Subscription;
-import com.n4systems.subscription.netsuite.model.Tenant;
+import com.n4systems.subscription.netsuite.model.NetsuiteClient;
+import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
+import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
+import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
-public class SignUpTenantClient extends AbstractNetsuiteClient<SignUpTenantResponse>{
+public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTenantResponse> implements com.n4systems.subscription.SignUpTenantClient {
 
-	private Tenant tenant;
-	private Client client;
-	private Subscription subscription;
+	private NetsuiteTenant tenant;
+	private NetsuiteClient client;
+	private NetsuiteSubscription subscription;
 	
 	public SignUpTenantClient() {
-		super(SignUpTenantResponse.class, "signuptenant");
+		super(NetsuiteSignUpTenantResponse.class, "signuptenant");
 	}
 	
 	@Override
@@ -73,15 +73,15 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<SignUpTenantRespo
 		}		
 	}
 
-	public void setTenant(Tenant tenant) {
+	public void setTenant(NetsuiteTenant tenant) {
 		this.tenant = tenant;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(NetsuiteClient client) {
 		this.client = client;
 	}
 
-	public void setSubscription(Subscription subscription) {
+	public void setSubscription(NetsuiteSubscription subscription) {
 		this.subscription = subscription;
 	}
 

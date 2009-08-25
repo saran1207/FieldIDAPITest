@@ -1,21 +1,18 @@
-package com.n4systems.subscription.netsuite.model;
+package com.n4systems.subscription;
 
-public class Subscription {
+import com.n4systems.subscription.netsuite.model.PaymentFrequency;
 
-	private Long netsuiteRecordId;
+public abstract class Subscription {
+
 	private int months;
 	private int users;
 	private PaymentFrequency frequency;
 	private String referralCode;
 	private boolean purchasingPhoneSupport;
-	private Long nsrecordid;
-
-	public Long getNetsuiteRecordId() {
-		return netsuiteRecordId;
-	}
-	public void setNetsuiteRecordId(Long netsuiteRecordId) {
-		this.netsuiteRecordId = netsuiteRecordId;
-	}
+	
+	public abstract Long getExternalId();
+	public abstract void setExternalId(Long externalId);
+	
 	public int getMonths() {
 		return months;
 	}
@@ -46,11 +43,4 @@ public class Subscription {
 	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
 		this.purchasingPhoneSupport = purchasingPhoneSupport;
 	}
-	public Long getNsrecordid() {
-		return nsrecordid;
-	}
-	public void setNsrecordid(Long nsrecordid) {
-		this.nsrecordid = nsrecordid;
-	}
-	
 }

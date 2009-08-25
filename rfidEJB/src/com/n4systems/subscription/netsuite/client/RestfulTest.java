@@ -3,7 +3,7 @@ package com.n4systems.subscription.netsuite.client;
 import java.io.IOException;
 
 import com.n4systems.subscription.netsuite.model.AddressInfo;
-import com.n4systems.subscription.netsuite.model.Client;
+import com.n4systems.subscription.netsuite.model.NetsuiteClient;
 import com.n4systems.subscription.netsuite.model.ContractLength;
 import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.subscription.netsuite.model.CreditCardType;
@@ -11,9 +11,9 @@ import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.PaymentFrequency;
 import com.n4systems.subscription.netsuite.model.ProductInformation;
-import com.n4systems.subscription.netsuite.model.SignUpTenantResponse;
-import com.n4systems.subscription.netsuite.model.Subscription;
-import com.n4systems.subscription.netsuite.model.Tenant;
+import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
+import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
+import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
 
 public class RestfulTest {
 
@@ -105,19 +105,19 @@ public class RestfulTest {
 		signUpTenantClient.setTenant(populateTestTenant());
 		
 		try {
-			SignUpTenantResponse tenantResponse = signUpTenantClient.execute();
+			NetsuiteSignUpTenantResponse tenantResponse = signUpTenantClient.execute();
 			
-			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getNsrecordid());
-			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getNsrecordid());
-			System.out.println("Subscription netsuite id: "+tenantResponse.getSubscription().getNsrecordid());
+			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getExternalId());
+			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getExternalId());
+			System.out.println("Subscription netsuite id: "+tenantResponse.getSubscription().getExternalId());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 	}
 	
-	private static Subscription populateTestSubscription() {
-		Subscription subscription = new Subscription();
+	private static NetsuiteSubscription populateTestSubscription() {
+		NetsuiteSubscription subscription = new NetsuiteSubscription();
 		subscription.setFrequency(PaymentFrequency.Monthly);
 		subscription.setMonths(12);
 		subscription.setNetsuiteRecordId(143L);
@@ -127,8 +127,8 @@ public class RestfulTest {
 		return subscription;
 	}
 	
-	private static Client populateTestClient() {
-		Client client = new Client();
+	private static NetsuiteClient populateTestClient() {
+		NetsuiteClient client = new NetsuiteClient();
 		
 		client.setFieldId("6");
 		client.setFirstName("Guy");
@@ -137,8 +137,8 @@ public class RestfulTest {
 		return client;
 	}
 	
-	private static Tenant populateTestTenant() {
-		Tenant tenant = new Tenant();
+	private static NetsuiteTenant populateTestTenant() {
+		NetsuiteTenant tenant = new NetsuiteTenant();
 		tenant.setBillingAddress(populateTestAddress());
 		tenant.setCompanyName("TEST - Jesse Manufacturing");
 		tenant.setCreditCard(populateTestCreditCard());
