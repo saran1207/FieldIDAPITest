@@ -64,15 +64,15 @@
 				<@s.password name="signUp.passwordConfirm"/>
 			</div>
 		</div>
-		
-		
 	</div>
 	
 	<hr/>
 	<div class="infoSection infoBlock">
 		<div class="infoSet">
-			<label for="tenantName">http://</label>
-			<span class="shortField"><@s.textfield theme="fieldidSimple" name="signUp.tenantName"/></span><label>.fieldid.com</label>
+			<label class="label" for="tenantName"><@s.text name="label.site_address"/></label>
+			<span class="fieldHolder">
+				<label>http://</label><span class="shortField"><@s.textfield theme="fieldidSimple" name="signUp.tenantName"/></span><label>.fieldid.com</label>
+			</span>
 		</div>
 	</div>
 	<hr/>
