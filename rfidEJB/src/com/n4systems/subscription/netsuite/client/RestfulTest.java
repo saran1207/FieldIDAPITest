@@ -113,7 +113,6 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	private static NetsuiteSubscription populateTestSubscription() {
