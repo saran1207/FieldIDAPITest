@@ -15,7 +15,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.Project;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.State;
 import com.n4systems.model.UnitOfMeasure;
 
 public enum SetupDataGroup {
@@ -36,7 +36,7 @@ public enum SetupDataGroup {
 	),
 	INSPECTION_TYPE (
 			InspectionType.class,
-			StateSet.class,
+			State.class,
 			InspectionBook.class,
 			CommentTempBean.class,
 			UnitOfMeasure.class
