@@ -14,6 +14,7 @@ import com.n4systems.subscription.netsuite.model.ProductInformation;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
+import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 
 public class RestfulTest {
 
@@ -71,6 +72,7 @@ public class RestfulTest {
 		*/
 		
 		
+		/*
 		for (ProductInformation productInformation : detailsResponse.getItemlist()) {
 			if (productInformation.getContractlengths() != null) {
 				for (ContractLength contractLength : productInformation.getContractlengths()) {
@@ -110,6 +112,23 @@ public class RestfulTest {
 			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getExternalId());
 			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getExternalId());
 			System.out.println("Subscription netsuite id: "+tenantResponse.getSubscription().getExternalId());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
+		
+		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
+		promoClient.setCode("SOMETHING");
+		
+		try {
+			NetSuiteValidatePromoCodeResponse response = promoClient.execute();
+			System.out.println("Result:"+response.getResult());
+			System.out.println("Details:"+response.getDetails());
+
+			promoClient.setCode("R5678");
+			response = promoClient.execute();
+			System.out.println("Result:"+response.getResult());
+			System.out.println("Details:"+response.getDetails());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
