@@ -299,6 +299,18 @@
 			<result name="error" type="redirectAction">eulas</result>
 			<result name="success" type="redirectAction">eulas</result>
 		</action>
+		
+		<action name="promoCodes" method="list" class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="success" type="freemarker">/templates/html/promocodes/list.ftl</result>
+		</action>
+		
+		<action name="promoCodeEdit" method="showForm" class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="input" type="freemarker">/templates/html/promocodes/edit.ftl</result>
+		</action>
+		
+		<action name="promoCodeSave" method="save" class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="success" type="redirectAction">promoCodes</result>
+		</action>
 	</package>
 	
 	

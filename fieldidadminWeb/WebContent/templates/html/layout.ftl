@@ -26,6 +26,7 @@
 <li><a href="certSelection.action">Certs</a></li>
 <li><a href="taskCrud.action">Tasks</a></li>
 <li><a href="changeAdminPass.action">Change System Pass</a></li>
+<li><a href="promoCodes.action">Promo Codes</a></li>
 </ul>
 <div id="container">
 <div id="content">

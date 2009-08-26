@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
-import com.n4systems.model.tenant.TenantByIdLoader;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
+import com.n4systems.persistence.loaders.NonSecureIdLoader;
 
 /**
  * Simple mem-cache for Tenants and PrimaryOrgs
@@ -27,7 +27,7 @@ public class TenantCache {
 		self = cache;
 	}
 
-	private final TenantByIdLoader tenantLoader;
+	private final NonSecureIdLoader<Tenant> tenantLoader;
 	private final PrimaryOrgByTenantLoader orgLoader;
 	private final TenantByNameLoader tenantNameLoader;
 	private final AllEntityListLoader<Tenant> allTenantLoader;
@@ -38,10 +38,10 @@ public class TenantCache {
 	private Map<Long, PrimaryOrg> primaryOrgMap = new ConcurrentHashMap<Long, PrimaryOrg>();
 	
 	private TenantCache() {
-		this(new TenantByIdLoader(), new TenantByNameLoader(), new AllEntityListLoader<Tenant>(Tenant.class), new PrimaryOrgByTenantLoader(), new AllEntityListLoader<PrimaryOrg>(PrimaryOrg.class));
+		this(new NonSecureIdLoader<Tenant>(Tenant.class), new TenantByNameLoader(), new AllEntityListLoader<Tenant>(Tenant.class), new PrimaryOrgByTenantLoader(), new AllEntityListLoader<PrimaryOrg>(PrimaryOrg.class));
 	}
 	
-	public TenantCache(TenantByIdLoader tenantLoader, TenantByNameLoader tenantNameLoader,  AllEntityListLoader<Tenant> allTenantLoader, PrimaryOrgByTenantLoader orgLoader, AllEntityListLoader<PrimaryOrg> allPrimaryOrgLoader) {
+	public TenantCache(NonSecureIdLoader<Tenant> tenantLoader, TenantByNameLoader tenantNameLoader,  AllEntityListLoader<Tenant> allTenantLoader, PrimaryOrgByTenantLoader orgLoader, AllEntityListLoader<PrimaryOrg> allPrimaryOrgLoader) {
 		this.tenantLoader  = tenantLoader;
 		this.tenantNameLoader = tenantNameLoader;
 		this.orgLoader = orgLoader;
@@ -204,7 +204,7 @@ public class TenantCache {
 	}
 	
 	private void loadTenant(Long id) {
-		tenantLoader.setTenantId(id);
+		tenantLoader.setId(id);
 		addTenant(tenantLoader.load());
 	}
 	
