@@ -129,7 +129,7 @@ public class RestfulTest {
 	private static NetsuiteClient populateTestClient() {
 		NetsuiteClient client = new NetsuiteClient();
 		
-		client.setFieldId("6");
+		client.setN4Id("6");
 		client.setFirstName("Guy");
 		client.setLastName("Incognito");
 		
@@ -142,7 +142,7 @@ public class RestfulTest {
 		tenant.setCompanyName("TEST - Jesse Manufacturing");
 		tenant.setCreditCard(populateTestCreditCard());
 		tenant.setEmail("guyincognito@n4systems.com");
-		tenant.setFieldId("5");
+		tenant.setN4Id("5");
 		tenant.setPhone("416-555-5555");
 		tenant.setShippingAddress(populateTestAddress());
 		tenant.setUsingCreditCard(true);

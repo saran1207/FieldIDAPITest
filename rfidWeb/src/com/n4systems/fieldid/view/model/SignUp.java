@@ -220,8 +220,8 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 		return signUpRequest.getExternalId();
 	}
 
-	public String getFieldId() {
-		return signUpRequest.getFieldId();
+	public String getN4Id() {
+		return signUpRequest.getN4Id();
 	}
 
 	public PaymentFrequency getFrequency() {
@@ -236,8 +236,8 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 		return signUpRequest.getPhone();
 	}
 
-	public String getReferralCode() {
-		return signUpRequest.getReferralCode();
+	public String getPromoCode() {
+		return signUpRequest.getPromoCode();
 	}
 
 	public AddressInfo getShippingAddress() {

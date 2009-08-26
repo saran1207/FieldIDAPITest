@@ -18,7 +18,7 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 	@Override
 	protected void addRequestParameters() {
 		addRequestParameter("companyname", company.getCompanyName());
-		addRequestParameter("fieldid", company.getFieldId());
+		addRequestParameter("n4id", company.getN4Id());
 		
 		if (company.getPhone() != null) {
 			addRequestParameter("phone", company.getPhone());
@@ -61,15 +61,15 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		
 		addRequestParameter("firstname", person.getFirstName());
 		addRequestParameter("lastname", person.getLastName());
-		addRequestParameter("clientfieldid", person.getFieldId());
+		addRequestParameter("clientn4id", person.getN4Id());
 		
 		addRequestParameter("itemid", String.valueOf(subscription.getExternalId()));
 		addRequestParameter("months", String.valueOf(subscription.getMonths()));
 		addRequestParameter("frequency", subscription.getFrequency().getCode());
 		addRequestParameter("numusers", String.valueOf(subscription.getUsers()));
 		addRequestParameter("phonesupport", subscription.isPurchasingPhoneSupport() ? "T" : "F");
-		if (subscription.getReferralCode() != null) {
-			addRequestParameter("referralcode", subscription.getReferralCode());
+		if (subscription.getPromoCode() != null) {
+			addRequestParameter("promocode", subscription.getPromoCode());
 		}		
 	}
 

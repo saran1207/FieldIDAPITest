@@ -7,7 +7,7 @@ public class NetsuiteClient implements Person, ExternalIdResponse {
 	
 	private String firstName;
 	private String lastName;
-	private String fieldId;
+	private String n4Id;
 	private Long nsrecordid;
 
 	public Long getExternalId() {
@@ -38,11 +38,11 @@ public class NetsuiteClient implements Person, ExternalIdResponse {
 		this.lastName = lastName;
 	}
 
-	public String getFieldId() {
-		return fieldId;
+	public String getN4Id() {
+		return n4Id;
 	}
 
-	public void setFieldId(String fieldId) {
-		this.fieldId = fieldId;
+	public void setN4Id(String n4Id) {
+		this.n4Id = n4Id;
 	}
 }

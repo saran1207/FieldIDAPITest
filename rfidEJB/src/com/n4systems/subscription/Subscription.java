@@ -7,6 +7,6 @@ public interface Subscription {
 	public int getMonths();
 	public int getUsers();
 	public PaymentFrequency getFrequency();
-	public String getReferralCode();
+	public String getPromoCode();
 	public boolean isPurchasingPhoneSupport();
 }

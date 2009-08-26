@@ -11,7 +11,7 @@ public class NetsuiteTenant implements Company, ExternalIdResponse {
 	private String email;	
 	private AddressInfo billingAddress;
 	private AddressInfo shippingAddress;
-	private String fieldId;
+	private String n4Id;
 	private String url;
 	private boolean usingCreditCard;
 	private CreditCard creditCard;
@@ -69,12 +69,12 @@ public class NetsuiteTenant implements Company, ExternalIdResponse {
 		this.shippingAddress = shippingAddress;
 	}
 
-	public String getFieldId() {
-		return fieldId;
+	public String getN4Id() {
+		return n4Id;
 	}
 
-	public void setFieldId(String fieldId) {
-		this.fieldId = fieldId;
+	public void setN4Id(String n4Id) {
+		this.n4Id = n4Id;
 	}
 
 	public String getUrl() {

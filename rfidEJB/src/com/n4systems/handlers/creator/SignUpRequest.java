@@ -195,7 +195,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public String getReferralCode() {
+	public String getPromoCode() {
 		return null;
 	}
 
@@ -222,7 +222,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public String getFieldId() {
+	public String getN4Id() {
 		// TODO Auto-generated method stub
 		return null;
 	}

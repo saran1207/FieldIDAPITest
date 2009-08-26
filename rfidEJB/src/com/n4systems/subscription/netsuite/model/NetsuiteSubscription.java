@@ -9,7 +9,7 @@ public class NetsuiteSubscription implements Subscription, ExternalIdResponse {
 	private int months;
 	private int users;
 	private PaymentFrequency frequency;
-	private String referralCode;
+	private String promoCode;
 	private boolean purchasingPhoneSupport;
 	private Long netsuiteRecordId;
 	private Long nsrecordid;
@@ -62,12 +62,12 @@ public class NetsuiteSubscription implements Subscription, ExternalIdResponse {
 		this.frequency = frequency;
 	}
 
-	public String getReferralCode() {
-		return referralCode;
+	public String getPromoCode() {
+		return promoCode;
 	}
 
-	public void setReferralCode(String referralCode) {
-		this.referralCode = referralCode;
+	public void setPromoCode(String promoCode) {
+		this.promoCode = promoCode;
 	}
 
 	public boolean isPurchasingPhoneSupport() {

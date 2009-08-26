@@ -4,5 +4,5 @@ public interface Person {
 
 	public String getFirstName();
 	public String getLastName();
-	public String getFieldId();
+	public String getN4Id();
 }
