@@ -1,8 +1,7 @@
-package com.n4systems.handlers.creator;
-
-import rfid.ejb.entity.UserBean;
+package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -10,25 +9,19 @@ import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
-import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DataUnit;
 
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	private final OrganizationSaver orgSaver;
-	private final UserSaver userSaver;
 	
 	private AccountCreationInformation accountInfo;
 	private Tenant tenant;
 
 	
-	public PrimaryOrgCreateHandlerImpl(OrganizationSaver orgSaver, UserSaver userSaver) {
+	public PrimaryOrgCreateHandlerImpl(OrganizationSaver orgSaver) {
 		super();
 		this.orgSaver = orgSaver;
-		this.userSaver = userSaver;
 	}
 
 	public void create(Transaction transaction) {
@@ -41,53 +34,12 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		PrimaryOrg primaryOrg = createPrimaryOrg();
 		
 		orgSaver.save(transaction, primaryOrg);
-		userSaver.save(transaction, createSystemUser(primaryOrg));
-		userSaver.save(transaction, createAdminUser(primaryOrg));
 		return primaryOrg;
-		
-		
 	}
 	
 
 
-	private UserBean createAdminUser(PrimaryOrg primaryOrg) {
-		UserBean user = new UserBean();
-		
-		setCommonUserFields(primaryOrg, user);
-		
-		user.setAdmin(true);
-		user.setUserID(accountInfo.getUsername());
-		user.assignPassword(accountInfo.getPassword());
-		user.setEmailAddress(accountInfo.getEmail());
-		user.setFirstName(accountInfo.getFirstName());
-		user.setLastName(accountInfo.getLastName());
-		user.setTimeZoneID(accountInfo.getFullTimeZone());
-		
-		return user;
-	}
-
-	private UserBean createSystemUser(PrimaryOrg primaryOrg) {
-		UserBean user = new UserBean();
-		user.setSystem(true);
-		
-		setCommonUserFields(primaryOrg, user);
-		
-		user.setTimeZoneID("Canada:Ontario - Toronto"); 
-		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
-		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
-		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));
-		user.setFirstName("N4");
-		user.setLastName("Admin");
-		return user;
-	}
-
-	private void setCommonUserFields(PrimaryOrg primaryOrg, UserBean user) {
-		user.setActive(true);
-		user.setTenant(tenant);
-		user.setOrganization(primaryOrg);
-		user.setPermissions(Permissions.SYSTEM);
-	}
-
+	
 	private PrimaryOrg createPrimaryOrg() {
 		PrimaryOrg primaryOrg = new PrimaryOrg();
 		primaryOrg.setTenant(tenant);
@@ -98,13 +50,14 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		primaryOrg.setCertificateName(accountInfo.getCompanyName());
 		primaryOrg.setDefaultTimeZone(accountInfo.getFullTimeZone());
 		
-		processSignUpPackage(primaryOrg);
+		applySignUpPackage(primaryOrg);
+		applyPromoCodeAdjustments(primaryOrg);
 		
 		return primaryOrg;
 	}
 	
 	
-	private void processSignUpPackage(PrimaryOrg primaryOrg) {
+	private void applySignUpPackage(PrimaryOrg primaryOrg) {
 		for (ExtendedFeature feature : accountInfo.getSignUpPackage().getExtendedFeatures()) {
 			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
 			featureSwitch.enableFeature();
@@ -117,6 +70,10 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		limits.setUsers(accountInfo.getNumberOfUsers().longValue());
 		
 		primaryOrg.setLimits(limits);
+	}
+	
+	private void applyPromoCodeAdjustments(PrimaryOrg primaryOrg) {
+		//TODO  find what we need to do to apply promo code.
 	}
 
 	private void guards() {

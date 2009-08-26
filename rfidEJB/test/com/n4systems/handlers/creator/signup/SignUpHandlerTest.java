@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
@@ -10,6 +10,12 @@ import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandler;
+import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
+import com.n4systems.handlers.creator.signup.SignUpHandler;
+import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
+import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
+import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSaver;
@@ -19,7 +25,7 @@ import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.test.helpers.asserts.Asserts;
-
+import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
 
 public class SignUpHandlerTest {
 	
@@ -60,23 +66,24 @@ public class SignUpHandlerTest {
 		replay(mockPersistenceProvider);
 		
 		
-		TenantSaver mockTenantSaver = createMock(TenantSaver.class);
-		mockTenantSaver.save(same(mockTransaction), isA(Tenant.class));
-		replay(mockTenantSaver);
-		
 		SignUpRequest signUpRequest = new SignUpRequest();
 		signUpRequest.setTenantName("some_tenant_name");
 		
-		PrimaryOrgCreateHandler mockOrgCreateHandler = createMock(PrimaryOrgCreateHandler.class);
-		expect(mockOrgCreateHandler.forTenant(isA(Tenant.class))).andReturn(mockOrgCreateHandler);
-		expect(mockOrgCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockOrgCreateHandler);
-		expect(mockOrgCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(null);
-		replay(mockOrgCreateHandler);
+		AccountPlaceHolder accountPlaceHolder = anAccountPlaceHolder().build();
+
+		AccountPlaceHolderCreateHandler mockAccountPlaceHolderCreateHandler = createMock(AccountPlaceHolderCreateHandler.class);
+		expect(mockAccountPlaceHolderCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockAccountPlaceHolderCreateHandler);
+		expect(mockAccountPlaceHolderCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(accountPlaceHolder);
+		replay(mockAccountPlaceHolderCreateHandler);
+		
+		SignUpTenantResponseStub subscriptionApproval = new SignUpTenantResponseStub();
 		
 		SubscriptionAgent mockSubscriptionAgent = createMock(SubscriptionAgent.class);
-		try {
-			expect(mockSubscriptionAgent.buy(signUpRequest, signUpRequest, signUpRequest)).andReturn(new SignUpTenantResponseStub());
+		try { 
+			expect(mockSubscriptionAgent.buy(signUpRequest, signUpRequest, signUpRequest))
+				.andReturn(subscriptionApproval); 
 		} catch (Exception e) {}
+		
 		replay(mockSubscriptionAgent);
 		
 		BaseSystemStructureCreateHandler mockSystemStructureHandler = createMock(BaseSystemStructureCreateHandler.class);
@@ -84,7 +91,13 @@ public class SignUpHandlerTest {
 		mockSystemStructureHandler.create(mockTransaction);
 		replay(mockSystemStructureHandler);
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockSystemStructureHandler, mockOrgCreateHandler, mockSubscriptionAgent, mockTenantSaver);
+		SubscriptionApprovalHandler mockSubscriptionApprovalHandler = createMock(SubscriptionApprovalHandler.class);
+		expect(mockSubscriptionApprovalHandler.forAccountPlaceHolder(accountPlaceHolder)).andReturn(mockSubscriptionApprovalHandler);
+		expect(mockSubscriptionApprovalHandler.forSubscriptionApproval(subscriptionApproval)).andReturn(mockSubscriptionApprovalHandler);
+		mockSubscriptionApprovalHandler.applyApproval(mockTransaction);
+		replay(mockSubscriptionApprovalHandler);
+		
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSubscriptionApprovalHandler);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		
@@ -92,10 +105,10 @@ public class SignUpHandlerTest {
 		
 		
 		verify(mockPersistenceProvider);
-		verify(mockTenantSaver);
-		verify(mockOrgCreateHandler);
+		verify(mockAccountPlaceHolderCreateHandler);
 		verify(mockSubscriptionAgent);
 		verify(mockSystemStructureHandler);
+		verify(mockSubscriptionApprovalHandler);
 	}
 
 	
@@ -109,16 +122,16 @@ public class SignUpHandlerTest {
 		
 		RuntimeException fakeConstraintException = new RuntimeException("constraint violation,  tenant_name already used");
 
-		TenantSaver mockTenantSaver = createMock(TenantSaver.class);
-		mockTenantSaver.save(same(mockTransaction), isA(Tenant.class));
-		expectLastCall().andThrow(fakeConstraintException);
-		replay(mockTenantSaver);
-		
 		SignUpRequest signUpRequest = new SignUpRequest();
 		signUpRequest.setTenantName("some_name_already_used.");
 		
+		AccountPlaceHolderCreateHandler mockAccountPlaceHolderCreateHandler = createMock(AccountPlaceHolderCreateHandler.class);
+		expect(mockAccountPlaceHolderCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockAccountPlaceHolderCreateHandler);
+		expect(mockAccountPlaceHolderCreateHandler.createWithUndoInformation(mockTransaction)).andThrow(fakeConstraintException);
+		replay(mockAccountPlaceHolderCreateHandler);
 		
-		SignUpHandler sut = new SignUpHandlerImpl(null, null, null, mockTenantSaver);
+		
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, null, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		try {
@@ -128,7 +141,7 @@ public class SignUpHandlerTest {
 		}
 		
 		verify(mockPersistenceProvider);
-		verify(mockTenantSaver);
+		verify(mockAccountPlaceHolderCreateHandler);
 	}
 
 	private void rollbackTransaction(PersistenceProvider mockPersistenceProvider) {
@@ -149,20 +162,16 @@ public class SignUpHandlerTest {
 		replay(mockPersistenceProvider);
 		
 		
-		TenantSaver mockTenantSaver = createMock(TenantSaver.class);
-		mockTenantSaver.save(same(mockTransaction), isA(Tenant.class));
-		mockTenantSaver.remove(same(mockTransaction), isA(Tenant.class));
-		replay(mockTenantSaver);
+		
 		
 		SignUpRequest signUpRequest = new SignUpRequest();
 		signUpRequest.setTenantName("some_tenant_name");
 		
-		PrimaryOrgCreateHandler mockOrgCreateHandler = createMock(PrimaryOrgCreateHandler.class);
-		expect(mockOrgCreateHandler.forTenant(isA(Tenant.class))).andReturn(mockOrgCreateHandler);
-		expect(mockOrgCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockOrgCreateHandler);
-		expect(mockOrgCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(null);
-		mockOrgCreateHandler.undo(same(mockTransaction), isA(PrimaryOrg.class));
-		replay(mockOrgCreateHandler);
+		AccountPlaceHolderCreateHandler mockAccountPlaceHolderCreateHandler = createMock(AccountPlaceHolderCreateHandler.class);
+		expect(mockAccountPlaceHolderCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockAccountPlaceHolderCreateHandler);
+		expect(mockAccountPlaceHolderCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(new AccountPlaceHolder(null,null,null,null));
+		mockAccountPlaceHolderCreateHandler.undo(same(mockTransaction), isA(AccountPlaceHolder.class));
+		replay(mockAccountPlaceHolderCreateHandler);
 		
 		SubscriptionAgent mockSubscriptionAgent = createMock(SubscriptionAgent.class);
 		try {
@@ -173,7 +182,7 @@ public class SignUpHandlerTest {
 		
 		
 		
-		SignUpHandler sut = new SignUpHandlerImpl(null, mockOrgCreateHandler, mockSubscriptionAgent, mockTenantSaver);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		boolean exceptionCaught = false;
@@ -187,9 +196,8 @@ public class SignUpHandlerTest {
 		
 		assertTrue(exceptionCaught);
 		verify(mockPersistenceProvider);
-		verify(mockTenantSaver);
-		verify(mockOrgCreateHandler);
 		verify(mockSubscriptionAgent);
+		verify(mockAccountPlaceHolderCreateHandler);
 	}
 
 	

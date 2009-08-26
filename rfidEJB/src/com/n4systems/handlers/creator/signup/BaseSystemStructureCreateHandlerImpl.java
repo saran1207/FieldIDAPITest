@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;

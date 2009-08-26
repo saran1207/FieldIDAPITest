@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup.model;
 
 import com.n4systems.model.signuppackage.SignUpPackage;
 

@@ -1,5 +1,6 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
+import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.persistence.PersistenceProvider;
 
 public interface SignUpHandler {

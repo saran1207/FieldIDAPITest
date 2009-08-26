@@ -8,16 +8,20 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.view.model.SignUp;
+import com.n4systems.fieldid.view.model.SignUpRequestDecorator;
 import com.n4systems.fieldid.view.model.SignUpPackage;
-import com.n4systems.handlers.creator.BaseSystemSetupDataCreateHandlerImpl;
-import com.n4systems.handlers.creator.BaseSystemStructureCreateHandler;
-import com.n4systems.handlers.creator.BaseSystemStructureCreateHandlerImpl;
-import com.n4systems.handlers.creator.BaseSystemTenantStructureCreateHandlerImpl;
-import com.n4systems.handlers.creator.PrimaryOrgCreateHandler;
-import com.n4systems.handlers.creator.PrimaryOrgCreateHandlerImpl;
-import com.n4systems.handlers.creator.SignUpHandlerImpl;
-import com.n4systems.handlers.creator.SignUpRequest;
+import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandler;
+import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandlerImpl;
+import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandlerImpl;
+import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
+import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandlerImpl;
+import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
+import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
+import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
+import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
+import com.n4systems.handlers.creator.signup.SubscriptionApprovalHandler;
+import com.n4systems.handlers.creator.signup.SubscriptionApprovalHandlerImpl;
+import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
@@ -44,7 +48,7 @@ public class SignUpCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
 
 	private SignUpPackage signUpPackage;
-	private SignUp signUp;
+	private SignUpRequestDecorator signUpRequest;
 
 	public SignUpCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -52,9 +56,9 @@ public class SignUpCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		signUp = (sessionContains("signUp")) ? new SignUp((SignUpRequest) getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) : new SignUp(NonSecureLoaderFactory
+		signUpRequest = (sessionContains("signUp")) ? new SignUpRequestDecorator((SignUpRequest) getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) : new SignUpRequestDecorator(NonSecureLoaderFactory
 				.createTenantUniqueAvailableNameLoader());
-		setSignUpPackageId(signUp.getSignUpPackageId());
+		setSignUpPackageId(signUpRequest.getSignUpPackageId());
 	}
 
 	@Override
@@ -63,7 +67,7 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	private void testRequiredEntities(boolean exists) {
-		if (exists && signUp.isNew()) {
+		if (exists && signUpRequest.isNew()) {
 			addFlashErrorText("error.you_must_go_through_sign_up");
 			throw new MissingEntityException("you must go through the sign up process");
 		}
@@ -89,26 +93,32 @@ public class SignUpCrud extends AbstractCrud {
 
 	public String doCreate() {
 		testRequiredEntities(false);
-		logger.info(getLogLinePrefix() + "signing up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
+		logger.info(getLogLinePrefix() + "signing up for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
 
-		setSessionVar("signUp", signUp.getSignUpRequest());
+		setSessionVar("signUp", signUpRequest.getSignUpRequest());
 		
 		try {
 			createAccount();
 		} catch (Exception e) {
 			addActionErrorText("error.could_not_create_account");
-			logger.error(getLogLinePrefix() + "signing up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]", e);
+			logger.error(getLogLinePrefix() + "signing up for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpPackage.getName() + "]", e);
 			return ERROR;
 		}
 
 		addFlashMessageText("message.your_account_has_been_created");
-		logger.info(getLogLinePrefix() + "signed up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
+		logger.info(getLogLinePrefix() + "signed up for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
 		return SUCCESS;
 	}
 
 	private void createAccount() {
 		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
-		new SignUpHandlerImpl(getBaseSystemStructureCreateHandler(), getPrimaryOrgCreateHandler(), getSubscriptionAgent(), new TenantSaver()).withPersistenceProvider(persistenceProvider).signUp(signUp.getSignUpRequest());
+		new SignUpHandlerImpl(getAccountPlaceHolderCreateHandler(), getBaseSystemStructureCreateHandler(), getSubscriptionAgent(), getSubscriptionApprovalHandler())
+			.withPersistenceProvider(persistenceProvider)
+			.signUp(signUpRequest.getSignUpRequest());
+	}
+
+	private SubscriptionApprovalHandler getSubscriptionApprovalHandler() {
+		return new SubscriptionApprovalHandlerImpl(new OrganizationSaver(), new UserSaver());
 	}
 
 	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
@@ -116,16 +126,18 @@ public class SignUpCrud extends AbstractCrud {
 				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
 	}
 	
+	private AccountPlaceHolderCreateHandler getAccountPlaceHolderCreateHandler() {
+		return new AccountPlaceHolderCreateHandlerImpl(new TenantSaver(), getPrimaryOrgCreateHandler(), new UserSaver());
+	}
+	
 	private PrimaryOrgCreateHandler getPrimaryOrgCreateHandler() {
-		return new PrimaryOrgCreateHandlerImpl(new OrganizationSaver(), new UserSaver());
+		return new PrimaryOrgCreateHandlerImpl(new OrganizationSaver());
 	}
 
 	private SubscriptionAgent getSubscriptionAgent() {
 		return SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
-
 	}
 
-	
 	
 
 	public SortedSet<? extends Listable<String>> getCountries() {
@@ -133,7 +145,7 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	public SortedSet<? extends Listable<String>> getTimeZones() {
-		return TimeZoneSelectionHelper.getTimeZones(signUp.getCountry());
+		return TimeZoneSelectionHelper.getTimeZones(signUpRequest.getCountry());
 	}
 
 	public SignUpPackage getSignUpPackage() {
@@ -145,12 +157,12 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	public void setSignUpPackageId(Long signUpPackageId) {
-		signUp.setSignUpPackageId(signUpPackageId);
+		signUpRequest.setSignUpPackageId(signUpPackageId);
 		this.signUpPackage = new SignUpPackage(signUpPackageId, "Basic", 40, false, 1L);
 	}
 
 	@VisitorFieldValidator(message = "")
-	public SignUp getSignUp() {
-		return signUp;
+	public SignUpRequestDecorator getSignUp() {
+		return signUpRequest;
 	}
 }

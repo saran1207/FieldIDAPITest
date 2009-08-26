@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
@@ -10,6 +10,8 @@ import org.junit.Test;
 import rfid.ejb.entity.SerialNumberCounterBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandler;
+import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
 import com.n4systems.model.tenant.SetupDataLastModDates;

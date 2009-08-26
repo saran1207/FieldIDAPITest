@@ -8,7 +8,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.view.model.SignUpPackage;
-import com.n4systems.handlers.creator.SignUpRequest;
+import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 
 public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
@@ -59,16 +59,16 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 		return priceModifier.getSignUpPackageId();
 	}
 
-	public boolean isPhoneSupport() {
-		return priceModifier.isPhoneSupport();
+	public boolean isPurchasingPhoneSupport() {
+		return priceModifier.isPurchasingPhoneSupport();
 	}
 
 	public void setNumberOfUsers(int numberOfUsers) {
 		priceModifier.setNumberOfUsers(numberOfUsers);
 	}
 
-	public void setPhoneSupport(boolean phoneSupport) {
-		priceModifier.setPhoneSupport(phoneSupport);
+	public void setPurchasingPhoneSupport(boolean phoneSupport) {
+		priceModifier.setPurchasingPhoneSupport(phoneSupport);
 	}
 
 	public void setSignUpPackageId(Long signUpPackageId) {

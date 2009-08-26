@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.handlers.creator.AccountCreationInformation;
-import com.n4systems.handlers.creator.SignUpRequest;
+import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
+import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 import com.n4systems.subscription.AddressInfo;
@@ -25,18 +25,18 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-public class SignUp implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
+public class SignUpRequestDecorator implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
 	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
 	
 	private final SignUpRequest signUpRequest;
 	
 
-	public SignUp(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
+	public SignUpRequestDecorator(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
 		this.signUpRequest = signUpRequest;
 		this.uniqueNameLoader = uniqueNameAvailableLoader;
 	}
 	
-	public SignUp(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
+	public SignUpRequestDecorator(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
 		this(new SignUpRequest(), uniqueNameAvailableLoader);
 	}
 	
@@ -121,9 +121,7 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 		return signUpRequest.isNew();
 	}
 
-	public boolean isPhoneSupport() {
-		return signUpRequest.isPhoneSupport();
-	}
+	
 
 	@RequiredStringValidator(message="", key="error.company_name_required")
 	public void setCompanyName(String companyName) {
@@ -174,10 +172,6 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 		signUpRequest.setPhoneNumber(phoneNumber);
 	}
 
-	public void setPhoneSupport(boolean phoneSupport) {
-		signUpRequest.setPhoneSupport(phoneSupport);
-	}
-
 	public void setSignUpPackageId(Long signUpPackageId) {
 		signUpRequest.setSignUpPackageId(signUpPackageId);
 	}
@@ -220,9 +214,6 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 		return signUpRequest.getExternalId();
 	}
 
-	public String getN4Id() {
-		return signUpRequest.getN4Id();
-	}
 
 	public PaymentFrequency getFrequency() {
 		return signUpRequest.getFrequency();
@@ -236,9 +227,6 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 		return signUpRequest.getPhone();
 	}
 
-	public String getPromoCode() {
-		return signUpRequest.getPromoCode();
-	}
 
 	public AddressInfo getShippingAddress() {
 		return signUpRequest.getShippingAddress();
@@ -255,9 +243,20 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 	public boolean isPurchasingPhoneSupport() {
 		return signUpRequest.isPurchasingPhoneSupport();
 	}
+	public void setPurchasingPhoneSupport(boolean purchasePhoneSupport) {
+		signUpRequest.setPurchasingPhoneSupport(purchasePhoneSupport);
+	}
 
 	public boolean isUsingCreditCard() {
 		return signUpRequest.isUsingCreditCard();
+	}
+
+	public String getN4Id() {
+		return signUpRequest.getN4Id();
+	}
+
+	public String getPromoCode() {
+		return signUpRequest.getPromoCode();
 	}
 
 

@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
@@ -8,6 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandler;
+import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandlerImpl;
+import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandler;
 import com.n4systems.model.Tenant;
 import com.n4systems.persistence.Transaction;
 

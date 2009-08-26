@@ -1,65 +1,66 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantSaver;
+import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
+import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.SubscriptionAgent;
 
 public class SignUpHandlerImpl implements SignUpHandler {
 
 	private final BaseSystemStructureCreateHandler baseSystemCreator;
-	private final PrimaryOrgCreateHandler orgCreateHandler;
 	private final SubscriptionAgent subscriptionAgent;
-	private final TenantSaver tenantSaver;
+	private final AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler;
+	private final SubscriptionApprovalHandler subscriptionApprovalHandler;
 	
 	private PersistenceProvider persistenceProvider;
-	private SignUpRequest signUp;
 	
-	public SignUpHandlerImpl(BaseSystemStructureCreateHandler baseSystemCreator, PrimaryOrgCreateHandler orgCreateHandler, SubscriptionAgent subscriptionAgent, TenantSaver tenantSaver) {
+	
+	public SignUpHandlerImpl(AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler, BaseSystemStructureCreateHandler baseSystemCreator, SubscriptionAgent subscriptionAgent, SubscriptionApprovalHandler subscriptionApprovalHandler) {
 		super();
+		this.accountPlaceHolderCreateHandler = accountPlaceHolderCreateHandler;
 		this.baseSystemCreator = baseSystemCreator;
-		this.orgCreateHandler = orgCreateHandler;
 		this.subscriptionAgent = subscriptionAgent;
-		this.tenantSaver = tenantSaver;
+		this.subscriptionApprovalHandler = subscriptionApprovalHandler;
 	}
 
 	public void signUp(SignUpRequest signUp) {
 		if (persistenceProvider == null) {
 			throw new InvalidArgumentException("You must give a persistence provider");
 		}
-		this.signUp = signUp;
-		
-		Tenant tenant = null;
+		AccountPlaceHolder placeHolder = null;
 		Transaction transaction = persistenceProvider.startTransaction();
 		try {
-			tenant = createAccountPlaceHolder(signUp, transaction);
+			placeHolder = createAccountPlaceHolder(signUp, transaction);
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
 			throw e;
 		}
 		
-		
+		SignUpTenantResponse subscriptionApproval = null;
 		try {
-			subscriptionAgent.buy(signUp, signUp, signUp);
+			
+			//TODO copy primary org and admin user id into the signUp
+			subscriptionApproval = subscriptionAgent.buy(signUp, signUp, signUp);
+			
 		} catch (CommunicationException e) {
-			undoAccountPlaceHolder(tenant);
+			undoAccountPlaceHolder(placeHolder);
 			throw new ProcessFailureException("could not complete process", e);
 		} catch (BillingInfoException e) {
-			undoAccountPlaceHolder(tenant);
+			undoAccountPlaceHolder(placeHolder);
 			throw new ProcessFailureException("could not complete process", e);
 		}
 		
 		transaction = persistenceProvider.startTransaction();
 		try {
-			
-			baseSystemCreator.forTenant(tenant).create(transaction);
+			subscriptionApprovalHandler.forAccountPlaceHolder(placeHolder).forSubscriptionApproval(subscriptionApproval).applyApproval(transaction);
+			baseSystemCreator.forTenant(placeHolder.getTenant()).create(transaction);
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
@@ -67,18 +68,14 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		}
 	}
 
-	private Tenant createAccountPlaceHolder(SignUpRequest signUp, Transaction transaction) {
-		Tenant tenant;
-		tenant = createTenant(transaction);
-		orgCreateHandler.forTenant(tenant).forAccountInfo(signUp).createWithUndoInformation(transaction);
-		return tenant;
+	private AccountPlaceHolder createAccountPlaceHolder(SignUpRequest signUp, Transaction transaction) {
+		return accountPlaceHolderCreateHandler.forAccountInfo(signUp).createWithUndoInformation(transaction);
 	}
 
-	private void undoAccountPlaceHolder(Tenant tenant) {
+	private void undoAccountPlaceHolder(AccountPlaceHolder placeHolder) {
 		Transaction transaction = persistenceProvider.startTransaction();
 		try {
-			tenantSaver.remove(transaction, tenant);
-			orgCreateHandler.undo(transaction, new PrimaryOrg());
+			accountPlaceHolderCreateHandler.undo(transaction, placeHolder);
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
@@ -86,13 +83,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		}
 	}
 	
-	private Tenant createTenant(Transaction transaction) {
-		
-		Tenant tenant = new Tenant();
-		tenant.setName(signUp.getTenantName());
-		tenantSaver.save(transaction, tenant);
-		return tenant;
-	}
+	
 	
 	
 

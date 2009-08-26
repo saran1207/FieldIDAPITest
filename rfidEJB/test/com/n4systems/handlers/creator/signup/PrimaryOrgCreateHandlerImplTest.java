@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
@@ -13,15 +13,14 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
+import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.OrganizationSaver;
-import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.DataUnit;
 
@@ -43,7 +42,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void should_throw_exception_if_tenant_is_not_set() {
-		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null, null);
+		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null);
 		sut.forAccountInfo(new AccountCreationInformationStub());
 		
 		sut.create(mockTransaction);
@@ -51,7 +50,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void should_throw_exception_if_account_info_is_not_set() {
-		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null, null);
+		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(null);
 		sut.forTenant(aTenant().build());
 		
 		sut.create(mockTransaction);
@@ -74,14 +73,10 @@ public class PrimaryOrgCreateHandlerImplTest {
 		mockOrgSaver.save(same(mockTransaction), capture(capturedPrimaryOrg));
 		replay(mockOrgSaver);
 		
-		UserSaver mockUserSaver = createMock(UserSaver.class);
-		mockUserSaver.save(same(mockTransaction), isA(UserBean.class));
-		expectLastCall().times(2);
-		replay(mockUserSaver);
 		
 		
 		
-		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(mockOrgSaver, mockUserSaver);
+		PrimaryOrgCreateHandler sut = new PrimaryOrgCreateHandlerImpl(mockOrgSaver);
 		sut.forTenant(tenant).forAccountInfo(accountInfo);
 		
 		sut.create(mockTransaction);

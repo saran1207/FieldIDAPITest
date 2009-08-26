@@ -84,8 +84,8 @@
 			</div>
 			
 			<div class="infoSet">
-				<label class="label" for="phoneSupport"><@s.text name="label.phone_support"/></label>
-				<span class="fieldHolder shortField"><@s.checkbox name="signUp.phoneSupport" theme="simple" cssClass="changesPrice"/></span>
+				<label class="label" for="purchasePhoneSupport"><@s.text name="label.phone_support"/></label>
+				<span class="fieldHolder shortField"><@s.checkbox name="signUp.purchasePhoneSupport" theme="simple" cssClass="changesPrice"/></span>
 			</div>
 		
 		</div>

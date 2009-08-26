@@ -1,4 +1,4 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup.model;
 
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.subscription.AddressInfo;
@@ -33,7 +33,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private String tenantName;
 	
 	private Integer numberOfUsers = 1;
-	private boolean phoneSupport;
+	private boolean purchasingPhoneSupport;
 	
 	public SignUpRequest() {
 		this.country = TimeZoneSelectionHelper.defaultCountry();
@@ -157,12 +157,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		this.numberOfUsers = numberOfUsers;
 	}
 	
-	public boolean isPhoneSupport() {
-		return phoneSupport;
-	}
-	public void setPhoneSupport(boolean phoneSupport) {
-		this.phoneSupport = phoneSupport;
-	}
+	
 	
 	public Long getSignUpPackageId() {
 		return signUpPackageId;
@@ -195,19 +190,12 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public String getPromoCode() {
-		return null;
-	}
-
-
 	public int getUsers() {
 		return getNumberOfUsers();
 	}
 
 
-	public boolean isPurchasingPhoneSupport() {
-		return isPhoneSupport();
-	}
+
 
 
 	public AddressInfo getBillingAddress() {
@@ -221,11 +209,6 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		return null;
 	}
 
-
-	public String getN4Id() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 	public String getPhone() {
@@ -246,5 +229,27 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 	public boolean isUsingCreditCard() {
 		return false;
+	}
+
+
+	public boolean isPurchasingPhoneSupport() {
+		return purchasingPhoneSupport;
+	}
+
+
+	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
+		this.purchasingPhoneSupport = purchasingPhoneSupport;
+	}
+
+
+	public String getPromoCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public String getN4Id() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

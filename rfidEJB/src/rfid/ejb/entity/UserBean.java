@@ -58,7 +58,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	@JoinColumn(name = "organization_id")
 	private BaseOrg organization;
 	
-	private String externalId;
+	private Long externalId;
 	
 	@PrePersist
     protected void prePersist() {
@@ -337,11 +337,11 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		this.organization = organization;
 	}
 
-	public String getExternalId() {
+	public Long getExternalId() {
 		return externalId;
 	}
 
-	public void setExternalId(String externalId) {
+	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
 	}
 } 

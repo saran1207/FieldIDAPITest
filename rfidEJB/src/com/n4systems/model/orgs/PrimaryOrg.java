@@ -50,7 +50,7 @@ public class PrimaryOrg extends InternalOrg {
 	@Column(name="dateformat", nullable = false)
 	private String dateFormat = "MM/dd/yy";
 	
-	private String externalId;
+	private Long externalId;
 	
 
 	public PrimaryOrg() {}
@@ -115,11 +115,11 @@ public class PrimaryOrg extends InternalOrg {
 		return new SimpleDateFormat(dateFormat);
 	}
 	
-	public String getExternalId() {
+	public Long getExternalId() {
 		return externalId;
 	}
 
-	public void setExternalId(String externalId) {
+	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
 	}
 

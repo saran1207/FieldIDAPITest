@@ -1,5 +1,6 @@
-package com.n4systems.handlers.creator;
+package com.n4systems.handlers.creator.signup;
 
+import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.util.timezone.Region;
 
