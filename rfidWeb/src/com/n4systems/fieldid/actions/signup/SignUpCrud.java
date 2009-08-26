@@ -31,6 +31,8 @@ import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
+import com.n4systems.subscription.BillingInfoException;
+import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.SubscriptionAgentFactory;
@@ -143,7 +145,17 @@ public class SignUpCrud extends AbstractCrud {
 
 	private SignUpTenantResponse confirmSubscription() {
 		SubscriptionAgent subscriptionAgent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
-		return subscriptionAgent.buy(signUp.getSignUpStorage(), signUp.getSignUpStorage(), signUp.getSignUpStorage());
+		
+		SignUpTenantResponse response = null;
+		try {
+			response = subscriptionAgent.buy(signUp.getSignUpStorage(), signUp.getSignUpStorage(), signUp.getSignUpStorage());
+		} catch (CommunicationException e) {
+			// TODO SOMETHING!!
+		} catch (BillingInfoException ee) {
+			// TODO SOMETHING ELSE!!
+		}
+		
+		return response;
 	}
 
 	private Tenant createTenant(Transaction transaction) {
