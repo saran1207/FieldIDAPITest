@@ -8,17 +8,16 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.actions.helpers.TimeZoneSelectionHelper;
 import com.n4systems.fieldid.view.model.SignUp;
 import com.n4systems.fieldid.view.model.SignUpPackage;
-import com.n4systems.fieldid.view.model.SignUpStorage;
 import com.n4systems.handlers.creator.BaseSystemSetupDataCreateHandlerImpl;
 import com.n4systems.handlers.creator.BaseSystemStructureCreateHandler;
 import com.n4systems.handlers.creator.BaseSystemStructureCreateHandlerImpl;
 import com.n4systems.handlers.creator.BaseSystemTenantStructureCreateHandlerImpl;
 import com.n4systems.handlers.creator.PrimaryOrgCreateHandler;
 import com.n4systems.handlers.creator.PrimaryOrgCreateHandlerImpl;
-import com.n4systems.model.Tenant;
+import com.n4systems.handlers.creator.SignUpHandlerImpl;
+import com.n4systems.handlers.creator.SignUpRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
@@ -29,15 +28,14 @@ import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
-import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.PersistenceProvider;
+import com.n4systems.persistence.StandardPersistenceProvider;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
-import com.n4systems.subscription.BillingInfoException;
-import com.n4systems.subscription.CommunicationException;
-import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.SubscriptionAgentFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.timezone.TimeZoneSelectionHelper;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 public class SignUpCrud extends AbstractCrud {
@@ -54,7 +52,7 @@ public class SignUpCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		signUp = (sessionContains("signUp")) ? new SignUp((SignUpStorage) getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) : new SignUp(NonSecureLoaderFactory
+		signUp = (sessionContains("signUp")) ? new SignUp((SignUpRequest) getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) : new SignUp(NonSecureLoaderFactory
 				.createTenantUniqueAvailableNameLoader());
 		setSignUpPackageId(signUp.getSignUpPackageId());
 	}
@@ -93,8 +91,7 @@ public class SignUpCrud extends AbstractCrud {
 		testRequiredEntities(false);
 		logger.info(getLogLinePrefix() + "signing up for an account tenant [" + signUp.getTenantName() + "]  package [" + signUpPackage.getName() + "]");
 
-		setSessionVar("signUp", signUp.getSignUpStorage());
-		
+		setSessionVar("signUp", signUp.getSignUpRequest());
 		
 		try {
 			createAccount();
@@ -110,66 +107,26 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	private void createAccount() {
-		
-		Tenant tenant = null;
-		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
-		try {
-			tenant = createTenant(transaction);
-			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
-		} catch (RuntimeException e) {
-			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
-			throw e;
-		}
-		
-		transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
-		try {
-			SignUpTenantResponse signUpTenantResponse = confirmSubscription();
-			completeSystemSetup(transaction, tenant, signUpTenantResponse);
-			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
-		} catch (RuntimeException e) {
-			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
-			removeTenant(transaction, tenant);
-			throw e;
-		}
+		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
+		new SignUpHandlerImpl(getBaseSystemStructureCreateHandler(), getPrimaryOrgCreateHandler(), getSubscriptionAgent(), new TenantSaver()).withPersistenceProvider(persistenceProvider).signUp(signUp.getSignUpRequest());
 	}
 
-	private void completeSystemSetup(Transaction transaction, Tenant tenant, SignUpTenantResponse signUpTenantResponse) {
-		BaseSystemStructureCreateHandler baseSystemCreator = new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
+	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
+		return new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
 				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
-		
-		PrimaryOrgCreateHandler orgCreateHandler = new PrimaryOrgCreateHandlerImpl(new OrganizationSaver(), new UserSaver());
-		
-		baseSystemCreator.forTenant(tenant).create(transaction);
-		orgCreateHandler.forTenant(tenant).forAccountInfo(signUp).create(transaction);
-	}
-
-	private SignUpTenantResponse confirmSubscription() {
-		SubscriptionAgent subscriptionAgent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
-		
-		SignUpTenantResponse response = null;
-		try {
-			response = subscriptionAgent.buy(signUp.getSignUpStorage(), signUp.getSignUpStorage(), signUp.getSignUpStorage());
-		} catch (CommunicationException e) {
-			// TODO SOMETHING!!
-		} catch (BillingInfoException ee) {
-			// TODO SOMETHING ELSE!!
-		}
-		
-		return response;
-	}
-
-	private Tenant createTenant(Transaction transaction) {
-		TenantSaver tenantSaver = new TenantSaver();
-		Tenant tenant = new Tenant();
-		tenant.setName(signUp.getTenantName());
-		tenantSaver.save(transaction, tenant);
-		return tenant;
 	}
 	
-	private void removeTenant(Transaction transaction, Tenant tenant) {
-		TenantSaver tenantSaver = new TenantSaver();
-		tenantSaver.remove(transaction, tenant);
+	private PrimaryOrgCreateHandler getPrimaryOrgCreateHandler() {
+		return new PrimaryOrgCreateHandlerImpl(new OrganizationSaver(), new UserSaver());
 	}
+
+	private SubscriptionAgent getSubscriptionAgent() {
+		return SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+
+	}
+
+	
+	
 
 	public SortedSet<? extends Listable<String>> getCountries() {
 		return TimeZoneSelectionHelper.getCountries();

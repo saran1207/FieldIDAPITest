@@ -24,6 +24,7 @@ abstract public class BaseEntity implements Serializable {
 		this.id = id;
 	}
 	
+	
 	@SuppressWarnings("unused")
 	@PrePersist
 	private void prePersist() {
@@ -76,6 +77,10 @@ abstract public class BaseEntity implements Serializable {
 	
 	public Long getId() {
 		return id;
+	}
+	
+	public Object getIdentifier() {
+		return getId();
 	}
 
 	public void setId(Long id) {

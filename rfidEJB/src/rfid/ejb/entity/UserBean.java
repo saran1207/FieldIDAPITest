@@ -49,12 +49,16 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	private boolean system = false;
 	private boolean admin = false;
 	
+	
+	
 	@Column(name="permissions", nullable=false)
 	private int permissions = 0; // permissions should always start out empty
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "organization_id")
 	private BaseOrg organization;
+	
+	private String externalId;
 	
 	@PrePersist
     protected void prePersist() {
@@ -331,5 +335,13 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 
 	public void setOrganization(BaseOrg organization) {
 		this.organization = organization;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 } 

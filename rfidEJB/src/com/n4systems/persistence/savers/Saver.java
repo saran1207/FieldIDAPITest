@@ -69,7 +69,9 @@ abstract public class Saver<T extends Saveable> implements Deleter<T> {
 	 * Removes an entity using an existing Transaction.
 	 */
 	public void remove(Transaction transaction, T entity) {
-		remove(transaction.getEntityManager(), entity);
+		EntityManager em = transaction.getEntityManager();
+		em.refresh(entity); 
+		remove(em, entity);
 	}
 	
 	/**

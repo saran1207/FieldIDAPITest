@@ -8,14 +8,14 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.view.model.SignUpPackage;
-import com.n4systems.fieldid.view.model.SignUpStorage;
+import com.n4systems.handlers.creator.SignUpRequest;
 
 public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private SignUpPackage signUpPackage;
 	
-	private SignUpStorage priceModifier = new SignUpStorage();
+	private SignUpRequest priceModifier = new SignUpRequest();
 	
 	public SignUpPackagePriceCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);

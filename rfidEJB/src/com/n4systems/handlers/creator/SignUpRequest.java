@@ -1,18 +1,17 @@
-package com.n4systems.fieldid.view.model;
+package com.n4systems.handlers.creator;
 
-import com.n4systems.fieldid.actions.helpers.TimeZoneSelectionHelper;
-import com.n4systems.handlers.creator.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.subscription.AddressInfo;
-import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
+import com.n4systems.util.timezone.TimeZoneSelectionHelper;
 
-public class SignUpStorage implements Subscription, AccountCreationInformation, Company, Person {
+public class SignUpRequest implements Subscription, AccountCreationInformation, Company, Person {
 	private static final long serialVersionUID = 1L;
 	
 	private Long signUpPackageId;
@@ -36,7 +35,7 @@ public class SignUpStorage implements Subscription, AccountCreationInformation, 
 	private Integer numberOfUsers = 1;
 	private boolean phoneSupport;
 	
-	public SignUpStorage() {
+	public SignUpRequest() {
 		this.country = TimeZoneSelectionHelper.defaultCountry();
 	}
 

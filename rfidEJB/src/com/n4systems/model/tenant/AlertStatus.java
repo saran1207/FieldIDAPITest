@@ -37,6 +37,9 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 	public boolean isNew() {
 		return (tenantId == null);
 	}
+	public Object getIdentifier() {
+		return getTenantId();
+	}
 	
 	public Long getTenantId() {
 		return tenantId;

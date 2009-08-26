@@ -68,6 +68,10 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 		return false;
 	}
 	
+	public Object getIdentifier() {
+		return getTenant_id();
+	}
+	
 	public static final void prepareFilter(SecurityFilter filter) {
 		filter.setTargets("r_tenant", null, null, null, null);
 	}

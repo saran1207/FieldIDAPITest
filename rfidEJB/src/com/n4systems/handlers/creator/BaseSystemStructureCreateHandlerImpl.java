@@ -27,6 +27,7 @@ public class BaseSystemStructureCreateHandlerImpl implements BaseSystemStructure
 		tenantStructureCreateHandler.forTenant(tenant).create(transaction);
 		setupDataCreateHandler.forTenant(tenant).create(transaction);
 		
+		
 	}
 
 	private boolean invalidTenant() {

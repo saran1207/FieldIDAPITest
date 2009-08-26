@@ -59,6 +59,8 @@ public class PersistenceManager {
 		}
 	}
 	
+	
+	
 	public static <T> T executeLoader(Loader<T> loader) {
 		T result = null;
 		Transaction transaction = startTransaction();

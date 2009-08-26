@@ -2,6 +2,7 @@ package com.n4systems.fieldid.view.model;
 
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.handlers.creator.AccountCreationInformation;
+import com.n4systems.handlers.creator.SignUpRequest;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 import com.n4systems.subscription.AddressInfo;
@@ -27,16 +28,16 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 public class SignUp implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
 	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
 	
-	private final SignUpStorage signUpStorage;
+	private final SignUpRequest signUpRequest;
 	
 
-	public SignUp(SignUpStorage signUp, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
-		this.signUpStorage = signUp;
+	public SignUp(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
+		this.signUpRequest = signUpRequest;
 		this.uniqueNameLoader = uniqueNameAvailableLoader;
 	}
 	
 	public SignUp(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
-		this(new SignUpStorage(), uniqueNameAvailableLoader);
+		this(new SignUpRequest(), uniqueNameAvailableLoader);
 	}
 	
 	public boolean duplicateValueExists(String formValue) {
@@ -44,141 +45,141 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 	}
 
 	public String getCompanyName() {
-		return signUpStorage.getCompanyName();
+		return signUpRequest.getCompanyName();
 	}
 
 	public Country getCountry() {
-		return signUpStorage.getCountry();
+		return signUpRequest.getCountry();
 	}
 
 	public String getCountryId() {
-		return signUpStorage.getCountryId();
+		return signUpRequest.getCountryId();
 	}
 
 	public String getEmail() {
-		return signUpStorage.getEmail();
+		return signUpRequest.getEmail();
 	}
 
 	
 	public String getFirstName() {
-		return signUpStorage.getFirstName();
+		return signUpRequest.getFirstName();
 	}
 
 	public String getFullTimeZone() {
-		return signUpStorage.getFullTimeZone();
+		return signUpRequest.getFullTimeZone();
 	}
 
 	public String getLastName() {
-		return signUpStorage.getLastName();
+		return signUpRequest.getLastName();
 	}
 
 	public Integer getNumberOfUsers() {
-		return signUpStorage.getNumberOfUsers();
+		return signUpRequest.getNumberOfUsers();
 	}
 
 	public String getPassword() {
-		return signUpStorage.getPassword();
+		return signUpRequest.getPassword();
 	}
 
 	public String getPasswordConfirm() {
-		return signUpStorage.getPasswordConfirm();
+		return signUpRequest.getPasswordConfirm();
 	}
 
 	public String getPhoneNumber() {
-		return signUpStorage.getPhoneNumber();
+		return signUpRequest.getPhoneNumber();
 	}
 
 	public Region getRegion() {
-		return signUpStorage.getRegion();
+		return signUpRequest.getRegion();
 	}
 
 	public SignUpPackage getSignUpPackage() {
-		return signUpStorage.getSignUpPackage();
+		return signUpRequest.getSignUpPackage();
 	}
 
 	public Long getSignUpPackageId() {
-		return signUpStorage.getSignUpPackageId();
+		return signUpRequest.getSignUpPackageId();
 	}
 
-	public SignUpStorage getSignUpStorage() {
-		return signUpStorage;
+	public SignUpRequest getSignUpRequest() {
+		return signUpRequest;
 	}
 
 	public String getTenantName() {
-		return signUpStorage.getTenantName();
+		return signUpRequest.getTenantName();
 	}
 
 	public String getTimeZone() {
-		return signUpStorage.getTimeZone();
+		return signUpRequest.getTimeZone();
 	}
 
 	public String getUsername() {
-		return signUpStorage.getUsername();
+		return signUpRequest.getUsername();
 	}
 
 	public boolean isNew() {
-		return signUpStorage.isNew();
+		return signUpRequest.isNew();
 	}
 
 	public boolean isPhoneSupport() {
-		return signUpStorage.isPhoneSupport();
+		return signUpRequest.isPhoneSupport();
 	}
 
 	@RequiredStringValidator(message="", key="error.company_name_required")
 	public void setCompanyName(String companyName) {
-		signUpStorage.setCompanyName(companyName);
+		signUpRequest.setCompanyName(companyName);
 	}
 
 	public void setCountryId(String countryId) {
-		signUpStorage.setCountryId(countryId);
+		signUpRequest.setCountryId(countryId);
 	}
 
 	@RequiredStringValidator(message="", key="error.email")
 	@EmailValidator(message="", key="error.email")
 	public void setEmail(String email) {
-		signUpStorage.setEmail(email);
+		signUpRequest.setEmail(email);
 	}
 
 	@RequiredStringValidator(message="", key="error.first_name_required")
 	@StringLengthFieldValidator(message="", key="error.first_name_length", maxLength="255")
 	public void setFirstName(String firstName) {
-		signUpStorage.setFirstName(firstName);
+		signUpRequest.setFirstName(firstName);
 	}
 
 	@RequiredStringValidator(message="", key="error.last_name_required")
 	@StringLengthFieldValidator(message="", key="error.last_name_length", maxLength="255")
 	public void setLastName(String lastName) {
-		signUpStorage.setLastName(lastName);
+		signUpRequest.setLastName(lastName);
 	}
 
 	@RequiredFieldValidator(message="", key="error.number_of_users_required")
 	@IntRangeFieldValidator(message="", key="error.number_of_users_minimum", min="1")
 	public void setNumberOfUsers(Integer numberOfUsers) {
-		signUpStorage.setNumberOfUsers(numberOfUsers);
+		signUpRequest.setNumberOfUsers(numberOfUsers);
 	}
 
 	@RequiredStringValidator(type=ValidatorType.FIELD, message="", key="error.passwordrequired")
 	@StringLengthFieldValidator(type=ValidatorType.FIELD, message="", key="errors.passwordlength", minLength="5") 
 	public void setPassword(String password) {
-		signUpStorage.setPassword(password);
+		signUpRequest.setPassword(password);
 	}
 	
 	@FieldExpressionValidator(expression="passwordConfirm == password", message="", key="error.passwordsmustmatch")
 	public void setPasswordConfirm(String passwordConfirm) {
-		signUpStorage.setPasswordConfirm(passwordConfirm);
+		signUpRequest.setPasswordConfirm(passwordConfirm);
 	}
 
 	@RequiredStringValidator(message="", key="error.phone_number_required")
 	public void setPhoneNumber(String phoneNumber) {
-		signUpStorage.setPhoneNumber(phoneNumber);
+		signUpRequest.setPhoneNumber(phoneNumber);
 	}
 
 	public void setPhoneSupport(boolean phoneSupport) {
-		signUpStorage.setPhoneSupport(phoneSupport);
+		signUpRequest.setPhoneSupport(phoneSupport);
 	}
 
 	public void setSignUpPackageId(Long signUpPackageId) {
-		signUpStorage.setSignUpPackageId(signUpPackageId);
+		signUpRequest.setSignUpPackageId(signUpPackageId);
 	}
 
 	@RequiredStringValidator(message="", key="error.tenant_name_required")
@@ -186,20 +187,20 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 	@RegexFieldValidator(expression="^[\\w][\\w\\-]*[\\w]$", message = "", key="error.tenant_name_format")
 	@CustomValidator(type="uniqueValue", message = "", key="error.name_already_used")
 	public void setTenantName(String tenantName) {
-		signUpStorage.setTenantName(tenantName);
+		signUpRequest.setTenantName(tenantName);
 	}
 
 	
 	@RequiredStringValidator(message="", key="error.time_zone_name_required")
 	public void setTimeZone(String regionId) {
-		signUpStorage.setTimeZone(regionId);
+		signUpRequest.setTimeZone(regionId);
 	}
 
 	@RequiredStringValidator(message="", key="error.username_required")
 	@FieldExpressionValidator(expression="(username != restrictedUsername)", message="", key="error.reserved_username")
 	@StringLengthFieldValidator(message = "" , key="errors.useridlength", maxLength="15")
 	public void setUsername(String username) {
-		signUpStorage.setUsername(username);
+		signUpRequest.setUsername(username);
 		ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME);
 	}
 	
@@ -208,55 +209,55 @@ public class SignUp implements Subscription, AccountCreationInformation, HasDupl
 	}
 
 	public AddressInfo getBillingAddress() {
-		return signUpStorage.getBillingAddress();
+		return signUpRequest.getBillingAddress();
 	}
 
 	public CreditCard getCreditCard() {
-		return signUpStorage.getCreditCard();
+		return signUpRequest.getCreditCard();
 	}
 
 	public Long getExternalId() {
-		return signUpStorage.getExternalId();
+		return signUpRequest.getExternalId();
 	}
 
 	public String getFieldId() {
-		return signUpStorage.getFieldId();
+		return signUpRequest.getFieldId();
 	}
 
 	public PaymentFrequency getFrequency() {
-		return signUpStorage.getFrequency();
+		return signUpRequest.getFrequency();
 	}
 
 	public int getMonths() {
-		return signUpStorage.getMonths();
+		return signUpRequest.getMonths();
 	}
 
 	public String getPhone() {
-		return signUpStorage.getPhone();
+		return signUpRequest.getPhone();
 	}
 
 	public String getReferralCode() {
-		return signUpStorage.getReferralCode();
+		return signUpRequest.getReferralCode();
 	}
 
 	public AddressInfo getShippingAddress() {
-		return signUpStorage.getShippingAddress();
+		return signUpRequest.getShippingAddress();
 	}
 
 	public String getUrl() {
-		return signUpStorage.getUrl();
+		return signUpRequest.getUrl();
 	}
 
 	public int getUsers() {
-		return signUpStorage.getUsers();
+		return signUpRequest.getUsers();
 	}
 
 	public boolean isPurchasingPhoneSupport() {
-		return signUpStorage.isPurchasingPhoneSupport();
+		return signUpRequest.isPurchasingPhoneSupport();
 	}
 
 	public boolean isUsingCreditCard() {
-		return signUpStorage.isUsingCreditCard();
+		return signUpRequest.isUsingCreditCard();
 	}
 
 

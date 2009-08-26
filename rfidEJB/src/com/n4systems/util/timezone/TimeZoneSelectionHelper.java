@@ -1,11 +1,9 @@
-package com.n4systems.fieldid.actions.helpers;
+package com.n4systems.util.timezone;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.n4systems.model.api.Listable;
-import com.n4systems.util.timezone.Country;
-import com.n4systems.util.timezone.CountryList;
 
 public class TimeZoneSelectionHelper {
 

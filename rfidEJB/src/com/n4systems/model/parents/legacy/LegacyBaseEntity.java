@@ -18,6 +18,9 @@ abstract public class LegacyBaseEntity implements Serializable {
 	public Long getUniqueID() {
 		return uniqueID;
 	}
+	public Object getIdentifier() {
+		return getUniqueID();
+	}
 
 	public void setUniqueID(Long uniqueID) {
 		this.uniqueID = uniqueID;

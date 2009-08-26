@@ -13,7 +13,6 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
-import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DataUnit;
@@ -24,11 +23,7 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	
 	private AccountCreationInformation accountInfo;
 	private Tenant tenant;
-	private SignUpTenantResponse signUpTenantResponse;
 
-
-
-	
 	
 	public PrimaryOrgCreateHandlerImpl(OrganizationSaver orgSaver, UserSaver userSaver) {
 		super();
@@ -37,6 +32,10 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	}
 
 	public void create(Transaction transaction) {
+		createWithUndoInformation(transaction);
+	}
+	
+	public PrimaryOrg createWithUndoInformation(Transaction transaction) {
 		guards();
 		
 		PrimaryOrg primaryOrg = createPrimaryOrg();
@@ -44,6 +43,7 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		orgSaver.save(transaction, primaryOrg);
 		userSaver.save(transaction, createSystemUser(primaryOrg));
 		userSaver.save(transaction, createAdminUser(primaryOrg));
+		return primaryOrg;
 		
 		
 	}
@@ -128,13 +128,15 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 			throw new InvalidArgumentException("you must set a saved tenant.");
 		}
 		
-		if (signUpTenantResponse == null) {
-			throw new InvalidArgumentException("you must have an approved subscription.");
-		}
 	}
 
 	private boolean invalidTenant() {
 		return tenant == null || tenant.isNew();
+	}
+	
+	
+	public void undo(Transaction transaction, PrimaryOrg primaryOrgToRemove) {
+		orgSaver.remove(transaction, primaryOrgToRemove);
 	}
 	
 	public PrimaryOrgCreateHandler forAccountInfo(AccountCreationInformation accountInfo) {
@@ -148,8 +150,4 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		return this;
 	}
 
-	public PrimaryOrgCreateHandler withApprovedSubscription(SignUpTenantResponse signUpTenantResponse) {
-		this.signUpTenantResponse = signUpTenantResponse;
-		return this;
-	}
 }

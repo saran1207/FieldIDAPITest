@@ -58,6 +58,10 @@ public class NotificationSettingOwner implements Serializable, EntityWithCustome
 	public Long getId() {
     	return id;
     }
+	
+	public Object getIdentifier() {
+		return getId();
+	}
 
 	public void setId(Long id) {
     	this.id = id;
