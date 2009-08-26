@@ -100,9 +100,9 @@ public class RestfulTest {
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
 		
 		SignUpTenantClient signUpTenantClient = new SignUpTenantClient();
-		signUpTenantClient.setClient(populateTestClient());
+		signUpTenantClient.setPerson(populateTestClient());
 		signUpTenantClient.setSubscription(populateTestSubscription());
-		signUpTenantClient.setTenant(populateTestTenant());
+		signUpTenantClient.setCompany(populateTestTenant());
 		
 		try {
 			NetsuiteSignUpTenantResponse tenantResponse = signUpTenantClient.execute();

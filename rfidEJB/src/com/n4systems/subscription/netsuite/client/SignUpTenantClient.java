@@ -1,15 +1,15 @@
 package com.n4systems.subscription.netsuite.client;
 
-import com.n4systems.subscription.netsuite.model.NetsuiteClient;
-import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
-import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
+import com.n4systems.subscription.Company;
+import com.n4systems.subscription.Person;
+import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
-public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTenantResponse> implements com.n4systems.subscription.SignUpTenantClient {
+public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTenantResponse> {
 
-	private NetsuiteTenant tenant;
-	private NetsuiteClient client;
-	private NetsuiteSubscription subscription;
+	private Company company;
+	private Person person;
+	private Subscription subscription;
 	
 	public SignUpTenantClient() {
 		super(NetsuiteSignUpTenantResponse.class, "signuptenant");
@@ -17,53 +17,53 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 	
 	@Override
 	protected void addRequestParameters() {
-		addRequestParameter("companyname", tenant.getCompanyName());
-		addRequestParameter("fieldid", tenant.getFieldId());
+		addRequestParameter("companyname", company.getCompanyName());
+		addRequestParameter("fieldid", company.getFieldId());
 		
-		if (tenant.getPhone() != null) {
-			addRequestParameter("phone", tenant.getPhone());
+		if (company.getPhone() != null) {
+			addRequestParameter("phone", company.getPhone());
 		}
 		
-		addRequestParameter("email", tenant.getEmail());		
-		addRequestParameter("billingaddressline1", tenant.getBillingAddress().getAddressLine1());
+		addRequestParameter("email", company.getEmail());		
+		addRequestParameter("billingaddressline1", company.getBillingAddress().getAddressLine1());
 		
-		if (tenant.getBillingAddress().getAddressLine2() != null) {
-			addRequestParameter("billingaddressline2", tenant.getBillingAddress().getAddressLine2());
+		if (company.getBillingAddress().getAddressLine2() != null) {
+			addRequestParameter("billingaddressline2", company.getBillingAddress().getAddressLine2());
 		}
 		
-		addRequestParameter("billingcity", tenant.getBillingAddress().getCity());
-		addRequestParameter("billingstate", tenant.getBillingAddress().getState());
-		addRequestParameter("billingcountry", tenant.getBillingAddress().getCountry());
-		addRequestParameter("billingpostal", tenant.getBillingAddress().getPostal());
-		addRequestParameter("shippingaddressline1", tenant.getShippingAddress().getAddressLine1());
+		addRequestParameter("billingcity", company.getBillingAddress().getCity());
+		addRequestParameter("billingstate", company.getBillingAddress().getState());
+		addRequestParameter("billingcountry", company.getBillingAddress().getCountry());
+		addRequestParameter("billingpostal", company.getBillingAddress().getPostal());
+		addRequestParameter("shippingaddressline1", company.getShippingAddress().getAddressLine1());
 		
-		if (tenant.getShippingAddress().getAddressLine2() != null) {
-			addRequestParameter("shippingaddressline2", tenant.getShippingAddress().getAddressLine2());
+		if (company.getShippingAddress().getAddressLine2() != null) {
+			addRequestParameter("shippingaddressline2", company.getShippingAddress().getAddressLine2());
 		}
 		
-		addRequestParameter("shippingcity", tenant.getShippingAddress().getCity());
-		addRequestParameter("shippingstate", tenant.getShippingAddress().getState());
-		addRequestParameter("shippingcountry", tenant.getShippingAddress().getCountry());
-		addRequestParameter("shippingpostal", tenant.getShippingAddress().getPostal());
+		addRequestParameter("shippingcity", company.getShippingAddress().getCity());
+		addRequestParameter("shippingstate", company.getShippingAddress().getState());
+		addRequestParameter("shippingcountry", company.getShippingAddress().getCountry());
+		addRequestParameter("shippingpostal", company.getShippingAddress().getPostal());
 		
-		if (tenant.getUrl() != null) {
-			addRequestParameter("url", tenant.getUrl());
+		if (company.getUrl() != null) {
+			addRequestParameter("url", company.getUrl());
 		}
 				
-		addRequestParameter("prefercc", tenant.isUsingCreditCard() ? "T" : "F");
-		if (tenant.isUsingCreditCard()) {
-			addRequestParameter("ccnumber", tenant.getCreditCard().getNumber());
-			addRequestParameter("cctype", tenant.getCreditCard().getType().getCode());
-			addRequestParameter("ccexp", tenant.getCreditCard().getExpiry());
-			addRequestParameter("ccname", tenant.getCreditCard().getName());
+		addRequestParameter("prefercc", company.isUsingCreditCard() ? "T" : "F");
+		if (company.isUsingCreditCard()) {
+			addRequestParameter("ccnumber", company.getCreditCard().getNumber());
+			addRequestParameter("cctype", company.getCreditCard().getType().getCode());
+			addRequestParameter("ccexp", company.getCreditCard().getExpiry());
+			addRequestParameter("ccname", company.getCreditCard().getName());
 			
 		}
 		
-		addRequestParameter("firstname", client.getFirstName());
-		addRequestParameter("lastname", client.getLastName());
-		addRequestParameter("clientfieldid", client.getFieldId());
+		addRequestParameter("firstname", person.getFirstName());
+		addRequestParameter("lastname", person.getLastName());
+		addRequestParameter("clientfieldid", person.getFieldId());
 		
-		addRequestParameter("itemid", String.valueOf(subscription.getNetsuiteRecordId()));
+		addRequestParameter("itemid", String.valueOf(subscription.getExternalId()));
 		addRequestParameter("months", String.valueOf(subscription.getMonths()));
 		addRequestParameter("frequency", subscription.getFrequency().getCode());
 		addRequestParameter("numusers", String.valueOf(subscription.getUsers()));
@@ -73,16 +73,15 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		}		
 	}
 
-	public void setTenant(NetsuiteTenant tenant) {
-		this.tenant = tenant;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
-	public void setClient(NetsuiteClient client) {
-		this.client = client;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
-	public void setSubscription(NetsuiteSubscription subscription) {
+	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
 	}
-
 }
