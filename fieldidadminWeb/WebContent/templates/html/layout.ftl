@@ -14,7 +14,7 @@
 <h1>Administration Console</h1>
 </div>
 <ul id="nav">
-<li><a href="organizationList.action">Organizations</a></li>
+<li><a href="organizations.action">Organizations</a></li>
 <li><a href="eulas.action">EULA</a></li>
 <li><a href="instructionalVideos.action">Instructional Videos</a></li>
 <li><a href="findProductOptionList.action">Find Product Option</a></li>
