@@ -1,21 +1,23 @@
 package com.n4systems.fieldid.actions.signup;
 
-import java.util.Random;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.view.model.SignUpPackage;
+import com.n4systems.fieldid.actions.signup.view.model.SignUpPackage;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
+import com.n4systems.subscription.PriceCheckResponse;
+import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.SubscriptionAgentFactory;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 
 public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private SignUpPackage signUpPackage;
 	
-	private SignUpRequest priceModifier = new SignUpRequest();
+	private SignUpRequest subscription = new SignUpRequest();
+	
 	
 	public SignUpPackagePriceCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -39,41 +41,37 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 	}
 
 	
-	@SkipValidation
+	
 	public String doShow() {
-		testRequiredEntities();
+		//testRequiredEntities();
 		
 		return SUCCESS;
 	}
 	
 	
 	public Long getPrice() {
-		return new Random().nextLong();
+		SubscriptionAgent agent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+		try {
+			PriceCheckResponse price = agent.priceCheck(getSignUp());
+			return price.getPricing().getDiscountTotal().longValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0L;
+	}
+	
+	public SignUpRequest getSignUp() {
+		return subscription;
 	}
 
-	public int getNumberOfUsers() {
-		return priceModifier.getNumberOfUsers();
+
+	public String getSignUpPackageId() {
+		return  subscription.getSignUpPackage().getName();
 	}
 
-	public Long getSignUpPackageId() {
-		return priceModifier.getSignUpPackageId();
+	public void setSignUpPackageId(String signUpPackageId) {
+		subscription.setSignUpPackage(new SignUpPackage(signUpPackageId).getSignUpPackage());
 	}
-
-	public boolean isPurchasingPhoneSupport() {
-		return priceModifier.isPurchasingPhoneSupport();
-	}
-
-	public void setNumberOfUsers(int numberOfUsers) {
-		priceModifier.setNumberOfUsers(numberOfUsers);
-	}
-
-	public void setPurchasingPhoneSupport(boolean phoneSupport) {
-		priceModifier.setPurchasingPhoneSupport(phoneSupport);
-	}
-
-	public void setSignUpPackageId(Long signUpPackageId) {
-		priceModifier.setSignUpPackageId(signUpPackageId);
-		this.signUpPackage =  new SignUpPackage(signUpPackageId, "basic", 40, false, 1L);
-	}
+	
 
 }

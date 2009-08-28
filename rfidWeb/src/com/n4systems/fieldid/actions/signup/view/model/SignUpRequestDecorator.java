@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.view.model;
+package com.n4systems.fieldid.actions.signup.view.model;
 
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
@@ -6,11 +6,12 @@ import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 import com.n4systems.subscription.AddressInfo;
-import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Company;
+import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.PaymentOption;
+import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Subscription;
-import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.timezone.Country;
@@ -29,11 +30,18 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
 	
 	private final SignUpRequest signUpRequest;
-	
+	private final CreditCardDecorator creditCard;
+	private final AddressInfoDecorator address;
 
+	public SignUpRequestDecorator() {
+		this(new SignUpRequest(), null);
+	}
+	
 	public SignUpRequestDecorator(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
 		this.signUpRequest = signUpRequest;
 		this.uniqueNameLoader = uniqueNameAvailableLoader;
+		this.creditCard = new CreditCardDecorator(signUpRequest.getCreditCard());
+		this.address = new AddressInfoDecorator(signUpRequest.getBillingAddress());
 	}
 	
 	public SignUpRequestDecorator(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
@@ -97,9 +105,6 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getSignUpPackage();
 	}
 
-	public Long getSignUpPackageId() {
-		return signUpRequest.getSignUpPackageId();
-	}
 
 	public SignUpRequest getSignUpRequest() {
 		return signUpRequest;
@@ -172,8 +177,8 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		signUpRequest.setPhoneNumber(phoneNumber);
 	}
 
-	public void setSignUpPackageId(Long signUpPackageId) {
-		signUpRequest.setSignUpPackageId(signUpPackageId);
+	public void setSignUpPackage(SignUpPackage signUpPackageId) {
+		signUpRequest.setSignUpPackage(signUpPackageId);
 	}
 
 	@RequiredStringValidator(message="", key="error.tenant_name_required")
@@ -201,17 +206,17 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public String getRestrictedUsername() {
 		return ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME);
 	}
-
+	
 	public AddressInfo getBillingAddress() {
-		return signUpRequest.getBillingAddress();
+		return address;
 	}
 
 	public CreditCard getCreditCard() {
-		return signUpRequest.getCreditCard();
+		return creditCard;
 	}
 
-	public Long getExternalId() {
-		return signUpRequest.getExternalId();
+	public String getSyncId() {
+		return signUpRequest.getSyncId();
 	}
 
 
@@ -257,5 +262,17 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 
 	public String getPromoCode() {
 		return signUpRequest.getPromoCode();
+	}
+
+	public String getPaymentOption() {
+		return signUpRequest.getPaymentOption();
+	}
+
+	public void setPaymentOption(String paymentOption) {
+		signUpRequest.setPaymentOption(paymentOption);
+	}
+
+	public PaymentOption[] getPaymentOptions() {
+		return PaymentOption.values();
 	}
 }

@@ -1,6 +1,5 @@
 package com.n4systems.subscription;
 
-import com.n4systems.subscription.netsuite.model.CreditCard;
 
 public interface Company {
 

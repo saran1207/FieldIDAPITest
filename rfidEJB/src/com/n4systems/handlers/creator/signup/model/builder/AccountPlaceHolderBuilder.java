@@ -12,14 +12,8 @@ import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 
-
-
-
 public class AccountPlaceHolderBuilder {
 
-	
-	
-	
 	public static AccountPlaceHolderBuilder anAccountPlaceHolder() {
 		return new AccountPlaceHolderBuilder();
 	}

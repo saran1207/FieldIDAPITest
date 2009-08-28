@@ -34,7 +34,8 @@ public class RequiredTenantInterceptor extends AbstractInterceptor {
 			return AbstractAction.REDIRECT_TO_URL;
 		}
 		
-		return invocation.invoke();
+		String invoke = invocation.invoke();
+		return invoke;
 		
 	}
 

@@ -14,7 +14,7 @@ public class PricingDetailsClient extends AbstractNetsuiteClient<GetPricingDetai
 	
 	@Override
 	protected void addRequestParameters() {
-		addRequestParameter("itemid", subscription.getExternalId().toString());
+		addRequestParameter("itemid", subscription.getSyncId().toString());
 		addRequestParameter("contractlength", subscription.getMonths().toString());
 		addRequestParameter("frequency", subscription.getFrequency().getCode());
 		addRequestParameter("numusers", subscription.getUsers().toString());

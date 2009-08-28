@@ -1,8 +1,8 @@
 package com.n4systems.subscription.local;
 
 import com.n4systems.subscription.CommunicationException;
-import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Company;
+import com.n4systems.subscription.Person;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
@@ -13,7 +13,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 
 	@Override
 	public SignUpTenantResponse buy(Subscription subscription, Company company, Person client) {
-		return null;
+		return new LocalSignUpTenantResponse();
 	}
 
 	@Override
@@ -21,8 +21,12 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		return new LocalValidatePromoCodeResponse();
 	}
 
+	
 	@Override
 	public PriceCheckResponse priceCheck(Subscription subscription)	throws CommunicationException {
+		if (subscription.getFrequency() == null || subscription.getMonths() == null || subscription.getSyncId() == null) {
+			throw new RuntimeException();
+		}
 		return new LocalPriceCheckResponse();
 	}
 

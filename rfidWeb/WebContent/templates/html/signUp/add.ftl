@@ -17,11 +17,8 @@
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<div class="infoSection multiColumn">
+		<h2><@s.text name="label.about_you"/></h2>
 		<div class="infoBlock">
-			<div class="infoSet">
-				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
-				<@s.textfield name="signUp.companyName"/>
-			</div>
 			<div class="infoSet">
 				<label class="label" for="firstName"><@s.text name="label.first_name"/></label>
 				<@s.textfield name="signUp.firstName"/>
@@ -35,14 +32,10 @@
 				<@s.textfield name="signUp.email"/>
 			</div>
 			
-			<div class="infoSet">
-				<label class="label" for="phoneNumber"><@s.text name="label.phonenumber"/></label>
-				<@s.textfield  name="signUp.phoneNumber"  />
-			</div>
 			
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.country"/></label>
-				<@s.select name="signUp.countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone"/>
+				<@s.select name="signUp.countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone setsCountry"/>
 			</div>
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.timezone"/></label>
@@ -64,10 +57,52 @@
 				<@s.password name="signUp.passwordConfirm"/>
 			</div>
 		</div>
+		
+		
+		
+		
+		
 	</div>
 	
 	<hr/>
+	<div class="infoSection">
+		<h2><@s.text name="label.company_info"/></h2>
+		<div class="infoBlock">
+			<div class="infoSet">
+				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
+				<@s.textfield name="signUp.companyName"/>
+			</div>
+			
+			<div class="infoSet">
+				<label class="label" for="addressLines"><@s.text name="label.address"/></label>
+				<@s.textfield name="address.addressLine1"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="city"><@s.text name="label.city"/></label>
+				<@s.textfield name="address.city"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="state"><@s.text name="label.state"/></label>
+				<@s.textfield name="address.state"/>
+			</div>
+			
+			<div class="infoSet">
+				<label class="label" for="country"><@s.text name="label.country"/></label>
+				<@s.textfield name="address.country" cssClass="country"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="postal"><@s.text name="label.zipcode"/></label>
+				<@s.textfield name="address.postal"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="phoneNumber"><@s.text name="label.phonenumber"/></label>
+				<@s.textfield  name="signUp.phoneNumber"  />
+			</div>
+		</div>
+	</div>
+	<hr/>
 	<div class="infoSection infoBlock">
+		<h2><@s.text name="label.site_address"/></h2>
 		<div class="infoSet">
 			<label class="label" for="tenantName"><@s.text name="label.site_address"/></label>
 			<span class="fieldHolder">
@@ -77,25 +112,92 @@
 	</div>
 	<hr/>
 	<div class="infoSection">
-		<div class="infoBlock fluidSets">
+		<h2><@s.text name="label.payment_options"/></h2>
+		<div class="infoBlock ">
 			<div class="infoSet">
 				<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
 				<span class="fieldHolder shortField"><@s.textfield name="signUp.numberOfUsers" theme="simple" cssClass="changesPrice"/></span>
 			</div>
 			
 			<div class="infoSet">
-				<label class="label" for="purchasePhoneSupport"><@s.text name="label.phone_support"/></label>
-				<span class="fieldHolder shortField"><@s.checkbox name="signUp.purchasePhoneSupport" theme="simple" cssClass="changesPrice"/></span>
+				<label class="label" for="purchasePhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasePhoneSupport" theme="simple" cssClass="changesPrice"/><span></label>
 			</div>
 		
+		</div>
+	</div>
+	<hr/>
+	<div class="infoSection">
+		<h2><@s.text name="label.promo_code"/></h2>
+		<div class="infoBlock ">
+			<div class="infoSet">
+				<label class="label" for="promoCode"><@s.text name="label.promo_code"/></label>
+				<span class="fieldHolder shortField"><@s.textfield name="signUp.promoCode" theme="fieldidSimple" cssClass="changesPrice"/></span>
+			</div>
+			
+					
 		</div>
 	</div>
 	
 	<hr/>
 	
 	<div class="infoSection">
+		<h2><@s.text name="label.payment_options"/></h2>
+		<div class="infoBlock ">
+			<div class="infoSet">
+				<ul>
+					<#list signUp.paymentOptions as paymentOption>
+						<li class="favouredChoice"><@s.radio name="signUp.paymentOption" list="'${paymentOption}'"  label="'${paymentOption.name()}'" theme="simple" cssClass="changesPrice"/></li>
+					</#list>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<hr/>
+	
+	<div class="infoSection" id="creditCardInformation">
+		<div class="multiColumn">
+			<div class="infoBlock" >
+				<a href="#">Pay by Credit Card</a>
+				<div id="payByCC">
+					<div class="infoSet">
+						<label class="label" for="creditCard.type"><@s.text name="label.credit_card_type"/></label>
+						<@s.select name="creditCard.cCType" list="creditCard.creditCardTypes" listKey="name()" listValue="name()" cssClass="autoSize"/>
+					</div>
+					
+					<div class="infoSet">
+						<label class="label" for="creditCard.name"><@s.text name="label.name_on_card"/></label>
+						<@s.textfield name="creditCard.name"/>
+					</div>
+					
+					<div class="infoSet">
+						<label class="label" for="creditCard.number"><@s.text name="label.credit_card_number"/></label>
+						<@s.textfield name="creditCard.number"/>
+					</div>
+					
+					<div class="infoSet">
+						<label class="label" for="creditCard.expiry"><@s.text name="label.expiry_date"/></label>
+						<span class="fieldHolder">
+							<@s.select name="creditCard.expiryMonth" list="creditCard.months" theme="fieldidSimple" cssClass="autoSize"/> <@s.text name="label.date_seperator"/> <@s.select name="creditCard.expiryYear" list="creditCard.years" theme="fieldidSimple" cssClass="autoSize"/>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="infoBlock">
+				<a href="#">Pay by Purchase order</a> [?]
+				<div id="payByPO">
+					<div class="infoSet">
+						<label class="label" for="po.number"><@s.text name="label.po_number"/></label>
+						<@s.textfield name="signUp.po_number"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<div class="infoSection">
 		<div class="infoBlock">
-			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">????</span>  <@s.reset key="label.update_price" cssClass="updatePrice"/>
+			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span>  <@s.reset key="label.update_price" cssClass="updatePrice"/>
 		</div>
 	</div>
 	

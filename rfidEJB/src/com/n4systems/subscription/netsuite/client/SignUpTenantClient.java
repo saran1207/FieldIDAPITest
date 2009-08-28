@@ -63,7 +63,7 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		addRequestParameter("lastname", person.getLastName());
 		addRequestParameter("clientn4id", person.getN4Id());
 		
-		addRequestParameter("itemid", String.valueOf(subscription.getExternalId()));
+		addRequestParameter("itemid", String.valueOf(subscription.getSyncId()));
 		addRequestParameter("months", String.valueOf(subscription.getMonths()));
 		addRequestParameter("frequency", subscription.getFrequency().getCode());
 		addRequestParameter("numusers", String.valueOf(subscription.getUsers()));

@@ -1,18 +1,16 @@
-package com.n4systems.fieldid.view.model;
+package com.n4systems.fieldid.actions.signup.view.model;
+
+import com.n4systems.model.tenant.TenantLimit;
 
 public class SignUpPackage {
-	private Long id;
 	private int priceInDollars;
-	private boolean preferred;
 	private com.n4systems.model.signuppackage.SignUpPackage signUpPackage;
 	
 
-	public SignUpPackage(Long id, String name, int priceInDollars, boolean preferred, Long numberOfUsers) {
+	public SignUpPackage(String name) {
 		super();
-		this.id = id;
 		this.signUpPackage = com.n4systems.model.signuppackage.SignUpPackage.valueOf(name);
-		this.priceInDollars = priceInDollars;
-		this.preferred = preferred;
+		
 	}
 
 	public com.n4systems.model.signuppackage.SignUpPackage getSignUpPackage() {
@@ -28,15 +26,16 @@ public class SignUpPackage {
 	}
 
 	public boolean isPreferred() {
-		return preferred;
+		return (signUpPackage == com.n4systems.model.signuppackage.SignUpPackage.Enterprise);
 	}
 
-	public Long getNumberOfUsers() {
-		return signUpPackage.getUsers();
+	public String getNumberOfUsersLabel() {
+		if (signUpPackage.getUsers().equals(TenantLimit.UNLIMITED)) { 
+			return "label.unlimited";
+		}
+		
+		return signUpPackage.getUsers().toString();
 	}
 
-	public Long getId() {
-		return id;
-	}
 
 }

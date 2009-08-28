@@ -7,8 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.view.model.SignUpPackage;
-import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.fieldid.actions.signup.view.model.SignUpPackage;
 
 public class SignUpPackageAction extends AbstractAction {
 
@@ -30,11 +29,11 @@ public class SignUpPackageAction extends AbstractAction {
 	public List<SignUpPackage> getPackages() {
 		if (packages == null) {
 			packages = new ArrayList<SignUpPackage>();
-			packages.add(new SignUpPackage(1L, "Free", 0, false, 1L));
-			packages.add(new SignUpPackage(2L, "Basic", 40, false, 5L));
-			packages.add(new SignUpPackage(3L, "Plus", 100, false, TenantLimit.UNLIMITED));
-			packages.add(new SignUpPackage(4L, "Enterprise", 175, true, TenantLimit.UNLIMITED));
-			packages.add(new SignUpPackage(5L,  "Unlimited", 225, false, TenantLimit.UNLIMITED));
+			packages.add(new SignUpPackage("Free"));
+			packages.add(new SignUpPackage("Basic"));
+			packages.add(new SignUpPackage("Plus"));
+			packages.add(new SignUpPackage("Enterprise"));
+			packages.add(new SignUpPackage("Unlimited"));
 		}
 		return packages;
 	}

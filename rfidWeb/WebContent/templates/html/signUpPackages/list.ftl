@@ -29,7 +29,7 @@
 				<td class="description"><@s.text name="label.users"/></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
-						${(package.numberOfUsers != -1)?string(package.numberOfUsers?html, action.getText('label.unlimited'))}
+						<@s.text name="${package.numberOfUsersLabel}"/>
 					</td>
 				</#list>
 			</tr>
@@ -39,7 +39,7 @@
 				<td class="description"></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
-						<a href="<@s.url action="signUpAdd" signUpPackageId="${package.id}"/>"><@s.text name="label.sign_up_now"/></a>
+						<a href="<@s.url action="signUpAdd" signUpPackageId="${package.name}"/>"><@s.text name="label.sign_up_now"/></a>
 					</td>
 				</#list>
 			</tr>

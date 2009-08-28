@@ -2,6 +2,7 @@ package com.n4systems.subscription.local;
 
 import com.n4systems.subscription.ExternalIdResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
+import com.n4systems.subscription.Subscription;
 
 public class LocalSignUpTenantResponse implements SignUpTenantResponse {
 
@@ -9,8 +10,8 @@ public class LocalSignUpTenantResponse implements SignUpTenantResponse {
 		return new LocalExternalIdResponse(1L);
 	}
 
-	public ExternalIdResponse getSubscription() {
-		return new LocalExternalIdResponse(1L);
+	public Subscription getSubscription() {
+		return null;
 	}
 
 	public ExternalIdResponse getTenant() {

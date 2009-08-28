@@ -28,8 +28,8 @@ public class SubscriptionApprovalHandlerImpl implements SubscriptionApprovalHand
 	public void applyApproval(Transaction transaction) {
 		adminUser.setExternalId(subscriptionApproval.getClient().getExternalId());
 		primaryOrg.setExternalId(subscriptionApproval.getTenant().getExternalId());
-		userSaver.save(transaction, adminUser);
-		orgSaver.save(transaction, primaryOrg);
+		userSaver.update(transaction, adminUser);
+		orgSaver.update(transaction, primaryOrg);
 	}
 	
 	public SubscriptionApprovalHandler forSubscriptionApproval(SignUpTenantResponse subscriptionApproval) {

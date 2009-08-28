@@ -4,3 +4,5 @@ var errors =  '';
 	errors += '${error!} ' + "\n";
 </#list>
 alert( errors );
+
+<@s.fielderror/>

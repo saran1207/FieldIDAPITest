@@ -3,10 +3,11 @@ package com.n4systems.handlers.creator.signup.model;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.Company;
+import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Subscription;
-import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
 import com.n4systems.util.timezone.TimeZoneSelectionHelper;
@@ -14,7 +15,7 @@ import com.n4systems.util.timezone.TimeZoneSelectionHelper;
 public class SignUpRequest implements Subscription, AccountCreationInformation, Company, Person {
 	private static final long serialVersionUID = 1L;
 	
-	private Long signUpPackageId;
+	private SignUpPackage signUpPackage;
 	
 	private String companyName;
 	private String firstName;
@@ -25,6 +26,8 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private Region region;
 	
 	
+	private AddressInfo address;
+	
 	private String username;
 	private String password;
 	private String passwordConfirm;
@@ -34,6 +37,10 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	
 	private Integer numberOfUsers = 1;
 	private boolean purchasingPhoneSupport;
+	
+	private CreditCard creditCard = new CreditCard();
+	
+	private PaymentOption paymentOption = PaymentOption.ONE_YEAR_UP_FRONT;
 	
 	public SignUpRequest() {
 		this.country = TimeZoneSelectionHelper.defaultCountry();
@@ -157,36 +164,27 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		this.numberOfUsers = numberOfUsers;
 	}
 	
-	
-	
-	public Long getSignUpPackageId() {
-		return signUpPackageId;
-	}
-	public void setSignUpPackageId(Long signUpPackageId) {
-		this.signUpPackageId = signUpPackageId;
-	}
-
 	public boolean isNew() {
 		return tenantName == null;
 	}
 
 	public SignUpPackage getSignUpPackage() {
-		return SignUpPackage.Basic;
+		return signUpPackage;
 	}
 
 
-	public Long getExternalId() {
-		return null;
+	public String getSyncId() {
+		return signUpPackage.getSyncId();
 	}
 
 
 	public PaymentFrequency getFrequency() {
-		return null;
+		return paymentOption.getFrequency();
 	}
 
 
 	public Integer getMonths() {
-		return 0;
+		return paymentOption.getTerm();
 	}
 
 
@@ -195,14 +193,15 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 	public AddressInfo getBillingAddress() {
-		// TODO Auto-generated method stub
-		return null;
+		return address;
 	}
 
+	public void setBillingAddress(AddressInfo address) {
+		this.address = address;
+	}
 
 	public CreditCard getCreditCard() {
-		// TODO Auto-generated method stub
-		return null;
+		return creditCard;
 	}
 
 
@@ -224,7 +223,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 
 	public boolean isUsingCreditCard() {
-		return false;
+		return true;
 	}
 
 
@@ -239,13 +238,31 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 
 	public String getPromoCode() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	public String getN4Id() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
+	}
+
+
+	public void setSignUpPackage(SignUpPackage signUpPackage) {
+		this.signUpPackage = signUpPackage;
+	}
+
+
+	public String getPaymentOption() {
+		return paymentOption.name();
+	}
+
+
+	public void setPaymentOption(String paymentOption) {
+		this.paymentOption = PaymentOption.valueOf(paymentOption);
 	}
 }

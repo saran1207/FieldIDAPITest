@@ -1,7 +1,11 @@
 package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
+import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
+import com.n4systems.handlers.creator.signup.exceptions.SignUpCompletionException;
+import com.n4systems.handlers.creator.signup.exceptions.SignUpSoftFailureException;
+import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.persistence.PersistenceProvider;
@@ -29,7 +33,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		this.subscriptionApprovalHandler = subscriptionApprovalHandler;
 	}
 
-	public void signUp(SignUpRequest signUp) {
+	public void signUp(SignUpRequest signUp) throws SignUpCompletionException, SignUpSoftFailureException {
 		if (persistenceProvider == null) {
 			throw new InvalidArgumentException("You must give a persistence provider");
 		}
@@ -40,7 +44,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
-			throw e;
+			throw new TenantNameUsedException("tenant name could not be saved", e);
 		}
 		
 		SignUpTenantResponse subscriptionApproval = null;
@@ -51,10 +55,10 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			
 		} catch (CommunicationException e) {
 			undoAccountPlaceHolder(placeHolder);
-			throw new ProcessFailureException("could not complete process", e);
+			throw new CommunicationErrorException("could not complete process", e);
 		} catch (BillingInfoException e) {
 			undoAccountPlaceHolder(placeHolder);
-			throw new ProcessFailureException("could not complete process", e);
+			throw new BillingValidationException("could not complete process", e);
 		}
 		
 		transaction = persistenceProvider.startTransaction();
@@ -64,7 +68,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
-			throw e;
+			throw new SignUpCompletionException("The final step of activating the account has failed. The subscription information been entered.", e);
 		}
 	}
 
@@ -79,7 +83,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
-			throw e;
+			throw new SignUpSoftFailureException("failed to destory account place holder", e);
 		}
 	}
 	

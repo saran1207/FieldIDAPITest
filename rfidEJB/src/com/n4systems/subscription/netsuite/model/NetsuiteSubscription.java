@@ -1,11 +1,10 @@
 package com.n4systems.subscription.netsuite.model;
 
-import com.n4systems.subscription.ExternalIdResponse;
 import com.n4systems.subscription.PaymentFrequency;
 import com.n4systems.subscription.Subscription;
 
-public class NetsuiteSubscription implements Subscription, ExternalIdResponse {
-
+public class NetsuiteSubscription implements Subscription {
+	private String syncId;
 	private Integer months;
 	private Integer users;
 	private PaymentFrequency frequency;
@@ -13,8 +12,8 @@ public class NetsuiteSubscription implements Subscription, ExternalIdResponse {
 	private boolean purchasingPhoneSupport;
 	private Long nsrecordid;
 
-	public Long getExternalId() {
-		return getNsrecordid();
+	public String getSyncId() {
+		return syncId;
 	}
 	
 	public Long getNsrecordid() {

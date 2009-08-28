@@ -3,19 +3,15 @@ package com.n4systems.subscription.netsuite.client;
 import java.io.IOException;
 
 import com.n4systems.subscription.AddressInfo;
+import com.n4systems.subscription.CreditCard;
+import com.n4systems.subscription.CreditCardType;
 import com.n4systems.subscription.PaymentFrequency;
-import com.n4systems.subscription.SignUpTenantResponse;
-import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
-import com.n4systems.subscription.netsuite.model.CreditCard;
-import com.n4systems.subscription.netsuite.model.CreditCardType;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteClient;
-import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
-import com.n4systems.subscription.netsuite.model.PricingDetails;
 
 public class RestfulTest {
 
@@ -182,7 +178,8 @@ public class RestfulTest {
 	
 	private static CreditCard populateTestCreditCard() {
 		CreditCard creditCard = new CreditCard();
-		creditCard.setExpiry("1/11");
+		creditCard.setExpiryMonth(1);
+		creditCard.setExpiryYear(11);
 		creditCard.setName("Guy Incognito");
 		creditCard.setNumber("4111111111111111");
 		creditCard.setType(CreditCardType.Visa);

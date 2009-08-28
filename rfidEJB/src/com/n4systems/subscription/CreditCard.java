@@ -1,10 +1,11 @@
-package com.n4systems.subscription.netsuite.model;
+package com.n4systems.subscription;
 
 public class CreditCard {
 
 	private String number;
 	private CreditCardType type;
-	private String expiry; // ex. 1/08 for January 2008 expiry
+	private int expiryMonth;
+	private int expiryYear;
 	private String name;
 
 	public String getNumber() {
@@ -20,15 +21,25 @@ public class CreditCard {
 		this.type = type;
 	}
 	public String getExpiry() {
-		return expiry;
+		return expiryMonth + "/" + expiryYear;
 	}
-	public void setExpiry(String expiry) {
-		this.expiry = expiry;
-	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public int getExpiryMonth() {
+		return expiryMonth;
+	}
+	public void setExpiryMonth(int expiryMonth) {
+		this.expiryMonth = expiryMonth;
+	}
+	public int getExpiryYear() {
+		return expiryYear;
+	}
+	public void setExpiryYear(int expiryYear) {
+		this.expiryYear = expiryYear;
 	}
 }

@@ -2,6 +2,7 @@ package com.n4systems.subscription.netsuite.model;
 
 import com.n4systems.subscription.ExternalIdResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
+import com.n4systems.subscription.Subscription;
 
 public class NetsuiteSignUpTenantResponse extends AbstractResponse implements SignUpTenantResponse {
 
@@ -21,7 +22,7 @@ public class NetsuiteSignUpTenantResponse extends AbstractResponse implements Si
 	public void setClient(NetsuiteClient client) {
 		this.client = client;
 	}
-	public ExternalIdResponse getSubscription() {
+	public Subscription getSubscription() {
 		return subscription;
 	}
 	public void setSubscription(NetsuiteSubscription subscription) {

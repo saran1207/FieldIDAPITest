@@ -1,4 +1,8 @@
-.shortField input[type="text"] {
+.autoSize {
+	width:auto !important;
+}
+
+.shortField input[type="text"], .shortField select {
 	width: 100px;
 }
 
@@ -40,3 +44,12 @@
 #packages tfoot .preferred {
 	border-top:none;
 }
+
+.perferredChoice {
+	font-size: 1.5em;
+}
+
+.favouredChoice {
+	font-size: 1.2em;
+}
+

@@ -1,6 +1,7 @@
 package com.n4systems.subscription.netsuite.model;
 
 import com.n4systems.subscription.AddressInfo;
+import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.ExternalIdResponse;
 import com.n4systems.subscription.Company;
 
