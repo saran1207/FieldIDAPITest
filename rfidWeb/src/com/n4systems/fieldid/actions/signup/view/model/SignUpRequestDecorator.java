@@ -215,8 +215,8 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return creditCard;
 	}
 
-	public String getSyncId() {
-		return signUpRequest.getSyncId();
+	public Long getContractId() {
+		return signUpRequest.getContractId();
 	}
 
 

@@ -4,7 +4,7 @@ import com.n4systems.subscription.PaymentFrequency;
 import com.n4systems.subscription.Subscription;
 
 public class NetsuiteSubscription implements Subscription {
-	private String syncId;
+	private Long contractId;
 	private Integer months;
 	private Integer users;
 	private PaymentFrequency frequency;
@@ -12,8 +12,8 @@ public class NetsuiteSubscription implements Subscription {
 	private boolean purchasingPhoneSupport;
 	private Long nsrecordid;
 
-	public String getSyncId() {
-		return syncId;
+	public Long getContractId() {
+		return contractId;
 	}
 	
 	public Long getNsrecordid() {

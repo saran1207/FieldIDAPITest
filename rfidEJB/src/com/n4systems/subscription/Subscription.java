@@ -3,7 +3,7 @@ package com.n4systems.subscription;
 
 public interface Subscription {
 	
-	public String getSyncId();
+	public Long getContractId();
 	public Integer getMonths();
 	public Integer getUsers();
 	public PaymentFrequency getFrequency();

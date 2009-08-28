@@ -173,8 +173,8 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public String getSyncId() {
-		return signUpPackage.getSyncId();
+	public Long getContractId() {
+		return 1L;
 	}
 
 
