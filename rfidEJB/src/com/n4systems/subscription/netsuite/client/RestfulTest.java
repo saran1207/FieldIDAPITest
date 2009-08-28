@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.SignUpTenantResponse;
+import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
 import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.subscription.netsuite.model.CreditCardType;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
@@ -101,22 +103,19 @@ public class RestfulTest {
 		System.out.println("Contract value:"+pricingDetailsResponse.getPricing().getContract_value());
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
 		
-		SignUpTenantClient signUpTenantClient = new SignUpTenantClient();
-		signUpTenantClient.setPerson(populateTestClient());
-		signUpTenantClient.setSubscription(populateTestSubscription());
-		signUpTenantClient.setCompany(populateTestTenant());
+		*/
+		NetSuiteSubscriptionAgent agent = new NetSuiteSubscriptionAgent();
 		
 		try {
-			NetsuiteSignUpTenantResponse tenantResponse = signUpTenantClient.execute();
+			SignUpTenantResponse tenantResponse = agent.buy(populateTestSubscription(), populateTestTenant(), populateTestClient());
 			
 			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getExternalId());
 			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getExternalId());
 			System.out.println("Subscription netsuite id: "+tenantResponse.getSubscription().getExternalId());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		*/
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
 		promoClient.setCode("SOMETHING");
 		
@@ -172,7 +171,7 @@ public class RestfulTest {
 		tenant.setBillingAddress(populateTestAddress());
 		tenant.setCompanyName("TEST - Jesse Manufacturing");
 		tenant.setCreditCard(populateTestCreditCard());
-		tenant.setEmail("guyincognito@n4systems.com");
+		tenant.setEmail("bademail@bad.com");
 		tenant.setN4Id("5");
 		tenant.setPhone("416-555-5555");
 		tenant.setShippingAddress(populateTestAddress());
@@ -185,7 +184,7 @@ public class RestfulTest {
 		CreditCard creditCard = new CreditCard();
 		creditCard.setExpiry("1/11");
 		creditCard.setName("Guy Incognito");
-		creditCard.setNumber("4111111111111111");
+		creditCard.setNumber("411353311");
 		creditCard.setType(CreditCardType.Visa);
 		
 		return creditCard;

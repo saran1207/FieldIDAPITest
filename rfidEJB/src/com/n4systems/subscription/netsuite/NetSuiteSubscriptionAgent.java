@@ -3,6 +3,7 @@ package com.n4systems.subscription.netsuite;
 import java.io.IOException;
 
 import com.n4systems.subscription.BillingInfoException;
+import com.n4systems.subscription.BillingInfoField;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.Person;
@@ -16,6 +17,7 @@ import com.n4systems.subscription.netsuite.client.SignUpTenantClient;
 import com.n4systems.subscription.netsuite.client.ValidatePromoCodeClient;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
+import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
 public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
@@ -35,12 +37,25 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		signUpTenantClient.setCompany(company);
 		signUpTenantClient.setPerson(person);
 		
-		SignUpTenantResponse response = null;
+		NetsuiteSignUpTenantResponse response = null;
 		
 		try {
 			response = signUpTenantClient.execute();
 		} catch (IOException e) {
 			throw new CommunicationException();
+		}
+				
+		BillingInfoField problemField = BillingInfoField.UNKOWN;
+		if (response.getResult().equals("NOTOK")) {
+			if (response.getDetails() != null) {
+				if (response.getDetails().contains("(email)")) {
+					problemField = BillingInfoField.EMAIL; 
+				} else if (response.getDetails().contains("ccnumber")) {
+					problemField = BillingInfoField.CC_NUMBER;
+				}
+			}
+			
+			throw new BillingInfoException(problemField);
 		}
 		
 		return response;

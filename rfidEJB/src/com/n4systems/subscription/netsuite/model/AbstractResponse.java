@@ -4,6 +4,7 @@ public abstract class AbstractResponse {
 
 	private String result;
 	private String function;
+	private String details;
 
 	public String getResult() {
 		return result;
@@ -19,5 +20,13 @@ public abstract class AbstractResponse {
 
 	public void setFunction(String function) {
 		this.function = function;
+	}
+
+	public String getDetails() {
+		return details;
+	}
+
+	public void setDetails(String details) {
+		this.details = details;
 	}	
 }

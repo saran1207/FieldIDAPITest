@@ -7,7 +7,7 @@ public class NetsuiteSignUpTenantResponse extends AbstractResponse implements Si
 
 	private NetsuiteTenant tenant;
 	private NetsuiteClient client;
-	private NetsuiteSubscription subscription;
+	private NetsuiteSubscription subscription;	
 
 	public ExternalIdResponse getTenant() {
 		return tenant;
