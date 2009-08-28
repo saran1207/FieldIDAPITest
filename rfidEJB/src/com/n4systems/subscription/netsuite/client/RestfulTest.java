@@ -4,17 +4,16 @@ import java.io.IOException;
 
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.PaymentFrequency;
-import com.n4systems.subscription.netsuite.model.NetsuiteClient;
-import com.n4systems.subscription.netsuite.model.ContractLength;
 import com.n4systems.subscription.netsuite.model.CreditCard;
 import com.n4systems.subscription.netsuite.model.CreditCardType;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
-import com.n4systems.subscription.netsuite.model.ProductInformation;
+import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
+import com.n4systems.subscription.netsuite.model.NetsuiteClient;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
-import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
+import com.n4systems.subscription.netsuite.model.PricingDetails;
 
 public class RestfulTest {
 
@@ -26,6 +25,7 @@ public class RestfulTest {
 		
 		try {
 			detailsResponse= productDetailsLoader.execute();
+			System.out.println("item list: "+detailsResponse.getItemlist());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -115,8 +115,8 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 		
+		*/
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
 		promoClient.setCode("SOMETHING");
 		
@@ -132,13 +132,25 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		PricingDetailsClient pricingClient = new PricingDetailsClient();
+		pricingClient.setSubscription(populateTestSubscription());
+		
+		try {
+			GetPricingDetailsResponse priceResponse = pricingClient.execute();
+			System.out.println("Pricing:"+priceResponse.getPricing());
+			System.out.println("Contract value:" +priceResponse.getPricing().getContractValue());
+			System.out.println("Storage pricing:" +priceResponse.getPricing().getStoragePrice());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static NetsuiteSubscription populateTestSubscription() {
 		NetsuiteSubscription subscription = new NetsuiteSubscription();
 		subscription.setFrequency(PaymentFrequency.Monthly);
 		subscription.setMonths(12);
-		subscription.setNetsuiteRecordId(143L);
+		subscription.setNsrecordid(143L);
 		subscription.setPurchasingPhoneSupport(true);
 		subscription.setUsers(5);
 		

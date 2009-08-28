@@ -13,7 +13,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import net.sf.json.JSONObject;
+import com.google.gson.Gson;
 
 public abstract class AbstractNetsuiteClient<K> {
 
@@ -128,7 +128,6 @@ public abstract class AbstractNetsuiteClient<K> {
 		return encoded;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public K execute() throws IOException {
 		
 		String response = "";
@@ -146,25 +145,24 @@ public abstract class AbstractNetsuiteClient<K> {
 			
 			System.out.println("Response in JSON was: "+response);
 			
-		} finally {				
-			connection.disconnect();
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
 		}
 
-		setupClassMap();
 		
-		JSONObject responseObject = JSONObject.fromObject(response);
-		K convertedObject = (K)JSONObject.toBean(responseObject, returnClass, classMap);
-		
-		return convertedObject;
+		return serializeJson(response);
 	}
 	
-	/**
-	 * Override this to setup a custom class map for converting from JSON
-	 */
-	protected void setupClassMap() {
-		// Do nothing by default 
+	private K serializeJson(String jsonResponse) {
+		Gson gson = new Gson();
+		
+		K convertedObject = gson.fromJson(jsonResponse, returnClass);
+		
+		return convertedObject;		
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	protected void addToClassMap(String name, Class clazz) {
 		classMap.put(name, clazz);

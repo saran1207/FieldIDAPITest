@@ -1,10 +1,13 @@
 package com.n4systems.subscription.netsuite.model;
 
-public class GetPricingDetailsResponse extends AbstractResponse {
+import com.n4systems.subscription.PriceCheckResponse;
+import com.n4systems.subscription.Pricing;
+
+public class GetPricingDetailsResponse extends AbstractResponse implements PriceCheckResponse {
 	
 	private PricingDetails pricing;
 
-	public PricingDetails getPricing() {
+	public Pricing getPricing() {
 		return pricing;
 	}
 

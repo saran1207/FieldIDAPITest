@@ -6,22 +6,27 @@ import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.Person;
+import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.ValidatePromoCodeResponse;
+import com.n4systems.subscription.netsuite.client.PricingDetailsClient;
 import com.n4systems.subscription.netsuite.client.SignUpTenantClient;
 import com.n4systems.subscription.netsuite.client.ValidatePromoCodeClient;
+import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 
 public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
 	private final SignUpTenantClient signUpTenantClient;
 	private final ValidatePromoCodeClient validatePromoCodeClient;
+	private final PricingDetailsClient pricingDetailsClient;
 	
 	public NetSuiteSubscriptionAgent() {
 		signUpTenantClient = new SignUpTenantClient();
 		validatePromoCodeClient = new ValidatePromoCodeClient();
+		pricingDetailsClient = new PricingDetailsClient();
 	}
 	
 	@Override
@@ -49,6 +54,21 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		
 		try {
 			response = validatePromoCodeClient.execute();
+		} catch (IOException e) {
+			throw new CommunicationException();
+		}
+		
+		return response;
+	}
+
+	@Override
+	public PriceCheckResponse priceCheck(Subscription subscription)	throws CommunicationException {
+		pricingDetailsClient.setSubscription(subscription);
+		
+		GetPricingDetailsResponse response = null;
+		
+		try {
+			response = pricingDetailsClient.execute();
 		} catch (IOException e) {
 			throw new CommunicationException();
 		}

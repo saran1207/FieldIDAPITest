@@ -185,18 +185,14 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public int getMonths() {
+	public Integer getMonths() {
 		return 0;
 	}
 
 
-	public int getUsers() {
+	public Integer getUsers() {
 		return getNumberOfUsers();
 	}
-
-
-
-
 
 	public AddressInfo getBillingAddress() {
 		// TODO Auto-generated method stub

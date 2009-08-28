@@ -1,15 +1,12 @@
 package com.n4systems.subscription.netsuite.client;
 
+import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
-import com.n4systems.subscription.netsuite.model.PricingDetails;
 
 public class PricingDetailsClient extends AbstractNetsuiteClient<GetPricingDetailsResponse> {
 
-	private String referralCode;
-	private String itemId;
-	private String contractLength;
-	private String frequency;
-	private String users;
+	private Subscription subscription;
+	
 	
 	public PricingDetailsClient() {
 		super(GetPricingDetailsResponse.class, "getpricingdetails");
@@ -17,41 +14,18 @@ public class PricingDetailsClient extends AbstractNetsuiteClient<GetPricingDetai
 	
 	@Override
 	protected void addRequestParameters() {
-		addRequestParameter("itemid", itemId);
-		addRequestParameter("contractlength", contractLength);
-		addRequestParameter("frequency", frequency);
-		addRequestParameter("users", users);
-
-		if (referralCode != null) {
-			addRequestParameter("referralcode", referralCode);
+		addRequestParameter("itemid", subscription.getExternalId().toString());
+		addRequestParameter("contractlength", subscription.getMonths().toString());
+		addRequestParameter("frequency", subscription.getFrequency().getCode());
+		addRequestParameter("numusers", subscription.getUsers().toString());
+		addRequestParameter("phonesupport", subscription.isPurchasingPhoneSupport() ? "T" : "F");
+		
+		if (subscription.getPromoCode() != null) {
+			addRequestParameter("promocode", subscription.getPromoCode());
 		}
 	}
-	
-	@Override
-	protected void setupClassMap() {
-		addToClassMap("pricing", PricingDetails.class);
-	}
 
-	
-	public void setReferralCode(String referralCode) {
-		this.referralCode = referralCode;
+	public void setSubscription(Subscription subscription) {
+		this.subscription = subscription;
 	}
-
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
-	}
-	
-	public void setContractLength(int contractLength) {
-		this.contractLength = String.valueOf(contractLength);
-	}
-	
-	public void setFrequency(String frequency) {
-		this.frequency = frequency;
-	}
-	
-	public void setUsers(int users) {
-		this.users = String.valueOf(users);
-	}	
-	
-	
 }

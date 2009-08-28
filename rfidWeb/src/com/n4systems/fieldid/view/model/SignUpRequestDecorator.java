@@ -219,7 +219,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getFrequency();
 	}
 
-	public int getMonths() {
+	public Integer getMonths() {
 		return signUpRequest.getMonths();
 	}
 
@@ -236,7 +236,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getUrl();
 	}
 
-	public int getUsers() {
+	public Integer getUsers() {
 		return signUpRequest.getUsers();
 	}
 
@@ -258,8 +258,4 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public String getPromoCode() {
 		return signUpRequest.getPromoCode();
 	}
-
-
-
-
 }
