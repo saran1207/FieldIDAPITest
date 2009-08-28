@@ -2,5 +2,5 @@
 	<#assign results = { "templateFound": autoAttributeCriteria?exists , "fields": lookUpOutputs } >
 </#escape>	
 
-var templateInfo = ${ json.toJSON( results ) }
+var templateInfo = ${ json.toJson( results ) }
 populateFromAutoAttributes( templateInfo );

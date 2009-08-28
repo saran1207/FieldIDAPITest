@@ -1,3 +1,3 @@
 <#assign b = { "errors": actionErrors, "messages": actionMessages, "uniqueID": uniqueID!, "status": actionErrors.size() } />
 ${ action.clearFlashMessages()! }${ action.clearFlashErrors()! }
-${ json.toJSON( b ) }
+${ json.toJson( b ) }

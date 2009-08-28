@@ -12,8 +12,8 @@
 			
 	</#if>
 	<#noescape>
-		var messages = ${ json.toJSON( actionMessages ) };
-		var errors = ${ json.toJSON( actionErrors ) };
+		var messages = ${ json.toJson( actionMessages ) };
+		var errors = ${ json.toJson( actionErrors ) };
 	</#noescape>
 	updateMessages( messages, errors, "${buttonGroupIndex}" );
 </#escape>

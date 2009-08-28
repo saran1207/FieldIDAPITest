@@ -12,7 +12,7 @@
 			jobSiteChangeUrl = '<@s.url action="jobSite" namespace="/ajax" />';
 			updateNextDateUrl = '<@s.url action="calcNextDate" namespace="/ajax" />';
 			productTypeId = ${product.type.id}
-			var proofTestTypes = ${json.toJSON( proofTestTypesUpload )}
+			var proofTestTypes = ${json.toJson( proofTestTypesUpload )}
 		</script>
 		<script type="text/javascript">
 			function imageFileUploaded( fileName, directory ){

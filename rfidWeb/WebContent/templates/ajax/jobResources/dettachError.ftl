@@ -1,5 +1,5 @@
 ${action.clearFlashScope()!}
 
-alertErrors(${json.toJSON(actionErrors)});
+alertErrors(${json.toJson(actionErrors)});
 
 	

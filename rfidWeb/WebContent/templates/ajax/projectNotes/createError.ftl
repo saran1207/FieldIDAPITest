@@ -1,6 +1,6 @@
 
 <#if !action.fieldErrors.isEmpty()  >
-	var errors = ${json.toJSON( action.fieldErrors ) };
+	var errors = ${json.toJson( action.fieldErrors ) };
 	var form = $( 'addNote' ); 
 	
 	

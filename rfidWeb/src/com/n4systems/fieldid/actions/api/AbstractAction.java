@@ -12,8 +12,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONSerializer;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
@@ -23,6 +21,7 @@ import rfid.ejb.entity.UserBean;
 import rfid.web.helper.Constants;
 import rfid.web.helper.SessionUser;
 
+import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
@@ -60,7 +59,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	private Collection<String> flashErrors = new ArrayList<String>();
 	private Collection<FindProductOptionManufactureBean> searchOptions;
 	private LoaderFactory loaderFactory;
-	private JSONSerializer json;
+	private Gson json;
 	private TenantLimitProxy limitProxy;
 	
 	protected final PersistenceManager persistenceManager;
@@ -241,9 +240,9 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return flashErrors;
 	}
 
-	public JSONSerializer getJson() {
+	public Gson getJson() {
 		if( json == null ) {
-			json = new JSONSerializer();
+			json = new Gson();
 		}
 		return json;
 	}

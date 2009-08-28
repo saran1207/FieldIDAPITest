@@ -36,5 +36,5 @@ Class-Path: rfidEJB.jar
  APP-INF/lib/solr-common.jar 
  APP-INF/lib/solr-core.jar 
  APP-INF/lib/xstream-1.3.jar 
- APP-INF/lib/json-lib-2.3-jdk15.jar
+ APP-INF/lib/gson-1.3.jar
 

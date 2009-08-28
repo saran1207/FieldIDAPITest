@@ -1,3 +1,3 @@
 ${ action.clearFlashMessages()! }${ action.clearFlashErrors()! }
-updateMessages(${json.toJSON(actionMessages)}, ${json.toJSON(actionErrors)});
+updateMessages(${json.toJson(actionMessages)}, ${json.toJson(actionErrors)});
 $('resultsTable').remove();

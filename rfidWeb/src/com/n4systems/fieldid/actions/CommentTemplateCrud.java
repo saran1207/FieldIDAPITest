@@ -2,13 +2,12 @@ package com.n4systems.fieldid.actions;
 
 import java.util.Collection;
 
-import net.sf.json.JSONSerializer;
-
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.CommentTempBean;
 import rfid.ejb.session.CommentTemp;
 
+import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -25,7 +24,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	private CommentTempBean commentTemplate;
 	private CommentTemp commentTemplateManager;
 	
-	private JSONSerializer json = new JSONSerializer();
+	private Gson json = new Gson();
 	
 	public CommentTemplateCrud(CommentTemp commentTemplateManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -113,7 +112,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 		commentTemplate.setContents(comment);
 	}
 	
-	public JSONSerializer getJson() {
+	public Gson getJson() {
 		return json;
 	}
 

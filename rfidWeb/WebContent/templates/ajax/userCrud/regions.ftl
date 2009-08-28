@@ -1,1 +1,1 @@
-updateTimezoneList( ${json.toJSON(regionList)} );
+updateTimezoneList( ${json.toJson(regionList)} );
