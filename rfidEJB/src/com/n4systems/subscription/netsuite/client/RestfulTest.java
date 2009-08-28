@@ -103,7 +103,6 @@ public class RestfulTest {
 		System.out.println("Contract value:"+pricingDetailsResponse.getPricing().getContract_value());
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
 		
-		*/
 		NetSuiteSubscriptionAgent agent = new NetSuiteSubscriptionAgent();
 		
 		try {
@@ -115,19 +114,20 @@ public class RestfulTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
 		promoClient.setCode("SOMETHING");
 		
 		try {
 			NetSuiteValidatePromoCodeResponse response = promoClient.execute();
-			System.out.println("Result:"+response.getResult());
-			System.out.println("Details:"+response.getDetails());
+			System.out.println("Valid? "+response.isValid());
+			System.out.println("Reason:"+response.getReason());
 
 			promoClient.setCode("R5678");
 			response = promoClient.execute();
-			System.out.println("Result:"+response.getResult());
-			System.out.println("Details:"+response.getDetails());
+			System.out.println("Valid? "+response.isValid());
+			System.out.println("Reason:"+response.getReason());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -184,7 +184,7 @@ public class RestfulTest {
 		CreditCard creditCard = new CreditCard();
 		creditCard.setExpiry("1/11");
 		creditCard.setName("Guy Incognito");
-		creditCard.setNumber("411353311");
+		creditCard.setNumber("4111111111111111");
 		creditCard.setType(CreditCardType.Visa);
 		
 		return creditCard;
