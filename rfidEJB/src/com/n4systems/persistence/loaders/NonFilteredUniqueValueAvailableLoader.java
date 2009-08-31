@@ -1,6 +1,5 @@
-package com.n4systems.model.tenant;
+package com.n4systems.persistence.loaders;
 
-import com.n4systems.persistence.loaders.Loader;
 
 public abstract class NonFilteredUniqueValueAvailableLoader extends Loader<Boolean> {
 

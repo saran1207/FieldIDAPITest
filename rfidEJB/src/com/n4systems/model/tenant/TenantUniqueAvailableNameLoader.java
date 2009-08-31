@@ -3,6 +3,7 @@ package com.n4systems.model.tenant;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.persistence.loaders.NonFilteredUniqueValueAvailableLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
