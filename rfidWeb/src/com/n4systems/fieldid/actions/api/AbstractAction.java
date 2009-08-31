@@ -34,6 +34,8 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.HostNameParser;
@@ -292,9 +294,10 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return searchOptions;
 	}
 	
-	public boolean getDevMode() {
+	public boolean isDevMode() {
 		String serverName = request.getServerName();
-		return !( serverName.equalsIgnoreCase( "www.fieldid.com" ) || serverName.equalsIgnoreCase( "fieldid.com" ));
+		String systemDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_DOMAIN);
+		return !(serverName.toLowerCase().endsWith(systemDomain));
 	}
 	
 	public String replaceCR(String string) {

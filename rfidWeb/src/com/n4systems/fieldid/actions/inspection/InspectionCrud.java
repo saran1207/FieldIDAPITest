@@ -110,6 +110,9 @@ public class InspectionCrud extends UploadFileSupport {
 	private Map<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>>();
 	private Map<AbstractInspection, List<CriteriaSection>> availableSections = new HashMap<AbstractInspection, List<CriteriaSection>>();
 
+	private Map<String, String> encodedInfoOptionMap = new HashMap<String, String>(); 
+
+
 	private List<CriteriaSection> currentCriteriaSections;
 
 	protected FileDataContainer fileData = null;
@@ -333,7 +336,7 @@ public class InspectionCrud extends UploadFileSupport {
 	}
 
 	protected void encodeInfoOptionMapForUseInForm() {
-		inspection.setInfoOptionMap(encodeMapKeys(inspection.getInfoOptionMap()));
+		encodedInfoOptionMap = encodeMapKeys(inspection.getInfoOptionMap());
 	}
 
 	protected void setUpSupportedProofTestTypes() {
@@ -357,7 +360,7 @@ public class InspectionCrud extends UploadFileSupport {
 			
 			findInspectionBook();
 
-			inspection.setInfoOptionMap(decodeMapKeys(inspection.getInfoOptionMap()));
+			inspection.setInfoOptionMap(decodeMapKeys(encodedInfoOptionMap));
 
 			inspection.setGroup(inspectionGroup);
 			inspection.setTenant(getTenant());
@@ -1016,5 +1019,13 @@ public class InspectionCrud extends UploadFileSupport {
 	}
 
 
+	
+	public Map<String, String> getEncodedInfoOptionMap() {
+		return encodedInfoOptionMap;
+	}
+
+	public void setEncodedInfoOptionMap(Map<String, String> encodedInfoOptionMap) {
+		this.encodedInfoOptionMap = encodedInfoOptionMap;
+	}
 
 }

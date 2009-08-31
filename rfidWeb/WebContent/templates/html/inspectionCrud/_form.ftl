@@ -48,7 +48,7 @@
 	<#list inspectionType.infoFieldNames as infoField >
 		<p>	
 			<label>${infoField}:</label>
-			<span><@s.textfield name="infoOptionMap['${infoField?url}']"/></span>
+			<span><@s.textfield name="encodedInfoOptionMap['${infoField?url}']"/></span>
 		</p>
 	 	
 	</#list>

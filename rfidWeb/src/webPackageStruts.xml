@@ -488,7 +488,7 @@
 				<param name="actionName">productEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="success" type="redirectAction">productInformation</result>
+			<result name="success" type="redirectAction">productAdd</result>
 			<result name="input" type="redirectAction">
 				<param name="actionName">productEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
