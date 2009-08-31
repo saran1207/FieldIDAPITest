@@ -5,8 +5,8 @@ class MigrateTenantFields < ActiveRecord::Migration
   def self.up
     Tenant.transaction do
       tenantTables = [
-        'alertstatus',
-        'autoattributecriteria',
+        #'alertstatus',
+        #'autoattributecriteria',
         'autoattributedefinition',
         'catalogs',
         'commenttemplate',
@@ -55,12 +55,13 @@ class MigrateTenantFields < ActiveRecord::Migration
         puts table
         
         if (!tablesMissingFK.include?(table))
-          drop_foreign_key(table, :organization, :source_column => :r_tenant, :foreign_column => :id)
+        #  drop_foreign_key(table, :organization, :source_column => :r_tenant, :foreign_column => :id)
         end
         
         rename_column(table, :r_tenant, :tenant_id)
-        
-        add_foreign_key(table, :tenants,  :source_column => :tenant_id, :foreign_column => :id)
+        if (tablesMissingFK.include?(table))
+          add_foreign_key(table, :tenants,  :source_column => :tenant_id, :foreign_column => :id)
+        end
       end 
       
     end
