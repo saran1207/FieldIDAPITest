@@ -62,6 +62,7 @@ public enum ConfigEntry {
 	UNBRANDED_SUBDOMAIN							(	"www"										),
 	GLOBAL_APPLICATION_ROOT						(	"/var/fieldid"			),
 	DEFAULT_TIMEZONE_ID							(	"United States:New York - New York"			),
+	SYSTEM_DOMAIN								(   "fieldid.com"),
 	SUBSCRIPTION_AGENT							(	"com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent");
 	
 	
