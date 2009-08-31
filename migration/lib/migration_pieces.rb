@@ -115,7 +115,7 @@ module ActiveRecord
       end
       
       def fk_column( foreign_table_name, options={} )  #:nodoc:
-        options[:source_column] || "#{Inflector.singularize(foreign_table_name)}_id"
+        options[:source_column]
       end 
       
       def target_column( options )  #:nodoc:
@@ -150,27 +150,7 @@ module ActiveRecord
        end
     end
 
-    class PostgreSQLAdapter < AbstractAdapter
-      # Defines a new foreign key constraint
-      # This is the PostgreSQL version
-      #
-      # See SchemaStatements#add_foreign_key for more detail
-      def add_foreign_key( table_name, foreign_table_name, options={} )
-        execute build_add_sql( table_name, foreign_table_name, options )
-      end
-
-      # Remove a foreign key constraint
-      # This is the PostgresSQL version
-      #
-      # See SchemaStatements#drop_foreign_key for more detail
-      def drop_foreign_key( table_name, foreign_table_name, options={} )
-        execute build_drop_sql( table_name, foreign_table_name, options )
-      end
-
-    end
-
-    class MysqlAdapter < AbstractAdapter
-
+    class JdbcAdapter < AbstractAdapter
       # Defines a new foreign key constraint
       # This, the MySQL implementation, creates an index on the 
       # foreign_column if it doesn't already exist.
@@ -200,5 +180,8 @@ module ActiveRecord
         indexes(table_name).any? {|i| i.name == index_name}
       end
     end
+    
+    
+    
   end
 end
