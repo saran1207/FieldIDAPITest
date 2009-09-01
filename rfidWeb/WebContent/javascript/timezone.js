@@ -4,8 +4,8 @@ function countryChanged(event) {
 	event.stop();
 	var countrySelect = Event.element(event);
 	
-	if(countrySelect.options[countrySelect.selectedIndex].value != "") {
-		var countryId = countrySelect.options[countrySelect.selectedIndex].value;
+	if(countrySelect.getValue() != "") {
+		var countryId = countrySelect.getValue();
 		var url =  countryChangeUrl + '?countryId='+ countryId;
 
 		new Ajax.Request(url, {
@@ -22,7 +22,7 @@ function updateTimezoneList(list) {
 	timezoneList.options.length = 0;
 	if( list != null ) {
 		for( var i = 0; i < list.length; i++ ) {
-			timezoneList.options[i] = new Option(list[i].displayName, list[i].id);
+			timezoneList.options[i] = new Option(list[i].name, list[i].timeZoneId);
 		}
 	}
 }
