@@ -2,7 +2,6 @@ package com.n4systems.model.signuppackage;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.ContractPricing;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 

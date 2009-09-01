@@ -1,7 +1,7 @@
 package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
-import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.util.timezone.Region;
 
 public class AccountCreationInformationStub implements AccountCreationInformation {
@@ -19,7 +19,7 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 	
 	private Integer numberOfUsers = 1;
 	
-	private SignUpPackage signUpPackage;
+	private SignUpPackageDetails signUpPackage;
 	private String fullTimeZone;
 	
 	public String getCompanyName() {
@@ -31,11 +31,11 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 		return this;
 	}
 	
-	public SignUpPackage getSignUpPackage() {
+	public SignUpPackageDetails getSignUpPackage() {
 		return signUpPackage;
 	}
 
-	public AccountCreationInformationStub setSignUpPackage(SignUpPackage signUpPackage) {
+	public AccountCreationInformationStub setSignUpPackage(SignUpPackageDetails signUpPackage) {
 		this.signUpPackage = signUpPackage;
 		return this;
 	}

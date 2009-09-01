@@ -1,6 +1,5 @@
 package com.n4systems.model.signuppackage;
 
-import com.n4systems.model.ContractPricing;
 import com.n4systems.subscription.netsuite.model.ContractLength;
 
 public class ContractPricingPopulator {
@@ -12,10 +11,7 @@ public class ContractPricingPopulator {
 	}
 	
 	public ContractPricing populateContractPricing(ContractLength contractLength, String syncId) {
-		contractPricing.setContractLength(contractLength.getMonths());
 		contractPricing.setNetsuiteRecordId(contractLength.getNsrecordid());
-		contractPricing.setPrice(contractLength.getPrice());
-		contractPricing.setSyncId(syncId);
 		
 		return contractPricing;
 	}

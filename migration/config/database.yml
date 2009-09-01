@@ -6,21 +6,6 @@ old:
   password: fieldid#9 
   encoding: utf8
 
-old_non_java:
-  adapter: postgresql
-  database: fieldid
-  host: localhost
-  username: fieldid-sys
-  password: fieldid#9 
-  encoding: utf8
-
-development_non_java:
-  adapter: mysql
-  database: fieldid
-  host: localhost
-  username: root
-  encoding: utf8
-
 development:
   adapter: jdbcmysql
   database: fieldid

@@ -4,16 +4,16 @@ import com.n4systems.model.tenant.TenantLimit;
 
 public class SignUpPackage {
 	private int priceInDollars;
-	private com.n4systems.model.signuppackage.SignUpPackage signUpPackage;
+	private com.n4systems.model.signuppackage.SignUpPackageDetails signUpPackage;
 	
 
 	public SignUpPackage(String name) {
 		super();
-		this.signUpPackage = com.n4systems.model.signuppackage.SignUpPackage.valueOf(name);
+		this.signUpPackage = com.n4systems.model.signuppackage.SignUpPackageDetails.valueOf(name);
 		
 	}
 
-	public com.n4systems.model.signuppackage.SignUpPackage getSignUpPackage() {
+	public com.n4systems.model.signuppackage.SignUpPackageDetails getSignUpPackage() {
 		return signUpPackage;
 	}
 	
@@ -26,7 +26,7 @@ public class SignUpPackage {
 	}
 
 	public boolean isPreferred() {
-		return (signUpPackage == com.n4systems.model.signuppackage.SignUpPackage.Enterprise);
+		return (signUpPackage == com.n4systems.model.signuppackage.SignUpPackageDetails.Enterprise);
 	}
 
 	public String getNumberOfUsersLabel() {

@@ -19,7 +19,7 @@ import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.DataUnit;
@@ -64,7 +64,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 		
 		AccountCreationInformationStub accountInfo = new AccountCreationInformationStub();
 		accountInfo.setCompanyName("some company").setTenantName("some-tenant").setFullTimeZone("Cananda:Ontario - Toronto")
-				.setSignUpPackage(SignUpPackage.Basic).setNumberOfUsers(10);
+				.setSignUpPackage(SignUpPackageDetails.Basic).setNumberOfUsers(10);
 		
 		
 		Capture<PrimaryOrg> capturedPrimaryOrg = new Capture<PrimaryOrg>(); 
@@ -85,12 +85,12 @@ public class PrimaryOrgCreateHandlerImplTest {
 		
 		assertEquals("some company", createdPrimaryOrg.getDisplayName());
 		assertEquals("Cananda:Ontario - Toronto", createdPrimaryOrg.getDefaultTimeZone());
-		assertEquals(new HashSet<ExtendedFeature>(Arrays.asList(SignUpPackage.Basic.getExtendedFeatures())), createdPrimaryOrg.getExtendedFeatures());
+		assertEquals(new HashSet<ExtendedFeature>(Arrays.asList(SignUpPackageDetails.Basic.getExtendedFeatures())), createdPrimaryOrg.getExtendedFeatures());
 		
 		
-		assertEquals(SignUpPackage.Basic.getAssets(), createdPrimaryOrg.getLimits().getAssets());
+		assertEquals(SignUpPackageDetails.Basic.getAssets(), createdPrimaryOrg.getLimits().getAssets());
 		assertEquals(new Long(10), createdPrimaryOrg.getLimits().getUsers());
-		assertEquals(SignUpPackage.Basic.getDiskSpaceInMB(), new Long(DataUnit.convert(BigInteger.valueOf(createdPrimaryOrg.getLimits().getDiskSpaceInBytes()), DataUnit.BYTES, DataUnit.MEGABYTES).longValue()));
+		assertEquals(SignUpPackageDetails.Basic.getDiskSpaceInMB(), new Long(DataUnit.convert(BigInteger.valueOf(createdPrimaryOrg.getLimits().getDiskSpaceInBytes()), DataUnit.BYTES, DataUnit.MEGABYTES).longValue()));
 		
 		
 	}

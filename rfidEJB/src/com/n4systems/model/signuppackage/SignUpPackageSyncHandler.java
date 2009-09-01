@@ -2,7 +2,6 @@ package com.n4systems.model.signuppackage;
 
 import java.util.List;
 
-import com.n4systems.model.ContractPricing;
 import com.n4systems.subscription.netsuite.model.ContractLength;
 import com.n4systems.subscription.netsuite.model.ProductInformation;
 
