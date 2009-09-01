@@ -2,20 +2,20 @@ package com.n4systems.subscription.netsuite.model;
 
 public class ContractLength {
 
-	private String nsrecordid;
-	private String months;
+	private Long nsrecordid;
+	private Integer months;
 	private String price;
 
-	public String getNsrecordid() {
+	public Long getNsrecordid() {
 		return nsrecordid;
 	}
-	public void setNsrecordid(String nsrecordid) {
+	public void setNsrecordid(Long nsrecordid) {
 		this.nsrecordid = nsrecordid;
 	}
-	public String getMonths() {
+	public Integer getMonths() {
 		return months;
 	}
-	public void setMonths(String months) {
+	public void setMonths(Integer months) {
 		this.months = months;
 	}
 	public String getPrice() {

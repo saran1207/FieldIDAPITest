@@ -54,5 +54,13 @@ public enum SignUpPackageDetails {
 		return extendedFeatures;
 	}
 	
-	
+	public static SignUpPackageDetails retrieveBySyncId(String syncId) {
+		for (SignUpPackageDetails signUpPackageDetails : SignUpPackageDetails.values()) {
+			if (signUpPackageDetails.getSyncId().equals(syncId)) {
+				return signUpPackageDetails;
+			}
+		}
+		
+		return null;
+	}
 }

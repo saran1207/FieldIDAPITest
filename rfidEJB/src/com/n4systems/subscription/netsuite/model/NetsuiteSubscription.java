@@ -10,18 +10,13 @@ public class NetsuiteSubscription implements Subscription {
 	private PaymentFrequency frequency;
 	private String promoCode;
 	private boolean purchasingPhoneSupport;
-	private Long nsrecordid;
 
 	public Long getContractId() {
 		return contractId;
 	}
 	
-	public Long getNsrecordid() {
-		return nsrecordid;
-	}
-
 	public void setNsrecordid(Long nsrecordid) {
-		this.nsrecordid = nsrecordid;
+		this.contractId = nsrecordid;
 	}
 
 	public PaymentFrequency getFrequency() {
@@ -63,5 +58,12 @@ public class NetsuiteSubscription implements Subscription {
 	public void setUsers(Integer users) {
 		this.users = users;
 	}
+
+	@Override
+	public String toString() {
+		return getContractId() + " for "+getMonths()+" months "+" with "+getUsers()+" users. "+getFrequency()+". Phone support? "+isPurchasingPhoneSupport();
+	}
+	
+	
 	
 }

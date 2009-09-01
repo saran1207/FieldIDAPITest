@@ -6,7 +6,8 @@ import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
 public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTenantResponse> {
-
+	private final boolean TESTING_MODE = true;
+	
 	private Company company;
 	private Person person;
 	private Subscription subscription;
@@ -71,6 +72,10 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		if (subscription.getPromoCode() != null) {
 			addRequestParameter("promocode", subscription.getPromoCode());
 		}		
+		
+		if (TESTING_MODE) {
+			addRequestParameter("testingsignup", "T");
+		}
 	}
 
 	public void setCompany(Company company) {

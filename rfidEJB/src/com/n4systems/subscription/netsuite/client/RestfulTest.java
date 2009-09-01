@@ -6,6 +6,8 @@ import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.CreditCardType;
 import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.SignUpTenantResponse;
+import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
@@ -16,6 +18,7 @@ import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
 public class RestfulTest {
 
 	public static void main(String args[]) {
+		
 		
 		ProductDetailsClient productDetailsLoader = new ProductDetailsClient();
 		
@@ -106,12 +109,12 @@ public class RestfulTest {
 			
 			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getExternalId());
 			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getExternalId());
-			System.out.println("Subscription netsuite id: "+tenantResponse.getSubscription().getExternalId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		*/
 		
+		/*
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
 		promoClient.setCode("SOMETHING");
 		
@@ -127,6 +130,7 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		PricingDetailsClient pricingClient = new PricingDetailsClient();
 		pricingClient.setSubscription(populateTestSubscription());
@@ -134,6 +138,8 @@ public class RestfulTest {
 		try {
 			GetPricingDetailsResponse priceResponse = pricingClient.execute();
 			System.out.println("Pricing:"+priceResponse.getPricing());
+			System.out.println("Standard price:" +priceResponse.getPricing().getStandardPrice());
+			System.out.println("Discount price:" +priceResponse.getPricing().getDiscountPrice());
 			System.out.println("Contract value:" +priceResponse.getPricing().getContractValue());
 			System.out.println("Storage pricing:" +priceResponse.getPricing().getStoragePrice());
 		} catch (IOException e) {
@@ -146,7 +152,7 @@ public class RestfulTest {
 		subscription.setFrequency(PaymentFrequency.Monthly);
 		subscription.setMonths(12);
 		subscription.setNsrecordid(143L);
-		subscription.setPurchasingPhoneSupport(true);
+		subscription.setPurchasingPhoneSupport(false);
 		subscription.setUsers(5);
 		
 		return subscription;

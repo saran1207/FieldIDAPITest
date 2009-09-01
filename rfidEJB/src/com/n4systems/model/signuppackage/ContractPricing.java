@@ -14,7 +14,7 @@ import com.n4systems.subscription.PaymentOption;
 public class ContractPricing extends AbstractEntity implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
-	private String netsuiteRecordId;
+	private Long netsuiteRecordId;
 	private Float pricePerUserPerMonth;
 	
 	@Enumerated(EnumType.STRING)
@@ -23,10 +23,10 @@ public class ContractPricing extends AbstractEntity implements Saveable {
 	@Enumerated(EnumType.STRING)
 	private SignUpPackageDetails signUpPackage;
 
-	public String getNetsuiteRecordId() {
+	public Long getNetsuiteRecordId() {
 		return netsuiteRecordId;
 	}
-	public void setNetsuiteRecordId(String netsuiteRecordId) {
+	public void setNetsuiteRecordId(Long netsuiteRecordId) {
 		this.netsuiteRecordId = netsuiteRecordId;
 	}
 	public Float getPricePerUserPerMonth() {
