@@ -10,6 +10,7 @@ import com.n4systems.services.SetupDataLastModUpdateServiceInitializer;
 import com.n4systems.services.TenantCachePreloader;
 import com.n4systems.services.TenantLimitServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
+import com.n4systems.taskscheduling.task.SignUpPackageSyncTaskInitializer;
 
 public class ApplicationBootstrap extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +20,8 @@ public class ApplicationBootstrap extends HttpServlet {
 		new TenantCachePreloader(),
 		new TaskSchedulerBootstraper(), 
 		new SetupDataLastModUpdateServiceInitializer(),
-		new TenantLimitServiceInitializer()
+		new TenantLimitServiceInitializer(),
+		new SignUpPackageSyncTaskInitializer()
 	}; 
 	
 	private static Logger logger = Logger.getLogger(ApplicationBootstrap.class);
