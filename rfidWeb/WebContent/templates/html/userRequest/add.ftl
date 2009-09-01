@@ -37,7 +37,7 @@
 				
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.country"/></label>
-					<@s.select name="countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesCountyr"/>
+					<@s.select name="countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone"/>
 				</div>
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.timezone"/></label>
