@@ -72,4 +72,20 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}
+
+	public boolean isAllowIntegrationEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.AllowIntegration);
+	}
+
+	public boolean isCustomCertEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.CustomCert);
+	}
+
+	public boolean isDedicatedProgramManagerEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.DedicatedProgramManager);
+	}
+
+	public boolean isMultiLocationEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.MultiLocation);
+	}
 }

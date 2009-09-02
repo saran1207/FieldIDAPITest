@@ -18,4 +18,8 @@ public interface SystemSecurityGuard {
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();
 	public boolean isEmailAlertsEnabled();
+	public boolean isCustomCertEnabled(); 
+	public boolean isDedicatedProgramManagerEnabled(); 
+	public boolean isMultiLocationEnabled(); 
+	public boolean isAllowIntegrationEnabled();
 }
