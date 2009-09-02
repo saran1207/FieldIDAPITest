@@ -14,7 +14,7 @@ import com.n4systems.subscription.PaymentOption;
 public class ContractPricing extends AbstractEntity implements Saveable, Comparable<ContractPricing> {
 	private static final long serialVersionUID = 1L;
 	
-	private Long netsuiteRecordId;
+	private Long externalId;
 	private Float pricePerUserPerMonth;
 	
 	@Enumerated(EnumType.STRING)
@@ -23,11 +23,11 @@ public class ContractPricing extends AbstractEntity implements Saveable, Compara
 	@Enumerated(EnumType.STRING)
 	private SignUpPackageDetails signUpPackage;
 
-	public Long getNetsuiteRecordId() {
-		return netsuiteRecordId;
+	public Long getExternalId() {
+		return externalId;
 	}
-	public void setNetsuiteRecordId(Long netsuiteRecordId) {
-		this.netsuiteRecordId = netsuiteRecordId;
+	public void setExternalId(Long externalId) {
+		this.externalId = externalId;
 	}
 	public Float getPricePerUserPerMonth() {
 		return pricePerUserPerMonth;

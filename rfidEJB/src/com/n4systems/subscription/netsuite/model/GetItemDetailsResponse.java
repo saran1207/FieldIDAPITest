@@ -4,13 +4,13 @@ import java.util.List;
 
 public class GetItemDetailsResponse extends AbstractResponse {
 
-	private List<ProductInformation> itemlist;
+	private List<NetSuiteProductInformation> itemlist;
 
-	public List<ProductInformation> getItemlist() {
+	public List<NetSuiteProductInformation> getItemlist() {
 		return itemlist;
 	}
 
-	public void setItemlist(List<ProductInformation> itemlist) {
+	public void setItemlist(List<NetSuiteProductInformation> itemlist) {
 		this.itemlist = itemlist;
 	}
 	

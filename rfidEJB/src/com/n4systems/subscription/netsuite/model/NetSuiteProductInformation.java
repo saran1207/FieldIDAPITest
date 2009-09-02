@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProductInformation {
+public class NetSuiteProductInformation {
 	
 	private String fieldid;
 	private String name;
@@ -13,7 +13,7 @@ public class ProductInformation {
 	private List<ContractLength> contractlengths;
 	private Map<Integer, ContractLength> contractLengthMap;
 
-	public String getFieldid() {
+	public String getSyncId() {
 		return fieldid;
 	}
 
@@ -38,7 +38,7 @@ public class ProductInformation {
 		this.name = name;
 	}
 	
-	public Long getNsrecordid() {
+	public Long getExternalId() {
 		return nsrecordid;
 	}
 

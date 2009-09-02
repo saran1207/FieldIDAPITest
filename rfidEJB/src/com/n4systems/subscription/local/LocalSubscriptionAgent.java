@@ -1,7 +1,10 @@
 package com.n4systems.subscription.local;
 
+import java.util.List;
+
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
+import com.n4systems.subscription.ContractPrice;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
@@ -32,6 +35,13 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		
 		LocalPriceCheckResponse priceCheckResponse = new LocalPriceCheckResponse(new LocalPricing());
 		return priceCheckResponse;
+	}
+
+	@Override
+	public List<ContractPrice> retrieveContractPrices()
+			throws CommunicationException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
