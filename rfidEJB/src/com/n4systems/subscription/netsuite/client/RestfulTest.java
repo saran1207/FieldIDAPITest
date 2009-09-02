@@ -6,6 +6,7 @@ import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.CreditCardType;
 import com.n4systems.subscription.PaymentFrequency;
+import com.n4systems.subscription.Response;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
@@ -101,18 +102,26 @@ public class RestfulTest {
 		
 		System.out.println("Contract value:"+pricingDetailsResponse.getPricing().getContract_value());
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
+		*/
 		
 		NetSuiteSubscriptionAgent agent = new NetSuiteSubscriptionAgent();
 		
 		try {
-			SignUpTenantResponse tenantResponse = agent.buy(populateTestSubscription(), populateTestTenant(), populateTestClient());
+			//SignUpTenantResponse tenantResponse = agent.buy(populateTestSubscription(), populateTestTenant(), populateTestClient());
 			
-			System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getExternalId());
-			System.out.println("CLient netsuite id: "+tenantResponse.getClient().getExternalId());
+			UploadNoteClient uploadNoteClient = new UploadNoteClient();
+//			uploadNoteClient.setTenantId(tenantResponse.getTenant().getExternalId());
+			uploadNoteClient.setTenantId(5149L);
+			uploadNoteClient.setNote("This is me testing out the note thing.");
+			uploadNoteClient.setTitle("TEST Note ** Jesse");
+			Response response = uploadNoteClient.execute();
+			
+			System.out.println("Note repsonse:"+response.getResult());
+			//System.out.println("Tenant netsuite id: "+tenantResponse.getTenant().getExternalId());
+			//System.out.println("CLient netsuite id: "+tenantResponse.getClient().getExternalId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		*/
 		
 		/*
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();

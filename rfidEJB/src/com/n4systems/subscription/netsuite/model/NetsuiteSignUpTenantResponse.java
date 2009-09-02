@@ -4,7 +4,7 @@ import com.n4systems.subscription.ExternalIdResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 
-public class NetsuiteSignUpTenantResponse extends AbstractResponse implements SignUpTenantResponse {
+public class NetsuiteSignUpTenantResponse extends BaseResponse implements SignUpTenantResponse {
 
 	private NetsuiteTenant tenant;
 	private NetsuiteClient client;

@@ -12,4 +12,6 @@ public abstract class SubscriptionAgent {
 	public abstract PriceCheckResponse priceCheck(Subscription subscription) throws CommunicationException;
 	
 	public abstract List<ContractPrice> retrieveContractPrices() throws CommunicationException;
+	
+	public abstract Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException;
 }

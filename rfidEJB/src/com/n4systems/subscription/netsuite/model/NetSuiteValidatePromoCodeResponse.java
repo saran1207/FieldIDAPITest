@@ -2,7 +2,7 @@ package com.n4systems.subscription.netsuite.model;
 
 import com.n4systems.subscription.InvalidPromoCodeReason;
 
-public class NetSuiteValidatePromoCodeResponse extends AbstractResponse implements com.n4systems.subscription.ValidatePromoCodeResponse {
+public class NetSuiteValidatePromoCodeResponse extends BaseResponse implements com.n4systems.subscription.ValidatePromoCodeResponse {
 
 	private String details;
 

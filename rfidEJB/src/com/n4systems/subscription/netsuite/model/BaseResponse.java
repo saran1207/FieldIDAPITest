@@ -1,6 +1,8 @@
 package com.n4systems.subscription.netsuite.model;
 
-public abstract class AbstractResponse {
+import com.n4systems.subscription.Response;
+
+public class BaseResponse implements Response {
 
 	private String result;
 	private String function;

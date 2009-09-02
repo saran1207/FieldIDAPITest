@@ -9,6 +9,7 @@ import com.n4systems.subscription.ContractPrice;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.PriceCheckResponse;
+import com.n4systems.subscription.Response;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
@@ -74,6 +75,11 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		localContractPrice.setSyncId(syncId);
 		
 		return localContractPrice;
+	}
+
+	@Override
+	public Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException {
+		return new LocalResponse();
 	}
 
 }

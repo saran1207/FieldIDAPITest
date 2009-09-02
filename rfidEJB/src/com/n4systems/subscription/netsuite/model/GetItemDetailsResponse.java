@@ -2,7 +2,7 @@ package com.n4systems.subscription.netsuite.model;
 
 import java.util.List;
 
-public class GetItemDetailsResponse extends AbstractResponse {
+public class GetItemDetailsResponse extends BaseResponse {
 
 	private List<NetSuiteProductInformation> itemlist;
 

@@ -10,6 +10,7 @@ import com.n4systems.subscription.Company;
 import com.n4systems.subscription.ContractPrice;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.PriceCheckResponse;
+import com.n4systems.subscription.Response;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
@@ -17,6 +18,7 @@ import com.n4systems.subscription.ValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.client.PricingDetailsClient;
 import com.n4systems.subscription.netsuite.client.ProductDetailsClient;
 import com.n4systems.subscription.netsuite.client.SignUpTenantClient;
+import com.n4systems.subscription.netsuite.client.UploadNoteClient;
 import com.n4systems.subscription.netsuite.client.ValidatePromoCodeClient;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
@@ -100,5 +102,22 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	public List<ContractPrice> retrieveContractPrices()	throws CommunicationException {
 		NetSuiteContractPriceHandler contractPriceHandler = new NetSuiteContractPriceHandler(productDetailsClient, pricingDetailsClient);
 		return contractPriceHandler.retrieveContractPrices();
+	}
+
+	@Override
+	public Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException {
+		UploadNoteClient uploadNoteClient = new UploadNoteClient();
+		uploadNoteClient.setTenantId(tenantExternalId);
+		uploadNoteClient.setTitle(title);
+		uploadNoteClient.setNote(note);
+		
+		Response response = null;
+		try {
+			response = uploadNoteClient.execute();
+		} catch (IOException e) {
+			throw new CommunicationException();
+		}
+		
+		return response;
 	}
 }

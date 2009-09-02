@@ -3,7 +3,7 @@ package com.n4systems.subscription.netsuite.model;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.Pricing;
 
-public class GetPricingDetailsResponse extends AbstractResponse implements PriceCheckResponse {
+public class GetPricingDetailsResponse extends BaseResponse implements PriceCheckResponse {
 	
 	private PricingDetails pricing;
 
