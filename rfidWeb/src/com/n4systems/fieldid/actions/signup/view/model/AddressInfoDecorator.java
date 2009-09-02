@@ -62,7 +62,7 @@ public class AddressInfoDecorator extends AddressInfo {
 		delegateAddress.setCountry(country);
 	}
 
-	@RequiredStringValidator(message="", key="error.postal_required")
+	@RequiredStringValidator(message="", key="error.zip_code_required")
 	public void setPostal(String postal) {
 		delegateAddress.setPostal(postal);
 	}

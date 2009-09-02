@@ -7,6 +7,7 @@ import java.util.List;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.CreditCardType;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
 public class CreditCardDecorator extends CreditCard {
 
@@ -58,12 +59,13 @@ public class CreditCardDecorator extends CreditCard {
 		return delegateCard.getType();
 	}
 
-	@RequiredStringValidator(message="", key="error.name_required")
+	@RequiredStringValidator(message="", key="error.cc_name_required")
 	public void setName(String name) {
 		delegateCard.setName(name);
 	}
 
-	@RequiredStringValidator(message="", key="error.number_required")
+	@RequiredStringValidator(message="", key="error.valid_cc_number_required")
+	@StringLengthFieldValidator(message="", key="error.valid_cc_number_required", minLength="13")
 	public void setNumber(String number) {
 		delegateCard.setNumber(number);
 	}
