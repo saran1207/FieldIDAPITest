@@ -13,6 +13,7 @@ public class PricingDetails implements Pricing {
 	private Float discount_total;
 	private Float phonesupport_value;
 	private Float storage_pricing;
+	private Float first_payment;
 
 	public void setPhonesupport_value(Float phonesupportValue) {
 		phonesupport_value = phonesupportValue;
@@ -39,8 +40,11 @@ public class PricingDetails implements Pricing {
 	}
 	public void setDiscount_total(Float discount_total) {
 		this.discount_total = discount_total;
+	}	
+	public void setFirst_payment(Float firstPayment) {
+		first_payment = firstPayment;
 	}
-	
+
 	public Integer getDiscountMonths() {
 		return disc_months;
 	}
@@ -65,8 +69,8 @@ public class PricingDetails implements Pricing {
 	public Float getContractValue() {
 		return contract_value;
 	}
-
 	public Float getFirstPaymentTotal() {
-		return getContractValue();
+		return first_payment;
 	}
+	
 }

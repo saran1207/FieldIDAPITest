@@ -146,7 +146,7 @@ public class RestfulTest {
 		
 		try {
 			GetPricingDetailsResponse priceResponse = pricingClient.execute();
-			System.out.println("Pricing:"+priceResponse.getPricing());
+			System.out.println("Pricing:"+priceResponse.getPricing().getFirstPaymentTotal());
 			System.out.println("Standard price:" +priceResponse.getPricing().getStandardPrice());
 			System.out.println("Discount price:" +priceResponse.getPricing().getDiscountPrice());
 			System.out.println("Contract value:" +priceResponse.getPricing().getContractValue());
