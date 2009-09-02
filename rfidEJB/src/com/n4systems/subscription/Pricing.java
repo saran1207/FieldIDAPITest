@@ -11,4 +11,6 @@ public interface Pricing {
 	public Float getDiscountTotal();
 	public Float getPhoneSupportValue();
 	
+	public Float getFirstPaymentTotal();
+	
 }

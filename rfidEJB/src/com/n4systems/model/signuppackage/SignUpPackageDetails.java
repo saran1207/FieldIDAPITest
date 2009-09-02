@@ -11,14 +11,29 @@ public enum SignUpPackageDetails {
 	Basic("FIDBASIC", "Basic", 50L, 5L, 250L, ExtendedFeature.EmailAlerts),
 	
 	Plus("FIDPLUS", "Plus", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
-																	ExtendedFeature.Projects),
+				ExtendedFeature.Projects),
 																	
 	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
-				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter),
+				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter,
+				ExtendedFeature.AllowIntegration),
 				
 	Unlimited("FIDUNLIMITED", "Unlimited", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
-				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter);
+				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.Compliance, ExtendedFeature.PartnerCenter,
+				ExtendedFeature.AllowIntegration, ExtendedFeature.MultiLocation, ExtendedFeature.CustomCert, 
+				ExtendedFeature.DedicatedProgramManager);
 	
+	
+	public static SignUpPackageDetails retrieveBySyncId(String syncId) {
+		for (SignUpPackageDetails signUpPackageDetails : SignUpPackageDetails.values()) {
+			if (signUpPackageDetails.getSyncId().equals(syncId)) {
+				return signUpPackageDetails;
+			}
+		}
+		
+		return null;
+	}
+	
+	private static final SignUpPackageDetails PREFERRED_PACKAGE = SignUpPackageDetails.Enterprise;
 	private String syncId;
 	private String name;
 	private Long diskSpace;
@@ -32,7 +47,7 @@ public enum SignUpPackageDetails {
 		this.diskSpace = diskSpace;
 		this.users = users;
 		this.assets = assets;
-		this.extendedFeatures = extendedFeatures;		
+		this.extendedFeatures = extendedFeatures;	
 	}
 	
 	public String getSyncId() {
@@ -53,14 +68,19 @@ public enum SignUpPackageDetails {
 	public ExtendedFeature[] getExtendedFeatures() {
 		return extendedFeatures;
 	}
+
+	public boolean isPreferred() {
+		return this == PREFERRED_PACKAGE;
+	}
 	
-	public static SignUpPackageDetails retrieveBySyncId(String syncId) {
-		for (SignUpPackageDetails signUpPackageDetails : SignUpPackageDetails.values()) {
-			if (signUpPackageDetails.getSyncId().equals(syncId)) {
-				return signUpPackageDetails;
+	public boolean includesFeature(ExtendedFeature feature) {
+		for (ExtendedFeature includedFeature : extendedFeatures) {
+			if (feature == includedFeature) {
+				return true;
 			}
 		}
 		
-		return null;
+		return false;
 	}
+
 }

@@ -1,6 +1,6 @@
 package com.n4systems.handlers.creator.signup.model;
 
-import com.n4systems.model.signuppackage.SignUpPackageDetails;
+import com.n4systems.model.signuppackage.SignUpPackage;
 
 
 public interface AccountCreationInformation {
@@ -24,7 +24,7 @@ public interface AccountCreationInformation {
 	
 	
 	
-	public SignUpPackageDetails getSignUpPackage();
+	public SignUpPackage getSignUpPackage();
 	
 	public Integer getNumberOfUsers();
 }

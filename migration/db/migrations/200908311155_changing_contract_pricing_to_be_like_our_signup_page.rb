@@ -5,7 +5,7 @@ class ChangingContractPricingToBeLikeOurSignupPage < ActiveRecord::Migration
       create_abstract_entity_fields_on(t)
       t.string :netsuiterecordid
       t.string :signuppackage
-      t.string :paymentOption
+      t.string :paymentoption
       t.float  :priceperuserpermonth
     end
     

@@ -13,7 +13,7 @@
 
 
 <@s.form action="signUpCreate" theme="fieldid" id="mainContent" cssClass="fullForm">
-	<h1><@s.text name="title.create_your_account"/></h1>
+	<h1><@s.text name="title.create_your_account"/>  with package ${signUp.signUpPackage.name?html}  $${signUp.signUpPackage.defaultPricePerUserPerMonth?html}</h1>
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<div class="infoSection multiColumn">
@@ -58,43 +58,39 @@
 			</div>
 		</div>
 		
-		
-		
-		
-		
 	</div>
 	
 	<hr/>
 	<div class="infoSection">
 		<h2><@s.text name="label.company_info"/></h2>
-		<div class="infoBlock">
-			<div class="infoSet">
+		<div class="multiColumn">
+			<div class="infoSet infoBlock">
 				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
 				<@s.textfield name="signUp.companyName"/>
 			</div>
 			
-			<div class="infoSet">
+			<div class="infoSet infoBlock">
 				<label class="label" for="addressLines"><@s.text name="label.address"/></label>
 				<@s.textfield name="address.addressLine1"/>
 			</div>
-			<div class="infoSet">
+			<div class="infoSet infoBlock">
 				<label class="label" for="city"><@s.text name="label.city"/></label>
 				<@s.textfield name="address.city"/>
 			</div>
-			<div class="infoSet">
+			<div class="infoSet infoBlock">
 				<label class="label" for="state"><@s.text name="label.state"/></label>
 				<@s.textfield name="address.state"/>
 			</div>
 			
-			<div class="infoSet">
+			<div class="infoSet infoBlock">
 				<label class="label" for="country"><@s.text name="label.country"/></label>
 				<@s.textfield name="address.country" cssClass="country"/>
 			</div>
-			<div class="infoSet">
+			<div class="infoSet infoBlock">
 				<label class="label" for="postal"><@s.text name="label.zipcode"/></label>
 				<@s.textfield name="address.postal"/>
 			</div>
-			<div class="infoSet">
+			<div class="infoSet infoBlock">
 				<label class="label" for="phoneNumber"><@s.text name="label.phonenumber"/></label>
 				<@s.textfield  name="signUp.phoneNumber"  />
 			</div>
@@ -111,6 +107,7 @@
 		</div>
 	</div>
 	<hr/>
+	<#if !signUp.signUpPackage.free>
 	<div class="infoSection">
 		<h2><@s.text name="label.payment_options"/></h2>
 		<div class="infoBlock ">
@@ -126,6 +123,7 @@
 		</div>
 	</div>
 	<hr/>
+	</#if>
 	<div class="infoSection">
 		<h2><@s.text name="label.promo_code"/></h2>
 		<div class="infoBlock ">
@@ -139,14 +137,17 @@
 	</div>
 	
 	<hr/>
-	
+	<#if !signUp.signUpPackage.free>
 	<div class="infoSection">
 		<h2><@s.text name="label.payment_options"/></h2>
 		<div class="infoBlock ">
 			<div class="infoSet">
 				<ul>
 					<#list signUp.paymentOptions as paymentOption>
-						<li class="favouredChoice"><@s.radio name="signUp.paymentOption" list="'${paymentOption}'"  label="'${paymentOption.name()}'" theme="simple" cssClass="changesPrice"/></li>
+					<li class="favouredChoice">
+						<#assign paymentMap><#noparse>#</#noparse>{ '${paymentOption.paymentOption}':'<@s.text name="label.${paymentOption.paymentOption}"><@s.param>${paymentOption.pricePerUserPerMonth}</@s.param></@s.text>'}</#assign>
+						<@s.radio name="signUp.paymentOption" list="${paymentMap}" theme="simple" cssClass="changesPrice"/> 
+					</li>
 					</#list>
 				</ul>
 			</div>
@@ -195,9 +196,11 @@
 		</div>
 	</div>
 	<hr/>
+	</#if>
+	
 	<div class="infoSection">
 		<div class="infoBlock">
-			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span>  <@s.reset key="label.update_price" cssClass="updatePrice"/>
+			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> + applicable taxes!!! <#if !signUp.signUpPackage.free><@s.reset key="label.update_price" cssClass="updatePrice"/></#if>
 		</div>
 	</div>
 	

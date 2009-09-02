@@ -24,10 +24,14 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	
 	@Override
 	public PriceCheckResponse priceCheck(Subscription subscription)	throws CommunicationException {
-		if (subscription.getFrequency() == null || subscription.getMonths() == null || subscription.getContractId() == null) {
+		if (subscription.getFrequency() == null || subscription.getMonths() == null || 
+				subscription.getContractId() == null || subscription.getUsers() < 1) {
 			throw new RuntimeException();
 		}
-		return new LocalPriceCheckResponse();
+		
+		
+		LocalPriceCheckResponse priceCheckResponse = new LocalPriceCheckResponse(new LocalPricing());
+		return priceCheckResponse;
 	}
 
 }

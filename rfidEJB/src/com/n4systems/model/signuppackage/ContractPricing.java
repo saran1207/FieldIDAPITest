@@ -11,7 +11,7 @@ import com.n4systems.subscription.PaymentOption;
 
 @Entity
 @Table(name = "contractpricings")
-public class ContractPricing extends AbstractEntity implements Saveable {
+public class ContractPricing extends AbstractEntity implements Saveable, Comparable<ContractPricing> {
 	private static final long serialVersionUID = 1L;
 	
 	private Long netsuiteRecordId;
@@ -46,6 +46,9 @@ public class ContractPricing extends AbstractEntity implements Saveable {
 	}
 	public void setSignUpPackage(SignUpPackageDetails signUpPackage) {
 		this.signUpPackage = signUpPackage;
+	}
+	public int compareTo(ContractPricing o) {
+		return paymentOption.compareTo(o.getPaymentOption());
 	}
 	
 		

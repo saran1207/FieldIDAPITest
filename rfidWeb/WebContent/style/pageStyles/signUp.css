@@ -6,11 +6,26 @@
 	width: 100px;
 }
 
+#mainContent {
+	width:858px;
+}
+h1 {
+	text-align:center;
+	font-size: 2em;
+}
 #packages {
+	margin: 10px 0;
 	width:100%;
 	border-collapse:separated;
 	text-align: center;	
+	empty-cells: show;
 }
+
+#packages .nonFeatureSection {
+	background-color: #ddd;
+}
+
+
 
 #packages th {
 	font-size: 1.2em;
@@ -21,8 +36,21 @@
 }
 
 #packages td, #packages th {
-	padding:5px;
+	padding:8px;
 	text-align: center;
+}
+
+#packages tbody td {
+	border-bottom: 1px solid #ccc;
+}
+
+
+#packages .signUp td, #packages tbody .signUp .preferred {
+	border-bottom: none;
+}
+
+#packages .nonFeatureSection td {
+	border-bottom: 1px solid #bfbfbf;
 }
 #packages .description {
 	text-align: right;
@@ -32,6 +60,7 @@
 	border: 2px solid black;
 	font-size:1.5em;
 	font-weight: bold;
+	background-color: #EEE;
 }		
 #packages thead .preferred {
 	border-bottom: none;
@@ -39,8 +68,10 @@
 
 #packages tbody .preferred {
 	border-top:none;
-	border-bottom:none;
+	border-bottom: 1px solid #fff;
 }
+
+
 #packages tfoot .preferred {
 	border-top:none;
 }

@@ -65,4 +65,8 @@ public class PricingDetails implements Pricing {
 	public Float getContractValue() {
 		return contract_value;
 	}
+
+	public Float getFirstPaymentTotal() {
+		return getContractValue();
+	}
 }

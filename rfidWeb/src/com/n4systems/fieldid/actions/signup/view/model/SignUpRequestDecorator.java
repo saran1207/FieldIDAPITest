@@ -1,15 +1,17 @@
 package com.n4systems.fieldid.actions.signup.view.model;
 
+import java.util.List;
+
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
-import com.n4systems.model.signuppackage.SignUpPackageDetails;
+import com.n4systems.model.signuppackage.ContractPricing;
+import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PaymentFrequency;
-import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.util.ConfigContext;
@@ -101,7 +103,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getRegion();
 	}
 
-	public SignUpPackageDetails getSignUpPackage() {
+	public SignUpPackage getSignUpPackage() {
 		return signUpRequest.getSignUpPackage();
 	}
 
@@ -177,7 +179,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		signUpRequest.setPhoneNumber(phoneNumber);
 	}
 
-	public void setSignUpPackage(SignUpPackageDetails signUpPackageId) {
+	public void setSignUpPackage(SignUpPackage signUpPackageId) {
 		signUpRequest.setSignUpPackage(signUpPackageId);
 	}
 
@@ -272,7 +274,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		signUpRequest.setPaymentOption(paymentOption);
 	}
 
-	public PaymentOption[] getPaymentOptions() {
-		return PaymentOption.values();
+	public List<ContractPricing> getPaymentOptions() {
+		return getSignUpPackage().getPaymentOptions();
 	}
 }

@@ -6,6 +6,7 @@ import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -14,11 +15,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
-import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.signuppackage.ContractPricing;
+import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.persistence.Transaction;
@@ -64,7 +65,7 @@ public class PrimaryOrgCreateHandlerImplTest {
 		
 		AccountCreationInformationStub accountInfo = new AccountCreationInformationStub();
 		accountInfo.setCompanyName("some company").setTenantName("some-tenant").setFullTimeZone("Cananda:Ontario - Toronto")
-				.setSignUpPackage(SignUpPackageDetails.Basic).setNumberOfUsers(10);
+				.setSignUpPackage(new SignUpPackage(SignUpPackageDetails.Basic, new ArrayList<ContractPricing>())).setNumberOfUsers(10);
 		
 		
 		Capture<PrimaryOrg> capturedPrimaryOrg = new Capture<PrimaryOrg>(); 

@@ -1,10 +1,12 @@
 package com.n4systems.subscription;
 
 public enum PaymentOption {
+	MONTH_TO_MONTH(PaymentFrequency.Monthly, Term.ONE_YEAR),
 	ONE_YEAR_UP_FRONT(PaymentFrequency.Upfront, Term.ONE_YEAR), 
-	TWO_YEARS_UP_FRONT(PaymentFrequency.Upfront, Term.TWO_YEARS), 
-	THREE_YEARS_UP_FRONT(PaymentFrequency.Upfront, Term.THREE_YEARS), 
-	MONTH_TO_MONTH(PaymentFrequency.Monthly, Term.ONE_YEAR);
+	TWO_YEARS_UP_FRONT(PaymentFrequency.Upfront, Term.TWO_YEARS); 
+
+	
+	private static final PaymentOption DEFAULT_OPTION = MONTH_TO_MONTH;
 	
 	private final PaymentFrequency frequency;
 	private final Term term;
@@ -21,5 +23,9 @@ public enum PaymentOption {
 	
 	public int getTerm() {
 		return term.getMonths();
+	}
+	
+	public boolean isDefault() {
+		return this == DEFAULT_OPTION;
 	}
 }

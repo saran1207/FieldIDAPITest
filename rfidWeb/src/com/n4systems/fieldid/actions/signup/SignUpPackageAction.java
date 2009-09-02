@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.actions.signup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.signup.view.model.SignUpPackage;
+import com.n4systems.model.signuppackage.SignUpPackage;
 
 public class SignUpPackageAction extends AbstractAction {
 
@@ -28,12 +27,7 @@ public class SignUpPackageAction extends AbstractAction {
 
 	public List<SignUpPackage> getPackages() {
 		if (packages == null) {
-			packages = new ArrayList<SignUpPackage>();
-			packages.add(new SignUpPackage("Free"));
-			packages.add(new SignUpPackage("Basic"));
-			packages.add(new SignUpPackage("Plus"));
-			packages.add(new SignUpPackage("Enterprise"));
-			packages.add(new SignUpPackage("Unlimited"));
+			packages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
 		}
 		return packages;
 	}

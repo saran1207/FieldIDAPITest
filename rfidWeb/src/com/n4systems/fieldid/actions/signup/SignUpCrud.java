@@ -9,20 +9,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.actions.signup.view.model.SignUpPackage;
 import com.n4systems.fieldid.actions.signup.view.model.SignUpRequestDecorator;
-import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandler;
-import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
-import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
-import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.SignUpHandler;
-import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
-import com.n4systems.handlers.creator.signup.SubscriptionApprovalHandler;
-import com.n4systems.handlers.creator.signup.SubscriptionApprovalHandlerImpl;
+import com.n4systems.handlers.creator.CreateHandlerFacorty;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
 import com.n4systems.handlers.creator.signup.exceptions.PromoCodeValidationException;
@@ -30,15 +18,9 @@ import com.n4systems.handlers.creator.signup.exceptions.SignUpCompletionExceptio
 import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
-import com.n4systems.model.producttype.ProductTypeSaver;
-import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
-import com.n4systems.model.stateset.StateSetSaver;
-import com.n4systems.model.tagoption.TagOptionSaver;
-import com.n4systems.model.tenant.OrganizationSaver;
-import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
-import com.n4systems.model.tenant.TenantSaver;
-import com.n4systems.model.user.UserSaver;
+import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
+import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.persistence.StandardPersistenceProvider;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
@@ -58,6 +40,7 @@ public class SignUpCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
 
 	private SignUpRequestDecorator signUpRequest = new SignUpRequestDecorator();
+	private CreateHandlerFacorty createHandlerFacorty;
 
 	public SignUpCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -160,33 +143,15 @@ public class SignUpCrud extends AbstractCrud {
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
 		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
 		
-		getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest());
+		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest());
+	}
+
+	private CreateHandlerFacorty getCreateHandlerFactory() {
+		if (createHandlerFacorty == null) {
+			createHandlerFacorty = new CreateHandlerFacorty();
+		}
 		
-	}
-
-	private SignUpHandler getSignUpHandler() {
-		return new SignUpHandlerImpl(getAccountPlaceHolderCreateHandler(), getBaseSystemStructureCreateHandler(), getSubscriptionAgent(), getSubscriptionApprovalHandler());
-	}
-
-	private SubscriptionApprovalHandler getSubscriptionApprovalHandler() {
-		return new SubscriptionApprovalHandlerImpl(new OrganizationSaver(), new UserSaver());
-	}
-
-	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
-		return new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
-				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver()));
-	}
-	
-	private AccountPlaceHolderCreateHandler getAccountPlaceHolderCreateHandler() {
-		return new AccountPlaceHolderCreateHandlerImpl(new TenantSaver(), getPrimaryOrgCreateHandler(), new UserSaver());
-	}
-	
-	private PrimaryOrgCreateHandler getPrimaryOrgCreateHandler() {
-		return new PrimaryOrgCreateHandlerImpl(new OrganizationSaver());
-	}
-
-	private SubscriptionAgent getSubscriptionAgent() {
-		return SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+		return createHandlerFacorty;
 	}
 
 	
@@ -200,7 +165,7 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	public SignUpPackage getSignUpPackage() {
-		return new SignUpPackage(signUpRequest.getSignUpPackage().name());
+		return signUpRequest.getSignUpPackage();
 	}
 
 	public String getSignUpPackageId() {
@@ -208,7 +173,11 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	public void setSignUpPackageId(String signUpPackageId) {
-		signUpRequest.setSignUpPackage(new SignUpPackage(signUpPackageId).getSignUpPackage());
+		SignUpPackageDetails targetPackage = SignUpPackageDetails.valueOf(signUpPackageId);
+		SignUpPackageLoader loader = getNonSecureLoaderFactory().createSignUpPackageLoader();
+		loader.setSignUpPackageTarget(targetPackage);
+		signUpRequest.setSignUpPackage(loader.load());
+		
 	}
 
 	@VisitorFieldValidator(message = "")
@@ -230,7 +199,7 @@ public class SignUpCrud extends AbstractCrud {
 		SubscriptionAgent agent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
 		try {
 			PriceCheckResponse price = agent.priceCheck(getSignUp());
-			return price.getPricing().getDiscountTotal().longValue();
+			return price.getPricing().getFirstPaymentTotal().longValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

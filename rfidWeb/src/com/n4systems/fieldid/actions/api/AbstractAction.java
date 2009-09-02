@@ -32,6 +32,7 @@ import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.util.ConfigContext;
@@ -458,5 +459,12 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	public String getHumanReadableFileSize(Long fileSize) {
 		String byteCountToDisplaySize = FileUtils.byteCountToDisplaySize(fileSize);
 		return byteCountToDisplaySize;
+	}
+	
+	public String labelForTenantLimit(Long limit) {
+		if (limit.equals(TenantLimit.UNLIMITED)) {
+			return "label.unlimited";
+		}
+		return limit.toString();
 	}
 }

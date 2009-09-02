@@ -1,6 +1,6 @@
 package com.n4systems.handlers.creator.signup.model;
 
-import com.n4systems.model.signuppackage.SignUpPackageDetails;
+import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.CreditCard;
@@ -15,8 +15,8 @@ import com.n4systems.util.timezone.TimeZoneSelectionHelper;
 public class SignUpRequest implements Subscription, AccountCreationInformation, Company, Person {
 	private static final long serialVersionUID = 1L;
 	
-	private SignUpPackageDetails signUpPackage;
-	
+	private SignUpPackage signUpPackage;
+		
 	private String companyName;
 	private String firstName;
 	private String lastName;
@@ -168,13 +168,13 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		return tenantName == null;
 	}
 
-	public SignUpPackageDetails getSignUpPackage() {
+	public SignUpPackage getSignUpPackage() {
 		return signUpPackage;
 	}
 
 
 	public Long getContractId() {
-		return 1L;
+		return signUpPackage.getContract(paymentOption);
 	}
 
 
@@ -203,7 +203,6 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	public CreditCard getCreditCard() {
 		return creditCard;
 	}
-
 
 
 	public String getPhone() {
@@ -252,7 +251,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public void setSignUpPackage(SignUpPackageDetails signUpPackage) {
+	public void setSignUpPackage(SignUpPackage signUpPackage) {
 		this.signUpPackage = signUpPackage;
 	}
 
