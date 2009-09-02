@@ -26,7 +26,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private Region region;
 	
 	
-	private AddressInfo address;
+	private AddressInfo address = new AddressInfo();
 	
 	private String username;
 	private String password;

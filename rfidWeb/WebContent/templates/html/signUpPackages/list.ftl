@@ -3,7 +3,7 @@
 </head>
 
 
-<div id="mainContent">
+<div id="mainContent" class="fullScreen">
 	<h1><@s.text name="title.sign_up_for_an_account"/></h1>
 	<table id="packages">
 		<thead>

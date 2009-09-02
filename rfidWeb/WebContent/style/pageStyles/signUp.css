@@ -6,7 +6,7 @@
 	width: 100px;
 }
 
-#mainContent {
+#mainContent.fullScreen {
 	width:858px;
 }
 h1 {
