@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.CollectionOfElements;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.tenant.TenantLimit;
 
 @Entity
 @Table(name = "promocodes")
@@ -35,6 +37,11 @@ public class PromoCode extends AbstractEntity implements Saveable {
     @Column(name="feature", nullable=false)
 	private Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>();
 
+	
+	@Embedded
+	private TenantLimit limits = new TenantLimit();
+	
+	
 	public String getCode() {
 		return code;
 	}
@@ -50,4 +57,15 @@ public class PromoCode extends AbstractEntity implements Saveable {
 	public void setExtendedFeatures(Set<ExtendedFeature> extendedFeatures) {
 		this.extendedFeatures = extendedFeatures;
 	}
+
+	public TenantLimit getLimits() {
+		return limits;
+	}
+
+	public void setLimits(TenantLimit limits) {
+		this.limits = limits;
+	}
+	
+	
+	
 }

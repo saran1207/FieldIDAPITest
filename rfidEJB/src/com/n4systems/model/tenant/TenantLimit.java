@@ -87,6 +87,19 @@ public class TenantLimit implements Serializable {
 		Long sum = (assets + users + diskSpace);
 		return sum.hashCode();
 	}
+
+	public void addOn(TenantLimit tenantLimitToAddOn) {
+		assets = addLimit(assets, tenantLimitToAddOn.assets);
+		diskSpace = addLimit(diskSpace, tenantLimitToAddOn.diskSpace);
+		users = addLimit(users, tenantLimitToAddOn.users);
+	}
+	
+	private Long addLimit(Long currentLimit, Long limitToAdd) {
+		if (currentLimit.equals(UNLIMITED) || limitToAdd.equals(UNLIMITED)) {
+			return UNLIMITED;
+		}
+		return currentLimit + limitToAdd;
+	}
 	
 	
 }
