@@ -4,19 +4,19 @@ import com.n4systems.subscription.PaymentFrequency;
 import com.n4systems.subscription.Subscription;
 
 public class NetsuiteSubscription implements Subscription {
-	private Long contractId;
+	private Long contractExternalId;
 	private Integer months;
 	private Integer users;
 	private PaymentFrequency frequency;
 	private String promoCode;
 	private boolean purchasingPhoneSupport;
 
-	public Long getContractId() {
-		return contractId;
+	public Long getContractExternalId() {
+		return contractExternalId;
 	}
 	
 	public void setNsrecordid(Long nsrecordid) {
-		this.contractId = nsrecordid;
+		this.contractExternalId = nsrecordid;
 	}
 
 	public PaymentFrequency getFrequency() {
@@ -61,7 +61,7 @@ public class NetsuiteSubscription implements Subscription {
 
 	@Override
 	public String toString() {
-		return getContractId() + " for "+getMonths()+" months "+" with "+getUsers()+" users. "+getFrequency()+". Phone support? "+isPurchasingPhoneSupport();
+		return getContractExternalId() + " for "+getMonths()+" months "+" with "+getUsers()+" users. "+getFrequency()+". Phone support? "+isPurchasingPhoneSupport();
 	}
 	
 	

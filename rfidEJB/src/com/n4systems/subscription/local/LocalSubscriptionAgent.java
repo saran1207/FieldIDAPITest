@@ -31,7 +31,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	@Override
 	public PriceCheckResponse priceCheck(Subscription subscription)	throws CommunicationException {
 		if (subscription.getFrequency() == null || subscription.getMonths() == null || 
-				subscription.getContractId() == null || subscription.getUsers() < 1) {
+				subscription.getContractExternalId() == null || subscription.getUsers() < 1) {
 			throw new RuntimeException();
 		}
 		

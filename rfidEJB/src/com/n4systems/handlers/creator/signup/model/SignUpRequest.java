@@ -174,7 +174,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public Long getContractId() {
+	public Long getContractExternalId() {
 		return signUpPackage.getContract(paymentOption);
 	}
 
