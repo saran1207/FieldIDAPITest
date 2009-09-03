@@ -11,9 +11,11 @@ import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
+import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteClient;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
+import com.n4systems.subscription.netsuite.model.NetsuiteSubscriptionDetails;
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
 
 public class RestfulTest {
@@ -102,16 +104,15 @@ public class RestfulTest {
 		
 		System.out.println("Contract value:"+pricingDetailsResponse.getPricing().getContract_value());
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
-		*/
 		
 		NetSuiteSubscriptionAgent agent = new NetSuiteSubscriptionAgent();
 		
 		try {
-			//SignUpTenantResponse tenantResponse = agent.buy(populateTestSubscription(), populateTestTenant(), populateTestClient());
+			SignUpTenantResponse tenantResponse = agent.buy(populateTestSubscription(), populateTestTenant(), populateTestClient());
 			
 			UploadNoteClient uploadNoteClient = new UploadNoteClient();
-//			uploadNoteClient.setTenantId(tenantResponse.getTenant().getExternalId());
-			uploadNoteClient.setTenantId(5149L);
+			uploadNoteClient.setTenantId(tenantResponse.getTenant().getExternalId());
+			//uploadNoteClient.setTenantId(5149L);
 			uploadNoteClient.setNote("This is me testing out the note thing.");
 			uploadNoteClient.setTitle("TEST Note ** Jesse");
 			Response response = uploadNoteClient.execute();
@@ -122,6 +123,7 @@ public class RestfulTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		/*
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
@@ -140,6 +142,19 @@ public class RestfulTest {
 			e.printStackTrace();
 		}
 		*/
+		
+		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
+		detailsClient.setTenantExternalId(5187L);
+		try {
+			GetSubscriptionDetailsResponse subResponse = detailsClient.execute();
+			if (subResponse.getSubscription() == null) {
+				System.out.println("No active subscription");
+			} else {
+				System.out.println("Account type: "+subResponse.getSubscription().getAccountType());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		PricingDetailsClient pricingClient = new PricingDetailsClient();
 		pricingClient.setSubscription(populateTestSubscription());
@@ -170,9 +185,9 @@ public class RestfulTest {
 	private static NetsuiteClient populateTestClient() {
 		NetsuiteClient client = new NetsuiteClient();
 		
-		client.setN4Id("6");
-		client.setFirstName("Guy");
-		client.setLastName("Incognito");
+		client.setN4Id("515");
+		client.setFirstName("Guy Not So");
+		client.setLastName("Incdognito");
 		
 		return client;
 	}
@@ -182,8 +197,8 @@ public class RestfulTest {
 		tenant.setBillingAddress(populateTestAddress());
 		tenant.setCompanyName("TEST - Jesse Manufacturing");
 		tenant.setCreditCard(populateTestCreditCard());
-		tenant.setEmail("bademail@bad.com");
-		tenant.setN4Id("5");
+		tenant.setEmail("badseemail@bad.com");
+		tenant.setN4Id("5552");
 		tenant.setPhone("416-555-5555");
 		tenant.setShippingAddress(populateTestAddress());
 		tenant.setUsingCreditCard(true);
