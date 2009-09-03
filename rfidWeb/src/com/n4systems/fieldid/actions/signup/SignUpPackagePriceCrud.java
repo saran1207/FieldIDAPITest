@@ -6,6 +6,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
+import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SubscriptionAgent;
 
@@ -51,8 +52,8 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 		try {
 			PriceCheckResponse price = agent.priceCheck(getSignUp());
 			return price.getPricing().getFirstPaymentTotal().longValue();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (CommunicationException e) {
+			
 		}
 		return 0L;
 	}

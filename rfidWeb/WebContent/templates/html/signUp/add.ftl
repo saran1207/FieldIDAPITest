@@ -116,7 +116,7 @@
 			</div>
 			
 			<div class="infoSet">
-				<label class="label" for="purchasePhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasePhoneSupport" theme="simple" cssClass="changesPrice"/><span></label>
+				<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/><span></label>
 			</div>
 		
 		</div>

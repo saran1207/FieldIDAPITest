@@ -212,13 +212,12 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 
 	public AddressInfo getShippingAddress() {
-		return null;
+		return getBillingAddress();
 	}
 
 
 	public String getUrl() {
-		
-		return null;
+		return "";
 	}
 
 
@@ -231,13 +230,10 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		return purchasingPhoneSupport;
 	}
 
-
+	
 	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
 		this.purchasingPhoneSupport = purchasingPhoneSupport;
 	}
-
-
-	
 
 
 	public String getN4Id() {
