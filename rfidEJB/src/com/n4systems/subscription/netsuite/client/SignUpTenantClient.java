@@ -74,7 +74,7 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		}		
 		
 		if (TESTING_MODE) {
-			addRequestParameter("testsignup", "T");
+			addRequestParameter("testingsignup", "T");
 		}
 	}
 
