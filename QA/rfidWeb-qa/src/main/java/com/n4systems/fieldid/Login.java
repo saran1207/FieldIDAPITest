@@ -222,8 +222,6 @@ public class Login extends TestCase {
 	 * @throws Exception
 	 */
 	public void close() throws Exception {
-		FieldIDMisc.stopMonitor();
-		FieldIDMisc.quitMonitor();
 		Thread.sleep(2000);	// give the thread a few seconds to stop before killing IE.
 		ie.close();
 		assertFalse("Closed Internet Explorer but it still exists.", ie.exists());

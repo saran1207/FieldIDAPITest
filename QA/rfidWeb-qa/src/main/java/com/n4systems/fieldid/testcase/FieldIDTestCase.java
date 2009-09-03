@@ -104,7 +104,10 @@ public abstract class FieldIDTestCase extends TestCase {
 	
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		FieldIDMisc.stopMonitor();
+		FieldIDMisc.quitMonitor();
 		misc.myWindowCapture(timestamp + "/tearDown-" + getName() + ".png");
 		login.close();
+		misc.forcefullyKillInternetExplorer();
 	}
 }

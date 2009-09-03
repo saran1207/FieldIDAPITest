@@ -17,6 +17,7 @@ public class AllTests {
 		suite.addTestSuite(SmokeTestEx.class);	// run smoke test first so it creates stuff for Validate to use
 		suite.addTestSuite(Validate.class);
 		suite.addTestSuite(Validate_2009_6_2.class);
+		suite.addTestSuite(Validate_2009_7_0.class);
 		suite.addTestSuite(EmbeddedLogin.class);
 		//suite.addTestSuite(BrandedLogin.class);
 //		suite.addTestSuite(EmployeePermissions.class);

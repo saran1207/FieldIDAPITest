@@ -26,7 +26,7 @@ public class Refresh extends Thread implements Runnable {
 				previous = wb2.getStatusText().toString();
 				wait(1000);
 				current = wb2.getStatusText().toString();
-				if(count > 0 && current.equals(previous)) {
+				if(count > 0 && current.equals(previous) && !current.startsWith("Done")) {
 					cycle++;
 				} else {
 					cycle = 0;
@@ -35,7 +35,6 @@ public class Refresh extends Thread implements Runnable {
 					wb2.refresh();
 					cycle = 0;
 				}
-				System.err.println(cycle);
 			}
 		} catch (Exception e) {
 		} finally {
@@ -44,19 +43,16 @@ public class Refresh extends Thread implements Runnable {
 	}
 	
 	public synchronized void enable() {
-		System.err.println("enable");
 		if(count < count_max)
 			count++;
 	}
 	
 	public synchronized void disable() {
-		System.err.println("disable");
 		if(count > 0)
 			count--;
 	}
 	
 	public synchronized void quit() {
-		System.err.println("quit");
 		running = false;
 	}
 	
@@ -70,7 +66,6 @@ public class Refresh extends Thread implements Runnable {
 	
 	public synchronized void start() {
 		super.start();
-		System.err.println("start");
 		running = true;
 	}
 }

@@ -27,7 +27,7 @@ import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "cglift";
+	String company = "illinois";
 	String password = "makemore$";
 	boolean jobs = false;			// end users do not have Jobs
 	
@@ -581,7 +581,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	static String masterInspectionType = "N4 Master Visual Inspection";
-	static String masterInspectionEventTypeGroup = "Visual Inspection";
+	static String masterInspectionEventTypeGroup = "Inspection Report";
 	static InspectionForm masterInspectionForm = null;
 	static String masterProductType = "n4master";
 	static String subInspectionType = null;	// This gets filled in later
@@ -702,7 +702,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 //				mits.gotoAddButtonGroup();
 //				ButtonGroupType bgt = new ButtonGroupType("Pass/Fail");
 //				bgt.setLabel(0, "PASS");
-//				bgt.setLabel(1, "FAIL", ButtonGroupType.FAIL, ButtonGroupType.FAIL_IMAGE);\
+//				bgt.setLabel(1, "FAIL", ButtonGroupType.FAIL, ButtonGroupType.FAIL_IMAGE);
 //				// TODO: add the button group
 //			}
 			mits.gotoImDoneFromManageButtonGroups();
@@ -717,7 +717,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 						bg.setSetsResult(true);
 					}
 					Criteria c = new Criteria("Criteria #" + criteria, bg);
-					int numRecommendations = misc.getRandomInteger(0, 3);
+					int numRecommendations = 21; // misc.getRandomInteger(0, 3);
 					for(int recommendation = 0; recommendation < numRecommendations; recommendation++) {
 						c.addRecommendation("Recommendation #" + recommendation);
 					}

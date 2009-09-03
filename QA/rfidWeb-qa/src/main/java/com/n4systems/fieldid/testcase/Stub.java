@@ -19,18 +19,7 @@ public class Stub extends FieldIDTestCase {
 			login.setUserName("n4systems");
 			login.setPassword("makemore$");
 			login.login();
-			String customer = "ALRO STEEL-AKRON";
-//			assets.validate("Reel/ID", customer);
-			assets.gotoAssets();
-			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-			c.setOrderNumber(true);
-			assets.setProductSearchColumns(c);
-			ProductSearchCriteria prop = new ProductSearchCriteria();
-			prop.setCustomer(customer);
-			assets.setProductSearchCriteria(prop);
-			assets.gotoProductSearchResults();
-			List<String> orderNumbers = assets.getProductSearchResultsColumn("Order Number");
-			System.out.println(orderNumbers);
+
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;

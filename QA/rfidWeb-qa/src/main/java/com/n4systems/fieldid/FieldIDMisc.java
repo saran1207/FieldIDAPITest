@@ -3,7 +3,9 @@ package com.n4systems.fieldid;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,8 +25,10 @@ public class FieldIDMisc extends TestCase {
 
 	IE ie = null;
 	public static Refresh monitor = null;
+	private static boolean enabled = true;
 	static long hack = 5000;	// wait 5 seconds for Javascript actions to complete
 	static long lightBoxHack = 10000;
+	static long lightBoxHackLoops = 60; // will loop 60 times, 1 second each loop or less
 	public static long dayInMilliseconds = 86400000;	// used for scheduling inspections
 	Random r = new Random();
 	private Finder lightBoxOKButtonFinder;
@@ -198,7 +202,14 @@ public class FieldIDMisc extends TestCase {
 	 * @throws Exception
 	 */
 	public void waitForLightBox() throws Exception {
-		Thread.sleep(lightBoxHack);
+		int count = 0;
+		while(count++ < lightBoxHackLoops) {
+			Thread.sleep(1000);	// one second
+			HtmlElement b = ie.htmlElement(lightBoxOKButtonFinder);
+			if(b.exists()) {
+				break;
+			}
+		}
 	}
 
 	/**
@@ -337,6 +348,43 @@ public class FieldIDMisc extends TestCase {
 				}
 			}
 		}).start();
+	}
+	
+	public void forcefullyKillInternetExplorer() throws Exception {
+		String imageName = "iexplore.exe";
+		Runtime r = Runtime.getRuntime();
+		// check to see if the process is running
+		Process p = r.exec("tasklist /FI \"IMAGENAME eq " + imageName + "\" /NH /FO CSV");
+		// if running, error stream will be empty, i.e. null
+		BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+		if(err.readLine() == null) {
+			// if it is running, kill it
+			r.exec("taskkill /f /im " + imageName + " /t");
+			Thread.sleep(5000);	// give it 5 seconds to die
+		}
+	}
+	
+	public void createThreadToConstantlyMonitorForModalDialogs() throws Exception {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					FieldIDMisc.enabled = true;
+					while(FieldIDMisc.enabled) {
+						Thread.sleep(1000);
+						Wnd w = Wnd.findWindow("#32770");
+						IEPromptDialog confirm = new IEPromptDialog(w, ie);
+						if(confirm.exists()) {
+							confirm.ok();
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}).start();
+	}
+	
+	public void killThreadToConstantlyMonitorForModalDialogs() throws Exception {
+		FieldIDMisc.enabled = false;
 	}
 	
 	/**

@@ -70,7 +70,7 @@ public class ManageOrganizations extends TestCase {
 			organizationNamesFinder = xpath(p.getProperty("organizationnamecells"));
 			addOrganizationLinkFinder = xpath(p.getProperty("addorganizationlink"));
 			addOrganizationNameFinder = id(p.getProperty("addorganizationname"));
-			addOrganizationAdminEmailFinder = id(p.getProperty("addorganizationadminemail"));
+			addOrganizationAdminEmailFinder = xpath(p.getProperty("addorganizationadminemail"));
 			addOrganizationNameOnCertFinder = id(p.getProperty("addorganizationnameoncert"));
 			addOrganizationStreetAddressFinder = id(p.getProperty("addorganizationstreetaddress"));
 			addOrganizationCityFinder = id(p.getProperty("addorganizationcity"));
@@ -155,14 +155,9 @@ public class ManageOrganizations extends TestCase {
 		assertNotNull(o);
 		assertNotNull("Organization Name is required", o.getName());
 		assertFalse("Organization Name cannot be blank", o.getName().equals(""));
-		assertNotNull("Organization Administrator Email is required", o.getAdminEmail());
-		assertFalse("Organization Administrator Email cannot be blank", o.getAdminEmail().equals(""));
 		TextField name = ie.textField(addOrganizationNameFinder);
 		assertTrue("Could not find the field for Name", name.exists());
 		name.set(o.getName());
-		TextField adminEmail = ie.textField(addOrganizationAdminEmailFinder);
-		assertTrue("Could not find the field for Administrator Email", adminEmail.exists());
-		adminEmail.set(o.getAdminEmail());
 		TextField nameOnCert = ie.textField(addOrganizationNameOnCertFinder);
 		assertTrue("Could not find the field for Name on certificate", nameOnCert.exists());
 		if(o.getNameOnCert() != null) {

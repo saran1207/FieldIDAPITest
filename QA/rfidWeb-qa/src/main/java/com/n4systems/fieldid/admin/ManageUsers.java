@@ -692,4 +692,62 @@ public class ManageUsers extends TestCase {
 		submit.click();
 		FieldIDMisc.startMonitor();
 	}
+
+	public CustomerUser getAddCustomerUser() throws Exception {
+		CustomerUser u = new CustomerUser(null, null, null, null, null);
+
+		TextField addCustomerUserUserID = ie.textField(addCustomerUserUserIDFinder);
+		assertTrue("Could not find the User ID text field on Add User", addCustomerUserUserID.exists());
+		u.setUserID(addCustomerUserUserID.value());
+
+		TextField addCustomerUserEmail = ie.textField(addCustomerUserEmailFinder);
+		assertTrue("Could not find the Email text field on Add User", addCustomerUserEmail.exists());
+		u.setEmail(addCustomerUserEmail.value());
+
+		TextField addCustomerUserFirstName = ie.textField(addCustomerUserFirstNameFinder);
+		assertTrue("Could not find the First Name text field on Add User", addCustomerUserFirstName.exists());
+		u.setFirstName(addCustomerUserFirstName.value());
+
+		TextField addCustomerUserLastName = ie.textField(addCustomerUserLastNameFinder);
+		assertTrue("Could not find the Last Name text field on Add User", addCustomerUserLastName.exists());
+		u.setLastName(addCustomerUserLastName.value());
+
+		TextField addCustomerUserPosition = ie.textField(addCustomerUserPositionFinder);
+		assertTrue("Could not find the Position text field on Add User", addCustomerUserPosition.exists());
+		u.setPosition(addCustomerUserPosition.value());
+
+		TextField addCustomerUserInitials = ie.textField(addCustomerUserInitialsFinder);
+		assertTrue("Could not find the Initials text field on Add User", addCustomerUserInitials.exists());
+		u.setInitials(addCustomerUserInitials.value());
+
+		TextField addCustomerUserSecurityRFIDNumber = ie.textField(addCustomerUserSecurityRFIDNumberFinder);
+		assertTrue("Could not find the Security Rfid Number text field on Add User", addCustomerUserSecurityRFIDNumber.exists());
+		u.setSecurityRFIDNumber(addCustomerUserSecurityRFIDNumber.value());
+
+		SelectList addCustomerUserCountry = ie.selectList(addCustomerUserCountryFinder);
+		assertTrue("Could not find the Country select list on Add User", addCustomerUserCountry.exists());
+		Option countrySelected = addCustomerUserCountry.option(value(addCustomerUserCountry.value()));
+		u.setCountry(countrySelected.text());
+
+		SelectList addCustomerUserTimeZone = ie.selectList(addCustomerUserTimeZoneFinder);
+		assertTrue("Could not find the Time Zone select list on Add User", addCustomerUserTimeZone.exists());
+		Option timeZoneSelected = addCustomerUserTimeZone.option(value(addCustomerUserTimeZone.value()));
+		u.setTimeZone(timeZoneSelected.text());
+
+		SelectList addCustomerUserCustomer = ie.selectList(addCustomerUserCustomerFinder);
+		assertTrue("Could not find the Customer select list on Add User", addCustomerUserCustomer.exists());
+		Option customerSelected = addCustomerUserCustomer.option(value(addCustomerUserCustomer.value()));
+		u.setCustomer(customerSelected.text());
+
+		SelectList addCustomerUserDivision = ie.selectList(addCustomerUserDivisionFinder);
+		assertTrue("Could not find the Divison select list on Add User", addCustomerUserDivision.exists());
+		Option divisionSelected = addCustomerUserDivision.option(value(addCustomerUserDivision.value()));
+		u.setDivision(divisionSelected.text());
+
+		checkAddUserCustomerPermissions();
+
+		// TODO: get the permissions
+
+		return u;
+	}
 }
