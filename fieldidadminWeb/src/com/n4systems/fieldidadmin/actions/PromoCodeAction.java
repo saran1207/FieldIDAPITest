@@ -11,6 +11,7 @@ import com.n4systems.model.promocode.PromoCode;
 import com.n4systems.model.promocode.PromoCodeSaver;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
+import com.n4systems.util.DataUnit;
 import com.opensymphony.xwork2.Preparable;
 
 public class PromoCodeAction extends AbstractAdminAction implements Preparable {
@@ -101,6 +102,23 @@ public class PromoCodeAction extends AbstractAdminAction implements Preparable {
 		this.extendedFeatures = extendedFeatures;
 	}
 
-	
+	public void setDiskSpaceMB(Long diskSpace) {
+		if (diskSpace == -1) {
+			promoCode.getLimits().setDiskSpaceUnlimited();
+		} else {
+			promoCode.getLimits().setDiskSpaceInBytes(DataUnit.BYTES.convertFrom(diskSpace, DataUnit.MEBIBYTES));
+		}	
+	}
+
+	public Long getDiskSpaceMB() {
+		Long diskSpace;
+		if (promoCode.getLimits().isDiskSpaceUnlimited()) {
+			diskSpace = -1L;
+		} else {
+			diskSpace = DataUnit.BYTES.convertTo(promoCode.getLimits().getDiskSpaceInBytes(), DataUnit.MEBIBYTES);
+		}
+		
+		return diskSpace;
+	}	
 	
 }
