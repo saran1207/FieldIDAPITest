@@ -73,7 +73,7 @@ public class SignUpPackage {
 	public Long getContract(PaymentOption paymentOption) {
 		for (ContractPricing contract : paymentOptions) {
 			if (contract.getPaymentOption() == paymentOption) {
-				return 1L;
+				return contract.getExternalId();
 			}
 		}
 		throw new InvalidArgumentException("there is no contract that matches the given payment option.");
