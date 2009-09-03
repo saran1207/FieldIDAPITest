@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class PromoCodeByCodeLoader extends Loader<PromoCode> {
 
@@ -11,9 +13,12 @@ public class PromoCodeByCodeLoader extends Loader<PromoCode> {
 	
 	@Override
 	protected PromoCode load(EntityManager em) {
+		if (code == null || code.trim().length() == 0) {
+			return null;
+		}
 		
 		QueryBuilder<PromoCode> builder = new QueryBuilder<PromoCode>(PromoCode.class);
-		builder.addSimpleWhere("code", code);		
+		builder.addWhere(Comparator.EQ, "code", "code", code, WhereParameter.IGNORE_CASE);		
 		
 		return builder.getSingleResult(em);
 	}

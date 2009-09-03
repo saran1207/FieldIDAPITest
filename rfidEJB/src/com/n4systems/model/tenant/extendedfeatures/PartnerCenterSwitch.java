@@ -8,7 +8,6 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 
 public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
@@ -18,26 +17,19 @@ public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 	}
 
 	@Override
-	protected void featureSetup() {
+	protected void featureSetup(Transaction transaction) {
 	}
 	
 	@Override
-	protected void featureTearDown() {
-		deleteAllCustomerUsers();
+	protected void featureTearDown(Transaction transaction) {
+		deleteAllCustomerUsers(transaction);
 	}
 	
-	private void deleteAllCustomerUsers() {
-		Transaction transaction = null;
-		try {
-			transaction = PersistenceManager.startTransaction();
-			
-			Query query = transaction.getEntityManager().createQuery("UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE r_EndUser IS NOT NULL");
-			query.setParameter("now", new Date());
-			query.executeUpdate();
-			
-		} finally {
-			PersistenceManager.finishTransaction(transaction);
-		}
+	private void deleteAllCustomerUsers(Transaction transaction) {
+		String updateQuery = "UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE r_EndUser IS NOT NULL";
+		Query query = transaction.getEntityManager().createQuery(updateQuery);
+		query.setParameter("now", new Date());
+		query.executeUpdate();
 	}
 
 }

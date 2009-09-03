@@ -2,6 +2,7 @@ package com.n4systems.model.tenant.extendedfeatures;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.persistence.Transaction;
 
 public abstract class ExtendedFeatureSwitch {
 	
@@ -13,12 +14,12 @@ public abstract class ExtendedFeatureSwitch {
 		this.feature = feature;
 	}
 	
-	protected abstract void featureSetup();
-	protected abstract void featureTearDown();
+	protected abstract void featureSetup(Transaction transaction);
+	protected abstract void featureTearDown(Transaction transaction);
 	
-	public final void enableFeature() {
+	public final void enableFeature(Transaction transaction) {
 		if (!primaryOrg.hasExtendedFeature(feature)) {
-			featureSetup();
+			featureSetup(transaction);
 			addFeatureToTenant(feature);
 		}
 	}
@@ -27,9 +28,9 @@ public abstract class ExtendedFeatureSwitch {
 		primaryOrg.getExtendedFeatures().add(feature);
 	}
 	
-	public final void disableFeature() {
+	public final void disableFeature(Transaction transaction) {
 		if (primaryOrg.hasExtendedFeature(feature)) {
-			featureTearDown();
+			featureTearDown(transaction);
 			removeFeatureFromTenant(feature);
 		}
 	}

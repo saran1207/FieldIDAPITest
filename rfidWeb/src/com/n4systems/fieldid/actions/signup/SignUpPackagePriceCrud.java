@@ -8,9 +8,6 @@ import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SubscriptionAgent;
-import com.n4systems.subscription.SubscriptionAgentFactory;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
 public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
@@ -48,9 +45,9 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	
+	// FIXME should this exception be eaten? 
 	public Long getPrice() {
-		SubscriptionAgent agent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+		SubscriptionAgent agent = getCreateHandlerFactory().getSubscriptionAgent();
 		try {
 			PriceCheckResponse price = agent.priceCheck(getSignUp());
 			return price.getPricing().getFirstPaymentTotal().longValue();
@@ -69,7 +66,6 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 		return  subscription.getSignUpPackage().getName();
 	}
 
-	//FIXME  
 	public void setSignUpPackageId(String signUpPackageId) {
 		SignUpPackageDetails targetPackage = SignUpPackageDetails.valueOf(signUpPackageId);
 		SignUpPackageLoader loader = getNonSecureLoaderFactory().createSignUpPackageLoader();

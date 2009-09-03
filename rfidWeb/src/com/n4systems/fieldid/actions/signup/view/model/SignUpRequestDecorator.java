@@ -265,6 +265,10 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public String getPromoCode() {
 		return signUpRequest.getPromoCode();
 	}
+	
+	public void setPromoCode(String promoCode) {
+		signUpRequest.setPromoCode(promoCode);
+	}
 
 	public String getPaymentOption() {
 		return signUpRequest.getPaymentOption();

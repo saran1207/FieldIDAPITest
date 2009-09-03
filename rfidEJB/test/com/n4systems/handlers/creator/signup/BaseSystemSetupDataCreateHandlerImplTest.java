@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandler;
 import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandlerImpl;
 import com.n4systems.model.InspectionTypeGroup;
@@ -23,18 +24,12 @@ import com.n4systems.persistence.Transaction;
 
 
 
-public class BaseSystemSetupDataCreateHandlerImplTest {
+public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactionBase {
 
-	private Transaction mockTransaction;
 
 	@Before
 	public void setup() {
 		mockTransaction();
-	}
-
-	private void mockTransaction() {
-		mockTransaction = createMock(Transaction.class);
-		replay(mockTransaction);
 	}
 
 	@Test(expected = InvalidArgumentException.class)

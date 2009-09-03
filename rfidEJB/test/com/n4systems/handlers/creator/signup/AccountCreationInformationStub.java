@@ -17,6 +17,8 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 	
 	private String tenantName;
 	
+	private String promoCode;
+	
 	private Integer numberOfUsers = 1;
 	
 	private SignUpPackage signUpPackage;
@@ -119,6 +121,14 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 	public AccountCreationInformationStub setNumberOfUsers(Integer numberOfUsers) {
 		this.numberOfUsers = numberOfUsers;
 		return this;
+	}
+
+	public String getPromoCode() {
+		return promoCode;
+	}
+
+	public void setPromoCode(String promoCode) {
+		this.promoCode = promoCode;
 	}
 
 }

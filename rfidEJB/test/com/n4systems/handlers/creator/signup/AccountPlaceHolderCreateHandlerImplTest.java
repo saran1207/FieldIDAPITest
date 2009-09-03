@@ -1,41 +1,31 @@
 package com.n4systems.handlers.creator.signup;
 
-import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 
 import org.easymock.Capture;
-import org.easymock.internal.matchers.Captures;
 import org.junit.Before;
 import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandler;
-import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
+import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
-import com.n4systems.persistence.Transaction;
 
 
-public class AccountPlaceHolderCreateHandlerImplTest {
+public class AccountPlaceHolderCreateHandlerImplTest extends TestUsesTransactionBase {
 
-	private Transaction mockTransaction;
 
 	@Before
 	public void setup() {
 		mockTransaction();
 	}
 
-	private void mockTransaction() {
-		mockTransaction = createMock(Transaction.class);
-		replay(mockTransaction);
-	}
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void should_throw_exception_if_no_account_creation_info_given() {
@@ -75,25 +65,5 @@ public class AccountPlaceHolderCreateHandlerImplTest {
 		verify(mockPrimaryOrgCreator);
 		verify(mockUserSaver);
 	}
-	
-	
-	/*
-	 * TenantSaver mockTenantSaver = createMock(TenantSaver.class);
-		mockTenantSaver.save(same(mockTransaction), isA(Tenant.class));
-		mockTenantSaver.remove(same(mockTransaction), isA(Tenant.class));
-		replay(mockTenantSaver);
-		
-		SignUpRequest signUpRequest = new SignUpRequest();
-		signUpRequest.setTenantName("some_tenant_name");
-		
-		PrimaryOrgCreateHandler mockOrgCreateHandler = createMock(PrimaryOrgCreateHandler.class);
-		expect(mockOrgCreateHandler.forTenant(isA(Tenant.class))).andReturn(mockOrgCreateHandler);
-		expect(mockOrgCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockOrgCreateHandler);
-		expect(mockOrgCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(null);
-		mockOrgCreateHandler.undo(same(mockTransaction), isA(PrimaryOrg.class));
-		replay(mockOrgCreateHandler);
-		*/
-	 
-	
 	
 }

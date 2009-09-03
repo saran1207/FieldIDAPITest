@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.remover.AssociatedInspectionTypeListDeleteHandler;
 import com.n4systems.handlers.remover.CatalogElementRemovalHandler;
 import com.n4systems.handlers.remover.InspectionListArchiveHandlerImp;
@@ -23,22 +24,14 @@ import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.persistence.Transaction;
 
 
-public class InspectionTypeArchiveHandlerImplTest {
+public class InspectionTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 
-	private Transaction mockTransaction;
 
 	@Before
 	public void setup() {
 		mockTransaction();
 	}
 
-	
-	private void mockTransaction() {
-		mockTransaction = createMock(Transaction.class);
-		replay(mockTransaction);
-	}
-	
-	
 	
 	@Test
 	public void should_be_able_to_archive_inspection_type_not_used_by_anything() {

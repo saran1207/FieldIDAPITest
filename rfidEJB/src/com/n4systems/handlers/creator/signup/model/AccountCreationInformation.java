@@ -22,7 +22,7 @@ public interface AccountCreationInformation {
 	
 	public String getTenantName();
 	
-	
+	public String getPromoCode();
 	
 	public SignUpPackage getSignUpPackage();
 	

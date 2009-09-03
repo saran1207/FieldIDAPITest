@@ -68,7 +68,6 @@
 				<label class="label" for="companyName"><@s.text name="label.company_name"/></label>
 				<@s.textfield name="signUp.companyName"/>
 			</div>
-			
 			<div class="infoSet infoBlock">
 				<label class="label" for="addressLines"><@s.text name="label.address"/></label>
 				<@s.textfield name="address.addressLine1"/>
@@ -87,7 +86,7 @@
 				<@s.textfield name="address.country" cssClass="country"/>
 			</div>
 			<div class="infoSet infoBlock">
-				<label class="label" for="postal"><@s.text name="label.zipcode"/></label>
+				<label class="label" for="postal"><@s.text name="label.zip_code"/></label>
 				<@s.textfield name="address.postal"/>
 			</div>
 			<div class="infoSet infoBlock">
@@ -189,7 +188,7 @@
 				<div id="payByPO">
 					<div class="infoSet">
 						<label class="label" for="po.number"><@s.text name="label.po_number"/></label>
-						<@s.textfield name="signUp.po_number"/>
+						<@s.textfield name="signUp.po_number" disabled="true"/>
 					</div>
 				</div>
 			</div>

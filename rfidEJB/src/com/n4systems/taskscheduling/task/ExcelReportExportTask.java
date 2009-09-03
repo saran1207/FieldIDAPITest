@@ -71,7 +71,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 			
 			logger.info("Export to Excel Complete [" + reportFile.getPath() + "]");
 			
-			// FIXME this should use a resource file to put out the correct language  -- AA
+			// TODO this should use a resource file to put out the correct language and move html to the template system for emails.
 			String body = "<h4>Your Excel report is ready</h4>";
 			body += "<br />Please see the attached Excel file.<br />";
 			

@@ -20,17 +20,17 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	private final BaseSystemStructureCreateHandler baseSystemCreator;
 	private final SubscriptionAgent subscriptionAgent;
 	private final AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler;
-	private final SubscriptionApprovalHandler subscriptionApprovalHandler;
+	private final SignUpFinalizationHandler signUpFinalizationHandler;
 	
 	private PersistenceProvider persistenceProvider;
 	
 	
-	public SignUpHandlerImpl(AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler, BaseSystemStructureCreateHandler baseSystemCreator, SubscriptionAgent subscriptionAgent, SubscriptionApprovalHandler subscriptionApprovalHandler) {
+	public SignUpHandlerImpl(AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler, BaseSystemStructureCreateHandler baseSystemCreator, SubscriptionAgent subscriptionAgent, SignUpFinalizationHandler signUpFinalizationHandler) {
 		super();
 		this.accountPlaceHolderCreateHandler = accountPlaceHolderCreateHandler;
 		this.baseSystemCreator = baseSystemCreator;
 		this.subscriptionAgent = subscriptionAgent;
-		this.subscriptionApprovalHandler = subscriptionApprovalHandler;
+		this.signUpFinalizationHandler = signUpFinalizationHandler;
 	}
 
 	public void signUp(SignUpRequest signUp) throws SignUpCompletionException, SignUpSoftFailureException {
@@ -63,8 +63,11 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		
 		transaction = persistenceProvider.startTransaction();
 		try {
-			subscriptionApprovalHandler.forAccountPlaceHolder(placeHolder).forSubscriptionApproval(subscriptionApproval).applyApproval(transaction);
 			baseSystemCreator.forTenant(placeHolder.getTenant()).create(transaction);
+			
+			signUpFinalizationHandler.setAccountPlaceHolder(placeHolder).setSubscriptionApproval(subscriptionApproval).setAccountInformation(signUp);
+			signUpFinalizationHandler.finalizeSignUp(transaction);
+			
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);

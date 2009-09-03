@@ -5,6 +5,7 @@ import com.n4systems.model.JobSite;
 import com.n4systems.model.jobsites.JobSiteSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class JobSiteSwitch extends ExtendedFeatureSwitch {
@@ -14,7 +15,7 @@ public class JobSiteSwitch extends ExtendedFeatureSwitch {
 	}
 
 	@Override
-	protected void featureSetup() {
+	protected void featureSetup(Transaction transaction) {
 		if (anyJobSitesDefined()) {
 			createDefaultJobSite();
 		}
@@ -44,7 +45,7 @@ public class JobSiteSwitch extends ExtendedFeatureSwitch {
 	}
 
 	@Override
-	protected void featureTearDown() {
+	protected void featureTearDown(Transaction transaction) {
 		// TODO:  remove all job sites from system.
 	}
 

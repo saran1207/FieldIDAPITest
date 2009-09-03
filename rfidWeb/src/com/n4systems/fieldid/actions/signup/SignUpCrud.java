@@ -10,7 +10,6 @@ import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.signup.view.model.SignUpRequestDecorator;
-import com.n4systems.handlers.creator.CreateHandlerFacorty;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
 import com.n4systems.handlers.creator.signup.exceptions.PromoCodeValidationException;
@@ -23,14 +22,10 @@ import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.persistence.StandardPersistenceProvider;
-import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SubscriptionAgent;
-import com.n4systems.subscription.SubscriptionAgentFactory;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.timezone.TimeZoneSelectionHelper;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
@@ -40,17 +35,15 @@ public class SignUpCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
 
 	private SignUpRequestDecorator signUpRequest = new SignUpRequestDecorator();
-	private CreateHandlerFacorty createHandlerFacorty;
-
 	public SignUpCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 
 	@Override
 	protected void initMemberFields() {
-		signUpRequest = (sessionContains("signUp")) ? new SignUpRequestDecorator((SignUpRequest) getSessionVar("signUp"), NonSecureLoaderFactory.createTenantUniqueAvailableNameLoader()) : new SignUpRequestDecorator(NonSecureLoaderFactory
-				.createTenantUniqueAvailableNameLoader());
-		
+		signUpRequest = (sessionContains("signUp")) 
+					? new SignUpRequestDecorator((SignUpRequest) getSessionVar("signUp"), getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader()) 
+					: new SignUpRequestDecorator(getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader());
 	}
 
 	@Override
@@ -146,16 +139,6 @@ public class SignUpCrud extends AbstractCrud {
 		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest());
 	}
 
-	private CreateHandlerFacorty getCreateHandlerFactory() {
-		if (createHandlerFacorty == null) {
-			createHandlerFacorty = new CreateHandlerFacorty();
-		}
-		
-		return createHandlerFacorty;
-	}
-
-	
-
 	public SortedSet<? extends Listable<String>> getCountries() {
 		return TimeZoneSelectionHelper.getCountries();
 	}
@@ -196,7 +179,7 @@ public class SignUpCrud extends AbstractCrud {
 	}
 	
 	public Long getPrice() {
-		SubscriptionAgent agent = SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+		SubscriptionAgent agent = getCreateHandlerFactory().getSubscriptionAgent();
 		try {
 			PriceCheckResponse price = agent.priceCheck(getSignUp());
 			return price.getPricing().getFirstPaymentTotal().longValue();

@@ -10,6 +10,7 @@ import org.junit.Test;
 import rfid.ejb.entity.SerialNumberCounterBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandler;
 import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
 import com.n4systems.model.Tenant;
@@ -20,19 +21,14 @@ import com.n4systems.persistence.Transaction;
 
 
 
-public class BaseSystemTenantStructureCreateHandlerImplTest {
+public class BaseSystemTenantStructureCreateHandlerImplTest extends TestUsesTransactionBase {
 
-	private Transaction mockTransaction;
 
 	@Before
 	public void setup() {
 		mockTransaction();
 	}
 
-	private void mockTransaction() {
-		mockTransaction = createMock(Transaction.class);
-		replay(mockTransaction);
-	}
 
 	@Test(expected = InvalidArgumentException.class)
 	public void should_throw_exception_if_no_tenant_is_provided() {

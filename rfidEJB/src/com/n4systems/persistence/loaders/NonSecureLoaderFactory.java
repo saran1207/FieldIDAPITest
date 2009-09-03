@@ -12,18 +12,18 @@ public class NonSecureLoaderFactory {
 	 */
 
 	
-	public static ContractPricingByExternalIdLoader createContractPricingByNsRecordIdLoader() {
+	public  ContractPricingByExternalIdLoader createContractPricingByNsRecordIdLoader() {
 		return new ContractPricingByExternalIdLoader();
 	}
 	
-	public static TenantUniqueAvailableNameLoader createTenantUniqueAvailableNameLoader() {
+	public  TenantUniqueAvailableNameLoader createTenantUniqueAvailableNameLoader() {
 		return new TenantUniqueAvailableNameLoader();
 	}
 	
-	public static SignUpPackageLoader createSignUpPackageLoader() {
+	public  SignUpPackageLoader createSignUpPackageLoader() {
 		return new SignUpPackageLoader();
 	}
-	public static SignUpPackageListLoader createSignUpPackageListLoader() {
+	public  SignUpPackageListLoader createSignUpPackageListLoader() {
 		return new SignUpPackageListLoader();
 	}
 }

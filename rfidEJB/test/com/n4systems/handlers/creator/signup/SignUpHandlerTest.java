@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandler;
 import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandler;
@@ -32,20 +33,15 @@ import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.test.helpers.asserts.Asserts;
 import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
 
-public class SignUpHandlerTest {
+public class SignUpHandlerTest extends TestUsesTransactionBase {
 	
 	
-	private Transaction mockTransaction;
 
 	@Before
 	public void setUp() {
-		createMockTransaction();
+		mockTransaction();
 	}
 	
-	private void createMockTransaction() {
-		mockTransaction = createStrictMock(Transaction.class);
-		replay(mockTransaction);
-	}
 	
 	private void successfulTransaction(PersistenceProvider mockPersistenceProvider) {
 		expect(mockPersistenceProvider.startTransaction()).andReturn(mockTransaction);
@@ -87,9 +83,14 @@ public class SignUpHandlerTest {
 		
 		BaseSystemStructureCreateHandler mockSystemStructureHandler = successfulBaseSystemCreation();
 		
-		SubscriptionApprovalHandler mockSubscriptionApprovalHandler = successfulSubscriptionApprovalUpdate(accountPlaceHolder, subscriptionApproval);
+		SignUpFinalizationHandler mockSignUpFinalizationHandler = createMock(SignUpFinalizationHandler.class);
+		expect(mockSignUpFinalizationHandler.setAccountInformation(signUpRequest)).andReturn(mockSignUpFinalizationHandler);
+		expect(mockSignUpFinalizationHandler.setAccountPlaceHolder(accountPlaceHolder)).andReturn(mockSignUpFinalizationHandler);
+		expect(mockSignUpFinalizationHandler.setSubscriptionApproval(subscriptionApproval)).andReturn(mockSignUpFinalizationHandler);
+		mockSignUpFinalizationHandler.finalizeSignUp(mockTransaction);
+		replay(mockSignUpFinalizationHandler);
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSubscriptionApprovalHandler);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		try {
@@ -103,7 +104,7 @@ public class SignUpHandlerTest {
 		verify(mockAccountPlaceHolderCreateHandler);
 		verify(mockSubscriptionAgent);
 		verify(mockSystemStructureHandler);
-		verify(mockSubscriptionApprovalHandler);
+		verify(mockSignUpFinalizationHandler);
 	}
 
 	private BaseSystemStructureCreateHandler successfulBaseSystemCreation() {
@@ -133,14 +134,7 @@ public class SignUpHandlerTest {
 		return mockAccountPlaceHolderCreateHandler;
 	}
 
-	private SubscriptionApprovalHandler successfulSubscriptionApprovalUpdate(AccountPlaceHolder accountPlaceHolder, SignUpTenantResponseStub subscriptionApproval) {
-		SubscriptionApprovalHandler mockSubscriptionApprovalHandler = createMock(SubscriptionApprovalHandler.class);
-		expect(mockSubscriptionApprovalHandler.forAccountPlaceHolder(accountPlaceHolder)).andReturn(mockSubscriptionApprovalHandler);
-		expect(mockSubscriptionApprovalHandler.forSubscriptionApproval(subscriptionApproval)).andReturn(mockSubscriptionApprovalHandler);
-		mockSubscriptionApprovalHandler.applyApproval(mockTransaction);
-		replay(mockSubscriptionApprovalHandler);
-		return mockSubscriptionApprovalHandler;
-	}
+	
 
 	
 	
@@ -309,19 +303,18 @@ public class SignUpHandlerTest {
 		SignUpTenantResponseStub subscriptionApproval = new SignUpTenantResponseStub();
 		SubscriptionAgent mockSubscriptionAgent = successfulSubscriptionPurchase(signUpRequest, subscriptionApproval);
 		
-		 
+		BaseSystemStructureCreateHandler mockBaseSystemStructureCreateHandler = successfulBaseSystemCreation();
 		
-		SubscriptionApprovalHandler mockSubscriptionApprovalHandler = createMock(SubscriptionApprovalHandler.class);
-		
-		expect(mockSubscriptionApprovalHandler.forAccountPlaceHolder(isA(AccountPlaceHolder.class))).andReturn(mockSubscriptionApprovalHandler);
-		expect(mockSubscriptionApprovalHandler.forSubscriptionApproval(subscriptionApproval)).andReturn(mockSubscriptionApprovalHandler);
-		
-		mockSubscriptionApprovalHandler.applyApproval(mockTransaction);
+		SignUpFinalizationHandler mockSignUpFinalizationHandler = createMock(SignUpFinalizationHandler.class);
+		expect(mockSignUpFinalizationHandler.setAccountInformation(signUpRequest)).andReturn(mockSignUpFinalizationHandler);
+		expect(mockSignUpFinalizationHandler.setAccountPlaceHolder(isA(AccountPlaceHolder.class))).andReturn(mockSignUpFinalizationHandler);
+		expect(mockSignUpFinalizationHandler.setSubscriptionApproval(subscriptionApproval)).andReturn(mockSignUpFinalizationHandler);
+		mockSignUpFinalizationHandler.finalizeSignUp(mockTransaction);
 		expectLastCall().andThrow(new RuntimeException("some exception"));
 		
-		replay(mockSubscriptionApprovalHandler);
+		replay(mockSignUpFinalizationHandler);
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, mockSubscriptionApprovalHandler);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockBaseSystemStructureCreateHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		boolean exceptionCaught = false;
@@ -335,7 +328,8 @@ public class SignUpHandlerTest {
 		assertTrue(exceptionCaught);
 		verify(mockPersistenceProvider);
 		verify(mockSubscriptionAgent);
-		verify(mockSubscriptionApprovalHandler);
+		verify(mockBaseSystemStructureCreateHandler);
+		verify(mockSignUpFinalizationHandler);
 		verify(mockAccountPlaceHolderCreateHandler);
 	}
 }

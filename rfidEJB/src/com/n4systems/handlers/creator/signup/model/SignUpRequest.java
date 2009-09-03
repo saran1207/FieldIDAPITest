@@ -32,6 +32,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private String password;
 	private String passwordConfirm;
 	
+	private String promoCode;
 		
 	private String tenantName;
 	
@@ -236,9 +237,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public String getPromoCode() {
-		return null;
-	}
+	
 
 
 	public String getN4Id() {
@@ -263,5 +262,14 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 	public void setPaymentOption(String paymentOption) {
 		this.paymentOption = PaymentOption.valueOf(paymentOption);
+	}
+
+	
+	public String getPromoCode() {
+		return promoCode;
+	}
+
+	public void setPromoCode(String promoCode) {
+		this.promoCode = promoCode;
 	}
 }

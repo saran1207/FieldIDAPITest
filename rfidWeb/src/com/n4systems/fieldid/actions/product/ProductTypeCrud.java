@@ -192,7 +192,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	}
 
-	// FIXME: refactor to use the input info field to convert -- AA
+	// TODO: refactor to use the input info field to convert -- AA
 	private void processInfoFields() {
 		List<InfoFieldBean> deleted = new ArrayList<InfoFieldBean>();
 		for (InfoFieldInput input : infoFields) {
@@ -250,7 +250,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		productType.getInfoFields().removeAll(deleted);
 	}
 
-	// FIXME: refactor to use the input info option to convert  -- AA
+	// TODO: refactor to use the input info option to convert  -- AA
 	private void processInfoOptions() {
 		for (InfoOptionInput input : editInfoOptions) {
 			if (input.getInfoFieldIndex().intValue() < infoFields.size()) {

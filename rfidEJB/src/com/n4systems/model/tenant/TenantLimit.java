@@ -70,4 +70,23 @@ public class TenantLimit implements Serializable {
 	public void setAssetsUnlimited() {
 		setAssets(UNLIMITED);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof TenantLimit) {
+			TenantLimit otherLimit = (TenantLimit)obj;
+			return (otherLimit.users.equals(users) 
+						&& otherLimit.diskSpace.equals(diskSpace) 
+						&& otherLimit.assets.equals(assets));
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		Long sum = (assets + users + diskSpace);
+		return sum.hashCode();
+	}
+	
+	
 }

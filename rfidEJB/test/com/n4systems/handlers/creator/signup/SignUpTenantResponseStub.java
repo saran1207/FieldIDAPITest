@@ -3,6 +3,7 @@ package com.n4systems.handlers.creator.signup;
 import com.n4systems.subscription.ExternalIdResponse;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
+import com.n4systems.subscription.local.LocalExternalIdResponse;
 
 public class SignUpTenantResponseStub implements SignUpTenantResponse {
 
@@ -10,7 +11,7 @@ public class SignUpTenantResponseStub implements SignUpTenantResponse {
 	}
 
 	public ExternalIdResponse getClient() {
-		return null;
+		return new LocalExternalIdResponse(1L);
 	}
 
 	public Subscription getSubscription() {
@@ -18,7 +19,7 @@ public class SignUpTenantResponseStub implements SignUpTenantResponse {
 	}
 
 	public ExternalIdResponse getTenant() {
-		return null;
+		return new LocalExternalIdResponse(1L);
 	}
 
 	public String getResult() {

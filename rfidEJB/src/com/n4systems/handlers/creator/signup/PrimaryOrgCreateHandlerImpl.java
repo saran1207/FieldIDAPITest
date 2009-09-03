@@ -13,6 +13,10 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.util.DataUnit;
 
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
+	private static final String DEFAULT_DATE_FORMAT = "MM/dd/yy";
+
+	private static final String DEFAULT_SERIAL_NUMBER_FORMAT = "";
+
 	private final OrganizationSaver orgSaver;
 	
 	private AccountCreationInformation accountInfo;
@@ -44,37 +48,18 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		PrimaryOrg primaryOrg = new PrimaryOrg();
 		primaryOrg.setTenant(tenant);
 		primaryOrg.setUsingSerialNumber(true);
-		primaryOrg.setSerialNumberFormat(""); //FIXME THIS NEEDS TO BE A GOOD DEFAULT.
-		primaryOrg.setDateFormat("MM/dd/yy"); //FIXME THIS NEEDS TO BE A GOOD DEFAULT.
+		primaryOrg.setSerialNumberFormat(DEFAULT_SERIAL_NUMBER_FORMAT);
+		primaryOrg.setDateFormat(DEFAULT_DATE_FORMAT);
 		primaryOrg.setName(accountInfo.getCompanyName());
 		primaryOrg.setCertificateName(accountInfo.getCompanyName());
 		primaryOrg.setDefaultTimeZone(accountInfo.getFullTimeZone());
 		
-		applySignUpPackage(primaryOrg);
-		applyPromoCodeAdjustments(primaryOrg);
 		
 		return primaryOrg;
 	}
 	
 	
-	private void applySignUpPackage(PrimaryOrg primaryOrg) {
-		for (ExtendedFeature feature : accountInfo.getSignUpPackage().getExtendedFeatures()) {
-			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
-			featureSwitch.enableFeature();
-		}
-		
-		TenantLimit limits = new TenantLimit();
-		
-		limits.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(accountInfo.getSignUpPackage().getDiskSpaceInMB(), DataUnit.BYTES));
-		limits.setAssets(accountInfo.getSignUpPackage().getAssets());
-		limits.setUsers(accountInfo.getNumberOfUsers().longValue());
-		
-		primaryOrg.setLimits(limits);
-	}
-	
-	private void applyPromoCodeAdjustments(PrimaryOrg primaryOrg) {
-		//TODO  find what we need to do to apply promo code.
-	}
+
 
 	private void guards() {
 		if (accountInfo == null) {
