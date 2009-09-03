@@ -258,8 +258,8 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.isUsingCreditCard();
 	}
 
-	public String getN4Id() {
-		return signUpRequest.getN4Id();
+	public String getCompanyN4Id() {
+		return signUpRequest.getCompanyN4Id();
 	}
 
 	public String getPromoCode() {
@@ -281,4 +281,9 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public List<ContractPricing> getPaymentOptions() {
 		return getSignUpPackage().getPaymentOptions();
 	}
+
+	public String getUserN4Id() {
+		return signUpRequest.getUserN4Id();
+	}
+
 }

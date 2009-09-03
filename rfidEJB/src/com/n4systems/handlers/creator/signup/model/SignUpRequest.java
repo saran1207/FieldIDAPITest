@@ -38,6 +38,8 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	
 	private Integer numberOfUsers = 1;
 	private boolean purchasingPhoneSupport;
+	private String userN4Id;
+	private String companyN4Id;
 	
 	private CreditCard creditCard = new CreditCard();
 	
@@ -236,9 +238,6 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 
-	public String getN4Id() {
-		return null;
-	}
 
 
 	public void setCreditCard(CreditCard creditCard) {
@@ -267,5 +266,25 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 	public void setPromoCode(String promoCode) {
 		this.promoCode = promoCode;
+	}
+
+
+	public String getUserN4Id() {
+		return userN4Id.toString();
+	}
+
+
+	public void setUserN4Id(Long userN4Id) {
+		this.userN4Id = userN4Id.toString();
+	}
+
+
+	public String getCompanyN4Id() {
+		return companyN4Id;
+	}
+
+
+	public void setCompanyN4Id(Long companyN4Id) {
+		this.companyN4Id = companyN4Id.toString();
 	}
 }

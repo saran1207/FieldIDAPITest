@@ -41,6 +41,9 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		Transaction transaction = persistenceProvider.startTransaction();
 		try {
 			placeHolder = createAccountPlaceHolder(signUp, transaction);
+			//FIXME this is the wrong spot for this.
+			signUp.setCompanyN4Id(placeHolder.getPrimaryOrg().getId());
+			signUp.setUserN4Id(placeHolder.getAdminUser().getId());
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);

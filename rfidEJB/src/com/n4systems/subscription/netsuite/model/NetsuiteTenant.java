@@ -70,7 +70,7 @@ public class NetsuiteTenant implements Company, ExternalIdResponse {
 		this.shippingAddress = shippingAddress;
 	}
 
-	public String getN4Id() {
+	public String getCompanyN4Id() {
 		return n4Id;
 	}
 

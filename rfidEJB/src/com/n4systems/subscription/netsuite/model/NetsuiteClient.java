@@ -38,7 +38,7 @@ public class NetsuiteClient implements Person, ExternalIdResponse {
 		this.lastName = lastName;
 	}
 
-	public String getN4Id() {
+	public String getUserN4Id() {
 		return n4Id;
 	}
 

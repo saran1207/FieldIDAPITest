@@ -1,20 +1,18 @@
 package com.n4systems.handlers.creator.signup;
 
+import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
+import static com.n4systems.model.builders.TenantBuilder.*;
+import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
-
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.TestUsesTransactionBase;
-import com.n4systems.handlers.creator.signup.AccountPlaceHolderCreateHandler;
-import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
-import com.n4systems.handlers.creator.signup.SignUpHandler;
-import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
 import com.n4systems.handlers.creator.signup.exceptions.SignUpCompletionException;
@@ -22,16 +20,16 @@ import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.persistence.PersistenceProvider;
-import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
-import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
-import com.n4systems.test.helpers.asserts.Asserts;
-import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
+
+
+
+
+
+
 
 public class SignUpHandlerTest extends TestUsesTransactionBase {
 	
@@ -229,7 +227,9 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		AccountPlaceHolderCreateHandler mockAccountPlaceHolderCreateHandler = createMock(AccountPlaceHolderCreateHandler.class);
 		
 		expect(mockAccountPlaceHolderCreateHandler.forAccountInfo(signUpRequest)).andReturn(mockAccountPlaceHolderCreateHandler);
-		expect(mockAccountPlaceHolderCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(new AccountPlaceHolder(null,null,null,null));
+		expect(mockAccountPlaceHolderCreateHandler.createWithUndoInformation(mockTransaction)).andReturn(new AccountPlaceHolder(aTenant().build(), aPrimaryOrg().build(), aUser().build(), aUser().build()));
+		
+		
 		mockAccountPlaceHolderCreateHandler.undo(same(mockTransaction), isA(AccountPlaceHolder.class));
 		
 		replay(mockAccountPlaceHolderCreateHandler);
