@@ -293,7 +293,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getUserN4Id();
 	}
 	
-	@FieldExpressionValidator(message="", key="error.promo_code_not_valid", expression="validPromoCode == true")
+	@FieldExpressionValidator(message="", key="error.promo_code_not_valid", expression="(validPromoCode == true)")
 	public boolean isValidPromoCode() {
 		try {
 			return isValidPromoCodeWithExceptions();
