@@ -21,7 +21,7 @@ public class PricingDetailsClient extends AbstractNetsuiteClient<GetPricingDetai
 		addRequestParameter("phonesupport", subscription.isPurchasingPhoneSupport() ? "T" : "F");
 		
 		if (subscription.getPromoCode() != null) {
-			addRequestParameter("promocode", subscription.getPromoCode());
+			addRequestParameter("promocode", subscription.getPromoCode().trim());
 		}
 	}
 

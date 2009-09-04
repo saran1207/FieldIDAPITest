@@ -70,7 +70,7 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		addRequestParameter("numusers", String.valueOf(subscription.getUsers()));
 		addRequestParameter("phonesupport", subscription.isPurchasingPhoneSupport() ? "T" : "F");
 		if (subscription.getPromoCode() != null) {
-			addRequestParameter("promocode", subscription.getPromoCode());
+			addRequestParameter("promocode", subscription.getPromoCode().trim());
 		}		
 		
 		if (TESTING_MODE) {
