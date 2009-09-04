@@ -166,9 +166,15 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 
 	@RequiredFieldValidator(message="", key="error.number_of_users_required")
 	@IntRangeFieldValidator(message="", key="error.number_of_users_minimum", min="1")
+	@FieldExpressionValidator(message="", key="error.number_of_users_max", expression="(usersBelowMax == true)", fieldName="numberOfUsers")
 	public void setNumberOfUsers(Integer numberOfUsers) {
 		signUpRequest.setNumberOfUsers(numberOfUsers);
 	}
+	
+	public boolean isUsersBelowMax() {
+		return getUsers() <= getSignUpPackage().getUsers();
+	}
+	
 
 	@RequiredStringValidator(type=ValidatorType.FIELD, message="", key="error.passwordrequired")
 	@StringLengthFieldValidator(type=ValidatorType.FIELD, message="", key="errors.passwordlength", minLength="5") 
@@ -293,7 +299,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getUserN4Id();
 	}
 	
-	@FieldExpressionValidator(message="", key="error.promo_code_not_valid", expression="(validPromoCode == true)")
+	@FieldExpressionValidator(message="", key="error.promo_code_not_valid", expression="(validPromoCode == true)", fieldName="promoCode")
 	public boolean isValidPromoCode() {
 		try {
 			return isValidPromoCodeWithExceptions();
@@ -314,5 +320,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	private boolean blankPromoCode() {
 		return getPromoCode() == null || getPromoCode().trim().length() == 0;
 	}
+	
+	
 
 }
