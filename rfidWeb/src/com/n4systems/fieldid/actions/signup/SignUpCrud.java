@@ -41,9 +41,8 @@ public class SignUpCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		signUpRequest = (sessionContains("signUp")) 
-					? new SignUpRequestDecorator((SignUpRequest) getSessionVar("signUp"), getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader()) 
-					: new SignUpRequestDecorator(getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader());
+		SignUpRequest sessionSignUp = (sessionContains("signUp")) ? (SignUpRequest) getSessionVar("signUp") : new SignUpRequest();
+		signUpRequest = new SignUpRequestDecorator(sessionSignUp, getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader(), getCreateHandlerFactory().getSubscriptionAgent()); 
 	}
 
 	@Override

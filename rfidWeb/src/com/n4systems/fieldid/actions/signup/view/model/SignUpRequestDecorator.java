@@ -9,11 +9,14 @@ import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 import com.n4systems.subscription.AddressInfo;
+import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PaymentFrequency;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.Subscription;
+import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.ValidatePromoCodeResponse;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.timezone.Country;
@@ -30,25 +33,29 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class SignUpRequestDecorator implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
 	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
+	private final SubscriptionAgent subscriptionAgent;
 	
 	private final SignUpRequest signUpRequest;
 	private final CreditCardDecorator creditCard;
 	private final AddressInfoDecorator address;
 
 	public SignUpRequestDecorator() {
-		this(new SignUpRequest(), null);
+		this(new SignUpRequest(), null, null);
 	}
 	
-	public SignUpRequestDecorator(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
+	public SignUpRequestDecorator(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader, SubscriptionAgent subscriptionAgent) {
+		this(new SignUpRequest(), uniqueNameAvailableLoader, subscriptionAgent);
+	}
+	
+	public SignUpRequestDecorator(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader, SubscriptionAgent subscriptionAgent) {
 		this.signUpRequest = signUpRequest;
 		this.uniqueNameLoader = uniqueNameAvailableLoader;
+		this.subscriptionAgent = subscriptionAgent;
 		this.creditCard = new CreditCardDecorator(signUpRequest.getCreditCard());
 		this.address = new AddressInfoDecorator(signUpRequest.getBillingAddress());
 	}
 	
-	public SignUpRequestDecorator(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader) {
-		this(new SignUpRequest(), uniqueNameAvailableLoader);
-	}
+	
 	
 	public boolean duplicateValueExists(String formValue) {
 		return !uniqueNameLoader.setUniqueName(formValue).load();
@@ -284,6 +291,28 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 
 	public String getUserN4Id() {
 		return signUpRequest.getUserN4Id();
+	}
+	
+	@FieldExpressionValidator(message="", key="error.promo_code_not_valid", expression="validPromoCode == true")
+	public boolean isValidPromoCode() {
+		try {
+			return isValidPromoCodeWithExceptions();
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public boolean isValidPromoCodeWithExceptions() throws CommunicationException{
+		if (blankPromoCode()) {
+			return true;
+		}
+		
+		ValidatePromoCodeResponse response = subscriptionAgent.validatePromoCode(getPromoCode());
+		return response.isValid();
+	}
+
+	private boolean blankPromoCode() {
+		return getPromoCode() == null || getPromoCode().trim().length() == 0;
 	}
 
 }

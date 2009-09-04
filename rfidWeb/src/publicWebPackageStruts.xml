@@ -54,5 +54,8 @@
 		<action name="signUpPackagePrice" method="show" class="com.n4systems.fieldid.actions.signup.SignUpPackagePriceCrud">
 			<result name="success" type="freemarker">/templates/ajax/signUpPackagePrice/show.ftl</result>
 		</action>
+		<action name="validPromoCode" method="show" class="com.n4systems.fieldid.actions.signup.ValidPromoCodeCrud">
+			<result name="success" type="freemarker">/templates/ajax/validPromoCode/show.ftl</result>
+		</action>
 	</package>
 </struts>

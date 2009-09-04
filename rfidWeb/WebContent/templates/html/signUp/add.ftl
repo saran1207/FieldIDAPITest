@@ -5,6 +5,7 @@
 	<@n4.includeScript>
 		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
 		pricingUrl = '<@s.url namespace="/public/ajax" action="signUpPackagePrice"/>';
+		validatePromoCodeUrl = '<@s.url namespace="/public/ajax" action="validPromoCode"/>';
 	</@n4.includeScript>
 </head>
 
@@ -128,7 +129,7 @@
 		<div class="infoBlock ">
 			<div class="infoSet">
 				<label class="label" for="promoCode"><@s.text name="label.promo_code"/></label>
-				<span class="fieldHolder shortField"><@s.textfield name="signUp.promoCode" theme="fieldidSimple" cssClass="changesPrice"/></span>
+				<span class="fieldHolder shortField"><@s.textfield name="signUp.promoCode" theme="fieldidSimple" id="promoCode" cssClass="changesPrice"/></span>
 			</div>
 			
 					

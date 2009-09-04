@@ -42,7 +42,4 @@ public class SubscriptionApprovalHandlerImpl implements SubscriptionApprovalHand
 		this.primaryOrg = accountPlaceHolder.getPrimaryOrg();
 		return this;
 	}
-	
-	
-	
 }

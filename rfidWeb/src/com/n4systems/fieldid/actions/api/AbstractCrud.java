@@ -9,15 +9,12 @@ import java.util.Map;
 import javax.activation.FileTypeMap;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.handlers.creator.CreateHandlerFacorty;
 import com.opensymphony.xwork2.Preparable;
 
 @SuppressWarnings("serial")
 abstract public class AbstractCrud extends AbstractAction implements Preparable {
 	protected Long uniqueID;
 	private Integer currentPage;
-	private CreateHandlerFacorty createHandlerFacorty;
-	
 	public AbstractCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		getSession();
@@ -134,14 +131,6 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
-	}
-
-	protected CreateHandlerFacorty getCreateHandlerFactory() {
-		if (createHandlerFacorty == null) {
-			createHandlerFacorty = new CreateHandlerFacorty();
-		}
-		
-		return createHandlerFacorty;
 	}
 
 }

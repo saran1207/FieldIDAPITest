@@ -1,6 +1,7 @@
 package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
 import com.n4systems.handlers.creator.signup.exceptions.SignUpCompletionException;
@@ -33,6 +34,8 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		this.signUpFinalizationHandler = signUpFinalizationHandler;
 	}
 
+	
+	//FIXME this method is big!
 	public void signUp(SignUpRequest signUp) throws SignUpCompletionException, SignUpSoftFailureException {
 		if (persistenceProvider == null) {
 			throw new InvalidArgumentException("You must give a persistence provider");
@@ -53,7 +56,6 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		SignUpTenantResponse subscriptionApproval = null;
 		try {
 			
-			//TODO copy primary org and admin user id into the signUp
 			subscriptionApproval = subscriptionAgent.buy(signUp, signUp, signUp);
 			
 		} catch (CommunicationException e) {
@@ -62,6 +64,9 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		} catch (BillingInfoException e) {
 			undoAccountPlaceHolder(placeHolder);
 			throw new BillingValidationException("could not complete process", e);
+		} catch (Exception e) {
+			undoAccountPlaceHolder(placeHolder);
+			throw new ProcessFailureException("could not complete process", e);
 		}
 		
 		transaction = persistenceProvider.startTransaction();
@@ -82,12 +87,14 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		return accountPlaceHolderCreateHandler.forAccountInfo(signUp).createWithUndoInformation(transaction);
 	}
 
+	
+	//FIXME  i don't think this is correctly working when there is failure from netsuite.
 	private void undoAccountPlaceHolder(AccountPlaceHolder placeHolder) {
 		Transaction transaction = persistenceProvider.startTransaction();
 		try {
 			accountPlaceHolderCreateHandler.undo(transaction, placeHolder);
 			persistenceProvider.finishTransaction(transaction);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			persistenceProvider.rollbackTransaction(transaction);
 			throw new SignUpSoftFailureException("failed to destory account place holder", e);
 		}

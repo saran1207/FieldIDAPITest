@@ -29,6 +29,7 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
+import com.n4systems.handlers.creator.CreateHandlerFacorty;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -74,6 +75,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	private String redirectUrl;
 	private RemovalHandlerFactory rhFactory;
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
+	private CreateHandlerFacorty createHandlerFacorty;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -466,5 +468,13 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 			return "label.unlimited";
 		}
 		return limit.toString();
+	}
+
+	protected CreateHandlerFacorty getCreateHandlerFactory() {
+		if (createHandlerFacorty == null) {
+			createHandlerFacorty = new CreateHandlerFacorty();
+		}
+		
+		return createHandlerFacorty;
 	}
 }

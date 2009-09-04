@@ -203,7 +203,6 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		replay(mockSubscriptionAgent);
 		
 		
-		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		

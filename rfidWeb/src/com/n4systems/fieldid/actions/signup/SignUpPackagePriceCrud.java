@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.signup;
 
+import org.apache.log4j.Logger;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
@@ -12,10 +14,10 @@ import com.n4systems.subscription.SubscriptionAgent;
 
 public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
-
+	private static final Logger logger = Logger.getLogger(SignUpPackagePriceCrud.class);
 	
 	private SignUpRequest subscription = new SignUpRequest();
-	
+	private Long price;
 	
 	public SignUpPackagePriceCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -42,20 +44,30 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 	
 	public String doShow() {
 		testRequiredEntities();
-		
-		return SUCCESS;
-	}
-	
-	// FIXME should this exception be eaten? 
-	public Long getPrice() {
-		SubscriptionAgent agent = getCreateHandlerFactory().getSubscriptionAgent();
 		try {
-			PriceCheckResponse price = agent.priceCheck(getSignUp());
-			return price.getPricing().getFirstPaymentTotal().longValue();
+			findPrice();
+			return SUCCESS;
+		
 		} catch (CommunicationException e) {
+			addActionErrorText("error.could_not_contact_billing_provider");
+			logger.error(getLogLinePrefix() + "could not contact billing provider (netsuite)", e);
+		} catch (Exception e) {
+			addActionErrorText("error.could_not_find_price");
+			logger.error(getLogLinePrefix() + "could not contact billing provider (netsuite)", e);
 			
 		}
-		return 0L;
+		return ERROR;
+		
+	}
+
+	private void findPrice() throws CommunicationException {
+		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
+		PriceCheckResponse priceResponse = subscriptionAgent.priceCheck(getSignUp());
+		price = priceResponse.getPricing().getFirstPaymentTotal().longValue();
+	}
+	
+	public Long getPrice() {
+		return price;
 	}
 	
 	public SignUpRequest getSignUp() {
