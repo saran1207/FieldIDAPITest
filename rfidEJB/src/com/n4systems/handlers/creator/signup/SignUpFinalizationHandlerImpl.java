@@ -16,11 +16,11 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.SignUpTenantResponse;
-import com.n4systems.util.DataUnit;
 
 public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler {
 
 	private final ExtendedFeatureListResolver extendedFeatureListResolver;
+	private final LimitResolver limitResolver;
 	private final OrganizationSaver orgSaver;
 	private final UserSaver userSaver;
 	
@@ -29,9 +29,10 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	private SignUpTenantResponse subscriptionApproval;
 	
 
-	public SignUpFinalizationHandlerImpl(ExtendedFeatureListResolver extendedFeatureListResolver, OrganizationSaver orgSaver, UserSaver userSaver) {
+	public SignUpFinalizationHandlerImpl(ExtendedFeatureListResolver extendedFeatureListResolver, OrganizationSaver orgSaver, UserSaver userSaver, LimitResolver limitResolver) {
 		super();
 		this.extendedFeatureListResolver = extendedFeatureListResolver;
+		this.limitResolver = limitResolver;
 		this.orgSaver = orgSaver;
 		this.userSaver = userSaver;
 	}
@@ -41,22 +42,21 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		guards();
 		
 		processExtendedFeatures(transaction);
-		processLimits();
+		processLimits(transaction);
 		applyExternalIds();
 		
 		saveChanges(transaction);
 	}
 
 
-	private void processLimits() {
-		TenantLimit limits = new TenantLimit();
+	private void processLimits(Transaction transaction) {
 		
-		limits.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(accountInformation.getSignUpPackage().getDiskSpaceInMB(), DataUnit.BYTES));
-		limits.setAssets(accountInformation.getSignUpPackage().getAssets());
-		limits.setUsers(accountInformation.getNumberOfUsers().longValue());
+		limitResolver.withPromoCode(accountInformation.getPromoCode())
+								.withSignUpPackageDetails(accountInformation.getSignUpPackage().getSignPackageDetails());
+		TenantLimit limits = limitResolver.resolve(transaction);
 		
+		limits.setUsers(new Long(accountInformation.getNumberOfUsers()));
 		getPrimaryOrg().setLimits(limits);
-		
 	}
 
 

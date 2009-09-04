@@ -11,15 +11,25 @@ public class TenantLimit implements Serializable {
 	public static Long UNLIMITED = -1L;
 	
 	@Column(name="diskspace_limit", nullable = false)
-	private Long diskSpace = 0L;
+	private Long diskSpace;
+	
+	@Column(name="asset_limit", nullable = false)
+	private Long assets;
 	
 	@Column(name="user_limit", nullable = false)
-	private Long users = 0L;
+	private Long users;
 
-	@Column(name="asset_limit", nullable = false)
-	private Long assets = 0L;
 	
-	public TenantLimit() {}
+	
+	public TenantLimit() {
+		this(0L, 0L, 0L);
+	}
+	
+	public TenantLimit(long diskSpace, long assets, long users) {
+		this.diskSpace = diskSpace;
+		this.assets = assets;
+		this.users = users;
+	}
 
 	public Long getDiskSpaceInBytes() {
 		return diskSpace;
@@ -88,18 +98,32 @@ public class TenantLimit implements Serializable {
 		return sum.hashCode();
 	}
 
-	public void addOn(TenantLimit tenantLimitToAddOn) {
-		assets = addLimit(assets, tenantLimitToAddOn.assets);
-		diskSpace = addLimit(diskSpace, tenantLimitToAddOn.diskSpace);
-		users = addLimit(users, tenantLimitToAddOn.users);
+	public void addUsers(Long additionalUsers) {
+		users = addLimits(users, additionalUsers);
 	}
 	
-	private Long addLimit(Long currentLimit, Long limitToAdd) {
+	public void addDiskSpace(Long additionalDiskSpace) {
+		diskSpace = addLimits(diskSpace, additionalDiskSpace);
+	}
+	
+	public void addAssets(Long additionalAssets) {
+		assets = addLimits(assets, additionalAssets);
+	}
+	
+	private Long addLimits(Long currentLimit, Long limitToAdd) {
 		if (currentLimit.equals(UNLIMITED) || limitToAdd.equals(UNLIMITED)) {
 			return UNLIMITED;
 		}
 		return currentLimit + limitToAdd;
 	}
+
+	@Override
+	public String toString() {
+		
+		return "users = [" + users + "] assets = [" + assets + "] diskspace = [" + diskSpace + "]";
+	}
+	
+	
 	
 	
 }

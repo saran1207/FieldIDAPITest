@@ -29,22 +29,26 @@ public class ExtendedFeatureListResolver {
 		Set<ExtendedFeature> extendedFeaturesToTurnOn = new HashSet<ExtendedFeature>();
 	
 		extendedFeaturesToTurnOn.addAll(Arrays.asList(signUpPackage.getExtendedFeatures()));
-		extendedFeaturesToTurnOn.addAll(getFeaturesFromPromoCode(mockTransaction));
+		extendedFeaturesToTurnOn.addAll(getFeaturesFromPromoCode(loadPromoCode(mockTransaction)));
 		
 		return extendedFeaturesToTurnOn; 
 	}
 
 
-	private List<ExtendedFeature> getFeaturesFromPromoCode(Transaction mockTransaction) {
+	private List<ExtendedFeature> getFeaturesFromPromoCode(PromoCode code) {
 		List<ExtendedFeature> features = new ArrayList<ExtendedFeature>();
 		
-		promoCodeLoader.setCode(promoCode);
-		PromoCode code = promoCodeLoader.load(mockTransaction);
+		
 		if (code != null) {
 			features.addAll(code.getExtendedFeatures());
 		}
 		
 		return features;
+	}
+
+
+	private PromoCode loadPromoCode(Transaction mockTransaction) {
+		return promoCodeLoader.setCode(promoCode).load(mockTransaction);
 	}
 
 

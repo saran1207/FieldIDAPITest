@@ -50,6 +50,12 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		expectedTenantLimit.setUsers(accountCreationInformationStub.getNumberOfUsers().longValue());
 		expectedTenantLimit.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
 		
+		TenantLimit limitFromResolver = new TenantLimit();
+		limitFromResolver.setAssets(SIGN_UP_PACKAGE_BEING_USED.getAssets());
+		limitFromResolver.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
+		
+		
+		
 		Set<ExtendedFeature> featuresThatShouldBeAddedToPrimaryOrg = new FluentHashSet<ExtendedFeature>(ExtendedFeature.Integration);
 		
 		// fixture setup
@@ -67,12 +73,17 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockUserSaver.saveOrUpdate(mockTransaction, accountPlaceHolder.getAdminUser())).andReturn(accountPlaceHolder.getAdminUser());
 		replay(mockUserSaver);
 		
-		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockExtendedFeatureListResolver, mockOrganizationSaver, mockUserSaver);
+		LimitResolver mockLimitResolver = createMock(LimitResolver.class);
+		expect(mockLimitResolver.withSignUpPackageDetails(SIGN_UP_PACKAGE_BEING_USED)).andReturn(mockLimitResolver);
+		expect(mockLimitResolver.withPromoCode(SOME_PROMO_CODE)).andReturn(mockLimitResolver);
+		expect(mockLimitResolver.resolve(mockTransaction)).andReturn(limitFromResolver);
+		replay(mockLimitResolver);
+		
+		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockExtendedFeatureListResolver, mockOrganizationSaver, mockUserSaver, mockLimitResolver);
 		sut.setAccountInformation(accountCreationInformationStub)
 				.setAccountPlaceHolder(accountPlaceHolder)
 				.setSubscriptionApproval(signUpTenantResponseStub);
-		
-	
+			
 		// exercise
 		sut.finalizeSignUp(mockTransaction);
 
@@ -80,6 +91,7 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		verify(mockExtendedFeatureListResolver);
 		verify(mockOrganizationSaver);
 		verify(mockUserSaver);
+		verify(mockLimitResolver);
 		
 		assertEquals(featuresThatShouldBeAddedToPrimaryOrg, accountPlaceHolder.getPrimaryOrg().getExtendedFeatures());
 		

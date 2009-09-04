@@ -104,18 +104,18 @@ public class PromoCodeAction extends AbstractAdminAction implements Preparable {
 
 	public void setDiskSpaceMB(Long diskSpace) {
 		if (diskSpace == -1) {
-			promoCode.getLimits().setDiskSpaceUnlimited();
+			promoCode.getLimitAdjuster().setDiskSpaceUnlimited();
 		} else {
-			promoCode.getLimits().setDiskSpaceInBytes(DataUnit.BYTES.convertFrom(diskSpace, DataUnit.MEBIBYTES));
+			promoCode.getLimitAdjuster().setDiskSpaceInBytes(DataUnit.BYTES.convertFrom(diskSpace, DataUnit.MEBIBYTES));
 		}	
 	}
 
 	public Long getDiskSpaceMB() {
 		Long diskSpace;
-		if (promoCode.getLimits().isDiskSpaceUnlimited()) {
+		if (promoCode.getLimitAdjuster().isDiskSpaceUnlimited()) {
 			diskSpace = -1L;
 		} else {
-			diskSpace = DataUnit.BYTES.convertTo(promoCode.getLimits().getDiskSpaceInBytes(), DataUnit.MEBIBYTES);
+			diskSpace = DataUnit.BYTES.convertTo(promoCode.getLimitAdjuster().getDiskSpaceInBytes(), DataUnit.MEBIBYTES);
 		}
 		
 		return diskSpace;

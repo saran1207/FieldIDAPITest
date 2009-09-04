@@ -18,7 +18,7 @@ import org.hibernate.annotations.CollectionOfElements;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.model.tenant.LimitAdjuster;
 
 @Entity
 @Table(name = "promocodes")
@@ -39,7 +39,7 @@ public class PromoCode extends AbstractEntity implements Saveable {
 
 	
 	@Embedded
-	private TenantLimit limits = new TenantLimit();
+	private LimitAdjuster limitAdjuster = new LimitAdjuster();
 	
 	
 	public String getCode() {
@@ -58,13 +58,17 @@ public class PromoCode extends AbstractEntity implements Saveable {
 		this.extendedFeatures = extendedFeatures;
 	}
 
-	public TenantLimit getLimits() {
-		return limits;
+	public LimitAdjuster getLimitAdjuster() {
+		return limitAdjuster;
+	}
+	
+	
+
+	public void setLimitAdjuster(LimitAdjuster limitAdjuster) {
+		this.limitAdjuster = limitAdjuster;
 	}
 
-	public void setLimits(TenantLimit limits) {
-		this.limits = limits;
-	}
+	
 	
 	
 	

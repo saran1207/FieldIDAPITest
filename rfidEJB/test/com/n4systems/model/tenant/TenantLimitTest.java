@@ -6,73 +6,72 @@ import org.junit.Test;
 
 
 
+
 public class TenantLimitTest {
 
 	@Test
 	public void should_add_limits_together() {
-		TenantLimit expectedTenantLimit = createTenantLimit(10L, 20L, 30L);
+		TenantLimit expectedTenantLimit = new TenantLimit(10L, 20L, 30L);
 		
-		TenantLimit tenantLimit = createTenantLimit(1L, 2L, 3L);
-		TenantLimit tenantLimitToAddOn = createTenantLimit(9L, 18L, 27L);
+		TenantLimit sut = new TenantLimit(1L, 2L, 3L);
 		
 		// exercise
-		tenantLimit.addOn(tenantLimitToAddOn);
+		sut.addDiskSpace(9L);
+		sut.addAssets(18L);
+		sut.addUsers(27L);
+		
+		
 		// verify
-		assertEquals(expectedTenantLimit, tenantLimit);
+		assertEquals(expectedTenantLimit, sut);
 
 	}
 	
 	@Test
 	public void should_add_limits_with_original_having_all_limits_set_to_unlimited() {
-		TenantLimit expectedTenantLimit = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
-		TenantLimit tenantLimit = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
-		TenantLimit tenantLimitToAddOn = createTenantLimit(9L, 8L, 7L);
+		TenantLimit sut = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
 		// exercise
-		tenantLimit.addOn(tenantLimitToAddOn);
+		sut.addDiskSpace(9L);
+		sut.addAssets(18L);
+		sut.addUsers(27L);
+		
 		// verify
-		assertEquals(expectedTenantLimit, tenantLimit);
+		assertEquals(expectedTenantLimit, sut);
 	}
 	
 	
 	@Test
 	public void should_add_limits_with_limit_being_added_on_has_all_limits_set_to_unlimited() {
-		TenantLimit expectedTenantLimit = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
-		TenantLimit tenantLimit = createTenantLimit(1L, 2L, 3L);
-		TenantLimit tenantLimitToAddOn = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit sut = new TenantLimit(1L, 3L, 2L);
 		
 		// exercise
-		tenantLimit.addOn(tenantLimitToAddOn);
+		sut.addDiskSpace(TenantLimit.UNLIMITED);
+		sut.addAssets(TenantLimit.UNLIMITED);
+		sut.addUsers(TenantLimit.UNLIMITED);
 		
 		// verify
-		assertEquals(expectedTenantLimit, tenantLimit);
+		assertEquals(expectedTenantLimit, sut);
 	}
 	
 	@Test
 	public void should_add_limits_with_both_limits_having_all_limits_set_to_unlimited() {
-		TenantLimit expectedTenantLimit = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
-		TenantLimit tenantLimit = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
-		TenantLimit tenantLimitToAddOn = createTenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit sut = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
 		// exercise
-		tenantLimit.addOn(tenantLimitToAddOn);
-		
+		sut.addDiskSpace(TenantLimit.UNLIMITED);
+		sut.addAssets(TenantLimit.UNLIMITED);
+		sut.addUsers(TenantLimit.UNLIMITED);
 		// verify
-		assertEquals(expectedTenantLimit, tenantLimit);
+		assertEquals(expectedTenantLimit, sut);
 	}
 	
 	
 
-	private TenantLimit createTenantLimit(long diskSpace, long users, long assets) {
-		TenantLimit tenantLimit = new TenantLimit();
-		
-		tenantLimit.setAssets(assets);
-		tenantLimit.setUsers(users);
-		tenantLimit.setDiskSpaceInBytes(diskSpace);
-		
-		return tenantLimit;
-	}
+	
 }

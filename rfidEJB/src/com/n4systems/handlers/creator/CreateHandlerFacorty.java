@@ -7,14 +7,13 @@ import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
 import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandlerImpl;
 import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
 import com.n4systems.handlers.creator.signup.ExtendedFeatureListResolver;
+import com.n4systems.handlers.creator.signup.LimitResolver;
 import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
 import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignUpFinalizationHandler;
 import com.n4systems.handlers.creator.signup.SignUpFinalizationHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignUpHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
-import com.n4systems.handlers.creator.signup.SubscriptionApprovalHandler;
-import com.n4systems.handlers.creator.signup.SubscriptionApprovalHandlerImpl;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.promocode.PromoCodeByCodeLoader;
@@ -40,7 +39,11 @@ public class CreateHandlerFacorty {
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {
-		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrganizationSaver(), new UserSaver());
+		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrganizationSaver(), new UserSaver(), getLimitResolver());
+	}
+
+	private LimitResolver getLimitResolver() {
+		return new LimitResolver(new PromoCodeByCodeLoader());
 	}
 
 	private ExtendedFeatureListResolver getExtendedFeatureListResolver() {

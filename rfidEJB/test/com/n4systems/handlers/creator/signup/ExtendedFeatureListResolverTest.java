@@ -1,4 +1,5 @@
 package com.n4systems.handlers.creator.signup;
+import static com.n4systems.test.helpers.creationmethods.PromoCodeCreationMethods.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
@@ -15,23 +16,20 @@ import com.n4systems.model.promocode.PromoCodeByCodeLoader;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.test.helpers.FluentHashSet;
 
-
-
 public class ExtendedFeatureListResolverTest  extends TestUsesTransactionBase{
 
-	private static final String PROMO_CODE_THAT_DOES_NOT_EXIST = "PROMO CODE THAT DOES NOT EXIST";
-	private static final String PROMO_CODE_THAT_EXISTS = "PROMO CODE THAT EXISTS";
+	
+	
 	private static final ExtendedFeature FEATURE_NOT_INCLUDED_IN_PACKAGE = ExtendedFeature.Integration;
-	private static final String NO_PROMO_CODE = "";
 	private static final SignUpPackageDetails SIGN_UP_PACKAGE_BEING_USED = SignUpPackageDetails.Basic;
-	private static final String SOME_INVALIDE_PROMO_CODE = "";
+	
 
 	@Test
 	public void should_return_only_get_extended_features_of_package_when_no_promo_code_given() {
 
 		Set<ExtendedFeature> expectedFeatureList = new FluentHashSet<ExtendedFeature>(SIGN_UP_PACKAGE_BEING_USED.getExtendedFeatures());
 		
-		PromoCodeByCodeLoader mockPromoByCodeLoader = createMockPromoCodeLoader(null, SOME_INVALIDE_PROMO_CODE);
+		PromoCodeByCodeLoader mockPromoByCodeLoader = createMockPromoCodeLoader(null, SOME_INVALID_PROMO_CODE);
 		
 		ExtendedFeatureListResolver sut = new ExtendedFeatureListResolver(mockPromoByCodeLoader);
 		sut.withSignUpPackageDetails(SIGN_UP_PACKAGE_BEING_USED).withPromoCode(NO_PROMO_CODE);
@@ -137,7 +135,7 @@ public class ExtendedFeatureListResolverTest  extends TestUsesTransactionBase{
 	private PromoCodeByCodeLoader createMockPromoCodeLoader(PromoCode loadedPromoCode, String promoCode) {
 		PromoCodeByCodeLoader mockLoader = createMock(PromoCodeByCodeLoader.class);
 		
-		mockLoader.setCode(promoCode);
+		expect(mockLoader.setCode(promoCode)).andReturn(mockLoader);
 		
 		expect(mockLoader.load(mockTransaction)).andReturn(loadedPromoCode);
 		

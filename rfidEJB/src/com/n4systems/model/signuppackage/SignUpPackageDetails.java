@@ -1,7 +1,9 @@
 package com.n4systems.model.signuppackage;
 
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.tenant.LimitAdjuster;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.util.DataUnit;
 
 
 public enum SignUpPackageDetails {
@@ -36,9 +38,10 @@ public enum SignUpPackageDetails {
 	private static final SignUpPackageDetails PREFERRED_PACKAGE = SignUpPackageDetails.Enterprise;
 	private String syncId;
 	private String name;
+	private Long assets;
 	private Long diskSpace;
 	private Long users;
-	private Long assets;
+	
 	private ExtendedFeature[] extendedFeatures;
 	
 	private SignUpPackageDetails(String syncId, String name, Long diskSpace, Long users, Long assets, ExtendedFeature...extendedFeatures) {
@@ -82,5 +85,11 @@ public enum SignUpPackageDetails {
 		
 		return false;
 	}
+	
+	public LimitAdjuster getLimitAdjuster() {
+		return new LimitAdjuster(assets, diskSpace, DataUnit.MEGABYTES);
+	}
+	
+	
 
 }

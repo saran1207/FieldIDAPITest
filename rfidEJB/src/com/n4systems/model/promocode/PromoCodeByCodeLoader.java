@@ -23,7 +23,8 @@ public class PromoCodeByCodeLoader extends Loader<PromoCode> {
 		return builder.getSingleResult(em);
 	}
 
-	public void setCode(String code) {
+	public PromoCodeByCodeLoader setCode(String code) {
 		this.code = code;
+		return this;
 	}
 }
