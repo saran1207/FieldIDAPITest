@@ -34,6 +34,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
@@ -97,7 +98,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		ProductType productTypeBean = null;
 		try {
 			
-			QueryBuilder<ProductType> qbuilder = new QueryBuilder<ProductType>(Product.class, "p");
+			QueryBuilder<ProductType> qbuilder = new QueryBuilder<ProductType>(Product.class, new OpenSecurityFilter(), "p");
 			qbuilder.setSimpleSelect("type");
 			qbuilder.addSimpleWhere("id", productId);
 			

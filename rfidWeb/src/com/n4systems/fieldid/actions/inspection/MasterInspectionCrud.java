@@ -264,7 +264,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			product = null;
 
 		} else if (product == null || !product.getId().equals(productId)) {
-			product = persistenceManager.find(Product.class, productId, getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id"), "type.subTypes");
+			product = persistenceManager.find(Product.class, productId, getSecurityFilter(), "type.subTypes");
 			product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
 			if (product != null) {
 				for (com.n4systems.model.SubProduct subProduct : product.getSubProducts()) {

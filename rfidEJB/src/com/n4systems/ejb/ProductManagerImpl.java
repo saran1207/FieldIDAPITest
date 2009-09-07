@@ -30,7 +30,9 @@ import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.security.SecurityFilterFactory;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.services.product.ProductMerger;
 import com.n4systems.taskscheduling.TaskExecutor;
@@ -40,7 +42,6 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.ProductTypeRemovalSummary;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
@@ -73,9 +74,7 @@ public class ProductManagerImpl implements ProductManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue, ProductType productType) {
-		SecurityFilter productFilter = SecurityFilterFactory.prepare(Product.class, filter);
-
-		String queryString = "FROM Product p WHERE ( UPPER( p.serialNumber ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + productFilter.produceWhereClause();
+		String queryString = "FROM Product p WHERE ( UPPER( p.serialNumber ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Product.class, "p");
 
 		if (productType != null) {
 			queryString += " AND p.type = :productType ";
@@ -84,7 +83,7 @@ public class ProductManagerImpl implements ProductManager {
 		queryString += " ORDER BY p.created ";
 
 		Query query = em.createQuery(queryString);
-		productFilter.applyParamers(query);
+		filter.applyParameters(query, Product.class);
 		query.setParameter("searchValue", searchValue.toUpperCase());
 		if (productType != null) {
 			query.setParameter("productType", productType);
@@ -94,7 +93,7 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	public Product findProduct(Long id) {
-		QueryBuilder<Product> qBuilder = new QueryBuilder<Product>(Product.class);
+		QueryBuilder<Product> qBuilder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
 
 		qBuilder.setSimpleSelect();
 		qBuilder.addSimpleWhere("id", id);
@@ -146,18 +145,18 @@ public class ProductManagerImpl implements ProductManager {
 	 * Notice that the customer id passed in is not the "security filter"
 	 * customer id
 	 */
-	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException {
+	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long ownerId) throws NonUniqueProductException {
 		Product product = null;
-		SecurityFilter filter = new SecurityFilter(tenantId);
+		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		try {
 			QueryBuilder<Product> qBuilder = basicProductQuery(filter);
 			qBuilder.addWhere(Comparator.EQ, "serialNumber", "serialNumber", rawSerialNumber.trim(), WhereParameter.IGNORE_CASE);
 			
-			if (customerId == null) {
+			if (ownerId == null) {
 				qBuilder.addWhere(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "owner"));
 			} else {
-				qBuilder.addSimpleWhere("owner.id", customerId);
+				qBuilder.addSimpleWhere("owner.id", ownerId);
 			}
 
 			
@@ -192,7 +191,7 @@ public class ProductManagerImpl implements ProductManager {
 			return null;
 		}
 
-		QueryBuilder<Product> qBuilder = basicProductQuery(filter.setTargets("tenant.id"));
+		QueryBuilder<Product> qBuilder = basicProductQuery(filter);
 		qBuilder.addSimpleWhere("mobileGUID", mobileGUID.trim()).addPostFetchPaths("subProducts");
 
 		try {
@@ -233,7 +232,6 @@ public class ProductManagerImpl implements ProductManager {
 	 * @return
 	 */
 	private QueryBuilder<Product> basicProductQuery(SecurityFilter filter) {
-		filter.setTargets("tenant.id", "owner.id", "division.id");
 		QueryBuilder<Product> qBuilder = new QueryBuilder<Product>(Product.class, filter);
 
 		qBuilder.setSimpleSelect();
@@ -246,7 +244,7 @@ public class ProductManagerImpl implements ProductManager {
 	 * parent product.
 	 */
 	public Product parentProduct(Product product) {
-		QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class).addSimpleWhere("product", product);
+		QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("product", product);
 		try {
 			SubProduct p = (SubProduct)persistenceManager.find(query);
 			if (p != null) {
@@ -264,12 +262,11 @@ public class ProductManagerImpl implements ProductManager {
 
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, ProductType type) {
-		filter.setTargets("pt.tenant.id");
 		String jpql = "SELECT new com.n4systems.util.ListingPair(id, name ) FROM ProductType pt";
-		jpql += " WHERE " + filter.produceWhereClause() + " AND pt.subTypes IS EMPTY AND pt.id != :productTypeId AND state = :activeState ORDER BY pt.name";
+		jpql += " WHERE " + filter.produceWhereClause(ProductType.class, "pt") + " AND pt.subTypes IS EMPTY AND pt.id != :productTypeId AND state = :activeState ORDER BY pt.name";
 
 		Query query = em.createQuery(jpql);
-		filter.applyParamers(query);
+		filter.applyParameters(query, ProductType.class);
 		query.setParameter("productTypeId", type.getId());
 		query.setParameter("activeState", EntityState.ACTIVE);
 
@@ -393,15 +390,15 @@ public class ProductManagerImpl implements ProductManager {
 	public ProductTypeRemovalSummary testArchive(ProductType productType) {
 		ProductTypeRemovalSummary summary = new ProductTypeRemovalSummary(productType);
 		try {
-			QueryBuilder<Product> productCount = new QueryBuilder<Product>(Product.class);
+			QueryBuilder<Product> productCount = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
 			productCount.setCountSelect().addSimpleWhere("type", productType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setProductsToDelete(persistenceManager.findCount(productCount));
 
-			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class);
+			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
 			inspectionCount.setCountSelect().addSimpleWhere("product.type", productType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
 
-			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class);
+			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
 			scheduleCount.setCountSelect().addSimpleWhere("product.type", productType);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
@@ -430,7 +427,7 @@ public class ProductManagerImpl implements ProductManager {
 			subProductTypeCount.setParameter("productType", productType);
 			summary.setProductTypesToDettachFrom((Long) subProductTypeCount.getSingleResult());
 
-			QueryBuilder<ProductCodeMappingBean> productCodeMappingCount = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class);
+			QueryBuilder<ProductCodeMappingBean> productCodeMappingCount = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class, new OpenSecurityFilter());
 			productCodeMappingCount.setCountSelect().addSimpleWhere("productInfo", productType);
 			summary.setProductCodeMappingsToDelete(persistenceManager.findCount(productCodeMappingCount));
 
@@ -463,7 +460,7 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	public void removeProductCodeMappingsThatUse(ProductType productType) {
-		QueryBuilder<ProductCodeMappingBean> productCodeMappingQuery = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class);
+		QueryBuilder<ProductCodeMappingBean> productCodeMappingQuery = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class, new OpenSecurityFilter());
 		productCodeMappingQuery.setSimpleSelect().addSimpleWhere("productInfo", productType);
 		try {
 			for (ProductCodeMappingBean mapping : persistenceManager.findAll(productCodeMappingQuery)) {
@@ -477,11 +474,11 @@ public class ProductManagerImpl implements ProductManager {
 	public ProductRemovalSummary testArchive(Product product) {
 		ProductRemovalSummary summary = new ProductRemovalSummary(product);
 		try {
-			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class);
+			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
 			inspectionCount.setCountSelect().addSimpleWhere("product", product).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
 
-			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class);
+			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
 			scheduleCount.setCountSelect().addSimpleWhere("product", product);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
@@ -520,7 +517,7 @@ public class ProductManagerImpl implements ProductManager {
 	public SortedSet<String> findAllCommonInfoFieldNames(SecurityFilter filter) {
 		// find all the product types for a tenant and compute the common info
 		// fields
-		return findAllCommonInfoFieldNames(persistenceManager.findAll(ProductType.class, filter.getTenantId()));
+		return findAllCommonInfoFieldNames(persistenceManager.findAll(new QueryBuilder<ProductType>(ProductType.class, filter)));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -552,7 +549,7 @@ public class ProductManagerImpl implements ProductManager {
 
 	public ProductTypeGroupRemovalSummary testDelete(ProductTypeGroup group) {
 		ProductTypeGroupRemovalSummary summary = new ProductTypeGroupRemovalSummary(group);
-		QueryBuilder<ProductType> countQuery = new QueryBuilder<ProductType>(ProductType.class);
+		QueryBuilder<ProductType> countQuery = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
 		countQuery.addSimpleWhere("group", group);
 		summary.setProductTypesConnected(persistenceManager.findCount(countQuery));
 		return summary;

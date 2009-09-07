@@ -24,6 +24,7 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ReportCriteria;
@@ -74,29 +75,13 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					updateJpql += ", location = :" + paramKey;
 					bindParams.put(paramKey, inspectionSchedule.getLocation());
 				}
-				if (paramKey.equals("customer") || paramKey.equals("jobSite")) {
-					if (paramKey.equals("jobSite")) {
-						// job site syncs the inspection's customer and division
-						// to match it's customer and division.
-						inspectionSchedule.setCustomer(inspectionSchedule.getJobSite().getCustomer());
-						inspectionSchedule.setDivision(inspectionSchedule.getJobSite().getDivision());
-
-						updateJpql += ", jobSite = :jobSite ";
-						bindParams.put("jobSite", inspectionSchedule.getJobSite());
-					}
-
-					if (inspectionSchedule.getCustomer() == null) {
-						updateJpql += ", customer = null ";
+				if (paramKey.equals("customer")) {
+					
+					if (inspectionSchedule.getOwner() == null) {
+						updateJpql += ", owner = null ";
 					} else {
-						updateJpql += ", customer = :customer ";
-						bindParams.put("customer", inspectionSchedule.getCustomer());
-					}
-
-					if (inspectionSchedule.getDivision() == null) {
-						updateJpql += ", division = null ";
-					} else {
-						updateJpql += ", division = :division ";
-						bindParams.put("division", inspectionSchedule.getDivision());
+						updateJpql += ", owner = :owner ";
+						bindParams.put("owner", inspectionSchedule.getOwner());
 					}
 				}
 
@@ -117,7 +102,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			result = new Long(updateStmt.executeUpdate());
 			
 			//update products as well.
-			QueryBuilder<Long> productIdQuery = new QueryBuilder<Long>(InspectionSchedule.class);
+			QueryBuilder<Long> productIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 			productIdQuery.setSimpleSelect("product.id").addWhere(Comparator.IN, "ids", "id", scheduleIds);
 			modifyProudcts(persistenceManager.findAll(productIdQuery));
 			
@@ -157,30 +142,14 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (entry.getValue() == true) {
 					updateQueryString += ", ";
 
-					if (entry.getKey().equals("customer") || entry.getKey().equals("jobSite")) {
+					if (entry.getKey().equals("customer")) {
 						ownershipBeingSet = true;
-						if (entry.getKey().equals("jobSite")) {
-							// job site syncs the customer and division to match
-							// it's customer and division.
-							product.setOwner(product.getJobSite().getCustomer());
-							product.setDivision(product.getJobSite().getDivision());
-
-							updateQueryString += " jobSite = :jobSite, ";
-							parameters.put("jobSite", product.getJobSite());
-						}
 
 						if (product.getOwner() == null) {
 							updateQueryString += " owner = null, ";
 						} else {
-							updateQueryString += " owner = :customer, ";
-							parameters.put("customer", product.getOwner());
-						}
-
-						if (product.getDivision() == null) {
-							updateQueryString += " division = null ";
-						} else {
-							updateQueryString += " division = :division ";
-							parameters.put("division", product.getDivision());
+							updateQueryString += " owner = :owner, ";
+							parameters.put("owner", product.getOwner());
 						}
 					}
 
@@ -237,7 +206,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			result = new Long(updateQuery.executeUpdate());
 			
 			if (ownershipBeingSet) {
-				QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class).setSimpleSelect("id").addWhere(Comparator.IN, "products", "product.id", ids).addWhere(Comparator.NE, "status","status", ScheduleStatus.COMPLETED);
+				QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "products", "product.id", ids).addWhere(Comparator.NE, "status","status", ScheduleStatus.COMPLETED);
 				Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(values);
 				InspectionSchedule schedule = new InspectionSchedule();
 				schedule.setProduct(product);
@@ -269,30 +238,14 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (entry.getValue() == true) {
 					updateQueryString += ", ";
 
-					if (entry.getKey().equals("customer") || entry.getKey().equals("jobSite")) {
+					if (entry.getKey().equals("customer")) {
 						ownershipBeingSet = true;
-						if (entry.getKey().equals("jobSite")) {
-							// job site syncs the inspection's customer and
-							// division to match it's customer and division.
-							inspection.setCustomer(inspection.getJobSite().getCustomer());
-							inspection.setDivision(inspection.getJobSite().getDivision());
 
-							updateQueryString += " jobSite = :jobSite, ";
-							parameters.put("jobSite", inspection.getJobSite());
-						}
-
-						if (inspection.getCustomer() == null) {
-							updateQueryString += " customer = null ";
+						if (inspection.getOwner() == null) {
+							updateQueryString += " owner = null ";
 						} else {
-							updateQueryString += " customer = :customer ";
-							parameters.put("customer", inspection.getCustomer());
-						}
-
-						if (inspection.getDivision() == null) {
-							updateQueryString += ", division = null ";
-						} else {
-							updateQueryString += ", division = :division ";
-							parameters.put("division", inspection.getDivision());
+							updateQueryString += " owner = :owner ";
+							parameters.put("owner", inspection.getOwner());
 						}
 					}
 					if (entry.getKey().equals("inspectionBook")) {
@@ -335,7 +288,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			result = new Long(ids.size());
 			
 			if (ownershipBeingSet) {
-				QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
+				QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
 				Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(values);
 				InspectionSchedule schedule = new InspectionSchedule();
 				schedule.completed(inspection);
@@ -400,7 +353,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	public List<Long> createSchedulesForInspections(List<Long> inspectionIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
-		QueryBuilder<Inspection> query = new QueryBuilder<Inspection>(Inspection.class);
+		QueryBuilder<Inspection> query = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
 		query.addWhere(Comparator.IN, "ids", "id", inspectionIds).addLeftJoin("schedule", "schedule").addWhere(Comparator.NULL, "scheduleId", "schedule.id", "true").addOrder("id");
 		int page = 1;
 		int pageSize = 100;
@@ -416,7 +369,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			page++;
 		} while (inspections.isHasNextPage());
 
-		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(InspectionSchedule.class);
+		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		scheduleQuery.setSimpleSelect("id");
 		scheduleQuery.addWhere(Comparator.IN, "ids", "inspection.id", inspectionIds).addOrder("id");
 		try {

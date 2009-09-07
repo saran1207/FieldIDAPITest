@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.util.HashCode;
 
 
@@ -17,6 +18,11 @@ public final class Tenant extends BaseEntity implements Listable<Long>, NamedEnt
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false, length=255)
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner("id", null, null, null);
+	}
+	
+	@Column(nullable=false)
 	private String name;
 	
 	public Tenant() {}

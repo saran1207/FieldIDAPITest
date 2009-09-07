@@ -57,10 +57,6 @@
     	<property name="jndiName" value="fieldid/CommentTempManager/local" />
     </bean>
     
-    <bean id="downloadManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-        	<property name="jndiName" value="fieldid/DownloadManagerImpl/local" />
-    </bean>
-    
     <bean id="persistenceManager" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="fieldid/PersistenceManagerImpl/local" />
 	</bean>
@@ -95,10 +91,6 @@
     
     <bean id="proofTestHandler" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/ProofTestHandlerImpl/local" />
-    </bean>
-    
-    <bean id="jobSiteManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/JobSiteManagerImpl/local" />
     </bean>
     
     <bean id="aggregateReportManager" class="org.springframework.jndi.JndiObjectFactoryBean">

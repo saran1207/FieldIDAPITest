@@ -4,20 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "ProductStatus")
-public class ProductStatusBean extends LegacyBeanTenantWithCreateModifyDate implements FilteredEntity {
+public class ProductStatusBean extends LegacyBeanTenantWithCreateModifyDate {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
 	private String modifiedBy;
-
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD);
-	}
 	
 	public String getName() {
 		return name;

@@ -120,7 +120,7 @@ public class ProjectNoteCrud extends UploadFileSupport {
 		if (projectId == null) {
 			project = null;
 		} else if (project == null || !projectId.equals(project.getId())) {
-			project = persistenceManager.find(Project.class, projectId, getSecurityFilter().setDefaultTargets());
+			project = persistenceManager.find(Project.class, projectId, getSecurityFilter());
 
 		}
 	}

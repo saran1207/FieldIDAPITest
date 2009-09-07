@@ -18,17 +18,19 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
 
-import com.n4systems.ejb.CustomerManager;
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
+import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.persistence.loaders.DivisionOrgByCustomerListLoader;
+import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.util.ServiceLocator;
 
 public class ProductSerialImporter extends Importer {
@@ -49,20 +51,16 @@ public class ProductSerialImporter extends Importer {
 	public static final String RFID = "rfid";
 
 	private LegacyProductType productTypeManager;
-	private CustomerManager customerManager;
 	private LegacyProductSerial productSerialManager;
 	private ProductManager productManager;
-	private PersistenceManager persistenceManager;
 
 	public ProductSerialImporter(File importerBaseDirectory, PrimaryOrg primaryOrg, boolean createMissingDivisions)
 			throws NamingException {
 		super(importerBaseDirectory, primaryOrg, createMissingDivisions);
 
 		this.productTypeManager = ServiceLocator.getProductType();
-		this.customerManager = ServiceLocator.getCustomerManager();
 		this.productSerialManager = ServiceLocator.getProductSerialManager();
 		this.productManager = ServiceLocator.getProductManager();
-		this.persistenceManager = ServiceLocator.getPersistenceManager();
 	}
 
 	public static Collection<File> filesProcessing(Tenant tenant, File importerBaseDirectory) {
@@ -104,27 +102,21 @@ public class ProductSerialImporter extends Importer {
 			for (Map<String, Object> productSerial : productSerials) {
 				try {
 					Product ps = new Product();
+					
+					// initially default the ps to the primary org, this may or may not get overriden 
+					ps.setOwner(primaryOrg);
+					
 					String serialNumber = (String) productSerial.get(SERIAL_NUMBER);
-					if (primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites)) {
-						if (productSerial.get(JOB_SITE) != null) {
-							JobSite jobSite = persistenceManager.findByName(JobSite.class, primaryOrg.getTenant().getId(), (String)productSerial.get(JOB_SITE));
-							if (jobSite != null) {
-								ps.setJobSite(jobSite);
-								ps.setOwner(jobSite.getCustomer());
-								ps.setDivision(jobSite.getDivision());
-							}
-						}
-						
-						if (ps.getJobSite() == null) {
-							throw new Exception("no job site");
-						}
+					
+					TenantFilteredListLoader<CustomerOrg> customerLoader = new TenantFilteredListLoader<CustomerOrg>(primaryOrg.getTenant(), CustomerOrg.class);
+					FindOrCreateCustomerOrgHandler customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
+					
+					CustomerOrg customer = customerSearcher.findOnly(primaryOrg, (String)productSerial.get(ENDUSER_IDENTIFIER));
+					
+					if (customer == null) {
+						throw new Exception("no customer");
 					} else {
-						Customer customer = customerManager.findCustomerFussySearch((String) productSerial.get(ENDUSER_IDENTIFIER), (String) productSerial.get(ENDUSER_IDENTIFIER), primaryOrg.getTenant().getId(), null);
-						if (customer == null) {
-							throw new Exception("no customer");
-						} else {
-							ps.setOwner(customer);
-						}
+						ps.setOwner(customer);
 					}
 
 					if (productManager.findProductBySerialNumber(serialNumber, primaryOrg.getTenant().getId(), (ps.getOwner() != null) ? ps.getOwner().getId() : null) == null) {
@@ -138,28 +130,25 @@ public class ProductSerialImporter extends Importer {
 						}
 
 						if ((String) productSerial.get(DIVISION) != null) {
-							Division division;
-							if (createMissingDivisions) {
-								division = customerManager.findOrCreateDivision((String) productSerial.get(DIVISION),
-										ps.getOwner().getId(), null);
-							} else {
-								division = customerManager.findDivision((String) productSerial.get(DIVISION), ps.getOwner(),
-										null);
-							}
+							
+							DivisionOrgByCustomerListLoader divisionLoader = new DivisionOrgByCustomerListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
+							divisionLoader.setCustomer(customer);
+							
+							FindOrCreateDivisionOrgHandler divisionSearcher = new FindOrCreateDivisionOrgHandler(divisionLoader, new OrgSaver());
+							divisionSearcher.setFindOnly(!createMissingDivisions);
+		
+							DivisionOrg division = divisionSearcher.findOrCreate(customer, (String)productSerial.get(DIVISION));
 
 							if (division == null) {
 								if (createMissingDivisions) {
 									throw new Exception("no division");
 								}
 							} else {
-								ps.setDivision(division);
+								ps.setOwner(division);
 							}
 						}
 
 						ps.setSerialNumber(serialNumber);
-
-						ps.setOrganization(primaryOrg);
-
 						ps.setComments((String) productSerial.get(COMMENT));
 						ps.setTenant(primaryOrg.getTenant());
 						if (productSerial.get(IDENTIFIED_DATE) != null) {

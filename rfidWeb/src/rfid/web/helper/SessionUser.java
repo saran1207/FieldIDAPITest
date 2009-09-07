@@ -7,17 +7,16 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
-import com.n4systems.util.SecurityFilter;
 
 public class SessionUser implements DateTimeDefinition {
 	private Tenant tenant;
-	private BaseOrg organization;
-	private Long r_EndUser;
-	private Long r_Division;
+	private BaseOrg owner;
 	private String userID;
 	private String firstName;
 	private String lastName;
@@ -31,12 +30,11 @@ public class SessionUser implements DateTimeDefinition {
 	private String searchType;
 	private TimeZone timeZone;
 	private boolean fromQuickLogin;
+	private SecurityFilter securityFilter;
 	
 	public SessionUser( UserBean user ) {
 		this.tenant = user.getTenant();
-		this.organization = user.getOrganization();
-		this.r_EndUser = ( user.getR_EndUser() == null ) ? -1L : user.getR_EndUser(); 
-		this.r_Division = user.getR_Division();
+		this.owner = user.getOwner();
 		this.userID = user.getUserID();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
@@ -44,21 +42,14 @@ public class SessionUser implements DateTimeDefinition {
 		this.fromQuickLogin = true;
 		this.permissions = user.getPermissions();
 		this.timeZone = user.getTimeZone();
-		this.dateFormat = user.getOrganization().getPrimaryOrg().getDateFormat();
+		this.dateFormat = owner.getPrimaryOrg().getDateFormat();
 		this.otherDateFormat = DateHelper.java2Unix(dateFormat);
+		this.securityFilter = new UserSecurityFilter(user);
 	}
 
 	public Tenant getTenant() {
 		tenant.getName();
 		return tenant;
-	}
-
-	public Long getR_EndUser() {
-		return r_EndUser;
-	}
-	
-	public Long getR_Division() {
-		return r_Division;
 	}
 
 	public String getUserID() {
@@ -187,7 +178,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public boolean isCustomerUser() {
-		return (getR_EndUser() != null && getR_EndUser() > 0 ) ? true : false;
+		return owner.isExternalOrg();
 	}
 	
 	public boolean isAnEndUser() {
@@ -195,7 +186,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public boolean isInDivision() {
-		return (getR_Division() != null && getR_Division() > 0 ) ? true : false;
+		return owner.isDivision();
 	}
 
 	/* (non-Javadoc)
@@ -218,11 +209,19 @@ public class SessionUser implements DateTimeDefinition {
 	}
 
 	public BaseOrg getOrganization() {
-		return organization;
+		return getOwner();
 	}
 
 	public void setOrganization(BaseOrg organization) {
-		this.organization = organization;
+		setOwner(organization);
+	}
+	
+	public BaseOrg getOwner() {
+		return owner;
+	}
+	
+	public void setOwner(BaseOrg owner) {
+		this.owner = owner;
 	}
 	
 	@Deprecated
@@ -231,19 +230,15 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public SecurityFilter getSecurityFilter() {
-		return new SecurityFilter(getTenant().getId(), getR_EndUser(), getR_Division(), getId());
+		return securityFilter;
 	}
 	
 	public boolean hasAdministrationAccess() {
-		if( ( r_EndUser == null || r_EndUser == -1L ) && ( hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig") ) ) {
-			return true;
-		}
-		
-		return false;
+		return (!isCustomerUser() && (hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig")));
 	}
 	
 	public String getSerialNumberLabel(){
-		if( organization.getPrimaryOrg().isUsingSerialNumber() ) {
+		if(owner.getPrimaryOrg().isUsingSerialNumber()) {
 			return "label.serialnumber";
 		}
 		return "label.reelid";

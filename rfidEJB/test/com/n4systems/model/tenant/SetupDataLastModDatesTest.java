@@ -12,8 +12,8 @@ public class SetupDataLastModDatesTest {
 	@SuppressWarnings("serial")
 	private class _SetupDataLastModDates extends SetupDataLastModDates {
 		@Override
-		public Long getTenant_id() {
-			return super.getTenant_id();
+		public Long getTenantId() {
+			return super.getTenantId();
 		}
 	}
 	
@@ -28,7 +28,7 @@ public class SetupDataLastModDatesTest {
 		setupModDates.setTenant(tenant);
 		
 		assertSame(tenant, setupModDates.getTenant());
-		assertEquals(tenant.getId(), setupModDates.getTenant_id());
+		assertEquals(tenant.getId(), setupModDates.getTenantId());
 	}
 	
 }

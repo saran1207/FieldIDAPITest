@@ -6,10 +6,10 @@ import javax.interceptor.Interceptors;
 
 import org.jboss.logging.Logger;
 
-
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Configuration;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -23,7 +23,7 @@ public class ConfigManagerImpl implements ConfigManager {
 	@EJB private PersistenceManager persistenceManager;
 
 	public Configuration findEntry(ConfigEntry entry, Long tenantId) {
-		QueryBuilder<Configuration> builder = new QueryBuilder<Configuration>(Configuration.class);
+		QueryBuilder<Configuration> builder = new QueryBuilder<Configuration>(Configuration.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("key", entry);
 		
 		if(tenantId != null) {

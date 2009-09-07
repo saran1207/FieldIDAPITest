@@ -27,8 +27,8 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
@@ -45,7 +45,6 @@ import com.n4systems.util.timezone.Region;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
@@ -61,12 +60,10 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	protected CustomerManager customerManager;
 	private String password;
 	private String passwordConfirmation;
-	
-	private Collection<ListingPair> organizationalUnits;
 	protected List<ListingPair> permissions;
-	private Collection<ListingPair> customers;
-	protected Collection<ListingPair> divisions;
-	
+	protected Collection<ListingPair> organizationalUnits;
+	protected List<ListingPair> customers;
+	protected List<ListingPair> divisions;
 	protected Pager<UserBean> page;
 	private String listFilter;
 	private String userType = UserType.ALL.name();
@@ -75,11 +72,9 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	private Region region;
 	private File signature;
 	
-	public UserCrud( User userManager, PersistenceManager persistenceManager, CustomerManager customerManager ) {
+	public UserCrud( User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
-		this.customerManager = customerManager;
-		
 	}
 	
 	@Override
@@ -289,58 +284,12 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return ERROR;
 	}
 	
-	public Long getCustomerId() {
-		return user.getR_EndUser();
-	}
-	
-	public void setCustomerId( Long customer ) {
-		user.setR_EndUser( customer );
+	public BaseOrg getOwner() {
+		return user.getOwner();
 	}
 
-	public Long getDivision() {
-		return user.getR_Division();
-	}
-	
-	public void setDivision( Long division ) {
-		user.setR_Division( division );
-	}
-	
-	@RequiredFieldValidator( type=ValidatorType.FIELD, message="", key="error.organizationrequired")
-	public Long getOrganizationalUnit() {
-		if( user.getOrganization() != null ) {
-			return 	user.getOrganization().getId();
-		} else {
-			return null;
-		}
-	}
-	
-	public void setOrganizationalUnit( Long orgId ) {
-		try {
-			FilteredIdLoader<SecondaryOrg> loader = getLoaderFactory().createFilteredIdLoader(SecondaryOrg.class);
-			loader.setId(orgId);
-			SecondaryOrg org = loader.load();
-			user.setOrganization( org );
-		} catch(InvalidQueryException e) {
-			logger.error("Unable to load Organization", e);
-		}
-	}	
-
-	public Collection<ListingPair> getCustomers() {
-		if( customers == null ){ 
-			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
-
-	public Collection<ListingPair> getDivisions() {
-		if( divisions == null ) {
-			divisions = new ArrayList<ListingPair>();
-			if( getCustomerId() != null ) {
-				divisions = customerManager.findDivisionsLP(getCustomerId(), getSecurityFilter());
-			}
-		}
-		return divisions;
+	public void setOwner(BaseOrg owner) {
+		user.setOwner(owner);
 	}
 	
 	public Collection<ListingPair> getOrganizationalUnits() {
@@ -354,12 +303,9 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		}
 		return organizationalUnits;
 	}
-	
-	
 
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {
-		
 		return userPermissions;
 	}
 
@@ -370,7 +316,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 
 	public List<ListingPair> getPermissions() {
 		if( permissions == null ){
-			if( user.getR_EndUser() == null ) {
+			if(user.getOwner().isExternalOrg()) {
 				permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 			} else {
 				permissions = ListHelper.intListableToListingPair(Permissions.getCustomerUserPermissions());
@@ -547,6 +493,22 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return user;
 	}
 	
-	
+	public List<ListingPair> getCustomers() {
+		if( customers == null ){ 
+			List<Listable<Long>> customerListables = getLoaderFactory().createFilteredListableLoader(CustomerOrg.class).load();
+			customers = ListHelper.longListableToListingPair(customerListables);
+		}
+		return customers;
+	}
 
+	public List<ListingPair> getDivisions() {
+		if( divisions == null ) {
+			divisions = new ArrayList<ListingPair>();
+			// TODO: CUSTOMER_REFACTOR: UserCrud needs to filter divisions by customers
+//			if(getCustomerId() != null) {
+//				divisions = getLoaderFactory().createDivisionOrgByCustomerListLoader().setCustomer(customer).load();
+//			}
+		}
+		return divisions;
+	}
 }

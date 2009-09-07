@@ -81,7 +81,7 @@ public class DownloadProductAttachmentFile extends DownloadAction {
 	}
 
 	private void loadProduct() {
-		product = persistenceManager.find(Product.class, uniqueID, getSecurityFilter().prepareFor(Product.class));
+		product = persistenceManager.find(Product.class, uniqueID, getSecurityFilter());
 
 		if (product == null) {
 			addActionError(getText("error.noproduct"));

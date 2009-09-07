@@ -1,14 +1,5 @@
 package com.n4systems.model.notificationsettings;
 
-import com.n4systems.model.api.Saveable;
-import com.n4systems.model.common.RelativeTime;
-import com.n4systems.model.common.SimpleFrequency;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
-
-import rfid.ejb.entity.UserBean;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +15,21 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
+import rfid.ejb.entity.UserBean;
+
+import com.n4systems.model.api.HasUser;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.common.RelativeTime;
+import com.n4systems.model.common.SimpleFrequency;
+import com.n4systems.model.parents.EntityWithOwner;
+
 @Entity
 @Table(name = "notificationsettings")
-public class NotificationSetting extends EntityWithTenant implements FilteredEntity, Saveable {
+public class NotificationSetting extends EntityWithOwner implements HasUser, Saveable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(nullable=false)
 	private String name;
-	
-	@Column(name="usingjobsite", nullable=false)
-	private boolean usingJobSite;
 	
 	@Column(name="frequency", nullable=false)
 	@Enumerated(EnumType.STRING)
@@ -68,24 +64,12 @@ public class NotificationSetting extends EntityWithTenant implements FilteredEnt
 
 	public NotificationSetting() {}
 
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, null, null, "user.uniqueID", null);
-	}
-
 	public String getName() {
     	return name;
     }
 
 	public void setName(String name) {
     	this.name = name;
-    }
-
-	public boolean isUsingJobSite() {
-    	return usingJobSite;
-    }
-
-	public void setUsingJobSite(boolean usingJobSite) {
-    	this.usingJobSite = usingJobSite;
     }
 
 	public SimpleFrequency getFrequency() {

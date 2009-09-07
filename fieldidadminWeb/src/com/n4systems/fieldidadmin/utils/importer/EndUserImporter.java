@@ -11,20 +11,20 @@ import javax.naming.NamingException;
 
 import org.ho.yaml.Yaml;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 
 public class EndUserImporter extends Importer {
 
 	public static final String FILE_NAME_PREFIX = "endUsers";
 	public static final String FAILURE_REASON = "failureReason";
-	private CustomerManager endUserManager;
 	
 	public EndUserImporter( File importerBaseDirectory, PrimaryOrg primaryOrg, boolean createMissingDivisions ) throws NamingException {
 		super( importerBaseDirectory, primaryOrg, createMissingDivisions );
-		this.endUserManager = ServiceLocator.getCustomerManager();
 	}
 
 	public static Collection<File> filesProcessing( Tenant tenant, File importerBaseDirectory ) {
@@ -64,9 +64,14 @@ public class EndUserImporter extends Importer {
 		try {
 			Collection<Map> endUsers = (Collection<Map>) Yaml.load(currentFile);
 			for (Map endUser : endUsers) {
-				try{
-					endUserManager.findOrCreateCustomer((String)endUser.get("endUserName"), (String)endUser.get("endUserId"), primaryOrg.getTenant().getId(), null);
+				try {
+					
+					TenantFilteredListLoader<CustomerOrg> customerLoader = new TenantFilteredListLoader<CustomerOrg>(primaryOrg.getTenant(), CustomerOrg.class);
+					FindOrCreateCustomerOrgHandler customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
+
+					customerSearcher.findOrCreate(primaryOrg, (String)endUser.get("endUserName"), (String)endUser.get("endUserId"));
 					successes.add( endUser );
+					
 				} catch ( Exception e ) {
 					StringWriter message = new StringWriter();
 					e.printStackTrace(new PrintWriter(message));

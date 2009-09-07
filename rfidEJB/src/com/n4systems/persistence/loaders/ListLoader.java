@@ -2,7 +2,7 @@ package com.n4systems.persistence.loaders;
 
 import java.util.List;
 
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 abstract public class ListLoader<T> extends SecurityFilteredLoader<List<T>> {
 	

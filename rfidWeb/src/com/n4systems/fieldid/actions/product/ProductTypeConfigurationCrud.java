@@ -75,10 +75,9 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 			productType.getSubTypes().clear();
 			if( !subProductIds.isEmpty() ) {
 				ListHelper.clearNulls( subProductIds );
-				QueryBuilder<ProductType> subTypeQuery = new QueryBuilder<ProductType>( ProductType.class );
+				QueryBuilder<ProductType> subTypeQuery = new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter());
 				subTypeQuery.addWhere( Comparator.IN, "productIds", "id", subProductIds );
 				subTypeQuery.setSimpleSelect();
-				subTypeQuery.setSecurityFilter( getSecurityFilter().setTargets( "tenant.id" ) );
 				subTypeQuery.setOrder( "name" );
 				productType.getSubTypes().addAll( persistenceManager.findAll( subTypeQuery ) );
 			}

@@ -41,11 +41,8 @@ public class ProjectEventCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		schedule = persistenceManager.find(InspectionSchedule.class, uniqueId, getSecurityFilter().setTargets("tenant.id", "product.owner.id", "product.division.id"));
-		
+		schedule = persistenceManager.find(InspectionSchedule.class, uniqueId, getSecurityFilter());
 	}
-	
-	
 	
 	@SkipValidation
 	public String doList() {
@@ -56,9 +53,6 @@ public class ProjectEventCrud extends AbstractCrud {
 		
 		return SUCCESS;
 	}
-
-
-
 
 	@SkipValidation
 	public String doDelete() {
@@ -101,13 +95,13 @@ public class ProjectEventCrud extends AbstractCrud {
 		if (projectId == null) {
 			project = null;
 		} else if (project == null || !projectId.equals(project.getId())) {
-			project = persistenceManager.find(Project.class, projectId, getSecurityFilter().setDefaultTargets(), "products");
+			project = persistenceManager.find(Project.class, projectId, getSecurityFilter(), "products");
 		}
 	}
 
 	public Pager<InspectionSchedule> getPage() {
 		if (page == null) {
-			page = projectManager.getSchedulesPaged(project, getSecurityFilter().setDefaultTargets(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getScheduleStatuses());
+			page = projectManager.getSchedulesPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getScheduleStatuses());
 		}
 
 		return page;

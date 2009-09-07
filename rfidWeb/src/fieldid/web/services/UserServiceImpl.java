@@ -15,37 +15,24 @@ import org.apache.log4j.Logger;
 import rfid.dto.CommentTempDTO;
 import rfid.ejb.entity.FindProductOptionManufactureBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.Option;
-import rfid.ejb.session.PopulatorLog;
 import rfid.ejb.session.ServiceDTOBeanConverter;
-import rfid.util.PopulatorLogger;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.fieldid.web.services.exceptions.InvalidTenantException;
 import com.n4systems.fieldid.web.services.exceptions.WebServiceLoadingFailure;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
-import com.n4systems.model.Product;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
-import com.n4systems.webservice.dto.ProductServiceDTO;
-import com.n4systems.webservice.dto.RequestInformation;
-import com.n4systems.webservice.server.DataService;
-import com.n4systems.webservice.server.DataServiceImpl;
 
 import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
 import fieldid.web.services.dto.CommentTemplateServiceDTO;
 import fieldid.web.services.dto.EndUserServiceDTO;
 import fieldid.web.services.dto.FindProductOptionServiceDTO;
 import fieldid.web.services.dto.InspectionBookServiceDTO;
-import fieldid.web.services.dto.ProductSerialServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 import fieldid.web.services.dto.SerialNumberCounterServiceDTO;
 import fieldid.web.services.dto.TagOptionManufacturerServiceDTO;
@@ -117,47 +104,6 @@ public class UserServiceImpl implements IUserService {
 		return productStatusServiceDTOs;		
 	}
 	
-	/**
-	 * Retrieve product serial dtos for the given list of end users or divisions
-	 * @param tenantId
-	 * @param endUserList
-	 * @param divisionList
-	 * @param lastId
-	 * @return
-	 */
-	public ArrayList<ProductSerialServiceDTO> findProductSerialForEndUserAndDivision(Long versionNumber,
-			Long tenantId, long[] endUserList, long[] divisionList,Date beginDate, 
-			Long lastId){
-		
-		ServiceDTOBeanConverter beanConverter = ServiceLocator.getServiceDTOBeanConverter();
-		LegacyProductSerial productSerialManager = ServiceLocator.getProductSerialManager();
-		
-		int MAX_RESULTS = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_PRODUCTS);
-		
-		// THIS FUCKING SUCKS.. I HATE  IT
-		Long[] endUserList2 = new Long[endUserList.length];
-		for (int i = 0; i < endUserList.length; i++) {
-			endUserList2[i] = endUserList[i];
-		}
-		
-		Long[] divisionList2 = new Long[divisionList.length];
-		for (int i=0; i< divisionList.length; i++) {
-			divisionList2[i] = divisionList[i];
-		}
-			
-		List<Product> productSerials = productSerialManager.findProductSerialByEndUserDivision(tenantId, endUserList2, divisionList2, beginDate, MAX_RESULTS, lastId);
-		
-		ArrayList<ProductSerialServiceDTO> productDTOs = new ArrayList<ProductSerialServiceDTO>();
-		
-		boolean moreData = (productSerials.size() > MAX_RESULTS);
-		
-		for (Product productSerial : productSerials) {
-			productDTOs.add( beanConverter.convert(productSerial, moreData) );
-		}
-		
-		return productDTOs;
-	}
-	
 	public ArrayList<UnitOfMeasureServiceDTO> getUnitOfMeasureForDate( Date beginDate) {
 		return findUnitOfMeasureForDate( DEFAULT_SERVICE_VERSION, beginDate);
 	}
@@ -214,28 +160,28 @@ public class UserServiceImpl implements IUserService {
 	public ArrayList<EndUserServiceDTO> getEndUsersForDate( Long rManufacturer, Date beginDate) {
 		return findEndUsersForDate( DEFAULT_SERVICE_VERSION, rManufacturer, beginDate);
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	public ArrayList<EndUserServiceDTO> findEndUsersForDate(Long versionNumber, Long tenantId, Date beginDate) {
-	
-
-		List<Customer> customerList = ServiceLocator.getCustomerManager().findCustomers(tenantId, beginDate, new SecurityFilter(tenantId));
-
-		EndUserServiceDTO customerService;
-		ArrayList<EndUserServiceDTO> returnList = new ArrayList<EndUserServiceDTO>();
-		try {
-			
-			for(Customer customer: customerList){
-				customerService = ServiceLocator.getServiceDTOBeanConverter().convertLegacy(customer);
-				returnList.add(customerService);
-			}
-			
-		} catch( Exception e ) {
-			returnList = new ArrayList<EndUserServiceDTO>();
-			logger.error( "End user could not be downgraded", e);
-		}
 		
-		return returnList;
+		// TODO: CUSTOMER_REFACTOR: UserService need to return a list of CustomerOrg's by date
+		return new ArrayList<EndUserServiceDTO>();
+//		List<Customer> customerList = ServiceLocator.getCustomerManager().findCustomers(tenantId, beginDate, new LegacySecurityFilter(tenantId));
+//
+//		EndUserServiceDTO customerService;
+//		ArrayList<EndUserServiceDTO> returnList = new ArrayList<EndUserServiceDTO>();
+//		try {
+//			
+//			for(Customer customer: customerList){
+//				customerService = ServiceLocator.getServiceDTOBeanConverter().convertLegacy(customer);
+//				returnList.add(customerService);
+//			}
+//			
+//		} catch( Exception e ) {
+//			returnList = new ArrayList<EndUserServiceDTO>();
+//			logger.error( "End user could not be downgraded", e);
+//		}
+//		
+//		return returnList;
 	}
 	
 	@SuppressWarnings("unused")
@@ -245,7 +191,7 @@ public class UserServiceImpl implements IUserService {
 		Tenant tenant = null ;
 		try {
 			
-			tenant =  (Tenant)ServiceLocator.getPersistenceManager().find( Tenant.class, tenantId );
+			tenant =  ServiceLocator.getPersistenceManager().find( Tenant.class, tenantId );
 		} catch (Exception e) {
 			logger.error("Loading tenant organizational unit", e);
 			throw new InvalidTenantException(e);
@@ -256,86 +202,6 @@ public class UserServiceImpl implements IUserService {
 			throw new InvalidTenantException();
 		}
 		return tenant;
-	}
-	
-	
-
-	// XXX this is a temporary method used to fix a bug on the handheld, should eventually be removed
-	@SuppressWarnings("unused")
-	private boolean doesDivisionReallyExist(Long tenantId, Long rDivision) {
-		
-		Division division = null;
-		try {
-			division = ServiceLocator.getPersistenceManager().find( Division.class, rDivision );
-		} catch (Exception e) {
-			logger.warn("Could not find the division sent in by the handheld", e);
-		}
-
-		if (division == null) {
-			PopulatorLogger.getInstance().logMessage(tenantId,
-					"Could not find the division referenced.",PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
-			return false;
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * 
-	 */
-	public Long TagProduct(ProductSerialServiceDTO productSerialServiceDTO) throws Exception {
-		
-		// TRANSLATE THIS TO THE NEW WAY AND PASS IT TO THE DATASERVICE
-		
-		RequestInformation requestInformation = new RequestInformation();
-		requestInformation.setTenantId(productSerialServiceDTO.getTenantIdLong());
-		requestInformation.setMobileGuid(productSerialServiceDTO.getMobileGUID());
-		
-		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		
-		ProductServiceDTO product = converter.convert(productSerialServiceDTO);
-		
-		DataService dataService = new DataServiceImpl();
-		
-		dataService.createProduct(requestInformation, product);
-		
-		return 0L;
-
-	}
-	
-	public Long UpdateProduct( ProductSerialServiceDTO productSerialServiceDTO ) throws Exception {
-		RequestInformation requestInformation = new RequestInformation();
-		requestInformation.setTenantId(productSerialServiceDTO.getTenantIdLong());
-		
-		
-		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		
-		ProductServiceDTO product = converter.convert(productSerialServiceDTO);
-		
-		DataService dataService = new DataServiceImpl();
-		
-		dataService.updateProduct(requestInformation, product);
-		
-		return 0L;
-	}
-	
-	
-	
-	
-	/**
-	 * Change the RFID number on a product serial
-	 */
-	public void changeRFIDNumber(Long rProductSerial, String newRFIDNumber){
-		
-	}
-	
-	
-	public ArrayList<TagOptionManufacturerServiceDTO> getTagOptionsForManufacturer( Long rManufacturerId ){
-		return new ArrayList<TagOptionManufacturerServiceDTO>();
-	}
-	
-	public ArrayList<TagOptionManufacturerServiceDTO> findTagOptionsForManufacturer(Long versionNumber, Long tenantId) {
-		return new ArrayList<TagOptionManufacturerServiceDTO>();
 	}
 	
 	public ArrayList<InspectionBookServiceDTO> getInspectionBookByDate( Long manufacturerId, Date beginDate){
@@ -450,6 +316,18 @@ public class UserServiceImpl implements IUserService {
 	    cal.add(Calendar.DAY_OF_MONTH, 1);
 	    date = cal.getTime();	    
 	    return date;
+	}
+
+	public void changeRFIDNumber(Long rProductSerial, String newRFIDNumber) {
+		throw new NotImplementedException("changeRFIDNumber(Long, String) has been disabled");
+	}
+
+	public ArrayList<TagOptionManufacturerServiceDTO> findTagOptionsForManufacturer(Long versionNumber, Long rManufacturerId) {
+		throw new NotImplementedException("findTagOptionsForManufacturer(Long, Long) has been disabled");
+	}
+
+	public ArrayList<TagOptionManufacturerServiceDTO> getTagOptionsForManufacturer(Long rManufacturerId) {
+		throw new NotImplementedException("getTagOptionsForManufacturer(Long) has been disabled");
 	}
 	
 }

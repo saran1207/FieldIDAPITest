@@ -9,7 +9,7 @@ require "criteria_section"
 class InspectionType < ActiveRecord::Base
   set_table_name :inspectiontypes
   
-  belongs_to  :tenant,                :foreign_key => 'r_tenant',           :class_name => 'Organization'
+  belongs_to  :tenant,                :foreign_key => 'tenant_id',           :class_name => 'Tenant'
   belongs_to  :group,                 :foreign_key => 'group_id',           :class_name => 'InspectionTypeGroup'
   has_many    :supportedProofTests,   :foreign_key => 'inspectiontypes_id', :class_name => 'InspectionTypeSupportedProofTest'
   has_many    :infoFieldNames,        :foreign_key => 'inspectiontypes_id', :class_name => 'InspectionTypeInfoFieldName'

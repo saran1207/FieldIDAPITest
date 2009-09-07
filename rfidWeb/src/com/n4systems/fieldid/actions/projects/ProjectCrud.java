@@ -8,7 +8,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.InvalidQueryException;
@@ -19,13 +18,13 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.services.JobListService;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -39,17 +38,12 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ProjectCrud.class);
 
-	private CustomerManager customerManager;
 	private ProjectManager projectManager;
 	private JobResourcesCrud jobResources;
 
 	private Project project;
 	private boolean justAssignedOn = false;
 	private Pager<Project> page;
-
-	private List<ListingPair> jobSites;
-	private List<ListingPair> customers;
-	private List<ListingPair> divisions;
 
 	private String actualCompletion;
 	private String estimatedCompletion;
@@ -58,9 +52,8 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	private Pager<Product> assetsPaged;
 	private Pager<InspectionSchedule> schedulesPaged;
 
-	public ProjectCrud(PersistenceManager persistenceManager, CustomerManager customerManager, ProjectManager projectManager, User userManager) {
+	public ProjectCrud(PersistenceManager persistenceManager, ProjectManager projectManager, User userManager) {
 		super(persistenceManager);
-		this.customerManager = customerManager;
 		this.projectManager = projectManager;
 		jobResources = new JobResourcesCrud(persistenceManager, userManager);
 	}
@@ -72,7 +65,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		project = persistenceManager.find(Project.class, uniqueId, getSecurityFilter().setDefaultTargets());
+		project = persistenceManager.find(Project.class, uniqueId, getSecurityFilter());
 	}
 
 	private void testRequiredEntities(boolean notNew) {
@@ -112,7 +105,6 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	public String doCreate() {
 		testRequiredEntities(false);
 		processDates();
-		processJobSite();
 		project.setTenant(getTenant());
 		try {
 			uniqueID = persistenceManager.save(project, getSessionUser().getUniqueID());
@@ -144,7 +136,6 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		testRequiredEntities(true);
 
 		processDates();
-		processJobSite();
 		try {
 			project = persistenceManager.update(project, getSessionUser().getUniqueID());
 			logger.info(getLogLinePrefix() + "project " + project.getProjectID() + " updated");
@@ -156,13 +147,6 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		}
 
 		return SUCCESS;
-	}
-
-	private void processJobSite() {
-		if (getSecurityGuard().isJobSitesEnabled()) {
-			project.setCustomer(project.getJobSite().getCustomer());
-			project.setDivision(project.getJobSite().getDivision());
-		}
 	}
 
 	private void processDates() {
@@ -199,18 +183,6 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	public String getActualCompletion() {
 		return actualCompletion;
-	}
-
-	public Long getJobSite() {
-		return (project.getJobSite() != null) ? project.getJobSite().getId() : null;
-	}
-
-	public Long getCustomer() {
-		return (project.getCustomer() != null) ? project.getCustomer().getId() : null;
-	}
-
-	public Long getDivision() {
-		return (project.getDivision() != null) ? project.getDivision().getId() : null;
 	}
 
 	public String getDuration() {
@@ -257,30 +229,13 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	public void setActualCompletion(String actualCompletion) {
 		this.actualCompletion = actualCompletion;
 	}
-
-	@CustomValidator(type = "requiredIfFeature", message = "", key = "error.jobsiterequired", parameters = { @ValidationParameter(name = "extendedFeature", value = "JobSites") })
-	public void setJobSite(Long jobSite) {
-		if (jobSite == null) {
-			project.setJobSite(null);
-		} else if (project.getJobSite() == null || !jobSite.equals(project.getJobSite().getId())) {
-			project.setJobSite(persistenceManager.find(JobSite.class, jobSite, getSecurityFilter().setDefaultTargets()));
-		}
+	
+	public BaseOrg getOwner() {
+		return project.getOwner();
 	}
 
-	public void setCustomer(Long customer) {
-		if (customer == null) {
-			project.setCustomer(null);
-		} else if (project.getCustomer() == null || !customer.equals(project.getCustomer().getId())) {
-			project.setCustomer(customerManager.findCustomer(customer, getSecurityFilter()));
-		}
-	}
-
-	public void setDivision(Long division) {
-		if (division == null) {
-			project.setDivision(null);
-		} else if (project.getDivision() == null || !division.equals(project.getDivision().getId())) {
-			project.setDivision(customerManager.findDivision(division, project.getCustomer(), getSecurityFilter()));
-		}
+	public void setOwner(BaseOrg owner) {
+		project.setOwner(owner);
 	}
 
 	public void setDuration(String duration) {
@@ -332,29 +287,8 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return page;
 	}
 
-	public List<ListingPair> getCustomers() {
-		if (customers == null) {
-			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
-	public List<ListingPair> getDivisions() {
-		if (divisions == null && getCustomer() != null) {
-			divisions = customerManager.findDivisionsLP(getCustomer(), getSecurityFilter());
-		}
-		return divisions;
-	}
-
-	public List<ListingPair> getJobSites() {
-		if (jobSites == null) {
-			jobSites = persistenceManager.findAllLP(JobSite.class, getSecurityFilter().setDefaultTargets(), "name");
-		}
-		return jobSites;
-	}
-
 	public boolean duplicateValueExists(String productId) {
-		QueryBuilder<Project> query = new QueryBuilder<Project>(Project.class);
+		QueryBuilder<Project> query = new QueryBuilder<Project>(Project.class, new OpenSecurityFilter());
 		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", productId, WhereParameter.IGNORE_CASE);
 		query.addSimpleWhere("tenant", getTenant());
 		if (uniqueID != null) {

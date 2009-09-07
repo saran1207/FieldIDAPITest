@@ -10,7 +10,6 @@ import javax.ejb.Local;
 import net.sf.jasperreports.engine.JasperPrint;
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.DownloadManager;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
@@ -25,17 +24,16 @@ public interface ReportFactory {
 	
 	/**
 	 * Generates a ziped collection of pdf inspection certificate files.  PDF files will contain up to {@link ConfigEntry#REPORTING_MAX_REPORTS_PER_FILE} reports.
-	 * The packaged report is generated into a secured User directory as defined by {@link DownloadManager}.
-	 * @see DownloadManager#getBaseAccessDir(UserBean)
+	 * The packaged report is generated the users home directory
 	 * @param type				The type of Inspection certificate report to generate
 	 * @param rInspectionDocs	A Collection of Inspection ids to generate reports for
 	 * @param dateFormat		The date format to be used in the inspection report
 	 * @param packageName		The name of the final zipped package (without extension).
 	 * @param user				A User used for security filtering and generating the private report path for.  
-	 * @return					A relative Path to the generated report as returned from {@link DownloadManager#resolveRelativePath(File)}
+	 * @return					The zipped report
 	 * @throws Exception		on any issue generating inspection or packaging reports
 	 */
-	public String generateInspectionCertificateReport(InspectionReportType type, Collection<Long> rInspectionDocs, String packageName, UserBean user) throws ReportException, NonPrintableEventType;
+	public File generateInspectionCertificateReport(InspectionReportType type, Collection<Long> rInspectionDocs, String packageName, UserBean user) throws ReportException, NonPrintableEventType;
 	
 	/**
 	 * Generates a JasperPrint object for an Inspection report of type InspectionReportType.
@@ -59,16 +57,14 @@ public interface ReportFactory {
 	
 	/**
 	 * Generates a ziped collection of pdf product certificate files.  PDF files will contain up to {@link ConfigEntry#REPORTING_MAX_REPORTS_PER_FILE} reports.
-	 * The packaged report is generated into a secured User directory as defined by {@link DownloadManager}.
-	 * @see DownloadManager#getBaseAccessDir(UserBean)
 	 * @param productIds		A Collection of product ids to generate reports for
 	 * @param dateFormat		The date format to be used in the inspection report
 	 * @param packageName		The name of the final zipped package (without extension).
 	 * @param user				A User used for security filtering and generating the private report path for.  
-	 * @return					A relative Path to the generated report as returned from {@link DownloadManager#resolveRelativePath(File)}
+	 * @return					The zipped report
 	 * @throws Exception		on any issue generating inspection or packaging reports
 	 */
-	public String generateProductCertificateReport( Collection<Long> productIds, String packageName, UserBean user) throws ReportException, EmptyReportException;
+	public File generateProductCertificateReport( Collection<Long> productIds, String packageName, UserBean user) throws ReportException, EmptyReportException;
 	
 	
 	

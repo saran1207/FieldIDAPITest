@@ -2,7 +2,6 @@ package com.n4systems.fieldid.actions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -181,7 +180,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public void setProductId(Long product) {
 		if (this.product == null || !this.product.getId().equals(product)) {
-			this.product = persistenceManager.find(Product.class, product, getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id"), "type.subTypes", "type.inspectionTypes");
+			this.product = persistenceManager.find(Product.class, product, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
 			this.product = new FindSubProducts(persistenceManager, this.product).fillInSubProducts();
 		}
 	}
@@ -247,7 +246,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public List<ListingPair> getJobs() {
 		if (jobs == null) {
-			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter().setTargets("tenant.id", "customer.id", "division.id"));
+			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter());
 			query.addSimpleWhere("eventJob", true);
 			query.addSimpleWhere("retired", false);
 			jobs = persistenceManager.findAllLP(query, "name");

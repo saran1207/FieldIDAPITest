@@ -24,14 +24,11 @@ public class CopyInspectionFactory {
 		
 		copyAbstractInspection( newInspection, inspection );
 		
-		newInspection.setDivision( inspection.getDivision() );
-		newInspection.setCustomer( inspection.getCustomer() );
+		newInspection.setOwner( inspection.getOwner() );
 		newInspection.setBook( inspection.getBook() );
 		newInspection.setGroup( inspection.getGroup() );
 		newInspection.setInspector( inspection.getInspector() );
 		newInspection.setLocation( inspection.getLocation() );
-		newInspection.setJobSite( inspection.getJobSite() );
-		newInspection.setOrganization( inspection.getOrganization() );
 		newInspection.setPrintable( inspection.isPrintable() );
 		if( inspection.isRetired() ) {
 			newInspection.retireEntity();

@@ -9,7 +9,6 @@ import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -20,7 +19,6 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Project;
 import com.n4systems.model.SavedReport;
 import com.n4systems.reporting.InspectionReportType;
@@ -39,7 +37,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
-	private final CustomerManager customerManager;
 	private final InspectionManager inspectionManager;
 	private final LegacyProductSerial productSerialManager;
 	private final User userManager;
@@ -47,27 +44,22 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private InspectionReportType reportType;
 	private String savedReportName;
 	private List<ListingPair> employees;
-	private List<ListingPair> jobSites;
 	private List<ListingPair> savedReports;
-	private List<ListingPair> divisions;
 	private List<ListingPair> inspectionBooks;
 	private List<ListingPair> users;
 	private List<ListingPair> inspectionTypes;
 	private List<ProductStatusBean> statuses;
-	private List<ListingPair> customers;
 	private List<ListingPair> eventJobs;
 	
 	public InspectionReportAction(
-			final PersistenceManager persistenceManager, 
-			final CustomerManager customerManager, 
+			final PersistenceManager persistenceManager,
 			final User userManager, 
 			final InspectionManager inspectionManager, 
 			final LegacyProductSerial productSerialManager, 
 			final ProductManager productManager) {
 		
 		super(InspectionReportAction.class, REPORT_CRITERIA, "InspectionReport", persistenceManager);
-		
-		this.customerManager = customerManager;
+
 		this.userManager = userManager;
 		this.inspectionManager = inspectionManager;
 		this.productSerialManager = productSerialManager;
@@ -102,12 +94,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	@SkipValidation
 	public String doReportCriteria() {
 		clearContainer();
-		if (getSessionUser().isAnEndUser()) {
-			getContainer().setCustomer(getSessionUser().getR_EndUser());
-			
-			if (getSessionUser().isInDivision()) {
-				getContainer().setDivision(getSessionUser().getR_Division());
-			}
+		if (getSessionUser().getOwner().isExternalOrg()) {
+			getContainer().setOwner(getSessionUser().getOwner().getId());
 		}
 		return INPUT;
 	}
@@ -209,14 +197,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public void setToDate(String toDate) {
 		getContainer().setToDate(DateHelper.convertToUTC(convertToEndOfDay(toDate), getSessionUser().getTimeZone()));
 	}
-
-	public List<ListingPair> getCustomers() {
-		if (customers == null) {
-			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-		}
-		
-		return customers; 
-	}
 	
 	public List<ProductStatusBean> getProductStatus() {
 		if (statuses == null) {
@@ -224,17 +204,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		}
 		
 		return statuses;
-	}
-
-	public List<ListingPair> getDivisions() {
-		if (divisions == null) {
-			divisions = new ArrayList<ListingPair>();
-			
-			if (getContainer().getCustomer() != null) {
-				divisions = customerManager.findDivisionsLP(getContainer().getCustomer(), getSecurityFilter());
-			}
-		}
-		return divisions;
 	}
 	
 	public List<ListingPair> getInspectors() {
@@ -258,13 +227,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		}
 		return inspectionTypes;
 	}
-
-	public List<ListingPair> getJobSites() {
-		if( jobSites == null ) {
-			jobSites = persistenceManager.findAllLP( JobSite.class, getSecurityFilter().setDefaultTargets(), "name" );
-		}
-		return jobSites;
-	}
 	 
 	public List<ListingPair> getEmployees() {
 		if(employees == null) {
@@ -283,7 +245,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<ListingPair> getSavedReports() {
 		if (savedReports == null) {
-			savedReports = persistenceManager.findAllLP(SavedReport.class, getSecurityFilter().setTargets("tenant.id", null, null, "owner.uniqueID", null), "name");
+			savedReports = persistenceManager.findAllLP(SavedReport.class, getSecurityFilter(), "name");
 		}
 		return savedReports;
 	}
@@ -302,7 +264,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public boolean isSavedReportModified() {
 		if (getContainer().isFromSavedReport()) {
-			QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter().setTargets("tenant.id"));
+			QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
 			query.addSimpleWhere("owner.id", getSessionUser().getId());
 			query.addSimpleWhere("id", getContainer().getSavedReportId());
 			SavedReport savedReport = persistenceManager.find(query);  
@@ -314,7 +276,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<ListingPair> getEventJobs() {
 		if (eventJobs == null) {
-			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter().setTargets("tenant.id", "customer.id", "division.id"));
+			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter());
 			query.addSimpleWhere("eventJob", true);
 			query.addSimpleWhere("retired", false);
 			eventJobs = persistenceManager.findAllLP(query, "name");

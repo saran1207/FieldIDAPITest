@@ -16,12 +16,10 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.exceptions.NotUpdatableException;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "eulaacceptances")
-public class EulaAcceptance extends EntityWithTenant implements FilteredEntity {
+public class EulaAcceptance extends EntityWithTenant {
 
 	private static final long serialVersionUID = 1L;
 
@@ -39,19 +37,11 @@ public class EulaAcceptance extends EntityWithTenant implements FilteredEntity {
 		super();
 		date = new Date();
 	}
-
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, null, null);
-	}
-	
 	
 	@Override
 	protected void onUpdate() {
 		throw new NotUpdatableException("you can not update this entity.");
 	}
-	
-	
-	
 
 	public EulaAcceptance(Tenant tenant) {
 		super(tenant);

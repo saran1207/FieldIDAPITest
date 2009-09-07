@@ -30,7 +30,7 @@ public class WebServiceAuthenticator {
 			if (loginUser != null) {
 				authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.SUCCESSFUL);
 				authenticationResponse.setUser(converter.convert(loginUser));
-				authenticationResponse.setTenant(converter.convert(loginUser.getOrganization().getPrimaryOrg()));
+				authenticationResponse.setTenant(converter.convert(loginUser.getOwner().getPrimaryOrg()));
 			} else {
 				authenticationResponse.setAuthenticationMessage("Authentication failed");
 				authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.NOT_SUCCESSFUL);

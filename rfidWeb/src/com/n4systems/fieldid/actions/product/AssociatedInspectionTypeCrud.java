@@ -143,7 +143,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 		if (productType == null) {
 			this.productType = null;
 		} else if (this.productType == null || productType.equals(this.productType.getId())) {
-			this.productType = persistenceManager.find(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter().prepareFor(ProductType.class))
+			this.productType = persistenceManager.find(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter())
 														.addSimpleWhere("id", productType).addFetch("inspectionTypes"));
 		}
 		} catch (Exception e) {
@@ -195,7 +195,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	 */
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
-			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter().prepareFor(InspectionType.class));
+			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter());
 			queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 			queryBuilder.addOrder("name");
 			inspectionTypes = persistenceManager.findAll(queryBuilder);

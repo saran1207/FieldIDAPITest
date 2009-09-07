@@ -45,16 +45,16 @@ ${action.setPageType('my_account', 'details')!}
 		<#if sessionUser.anEndUser >
 			<div class="infoSet infoBlock">
 				<label for="customer" class="label"><@s.text name="label.customer"/></label>
-				<span class="fieldHolder">${(customer.name?html) !}</span>
+				<span class="fieldHolder">${(owner.name?html) !}</span>
 			</div>
 			<div class="infoSet infoBlock">
 				<label for="division" class="label"><@s.text name="label.division"/></label>
-				<span class="fieldHolder">${(division.name?html) !}</span>
+				<span class="fieldHolder">${(owner.name?html) !}</span>
 			</div>
 		<#else>
 			<div class="infoSet infoBlock">
 				<label for="organizationalUnit" class="label"><@s.text name="label.organizationalunit"/></label>
-				<span class="fieldHolder">${(organization.displayName?html) !}</span>
+				<span class="fieldHolder">${(owner.name?html) !}</span>
 			</div>
 		</#if>
 	

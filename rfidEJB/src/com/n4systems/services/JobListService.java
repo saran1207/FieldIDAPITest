@@ -2,8 +2,8 @@ package com.n4systems.services;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Project;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -30,7 +30,7 @@ public class JobListService {
 	
 	
 	public Pager<Project> getList(boolean justAssignedOn, boolean onlyOpen) {
-		QueryBuilder<Project> qBuilder = new QueryBuilder<Project>(Project.class, filter.setDefaultTargets());
+		QueryBuilder<Project> qBuilder = new QueryBuilder<Project>(Project.class, filter);
 		qBuilder.setSimpleSelect().addOrder(orderBy, ascendingOrderBy).addSimpleWhere("retired", false);
 		if (justAssignedOn) {
 			qBuilder.addRequiredLeftJoin("resources", "resource");
@@ -42,21 +42,19 @@ public class JobListService {
 		
 		return persistenceManager.findAllPaged(qBuilder, pageNumber, pageSize);
 	}
-	
-	
+		
 	public void setPageNumber(Integer pageNumber) {
 		this.pageNumber = (pageNumber == null) ? 1 : pageNumber;
 	}
-
 
 	public void setOrderBy(String orderBy) {
 		this.orderBy = orderBy;
 	}
 
-
 	public void setAscendingOrderBy() {
 		this.ascendingOrderBy = true;
 	}
+	
 	public void setDescendingOrderBy() {
 		this.ascendingOrderBy = false;
 	}

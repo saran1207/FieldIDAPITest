@@ -40,10 +40,6 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 	public boolean isIntegrationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
 	}
-	
-	public boolean isJobSitesEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
-	}
 
 	public boolean isPartnerCenterEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.PartnerCenter);
@@ -87,5 +83,10 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 
 	public boolean isMultiLocationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.MultiLocation);
+	}
+
+	public boolean isJobSitesEnabled() {
+		// XXX - feature has been removed, always return false
+		return false;
 	}
 }

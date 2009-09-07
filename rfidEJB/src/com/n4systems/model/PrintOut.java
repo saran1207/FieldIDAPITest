@@ -4,16 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "printouts")
-public class PrintOut extends AbstractEntity implements NamedEntity {
+public class PrintOut extends EntityWithTenant implements NamedEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,15 @@ public class PrintOut extends AbstractEntity implements NamedEntity {
 	@Column(nullable = false)
 	private String pdfTemplate;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Tenant tenant;
+	// TODO: REMOVE_ME
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	private Tenant tenant;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private PrintOutType type;
 	
 	private boolean withSubInspections = false;
-	
 	
 	public PrintOut() {
 		super();
@@ -107,13 +105,14 @@ public class PrintOut extends AbstractEntity implements NamedEntity {
 		this.type = type;
 	}
 
-	public Tenant getTenant() {
-		return tenant;
-	}
-
-	public void setTenant(Tenant tenant) {
-		this.tenant = tenant;
-	}
+	// TODO: REMOVE_ME
+//	public Tenant getTenant() {
+//		return tenant;
+//	}
+//
+//	public void setTenant(Tenant tenant) {
+//		this.tenant = tenant;
+//	}
 
 	public boolean isCustom() {
 		return custom;

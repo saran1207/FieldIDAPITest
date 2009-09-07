@@ -15,10 +15,7 @@ import java.util.regex.Pattern;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -29,19 +26,17 @@ import javax.persistence.Table;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
 
 @Entity
 @Table(name = "producttypes")
-public class ProductType extends EntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Archivable, FilteredEntity, Saveable  {
+public class ProductType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable  {
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
 	private static final String descVariableStart = "{";
@@ -82,8 +77,9 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<ProductType> subTypes = new HashSet<ProductType>();
 
-	@Enumerated(EnumType.STRING)
-	private EntityState state = EntityState.ACTIVE;
+	// TODO: REMOVE_ME
+//	@Enumerated(EnumType.STRING)
+//	private EntityState state = EntityState.ACTIVE;
 	
 	private String archivedName;
 	
@@ -102,24 +98,18 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 		this.name = name;
 	}
 	
+	private void trimName() {
+		this.name = (name != null) ? name.trim() : null;
+	}
+	
 	protected void onCreate() {
 		super.onCreate();
 		trimName();
-	}
-
-	private void trimName() {
-		this.name = (name != null) ? name.trim() : null;
 	}
 	
 	protected void onUpdate() {
 		super.onUpdate();
 		trimName();
-	}
-	
-	
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, null, null, null, "state");
 	}
 	
 	@Deprecated
@@ -142,8 +132,6 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 	public String getName() {
 		return name;
 	}
-	
-	
 	
 	@Deprecated
 	public String getProductType() {
@@ -349,44 +337,41 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 		this.schedules = schedules;
 	}
 	
-	public ProductTypeSchedule getSchedule(InspectionType type, Customer customer) {
-		if(type == null) {
+	/**
+	 * Finds the ProductTypeSchedule for the given inspection type and owner, looking for schedules 
+	 * up the owners {@link BaseOrg#getParent() parent} chain until it finds one or reaches the 
+	 * PrimaryOrg.
+	 * @param type	Inspection type
+	 * @param owner	Owner
+	 * @return		ProductTypeSchedule or null if no schedule was found
+	 */
+	public ProductTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {
+		ProductTypeSchedule scheduleForOrg = null;
+		
+		if(type == null || owner == null) {
+			// the null owner check is important here since it is a stopping case for the recursion
 			return null;
 		}
 		
-		ProductTypeSchedule defaultSchedule = null;
-		ProductTypeSchedule customerSchedule = null;
-		
-		for(ProductTypeSchedule schedule: schedules) {
-			// find the schedule for the type (and customer if required)
-			if(schedule.getInspectionType().equals(type)) {
-				
-				// if the schedule's customer is null, then it is default for this event type
-				if(schedule.getCustomer() == null) {
-					defaultSchedule = schedule;
-					// if our requested customer is null, then we break out
-					if(customer == null) {
-						break;
-					}
-				} else {
-					// if the schedule has a customer, check to see if it's the one we're looking for
-					if(customer != null && schedule.getCustomer().equals(customer)) {
-						customerSchedule = schedule;
-						break;
-					}
-				}
-			}
+		for (ProductTypeSchedule schedule: schedules) {
+			if (schedule.getInspectionType().equals(type) && schedule.getOwner().equals(owner)) {
+				scheduleForOrg = schedule;
+				break;
+			}				
 		}
 		
-		// if the customerSchedule is set then use that one, otherwise fall back on the default
-		// note that the defaultSchedule could still be null if there was no schedule for the requested event type
-		return (customerSchedule != null) ? customerSchedule: defaultSchedule;
+		// if we didn't find a schedule, recurse up the owner's parent chain
+		if (scheduleForOrg == null) {
+			scheduleForOrg = getSchedule(type, owner.getParent());
+		}
+		
+		return scheduleForOrg;
 	}
 	
-	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, Customer customer) {
+	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, BaseOrg owner) {
 		Date returnDate = fromDate;
 		
-		ProductTypeSchedule schedule = getSchedule(type, customer);
+		ProductTypeSchedule schedule = getSchedule(type, owner);
 		if(schedule != null) {
 			returnDate = schedule.getNextDate(fromDate);
 		}
@@ -430,42 +415,42 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 		return !subTypes.isEmpty();
 	}
 
-	public void activateEntity() {
-		state = EntityState.ACTIVE;
-	}
-
-	public void archiveEntity() {
-		state = EntityState.ARCHIVED;
-	}
-
-	public EntityState getEntityState() {
-		return state;
-	}
-
-	public void retireEntity() {
-		state = EntityState.RETIRED;
-	}
-	
-	public void setRetired( boolean retired ) {
-		if( retired ) {
-			retireEntity();
-		} else  {
-			activateEntity();
-		}
-	}
-	
-	public boolean isRetired() {
-		return state == EntityState.RETIRED;
-	}
-
-	public boolean isActive() {
-		return state == EntityState.ACTIVE;
-	}
-	
-	public boolean isArchived() {
-		return state == EntityState.ARCHIVED;
-	}
-	
+	// TODO: REMOVE_ME
+//	public void activateEntity() {
+//		state = EntityState.ACTIVE;
+//	}
+//
+//	public void archiveEntity() {
+//		state = EntityState.ARCHIVED;
+//	}
+//
+//	public EntityState getEntityState() {
+//		return state;
+//	}
+//
+//	public void retireEntity() {
+//		state = EntityState.RETIRED;
+//	}
+//	
+//	public void setRetired( boolean retired ) {
+//		if( retired ) {
+//			retireEntity();
+//		} else  {
+//			activateEntity();
+//		}
+//	}
+//	
+//	public boolean isRetired() {
+//		return state == EntityState.RETIRED;
+//	}
+//
+//	public boolean isActive() {
+//		return state == EntityState.ACTIVE;
+//	}
+//	
+//	public boolean isArchived() {
+//		return state == EntityState.ARCHIVED;
+//	}
 	
 	public void archivedName(String prefix) {
 		archivedName = name;
@@ -485,10 +470,6 @@ public class ProductType extends EntityWithTenant implements NamedEntity, HasFil
 
 	public void setGroup(ProductTypeGroup group) {
 		this.group = group;
-	}
-	
-	public int hasCode() {
-		return (id == null) ? super.hashCode() : id.hashCode();
 	}
 	
 }

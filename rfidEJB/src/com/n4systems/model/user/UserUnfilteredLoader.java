@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -14,7 +15,7 @@ public class UserUnfilteredLoader extends Loader<UserBean> {
 
 	@Override
 	protected UserBean load(EntityManager em) {
-		QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class);
+		QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("uniqueID", id);
 		
 		UserBean user = builder.getSingleResult(em);

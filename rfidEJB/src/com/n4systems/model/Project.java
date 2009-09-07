@@ -12,7 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,12 +24,12 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.util.DateHelper;
 
 @Entity
 @Table( name="projects" )
-public class Project extends EntityWithTenant implements NamedEntity, Listable<Long>, Retirable {
+public class Project extends EntityWithOwner implements NamedEntity, Listable<Long>, Retirable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -50,15 +49,6 @@ public class Project extends EntityWithTenant implements NamedEntity, Listable<L
 		
 	@Column(nullable=true, length=255)
 	private String poNumber;
-	
-	@ManyToOne(optional = true)
-    private Customer customer;
-	
-	@ManyToOne(optional = true)
-    private Division division;
-	
-	@ManyToOne(optional = true)
-    private JobSite	jobSite;
     
     @Column( nullable=false, length=255 )
     private String status;
@@ -92,12 +82,7 @@ public class Project extends EntityWithTenant implements NamedEntity, Listable<L
     
     private boolean retired;
     
-	public Project() {
-	}
-
-	public Project( Tenant tenant ) {
-		super( tenant );
-	}
+	public Project() {}
 	
 	@Override
 	protected void onCreate() {
@@ -131,22 +116,6 @@ public class Project extends EntityWithTenant implements NamedEntity, Listable<L
 
 	public void setName( String name ) {
 		this.name = name;
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer( Customer customer ) {
-		this.customer = customer;
-	}
-
-	public Division getDivision() {
-		return division;
-	}
-
-	public void setDivision( Division division ) {
-		this.division = division;
 	}
 
 	public String getStatus() {
@@ -184,6 +153,7 @@ public class Project extends EntityWithTenant implements NamedEntity, Listable<L
 	public Date getActualCompletion() {
 		return actualCompletion;
 	}
+	
 	public Date getActualCompletionInUserTime(TimeZone timeZone) {
 		return DateHelper.convertToUserTimeZone(actualCompletion, timeZone);
 	}
@@ -226,14 +196,6 @@ public class Project extends EntityWithTenant implements NamedEntity, Listable<L
 
 	public void setRetired( boolean retired ) {
 		this.retired = retired;
-	}
-
-	public JobSite getJobSite() {
-		return jobSite;
-	}
-
-	public void setJobSite( JobSite jobSite ) {
-		this.jobSite = jobSite;
 	}
 
 	public String getDescription() {

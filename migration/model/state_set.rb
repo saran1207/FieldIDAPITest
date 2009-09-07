@@ -5,7 +5,7 @@ require "state"
 class StateSet < ActiveRecord::Base
   set_table_name :statesets
   
-  belongs_to  :tenant,      :foreign_key => 'r_tenant',     :class_name => 'Organization'
+  belongs_to  :tenant,      :foreign_key => 'tenant_id',     :class_name => 'Tenant'
   has_many    :criteria,    :foreign_key => 'states_id',    :class_name => 'Criteria'
   has_many    :stateFKs,    :foreign_key => 'statesets_id', :class_name => 'StateSetState',  :order => :orderidx
   has_many    :states,                                      :class_name => 'State',          :through => :stateFKs
@@ -35,7 +35,7 @@ class StateSet < ActiveRecord::Base
     stateSetName = createStateSetNameFromButton(button)
     
     # try and load a state set by tenant and name
-    stateSet = StateSet.find(:first, :conditions => ["r_tenant = :tenantId and name = :stateSetName", {:tenantId => tenant.id, :stateSetName => stateSetName}])
+    stateSet = StateSet.find(:first, :conditions => ["tenant_id = :tenantId and name = :stateSetName", {:tenantId => tenant.id, :stateSetName => stateSetName}])
   
     if stateSet.nil?
       # we didn't find a set for this name, let's create one

@@ -2,7 +2,7 @@ package com.n4systems.fieldid.actions.helpers;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 public class ConnectedEntityLoader {
 

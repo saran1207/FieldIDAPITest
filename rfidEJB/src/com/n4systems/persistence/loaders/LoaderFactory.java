@@ -1,18 +1,15 @@
 package com.n4systems.persistence.loaders;
 
+import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
-import com.n4systems.model.customer.CustomerListableLoader;
-import com.n4systems.model.division.DivisionListableLoader;
-import com.n4systems.model.division.DivisionUniqueNameUsedLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
-import com.n4systems.model.jobsites.JobSiteListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
-import com.n4systems.model.notificationsettings.NotificationSettingOwnerListLoader;
+import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
@@ -25,11 +22,10 @@ import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoade
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
 import com.n4systems.model.producttype.ProductTypeScheduleLoader;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
-import com.n4systems.util.SecurityFilter;
 
 /**
  * Provides simple access to creation of loaders.
@@ -73,20 +69,20 @@ public class LoaderFactory {
 		return new CurrentEulaLoader();
 	}
 
-	public CustomerListableLoader createCustomerListableLoader() {
-		return new CustomerListableLoader(filter);
+	public CustomerOrgPaginatedLoader createCustomerOrgPaginatedLoader() {
+		return new CustomerOrgPaginatedLoader(filter);
 	}
 
-	public DivisionListableLoader createDivisionListableLoader() {
-		return new DivisionListableLoader(filter);
+	public DivisionOrgByCustomerListLoader createDivisionOrgByCustomerListLoader() {
+		return new DivisionOrgByCustomerListLoader(filter);
 	}
 
-	public DivisionUniqueNameUsedLoader createDivisionUniqueNameUsedLoader() {
-		return new DivisionUniqueNameUsedLoader(filter);
-	}
-
-	public <T extends AbstractEntity & FilteredEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
+	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
 		return new FilteredIdLoader<T>(filter, clazz);
+	}
+
+	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
+		return new FilteredListableLoader(filter, clazz);
 	}
 
 	public InspectionFrequencyListLoader createInspectionFrequenciesListLoader() {
@@ -101,20 +97,12 @@ public class LoaderFactory {
 		return new InspectionTypeListableLoader(filter);
 	}
 
-	public JobSiteListableLoader createJobSiteListableLoader() {
-		return new JobSiteListableLoader(filter);
-	}
-
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
 	}
 
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
-	}
-
-	public NotificationSettingOwnerListLoader createNotificationSettingOwnerListLoader() {
-		return new NotificationSettingOwnerListLoader();
 	}
 
 	public ProductAttachmentListLoader createProductAttachmentListLoader() {
@@ -152,15 +140,15 @@ public class LoaderFactory {
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}
-
+	
 	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
-
+	
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
-
+	
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}

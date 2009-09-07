@@ -17,8 +17,6 @@ import javax.persistence.Table;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
 /**
  * This defines the set of input info fields and output info fields for a product type.
  * These fields are used to help fill in values when tagging a product in all user interfaces.
@@ -27,7 +25,7 @@ import com.n4systems.util.SecurityFilter;
  */
 @Entity
 @Table ( name="autoattributecriteria" )
-public class AutoAttributeCriteria extends EntityWithTenant implements FilteredEntity {
+public class AutoAttributeCriteria extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToMany (targetEntity = InfoFieldBean.class, fetch = FetchType.LAZY)
@@ -50,10 +48,6 @@ public class AutoAttributeCriteria extends EntityWithTenant implements FilteredE
 	@OneToOne(optional = true, fetch = FetchType.LAZY )
 	@JoinColumn(name = "r_producttype")
 	private ProductType productType;
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD);
-	}
 	
 	public List<InfoFieldBean> getInputs() {
 		return inputs;

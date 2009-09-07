@@ -17,10 +17,12 @@ import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.safetyNetwork.exception.NotPublishedException;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
@@ -37,7 +39,7 @@ public class CatalogServiceImpl implements CatalogService {
 		super();
 		this.persistenceManager = persistenceManager;
 		this.tenant = tenant;
-		filter = new SecurityFilter(tenant.getId()).setDefaultTargets();
+		filter = new TenantOnlySecurityFilter(tenant.getId());
 	}
 
 	public Set<Long> getProductTypeIdsPublished() {
@@ -106,7 +108,7 @@ public class CatalogServiceImpl implements CatalogService {
 			return new ArrayList<ListingPair>();
 		}
 		
-		QueryBuilder<ListingPair> inspectionTypesQuery = new QueryBuilder<ListingPair>(InspectionType.class, new SecurityFilter(tenant.getId()).setDefaultTargets());
+		QueryBuilder<ListingPair> inspectionTypesQuery = new QueryBuilder<ListingPair>(InspectionType.class, new TenantOnlySecurityFilter(tenant.getId()));
 		inspectionTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", inspectionTypeIdsPublished);
 		inspectionTypesQuery.addOrder("name");
 
@@ -120,7 +122,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	private Catalog getCatalog() {
-		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedProductTypes", "publishedInspectionTypes");
+		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedProductTypes", "publishedInspectionTypes");
 		Catalog catalog = persistenceManager.find(query);
 		if (catalog == null) {
 			catalog = new Catalog();

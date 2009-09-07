@@ -11,6 +11,7 @@ import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -65,7 +66,7 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 	}
 
 	private PrintOut getDefaultObservationCert() {
-		QueryBuilder<PrintOut> queryObservation = new QueryBuilder<PrintOut>(PrintOut.class);
+		QueryBuilder<PrintOut> queryObservation = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
 		queryObservation.addSimpleWhere("custom", false);
 		queryObservation.addSimpleWhere("type", PrintOutType.OBSERVATION);
 		queryObservation.addOrder("name");
@@ -73,7 +74,7 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 	}
 
 	private PrintOut getDefaultCert() {
-		QueryBuilder<PrintOut> queryCert = new QueryBuilder<PrintOut>(PrintOut.class);
+		QueryBuilder<PrintOut> queryCert = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
 		queryCert.addSimpleWhere("custom", false);
 		queryCert.addSimpleWhere("type", PrintOutType.CERT);
 		queryCert.addOrder("name");

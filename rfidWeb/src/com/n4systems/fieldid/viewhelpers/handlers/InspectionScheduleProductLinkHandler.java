@@ -2,12 +2,13 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class InspectionScheduleProductLinkHandler implements OutputHandler {
 	private final PersistenceManager persistenceManager;
-	private final QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class);
+	private final QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 	
 	public InspectionScheduleProductLinkHandler() {
 		persistenceManager = ServiceLocator.getPersistenceManager();

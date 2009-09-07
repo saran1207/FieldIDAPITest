@@ -19,6 +19,7 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -74,7 +75,7 @@ public class ProductMerger {
 	}
 
 	private void moveInspections(Product winningProduct, Product losingProduct) {
-		QueryBuilder<Inspection> inspections = new QueryBuilder<Inspection>(Inspection.class).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("product", losingProduct);
+		QueryBuilder<Inspection> inspections = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("product", losingProduct);
 		List<Inspection> inspectionsToMove = persistenceManager.findAll(inspections);
 
 		for (Inspection inspectionToMove : inspectionsToMove) {

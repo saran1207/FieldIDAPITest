@@ -1,22 +1,21 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.parents.EntityWithOwner;
+
 @Entity
 @Table(name = "inspectionbooks")
-public class InspectionBook extends EntityWithTenant implements NamedEntity, Listable<Long> {
+public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
@@ -28,13 +27,9 @@ public class InspectionBook extends EntityWithTenant implements NamedEntity, Lis
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="book")
 	private Set<Inspection> inspections = new TreeSet<Inspection>();
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	private Customer customer;
-	
 	private Long legacyId;
 
 	public InspectionBook() {}
-
 	
 	@Override
 	protected void onCreate() {
@@ -47,7 +42,6 @@ public class InspectionBook extends EntityWithTenant implements NamedEntity, Lis
 		super.onUpdate();
 		trimName();
 	}
-	
 
 	private void trimName() {
 		this.name = (name != null) ? name.trim() : null;
@@ -83,18 +77,10 @@ public class InspectionBook extends EntityWithTenant implements NamedEntity, Lis
 	}
 
 	public String getDisplayName() {
-		String custName = (customer != null) ? " (" + customer.getName() + ")" : "";
-		return getName() + custName;
+		String ownerName = (getOwner() != null) ? " (" + getOwner().getName() + ")" : "";
+		return getName() + ownerName;
 	}
 	
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
 	public Long getLegacyId() {
 		return legacyId;
 	}

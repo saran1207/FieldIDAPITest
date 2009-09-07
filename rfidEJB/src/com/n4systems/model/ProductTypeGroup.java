@@ -31,7 +31,6 @@ public class ProductTypeGroup extends EntityWithTenant implements NamedEntity, L
 		trimName();
 	}
 	
-
 	private void trimName() {
 		name = (name != null) ? name.trim() : null;
 	}
@@ -39,8 +38,6 @@ public class ProductTypeGroup extends EntityWithTenant implements NamedEntity, L
 	public String getDisplayName() {
 		return name;
 	}
-	
-	
 
 	public Long getOrderIdx() {
 		return orderIdx;
@@ -56,7 +53,6 @@ public class ProductTypeGroup extends EntityWithTenant implements NamedEntity, L
 	
 	public void setName(String name) {
 		this.name = name;
-		
 	}
 
 }

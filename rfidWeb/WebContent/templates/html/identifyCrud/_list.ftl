@@ -25,7 +25,7 @@
 				</div>
 				<div class="infoSet">
 					<label><@s.text name="label.customer"/></label>
-					<span>${(order.customer.displayName)!}</span>
+					<span>${(order.owner.displayName)!}</span>
 				</div>
 				<div class="infoSet">
 					<label><@s.text name="label.division"/></label>

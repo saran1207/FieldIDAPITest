@@ -1,32 +1,8 @@
 package com.n4systems.util;
 
-import com.n4systems.ejb.AutoAttributeManager;
-import com.n4systems.ejb.AutoAttributeManagerImpl;
-import com.n4systems.ejb.ConfigManager;
-import com.n4systems.ejb.ConfigManagerImpl;
-import com.n4systems.ejb.CustomerManager;
-import com.n4systems.ejb.CustomerManagerImpl;
-import com.n4systems.ejb.DownloadManager;
-import com.n4systems.ejb.DownloadManagerImpl;
-import com.n4systems.ejb.InspectionManager;
-import com.n4systems.ejb.InspectionManagerImpl;
-import com.n4systems.ejb.InspectionScheduleManager;
-import com.n4systems.ejb.InspectionScheduleManagerImpl;
-import com.n4systems.ejb.MailManager;
-import com.n4systems.ejb.MailManagerImpl;
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.OrderManagerImpl;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.PersistenceManagerImpl;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.ProductManagerImpl;
-import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.ejb.ProofTestHandlerImpl;
-import com.n4systems.ejb.SafetyNetworkManager;
-import com.n4systems.ejb.SafetyNetworkManagerImpl;
-import com.n4systems.exceptions.EJBLookupException;
-import com.n4systems.reporting.ReportFactory;
-import com.n4systems.reporting.ReportFactoryImpl;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import rfid.ejb.session.CommentTemp;
 import rfid.ejb.session.CommentTempManager;
@@ -49,9 +25,31 @@ import rfid.ejb.session.UnitOfMeasureManagerImpl;
 import rfid.ejb.session.User;
 import rfid.ejb.session.UserManager;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import com.n4systems.ejb.AutoAttributeManager;
+import com.n4systems.ejb.AutoAttributeManagerImpl;
+import com.n4systems.ejb.ConfigManager;
+import com.n4systems.ejb.ConfigManagerImpl;
+import com.n4systems.ejb.CustomerManager;
+import com.n4systems.ejb.CustomerManagerImpl;
+import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.InspectionManagerImpl;
+import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.InspectionScheduleManagerImpl;
+import com.n4systems.ejb.MailManager;
+import com.n4systems.ejb.MailManagerImpl;
+import com.n4systems.ejb.OrderManager;
+import com.n4systems.ejb.OrderManagerImpl;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.PersistenceManagerImpl;
+import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.ProductManagerImpl;
+import com.n4systems.ejb.ProofTestHandler;
+import com.n4systems.ejb.ProofTestHandlerImpl;
+import com.n4systems.ejb.SafetyNetworkManager;
+import com.n4systems.ejb.SafetyNetworkManagerImpl;
+import com.n4systems.exceptions.EJBLookupException;
+import com.n4systems.reporting.ReportFactory;
+import com.n4systems.reporting.ReportFactoryImpl;
 
 public class ServiceLocator {
 	private static final String APP_PREFIX = "fieldid/";
@@ -237,13 +235,6 @@ public class ServiceLocator {
 	
 	public static final InspectionScheduleManager getInspectionScheduleManager() {
 		return get(InspectionScheduleManager.class, InspectionScheduleManagerImpl.class, inspectionScheduleManager);
-	}
-	
-	
-	private static final ThreadLocal<DownloadManager> downloadManager = new ThreadLocal<DownloadManager>();
-	
-	public static final DownloadManager getDownloadManager() {
-		return get(DownloadManager.class, DownloadManagerImpl.class, downloadManager);
 	}
 	
 	

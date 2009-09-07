@@ -4,8 +4,8 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.search.SortTerm;
 
 public class InspectionScheduleSearchContainer extends SearchContainer {
@@ -19,22 +19,21 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	private String location;
 	private String referenceNumber;
 	private Long productStatusId;
-	private Long customerId;
-	private Long divisionId;
 	private Long productTypeId;
-	private Long jobSiteId;
 	private Long assignedUserId;
 	private Long inspectionTypeId;
 	private Long jobId;
 	private Long jobAndNullId;
+	private Long ownerId;
 	private Date toDate;
 	private Date fromDate;
 	private CompressedScheduleStatus status = CompressedScheduleStatus.INCOMPLETE;
 	
 	public InspectionScheduleSearchContainer(SecurityFilter securityFilter) {
 		super(InspectionSchedule.class, "id", securityFilter, joinColumns);
-		if (securityFilter.isCustomerSet()) {
-			setCustomer(securityFilter.getCustomerId());
+		
+		if (securityFilter.hasOwner()) {
+			setOwner(securityFilter.getOwner().getId());
 		}
 	}
 
@@ -48,9 +47,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addStringTerm("product.customerRefNumber", referenceNumber);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.type.id", productTypeId);
-		addSimpleTerm("customer.id", customerId);
-		addSimpleTerm("division.id", divisionId);
-		addSimpleTerm("jobSite.id", jobSiteId);
+		addSimpleTerm("owner.id", ownerId);
 		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
 		addSimpleTerm("inspectionType.group.id", inspectionTypeId);
 		addSimpleTerm("project.id", jobId);
@@ -116,21 +113,13 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	public void setProductStatus(Long productStatus) {
 		this.productStatusId = productStatus;
 	}
-
-	public Long getCustomer() {
-		return customerId;
+	
+	public Long getOwner() {
+		return ownerId;
 	}
-
-	public void setCustomer(Long customer) {
-		this.customerId = customer;
-	}
-
-	public Long getDivision() {
-		return divisionId;
-	}
-
-	public void setDivision(Long division) {
-		this.divisionId = division;
+	
+	public void setOwner(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public Long getProductType() {
@@ -147,14 +136,6 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	
 	public void setInspectionType(Long inspectionType) {
 		this.inspectionTypeId = inspectionType;
-	}
-	
-	public Long getJobSite(){
-		return jobSiteId;
-	}
-	
-	public void setJobSite(Long jobSite) {
-		this.jobSiteId = jobSite;
 	}
 	
 	public Long getAssingedUser() {

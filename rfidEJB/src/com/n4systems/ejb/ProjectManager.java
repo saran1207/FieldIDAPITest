@@ -12,8 +12,8 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.SecurityFilter;
 
 @Local
 public interface ProjectManager {

@@ -14,7 +14,7 @@ require "inspection_file_attachment"
 class Inspection < ActiveRecord::Base
   set_table_name :inspections
   
-  belongs_to  :tenant,          :foreign_key => 'r_tenant',           :class_name => 'Organization'
+  belongs_to  :tenant,          :foreign_key => 'tenant_id',           :class_name => 'Tenant'
   belongs_to  :modifiedBy,      :foreign_key => 'modifiedby',         :class_name => 'User'
   belongs_to  :inspectionType,  :foreign_key => 'type_id',            :class_name => 'InspectionType'
   belongs_to  :group,           :foreign_key => 'group_id',           :class_name => 'InspectionGroup'
@@ -36,5 +36,4 @@ class Inspection < ActiveRecord::Base
   def displayString
     "#{date} (#{id.to_s}): Type: #{inspectionType.displayString}, Product: #{product.displayString}"
   end
-  
 end

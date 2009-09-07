@@ -6,12 +6,9 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
@@ -20,27 +17,20 @@ import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class MyAccount extends AbstractCrud implements HasDuplicateValueValidator {
-
 	private static final long serialVersionUID = 1L;
-
 	private static final Logger logger = Logger.getLogger(MyAccount.class);
 
 	private User userManager;
-	private CustomerManager customerManager;
-	
-
 	private UserBean currentUser;
 
-	public MyAccount(User userManager, PersistenceManager persistenceManager, CustomerManager customerManager) {
+	public MyAccount(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
-		this.customerManager = customerManager;
 	}
 
 	@Override
 	protected void initMemberFields() {
 		currentUser = userManager.getUser(getSessionUser().getId());
-
 	}
 
 	@Override
@@ -65,8 +55,6 @@ public class MyAccount extends AbstractCrud implements HasDuplicateValueValidato
 
 		return SUCCESS;
 	}
-
-	
 
 	public String getEmailAddress() {
 		return currentUser.getEmailAddress();
@@ -126,17 +114,9 @@ public class MyAccount extends AbstractCrud implements HasDuplicateValueValidato
 	public boolean duplicateValueExists(String formValue) {
 		return !userManager.userIdIsUnique(getTenantId(), formValue, currentUser.getId());
 	}
-
-	public BaseOrg getOrganization() {
-		return currentUser.getOrganization();
-	}
 	
-	public Customer getCustomer() {
-		return customerManager.findCustomer(currentUser.getR_EndUser(), getSecurityFilter());
-	}
-	
-	public Division geDivision() {
-		return customerManager.findDivision(currentUser.getR_Division(), getSecurityFilter());
+	public BaseOrg getOwner() {
+		return currentUser.getOwner();
 	}
 
 }

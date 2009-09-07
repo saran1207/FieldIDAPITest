@@ -14,37 +14,42 @@ public class N4TagModels {
     private PercentBarModel percentBar;
     private IncludeScriptModel includeScript;
     private IncludeStyleModel includeStyle;
-
+    private OrgPickerModel orgPicker;
+    
     public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         this.stack = stack;
         this.req = req;
         this.res = res;
     }
-
     
     public PercentBarModel getPercentbar() {
-    	 if (this.percentBar == null) {
-             this.percentBar = new PercentBarModel(this.stack, this.req, this.res);
+    	 if (percentBar == null) {
+             percentBar = new PercentBarModel(stack, req, res);
          }
 
-         return this.percentBar;
+         return percentBar;
     }
     
     public IncludeScriptModel getIncludeScript() {
-    	if (this.includeScript == null) {
-            this.includeScript = new IncludeScriptModel(this.stack, this.req, this.res);
+    	if (includeScript == null) {
+            includeScript = new IncludeScriptModel(stack, req, res);
         }
 
-        return this.includeScript;
+        return includeScript;
     }
     
     public IncludeStyleModel getIncludeStyle() {
-    	if (this.includeStyle == null) {
-    		this.includeStyle = new IncludeStyleModel(stack, req, res);
+    	if (includeStyle == null) {
+    		includeStyle = new IncludeStyleModel(stack, req, res);
     	}
     	return includeStyle;
     }
     
-   
+    public OrgPickerModel getOrgPicker() {
+    	if (orgPicker == null) {
+    		orgPicker = new OrgPickerModel(stack, req, res);
+    	}
+    	return orgPicker;
+    }
 
 }

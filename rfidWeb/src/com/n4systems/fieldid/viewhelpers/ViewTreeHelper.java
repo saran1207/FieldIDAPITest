@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.utils.UserComparator;
-import com.n4systems.util.SecurityFilter;
+import java.util.Collections;
+import java.util.List;
 
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
-import java.util.Collections;
-import java.util.List;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.utils.UserComparator;
 
 public class ViewTreeHelper {
 	private final PersistenceManager persistenceManager;
@@ -28,8 +28,8 @@ public class ViewTreeHelper {
 	 * @see #addUserToTree(UserBean, ViewTree, SecurityFilter)
 	 * @return				A constructed ViewTree of User id's
 	 */
-	public ViewTree<Long> getUserViewTree(Tenant tenant, Long customerId, Long divisionId, Long userId, SecurityFilter filter) {
-		List<UserBean> users = userManager.getOuterUserList(tenant.getId(), customerId, divisionId, userId, filter);
+	public ViewTree<Long> getUserViewTree(Tenant tenant, Long ownerId, Long userId, SecurityFilter filter) {
+		List<UserBean> users = userManager.getOuterUserList(tenant.getId(), ownerId, userId, filter);
 		
 		// sort the users by customer and division, so the tree nodes are added in order
 		Collections.sort(users, new UserComparator());
@@ -53,14 +53,15 @@ public class ViewTreeHelper {
 	private void addUserToTree(UserBean user, ViewTree<Long> treeRoot, SecurityFilter filter) {
 		ViewTree<Long> node;
 		
-		// first we need to location the tree node to add this user on
+		// TODO: CUSTOMER_REFACTOR: This should be changed to whatever we use for customer selection
+		// first we need to locate the tree node to add this user on
 		if (user.getCustomerId() != null) {
 			// find the customer node
 			node = findOrCreateTreeNode(user.getCustomerId(), treeRoot);
 			
 			// if the node name is null, it's new, we need to find and set the customer name
 			if (node.getNodeName() == null) {
-				node.setNodeName(persistenceManager.findName(Customer.class, user.getCustomerId(), filter.newFilter().setTargets("tenant.id", "id")));
+				node.setNodeName(persistenceManager.findName(CustomerOrg.class, user.getCustomerId(), filter));
 			}
 			
 			if (user.getDivisionId() != null) {
@@ -69,7 +70,7 @@ public class ViewTreeHelper {
 				
 				// if the node name is null, it's new, we need to find and set the division name
 				if (node.getNodeName() == null) {
-					node.setNodeName(persistenceManager.findName(Division.class, user.getDivisionId(), filter.newFilter().setTargets("tenant.id", "customer.id", "id")));
+					node.setNodeName(persistenceManager.findName(DivisionOrg.class, user.getDivisionId(), filter));
 				}
 			}
 		} else {

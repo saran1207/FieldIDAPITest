@@ -21,14 +21,14 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
-@SuppressWarnings("deprecation")
 @Local
 public interface InspectionManager {
 
@@ -86,7 +86,7 @@ public interface InspectionManager {
 
 	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed);
 
-	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, Long customerId);
+	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, BaseOrg owner);
 
 	public List<InspectionBook> findAvailableInspectionBooks(SecurityFilter filter, boolean withClosed);
 

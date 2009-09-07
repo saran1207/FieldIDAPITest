@@ -21,7 +21,6 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.OutputHandler;
-import com.n4systems.model.security.FilteredEntity;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
 import com.n4systems.util.ConfigContext;
@@ -191,7 +190,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return mappings;
 	}
 	
-	public Class<? extends FilteredEntity> getSearchClass() {
+	public Class<?> getSearchClass() {
 		return getContainer().getSearchClass();
 	}
 

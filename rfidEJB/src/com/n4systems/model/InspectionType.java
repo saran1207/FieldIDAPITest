@@ -20,20 +20,17 @@ import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
 @Entity
 @Table(name = "inspectiontypes")
-public class InspectionType extends EntityWithTenant implements NamedEntity, Listable<Long>, FilteredEntity, Archivable, Saveable {
+public class InspectionType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
-
+	
 	@Column(nullable=false)
 	private String name;
 	
@@ -70,11 +67,10 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
 	
 	private Long legacyEventId;
 	
-	@Enumerated(EnumType.STRING)
-	private EntityState state = EntityState.ACTIVE;
+	// TODO: REMOVE_ME
+//	@Enumerated(EnumType.STRING)
+//	private EntityState state = EntityState.ACTIVE;
 
-	
-		
 	public InspectionType() {
 		this(null);
 	}
@@ -82,10 +78,6 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
 	public InspectionType(String name) {
 		super();
 		this.name = name;
-	}
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, null, null, null, "state");
 	}
 	
 	protected void onCreate() {
@@ -100,6 +92,7 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
 	protected void onUpdate() {
 		super.onUpdate();
 		trimName();
+		archiveName();
 	}
 	
 	@Override
@@ -223,41 +216,45 @@ public class InspectionType extends EntityWithTenant implements NamedEntity, Lis
     	this.formVersion = formVersion;
     }
 
-	public void activateEntity() {
-		if (state == EntityState.ARCHIVED) {
-			name = archivedName;
-		}
-		state = EntityState.ACTIVE;
-		
-	}
-
-	public void archiveEntity() {
-		if (state != EntityState.ARCHIVED) {
-			state = EntityState.ARCHIVED;
-			archiveName();
-		}
-	}
+	// TODO: REMOVE_ME
+//	public void activateEntity() {
+//		if (state == EntityState.ARCHIVED) {
+//			name = archivedName;
+//		}
+//		state = EntityState.ACTIVE;
+//		
+//	}
+//
+//	public void archiveEntity() {
+//		if (state != EntityState.ARCHIVED) {
+//			state = EntityState.ARCHIVED;
+//			archiveName();
+//		}
+//	}
 	
 	private void archiveName() {
-		archivedName = name;
-		name = UUID.randomUUID().toString();
+		if (isArchived() && archivedName == null) {
+			archivedName = name;
+			name = UUID.randomUUID().toString();
+		}
 	}
 
-	public EntityState getEntityState() {
-		return state;
-	}
-
-	public boolean isActive() {
-		return state == EntityState.ACTIVE;
-	}
-
-	public boolean isArchived() {
-		return state == EntityState.ARCHIVED;
-	}
-
-	public void retireEntity() {
-		state = EntityState.RETIRED;
-	}
+	// TODO: REMOVE_ME
+//	public EntityState getEntityState() {
+//		return state;
+//	}
+//
+//	public boolean isActive() {
+//		return state == EntityState.ACTIVE;
+//	}
+//
+//	public boolean isArchived() {
+//		return state == EntityState.ARCHIVED;
+//	}
+//
+//	public void retireEntity() {
+//		state = EntityState.RETIRED;
+//	}
 
 	public String getArchivedName() {
 		return archivedName;

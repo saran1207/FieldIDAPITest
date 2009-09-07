@@ -6,7 +6,7 @@ require "customer"
 class InspectionBook < ActiveRecord::Base
   set_table_name :inspectionbooks
 
-  belongs_to  :tenant,        :foreign_key => 'r_tenant',           :class_name => 'Organization'
+  belongs_to  :tenant,        :foreign_key => 'tenant_id',           :class_name => 'Tenant'
   belongs_to  :modifiedBy,    :foreign_key => 'modifiedby',         :class_name => 'User'
   belongs_to  :customer,      :foreign_key => 'customer_uniqueid',  :class_name => 'Customer'
   has_many    :inspections,   :foreign_key => 'book_id',            :class_name => 'Inspection'
@@ -39,5 +39,4 @@ class InspectionBook < ActiveRecord::Base
   def displayString
     "#{name} (#{id.to_s})"
   end
-  
 end

@@ -9,11 +9,10 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.DateTimeDefiner;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ExcelBuilder;
-import com.n4systems.util.FileHelper;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -63,7 +62,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 			excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
 
 			// setup the output file
-			File tempDir = FileHelper.getTempDir(ServiceLocator.getDownloadManager().getBaseAccessDir(user));
+			File tempDir = PathHandler.getTempDir();
 			File reportFile = new File(tempDir, getPackageName() + ".xls");
 			
 			//write the file
@@ -80,7 +79,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 			message.addAttachment(reportFile);
 			ServiceLocator.getMailManager().sendMessage(message);
 			
-			FileUtils.deleteDirectory(reportFile.getParentFile());
+			FileUtils.deleteDirectory(tempDir);
 			
 		} catch (Exception e) {
 			logger.error("Excel Export Task failed", e);
@@ -107,7 +106,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 		this.totalResults = totalResults;
 	}
 
-	public Class<? extends FilteredEntity> getSearchClass() {
+	public Class<?> getSearchClass() {
 		return searchDefiner.getSearchClass();
 	}
 

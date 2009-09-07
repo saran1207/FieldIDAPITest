@@ -21,6 +21,7 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -162,7 +163,7 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 	}
 
 	private void deleteExistingDefinitions(AutoAttributeCriteria criteria) {
-		QueryBuilder<AutoAttributeDefinition> builder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class);
+		QueryBuilder<AutoAttributeDefinition> builder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("criteria", criteria);
 		for (AutoAttributeDefinition definition : persistenceManager.findAll(builder)) {
 			persistenceManager.delete(definition);

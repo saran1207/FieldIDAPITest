@@ -32,14 +32,11 @@ import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
@@ -48,13 +45,14 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -67,7 +65,6 @@ import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
 import com.n4systems.webservice.dto.CustomerListResponse;
 import com.n4systems.webservice.dto.CustomerServiceDTO;
-import com.n4systems.webservice.dto.DivisionServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -145,9 +142,8 @@ public class DataServiceImpl implements DataService {
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, securityFilter.prepareFor(InspectionType.class));
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
+			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			queryBuilder.addPostFetchPaths("sections", "infoFieldNames");
 			
@@ -179,8 +175,7 @@ public class DataServiceImpl implements DataService {
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<StateSet> queryBuilder = new QueryBuilder<StateSet>(StateSet.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 	
@@ -215,8 +210,7 @@ public class DataServiceImpl implements DataService {
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 	
@@ -276,8 +270,7 @@ public class DataServiceImpl implements DataService {
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<ProductTypeGroup> queryBuilder = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			
@@ -312,9 +305,7 @@ public class DataServiceImpl implements DataService {
 			
 			Date modified = converter.convertStringToDate(request.getModified());
 			
-			SecurityFilter securityFilter = new SecurityFilter(request.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
 			QueryBuilder<Project> jobBuilder = new QueryBuilder<Project>(Project.class, securityFilter);
 			jobBuilder.addWhere(Comparator.EQ, "eventjob", "eventJob", true);
 			jobBuilder.addWhere(Comparator.EQ, "open", "open",true);
@@ -336,7 +327,6 @@ public class DataServiceImpl implements DataService {
 					response.getJobs().add(converter.convert(job));
 				}
 			} else {
-				// TODO add filteredentity to project
 				//response.setTotalPages(persistenceManager.countAllPages(Project.class, jobsPerPage, securityFilter));
 			}
 			
@@ -352,59 +342,61 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public CustomerListResponse getAllCustomers(PaginatedRequestInformation request) throws ServiceException {
-		try {
-			logger.info("Finding Customers: Tenant [" + request.getTenantId() + "] Page [" + request.getPageNumber() + "]");
-			
-			CustomerListResponse response = new CustomerListResponse();
-			
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-			
-			int customersPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA);
-			int currentPage = request.getPageNumber().intValue();
-			
-			SecurityFilter securityFilter = new SecurityFilter(request.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			
-			QueryBuilder<Customer> customerBuilder = new QueryBuilder<Customer>(Customer.class, securityFilter);
-			WhereParameter<Long> customerParam = new WhereParameter<Long>(WhereParameter.Comparator.EQ, "customer_id", "customer.id");
-			// this is for postgres to paginate correctly.
-			customerBuilder.addOrder("id");
-			
-			
-			QueryBuilder<Division> divisionBuilder = new QueryBuilder<Division>(Division.class, securityFilter);
-			divisionBuilder.addWhere(customerParam);
-			// this is for postgres to paginate correctly
-			divisionBuilder.addOrder("id");
-			
-			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				Pager<Customer> customerPage = persistenceManager.findAllPaged(customerBuilder, currentPage, customersPerPage);
-				response.setTotalPages((int)customerPage.getTotalPages());
-				
-				for(Customer customer : customerPage.getList()) {
-					customerParam.setValue(customer.getId());
-					response.getCustomers().add(converter.convert(customer, persistenceManager.findAll(divisionBuilder)));
-				}
-			} else {
-				response.setTotalPages(persistenceManager.countAllPages(Customer.class, customersPerPage, securityFilter));
-				response.setCurrentPage(currentPage);
-			}
-			
-			response.setRecordsPerPage(customersPerPage);
-			response.setStatus(ResponseStatus.OK);
-			
-			logger.info("Returning Customers: Tenant [" + request.getTenantId() + 
-					"] Page [" + response.getCurrentPage() + "/" + response.getTotalPages() + 
-					"] Customers [" + response.getCustomers().size() + 
-					"] PageSize [" + response.getRecordsPerPage() + 
-					"] Status [" +response.getStatus().name() + "]");
-			
-			return response;
-			
-		} catch (Exception e) {
-			logger.error( "failed while processing customers", e );
-			throw new ServiceException();			
-		}
+		// TODO: CUSTOMER_REFACTOR: DataService rewerite getAllCustomers 
+//		try {
+//			logger.info("Finding Customers: Tenant [" + request.getTenantId() + "] Page [" + request.getPageNumber() + "]");
+//			
+//			CustomerListResponse response = new CustomerListResponse();
+//			
+//			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+//			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+//			
+//			int customersPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA);
+//			int currentPage = request.getPageNumber().intValue();
+//			
+//			LegacySecurityFilter securityFilter = new LegacySecurityFilter(request.getTenantId());
+//			securityFilter.setTargets("tenant.id", null, null);
+//			
+//			QueryBuilder<Customer> customerBuilder = new QueryBuilder<Customer>(Customer.class, securityFilter);
+//			WhereParameter<Long> customerParam = new WhereParameter<Long>(WhereParameter.Comparator.EQ, "customer_id", "customer.id");
+//			// this is for postgres to paginate correctly.
+//			customerBuilder.addOrder("id");
+//			
+//			
+//			QueryBuilder<Division> divisionBuilder = new QueryBuilder<Division>(Division.class, securityFilter);
+//			divisionBuilder.addWhere(customerParam);
+//			// this is for postgres to paginate correctly
+//			divisionBuilder.addOrder("id");
+//			
+//			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
+//				Pager<Customer> customerPage = persistenceManager.findAllPaged(customerBuilder, currentPage, customersPerPage);
+//				response.setTotalPages((int)customerPage.getTotalPages());
+//				
+//				for(Customer customer : customerPage.getList()) {
+//					customerParam.setValue(customer.getId());
+//					response.getCustomers().add(converter.convert(customer, persistenceManager.findAll(divisionBuilder)));
+//				}
+//			} else {
+//				response.setTotalPages(persistenceManager.countAllPages(Customer.class, customersPerPage, securityFilter));
+//				response.setCurrentPage(currentPage);
+//			}
+//			
+//			response.setRecordsPerPage(customersPerPage);
+//			response.setStatus(ResponseStatus.OK);
+//			
+//			logger.info("Returning Customers: Tenant [" + request.getTenantId() + 
+//					"] Page [" + response.getCurrentPage() + "/" + response.getTotalPages() + 
+//					"] Customers [" + response.getCustomers().size() + 
+//					"] PageSize [" + response.getRecordsPerPage() + 
+//					"] Status [" +response.getStatus().name() + "]");
+//			
+//			return response;
+//			
+//		} catch (Exception e) {
+//			logger.error( "failed while processing customers", e );
+//			throw new ServiceException();			
+//		}
+		return null;
 	}
 	
 	public UserListResponse getAllUsers(PaginatedRequestInformation request) throws ServiceException {
@@ -419,9 +411,7 @@ public class DataServiceImpl implements DataService {
 			int usersPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA);
 			int currentPage = request.getPageNumber().intValue();
 			
-			SecurityFilter securityFilter = new SecurityFilter(request.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
 			QueryBuilder<UserBean> userBuilder = new QueryBuilder<UserBean>(UserBean.class, securityFilter);
 			// This is for postgres to ensure paging works
 			userBuilder.addOrder("uniqueID");
@@ -456,38 +446,7 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public JobSiteListResponse getAllJobSites(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
-		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
-			//int currentPage = paginatedRequestInformation.getPageNumber().intValue();
-			
-			JobSiteListResponse response = new JobSiteListResponse();
-			
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			QueryBuilder<JobSite> queryBuilder = new QueryBuilder<JobSite>(JobSite.class, securityFilter);
-			queryBuilder.setSimpleSelect();
-	
-			List<JobSite> jobSites = null;
-			jobSites = persistenceManager.findAll( queryBuilder );
-						
-			for (JobSite jobSite : jobSites) {
-				response.getJobSites().add(converter.convert( jobSite ));
-			}
-			
-			response.setCurrentPage(1);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
-			response.setStatus(ResponseStatus.OK);
-			response.setTotalPages(1);
-			
-			return response;
-			
-		} catch ( Exception e ) {
-			logger.error( "exception occured while looking up job sites", e );
-			throw new ServiceException();			
-		}		
+		return new JobSiteListResponse();	
 	}
 	
 	public AutoAttributeCriteriaListResponse getAutoAttributeCriteria(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
@@ -498,9 +457,7 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<AutoAttributeCriteria> queryBuilder = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, securityFilter);
 			queryBuilder.addPostFetchPaths("productType", "inputs", "outputs");
 			// this is so postgres can paginate correctly.
@@ -535,9 +492,7 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 
-			SecurityFilter securityFilter = new SecurityFilter(paginatedRequestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
-			
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<AutoAttributeDefinition> queryBuilder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, securityFilter);
 			queryBuilder.addFetch("criteria");
 			queryBuilder.addPostFetchPaths("outputs");
@@ -574,7 +529,7 @@ public class DataServiceImpl implements DataService {
 			ProductManager productManager = ServiceLocator.getProductManager();
 			
 			Product existingProduct;
-			SecurityFilter filter = new SecurityFilter( requestInformation.getTenantId() );
+			SecurityFilter filter = new TenantOnlySecurityFilter( requestInformation.getTenantId() );
 			
 			if( productDTO.isCreatedOnMobile() ) {
 				existingProduct = productManager.findProductByGUID( productDTO.getMobileGuid(), filter );
@@ -621,7 +576,7 @@ public class DataServiceImpl implements DataService {
 
 			// create any new subproducts (this is not currently used by mobile (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), product.getJobSite(), product);			
+				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), product);			
 				if (subProducts.size() > 0) {
 					/*
 					 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
@@ -648,27 +603,28 @@ public class DataServiceImpl implements DataService {
 	 * in {@link CustomerManager#findOrCreateCustomer()}), this method will do nothing.
 	 */
 	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerServiceDTO customerDTO) throws ServiceException {
-		// TODO: make this transactional
-		RequestResponse response = new RequestResponse();
-		response.setStatus(ResponseStatus.OK);
-		
-		try {
-			CustomerManager customerManager = ServiceLocator.getCustomerManager();
-	
-			SecurityFilter filter = createFilterFromRequest(requestInformation);
-
-			Customer customer = customerManager.findOrCreateCustomer(customerDTO.getName(), customerDTO.getCustomerId(), requestInformation.getTenantId(), filter);
-				
-			for (DivisionServiceDTO divisionService: customerDTO.getDivisions()) {
-				customerManager.findOrCreateDivision(divisionService.getName(), customer.getId(), filter);
-			}
-			
-		} catch (Exception e) {
-			logger.error("Failed while creating Customer and Divisions", e);
-			throw new ServiceException("Unable to create Customer");
-		}
-		
-		return response;
+		// TODO: CUSTOMER_REFACTOR: DataService fix create customer (or don't it's only used by the importer)
+//		RequestResponse response = new RequestResponse();
+//		response.setStatus(ResponseStatus.OK);
+//		
+//		try {
+//			CustomerManager customerManager = ServiceLocator.getCustomerManager();
+//	
+//			LegacySecurityFilter filter = createFilterFromRequest(requestInformation);
+//
+//			Customer customer = customerManager.findOrCreateCustomer(customerDTO.getName(), customerDTO.getCustomerId(), requestInformation.getTenantId(), filter);
+//				
+//			for (DivisionServiceDTO divisionService: customerDTO.getDivisions()) {
+//				customerManager.findOrCreateDivision(divisionService.getName(), customer.getId(), filter);
+//			}
+//			
+//		} catch (Exception e) {
+//			logger.error("Failed while creating Customer and Divisions", e);
+//			throw new ServiceException("Unable to create Customer");
+//		}
+//		
+//		return response;
+		return null;
 	}
 	
 	/**
@@ -691,7 +647,7 @@ public class DataServiceImpl implements DataService {
 				// set the basic information
 				UserBean user = ServiceLocator.getServiceDTOBeanConverter().convert(userDTO);
 				user.setTenant(tenant);
-				user.setOrganization(primaryOrg);
+				user.setOwner(primaryOrg);
 				
 				// make sure the id is cleared
 				user.setUniqueID(null);
@@ -722,7 +678,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private SecurityFilter createFilterFromRequest(RequestInformation requestInformation) {
-		return new SecurityFilter(requestInformation.getTenantId());
+		return new TenantOnlySecurityFilter(requestInformation.getTenantId());
 	}
 	
 	private void testTransactionId( RequestInformation requestInformation ) throws ServiceException {
@@ -795,7 +751,7 @@ public class DataServiceImpl implements DataService {
 				inspectionServiceDTO.setProductId( product.getId() );
 				
 				// lets look up or create all newly attached sub products and attach to product
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product.getJobSite(), product);
+				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product);
 				if (subProducts.size() > 0) {
 					/*
 					 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
@@ -863,7 +819,7 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
-	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, JobSite jobSite, Product masterProduct) throws Exception {
+	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct) throws Exception {
 		
 		List<SubProduct> subProducts = new ArrayList<SubProduct>();
 		
@@ -875,12 +831,7 @@ public class DataServiceImpl implements DataService {
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
 			ProductServiceDTO subProductDTO = subProductMap.getNewProduct();
 			
-			
-			if (jobSite != null) {
-				subProductDTO.setJobSiteId(jobSite.getId());
-			}
-			
-			Product product = productManager.findProductByGUID(subProductDTO.getMobileGuid(), new SecurityFilter( tenantId ) );
+			Product product = productManager.findProductByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			
 			// Try by id
 			if (product == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
@@ -912,7 +863,7 @@ public class DataServiceImpl implements DataService {
 		Product product = null;
 		if( inspectionServiceDTO.productIdExists() ) {
 			try {
-				product = ServiceLocator.getProductManager().findProduct( inspectionServiceDTO.getProductId(), new SecurityFilter( tenantId ) );
+				product = ServiceLocator.getProductManager().findProduct( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
 				product = ServiceLocator.getProductManager().fillInSubProductsOnProduct(product);
 			} catch( Exception e ) {
 				logger.error( "looking up product with product id " + inspectionServiceDTO.getProductId(), e );
@@ -921,7 +872,7 @@ public class DataServiceImpl implements DataService {
 		} else if( inspectionServiceDTO.productMobileGuidExists() ) {
 			// Try looking up by GUID
 			try {
-				product = ServiceLocator.getProductManager().findProductByGUID( inspectionServiceDTO.getProductMobileGuid(), new SecurityFilter( tenantId ) );
+				product = ServiceLocator.getProductManager().findProductByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			} catch (Exception e) {
 				logger.error("Looking up product serial by GUID = "+inspectionServiceDTO.getProductMobileGuid(), e);
 			}
@@ -971,12 +922,12 @@ public class DataServiceImpl implements DataService {
 	
 			Pager<InspectionGroup> inspectionGroups = null;			
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new SecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
+				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
 				for( InspectionGroup inspectionGroup : inspectionGroups.getList() ) {
 					response.getInspections().addAll(converter.convert(inspectionGroup));
 				}
 			} else {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new SecurityFilter(requestInformation.getTenantId()), FIRST_PAGE, INSPECTIONS_PER_PAGE );
+				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), FIRST_PAGE, INSPECTIONS_PER_PAGE );
 			}
 			
 			response.setCurrentPage(CURRENT_PAGE);
@@ -1009,16 +960,16 @@ public class DataServiceImpl implements DataService {
 			int PRODUCTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_PRODUCTS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 			
-			SecurityFilter securityFilter = new SecurityFilter(requestInformation.getTenantId());
-			QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, securityFilter.prepareFor(Product.class));
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
+			QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			
 			if (searchCriteria.getCustomerIds() != null && searchCriteria.getCustomerIds().size() > 0) {
-				queryBuilder.addWhere(WhereParameter.Comparator.IN, "customerIds", "owner.id", searchCriteria.getCustomerIds());
+				queryBuilder.addWhere(WhereParameter.Comparator.IN, "customerIds", "owner.customer_id", searchCriteria.getCustomerIds());
 			}
 			
 			if (searchCriteria.getDivisionIds() != null && searchCriteria.getDivisionIds().size() > 0) {
-				queryBuilder.addWhere(WhereParameter.Comparator.IN, "divisionIds", "division.id", searchCriteria.getDivisionIds());
+				queryBuilder.addWhere(WhereParameter.Comparator.IN, "divisionIds", "owner.division_id", searchCriteria.getDivisionIds());
 			}
 			
 			if (searchCriteria.getJobSiteIds() != null && searchCriteria.getJobSiteIds().size() > 0) {
@@ -1076,8 +1027,7 @@ public class DataServiceImpl implements DataService {
 			int PRODUCTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_PRODUCTS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 			
-			SecurityFilter securityFilter = new SecurityFilter(requestInformation.getTenantId());
-			securityFilter.setTargets("tenant.id", null, null);
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
 			QueryBuilder<InspectionSchedule> queryBuilder = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, securityFilter);
 					
 			if (searchCriteria.getJobIds() != null && searchCriteria.getJobIds().size() > 0) {
@@ -1145,12 +1095,12 @@ public class DataServiceImpl implements DataService {
 	
 			Pager<InspectionGroup> inspectionGroups = null;			
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new SecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
+				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
 				for( InspectionGroup inspectionGroup : inspectionGroups.getList() ) {
 					response.getInspections().addAll(converter.convert(inspectionGroup));
 				}
 			} else {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new SecurityFilter(requestInformation.getTenantId()), FIRST_PAGE, INSPECTIONS_PER_PAGE );
+				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), FIRST_PAGE, INSPECTIONS_PER_PAGE );
 			}
 			
 			response.setCurrentPage(CURRENT_PAGE);

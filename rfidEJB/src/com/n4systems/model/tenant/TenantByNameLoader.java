@@ -3,6 +3,7 @@ package com.n4systems.model.tenant;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -15,7 +16,7 @@ public class TenantByNameLoader extends Loader<Tenant> {
 
 	@Override
 	protected Tenant load(EntityManager em) {
-		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class);
+		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
 		
 		Tenant tenant = builder.getSingleResult(em);

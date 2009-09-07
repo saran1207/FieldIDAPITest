@@ -87,7 +87,7 @@ public class DownloadProjectNoteFile extends DownloadAction {
 		if( projectId == null ) {
 			project = null;
 		} else if( project == null || !projectId.equals( project.getId() ) ) {
-			project = persistenceManager.find( Project.class, projectId, getSecurityFilter().setDefaultTargets(), "notes" );
+			project = persistenceManager.find( Project.class, projectId, getSecurityFilter(), "notes" );
 			project.setNotes( persistenceManager.reattchAndFetch( project.getNotes(), "modifiedBy.userID" ) );
 		}
 	}

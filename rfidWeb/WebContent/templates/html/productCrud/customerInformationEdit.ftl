@@ -25,12 +25,12 @@ ${action.setPageType('product', 'customer_edit')!}
 			
 			<div class="infoSet">
 				<label class="label" for="customer"><@s.text name="label.customer"/>:</label>
-				<span class="fieldValue" id="customerName">${(product.owner.name?html)!}</span>
+				<span class="fieldValue" id="customerName">${(product.owner.customerOrg.name?html)!}</span>
 			</div>		 
 		
 			<div class="infoSet">
 				<label class="label" for="division"><@s.text name="label.division"/>:</label>
-				<span class="fieldValue" id="divisionName">${(product.division.name?html)!}</span>
+				<span class="fieldValue" id="divisionName">${(product.owner.divisionOrg.name?html)!}</span>
 			</div>
 		
 		<#else>	

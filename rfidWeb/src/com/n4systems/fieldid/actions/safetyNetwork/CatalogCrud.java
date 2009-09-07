@@ -122,7 +122,7 @@ public class CatalogCrud extends AbstractCrud {
 	
 	public List<ListingPair> getInspectionTypes() {
 		if (inspectionTypes == null) {
-			QueryBuilder<ListingPair> inspectionTypeQuery = new QueryBuilder<ListingPair>(InspectionType.class, getSecurityFilter().prepareFor(InspectionType.class));
+			QueryBuilder<ListingPair> inspectionTypeQuery = new QueryBuilder<ListingPair>(InspectionType.class, getSecurityFilter());
 			inspectionTypes = persistenceManager.findAllLP(inspectionTypeQuery, "name");
 		}
 

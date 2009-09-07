@@ -7,14 +7,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "producttypeschedules")
-public class ProductTypeSchedule extends EntityWithTenant implements FilteredEntity, Saveable {
+public class ProductTypeSchedule extends EntityWithOwner implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional=false)
@@ -23,18 +21,15 @@ public class ProductTypeSchedule extends EntityWithTenant implements FilteredEnt
 	@ManyToOne(optional=false)
 	private InspectionType inspectionType;
 	
-	@ManyToOne
-	private Customer customer;
+	// TODO: REMOVE_ME
+//	@ManyToOne
+//	private Customer customer;
 
 	//in days
 	private Long frequency;
 	private boolean autoSchedule = true;
 	
 	public ProductTypeSchedule() {}
-
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, "customer.id", null, null, null);
-	}
 	
 	public ProductType getProductType() {
 		return productType;
@@ -52,13 +47,14 @@ public class ProductTypeSchedule extends EntityWithTenant implements FilteredEnt
 		this.inspectionType = inspectionType;
 	}
 
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
+	// TODO: REMOVE_ME
+//	public Customer getCustomer() {
+//		return customer;
+//	}
+//
+//	public void setCustomer(Customer customer) {
+//		this.customer = customer;
+//	}
 
 	public Long getFrequency() {
 		return frequency;
@@ -102,7 +98,7 @@ public class ProductTypeSchedule extends EntityWithTenant implements FilteredEnt
 		this.autoSchedule = autoSchedule;
 	}
 	
-	public boolean isCustomerOverride() {
-		return customer != null;
-	}
+//	public boolean isCustomerOverride() {
+//		return customer != null;
+//	}
 }

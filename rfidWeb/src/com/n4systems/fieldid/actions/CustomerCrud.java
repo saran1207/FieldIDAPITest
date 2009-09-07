@@ -8,13 +8,13 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.Customer;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
@@ -25,24 +25,22 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 @Validation
 public class CustomerCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
-	private Logger logger = Logger.getLogger(CustomerCrud.class);
-
-	private CustomerManager customerManager;
-	private User userManager;
-	private Customer customer;
-
-	private Pager<Customer> customerPage;
-	private String listFilter;
-
-	private Pager<UserBean> userList;
-
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
 	private static final int USER_RESULTS_MAX = 100000;
+	private Logger logger = Logger.getLogger(CustomerCrud.class);
 
-	public CustomerCrud(CustomerManager customerManager, User userManager, PersistenceManager persistenceManager) {
+	private final User userManager;
+	private final OrgSaver saver;
+	
+	private CustomerOrg customer;
+	private Pager<CustomerOrg> customerPage;
+	private String listFilter;
+	private Pager<UserBean> userList;
+	
+	public CustomerCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.customerManager = customerManager;
 		this.userManager = userManager;
+		this.saver = new OrgSaver();
 	}
 
 	@SkipValidation
@@ -78,7 +76,7 @@ public class CustomerCrud extends AbstractCrud {
 		}
 
 		try {
-			customerManager.deleteCustomer(customer.getId(), getSecurityFilter());
+			persistenceManager.deleteSafe(customer);
 		} catch (EntityStillReferencedException e) {
 			addFlashError(getText("error.customerinuse"));
 			return ERROR;
@@ -89,12 +87,11 @@ public class CustomerCrud extends AbstractCrud {
 	}
 
 	public String doSave() {
-
 		try {
 			if (customer.getTenant() == null) {
 				customer.setTenant(getTenant());
 			}
-			customerManager.saveCustomer(customer);
+			saver.save(customer);
 		} catch (Exception e) {
 			addActionError(getText("error.savingcustomer"));
 			return ERROR;
@@ -106,26 +103,25 @@ public class CustomerCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		customer = new Customer();
+		customer = new CustomerOrg();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		customer = customerManager.findCustomer(uniqueId, getSecurityFilter());
+		customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(uniqueId).load();
 		if (customer.getAddressInfo() == null) {
 			customer.setAddressInfo(new AddressInfo());
 		}
 	}
 
-	public Pager<Customer> getPage() {
+	public Pager<CustomerOrg> getPage() {
 		if (customerPage == null) {
-			try {
-				customerPage = customerManager.findCustomers(getTenantId(), getListFilter(), getCurrentPage(),
-						CRUD_RESULTS_PER_PAGE, getSecurityFilter());
-			} catch (InvalidQueryException e) {
-				logger.error("Unable to load Customer Pager", e);
-			}
+			CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
+			loader.setPage(getCurrentPage()).setPageSize(CRUD_RESULTS_PER_PAGE);
+			
+			customerPage = loader.load();
 		}
+		
 		return customerPage;
 	}
 
@@ -139,12 +135,12 @@ public class CustomerCrud extends AbstractCrud {
 	}
 
 	public String getCustomerId() {
-		return customer.getCustomerId();
+		return customer.getCode();
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.customeridrequired")
 	public void setCustomerId(String customerId) {
-		customer.setCustomerId(customerId);
+		customer.setCode(customerId);
 	}
 
 	public String getAccountManagerEmail() {
@@ -182,14 +178,12 @@ public class CustomerCrud extends AbstractCrud {
 	
 	public List<UserBean> getUserList() {
 		if (userList == null) {
-			userList = userManager.getUsers(getSecurityFilter(), true, 1, USER_RESULTS_MAX, null, UserType.CUSTOMERS,
-					customer);
+			userList = userManager.getUsers(getSecurityFilter(), true, 1, USER_RESULTS_MAX, null, UserType.CUSTOMERS, customer);
 		}
-
 		return userList.getList();
 	}
 
-	public Customer getCustomer() {
+	public CustomerOrg getCustomer() {
 		return customer;
 		
 	}

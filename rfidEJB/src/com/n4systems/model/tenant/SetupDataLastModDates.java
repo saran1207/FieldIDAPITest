@@ -14,23 +14,27 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.services.SetupDataGroup;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "setupdatalastmoddates")
-public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializable {
-
+public class SetupDataLastModDates implements HasTenantId, Saveable, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner("tenantId", null, null, null);
+	}
+	
 	/**
 	 * This field is used as the primary key for this table.  It will always be set to tenant.id.
 	 * Note the PrimaryKeyJoinColumn annotation on the tenant field.
 	 */
 	@Id
-	private Long tenant_id;
+	@Column(name="tenant_id")
+	private Long tenantId;
 
 	@PrimaryKeyJoinColumn(name="tenant_id")
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
@@ -112,12 +116,12 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 		return null;
 	}
 	
-	protected Long getTenant_id() {
-		return tenant_id;
+	public Long getTenantId() {
+		return tenantId;
 	}
 
-	protected void setTenant_id(Long r_tenant) {
-		this.tenant_id = r_tenant;
+	public void setTenantId(Long r_tenant) {
+		this.tenantId = r_tenant;
 	}
 
 	public Tenant getTenant() {
@@ -125,10 +129,10 @@ public class SetupDataLastModDates implements FilteredEntity, Saveable, Serializ
 	}
 
 	public void setTenant(Tenant tenant) {
-		// need to set both here ... I thought Hibernate would manage setting the r_tenant
+		// need to set both here ... I thought Hibernate would manage setting the tenant id
 		// from the tenant given the PrimaryKeyJoinColumn annotation but it doesn't ...
 		this.tenant = tenant;
-		this.tenant_id = tenant.getId();
+		this.tenantId = tenant.getId();
 	}
 
 	public Date getProductTypes() {

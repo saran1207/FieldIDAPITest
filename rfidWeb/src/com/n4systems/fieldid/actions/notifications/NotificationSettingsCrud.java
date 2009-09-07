@@ -2,7 +2,6 @@
 package com.n4systems.fieldid.actions.notifications;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,25 +9,20 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.NotificationSettingManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.utils.ListHelper;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
-import com.n4systems.model.customer.CustomerListableLoader;
-import com.n4systems.model.division.DivisionListableLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
-import com.n4systems.model.notificationsettings.NotificationSettingOwner;
-import com.n4systems.model.notificationsettings.NotificationSettingOwnerListLoader;
+import com.n4systems.model.notificationsettings.NotificationSettingSaver;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
 
 public class NotificationSettingsCrud extends AbstractCrud {
@@ -38,12 +32,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	// these are the relative times that will be used in each period list (in order)
 	private static final RelativeTime[] startTimes = {RelativeTime.TODAY, RelativeTime.TOMORROW, RelativeTime.THIS_WEEK, RelativeTime.NEXT_WEEK, RelativeTime.THIS_MONTH, RelativeTime.NEXT_MONTH};
 	private static final RelativeTime[] endTimes = {RelativeTime.DAY_1, RelativeTime.DAY_2, RelativeTime.WEEK_1, RelativeTime.WEEK_2, RelativeTime.MONTH_1, RelativeTime.MONTH_2};
-	
-	private final NotificationSettingManager notificationSettingManager;
-	
-	private List<ListingPair> jobSites;
-	private List<Listable<Long>> customers;
-	private List<Listable<Long>> divisions;
+
 	private List<Listable<String>> periodStartList;
 	private List<Listable<String>> periodEndList;
 	private List<Listable<Long>> productTypeList;
@@ -54,9 +43,8 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	private NotificationSettingViewModelConverter converter;
 	private NotificationSettingView view = new NotificationSettingView();
 	
-	public NotificationSettingsCrud(PersistenceManager persistenceManager, NotificationSettingManager notificationSettingManager) {
+	public NotificationSettingsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.notificationSettingManager = notificationSettingManager;
 	}
 	
 	private void initPeriodList(List<Listable<String>> periodList, RelativeTime[] allowedTimes) {
@@ -88,12 +76,12 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		converter = new NotificationSettingViewModelConverter(persistenceManager, getPrimaryOrg(), getUser(), getSecurityFilter());
+		converter = new NotificationSettingViewModelConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getPrimaryOrg(), getUser());
 	}
 	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		converter = new NotificationSettingViewModelConverter(persistenceManager, getPrimaryOrg(), getUser(), getSecurityFilter());
+		converter = new NotificationSettingViewModelConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getPrimaryOrg(), getUser());
 	}
 	
 	@SkipValidation
@@ -103,7 +91,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	@SkipValidation
 	public String doAdd() {
-		converter.populateView(new NotificationSetting(), new NotificationSettingOwner(), view);
+		converter.populateView(new NotificationSetting(), view);
 		
 		// default to the users email address
 		view.getAddresses().add(getUser().getEmailAddress());
@@ -122,15 +110,8 @@ public class NotificationSettingsCrud extends AbstractCrud {
 			addActionErrorText("error.nonotificationsetting");
 			return MISSING;
 		}
-			
-		NotificationSettingOwnerListLoader ownerLoader = new NotificationSettingOwnerListLoader();
-		ownerLoader.setNotificationSettingId(setting.getId());
-		List<NotificationSettingOwner> owners = ownerLoader.load();
 		
-		// we currently only support a single owner, so if there is one we will just take the first
-		NotificationSettingOwner owner = (owners.isEmpty()) ? new NotificationSettingOwner() : owners.get(0);
-		
-		converter.populateView(setting, owner, view);
+		converter.populateView(setting, view);
 				
 		return SUCCESS;
 	}
@@ -140,11 +121,12 @@ public class NotificationSettingsCrud extends AbstractCrud {
 			ListHelper.clearEmpties(view.getAddresses());
 			
 			NotificationSetting setting = new NotificationSetting();
-			NotificationSettingOwner owner = new NotificationSettingOwner();
 			
-			converter.populateModel(setting, owner, view);
+			converter.populateModel(setting, view);
 			
-			notificationSettingManager.saveOrUpdate(setting, new ArrayList<NotificationSettingOwner>(Arrays.asList(owner)), getSessionUserId());
+			NotificationSettingSaver saver = new NotificationSettingSaver();
+			
+			saver.save(setting);
 			
 			uniqueID = setting.getId();
 			
@@ -169,9 +151,11 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	@SkipValidation
 	public String doDelete() {
 		try {
-			NotificationSetting setting = persistenceManager.find(NotificationSetting.class, getUniqueID(), getTenant());
+			NotificationSetting setting = getLoaderFactory().createFilteredIdLoader(NotificationSetting.class).setId(getUniqueID()).load();
 			
-			notificationSettingManager.remove(setting);
+			NotificationSettingSaver saver = new NotificationSettingSaver();
+			
+			saver.remove(setting);
 			
 			addFlashMessageText("message.notificationsettingdeleted");
 		} catch (MissingEntityException e) {
@@ -236,36 +220,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 			productTypeList = loader.load();
 		}
     	return productTypeList;
-    }	
-	
-	public List<Listable<Long>> getCustomers() {
-		if (customers == null) {
-			CustomerListableLoader customerListLoader = getLoaderFactory().createCustomerListableLoader();
-			customers = customerListLoader.load();
-		}
-		return customers;
-	}
-	
-	public List<Listable<Long>> getDivisions() {
-		if (divisions == null) {
-			if (view.getCustomerId() != null) {
-				DivisionListableLoader divisionListLoader = getLoaderFactory().createDivisionListableLoader();
-				divisionListLoader.setCustomerId(view.getCustomerId());
-				
-				divisions = divisionListLoader.load();
-			} else {
-				divisions = new ArrayList<Listable<Long>>();
-			}
-		}
-		return divisions;
-	}
-	
-	public List<ListingPair> getJobSites() {
-		if (jobSites == null) {
-			jobSites = persistenceManager.findAllLP(JobSite.class, getSecurityFilter().prepareFor(JobSite.class), "name");
-		}
-		return jobSites;
-	}
+    }
 	
 	public NotificationSettingView getView() {
 		return view;

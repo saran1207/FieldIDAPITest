@@ -10,8 +10,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -65,7 +65,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	}
 	
 	public String doUpdate() throws Exception {
-		OrganizationSaver orgSaver = new OrganizationSaver();
+		OrgSaver orgSaver = new OrgSaver();
 		
 		Transaction transaction = PersistenceManager.startTransaction();
 		
@@ -89,13 +89,113 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		return SUCCESS;
 	}
 
+	private void createTenant(TenantSaver tenantSaver, OrgSaver orgSaver, Transaction transaction) throws ParseException {
+		tenantSaver.save(transaction, tenant);
+		
+		primaryOrg.setTenant(tenant);
+		primaryOrg.setUsingSerialNumber(true);
+		primaryOrg.setCertificateName(primaryOrg.getName());
+		primaryOrg.setDefaultTimeZone("United States:New York - New York");
+		
+		orgSaver.save(transaction, primaryOrg);
+	}
 
+	private void updateTenant(TenantSaver tenantSaver, OrgSaver orgSaver, Transaction transaction) {
+		tenantSaver.update(transaction, tenant);
+		orgSaver.update(transaction, primaryOrg);
+	}
 
+	private void moveMainLogo() throws IOException {
+		if (logoFile != null && logoFile.exists()) {
+			File privateLogoPath = PathHandler.getTenantLogo(tenant);
+
+			if (!privateLogoPath.getParentFile().exists()) {
+				privateLogoPath.getParentFile().mkdirs();
+			}
+
+			FileUtils.copyFile(logoFile, privateLogoPath);
+		}
+	}
+
+	private void moveCertLogo() throws IOException {
+		if (certificateLogoFile != null && certificateLogoFile.exists()) {
+			File privateLogoPath = PathHandler.getCertificateLogo(primaryOrg);
+
+			if (!privateLogoPath.getParentFile().exists()) {
+				privateLogoPath.getParentFile().mkdirs();
+			}
+
+			FileUtils.copyFile(certificateLogoFile, privateLogoPath);
+		}
+	}
 	
-	private void createSystemAccount(Transaction transaction) {
-		UserBean user = new UserBean();
+	//private void createSystemAccount(Transaction transaction) {
+	//	UserBean user = new UserBean();
+	
+	private void processExtendedFeatures(OrgSaver orgSaver, Transaction transaction) {
+		for (Entry<String, Boolean> inputFeature : extendedFeatures.entrySet()) {
+			processFeature(inputFeature.getKey(), inputFeature.getValue());
+		}
+		orgSaver.update(transaction, primaryOrg);
+	}
+
+	private void processFeature(String featureName, boolean featureOn) {
+		try {
+			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
+			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
+			
+			if (featureOn) {
+				featureSwitch.enableFeature();
+			} else {
+				featureSwitch.disableFeature();
+			}
+		} catch (IllegalArgumentException e) {
+			addFieldError("extendedFeatures", "incorrect type of extended feature");
+		}
+	}
+
+	private void createDefaultTagOptionManufacture(TagOption.OptionKey optionKey, Transaction transaction) {
+		TagOption tagOption = new TagOption();
+
+		tagOption.setTenant(tenant);
+		tagOption.setKey(optionKey);
+
+		TagOptionSaver saver = new TagOptionSaver();
+		
+		saver.save(transaction, tagOption);
+	}
+
+	private void createDefaultProductType(String itemNumber, Transaction transaction) {
+		ProductType productType = new ProductType();
+
+		productType.setTenant(tenant);
+		productType.setName(itemNumber);
+		
+		ProductTypeSaver saver = new ProductTypeSaver();
+		saver.save(transaction, productType);
+	}
+
+	private Date getFirstDayOfYear() throws ParseException {
+		SimpleDateFormat fullFormat = new SimpleDateFormat("dd-MM-yyyy");
+		String year = new SimpleDateFormat("yyyy").format(new Date());
+		return fullFormat.parse("01-01-" + year);
+	}
+
+	private void createDefaultSerialNumberCounter(Long counter, String decimalFormat, Long daysToReset, Date lastReset, Transaction transaction) {
+		SerialNumberCounterBean serialNumberCounter = new SerialNumberCounterBean();
+		serialNumberCounter.setTenant(tenant);
+		serialNumberCounter.setCounter(counter);
+		serialNumberCounter.setDecimalFormat(decimalFormat);
+		serialNumberCounter.setDaysToReset(daysToReset);
+		serialNumberCounter.setLastReset(lastReset);
+
+		SerialNumberCounterSaver saver = new SerialNumberCounterSaver();
+		saver.save(transaction, serialNumberCounter);
+	}
+	
+	private void setCommonUserAttribs(UserBean user, int permissions) {
 		user.setTenant(tenant);
-		user.setOrganization(primaryOrg);
+		user.setOwner(primaryOrg);
 		user.setTimeZoneID("United States:New York - New York");
 		user.setActive(true);
 		user.setPermissions(Permissions.SYSTEM);
@@ -110,9 +210,6 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		saver.save(transaction, user);
 	}
 	
-	
-	
-
 	public String doCreateUser() {
 		Transaction transaction = null;
 		try {
@@ -166,7 +263,5 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	public String getFormattedDate() {
 		return (primaryOrg.getDateFormat() != null) ? (new SimpleDateFormat(primaryOrg.getDateFormat())).format(new Date()) : "";
 	}
-
-	
 
 }

@@ -3,7 +3,6 @@ package com.n4systems.ejb;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueProductException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.Customer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionSchedule;
@@ -38,12 +36,16 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FuzzyResolver;
-import com.n4systems.util.SecurityFilter;
 
 @Interceptors({TimingInterceptor.class})
 @Stateless
@@ -55,7 +57,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	@EJB private LegacyProductType productTypeManager;
 	@EJB private PersistenceManager persistenceManager;
 	@EJB private InspectionManager inspectionManager;
-	@EJB private CustomerManager customerManager;
 	@EJB private User userManager;
 	@EJB private PopulatorLog populatorLogManager;
 	
@@ -66,7 +67,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 * Basically what I'm saying is that constantly having to handle a proof test with multiple serials creates a lot of complexity for
 	 * something that only one customer uses and is really just a hack in the first place. =;<
 	 */
-	public Map<String, Inspection> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long customerId, Long inspectionBookId) throws FileProcessingException {
+	public Map<String, Inspection> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
 		FileDataContainer fileData = null;
 		
 		// first we need to process this proof test
@@ -81,7 +82,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		} 
 		// now lets look up our beans
 		UserBean user = userManager.findUser(userId, tenantId);
-		Customer customer = customerManager.findCustomer(customerId, new SecurityFilter(tenantId));
+		BaseOrg customer = persistenceManager.find(BaseOrg.class, ownerId, tenantId);
 		InspectionBook book = persistenceManager.find(InspectionBook.class, inspectionBookId, tenantId);
 		
 		return createOrUpdateProofTest(fileData, user, customer, book, false);
@@ -96,28 +97,35 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	public Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, Customer customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
+	public Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg owner, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
-		Tenant tenant = inspector.getOrganization().getTenant();
-		PrimaryOrg primaryOrg = inspector.getOrganization().getPrimaryOrg();
+		Tenant tenant = inspector.getTenant();
+		PrimaryOrg primaryOrg = inspector.getOwner().getPrimaryOrg();
 		
 		// sending a null customer will lookup products with no customer (rather then products for any customer)
-		Long customerId = (customer != null) ? customer.getId() : null;
+		Long customerId = (owner != null) ? owner.getId() : null;
 		
 		//if our customer is null, then let's see if we're supposed to resolve a customer by name from the FileDataContainer
 		if(customerId == null && fileData.isResolveCustomer()) {
 			// lets resolve a customer from the file data container.  This will also create a customer if resolution fails and createCustomer is set
-			customer = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
+			try {
+				owner = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
+			} catch (DuplicateExtenalOrgException e) {
+				// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
+				String message = "Prooftest [" + fileData.getFileName() + "] rejected";
+				logger.warn(message, e);
+				throw new FileProcessingException(message, e);
+			}
 			
 			// If the customer is still null then, we were unalbe to find or create a customer.  Let's assume we we're supposed to use no customer
-			if(customer == null) {
+			if(owner == null) {
 				logger.warn("Unable to find or create customer.  Assuming no customer.");
 				customerId = null;
 			} else {
-				customerId = customer.getId();
+				customerId = owner.getId();
 			}
 
 		}
@@ -133,7 +141,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			inspection = null;
 			try {
 				// find a product for this tenant, serial and customer
-				product = findOrCreateProduct(primaryOrg, inspector, serialNumber, customer, fileData);
+				product = findOrCreateProduct(primaryOrg, inspector, serialNumber, owner, fileData);
 			} catch (NonUniqueProductException e) {
 				writeLogMessage(tenant, "There are multiple Product with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
@@ -161,7 +169,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date inspectionDateRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(inspectionDate), inspector.getTimeZone());
 
 			// if we find a product then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, new SecurityFilter(tenant.getId(), customerId, null));
+			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, new UserSecurityFilter(owner, null));
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
 			for (Inspection insp: inspections) {
@@ -174,7 +182,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData);
+				inspection = createInspection(tenant, inspector, owner, product, book, inspectionDateInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
@@ -197,46 +205,27 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return inspectionMap;
 	}
 	
-	private Customer findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) {
-		Customer customer = customerManager.findCustomerFussySearch(customerName, customerName, primaryOrg.getTenant().getId(), null);
-		
-		// if the customer is still null then lets just create one
-		if(customer == null && createCustomer) {
-			customer = new Customer();
-			customer.setTenant(primaryOrg.getTenant());
-			customer.setName(customerName.trim());
+	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) throws DuplicateExtenalOrgException {
+		LegacyFindOrCreateCustomerOrgHandler findOrCreateCust = getFindOrCreateCustomerHandler();
+		findOrCreateCust.setFindOnly(!createCustomer);
+	
+		CustomerOrg customer = findOrCreateCust.findOrCreate(primaryOrg, customerName.trim());
 			
-			String customerId = findUniqueCustomerId(FuzzyResolver.mungString(customerName), customerManager.findCustomers(primaryOrg.getTenant().getId(), null));
-			customer.setCustomerId(customerId);
+		if (customer != null) {
+			// if we've found or created a customer, log about it
 			
-			customerManager.saveCustomer(customer, user);
-			writeLogMessage(primaryOrg.getTenant(), "Created Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCustomerId() + "]");
-		} else if(customer != null){
-			logger.debug("Found Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCustomerId() + "]");
+			if (findOrCreateCust.customerWasCreated()) {
+				writeLogMessage(primaryOrg.getTenant(), "Created Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCode() + "]");
+			} else {
+				logger.debug("Found Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCode() + "]");
+			}
 		}
-		
+			
 		return customer;
 	}
 	
-	private String findUniqueCustomerId(String preferedId, List<Customer> customers) {
-		List<String> idList = new ArrayList<String>();
-		for(Customer customer: customers) {
-			idList.add(customer.getCustomerId());
-		}
-		
-		String newId = preferedId;
-		
-		int idx = 1;
-		while(idList.contains(newId)) {
-			newId = preferedId + idx;
-			idx++;
-		}
-		
-		return newId;
-	}
-	
-	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, Customer customer, FileDataContainer fileData) throws NonUniqueProductException {
-		Long customerId = (customer != null) ?  customer.getId() : null;
+	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, BaseOrg owner, FileDataContainer fileData) throws NonUniqueProductException {
+		Long customerId = (owner != null) ?  owner.getId() : null;
 		
 		// we must have a valid serial number
 		if(serial == null || serial.length() == 0) {
@@ -252,14 +241,14 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				return null;
 			} else {
 				// create product is set, lets create a default
-				product = createProduct(primaryOrg, user, customer, serial, fileData.getExtraInfo());
+				product = createProduct(primaryOrg, user, owner, serial, fileData.getExtraInfo());
 			}
 		}
 		
 		return product;
 	}
 
-	private Product createProduct(PrimaryOrg primaryOrg, UserBean user, Customer customer, String serialNumber, Map<String, String> productOptions) {
+	private Product createProduct(PrimaryOrg primaryOrg, UserBean user, BaseOrg owner, String serialNumber, Map<String, String> productOptions) {
 		Product product = new Product();
 		
 		product.setTenant(primaryOrg.getTenant());
@@ -271,8 +260,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		product.setIdentifiedBy(user);
 		product.setModifiedBy(user);
 		
-		product.setOwner(customer);
-		product.setOrganization(primaryOrg);
+		product.setOwner(owner);
 		
 		Date now = new Date();
 		product.setIdentified(now);
@@ -333,28 +321,22 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			logger.error( "received a subproduct uniquness error this should not be possible form this type of update.", e );
 			throw new RuntimeException( e );
 		}
-				
-		String customerName = (customer == null) ? "" : customer.getName();
-		String message = "Created Product [" + product.getId() +  "] serial [" + serialNumber + "] customer [" + customerName + "]";
+
+		String message = "Created Product [" + product.getId() +  "] serial [" + serialNumber + "] owner [" + owner.getName() + "]";
 		writeLogMessage(primaryOrg.getTenant(), message);
 		
 		return product;
 	}
 	
-	private Inspection createInspection(Tenant tenant, UserBean inspector, Customer customer, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData ) {
+	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData ) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
-		inspection.setCustomer(customer);
+		inspection.setOwner(owner);
 		inspection.setProduct(product);
 		inspection.setDate(inspectionDate);
 		inspection.setInspector(inspector);
 		inspection.setBook(book);
 		inspection.setComments(fileData.getComments());
-	
-		// the following fields we get from the product so that the inspection manager
-		//  doesn't clear them off the product at save time
-		inspection.setOrganization(inspector.getOrganization());
-		inspection.setDivision(product.getDivision());
 		inspection.setLocation(product.getLocation());
 		
 		// find the first inspection that for this product that supports our file type
@@ -446,6 +428,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		PopulatorLog.logStatus status = (success) ? PopulatorLog.logStatus.success : PopulatorLog.logStatus.error;		
 		populatorLogManager.createPopulatorLog(new PopulatorLogBean(tenant, message, status, PopulatorLog.logType.prooftest));
-		
+	}
+	
+	protected LegacyFindOrCreateCustomerOrgHandler getFindOrCreateCustomerHandler() {
+		return new LegacyFindOrCreateCustomerOrgHandler(persistenceManager);
 	}
 }

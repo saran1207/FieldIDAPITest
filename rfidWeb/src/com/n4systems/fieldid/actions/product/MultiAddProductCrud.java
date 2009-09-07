@@ -20,8 +20,6 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
-import com.n4systems.model.customer.CustomerListableLoader;
-import com.n4systems.model.jobsites.JobSiteListableLoader;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductCleaner;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
@@ -40,13 +38,11 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	private final OrderManager orderManager;
 	
 	// drop down lists
-	private List<ListingPair> jobSites;
 	private List<ListingPair> employees;
 	private List<ProductStatusBean> productStatuses;
 	private List<ListingPair> commentTemplates;
 	private List<ProductSerialExtensionBean> extentions;
 	private ProductTypeLister productTypeLister;
-	private List<ListingPair> customers;
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	// form inputs
@@ -136,28 +132,6 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return employees;
 	}
 
-	public List<ListingPair> getCustomers() {
-		if (customers == null) {
-			CustomerListableLoader loader = getLoaderFactory().createCustomerListableLoader();
-			customers = ListHelper.longListableToListingPair(loader.load());
-		}
-		return customers;
-	}
-
-	public List<ListingPair> getDivisions() {
-		// since multi add has no edit, the division list will always be loaded by ajax
-		// and is initially empty
-		return new ArrayList<ListingPair>();
-	}
-	
-	public List<ListingPair> getJobSites() {
-		if (jobSites == null) {
-			JobSiteListableLoader loader = getLoaderFactory().createJobSiteListableLoader();
-			jobSites = ListHelper.longListableToListingPair(loader.load());
-		}
-		return jobSites;
-	}
-
 	public List<ProductStatusBean> getProductStatuses() {
 		if (productStatuses == null) {
 			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
@@ -222,14 +196,6 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	public void setOwner(Long ownerId) {
 		productView.setOwner(ownerId);
-	}
-	
-	public void setDivision(Long divisionId) {
-		productView.setDivision(divisionId);
-	}
-	
-	public void setJobSite(Long jobSiteId) {
-		productView.setJobSite(jobSiteId);
 	}
 	
 	public void setAssignedUser(Long userId) {

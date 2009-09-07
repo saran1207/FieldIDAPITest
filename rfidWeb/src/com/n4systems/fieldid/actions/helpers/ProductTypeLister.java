@@ -9,8 +9,8 @@ import java.util.Map;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class ProductTypeLister {
@@ -24,7 +24,7 @@ public class ProductTypeLister {
 	public ProductTypeLister(PersistenceManager persistenceManager, SecurityFilter filter) {
 		super();
 		this.persistenceManager = persistenceManager;
-		this.filter = filter.newFilter().setTargets("tenant.id");
+		this.filter = filter;
 	}
 
 	public List<String> getGroups() {

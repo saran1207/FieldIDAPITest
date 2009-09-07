@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
@@ -15,7 +14,7 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 	private List<SortTerm> sortTerms;
 	private ResultTransformer<K> transformer;
 	private String[] joinColumns;
-	private Class<? extends FilteredEntity> searchClass;
+	private Class<?> searchClass;
 	private List<SearchTermDefiner> searchTerms;
 	private SecurityFilter filter;
 	
@@ -47,7 +46,7 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 		return joinColumns;
 	}
 
-	public Class<? extends FilteredEntity> getSearchClass() {
+	public Class<?> getSearchClass() {
 		return searchClass;
 	}
 

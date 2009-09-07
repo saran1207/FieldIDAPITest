@@ -34,6 +34,8 @@ import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.util.ConfigContext;
@@ -41,7 +43,6 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.HostNameParser;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.ActionContext;
@@ -140,7 +141,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		loadSessionUser(getSessionUser().getId());
 	}
 	protected void loadSessionUser(Long userId) {
-		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "organization.primaryOrg.id"));
+		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter()).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "organization.primaryOrg.id"));
 		setupSessionUser(user);
 	}
 	
@@ -178,14 +179,6 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	
 	public HttpServletResponse getServletResponse() {
 		return response;
-	}
-	
-	public Long getEndUserId() {
-		return getSessionUser().getR_EndUser(); 
-	}
-	
-	public Long getDivisionId() {	
-		return getSessionUser().getR_Division(); 
 	}
 	
 	public SecurityFilter getSecurityFilter() {

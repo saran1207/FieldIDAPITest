@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions.product;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -57,7 +56,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		product = persistenceManager.find(Product.class, uniqueId, getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id"), "infoOptions", "type.subTypes");
+		product = persistenceManager.find(Product.class, uniqueId, getSecurityFilter(), "infoOptions", "type.subTypes");
 		product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
 	}
 
@@ -78,7 +77,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 		subProducts = SubProductHelper.convert(product.getSubProducts());
 		
-		Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter().setDefaultTargets(), "type.inspectionTypes");
+		Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter(), "type.inspectionTypes");
 		if (foundSubProduct == null) {
 			addActionErrorText("error.nosubproduct");
 			return ERROR;
@@ -127,7 +126,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		}
 		
 		// this is to get the inspection types for this product loaded correctly  gah!
-		Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter().setDefaultTargets(), "type.inspectionTypes");
+		Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter(), "type.inspectionTypes");
 		if (foundSubProduct == null) {
 			addActionErrorText("error.nosubproduct");
 			return ERROR;
@@ -237,7 +236,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 		if (subProducts != null && !subProducts.isEmpty()) {
 			for (SubProductHelper subProduct : subProducts) {
-				Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter().setDefaultTargets(), "type.inspectionTypes");
+				Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter(), "type.inspectionTypes");
 
 				if (foundSubProduct == null) {
 					throw new MissingEntityException("product id " + subProduct.getProduct().getId().toString() + " missing");

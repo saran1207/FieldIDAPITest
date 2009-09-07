@@ -17,6 +17,5 @@ public interface ReportDefiner extends BaseSearchDefiner {
 	public Long getJobSite();
 	public Long getInspectionTypeGroup();
 	public Long getInspector();
-	public Long getCustomer();
-	public Long getDivision();
+	public Long getOwner();
 }

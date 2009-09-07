@@ -62,7 +62,7 @@ class MigrateTenantFields < ActiveRecord::Migration
         if (tablesMissingFK.include?(table))
           add_foreign_key(table, :tenants,  :source_column => :tenant_id, :foreign_column => :id)
         end
-      end 
+      end
       
     end
 

@@ -86,10 +86,6 @@
 			value="fieldid/ProductCodeMappingManager/local" />
 	</bean>
 	
-	<bean id="jobSiteManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/JobSiteManagerImpl/local" />
-    </bean>
-	
 	<bean id="importManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/ImportManagerImpl/local" />
     </bean>

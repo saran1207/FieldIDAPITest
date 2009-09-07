@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +25,6 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -37,9 +35,7 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Customer;
 import com.n4systems.model.Deficiency;
-import com.n4systems.model.Division;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -47,7 +43,6 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Observation;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
@@ -61,21 +56,20 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.OrgOnlySecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaResultServiceDTO;
 import com.n4systems.webservice.dto.CriteriaSectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaServiceDTO;
-import com.n4systems.webservice.dto.CustomerServiceDTO;
-import com.n4systems.webservice.dto.DivisionServiceDTO;
 import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldNameServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldServiceDTO;
@@ -84,7 +78,6 @@ import com.n4systems.webservice.dto.InspectionInfoOptionServiceDTO;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
-import com.n4systems.webservice.dto.JobSiteServiceDTO;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO;
 import com.n4systems.webservice.dto.ObservationServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
@@ -101,9 +94,7 @@ import com.n4systems.webservice.dto.TenantServiceDTO;
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
 import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
 import fieldid.web.services.dto.AutoAttributeDefinitionServiceDTO;
-import fieldid.web.services.dto.EndUserServiceDTO;
 import fieldid.web.services.dto.InfoOptionServiceDTO;
-import fieldid.web.services.dto.ProductSerialServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 import fieldid.web.services.dto.UserServiceDTO;
 
@@ -126,7 +117,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 	@EJB private PersistenceManager persistenceManager;	
 	@EJB private InspectionManager inspectionManager;
-	@EJB private CustomerManager customerManager;
 	@EJB private InspectionScheduleManager inspectionScheduleManager;
 	@EJB private SerialNumberCounter serialNumberCounter;
 	
@@ -151,73 +141,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return decoded;
 	}
 	
-	
-	public ProductServiceDTO convert(ProductSerialServiceDTO productSerialServiceDTO) {
-		if (productSerialServiceDTO == null) 
-			return null;
-		
-		Long customerId = convertStringToLong(productSerialServiceDTO.getR_endUser());
-		Long divisionId = convertStringToLong(productSerialServiceDTO.getR_Division());
-		Long userId = convertStringToLong(productSerialServiceDTO.getR_User());
-		Long productStatusId = convertStringToLong(productSerialServiceDTO.getR_productStatus());
-		
-		ProductServiceDTO product = new ProductServiceDTO();
-		product.setId(convertStringToLong(productSerialServiceDTO.getUniqueID()));
-		product.setComments(productSerialServiceDTO.getComment());
-		product.setCustomerId( customerId != null ? customerId : 0L );
-		product.setCustomerRefNumber( productSerialServiceDTO.getEndUserReferenceNumber() );
-		product.setDivisionId( divisionId != null ? divisionId : 0L );
-		product.setIdentified( productSerialServiceDTO.getDateCreated() );
-		product.setIdentifiedById( userId != null ? userId : 0L );
-		product.setInfoOptions( convertOldInfoOptionsToNew(productSerialServiceDTO.getInfoOptions()) );
-		product.setJobSiteId( productSerialServiceDTO.getJobSiteId() );
-		product.setLocation( productSerialServiceDTO.getLocation() );
-		product.setMobileGuid( productSerialServiceDTO.getMobileGUID() );
-		product.setProductStatusId( productStatusId != null ? productStatusId : 0L );
-		product.setProductTypeId( convertStringToLong(productSerialServiceDTO.getR_productInfo()) );
-		product.setRfidNumber( productSerialServiceDTO.getRfidNumber() );
-		product.setSerialNumber( productSerialServiceDTO.getSerialNumber() );
-		
-		return product;
-	}
-	
-	@SuppressWarnings("deprecation")
-	private List<com.n4systems.webservice.dto.InfoOptionServiceDTO> convertOldInfoOptionsToNew(Collection<InfoOptionServiceDTO> oldInfoOptions) {
-		List<com.n4systems.webservice.dto.InfoOptionServiceDTO> infoOptions = new ArrayList<com.n4systems.webservice.dto.InfoOptionServiceDTO>();
-		
-		com.n4systems.webservice.dto.InfoOptionServiceDTO infoOption = null;
-		for (InfoOptionServiceDTO oldInfoOption : oldInfoOptions) {
-			infoOption = new com.n4systems.webservice.dto.InfoOptionServiceDTO();
-			infoOption.setId( convertStringToLong(oldInfoOption.getUniqueId()) );
-			infoOption.setInfoFieldId( convertStringToLong(oldInfoOption.getR_infoField()) );
-			infoOption.setName(oldInfoOption.getName());
-			if (infoOption.getId() > 0) {
-				infoOption.setStaticData(true);
-			} else {
-				infoOption.setStaticData(false);
-			}
-			infoOption.setWeight( convertStringToLong(oldInfoOption.getWeight()) );
-			infoOptions.add(infoOption);
-		}
-		
-		return infoOptions;
-	}
-	
-	public JobSiteServiceDTO convert(JobSite jobSite) {
-		JobSiteServiceDTO jobSiteDTO = new JobSiteServiceDTO();
-		jobSiteDTO.setId(jobSite.getId());
-		jobSiteDTO.setName(jobSite.getName());
-		jobSiteDTO.setCustomerId(jobSite.getCustomer() != null ? jobSite.getCustomer().getId() : NULL_ID);
-		if (jobSite.getDivision() != null) {	
-			jobSiteDTO.setDivisionId(jobSite.getDivision().getId());
-		}
-		return jobSiteDTO;
-	}
-	
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook) {
 		
 		InspectionBookServiceDTO bookDTO = new InspectionBookServiceDTO();
-		bookDTO.setCustomerId(inspectionBook.getCustomer() != null ? inspectionBook.getCustomer().getId() : NULL_ID);
+		bookDTO.setCustomerId(inspectionBook.getOwner().getId());
 		bookDTO.setName(inspectionBook.getName());
 		bookDTO.setBookOpen(inspectionBook.isOpen());
 		bookDTO.setId(inspectionBook.getId());
@@ -232,8 +159,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setId( inspection.getId() );
 		inspectionDTO.setComments( inspection.getComments() );
 		inspectionDTO.setProductId( inspection.getProduct().getId() );
-		inspectionDTO.setCustomerId( ( inspection.getCustomer() != null ) ? inspection.getCustomer().getId() : 0L );
-		inspectionDTO.setDivisionId( ( inspection.getDivision() != null ) ? inspection.getDivision().getId() : 0L );
+		// TODO: CUSTOMER_REFACTOR: need to set owner in InspectionServiceDTO
+//		inspectionDTO.setCustomerId( ( inspection.getCustomer() != null ) ? inspection.getCustomer().getId() : 0L );
+//		inspectionDTO.setDivisionId( ( inspection.getDivision() != null ) ? inspection.getDivision().getId() : 0L );
 		inspectionDTO.setLocation( inspection.getLocation() );
 		inspectionDTO.setInspectorId( inspection.getInspector().getUniqueID() );
 		inspectionDTO.setInspectionTypeId( inspection.getType().getId() );
@@ -243,8 +171,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		// TODO convert date to their time zone
 		inspectionDTO.setDate( AbstractBaseServiceDTO.dateToString( inspection.getDate() ) );
-		
-		inspectionDTO.setJobSiteId( ( inspection.getJobSite() != null ) ? inspection.getJobSite().getId() : 0L );
 		inspectionDTO.setFormVersion(inspection.getFormVersion());
 		return inspectionDTO;
 				
@@ -267,16 +193,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		persistenceManager.reattach( product, false );
 		
-		productDTO.setCustomerId(product.getOwner() != null ? product.getOwner().getId() : 0);
-		productDTO.setCustomerRefNumber(product.getCustomerRefNumber());
-		productDTO.setDivisionId(product.getDivision() != null ? product.getDivision().getId() : 0);
+		// TODO: CUSTOMER_REFACTOR: need to set Owner on ProductServiceDTO
+//		productDTO.setCustomerId(product.getOwner() != null ? product.getOwner().getId() : 0);
+//		productDTO.setDivisionId(product.getDivision() != null ? product.getDivision().getId() : 0);
+		
 		productDTO.setId(product.getId());
+		productDTO.setCustomerRefNumber(product.getCustomerRefNumber());
 		productDTO.setIdentified( AbstractBaseServiceDTO.dateToString(product.getIdentified()) );
-		productDTO.setJobSiteId(product.getJobSite() != null ? product.getJobSite().getId() : 0);
 		productDTO.setLastInspectionDate( AbstractBaseServiceDTO.dateToString(product.getLastInspectionDate()) );
 		productDTO.setLocation(product.getLocation());
 		productDTO.setMobileGuid(product.getMobileGUID());
-		productDTO.setOrganizationId(product.getOrganization() != null ? product.getOrganization().getId() : 0);
 		productDTO.setProductStatusId(product.getProductStatus() != null ? product.getProductStatus().getUniqueID() : 0);
 		productDTO.setProductTypeId(product.getType().getId());
 		productDTO.setPurchaseOrder(product.getPurchaseOrder());
@@ -337,33 +263,17 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetProduct.setSerialNumber(productServiceDTO.getSerialNumber());
 		}
 		
-		if( productServiceDTO.divisionExists() ) {
-			targetProduct.setDivision( em.find(Division.class, productServiceDTO.getDivisionId()) );
-		} else {
-			targetProduct.setDivision( null );
-		}
-				
-		if( productServiceDTO.customerExists() ) {
-			targetProduct.setOwner( em.find(Customer.class, productServiceDTO.getCustomerId()) );
-		} else {
-			targetProduct.setOwner( null );
-		}
-		
-		if( productServiceDTO.jobSiteExists() ) {
-			targetProduct.setJobSite( em.find(JobSite.class, productServiceDTO.getJobSiteId()) );
-		} else {
-			targetProduct.setJobSite( null );
-		}
+		// TODO: CUSTOMER_REFACTOR: set owner back on Product from ProductServiceDTO
+//		if( productServiceDTO.customerExists() ) {
+//			targetProduct.setUser( em.find(Customer.class, productServiceDTO.getCustomerId()) );
+//		} else {
+//			targetProduct.setOwner( null );
+//		}
 
 		targetProduct.setProductStatus(convertField(ProductStatusBean.class, productServiceDTO.getProductStatusId(), targetProduct.getProductStatus()));
 		
-		if( productServiceDTO.identifiedByExists() ) {
-			UserBean user = em.find(UserBean.class, productServiceDTO.getIdentifiedById());			
-			targetProduct.setIdentifiedBy( user );			
-			targetProduct.setOrganization(user.getOrganization());
-		} else {
-			targetProduct.setOrganization(primaryOrg);
-		}
+		UserBean user = em.find(UserBean.class, productServiceDTO.getIdentifiedById());			
+		targetProduct.setIdentifiedBy( user );
 	
 		if ( productServiceDTO.getInfoOptions() != null ) {			
 			Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
@@ -443,7 +353,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		// Required object lookups
 		inspection.setTenant( tenant );
-		inspection.setType( persistenceManager.find(InspectionType.class, inspectionServiceDTO.getInspectionTypeId(), new SecurityFilter(tenant.getId()).prepareFor(InspectionType.class)) );
+		inspection.setType( persistenceManager.find(InspectionType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
 		inspection.setProduct( (Product)em.find(Product.class, inspectionServiceDTO.getProductId()) );
 		
 		// Optional object lookups
@@ -483,40 +393,26 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		UserBean inspector = (UserBean)em.find(UserBean.class, inspectionServiceDTO.getInspectorId());
 		inspection.setModifiedBy( inspector );		
 		inspection.setInspector( inspector );
-		inspection.setOrganization( persistenceManager.find(BaseOrg.class, inspectionServiceDTO.getOrganizationId()) );
 
-		// Optional object lookups
+		// initially default this to the product's owner
+		inspection.setOwner(inspection.getProduct().getOwner()); 
 		
-		// Customer is optional in case they are using job sites
 		if (inspectionServiceDTO.customerExists() ) {
-			inspection.setCustomer( (Customer)em.find(Customer.class, inspectionServiceDTO.getCustomerId()) );
-		}
-		
-		if (inspectionServiceDTO.divisionExists()) {
-			inspection.setDivision( (Division)em.find(Division.class, inspectionServiceDTO.getDivisionId()) );
-		}
-		
-		if (inspectionServiceDTO.jobSiteExists()) {
-			inspection.setJobSite( (JobSite)em.find(JobSite.class, inspectionServiceDTO.getJobSiteId()));
+			inspection.setOwner(persistenceManager.find(CustomerOrg.class, inspectionServiceDTO.getCustomerId()));
 		}
 		
 		if ( inspectionServiceDTO.inspectionBookExists() ) {
 			inspection.setBook( persistenceManager.find(InspectionBook.class, inspectionServiceDTO.getInspectionBookId()) );			
 		} else if( inspectionServiceDTO.getInspectionBookTitle() != null ) {
-			InspectionBook inspectionBook = inspectionManager.findInspectionBook( inspectionServiceDTO.getInspectionBookTitle(), new SecurityFilter(tenantId, inspectionServiceDTO.getCustomerId() ) );
+			CustomerOrg customerOrg = persistenceManager.find(CustomerOrg.class, inspectionServiceDTO.getCustomerId());
 			
+			InspectionBook inspectionBook = inspectionManager.findInspectionBook( inspectionServiceDTO.getInspectionBookTitle(), new OrgOnlySecurityFilter(customerOrg));
+
 			if( inspectionBook == null ) {
 				inspectionBook = new InspectionBook();
-				inspectionBook.setName(inspectionServiceDTO.getInspectionBookTitle());				
+				inspectionBook.setName(inspectionServiceDTO.getInspectionBookTitle());
+				inspectionBook.setOwner(inspection.getOwner());
 				inspectionBook.setTenant(tenant);
-				
-				// If we are using customer, use the inspection customer for this inspection book
-				// otherwise, use the jobsite's customer for the inspection book
-				if (inspection.getCustomer() != null) {				
-					inspectionBook.setCustomer( inspection.getCustomer() );
-				} else if (inspection.getJobSite() != null) {
-					inspectionBook.setCustomer( inspection.getJobSite().getCustomer() );
-				}
 				
 				persistenceManager.save(inspectionBook);
 			}
@@ -651,44 +547,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return schedule;
 	}
 	
-	public ProductSerialServiceDTO convert( Product productSerial, boolean moreData ) {
-		ProductSerialServiceDTO productSerialDTO = new ProductSerialServiceDTO();
-		
-		productSerialDTO.setDtoVersion( ProductSerialServiceDTO.CURRENT_DTO_VERSION.toString() );
-		
-		productSerialDTO.setUniqueID(productSerial.getId().toString());
-
-		
-		productSerialDTO.setTenantId( productSerial.getTenant().getId().toString() );
-		productSerialDTO.setRfidNumber(productSerial.getRfidNumber());
-		productSerialDTO.setReelId(productSerial.getSerialNumber());
-		productSerialDTO.setSerialNumber( productSerial.getSerialNumber());
-		productSerialDTO.setR_ordermaster(productSerial.getShopOrder() != null ? productSerial.getShopOrder().getId().toString() : "-1");
-		productSerialDTO.setDateModified(productSerial.getModified().toString());
-		
-		productSerialDTO.setR_endUser(productSerial.getOwner() != null ? productSerial.getOwner().getId().toString() : "-1");
-		productSerialDTO.setR_Division(productSerial.getDivision() != null ? productSerial.getDivision().getId().toString() : "-1");		
-		productSerialDTO.setR_productInfo(productSerial.getType() != null ? productSerial.getType().getId().toString() : "-1");
-		
-		productSerialDTO.setMobileGUID(productSerial.getMobileGUID());
-		productSerialDTO.setEndUserReferenceNumber(productSerial.getCustomerRefNumber());
-		productSerialDTO.setComment(productSerial.getComments());
-		productSerialDTO.setLocation( productSerial.getLocation() );
-		productSerialDTO.setR_productStatus(productSerial.getProductStatus() != null ? productSerial.getProductStatus().getUniqueID().toString() : "-1" );
-		productSerialDTO.setJobSiteId( (productSerial.getJobSite() != null) ? productSerial.getJobSite().getId() : 0L );
-		
-		productSerialDTO.setMoreData(moreData);
-		
-		for (InfoOptionBean infoOptionBean: productSerial.getInfoOptions()) {
-			if (!infoOptionBean.getInfoField().isRetired()) {
-				productSerialDTO.getInfoOptions().add(convert_OLD(infoOptionBean));
-			}
-		}
-				
-		return productSerialDTO;		
-	}
-	
-	
 	public ProductStatusServiceDTO convert( ProductStatusBean productStatus ) {
 		
 		ProductStatusServiceDTO productStatusServiceDTO = new ProductStatusServiceDTO();
@@ -707,9 +565,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private ProductTypeScheduleServiceDTO convert( ProductTypeSchedule productTypeSchedule ) {
 		ProductTypeScheduleServiceDTO productTypeScheduleServiceDTO = new ProductTypeScheduleServiceDTO();
 		productTypeScheduleServiceDTO.setDtoVersion(ProductTypeScheduleServiceDTO.CURRENT_DTO_VERSION);
-		if (productTypeSchedule.getCustomer() != null) {
-			productTypeScheduleServiceDTO.setCustomerId(productTypeSchedule.getCustomer().getId());
-		}
+		
+		// TODO: CUSTOMER_REFACTOR: need to set owner on ProductTypeScheduleServiceDTO from ProductTypeSchedule
+//		if (productTypeSchedule.getCustomer() != null) {
+//			productTypeScheduleServiceDTO.setCustomerId(productTypeSchedule.getCustomer().getId());
+//		}
+		
 		productTypeScheduleServiceDTO.setInspectionTypeId(productTypeSchedule.getInspectionType().getId());
 		productTypeScheduleServiceDTO.setFrequency(productTypeSchedule.getFrequency());
 		productTypeScheduleServiceDTO.setId(productTypeSchedule.getId());
@@ -989,8 +850,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		userService.setUserId(user.getUserID().toLowerCase());
 		userService.setHashPassword(user.getHashPassword());
 		userService.setSecurityRfidNumber(user.getHashSecurityCardNumber());
-		userService.setCustomerId(user.getR_EndUser() != null ? user.getR_EndUser() : NULL_ID);
-		userService.setDivisionId(user.getR_Division() != null ? user.getR_Division() : NULL_ID);
+		
+		// TODO: CUSTOMER_REFACTOR: need to set owner on UserServiceDTO from UserBean
+//		userService.setCustomerId(user.getR_EndUser() != null ? user.getR_EndUser() : NULL_ID);
 		
 		BitField permField = new BitField(user.getPermissions());
 		userService.setAllowedToIdentify(permField.isSet(Permissions.TAG));
@@ -1004,8 +866,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		user.setUniqueID((userDTO.getId() == NULL_ID) ? null : userDTO.getId());
 		user.setUserID(userDTO.getUserId());
-		user.setR_EndUser((userDTO.getCustomerId() == NULL_ID) ? null : userDTO.getId());
-		user.setR_Division((userDTO.getDivisionId() == NULL_ID) ? null : userDTO.getId());
+		
+		// TODO: CUSTOMER_REFACTOR: need to set owner on UserBean from UserServiceDTO
+//		user.setR_EndUser((userDTO.getCustomerId() == NULL_ID) ? null : userDTO.getId());
 		
 		return user;
 	}
@@ -1027,7 +890,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		tenantService.setName(tenant.getTenant().getName());
 		tenantService.setDisplayName(tenant.getName());
 		tenantService.setSerialNumberFormat(tenant.getSerialNumberFormat());
-		tenantService.setUsingJobSites(tenant.getExtendedFeatures().contains(ExtendedFeature.JobSites));
 		tenantService.setUsingJobs(tenant.getExtendedFeatures().contains(ExtendedFeature.Projects));
 		tenantService.setUsingSerialNumber(tenant.isUsingSerialNumber());
 		
@@ -1047,12 +909,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		theDTO.setHashPassword(user.getHashPassword());
 		theDTO.setUniqueID(user.getUniqueID().toString());
 		theDTO.setUserID(user.getUserID());
-		theDTO.setR_EndUser(user.getR_EndUser());
 		theDTO.setHashSecurityCardNumber(user.getHashSecurityCardNumber());
 		
-		theDTO.setSerialNumberFormat(user.getOrganization().getPrimaryOrg().getSerialNumberFormat());
+		// TODO: CUSTOMER_REFACTOR: need to set owner on UserServiceDTO from UserBean
+//		theDTO.setR_EndUser(user.getR_EndUser());
 		
-		theDTO.setUsingJobSites( user.getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.JobSites) );
+		theDTO.setSerialNumberFormat(user.getOwner().getPrimaryOrg().getSerialNumberFormat());
 		
 		return theDTO;
 		
@@ -1093,18 +955,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		
 		return infoField;
-	}
-	
-	@SuppressWarnings("unused")
-	private Customer findEndUser( String endUserIDString ) {
-		Customer endUser = null;
-		
-		Long endUserID = convertStringToLong( endUserIDString );
-		if ( endUserID != null ) {			
-			endUser = (Customer)em.find( Customer.class, endUserID );			
-		}
-		
-		return endUser;
 	}
 	
 	@SuppressWarnings("unused")
@@ -1178,37 +1028,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return (ProductStatusBean)em.find(ProductStatusBean.class, inspectionServiceDTO.getProductStatusId());
 	}
 
-	public EndUserServiceDTO convertLegacy(Customer customer) {
-		EndUserServiceDTO customerService = new EndUserServiceDTO();
-		
-		customerService.setUniqueID(customer.getId().toString());
-		customerService.setTenantId(customer.getTenant().getId());
-		customerService.setEndUserID(customer.getCustomerId());
-		customerService.setEndUserName(customer.getName());
-
-		customerService.setDivisions(convertAllLegacy(customerManager.findDivisions(customer, null)));
-		
-		return customerService;
-	}
-	
-	public fieldid.web.services.dto.DivisionServiceDTO convertLegacy(Division division) {
-		fieldid.web.services.dto.DivisionServiceDTO divisionService = new fieldid.web.services.dto.DivisionServiceDTO();
-		
-		divisionService.setUniqueID(division.getId().toString());
-		divisionService.setTenantId(division.getCustomer().getTenant().getId());
-		divisionService.setR_EndUser(division.getCustomer().getId().toString());
-		divisionService.setName(division.getName());
-		
-		return divisionService;
-	}
-
 	public JobServiceDTO convert(Project job) {
 		JobServiceDTO jobService = new JobServiceDTO();
 		
 		jobService.setId(job.getId());
-		jobService.setCustomerId(job.getCustomer() != null ? job.getCustomer().getId() : NULL_ID);
-		jobService.setDivisionId(job.getDivision() != null ? job.getDivision().getId() : NULL_ID);
-		jobService.setJobSiteId(job.getJobSite() != null ? job.getJobSite().getId() : NULL_ID);
+		// TODO: CUSTOMER_REFACTOR: need to set Owner on JobServiceDTO from Project
+//		jobService.setCustomerId(job.getCustomer() != null ? job.getCustomer().getId() : NULL_ID);
 		jobService.setName(job.getName());
 		jobService.setProjectId(job.getProjectID());
 		
@@ -1217,34 +1042,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		
 		return jobService;
-	}
-	
-	public CustomerServiceDTO convert(Customer customer, List<Division> divisions) {
-		CustomerServiceDTO customerService = new CustomerServiceDTO();
-		
-		customerService.setId(customer.getId());
-		customerService.setCustomerId(customer.getCustomerId());
-		customerService.setName(customer.getDisplayName());
-		
-		if (customer.getContact() != null) {
-			customerService.setContactName(customer.getContact().getName());
-			customerService.setContactEmail(customer.getContact().getEmail());
-		}
-		
-		if (divisions != null) {
-			customerService.getDivisions().addAll(convertAll(divisions));
-		}
-		
-		return customerService;
-	}
-	
-	public DivisionServiceDTO convert(Division division) {
-		DivisionServiceDTO divisionService = new DivisionServiceDTO();
-		
-		divisionService.setId(division.getId());
-		divisionService.setName(division.getName());
-		
-		return divisionService;
 	}
 
 	private InspectionScheduleServiceDTO convert(InspectionSchedule inspectionSchedule) {
@@ -1258,27 +1055,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		scheduleService.setCompleted(inspectionSchedule.getStatus() == InspectionSchedule.ScheduleStatus.COMPLETED);
 		
 		return scheduleService;
-	}
-
-	public List<DivisionServiceDTO> convertAll(List<Division> divisions) {
-		List<DivisionServiceDTO> divisionServices = new ArrayList<DivisionServiceDTO>();
-		
-		for (Division division: divisions) {
-			divisionServices.add(convert(division));
-		}
-		
-		return divisionServices;
-	}
-	
-	@Deprecated
-	public List<fieldid.web.services.dto.DivisionServiceDTO> convertAllLegacy(List<Division> divisions) {
-		List<fieldid.web.services.dto.DivisionServiceDTO> divisionServices = new ArrayList<fieldid.web.services.dto.DivisionServiceDTO>();
-		
-		for(Division division: divisions) {
-			divisionServices.add(convertLegacy(division));
-		}
-		
-		return divisionServices;
 	}
 	
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates) {

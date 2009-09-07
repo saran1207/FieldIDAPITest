@@ -16,25 +16,30 @@ import rfid.ejb.entity.OrderMappingBean;
 import rfid.ejb.session.OrderMapping;
 
 import com.n4systems.ejb.interceptor.TimingInterceptor;
-import com.n4systems.exceptions.CustomerNotFoundException;
 import com.n4systems.exceptions.OrderProcessingException;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Product;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.Order.OrderType;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
+import com.n4systems.model.orgs.LegacyFindOrCreateDivisionOrgHandler;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.plugins.PluginException;
 import com.n4systems.plugins.integration.CustomerOrderTransfer;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.plugins.integration.OrderTransfer;
 import com.n4systems.plugins.integration.ShopOrderTransfer;
+import com.n4systems.services.TenantCache;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 
@@ -44,18 +49,17 @@ public class OrderManagerImpl implements OrderManager {
 	private Logger logger = Logger.getLogger(OrderManagerImpl.class);
 	
 	@EJB private PersistenceManager persistenceManager;
-	@EJB private CustomerManager customerManager;
 	@EJB private OrderMapping orderMappingManager;
 	
 	public Order findOrder(OrderType type, String orderNumber, Long tenantId, SecurityFilter filter) {
-		QueryBuilder<Order> builder = new QueryBuilder<Order>(Order.class);
+		QueryBuilder<Order> builder = new QueryBuilder<Order>(Order.class, new OpenSecurityFilter());
 
 		builder.addSimpleWhere("tenant.id", tenantId);
 		builder.addWhere(WhereParameter.Comparator.EQ, "orderNumber", "orderNumber", orderNumber, WhereParameter.IGNORE_CASE);
 		builder.addSimpleWhere("orderType", type);
 
 		if (filter != null) {
-			builder.setSecurityFilter(filter.setDefaultTargets());
+			builder.applyFilter(filter);
 		}
 		
 		Order order = null;
@@ -69,7 +73,7 @@ public class OrderManagerImpl implements OrderManager {
 	}
 	
 	public LineItem findLineItem(Order order, String lineId) {
-		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class);
+		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("order", order);
 		builder.addSimpleWhere("lineId", lineId);
 		
@@ -84,7 +88,7 @@ public class OrderManagerImpl implements OrderManager {
 	}
 	
 	public List<LineItem> findLineItems(Order order) {
-		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class);
+		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("order", order);
 		builder.setOrder("index");
 		
@@ -99,7 +103,7 @@ public class OrderManagerImpl implements OrderManager {
 	}
 	
 	public int countLineItems(Order order) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(LineItem.class);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(LineItem.class, new OpenSecurityFilter());
 		builder.setCountSelect();
 		builder.addSimpleWhere("order", order);
 		
@@ -114,7 +118,7 @@ public class OrderManagerImpl implements OrderManager {
 	}
 	
 	public int countProductsTagged(LineItem lineItem) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, new OpenSecurityFilter());
 		builder.setCountSelect();
 		builder.addSimpleWhere("shopOrder", lineItem);
 		
@@ -212,9 +216,21 @@ public class OrderManagerImpl implements OrderManager {
 		 *  This means that even on update, all non-required fields will get rewritten.
 		 */
 		
-		// this will create, resolve or set the customer null
-		order.setCustomer(processCustomer(orderData.get(OrderKey.ORDER_CUSTOMER_NAME), orderData.get(OrderKey.ORDER_CUSTOMER_ID), tenant));
-		order.setDivision(processDivision(orderData.get(OrderKey.ORDER_DIVISION_NAME), order.getCustomer()));
+		CustomerOrg customer;
+		DivisionOrg division;
+		try {
+			
+			customer = processCustomer(orderData.get(OrderKey.ORDER_CUSTOMER_NAME), orderData.get(OrderKey.ORDER_CUSTOMER_ID), tenant);
+			division = processDivision(orderData.get(OrderKey.ORDER_DIVISION_NAME), customer); 
+		
+		} catch (DuplicateExtenalOrgException e) {
+			String message = type.name() + " Order [" + orderNumber + "] rejected";
+			logger.warn(message, e);
+			// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
+			throw new OrderProcessingException(message, e);
+		}
+		
+		order.setOwner((division != null) ? division : customer);
 
 		// now we'll fill in the rest of the order data
 		String value;
@@ -371,24 +387,30 @@ public class OrderManagerImpl implements OrderManager {
 	 * customerId is null then customerName will be used for both values.
 	 * @see CustomerManager#findOrCreateCustomer(String, String, Long, SecurityFilter)
 	 * @param customerName	name of the customer
-	 * @param customerId	short name of the customer
+	 * @param customerCode	short name of the customer
 	 * @param tenant		a Tenant
 	 * @return				A customer or null
+	 * @throws DuplicateExtenalOrgException 
 	 */
-	private Customer processCustomer(String customerName, String customerId, Tenant tenant) {
+	private CustomerOrg processCustomer(String customerName, String customerCode, Tenant tenant) throws DuplicateExtenalOrgException {
 		// if neither are set, do nothing
-		if(customerName == null && customerId == null) {
+		if(customerName == null && customerCode == null) {
 			return null;
 		}
 		
 		// both customerName and customerId must be set for findOrCreateCustomer
 		if(customerName == null) {
-			customerName = customerId;
-		} else if(customerId == null) {
-			customerId = customerName;
+			customerName = customerCode;
+		} else if(customerCode == null) {
+			customerCode = customerName;
 		}
 		
-		return customerManager.findOrCreateCustomer(customerName, customerId, tenant.getId(), null);
+		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenant.getId());
+		
+		LegacyFindOrCreateCustomerOrgHandler findOrCreateCust = getFindOrCreateCustomerHandler();
+		
+		CustomerOrg customer = findOrCreateCust.findOrCreate(primaryOrg, customerName, customerCode);
+		return customer;
 	}
 	
 	/**
@@ -396,20 +418,17 @@ public class OrderManagerImpl implements OrderManager {
 	 * @param divisionName	Name of a division
 	 * @param customer		An existing customer in the system
 	 * @return				A Division or null
+	 * @throws DuplicateExtenalOrgException 
 	 */
-	private Division processDivision(String divisionName, Customer customer) {
+	private DivisionOrg processDivision(String divisionName, CustomerOrg customer) throws DuplicateExtenalOrgException {
 		// we'll need both of these to do anything
 		if(divisionName == null || customer == null) {
 			return null;
 		}
 		
-		Division division = null;
-		try {
-			division = customerManager.findOrCreateDivision(divisionName, customer.getId(), null);
-		} catch(CustomerNotFoundException e) {
-			logger.warn("Attempted to find or create Division on non-existant Customer", e);
-		}
+		LegacyFindOrCreateDivisionOrgHandler findOrCreateDiv = getFindOrCreateDivisionHandler();
 		
+		DivisionOrg division = findOrCreateDiv.findOrCreate(customer, divisionName);
 		return division;
 	}
 	
@@ -566,20 +585,24 @@ public class OrderManagerImpl implements OrderManager {
 			throw new OrderProcessingException("Plugin returned Order with blank OrderNumber");
 		}
 		
-		Customer customer = null;
-		Division division = null;
+		CustomerOrg customer = null;
+		DivisionOrg division = null;
 		
 		if(orderTransfer.getCustomerName() != null || orderTransfer.getCustomerId() != null) {
-			customer = customerManager.findOrCreateCustomer(orderTransfer.getCustomerName(), orderTransfer.getCustomerId(), tenant.getId(), null);
-		
-			if(orderTransfer.getDivisionName() != null) {
-				try {
-					division = customerManager.findOrCreateDivision(orderTransfer.getDivisionName(), customer.getId(), null);
-				} catch(CustomerNotFoundException cne) {
-					// this would be very strange since findOrCreateCustomer should always return a customer, but it's not really the end of the world
-					logger.warn("Tried to find or create division but customer [" + customer.getId() + "] did not exist", cne);
+			
+			try {
+				customer = processCustomer(orderTransfer.getCustomerName(), orderTransfer.getCustomerId(), tenant);
+				
+				if(orderTransfer.getDivisionName() != null) {
+					division = processDivision(orderTransfer.getDivisionName(), customer);
 				}
+			} catch (DuplicateExtenalOrgException e) {
+				String message = type.name() + " Order [" + orderTransfer.getOrderNumber() + "] rejected";
+				logger.warn(message, e);
+				// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
+				throw new OrderProcessingException(message, e);
 			}
+			
 		}
 		
 		// try and look up the order first
@@ -593,8 +616,7 @@ public class OrderManagerImpl implements OrderManager {
 		
 		// set or update the order's data
 		order.setOrderNumber(orderTransfer.getOrderNumber());
-		order.setCustomer(customer);
-		order.setDivision(division);
+		order.setOwner((division != null) ? division : customer);
 		order.setPoNumber(orderTransfer.getPoNumber());
 		order.setOrderDate(orderTransfer.getOrderDate());
 		order.setDescription(orderTransfer.getOrderDescription());
@@ -657,5 +679,13 @@ public class OrderManagerImpl implements OrderManager {
 		strbuild.append("\n********************* Order Debug Stop **************************\n");
 		
 		logger.trace(strbuild.toString());
+	}
+    
+    protected LegacyFindOrCreateCustomerOrgHandler getFindOrCreateCustomerHandler() {
+		return new LegacyFindOrCreateCustomerOrgHandler(persistenceManager);
+	}
+    
+    protected LegacyFindOrCreateDivisionOrgHandler getFindOrCreateDivisionHandler() {
+		return new LegacyFindOrCreateDivisionOrgHandler(persistenceManager);
 	}
 }

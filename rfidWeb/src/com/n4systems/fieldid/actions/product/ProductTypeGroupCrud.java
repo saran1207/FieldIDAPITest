@@ -91,7 +91,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 	}
 	
 	private Long getNextAvailableIndex() {
-		QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter().setTargets("tenant.id"));
+		QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter());
 		return persistenceManager.findCount(query);
 	}
 
@@ -169,7 +169,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 
 	public List<ProductTypeGroup> getGroups() {
 		if (groups == null) {
-			QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter().setTargets("tenant.id")).addOrder("orderIdx");
+			QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter()).addOrder("orderIdx");
 			groups = persistenceManager.findAll(query);
 		}
 		return groups;
@@ -202,7 +202,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 
 	public List<ProductType> getProductTypes() {
 		if (productTypes == null) {
-			productTypes = persistenceManager.findAll(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter().setTargets("tenant.id")).addSimpleWhere("group", group).addOrder("name"));
+			productTypes = persistenceManager.findAll(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter()).addSimpleWhere("group", group).addOrder("name"));
 		}
 		return productTypes;
 	}

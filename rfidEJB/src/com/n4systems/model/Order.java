@@ -1,22 +1,21 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.EntityWithTenant;
-
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.parents.EntityWithOwner;
+
 @Entity
 @Table(name = "orders")
-public class Order extends EntityWithTenant implements Listable<Long> {
+public class Order extends EntityWithOwner implements Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
 	public enum OrderType { 
@@ -50,11 +49,12 @@ public class Order extends EntityWithTenant implements Listable<Long> {
 	@Temporal(TemporalType.DATE)
 	private Date orderDate;
 	
-	@ManyToOne
-	private Customer customer;
-	
-	@ManyToOne
-	private Division division;
+	// TODO: REMOVE_ME
+//	@ManyToOne
+//	private Customer customer;
+//	
+//	@ManyToOne
+//	private Division division;
 	
 	private String poNumber;
 	private String description;
@@ -94,22 +94,22 @@ public class Order extends EntityWithTenant implements Listable<Long> {
 		this.orderDate = date;
 	}
 
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public Division getDivision() {
-		return division;
-	}
-
-	public void setDivision(Division division) {
-		this.division = division;
-	}
-	
+	// TODO: REMOVE_ME
+//	public Customer getCustomer() {
+//		return customer;
+//	}
+//
+//	public void setCustomer(Customer customer) {
+//		this.customer = customer;
+//	}
+//
+//	public Division getDivision() {
+//		return division;
+//	}
+//
+//	public void setDivision(Division division) {
+//		this.division = division;
+//	}
 
 	public String getPoNumber() {
 		return poNumber;

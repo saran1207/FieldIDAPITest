@@ -1,17 +1,16 @@
 package com.n4systems.fieldid.actions.helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import rfid.ejb.entity.InfoFieldBean;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.security.SecurityFilterFactory;
-import com.n4systems.util.SecurityFilter;
-
-import rfid.ejb.entity.InfoFieldBean;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.model.security.SecurityFilter;
 
 public class InfoFieldDynamicGroupGenerator {
 	
@@ -37,7 +36,7 @@ public class InfoFieldDynamicGroupGenerator {
 			int order = 1024;
 			if (productTypeId != null) {
 				// when a product type has been selected, we will use all the infofields from the product type
-				ProductType productType = persistenceManager.find(ProductType.class, productTypeId, SecurityFilterFactory.prepare(ProductType.class, filter), "infoFields");
+				ProductType productType = persistenceManager.find(ProductType.class, productTypeId, filter, "infoFields");
 				
 				// construct and add our field mappings
 				for (InfoFieldBean field: productType.getInfoFields()) {

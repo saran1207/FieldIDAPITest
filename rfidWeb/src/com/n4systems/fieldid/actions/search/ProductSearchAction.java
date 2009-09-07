@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,14 +11,12 @@ import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
-import com.n4systems.model.JobSite;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
 import com.n4systems.util.ListingPair;
@@ -29,15 +26,11 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private static final long serialVersionUID = 1L;
 	
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
-	private final CustomerManager customerManager;
 	private final LegacyProductSerial productSerialManager;
 	private final User userManager;
-	
-	private List<ListingPair> jobSites;
 	private List<ListingPair> employees;
 	
-	public ProductSearchAction(
-			final CustomerManager customerManager, 
+	public ProductSearchAction( 
 			final LegacyProductType productTypeManager, 
 			final LegacyProductSerial productSerialManager, 
 			final PersistenceManager persistenceManager, 
@@ -45,8 +38,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 			final ProductManager productManager) {
 		
 		super(ProductSearchAction.class, SEARCH_CRITERIA, "ProductReport", persistenceManager);
-		
-		this.customerManager = customerManager;
+
 		this.productSerialManager = productSerialManager;
 		this.userManager = userManager;
 		
@@ -66,12 +58,8 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		if (getSessionUser().isAnEndUser()) {
-			getContainer().setCustomer(getSessionUser().getR_EndUser());
-			
-			if (getSessionUser().isInDivision()) {
-				getContainer().setDivision(getSessionUser().getR_Division());
-			}
+		if (getSessionUser().getOwner().isExternalOrg()) {
+			getContainer().setOwner(getSessionUser().getOwner().getId());
 		}
 		return INPUT;
 	}
@@ -130,29 +118,9 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public void setToDate(String toDate) {
 		getContainer().setToDate(convertToEndOfDay(toDate));
 	}
-	
-	public Collection<ListingPair> getCustomers() {
-		return customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-	}
-
 
 	public Collection<ProductStatusBean> getProductStatuses() {
 		return productSerialManager.getAllProductStatus(getTenantId());
-	}
-
-	public Collection<ListingPair> getDivisions() {
-		Collection<ListingPair> divisions = new ArrayList<ListingPair>();
-		if(getContainer().getCustomer() != null ) {
-			divisions = customerManager.findDivisionsLP(getContainer().getCustomer(), getSecurityFilter());
-		}
-		return divisions;
-	}
-
-	public List<ListingPair> getJobSites() {
-		if( jobSites == null ) {
-			jobSites = persistenceManager.findAllLP( JobSite.class, getSecurityFilter().setDefaultTargets(), "name" );
-		}
-		return jobSites;
 	}
 	
 	public List<ListingPair> getEmployees() {

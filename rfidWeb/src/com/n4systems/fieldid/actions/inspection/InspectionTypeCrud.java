@@ -20,11 +20,12 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.InspectionTypeArchiveTask;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -53,7 +54,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter().prepareFor(InspectionType.class));
+		QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter());
 		query.addSimpleWhere("id", uniqueId);
 		query.addPostFetchPaths("sections", "supportedProofTests", "infoFieldNames");
 		inspectionType = persistenceManager.find(query);
@@ -186,10 +187,9 @@ public class InspectionTypeCrud extends AbstractCrud {
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
 			try {
-				QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class);
+				QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, new OpenSecurityFilter());
 				SecurityFilter filter = getSecurityFilter();
-				filter.setTargets("tenant.id", null, null);
-				queryBuilder.setSecurityFilter(filter);
+				queryBuilder.applyFilter(filter);
 				queryBuilder.addOrder("name");
 				queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 				queryBuilder.setSimpleSelect();

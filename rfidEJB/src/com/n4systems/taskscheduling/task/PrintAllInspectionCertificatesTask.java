@@ -1,15 +1,6 @@
 package com.n4systems.taskscheduling.task;
 
-import com.n4systems.exceptions.EmptyReportException;
-import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.exceptions.ReportException;
-import com.n4systems.model.Tenant;
-import com.n4systems.reporting.InspectionReportType;
-import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.mail.MailMessage;
-
-import rfid.ejb.entity.UserBean;
-
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -17,6 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import rfid.ejb.entity.UserBean;
+
+import com.n4systems.exceptions.EmptyReportException;
+import com.n4systems.exceptions.NonPrintableEventType;
+import com.n4systems.exceptions.ReportException;
+import com.n4systems.model.Tenant;
+import com.n4systems.reporting.InspectionReportType;
+import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.mail.MailMessage;
 
 
 public class PrintAllInspectionCertificatesTask implements Runnable {
@@ -63,14 +64,14 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 		
 		try {
 			// generate the report
-			String reportPath = ServiceLocator.getReportFactory().generateInspectionCertificateReport(reportType, inspectionDocs, reportFileName, user);
+			File report = ServiceLocator.getReportFactory().generateInspectionCertificateReport(reportType, inspectionDocs, reportFileName, user);
 			
-			logger.info("Generating Multi-Inspection certificate Report Complete [" + reportPath + "]");
+			logger.info("Generating Multi-Inspection certificate Report Complete [" + report + "]");
 			
 			body.append("<h4>Your Report is ready</h4>");
 			body.append("<br />Please click the link below to download your report package.<br />");
 			body.append("If you are not logged in you will be prompted to do so.<br /><br />");
-			body.append("<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(reportPath, "UTF-8") + "'>Click here to download your report</a>");
+			body.append("<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(report.getName(), "UTF-8") + "'>Click here to download your report</a>");
 			
 		} catch(EmptyReportException e) {
 			body.append("<h4>Your Report contained no printable inspections</h4>");

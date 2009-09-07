@@ -37,7 +37,6 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 		UserBean user = new UserBean();
 		user.setUniqueID(uniqueId);
 		user.setTenant(tenantOrganization);
-		user.setR_EndUser(customer);
 		return user;
 	}
 }

@@ -40,7 +40,6 @@ import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -54,6 +53,12 @@ import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.ManualSecurityFilter;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.CreateInspectionAuditHandler;
 import com.n4systems.security.CustomAuditHandler;
@@ -64,8 +69,8 @@ import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.TransactionSupervisor;
+import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -90,8 +95,9 @@ public class InspectionManagerImpl implements InspectionManager {
 	 * finds all the groups that you can view with the defined security filter.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId) {
-		filter.setTargets("ig.tenant.id", "inspection.customer.id", "inspection.division.id");
+	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter userFilter, Long productId) {
+		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
+		filter.setTargets("ig.tenant.id", "inspection.owner", null, null);
 
 		String queryString = "Select DISTINCT ig FROM InspectionGroup as ig INNER JOIN ig.inspections as inspection LEFT JOIN inspection.product as product"
 				+ " WHERE product.id = :id AND inspection.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY ig.created ";
@@ -100,7 +106,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		// not need an Entity Manager at all.
 		Query query = em.createQuery(queryString);
 
-		filter.applyParamers(query);
+		filter.applyParameters(query);
 		query.setParameter("id", productId);
 		query.setParameter("activeState", EntityState.ACTIVE);
 
@@ -120,8 +126,6 @@ public class InspectionManagerImpl implements InspectionManager {
 	public InspectionGroup findInspectionGroupByMobileGuid(String mobileGuid, SecurityFilter filter) {
 		InspectionGroup inspectionGroup = null;
 
-		filter.setTargets("tenant.id", null, null);
-
 		QueryBuilder<InspectionGroup> queryBuilder = new QueryBuilder<InspectionGroup>(InspectionGroup.class, filter);
 		queryBuilder.setSimpleSelect().addSimpleWhere("mobileGuid", mobileGuid);
 
@@ -136,10 +140,10 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	public Inspection findInspectionThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
 		String str = "select i FROM Inspection i, IN( i.subInspections ) s WHERE s.id = :subInspection AND ";
-		str += filter.produceWhereClause("i.tenant.id", "i.customer.id", "i.division.id");
+		str += filter.produceWhereClause(Inspection.class, "i");
 		Query query = em.createQuery(str);
 		query.setParameter("subInspection", subInspectionId);
-		filter.applyParamers(query);
+		filter.applyParameters(query, Inspection.class);
 		try {
 			return (Inspection) query.getSingleResult();
 		} catch (NoResultException e) {
@@ -170,8 +174,6 @@ public class InspectionManagerImpl implements InspectionManager {
 	public Inspection findAllFields(Long id, SecurityFilter filter) {
 		Inspection inspection = null;
 
-		filter.setTargets("tenant.id", "customer.id", "division.id");
-
 		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
 		queryBuilder.setSimpleSelect().addSimpleWhere("id", id).addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addOrder("created");
@@ -197,7 +199,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter) {
 		
 
-		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter.prepareFor(Inspection.class));
+		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", inspectionDateRangeStart).addWhere(Comparator.LE, "endingDate", "date", inspectionDateRangeEnd); 
@@ -343,17 +345,12 @@ public class InspectionManagerImpl implements InspectionManager {
 			inspection.getGroup().setTenant(inspection.getTenant());
 			persistenceManager.save(inspection.getGroup(), userId);
 		}
-
-		inspection.setOrganization(inspection.getInspector().getOrganization());
 		
 		// set the status from the state sets
 		inspection.setStatus(calculateInspectionResult(inspection));
 
 		// set proof test info on the inspection from a file data container
 		setProofTestData(inspection, fileData);
-
-		// set the inspection's customer and division from the job site
-		copyCustomerDivisionFromJobSite(inspection);
 
 		confirmSubInspectionsAreAgainstAttachedSubProducts(inspection);
 
@@ -400,13 +397,6 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 		inspection.setSubInspections(reorderedSubInspections);
 		
-	}
-
-	private void copyCustomerDivisionFromJobSite(Inspection inspection) {
-		if (inspection.getOrganization().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites)) {
-			inspection.setCustomer(inspection.getJobSite().getCustomer());
-			inspection.setDivision(inspection.getJobSite().getDivision());
-		}
 	}
 
 	private Status calculateInspectionResult(Inspection inspection) {
@@ -461,15 +451,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	@Interceptors({AuditInterceptor.class})
 	@CustomAuditHandler(UpdateInspectionAuditHandler.class)
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		/*
-		 * if the inspector has changed, we need to make sure the inspection is
-		 * updated to the new organization since we have no good way to tell if
-		 * this has changed, we'll just set it everytime
-		 */
-		inspection.setOrganization(inspection.getInspector().getOrganization());
-
 		setProofTestData(inspection, fileData);
-		copyCustomerDivisionFromJobSite(inspection);
 		updateDeficiencies(inspection.getResults());
 		inspection = persistenceManager.update(inspection, userId);
 		
@@ -485,9 +467,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	private void updateScheduleOwnerShip(Inspection inspection, Long userId) {
 		InspectionSchedule schedule = inspection.getSchedule();
 		if (schedule != null) {
-			schedule.setJobSite(inspection.getJobSite());
-			schedule.setCustomer(inspection.getCustomer());
-			schedule.setDivision(inspection.getDivision());
+			schedule.setOwner(inspection.getOwner());
 			schedule.setLocation(inspection.getLocation());
 			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
 		}
@@ -515,7 +495,6 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	public Inspection retireInspection(Inspection inspection, Long userId) {
 		inspection.retireEntity();
-		copyCustomerDivisionFromJobSite(inspection);
 		inspection = persistenceManager.update(inspection, userId);
 		updateProductInspectionDate(inspection.getProduct());
 		inspection.setProduct(persistenceManager.update(inspection.getProduct()));
@@ -680,9 +659,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		// pushes the location and the ownership to the product based on the
 		// inspections data.
-		product.setJobSite(inspection.getJobSite());
-		product.setOwner(inspection.getCustomer());
-		product.setDivision(inspection.getDivision());
+		product.setOwner(inspection.getOwner());
 		product.setLocation(inspection.getLocation());
 
 		product.setProductStatus(productStatus);
@@ -717,7 +694,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
 
-		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, "i");
+		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
 
 		qBuilder.setMaxSelect("date");
 		qBuilder.addSimpleWhere("product.id", product.getId());
@@ -740,8 +717,6 @@ public class InspectionManagerImpl implements InspectionManager {
 	}
 
 	public InspectionBook findInspectionBook(String name, SecurityFilter filter) {
-		filter.setTargets("tenant.id", "customer.id", null);
-
 		QueryBuilder<InspectionBook> qBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
 		qBuilder.setSimpleSelect().addSimpleWhere("name", name);
 
@@ -756,8 +731,6 @@ public class InspectionManagerImpl implements InspectionManager {
 	}
 
 	public InspectionBook findInspectionBookByLegacyId(Long id, SecurityFilter filter) {
-		filter.setTargets("tenant.id", "customer.id", null);
-
 		QueryBuilder<InspectionBook> qBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
 		qBuilder.setSimpleSelect().addSimpleWhere("legacyId", id);
 
@@ -775,39 +748,25 @@ public class InspectionManagerImpl implements InspectionManager {
 		return findAvailableInspectionBooksLP(filter, withClosed, null, false);
 	}
 
-	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, Long customerId) {
-		return findAvailableInspectionBooksLP(filter, withClosed, customerId, true);
+	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, BaseOrg owner) {
+		return findAvailableInspectionBooksLP(filter, withClosed, owner, true);
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, Long customerId, boolean useCustomer) {
-		filter.setTargets("tenant.id", "customer.id", null);
+	private List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, BaseOrg owner, boolean useCustomer) {
+		QueryBuilder<ListingPair> builder = new QueryBuilder<ListingPair>(InspectionBook.class, filter);
 
-		String queryString = "select new com.n4systems.util.ListingPair( ib.id, ib.name ) from InspectionBook ib where " + filter.produceWhereClause();
-
-		if (customerId != null) {
-			queryString += " AND customer.id = :customerId ";
-		} else if (useCustomer) {
-			queryString += " AND customer.id IS NULL ";
-		}
-		queryString += " order by ib.name";
-
-		Query query = em.createQuery(queryString);
-		filter.applyParamers(query);
-		if (customerId != null) {
-			query.setParameter("customerId", customerId);
-		}
-
-		return query.getResultList();
+		builder.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name"));
+		builder.applyFilter(new OwnerFilter(owner));
+		builder.addOrder("name");
+		
+		return persistenceManager.findAll(builder);
 	}
 
 	/**
 	 * @return A list of InspectionBooks for the given SecurityFilter
 	 */
 	public List<InspectionBook> findAvailableInspectionBooks(SecurityFilter filter, boolean withClosed) {
-
-		filter.setTargets("tenant.id", "customer.id", null);
-
 		QueryBuilder<InspectionBook> qBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
 		qBuilder.setSimpleSelect("book", true);
 
@@ -851,8 +810,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	 * this should be removed once the legacyEventId is no longer needed
 	 */
 	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId) {
-		SecurityFilter filter = new SecurityFilter(tenantId);
-		filter.setTargets("tenant.id", null, null);
+		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		QueryBuilder<InspectionType> qBuilder = new QueryBuilder<InspectionType>(InspectionType.class, filter);
 		qBuilder.setSimpleSelect().addSimpleWhere("legacyEventId", eventId);
@@ -877,8 +835,6 @@ public class InspectionManagerImpl implements InspectionManager {
 		boolean setDivisionInfo = (divisionIds != null && divisionIds.size() > 0);
 		boolean setJobSiteInfo = (jobSiteIds != null && jobSiteIds.size() > 0);
 
-		securityFilter.setTargets("i.tenant.id");
-
 		String selectStatement = " from InspectionGroup ig ";
 
 		String whereClause = "where ig.id in (select i.group.id from Inspection i where ( ";
@@ -891,7 +847,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 
 		if (setDivisionInfo) {
-			whereClause += "i.product.division.id in (:divisionIds)";
+			whereClause += "i.product.owner.division_id in (:divisionIds)";
 
 			if (setJobSiteInfo) {
 				whereClause += "or ";
@@ -902,7 +858,7 @@ public class InspectionManagerImpl implements InspectionManager {
 			whereClause += "i.product.jobSite.id in (:jobSiteIds)";
 		}
 
-		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause() + ")";
+		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Inspection.class, "i") + ")";
 
 		Query query = em.createQuery("select ig " + selectStatement + whereClause + " ORDER BY ig.id");
 		if (setCustomerInfo)
@@ -911,7 +867,7 @@ public class InspectionManagerImpl implements InspectionManager {
 			query.setParameter("divisionIds", divisionIds);
 		if (setJobSiteInfo)
 			query.setParameter("jobSiteIds", jobSiteIds);
-		securityFilter.applyParamers(query);
+		securityFilter.applyParameters(query, Inspection.class);
 
 		Query countQuery = em.createQuery("select count( ig.id ) " + selectStatement + whereClause);
 		if (setCustomerInfo)
@@ -920,7 +876,7 @@ public class InspectionManagerImpl implements InspectionManager {
 			countQuery.setParameter("divisionIds", divisionIds);
 		if (setJobSiteInfo)
 			countQuery.setParameter("jobSiteIds", jobSiteIds);
-		securityFilter.applyParamers(countQuery);
+		securityFilter.applyParameters(countQuery, Inspection.class);
 
 		return new Page<InspectionGroup>(query, countQuery, page, pageSize);
 	}
@@ -929,23 +885,21 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		List<Long> jobIds = searchCriteria.getJobIds();
 
-		securityFilter.setTargets("i.tenant.id");
-
 		String selectStatement = " from InspectionGroup ig ";
 
 		String whereClause = "where ig.id in (select i.group.id from Inspection i where ( ";
 		
 		whereClause += "i.product.id in (select sch.product.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
 
-		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause() + ")";
+		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(InspectionGroup.class, "i") + ")";
 
 		Query query = em.createQuery("select ig " + selectStatement + whereClause + " ORDER BY ig.id");
 		query.setParameter("jobIds", jobIds);
-		securityFilter.applyParamers(query);
+		securityFilter.applyParameters(query, InspectionGroup.class);
 
 		Query countQuery = em.createQuery("select count( ig.id ) " + selectStatement + whereClause);
 		countQuery.setParameter("jobIds", jobIds);
-		securityFilter.applyParamers(countQuery);
+		securityFilter.applyParameters(countQuery, InspectionGroup.class);
 
 		return new Page<InspectionGroup>(query, countQuery, page, pageSize);
 	}

@@ -7,7 +7,7 @@ import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 public class AllInspectionHelper {
 	

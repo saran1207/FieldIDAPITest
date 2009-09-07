@@ -42,7 +42,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, CustomerManager customerManager,
 			CommentTemp commentTemplateManager, SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 
-		super(persistenceManager, inspectionManager, userManager, legacyProductManager, customerManager, commentTemplateManager, safetyNetworkManager, productManager, inspectionScheduleManager);
+		super(persistenceManager, inspectionManager, userManager, legacyProductManager, commentTemplateManager, safetyNetworkManager, productManager, inspectionScheduleManager);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			return MISSING;
 		}
 
-		Product masterProduct = persistenceManager.find(Product.class, masterInspectionHelper.getMasterProduct().getId(), getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id"), "type.subTypes");
+		Product masterProduct = persistenceManager.find(Product.class, masterInspectionHelper.getMasterProduct().getId(), getSecurityFilter(), "type.subTypes");
 		masterProduct = productManager.fillInSubProductsOnProduct(masterProduct);
 		masterInspectionHelper.setMasterProduct(masterProduct);
 
@@ -248,7 +248,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			}
 		
 			inspection.setInfoOptionMap(decodeMapKeys(inspection.getInfoOptionMap()));
-			inspection.setOrganization(inspection.getInspector().getOrganization());
+			inspection.setOwner(inspection.getInspector().getOwner());
 			inspection.setDate(convertDateTime(inspectionDate));
 			
 			masterInspectionHelper.setSchedule(inspectionSchedule);
@@ -291,7 +291,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		if (productId == null) {
 			parentProduct = null;
 		} else if (parentProduct == null || !productId.equals(parentProduct.getId())) {
-			parentProduct = persistenceManager.find(Product.class, productId, getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id"), "type.inspectionTypes", "infoOptions");
+			parentProduct = persistenceManager.find(Product.class, productId, getSecurityFilter(), "type.inspectionTypes", "infoOptions");
 			parentProduct = productManager.fillInSubProductsOnProduct(parentProduct);
 		}
 	}

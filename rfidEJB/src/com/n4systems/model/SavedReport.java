@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,13 +17,15 @@ import org.hibernate.annotations.IndexColumn;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name="savedreports")
-public class SavedReport extends EntityWithTenant implements NamedEntity, Listable<Long> {
+public class SavedReport extends EntityWithTenant implements NamedEntity, Listable<Long>, HasUser {
 	private static final long serialVersionUID = 1L;
 	public static final String TO_DATE = "toDate";
 	public static final String FROM_DATE = "fromDate";
@@ -34,15 +37,18 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String INSPECTOR = "inspector";
 	public static final String INSPECTION_TYPE_GROUP = "inspectionTypeGroup";
 	public static final String INSPECTION_BOOK = "inspectionBook";
-	public static final String DIVISION_ID = "divisionId";
 	public static final String SERIAL_NUMBER = "serialNumber";
 	public static final String RFID_NUMBER = "rfidNumber";
 	public static final String ORDER_NUMBER = "orderNumber";
 	public static final String PURCHASE_ORDER_NUMBER = "purchaseOrderNumber";
-	public static final String CUSTOMER_ID = "customerId";
 	public static final String JOB_ID = "jobId";
 	public static final String REFERENCE_NUMBER = "referenceNumber";
 	public static final String LOCATION = "location";
+	public static final String OWNER_ID = "ownerId";
+	
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(SavedReport.class);
+	}
 	
 	@Column(nullable=false, length=255)
 	private String name;
@@ -57,7 +63,8 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	private List<String> columns = new ArrayList<String>();
 	
 	@ManyToOne(optional=false)
-	private UserBean owner;
+	@JoinColumn(name="user_id", updatable=false)
+	private UserBean user;
 	
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	private Map<String, String> criteria = new HashMap<String, String>(); 
@@ -135,12 +142,12 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 		this.sortColumn = sortColumn;
 	}
 
-	public UserBean getOwner() {
-		return owner;
+	public UserBean getUser() {
+		return user;
 	}
 
-	public void setOwner(UserBean owner) {
-		this.owner = owner;
+	public void setUser(UserBean owner) {
+		this.user = owner;
 	}
 
 	public Map<String, String> getCriteria() {

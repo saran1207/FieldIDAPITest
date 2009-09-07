@@ -6,8 +6,8 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Product;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class ProductAttachmentListLoader extends ListLoader<ProductAttachment> {
@@ -22,7 +22,6 @@ public class ProductAttachmentListLoader extends ListLoader<ProductAttachment> {
 		if (product == null) {
 			throw new InvalidArgumentException("you must have a product to load product attachments");
 		}
-		ProductAttachment.prepareFilter(filter);
 		QueryBuilder<ProductAttachment> builder = new QueryBuilder<ProductAttachment>(ProductAttachment.class, filter);
 		builder.addSimpleWhere("product", product).addOrder("id");
 		

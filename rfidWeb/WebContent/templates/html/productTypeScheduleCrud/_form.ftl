@@ -16,7 +16,7 @@
 				</#if> 
 			</@s.select>
 		<#else>
-			${ (schedule.customer.name )! }<@s.hidden name="customer" />
+			${ (schedule.owner.name )! }<@s.hidden name="customer" />
 			
 		</#if>
 	</span>

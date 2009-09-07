@@ -5,6 +5,7 @@ package com.n4systems.model.catalog;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -18,7 +19,7 @@ public class CatalogLoader extends Loader<Catalog> {
 
 	@Override
 	protected Catalog load(EntityManager em) {
-		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedProductTypes", "publishedInspectionTypes");
+		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedProductTypes", "publishedInspectionTypes");
 		return query.getSingleResult(em);
 	}
 

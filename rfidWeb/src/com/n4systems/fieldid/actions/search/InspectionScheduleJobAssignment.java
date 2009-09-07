@@ -6,7 +6,6 @@ import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -23,9 +22,9 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	
 	private Project job;
 	
-	public InspectionScheduleJobAssignment(CustomerManager customerManager, LegacyProductType productTypeManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager,
+	public InspectionScheduleJobAssignment(LegacyProductType productTypeManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager,
 			InspectionManager inspectionManager, User userManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, customerManager, productTypeManager, productSerialManager, persistenceManager, inspectionManager, userManager, productManager, inspectionScheduleManager);
+		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, productTypeManager, productSerialManager, persistenceManager, inspectionManager, userManager, productManager, inspectionScheduleManager);
 	}
 
 	private void testRequiredEntities() {
@@ -39,9 +38,7 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	public String doStartSearch() {
 		testRequiredEntities();
 		getContainer().setJobAndNullId(job.getId());
-		getContainer().setJobSite((job.getJobSite() != null) ? job.getJobSite().getId() : null);
-		getContainer().setCustomer((job.getCustomer() != null) ? job.getCustomer().getId() : null);
-		getContainer().setDivision((job.getDivision() != null) ? job.getDivision().getId() : null);
+		getContainer().setOwner(job.getOwner().getId());
 		return doCreateSearch();
 	}
 	
@@ -70,7 +67,7 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 		if (jobId == null) {
 			job = null;
 		} else if (job == null || !jobId.equals(job.getId())) {
-			QueryBuilder<Project> eventJob = new QueryBuilder<Project>(Project.class, getSecurityFilter().setDefaultTargets());
+			QueryBuilder<Project> eventJob = new QueryBuilder<Project>(Project.class, getSecurityFilter());
 			eventJob.addSimpleWhere("eventJob",true).addSimpleWhere("id", jobId);
 			job = persistenceManager.find(eventJob);
 		}
@@ -85,7 +82,7 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	}
 	
 	public Long getJobForSchedule(String scheduleId) {
-		QueryBuilder<Long> jobId = new QueryBuilder<Long>(InspectionSchedule.class, getSecurityFilter().setDefaultTargets());
+		QueryBuilder<Long> jobId = new QueryBuilder<Long>(InspectionSchedule.class, getSecurityFilter());
 		jobId.setSimpleSelect("project.id").addLeftJoin("project", "project").addSimpleWhere("id", Long.valueOf(scheduleId));
 		return persistenceManager.find(jobId);
 	}

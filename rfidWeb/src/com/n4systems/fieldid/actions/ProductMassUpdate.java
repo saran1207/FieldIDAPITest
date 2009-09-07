@@ -18,10 +18,9 @@ import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.search.ProductSearchAction;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
@@ -34,8 +33,6 @@ public class ProductMassUpdate extends MassUpdate {
 	private ProductSearchContainer criteria;
 
 	private Product product = new Product();
-
-	private List<ListingPair> jobSites;
 	private List<ListingPair> employees;
 	
 	private String identified;
@@ -47,11 +44,11 @@ public class ProductMassUpdate extends MassUpdate {
 	}
 
 	private void applyCriteriaDefaults() {
-		setCustomer(criteria.getCustomer());
-		setDivision(criteria.getDivision());
+		BaseOrg owner = getOrgLoader().setId(criteria.getOwner()).load();
+		setOwner(owner);
+		
 		setProductStatus(criteria.getProductStatus());
 		setPurchaseOrder(criteria.getPurchaseOrder());
-		setJobSite(criteria.getJobSite());
 		setAssignedUser(criteria.getAssingedUser());
 	}
 
@@ -106,6 +103,10 @@ public class ProductMassUpdate extends MassUpdate {
 		return INPUT;
 	}
 
+	public FilteredIdLoader<BaseOrg> getOrgLoader() {
+		return getLoaderFactory().createFilteredIdLoader(BaseOrg.class);
+	}
+	
 	private boolean findCriteria() {
 		if (getSession().containsKey(ProductSearchAction.SEARCH_CRITERIA) && getSession().get(ProductSearchAction.SEARCH_CRITERIA) != null) {
 			criteria = (ProductSearchContainer)getSession().get(ProductSearchAction.SEARCH_CRITERIA);
@@ -117,30 +118,12 @@ public class ProductMassUpdate extends MassUpdate {
 		return true;
 	}
 
-	public Long getCustomer() {
-		return (product.getOwner() == null) ? null : product.getOwner().getId();
+	public BaseOrg getOwner() {
+		return product.getOwner();
 	}
-
-	public void setCustomer(Long customer) {
-		if (customer == null) {
-			product.setOwner(null);
-		} else if (product.getOwner() == null || !customer.equals(product.getOwner().getId())) {
-			Customer customerBean = customerManager.findCustomer(customer, getSecurityFilter());
-			product.setOwner(customerBean);
-		}
-	}
-
-	public Long getDivision() {
-		return (product.getDivision() == null) ? null : product.getDivision().getId();
-	}
-
-	public void setDivision(Long division) {
-		if (division == null) {
-			product.setDivision(null);
-		} else if (product.getDivision() == null || !division.equals(product.getDivision().getId())) {
-			Division divisionBean = customerManager.findDivision(division, getSecurityFilter());
-			product.setDivision(divisionBean);
-		}
+	
+	public void setOwner(BaseOrg owner) {
+		product.setOwner(owner);
 	}
 
 	public Long getProductStatus() {
@@ -171,42 +154,9 @@ public class ProductMassUpdate extends MassUpdate {
 	public void setPurchaseOrder(String purcahseOrder) {
 		product.setPurchaseOrder(purcahseOrder);
 	}
-	
-	public Collection<ListingPair> getCustomers() {
-		return customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-	}
-
-	public Collection<ListingPair> getDivisions() {
-		Collection<ListingPair> divisions = new ArrayList<ListingPair>();
-		if (getCustomer() != null) {
-			divisions = customerManager.findDivisionsLP(getCustomer(), getSecurityFilter());
-		}
-
-		return divisions;
-	}
 
 	public Collection<ProductStatusBean> getProductStatuses() {
 		return productSerialManager.getAllProductStatus(getTenantId());
-	}
-
-	public Long getJobSite() {
-		return ( product.getJobSite() != null ) ? product.getJobSite().getId() : null;
-	}
-
-	
-	public void setJobSite( Long jobSite ) {
-		if (jobSite == null) {
-			product.setJobSite( null );
-		} else if (product.getJobSite() == null || !jobSite.equals(product.getJobSite().getId())) {
-			product.setJobSite( persistenceManager.find( JobSite.class, jobSite, getSecurityFilter().setDefaultTargets() ) );
-		}
-	}
-
-	public List<ListingPair> getJobSites() {
-		if( jobSites == null ) {
-			jobSites = persistenceManager.findAllLP( JobSite.class, getSecurityFilter().setDefaultTargets(), "name" );
-		}
-		return jobSites;
 	}
 	
 	public Long getAssignedUser() {

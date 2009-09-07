@@ -10,22 +10,20 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.DownloadManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.reporting.PathHandler;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class SecureFileAccess extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SecureFileAccess.class);
-	
-	private DownloadManager downloadManager;
+
 	private User userManager;
 	private String downloadPath; 
 	
-	public SecureFileAccess(DownloadManager downloadManager, User userManager, PersistenceManager persistenceManager) {
+	public SecureFileAccess(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.downloadManager = downloadManager;
 		this.userManager = userManager;
 	}
 	
@@ -45,8 +43,7 @@ public class SecureFileAccess extends AbstractAction {
 		try {
 			UserBean user = userManager.getUser(getSessionUser().getUniqueID());
 			
-			File downloadFile = downloadManager.getFile(getDownloadPath(), user);
-			
+			File downloadFile = PathHandler.getUserFile(user, getDownloadPath());
 			
 			if (downloadFile.exists()) {
 				InputStream fileIn = new FileInputStream(downloadFile);

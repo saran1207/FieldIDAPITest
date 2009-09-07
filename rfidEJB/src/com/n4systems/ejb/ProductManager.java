@@ -14,11 +14,11 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.SubProduct;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.ProductTypeRemovalSummary;
-import com.n4systems.util.SecurityFilter;
 
 @Local
 public interface ProductManager {

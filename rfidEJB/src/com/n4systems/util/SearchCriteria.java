@@ -8,6 +8,7 @@ import com.n4systems.fieldid.tools.reports.ColumnDefinition;
 import com.n4systems.fieldid.tools.reports.TableStructure;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 
@@ -23,9 +24,6 @@ public class SearchCriteria extends AbstractSearchCriteria<Product> {
 	
 	public SearchCriteria(SecurityFilter filter, TableStructure reportStructure) {
 		super(filter, reportStructure);
-		
-		getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id");
-		
 		queryBuilder = new QueryBuilder<Product>(Product.class, getSecurityFilter());
 		// we don't want deleted inspections
 		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "product_retired", "state", EntityState.ACTIVE );
@@ -69,7 +67,7 @@ public class SearchCriteria extends AbstractSearchCriteria<Product> {
 	}
 
 	public void setDivision(Long division) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "division.id", division);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "owner.division_id", division);
 	}
 
 	public String getOrderNumber() {

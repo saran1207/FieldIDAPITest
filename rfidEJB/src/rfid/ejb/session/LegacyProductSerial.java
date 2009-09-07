@@ -16,7 +16,7 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
 import com.n4systems.model.Tenant;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 @Local 
 public interface LegacyProductSerial {

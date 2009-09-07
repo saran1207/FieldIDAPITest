@@ -6,12 +6,11 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
-import com.n4systems.model.Customer;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -19,12 +18,11 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class CustomerUserCrud extends AnyCustomerUserCrud {
 	private static final long serialVersionUID = 1L;
 	
-	private Customer customer;
+	private CustomerOrg customer;
 	
-	public CustomerUserCrud( User userManager, CustomerManager customerManager, PersistenceManager persistenceManager ) {
-		super(userManager, customerManager, persistenceManager);
+	public CustomerUserCrud( User userManager, PersistenceManager persistenceManager ) {
+		super(userManager, persistenceManager);
 	}
-	
 	
 	private void testRequiredEntities(boolean existing) {
 		if (customer == null) {
@@ -85,13 +83,12 @@ public class CustomerUserCrud extends AnyCustomerUserCrud {
 	
 	public Pager<UserBean> getPage() {
 		if( page == null ) {
-			QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, getSecurityFilter().setTargets("tenant.id"));
+			QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, getSecurityFilter());
 			
 			builder.addOrder("firstName", "lastName");
 			builder.addSimpleWhere("active", true);
 			builder.addSimpleWhere("deleted", false);
-			builder.addSimpleWhere("r_EndUser", customer.getId());
-			
+			builder.addSimpleWhere("owner.id", customer.getId());
 			
 			page = persistenceManager.findAllPaged(builder, getCurrentPage(), Constants.PAGE_SIZE);
 		}
@@ -107,12 +104,12 @@ public class CustomerUserCrud extends AnyCustomerUserCrud {
 		if (customerId == null) {
 			customer = null; 
 		} else if(customer == null || !customer.getId().equals(customerId)) {
-			customer = getLoaderFactory().createFilteredIdLoader(Customer.class).setId(customerId).load();
+			customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(customerId).load();
 		}
-		super.setCustomerId(customerId);
+		setOwner(customer);;
 	}
 	
-	public Customer getCustomer() {
+	public CustomerOrg getCustomer() {
 		return customer;
 	}
 }

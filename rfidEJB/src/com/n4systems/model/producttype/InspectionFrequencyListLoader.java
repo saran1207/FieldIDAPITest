@@ -6,8 +6,8 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class InspectionFrequencyListLoader extends ListLoader<ProductTypeSchedule> {
@@ -30,7 +30,7 @@ public class InspectionFrequencyListLoader extends ListLoader<ProductTypeSchedul
 	}
 
 	private List<ProductTypeSchedule> createQuery(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductTypeSchedule> builder = new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, filter.prepareFor(ProductTypeSchedule.class));
+		QueryBuilder<ProductTypeSchedule> builder = new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, filter);
 		
 		if (inspectionTypeId != null) { 
 			builder.addSimpleWhere("inspectionType.id", inspectionTypeId); 

@@ -55,8 +55,48 @@ public class PrimaryOrg extends InternalOrg {
 
 	public PrimaryOrg() {}
 	
+	@Override
 	public PrimaryOrg getPrimaryOrg() {
 		return this;
+	}
+	
+	@Override
+	public InternalOrg getInternalOrg() {
+		return this;
+	}
+
+	@Override
+	public CustomerOrg getCustomerOrg() {
+		return null;
+	}
+
+	@Override
+	public DivisionOrg getDivisionOrg() {
+		return null;
+	}
+
+	@Override
+	protected Long getSecondaryOrgId() {
+		return null;
+	}
+	
+	@Override
+	protected Long getCustomerOrgId() {
+		return null;
+	}
+
+	@Override
+	protected Long getDivisionOrgId() {
+		return null;
+	}
+	
+	public String getFilterPath() {
+		return null;
+	}
+
+	@Override
+	public BaseOrg getParent() {
+		return null;
 	}
 	
 	public TenantLimit getLimits() {
@@ -122,5 +162,4 @@ public class PrimaryOrg extends InternalOrg {
 	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
 	}
-
 }

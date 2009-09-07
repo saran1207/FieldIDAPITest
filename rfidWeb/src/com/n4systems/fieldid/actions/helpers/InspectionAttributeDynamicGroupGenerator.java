@@ -8,8 +8,7 @@ import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectiontype.CommonInspectionAttributeNameListLoader;
-import com.n4systems.model.security.SecurityFilterFactory;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 public class InspectionAttributeDynamicGroupGenerator {
 	
@@ -33,7 +32,7 @@ public class InspectionAttributeDynamicGroupGenerator {
 			int order = 1024;
 			if (inspectionTypeId != null) {
 				// when a product type has been selected, we will use all the infofields from the product type
-				InspectionType productType = persistenceManager.find(InspectionType.class, inspectionTypeId, SecurityFilterFactory.prepare(InspectionType.class, filter), "infoFieldNames");
+				InspectionType productType = persistenceManager.find(InspectionType.class, inspectionTypeId, filter, "infoFieldNames");
 				
 				// construct and add our field mappings
 				for (String fieldName: productType.getInfoFieldNames()) {

@@ -13,8 +13,8 @@ import com.n4systems.model.Order;
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.Order.OrderType;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.plugins.integration.OrderResolver;
-import com.n4systems.util.SecurityFilter;
 
 @Local
 public interface OrderManager {

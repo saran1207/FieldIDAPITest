@@ -7,6 +7,7 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.security.SecurityDefiner;
 
 // this class this just temporary while we refactor the legacy beans to use the new AbstractEntity
 // Once a been is moved to it's new version, OrganizationAndTenant should be replaced with EntityWithTenant
@@ -14,11 +15,13 @@ import com.n4systems.model.api.HasTenant;
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class LegacyBeanTenantWithCreateModifyDate extends LegacyEntityCreateModifyDate implements HasTenant {
-	public static final String columnName = "tenant_id";
-	public static final String TENANT_ID_FIELD = "tenant.id";
+	
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(LegacyBeanTenantWithCreateModifyDate.class);
+	}
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = columnName)
+	@JoinColumn(name = "tenant_id")
 	private Tenant tenant;
 	
 	public Tenant getTenant() {

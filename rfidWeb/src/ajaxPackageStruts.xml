@@ -275,13 +275,6 @@
 			<result name="success" type="freemarker">/templates/ajax/projectAttachProduct/list.ftl</result>
 			<result name="oneFound" type="freemarker">/templates/ajax/projectAttachProduct/oneFound.ftl</result>
 		</action>
-		
-		
-
-		<action name="jobSite" method="show"
-			class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
-			<result name="success" type="freemarker">/templates/ajax/jobSites/show.ftl</result>
-		</action>
 
 		<action name="generateSerialNumber" method="generateSerialNumber"
 			class="com.n4systems.fieldid.actions.product.ProductUtilAction">

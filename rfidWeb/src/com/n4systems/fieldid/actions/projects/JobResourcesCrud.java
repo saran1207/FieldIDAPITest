@@ -46,7 +46,7 @@ public class JobResourcesCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		employee = persistenceManager.findLegacy(UserBean.class, uniqueId, getSecurityFilter().setTargets("tenant.id"));
+		employee = persistenceManager.findLegacy(UserBean.class, uniqueId, getSecurityFilter());
 	}
 	
 	private void testRequiredEntities(boolean employeeNeeded) {
@@ -135,7 +135,7 @@ public class JobResourcesCrud extends AbstractCrud {
 		if (jobId == null) {
 			job = null;
 		} else if (job == null || !jobId.equals(job.getId())) {
-			job = persistenceManager.find(Project.class, jobId, getSecurityFilter().setDefaultTargets());
+			job = persistenceManager.find(Project.class, jobId, getSecurityFilter());
 		}
 	}
 

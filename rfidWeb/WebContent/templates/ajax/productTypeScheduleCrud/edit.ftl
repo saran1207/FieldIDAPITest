@@ -2,8 +2,8 @@
 <#assign html>
 	<#include "/templates/html/productTypeScheduleCrud/_form.ftl" >
 </#assign>
-<#if schedule.customer?exists>
-	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.customer.id}"/>
+<#if schedule.owner.customer>
+	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.owner.id}"/>
 <#else>
 	<#assign containerId="eventFrequency_${inspectionTypeId}" />
 </#if>

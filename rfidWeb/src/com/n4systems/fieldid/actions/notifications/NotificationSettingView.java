@@ -21,9 +21,6 @@ public class NotificationSettingView implements Serializable {
 	private String periodEnd;
 	private Long productTypeId;
 	private Long inspectionTypeId;
-	private Long customerId;
-	private Long divisionId;
-	private Long jobSiteId;
 	private List<String> addresses = new ArrayList<String>();
 
 	public NotificationSettingView() {}
@@ -107,30 +104,6 @@ public class NotificationSettingView implements Serializable {
 
 	public void setInspectionTypeId(Long inspectionTypeId) {
     	this.inspectionTypeId = inspectionTypeId;
-    }
-
-	public Long getCustomerId() {
-    	return customerId;
-    }
-
-	public void setCustomerId(Long customerId) {
-    	this.customerId = customerId;
-    }
-
-	public Long getDivisionId() {
-    	return divisionId;
-    }
-
-	public void setDivisionId(Long divisionId) {
-    	this.divisionId = divisionId;
-    }
-
-	public Long getJobSiteId() {
-    	return jobSiteId;
-    }
-
-	public void setJobSiteId(Long jobSiteId) {
-    	this.jobSiteId = jobSiteId;
     }
 
 	public List<String> getAddresses() {

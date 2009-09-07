@@ -12,11 +12,11 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
-import com.n4systems.model.Division;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
 public class CustomerInformationCrud extends AbstractCrud {
@@ -29,9 +29,6 @@ public class CustomerInformationCrud extends AbstractCrud {
 	private LegacyProductSerial legacyProductManager;
 	
 	private List<Listable<Long>> divisions;
-	private List<Listable<Long>> jobSites;
-	
-	
 	
 	public CustomerInformationCrud(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerial) {
 		super(persistenceManager);
@@ -40,13 +37,11 @@ public class CustomerInformationCrud extends AbstractCrud {
 	}
 
 	@Override
-	protected void initMemberFields() {
-	}
+	protected void initMemberFields() {}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
-		
 	}
 	
 	private void testRequiredEntities() {
@@ -105,30 +100,13 @@ public class CustomerInformationCrud extends AbstractCrud {
 		product.setPurchaseOrder(purchaseOrder);
 	}
 
-	public Long getDivision() {
-		return (product.getDivision() != null) ? product.getDivision().getId() : null;
-	}
-
-	public Long getJobSite() {
-		return (product.getJobSite() != null) ? product.getJobSite().getId() : null;
+	public BaseOrg getOwner() {
+		return product.getOwner();
 	}
 	
-	public void setDivision(Long division) {
-		if (division == null) {
-			product.setDivision(null);
-		} else if (product.getDivision() == null || !product.getDivision().getId().equals(division)) {
-			product.setDivision(persistenceManager.find(Division.class, division, getTenantId()));
-		}
+	public void setOwner(BaseOrg owner) {
+		product.setOwner(owner);
 	}
-
-	public void setJobSite(Long jobSite) {
-		if (jobSite == null) {
-			product.setDivision(null);
-		} else if (product.getJobSite() == null || !product.getJobSite().getId().equals(jobSite)) {
-			product.setJobSite(persistenceManager.find(JobSite.class, jobSite, getTenantId()));
-		}
-	}
-
 	
 	public Product getProduct() {
 		return product;
@@ -136,17 +114,9 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	public List<Listable<Long>> getDivisions() {
 		if (divisions == null) {
-			
-			divisions = getLoaderFactory().createDivisionListableLoader().load();
+			divisions = getLoaderFactory().createFilteredListableLoader(DivisionOrg.class).load();
 		}
 		return divisions;
-	}
-
-	public List<Listable<Long>> getJobSites() {
-		if (jobSites == null) {
-			jobSites = getLoaderFactory().createJobSiteListableLoader().load();
-		}
-		return jobSites;
 	}
 	
 }

@@ -24,10 +24,9 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.AbstractStringIdEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -102,7 +101,7 @@ public interface PersistenceManager {
 
 	public <T> Pager<T> findAllPaged(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException;
 
-	public <T extends FilteredEntity> int countAllPages(Class<T> entityClass, int pageSize, SecurityFilter filter);
+	public <T> int countAllPages(Class<T> entityClass, int pageSize, SecurityFilter filter);
 
 	public Long findCount(QueryBuilder<?> queryBuilder) throws InvalidQueryException;
 

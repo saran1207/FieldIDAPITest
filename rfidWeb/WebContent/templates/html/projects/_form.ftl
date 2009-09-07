@@ -33,7 +33,7 @@
 		<div class="infoSet">
 			<label for="customer"><@s.text name="label.customer"/> </label>
 			<span id="customerName">
-				${(project.customer.name?html) !}
+				${(project.owner.customerOrg.name?html) !}
 				
 			</span>
 			<@s.hidden name="customer" id="customer" />
@@ -42,7 +42,7 @@
 		<div class="infoSet">
 			<label for="division"><@s.text name="label.division"/> </label>
 			<span id="divisionName">
-				${(project.division.name?html)!}
+				${(project.owner.divisionOrg.name?html)!}
 			</span>
 			<@s.hidden name="division" id="division" />
 		</div>

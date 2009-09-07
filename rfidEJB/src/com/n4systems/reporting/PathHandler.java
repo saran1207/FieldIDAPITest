@@ -16,8 +16,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.util.ConfigContext;
 
@@ -36,13 +35,13 @@ public class PathHandler {
 	private static final String CERTIFICATE_LOGO_IMAGE_FILE_NAME = "certlogo.gif";
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
 	private static final String ORGANIZATION_PATH_PART =  "orgs";
-	private static final String USER_PATH_PART =  "users";
 	private static final String TENANT_IMAGE_PATH_BASE = PRIVATE_PATH_BASE + "/images";
 	private static final String INSPECTION_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
 	private static final String PRODUCT_PATH_BASE = PRIVATE_PATH_BASE + "/products";
 	private static final String PRODUCT_TYPE_PATH_BASE = PRIVATE_PATH_BASE + "/productTypes";
 	private static final String PROJECT_PATH_BASE = PRIVATE_PATH_BASE + "/projects";
 	private static final String CONF_PATH_BASE = PRIVATE_PATH_BASE + "/conf";
+	private static final String USERS_PATH_BASE = PRIVATE_PATH_BASE + "/users";
 	private static final String PRODUCT_TYPE_ATTACHMENT_PATH_BASE = PRODUCT_TYPE_PATH_BASE + "/attachments";
 	private static final String PRODUCT_TYPE_IMAGE_PATH_BASE = PRODUCT_TYPE_PATH_BASE + "/images";
 	private static final String PROJECT_ATTACHMENT_PATH_BASE = PROJECT_PATH_BASE + "/attachments";
@@ -131,7 +130,9 @@ public class PathHandler {
 	 * @return					A File object for this directory
 	 */
 	public static File getTempDir() {
-		return parentize(getTempRoot(), getTempFileName());
+		File tempDir = parentize(getTempRoot(), getTempFileName());
+		tempDir.mkdirs();
+		return tempDir;
 	}
 	
 	/**
@@ -178,9 +179,9 @@ public class PathHandler {
 	 * @param 	organization	An Organization
 	 * @return					A string path representing an Organizations private path
 	 */
-	private static String getOrganizationPathPart(BaseOrg organization) {
+	private static String getOrganizationPathPart(InternalOrg organization) {
 		String path;
-		if (organization instanceof SecondaryOrg) {
+		if (organization.isSecondary()) {
 			path = mergePaths(getTenantPathPart(organization.getTenant()), ORGANIZATION_PATH_PART, organization.getId().toString());
 		} else {
 			path = getTenantPathPart(organization.getTenant());
@@ -189,24 +190,33 @@ public class PathHandler {
 	}
 	
 	/**
-	 * Constructs the private path for a user within a tenant directory.
-	 * @param user	A UserBean
-	 * @return		A string path representing the users private path
+	 * Converts an absolute File to a path relative to {@link #getAppRoot()}.  Warning: using a path that is not a sub-directory of
+	 * {@link #getAppRoot()} will yield unexpected results.
+	 * @param path	Path to convert.
+	 * @return		relative path
 	 */
-	private static String getUserPathPart(UserBean user) {
-		return mergePaths(getUserBasePath(user.getTenant()), user.getId().toString());
+	public static String makeRelative(File path) {
+		return path.getAbsolutePath().substring((int)getAppRoot().getAbsoluteFile().length());
 	}
+	
+//	/**
+//	 * Constructs the private path for a user within a tenant directory.
+//	 * @param user	A UserBean
+//	 * @return		A string path representing the users private path
+//	 */
+//	private static String getUserSignaturePathPart(UserBean user) {
+//		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
+//	}
 	
 	/**
 	 * Returns the base directory for user files for the given tenant.
 	 */
-	public static File getAbsoluteUserBaseFile(Tenant tenant) {
-		return absolutize(getUserBasePath(tenant));
+	public static File getTenantUserBaseFile(Tenant tenant) {
+		return absolutize(getTenantUserBasePath(tenant));
 	}
 	
-	
-	private static String getUserBasePath(Tenant tenant) {
-		return mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(tenant), USER_PATH_PART);
+	private static String getTenantUserBasePath(Tenant tenant) {
+		return mergePaths(USERS_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
 	/**
@@ -451,19 +461,33 @@ public class PathHandler {
 	}
 	
 	/** @return The certificate logo for an Organization */
-	public static File getCertificateLogo(BaseOrg organization) {
+	public static File getCertificateLogo(InternalOrg organization) {
 		File logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getOrganizationPathPart(organization), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
 		
 		// if we're dealing with a SecondaryOrg and the file does not exist, fall back to the tenant
-		if (!logo.exists() && (organization instanceof SecondaryOrg)) {
+		if (!logo.exists() && organization.isSecondary()) {
 			logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(organization.getTenant()), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
 		}
 		
 		return logo;
 	}
 	
+	private static String getUserPrivatePath(UserBean user) {
+		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getUniqueID().toString());
+	}
+
+	/** @return The absolute private directory for a user  */
+	public static File getUserPrivateDir(UserBean user) {
+		return absolutize(getUserPrivatePath(user));
+	}
+	
+	/** @return The path to a file under a users private directory */
+	public static File getUserFile(UserBean user, String fileName) {
+		return new File(getUserPrivateDir(user), fileName);
+	}
+	
 	/** @return The signature image for a user  */
 	public static File getSignatureImage(UserBean user) {
-		return absolutize(mergePaths(getUserPathPart(user), SIGNATURE_IMAGE_FILE_NAME));
+		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
 }

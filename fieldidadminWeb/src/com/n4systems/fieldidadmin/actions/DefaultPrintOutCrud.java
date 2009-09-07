@@ -5,6 +5,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Preparable;
@@ -41,7 +42,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class);
+		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
 		queryBuilder.addSimpleWhere("custom", false);
 		queryBuilder.addOrder("type");
 		queryBuilder.addOrder("name");
@@ -88,7 +89,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 	@SkipValidation
 	public String doDelete() {
 		testRequiredEntities(true);
-		QueryBuilder<InspectionTypeGroup> printOutUsedQuery = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class);
+		QueryBuilder<InspectionTypeGroup> printOutUsedQuery = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class, new OpenSecurityFilter());
 		printOutUsedQuery.addSimpleWhere("printOut", printOut);
 		Long numberOfInspectionGroupsUsingPrintOut = persistenceManager.findCount(printOutUsedQuery);
 		if (numberOfInspectionGroupsUsingPrintOut != 0 ) {

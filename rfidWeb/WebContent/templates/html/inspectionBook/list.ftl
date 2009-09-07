@@ -14,7 +14,7 @@ ${action.setPageType('inspection_book', 'list')!}
 		<#list page.getList() as book > 
 			<tr id="book_${book.id}" >
 				<td><a href="<@s.url action="inspectionBookEdit" uniqueID="${book.id}"/>" >${book.name?html}</a></td>
-				<td>${(book.customer.name?html)!}</td>
+				<td>${(book.owner.name?html)!}</td>
 				<td>${action.formatDateTime(book.created)}</td>
 				<td><span id="bookStatus_${book.id}">${book.open?string( action.getText( "label.open" ), action.getText( "label.closed" ) ) }</td>
 				<td><span id="bookStatusLink_${book.id}">

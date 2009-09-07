@@ -3,7 +3,7 @@ require "organization"
 class TagOption < ActiveRecord::Base
   set_table_name :tagoptions
   
-  belongs_to  :tenant,      :foreign_key => 'r_tenant',   :class_name => 'Organization'
+  belongs_to  :tenant,      :foreign_key => 'tenant_id',   :class_name => 'Tenant'
   
   def self.resolveNewKeyName(legacyKey)
     case legacyKey

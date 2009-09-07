@@ -6,7 +6,7 @@ require "criteria"
 class CriteriaSection < ActiveRecord::Base
   set_table_name :criteriasections
   
-  belongs_to  :tenant,              :foreign_key => 'r_tenant',             :class_name => 'Organization'
+  belongs_to  :tenant,              :foreign_key => 'tenant_id',             :class_name => 'Tenant'
   has_one     :inspectionTypeFK,    :foreign_key => 'sections_id',          :class_name => 'InspectionTypeCriteriaSection'
   has_one     :inspectionType,                                              :class_name => 'InspectionType',                :through => :inspectionTypeFK
   has_many    :criteriaFKs,         :foreign_key => 'criteriasections_id',  :class_name => 'CriteriaSectionCriteria',       :order => :orderidx

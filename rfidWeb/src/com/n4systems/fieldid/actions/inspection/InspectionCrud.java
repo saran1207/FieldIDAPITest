@@ -19,7 +19,6 @@ import rfid.ejb.session.CommentTemp;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -46,13 +45,13 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
@@ -68,7 +67,6 @@ public class InspectionCrud extends UploadFileSupport {
 
 	private final InspectionManager inspectionManager;
 	private final LegacyProductSerial legacyProductManager;
-	private final CustomerManager customerManager;
 	private final User userManager;
 	private final CommentTemp commentTemplateManager;
 	private final SafetyNetworkManager safetyNetworkManager;
@@ -97,13 +95,10 @@ public class InspectionCrud extends UploadFileSupport {
 	private String newInspectionBookTitle;
 	
 	private List<SubInspection> subInspections;
-	private List<ListingPair> customers;
-	private List<ListingPair> divisions;
 	private List<ListingPair> inspectors;
 	private List<ProductStatusBean> productStatuses;
 	private List<ListingPair> commentTemplates;
 	private List<ListingPair> inspectionBooks;
-	private List<ListingPair> jobSites;
 	private List<InspectionSchedule> availableSchedules;
 	
 
@@ -120,12 +115,11 @@ public class InspectionCrud extends UploadFileSupport {
 	private String proofTestDirectory;
 	private boolean newFile = false;
 
-	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, CustomerManager customerManager,
+	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
 			CommentTemp commentTemplateManager, SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
 		this.legacyProductManager = legacyProductManager;
-		this.customerManager = customerManager;
 		this.userManager = userManager;
 		this.commentTemplateManager = commentTemplateManager;
 		this.safetyNetworkManager = safetyNetworkManager;
@@ -232,10 +226,8 @@ public class InspectionCrud extends UploadFileSupport {
 
 		// set defaults.
 		productStatus = product.getProductStatus();
-		inspection.setCustomer(product.getOwner());
-		inspection.setDivision(product.getDivision());
+		inspection.setOwner(product.getOwner());
 		inspection.setLocation(product.getLocation());
-		inspection.setJobSite(product.getJobSite());
 		inspection.setDate(DateHelper.getTodayWithTime());
 		setInspector(getSessionUser().getUniqueID());
 		inspection.setPrintable(inspection.getType().isPrintable());
@@ -365,7 +357,6 @@ public class InspectionCrud extends UploadFileSupport {
 			inspection.setGroup(inspectionGroup);
 			inspection.setTenant(getTenant());
 			inspection.setProduct(product);
-			inspection.setOrganization(inspection.getInspector().getOrganization());
 			inspection.setDate(convertDateTime(inspectionDate));
 
 			// setup the next inspection date.
@@ -426,14 +417,14 @@ public class InspectionCrud extends UploadFileSupport {
 				addFieldError("newInspectionBookTitle", getText("error.inspection_book_title_required"));
 				throw new ValidationException("not validated.");
 			}
-			InspectionBookCrud bookCrud = new InspectionBookCrud(persistenceManager, customerManager, inspectionManager);
+			InspectionBookCrud bookCrud = new InspectionBookCrud(persistenceManager, inspectionManager);
 			try {
 				bookCrud.prepare();
 			} catch (Exception e) {
 				addActionErrorText("error.new_saving_inspection_book");
 				throw new PersistenceException("could not save.");
 			}
-			bookCrud.setCustomerId(getCustomer());
+			bookCrud.setOwner(getOwner());
 			bookCrud.setName(newInspectionBookTitle);
 			
 			
@@ -510,13 +501,13 @@ public class InspectionCrud extends UploadFileSupport {
 		addFlashMessage(getText("message.inspectiondeleted"));
 		return SUCCESS;
 	}
-
-	public Long getCustomer() {
-		return (inspection.getCustomer() != null) ? inspection.getCustomer().getId() : null;
+	
+	public BaseOrg getOwner() {
+		return inspection.getOwner();
 	}
-
-	public Long getDivision() {
-		return (inspection.getDivision() != null) ? inspection.getDivision().getId() : null;
+	
+	public void setOwner(BaseOrg owner) {
+		inspection.setOwner(owner);
 	}
 
 	public String getLocation() {
@@ -533,22 +524,6 @@ public class InspectionCrud extends UploadFileSupport {
 
 	public boolean isPrintable() {
 		return inspection.isPrintable();
-	}
-
-	public void setCustomer(Long customer) {
-		if (customer == null) {
-			inspection.setCustomer(null);
-		} else if (inspection.getCustomer() == null || !customer.equals(inspection.getCustomer())) {
-			inspection.setCustomer(customerManager.findCustomer(customer, getSecurityFilter()));
-		}
-	}
-
-	public void setDivision(Long division) {
-		if (division == null) {
-			inspection.setDivision(null);
-		} else if (inspection.getDivision() == null || !division.equals(inspection.getDivision())) {
-			inspection.setDivision(customerManager.findDivision(division, getSecurityFilter()));
-		}
 	}
 
 	public void setLocation(String location) {
@@ -600,22 +575,6 @@ public class InspectionCrud extends UploadFileSupport {
 
 	public Inspection getInspection() {
 		return inspection;
-	}
-
-	public List<ListingPair> getCustomers() {
-		if (customers == null) {
-			customers = customerManager.findCustomersLP(getTenant().getId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
-	public List<ListingPair> getDivisions() {
-		Long customerId = (inspection.getCustomer() != null) ? inspection.getCustomer().getId() : null;
-
-		if (divisions == null) {
-			divisions = customerManager.findDivisionsLP(customerId, getSecurityFilter());
-		}
-		return divisions;
 	}
 
 	public String getNextInspectionDate() {
@@ -753,7 +712,7 @@ public class InspectionCrud extends UploadFileSupport {
 
 	public List<ListingPair> getInspectionBooks() {
 		if (inspectionBooks == null) {
-			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP(getSecurityFilter(), (uniqueID != null), getCustomer());
+			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP(getSecurityFilter(), (uniqueID != null), getOwner());
 		}
 		return inspectionBooks;
 	}
@@ -825,29 +784,6 @@ public class InspectionCrud extends UploadFileSupport {
 
 		return sections.get(inspection);
 
-	}
-
-	public List<ListingPair> getJobSites() {
-		if (jobSites == null) {
-			jobSites = persistenceManager.findAllLP(JobSite.class, getSecurityFilter().setDefaultTargets(), "name");
-		}
-		return jobSites;
-	}
-
-	public Long getJobSite() {
-
-		return (inspection.getJobSite() != null) ? inspection.getJobSite().getId() : null;
-	}
-
-	@CustomValidator(type = "requiredIfFeature", message = "", key = "error.jobsiterequired", parameters = { @ValidationParameter(name = "extendedFeature", value = "JobSites") })
-	public void setJobSite(Long jobSite) {
-
-		if (jobSite == null) {
-			inspection.setJobSite(null);
-		} else if (inspection.getJobSite() == null || !jobSite.equals(inspection.getJobSite().getId())) {
-
-			inspection.setJobSite(persistenceManager.find(JobSite.class, jobSite, getSecurityFilter().setDefaultTargets()));
-		}
 	}
 
 	public File returnFile(String fileName) {
@@ -1017,8 +953,6 @@ public class InspectionCrud extends UploadFileSupport {
 	public boolean isScheduleSuggested() {
 		return scheduleSuggested;
 	}
-
-
 	
 	public Map<String, String> getEncodedInfoOptionMap() {
 		return encodedInfoOptionMap;

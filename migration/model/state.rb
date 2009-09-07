@@ -5,14 +5,14 @@ require "legacy_button_state_mapping"
 class State < ActiveRecord::Base
   set_table_name :states
   
-  belongs_to  :tenant,      :foreign_key => 'r_tenant',   :class_name => 'Organization'
+  belongs_to  :tenant,      :foreign_key => 'tenant_id',   :class_name => 'Tenant'
   has_one     :stateSetFK,  :foreign_key => 'states_id',  :class_name => 'StateSetState'
   has_one     :stateSet,                                  :class_name => 'StateSet',      :through => :stateSetFK
   
   def createLegacyButtonStateMapping(criteria, buttonState)
 
     # we need to check first that there is not already a mapping for this criteria and buttonState (this case is rare but it does exist)
-    lbsmCount = LegacyButtonStateMapping.count(:conditions => ["r_tenant = :tenantId and buttonstateid = :buttonstateid", {:tenantId => self.tenant.id, :buttonstateid => buttonState.uniqueid}])
+    lbsmCount = LegacyButtonStateMapping.count(:conditions => ["tenant_id = :tenantId and buttonstateid = :buttonstateid", {:tenantId => self.tenant.id, :buttonstateid => buttonState.uniqueid}])
     
     if lbsmCount == 0
       puts "Creating LegacyButtonStateMapping for ButtonState [" + buttonState.displayString + "], Criteria [" + criteria.displayString + "] State [" + self.displayString + "]"

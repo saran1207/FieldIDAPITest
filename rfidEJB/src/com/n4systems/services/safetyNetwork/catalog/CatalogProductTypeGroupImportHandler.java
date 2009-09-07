@@ -8,11 +8,11 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
@@ -65,7 +65,7 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	}
 	
 	private Long getNextAvailableIndex() {
-		QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, new SecurityFilter(tenant.getId()).setDefaultTargets());
+		QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, new TenantOnlySecurityFilter(tenant.getId()));
 		return persistenceManager.findCount(query);
 	}
 	

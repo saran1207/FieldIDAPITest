@@ -1,24 +1,23 @@
 package com.n4systems.fieldid.actions.search;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
-import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
-import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
-import com.n4systems.fieldid.viewhelpers.ViewTree;
-import com.n4systems.model.SavedReport;
-import com.n4systems.util.persistence.QueryBuilder;
-
-import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
-import rfid.web.helper.Constants;
-
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import rfid.ejb.entity.UserBean;
+import rfid.ejb.session.User;
+import rfid.web.helper.Constants;
+
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
+import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
+import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
+import com.n4systems.fieldid.viewhelpers.ViewTree;
+import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
+import com.n4systems.model.SavedReport;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
@@ -44,7 +43,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter().setTargets("tenant.id"));
+		QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
 		query.addSimpleWhere("owner.id", getSessionUser().getId());
 		query.addSimpleWhere("id", uniqueId);
 		report = persistenceManager.find(query);
@@ -72,8 +71,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter().setTargets("tenant.id"));
-		query.addSimpleWhere("owner.id", getSessionUser().getId());
+		QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
 		query.addOrder("name");
 		page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
 		return SUCCESS;
@@ -97,7 +95,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		}
 		try {
 			report.setTenant(getTenant());
-			report.setOwner(fetchCurrentUser());
+			report.setUser(fetchCurrentUser());
 										
 			InspectionSearchContainer inspectionSearchContainer = getContainer();
 			inspectionSearchContainer.toSavedReport(report);
@@ -153,7 +151,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 			SavedReport shareReport;
 			for (Long userId: shareUsers) {
 				
-				toUser = persistenceManager.findLegacy(UserBean.class, userId, getSecurityFilter().newFilter().setTargets("tenant.id", "r_EndUser", "r_Division"));
+				toUser = persistenceManager.findLegacy(UserBean.class, userId, getSecurityFilter());
 				shareReport = SavedReportHelper.createdSharedReport(report, fromUser, toUser);
 				
 				persistenceManager.save(shareReport, getSessionUser().getId());
@@ -188,10 +186,9 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	
 	public ViewTree<Long> getShareUserList() {
 		if (shareUserTree == null) {
-			Long customerId = report.getLongCriteria(SavedReport.CUSTOMER_ID);
-			Long divisionId = report.getLongCriteria(SavedReport.DIVISION_ID);
+			Long ownerId = report.getLongCriteria(SavedReport.OWNER_ID);
 
-			shareUserTree = userViewHelp.getUserViewTree(getTenant(), customerId, divisionId, getSessionUser().getId(), getSecurityFilter());
+			shareUserTree = userViewHelp.getUserViewTree(getTenant(), ownerId, getSessionUser().getId(), getSecurityFilter());
 		}
 
 		return shareUserTree;

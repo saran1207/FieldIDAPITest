@@ -56,8 +56,8 @@ ${action.setPageType('job', 'list')!}
 				<#if securityGuard.jobSitesEnabled>
 					<td>${(project.jobSite.name?html)!}</td>
 				<#else>
-					<td>${(project.customer.name?html)!}</td>
-					<td>${(project.division.name?html)!}</td>
+					<td>${(project.owner.customerOrg.name?html)!}</td>
+					<td>${(project.owner.divisionOrg.name?html)!}</td>
 				</#if>
 				<td>${action.formatDateTime(project.started)}</td>
 				<td>${action.formatDateTime(project.estimatedCompletion)}</td>

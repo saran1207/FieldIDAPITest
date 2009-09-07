@@ -50,7 +50,7 @@
 	<p>
 		<label><@s.text name="label.customer"/></label>
 		<#if securityGuard.jobSitesEnabled >
-			<span id="customerName">${(inspection.customer.name)!}</span>
+			<span id="customerName">${(inspection.owner.name)!}</span>
 			<@s.hidden name="customer" id="customer" />
 		<#else>
 			<span>
@@ -67,7 +67,7 @@
 	<p>
 		<label><@s.text name="label.division"/></label>
 		<#if securityGuard.jobSitesEnabled >
-			<span id="divisionName">${(inspection.division.name)!}</span>
+			<span id="divisionName">${(inspection.owner.divisionOrg.name)!}</span>
 			<@s.hidden name="division" id="division"/>
 		<#else>
 			<span>

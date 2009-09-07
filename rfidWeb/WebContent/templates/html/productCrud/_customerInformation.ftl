@@ -15,11 +15,11 @@
 		
 	<p>
 		<label><@s.text name="label.customername"/></label>
-		<span class="fieldValue">${(product.owner.name)!}</span>
+		<span class="fieldValue">${(product.owner.customerOrg.name)!}</span>
 	</p>
 	<p>
 		<label><@s.text name="label.division"/></label>
-		<span class="fieldValue">${(product.division.name)!}</span>
+		<span class="fieldValue">${(product.owner.divisionOrg.name)!}</span>
 	</p>
 	<p>
 		<label><@s.text name="label.location"/></label>

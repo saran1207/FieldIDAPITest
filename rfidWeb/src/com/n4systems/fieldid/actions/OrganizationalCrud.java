@@ -15,11 +15,11 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
-import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
@@ -98,7 +98,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			secondaryOrg.setTenant(primaryOrg.getTenant());
 			secondaryOrg.setPrimaryOrg(primaryOrg);
 			
-			OrganizationSaver saver = new OrganizationSaver();
+			OrgSaver saver = new OrgSaver();
 			saver.save(secondaryOrg);
 
 			processImage();
@@ -153,7 +153,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	public String doUpdate() {
 		testRequiredEntities(true);
 		try {
-			OrganizationSaver saver = new OrganizationSaver();
+			OrgSaver saver = new OrgSaver();
 			saver.update(organization);
 			
 			processImage();

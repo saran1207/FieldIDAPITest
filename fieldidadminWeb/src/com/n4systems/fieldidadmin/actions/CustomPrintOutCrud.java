@@ -6,6 +6,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -17,7 +18,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 	
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class);
+		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
 		queryBuilder.addSimpleWhere("custom", true);
 		queryBuilder.addOrder("type");
 		queryBuilder.addOrder("name");
@@ -42,7 +43,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 	
 	public List<Tenant> getTenants() {
 		if (tenants == null) {
-			QueryBuilder<Tenant> tenantQuery = new QueryBuilder<Tenant>(Tenant.class);
+			QueryBuilder<Tenant> tenantQuery = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 			tenantQuery.addOrder("name");
 			tenants = persistenceManager.findAll(tenantQuery);
 		}

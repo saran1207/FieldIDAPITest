@@ -19,6 +19,7 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -155,7 +156,7 @@ public class ArchiveProductTypeTask implements Runnable {
 		Map<Product, Exception> failedProducts = new HashMap<Product, Exception>();
 		Pager<Product> products;
 
-		QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class);
+		QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
 		queryBuilder.setSimpleSelect().addSimpleWhere("type", type).addSimpleWhere("state", EntityState.ACTIVE);
 
 		while ((products = persistenceManager.findAllPaged(queryBuilder, 1, PAGE_SIZE)).getTotalResults() > 0L) {

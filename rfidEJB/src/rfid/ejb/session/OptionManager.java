@@ -22,7 +22,7 @@ import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.TagOption.OptionKey;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 @Interceptors({TimingInterceptor.class})
@@ -87,8 +87,6 @@ public class OptionManager implements Option {
 	}
 	
 	public List<TagOption> findTagOptions(SecurityFilter filter) {
-		filter.setTargets("tenant.id");
-		
 		QueryBuilder<TagOption> builder = new QueryBuilder<TagOption>(TagOption.class, filter);
 		
 		List<TagOption> tagOptions = null;
@@ -104,8 +102,6 @@ public class OptionManager implements Option {
 	}
 	
 	public TagOption findTagOption(Long id, SecurityFilter filter) {
-		filter.setTargets("tenant.id");
-		
 		QueryBuilder<TagOption> builder = new QueryBuilder<TagOption>(TagOption.class, filter);
 		
 		TagOption tagOption = null;
@@ -121,8 +117,6 @@ public class OptionManager implements Option {
 	}
 	
 	public TagOption findTagOption(OptionKey key, SecurityFilter filter) {
-		filter.setTargets("tenant.id");
-		
 		QueryBuilder<TagOption> builder = new QueryBuilder<TagOption>(TagOption.class, filter);
 		
 		TagOption tagOption = null;

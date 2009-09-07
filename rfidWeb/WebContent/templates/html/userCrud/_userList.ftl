@@ -15,13 +15,7 @@
 			<td>${user.userLabel?html! }</td>
 			<#if userType?exists && userType != "EMPLOYEES" >
 				<td>
-					<#if user.r_EndUser?exists >
-						<#list customers as customer >	
-							<#if customer.id == user.r_EndUser >
-								${customer.name?html}
-							</#if>
-						</#list>
-					</#if> 
+					${(user.owner.name)?html!}
 				</td>
 			</#if>
 			<td>${user.emailAddress?html! } </td>

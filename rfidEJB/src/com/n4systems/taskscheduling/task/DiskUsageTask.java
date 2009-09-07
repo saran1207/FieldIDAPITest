@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.taskscheduling.ScheduledTask;
@@ -43,7 +44,7 @@ public class DiskUsageTask extends ScheduledTask {
 
 	private List<Tenant> getTenants() {
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-		List<Tenant> tenants = persistenceManager.findAll(new QueryBuilder<Tenant>(Tenant.class).addOrder("name"));
+		List<Tenant> tenants = persistenceManager.findAll(new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter()).addOrder("name"));
 		return tenants;
 	}
 

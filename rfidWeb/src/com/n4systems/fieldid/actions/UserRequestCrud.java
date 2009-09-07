@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -11,24 +10,19 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
 public class UserRequestCrud extends AbstractCrud {
@@ -43,17 +37,12 @@ public class UserRequestCrud extends AbstractCrud {
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 
 	private User userManager;
-	private CustomerManager customerManager;
-
-	private Collection<ListingPair> customers;
-	private Collection<ListingPair> divisions;
 	private Collection<ListingPair> organizationalUnits;
 	private List<ListingPair> permissions;
 
-	public UserRequestCrud(User userManager, PersistenceManager persistenceManager, CustomerManager customerManager) {
+	public UserRequestCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
-		this.customerManager = customerManager;
 	}
 
 	@Override
@@ -196,55 +185,12 @@ public class UserRequestCrud extends AbstractCrud {
 		return userRequest;
 	}
 
-	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.customerrequired")
-	public Long getCustomer() {
-		return userRequest.getUserAccount().getR_EndUser();
+	public BaseOrg getOwner() {
+		return userRequest.getUserAccount().getOwner();
 	}
 
-	public void setCustomer(Long customer) {
-		userRequest.getUserAccount().setR_EndUser(customer);
-	}
-
-	public Long getDivision() {
-		return userRequest.getUserAccount().getR_Division();
-	}
-
-	public void setDivision(Long division) {
-		userRequest.getUserAccount().setR_Division(division);
-	}
-
-	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.organizationrequired")
-	public Long getOrganizationalUnit() {
-		return userRequest.getUserAccount().getOrganization().getId();
-	}
-
-	public void setOrganizationalUnit(Long orgId) {
-		try {
-			FilteredIdLoader<BaseOrg> loader = getLoaderFactory().createFilteredIdLoader(BaseOrg.class);
-			loader.setId(orgId);
-			
-			BaseOrg org = loader.load();
-			userRequest.getUserAccount().setOrganization(org);
-		} catch (InvalidQueryException e) {
-			logger.error("Unable to load Organization", e);
-		}
-	}
-
-	public Collection<ListingPair> getCustomers() {
-		if (customers == null) {
-			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
-	public Collection<ListingPair> getDivisions() {
-		if (divisions == null) {
-			divisions = new ArrayList<ListingPair>();
-			if (getCustomer() != null) {
-				divisions = customerManager.findDivisionsLP(getCustomer(), getSecurityFilter());
-			}
-		}
-		return divisions;
+	public void setOwner(BaseOrg owner) {
+		userRequest.getUserAccount().setOwner(owner);
 	}
 
 	public Collection<ListingPair> getOrganizationalUnits() {

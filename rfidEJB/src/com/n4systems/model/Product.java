@@ -11,8 +11,6 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -29,19 +27,14 @@ import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.EntityStateField;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.util.SecurityFilter;
 
 
 @Entity
 @Table(name = "products")
-public class Product extends EntityWithTenant implements Listable<Long>, Archivable, FilteredEntity {
+public class Product extends ArchivableEntityWithOwner implements Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false, length=50)
@@ -62,9 +55,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 	private String uuid;
 	private String linkedUuid;
 	private String mobileGUID;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	private BaseOrg organization;
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -96,15 +86,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 
 	@ManyToOne(optional = true)
 	private UserBean identifiedBy;
-	
-	@ManyToOne(optional = true)
-	private Customer owner;
-    
-    @ManyToOne(optional = true)  
-    private Division division;
-    
-    @ManyToOne(optional = true)
-    private JobSite	jobSite;
     
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigneduser_id")
@@ -113,20 +94,12 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
     @Transient
     private List<SubProduct> subProducts = new ArrayList<SubProduct>();
     
-    @EntityStateField
-    @Enumerated(EnumType.STRING)
-	private EntityState state = EntityState.ACTIVE;
-    
     @ManyToMany( fetch= FetchType.LAZY )
     @JoinTable(name = "projects_products" )
     private List<Project> projects = new ArrayList<Project>();
     
 	public Product() {
 		this.identified = new PlainDate();
-	}
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, "owner.id", "division.id", null, "state");
 	}
 	
 	@Override
@@ -192,8 +165,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	
-
 
 	public String getComments() {
 		return comments;
@@ -201,14 +172,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public Division getDivision() {
-		return division;
-	}
-	
-	public void setDivision(Division division) {
-		this.division = division;
 	}
 
 	public ProductType getType() {
@@ -232,14 +195,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 	@Deprecated
 	public void setProductType(ProductType productType) {
 		setType( productType );
-	}
-	
-	public BaseOrg getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(BaseOrg organization) {
-		this.organization = organization;
 	}
 	
 	public void setInfoOptions(Set<InfoOptionBean> infoOptions) {
@@ -305,14 +260,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 
 	public void setIdentifiedBy(UserBean identifiedBy) {
 		this.identifiedBy = identifiedBy;
-	}
-
-	public Customer getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Customer owner) {
-		this.owner = owner;
 	}
 
 	public Order getCustomerOrder() {
@@ -407,14 +354,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-	public JobSite getJobSite() {
-		return jobSite;
-	}
-
-	public void setJobSite( JobSite jobSite ) {
-		this.jobSite = jobSite;
-	}
 	
     public UserBean getAssignedUser() {
 		return assignedUser;
@@ -446,44 +385,6 @@ public class Product extends EntityWithTenant implements Listable<Long>, Archiva
 		
 		return highestWeight + 1;
 	}
-
-
-	public void activateEntity() {
-		state = EntityState.ACTIVE;
-	}
-
-	public void archiveEntity() {
-		state = EntityState.ARCHIVED;
-	}
-
-	public EntityState getEntityState() {
-		return state;
-	}
-
-	public void retireEntity() {
-		state = EntityState.RETIRED;
-	}
-	
-	public void setRetired( boolean retired ) {
-		if( retired ) {
-			retireEntity();
-		} else  {
-			activateEntity();
-		}
-	}
-	
-	public boolean isRetired() {
-		return state == EntityState.RETIRED;
-	}
-
-	public boolean isActive() {
-		return state == EntityState.ACTIVE;
-	}
-	
-	public boolean isArchived() {
-		return state == EntityState.ARCHIVED;
-	}
-	
 	
 	public void archiveSerialNumber() {
 		archivedSerialNumber = serialNumber;

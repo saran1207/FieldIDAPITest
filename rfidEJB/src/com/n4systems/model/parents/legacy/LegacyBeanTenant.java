@@ -7,14 +7,18 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.security.SecurityDefiner;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class LegacyBeanTenant extends LegacyBaseEntity implements HasTenant {
-	public static final String columnName = "tenant_id";
+	
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(LegacyBeanTenant.class);
+	}
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = columnName)
+	@JoinColumn(name = "tenant_id")
 	private Tenant tenant;
 	
 	public Tenant getTenant() {

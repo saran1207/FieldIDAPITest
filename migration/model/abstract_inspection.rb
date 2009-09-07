@@ -9,7 +9,7 @@ require "inspection_attachment"
 class AbstractInspection < ActiveRecord::Base
 	set_table_name :inspections
   
-  belongs_to  :tenant,          :foreign_key => 'r_tenant',           :class_name => 'Organization'
+  belongs_to  :tenant,          :foreign_key => 'tenant_id',           :class_name => 'Tenant'
   belongs_to  :modifiedBy,      :foreign_key => 'modifiedby',         :class_name => 'User'
   belongs_to  :inspectionType,  :foreign_key => 'type_id',            :class_name => 'InspectionType'
   belongs_to  :product,         :foreign_key => 'product_id',         :class_name => 'Product'

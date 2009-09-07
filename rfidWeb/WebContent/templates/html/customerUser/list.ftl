@@ -20,12 +20,8 @@ ${action.setPageType('customer', 'users')!}
 			<td><a href="<@s.url action="customerUserEdit" uniqueID="${user.uniqueID!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
 			<td>${user.userLabel?html! }</td>
 			<td>
-				<#if user.r_Division?exists>
-					<#list divisions as division >	
-						<#if division.id == user.r_Division >
-							${division.name?html}
-						</#if>
-					</#list>
+				<#if user.owner.division>
+					${user.owner.name}
 				</#if>
 			</td>
 			<td>${user.emailAddress?html! } </td>

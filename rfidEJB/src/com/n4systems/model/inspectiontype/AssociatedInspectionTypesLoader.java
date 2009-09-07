@@ -8,8 +8,9 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspectionType> {
@@ -33,7 +34,7 @@ public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspec
 	}
 
 	private QueryBuilder<AssociatedInspectionType> prepareQuery() {
-		QueryBuilder<AssociatedInspectionType> query = new QueryBuilder<AssociatedInspectionType>(AssociatedInspectionType.class);
+		QueryBuilder<AssociatedInspectionType> query = new QueryBuilder<AssociatedInspectionType>(AssociatedInspectionType.class, new OpenSecurityFilter());
 		if (productType != null) {
 			query.addSimpleWhere("productType", productType);
 		}

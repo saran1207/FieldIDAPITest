@@ -14,9 +14,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.SimplePager;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -77,60 +77,38 @@ public class QueryBuilder<E> {
 	private List<String> postFetchPaths = new ArrayList<String>();
 	
 	/** 
-     * Constructs a <tt>QueryBuilder</tt> setting both the target table class and table alias.
+     * Constructs a <tt>QueryBuilder</tt> setting the target table class and 
+     * applying a {@link QueryFilter} by calling {@link #applyFilter(QueryFilter)}.
      * 
      * @param tableClass	the target table class
+     * @param filter		the {@link QueryFilter} to apply
      * @param alias			the alias used to preface query parameters.
      */
-	public QueryBuilder(Class<?> tableClass, String alias) {
+	public QueryBuilder(Class<?> tableClass, QueryFilter filter, String alias) {
 		setFromArgument(tableClass, alias);
 		setSimpleSelect();
-	}
-	
-	/** 
-     * Constructs a <tt>QueryBuilder</tt> setting the target table class.
-     * 
-     * @param tableClass	the target table class
-     */
-	public QueryBuilder(Class<?> tableClass) {
-		this(tableClass, defaultAlias);
+		applyFilter(filter);
 	}
 	
 	/** 
      * Constructs a <tt>QueryBuilder</tt> setting the target table class and 
-     * applying a {@link SecurityFilter} by calling {@link #setSecurityFilter(SecurityFilter)}.
+     * applying a {@link QueryFilter} by calling {@link #applyFilter(QueryFilter)}.
      * 
-     * @see #setSecurityFilter(SecurityFilter)
+     * @see #applyFilter(SecurityFilter)
      * 
      * @param tableClass	the target table class
-     * @param filter		the {@link SecurityFilter} to apply
+     * @param filter		the {@link QueryFilter} to apply
      */
-	public QueryBuilder(Class<?> tableClass, SecurityFilter filter) {
-		this(tableClass);
-		setSecurityFilter(filter);
+	public QueryBuilder(Class<?> tableClass, QueryFilter filter) {
+		this(tableClass, filter, defaultAlias);
 	}
 
 	/** 
-     * Adds where clauses for Tenant, Customer and Division using a {@link SecurityFilter}.<p/>
-     * <i>Note: {@link SecurityFilter#setTargets(String, String, String)} must be 
-     * called before calling</i> <tt>setSecurityFilter(SecurityFilter filter)</tt>
-     * 
-     * @see SecurityFilter
-     * @see SecurityFilter#setDefaultTargets()
-     * @see SecurityFilter#setTargets(String)
-     * @see SecurityFilter#setTargets(String, String)
-     * @see SecurityFilter#setTargets(String, String, String)
-     * @see SecurityFilter#getTenantWhereParameter()
-     * @see SecurityFilter#getCustomerWhereParameter()
-     * @see SecurityFilter#getDivisionWhereParameter()
-     * 
-     * @param filter	the {@link SecurityFilter} to apply
+     * Calls {@link QueryFilter#applyFilter(QueryBuilder)} using this QueryBuilder
+     * @param filter	A QueryFilter
      */
-	public void setSecurityFilter(SecurityFilter filter) {
-		if(filter != null) {
-			// add the where parameters defined by this filter
-			filter.applyParamers(this);
-		}
+	public void applyFilter(QueryFilter filter) {
+		filter.applyFilter(this);
 	}
 	
 	/**

@@ -8,21 +8,15 @@ import com.n4systems.model.Product;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "productattachments")
-public class ProductAttachment extends EntityWithTenant implements Saveable, FilteredEntity {
+public class ProductAttachment extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
 	private Product product;
 	private Note note = new Note();
-
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD);
-	}
 	
 	public ProductAttachment() {
 		super();

@@ -18,14 +18,14 @@ import org.apache.log4j.Logger;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.notificationsettings.NotificationSettingOwnerListLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.TenantCache;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.LogUtils;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 
@@ -76,14 +76,10 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		logger.info(LogUtils.prepare("Generating inspection schedule report for Tenant [$0], Name [$1], User [$2], Start [$3], End [$4]", 
 				setting.getTenant(), setting.getName(), setting.getUser().getUserID(), start, end));
 		
-		NotificationSettingOwnerListLoader customerLoader = new NotificationSettingOwnerListLoader();
-		customerLoader.setNotificationSettingId(setting.getId());
-		
-		SecurityFilter settingUserFilter = new SecurityFilter(setting.getUser());		
+		SecurityFilter settingUserFilter = new UserSecurityFilter(setting.getUser());		
 		InspectionScheduleCountListLoader loader = new InspectionScheduleCountListLoader(settingUserFilter);
 		
 		loader.setNotification(setting);
-		loader.setOwners(customerLoader.load());
 		loader.setFromDate(start);
 		loader.setToDate(end);
 		
@@ -101,16 +97,13 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 				.append("<table class=\"message\" cellpadding=2 cellspacing=2 border><tr>")
 				.append("<th>Inspection Date</th>");
 				
-			if (setting.isUsingJobSite()) {
-				messageBody.append("<th>Job Site</th>");
-			} else {
-				messageBody.append("<th>Customer</th><th>Division</th>");
-			}
+
+			messageBody.append("<th>Customer</th><th>Division</th>");
 				
 			messageBody.append("<th>Product Type</th><th>Event Type</th><th>Inspections Due</th></tr>");
 		
 			for(InspectionScheduleCount inspectionCount: inspectionCounts) {
-				messageBody.append(formatMessageTableEntry(inspectionCount, setting.isUsingJobSite()));
+				messageBody.append(formatMessageTableEntry(inspectionCount));
 			}
 		
 			messageBody.append("</table>");
@@ -142,20 +135,14 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		ServiceLocator.getMailManager().sendMessage(message);
 	}
 	
-	private String formatMessageTableEntry(InspectionScheduleCount isCount, boolean usingJobSite) {
+	private String formatMessageTableEntry(InspectionScheduleCount isCount) {
 		StringBuilder entry = new StringBuilder();
 		
 		entry
 			.append("<tr><td>")
 			.append(dateFormatter.format(isCount.getNextInspectionDate()))
 			.append("</td><td>")
-			.append(isCount.getOwnerName());
-		
-		if (!usingJobSite) {
-			entry.append("</td><td>").append(isCount.getDivisionName());
-		}
-				
-		entry
+			.append(isCount.getOwnerName())
 			.append("</td><td>")
 			.append(isCount.getProductTypeName())
 			.append("</td><td>")

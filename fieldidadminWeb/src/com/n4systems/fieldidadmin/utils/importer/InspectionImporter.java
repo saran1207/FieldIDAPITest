@@ -18,11 +18,8 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
@@ -30,8 +27,17 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Status;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
+import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.persistence.loaders.DivisionOrgByCustomerListLoader;
+import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.util.ServiceLocator;
 
 public class InspectionImporter extends Importer {
@@ -54,8 +60,7 @@ public class InspectionImporter extends Importer {
 	public static final String INSPECTION_BOOK = "inspectionBook";
 	public static final String NEXT_INSPECTION_DATE = "nextInspectionDate";
 	public static final String PRODUCT_STATUS = "productStatus";
-
-	private CustomerManager endUserManager;
+	
 	private LegacyProductSerial productSerialManager;
 	private ProductManager productManager;
 	private User userManager;
@@ -66,7 +71,6 @@ public class InspectionImporter extends Importer {
 
 		super(importerBaseDirectory, primaryOrg, createMissingDivisions);
 
-		this.endUserManager = ServiceLocator.getCustomerManager();
 		this.productSerialManager = ServiceLocator.getProductSerialManager();
 		this.productManager = ServiceLocator.getProductManager();
 		this.userManager = ServiceLocator.getUser();
@@ -118,15 +122,19 @@ public class InspectionImporter extends Importer {
 
 					String serialNumber = (String) inspectionMap.get(SERIAL_NUMBER);
 
-					Customer endUser = endUserManager.findCustomerFussySearch((String) inspectionMap
-							.get(ENDUSER_IDENTIFIER), (String) inspectionMap.get(ENDUSER_IDENTIFIER), primaryOrg.getTenant().getId(),
-							null);
+					TenantFilteredListLoader<CustomerOrg> customerLoader = new TenantFilteredListLoader<CustomerOrg>(primaryOrg.getTenant(), CustomerOrg.class);
+					FindOrCreateCustomerOrgHandler customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
+
+					CustomerOrg endUser = customerSearcher.findOnly(primaryOrg, (String)inspectionMap.get(ENDUSER_IDENTIFIER));
+					
 					if (endUser == null) {
 						throw new Exception("no end user");
 					}
+					
+					inspection.setOwner(endUser);
 
-					Product product = productManager.findProductBySerialNumber(serialNumber, primaryOrg.getTenant().getId(), endUser
-							.getId());
+
+					Product product = productManager.findProductBySerialNumber(serialNumber, primaryOrg.getTenant().getId(), endUser.getId());
 					if (product == null) {
 						throw new Exception("no product ");
 					}
@@ -180,9 +188,8 @@ public class InspectionImporter extends Importer {
 					if (inspectionBookName != null) {
 						try {
 							// look up inspection book by name and customer.
-							SecurityFilter filter = new SecurityFilter(primaryOrg.getTenant().getId(), endUser.getId());
-							InspectionBook inspectionBook = inspectionManager.findInspectionBook(inspectionBookName,
-									filter);
+							SecurityFilter filter = new OwnerFilter(endUser);
+							InspectionBook inspectionBook = inspectionManager.findInspectionBook(inspectionBookName, filter);
 							if (inspectionBook != null) {
 								inspection.setBook(inspectionBook);
 							}
@@ -192,29 +199,27 @@ public class InspectionImporter extends Importer {
 
 					}
 
-					if ((String) inspectionMap.get(DIVISION) != null) {
-						Division division;
-						if (createMissingDivisions) {
-							division = endUserManager.findOrCreateDivision((String) inspectionMap.get(DIVISION),
-									endUser.getId(), null);
-						} else {
-							division = endUserManager.findDivision((String) inspectionMap.get(DIVISION), endUser
-									.getId(), null);
-						}
+					if ((String)inspectionMap.get(DIVISION) != null) {
 
+						DivisionOrgByCustomerListLoader divisionLoader = new DivisionOrgByCustomerListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
+						divisionLoader.setCustomer(endUser);
+						
+						FindOrCreateDivisionOrgHandler divisionSearcher = new FindOrCreateDivisionOrgHandler(divisionLoader, new OrgSaver());
+						divisionSearcher.setFindOnly(!createMissingDivisions);
+
+						DivisionOrg division = divisionSearcher.findOrCreate(endUser, (String)inspectionMap.get(DIVISION));
+						
 						if (division == null) {
 							if (createMissingDivisions) {
 								throw new Exception("no division");
 							}
 
 						} else {
-							inspection.setDivision(division);
+							inspection.setOwner(division);
 						}
 					}
-
-					inspection.setOrganization(primaryOrg);
+					
 					inspection.setLocation((String) inspectionMap.get(LOCATION));
-					inspection.setCustomer(endUser);
 					inspection.setDate(inspectionDate);
 					inspection.setProduct(product);
 

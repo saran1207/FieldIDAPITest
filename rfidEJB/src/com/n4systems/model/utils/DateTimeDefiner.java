@@ -18,7 +18,7 @@ public class DateTimeDefiner implements DateTimeDefinition {
 	}
 
 	public DateTimeDefiner(UserBean user) {
-		this(user.getOrganization().getPrimaryOrg().getDateFormat(), user.getTimeZone());
+		this(user.getOwner().getPrimaryOrg().getDateFormat(), user.getTimeZone());
 	}
 
 	public String getDateFormat() {

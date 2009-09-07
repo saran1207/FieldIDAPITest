@@ -13,13 +13,11 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.user.UserFilteredLoader;
@@ -50,11 +48,8 @@ public class ProductViewModeConverter {
 		
 		try {
 			model.setTenant(identifier.getTenant());
-			model.setOrganization(identifier.getOrganization());
 			model.setIdentifiedBy(identifier);	
-			model.setOwner(resolveCustomer(view.getOwner()));
-			model.setDivision(resolveDivision(view.getDivision()));
-			model.setJobSite(resolveJobSite(view.getJobSite()));
+			model.setOwner(resolveOwner(view.getOwner()));
 			model.setType(resolveProductType(view.getProductTypeId()));
 			model.setAssignedUser(resolveUser(view.getAssignedUser()));
 			model.setProductStatus(resolveProductStatus(view.getProductStatus()));
@@ -84,31 +79,13 @@ public class ProductViewModeConverter {
 		return line;
 	}
 	
-	private Customer resolveCustomer(Long customerId) {
-		Customer customer = null;
-		if (customerId != null) {
-			FilteredIdLoader<Customer> loader = loaderFactory.createFilteredIdLoader(Customer.class).setId(customerId);
-			customer = loader.load(transaction);
+	private BaseOrg resolveOwner(Long orgId) {
+		BaseOrg owner = null;
+		if (orgId != null) {
+			FilteredIdLoader<BaseOrg> loader = loaderFactory.createFilteredIdLoader(BaseOrg.class).setId(orgId);
+			owner = loader.load(transaction);
 		}
-		return customer;
-	}
-	
-	private Division resolveDivision(Long divisionId) {
-		Division division = null;
-		if (divisionId != null) {
-			FilteredIdLoader<Division> loader = loaderFactory.createFilteredIdLoader(Division.class).setId(divisionId);
-			division = loader.load(transaction);
-		}
-		return division;
-	}
-	
-	private JobSite resolveJobSite(Long jobSiteId) {
-		JobSite jobSite = null;
-		if (jobSiteId != null) {
-			FilteredIdLoader<JobSite> loader = loaderFactory.createFilteredIdLoader(JobSite.class).setId(jobSiteId);
-			jobSite = loader.load(transaction);
-		}
-		return jobSite;
+		return owner;
 	}
 	
 	private ProductType resolveProductType(Long productTypeId) {

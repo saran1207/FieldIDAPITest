@@ -10,7 +10,6 @@ import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -20,7 +19,6 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.util.ListingPair;
@@ -31,18 +29,15 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	private static final long serialVersionUID = 1L;
 	
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
-	private final CustomerManager customerManager;
 	private final LegacyProductSerial productSerialManager;
 	private final InspectionManager inspectionManager;
 	private final User userManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	
-	private List<ListingPair> jobSites;
 	private List<ListingPair> employees;
 	private List<ListingPair> eventJobs;
 	
 	public InspectionScheduleAction(
-			final CustomerManager customerManager, 
 			final LegacyProductType productTypeManager, 
 			final LegacyProductSerial productSerialManager, 
 			final PersistenceManager persistenceManager, 
@@ -50,12 +45,12 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 			final User userManager, 
 			final ProductManager productManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
-		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, customerManager, productTypeManager, productSerialManager, persistenceManager, inspectionManager, userManager, productManager, inspectionScheduleManager);
+		
+		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, productTypeManager, productSerialManager, persistenceManager, inspectionManager, userManager, productManager, inspectionScheduleManager);
 	}
 	
 	
 	public <T extends CustomizableSearchAction<InspectionScheduleSearchContainer>>InspectionScheduleAction(String sessionKey, Class<T> implementingClass,
-			final CustomerManager customerManager, 
 			final LegacyProductType productTypeManager, 
 			final LegacyProductSerial productSerialManager, 
 			final PersistenceManager persistenceManager, 
@@ -66,7 +61,6 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		
 		super(implementingClass, sessionKey, "InspectionScheduleReport", persistenceManager);
 		
-		this.customerManager = customerManager;
 		this.productSerialManager = productSerialManager;
 		this.inspectionManager = inspectionManager;
 		this.userManager = userManager;
@@ -106,12 +100,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		if (getSessionUser().isAnEndUser()) {
-			getContainer().setCustomer(getSessionUser().getR_EndUser());
-			
-			if (getSessionUser().isInDivision()) {
-				getContainer().setDivision(getSessionUser().getR_Division());
-			}
+		if (getSessionUser().getOwner().isExternalOrg()) {
+			getContainer().setOwner(getSessionUser().getOwner().getId());
 		}
 		return INPUT;
 	}
@@ -145,28 +135,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		return psList;
 	}
 	
-	public List<ListingPair> getCustomers() {
-		return customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-	}
-
-	public List<ListingPair> getDivisions() {
-		List<ListingPair> divisions = new ArrayList<ListingPair>();
-		if(getContainer().getCustomer() != null ) {
-			divisions = customerManager.findDivisionsLP(getContainer().getCustomer(), getSecurityFilter());
-		}
-		return divisions;
-	}
-	
-	
 	public List<ListingPair> getInspectionTypes() {
 		return persistenceManager.findAllLP(InspectionTypeGroup.class, getTenantId(), "name");
-	}
-	
-	public List<ListingPair> getJobSites() {
-		if( jobSites == null ) {
-			jobSites = persistenceManager.findAllLP(JobSite.class, getSecurityFilter().setDefaultTargets(), "name");
-		}
-		return jobSites;
 	}
 	
 	public List<ListingPair> getEmployees() {
@@ -188,8 +158,6 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		return inspectionScheduleManager.getInspectionTypeIdForSchedule(Long.valueOf(inspectionScheduleId));
 	}
 	
-	
-	
 	public Long getInspectionIdForInspectionScheduleId(String inspectionScheduleId) {
 		return inspectionScheduleManager.getInspectionIdForSchedule(Long.valueOf(inspectionScheduleId));
 	}
@@ -200,7 +168,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	public List<ListingPair> getEventJobs() {
 		if (eventJobs == null) {
-			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter().setTargets("tenant.id", "customer.id", "division.id"));
+			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter());
 			query.addSimpleWhere("eventJob", true);
 			query.addSimpleWhere("retired", false);
 			eventJobs = persistenceManager.findAllLP(query, "name");

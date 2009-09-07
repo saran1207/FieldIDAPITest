@@ -3,12 +3,12 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.model.Product;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.search.SortTerm;
 
 public class ProductSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy", "owner", "division", "organization"};
+	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy"};
 	
 	private String rfidNumber;
 	private String serialNumber;
@@ -16,12 +16,10 @@ public class ProductSearchContainer extends SearchContainer {
 	private String orderNumber;
 	private String referenceNumber;
 	private String purchaseOrder;
-	private Long customerId;
-	private Long divisionId;
 	private Long productTypeId;
 	private Long productStatusId;
 	private Long assignedUserId;
-	private Long jobSiteId;
+	private Long ownerId;
 	private Date fromDate;
 	private Date toDate;
 	
@@ -37,13 +35,12 @@ public class ProductSearchContainer extends SearchContainer {
 		addStringTerm("shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("customerRefNumber", referenceNumber);
 		addStringTerm("purchaseOrder", purchaseOrder);
-		addSimpleTerm("owner.id", customerId);
-		addSimpleTerm("division.id", divisionId);
 		addSimpleTerm("type.id", productTypeId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
 		addSimpleTerm("assignedUser.uniqueID", assignedUserId);
-		addSimpleTerm("jobSite.id", jobSiteId);
+		addSimpleTerm("owner.id", ownerId);
 		addDateRangeTerm("identified", fromDate, toDate);
+		
 	}
 	
 	@Override
@@ -78,22 +75,6 @@ public class ProductSearchContainer extends SearchContainer {
 
 	public void setLocation(String location) {
 		this.location = location;
-	}
-
-	public Long getCustomer() {
-		return customerId;
-	}
-
-	public void setCustomer(Long customerId) {
-		this.customerId = customerId;
-	}
-
-	public Long getDivision() {
-		return divisionId;
-	}
-
-	public void setDivision(Long divisionId) {
-		this.divisionId = divisionId;
 	}
 
 	public String getOrderNumber() {
@@ -152,19 +133,19 @@ public class ProductSearchContainer extends SearchContainer {
 		this.purchaseOrder = purchaseOrder;
 	}
 	
-	public Long getJobSite() {
-		return jobSiteId;
-	}
-	
-	public void setJobSite(Long jobSiteId) {
-		this.jobSiteId = jobSiteId;
-	}
-	
 	public Long getAssingedUser() {
 		return assignedUserId;
 	}
 	
 	public void setAssingedUser(Long assignedUserId) {
 		this.assignedUserId = assignedUserId;
+	}
+	
+	public Long getOwner() {
+		return ownerId;
+	}
+	
+	public void setOwner(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 }

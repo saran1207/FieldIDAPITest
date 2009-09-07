@@ -24,11 +24,13 @@ import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -95,7 +97,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	private List<Long> getAvailableScheduleIdsFor(ProductType productType, InspectionType inspectionType) {
-		QueryBuilder<Long> query = new QueryBuilder<Long>(InspectionSchedule.class);
+		QueryBuilder<Long> query = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		query.setSimpleSelect("id");
 		query.addSimpleWhere("product.type", productType).addSimpleWhere("inspectionType", inspectionType);
 		query.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
@@ -116,22 +118,20 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	public List<InspectionScheduleCount> getInspectionScheduleCount(Date fromDate, Date toDate, Long tenantId) {
-		return getInspectionScheduleCount(fromDate, toDate, new SecurityFilter(tenantId));
+		return getInspectionScheduleCount(fromDate, toDate, new TenantOnlySecurityFilter(tenantId));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InspectionScheduleCount> getInspectionScheduleCount(Date fromDate, Date toDate, SecurityFilter secFilter) {
-		secFilter.setTargets("i.tenant.id", "i.customer.id", "i.customer.id");
-		
 		String jpql = "select new " + InspectionScheduleCount.class.getName() + "(i.nextDate, i.product.owner.name, i.product.type.name, count(*)) " +
 				"from " + InspectionSchedule.class.getName() + " i " +
-				"where " + secFilter.produceWhereClause() + " and i.nextDate >= :fromDate and i.nextDate < :toDate AND state = :activeState AND status != :completedStatus " + 
+				"where " + secFilter.produceWhereClause(InspectionSchedule.class, "i") + " and i.nextDate >= :fromDate and i.nextDate < :toDate AND state = :activeState AND status != :completedStatus " + 
 				"group by i.nextDate, i.product.owner.name, i.product.type.name " + 
 				"order by i.nextDate asc";
 				
 		Query query = em.createQuery(jpql);
 		
-		secFilter.applyParamers(query);
+		secFilter.applyParameters(query, InspectionSchedule.class);
 		query.setParameter("fromDate", fromDate);
 		query.setParameter("toDate", toDate);
 		query.setParameter("activeState", EntityState.ACTIVE);
@@ -143,7 +143,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	public InspectionSchedule getNextScheduleFor(Product product, InspectionType type) {
 		InspectionSchedule schedule = null;
 		
-		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class);
+		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
 		query.addSimpleWhere("product", product).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("inspectionType", type);
 		query.addOrder("nextDate");
 		
@@ -161,7 +161,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	
 	
 	public List<InspectionSchedule> getAvailableSchedulesFor(Product product) {
-		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class);
+		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
 		query.addSimpleWhere("product", product).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
 		query.addOrder("nextDate");
 		
@@ -170,7 +170,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	
 	public boolean schedulePastDue(Long scheduleId) {
 		// here we'll select the next date off the schedule and see if it's after today
-		QueryBuilder<Date> builder = new QueryBuilder<Date>(InspectionSchedule.class);
+		QueryBuilder<Date> builder = new QueryBuilder<Date>(InspectionSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("nextDate");
 		builder.addSimpleWhere("id", scheduleId);
 		builder.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
@@ -182,7 +182,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	public Long getProductIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("product.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
@@ -190,7 +190,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	public Long getInspectionTypeIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("inspectionType.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
@@ -200,7 +200,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	
 	
 	public Long getInspectionIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("inspection.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
@@ -215,7 +215,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		
 		Date to = DateHelper.addDaysToDate(inspectionDate, INSPECTION_SCHEDULE_DATE_RANGE);
 		
-		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class);
+		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
 		query.addSimpleWhere("product", product).addSimpleWhere("inspectionType", inspectionType);
 		query.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
 		query.addWhere(Comparator.LE, "to", "nextDate", to);

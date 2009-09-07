@@ -44,17 +44,13 @@ public class SavedReportHelper {
 		
 		// override the owner and sharedBy name
 		sharedReport.setSharedByName(fromUser.getDisplayName());
-		sharedReport.setOwner(toUser);
+		sharedReport.setUser(toUser);
+		
 		
 		// if the user is a customer/division user, we need to ensure the division gets properly overridden.
 		// for employee users we will let the original customer/division properties continue
-		if (toUser.getCustomerId() != null) {
-			sharedReport.setInCriteria(SavedReport.CUSTOMER_ID, toUser.getCustomerId());
-			
-			if (toUser.getDivisionId() != null) {
-				// user also has a division, override that too
-				sharedReport.setInCriteria(SavedReport.DIVISION_ID, toUser.getDivisionId());
-			}
+		if (toUser.getOwner().isExternalOrg()) {
+			sharedReport.setInCriteria(SavedReport.OWNER_ID, toUser.getOwner().getId());
 		}
 
 		return sharedReport;
@@ -72,7 +68,7 @@ public class SavedReportHelper {
 		newReport.getColumns().addAll(report.getColumns());
 		newReport.getCriteria().putAll(report.getCriteria());
 		newReport.setName(report.getName());
-		newReport.setOwner(report.getOwner());
+		newReport.setUser(report.getUser());
 		newReport.setSharedByName(report.getSharedByName());
 		newReport.setSortColumn(report.getSortColumn());
 		newReport.setSortDirection(report.getSortDirection());

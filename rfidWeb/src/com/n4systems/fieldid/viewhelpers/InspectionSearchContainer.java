@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.viewhelpers;
 
+import java.util.Date;
+
 import com.n4systems.model.Inspection;
 import com.n4systems.model.SavedReport;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.search.SortTerm;
-
-import java.util.Date;
 
 
 public class InspectionSearchContainer extends SearchContainer implements ReportDefiner {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"book", "customer", "division", "product.shopOrder.order", "product.productStatus", "product.identifiedBy", "product.owner", "product.division", "product.organization"};
+	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.productStatus", "product.identifiedBy"};
 	
 	private Long savedReportId;
 	private boolean savedReportModified;
@@ -22,8 +22,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private String purchaseOrder;
 	private String referenceNumber;
 	private String location;
-	private Long customerId;
-	private Long divisionId;
+	private Long ownerId;
 	private Long productTypeId;
 	private Long productStatusId;
 	private Long assignedUserId;
@@ -51,8 +50,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addStringTerm("product.shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("product.purchaseOrder", purchaseOrder);
 		addStringTerm("product.customerRefNumber", referenceNumber);
-		addSimpleTerm("customer.id", customerId);
-		addSimpleTerm("division.id", divisionId);
+		addSimpleTerm("owner.id", ownerId);
 		addWildcardTerm("location", location);
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
@@ -97,8 +95,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		report.setInCriteria(SavedReport.ORDER_NUMBER, getOrderNumber());
 		report.setInCriteria(SavedReport.RFID_NUMBER, getRfidNumber());
 		report.setInCriteria(SavedReport.SERIAL_NUMBER, getSerialNumber());
-		report.setInCriteria(SavedReport.CUSTOMER_ID, getCustomer());
-		report.setInCriteria(SavedReport.DIVISION_ID, getDivision());
+		report.setInCriteria(SavedReport.OWNER_ID, getOwner());
 		report.setInCriteria(SavedReport.REFERENCE_NUMBER, getReferenceNumber());
 		report.setInCriteria(SavedReport.INSPECTION_BOOK, getInspectionBook());
 		report.setInCriteria(SavedReport.INSPECTION_TYPE_GROUP, getInspectionTypeGroup());
@@ -134,8 +131,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		setSerialNumber(report.getStringCriteria(SavedReport.SERIAL_NUMBER));
 		setReferenceNumber(report.getStringCriteria(SavedReport.REFERENCE_NUMBER));
 		setLocation(report.getStringCriteria(SavedReport.LOCATION));
-		setCustomer(report.getLongCriteria(SavedReport.CUSTOMER_ID));
-		setDivision(report.getLongCriteria(SavedReport.DIVISION_ID));
+		setOwner(report.getLongCriteria(SavedReport.OWNER_ID));
 		setInspectionBook(report.getLongCriteria(SavedReport.INSPECTION_BOOK));
 		setInspectionTypeGroup(report.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
 		setInspector(report.getLongCriteria(SavedReport.INSPECTOR));
@@ -177,14 +173,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-
-	public Long getCustomer() {
-		return customerId;
-	}
-
-	public void setCustomer(Long customerId) {
-		this.customerId = customerId;
-	}
 	
 	public Long getJobSite() {
 		return jobSiteId;
@@ -192,14 +180,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 
 	public void setJobSite(Long jobSiteId) {
 		this.jobSiteId = jobSiteId;
-	}
-	
-	public Long getDivision() {
-		return divisionId;
-	}
-
-	public void setDivision(Long divisionId) {
-		this.divisionId = divisionId;
 	}
 
 	public String getOrderNumber() {
@@ -324,5 +304,13 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	
+	public Long getOwner() {
+		return ownerId;
+	}
+	
+	public void setOwner(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 }

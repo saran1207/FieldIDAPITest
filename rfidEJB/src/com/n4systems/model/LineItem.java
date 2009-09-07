@@ -22,7 +22,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 	
 	@Column(nullable=false)
 	private String productCode = DEFAULT_PRODUCT_CODE;
-	private String lineId;	
+	private String lineId;
 	private String description;
 	
 	@ManyToOne(optional=false)

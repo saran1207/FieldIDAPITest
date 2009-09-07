@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.TenantCache;
@@ -21,7 +21,7 @@ public class DownloadOrganizationImages extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( DownloadOrganizationImages.class );
 
-	private BaseOrg organization;
+	private InternalOrg organization;
 	private Tenant tenant;
 	
 	private String tenantName;
@@ -68,7 +68,8 @@ public class DownloadOrganizationImages extends DownloadAction {
 	
 	public String doDownloadCertLogo() {
 		if( uniqueID != null ) {
-			FilteredIdLoader<BaseOrg> loader = getLoaderFactory().createFilteredIdLoader(BaseOrg.class);
+			// TODO: CUSTOMER_REFACTOR: not sure this is going to work.  May not be able to select InternalOrg like this
+			FilteredIdLoader<InternalOrg> loader = getLoaderFactory().createFilteredIdLoader(InternalOrg.class);
 			loader.setId(uniqueID);
 			organization = loader.load();
 			

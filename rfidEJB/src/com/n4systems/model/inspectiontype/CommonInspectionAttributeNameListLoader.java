@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.model.InspectionType;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class CommonInspectionAttributeNameListLoader extends ListLoader<String> {
@@ -20,7 +20,7 @@ public class CommonInspectionAttributeNameListLoader extends ListLoader<String> 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected List<String> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionType.class, filter.prepareFor(InspectionType.class));
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionType.class, filter);
 		Long inspectionTypes = builder.setCountSelect().getSingleResult(em);
 		
 		Query query = em.createQuery("SELECT f FROM " + InspectionType.class.getName() + " i, IN(i.infoFieldNames) f WHERE i.tenant.id = :tenantId GROUP BY f HAVING COUNT(*) = :inspectionTypeCount");

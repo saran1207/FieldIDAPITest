@@ -6,7 +6,7 @@ class DivisionOrg < ActiveRecord::Base
   set_primary_key :org_id
   
   belongs_to  :baseOrg, :foreign_key => 'org_id',     :class_name => 'BaseOrg'
-  belongs_to  :parent,  :foreign_key => 'parent_id',  :class_name => 'CustomerOrg'
+  belongs_to  :parent,  :foreign_key => 'parent_id',  :class_name => 'BaseOrg'
   
   def displayString
     "#{name} (#{id.to_s})"

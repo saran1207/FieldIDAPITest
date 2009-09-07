@@ -7,16 +7,20 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.services.limiters.LimitType;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "alertstatus")
-public class AlertStatus implements FilteredEntity, Saveable, Serializable {
+public class AlertStatus implements HasTenantId, Saveable, Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final int NORMAL_STATUS = 0;
+	
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner("tenantId", null, null, null);
+	}
 	
 	@Id
 	@Column(name="tenant_id")
@@ -29,10 +33,6 @@ public class AlertStatus implements FilteredEntity, Saveable, Serializable {
 	private int assets = NORMAL_STATUS;
 	
 	public AlertStatus() {}
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets("tenantId", null, null, null, null);
-	}
 
 	public boolean isNew() {
 		return (tenantId == null);

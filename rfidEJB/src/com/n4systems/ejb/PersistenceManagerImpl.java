@@ -39,12 +39,11 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.AbstractStringIdEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.model.security.SecurityFilterFactory;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SelectClause;
@@ -122,10 +121,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, SecurityFilter filter, String... postFetchFields) {
-		QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass);
+		QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("id", entityId);
-		queryBuilder.setSecurityFilter(filter);
+		queryBuilder.applyFilter(filter);
 		queryBuilder.addPostFetchPaths(postFetchFields);
 		try {
 			return find(queryBuilder);
@@ -178,16 +177,14 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return find(builder.setSimpleSelect("name").addSimpleWhere("id", id));
 	}
 
-	public <T extends FilteredEntity> int countAllPages(Class<T> entityClass, int pageSize, SecurityFilter filter) {
+	public <T> int countAllPages(Class<T> entityClass, int pageSize, SecurityFilter filter) {
 		Long longPageSize = new Long(pageSize);
 		Long entityCount;
-
-		SecurityFilter entityFilter = SecurityFilterFactory.prepare(entityClass, filter);
 
 		int pages = -1;
 		try {
 			
-			entityCount = findCount(new QueryBuilder<T>(entityClass, entityFilter));
+			entityCount = findCount(new QueryBuilder<T>(entityClass, filter));
 			pages = (int)Math.ceil(entityCount.doubleValue() / longPageSize.doubleValue());
 			
 		} catch (InvalidQueryException e) {
@@ -544,15 +541,13 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, Long tenantId, String nameField) {
-		SecurityFilter filter = new SecurityFilter(tenantId);
-		filter.setTargets("tenant.id");
-		return findAllLP(entityClass, filter, nameField);
+		return findAllLP(entityClass, new TenantOnlySecurityFilter(tenantId), nameField);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, SecurityFilter filter, String nameField) {
 		String jpql = "SELECT new com.n4systems.util.ListingPair(id, " + nameField + " ) " + generateFromClause(defaultTableAlias, entityClass);
-		jpql += " WHERE " + filter.produceWhereClause();
+		jpql += " WHERE " + filter.produceWhereClause(entityClass, defaultTableAlias);
 
 		if (Arrays.asList(entityClass.getInterfaces()).contains(Archivable.class)) {
 			jpql += " AND state = :activeState ";
@@ -564,7 +559,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 		Query query = em.createQuery(jpql);
 
-		filter.applyParamers(query);
+		filter.applyParameters(query, entityClass);
 		if (Arrays.asList(entityClass.getInterfaces()).contains(Archivable.class)) {
 			query.setParameter("activeState", EntityState.ACTIVE);
 		}
@@ -592,7 +587,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND LOWER(name) = :name ";
 		if (useCustomer) {
-			jpql += " AND customer.id ";
+			jpql += " AND owner.customer_id ";
 			if (customerId != null) {
 				jpql += "= :customerId ";
 			} else {
@@ -730,11 +725,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	 * @return				A QueryBuilder constructed from the Definer.
 	 */
 	private <T> QueryBuilder<T> createBaseSearchQueryBuilder(Class<T> selectClass, BaseSearchDefiner definer) {
-		// prepare a filter for our search
-		SecurityFilter searchFilter = SecurityFilterFactory.prepare(definer.getSearchClass(), definer.getSecurityFilter());
-		
 		// create our QueryBuilder, note the type will be the same as our selectClass
-		QueryBuilder<T> searchBuilder = new QueryBuilder<T>(definer.getSearchClass(), searchFilter);
+		QueryBuilder<T> searchBuilder = new QueryBuilder<T>(definer.getSearchClass(), definer.getSecurityFilter());
 
 		// add all the left join columns
 		if (definer.getJoinColumns() != null) {

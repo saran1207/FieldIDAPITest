@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.InstructionalVideo;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -18,7 +19,7 @@ public class InstructionalVidoeHelper {
 	
 	
 	public Pager<InstructionalVideo> getPage( int pageNumber, int pageSize ) throws InvalidQueryException {
-		QueryBuilder<InstructionalVideo> queryBuilder = new QueryBuilder<InstructionalVideo>( InstructionalVideo.class );
+		QueryBuilder<InstructionalVideo> queryBuilder = new QueryBuilder<InstructionalVideo>( InstructionalVideo.class, new OpenSecurityFilter());
 		queryBuilder.addOrder( "created", false );
 		
 		return  persistenceManager.findAllPaged( queryBuilder, pageNumber, pageSize );

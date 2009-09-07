@@ -13,6 +13,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.utils.LargeInClauseSelect;
 import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
@@ -61,7 +62,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 
 	private void updateProductsLastInspectionDate(EntityManager em, List<Long> ids) {
 		
-		List<Long> productsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class)
+		List<Long> productsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
 				.setSimpleSelect("product.id", true)
 				.addSimpleWhere("product.state", EntityState.ACTIVE),
 		  ids,
@@ -71,7 +72,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 			Product product = em.find(Product.class, productId);
 			
 			
-			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, "i");
+			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
 			qBuilder.setMaxSelect("date");
 			qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 			qBuilder.addSimpleWhere("product", product);
@@ -91,7 +92,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 	}
 
 	private List<Long> getInspectionIds(EntityManager em) {
-		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(Inspection.class)
+		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
 				.setSelectArgument(new SimpleSelect("id"))
 				.addSimpleWhere("type", inspectionType);
 		return queryBuilder.getResultList(em);

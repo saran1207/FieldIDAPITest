@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
@@ -24,11 +23,9 @@ public class MultiProofTestUpload extends AbstractAction {
 	
 	private ProofTestHandler proofTestHandler;
 	private InspectionManager inspectionManager;
-	private CustomerManager customerManager;
 	
 	private Inspection inspection = new Inspection();
-	private ProofTestType proofTestType; 
-	private List<ListingPair> customers;
+	private ProofTestType proofTestType;
 	private List<ListingPair> inspectionBooks;
 	
 	private File filedata;
@@ -37,11 +34,10 @@ public class MultiProofTestUpload extends AbstractAction {
 	private Map<String, Exception> fileProcessingFailureMap = new HashMap<String, Exception>();
 	private Map<String, Map<String, Inspection>> inspectionProcessingFailureMap = new HashMap<String, Map<String, Inspection>>();
 	
-	public MultiProofTestUpload(InspectionManager inspectionManager, ProofTestHandler proofTestHandler, CustomerManager customerManager, PersistenceManager persistenceManager) {
+	public MultiProofTestUpload(InspectionManager inspectionManager, ProofTestHandler proofTestHandler, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
 		this.proofTestHandler = proofTestHandler;
-		this.customerManager = customerManager;
 	}
 
 	public String doAdd() {		 
@@ -80,7 +76,7 @@ public class MultiProofTestUpload extends AbstractAction {
 											proofTestType, 
 											getSessionUser().getTenant().getId(), 
 											getSessionUser().getUniqueID(), 
-											inspection.getCustomer().getId(), 
+											inspection.getOwner().getId(), 
 											inspection.getBook().getId()
 										);
 				
@@ -127,16 +123,9 @@ public class MultiProofTestUpload extends AbstractAction {
 		return Arrays.asList( ProofTestType.values() );
 	}
 
-	public List<ListingPair> getCustomers() {
-		if( customers == null ) {
-			customers = customerManager.findCustomersLP(getSecurityFilter().getTenantId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
 	public List<ListingPair> getInspectionBooks() {
 		if( inspectionBooks == null ) {
-			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP( getSecurityFilter(), false, ( inspection.getCustomer() != null ) ? inspection.getCustomer().getId() : null  );
+			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP( getSecurityFilter(), false, inspection.getOwner());
 		}
 		return inspectionBooks;
 	}

@@ -12,7 +12,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 @Local
 public interface InspectionScheduleManager {

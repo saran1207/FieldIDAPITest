@@ -1,7 +1,12 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -13,17 +18,11 @@ import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTermOrNull;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
 abstract public class SearchContainer implements BaseSearchDefiner, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private final String searchClassIdField;
-	private final Class<? extends FilteredEntity> searchClass;
+	private final Class<?> searchClass;
 	private final SecurityFilter securityFilter;
 	private final String[] joinColumns;
 	private String searchId = String.valueOf(Math.abs((new Random()).nextLong()));
@@ -33,7 +32,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	private String sortColumn;
 	private String sortDirection;
 	
-	public SearchContainer(Class<? extends FilteredEntity> searchClass, String searchClassIdField, SecurityFilter securityFilter, String...joinColumns) {
+	public SearchContainer(Class<?> searchClass, String searchClassIdField, SecurityFilter securityFilter, String...joinColumns) {
 		this.searchClass = searchClass;
 		this.searchClassIdField = searchClassIdField;
 		this.securityFilter = securityFilter;
@@ -46,7 +45,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	abstract protected String defaultSortColumn();
 	abstract protected SortTerm.Direction defaultSortDirection();
 	
-	public Class<? extends FilteredEntity> getSearchClass() {
+	public Class<?> getSearchClass() {
 		return searchClass;
 	}
 

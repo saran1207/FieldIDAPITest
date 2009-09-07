@@ -17,10 +17,10 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.timezone.Country;
@@ -78,7 +78,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 		userAccount.setActive(false);
 		userAccount.setTenant(getTenant());
-		userAccount.setOrganization(getPrimaryOrg());
+		userAccount.setOwner(getPrimaryOrg());
 		userAccount.assignPassword(password);
 		userRequest.setTenant(getTenant());
 		userRequest.setUserAccount(userAccount);
@@ -97,7 +97,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		message.setSubject("Customer Account Request");
 		message.setBody(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList.action").toString(), getTenant().getName()));
 		
-		AdminUserListLoader userLoader = new AdminUserListLoader(new SecurityFilter(getTenant().getId()));
+		AdminUserListLoader userLoader = new AdminUserListLoader(new TenantOnlySecurityFilter(getTenant()));
 		for (UserBean user: userLoader.load()) {
 			message.getToAddresses().add(user.getEmailAddress());
 		}

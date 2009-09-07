@@ -7,6 +7,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.eula.EULA;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Preparable;
@@ -47,7 +48,7 @@ public class EulaCrud extends AbstractAdminAction implements Preparable {
 	@SkipValidation
 	public String doList() {
 		try {
-			QueryBuilder<EULA> query = new QueryBuilder<EULA>(EULA.class).addOrder("effectiveDate", false);
+			QueryBuilder<EULA> query = new QueryBuilder<EULA>(EULA.class, new OpenSecurityFilter()).addOrder("effectiveDate", false);
 			page = persistenceManager.findAllPaged(query, getPageNumber(), 10);
 			return SUCCESS;
 		} catch (InvalidQueryException iqe) {

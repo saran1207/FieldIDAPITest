@@ -58,12 +58,12 @@ ${action.setPageType('job', 'show')!}
 			
 			<div class="infoSet">
 				<label for="customer"><@s.text name="label.customer"/> </label>
-				<span>${(project.customer.name?html) !}</span>
+				<span>${(project.owner.customerOrg.name?html) !}</span>
 			</div>
 			
 			<div class="infoSet">
 				<label for="division"><@s.text name="label.division"/> </label>
-				<span>${(project.division.name?html)!}</span>
+				<span>${(project.owner.divisionOrg.name?html)!}</span>
 			</div>
 						
 			<div class="infoSet">

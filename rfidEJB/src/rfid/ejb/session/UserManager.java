@@ -21,15 +21,16 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
-import com.n4systems.model.Customer;
 import com.n4systems.model.UserRequest;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.UserType;
 import com.n4systems.util.mail.MailMessage;
 
@@ -249,9 +250,9 @@ public class UserManager implements User {
 		return getUsers( filter, onlyActive, pageNumber, pageSize, nameFilter, userType, null );
 	}
 
-	public Pager<UserBean> getUsers( SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, Customer customer ) {
+	public Pager<UserBean> getUsers( SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer ) {
 		
-		String queryString = "from UserBean ub where  " + filter.produceWhereClause( "ub.tenant.id", "ub.r_EndUser", "ub.r_Division" ) 
+		String queryString = "from UserBean ub where  " + filter.produceWhereClause(UserBean.class, "ub") 
 			+ " AND ub.active = true AND ub.system = false ";
 		
 		if(onlyActive) {
@@ -264,16 +265,16 @@ public class UserManager implements User {
 		}
 		
 		if( customer != null ) {
-			queryString += "AND ub.r_EndUser = :customer ";
+			queryString += "AND ub.owner.id = :customer ";
 		} 
 		
 		if( userType != null ) {
 			switch( userType ) {
 				case CUSTOMERS:
-					queryString += "AND ub.r_EndUser IS NOT NULL ";
+					queryString += "AND ub.owner IS NOT NULL ";
 					break;
 				case EMPLOYEES:
-					queryString += "AND ub.r_EndUser IS NULL ";
+					queryString += "AND ub.owner IS NULL ";
 					break;
 					
 			}
@@ -285,8 +286,8 @@ public class UserManager implements User {
 		Query query = em.createQuery( queryString + orderBy);
 		Query countQuery = em.createQuery( "SELECT count(*) " + queryString);
 		
-		filter.applyParamers( query );
-		filter.applyParamers( countQuery );
+		filter.applyParameters(query, UserBean.class );
+		filter.applyParameters(countQuery, UserBean.class);
 		if( nameFilter != null ) {
 			String filterMatcher = '%' +nameFilter.toLowerCase()  + '%';
 			query.setParameter( "nameFilter", filterMatcher );
@@ -312,10 +313,10 @@ public class UserManager implements User {
 		
 		
 		String queryString = "select new com.n4systems.util.ListingPair( ub.uniqueID, CONCAT(ub.firstName, ' ', ub.lastName ) ) from UserBean ub where ub.system = false and ub.active = true and " + 
-			filter.produceWhereClause( "ub.tenant.id", "ub.r_EndUser", null ) + " ORDER BY ub.firstName, ub.lastName";
+			filter.produceWhereClause(UserBean.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
 		
 		Query query = em.createQuery(queryString);
-		filter.applyParamers( query );
+		filter.applyParameters(query, UserBean.class);
 		
 		return (List<ListingPair>)query.getResultList();
 	}
@@ -327,15 +328,15 @@ public class UserManager implements User {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getInspectorList( SecurityFilter filter ) {
-		SecurityFilter justTenantFilter = new SecurityFilter(filter.getTenantId());
+		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
 		String queryString = "select DISTINCT ub from UserBean ub where ub.active = true and deleted = false and ub.system = false and ( " + 
-					filter.produceWhereClause("ub.tenant.id", "ub.r_EndUser", null) + " OR ( "+
-					justTenantFilter.produceWhereClause("ub.tenant.id", null, null) + " AND ub.r_EndUser IS NULL) )" +
+					filter.produceWhereClause(UserBean.class, "ub") + " OR ( "+
+					justTenantFilter.produceWhereClause(UserBean.class, "ub") + " AND ub.r_EndUser IS NULL) )" +
 					" ORDER BY ub.firstName, ub.lastName";
 		
 		Query query = em.createQuery(queryString);
-		filter.applyParamers(query);
-		justTenantFilter.applyParamers(query);
+		filter.applyParameters(query, UserBean.class);
+		justTenantFilter.applyParameters(query, UserBean.class);
 		
 		// get the userlist and filter out users not having the create/edit inspect
 		List<UserBean> users = Permissions.filterHasOneOf((List<UserBean>)query.getResultList(), Permissions.ALLINSPECTION);
@@ -362,10 +363,10 @@ public class UserManager implements User {
 		if (withOutDeleted) {
 			queryString += " ub.deleted = false AND ";
 		}
-		queryString += filter.produceWhereClause( "ub.tenant.id", null, null ) + " ORDER BY ub.firstName, ub.lastName";
+		queryString += filter.produceWhereClause(UserBean.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
 		
 		Query query = em.createQuery(queryString);
-		filter.applyParamers( query );
+		filter.applyParameters(query, UserBean.class);
 		
 		return ListHelper.longListableToListingPair( (List<UserBean>)query.getResultList() );
 	}
@@ -436,41 +437,32 @@ public class UserManager implements User {
 	}
 	
 	@SuppressWarnings("unchecked")
-    public List<UserBean> getOuterUserList(Long tenantId, Long customerId, Long divisionId, Long userId, SecurityFilter filter) {
-		SecurityFilter userFilter = filter.newFilter().setTargets("tenant.id", "r_EndUser", "r_Division");
-		
+    public List<UserBean> getOuterUserList(Long tenantId, Long ownerId, Long userId, SecurityFilter filter) {
 		StringBuilder jpql = new StringBuilder();
 		
 		jpql.append("from ");
 		jpql.append(UserBean.class.getName());
 		jpql.append(" WHERE tenant.id = :tenantId AND active = :active AND deleted = :deleted AND system = :system AND uniqueID <> :userId AND");
 		
-		jpql.append(userFilter.produceWhereClause());
+		jpql.append(filter.produceWhereClause(UserBean.class));
 		
-		if (customerId != null) {
-			jpql.append(" AND (r_EndUser = :customerId OR r_EndUser IS NULL)");
-			
-			if (divisionId != null) {
-				jpql.append(" AND (r_Division = :divisionId OR r_Division IS NULL)");
-			}
+		if (ownerId != null) {
+			jpql.append(" AND (owner.id = :ownerId OR owner IS NULL)");
 		}
 		
-		jpql.append(" ORDER BY r_EndUser, r_Division, firstName, lastName");
+		jpql.append(" ORDER BY owner.name, firstName, lastName");
 		
 		Query userQuery = em.createQuery(jpql.toString());
 		
-		userFilter.applyParamers(userQuery);
+		filter.applyParameters(userQuery, UserBean.class);
 		userQuery.setParameter("tenantId", tenantId);
 		userQuery.setParameter("userId", userId);
 		userQuery.setParameter("active", true);
 		userQuery.setParameter("deleted", false);
 		userQuery.setParameter("system", false);
 		
-		if (customerId != null) {
-			userQuery.setParameter("customerId", customerId);
-			if (divisionId != null) {
-				userQuery.setParameter("divisionId", divisionId);
-			}
+		if (ownerId != null) {
+			userQuery.setParameter("ownerId", ownerId);
 		}
 		
 		return (List<UserBean>)userQuery.getResultList();

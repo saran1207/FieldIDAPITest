@@ -13,6 +13,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -51,7 +52,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 
 	
 	private List<Long> scheduleIds() {
-		QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(InspectionSchedule.class);
+		QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("inspectionType", inspectionType);
 		schedulesToDelete.addWhere(Comparator.IN, "status", "status", Arrays.asList(target.getMembers()));
 				

@@ -14,7 +14,6 @@ public interface SystemSecurityGuard {
 	public boolean isPartnerCenterEnabled();
 	public boolean isIntegrationEnabled();
 	public boolean isComplianceEnabled();
-	public boolean isJobSitesEnabled();
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();
 	public boolean isEmailAlertsEnabled();
@@ -22,4 +21,7 @@ public interface SystemSecurityGuard {
 	public boolean isDedicatedProgramManagerEnabled(); 
 	public boolean isMultiLocationEnabled(); 
 	public boolean isAllowIntegrationEnabled();
+	
+	@Deprecated
+	public boolean isJobSitesEnabled();
 }

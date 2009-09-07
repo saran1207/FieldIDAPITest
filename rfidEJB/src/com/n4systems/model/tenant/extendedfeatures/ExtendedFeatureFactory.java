@@ -9,8 +9,6 @@ public class ExtendedFeatureFactory {
 		switch (feature) {
 			case PartnerCenter:
 				return new PartnerCenterSwitch(primaryOrg);
-			case JobSites:
-				return new JobSiteSwitch(primaryOrg);
 			case EmailAlerts:
 				return new EmailAlertsSwitch(primaryOrg);
 			default:

@@ -1,5 +1,6 @@
 package com.n4systems.taskscheduling.task;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,14 +42,14 @@ public class PrintAllProductCertificatesTask implements Runnable {
 			
 			try {
 				// generate the report
-				String reportPath = reportFactory.generateProductCertificateReport(productIdList, packageName, user);
+				File report = reportFactory.generateProductCertificateReport(productIdList, packageName, user);
 				
-				logger.info("Generating report Complete [" + reportPath + "]");
+				logger.info("Generating report Complete [" + report + "]");
 				
 				body = "<h4>Your Report is ready</h4>";
 				body += "<br />Please click the link below to download your report package.<br />";
 				body += "If you are not logged in you will be prompted to do so.<br /><br />";
-				body += "<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(reportPath, "UTF-8") + "'>Click here to download your report</a>";
+				body += "<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(report.getName(), "UTF-8") + "'>Click here to download your report</a>";
 				
 			} catch(EmptyReportException e) {
 				body = "<h4>Your report contained no manufacturer certificates. </h4>";

@@ -1,28 +1,32 @@
 package com.n4systems.model.parents;
 
-import com.n4systems.model.Tenant;
-import com.n4systems.model.api.HasTenant;
-import com.n4systems.model.security.TenantField;
-
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import com.n4systems.model.Tenant;
+import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.security.SecurityDefiner;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class EntityWithTenant extends AbstractEntity implements HasTenant {
-	public static final String columnName = "tenant_id";
-	protected static final String TENANT_ID_FIELD = "tenant.id";
 	
-	@TenantField
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(EntityWithTenant.class);
+	}
+	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = columnName)
+	@JoinColumn(name = "tenant_id")
 	private Tenant tenant;
 	
-	public EntityWithTenant() {}
+	public EntityWithTenant() {
+		this(null);
+	}
 	
 	public EntityWithTenant(Tenant tenant) {
+		super();
 		this.tenant = tenant;
 	}
 	

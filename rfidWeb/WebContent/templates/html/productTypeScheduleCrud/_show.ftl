@@ -1,5 +1,5 @@
-<#if (schedule.id)?exists && (schedule.customer)?exists >
-	<span class="customer">${schedule.customer.name}</span> <@s.text name="label.every" />
+<#if (schedule.id)?exists && schedule.owner.customer >
+	<span class="customer">${schedule.owner.name}</span> <@s.text name="label.every" />
 </#if>
 <span class="frequency">
 	<#if (schedule.id)?exists>

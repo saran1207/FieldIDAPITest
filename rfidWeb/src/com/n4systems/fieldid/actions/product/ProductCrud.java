@@ -24,7 +24,6 @@ import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.ProductCodeMapping;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -40,17 +39,16 @@ import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
@@ -61,7 +59,6 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class ProductCrud extends UploadAttachmentSupport {
@@ -69,11 +66,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private static Logger logger = Logger.getLogger(ProductCrud.class);
 
 	// drop down lists
-	private Collection<ListingPair> customers;
-	private Collection<ListingPair> divisions;
 	private Collection<ProductStatusBean> productStatuses;
 	private Collection<ListingPair> commentTemplates;
-	private List<ListingPair> jobSites;
 	private ProductType productType;
 	private Collection<ProductSerialExtensionBean> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -124,7 +118,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// managers
 	private LegacyProductType productTypeManager;
 	private LegacyProductSerial legacyProductSerialManager;
-	private CustomerManager customerManager;
 	private CommentTemp commentTemplateManager;
 	private User userManager;
 	private SafetyNetworkManager safetyNetworkManager;
@@ -142,13 +135,12 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	
 	//XXX:  this needs access to way to many managers to be healthy!!! AA
-	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, CustomerManager customerManager, CommentTemp commentTemplateManager,
+	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, CommentTemp commentTemplateManager,
 			PersistenceManager persistenceManager, User userManager, SafetyNetworkManager safetyNetworkManager, ProductCodeMapping productCodeMappingManager,
 			ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 		this.legacyProductSerialManager = legacyProductSerialManager;
-		this.customerManager = customerManager;
 		this.commentTemplateManager = commentTemplateManager;
 		this.userManager = userManager;
 		this.safetyNetworkManager = safetyNetworkManager;
@@ -182,14 +174,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		loadAddProductHistory();
 		if (addProductHistory != null) {
 			product.setOwner(addProductHistory.getOwner());
-			product.setDivision(addProductHistory.getDivision());
-
-			if (addProductHistory.getJobSite() != null) {
-				product.setJobSite(addProductHistory.getJobSite());
-				product.setAssignedUser(addProductHistory.getAssignedUser());
-				product.setOwner(addProductHistory.getJobSite().getCustomer());
-				product.setDivision(addProductHistory.getJobSite().getDivision());
-			}
 
 			// we need to make sure we load the producttype with its info fields
 			setProductTypeId(addProductHistory.getProductType().getId());
@@ -205,14 +189,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 			Long productId = productTypes.getProductTypes().iterator().next().getId();
 			setProductTypeId(productId);
 		}
-
-		if (getSessionUser().isAnEndUser()) {
-			setOwner(getSessionUser().getR_EndUser());
-		}
-		if (getSessionUser().isInDivision()) {
-			setDivision(getSessionUser().getR_Division());
-		}
-
+		
+		setOwner(getSessionUser().getOwner());
 	}
 
 	private void convertInputsToInfoOptions() {
@@ -313,8 +291,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		product.setCustomerRefNumber(productCodeMapping.getCustomerRefNumber());
 		product.setShopOrder(lineItem);
-		product.setOwner(lineItem.getOrder().getCustomer());
-		product.setDivision(lineItem.getOrder().getDivision());
+		product.setOwner(lineItem.getOrder().getOwner());
 		product.setPurchaseOrder(lineItem.getOrder().getPoNumber());
 
 		return SUCCESS;
@@ -355,7 +332,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		testProduct();
 
 		product.setTenant(getTenant());
-		product.setOrganization(getSessionUser().getOrganization());
 		product.setIdentified(convertDate(identified));
 		UserBean user = fetchCurrentUser();
 
@@ -486,8 +462,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		product.setCustomerOrder(customerOrder);
 		product.setPurchaseOrder(customerOrder.getPoNumber());
-		product.setOwner(customerOrder.getCustomer());
-		product.setDivision(customerOrder.getDivision());
+		product.setOwner(customerOrder.getOwner());
 
 		processOrderMasters();
 
@@ -495,9 +470,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		try {
 			getProductSaveService().setProduct(product).update();
 			String updateMessage = getText("message.productupdated.customer", Arrays.asList(product.getSerialNumber(), product.getOwner().getName()));
-			if (product.getDivision() != null) {
-				updateMessage += getText("message.productupdated.division", Arrays.asList(product.getDivision().getName()));
-			}
 			addFlashMessage(updateMessage);
 
 		} catch (Exception e) {
@@ -547,7 +519,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 
-
 	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")
 	public List<InfoOptionInput> getProductInfoOptions() {
 		if (productInfoOptions == null) {
@@ -577,22 +548,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.productInfoOptions = productInfoOptions;
 	}
 
-	public Collection<ListingPair> getCustomers() {
-		if (customers == null) {
-			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
-	public Collection<ListingPair> getDivisions() {
-		if (divisions == null) {
-			if (getOwner() != null) {
-				divisions = customerManager.findDivisionsLP(getOwner(), getSecurityFilter());
-			}
-		}
-		return divisions;
-	}
-
 	public Collection<ProductStatusBean> getProductStatuses() {
 		if (productStatuses == null) {
 			productStatuses = legacyProductSerialManager.getAllProductStatus(getTenantId());
@@ -600,6 +555,14 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return productStatuses;
 	}
 
+	public BaseOrg getOwner() {
+		return product.getOwner();
+	}
+	
+	public void setOwner(BaseOrg owner) {
+		product.setOwner(owner);
+	}
+	
 	public Product getProduct() {
 		return product;
 	}
@@ -680,30 +643,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.product.setProductStatus(productStatus);
 	}
 
-	public Long getOwner() {
-		return (product.getOwner() != null) ? product.getOwner().getId() : null;
-	}
-
-	public void setOwner(Long ownerId) {
-		Customer customer = null;
-		if (ownerId != null) {
-			customer = customerManager.findCustomer(ownerId, getSecurityFilter());
-		}
-		this.product.setOwner(customer);
-	}
-
-	public Long getDivision() {
-		return (product.getDivision() != null) ? product.getDivision().getId() : null;
-	}
-
-	public void setDivision(Long divisionId) {
-		Division division = null;
-		if (divisionId != null) {
-			division = customerManager.findDivision(divisionId, getSecurityFilter());
-		}
-		this.product.setDivision(division);
-	}
-
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
 		if (autoAttributeCriteria == null) {
 			if (productType != null && productType.getAutoAttributeCriteria() != null) {
@@ -726,7 +665,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public void setProductTypeId(Long productTypeId) {
 		productType = null;
 		if (productTypeId != null) {
-			QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class);
+			QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
 			query.addSimpleWhere("tenant", getTenant()).addSimpleWhere("id", productTypeId).addSimpleWhere("state", EntityState.ACTIVE);
 			query.addPostFetchPaths("infoFields", "inspectionTypes", "attachments", "subTypes");
 			productType = persistenceManager.find(query);
@@ -837,26 +776,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
 	}
 
-	public List<ListingPair> getJobSites() {
-		if (jobSites == null) {
-			jobSites = persistenceManager.findAllLP(JobSite.class, getSecurityFilter().setDefaultTargets(), "name");
-		}
-		return jobSites;
-	}
-
-	public Long getJobSite() {
-		return (product.getJobSite() != null) ? product.getJobSite().getId() : null;
-	}
-
-	@CustomValidator(type = "requiredIfFeature", message = "", key = "error.jobsiterequired", parameters = { @ValidationParameter(name = "extendedFeature", value = "JobSites") })
-	public void setJobSite(Long jobSite) {
-		if (jobSite == null) {
-			product.setJobSite(null);
-		} else if (product.getJobSite() == null || !jobSite.equals(product.getJobSite().getId())) {
-			product.setJobSite(persistenceManager.find(JobSite.class, jobSite, getSecurityFilter().setDefaultTargets()));
-		}
-	}
-
 	public Long getTagOptionId() {
 		return tagOptionId;
 	}
@@ -880,8 +799,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 		return employees;
 	}
-
-	
 
 	public Long getAssignedUser() {
 		return (product.getAssignedUser() != null) ? product.getAssignedUser().getUniqueID() : null;

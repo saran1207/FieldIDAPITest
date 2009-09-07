@@ -13,6 +13,7 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.tools.Pager;
@@ -142,7 +143,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 
 	private void rollbackDefinitions() {
 		Pager<AutoAttributeDefinition> pager = null;
-		QueryBuilder<AutoAttributeDefinition> existingDefinitionQuery = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class);
+		QueryBuilder<AutoAttributeDefinition> existingDefinitionQuery = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
 		existingDefinitionQuery.addSimpleWhere("criteria", importCriteria);
 		while ((pager = persistenceManager.findAllPaged(existingDefinitionQuery, 1, ConfigContext.getCurrentContext().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
 			for (AutoAttributeDefinition definition : pager.getList()) {

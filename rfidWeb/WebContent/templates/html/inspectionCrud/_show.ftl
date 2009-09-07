@@ -69,12 +69,12 @@
 	
 	<p>
 		<label><@s.text name="label.customer"/></label>
-		<span>${(inspection.customer.name)!?html}</span>
+		<span>${(inspection.owner.customerOrg.name)!?html}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.division"/></label>
-		<span>${(inspection.division.name)!?html}</span>
+		<span>${(inspection.owner.divisionOrg.name)!?html}</span>
 	</p>
 	
 	<p>

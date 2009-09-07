@@ -19,12 +19,52 @@ public class SecondaryOrg extends InternalOrg {
 	
 	public SecondaryOrg() {}
 	
+	@Override
+	public InternalOrg getInternalOrg() {
+		return this;
+	}
+
+	@Override
+	public CustomerOrg getCustomerOrg() {
+		return null;
+	}
+
+	@Override
+	public DivisionOrg getDivisionOrg() {
+		return null;
+	}
+
+	@Override
+	protected Long getSecondaryOrgId() {
+		return getId();
+	}
+	
+	@Override
+	protected Long getCustomerOrgId() {
+		return null;
+	}
+
+	@Override
+	protected Long getDivisionOrgId() {
+		return null;
+	}
+	
+	@Override
+	public String getFilterPath() {
+		return SECONDARY_ID_FILTER_PATH;
+	}
+
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}
 
 	public void setPrimaryOrg(PrimaryOrg primaryOrg) {
 		this.primaryOrg = primaryOrg;
+	}
+
+	@Override
+	public PrimaryOrg getParent() {
+		return primaryOrg;
 	}
 	
 }

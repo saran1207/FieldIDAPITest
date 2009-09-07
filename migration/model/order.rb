@@ -7,7 +7,7 @@ require "line_item"
 class Order < ActiveRecord::Base
   set_table_name :orders
   
-  belongs_to  :tenant,          :foreign_key => 'r_tenant',           :class_name => 'Organization'
+  belongs_to  :tenant,          :foreign_key => 'tenant_id',           :class_name => 'Tenant'
   belongs_to  :modifiedBy,      :foreign_key => 'modifiedby',         :class_name => 'User'
   belongs_to  :customer,        :foreign_key => 'customer_id',        :class_name => 'Customer'
   belongs_to  :division,        :foreign_key => 'division_id',        :class_name => 'Division'
@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
       return nil
     end
   
-    order = Order.find(:first, :conditions => ["r_tenant = :tenantId and ordernumber = :ordernumber", {:tenantId => orderMaster.tenant.id, :ordernumber => orderMaster.ordernumber}])
+    order = Order.find(:first, :conditions => ["tenant_id = :tenantId and ordernumber = :ordernumber", {:tenantId => orderMaster.tenant.id, :ordernumber => orderMaster.ordernumber}])
     
     if order.nil?
       order = createFromOrderMaster(orderMaster)
@@ -48,7 +48,7 @@ class Order < ActiveRecord::Base
     end
     
     order = Order.create(
-              :r_tenant     => orderMaster.tenant.id,
+              :tenant_id     => orderMaster.tenant.id,
               :created      => created, 
               :modified     => modified,
               :ordertype    => resolveLegacyType(orderMaster.ordertype),
@@ -72,5 +72,4 @@ class Order < ActiveRecord::Base
   def displayString
     "#{ordernumber} (#{id.to_s})"
   end
-  
 end

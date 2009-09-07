@@ -11,7 +11,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Product;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 
 public class ProductUtilAction extends AbstractAction {
 
@@ -98,7 +98,7 @@ public class ProductUtilAction extends AbstractAction {
 
 	public Collection<Product> getProducts() {
 		if( products == null ) {
-			products =  productManager.findProductsByRfidNumber( rfidString, new SecurityFilter( getTenantId() ), "infoOptions", "type.name" );
+			products =  productManager.findProductsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
 		}
 		return products;
 	}

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -24,18 +25,21 @@ import org.hibernate.annotations.IndexColumn;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.EntityStateField;
-import com.n4systems.model.security.FilteredEntity;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "inspectionsmaster")
 @PrimaryKeyJoinColumn(name="inspection_id")
-public class Inspection extends AbstractInspection implements Comparable<Inspection>, Archivable, FilteredEntity {
+public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(Inspection.class);
+	}
 	
 	private String location;
 	
@@ -54,16 +58,11 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private InspectionBook book;
-
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private BaseOrg organization;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	private Customer customer;
-
-	@ManyToOne(fetch=FetchType.EAGER)
-	private Division division;
-
+	@ManyToOne(fetch=FetchType.EAGER, optional=false)
+	@JoinColumn(name="owner_id", nullable = false)
+	private BaseOrg owner;
+	
 	private ProofTestInfo proofTestInfo;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -72,23 +71,15 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	
 	@Enumerated(EnumType.STRING)
 	private Status status = Status.NA;
-	
-	@ManyToOne(optional=true)
-	private JobSite jobSite;
 		
-	@EntityStateField
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
 	@OneToOne(mappedBy="inspection")
 	private InspectionSchedule schedule;
-
+	
 	public Inspection() {
 		super();
-	}
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD, "customer.id", "division.id", null, "state");
 	}
 	
 	public Inspection(Tenant tenant) {
@@ -146,28 +137,12 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.book = book;
 	}
 
-	public BaseOrg getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(BaseOrg organization) {
-		this.organization = organization;
+	public BaseOrg getOwner() {
+		return owner;
 	}
 	
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public Division getDivision() {
-		return division;
-	}
-
-	public void setDivision(Division division) {
-		this.division = division;
+	public void setOwner(BaseOrg owner) {
+		this.owner = owner;
 	}
 
 	public ProofTestInfo getProofTestInfo() {
@@ -195,14 +170,6 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return ( compare == 0 ) ? getCreated().compareTo( inspection.getCreated() ) : compare;
 	}
 
-	public JobSite getJobSite() {
-		return jobSite;
-	}
-
-	public void setJobSite( JobSite jobSite ) {
-		this.jobSite = jobSite;
-	}
-
 	public List<SubInspection> getSubInspections() {
 		return subInspections;
 	}
@@ -211,7 +178,6 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.subInspections = subInspections;
 	}
 
-	
 	public void activateEntity() {
 		state = EntityState.ACTIVE;
 	}
@@ -262,9 +228,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	    return	super.toString() + 
 	    		"\nState: " + state + 
 	    		"\nDate: " + date +
-	    		"\nCustomer: " + getCustomer() +
-	    		"\nDivision: " + getDivision() + 
-	    		"\nJobSite: " + getJobSite() +
+	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
 	    		"\nInspector: " + getInspector() + 
 	    		"\nStatus: " + getStatus() + 

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.n4systems.fieldid.tools.reports.ColumnDefinition;
 import com.n4systems.fieldid.tools.reports.TableStructure;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 /**

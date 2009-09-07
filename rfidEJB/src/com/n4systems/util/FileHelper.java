@@ -6,23 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 
 public class FileHelper {
-	
-	public static File getTempDir(File baseDir) throws IOException {
-		File reportDir = new File(baseDir, UUID.randomUUID().toString());
-		
-		if(!reportDir.mkdirs()) {
-			throw new IOException("Unable to create directory path: " + reportDir.getPath());
-		}
-		
-		return reportDir;
-	}
 	
 	public static File getNonConflictingFile(File directory, String fileName, String suffix) throws IOException {
 		int fileNum = 1;
@@ -40,7 +29,7 @@ public class FileHelper {
 	}
 	
 	// XXX - make me recursive
-	public static File zipDirectory(File directory, String fileName) throws FileNotFoundException, IOException {
+	public static File zipDirectory(File zipDirectory, File outputDirectory, String fileName) throws FileNotFoundException, IOException {
 		OutputStream out = null;
 		ZipOutputStream zipOut = null;
 		
@@ -48,7 +37,7 @@ public class FileHelper {
 		byte[] buffer = new byte[1024 * 8];
 		int readBytes;
 
-		File zipFile = getNonConflictingFile(directory.getParentFile(), fileName, ".zip");
+		File zipFile = getNonConflictingFile(outputDirectory, fileName, ".zip");
 		
 		try {
 			out = new FileOutputStream(zipFile);
@@ -56,7 +45,7 @@ public class FileHelper {
 			
 			//walk files in the directory and write them to the zip stream
 			//note that this is not recursive in any way ...
-			for(File file: directory.listFiles()) {
+			for(File file: zipDirectory.listFiles()) {
 				in = new FileInputStream(file);
 				
 				// each file is a new zip entry ...

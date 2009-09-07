@@ -7,6 +7,7 @@ import com.n4systems.model.notificationsettings.NotificationSettingSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 
 public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
 
@@ -21,7 +22,7 @@ public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
 	@Override
 	protected void featureTearDown(Transaction transaction) {
 		// removes all current notification settings for this tenant
-		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(new SecurityFilter(primaryOrg.getTenant().getId()));
+		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant().getId()));
 		
 		NotificationSettingSaver saver = new NotificationSettingSaver();
 		

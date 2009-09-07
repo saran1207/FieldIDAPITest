@@ -21,6 +21,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -53,7 +54,7 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 		q.setParameter( "productCode", productCode );
 		q.setParameter( "manufacturer", tenantId );
 		
-		QueryBuilder<ProductCodeMappingBean> builder = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class);
+		QueryBuilder<ProductCodeMappingBean> builder = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("productCode", productCode);
 		builder.addSimpleWhere("tenant.id", tenantId);
 		
@@ -82,7 +83,7 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 		// find the default product type name for this tenant
 		String defaultTypeName = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, tenantId);
 		
-		QueryBuilder<ProductType> builder = new QueryBuilder<ProductType>(ProductType.class);
+		QueryBuilder<ProductType> builder = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("tenant.id", tenantId);
 		builder.addSimpleWhere("name", defaultTypeName);
 		

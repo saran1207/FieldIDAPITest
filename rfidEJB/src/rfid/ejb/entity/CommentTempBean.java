@@ -4,21 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
-import com.n4systems.model.security.FilteredEntity;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "CommentTemplate")
-public class CommentTempBean extends LegacyBeanTenantWithCreateModifyDate implements FilteredEntity {
+public class CommentTempBean extends LegacyBeanTenantWithCreateModifyDate {
 	private static final long serialVersionUID = 1L;
 	
 	private String modifiedBy;
 	private String templateID;
 	private String contents;
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets(TENANT_ID_FIELD);
-	}
 	
 	public String getModifiedBy() {
 		return modifiedBy;

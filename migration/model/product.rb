@@ -9,8 +9,8 @@ require "sub_product"
 class Product < ActiveRecord::Base
   set_table_name :products
   
-  belongs_to  :tenant,        :foreign_key => 'r_tenant',               :class_name => 'Organization'
-  belongs_to  :organization,  :foreign_key => 'r_organization',         :class_name => 'Organization'
+  belongs_to  :tenant,        :foreign_key => 'tenant_id',               :class_name => 'Tenant'
+  belongs_to  :organization,  :foreign_key => 'organization_id',         :class_name => 'Organization'
   belongs_to  :productinfo,   :foreign_key => 'type_id',                :class_name => 'ProductType'
   belongs_to  :owner,         :foreign_key => 'owner_id',               :class_name => 'Customer'
   belongs_to  :division,      :foreign_key => 'division_id',            :class_name => 'Division'

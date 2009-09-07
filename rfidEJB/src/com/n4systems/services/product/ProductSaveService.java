@@ -12,7 +12,8 @@ import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductAttachmentSaver;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 
 public class ProductSaveService {
 
@@ -27,7 +28,7 @@ public class ProductSaveService {
 		super();
 		this.productManager = productManager;
 		this.user = user;
-		filter = new SecurityFilter(user);
+		filter = new UserSecurityFilter(user);
 		
 	}
 

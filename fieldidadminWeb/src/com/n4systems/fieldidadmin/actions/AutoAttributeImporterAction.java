@@ -11,6 +11,7 @@ import com.n4systems.importing.ImportManager;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -74,11 +75,11 @@ public class AutoAttributeImporterAction extends AbstractAdminAction {
 	}
 	
 	public List<DualListView> loadTenantView() {
-		QueryBuilder<Listable<Long>> tenantBuilder = new QueryBuilder<Listable<Long>>(Tenant.class);
+		QueryBuilder<Listable<Long>> tenantBuilder = new QueryBuilder<Listable<Long>>(Tenant.class, new OpenSecurityFilter());
 		tenantBuilder.setSimpleSelect();
 		tenantBuilder.setOrder("displayName");
 		
-		QueryBuilder<Listable<Long>> typeBuilder = new QueryBuilder<Listable<Long>>(ProductType.class);
+		QueryBuilder<Listable<Long>> typeBuilder = new QueryBuilder<Listable<Long>>(ProductType.class, new OpenSecurityFilter());
 		typeBuilder.setSimpleSelect();
 		typeBuilder.setOrder("name");
 		

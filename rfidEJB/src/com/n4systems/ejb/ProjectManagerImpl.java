@@ -16,10 +16,11 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
+import com.n4systems.model.security.ManualSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.SecurityFilter;
 
 @Stateless
 public class ProjectManagerImpl implements ProjectManager {
@@ -59,16 +60,17 @@ public class ProjectManagerImpl implements ProjectManager {
 		return noteManager.detachNote(note, project, modifiedBy);
 	}
 
-	public Pager<Product> getAssetsPaged(Project project, SecurityFilter filter, int page, int pageSize) {
-		filter.setTargets("p.tenant.id", "asset.owner.id", "asset.division.id");
+	public Pager<Product> getAssetsPaged(Project project, SecurityFilter userFilter, int page, int pageSize) {
+		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
+		filter.setTargets("p.tenant.id", "asset.owner", null, null);
 		String queryStr = "SELECT asset FROM " + Project.class.getName() + " p , IN( p.products ) asset where p = :project AND " + filter.produceWhereClause();
 		String countQueryStr = "SELECT count( asset ) FROM " + Project.class.getName() + " p , IN( p.products ) asset where p = :project and " + filter.produceWhereClause();
 
 		Query selectQuery = em.createQuery(queryStr).setParameter("project", project);
-		filter.applyParamers(selectQuery);
+		filter.applyParameters(selectQuery);
 		
 		Query countQuery = em.createQuery(countQueryStr).setParameter("project", project);
-		filter.applyParamers(countQuery);
+		filter.applyParameters(countQuery);
 
 		return new Page<Product>(selectQuery, countQuery, page, pageSize);
 	}
@@ -79,8 +81,9 @@ public class ProjectManagerImpl implements ProjectManager {
 		return new Page<InspectionSchedule>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	private Query scheduleCountQuery(Project project, SecurityFilter filter, List<InspectionSchedule.ScheduleStatus> statuses) {
-		filter.setTargets("p.tenant.id", "schedule.customer.id", "schedule.division.id");
+	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
+		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
+		filter.setTargets("p.tenant.id", "schedule.owner", null, null);
 		String countQueryStr = "SELECT count( schedule ) FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project and " + filter.produceWhereClause();
 		
 		if (statuses != null && !statuses.isEmpty()) {
@@ -88,7 +91,7 @@ public class ProjectManagerImpl implements ProjectManager {
 		}
 		
 		Query countQuery = em.createQuery(countQueryStr).setParameter("project", project);
-		filter.applyParamers(countQuery);
+		filter.applyParameters(countQuery);
 		if (statuses != null && !statuses.isEmpty()) {
 			countQuery.setParameter("statuses", statuses);
 		}
@@ -96,8 +99,9 @@ public class ProjectManagerImpl implements ProjectManager {
 		
 	}
 	
-	private Query scheduleSelectQuery(Project project, SecurityFilter filter, List<InspectionSchedule.ScheduleStatus> statuses) {
-		filter.setTargets("p.tenant.id", "schedule.customer.id", "schedule.division.id");
+	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
+		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
+		filter.setTargets("p.tenant.id", "schedule.owner", null, null);
 		String queryStr = "SELECT schedule FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {
 			queryStr += " AND schedule.status IN (:statuses) ";
@@ -106,7 +110,7 @@ public class ProjectManagerImpl implements ProjectManager {
 		queryStr += " ORDER BY schedule.nextDate";
 		
 		Query selectQuery = em.createQuery(queryStr).setParameter("project", project);
-		filter.applyParamers(selectQuery);
+		filter.applyParameters(selectQuery);
 		if (statuses != null && !statuses.isEmpty()) {
 			selectQuery.setParameter("statuses", statuses);
 		}
@@ -121,7 +125,6 @@ public class ProjectManagerImpl implements ProjectManager {
 	public Long getCompleteSchedules(Project project, SecurityFilter filter) {
 		Query countQuery = scheduleCountQuery(project, filter, CompressedScheduleStatus.COMPLETE.getScheduleStatuses());
 		return (Long)(countQuery.getSingleResult());
-		
 	}
 
 	public Pager<FileAttachment> getNotesPaged(Project project, int page, int pageSize) {
@@ -136,11 +139,10 @@ public class ProjectManagerImpl implements ProjectManager {
 	
 	@SuppressWarnings("unchecked")
 	public List<Project> getProjectsForAsset(Product asset, SecurityFilter filter) {
-		filter.setTargets("p.tenant.id", "p.customer.id", "p.division.id");
-		String queryStr = "SELECT p FROM " + Project.class.getName() + " p , IN( p.products ) asset where asset = :asset AND p.retired = false AND " + filter.produceWhereClause() ;
+		String queryStr = "SELECT p FROM " + Project.class.getName() + " p , IN( p.products ) asset where asset = :asset AND p.retired = false AND " + filter.produceWhereClause(Project.class, "p") ;
 		Query selectQuery = em.createQuery(queryStr);
 		selectQuery.setParameter("asset", asset);
-		filter.applyParamers(selectQuery);
+		filter.applyParameters(selectQuery, Project.class);
 	
 		return (List<Project>)selectQuery.getResultList();
 	}
@@ -159,7 +161,7 @@ public class ProjectManagerImpl implements ProjectManager {
 
 	private Query createResourceQuery(Project project, SecurityFilter filter, String queryStr) {
 		Query query = em.createQuery(queryStr).setParameter("project", project);
-		filter.applyParamers(query);
+		filter.applyParameters(query, Project.class);
 		return query;
 	}
 	
@@ -169,8 +171,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	private String baseResourceQuery(SecurityFilter filter) {
-		filter.setTargets("p.tenant.id");
-		String queryStr = "FROM " + Project.class.getName() + " p, IN( p.resources ) resource where p = :project AND " + filter.produceWhereClause();
+		String queryStr = "FROM " + Project.class.getName() + " p, IN( p.resources ) resource where p = :project AND " + filter.produceWhereClause(Project.class, "p");
 		return queryStr;
 	}
 	

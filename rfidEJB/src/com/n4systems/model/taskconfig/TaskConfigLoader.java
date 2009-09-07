@@ -2,6 +2,7 @@ package com.n4systems.model.taskconfig;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -11,7 +12,7 @@ public class TaskConfigLoader extends Loader<TaskConfig> {
 	public TaskConfigLoader() {}
 	
 	protected TaskConfig load(EntityManager em) {
-		QueryBuilder<TaskConfig> builder = new QueryBuilder<TaskConfig>(TaskConfig.class);
+		QueryBuilder<TaskConfig> builder = new QueryBuilder<TaskConfig>(TaskConfig.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("id", id);
 		
 		TaskConfig config = builder.getSingleResult(em);

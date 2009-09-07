@@ -536,12 +536,12 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	}
 
 	public void setGroup(Long group) {
-		productType.setGroup(entityLoader.getEntity(ProductTypeGroup.class, group, productType.getGroup(), getSecurityFilter().setTargets("tenant.id")));
+		productType.setGroup(entityLoader.getEntity(ProductTypeGroup.class, group, productType.getGroup(), getSecurityFilter()));
 	}
 
 	public List<ProductTypeGroup> getProductTypeGroups() {
 		if (productTypeGroups == null) {
-			productTypeGroups = persistenceManager.findAll(new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter().setTargets("tenant.id")).addOrder("orderIdx"));
+			productTypeGroups = persistenceManager.findAll(new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter()).addOrder("orderIdx"));
 		}
 		return productTypeGroups;
 	}

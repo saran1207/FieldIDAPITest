@@ -1153,38 +1153,6 @@
 			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 		</action>
 
-		<action name="jobSites" method="list" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
-			<result name="success" type="freemarker">/templates/html/jobSites/list.ftl</result>
-		</action>
-
-		<action name="jobSiteAdd" method="add" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
-			<result name="success" type="freemarker">/templates/html/jobSites/add.ftl</result>
-		</action>
-
-		<action name="jobSiteCreate" method="save" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
-			<result name="error" type="freemarker">/templates/html/jobSites/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/jobSites/add.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">jobSites</param>
-				<param name="currentPage">${currentPage}</param>
-			</result>
-		</action>
-
-
-		<action name="jobSiteEdit" method="edit" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
-			<result name="success" type="freemarker">/templates/html/jobSites/edit.ftl</result>
-
-		</action>
-
-		<action name="jobSiteUpdate" method="save" class="com.n4systems.fieldid.actions.jobSites.JobSiteCrud">
-			<result name="error" type="freemarker">/templates/html/jobSites/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/jobSites/edit.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">jobSites</param>
-				<param name="currentPage">${currentPage}</param>
-			</result>
-		</action>
-
 		<action name="summaryReport" method="show"
 			class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
 			<result name="error" type="redirect-action">report</result>

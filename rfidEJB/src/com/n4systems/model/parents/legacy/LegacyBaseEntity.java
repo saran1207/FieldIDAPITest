@@ -7,10 +7,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.n4systems.model.security.SecurityDefiner;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class LegacyBaseEntity implements Serializable {
     
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(LegacyBaseEntity.class);
+	}
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uniqueID;

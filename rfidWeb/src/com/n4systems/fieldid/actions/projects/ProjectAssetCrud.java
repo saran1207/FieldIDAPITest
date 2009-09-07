@@ -39,7 +39,7 @@ public class ProjectAssetCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = persistenceManager.find(Product.class, uniqueId, getSecurityFilter().setTargets("tenant.id", "owner.id", "division.id"));
+		asset = persistenceManager.find(Product.class, uniqueId, getSecurityFilter());
 		
 	}
 
@@ -129,7 +129,7 @@ public class ProjectAssetCrud extends AbstractCrud {
 		if (projectId == null) {
 			project = null;
 		} else if (project == null || !projectId.equals(project.getId())) {
-			project = persistenceManager.find(Project.class, projectId, getSecurityFilter().setDefaultTargets(), "products");
+			project = persistenceManager.find(Project.class, projectId, getSecurityFilter(), "products");
 		}
 	}
 

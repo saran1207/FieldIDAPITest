@@ -137,13 +137,13 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		if (jobId == null) {
 			job = null;
 		} else if (job == null || !jobId.equals(job.getId())) {
-			job = persistenceManager.find(Project.class, jobId, getSecurityFilter().setDefaultTargets());
+			job = persistenceManager.find(Project.class, jobId, getSecurityFilter());
 		}
 	}
 	
 	public List<ListingPair> getJobs() {
 		if (jobs == null) {
-			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter().setTargets("tenant.id", "customer.id", "division.id"));
+			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(Project.class, getSecurityFilter());
 			query.addSimpleWhere("eventJob", true).addSimpleWhere("retired", false);
 			jobs = persistenceManager.findAllLP(query, "name");
 		}

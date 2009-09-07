@@ -37,7 +37,6 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.DownloadManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -48,20 +47,20 @@ import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
@@ -76,25 +75,15 @@ import com.n4systems.util.ReportMap;
 @Interceptors( { TimingInterceptor.class })
 @Stateless
 public class ReportFactoryImpl implements ReportFactory {
-
 	private static final String n4LogoFileName = "n4_logo.gif";
 	private static final String pdfExt = ".pdf";
-
 	private Logger logger = Logger.getLogger(ReportFactory.class);
-
-	@EJB
-	private DownloadManager downloadManager;
-	@EJB
-	private ProductManager productManager;
-	@EJB
-	private PersistenceManager persistenceManager;
-	@EJB
-	private LegacyProductType productTypeManger;
-
-	@EJB
-	private InspectionScheduleManager inspectionScheduleManager;
-	@EJB
-	private User userManager;
+	
+	@EJB private ProductManager productManager;
+	@EJB private PersistenceManager persistenceManager;
+	@EJB private LegacyProductType productTypeManger;
+	@EJB private InspectionScheduleManager inspectionScheduleManager;
+	@EJB private User userManager;
 
 	/**
 	 * @return A new jasper JRPdfExporter with character encoding set to UTF8
@@ -111,22 +100,22 @@ public class ReportFactoryImpl implements ReportFactory {
 	 *      java.util.Collection, java.lang.String, java.lang.String,
 	 *      rfid.ejb.entity.UserBean)
 	 */
-	public String generateInspectionCertificateReport(InspectionReportType type, Collection<Long> inspectionIds, String packageName, UserBean user) throws ReportException, EmptyReportException {
+	public File generateInspectionCertificateReport(InspectionReportType type, Collection<Long> inspectionIds, String packageName, UserBean user) throws ReportException, EmptyReportException {
 		// XXX - this could probable be improved now the the rest is a little
 		// cleaner
 		int reportsInFile = 0;
 		int totalReports = 0;
 		int reportFileCount = 1;
 		List<JasperPrint> printList = new ArrayList<JasperPrint>();
-		File reportOutputDir = null;
+		File tempDir = null;
 		File reportFile;
 		OutputStream reportOut = null;
 		File zipFile = null;
 
 		try {
-			reportOutputDir = FileHelper.getTempDir(downloadManager.getBaseAccessDir(user));
-
-			reportFile = new File(reportOutputDir, packageName + "_" + reportFileCount + pdfExt);
+			tempDir = PathHandler.getTempDir();
+			
+			reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
 			reportOut = new FileOutputStream(reportFile);
 
 			List<Inspection> inspections = persistenceManager.findAll(Inspection.class, new HashSet<Long>(inspectionIds), user.getTenant());
@@ -143,7 +132,7 @@ public class ReportFactoryImpl implements ReportFactory {
 					printList = new ArrayList<JasperPrint>();
 
 					reportOut.close();
-					reportFile = new File(reportOutputDir, packageName + "_" + reportFileCount + pdfExt);
+					reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
 					reportOut = new FileOutputStream(reportFile);
 				}
 
@@ -174,7 +163,7 @@ public class ReportFactoryImpl implements ReportFactory {
 				throw new EmptyReportException("No printable reports found");
 			}
 
-			zipFile = FileHelper.zipDirectory(reportOutputDir, packageName);
+			zipFile = FileHelper.zipDirectory(tempDir, user.getPrivateDir(), packageName);
 		} catch (IOException e) {
 			throw new ReportException("error with file access", e);
 		} finally {
@@ -182,34 +171,34 @@ public class ReportFactoryImpl implements ReportFactory {
 			// temp dir
 			IOUtils.closeQuietly(reportOut);
 
-			if (reportOutputDir != null) {
+			if (tempDir != null) {
 				try {
-					FileUtils.deleteDirectory(reportOutputDir);
+					FileUtils.deleteDirectory(tempDir);
 				} catch (IOException e) {
-					logger.error("could not delete the directory " + reportOutputDir.toString(), e);
+					logger.error("could not delete the directory " + tempDir.toString(), e);
 				}
 			}
 		}
 
-		return downloadManager.resolveRelativePath(zipFile);
+		return zipFile;
 	}
 
-	public String generateProductCertificateReport(Collection<Long> productIds, String packageName, UserBean user) throws ReportException, EmptyReportException {
+	public File generateProductCertificateReport(Collection<Long> productIds, String packageName, UserBean user) throws ReportException, EmptyReportException {
 		// XXX - this could probable be improved now the the rest is a little
 		// cleaner
 		int reportsInFile = 0;
 		int totalReports = 0;
 		int reportFileCount = 1;
 		List<JasperPrint> printList = new ArrayList<JasperPrint>();
-		File reportOutputDir = null;
+		File tempDir = null;
 		File reportFile;
 		OutputStream reportOut = null;
 		File zipFile = null;
 
 		try {
-			reportOutputDir = FileHelper.getTempDir(downloadManager.getBaseAccessDir(user));
+			tempDir = PathHandler.getTempDir();
 
-			reportFile = new File(reportOutputDir, packageName + "_" + reportFileCount + pdfExt);
+			reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
 			reportOut = new FileOutputStream(reportFile);
 
 			// builds sets of pdfs.
@@ -225,7 +214,7 @@ public class ReportFactoryImpl implements ReportFactory {
 					printList = new ArrayList<JasperPrint>();
 
 					reportOut.close();
-					reportFile = new File(reportOutputDir, packageName + "_" + reportFileCount + pdfExt);
+					reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
 					reportOut = new FileOutputStream(reportFile);
 				}
 
@@ -253,7 +242,7 @@ public class ReportFactoryImpl implements ReportFactory {
 				throw new EmptyReportException("No printable reports found");
 			}
 
-			zipFile = FileHelper.zipDirectory(reportOutputDir, packageName);
+			zipFile = FileHelper.zipDirectory(tempDir, user.getPrivateDir(), packageName);
 		} catch (IOException e) {
 			throw new ReportException("File access product occured", e);
 		} finally {
@@ -262,13 +251,13 @@ public class ReportFactoryImpl implements ReportFactory {
 			IOUtils.closeQuietly(reportOut);
 
 			try {
-				FileUtils.deleteDirectory(reportOutputDir);
+				FileUtils.deleteDirectory(tempDir);
 			} catch (IOException e) {
-				logger.error("could not delete the directory " + reportOutputDir.toString(), e);
+				logger.error("could not delete the directory " + tempDir.toString(), e);
 			}
 		}
 
-		return downloadManager.resolveRelativePath(zipFile);
+		return zipFile;
 
 	}
 
@@ -407,16 +396,17 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 
-		addImageStreams(reportMap, inspection.getOrganization());
-
-		addTenantParams(reportMap, inspection.getOrganization().getPrimaryOrg());
-		addOrganizationParams(reportMap, inspection.getOrganization());
+		// images come from the inspectors organization
+		addImageStreams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
+		addOrganizationParams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
+		
+		addTenantParams(reportMap, inspection.getOwner().getPrimaryOrg());
 		addUserParams(reportMap, inspection.getInspector());
 		reportMap.putAll(new ProductReportMapProducer(inspection.getProduct(), new DateTimeDefiner(user)).produceMap());
 		addOrderParams(reportMap, inspection.getProduct().getShopOrder());
 		addProductTypeParams(reportMap, inspection.getProduct().getType());
-		addCustomerParams(reportMap, inspection.getCustomer());
-		addDivisionParams(reportMap, inspection.getDivision());
+//		addCustomerParams(reportMap, inspection.getCustomer());
+//		addDivisionParams(reportMap, inspection.getDivision());
 		reportMap.putAll(new InspectionReportMapProducer(inspection, new DateTimeDefiner(user)).produceMap());
 
 		JasperPrint jasperPrint = null;
@@ -455,12 +445,12 @@ public class ReportFactoryImpl implements ReportFactory {
 			reportMap.put("product", inspectionReportMap.get("product"));
 			addInspectionTypeGroupParams(reportMap, inspection.getType().getGroup());
 			reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-			addImageStreams(reportMap, inspection.getOrganization());
-			addTenantParams(reportMap, inspection.getOrganization().getPrimaryOrg());
-			addOrganizationParams(reportMap, inspection.getOrganization());
+			addImageStreams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
+			addTenantParams(reportMap, inspection.getOwner().getPrimaryOrg());
 			addUserParams(reportMap, inspection.getInspector());
-			addCustomerParams(reportMap, inspection.getCustomer());
-			addDivisionParams(reportMap, inspection.getDivision());
+			addOrganizationParams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
+			addCustomerParams(reportMap, inspection.getOwner().getCustomerOrg());
+			addDivisionParams(reportMap, inspection.getOwner().getDivisionOrg());
 			addInspectionScheduleParams(reportMap, inspectionScheduleManager.getNextScheduleFor(inspection.getProduct(), inspection.getType()), user);
 
 			List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
@@ -525,12 +515,12 @@ public class ReportFactoryImpl implements ReportFactory {
 		ReportMap<Object> reportMap = createAbstractInspectionReportMap(inspection, user);
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-		addImageStreams(reportMap, inspection.getOrganization());
-		addTenantParams(reportMap, inspection.getOrganization().getPrimaryOrg());
-		addOrganizationParams(reportMap, inspection.getOrganization());
+		addImageStreams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
+		addTenantParams(reportMap, inspection.getOwner().getPrimaryOrg());
+		addOrganizationParams(reportMap, inspection.getOwner().getInternalOrg());
 		addUserParams(reportMap, inspection.getInspector());
-		addCustomerParams(reportMap, inspection.getCustomer());
-		addDivisionParams(reportMap, inspection.getDivision());
+		addCustomerParams(reportMap, inspection.getOwner().getCustomerOrg());
+		addDivisionParams(reportMap, inspection.getOwner().getDivisionOrg());
 		addProofTestInfoParams(reportMap, inspection);
 
 		addInspectionScheduleParams(reportMap, inspectionScheduleManager.getNextScheduleFor(inspection.getProduct(), inspection.getType()), user);
@@ -579,18 +569,18 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 
-		addImageStreams(reportMap, productSerial.getOrganization());
+		addImageStreams(reportMap, productSerial.getOwner().getInternalOrg());
 
-		addTenantParams(reportMap, productSerial.getOrganization().getPrimaryOrg());
-		addOrganizationParams(reportMap, productSerial.getOrganization());
+		addTenantParams(reportMap, productSerial.getOwner().getPrimaryOrg());
+		addOrganizationParams(reportMap, productSerial.getOwner().getInternalOrg());
 		addUserParams(reportMap, productSerial.getIdentifiedBy());
 
 		reportMap.putAll(new ProductReportMapProducer(productSerial, new DateTimeDefiner(user)).produceMap());
 		addProductTypeParams(reportMap, productSerial.getType());
 		addOrderParams(reportMap, productSerial.getShopOrder());
 
-		addCustomerParams(reportMap, productSerial.getOwner());
-		addDivisionParams(reportMap, productSerial.getDivision());
+		addCustomerParams(reportMap, productSerial.getOwner().getCustomerOrg());
+		addDivisionParams(reportMap, productSerial.getOwner().getDivisionOrg());
 
 		List<Product> reportCollection = new ArrayList<Product>();
 		reportCollection.add(productSerial);
@@ -623,12 +613,10 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner);
 
-		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOrganization().getPrimaryOrg(), jasperFile);
+		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
 		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();
 
-		// we don't have access to a user here so we'll always use the tenant's
-		// image
-		addImageStreams(reportMap, user.getOrganization().getPrimaryOrg());
+		addImageStreams(reportMap, user.getOwner().getInternalOrg());
 
 		try {
 			Inspection inspection;
@@ -640,13 +628,13 @@ public class ReportFactoryImpl implements ReportFactory {
 				inspectionMap.put("productType", inspection.getProduct().getType().getName());
 				inspectionMap.put("serialNumber", inspection.getProduct().getSerialNumber());
 				inspectionMap.put("description", inspection.getProduct().getDescription());
-				inspectionMap.put("organization", inspection.getOrganization().getName());
-				inspectionMap.put("division", (inspection.getDivision() != null) ? inspection.getDivision().getDisplayName() : null);
+				inspectionMap.put("organization", inspection.getOwner().getInternalOrg().getName());
 				inspectionMap.put("inspectionType", inspection.getType().getName());
 				inspectionMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
 				inspectionMap.put("inspector", inspection.getInspector().getUserLabel());
 				inspectionMap.put("result", inspection.getStatus().getDisplayName());
-
+				inspectionMap.put("division", (inspection.getOwner().isDivision()) ? inspection.getOwner().getName() : null);
+				
 				if (inspection.getProofTestInfo() != null) {
 					inspectionMap.put("peakLoad", inspection.getProofTestInfo().getPeakLoad());
 				}
@@ -682,7 +670,6 @@ public class ReportFactoryImpl implements ReportFactory {
 		reportMap.put("toDate", reportDefiner.getToDate());
 		reportMap.put("fromDate", reportDefiner.getFromDate());
 		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
-		reportMap.put("hasJobSites", primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 
 		if (reportDefiner.getProductType() != null) {
 			reportMap.put("productType", productTypeManger.findProductType(reportDefiner.getProductType()).getName());
@@ -695,9 +682,6 @@ public class ReportFactoryImpl implements ReportFactory {
 				reportMap.put("inspectionBook", "no inspection book");
 			}
 		}
-		if (reportDefiner.getJobSite() != null) {
-			reportMap.put("jobSite", persistenceManager.find(JobSite.class, reportDefiner.getJobSite()).getName());
-		}
 
 		if (reportDefiner.getInspectionTypeGroup() != null) {
 			reportMap.put("inspectionTypeGroup", persistenceManager.find(InspectionTypeGroup.class, reportDefiner.getInspectionTypeGroup()).getName());
@@ -706,18 +690,18 @@ public class ReportFactoryImpl implements ReportFactory {
 		if (reportDefiner.getInspector() != null) {
 			reportMap.put("inspector", userManager.findUserBean(reportDefiner.getInspector()).getUserLabel());
 		}
-
-		if (reportDefiner.getCustomer() != null) {
-			reportMap.put("customer", persistenceManager.find(Customer.class, reportDefiner.getCustomer()).getName());
+		
+		if (reportDefiner.getOwner() != null) {
+			BaseOrg owner = persistenceManager.find(BaseOrg.class, reportDefiner.getOwner());
+			
+			reportMap.put("customer", (owner.getCustomerOrg() != null) ? owner.getCustomerOrg().getName() : "");
+			reportMap.put("division", (owner.getDivisionOrg() != null) ? owner.getDivisionOrg().getName() : "");
 		}
-
-		if (reportDefiner.getDivision() != null) {
-			reportMap.put("division", persistenceManager.find(Division.class, reportDefiner.getDivision()).getName());
-		}
+		
 		return reportMap;
 	}
 
-	private void addImageStreams(ReportMap<Object> params, BaseOrg org) throws ReportException {
+	private void addImageStreams(ReportMap<Object> params, InternalOrg org) throws ReportException {
 		InputStream logoImage = resolveCertificateMainLogo(org);
 		InputStream n4LogoImage = getImageFileStream(PathHandler.getCommonImageFile(n4LogoFileName));
 
@@ -734,11 +718,11 @@ public class ReportFactoryImpl implements ReportFactory {
 		}
 	}
 
-	private void addCustomerParams(ReportMap<Object> params, Customer customer) {
+	private void addCustomerParams(ReportMap<Object> params, CustomerOrg customer) {
 		params.putEmpty("customerNumber", "endUserName", "customerAddress", "customerCity", "customerState", "customerPostalCode", "customerPhoneNumber", "customerFaxNumber");
 
 		if (customer != null) {
-			params.put("customerNumber", customer.getCustomerId());
+			params.put("customerNumber", customer.getCode());
 			params.put("endUserName", customer.getName());
 
 			AddressInfo addressInfo = customer.getAddressInfo();
@@ -754,12 +738,12 @@ public class ReportFactoryImpl implements ReportFactory {
 		}
 	}
 
-	private void addDivisionParams(ReportMap<Object> params, Division division) {
+	private void addDivisionParams(ReportMap<Object> params, DivisionOrg division) {
 		params.putEmpty("division");
 
 		if (division != null) {
 			params.put("division", division.getName());
-			params.put("divisionID", division.getDivisionID());
+			params.put("divisionID", division.getCode());
 
 			if (division.getContact() != null) {
 				params.put("divisionContactName", division.getContact().getName());
@@ -813,12 +797,12 @@ public class ReportFactoryImpl implements ReportFactory {
 		}
 	}
 
-	private void addOrganizationParams(ReportMap<Object> params, BaseOrg org) {
+	private void addOrganizationParams(ReportMap<Object> params, InternalOrg org) {
 		params.putEmpty("organizationalPrintName", "organizationalAddress", "organizationalCity", "organizationalState", "organizationalPostalCode", "organizationalPhoneNumber",
 				"organizationalFaxNumber");
 
 		if (org != null) {
-			params.put("organizationalPrintName", org.getPrimaryOrg().getCertificateName());
+			params.put("organizationalPrintName", org.getCertificateName());
 
 			AddressInfo addressInfo = org.getAddressInfo();
 			if (addressInfo != null) {
@@ -899,7 +883,7 @@ public class ReportFactoryImpl implements ReportFactory {
 	 * @return An InputStream or null if no logo could be resolved.
 	 * @throws ReportException
 	 */
-	private InputStream resolveCertificateMainLogo(BaseOrg organization) throws ReportException {
+	private InputStream resolveCertificateMainLogo(InternalOrg organization) throws ReportException {
 		InputStream logoStream = null;
 		File tenantLogo = PathHandler.getCertificateLogo(organization);
 

@@ -30,14 +30,55 @@ public class CustomerOrg extends ExternalOrg {
 		return parent.getPrimaryOrg();
 	}
 	
-	// Note the type is downcast to InternalOrg (should always be the case because of forced setter)
+	@Override
+	public InternalOrg getInternalOrg() {
+		return getParent();
+	}
+	
+	@Override
+	public CustomerOrg getCustomerOrg() {
+		return this;
+	}
+
+	@Override
+	public DivisionOrg getDivisionOrg() {
+		return null;
+	}
+
+	@Override
+	protected Long getSecondaryOrgId() {
+		return parent.getSecondaryOrgId();
+	}
+	
+	@Override
+	protected Long getCustomerOrgId() {
+		return getId();
+	}
+
+	@Override
+	protected Long getDivisionOrgId() {
+		return null;
+	}
+	
+	@Override
+	public String getFilterPath() {
+		return CUSTOMER_ID_FILTER_PATH;
+	}
+	
+	@Override
 	public InternalOrg getParent() {
+		// Note the type is downcast to InternalOrg (should always be the case because of forced setter)
 		return (InternalOrg)parent;
 	}
 
 	// Note we force the type to be InternalOrg
 	public void setParent(InternalOrg parentOrg) {
 		this.parent = parentOrg;
+	}
+	
+	@Deprecated
+	public String getCustomerId() {
+		return getCode();
 	}
 
 }

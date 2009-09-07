@@ -1,14 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import com.n4systems.exceptions.EmptyReportException;
-import com.n4systems.model.Tenant;
-import com.n4systems.reporting.ReportDefiner;
-import com.n4systems.util.FileHelper;
-import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.mail.MailMessage;
-
-import rfid.ejb.entity.UserBean;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -18,6 +9,14 @@ import java.text.SimpleDateFormat;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
+
+import rfid.ejb.entity.UserBean;
+
+import com.n4systems.exceptions.EmptyReportException;
+import com.n4systems.model.Tenant;
+import com.n4systems.reporting.ReportDefiner;
+import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.mail.MailMessage;
 
 public class PrintInspectionSummaryReportTask implements Runnable {
 	private static Logger logger = Logger.getLogger(PrintInspectionSummaryReportTask.class);
@@ -66,25 +65,19 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 	    String body;
 		
 		try {
-			// generate the report
-			JasperPrint p = null;
+			File reportFile = new File(user.getPrivateDir(), reportFileName +  pdfExt);
 			
-			File reportOutputDir = FileHelper.getTempDir(ServiceLocator.getDownloadManager().getBaseAccessDir(user));
-			File reportFile = new File( reportOutputDir, reportFileName +  pdfExt);
-			
-			String reportPath = ServiceLocator.getDownloadManager().resolveRelativePath(reportFile);
-			
-			p = ServiceLocator.getReportFactory().generateInspectionReport( reportDefiner, user, tenant );
+			JasperPrint p = ServiceLocator.getReportFactory().generateInspectionReport( reportDefiner, user, tenant );
 			OutputStream pdf = new FileOutputStream( reportFile );
-			logger.info("Generating inspection summary report Complete [" + reportPath + "]");
+			logger.info("Generating inspection summary report Complete [" + reportFile + "]");
 			
 			ServiceLocator.getReportFactory().printToPDF( p, pdf );
-			logger.info("Printing pdf Complete[" + reportPath + "]");
+			logger.info("Printing pdf Complete[" + reportFile + "]");
 			
 			body = "<h4>Your Inspection Report print out is ready.</h4>";
 			body += "<br />Please click the link below to download your report.<br />";
 			body += "If you are not logged in you will be prompted to do so.<br /><br />";
-			body += "<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(reportPath, "UTF-8") + "'>Click here to download your report</a>";
+			body += "<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(reportFile.getName(), "UTF-8") + "'>Click here to download your report</a>";
 			
 		} catch( EmptyReportException e) {
 			logger.warn( "inspection report print empty report" );

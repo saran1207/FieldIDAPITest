@@ -8,6 +8,7 @@ import com.n4systems.fieldid.tools.reports.ColumnDefinition;
 import com.n4systems.fieldid.tools.reports.TableStructure;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 
@@ -27,9 +28,6 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 	
 	public ReportCriteria(SecurityFilter filter, TableStructure reportColumns) {
 		super(filter, reportColumns);
-
-		getSecurityFilter().setTargets("tenant.id", "customer.id", "division.id");	
-				
 		queryBuilder = new QueryBuilder<Inspection>(Inspection.class, getSecurityFilter());
 		
 		// we don't want deleted inspections or archived.
@@ -58,7 +56,7 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 	}
 
 	public void setCustomer(Long customer) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "customer", "customer.id", customer);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "customer", "owner.customer_id", customer);
 	}
 	
 	public Long getJobSite() {
@@ -75,7 +73,7 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 	}
 
 	public void setDivision(Long division) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "division.id", division);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "owner.division_id", division);
 	}
 
 	public String getOrderNumber() {
@@ -207,13 +205,13 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 			} else {
 				// if the direction isn't set or set to off clear all orderby and use default
 				queryBuilder.getOrderArguments().clear();
-				queryBuilder.addOrder("customer.id", "product.id");
+				queryBuilder.addOrder("owner.customer_id", "product.id");
 			}
 		} catch (Exception e) {
 			// do nothing this will catch the exception of the enum valueOf on a
 			// null or non existent type.
 			queryBuilder.getOrderArguments().clear();
-			queryBuilder.addOrder("customer.id", "product.id");
+			queryBuilder.addOrder("owner.customer_id", "product.id");
 		}
 	}
 	

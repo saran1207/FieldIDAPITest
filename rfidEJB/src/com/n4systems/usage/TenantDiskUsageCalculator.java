@@ -39,7 +39,7 @@ public class TenantDiskUsageCalculator {
 		dirs.put(TenantDirType.PRODUCT_TYPE_IMAGE,  	new Directory(getProductTypeImageBaseFile(tenant)));
 		dirs.put(TenantDirType.PRODUCT_TYPE_ATTACH, 	new Directory(getProductTypeAttachmentBaseFile(tenant)));
 		dirs.put(TenantDirType.JOB_NOTE,  				new Directory(getJobAttachmentFileBaseFile(tenant)));
-		dirs.put(TenantDirType.USER,  					new Directory(getAbsoluteUserBaseFile(tenant)));
+		dirs.put(TenantDirType.USER,  					new Directory(getTenantUserBaseFile(tenant)));
 	}
 
 	public Tenant getTenant() {

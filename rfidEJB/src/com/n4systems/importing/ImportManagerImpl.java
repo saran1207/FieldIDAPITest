@@ -28,8 +28,9 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.FuzzyResolver;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 @Interceptors({TimingInterceptor.class})
@@ -73,8 +74,7 @@ public class ImportManagerImpl implements ImportManager {
 			csvRead = new CSVReader(fRead);
 			
 			// we're going to need all the inspection types for this tenant.  Let's find them now.
-			SecurityFilter filter = new SecurityFilter(tenantId);
-			filter.setDefaultTargets();
+			SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 			
 			QueryBuilder<InspectionType> builder = new QueryBuilder<InspectionType>(InspectionType.class, filter);
 			builder.setSimpleSelect();

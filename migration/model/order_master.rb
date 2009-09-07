@@ -6,7 +6,7 @@ class OrderMaster < ActiveRecord::Base
   set_table_name :ordermaster
   set_primary_key :uniqueid
   
-  belongs_to  :tenant,      :foreign_key => 'r_tenant',     :class_name => 'Organization'
+  belongs_to  :tenant,      :foreign_key => 'tenant_id',     :class_name => 'Tenant'
   belongs_to  :modifiedBy,  :foreign_key => 'modifiedby',   :class_name => 'User'
   belongs_to  :customer,    :foreign_key => 'r_enduser',    :class_name => 'Customer'
   belongs_to  :division,    :foreign_key => 'r_division',   :class_name => 'Division'

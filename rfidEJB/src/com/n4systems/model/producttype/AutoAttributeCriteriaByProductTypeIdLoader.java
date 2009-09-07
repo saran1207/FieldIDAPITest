@@ -3,8 +3,8 @@ package com.n4systems.model.producttype;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class AutoAttributeCriteriaByProductTypeIdLoader extends SecurityFilteredLoader<AutoAttributeCriteria> {
@@ -16,7 +16,7 @@ public class AutoAttributeCriteriaByProductTypeIdLoader extends SecurityFiltered
 
 	@Override
 	protected AutoAttributeCriteria load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<AutoAttributeCriteria> builder = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, filter.prepareFor(AutoAttributeCriteria.class));
+		QueryBuilder<AutoAttributeCriteria> builder = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, filter);
 		builder.addSimpleWhere("productType.id", productTypeId);
 		builder.addFetch("inputs");
 		

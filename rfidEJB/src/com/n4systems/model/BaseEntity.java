@@ -10,10 +10,16 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.n4systems.model.security.SecurityDefiner;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class BaseEntity implements Serializable {
 
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(BaseEntity.class);
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;

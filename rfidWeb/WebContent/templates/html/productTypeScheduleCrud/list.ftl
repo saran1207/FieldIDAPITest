@@ -46,7 +46,7 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 							<div id="eventFrequencyOverrides_${inspectionType.id}" >
 								<#if customerOverrideSchedules[inspectionType.name]?exists >
 									<#list customerOverrideSchedules[inspectionType.name] as schedule >
-										<div id="eventFrequencyOverride_${inspectionType.id}_${schedule.customer.id}" class="override customerOverride"> 
+										<div id="eventFrequencyOverride_${inspectionType.id}_${schedule.owner.customerOrg.id}" class="override customerOverride"> 
 											<#include "_show.ftl"/>
 										</div>
 									</#list>

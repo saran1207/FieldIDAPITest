@@ -8,7 +8,7 @@ import rfid.ejb.entity.FindProductOptionManufactureBean;
 
 import com.n4systems.model.TagOption;
 import com.n4systems.model.TagOption.OptionKey;
-import com.n4systems.util.SecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 
 public interface Option {
 	

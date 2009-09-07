@@ -7,7 +7,7 @@ require 'info_field'
 class ProductType < ActiveRecord::Base
   set_table_name :producttypes
   
-  belongs_to  :tenant,             :foreign_key => 'r_tenant',              :class_name => 'Organization'
+  belongs_to  :tenant,             :foreign_key => 'tenant_id',              :class_name => 'Tenant'
   belongs_to  :modifiedBy,         :foreign_key => 'modifiedby',            :class_name => 'User'
   has_many    :inspectionTypeFKs,  :foreign_key => 'producttypes_id',        :class_name => 'ProductTypeInspectionType'
   has_many    :inspectionTypes,                                             :class_name => 'InspectionType',            :through => :inspectionTypeFKs

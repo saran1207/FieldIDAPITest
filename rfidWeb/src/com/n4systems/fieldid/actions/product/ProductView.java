@@ -11,8 +11,6 @@ public class ProductView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long owner;
-	private Long division;
-	private Long jobSite;
 	private Long assignedUser;
 	private Long productStatus;
 	private Long productTypeId;
@@ -32,22 +30,6 @@ public class ProductView implements Serializable {
 
 	public void setOwner(Long owner) {
 		this.owner = owner;
-	}
-
-	public Long getDivision() {
-		return division;
-	}
-
-	public void setDivision(Long division) {
-		this.division = division;
-	}
-
-	public Long getJobSite() {
-		return jobSite;
-	}
-
-	public void setJobSite(Long jobSite) {
-		this.jobSite = jobSite;
 	}
 
 	public Long getAssignedUser() {

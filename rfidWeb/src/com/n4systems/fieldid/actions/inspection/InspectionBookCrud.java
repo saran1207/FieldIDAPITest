@@ -7,7 +7,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.web.helper.Constants;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
@@ -16,9 +15,11 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -28,7 +29,6 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(InspectionBookCrud.class);
 
-	private CustomerManager customerManager;
 	private InspectionManager inspectionManager;
 
 	private InspectionBook book;
@@ -38,18 +38,14 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	private Pager<InspectionBook> page;
 
-	private List<ListingPair> customers;
-
-	public InspectionBookCrud(PersistenceManager persistenceManager, CustomerManager customerManager, InspectionManager inspectionManager) {
+	public InspectionBookCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager) {
 		super(persistenceManager);
-		this.customerManager = customerManager;
 		this.inspectionManager = inspectionManager;
 	}
 
 	@Override
 	protected void initMemberFields() {
 		book = new InspectionBook();
-
 	}
 
 	@Override
@@ -59,9 +55,9 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class);
+		QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, new OpenSecurityFilter());
 
-		queryBuilder.setSecurityFilter(getSecurityFilter());
+		queryBuilder.applyFilter(getSecurityFilter());
 		queryBuilder.addOrder("name");
 		try {
 			page = persistenceManager.findAllPaged(queryBuilder, getCurrentPage(), Constants.PAGE_SIZE);
@@ -78,7 +74,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 		SecurityFilter filter = getSecurityFilter();
 
 		try {
-			books = inspectionManager.findAvailableInspectionBooksLP(filter, withClosed, getCustomerId());
+			books = inspectionManager.findAvailableInspectionBooksLP(filter, withClosed, getOwner());
 			return SUCCESS;
 		} catch (Exception e) {
 			addActionErrorText("error.failedtoloadinspectionbooks");
@@ -188,7 +184,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 			return MISSING;
 		}
 
-		QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class);
+		QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
 
 		builder.setCountSelect();
 		builder.addSimpleWhere("book", book);
@@ -215,7 +211,6 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	public Pager<InspectionBook> getPage() {
 		return page;
 	}
-
 	
 	public String getName() {
 		return book.getName();
@@ -234,35 +229,17 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	public void setOpen(boolean open) {
 		book.setOpen(open);
 	}
-
-	public Long getCustomerId() {
-		return (book.getCustomer() != null) ? book.getCustomer().getId() : null;
+	
+	public BaseOrg getOwner() {
+		return book.getOwner();
 	}
-
-	public void setCustomerId(Long customerId) {
-		if (customerId == null) {
-			book.setCustomer(null);
-		} else if (book.getCustomer() == null || !customerId.equals(book.getCustomer().getId())) {
-			book.setCustomer(customerManager.findCustomer(customerId, getSecurityFilter()));
-		}
+	
+	public void setOwner(BaseOrg owner) {
+		book.setOwner(owner);
 	}
-
+	
 	public boolean duplicateValueExists(String formValue) {
-		return !persistenceManager.uniqueNameAvailableWithCustomer(InspectionBook.class, formValue, uniqueID, getTenantId(), getCustomerId());
-	}
-
-	public List<ListingPair> getCustomers() {
-		if (customers == null) {
-			customers = customerManager.findCustomersLP(getTenantId(), getSecurityFilter());
-		}
-		return customers;
-	}
-
-	@Override
-	public SecurityFilter getSecurityFilter() {
-		SecurityFilter filter = super.getSecurityFilter();
-		filter.setTargets("tenant.id", "customer.id", null);
-		return filter;
+		return !persistenceManager.uniqueNameAvailableWithCustomer(InspectionBook.class, formValue, uniqueID, getTenantId(), getOwner().getId());
 	}
 
 	public void setWithClosed(boolean withClosed) {

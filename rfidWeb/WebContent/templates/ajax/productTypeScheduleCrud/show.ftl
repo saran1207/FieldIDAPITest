@@ -3,15 +3,15 @@
 	<#include "/templates/html/productTypeScheduleCrud/_show.ftl" >
 </#assign>
 
-<#if schedule.customer?exists>
-	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.customer.id}"/>
+<#if schedule.owner.customer>
+	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.owner.id}"/>
 <#else>
 	<#assign containerId="eventFrequency_${inspectionTypeId}" />
 </#if>
 
 	var container = $('${containerId}');
 	
-	<#if schedule.customer?exists >
+	<#if schedule.owner.customer >
 		<#if schedule.id?exists >
 			if( container == null ) {
 				container = new Element('div', { id: '${containerId}', 'class':'override customerOverride' } );

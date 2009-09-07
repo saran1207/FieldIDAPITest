@@ -3,8 +3,8 @@ package com.n4systems.model.user;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListableLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.ListableSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
@@ -24,7 +24,7 @@ public class UserListableLoader extends ListableLoader {
 		/*
 		 * We're currently only filtering by tenant, this comes from the original UserManager method.  Not sure if it should be changed.
 		 */
-		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(UserBean.class, filter.newFilter().setTargets("tenant.id"));
+		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(UserBean.class, filter);
 		builder.setSelectArgument(new ListableSelect("uniqueID", "CONCAT(firstName, ' ', lastName)"));
 		builder.addSimpleWhere("system", false);
 		builder.addOrder("firstName", "lastName");

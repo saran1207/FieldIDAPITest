@@ -15,6 +15,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -65,7 +66,7 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	@SkipValidation
 	public String doList() {
 		try {
-			QueryBuilder<InspectionTypeGroup> query = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class, getSecurityFilter().setTargets("tenant.id"));
+			QueryBuilder<InspectionTypeGroup> query = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class, getSecurityFilter());
 			query.addOrder("name");
 			page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
 		} catch (Exception e) {
@@ -137,7 +138,7 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 		if (group.equals(inspectionTypeGroup)) {
 			return getInspectionTypes().isEmpty();
 		} else {
-			QueryBuilder<Long> inspectionTypeCountQuery = new QueryBuilder<Long>(InspectionType.class, getSecurityFilter().setTargets("tenant.id"));
+			QueryBuilder<Long> inspectionTypeCountQuery = new QueryBuilder<Long>(InspectionType.class, getSecurityFilter());
 			inspectionTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
 			return (persistenceManager.findCount(inspectionTypeCountQuery) == 0);
 		}
@@ -173,7 +174,7 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
-			QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter().prepareFor(InspectionType.class));
+			QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter());
 			query.addSimpleWhere("group", inspectionTypeGroup).addOrder("name");
 			inspectionTypes = persistenceManager.findAll(query);
 		}
@@ -222,13 +223,13 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	private List<PrintOut> findPrintOutsOfType(PrintOutType type) {
 		List<PrintOut> printOuts = null;
 		
-		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class);
+		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
 		queryBuilder.addSimpleWhere("type", type);
 		queryBuilder.addSimpleWhere("custom", false);
 		queryBuilder.addOrder("name");
 		printOuts = persistenceManager.findAll(queryBuilder);
 		
-		QueryBuilder<PrintOut>queryBuilderCustomPrintOuts = new QueryBuilder<PrintOut>(PrintOut.class);
+		QueryBuilder<PrintOut>queryBuilderCustomPrintOuts = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
 		queryBuilderCustomPrintOuts.addSimpleWhere("type", type);
 		queryBuilderCustomPrintOuts.addSimpleWhere("custom", true);
 		queryBuilderCustomPrintOuts.addSimpleWhere("tenant", getTenant());

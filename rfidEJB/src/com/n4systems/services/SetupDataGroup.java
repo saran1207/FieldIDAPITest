@@ -6,17 +6,18 @@ import rfid.ejb.entity.ProductStatusBean;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.JobSite;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 
 public enum SetupDataGroup {
 	/*
@@ -46,9 +47,10 @@ public enum SetupDataGroup {
 			AutoAttributeDefinition.class
 	),
 	OWNERS (
-			Customer.class,
-			Division.class,
-			JobSite.class
+			PrimaryOrg.class,
+			SecondaryOrg.class,
+			CustomerOrg.class,
+			DivisionOrg.class
 	),
 	JOBS (
 			Project.class

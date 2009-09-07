@@ -3,8 +3,8 @@ package com.n4systems.model.producttype;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -36,18 +36,18 @@ public class ProductTypeScheduleLoader extends SecurityFilteredLoader<ProductTyp
 	}
 
 	private QueryBuilder<ProductTypeSchedule> getBaseBuilder(SecurityFilter filter) {
-		QueryBuilder<ProductTypeSchedule> builder = new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, filter.prepareFor(ProductTypeSchedule.class));
+		QueryBuilder<ProductTypeSchedule> builder = new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, filter);
 		builder.addSimpleWhere("inspectionType.id", inspectionTypeId);
 		builder.addSimpleWhere("productType.id", productTypeId);
 		return builder;
 	}
 	
 	private QueryBuilder<ProductTypeSchedule> getCustomerOverrideBuilder(SecurityFilter filter) {
-		return getBaseBuilder(filter).addSimpleWhere("customer.id", customerId);
+		return getBaseBuilder(filter).addSimpleWhere("owner.customer_id", customerId);
 	}
 	
 	private QueryBuilder<ProductTypeSchedule> getDefaultScheduleBuilder(SecurityFilter filter) {
-		return getBaseBuilder(filter).addWhere(new WhereParameter<Object>(Comparator.NULL, "customer.id"));
+		return getBaseBuilder(filter).addWhere(new WhereParameter<Object>(Comparator.NULL, "owner.customer_id"));
 	}	
 	
 	public ProductTypeScheduleLoader setProductTypeId(Long productTypeId) {

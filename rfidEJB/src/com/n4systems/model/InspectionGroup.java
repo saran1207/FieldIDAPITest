@@ -1,9 +1,7 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -14,7 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.SecurityFilter;
 
 @Entity
 @Table(name = "inspectiongroups")
@@ -44,28 +41,29 @@ public class InspectionGroup extends EntityWithTenant {
 		this.mobileGuid = mobileGuid;
 	}
 
-	public List<Inspection> getFilteredInspections( SecurityFilter filter ) {
-		List<Inspection> filteredInspections = new ArrayList<Inspection>();
-		if( !filter.isCustomerSet() && !filter.isDivisionSet()  ) {
-			filteredInspections.addAll( getAvailableInspections() );
-			return filteredInspections;
-		}
-		
-		for( Inspection inspection : getAvailableInspections() ) {
-			if( filter.isCustomerSet() && inspection.getCustomer() != null && 
-					filter.getCustomerId().equals( inspection.getCustomer().getId() ) ) {
-				// only
-				if( filter.isDivisionSet() && ( inspection.getDivision() == null || 
-						!filter.getDivisionId().equals( inspection.getDivision().getId() ) ) ) {
-					continue;
-				}
-				filteredInspections.add( inspection );
-			}	
-		}
-		
-		
-		return filteredInspections;
-	}
+	// TODO: REMOVE_ME
+//	public List<Inspection> getFilteredInspections( LegacySecurityFilter filter ) {
+//		List<Inspection> filteredInspections = new ArrayList<Inspection>();
+//		if( !filter.isCustomerSet() && !filter.isDivisionSet()  ) {
+//			filteredInspections.addAll( getAvailableInspections() );
+//			return filteredInspections;
+//		}
+//		
+//		for( Inspection inspection : getAvailableInspections() ) {
+//			if( filter.isCustomerSet() && inspection.getCustomer() != null && 
+//					filter.getCustomerId().equals( inspection.getCustomer().getId() ) ) {
+//				// only
+//				if( filter.isDivisionSet() && ( inspection.getDivision() == null || 
+//						!filter.getDivisionId().equals( inspection.getDivision().getId() ) ) ) {
+//					continue;
+//				}
+//				filteredInspections.add( inspection );
+//			}	
+//		}
+//		
+//		
+//		return filteredInspections;
+//	}
 	
 	public Date getFirstDate() {
 		Date minDate = null;
@@ -92,8 +90,6 @@ public class InspectionGroup extends EntityWithTenant {
 		
 		return maxDate;
 	}
-	
-	
 	
 	public Set<Inspection> getAvailableInspections() {
 		Set<Inspection> availableInspections = new HashSet<Inspection>();

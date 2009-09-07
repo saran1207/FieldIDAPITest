@@ -37,7 +37,6 @@ import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
@@ -45,8 +44,10 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.FindSubProducts;
-import com.n4systems.util.SecurityFilter;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -177,7 +178,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			}
 
 			if (divisionList.length > 0) {
-				queryString += "ps.division.id in (:divisionList)";
+				queryString += "ps.owner.division_id in (:divisionList)";
 			}
 
 			queryString += ") AND ps.modified >= :beginDate " + " AND ps.id > :beginId ORDER BY ps.id ASC";
@@ -290,7 +291,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 	
 	private void linkProductOverTheSafetyNetwork(Product product) {
-		String linkedId = safetyNetworkManager.findProductLink(product.getRfidNumber(), product.getOrganization());
+		String linkedId = safetyNetworkManager.findProductLink(product.getRfidNumber(), product.getOwner());
 		if (linkedId != null) {
 			product.setLinkedUuid(linkedId);
 		}
@@ -298,7 +299,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	private void runProductSavePreRecs(Product product) throws SubProductUniquenessException {
 		moveRfidFromProductSerials(product);
-		processOwnership(product);
 		processSubProducts(product);
 	}
 
@@ -319,29 +319,16 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	private void updateSchedulesOwnership(Product product) {
 		try {
-			QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class).setSimpleSelect("id").addSimpleWhere("product", product).addWhere(Comparator.NE, "status", "status",
+			QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addSimpleWhere("product", product).addWhere(Comparator.NE, "status", "status",
 					ScheduleStatus.COMPLETED);
 			Map<String, Boolean> selectedAttributes = new HashMap<String, Boolean>();
-			if (product.getJobSite() != null) {
-				selectedAttributes.put("jobSite", true);
-			} else {
-				selectedAttributes.put("customer", true);
-			}
+			selectedAttributes.put("customer", true);
 			selectedAttributes.put("location", true);
 			InspectionSchedule schedule = new InspectionSchedule();
 			schedule.setProduct(product);
 			massUpdateManager.updateInspectionSchedules(persistenceManager.findAll(scheduleIds), schedule, selectedAttributes);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}
-	}
-
-	private void processOwnership(Product product) {
-		// if this customer has a jobsite feature then the customer and division
-		// must match the job site.
-		if (product.getOrganization().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites)) {
-			product.setOwner(product.getJobSite().getCustomer());
-			product.setDivision(product.getJobSite().getDivision());
 		}
 	}
 
@@ -356,8 +343,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			detachFromPreviousParent(product, subProduct);
 
 			subProduct.getProduct().setOwner(product.getOwner());
-			subProduct.getProduct().setDivision(product.getDivision());
-			subProduct.getProduct().setJobSite(product.getJobSite());
 			subProduct.getProduct().setLocation(product.getLocation());
 			subProduct.setWeight(weight);
 			em.merge(subProduct.getProduct());
@@ -367,7 +352,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	private void clearOldSubProducts(Product product) {
 		if (!product.isNew()) {
-			List<SubProduct> existingSubProducts = persistenceManager.findAll(new QueryBuilder<SubProduct>(SubProduct.class).addSimpleWhere("masterProduct", product));
+			List<SubProduct> existingSubProducts = persistenceManager.findAll(new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("masterProduct", product));
 			for (SubProduct subProduct : existingSubProducts) {
 				if (product.getSubProducts().contains(subProduct)) {
 					SubProduct subProductToUpdate = product.getSubProducts().get(product.getSubProducts().indexOf(subProduct));
@@ -385,7 +370,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 		if (parentProduct != null && !parentProduct.equals(product)) {
 			try {
-				QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class).addSimpleWhere("product", subProduct.getProduct());
+				QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("product", subProduct.getProduct());
 				SubProduct subProductToRemove = persistenceManager.find(query);
 				parentProduct.getSubProducts().remove(subProductToRemove);
 				persistenceManager.delete(subProductToRemove);
@@ -425,12 +410,10 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 		addProductHistory.setOwner(product.getOwner());
 		addProductHistory.setProductType(product.getType());
-		addProductHistory.setDivision(product.getDivision());
 		addProductHistory.setProductStatus(product.getProductStatus());
 		addProductHistory.setPurchaseOrder(product.getPurchaseOrder());
 		addProductHistory.setLocation(product.getLocation());
 		addProductHistory.setInfoOptions(new ArrayList<InfoOptionBean>(product.getInfoOptions()));
-		addProductHistory.setJobSite(product.getJobSite());
 		addProductHistory.setAssignedUser(product.getAssignedUser());
 
 		em.merge(addProductHistory);
@@ -440,7 +423,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	private void moveRfidFromProductSerials(Product obj) {
 		if (rfidExists(obj.getRfidNumber(), obj.getTenant().getId())) {
-			Collection<Product> pSerials = productManager.findProductsByRfidNumber(obj.getRfidNumber(), new SecurityFilter(obj.getTenant().getId()));
+			Collection<Product> pSerials = productManager.findProductsByRfidNumber(obj.getRfidNumber(), new TenantOnlySecurityFilter(obj.getTenant().getId()));
 			for (Product pSerial : pSerials) {
 				if (!pSerial.getId().equals(obj.getId())) {
 					pSerial.setRfidNumber(null);
@@ -565,8 +548,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	private Query createAllInspectionQuery(Product product, SecurityFilter securityFilter, boolean count, boolean lastInspection) {
-		securityFilter.setTargets("inspection.tenant.id", "inspection.customer.id", "inspection.division.id");
-		String query = "from Inspection inspection  left join inspection.product " + "WHERE  " + securityFilter.produceWhereClause()
+		String query = "from Inspection inspection  left join inspection.product " + "WHERE  " + securityFilter.produceWhereClause(Inspection.class, "inspection")
 				+ " AND inspection.product = :product AND inspection.state= :activeState";
 		if (count) {
 			query = "SELECT count(inspection.id) " + query;
@@ -584,7 +566,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 
 		inspectionQuery.setParameter("product", product);
-		securityFilter.applyParamers(inspectionQuery);
+		securityFilter.applyParameters(inspectionQuery, Inspection.class);
 		inspectionQuery.setParameter("activeState", EntityState.ACTIVE);
 
 		return inspectionQuery;
