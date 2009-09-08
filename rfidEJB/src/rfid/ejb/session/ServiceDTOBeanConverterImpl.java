@@ -272,8 +272,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		targetProduct.setProductStatus(convertField(ProductStatusBean.class, productServiceDTO.getProductStatusId(), targetProduct.getProductStatus()));
 		
-		UserBean user = em.find(UserBean.class, productServiceDTO.getIdentifiedById());			
-		targetProduct.setIdentifiedBy( user );
+		if (productServiceDTO.identifiedByExists()) {
+			UserBean user = em.find(UserBean.class, productServiceDTO.getIdentifiedById());			
+			targetProduct.setIdentifiedBy( user );
+		}
 	
 		if ( productServiceDTO.getInfoOptions() != null ) {			
 			Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();

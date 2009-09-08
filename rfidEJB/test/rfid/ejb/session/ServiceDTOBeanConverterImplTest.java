@@ -1,18 +1,16 @@
 package rfid.ejb.session;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -27,8 +25,6 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.model.Customer;
-import com.n4systems.model.Division;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
@@ -41,8 +37,6 @@ import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.TenantCache;
 import com.n4systems.test.helpers.EJBTestCase;
-import com.n4systems.webservice.dto.CustomerServiceDTO;
-import com.n4systems.webservice.dto.DivisionServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
@@ -167,12 +161,18 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		ProductType foundProductType = new ProductType();
 		foundProductType.setId( 5L );
 		
+		UserBean foundUser = new UserBean();
+		foundUser.setUniqueID(productServiceDTO.getIdentifiedById());
+		
 		Tenant foundTenant = aTenant().build();
 		productServiceDTO.setProductTypeId( foundProductType.getId() );
 		
 		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
 		
 		EasyMock.expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
+		if (productServiceDTO.identifiedByExists()) {
+			EasyMock.expect(mockEntityManager.find(UserBean.class, foundUser.getId())).andReturn(foundUser);
+		} 
 		EasyMock.replay( mockEntityManager );
 		injectEntityManager( converter, mockEntityManager );
 		
@@ -290,30 +290,27 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		assertEquals( productServiceDTO.getRfidNumber(), product.getRfidNumber() );
 		assertEquals( productServiceDTO.getSerialNumber(), product.getSerialNumber() );
 		
-		if( productServiceDTO.customerExists() ) {
+		if( productServiceDTO.customerExists() && !productServiceDTO.divisionExists()) {
 			assertEquals( new Long( productServiceDTO.getCustomerId() ), product.getOwner().getId() );
-		} else {
-			assertNull( product.getOwner() );
-		}
+		} 
 		
-		if( productServiceDTO.divisionExists() ) {
-			assertEquals( new Long( productServiceDTO.getDivisionId() ), product.getDivision().getId() );
-		} else {
-			assertNull( product.getDivision() );
-		}
+		if( productServiceDTO.customerExists() && productServiceDTO.divisionExists() ) {
+			assertEquals( new Long( productServiceDTO.getDivisionId() ), product.getOwner().getId() );
+		} 
 		
 		if( productServiceDTO.jobSiteExists() ) {
-			assertEquals( new Long( productServiceDTO.getJobSiteId() ), product.getJobSite().getId() );
-		} else {
-			assertNull( product.getJobSite() );
+			assertEquals( new Long( productServiceDTO.getJobSiteId() ), product.getOwner().getId() );
+		} 
+		
+		if (!productServiceDTO.customerExists() && !productServiceDTO.divisionExists() && !productServiceDTO.jobSiteExists()) {
+			assertNull(product.getOwner());
 		}
 		
 		if( productServiceDTO.identifiedByExists() ) {
 			assertEquals( new Long( productServiceDTO.getIdentifiedById() ), product.getIdentifiedBy().getUniqueID() );
-			assertEquals( new Long( product.getIdentifiedBy().getOrganization().getId() ), product.getOrganization().getId() );
+			assertEquals( new Long( product.getIdentifiedBy().getOwner().getId() ), product.getOwner().getId() );
 		} else {
 			assertNull( product.getIdentifiedBy() );
-			assertEquals( primaryOrg, product.getOrganization() );
 		}
 		
 		if (productServiceDTO.getProductStatusId() > 0) {
@@ -331,9 +328,11 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		
 	}
 	
+	// TODO replace these with new tests when we figure out how we are sending down customer/divisions to handheld
+	/*
 	@Test
 	public void test_convert_division() {
-		Division division = new Division();
+		DivisionOrg division = new DivisionOrg();
 		
 		division.setId(10L);
 		division.setName("division_name");
@@ -396,6 +395,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		converter.convert(customer, null);
 		
 	}
+	*/
 	
 	@Test
 	public void test_setup_data_last_mod_dates() {
