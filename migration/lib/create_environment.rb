@@ -13,7 +13,7 @@ if RUBY_PLATFORM =~ /java/
   gem 'activerecord-jdbcmysql-adapter', "= 0.9.0"
   require 'active_record/connection_adapters/jdbcmysql_adapter'
 else
-  raise new Exception('you must use jruby from now on.  There are too many environment issues.')
+  raise "you must use jruby from now on.  There are too many environment issues."
 end
 
 

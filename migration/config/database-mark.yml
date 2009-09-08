@@ -1,7 +1,7 @@
-development_non_java:
-  adapter: mysql
+development:
+  adapter: jdbcmysql
   database: fieldid
   host: localhost
-  username: fieldid
-  password: fieldid
+  username: dev
+  password: dev
   encoding: utf8
