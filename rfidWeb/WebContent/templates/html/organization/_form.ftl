@@ -1,14 +1,10 @@
 <head>
-	<style>
-			
+	<style>	
 		#imageUploaded {
 			padding:0px;
 			vertical-align:top;
 			display:block;
 		}
-		
-		
-		
 	</style>
 	
 	<script type="text/javascript">
@@ -47,6 +43,13 @@
 			<label><@s.text name="label.name_on_cert"/></label>
 			<@s.textfield name="certificateName"/>
 		</div>
+		
+		<#if primary >
+			<div class="infoSet">
+				<label><@s.text name="label.website_url"/></label>
+				<@s.textfield name="webSite"/>
+			</div>
+		</#if>
 	</div>
 </div>
 <div class="pageSection" >

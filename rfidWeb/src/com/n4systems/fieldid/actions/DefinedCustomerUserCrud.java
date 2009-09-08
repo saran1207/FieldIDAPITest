@@ -26,7 +26,9 @@ public class DefinedCustomerUserCrud extends UserCrud {
 	
 	public Pager<UserBean> getPage() {
 		if( page == null ) {
-			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(),	Constants.PAGE_SIZE, "", UserType.CUSTOMERS, (CustomerOrg)getOwner());
+			CustomerOrg customerOrg = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(getOwner()).load();
+			
+			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(),	Constants.PAGE_SIZE, "", UserType.CUSTOMERS, customerOrg);
 		}
 		return page;
 	}

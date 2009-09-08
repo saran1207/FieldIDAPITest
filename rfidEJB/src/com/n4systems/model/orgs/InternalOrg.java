@@ -17,7 +17,12 @@ abstract public class InternalOrg extends BaseOrg {
 	public InternalOrg() {}
 
 	public String getCertificateName() {
-		return certificateName;
+		if (certificateName != null && certificateName.trim().length() > 0) {
+			return certificateName;
+		}
+		
+		// PrimaryOrgs default to their name, SecondaryOrgs differ to the primary		
+		return (isPrimary()) ? getName() : ((SecondaryOrg)this).getParent().getCertificateName();
 	}
 
 	public void setCertificateName(String certificateName) {

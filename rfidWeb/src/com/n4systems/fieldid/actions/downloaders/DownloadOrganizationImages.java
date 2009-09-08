@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.TenantCache;
 
@@ -68,10 +68,7 @@ public class DownloadOrganizationImages extends DownloadAction {
 	
 	public String doDownloadCertLogo() {
 		if( uniqueID != null ) {
-			// TODO: CUSTOMER_REFACTOR: not sure this is going to work.  May not be able to select InternalOrg like this
-			FilteredIdLoader<InternalOrg> loader = getLoaderFactory().createFilteredIdLoader(InternalOrg.class);
-			loader.setId(uniqueID);
-			organization = loader.load();
+			organization = (InternalOrg)getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(uniqueID).load();
 			
 			if(organization != null) {
 				File certLogoFile = PathHandler.getCertificateLogo(organization);

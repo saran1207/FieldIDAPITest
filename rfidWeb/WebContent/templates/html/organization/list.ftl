@@ -2,6 +2,25 @@ ${action.setPageType('organization','list')!}
 <#if  page.hasResults() && page.validPage() >
 	<@s.url action="organizations" id="pageAction"/>
 	
+	<h2 class="sectionTitle"><@s.text name="label.primaryorganization"/></h2>
+	<div class="multiColumn fluidSets">
+		<div class="infoSet infoBlock">
+			<label for="name" class="label"><@s.text name="label.name"/></label>
+			<span class="fieldHolder">
+				${primaryOrg.name?html}
+				<a href="<@s.url action="organizationEdit" uniqueID="${primaryOrg.id}"/>"><@s.text name="label.edit"/></a>
+			</span>
+		</div>
+		<div class="infoSet infoBlock">
+			<label for="name" class="label"><@s.text name="label.name_on_cert"/></label>
+			<span class="fieldHolder">
+				${primaryOrg.certificateName?html}	
+			</span>
+		</div>
+	</div>
+	
+	
+	<h2 class="sectionTitle"><@s.text name="label.organizationalunits"/></h2>
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>

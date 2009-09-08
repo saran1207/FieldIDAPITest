@@ -32,6 +32,7 @@ class MigrateOrganizations < ActiveRecord::Migration
         orgPrimary.asset_limit = tenantOrg.asset_limit
         orgPrimary.diskspace_limit = tenantOrg.diskspace_limit
         orgPrimary.user_limit = tenantOrg.user_limit
+        orgPrimary.certificatename = tenantOrg.certificatename
         orgPrimary.serialnumberformat = tenantOrg.serialnumberformat.nil? ? "" : tenantOrg.serialnumberformat
         orgPrimary.usingserialnumber = tenantOrg.usingserialnumber
         orgPrimary.website = tenantOrg.website
@@ -53,6 +54,7 @@ class MigrateOrganizations < ActiveRecord::Migration
         
         orgSecondary = SecondaryOrg.new
         orgSecondary.baseOrg = baseSecondary
+        orgSecondary.certificatename = tenantOrg.certificatename
         orgSecondary.primaryOrg = orgPrimary
         orgSecondary.save
       end

@@ -230,6 +230,16 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 		this.newImage = newImage;
 	}
 
+	public String getWebSite() {
+		return (organization.isPrimary()) ? ((PrimaryOrg)organization).getWebSite() : null;
+	}
+	
+	public void setWebSite(String webSite) {
+		if (organization.isPrimary()) {
+			((PrimaryOrg)organization).setWebSite(webSite);
+		}
+	}
+	
 	public boolean duplicateValueExists(String formValue) {
 		if (formValue != null) {
 			SecondaryOrgByNameLoader loader  = getLoaderFactory().createSecondaryOrgByNameLoader();
@@ -240,5 +250,9 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			return (secOrg != null);
 		} 
 		return false;
+	}
+	
+	public boolean isPrimary() {
+		return organization.isPrimary();
 	}
 }
