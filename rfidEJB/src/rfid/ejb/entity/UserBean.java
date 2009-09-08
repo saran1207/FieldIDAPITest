@@ -118,7 +118,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	}
 
 	public boolean isEmployee() {
-		return owner.isExternalOrg();
+		return owner.isInternalOrg();
 	}
 
 	public boolean isDeleted() {

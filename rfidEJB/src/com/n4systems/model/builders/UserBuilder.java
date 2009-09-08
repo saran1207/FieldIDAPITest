@@ -4,32 +4,33 @@ import static com.n4systems.model.builders.TenantBuilder.*;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 
 public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 
 	private final Tenant tenantOrganization;
-	private final Long customer;
+	private final BaseOrg owner;
 	
 	public static UserBuilder aUser() {
-		return new UserBuilder(aTenant().build());
+		return anEmployee();
 	}
 	
 	public static UserBuilder anEmployee() {
-		return new UserBuilder(aTenant().build(), null);
+		return new UserBuilder(aTenant().build(), OrgBuilder.aPrimaryOrg().build());
 	}
 	
 	public static UserBuilder aCustomerUser() {
-		return new UserBuilder(aTenant().build(), 1L);
+		return new UserBuilder(aTenant().build(), OrgBuilder.aCustomerOrg().build());
 	}
 	
 	public UserBuilder(Tenant tenantOrganization) {
 		this(tenantOrganization, null);
 	}
 	
-	public UserBuilder(Tenant tenantOrganization, Long customer) {
+	public UserBuilder(Tenant tenantOrganization, BaseOrg owner) {
 		super();
 		this.tenantOrganization = tenantOrganization;
-		this.customer = customer;
+		this.owner = owner;
 	}
 	
 	@Override
@@ -37,6 +38,7 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 		UserBean user = new UserBean();
 		user.setUniqueID(uniqueId);
 		user.setTenant(tenantOrganization);
+		user.setOwner(owner);
 		return user;
 	}
 }

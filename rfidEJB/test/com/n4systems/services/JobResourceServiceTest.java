@@ -15,11 +15,10 @@ import com.n4systems.exceptions.NonEmployeeUserException;
 import com.n4systems.model.Project;
 
 public class JobResourceServiceTest {
-
-	
 	private final UserBean modifier = aUser().build();
 
-	@Test public void should_attach_first_employee_resource() {
+	@Test
+	public void should_attach_first_employee_resource() throws NonEmployeeUserException, EmployeeAlreadyAttachedException {
 		Project job = aJob().build();
 		UserBean employee = anEmployee().build();
 	
@@ -30,34 +29,21 @@ public class JobResourceServiceTest {
 				
 		JobResourceService sut = new JobResourceService(job, mockPersistenceManager, modifier);
 		
-		try {
-			assertEquals(1, sut.attach(employee));
-		} catch (Exception e) {
-			fail("exception thrown");
-		}
+		assertEquals(1, sut.attach(employee));
 		verify(mockPersistenceManager);
-		
 	}
 	
-	
-	@Test public void should_stop_attachment_non_employee() {
+	@Test(expected=NonEmployeeUserException.class)
+	public void should_stop_attachment_non_employee() throws NonEmployeeUserException, EmployeeAlreadyAttachedException {
 		Project job = aJob().build();
 		UserBean customer = aCustomerUser().build();
 		JobResourceService sut = new JobResourceService(job, null, modifier);
 		
-		boolean exceptionThrown = false;
-		try {
-			sut.attach(customer);
-		} catch (NonEmployeeUserException e) {
-			exceptionThrown = true;
-		} catch (EmployeeAlreadyAttachedException e) {
-			fail("EmployeeAlreadyAttached was thrown.");
-		}
-		
-		assertTrue("NonEmployeeUserException exception should have been thrown", exceptionThrown);
+		sut.attach(customer);
 	}
 	
-	@Test public void should_stop_attaching_the_same_employee_twice() {
+	@Test(expected=EmployeeAlreadyAttachedException.class)
+	public void should_stop_attaching_the_same_employee_twice() throws NonEmployeeUserException, EmployeeAlreadyAttachedException {
 		UserBean employeeAssigned = anEmployee().build();
 		UserBean employee = anEmployee().build();
 		employee.setUniqueID(employeeAssigned.getId());
@@ -68,22 +54,14 @@ public class JobResourceServiceTest {
 		replay(mockPersistenceManager);
 		
 		JobResourceService sut = new JobResourceService(job, mockPersistenceManager, modifier);
-		
-		boolean exceptionThrown = false;
-		try {
-			sut.attach(employee);
-		} catch (EmployeeAlreadyAttachedException e) {
-			exceptionThrown = true;
-		} catch (NonEmployeeUserException e) {
-			fail("NonEmployeeUserException was thrown.");
-		}
-		
-		assertTrue("EmployeeAlreadyAttached exception should have been thrown", exceptionThrown);
+
+		sut.attach(employee);
 		verify(mockPersistenceManager);
 	}
 	
 	
-	@Test public void should_remove_the_employee_from_job() {
+	@Test
+	public void should_remove_the_employee_from_job() throws NonEmployeeUserException {
 		UserBean employee = anEmployee().build();
 		Project job = aJob().withResources(employee).build();
 		
@@ -93,17 +71,13 @@ public class JobResourceServiceTest {
 		replay(mockPersistenceManager);
 		
 		JobResourceService sut = new JobResourceService(job, mockPersistenceManager, modifier);
-		
-		try {
-			sut.dettach(employee);
-		} catch (NonEmployeeUserException e) {
-			fail("NonEmployeeUserException was thrown.");
-		}
-		
+
+		sut.dettach(employee);
 		verify(mockPersistenceManager);
 	}
 	
-	@Test public void should_not_save_the_removal_of_an_employee_not_assigned_to_job() {
+	@Test
+	public void should_not_save_the_removal_of_an_employee_not_assigned_to_job() throws NonEmployeeUserException {
 		UserBean employee = anEmployee().build();
 		Project job = aJob().build();
 		
@@ -113,27 +87,16 @@ public class JobResourceServiceTest {
 		
 		JobResourceService sut = new JobResourceService(job, mockPersistenceManager, modifier);
 		
-		try {
-			sut.dettach(employee);
-		} catch (NonEmployeeUserException e) {
-			fail("NonEmployeeUserException was thrown.");
-		}
-		
+		sut.dettach(employee);
 		verify(mockPersistenceManager);
 	}
 	
-	@Test public void should_stop_dettachment_of_a_non_employee() {
+	@Test(expected=NonEmployeeUserException.class)
+	public void should_stop_dettachment_of_a_non_employee() throws NonEmployeeUserException {
 		Project job = aJob().build();
 		UserBean customer = aCustomerUser().build();
 		JobResourceService sut = new JobResourceService(job, null, modifier);
 		
-		boolean exceptionThrown = false;
-		try {
-			sut.dettach(customer);
-		} catch (NonEmployeeUserException e) {
-			exceptionThrown = true;
-		} 
-		
-		assertTrue("NonEmployeeUserException exception should have been thrown", exceptionThrown);
+		sut.dettach(customer);
 	}
 }
