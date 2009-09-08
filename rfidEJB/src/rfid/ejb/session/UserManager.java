@@ -271,15 +271,14 @@ public class UserManager implements User {
 		if( userType != null ) {
 			switch( userType ) {
 				case CUSTOMERS:
-					queryString += "AND ub.owner IS NOT NULL ";
+					queryString += "AND ub.owner.customer_id IS NOT NULL ";
 					break;
 				case EMPLOYEES:
-					queryString += "AND ub.owner IS NULL ";
+					queryString += "AND ub.owner.customer_id IS NULL ";
 					break;
 					
 			}
 		}
-		
 		
 		String orderBy = " ORDER BY ub.firstName, ub.lastName";
 		
@@ -299,7 +298,7 @@ public class UserManager implements User {
 			countQuery.setParameter( "customer", customer.getId() );
 		}
 		
-		return new Page<UserBean>( query, countQuery, pageNumber, pageSize );
+		return new Page<UserBean>(query, countQuery, pageNumber, pageSize);
 	}
 	
 	
@@ -447,7 +446,7 @@ public class UserManager implements User {
 		jpql.append(filter.produceWhereClause(UserBean.class));
 		
 		if (ownerId != null) {
-			jpql.append(" AND (owner.id = :ownerId OR owner IS NULL)");
+			jpql.append(" AND (owner.id = :ownerId OR owner.customer_id IS NULL)");
 		}
 		
 		jpql.append(" ORDER BY owner.name, firstName, lastName");

@@ -10,6 +10,7 @@ import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
@@ -97,6 +98,10 @@ public class LoaderFactory {
 		return new InspectionTypeListableLoader(filter);
 	}
 
+	public InternalOrgListableLoader createInternalOrgListableLoader() {
+		return new InternalOrgListableLoader(filter);
+	}
+
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
 	}
@@ -136,7 +141,7 @@ public class LoaderFactory {
 	public SecondaryOrgListableLoader createSecondaryOrgListableLoader() {
 		return new SecondaryOrgListableLoader(filter);
 	}
-
+	
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}

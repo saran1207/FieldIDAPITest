@@ -2,8 +2,10 @@
 	<tr>
 		<th ><@s.text name="label.userid"/></th>
     	<th ><@s.text name="label.username"/></th>
+    	<th ><@s.text name="label.organization"/></th>
     	<#if userType?exists && userType != "EMPLOYEES"  >
-    		<th ><@s.text name="label.customername"/></th>
+    		<th ><@s.text name="label.customer"/></th>
+    		<th ><@s.text name="label.division"/></th>
     	</#if>
   		<th ><@s.text name="label.emailaddress"/></th>
 		<th></th>
@@ -13,9 +15,13 @@
 		<tr id="user_${user.uniqueID!}" >
 			<td><a href="<@s.url action="userEdit" uniqueID="${user.uniqueID!}" />" >${user.userID?html! }</a> </td>
 			<td>${user.userLabel?html! }</td>
+			<td>${(user.owner.getInternalOrg().name?html)!}</td>
 			<#if userType?exists && userType != "EMPLOYEES" >
 				<td>
-					${(user.owner.name)?html!}
+					${(user.owner.customerOrg.name?html)!}
+				</td>
+				<td>
+					${(user.owner.divisionOrg.name?html)!}
 				</td>
 			</#if>
 			<td>${user.emailAddress?html! } </td>

@@ -19,7 +19,7 @@ public class CustomerOrg extends ExternalOrg {
 	 * has no idea what to do in that situation, so we set it directly to the BaseOrg
 	 * and force casing to InternalOrg via getter/setter
 	 */
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name="parent_id")
 	private BaseOrg parent;
 	

@@ -42,7 +42,7 @@
 		<@s.hidden name="organizationalUnit" value="${Session.sessionUser.tenant.id}"/>
 	<#else>
 		<div class="formRowHolder">
-			<@s.select key="label.organizationalunit" name="organizationalUnit" list="organizationalUnits" listKey="id" listValue="name" labelposition="left" required="true"/>
+			<@s.select key="label.organizationalunit" name="owner" list="organizationalUnits" listKey="id" listValue="name" labelposition="left" required="true"/>
 		</div>
 	</#if>
 	

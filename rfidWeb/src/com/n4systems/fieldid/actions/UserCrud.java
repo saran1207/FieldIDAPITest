@@ -80,6 +80,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	@Override
 	protected void initMemberFields() {
 		user = new UserBean();
+		user.setOwner(getPrimaryOrg());
 		String defaultZoneId = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
 		country = CountryList.getInstance().getCountryByFullId(defaultZoneId);
 		region = CountryList.getInstance().getRegionByFullId(defaultZoneId);	
@@ -101,14 +102,12 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	
 	@SkipValidation
 	public String doEdit() {
-		if( user == null ) {
+		if(user == null) {
 			addFlashErrorText( "error.unknownuser" );
 			return ERROR;
-		} 
+		}
 		
-		setupPermissions(); 
-	
-		
+		setupPermissions();
 		return SUCCESS;
 	}
 
@@ -284,18 +283,18 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return ERROR;
 	}
 	
-	public BaseOrg getOwner() {
-		return user.getOwner();
+	public Long getOwner() {
+		return user.getOwner().getId();
 	}
 
-	public void setOwner(BaseOrg owner) {
-		user.setOwner(owner);
+	public void setOwner(Long ownerId) {
+		user.setOwner(getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(ownerId).load());
 	}
 	
 	public Collection<ListingPair> getOrganizationalUnits() {
 		if( organizationalUnits == null ) {
 			try {
-				List<Listable<Long>> orgListables = getLoaderFactory().createSecondaryOrgListableLoader().load();
+				List<Listable<Long>> orgListables = getLoaderFactory().createInternalOrgListableLoader().load();
 				organizationalUnits = ListHelper.longListableToListingPair(orgListables);
 			} catch (InvalidQueryException e) {
 				logger.error("Unable to load list of Organizations", e);
@@ -316,7 +315,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 
 	public List<ListingPair> getPermissions() {
 		if( permissions == null ){
-			if(user.getOwner().isExternalOrg()) {
+			if(user.getOwner().isInternalOrg()) {
 				permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 			} else {
 				permissions = ListHelper.intListableToListingPair(Permissions.getCustomerUserPermissions());

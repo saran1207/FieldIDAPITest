@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class SecondaryOrg extends InternalOrg {
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name="primaryorg_id")
 	private PrimaryOrg primaryOrg;
 	
