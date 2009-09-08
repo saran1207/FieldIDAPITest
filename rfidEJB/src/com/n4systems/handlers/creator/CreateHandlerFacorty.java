@@ -15,12 +15,12 @@ import com.n4systems.handlers.creator.signup.SignUpFinalizationHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignUpHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.promocode.PromoCodeByCodeLoader;
 import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
-import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
@@ -39,7 +39,7 @@ public class CreateHandlerFacorty {
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {
-		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrganizationSaver(), new UserSaver(), getLimitResolver());
+		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrgSaver(), new UserSaver(), getLimitResolver());
 	}
 
 	private LimitResolver getLimitResolver() {

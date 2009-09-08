@@ -2,28 +2,23 @@ package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.OrganizationSaver;
-import com.n4systems.model.tenant.TenantLimit;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.util.DataUnit;
 
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	private static final String DEFAULT_DATE_FORMAT = "MM/dd/yy";
 
 	private static final String DEFAULT_SERIAL_NUMBER_FORMAT = "";
 
-	private final OrganizationSaver orgSaver;
+	private final OrgSaver orgSaver;
 	
 	private AccountCreationInformation accountInfo;
 	private Tenant tenant;
 
 	
-	public PrimaryOrgCreateHandlerImpl(OrganizationSaver orgSaver) {
+	public PrimaryOrgCreateHandlerImpl(OrgSaver orgSaver) {
 		super();
 		this.orgSaver = orgSaver;
 	}

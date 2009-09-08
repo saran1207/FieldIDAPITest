@@ -103,7 +103,7 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 	private void setCommonUserFields(PrimaryOrg primaryOrg, UserBean user) {
 		user.setActive(true);
 		user.setTenant(primaryOrg.getTenant());
-		user.setOrganization(primaryOrg);
+		user.setOwner(primaryOrg);
 		user.setPermissions(Permissions.SYSTEM);
 	}
 

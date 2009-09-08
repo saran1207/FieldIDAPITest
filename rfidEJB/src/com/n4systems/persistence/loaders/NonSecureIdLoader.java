@@ -15,7 +15,7 @@ public class NonSecureIdLoader<T extends BaseEntity> extends Loader<T> {
 	}
 	
 	@Override
-	protected T load(EntityManager em) {
+	protected T load(EntityManager em) {  //FIXME NEED A QUERY FILTER WHAT IS THAT HOW CAN I MAKE IT?
 		QueryBuilder<T> builder = new QueryBuilder<T>(clazz);
 		builder.addSimpleWhere("id", id);
 		

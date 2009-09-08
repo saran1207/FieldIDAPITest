@@ -14,10 +14,10 @@ import org.junit.Test;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
-import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.test.helpers.FluentHashSet;
@@ -65,7 +65,7 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockExtendedFeatureListResolver.resolve(mockTransaction)).andReturn(featuresThatShouldBeAddedToPrimaryOrg);
 		replay(mockExtendedFeatureListResolver);
 		
-		OrganizationSaver mockOrganizationSaver = createMock(OrganizationSaver.class);
+		OrgSaver mockOrganizationSaver = createMock(OrgSaver.class);
 		expect(mockOrganizationSaver.saveOrUpdate(mockTransaction, accountPlaceHolder.getPrimaryOrg())).andReturn(accountPlaceHolder.getPrimaryOrg());
 		replay(mockOrganizationSaver);
 		

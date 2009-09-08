@@ -155,6 +155,11 @@
 	</div>
 	
 	<hr/>
+	<div class="infoSection">
+		<div class="infoBlock">
+			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> + applicable taxes!!! <#if !signUp.signUpPackage.free><@s.reset key="label.update_price" cssClass="updatePrice"/></#if>
+		</div>
+	</div>
 	
 	<div class="infoSection" id="creditCardInformation">
 		<div class="multiColumn">
@@ -198,11 +203,7 @@
 	<hr/>
 	</#if>
 	
-	<div class="infoSection">
-		<div class="infoBlock">
-			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> + applicable taxes!!! <#if !signUp.signUpPackage.free><@s.reset key="label.update_price" cssClass="updatePrice"/></#if>
-		</div>
-	</div>
+	
 	
 	<div class="actions">
 		<@s.submit key="label.create_my_account"/> <@s.text name="label.or"/> <a href="<@s.url action="signUpPackages"/>"><@s.text name="label.choose_another_package"/></a> 

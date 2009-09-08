@@ -14,11 +14,11 @@ import org.junit.Test;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
-import com.n4systems.model.tenant.OrganizationSaver;
 
 
 
@@ -58,7 +58,7 @@ public class PrimaryOrgCreateHandlerImplTest extends TestUsesTransactionBase {
 		
 		Capture<PrimaryOrg> capturedPrimaryOrg = new Capture<PrimaryOrg>(); 
 		
-		OrganizationSaver mockOrgSaver = createMock(OrganizationSaver.class);
+		OrgSaver mockOrgSaver = createMock(OrgSaver.class);
 		mockOrgSaver.save(same(mockTransaction), capture(capturedPrimaryOrg));
 		replay(mockOrgSaver);
 		

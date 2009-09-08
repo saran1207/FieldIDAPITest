@@ -8,8 +8,8 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.OrganizationSaver;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
@@ -21,7 +21,7 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 
 	private final ExtendedFeatureListResolver extendedFeatureListResolver;
 	private final LimitResolver limitResolver;
-	private final OrganizationSaver orgSaver;
+	private final OrgSaver orgSaver;
 	private final UserSaver userSaver;
 	
 	private AccountCreationInformation accountInformation;
@@ -29,7 +29,7 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	private SignUpTenantResponse subscriptionApproval;
 	
 
-	public SignUpFinalizationHandlerImpl(ExtendedFeatureListResolver extendedFeatureListResolver, OrganizationSaver orgSaver, UserSaver userSaver, LimitResolver limitResolver) {
+	public SignUpFinalizationHandlerImpl(ExtendedFeatureListResolver extendedFeatureListResolver, OrgSaver orgSaver, UserSaver userSaver, LimitResolver limitResolver) {
 		super();
 		this.extendedFeatureListResolver = extendedFeatureListResolver;
 		this.limitResolver = limitResolver;
