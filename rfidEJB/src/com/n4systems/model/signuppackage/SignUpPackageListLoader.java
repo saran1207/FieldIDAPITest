@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -17,7 +18,7 @@ public class SignUpPackageListLoader extends NonSecuredListLoader<SignUpPackage>
 	}
 
 	private List<ContractPricing> getContracts(EntityManager em) {
-		QueryBuilder<ContractPricing> query = new QueryBuilder<ContractPricing>(ContractPricing.class);
+		QueryBuilder<ContractPricing> query = new QueryBuilder<ContractPricing>(ContractPricing.class, new OpenSecurityFilter());
 		query.addOrder("signUpPackage");
 		
 		List<ContractPricing> contracts = query.getResultList(em);

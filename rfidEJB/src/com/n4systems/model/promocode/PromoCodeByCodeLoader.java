@@ -2,6 +2,7 @@ package com.n4systems.model.promocode;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
@@ -17,7 +18,7 @@ public class PromoCodeByCodeLoader extends Loader<PromoCode> {
 			return null;
 		}
 		
-		QueryBuilder<PromoCode> builder = new QueryBuilder<PromoCode>(PromoCode.class);
+		QueryBuilder<PromoCode> builder = new QueryBuilder<PromoCode>(PromoCode.class, new OpenSecurityFilter());
 		builder.addWhere(Comparator.EQ, "code", "code", code, WhereParameter.IGNORE_CASE);		
 		
 		return builder.getSingleResult(em);

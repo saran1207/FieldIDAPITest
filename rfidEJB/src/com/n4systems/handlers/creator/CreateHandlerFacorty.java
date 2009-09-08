@@ -60,7 +60,7 @@ public class CreateHandlerFacorty {
 	}
 	
 	private PrimaryOrgCreateHandler getPrimaryOrgCreateHandler() {
-		return new PrimaryOrgCreateHandlerImpl(new OrganizationSaver());
+		return new PrimaryOrgCreateHandlerImpl(new OrgSaver());
 	}
 
 	public SubscriptionAgent getSubscriptionAgent() {

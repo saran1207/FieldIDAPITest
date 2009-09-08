@@ -3,6 +3,7 @@ package com.n4systems.persistence.loaders;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class NonSecureIdLoader<T extends BaseEntity> extends Loader<T> {
@@ -15,8 +16,8 @@ public class NonSecureIdLoader<T extends BaseEntity> extends Loader<T> {
 	}
 	
 	@Override
-	protected T load(EntityManager em) {  //FIXME NEED A QUERY FILTER WHAT IS THAT HOW CAN I MAKE IT?
-		QueryBuilder<T> builder = new QueryBuilder<T>(clazz);
+	protected T load(EntityManager em) {
+		QueryBuilder<T> builder = new QueryBuilder<T>(clazz, new OpenSecurityFilter());
 		builder.addSimpleWhere("id", id);
 		
 		return builder.getSingleResult(em);

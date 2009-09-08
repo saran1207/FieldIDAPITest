@@ -73,11 +73,7 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	}
 	
 	public Object getIdentifier() {
-		return getTenant_id();
-	}
-	
-	public static final void prepareFilter(SecurityFilter filter) {
-		filter.setTargets("r_tenant", null, null, null, null);
+		return getTenantId();
 	}
 	
 	public void setModDate(SetupDataGroup group, Date newDate) {

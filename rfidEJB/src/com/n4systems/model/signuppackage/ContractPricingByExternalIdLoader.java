@@ -2,6 +2,7 @@ package com.n4systems.model.signuppackage;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -14,7 +15,7 @@ public class ContractPricingByExternalIdLoader extends Loader<ContractPricing> {
 	
 	@Override
 	protected ContractPricing load(EntityManager em) {
-		QueryBuilder<ContractPricing> builder = new QueryBuilder<ContractPricing>(ContractPricing.class);
+		QueryBuilder<ContractPricing> builder = new QueryBuilder<ContractPricing>(ContractPricing.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("externalId", externalId);
 		builder.addSimpleWhere("signUpPackage", signUpPackage);
 		builder.addSimpleWhere("paymentOption", paymentOption);
