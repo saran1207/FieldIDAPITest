@@ -17,6 +17,7 @@
 		<div class="multiColumn">
 			<div class="infoBlock">
 				<h2><@s.text name="label.company_details"/></h2>
+				
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.companyname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 					<@s.textfield  name="companyName" id="companyName"/>

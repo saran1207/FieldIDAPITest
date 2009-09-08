@@ -11,7 +11,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class OrgPickerComponent extends UIBean {
 	public static final String TEMPLATE = "orgPicker";
 	
-	private BaseOrg selectedOrg;
 	
 	public OrgPickerComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
@@ -25,11 +24,17 @@ public class OrgPickerComponent extends UIBean {
 	@Override
 	public void evaluateParams() {
 		super.evaluateParams();
-
-//		addParameter("total", total);
-//		addParameter("progress", progress);
-//		addParameter("percentage", getPercentage());
-//		addParameter("modifierClass", getModifierClass());
+		BaseOrg selectedOrg = (BaseOrg)getParameters().get("nameValue");
+		addParameter("idName", findString("name") + "Id");
+		
+		if (selectedOrg != null) {
+			addParameter("idNameValue", selectedOrg.getId());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Class getValueClassType() {
+		return BaseOrg.class;
 	}
 	
 	

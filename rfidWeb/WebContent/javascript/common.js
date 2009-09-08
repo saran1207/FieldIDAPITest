@@ -437,4 +437,13 @@ Element.extend(document).observe("dom:loaded", function (event) {
 				element.observe('mouseout', turnOffHighlightButton);
 			});
 	});
-	
+
+function ajaxFormEvent(event) {
+	event.stop();
+	var form = Event.element(event);
+	ajaxForm(form);
+}
+
+function ajaxForm(form) {
+	form.request(getStandardCallbacks());
+}

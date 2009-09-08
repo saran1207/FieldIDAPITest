@@ -233,10 +233,19 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	public BaseOrg getOwner() {
 		return project.getOwner();
 	}
-
-	public void setOwner(BaseOrg owner) {
-		project.setOwner(owner);
+	
+	public Long getOwnerId() {
+		return (project.getOwner() != null) ? project.getOwner().getId() : null;
 	}
+	
+	public void setOwnerId(Long id) {
+		if (id == null) {
+			project.setOwner(null);
+		} else if (project.getOwner() == null || project.getOwner().getId().equals(id)) {
+			project.setOwner(getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(id).load());
+		}
+	}
+	
 
 	public void setDuration(String duration) {
 		project.setDuration(duration);

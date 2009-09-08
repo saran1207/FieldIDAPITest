@@ -11,6 +11,8 @@
 		jobSiteChangeUrl = '<@s.url action="jobSite" namespace="/ajax" />';
 	</script>
 	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projects.css"/>"/>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+	
 </head>
 <#include "/templates/html/common/_formErrors.ftl" />
 
@@ -25,38 +27,11 @@
 		<@s.textfield name="name" required="true"/>
 	</div>
 	
-	<#if securityGuard.jobSitesEnabled>
-		<div class="infoSet">
-			<label for="jobSite"><@s.text name="indicator.required"/> <@s.text name="label.jobsite"/> </label>
-			<@s.select name="jobSite" id="jobSite" list="jobSites" listKey="id" listValue="name" onchange="jobSiteChange(this)" />
-		</div>
-		<div class="infoSet">
-			<label for="customer"><@s.text name="label.customer"/> </label>
-			<span id="customerName">
-				${(project.owner.customerOrg.name?html) !}
-				
-			</span>
-			<@s.hidden name="customer" id="customer" />
-		</div>
+	<div class="infoSet">
+		<label for="name"><@s.text name="indicator.required"/> <@s.text name="label.owner"/></label>
+		<@n4.orgPicker name="owner"/>
+	</div>
 		
-		<div class="infoSet">
-			<label for="division"><@s.text name="label.division"/> </label>
-			<span id="divisionName">
-				${(project.owner.divisionOrg.name?html)!}
-			</span>
-			<@s.hidden name="division" id="division" />
-		</div>
-	<#else>
-		<div class="infoSet">
-			<label for="customer"><@s.text name="label.customer"/> </label>
-			<@s.select name="customer" id="customer" list="customers" listKey="id" listValue="name" emptyOption="true" onchange="customerChanged(this)" />
-		</div>
-		
-		<div class="infoSet">
-			<label for="division"><@s.text name="label.division"/> </label>
-			<@s.select name="division" id="division" list="divisions" listKey="id" listValue="name" emptyOption="true" />
-		</div>
-	</#if>
 	
 	<div class="infoSet">
 		<label for="status"><@s.text name="label.status"/></label>

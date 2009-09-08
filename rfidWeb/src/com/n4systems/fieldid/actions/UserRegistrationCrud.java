@@ -17,6 +17,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.util.ConfigContext;
@@ -239,4 +241,18 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		return false;
 	}
 
+	public Long getOwnerId() {
+		return 1L;
+	}
+	
+	public void setOwnerId() {
+		
+	}
+	
+	public BaseOrg getOwner() {
+		BaseOrg owner = new PrimaryOrg();
+		owner.setName("hi");
+		owner.setId(1L);
+		return owner;
+	}
 }

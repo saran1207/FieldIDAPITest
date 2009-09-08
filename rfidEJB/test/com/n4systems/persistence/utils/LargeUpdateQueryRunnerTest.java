@@ -1,5 +1,8 @@
 package com.n4systems.persistence.utils;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +10,7 @@ import javax.persistence.Query;
 
 import org.junit.Test;
 
-import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
 import com.n4systems.test.helpers.FluentArrayList;
-
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
 
 
 public class LargeUpdateQueryRunnerTest {

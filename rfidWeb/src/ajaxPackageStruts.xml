@@ -436,5 +436,9 @@
 			<interceptor-ref name="publicStack" />
 			<result name="success" type="freemarker">/templates/ajax/userCrud/regions.ftl</result>
 		</action>
+		
+		<action name="orgs" method="list" class="com.n4systems.fieldid.actions.BaseOrgCrud" >
+			<result name="success" type="freemarker">/templates/ajax/baseOrg/list.ftl</result>
+		</action>
 	</package>
 </struts>
