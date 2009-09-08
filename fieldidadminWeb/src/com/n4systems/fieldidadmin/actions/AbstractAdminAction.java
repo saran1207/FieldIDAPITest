@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.struts2.interceptor.SessionAware;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class AbstractAdminAction extends ActionSupport implements SessionAware {
@@ -14,6 +15,7 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 	protected  PersistenceManager persistenceManager;
 	
 	private Map<String, Object> session;
+	private CreateHandlerFactory createHandlerFactory;
 	
 	@SuppressWarnings("unchecked")
 	public void setSession(Map session) {
@@ -29,4 +31,11 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 		this.persistenceManager = persistenceManager;
 	}
 
+	protected CreateHandlerFactory getCreateHandlerFactory() {
+		if (createHandlerFactory == null) {
+			createHandlerFactory = new CreateHandlerFactory();
+		}
+		
+		return createHandlerFactory;
+	}
 }

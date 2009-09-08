@@ -3,7 +3,7 @@ package com.n4systems.taskscheduling.task;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.n4systems.handlers.creator.CreateHandlerFacorty;
+import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.model.signuppackage.SignUpPackageSyncHandler;
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
@@ -31,7 +31,7 @@ public class SignUpPackageSyncTask extends ScheduledTask {
 	}
 
 	private List<ContractPrice> retrieveContracts() throws CommunicationException {
-		SubscriptionAgent subscriptionAgent = new CreateHandlerFacorty().getSubscriptionAgent();
+		SubscriptionAgent subscriptionAgent = new CreateHandlerFactory().getSubscriptionAgent();
 
 		List<ContractPrice> contractPrices = subscriptionAgent.retrieveContractPrices();
 		return contractPrices;

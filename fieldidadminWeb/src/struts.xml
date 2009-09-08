@@ -57,6 +57,11 @@
 			<result name="input" type="freemarker">/templates/html/organization/show.ftl</result>
 		</action>
 		
+		<action name="organizationNote" method="note" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/templates/html/organization/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
+		</action>
+		
 		<action name="findProductOptionList" method="list" class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
 			<result name="success" type="freemarker">/templates/html/findproductoption/list.ftl</result>
 		</action>

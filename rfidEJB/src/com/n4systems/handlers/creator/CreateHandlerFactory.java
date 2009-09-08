@@ -29,7 +29,7 @@ import com.n4systems.subscription.SubscriptionAgentFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
-public class CreateHandlerFacorty {
+public class CreateHandlerFactory {
 
 	
 	

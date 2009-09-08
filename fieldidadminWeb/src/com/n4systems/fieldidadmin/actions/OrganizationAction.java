@@ -3,20 +3,27 @@ package com.n4systems.fieldidadmin.actions;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
+import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
+import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -33,11 +40,17 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
 	private UserBean adminUser = new UserBean();
+	private String title;
+	private String note;
+	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();	
 
 	public void prepare() throws Exception {
 		if (id != null) {
 			tenant = TenantCache.getInstance().findTenant(id); 
 			primaryOrg = TenantCache.getInstance().findPrimaryOrg(id);
+			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
+				extendedFeatures.put(feature.name(), true);
+			}			
 		} 
 	}
 
@@ -71,9 +84,11 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		
 		try {
 			
+			if (primaryOrg.getId() != null) {
+				processExtendedFeatures(transaction);
+			}
 			
 			orgSaver.update(transaction, primaryOrg);
-			
 			
 			PersistenceManager.finishTransaction(transaction);
 			
@@ -88,7 +103,51 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		
 		return SUCCESS;
 	}
+	
+	private void processExtendedFeatures(Transaction transaction) {
+		for (Entry<String, Boolean> inputFeature : extendedFeatures.entrySet()) {
+			processFeature(inputFeature.getKey(), inputFeature.getValue(), transaction);
+		}
+	}
 
+	private void processFeature(String featureName, boolean featureOn, Transaction transaction) {
+		try {
+			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
+			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
+			
+			if (featureOn) {
+				featureSwitch.enableFeature(transaction);
+			} else {
+				featureSwitch.disableFeature(transaction);
+			}
+		} catch (IllegalArgumentException e) {
+			addFieldError("extendedFeatures", "incorrect type of extended feature");
+		} catch (Exception e) {
+			addFieldError("extendedFeatures", "could not setup");
+			throw new RuntimeException("problem while switching on or off an extended feature", e);
+		}
+	}	
+
+	public String doNote() throws Exception {
+		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
+		
+		if (primaryOrg != null) {	
+			if (primaryOrg.getExternalId() != null) {
+				subscriptionAgent.attachNote(primaryOrg.getExternalId(), title, note);
+				title = null;
+				note = null;
+				addActionMessage("The note has been successfully attached");
+			} else {
+				addActionError("This organization is not attached to a netsuite account.");
+				return INPUT;
+			} 
+		} else {
+			addActionError("You can only add a note to an organization that exists");
+			return INPUT;
+		}
+		
+		return SUCCESS;
+	}
 
 
 	
@@ -167,6 +226,33 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		return (primaryOrg.getDateFormat() != null) ? (new SimpleDateFormat(primaryOrg.getDateFormat())).format(new Date()) : "";
 	}
 
-	
+	public String getTitle() {
+		return title;
+	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map getExtendedFeatures() {
+		return extendedFeatures;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setExtendedFeatures(Map extendedFeatures) {
+		this.extendedFeatures = extendedFeatures;
+	}
+
+	public ExtendedFeature[] getAvailableExtendedFeatures() {
+		return ExtendedFeature.values();
+	}
 }

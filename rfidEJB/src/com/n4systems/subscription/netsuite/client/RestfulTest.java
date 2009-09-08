@@ -178,6 +178,7 @@ public class RestfulTest {
 		subscription.setNsrecordid(143L);
 		subscription.setPurchasingPhoneSupport(false);
 		subscription.setUsers(5);
+		subscription.setPromoCode("");
 		
 		return subscription;
 	}
@@ -198,7 +199,7 @@ public class RestfulTest {
 		tenant.setCompanyName("TEST - Jesse Manufacturing");
 		tenant.setCreditCard(populateTestCreditCard());
 		tenant.setEmail("badseemail@bad.com");
-		tenant.setN4Id("5552");
+		tenant.setN4Id("555242");
 		tenant.setPhone("416-555-5555");
 		tenant.setShippingAddress(populateTestAddress());
 		tenant.setUsingCreditCard(true);
