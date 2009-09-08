@@ -7,7 +7,9 @@ import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
 import com.n4systems.webservice.dto.CustomerListResponse;
+import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.CustomerServiceDTO;
+import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -63,4 +65,6 @@ public interface DataService {
 	public JobListResponse getAllJobs(PaginatedUpdateRequestInfo request) throws ServiceException;
 	public SetupDataLastModDatesServiceDTO getSetupDataLastModDates(RequestInformation requestInformation) throws ServiceException;
 	public MobileUpdateInfo getMobileUpdateInfo(String currentVersion) throws ServiceException;
+	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;	
+	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
 }

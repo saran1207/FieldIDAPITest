@@ -64,7 +64,10 @@ import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
 import com.n4systems.webservice.dto.CustomerListResponse;
+import com.n4systems.webservice.dto.CustomerOrgListResponse;
+import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.CustomerServiceDTO;
+import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -518,6 +521,14 @@ public class DataServiceImpl implements DataService {
 			logger.error("Exception occured while lookup auto attribute definition", e);
 			throw new ServiceException();
 		}		
+	}
+	
+	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
+		return null;
+	}
+	
+	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
+		return null;
 	}
 	
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
