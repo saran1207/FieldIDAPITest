@@ -22,8 +22,12 @@ public class SignUpPackageSyncTask extends ScheduledTask {
 
 	@Override
 	protected void runTask(TaskConfig config) throws Exception {
+		runTask();
+	}
+	
+	public void runTask() throws Exception {
 		List<ContractPrice> contractPrices = retrieveContracts();
-		syncContractsWithSignUpPackages(contractPrices);
+		syncContractsWithSignUpPackages(contractPrices);		
 	}
 
 	private List<ContractPrice> retrieveContracts() throws CommunicationException {
