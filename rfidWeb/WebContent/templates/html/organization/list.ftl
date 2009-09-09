@@ -2,14 +2,14 @@ ${action.setPageType('organization','list')!}
 <#if  page.hasResults() && page.validPage() >
 	<@s.url action="organizations" id="pageAction"/>
 	
-	<h2 class="sectionTitle"><@s.text name="label.primaryorganization"/></h2>
+	<h2 class="sectionTitle">
+		<@s.text name="label.primaryorganization"/>
+		<a href="<@s.url action="organizationEdit" uniqueID="${primaryOrg.id}"/>"><@s.text name="label.edit"/></a>
+	</h2>
 	<div class="multiColumn fluidSets">
 		<div class="infoSet infoBlock">
 			<label for="name" class="label"><@s.text name="label.name"/></label>
-			<span class="fieldHolder">
-				${primaryOrg.name?html}
-				<a href="<@s.url action="organizationEdit" uniqueID="${primaryOrg.id}"/>"><@s.text name="label.edit"/></a>
-			</span>
+			<span class="fieldHolder">${primaryOrg.name?html}</span>
 		</div>
 		<div class="infoSet infoBlock">
 			<label for="name" class="label"><@s.text name="label.name_on_cert"/></label>
@@ -19,12 +19,10 @@ ${action.setPageType('organization','list')!}
 		</div>
 	</div>
 	
-	
-	<h2 class="sectionTitle"><@s.text name="label.organizationalunits"/></h2>
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.name"/></th>
+			<th><@s.text name="label.organizationalunits"/></th>
 			<th>&nbsp;</th>
 		</tr>
 		<#list page.getList() as organization > 
