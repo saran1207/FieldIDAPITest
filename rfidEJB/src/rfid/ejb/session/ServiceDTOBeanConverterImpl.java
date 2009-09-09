@@ -56,7 +56,9 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -66,11 +68,13 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
+import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaResultServiceDTO;
 import com.n4systems.webservice.dto.CriteriaSectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
+import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldNameServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldServiceDTO;
@@ -1074,11 +1078,21 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg) {
 		CustomerOrgServiceDTO dto = new CustomerOrgServiceDTO();
-		dto.setId(customerOrg.getId());
-		dto.setName(customerOrg.getName());
-		if (!customerOrg.getParent().equals(customerOrg.getPrimaryOrg())) {
-			dto.setParentId(customerOrg.getParent().getId());
-		}
+		populate(customerOrg, dto);
 		return dto;
+	}
+
+	public DivisionOrgServiceDTO convert(DivisionOrg divisionOrg) {
+		DivisionOrgServiceDTO dto = new DivisionOrgServiceDTO();
+		populate(divisionOrg, dto);
+		return dto;
+	}
+	
+	private void populate(BaseOrg baseOrg, AbstractBaseOrgServiceDTO baseOrgDto) {
+		baseOrgDto.setId(baseOrg.getId());
+		baseOrgDto.setName(baseOrg.getName());
+		if (!baseOrg.getParent().equals(baseOrg.getPrimaryOrg())) {
+			baseOrgDto.setParentId(baseOrg.getParent().getId());
+		}
 	}
 }

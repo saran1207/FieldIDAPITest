@@ -33,9 +33,11 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.CustomerOrgBuilder;
+import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.SecondaryOrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -43,6 +45,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.TenantCache;
 import com.n4systems.test.helpers.EJBTestCase;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
+import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
@@ -341,6 +344,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		
 		CustomerOrgServiceDTO dto = converter.convert(customerOrg);
 		
+		assertEquals(dto.getId(), customerOrg.getId());
 		assertEquals(dto.getName(), customerName);
 		assertNull(dto.getParentId());		
 	}
@@ -356,8 +360,22 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		
 		CustomerOrgServiceDTO dto = converter.convert(customerOrg);
 		
+		assertEquals(dto.getId(), customerOrg.getId());
 		assertEquals(dto.getName(), customerName);
 		assertEquals(dto.getParentId(), secondaryOrg.getId());		
+	}
+	
+	@Test
+	public void test_convert_division_org() {
+		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().build();
+		CustomerOrg customerOrg = CustomerOrgBuilder.aCustomerOrg().withParent(primaryOrg).build();
+		DivisionOrg divisionOrg = DivisionOrgBuilder.aDivisionOrg().withCustomerOrg(customerOrg).build();
+		
+		DivisionOrgServiceDTO dto = converter.convert(divisionOrg);
+		
+		assertEquals(dto.getId(), divisionOrg.getId());
+		assertEquals(dto.getName(), divisionOrg.getName());
+		assertEquals(dto.getParentId(), customerOrg.getId());
 	}
 	
 	@Test

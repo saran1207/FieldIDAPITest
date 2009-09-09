@@ -10,6 +10,7 @@ import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
@@ -72,6 +73,10 @@ public class LoaderFactory {
 
 	public CustomerOrgPaginatedLoader createCustomerOrgPaginatedLoader() {
 		return new CustomerOrgPaginatedLoader(filter);
+	}
+	
+	public DivisionOrgPaginatedLoader createDivisionOrgPaginatedLoader() {
+		return new DivisionOrgPaginatedLoader(filter);
 	}
 
 	public DivisionOrgByCustomerListLoader createDivisionOrgByCustomerListLoader() {

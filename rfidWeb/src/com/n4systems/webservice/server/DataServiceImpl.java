@@ -46,12 +46,13 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.tools.Pager;
@@ -67,9 +68,7 @@ import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
-import com.n4systems.webservice.dto.CustomerListResponse;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
-import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.CustomerServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
@@ -348,64 +347,6 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
-	public CustomerListResponse getAllCustomers(PaginatedRequestInformation request) throws ServiceException {
-		// TODO: CUSTOMER_REFACTOR: DataService rewerite getAllCustomers 
-//		try {
-//			logger.info("Finding Customers: Tenant [" + request.getTenantId() + "] Page [" + request.getPageNumber() + "]");
-//			
-//			CustomerListResponse response = new CustomerListResponse();
-//			
-//			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-//			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-//			
-//			int customersPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA);
-//			int currentPage = request.getPageNumber().intValue();
-//			
-//			LegacySecurityFilter securityFilter = new LegacySecurityFilter(request.getTenantId());
-//			securityFilter.setTargets("tenant.id", null, null);
-//			
-//			QueryBuilder<Customer> customerBuilder = new QueryBuilder<Customer>(Customer.class, securityFilter);
-//			WhereParameter<Long> customerParam = new WhereParameter<Long>(WhereParameter.Comparator.EQ, "customer_id", "customer.id");
-//			// this is for postgres to paginate correctly.
-//			customerBuilder.addOrder("id");
-//			
-//			
-//			QueryBuilder<Division> divisionBuilder = new QueryBuilder<Division>(Division.class, securityFilter);
-//			divisionBuilder.addWhere(customerParam);
-//			// this is for postgres to paginate correctly
-//			divisionBuilder.addOrder("id");
-//			
-//			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-//				Pager<Customer> customerPage = persistenceManager.findAllPaged(customerBuilder, currentPage, customersPerPage);
-//				response.setTotalPages((int)customerPage.getTotalPages());
-//				
-//				for(Customer customer : customerPage.getList()) {
-//					customerParam.setValue(customer.getId());
-//					response.getCustomers().add(converter.convert(customer, persistenceManager.findAll(divisionBuilder)));
-//				}
-//			} else {
-//				response.setTotalPages(persistenceManager.countAllPages(Customer.class, customersPerPage, securityFilter));
-//				response.setCurrentPage(currentPage);
-//			}
-//			
-//			response.setRecordsPerPage(customersPerPage);
-//			response.setStatus(ResponseStatus.OK);
-//			
-//			logger.info("Returning Customers: Tenant [" + request.getTenantId() + 
-//					"] Page [" + response.getCurrentPage() + "/" + response.getTotalPages() + 
-//					"] Customers [" + response.getCustomers().size() + 
-//					"] PageSize [" + response.getRecordsPerPage() + 
-//					"] Status [" +response.getStatus().name() + "]");
-//			
-//			return response;
-//			
-//		} catch (Exception e) {
-//			logger.error( "failed while processing customers", e );
-//			throw new ServiceException();			
-//		}
-		return null;
-	}
-	
 	public UserListResponse getAllUsers(PaginatedRequestInformation request) throws ServiceException {
 		try {
 			logger.info("Finding Users: Tenant [" + request.getTenantId() + "] Page [" + request.getPageNumber() + "]");
@@ -559,7 +500,34 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
-		return null;
+		try {
+			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
+			int currentPage = requestInformation.getPageNumber().intValue();			
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+									
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			DivisionOrgPaginatedLoader loader = loaderFactory.createDivisionOrgPaginatedLoader();
+			loader.setPage(currentPage);
+			loader.setPageSize(RESULTS_PER_PAGE);
+			
+			Pager<DivisionOrg> pager = loader.load();
+			
+			DivisionOrgListResponse response = new DivisionOrgListResponse();
+			
+			for (DivisionOrg divisionOrg : pager.getList()) {
+				response.getDivisions().add( converter.convert(divisionOrg) );
+			}
+						
+			response.setCurrentPage(currentPage);
+			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setStatus(ResponseStatus.OK);
+			response.setTotalPages((int)pager.getTotalPages());
+			
+			return response;
+		} catch (Exception e) {
+			logger.error("Exception occured while looking up customer orgs", e);
+			throw new ServiceException();
+		}
 	}
 	
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
