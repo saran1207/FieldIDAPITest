@@ -460,12 +460,17 @@ public class PathHandler {
 		return absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(tenant), LOGO_IMAGE_FILE_NAME));
 	}
 	
-	/** @return The certificate logo for an Organization */
+	/** @return The certificate logo for an Organization defaulting up the parent chain*/
 	public static File getCertificateLogo(InternalOrg organization) {
+		return getCertificateLogo(organization, true);
+	}
+	
+	/** @return The certificate logo for an Organization */
+	public static File getCertificateLogo(InternalOrg organization, boolean defaultToParent) {
 		File logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getOrganizationPathPart(organization), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
 		
 		// if we're dealing with a SecondaryOrg and the file does not exist, fall back to the tenant
-		if (!logo.exists() && organization.isSecondary()) {
+		if (!logo.exists() && organization.isSecondary() && defaultToParent) {
 			logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(organization.getTenant()), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
 		}
 		

@@ -71,7 +71,7 @@ public class DownloadOrganizationImages extends DownloadAction {
 			organization = (InternalOrg)getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(uniqueID).load();
 			
 			if(organization != null) {
-				File certLogoFile = PathHandler.getCertificateLogo(organization);
+				File certLogoFile = PathHandler.getCertificateLogo(organization, false);
 				if (!certLogoFile.exists()) {
 					logger.error("No certificate logo file found at [" + certLogoFile.getAbsolutePath() + "]");
 					return ERROR;

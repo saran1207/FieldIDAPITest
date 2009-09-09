@@ -2,6 +2,8 @@ package com.n4systems.fieldid.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -23,6 +26,9 @@ import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.timezone.Region;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
@@ -40,6 +46,8 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	private String certImageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
+	private Country country;
+	private Region region;
 	
 	public OrganizationalCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -49,6 +57,10 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	protected void initMemberFields() {
 		// this action can only create secondary orgs
 		organization = new SecondaryOrg();
+		
+		String primaryOrgTimeZone = getPrimaryOrg().getDefaultTimeZone();
+		country = CountryList.getInstance().getCountryByFullId(primaryOrgTimeZone);
+		region = CountryList.getInstance().getRegionByFullId(primaryOrgTimeZone);
 	}
 
 	@Override
@@ -64,6 +76,9 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			loader.setId(uniqueId);
 			organization = loader.load();
 		}
+		
+		country = CountryList.getInstance().getCountryByFullId(organization.getDefaultTimeZone());
+		region = CountryList.getInstance().getRegionByFullId(organization.getDefaultTimeZone());
 	}
 
 	private void testRequiredEntities(boolean existing) {
@@ -113,7 +128,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 
 	private void processImage() {
 		
-		File ouCertLogo = PathHandler.getCertificateLogo(organization);
+		File ouCertLogo = PathHandler.getCertificateLogo(organization, false);
 		if (removeImage) {
 			if (ouCertLogo.exists()) {
 				ouCertLogo.delete();
@@ -138,7 +153,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	}
 	
 	private String certImageExists() {
-		File ouCertLogo = PathHandler.getCertificateLogo(organization);
+		File ouCertLogo = PathHandler.getCertificateLogo(organization, false);
 		return (ouCertLogo.exists()) ? ouCertLogo.getName() : null; 
 	}
 	
@@ -254,5 +269,32 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	
 	public boolean isPrimary() {
 		return organization.isPrimary();
+	}
+	
+	public SortedSet<? extends Listable<String>> getCountries() {
+		return CountryList.getInstance().getCountries();
+	}
+
+	public SortedSet<? extends Listable<String>> getTimeZones() {
+		return (country != null) ? country.getRegions() : new TreeSet<Listable<String>>();
+	}
+	
+	public String getCountryId() {
+		return country.getId();
+	}
+	
+	public void setCountryId(String countryId) {
+		country = CountryList.getInstance().getCountryById(countryId);
+	}
+	
+	public String getTimeZoneID() {
+		return region.getId();
+	}
+	
+	public void setTimeZoneID(String regionId) {
+		if (country != null) {
+			region = country.getRegionById(regionId);
+			organization.setDefaultTimeZone(country.getFullId(region));
+		}
 	}
 }

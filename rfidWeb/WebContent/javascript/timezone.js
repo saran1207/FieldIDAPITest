@@ -22,7 +22,7 @@ function updateTimezoneList(list) {
 	timezoneList.options.length = 0;
 	if( list != null ) {
 		for( var i = 0; i < list.length; i++ ) {
-			timezoneList.options[i] = new Option(list[i].name, list[i].timeZoneId);
+			timezoneList.options[i] = new Option(list[i].name, list[i].name);
 		}
 	}
 }

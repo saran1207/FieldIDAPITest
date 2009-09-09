@@ -44,6 +44,15 @@
 			<@s.textfield name="certificateName"/>
 		</div>
 		
+		<div class="infoSet">
+			<label><@s.text name="label.country"/></label>
+			<@s.select name="countryId" list="countries" listKey="id" listValue="displayName" labelposition="left" cssClass="changesTimeZone"/>
+		</div>
+		<div class="infoSet">
+			<label><@s.text name="label.timezone"/></label>
+			<@s.select id="tzlist" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName" labelposition="left" emptyOption="false"/>
+		</div>
+		
 		<#if primary >
 			<div class="infoSet">
 				<label><@s.text name="label.website_url"/></label>
@@ -119,6 +128,17 @@
 	</div>
 </div>
 
+<head>
+	<style>
+		.radio {
+			width: 60px;
+		}
+	</style>
+	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
+	<script type="text/javascript" >
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
+	</script>
+</head>
 
 
 
