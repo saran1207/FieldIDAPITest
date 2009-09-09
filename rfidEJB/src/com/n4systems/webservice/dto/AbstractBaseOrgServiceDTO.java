@@ -4,7 +4,6 @@ public class AbstractBaseOrgServiceDTO {
 
 	private Long id;
 	private String name;
-	private Long parentId;
 	
 	public Long getId() {
 		return id;
@@ -18,10 +17,4 @@ public class AbstractBaseOrgServiceDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getParentId() {
-		return parentId;
-	}
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}	
 }

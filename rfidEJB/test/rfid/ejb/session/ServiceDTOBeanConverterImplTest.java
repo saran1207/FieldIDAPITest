@@ -48,6 +48,7 @@ import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
+import com.n4systems.webservice.dto.SecondaryOrgServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 
 
@@ -376,6 +377,16 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		assertEquals(dto.getId(), divisionOrg.getId());
 		assertEquals(dto.getName(), divisionOrg.getName());
 		assertEquals(dto.getParentId(), customerOrg.getId());
+	}
+	
+	@Test
+	public void test_convert_secondary_org() {
+		SecondaryOrg secondaryOrg = SecondaryOrgBuilder.aSecondaryOrg().build();
+		
+		SecondaryOrgServiceDTO dto = converter.convert(secondaryOrg);
+		
+		assertEquals(dto.getId(), secondaryOrg.getId());
+		assertEquals(dto.getName(), secondaryOrg.getName());
 	}
 	
 	@Test

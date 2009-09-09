@@ -49,6 +49,8 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -87,6 +89,7 @@ import com.n4systems.webservice.dto.ProductTypeListResponse;
 import com.n4systems.webservice.dto.RequestInformation;
 import com.n4systems.webservice.dto.RequestResponse;
 import com.n4systems.webservice.dto.ResponseStatus;
+import com.n4systems.webservice.dto.SecondaryOrgListResponse;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
@@ -525,10 +528,42 @@ public class DataServiceImpl implements DataService {
 			
 			return response;
 		} catch (Exception e) {
-			logger.error("Exception occured while looking up customer orgs", e);
+			logger.error("Exception occured while looking up division orgs", e);
 			throw new ServiceException();
 		}
 	}
+	
+	public SecondaryOrgListResponse getAllSecondaryOrgs(PaginatedRequestInformation requestInformation)	throws ServiceException {
+		try {
+			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
+			int currentPage = requestInformation.getPageNumber().intValue();			
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+									
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			SecondaryOrgPaginatedLoader loader = loaderFactory.createSecondaryOrgPaginatedLoader();
+			loader.setPage(currentPage);
+			loader.setPageSize(RESULTS_PER_PAGE);
+			
+			Pager<SecondaryOrg> pager = loader.load();
+			
+			SecondaryOrgListResponse response = new SecondaryOrgListResponse();
+			
+			for (SecondaryOrg secondaryOrg : pager.getList()) {
+				response.getSecondaryOrgs().add( converter.convert(secondaryOrg) );
+			}
+						
+			response.setCurrentPage(currentPage);
+			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setStatus(ResponseStatus.OK);
+			response.setTotalPages((int)pager.getTotalPages());
+			
+			return response;
+		} catch (Exception e) {
+			logger.error("Exception occured while looking up secondary orgs", e);
+			throw new ServiceException();
+		}
+	}
+	
 	
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
 		try {
@@ -1154,4 +1189,5 @@ public class DataServiceImpl implements DataService {
 		
 		return mobileUpdateInfo;
 	}
+
 }

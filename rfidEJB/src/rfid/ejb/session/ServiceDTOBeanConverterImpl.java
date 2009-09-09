@@ -60,6 +60,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -69,6 +70,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
 import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
+import com.n4systems.webservice.dto.AbstractExternalOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaResultServiceDTO;
 import com.n4systems.webservice.dto.CriteriaSectionServiceDTO;
@@ -89,6 +91,7 @@ import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeScheduleServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeServiceDTO;
+import com.n4systems.webservice.dto.SecondaryOrgServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateServiceDTO;
 import com.n4systems.webservice.dto.StateSetServiceDTO;
@@ -1088,11 +1091,22 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return dto;
 	}
 	
+	public SecondaryOrgServiceDTO convert(SecondaryOrg secondaryOrg) {
+		SecondaryOrgServiceDTO dto = new SecondaryOrgServiceDTO();
+		populate(secondaryOrg, dto);
+		return dto;
+	}
+	
 	private void populate(BaseOrg baseOrg, AbstractBaseOrgServiceDTO baseOrgDto) {
 		baseOrgDto.setId(baseOrg.getId());
-		baseOrgDto.setName(baseOrg.getName());
+		baseOrgDto.setName(baseOrg.getName());		
+	}
+	
+	private void populate(BaseOrg baseOrg, AbstractExternalOrgServiceDTO baseOrgDto) {
+		populate(baseOrg, (AbstractBaseOrgServiceDTO)baseOrgDto);
 		if (!baseOrg.getParent().equals(baseOrg.getPrimaryOrg())) {
 			baseOrgDto.setParentId(baseOrg.getParent().getId());
 		}
 	}
+
 }

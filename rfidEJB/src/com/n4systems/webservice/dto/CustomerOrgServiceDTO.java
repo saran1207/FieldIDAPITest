@@ -1,4 +1,4 @@
 package com.n4systems.webservice.dto;
 
-public class CustomerOrgServiceDTO extends AbstractBaseOrgServiceDTO {
+public class CustomerOrgServiceDTO extends AbstractExternalOrgServiceDTO {
 }
