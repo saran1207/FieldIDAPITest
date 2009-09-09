@@ -70,6 +70,7 @@ import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaResultServiceDTO;
 import com.n4systems.webservice.dto.CriteriaSectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaServiceDTO;
+import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldNameServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldServiceDTO;
@@ -1068,6 +1069,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		dto.setProductTypes(setupModDates.getProductTypes());
 		dto.setJobs(setupModDates.getJobs());
 		
+		return dto;
+	}
+	
+	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg) {
+		CustomerOrgServiceDTO dto = new CustomerOrgServiceDTO();
+		dto.setId(customerOrg.getId());
+		dto.setName(customerOrg.getName());
+		if (!customerOrg.getParent().equals(customerOrg.getPrimaryOrg())) {
+			dto.setParentId(customerOrg.getParent().getId());
+		}
 		return dto;
 	}
 }

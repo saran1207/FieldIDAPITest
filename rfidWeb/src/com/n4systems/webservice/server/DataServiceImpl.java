@@ -44,10 +44,14 @@ import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.tools.Pager;
@@ -524,7 +528,34 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
-		return null;
+		try {
+			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
+			int currentPage = requestInformation.getPageNumber().intValue();			
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+									
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			CustomerOrgPaginatedLoader loader = loaderFactory.createCustomerOrgPaginatedLoader();
+			loader.setPage(currentPage);
+			loader.setPageSize(RESULTS_PER_PAGE);
+			
+			Pager<CustomerOrg> pager = loader.load();
+			
+			CustomerOrgListResponse response = new CustomerOrgListResponse();
+			
+			for (CustomerOrg customerOrg : pager.getList()) {
+				response.getCustomers().add( converter.convert(customerOrg) );
+			}
+						
+			response.setCurrentPage(currentPage);
+			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setStatus(ResponseStatus.OK);
+			response.setTotalPages((int)pager.getTotalPages());
+			
+			return response;
+		} catch (Exception e) {
+			logger.error("Exception occured while looking up customer orgs", e);
+			throw new ServiceException();
+		}
 	}
 	
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {

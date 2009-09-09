@@ -22,8 +22,10 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
@@ -67,4 +69,5 @@ public interface ServiceDTOBeanConverter {
 	public Date convertStringToDate(String stringDate);
 	public JobServiceDTO convert(Project job);
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates);
+	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg);
 }

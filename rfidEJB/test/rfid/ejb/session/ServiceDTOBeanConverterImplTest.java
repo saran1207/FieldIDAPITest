@@ -32,11 +32,17 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.CustomerOrgBuilder;
+import com.n4systems.model.builders.PrimaryOrgBuilder;
+import com.n4systems.model.builders.SecondaryOrgBuilder;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.TenantCache;
 import com.n4systems.test.helpers.EJBTestCase;
+import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
@@ -322,80 +328,37 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 				// need to test value has not changed
 			}
 		}
-		
-		
-		
-		
-	}
-	
-	// TODO replace these with new tests when we figure out how we are sending down customer/divisions to handheld
-	/*
-	@Test
-	public void test_convert_division() {
-		DivisionOrg division = new DivisionOrg();
-		
-		division.setId(10L);
-		division.setName("division_name");
-		
-		DivisionServiceDTO divisionService = converter.convert(division);
-		
-		assertEquals(division.getId(), divisionService.getId());
-		assertEquals(division.getName(), divisionService.getName());
 	}
 	
 	@Test
-	public void test_convert_customer() {
-		Customer customer = new Customer();
+	public void test_convert_customer_org_from_primary_org() {
+		String customerName = "Test Name";
 		
-		customer.setId(5L);
-		customer.setName("customer_name");
-		customer.setCustomerId("customer_id");
-		customer.getContact().setName("contact_name");
-		customer.getContact().setEmail("contact_email");
+		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().build();
 		
-		Division division = new Division();
-		division.setId(10L);
+		CustomerOrg customerOrg = CustomerOrgBuilder.aCustomerOrg().
+									withName(customerName).withParent(primaryOrg).build();
 		
-		List<Division> divisions = Collections.nCopies(5, division);
+		CustomerOrgServiceDTO dto = converter.convert(customerOrg);
 		
-		CustomerServiceDTO customerService = converter.convert(customer, divisions);
-		
-		assertEquals(customer.getId(), customerService.getId());
-		assertEquals(customer.getName(), customerService.getName());
-		assertEquals(customer.getCustomerId(), customerService.getCustomerId());
-		assertEquals(customer.getContact().getName(), customerService.getContactName());
-		assertEquals(customer.getContact().getEmail(), customerService.getContactEmail());
-		
-		assertNotNull(customerService.getDivisions());
-		
-		assertEquals(5, customerService.getDivisions().size());
-		
+		assertEquals(dto.getName(), customerName);
+		assertNull(dto.getParentId());		
 	}
 	
 	@Test
-	public void test_convert_customer_null_contact() {
-		Customer customer = new Customer();
+	public void test_convert_customer_org_from_secondary_org() {
+		String customerName = "Test Name";
 		
-		customer.setId(5L);
-		customer.setName("customer_name");
-		customer.setCustomerId("customer_id");
-
-		CustomerServiceDTO customerService = converter.convert(customer, new ArrayList<Division>());
+		SecondaryOrg secondaryOrg = SecondaryOrgBuilder.aSecondaryOrg().build();
 		
-		assertEquals(customer.getId(), customerService.getId());
-		assertEquals(customer.getName(), customerService.getName());
-		assertEquals(customer.getCustomerId(), customerService.getCustomerId());
+		CustomerOrg customerOrg = CustomerOrgBuilder.aCustomerOrg().
+									withName(customerName).withParent(secondaryOrg).build();
+		
+		CustomerOrgServiceDTO dto = converter.convert(customerOrg);
+		
+		assertEquals(dto.getName(), customerName);
+		assertEquals(dto.getParentId(), secondaryOrg.getId());		
 	}
-	
-	@Test
-	public void test_convert_customer_null_divisions() {
-		Customer customer = new Customer();
-		customer.setId(5L);
-		
-		converter.convert(customer, null);
-		
-	}
-	*/
 	
 	@Test
 	public void test_setup_data_last_mod_dates() {
