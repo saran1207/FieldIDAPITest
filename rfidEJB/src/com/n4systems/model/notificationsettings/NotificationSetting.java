@@ -17,10 +17,12 @@ import org.hibernate.annotations.IndexColumn;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithOwner;
 
 @Entity
@@ -63,6 +65,10 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	private List<Long> inspectionTypes = new ArrayList<Long>();
 
 	public NotificationSetting() {}
+	
+	public NotificationSetting(Tenant tenant, BaseOrg owner) {
+		super(tenant, owner);
+	}
 
 	public String getName() {
     	return name;

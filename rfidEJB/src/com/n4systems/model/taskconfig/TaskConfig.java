@@ -22,7 +22,6 @@ public class TaskConfig extends AbstractStringIdEntity {
 	@Column(nullable=false)
 	private Boolean enabled = true;
 	private String taskGroup = DEFAULT_TASK_GROUP;
-	private Long taskEntityId;
 	
 	public TaskConfig() {}
 
@@ -60,14 +59,6 @@ public class TaskConfig extends AbstractStringIdEntity {
 
 	public void setEnabled(Boolean enabled) {
     	this.enabled = enabled;
-    }
-
-	public Long getTaskEntityId() {
-    	return taskEntityId;
-    }
-
-	public void setTaskEntityId(Long taskEntityId) {
-    	this.taskEntityId = taskEntityId;
     }
 	
 }

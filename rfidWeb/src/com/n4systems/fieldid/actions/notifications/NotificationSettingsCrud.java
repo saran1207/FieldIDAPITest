@@ -76,12 +76,16 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		converter = new NotificationSettingViewModelConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getPrimaryOrg(), getUser());
+		initConverter();
 	}
 	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		converter = new NotificationSettingViewModelConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getPrimaryOrg(), getUser());
+		initConverter();
+	}
+	
+	private void initConverter() {
+		converter = new NotificationSettingViewModelConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getTenant(), getUser());
 	}
 	
 	@SkipValidation
@@ -91,7 +95,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	@SkipValidation
 	public String doAdd() {
-		converter.populateView(new NotificationSetting(), view);
+		converter.populateView(new NotificationSetting(getTenant(), getSessionUserOwner()), view);
 		
 		// default to the users email address
 		view.getAddresses().add(getUser().getEmailAddress());
@@ -126,7 +130,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 			
 			NotificationSettingSaver saver = new NotificationSettingSaver();
 			
-			saver.save(setting);
+			saver.saveOrUpdate(setting);
 			
 			uniqueID = setting.getId();
 			
@@ -230,4 +234,11 @@ public class NotificationSettingsCrud extends AbstractCrud {
 		this.view = view;
 	}
 
+	public Long getOwnerId() {
+		return view.getOwnerId();
+	}
+	
+	public void setOwnerId(Long id) {
+		view.setOwnerId(id);
+	}
 }

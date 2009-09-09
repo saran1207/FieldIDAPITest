@@ -1,8 +1,4 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" />"></script>
-	<script type="text/javascript">
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
-	</script>
 	<script type="text/javascript" src="javascript/notificationSettings.js"> </script>
 	<@n4.includeStyle type="page" href="notifications"/>
 	
@@ -11,10 +7,10 @@ ${action.setPageType('my_account', 'notification_settings')!}
 <h2><@s.text name="label.notification"/></h2>
 
 <#include "/templates/html/common/_formErrors.ftl" />
+<#include "/templates/html/common/_orgPicker.ftl"/>
 
 <@s.hidden name="uniqueID"/>
 <@s.hidden name="view.ID"/>
-<@s.hidden name="view.ownerId"/>
 <@s.hidden name="view.createdTimeStamp"/>
 <div class="sectionContent">
 	<div class="infoSet fullInfoSet">
@@ -27,22 +23,8 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		</@s.textfield>
 	</div>
 	
-	<div id="customerDivisionList">
-		<#if securityGuard.jobSitesEnabled>
-			<div class="infoSet">
-				<label for="view.jobSiteId"><@s.text name="label.jobsite"/></label>
-				<@s.select id="jobSite" name="view.jobSiteId" list="jobSites" listKey="id" listValue="name" headerKey="" headerValue="${action.getText('label.all_jobsites')}" />
-			</div>
-		<#else>
-			<div class="infoSet">
-				<label for="view.customerId"><@s.text name="label.customer"/></label>
-				<@s.select id="customer" name="view.customerId" list="customers" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_customers')}" onchange="customerChanged(this);" />
-			</div>
-			<div class="infoSet">
-				<label for="view.divisionId"><@s.text name="label.division"/></label>
-				<@s.select id="division" name="view.divisionId" list="divisions" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_divisions')}" />
-			</div>
-		</#if>
+	<div class="infoSet fullInfoSet">
+		<@n4.orgPicker name="owner"/>
 	</div>
 	
 	<div class="infoSet fullInfoSet">

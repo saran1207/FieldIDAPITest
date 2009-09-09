@@ -4,22 +4,22 @@ import java.util.Date;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.Tenant;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class NotificationSettingViewModelConverter {
 
 	private final FilteredIdLoader<BaseOrg> orgLoader;
-	private final PrimaryOrg primaryOrg;
+	private final Tenant tenant;
 	private final UserBean user;
 	
-	public NotificationSettingViewModelConverter(FilteredIdLoader<BaseOrg> orgLoader, PrimaryOrg primaryOrg, UserBean user) {
+	public NotificationSettingViewModelConverter(FilteredIdLoader<BaseOrg> orgLoader, Tenant tenant, UserBean user) {
 		this.orgLoader = orgLoader;
-		this.primaryOrg = primaryOrg;
+		this.tenant = tenant;
 		this.user = user;
 	}
 	
@@ -64,7 +64,7 @@ public class NotificationSettingViewModelConverter {
 		
 		// setup the model object
 		model.setId(view.getId());
-		model.setTenant(primaryOrg.getTenant());
+		model.setTenant(tenant);
 		model.setUser(user);
 		model.setName(view.getName());
 		

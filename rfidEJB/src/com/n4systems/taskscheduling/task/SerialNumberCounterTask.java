@@ -1,16 +1,15 @@
 package com.n4systems.taskscheduling.task;
 
-import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.taskscheduling.ScheduledTask;
-import com.n4systems.util.ServiceLocator;
-
-import rfid.ejb.entity.SerialNumberCounterBean;
-import rfid.ejb.session.SerialNumberCounter;
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.session.SerialNumberCounter;
+
+import com.n4systems.taskscheduling.ScheduledTask;
+import com.n4systems.util.ServiceLocator;
 
 
 /**
@@ -25,7 +24,7 @@ public class SerialNumberCounterTask extends ScheduledTask {
     }
 
 	@Override
-    protected void runTask(TaskConfig config) throws Exception {
+    protected void runTask() throws Exception {
 		Collection<SerialNumberCounterBean> serialNumberCounters = null;
 		SerialNumberCounter serialNumberCounterManager = ServiceLocator.getSerialNumberCounter();
 

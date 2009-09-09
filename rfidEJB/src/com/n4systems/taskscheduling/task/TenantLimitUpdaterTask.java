@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.model.tenant.AlertStatus;
 import com.n4systems.model.tenant.AlertStatusSaver;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
@@ -27,7 +26,7 @@ public class TenantLimitUpdaterTask extends ScheduledTask {
 	}
 
 	@Override
-	protected void runTask(TaskConfig config) throws Exception {
+	protected void runTask() throws Exception {
 		logger.info("Initializing TenantLimitService ... ");
 		
 		limitService = TenantLimitService.getInstance();

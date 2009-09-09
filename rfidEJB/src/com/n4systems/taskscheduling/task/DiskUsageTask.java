@@ -14,7 +14,6 @@ import org.apache.commons.io.FileUtils;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.usage.TenantDiskUsageCalculator;
@@ -32,7 +31,7 @@ public class DiskUsageTask extends ScheduledTask {
 	}
 
 	@Override
-	protected void runTask(TaskConfig config) throws Exception {
+	protected void runTask() throws Exception {
 		List<TenantDiskUsageCalculator> summaries = new ArrayList<TenantDiskUsageCalculator>();
 		
 		for (Tenant tenant: getTenants()) {

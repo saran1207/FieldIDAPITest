@@ -13,10 +13,13 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.Gson;
 
 public abstract class AbstractNetsuiteClient<K> {
-
+	private static Logger logger = Logger.getLogger(AbstractNetsuiteClient.class);
+	
 	private final String password = "pickles";
 	private final String netsuiteUrl = "https://forms.netsuite.com/app/site/hosting/scriptlet.nl?script=4&deploy=1&compid=723761&h=da3f7f1be20eb4e4299a";
 	private final Class<K> returnClass;
@@ -137,13 +140,13 @@ public abstract class AbstractNetsuiteClient<K> {
 	
 			createConnection();
 			
-			System.out.println("Data to send: " + data);
+			logger.debug("Data to send: " + data);
 	
 			sendData(data);
 			
 			response = getConnectionResponse();
 			
-			System.out.println("Response in JSON was: "+response);
+			logger.debug("Response in JSON was: "+response);
 			
 		} finally {
 			if (connection != null) {

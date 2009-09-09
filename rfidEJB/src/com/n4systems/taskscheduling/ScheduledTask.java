@@ -1,8 +1,5 @@
 package com.n4systems.taskscheduling;
 
-import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.model.taskconfig.TaskConfigLoader;
-
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -58,14 +55,7 @@ abstract public class ScheduledTask implements Runnable {
 	 * allow InterruptedException's to pass through (or at least re-throw them).
 	 * @throws Exception On job failure
 	 */
-	abstract protected void runTask(TaskConfig config) throws Exception;
-
-	private TaskConfig loadConfig() {
-	    TaskConfigLoader configLoader = new TaskConfigLoader();
-	    configLoader.setId(configId);
-	    
-	    return configLoader.load();
-    }
+	abstract protected void runTask() throws Exception;
 	
 	/** sets up the task for execution */
 	private synchronized void taskPreExecute() {
@@ -92,11 +82,9 @@ abstract public class ScheduledTask implements Runnable {
 	/** Implements the job launching logic.  Subclasses MUST NOT override this method. */
 	public void run() {
 		try {
-			TaskConfig config = loadConfig();
-			
 			taskPreExecute();
 			
-			runTask(config);
+			runTask();
 			
 			taskPostExecute();
 			
@@ -113,15 +101,13 @@ abstract public class ScheduledTask implements Runnable {
 			logger.info("Task [" + configId + "] failed", e);
 		}
 	}
-
-
 	
 	/**
 	 * Cancels a task during execution.  The task is interrupted, and told to shutdown.
 	 */
 	public void cancel() {
 		if (isExecuting()) {
-			logger.info("Cancel called on active task [" + configId + "]");
+			logger.info("Cancel called on active task [" + configId + "], elapsed run time [" + getCurrentTimeElapsed() + "ms]");
 			synchronized(taskThread) {
 				canceled = true;
 				taskThread.interrupt();

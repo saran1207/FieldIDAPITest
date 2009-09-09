@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.ProductCountLoader;
 import com.n4systems.model.user.EmployeeUserCountLoader;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.services.TenantCache;
 import com.n4systems.usage.TenantDiskUsageCalculator;
 
@@ -25,6 +27,9 @@ public class TenantLimitService implements Serializable {
 	private Map<Long, ResourceLimit> diskSpace = new ConcurrentHashMap<Long, ResourceLimit>();
 	private Map<Long, ResourceLimit> employeeUsers = new ConcurrentHashMap<Long, ResourceLimit>();
 	private Map<Long, ResourceLimit> assets = new ConcurrentHashMap<Long, ResourceLimit>();
+	
+	private ProductCountLoader productCountLoader = new ProductCountLoader();
+	private EmployeeUserCountLoader employeeCountLoader = new EmployeeUserCountLoader();
 	
 	private TenantLimitService() {}
 	
@@ -70,11 +75,24 @@ public class TenantLimitService implements Serializable {
 	public void updateAll() {
 		logger.info("Reloading all limits");
 		long startTime = System.currentTimeMillis();
-		for (PrimaryOrg primaryOrg: TenantCache.getInstance().findAllPrimaryOrgs()) {
-			updateDiskSpace(primaryOrg);
-			updateEmployeeUsers(primaryOrg);
-			updateAssets(primaryOrg);
+		
+		Transaction transaction = null;
+		try {
+			transaction = PersistenceManager.startTransaction();
+			
+			for (PrimaryOrg primaryOrg: TenantCache.getInstance().findAllPrimaryOrgs()) {
+				logger.info("Updating all limits for [" + primaryOrg.toString() + "]");
+				updateDiskSpace(primaryOrg);
+				updateEmployeeUsers(primaryOrg, transaction);
+				updateAssets(primaryOrg, transaction);
+			}
+			
+			PersistenceManager.finishTransaction(transaction);
+		} catch(Exception e) {
+			PersistenceManager.rollbackTransaction(transaction);
+			logger.error("Failed updating limits", e);
 		}
+		
 		logger.info("All limits reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 	
@@ -82,44 +100,40 @@ public class TenantLimitService implements Serializable {
 	 * Updates the user count but does not reload the tenant limit.
 	 */
 	private void refreshEmployeeUserCount(Long tenantId) {
-		EmployeeUserCountLoader loader = new EmployeeUserCountLoader();
-		loader.setTenantId(tenantId);
+		employeeCountLoader.setTenantId(tenantId);
 		
-		employeeUsers.get(tenantId).setUsed(loader.load());
+		employeeUsers.get(tenantId).setUsed(employeeCountLoader.load());
 	}
 	
 	/**
 	 * Updates the asset count but does not reload the tenant limit.
 	 */
 	private void refreshAssetCount(Long tenantId) {
-		ProductCountLoader loader = new ProductCountLoader();
-		loader.setTenantId(tenantId);
+		productCountLoader.setTenantId(tenantId);
 		
-		assets.get(tenantId).setUsed(loader.load());
+		assets.get(tenantId).setUsed(productCountLoader.load());
 	}
 	
 	/**
 	 * Updates the employee user limit for a single tenant
 	 */
-	private void updateEmployeeUsers(PrimaryOrg primaryOrg) {
-		logger.debug("Updating employee limits for [" + primaryOrg.toString() + "]");
-		
-		EmployeeUserCountLoader loader = new EmployeeUserCountLoader();
-		loader.setTenantId(primaryOrg.getId());
+	private void updateEmployeeUsers(PrimaryOrg primaryOrg, Transaction transaction) {
+		logger.trace("Updating employee limits for [" + primaryOrg.toString() + "]");
+		employeeCountLoader.setTenantId(primaryOrg.getId());
 		
 		ResourceLimit limit = new AccountResourceLimit();
-		limit.setUsed(loader.load());
+		limit.setUsed(employeeCountLoader.load(transaction));
 		limit.setMaximum(primaryOrg.getLimits().getUsers());
 		
 		employeeUsers.put(primaryOrg.getId(), limit);
-		logger.debug("Employee Limit [" + primaryOrg.toString() + "]: " + limit.toString());
+		logger.trace("Employee Limit [" + primaryOrg.toString() + "]: " + limit.toString());
 	}
 	
 	/**
 	 * Updates the disk space limit for a single tenant
 	 */
 	private void updateDiskSpace(PrimaryOrg primaryOrg) {
-		logger.debug("Updating disk space limits for [" + primaryOrg.toString() + "]");
+		logger.trace("Updating disk space limits for [" + primaryOrg.toString() + "]");
 		TenantDiskUsageCalculator usageCalc = new TenantDiskUsageCalculator(primaryOrg.getTenant());
 		
 		ResourceLimit limit = new DiskResourceLimit();
@@ -127,23 +141,21 @@ public class TenantLimitService implements Serializable {
 		limit.setMaximum(primaryOrg.getLimits().getDiskSpaceInBytes());
 		
 		diskSpace.put(primaryOrg.getId(), limit);
-		logger.debug("Disk Limit [" + primaryOrg.toString() + "]: " + limit.toString());
+		logger.trace("Disk Limit [" + primaryOrg.toString() + "]: " + limit.toString());
 	}
 	
 	/**
 	 * Updates the asset limit for a single tenant
 	 */
-	private void updateAssets(PrimaryOrg primaryOrg) {
-		logger.debug("Updating asset limits for [" + primaryOrg.toString() + "]");
-		
-		ProductCountLoader loader = new ProductCountLoader();
-		loader.setTenantId(primaryOrg.getId());
+	private void updateAssets(PrimaryOrg primaryOrg, Transaction transaction) {
+		logger.trace("Updating asset limits for [" + primaryOrg.toString() + "]");
+		productCountLoader.setTenantId(primaryOrg.getId());
 		
 		ResourceLimit limit = new AssetResourceLimit();
-		limit.setUsed(loader.load());
+		limit.setUsed(productCountLoader.load(transaction));
 		limit.setMaximum(primaryOrg.getLimits().getAssets());
 		
 		assets.put(primaryOrg.getId(), limit);
-		logger.debug("Asset Limit [" + primaryOrg.toString() + "]: " + limit.toString());
+		logger.trace("Asset Limit [" + primaryOrg.toString() + "]: " + limit.toString());
 	}
 }

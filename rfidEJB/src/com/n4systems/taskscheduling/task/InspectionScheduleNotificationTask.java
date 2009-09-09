@@ -21,7 +21,6 @@ import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
-import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.TenantCache;
 import com.n4systems.taskscheduling.ScheduledTask;
@@ -44,7 +43,7 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
     }
 
 	@Override
-    protected void runTask(TaskConfig config) throws Exception {
+    protected void runTask() throws Exception {
 		logger.info("Starting Inspection Schedule Notification Task");
 		
 		AllEntityListLoader<NotificationSetting> loader = new AllEntityListLoader<NotificationSetting>(NotificationSetting.class);

@@ -32,10 +32,11 @@ import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.util.ConfigContext;
@@ -163,6 +164,10 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	
 	public PrimaryOrg getPrimaryOrg() {
 		return getSecurityGuard().getPrimaryOrg();
+	}
+	
+	public BaseOrg getSessionUserOwner() {
+		return getSessionUser().getOwner();
 	}
 	
 	public void setServletRequest(HttpServletRequest request) {

@@ -1,6 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.taskscheduling.TaskScheduler;
 
@@ -14,7 +13,7 @@ public class WatcherTask extends ScheduledTask {
     }
 
 	@Override
-	protected void runTask(TaskConfig config) throws Exception {
+	protected void runTask() throws Exception {
 		logger.trace("Looking for long running tasks");
 		for (ScheduledTask task: scheduler.getExecutingTasks()) {
 			if (task.equals(this)) {

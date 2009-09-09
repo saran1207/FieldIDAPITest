@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.model.signuppackage.SignUpPackageSyncHandler;
-import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.subscription.CommunicationException;
@@ -21,13 +20,9 @@ public class SignUpPackageSyncTask extends ScheduledTask {
 	}
 
 	@Override
-	protected void runTask(TaskConfig config) throws Exception {
-		runTask();
-	}
-	
-	public void runTask() throws Exception {
+	protected void runTask() throws Exception {
 		List<ContractPrice> contractPrices = retrieveContracts();
-		syncContractsWithSignUpPackages(contractPrices);		
+		syncContractsWithSignUpPackages(contractPrices);	
 	}
 
 	private List<ContractPrice> retrieveContracts() throws CommunicationException {
