@@ -67,7 +67,10 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	}
 
 	public String getDisplayName() {
-		return name;
+		if (getParent() == null) {
+			return name;
+		}
+		return name + " <- " + getParent().getDisplayName();
 	}
 	
 	public String getName() {

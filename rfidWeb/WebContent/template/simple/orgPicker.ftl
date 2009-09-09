@@ -13,7 +13,7 @@
 <#-- Text input area. -->
 <input type="text" name="${parameters.name?default("")?html}_orgName"<#rt/>
 readonly="readonly"<#rt/>
-value="${(parameters.nameValue.name)?default("")?html}"<#rt/>
+value="${(parameters.nameValue.displayName)?default("")?html}"<#rt/>
 <#if parameters.maxlength?exists>
  maxlength="${parameters.maxlength?html}"<#rt/>
 </#if>
@@ -26,7 +26,7 @@ value="${(parameters.nameValue.name)?default("")?html}"<#rt/>
 <#if parameters.cssClass?exists>
  class="${parameters.cssClass?html}"<#rt/>
 </#if>
-
+/>
 <a href="#" class="searchOwner">search</a>
 
 </span>

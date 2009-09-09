@@ -25,7 +25,7 @@ public class OrgPickerComponent extends UIBean {
 	public void evaluateParams() {
 		super.evaluateParams();
 		BaseOrg selectedOrg = (BaseOrg)getParameters().get("nameValue");
-		addParameter("idName", findString("name") + "Id");
+		addParameter("idName", name + "Id");
 		
 		if (selectedOrg != null) {
 			addParameter("idNameValue", selectedOrg.getId());

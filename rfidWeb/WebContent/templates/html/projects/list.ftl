@@ -33,12 +33,10 @@ ${action.setPageType('job', 'list')!}
 			<th><@s.text name="label.type"/></th>
 			<th><@s.text name="label.projectid"/></th>
 			<th><@s.text name="label.title" /></th>
-			<#if securityGuard.jobSitesEnabled>
-				<th><@s.text name="label.jobsite" /></th>
-			<#else>
-				<th><@s.text name="label.customer" /></th>
-				<th><@s.text name="label.division" /></th>
-			</#if>
+			
+			<th><@s.text name="label.customer" /></th>
+			<th><@s.text name="label.division" /></th>
+			
 			<th><@s.text name="label.datestarted" /></th>
 			<th><@s.text name="label.estimatedcompletion" /></th>
 			<th><@s.text name="label.actualcompletion" /></th>
@@ -53,12 +51,9 @@ ${action.setPageType('job', 'list')!}
 				<td>${project.eventJob?string(action.getText("label.eventjob"), action.getText("label.assetjob"))}</td>
 				<td>${project.projectID?html}</td>
 				<td><a href="<@s.url action="job" uniqueID="${project.id}" />" >${project.name?html}</td>
-				<#if securityGuard.jobSitesEnabled>
-					<td>${(project.jobSite.name?html)!}</td>
-				<#else>
-					<td>${(project.owner.customerOrg.name?html)!}</td>
-					<td>${(project.owner.divisionOrg.name?html)!}</td>
-				</#if>
+				
+				<td>${(project.owner.customerOrg.name?html)!}</td>
+				<td>${(project.owner.divisionOrg.name?html)!}</td>
 				<td>${action.formatDateTime(project.started)}</td>
 				<td>${action.formatDateTime(project.estimatedCompletion)}</td>
 				<td>${action.formatDateTime(project.actualCompletion)}</td>

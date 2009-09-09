@@ -13,6 +13,7 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
@@ -40,6 +41,8 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	private ProjectManager projectManager;
 	private JobResourcesCrud jobResources;
+	
+	private OwnerPicker ownerPicker;
 
 	private Project project;
 	private boolean justAssignedOn = false;
@@ -51,6 +54,8 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	private Pager<FileAttachment> notesPaged;
 	private Pager<Product> assetsPaged;
 	private Pager<InspectionSchedule> schedulesPaged;
+	
+	
 
 	public ProjectCrud(PersistenceManager persistenceManager, ProjectManager projectManager, User userManager) {
 		super(persistenceManager);
@@ -61,11 +66,13 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	@Override
 	protected void initMemberFields() {
 		project = new Project();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), project);
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		project = persistenceManager.find(Project.class, uniqueId, getSecurityFilter());
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), project);
 	}
 
 	private void testRequiredEntities(boolean notNew) {
@@ -230,21 +237,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		this.actualCompletion = actualCompletion;
 	}
 	
-	public BaseOrg getOwner() {
-		return project.getOwner();
-	}
 	
-	public Long getOwnerId() {
-		return (project.getOwner() != null) ? project.getOwner().getId() : null;
-	}
-	
-	public void setOwnerId(Long id) {
-		if (id == null) {
-			project.setOwner(null);
-		} else if (project.getOwner() == null || project.getOwner().getId().equals(id)) {
-			project.setOwner(getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(id).load());
-		}
-	}
 	
 
 	public void setDuration(String duration) {
@@ -361,5 +354,17 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	public void setJustAssignedOn(boolean justAssignedOn) {
 		this.justAssignedOn = justAssignedOn;
+	}
+
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
 	}
 }
