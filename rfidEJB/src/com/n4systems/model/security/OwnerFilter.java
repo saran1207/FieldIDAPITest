@@ -14,6 +14,11 @@ public class OwnerFilter extends AbstractSecurityFilter {
 	}
 
 	@Override
+	protected String getFieldPrefix() {
+		return "owner_filter_";
+	}
+
+	@Override
 	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
 		if (!definer.isOwnerFiltered()) {
 			throw new SecurityException("OwnerFilter can only be used on entities with an owner");

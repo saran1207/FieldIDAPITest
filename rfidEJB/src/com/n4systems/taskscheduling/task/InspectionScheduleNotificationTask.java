@@ -3,8 +3,9 @@ package com.n4systems.taskscheduling.task;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
@@ -82,7 +83,7 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		loader.setFromDate(start);
 		loader.setToDate(end);
 		
-		List<InspectionScheduleCount> inspectionCounts = loader.load();
+		SortedSet<InspectionScheduleCount> inspectionCounts = new TreeSet<InspectionScheduleCount>(loader.load());
 		
 		String messageSubject = "Scheduled Inspection Report " + setting.getName() + " - " + dateFormatter.format(start) + " to " + dateFormatter.format(end);
 		
@@ -92,15 +93,8 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		
 		if(inspectionCounts.size() > 0) {
 			
-			messageBody
-				.append("<table class=\"message\" cellpadding=2 cellspacing=2 border><tr>")
-				.append("<th>Inspection Date</th>");
-				
+			messageBody.append("<table class=\"message\" cellpadding=2 cellspacing=2 border><tr><th>Inspection Date</th><th>Organization</th><th>Customer</th><th>Division</th><th>Product Type</th><th>Event Type</th><th>Inspections Due</th></tr>");
 
-			messageBody.append("<th>Customer</th><th>Division</th>");
-				
-			messageBody.append("<th>Product Type</th><th>Event Type</th><th>Inspections Due</th></tr>");
-		
 			for(InspectionScheduleCount inspectionCount: inspectionCounts) {
 				messageBody.append(formatMessageTableEntry(inspectionCount));
 			}
@@ -141,7 +135,11 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 			.append("<tr><td>")
 			.append(dateFormatter.format(isCount.getNextInspectionDate()))
 			.append("</td><td>")
-			.append(isCount.getOwnerName())
+			.append(isCount.getOrganizationName())
+			.append("</td><td>")
+			.append(isCount.getCustomerName())
+			.append("</td><td>")
+			.append(isCount.getDivisionName())
 			.append("</td><td>")
 			.append(isCount.getProductTypeName())
 			.append("</td><td>")

@@ -1,6 +1,5 @@
 package com.n4systems.model.inspectionschedulecount;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.model.security.OwnerFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -26,31 +26,12 @@ public class InspectionScheduleCountListLoader extends ListLoader<InspectionSche
 
 	@Override
 	protected List<InspectionScheduleCount> load(EntityManager em, SecurityFilter filter) {
-		
-		List<InspectionScheduleCount> scheduleCounts = new ArrayList<InspectionScheduleCount>();
-		QueryBuilder<InspectionScheduleCount> builder;
-		
-		/*
-		 * When using customer/divisions, we _could_ use an in list of each.  The problem is that
-		 * we may have customers with null divisions which means an in list is impossible.
-		 * Our only other choice would be to build a list of (customer = :c1 AND division = :d1) or (customer = c2 AND ....
-		 * this could create a very long list of criteria and would produce a massive SQL query.  Rather than do this
-		 * we've opted to handle the customers/divisions one at a time.
-		 */
-		
-		builder = prepareQueryBuilder(filter);
-		
-		scheduleCounts.addAll(builder.getResultList(em));
-		
-		return scheduleCounts;
-  }
-	
-	private QueryBuilder<InspectionScheduleCount> prepareQueryBuilder(SecurityFilter filter) {
 		QueryBuilder<InspectionScheduleCount> builder = new QueryBuilder<InspectionScheduleCount>(InspectionSchedule.class, filter);
+		builder.applyFilter(new OwnerFilter(notification.getOwner()));
 		
 		// we have to set the alias here and prefix our select clause arguments, otherwise hibernate generates a bad query 
 		builder.setTableAlias("isc");
-		builder.setSelectArgument(new NewObjectSelect(InspectionScheduleCount.class, "isc.nextDate", "isc.owner.name", "isc.product.type.name", "isc.inspectionType.name", "count(*)"));
+		builder.setSelectArgument(new NewObjectSelect(InspectionScheduleCount.class, "isc.nextDate", "isc.owner", "isc.product.type.name", "isc.inspectionType.name", "count(*)"));
 		
 		// we only want schedules that have not been completed
 		builder.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
@@ -73,15 +54,13 @@ public class InspectionScheduleCountListLoader extends ListLoader<InspectionSche
 		
 		// the aggregate queries are grouped: next_inspection_date, (customer, division) or (jobsite),  product_type, inspection_type
 		builder.addGroupBy("nextDate");
-		builder.addGroupBy("owner.name");
+		builder.addGroupBy("owner");
 		builder.addGroupBy("product.type.name", "inspectionType.name");
+
+		builder.addOrder("nextDate");
 		
-		// we also want to order, the same way we group
-		builder.addOrder("nextDate", true);
-		builder.addOrder("owner.name");
-		builder.addOrder("product.type.name", "inspectionType.name");
-		
-		return builder;
+		List<InspectionScheduleCount> scheduleCounts = builder.getResultList(em);
+		return scheduleCounts;
 	}
 	
 	public void setFromDate(Date fromDate) {

@@ -44,7 +44,11 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 	}
 
 	protected String prepareFieldName(String field) {
-		return FIELD_PREFIX + field.replace('.', '_');
+		return getFieldPrefix() + field.replace('.', '_');
+	}
+
+	protected String getFieldPrefix() {
+		return FIELD_PREFIX;
 	}
 	
 	protected <T> void addFilterParameter(QueryBuilder<?> builder, String field, T value) {
