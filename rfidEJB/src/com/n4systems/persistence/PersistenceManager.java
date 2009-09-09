@@ -7,6 +7,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
 
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.deleters.Deleter;
@@ -168,4 +170,13 @@ public class PersistenceManager {
 		}
 		return exists;
 	}
+	
+	public static Session getHibernateSession(EntityManager em) {
+		return (Session) em.getDelegate();
+	}
+	
+	public static void reattach(EntityManager em, Object entity) {
+		getHibernateSession(em).lock(entity, LockMode.NONE);
+	}
+	
 }

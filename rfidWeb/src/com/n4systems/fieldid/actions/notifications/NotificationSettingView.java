@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
@@ -13,7 +14,7 @@ public class NotificationSettingView implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private Long ownerId;
+	private BaseOrg owner;
 	private Long createdTimeStamp;
 	private String name;
 	private String frequency;
@@ -41,12 +42,12 @@ public class NotificationSettingView implements Serializable {
 		this.id = id;
 	}
 	
-	public Long getOwnerId() {
-    	return ownerId;
+	public BaseOrg getOwner() {
+    	return owner;
     }
 
-	public void setOwnerId(Long ownerId) {
-    	this.ownerId = ownerId;
+	public void setOwner(BaseOrg owner) {
+    	this.owner = owner;
     }
 	
 	public Long getCreatedTimeStamp() {

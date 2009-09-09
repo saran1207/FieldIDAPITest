@@ -8,17 +8,13 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class NotificationSettingViewModelConverter {
-
-	private final FilteredIdLoader<BaseOrg> orgLoader;
+	
 	private final Tenant tenant;
 	private final UserBean user;
 	
-	public NotificationSettingViewModelConverter(FilteredIdLoader<BaseOrg> orgLoader, Tenant tenant, UserBean user) {
-		this.orgLoader = orgLoader;
+	public NotificationSettingViewModelConverter(Tenant tenant, UserBean user) {
 		this.tenant = tenant;
 		this.user = user;
 	}
@@ -32,7 +28,7 @@ public class NotificationSettingViewModelConverter {
 		// get fields from the model object
 		view.setId(model.getId());
 		view.setName(model.getName());
-		
+		view.setOwner(model.getOwner());
 		view.setFrequency(model.getFrequency().getId());
 		view.setPeriodStart(model.getPeriodStart().getId());
 		view.setPeriodEnd(model.getPeriodEnd().getId());
@@ -53,8 +49,6 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		view.getAddresses().addAll(model.getAddresses());
-		
-		view.setOwnerId(model.getOwner().getId());
 	}
 	
 	/**
@@ -67,6 +61,7 @@ public class NotificationSettingViewModelConverter {
 		model.setTenant(tenant);
 		model.setUser(user);
 		model.setName(view.getName());
+		model.setOwner(view.getOwner());
 		
 		model.setFrequency(SimpleFrequency.valueOf(view.getFrequency()));
 		model.setPeriodStart(RelativeTime.valueOf(view.getPeriodStart()));
@@ -85,8 +80,5 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		model.getAddresses().addAll(view.getAddresses());
-		
-		model.setOwner(orgLoader.setId(view.getOwnerId()).load());
-			
 	}
 }

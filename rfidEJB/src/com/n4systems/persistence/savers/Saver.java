@@ -27,6 +27,7 @@ abstract public class Saver<T extends Saveable> implements Deleter<T> {
 	 * Subclasses should override this method if a non-default remove is required. 
 	 */
 	protected void remove(EntityManager em, T entity) {
+		PersistenceManager.reattach(em, entity);
 		em.remove(entity);
 	}
 	
@@ -69,9 +70,7 @@ abstract public class Saver<T extends Saveable> implements Deleter<T> {
 	 * Removes an entity using an existing Transaction.
 	 */
 	public void remove(Transaction transaction, T entity) {
-		EntityManager em = transaction.getEntityManager();
-		em.refresh(entity); 
-		remove(em, entity);
+		remove(transaction.getEntityManager(), entity);
 	}
 	
 	/**

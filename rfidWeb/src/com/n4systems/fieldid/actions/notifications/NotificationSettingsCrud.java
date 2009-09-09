@@ -85,7 +85,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	}
 	
 	private void initConverter() {
-		converter = new NotificationSettingViewModelConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getTenant(), getUser());
+		converter = new NotificationSettingViewModelConverter(getTenant(), getUser());
 	}
 	
 	@SkipValidation
@@ -116,7 +116,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 		}
 		
 		converter.populateView(setting, view);
-				
+		
 		return SUCCESS;
 	}
 	
@@ -234,11 +234,19 @@ public class NotificationSettingsCrud extends AbstractCrud {
 		this.view = view;
 	}
 
+	public BaseOrg getOwner() {
+		return view.getOwner();
+	}
+	
 	public Long getOwnerId() {
-		return view.getOwnerId();
+		return (view.getOwner() != null) ? view.getOwner().getId() : null;
 	}
 	
 	public void setOwnerId(Long id) {
-		view.setOwnerId(id);
+		if (id == null) {
+			view.setOwner(null);
+		} else if (view.getOwner() == null || !view.getOwner().getId().equals(id)) {
+			view.setOwner(getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(id).load());
+		}
 	}
 }

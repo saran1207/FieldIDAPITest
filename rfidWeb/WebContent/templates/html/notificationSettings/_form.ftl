@@ -24,6 +24,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	</div>
 	
 	<div class="infoSet fullInfoSet">
+		<label for="owner"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="owner"/>
 	</div>
 	
