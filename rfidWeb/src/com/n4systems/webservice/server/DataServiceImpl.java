@@ -1042,9 +1042,12 @@ public class DataServiceImpl implements DataService {
 				queryBuilder.addWhere(WhereParameter.Comparator.IN, "divisionIds", "owner.division_id", searchCriteria.getDivisionIds());
 			}
 			
+			// FIXME Job sites don't exists!
+			/*
 			if (searchCriteria.getJobSiteIds() != null && searchCriteria.getJobSiteIds().size() > 0) {
 				queryBuilder.addWhere(WhereParameter.Comparator.IN, "jobSiteIds", "jobSite.id", searchCriteria.getJobSiteIds());
 			}
+			*/
 
 			Date createDate = converter.convertStringToDate(searchCriteria.getCreateDate()); 
 			if (createDate != null) {

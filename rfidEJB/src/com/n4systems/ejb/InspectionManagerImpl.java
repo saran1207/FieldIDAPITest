@@ -839,7 +839,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		String whereClause = "where ig.id in (select i.group.id from Inspection i where ( ";
 		if (setCustomerInfo) {
-			whereClause += "i.product.owner.id in (:customerIds) ";
+			whereClause += "i.product.owner.customer_id in (:customerIds) ";
 
 			if (setDivisionInfo || setJobSiteInfo) {
 				whereClause += "or ";
@@ -854,6 +854,8 @@ public class InspectionManagerImpl implements InspectionManager {
 			}
 		}
 
+		// FIXME jobsites don't exist anymore!
+		
 		if (setJobSiteInfo) {
 			whereClause += "i.product.jobSite.id in (:jobSiteIds)";
 		}
