@@ -6,11 +6,14 @@ import java.util.List;
 
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.api.HasOwner;
+import com.n4systems.model.orgs.BaseOrg;
 
-public class ProductView implements Serializable {
+public class ProductView implements Serializable, HasOwner {
 	private static final long serialVersionUID = 1L;
 
-	private Long owner;
+	private BaseOrg owner;
 	private Long assignedUser;
 	private Long productStatus;
 	private Long productTypeId;
@@ -24,11 +27,11 @@ public class ProductView implements Serializable {
 	
 	public ProductView() {}
 
-	public Long getOwner() {
+	public BaseOrg getOwner() {
 		return owner;
 	}
 
-	public void setOwner(Long owner) {
+	public void setOwner(BaseOrg owner) {
 		this.owner = owner;
 	}
 
@@ -110,6 +113,14 @@ public class ProductView implements Serializable {
 
 	public void setProductInfoOptions(List<InfoOptionInput> productInfoOptions) {
 		this.productInfoOptions = productInfoOptions;
+	}
+
+	public Tenant getTenant() {
+		return null;
+	}
+
+	public void setTenant(Tenant tenant) {
+		
 	}
 	
 }

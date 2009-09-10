@@ -1,3 +1,6 @@
+<head>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+</head>
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <@s.hidden name="productId"/>
 <@s.hidden name="inspectionGroupId"/>
@@ -34,52 +37,10 @@
 <#if action.isParentProduct() >
 	<h2><@s.text name="label.customerinformation"/></h2>
 	
-	<#if securityGuard.jobSitesEnabled >
-		<p>
-			<label><@s.text name="label.jobsite"/></label>
-			<span>
-				<@s.select name="jobSite" list="jobSites" listKey="id" listValue="name" onchange="jobSiteChange(this);">
-					<#if (action.fieldErrors['jobSite'])?exists> 
-						<@s.param name="cssClass">inputError</@s.param>
-						<@s.param name="title">${action.fieldErrors['jobSite']}</@s.param>
-					</#if>
-				</@s.select> 
-			</span>
-		</p>
-	</#if>
 	<p>
-		<label><@s.text name="label.customer"/></label>
-		<#if securityGuard.jobSitesEnabled >
-			<span id="customerName">${(inspection.owner.name)!}</span>
-			<@s.hidden name="customer" id="customer" />
-		<#else>
-			<span>
-				<@s.select name="customer" id="customer" list="customers" listKey="id" listValue="name" onchange="customerChanged(this); updateInspectionBooks(this.id, ${(unqiueID?exists)?string}); updateNextDate();">
-					<#if !Session.sessionUser.anEndUser >
-						<@s.param name="headerKey"></@s.param>
-						<@s.param name="headerValue"></@s.param>
-					</#if> 
-				</@s.select>
-			</span>
-		</#if>
-	</p>
-	
-	<p>
-		<label><@s.text name="label.division"/></label>
-		<#if securityGuard.jobSitesEnabled >
-			<span id="divisionName">${(inspection.owner.divisionOrg.name)!}</span>
-			<@s.hidden name="division" id="division"/>
-		<#else>
-			<span>
-				<@s.select name="division" list="divisions" listKey="id" listValue="name" id="division" >
-					<#if !Session.sessionUser.inDivision >
-						<@s.param name="headerKey"></@s.param>
-						<@s.param name="headerValue"></@s.param>
-					</#if> 
-				</@s.select>
-			</span>
-		</#if>
-	</p>
+		<label><@s.text name="label.owner"/></label>
+		<span><@n4.orgPicker name="owner" /></span>
+	</p>	
 	
 	<p>
 		<label><@s.text name="label.location"/></label>

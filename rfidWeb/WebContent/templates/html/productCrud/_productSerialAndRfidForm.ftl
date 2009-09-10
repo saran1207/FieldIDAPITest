@@ -8,5 +8,4 @@
 <div class="formRowHolder">
 	<@s.textfield id="rfidNumber" key="label.rfidnumber" name="rfidNumber" labelposition="left"/>
 	<@s.textfield id="customerRefNumber" key="label.referencenumber" name="customerRefNumber" labelposition="left"/>
-	
 </div>

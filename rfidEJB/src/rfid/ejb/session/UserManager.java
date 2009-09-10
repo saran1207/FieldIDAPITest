@@ -325,14 +325,15 @@ public class UserManager implements User {
 	 * @param tenantid the tenant to return the list of users for
 	 * @param endUserID optional argument to filter the list to a particular end user
 	 */
+	//TODO extract to a loaded it is only used by one call on inspection crud.
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getInspectorList( SecurityFilter filter ) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
 		String queryString = "select DISTINCT ub from UserBean ub where ub.active = true and deleted = false and ub.system = false and ( " + 
 					filter.produceWhereClause(UserBean.class, "ub") + " OR ( "+
-					justTenantFilter.produceWhereClause(UserBean.class, "ub") + " AND ub.r_EndUser IS NULL) )" +
+					justTenantFilter.produceWhereClause(UserBean.class, "ub") + " AND ub.owner.customer_id IS NULL) )" +
 					" ORDER BY ub.firstName, ub.lastName";
-		
+		try {
 		Query query = em.createQuery(queryString);
 		filter.applyParameters(query, UserBean.class);
 		justTenantFilter.applyParameters(query, UserBean.class);
@@ -341,6 +342,9 @@ public class UserManager implements User {
 		List<UserBean> users = Permissions.filterHasOneOf((List<UserBean>)query.getResultList(), Permissions.ALLINSPECTION);
 		
 		return ListHelper.longListableToListingPair(users);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	/**

@@ -16,10 +16,12 @@ import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductCleaner;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
@@ -50,6 +52,8 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	private ProductView productView = new ProductView();
 	
 	
+	private OwnerPicker ownerPicker;
+	
 	public MultiAddProductCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyProductSerial legacyProductManager) {
 		super(persistenceManager);
 		this.orderManager = orderManager;
@@ -62,6 +66,14 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
+	}
+	
+	
+
+	@Override
+	protected void postInit() {
+		super.postInit();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
 	}
 
 	public String doForm() {
@@ -194,10 +206,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	/*************** Form input get/set's go below here **********************/
 	
-	public void setOwner(Long ownerId) {
-		productView.setOwner(ownerId);
-	}
-	
+
 	public void setAssignedUser(Long userId) {
 		productView.setAssignedUser(userId);
 	}
@@ -244,6 +253,18 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	public List<ProductIdentifierView> getIdentifiers() {
 		return identifiers;
+	}
+
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
 	}
 
 	

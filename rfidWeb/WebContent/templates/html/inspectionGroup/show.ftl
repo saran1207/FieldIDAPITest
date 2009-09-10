@@ -41,7 +41,7 @@ ${action.setPageType('inspection', 'list')!}
 						${action.formatDate(inspectionGroup.firstDate, true)!} - ${action.formatDate(inspectionGroup.firstDate, true)!}
 						
 						<div id="inspections_${inspectionGroup.id}" ${closeStyle} class="inspectionList">
-						<#list inspectionGroup.getFilteredInspections( Session.sessionUser.securityFilter )?sort_by( 'date' )?reverse as inspection >
+						<#list inspectionGroup.availableInspections?sort_by( 'date' )?reverse as inspection >
 							<div class="inspections" >	
 								<span class="inspectionType">						
 									<a id="showInspection_${inspection.id}" href="<@s.url action="inspection" uniqueID="${inspection.id}" />">
@@ -55,7 +55,7 @@ ${action.setPageType('inspection', 'list')!}
 									<@s.text name="label.inspectedby"/>: ${ (inspection.inspector.userLabel)! }
 								</span>
 								<span class="editInspection">
-									<#if Session.sessionUser.hasAccess("editinspection") >
+									<#if sessionUser.hasAccess("editinspection") >
 										<a id="editInspection_${inspection.id}" href="<@s.url action="selectInspectionEdit" uniqueID="${inspection.id}" />">
 											<@s.text name="label.edit"/>
 										</a>

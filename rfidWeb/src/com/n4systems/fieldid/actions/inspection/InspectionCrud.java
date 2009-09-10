@@ -32,6 +32,7 @@ import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.AbstractInspection;
@@ -101,6 +102,8 @@ public class InspectionCrud extends UploadFileSupport {
 	private List<ListingPair> inspectionBooks;
 	private List<InspectionSchedule> availableSchedules;
 	
+	private OwnerPicker ownerPicker;
+	
 
 	private Map<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>>();
 	private Map<AbstractInspection, List<CriteriaSection>> availableSections = new HashMap<AbstractInspection, List<CriteriaSection>>();
@@ -146,9 +149,14 @@ public class InspectionCrud extends UploadFileSupport {
 			inspectionGroup = inspection.getGroup();
 			inspectionScheduleOnInspection = (inspection.getSchedule() != null);
 		}
-		
-		
 	}
+	
+	@Override
+	protected void postInit() {
+		super.postInit();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
+	}
+	
 
 	protected void testDependices() throws MissingEntityException {
 		if (product == null) {
@@ -398,8 +406,6 @@ public class InspectionCrud extends UploadFileSupport {
 			return INPUT;
 		} catch (ValidationException e) {
 			return INPUT;
-		} catch (PersistenceException e) {
-			return ERROR;
 		} catch (Exception e) {
 			addActionErrorText("error.inspectionsavefailed");
 			logger.error("inspection save failed serial number " + product.getSerialNumber(), e);
@@ -961,5 +967,15 @@ public class InspectionCrud extends UploadFileSupport {
 	public void setEncodedInfoOptionMap(Map<String, String> encodedInfoOptionMap) {
 		this.encodedInfoOptionMap = encodedInfoOptionMap;
 	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+
+	
 
 }

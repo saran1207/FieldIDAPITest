@@ -49,7 +49,7 @@ public class ProductViewModeConverter {
 		try {
 			model.setTenant(identifier.getTenant());
 			model.setIdentifiedBy(identifier);	
-			model.setOwner(resolveOwner(view.getOwner()));
+			model.setOwner(view.getOwner());
 			model.setType(resolveProductType(view.getProductTypeId()));
 			model.setAssignedUser(resolveUser(view.getAssignedUser()));
 			model.setProductStatus(resolveProductStatus(view.getProductStatus()));
@@ -79,15 +79,7 @@ public class ProductViewModeConverter {
 		return line;
 	}
 	
-	private BaseOrg resolveOwner(Long orgId) {
-		BaseOrg owner = null;
-		if (orgId != null) {
-			FilteredIdLoader<BaseOrg> loader = loaderFactory.createFilteredIdLoader(BaseOrg.class).setId(orgId);
-			owner = loader.load(transaction);
-		}
-		return owner;
-	}
-	
+		
 	private ProductType resolveProductType(Long productTypeId) {
 		ProductType productType = null;
 		if (productTypeId != null) {

@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.actions.utils;
 
+import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class OwnerPicker {
 
 	private final FilteredIdLoader<BaseOrg> loader;
 	
-	private final EntityWithOwner entity;
+	private final HasOwner entity;
 
 
-	public OwnerPicker(FilteredIdLoader<BaseOrg> loader, EntityWithOwner entity) {
+	public OwnerPicker(FilteredIdLoader<BaseOrg> loader, HasOwner entity) {
 		super();
 		this.loader = loader;
 		this.entity = entity;

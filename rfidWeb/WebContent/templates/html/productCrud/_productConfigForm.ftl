@@ -1,3 +1,6 @@
+<head>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+</head>
 <#if securityGuard.jobSitesEnabled >
 	<div class="formRowHolder">
 		<#if !parentProduct?exists >
