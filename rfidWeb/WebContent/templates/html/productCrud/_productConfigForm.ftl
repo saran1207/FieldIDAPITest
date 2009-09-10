@@ -1,23 +1,8 @@
-<#if !securityGuard.jobSitesEnabled >
-	<#if !parentProduct?exists >
-		<#include "_customerFields.ftl"/>
-	<#else>
-		<#include "_readOnlyCustomerFields.ftl"/>
-	</#if>
-<#else>
+<#if securityGuard.jobSitesEnabled >
 	<div class="formRowHolder">
 		<#if !parentProduct?exists >
-			<@s.select key="label.jobsite" name="jobSite" list="jobSites" required="true" listKey="id" listValue="name"  labelposition="left" onchange="jobSiteChange(this)"/>
 			<@s.select key="label.assignedto" name="assignedUser" list="employees" listKey="id" listValue="name" emptyOption="true" labelposition="left" />
 		<#else>
-			<div class="wwgrp" id="wwgrp_jobsite">
-				<span class="wwlbl" id="wwlbl_jobsite">
-					<label class="label" for="jobsite"><@s.text name="label.jobsite"/>:</label>
-				</span> 
-				<span class="wwctrl" id="jobSite">
-					${(product.jobSite.name)!}
-				</span>
-			</div>
 			<div class="wwgrp" id="wwgrp_assigneduser">
 				<span class="wwlbl" id="wwlbl_assigneduser">
 					<label class="label" for="assigneduser"><@s.text name="label.assignedto"/>:</label>
@@ -28,10 +13,11 @@
 			</div>
 		</#if>
 	</div>
-	<#include "_readOnlyCustomerFields.ftl"/>
-	
 </#if>
-
+<div class="formRowHolder">
+	<label for="owner"><@s.text name="label.owner"/></label>
+	<@n4.orgPicker name="owner"/>
+</div>
 <div class="formRowHolder">
 	<#if !parentProduct?exists >
 		<@s.textfield id="location" key="label.location" name="location" labelposition="left"/>

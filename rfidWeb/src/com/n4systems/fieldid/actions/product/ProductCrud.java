@@ -38,6 +38,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
@@ -71,10 +72,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private ProductType productType;
 	private Collection<ProductSerialExtensionBean> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
-	
+
 	private List<Product> products;
 	private List<ListingPair> employees;
-	
+
 	private List<ProductAttachment> productAttachments;
 
 	// form inputs
@@ -85,6 +86,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private String search;
 	private String identified;
 	private LineItem lineItem;
+
+	private OwnerPicker ownerPicker;
 
 	/**
 	 * Set only when coming from searchOrder.action, when attached a customer
@@ -102,7 +105,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private AllInspectionHelper allInspectionHelper;
 	private List<Product> linkedProducts;
 	private List<Project> projects;
-	
 
 	private Product parentProduct;
 	private boolean lookedUpParent = false;
@@ -121,7 +123,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private CommentTemp commentTemplateManager;
 	private User userManager;
 	private SafetyNetworkManager safetyNetworkManager;
-	
+
 	private ProductCodeMapping productCodeMappingManager;
 	private InspectionScheduleManager inspectionScheduleManager;
 	private ProductManager productManager;
@@ -130,14 +132,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private ProductTypeLister productTypes;
 	private ProductSaveService productSaverService;
 	private Long excludeId;
-	
-	
 
-	
-	//XXX:  this needs access to way to many managers to be healthy!!! AA
-	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, CommentTemp commentTemplateManager,
-			PersistenceManager persistenceManager, User userManager, SafetyNetworkManager safetyNetworkManager, ProductCodeMapping productCodeMappingManager,
-			ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
+	// XXX: this needs access to way to many managers to be healthy!!! AA
+	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, CommentTemp commentTemplateManager, PersistenceManager persistenceManager,
+			User userManager, SafetyNetworkManager safetyNetworkManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
+			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 		this.legacyProductSerialManager = legacyProductSerialManager;
@@ -149,7 +148,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.orderManager = orderManager;
 		this.projectManager = projectManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
-		
+
 	}
 
 	@Override
@@ -160,8 +159,14 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
-		
 	}
+	
+	@Override
+	protected void postInit() {
+		super.postInit();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+	}
+	
 
 	private void loadAddProductHistory() {
 		addProductHistory = legacyProductSerialManager.getAddProductHistory(getSessionUser().getUniqueID());
@@ -189,7 +194,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 			Long productId = productTypes.getProductTypes().iterator().next().getId();
 			setProductTypeId(productId);
 		}
-		
+
 		setOwner(getSessionUser().getOwner());
 	}
 
@@ -200,7 +205,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 		product.setInfoOptions(new TreeSet<InfoOptionBean>(options));
 	}
 
-	// XXX - This logic has been duplicated in ProductViewModeConverter.  ProductCrud should be refactored to use that.
+	// XXX - This logic has been duplicated in ProductViewModeConverter.
+	// ProductCrud should be refactored to use that.
 	private void convertInputsToExtensionValues() {
 		if (productExtentionValues != null) {
 			Set<ProductSerialExtensionValueBean> newExtensionValues = new TreeSet<ProductSerialExtensionValueBean>();
@@ -227,9 +233,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 		if (search != null && search.length() > 0) {
 			try {
 				products = productManager.findProductByIdentifiers(getSecurityFilter(), search, productType);
-				
-				// remove the product given.  ( this is for product merging, you don't want to merge the product with itself.)
-				 
+
+				// remove the product given. ( this is for product merging, you
+				// don't want to merge the product with itself.)
+
 				if (excludeId != null) {
 					Product excludeProduct = new Product();
 					excludeProduct.setId(excludeId);
@@ -251,8 +258,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		return SUCCESS;
 	}
-
-	
 
 	@SkipValidation
 	public String doAddNoHistory() {
@@ -302,16 +307,17 @@ public class ProductCrud extends UploadAttachmentSupport {
 		testExistingProduct();
 		setProductTypeId(product.getType().getId());
 		// persistenceManager.reattchAndFetch( product, "projects" );
-		
+
 		loadAttachments();
 		return SUCCESS;
 	}
 
-	//TODO this shouldn't be in this class this is not really about the product - AA
+	// TODO this shouldn't be in this class this is not really about the product
+	// - AA
 	@SkipValidation
 	public String doInspections() {
 		testExistingProduct();
-		
+
 		return SUCCESS;
 	}
 
@@ -348,9 +354,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 				ProductSaveService saver = getProductSaveService();
 				saver.setUploadedAttachments(getUploadedFiles());
 				saver.setProduct(product);
-				
+
 				product = saver.create();
-				
+
 				uniqueID = product.getId();
 				addFlashMessageText("message.productcreated");
 				if (product.isLinkedToManufacturer()) {
@@ -361,7 +367,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 				// on edit, we need to know if the product type has changed
 				ProductType oldType = productTypeManager.findProductTypeForProduct(product.getId());
 
-				
 				// if the new product type is not equal to the old then the type
 				// has changed
 				if (!product.getType().equals(oldType)) {
@@ -372,11 +377,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 				saver.setUploadedAttachments(getUploadedFiles());
 				saver.setExistingAttachments(getAttachments());
 				saver.setProduct(product);
-				
+
 				product = saver.update();
-				
+
 				addFlashMessageText("message.productupdated");
-				
+
 			}
 
 		} catch (Exception e) {
@@ -558,11 +563,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public BaseOrg getOwner() {
 		return product.getOwner();
 	}
-	
+
 	public void setOwner(BaseOrg owner) {
 		product.setOwner(owner);
 	}
-	
+
 	public Product getProduct() {
 		return product;
 	}
@@ -572,7 +577,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
-	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength="50")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength = "50")
 	public void setSerialNumber(String serialNumber) {
 		product.setSerialNumber(serialNumber);
 	}
@@ -707,7 +712,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return 0L;
 	}
 
-	
 	public List<ProductExtensionValueInput> getProductExtentionValues() {
 		if (productExtentionValues == null) {
 			productExtentionValues = new ArrayList<ProductExtensionValueInput>();
@@ -748,7 +752,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public void setSaveAndSchedule(String saveAndSchedule) {
 		this.saveAndSchedule = saveAndSchedule;
 	}
-
 
 	public List<Product> getLinkedProducts() {
 		if (linkedProducts == null) {
@@ -891,7 +894,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 		return projects;
 	}
-	
+
 	public ProductTypeLister getProductTypes() {
 		if (productTypes == null) {
 			productTypes = new ProductTypeLister(persistenceManager, getSecurityFilter());
@@ -905,8 +908,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 			allInspectionHelper = new AllInspectionHelper(legacyProductSerialManager, product, getSecurityFilter());
 		return allInspectionHelper;
 	}
-	
-	
+
 	public Long getInspectionCount() {
 		return getAllInspectionHelper().getInspectionCount();
 	}
@@ -926,7 +928,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public void setExcludeId(Long excludeId) {
 		this.excludeId = excludeId;
 	}
-	
+
 	public ProductSaveService getProductSaveService() {
 		if (productSaverService == null) {
 			productSaverService = new ProductSaveService(legacyProductSerialManager, fetchCurrentUser());
@@ -940,6 +942,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 		return productAttachments;
 	}
-	
-	
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+
 }

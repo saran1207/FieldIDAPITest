@@ -33,7 +33,8 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 			loadMemberFields(getUniqueID());
 		} else {
 			initMemberFields();
-		}		
+		}
+		postInit();
 	}
 	
 	/**
@@ -46,6 +47,11 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 	 * This should initialize a new instance of the main class that will be edited with this CRUD
 	 */
 	abstract protected void initMemberFields();
+	
+	/**
+	 * this should do anything to the crud objects assuming the members have been loaded.
+	 */
+	protected void postInit() {}
 	
 	
 	protected byte[] convertToByteArray(File file) {

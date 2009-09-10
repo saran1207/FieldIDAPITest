@@ -17,6 +17,7 @@
 	    checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';
 	</script>
 	<#include "/templates/html/common/_calendar.ftl"/>	
+	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 
 <#include "../common/_formErrors.ftl"/>
