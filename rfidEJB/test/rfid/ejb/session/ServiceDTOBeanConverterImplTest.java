@@ -3,8 +3,7 @@ package rfid.ejb.session;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
 import static com.n4systems.model.builders.TenantBuilder.aTenant;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +37,7 @@ import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.SecondaryOrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.FindOwnerByLegacyIds;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -54,11 +54,11 @@ import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 
 public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 
-	ServiceDTOBeanConverterImpl converter ;
+	ServiceDTOBeanConverterTestExtension converter ;
 	
 	@Before
 	public void setUp() throws Exception {
-		converter = new ServiceDTOBeanConverterImpl();
+		converter = new ServiceDTOBeanConverterTestExtension();
 	}
 
 	@After
@@ -184,7 +184,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 			EasyMock.expect(mockEntityManager.find(UserBean.class, foundUser.getId())).andReturn(foundUser);
 		} 
 		EasyMock.replay( mockEntityManager );
-		injectEntityManager( converter, mockEntityManager );
+		converter.setEntityManager(mockEntityManager);
 		
 		
 		PrimaryOrg primaryOrg = aPrimaryOrg().onTenant(foundTenant).build();
@@ -194,6 +194,12 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		expect(mockCache.findPrimaryOrg(foundTenant.getId())).andReturn(primaryOrg);
 		replay(mockCache);
 		TenantCache.setInstance(mockCache);
+		
+		FindOwnerByLegacyIds mockFindOwners = createNiceMock(FindOwnerByLegacyIds.class);	
+		expect(mockFindOwners.retrieveOwner()).andReturn(primaryOrg);
+		replay(mockFindOwners);
+		
+		converter.setFindOwner(mockFindOwners);
 		
 		product = converter.convert( productServiceDTO, product, foundTenant.getId() );
 		
@@ -227,7 +233,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
 		EasyMock.expect( mockEntityManager.find( InfoFieldBean.class, foundInfoField.getUniqueID() ) ).andReturn( foundInfoField );
 		EasyMock.replay( mockEntityManager );
-		injectEntityManager( converter, mockEntityManager );
+		converter.setEntityManager(mockEntityManager);
 		
 		infoOptionDTO.setInfoFieldId( foundInfoField.getUniqueID() );
 		infoOptionDTO.setName( "new dynamic info option" );
@@ -261,7 +267,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
 		EasyMock.expect( mockEntityManager.find( InfoOptionBean.class, existingOption.getUniqueID() ) ).andReturn( existingOption );
 		EasyMock.replay( mockEntityManager );
-		injectEntityManager( converter, mockEntityManager );
+		converter.setEntityManager(mockEntityManager);
 		
 		infoOptionDTO.setInfoFieldId( foundInfoField.getUniqueID() - 1L );
 		infoOptionDTO.setName( "new dynamic info option" );
@@ -313,7 +319,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		} 
 		
 		if (!productServiceDTO.customerExists() && !productServiceDTO.divisionExists() && !productServiceDTO.jobSiteExists()) {
-			assertNull(product.getOwner());
+			assertEquals(product.getOwner(), primaryOrg);
 		}
 		
 		if( productServiceDTO.identifiedByExists() ) {

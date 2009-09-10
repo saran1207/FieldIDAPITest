@@ -273,7 +273,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			//FIXME add a lookup for the owner
 		} else {
 			// This is here to support mobiles before version 1.14
-			FindOwnerByLegacyIds ownerFinder = new FindOwnerByLegacyIds(persistenceManager, tenantId);
+			FindOwnerByLegacyIds ownerFinder = getFindOwnerByLegacyIds(tenantId);
 			ownerFinder.setLegacyCustomerId(productServiceDTO.customerExists() ? productServiceDTO.getCustomerId() : null);
 			ownerFinder.setLegacyDivisionId(productServiceDTO.divisionExists() ? productServiceDTO.getDivisionId() : null);
 			
@@ -306,6 +306,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		
 		return targetProduct;		
+	}
+
+	protected FindOwnerByLegacyIds getFindOwnerByLegacyIds(long tenantId) {
+		FindOwnerByLegacyIds ownerFinder = new FindOwnerByLegacyIds(persistenceManager, tenantId);
+		return ownerFinder;
 	}
 	
 
