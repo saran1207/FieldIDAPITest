@@ -1,6 +1,5 @@
 <title><@s.text name="title.massupdateproducts" /></title>
 <head>
-	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" includeParams="none" />"></script>
 	<#include "/templates/html/common/_calendar.ftl"/>	
 </head>
 <h4 >Instructions </h4>
@@ -130,7 +129,6 @@
 
 </@s.form>
 <script type="text/javascript">
-	customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" includeParams="none"/>";
 	
 	function selectField( fieldType ) {
 		var field = $('check_' + fieldType );

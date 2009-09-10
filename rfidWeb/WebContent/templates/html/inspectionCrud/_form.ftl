@@ -2,14 +2,10 @@
 		<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 		<script type="text/javascript" src="<@s.url value="/javascript/inspection.js" />" ></script>
 		<script type="text/javascript" src="<@s.url value="/javascript/inspectionBook.js"/>" ></script>
-		<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js"  />"></script>	
-		<script type="text/javascript" src="<@s.url value="javascript/changeJobSite.js" />"></script>
 		<script type="text/javascript" src="<@s.url value="javascript/calcNextDate.js" />"></script>
 		<script type="text/javascript">
-			customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
 			updateInspectionBooksUrl = '<@s.url action="inspectionBooks" namespace="ajax"   />';
-			jobSiteChangeUrl = '<@s.url action="jobSite" namespace="/ajax" />';
 			updateNextDateUrl = '<@s.url action="calcNextDate" namespace="/ajax" />';
 			productTypeId = ${product.type.id}
 			var proofTestTypes = ${json.toJson( proofTestTypesUpload )}

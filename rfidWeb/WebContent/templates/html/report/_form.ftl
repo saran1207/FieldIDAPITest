@@ -1,13 +1,12 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/search.css"/>" />
-	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="reportDynamicColumns" namespace="/ajax" />';
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax"/>";
 	</script>	
+	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<style type="text/css">
 		
 		#criteriaForm {
@@ -54,29 +53,13 @@
 			</div>	
 			<#if securityGuard.jobSitesEnabled >
 				<div class="infoSet">
-					<label for="criteria.jobSite"><@s.text name="label.jobsite"/></label>
-					<@s.select name="criteria.jobSite" list="jobSites" listKey="id" listValue="name" emptyOption="true"  />
-				</div>
-				<div class="infoSet">
 					<label for="criteria.assingedUser"><@s.text name="label.assignedto"/></label>
 					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
 				</div>
 			</#if>
 			<div class="infoSet">
-				<label for="criteria.customer"><@s.text name="label.customer"/></label>
-				<#if sessionUser.anEndUser>
-					<span>${customers[0].name?html}</span>
-				<#else>
-					<@s.select name="criteria.customer" list="customers" listKey="id" listValue="name" emptyOption="true"  onchange="customerChanged(this);"/>
-				</#if>
-			</div>
-			<div class="infoSet">
-				<label for="criteria.division"><@s.text name="label.division"/></label>
-				<#if sessionUser.inDivision>
-					<span>${divisions[0].name?html}</span>
-				<#else>
-					<@s.select id="division" name="criteria.division" list="divisions" listKey="id" listValue="name" emptyOption="true" />
-				</#if>
+				<label for="owner"><@s.text name="label.owner"/></label>
+				<@n4.orgPicker name="owner"/>
 			</div>
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>

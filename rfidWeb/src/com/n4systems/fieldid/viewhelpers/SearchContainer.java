@@ -6,8 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OwnerFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.StringUtils;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
@@ -29,6 +32,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	private List<String> selectedColumns = new ArrayList<String>();
 	private List<SortTerm> sortTerms = new ArrayList<SortTerm>();
 	private List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
+	private List<QueryFilter> searchFilters = new ArrayList<QueryFilter>(); 
 	private String sortColumn;
 	private String sortDirection;
 	
@@ -42,6 +46,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	
 	// XXX - I don't like this system ... need to find something better which actually requires you to setup the search/sort terms
 	abstract protected void evalSearchTerms();
+	abstract protected void evalSearchFilters();
 	abstract protected String defaultSortColumn();
 	abstract protected SortTerm.Direction defaultSortDirection();
 	
@@ -121,11 +126,6 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	
 	public List<SearchTermDefiner> getSearchTerms() {
 		searchTerms.clear();
-		
-		// always add in the tenant id ... this is really a term of last resort
-		// as hibernate search needs at least one term.  Actual security is handled by 
-		// a search filter.
-		addSimpleTerm("tenant.id", securityFilter.getTenantId());
 		evalSearchTerms();
 		return searchTerms;
 	}
@@ -171,6 +171,18 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	protected void addDateRangeTerm(String field, Date start, Date end) {
 		if (start != null || end != null) {
 			searchTerms.add(new DateRangeTerm(field, start, end));
+		}
+	}
+	
+	public List<QueryFilter> getSearchFilters() {
+		searchFilters.clear();
+		evalSearchFilters();
+		return searchFilters;
+	}
+	
+	protected void addOwnerFilter(BaseOrg owner) {
+		if (owner != null) {
+			searchFilters.add(new OwnerFilter(owner));
 		}
 	}
 }

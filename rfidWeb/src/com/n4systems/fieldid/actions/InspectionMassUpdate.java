@@ -17,27 +17,24 @@ import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ListingPair;
 
 public class InspectionMassUpdate extends MassUpdate {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( InspectionMassUpdate.class );
 	
-	private FilteredIdLoader<BaseOrg> orgLoader;
 	private InspectionManager inspectionManager;
 	private InspectionSearchContainer criteria;
 	private Inspection inspection = new Inspection();
 
-	public InspectionMassUpdate( InspectionManager inspectionManager,  CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, FilteredIdLoader<BaseOrg> orgLoader) {
+	public InspectionMassUpdate( InspectionManager inspectionManager,  CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
 		super( customerManager, massUpdateManager, persistenceManager);
 		this.inspectionManager = inspectionManager;
-		this.orgLoader = orgLoader;
 	}
 	
 	private void applyCriteriaDefaults() {
-		orgLoader.setId(criteria.getOwner());
-		setOwner(orgLoader.load());
+		
+		setOwner(criteria.getOwner());
 		
 		setInspectionBook( criteria.getInspectionBook() );
 	}

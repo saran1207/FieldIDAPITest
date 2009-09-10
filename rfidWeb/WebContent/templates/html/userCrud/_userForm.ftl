@@ -109,10 +109,8 @@
 			width: 60px;
 		}
 	</style>
-	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" />"></script>
 	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
 	<script type="text/javascript" >
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
 		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
 		
 		function updateInitials() {

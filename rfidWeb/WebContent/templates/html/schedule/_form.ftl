@@ -1,13 +1,12 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/search.css"/>" />
-	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js" />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="scheduleDynamicColumns" namespace="/ajax" />';
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax"/>";
 	</script>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 
 <div class="pageSection" id="criteriaForm">

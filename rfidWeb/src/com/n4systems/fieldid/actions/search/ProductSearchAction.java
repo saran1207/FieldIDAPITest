@@ -15,13 +15,18 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
+import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.QueryFilter;
+import com.opensymphony.xwork2.Preparable;
 
-public class ProductSearchAction extends CustomizableSearchAction<ProductSearchContainer> {
+public class ProductSearchAction extends CustomizableSearchAction<ProductSearchContainer> implements Preparable {
 	public static final String SEARCH_CRITERIA = "searchCriteria";
 	private static final long serialVersionUID = 1L;
 	
@@ -29,6 +34,8 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private final LegacyProductSerial productSerialManager;
 	private final User userManager;
 	private List<ListingPair> employees;
+	
+	private OwnerPicker ownerPicker;
 	
 	public ProductSearchAction( 
 			final LegacyProductType productTypeManager, 
@@ -45,6 +52,12 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
 	}
 	
+	public void prepare() throws Exception {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
+		ownerPicker.setOwnerId(getContainer().getOwnerId());
+	}
+	
+	
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "product_search", getSecurityFilter());
@@ -58,9 +71,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		if (getSessionUser().getOwner().isExternalOrg()) {
-			getContainer().setOwner(getSessionUser().getOwner().getId());
-		}
+
 		return INPUT;
 	}
 	
@@ -129,5 +140,21 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		}
 		return employees;
 	}
+
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+		getContainer().setOwner(ownerPicker.getOwner());
+		
+	}
+
+	
 	
 }

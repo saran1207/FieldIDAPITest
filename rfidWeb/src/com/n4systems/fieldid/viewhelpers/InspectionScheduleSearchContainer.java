@@ -4,6 +4,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -24,7 +25,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	private Long inspectionTypeId;
 	private Long jobId;
 	private Long jobAndNullId;
-	private Long ownerId;
+	private BaseOrg owner;
 	private Date toDate;
 	private Date fromDate;
 	private CompressedScheduleStatus status = CompressedScheduleStatus.INCOMPLETE;
@@ -32,9 +33,6 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	public InspectionScheduleSearchContainer(SecurityFilter securityFilter) {
 		super(InspectionSchedule.class, "id", securityFilter, joinColumns);
 		
-		if (securityFilter.hasOwner()) {
-			setOwner(securityFilter.getOwner().getId());
-		}
 	}
 
 	@Override
@@ -47,13 +45,17 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addStringTerm("product.customerRefNumber", referenceNumber);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.type.id", productTypeId);
-		addSimpleTerm("owner.id", ownerId);
 		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
 		addSimpleTerm("inspectionType.group.id", inspectionTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);
 		addDateRangeTerm("nextDate", fromDate, toDate);
 		addSimpleInTerm("status", status.getScheduleStatuses());
+	}
+	
+	@Override
+	protected void evalSearchFilters() {
+		addOwnerFilter(getOwner());
 	}
 	
 	@Override
@@ -114,13 +116,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		this.productStatusId = productStatus;
 	}
 	
-	public Long getOwner() {
-		return ownerId;
-	}
 	
-	public void setOwner(Long ownerId) {
-		this.ownerId = ownerId;
-	}
 
 	public Long getProductType() {
 		return productTypeId;
@@ -196,5 +192,17 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public BaseOrg getOwner() {
+		return owner;
+	}
+
+	public void setOwner(BaseOrg owner) {
+		this.owner = owner;
+	}
+
+	public Long getOwnerId() {
+		return (owner != null) ? owner.getId() : null;
 	}
 }

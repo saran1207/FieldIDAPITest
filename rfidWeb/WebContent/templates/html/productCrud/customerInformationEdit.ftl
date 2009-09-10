@@ -1,9 +1,3 @@
-<head>
-	<script type="text/javascript" src="<@s.url value="/javascript/changeJobSite.js" />"></script>
-	<script type="text/javascript">
-		jobSiteChangeUrl = '<@s.url action="jobSite" namespace="/ajax" />';
-	</script>
-</head>
 ${action.setPageType('product', 'customer_edit')!}
 
 <@s.form action="customerInformationUpdate" cssClass="crudForm" theme="fieldid">

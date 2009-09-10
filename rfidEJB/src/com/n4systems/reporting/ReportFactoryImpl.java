@@ -57,7 +57,6 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -692,10 +691,8 @@ public class ReportFactoryImpl implements ReportFactory {
 		}
 		
 		if (reportDefiner.getOwner() != null) {
-			BaseOrg owner = persistenceManager.find(BaseOrg.class, reportDefiner.getOwner());
-			
-			reportMap.put("customer", (owner.getCustomerOrg() != null) ? owner.getCustomerOrg().getName() : "");
-			reportMap.put("division", (owner.getDivisionOrg() != null) ? owner.getDivisionOrg().getName() : "");
+			reportMap.put("customer", (reportDefiner.getOwner().getCustomerOrg() != null) ? reportDefiner.getOwner().getCustomerOrg().getName() : "");
+			reportMap.put("division", (reportDefiner.getOwner().getDivisionOrg() != null) ? reportDefiner.getOwner().getDivisionOrg().getName() : "");
 		}
 		
 		return reportMap;

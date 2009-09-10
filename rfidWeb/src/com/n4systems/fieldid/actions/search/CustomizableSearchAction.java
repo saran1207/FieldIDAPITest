@@ -25,6 +25,7 @@ import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -46,6 +47,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private Map<String, OutputHandler> cellHandlers = new HashMap<String, OutputHandler>();
 	private TableView resultsTable;
 	private ProductTypeLister productTypes;
+	
+	
 
 	public CustomizableSearchAction(
 			final Class<? extends CustomizableSearchAction<T>> implementingClass, 
@@ -62,6 +65,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 
 	abstract public List<ColumnMappingGroup> getDynamicGroups();
 	abstract protected T createSearchContainer();
+	
+	
 	
 	private void initializeColumnMappings() {
 		mappingGroups = ColumnMappingFactory.getMappings(implementingClass, getTenant());
@@ -272,6 +277,10 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return getContainer().getSelectedColumns();
 	}
 
+	public List<QueryFilter> getSearchFilters() {
+		return getContainer().getSearchFilters();
+	}
+
 	@CustomValidator(type = "listNotEmptyValidator", message = "", key = "error.nocolumnsselected")
 	public void setSelectedColumns(List<String> selectedColumns) {
 		getContainer().setSelectedColumns(sortColumnIds(selectedColumns));
@@ -388,4 +397,6 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	public Integer getMaxSizeForAssigningInspectionsToJobs() {
 		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId());
 	}
+
+
 }

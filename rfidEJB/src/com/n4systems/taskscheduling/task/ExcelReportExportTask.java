@@ -15,6 +15,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ExcelBuilder;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -153,5 +154,10 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	public void setColumnTitles(List<String> columnTitles) {
 		this.columnTitles = columnTitles;
 	}
+
+	public List<QueryFilter> getSearchFilters() {
+		return new ArrayList<QueryFilter>();
+	}
+	
 	
 }

@@ -28,5 +28,6 @@ value="${(parameters.nameValue.displayName)?default("")?html}"<#rt/>
 </#if>
 />
 <a href="#" class="searchOwner">search</a>
+<a href="#" class="clearSearchOwner">clear</a>
 
 </span>

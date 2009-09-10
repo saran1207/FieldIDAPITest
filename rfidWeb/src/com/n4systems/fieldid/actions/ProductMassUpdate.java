@@ -44,8 +44,7 @@ public class ProductMassUpdate extends MassUpdate {
 	}
 
 	private void applyCriteriaDefaults() {
-		BaseOrg owner = getOrgLoader().setId(criteria.getOwner()).load();
-		setOwner(owner);
+		setOwner(criteria.getOwner());
 		
 		setProductStatus(criteria.getProductStatus());
 		setPurchaseOrder(criteria.getPurchaseOrder());

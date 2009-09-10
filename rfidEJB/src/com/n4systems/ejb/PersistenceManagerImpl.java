@@ -46,6 +46,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.SelectClause;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
@@ -741,6 +742,13 @@ public class PersistenceManagerImpl implements PersistenceManager {
 				for (WhereParameter<?> param: term.getWhereParameters()) {
 					searchBuilder.addWhere(param);
 				}
+			}
+		}
+		
+		
+		if (definer.getSecurityFilter() != null) {
+			for (QueryFilter filter : definer.getSearchFilters()) {
+				filter.applyFilter(searchBuilder);
 			}
 		}
 		

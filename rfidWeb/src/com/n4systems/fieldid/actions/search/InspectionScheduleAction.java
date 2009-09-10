@@ -15,16 +15,20 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
+import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.opensymphony.xwork2.Preparable;
 
-public class InspectionScheduleAction extends CustomizableSearchAction<InspectionScheduleSearchContainer> {
+public class InspectionScheduleAction extends CustomizableSearchAction<InspectionScheduleSearchContainer> implements Preparable {
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 	private static final long serialVersionUID = 1L;
 	
@@ -36,6 +40,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	private List<ListingPair> employees;
 	private List<ListingPair> eventJobs;
+	
+	private OwnerPicker ownerPicker;
 	
 	public InspectionScheduleAction(
 			final LegacyProductType productTypeManager, 
@@ -69,6 +75,10 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
 	}
 
+	public void prepare() throws Exception {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
+		ownerPicker.setOwnerId(getContainer().getOwnerId());
+	}
 	
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
@@ -100,9 +110,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		if (getSessionUser().getOwner().isExternalOrg()) {
-			getContainer().setOwner(getSessionUser().getOwner().getId());
-		}
+		
 		return INPUT;
 	}
 
@@ -176,5 +184,19 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		}
 
 		return eventJobs;
+	}
+	
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+		getContainer().setOwner(ownerPicker.getOwner());
+		
 	}
 }

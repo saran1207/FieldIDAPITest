@@ -1,15 +1,6 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
-	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js"  />"></script>
 	
-	<#if securityGuard.jobSitesEnabled>
-		<script type="text/javascript" src="<@s.url value="/javascript/changeJobSite.js" />"></script>
-	</#if>
-
-	<script type="text/javascript">
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
-		jobSiteChangeUrl = '<@s.url action="jobSite" namespace="/ajax" />';
-	</script>
 	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projects.css"/>"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	

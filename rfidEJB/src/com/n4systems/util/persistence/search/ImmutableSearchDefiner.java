@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
@@ -16,6 +17,7 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 	private String[] joinColumns;
 	private Class<?> searchClass;
 	private List<SearchTermDefiner> searchTerms;
+	private List<QueryFilter> searchFilters;
 	private SecurityFilter filter;
 	
 	
@@ -32,6 +34,7 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 		searchClass = definer.getSearchClass();
 		searchTerms = new ArrayList<SearchTermDefiner>(definer.getSearchTerms());
 		filter = definer.getSecurityFilter();
+		searchFilters = new ArrayList<QueryFilter>(definer.getSearchFilters());
 	}
 
 	public List<SortTerm> getSortTerms() {
@@ -70,4 +73,9 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 		throw new NotImplementedException("don't use this method.");
 	}
 
+	public List<QueryFilter> getSearchFilters() {
+		return searchFilters;
+	}
+
+	
 }

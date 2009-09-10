@@ -15,12 +15,15 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGenerator;
+import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.SavedReport;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
@@ -29,8 +32,9 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
+import com.opensymphony.xwork2.Preparable;
 
-public class InspectionReportAction extends CustomizableSearchAction<InspectionSearchContainer> {
+public class InspectionReportAction extends CustomizableSearchAction<InspectionSearchContainer> implements Preparable {
 	private static final String REPORT_PAGE_NUMBER = "reportPageNumber";
 	private static final long serialVersionUID = 1L;
 	public static final String REPORT_CRITERIA = "reportCriteria";
@@ -51,6 +55,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private List<ProductStatusBean> statuses;
 	private List<ListingPair> eventJobs;
 	
+	private OwnerPicker ownerPicker;
+	
 	public InspectionReportAction(
 			final PersistenceManager persistenceManager,
 			final User userManager, 
@@ -69,6 +75,12 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		attribGroupGen = new InspectionAttributeDynamicGroupGenerator(persistenceManager);
 	}
 
+	
+	public void prepare() throws Exception {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
+		ownerPicker.setOwnerId(getContainer().getOwnerId());
+	}
+	
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		List<ColumnMappingGroup> dynamicGroups = new ArrayList<ColumnMappingGroup>();
@@ -94,9 +106,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	@SkipValidation
 	public String doReportCriteria() {
 		clearContainer();
-		if (getSessionUser().getOwner().isExternalOrg()) {
-			getContainer().setOwner(getSessionUser().getOwner().getId());
-		}
 		return INPUT;
 	}
 
@@ -287,4 +296,17 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	}
 
 
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+		getContainer().setOwner(ownerPicker.getOwner());
+		
+	}
 }

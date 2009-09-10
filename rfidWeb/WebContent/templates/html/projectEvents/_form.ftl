@@ -1,10 +1,8 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/search.css"/>" />
-	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js" />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax"/>";
 		function productTypeChanged(productType) {
 			return null;
 		}

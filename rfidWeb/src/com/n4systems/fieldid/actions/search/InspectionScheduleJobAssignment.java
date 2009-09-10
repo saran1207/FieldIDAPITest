@@ -38,7 +38,7 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	public String doStartSearch() {
 		testRequiredEntities();
 		getContainer().setJobAndNullId(job.getId());
-		getContainer().setOwner(job.getOwner().getId());
+		getContainer().setOwner(job.getOwner());
 		return doCreateSearch();
 	}
 	

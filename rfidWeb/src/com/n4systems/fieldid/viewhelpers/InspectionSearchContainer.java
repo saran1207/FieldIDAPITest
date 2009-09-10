@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.SavedReport;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.DateHelper;
@@ -22,11 +23,10 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private String purchaseOrder;
 	private String referenceNumber;
 	private String location;
-	private Long ownerId;
+	private BaseOrg owner;
 	private Long productTypeId;
 	private Long productStatusId;
 	private Long assignedUserId;
-	private Long jobSiteId;
 	private Long inspectionTypeGroupId;
 	private Long inspectorId;
 	private Long inspectionBookId;
@@ -50,12 +50,10 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addStringTerm("product.shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("product.purchaseOrder", purchaseOrder);
 		addStringTerm("product.customerRefNumber", referenceNumber);
-		addSimpleTerm("owner.id", ownerId);
 		addWildcardTerm("location", location);
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
-		addSimpleTerm("jobSite.id", jobSiteId);
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
 		addSimpleTerm("inspector.uniqueID", inspectorId);
 		addSimpleTerm("schedule.project.id", jobId);
@@ -68,6 +66,11 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		}
 		
 		addDateRangeTerm("date", fromDate, toDate);
+	}
+	
+	@Override
+	protected void evalSearchFilters() {
+		addOwnerFilter(getOwner());
 	}
 	
 	/**
@@ -95,7 +98,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		report.setInCriteria(SavedReport.ORDER_NUMBER, getOrderNumber());
 		report.setInCriteria(SavedReport.RFID_NUMBER, getRfidNumber());
 		report.setInCriteria(SavedReport.SERIAL_NUMBER, getSerialNumber());
-		report.setInCriteria(SavedReport.OWNER_ID, getOwner());
+		report.setInCriteria(SavedReport.OWNER_ID, getOwnerId());
 		report.setInCriteria(SavedReport.REFERENCE_NUMBER, getReferenceNumber());
 		report.setInCriteria(SavedReport.INSPECTION_BOOK, getInspectionBook());
 		report.setInCriteria(SavedReport.INSPECTION_TYPE_GROUP, getInspectionTypeGroup());
@@ -103,7 +106,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		report.setInCriteria(SavedReport.PRODUCT_STATUS, getProductStatus());
 		report.setInCriteria(SavedReport.PRODUCT_TYPE, getProductType());
 		report.setInCriteria(SavedReport.ASSINGED_USER, getAssingedUser());
-		report.setInCriteria(SavedReport.JOB_SITE, getJobSite());
 		report.setInCriteria(SavedReport.JOB_ID, getJob());
 		report.setInCriteria(SavedReport.LOCATION, location);
 
@@ -131,14 +133,14 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		setSerialNumber(report.getStringCriteria(SavedReport.SERIAL_NUMBER));
 		setReferenceNumber(report.getStringCriteria(SavedReport.REFERENCE_NUMBER));
 		setLocation(report.getStringCriteria(SavedReport.LOCATION));
-		setOwner(report.getLongCriteria(SavedReport.OWNER_ID));
+		//FIXME:  this must load differently.
+		//setOwner(report.getLongCriteria(SavedReport.OWNER_ID));
 		setInspectionBook(report.getLongCriteria(SavedReport.INSPECTION_BOOK));
 		setInspectionTypeGroup(report.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
 		setInspector(report.getLongCriteria(SavedReport.INSPECTOR));
 		setAssingedUser(report.getLongCriteria(SavedReport.ASSINGED_USER));
 		setProductStatus(report.getLongCriteria(SavedReport.PRODUCT_STATUS));
 		setProductType(report.getLongCriteria(SavedReport.PRODUCT_TYPE));
-		setJobSite(report.getLongCriteria(SavedReport.JOB_SITE));
 		setJob(report.getLongCriteria(SavedReport.JOB_ID));
 		
 		setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, report.getCriteria().get(SavedReport.FROM_DATE)));
@@ -174,14 +176,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		this.serialNumber = serialNumber;
 	}
 	
-	public Long getJobSite() {
-		return jobSiteId;
-	}
-
-	public void setJobSite(Long jobSiteId) {
-		this.jobSiteId = jobSiteId;
-	}
-
+	
 	public String getOrderNumber() {
 		return orderNumber;
 	}
@@ -305,12 +300,17 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
-	public Long getOwner() {
-		return ownerId;
+
+	public BaseOrg getOwner() {
+		return owner;
+	}
+
+	public void setOwner(BaseOrg owner) {
+		this.owner = owner;
+	}
+
+	public Long getOwnerId() {
+		return (owner != null) ? owner.getId() : null;
 	}
 	
-	public void setOwner(Long ownerId) {
-		this.ownerId = ownerId;
-	}
 }

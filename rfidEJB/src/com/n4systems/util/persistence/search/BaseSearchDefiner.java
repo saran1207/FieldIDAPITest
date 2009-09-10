@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 public interface BaseSearchDefiner extends Serializable {
 	public Class<?> getSearchClass();
 	public SecurityFilter getSecurityFilter();
 	public List<SearchTermDefiner> getSearchTerms();
+	public List<QueryFilter> getSearchFilters();
 	public String[] getJoinColumns();
 	public List<SortTerm> getSortTerms();
 }

@@ -1,8 +1,6 @@
 <title><@s.text name="title.massupdateinspections" /></title>
 <head>
-	<script type="text/javascript" src="<@s.url value="javascript/customerUpdate.js" includeParams="none" />"></script>
 	<script type="text/javascript">
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" includeParams="none"/>";
 		
 		function selectField( fieldType ) {
 			var field = $('check_' + fieldType );

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.model.Product;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.search.SortTerm;
 
@@ -19,7 +20,7 @@ public class ProductSearchContainer extends SearchContainer {
 	private Long productTypeId;
 	private Long productStatusId;
 	private Long assignedUserId;
-	private Long ownerId;
+	private BaseOrg owner;
 	private Date fromDate;
 	private Date toDate;
 	
@@ -38,10 +39,14 @@ public class ProductSearchContainer extends SearchContainer {
 		addSimpleTerm("type.id", productTypeId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
 		addSimpleTerm("assignedUser.uniqueID", assignedUserId);
-		addSimpleTerm("owner.id", ownerId);
 		addDateRangeTerm("identified", fromDate, toDate);
-		
 	}
+
+	@Override
+	protected void evalSearchFilters() {
+		addOwnerFilter(getOwner());
+	}
+
 	
 	@Override
 	protected String defaultSortColumn() {
@@ -140,12 +145,18 @@ public class ProductSearchContainer extends SearchContainer {
 	public void setAssingedUser(Long assignedUserId) {
 		this.assignedUserId = assignedUserId;
 	}
-	
-	public Long getOwner() {
-		return ownerId;
+
+	public Long getOwnerId() {
+		return (owner != null) ? owner.getId() : null;
 	}
 	
-	public void setOwner(Long ownerId) {
-		this.ownerId = ownerId;
+	public BaseOrg getOwner() {
+		return owner;
 	}
+
+	public void setOwner(BaseOrg owner) {
+		this.owner = owner;
+	}
+	
+	
 }

@@ -7,8 +7,6 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/product.js" />" ></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/customerUpdate.js"  />"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/changeJobSite.js" />"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/multiAddProduct.js" />"></script>
 	<@n4.includeStyle type="page" href="product"/>
 	<@n4.includeStyle type="page" href="multiadd"/>
@@ -17,8 +15,6 @@
 
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"  />'; 
-		customerChangeUrl = "<@s.url action="divisionList" namespace="/ajax" />";
-		jobSiteChangeUrl = '<@s.url action="jobSite" namespace="/ajax" />';
 	    productTypeChangeWarning = '<@s.text name="warning.producttypechange"/>';
 	    originalProductType = ${productTypeId!0};
 	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax" />';

@@ -20,8 +20,19 @@ function updateOwner(event) {
 	$('orgSearch').hide();
 }
 
+function clearOrgSearch(event) {
+	var element =  Event.element(event);
+	event.stop();
+	$$(".orgSelected").first().value = "";
+	$$(".orgSelected").first().next('input').value = "";
+}
+
 document.observe("dom:loaded", function() {
 	$$(".searchOwner").each(function(element) {
 		element.observe('click', showOrgSearch);
+	});
+	
+	$$(".clearSearchOwner").each(function(element) {
+		element.observe('click', clearOrgSearch);
 	});
 });
