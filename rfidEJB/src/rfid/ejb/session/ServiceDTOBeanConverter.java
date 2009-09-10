@@ -43,7 +43,6 @@ import com.n4systems.webservice.dto.TenantServiceDTO;
 import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
 import fieldid.web.services.dto.InfoOptionServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
-import fieldid.web.services.dto.UserServiceDTO;
 
 @Local
 public interface ServiceDTOBeanConverter {
@@ -67,7 +66,6 @@ public interface ServiceDTOBeanConverter {
 	public TenantServiceDTO convert(PrimaryOrg tenant);
 	public com.n4systems.webservice.dto.UserServiceDTO convert(UserBean user);
 	public UserBean convert(com.n4systems.webservice.dto.UserServiceDTO user);
-	public UserServiceDTO convert_old( UserBean user );
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook);
 	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup);
 	public Date convertStringToDate(String stringDate);

@@ -150,6 +150,7 @@ public class DataServiceImpl implements DataService {
 			InspectionTypeListResponse response = new InspectionTypeListResponse();
 			
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
@@ -610,7 +611,9 @@ public class DataServiceImpl implements DataService {
 				throw new ServiceException();
 			}
 			
+			
 			Product product = converter.convert(productDTO, existingProduct, requestInformation.getTenantId());
+			
 			ServiceLocator.getProductSerialManager().update(product);
 			
 			return response;

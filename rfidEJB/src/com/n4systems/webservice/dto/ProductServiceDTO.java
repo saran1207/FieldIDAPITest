@@ -3,7 +3,7 @@ package com.n4systems.webservice.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductServiceDTO extends AbstractBaseServiceDTO {
+public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 
 	private String serialNumber;
 	private String rfidNumber;
@@ -13,20 +13,20 @@ public class ProductServiceDTO extends AbstractBaseServiceDTO {
 	private String purchaseOrder;
 	private String location;
 	private String orderNumber;
-	private long organizationId;
 	private String identified; // date
 	private long identifiedById;
 	private String lastInspectionDate; //date
 	private long productTypeId;
 	private List<InfoOptionServiceDTO> infoOptions = new ArrayList<InfoOptionServiceDTO>();
 	private long productStatusId;
-	private long customerId;
-	private long divisionId;
-	private long jobSiteId;
 	private String serverRequestGuid;
 	private List<SubProductMapServiceDTO> subProducts = new ArrayList<SubProductMapServiceDTO>();
 	private List<InspectionScheduleServiceDTO> schedules = new ArrayList<InspectionScheduleServiceDTO>();
 	private String description;
+
+	// All of these are unused starting on mobile version 1.14
+	private long organizationId;
+	private long jobSiteId;
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -65,15 +65,6 @@ public class ProductServiceDTO extends AbstractBaseServiceDTO {
 		this.location = location;
 	}
 	
-	public boolean organizationExists() {
-		return isValidServerId( organizationId );
-	}
-	public long getOrganizationId() {
-		return organizationId;
-	}
-	public void setOrganizationId(long organizationId) {
-		this.organizationId = organizationId;
-	}
 	public String getIdentified() {
 		return identified;
 	}
@@ -103,35 +94,6 @@ public class ProductServiceDTO extends AbstractBaseServiceDTO {
 		this.productStatusId = productStatusId;
 	}
 	
-	public boolean customerExists() {
-		return isValidServerId( customerId );
-	}
-	public long getCustomerId() {
-		return customerId;
-	}
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
-	}
-	
-	public boolean divisionExists() {
-		return isValidServerId( divisionId );
-	}
-	public long getDivisionId() {
-		return divisionId;
-	}
-	public void setDivisionId(long divisionId) {
-		this.divisionId = divisionId;
-	}
-	
-	public boolean jobSiteExists() {
-		return isValidServerId( jobSiteId );
-	}
-	public long getJobSiteId() {
-		return jobSiteId;
-	}
-	public void setJobSiteId(long jobSiteId) {
-		this.jobSiteId = jobSiteId;
-	}
 	public long getProductTypeId() {
 		return productTypeId;
 	}
@@ -183,5 +145,23 @@ public class ProductServiceDTO extends AbstractBaseServiceDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public boolean jobSiteExists() {
+		return isValidServerId( jobSiteId );
+	}
+	public long getJobSiteId() {
+		return jobSiteId;
+	}
+	public void setJobSiteId(long jobSiteId) {
+		this.jobSiteId = jobSiteId;
+	}
+	public boolean organizationExists() {
+		return isValidServerId( organizationId );
+	}
+	public long getOrganizationId() {
+		return organizationId;
+	}
+	public void setOrganizationId(long organizationId) {
+		this.organizationId = organizationId;
 	}
 }

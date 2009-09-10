@@ -82,7 +82,7 @@ public class LoaderFactory {
 	public DivisionOrgByCustomerListLoader createDivisionOrgByCustomerListLoader() {
 		return new DivisionOrgByCustomerListLoader(filter);
 	}
-
+	
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
 		return new FilteredIdLoader<T>(filter, clazz);
 	}

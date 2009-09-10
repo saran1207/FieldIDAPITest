@@ -1,5 +1,6 @@
 package com.n4systems.model.orgs;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,6 +17,9 @@ public class DivisionOrg extends ExternalOrg {
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name="parent_id")
 	private CustomerOrg parent;
+	
+	@Column(name="legacy_id", nullable=true)
+	private Long legacyId;
 	
 	public DivisionOrg() {}
 	
@@ -71,5 +75,13 @@ public class DivisionOrg extends ExternalOrg {
 	@Deprecated
 	public String getDivisionId() {
 		return getCode();
+	}
+
+	public Long getLegacyId() {
+		return legacyId;
+	}
+
+	public void setLegacyId(Long legacyId) {
+		this.legacyId = legacyId;
 	}
 }

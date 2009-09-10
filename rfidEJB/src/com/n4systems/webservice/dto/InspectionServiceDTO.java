@@ -11,10 +11,8 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO {
 	private long inspectorId;
 	private long inspectionGroupId;
 	private long inspectionBookId;
+	private long ownerId;
 	private String inspectionBookTitle;
-	private long organizationId;
-	private long customerId;
-	private long divisionId;
 	private String status;
 	private String nextDate;
 	private long productStatusId;
@@ -23,6 +21,11 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO {
 	private List<SubInspectionServiceDTO> subInspections;
 	private List<SubProductMapServiceDTO> newSubProducts;
 
+	// These are only used by PRE 1.14 mobile versions; now uses ownerId
+	private long organizationId;
+	private long customerId;
+	private long divisionId;
+	
 	/*
 	 * These are here only for the mobile side.  
 	 * The mobile will record the information about the product attached to this inspection.
@@ -188,5 +191,14 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO {
 	}
 	public void setProductTypeId(long productTypeId) {
 		this.productTypeId = productTypeId;
-	}	
+	}
+	public long getOwnerId() {
+		return ownerId;
+	}
+	public void setOwnerId(long ownerId) {
+		this.ownerId = ownerId;
+	}
+	public boolean ownerIdExists() {
+		return isValidServerId(ownerId);
+	}
 }

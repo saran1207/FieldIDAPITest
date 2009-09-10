@@ -1,21 +1,12 @@
 package com.n4systems.webservice.dto;
 
-public class ProductTypeScheduleServiceDTO extends AbstractBaseServiceDTO {
+public class ProductTypeScheduleServiceDTO extends AbstractBaseDTOWithOwner {
 
-	private long customerId;
 	private long frequency;
 	private long inspectionTypeId;
 	private long productTypeId;
 
 	public ProductTypeScheduleServiceDTO() {}
-	
-	public long getCustomerId() {
-		return customerId;
-	}
-	
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
-	}
 	
 	public long getFrequency() {
 		return frequency;
