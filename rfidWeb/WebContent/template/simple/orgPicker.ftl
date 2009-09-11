@@ -26,6 +26,9 @@ value="${(parameters.nameValue.displayName)?default("")?html}"<#rt/>
 <#if parameters.cssClass?exists>
  class="${parameters.cssClass?html}"<#rt/>
 </#if>
+<#if parameters.title?exists>
+ title="${parameters.title?html}"<#rt/>
+</#if>
 />
 <a href="#" class="searchOwner">search</a>
 <a href="#" class="clearSearchOwner">clear</a>

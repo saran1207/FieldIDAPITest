@@ -508,13 +508,7 @@ public class InspectionCrud extends UploadFileSupport {
 		return SUCCESS;
 	}
 	
-	public BaseOrg getOwner() {
-		return inspection.getOwner();
-	}
 	
-	public void setOwner(BaseOrg owner) {
-		inspection.setOwner(owner);
-	}
 
 	public String getLocation() {
 		return inspection.getLocation();
@@ -972,10 +966,15 @@ public class InspectionCrud extends UploadFileSupport {
 		return ownerPicker.getOwnerId();
 	}
 
+	
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
 
+	@RequiredFieldValidator(message="", key="error.owner_required")
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
 	
 
 }

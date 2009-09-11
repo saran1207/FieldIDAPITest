@@ -195,7 +195,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 			setProductTypeId(productId);
 		}
 
-		setOwner(getSessionUser().getOwner());
+		setOwnerId(getSessionUser().getOwner().getId());
 	}
 
 	private void convertInputsToInfoOptions() {
@@ -560,13 +560,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return productStatuses;
 	}
 
-	public BaseOrg getOwner() {
-		return product.getOwner();
-	}
-
-	public void setOwner(BaseOrg owner) {
-		product.setOwner(owner);
-	}
 
 	public Product getProduct() {
 		return product;
@@ -949,6 +942,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
+	}
+	
+	@RequiredFieldValidator(message="", key="error.owner_required")
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
 	}
 
 }
