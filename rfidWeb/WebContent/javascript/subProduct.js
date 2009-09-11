@@ -37,21 +37,22 @@ function submitCreateForm( event, form ) {
 
 
 var addProductUrl = "";
-function addSubProduct( productType, jobSiteId ) {
-	var url = addProductUrl + "?productTypeId=" + productType + "&token=" + getToken();
-	if( jobSiteId ) { 
-		url += "&jobSite=" + jobSiteId;
-	}
-	getResponse( url , "get" );
+function addSubProduct(productType, ownerId) {
+	var params = new Object();
+	params.productTypeId = productType;
+	params.token = getToken();
+	params.ownerId = ownerId;
+	
+	getResponse(addProductUrl , "get", params);
 }
 
 
-function findSubProduct( productType ) {
+function findSubProduct(productType) {
 	$('subProductSearchForm').observe('submit', submitSearchForm);
-	var productLinks = $$( '.productLink' );
-	if( productLinks != null ) {
-		for( var i = 0; i < productLinks.length; i++ ) {
-			productLinks[i].observe('click', attachProduct );
+	var productLinks = $$('.productLink');
+	if (productLinks != null) {
+		for (var i = 0; i < productLinks.length; i++) {
+			productLinks[i].observe('click', attachProduct);
 		}
 	}		
 }

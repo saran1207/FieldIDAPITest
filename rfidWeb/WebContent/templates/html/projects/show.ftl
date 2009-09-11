@@ -49,12 +49,6 @@ ${action.setPageType('job', 'show')!}
 				<span>${(project.name?html) !}</span>
 			</div>
 			
-			<#if securityGuard.jobSitesEnabled>
-				<div class="infoSet">
-					<label for="jobSite"><@s.text name="label.jobsite"/> </label>
-					<span>${(project.jobSite.name?html) !}</span>
-				</div>
-			</#if>
 			
 			<div class="infoSet">
 				<label for="customer"><@s.text name="label.customer"/> </label>

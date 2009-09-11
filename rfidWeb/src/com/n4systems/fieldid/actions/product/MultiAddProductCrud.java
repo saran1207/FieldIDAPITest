@@ -266,6 +266,5 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-
 	
 }

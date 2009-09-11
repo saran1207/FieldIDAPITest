@@ -2,10 +2,6 @@
 	<#if securityGuard.jobSitesEnabled >
 		<h2><@s.text name="label.siteinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
 		<p>
-			<label><@s.text name="label.jobsite"/></label>
-			<span class="fieldValue">${(product.jobSite.name)!}</span>
-		</p>
-		<p>
 			<label><@s.text name="label.assignedto"/></label>
 			<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
 		</p>

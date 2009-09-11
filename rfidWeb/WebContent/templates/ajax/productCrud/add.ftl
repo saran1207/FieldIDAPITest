@@ -1,8 +1,6 @@
 <#assign html>
 	<@s.form action="productCreate" id="subProductCreateForm_${productTypeId}" namespace="/ajax" theme="fieldid" cssClass="crudForm" cssStyle="display:none">
-		<@s.hidden name="owner"/>
-		<@s.hidden name="division"/>
-		<@s.hidden name="jobSite"/>
+		<@s.hidden name="ownerId"/>
 		<@s.hidden name="identified"/>
 		<@s.hidden name="productTypeId" id="productType"/>
 		<#include "/templates/html/common/_formErrors.ftl"/>

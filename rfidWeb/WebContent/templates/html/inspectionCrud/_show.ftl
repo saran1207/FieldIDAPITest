@@ -60,12 +60,7 @@
 	</div>
 	
 	<h2><@s.text name="label.customerinformation"/></h2>
-	<#if securityGuard.jobSitesEnabled >
-		<p>
-			<label><@s.text name="label.jobsite"/></label>
-			<span>${(inspection.jobSite.name)!?html}</span>
-		</p>
-	</#if>
+	
 	
 	<p>
 		<label><@s.text name="label.customer"/></label>

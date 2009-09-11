@@ -18,14 +18,7 @@
 			</p>
 		</#if>
 		
-		<#if securityGuard.jobSitesEnabled && sessionUser.hasAccess("manageendusers") == true >
-			<p>
-				<label><a href="jobSites.action" ><@s.text name="title.manage_job_sites.plural" /></a></label>
-				<span >View and setup all of your job sites in Field ID.</span>
-			</p>
-		</#if>
-		
-		
+			
 		<#if sessionUser.hasAccess("managesystemusers") == true >
 			<p>
 				<label><a href="userList.action" ><@s.text name="title.manage_users.plural" /></a></label>

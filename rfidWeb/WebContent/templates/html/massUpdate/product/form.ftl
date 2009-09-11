@@ -20,22 +20,7 @@
 			<th><@s.text name="label.fieldstoupdate"/></th>
 		</tr>
 		<#if securityGuard.jobSitesEnabled>
-			<tr>
-				<td><@s.checkbox name="select['jobSite']" id="check_jobSite"/></td>
-				<td>
-					<p>
-						<label class="label" ><@s.text name="label.jobsite"/>:</label> 
-						<span class="field">
-							<@s.select  name="jobSite" list="jobSites" listKey="id" listValue="name"  labelposition="left" onchange="selectField('jobSite');" >
-								<#if (action.fieldErrors['jobSite'])?exists> 
-									<@s.param name="cssClass">inputError</@s.param>
-									<@s.param name="title">${action.fieldErrors['jobSite']}</@s.param>
-								</#if>  
-							</@s.select>
-						</span>
-					</p>
-				</td>
-			</tr>
+		
 			<tr>
 				<td><@s.checkbox name="select['assignedUser']" id="check_assignedUser"/></td>
 				<td>
@@ -45,27 +30,17 @@
 					</p>
 				</td>
 			</tr>
-		<#else>
-			<tr>
-				<td><@s.checkbox name="select['customer']" id="check_customer" /></td>
-				<td>
-					<p>
-						<label class="label" ><@s.text name="label.eusername"/>:</label> 
-						<span class="field"><@s.select  name="customer" list="customers" listKey="id" listValue="name"  onchange="customerChanged(this); selectField('customer');" /></span>
-					</p>
-					<p>
-						<label class="label"><@s.text name="label.division"/>:</label> 
-						<span class="field"><@s.select id="division" name="division" list="divisions" listKey="id" listValue="name" onchange="selectField('customer');" >
-							<#if !Session.sessionUser.inDivision >
-								<@s.param name="headerKey"></@s.param>
-								<@s.param name="headerValue"></@s.param>
-							</#if>					
-						</@s.select>
-						</span>
-					</p>
-				</td>
-			</tr>
 		</#if>
+		<tr>
+			<td><@s.checkbox name="select['owner']" id="check_owner" /></td>
+			<td>
+				<p>
+					<label class="label" ><@s.text name="label.owner"/>:</label> 
+					<span class="field"><@n4.orgPicker name="owner" /></span>
+				</p>
+				
+			</td>
+		</tr>
 			
 		<tr>
 			<td><@s.checkbox name="select['productStatus']" id="check_productStatus"/></td>
