@@ -91,7 +91,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	@SkipValidation
 	public String doList() {
 		SecondaryOrgPaginatedLoader loader = getLoaderFactory().createSecondaryOrgPaginatedLoader();
-		loader.setPage(getCurrentPage() - 1).setPageSize(Constants.PAGE_SIZE);
+		loader.setPage(getCurrentPage()).setPageSize(Constants.PAGE_SIZE);
 		page = loader.load();
 		
 		return SUCCESS;

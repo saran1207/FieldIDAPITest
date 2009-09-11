@@ -19,11 +19,15 @@ public class EntityStillReferencedException extends Exception {
 		super(cause);
 	}
 	
-	public EntityStillReferencedException(Class<?> clazz, Long id) {
-		this("Entity type [" + clazz.getName() + "] with id [" + id + "] is still referenced.", null);
+	public EntityStillReferencedException(Class<?> clazz, Object id) {
+		this(clazz, id, null);
 	}
 	
-	public EntityStillReferencedException(Class<?> clazz, Long id, Throwable cause) {
+	public EntityStillReferencedException(Class<?> clazz, Object id, Throwable cause) {
+		this(clazz, id.toString(), cause);
+	}
+	
+	public EntityStillReferencedException(Class<?> clazz, String id, Throwable cause) {
 		super("Entity type [" + clazz.getName() + "] with id [" + id + "] is still referenced.", cause);
 	}
 	

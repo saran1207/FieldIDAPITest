@@ -482,27 +482,16 @@ public class DataServiceImpl implements DataService {
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			CustomerOrgPaginatedLoader loader = loaderFactory.createCustomerOrgPaginatedLoader();
 			loader.setPageSize(RESULTS_PER_PAGE);
-
-			if (currentPage == PaginatedRequestInformation.INFORMATION_PAGE) {
-				loader.setPage(FIRST_PAGE);
-			} else {
-				loader.setPage(currentPage - 1);
-			}
+			loader.setPage(currentPage);
 			
 			Pager<CustomerOrg> pager = loader.load();
 			
-			CustomerOrgListResponse response = new CustomerOrgListResponse();
-			
-			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				for (CustomerOrg customerOrg : pager.getList()) {
-					response.getCustomers().add( converter.convert(customerOrg) );
-				}
-			}
-						
-			response.setCurrentPage(currentPage);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			CustomerOrgListResponse response = new CustomerOrgListResponse(pager, RESULTS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
-			response.setTotalPages((int)pager.getTotalPages());
+			
+			for (CustomerOrg customerOrg : pager.getList()) {
+				response.getCustomers().add( converter.convert(customerOrg) );
+			}
 			
 			return response;
 		} catch (Exception e) {
@@ -520,27 +509,16 @@ public class DataServiceImpl implements DataService {
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			DivisionOrgPaginatedLoader loader = loaderFactory.createDivisionOrgPaginatedLoader();
 			loader.setPageSize(RESULTS_PER_PAGE);
-
-			if (currentPage == PaginatedRequestInformation.INFORMATION_PAGE) {
-				loader.setPage(FIRST_PAGE);
-			} else {
-				loader.setPage(currentPage - 1);
-			}
+			loader.setPage(currentPage);
 			
 			Pager<DivisionOrg> pager = loader.load();
 			
-			DivisionOrgListResponse response = new DivisionOrgListResponse();
-			
-			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				for (DivisionOrg divisionOrg : pager.getList()) {
-					response.getDivisions().add( converter.convert(divisionOrg) );
-				}
-			}
-						
-			response.setCurrentPage(currentPage);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			DivisionOrgListResponse response = new DivisionOrgListResponse(pager, RESULTS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
-			response.setTotalPages((int)pager.getTotalPages());
+
+			for (DivisionOrg divisionOrg : pager.getList()) {
+				response.getDivisions().add( converter.convert(divisionOrg) );
+			}
 			
 			return response;
 		} catch (Exception e) {
@@ -558,27 +536,16 @@ public class DataServiceImpl implements DataService {
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			SecondaryOrgPaginatedLoader loader = loaderFactory.createSecondaryOrgPaginatedLoader();
 			loader.setPageSize(RESULTS_PER_PAGE);
-
-			if (currentPage == PaginatedRequestInformation.INFORMATION_PAGE) {
-				loader.setPage(FIRST_PAGE);
-			} else {
-				loader.setPage(currentPage - 1);
-			}
+			loader.setPage(currentPage);
 			
 			Pager<SecondaryOrg> pager = loader.load();
 			
-			SecondaryOrgListResponse response = new SecondaryOrgListResponse();
-			
-			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				for (SecondaryOrg secondaryOrg : pager.getList()) {
-					response.getSecondaryOrgs().add( converter.convert(secondaryOrg) );
-				}
-			}
-						
-			response.setCurrentPage(currentPage);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			SecondaryOrgListResponse response = new SecondaryOrgListResponse(pager, RESULTS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
-			response.setTotalPages((int)pager.getTotalPages());
+
+			for (SecondaryOrg secondaryOrg : pager.getList()) {
+				response.getSecondaryOrgs().add( converter.convert(secondaryOrg) );
+			}
 			
 			return response;
 		} catch (Exception e) {

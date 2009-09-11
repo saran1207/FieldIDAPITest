@@ -12,7 +12,9 @@ public class DivisionOrgPaginatedLoader extends PaginatedLoader<DivisionOrg> {
 	
 	@Override
 	protected QueryBuilder<DivisionOrg> createBuilder(SecurityFilter filter) {
-		return new QueryBuilder<DivisionOrg>(DivisionOrg.class, filter);
+		QueryBuilder<DivisionOrg> builder = new QueryBuilder<DivisionOrg>(DivisionOrg.class, filter);
+		builder.addOrder("name");
+		return builder;
 	}
 	
 

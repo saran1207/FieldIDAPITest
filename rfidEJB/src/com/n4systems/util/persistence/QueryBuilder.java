@@ -548,14 +548,26 @@ public class QueryBuilder<E> {
 		return (List<E>)query.getResultList();
 	}
 	
+	/**
+	 * Returns a page of results.  The first page starts at 1.  Page < 1 will return a pager with the page,
+	 * page size and a total result count and an empty result list.
+	 * @param em		EntityManager to use for this query
+	 * @param page		The page to return.  >= 1 for result page, < 1 for count page 
+	 * @param pageSize	The number of results for this page
+	 * @return			A page of results for Page >= 1, A page with only result count for page < 1
+	 */
 	public Pager<E> getPaginatedResults(EntityManager em, int page, int pageSize) {
-		int firstResult = page * pageSize;
-		
 		long totalResults = getCount(em);
-		List<E> results = getResultList(em, firstResult, pageSize);
+
+		List<E> results;
+		if (page >= 1) {
+			int firstResult = (page - 1) * pageSize;
+			results = getResultList(em, firstResult, pageSize);
+		} else {
+			results = new ArrayList<E>(0);
+		}
 		
 		Pager<E> pager = new SimplePager<E>(page, pageSize, totalResults, results);
-		
 		return pager;
 	}
 	

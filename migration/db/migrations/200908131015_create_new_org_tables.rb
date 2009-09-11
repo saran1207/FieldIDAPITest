@@ -22,6 +22,9 @@ class CreateNewOrgTables < ActiveRecord::Migration
         t.string  :serialnumberformat, :null => false
         t.boolean :usingserialnumber, :null => false
         t.string  :website,:limit => 2056
+        t.string  :certificatename
+        t.string  :defaulttimezone, :null => false
+        t.string  :dateformat, :null => false
       end
       
       execute("ALTER TABLE org_primary ADD PRIMARY KEY (org_id)")
@@ -30,6 +33,8 @@ class CreateNewOrgTables < ActiveRecord::Migration
       create_table :org_secondary, :id => false do |t|
         t.integer :org_id, :null => false
         t.integer :primaryorg_id, :null => false
+        t.string  :certificatename
+        t.string  :defaulttimezone, :null => false
       end
       
       execute("ALTER TABLE org_secondary ADD PRIMARY KEY (org_id)")

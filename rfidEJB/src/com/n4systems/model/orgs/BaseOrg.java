@@ -13,14 +13,13 @@ import javax.persistence.Table;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable, Comparable<BaseOrg> {
+public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg> {
 	private static final long serialVersionUID = 1L;
 	protected static final String SECONDARY_ID_FILTER_PATH = ".secondary_id";
 	protected static final String CUSTOMER_ID_FILTER_PATH = ".customer_id";

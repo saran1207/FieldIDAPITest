@@ -22,7 +22,7 @@ public class SimplePager<T> implements Pager<T> {
 	}
 
 	public long getLastPage() {
-		return totalPages - 1;
+		return totalPages;
 	}
 
 	public List<T> getList() {
@@ -38,7 +38,7 @@ public class SimplePager<T> implements Pager<T> {
 	}
 
 	public int getReadableCurrentPage() {
-		return currentPage + 1;
+		return getCurrentPage();
 	}
 
 	public long getTotalPages() {
@@ -54,15 +54,15 @@ public class SimplePager<T> implements Pager<T> {
 	}
 
 	public boolean isHasNextPage() {
-		return currentPage < getLastPage();
+		return currentPage < totalPages;
 	}
 
 	public boolean isHasPreviousPage() {
-		return currentPage > 0;
+		return currentPage > 1;
 	}
 
 	public boolean validPage() {
-		return (currentPage >= 0 && currentPage < totalPages) ;
+		return (currentPage >= 1 && currentPage <= totalPages) ;
 	}
 
 }

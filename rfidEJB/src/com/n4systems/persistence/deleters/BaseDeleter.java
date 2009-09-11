@@ -2,6 +2,7 @@ package com.n4systems.persistence.deleters;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -18,7 +19,7 @@ public class BaseDeleter<T extends Saveable> implements Deleter<T> {
 	/**
 	 * Removes an entity.
 	 */
-	public void remove(T entity) {
+	public void remove(T entity) throws EntityStillReferencedException {
 		PersistenceManager.executeDeleter(this, entity);
 	}
 	

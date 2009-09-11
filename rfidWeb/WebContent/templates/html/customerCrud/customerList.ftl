@@ -17,14 +17,20 @@ ${action.setPageType('customer','list')!}
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.customer" /></th>
+			<th><@s.text name="label.customername" /></th>
+			<th><@s.text name="label.customerid" /></th>
+			<th><@s.text name="label.organization" /></th>
 			<th></th>
 		</tr>
 	
 	<#list page.list as customer>
 	
-		<tr >
-			<td><a href="<@s.url value="customerShow.action" uniqueID="${customer.id}" />" >${customer.name} - (${customer.customerId})</a></td>
+		<tr>
+			<td>
+				<a href="<@s.url value="customerShow.action" uniqueID="${customer.id}" />" >${customer.name}</a>
+			</td>
+			<td>${customer.code}</td>
+			<td>${customer.getInternalOrg().name}</td>
 			<td>
 				<a href="<@s.url value="customerEdit.action" uniqueID="${customer.id}" />" ><@s.text name="label.edit" /></a> | 
 				<a href="<@s.url value="customerRemove.action" uniqueID="${customer.id}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>

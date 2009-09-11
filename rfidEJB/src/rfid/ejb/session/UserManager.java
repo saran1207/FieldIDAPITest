@@ -265,7 +265,7 @@ public class UserManager implements User {
 		}
 		
 		if( customer != null ) {
-			queryString += "AND ub.owner.id = :customer ";
+			queryString += "AND ub.owner.customer_id = :customer ";
 		} 
 		
 		if( userType != null ) {

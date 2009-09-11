@@ -10,11 +10,12 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-abstract public class BaseEntity implements Serializable {
+abstract public class BaseEntity implements Saveable, Serializable {
 
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(BaseEntity.class);

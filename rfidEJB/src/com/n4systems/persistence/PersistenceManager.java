@@ -9,11 +9,14 @@ import javax.persistence.Persistence;
 import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 
+import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.deleters.Deleter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.util.ExceptionHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class PersistenceManager {
@@ -102,13 +105,22 @@ public class PersistenceManager {
 		return managedEntity;
 	}
 
-	public static <T extends Saveable> void executeDeleter(Deleter<T> deleter, T entity) {
+	public static <T extends Saveable> void executeDeleter(Deleter<T> deleter, T entity) throws EntityStillReferencedException {
 		Transaction transaction = startTransaction();
 		try {
 			deleter.remove(transaction, entity);
+			
+			// flush the transaction early to force the RuntimeException
+			transaction.getEntityManager().flush();
+			
 		} catch(RuntimeException e) {
 			rollbackTransaction(transaction);
-			throw e;
+			
+			if (ExceptionHelper.causeContains(e, ConstraintViolationException.class)) {
+				throw new EntityStillReferencedException(entity.getClass(), entity.getIdentifier(), e);
+			} else {
+				throw e;
+			}
 		} finally {
 			finishTransaction(transaction);
 		}

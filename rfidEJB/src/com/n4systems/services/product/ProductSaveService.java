@@ -2,9 +2,12 @@ package com.n4systems.services.product;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 
+import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubProductUniquenessException;
@@ -16,7 +19,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 
 public class ProductSaveService {
-
+	private static Logger logger = Logger.getLogger(ProductSaveService.class);
 	private final LegacyProductSerial productManager;
 	private final UserBean user;
 	private SecurityFilter filter;
@@ -114,7 +117,11 @@ public class ProductSaveService {
 		ProductAttachmentSaver deleter = new ProductAttachmentSaver(product);
 		for (ProductAttachment loadedAttachment : loadedAttachments) {
 			if (!existingAttachments.contains(loadedAttachment)) {
-				deleter.remove(loadedAttachment);
+				try {
+					deleter.remove(loadedAttachment);
+				} catch (EntityStillReferencedException e) {
+					logger.error("Could not delete attachment", e);
+				}
 			}
 		}
 	}

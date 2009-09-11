@@ -16,6 +16,9 @@
 		<@s.textfield key="label.customername" required="true" name="customerName" size="50" labelposition="left" />
 	</div>
 	<div class="formRowHolder">
+		<@s.select key="label.organizationalunit" name="parentOrgId" list="parentOrgs" listKey="id" listValue="name" labelposition="left" required="true"/>
+	</div>
+	<div class="formRowHolder">
 		<@s.textfield key="label.contactname" name="contactName" labelposition="left" />
 	</div>
 	<div class="formRowHolder">

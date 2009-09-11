@@ -7,6 +7,9 @@ ${action.setPageType('customer','show')!}
 	<div >
 		<span class="label" ><@s.text name="label.customername"/>:</span><span class="field">${customerName!}</span>
 	</div>
+	<div class="formRowHolder">
+		<span class="label" ><@s.text name="label.organizationalunit"/>:</span><span class="field">${customer.parent.name!}</span>
+	</div>
 	<div >
 		<span class="label" ><@s.text name="label.contactname"/>:</span><span class="field">${contactName!}</span>
 	</div>
