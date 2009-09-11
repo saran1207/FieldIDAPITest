@@ -28,7 +28,7 @@ public class OwnerFilter extends AbstractSecurityFilter {
 			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
 			addFilterParameter(builder, definer.getTenantPath(), getTenantId());
 		} else {
-			addFilterParameter(builder, definer.getOwnerPath() + filterOrg.getFilterPath(), filterOrg.getId());
+			addFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
 		}
 	}
 
@@ -42,7 +42,7 @@ public class OwnerFilter extends AbstractSecurityFilter {
 			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
 			setParameter(query, definer.getTenantPath(), getTenantId());
 		} else {
-			setParameter(query, definer.getOwnerPath(), filterOrg.getId());
+			setParameter(query, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
 		}
 	}
 
@@ -58,7 +58,7 @@ public class OwnerFilter extends AbstractSecurityFilter {
 			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
 			addFilterClause(clauses, definer.getTenantPath(), alias, false);
 		} else {
-			addFilterClause(clauses, definer.getTenantPath(), alias, false);
+			addFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, false);
 		}
 		
 		return clauses.toString();

@@ -26,12 +26,9 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 		return builder;
 	}
 
-	public String getNameFilter() {
-		return nameFilter;
-	}
-
-	public void setNameFilter(String nameCodeFilter) {
+	public CustomerOrgPaginatedLoader setNameFilter(String nameCodeFilter) {
 		this.nameFilter = nameCodeFilter;
+		return this;
 	}
 	
 }

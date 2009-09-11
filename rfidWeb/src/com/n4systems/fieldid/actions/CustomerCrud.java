@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.jboss.logging.Logger;
 
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
@@ -31,7 +32,8 @@ public class CustomerCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
 	private static final int USER_RESULTS_MAX = 100000;
-
+	private static Logger logger = Logger.getLogger(CustomerCrud.class);
+	
 	private final User userManager;
 	private final OrgSaver saver;
 	
@@ -87,12 +89,16 @@ public class CustomerCrud extends AbstractCrud {
 			}
 			
 			saver.remove(customer);
+			addFlashMessage("Customer deleted successfully");
 		} catch (EntityStillReferencedException e) {
 			addFlashError(getText("error.customerinuse"));
 			return ERROR;
+		} catch (Exception e) {
+			logger.error("Failed deleteing customer", e);
+			addFlashError(getText("error.savingcustomer"));
+			return ERROR;
 		}
-
-		addFlashMessage("Customer deleted successfully");
+		
 		return SUCCESS;
 	}
 
@@ -102,12 +108,13 @@ public class CustomerCrud extends AbstractCrud {
 				customer.setTenant(getTenant());
 			}
 			saver.saveOrUpdate(customer);
+			addFlashMessage(getText("message.saved"));
+			uniqueID = customer.getId();
 		} catch (Exception e) {
 			addActionError(getText("error.savingcustomer"));
 			return ERROR;
 		}
-		uniqueID = customer.getId();
-		addFlashMessage(getText("message.saved"));
+		
 		return SUCCESS;
 	}
 

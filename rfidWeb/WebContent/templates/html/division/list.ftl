@@ -8,17 +8,19 @@ ${action.setPageType('customer', 'divisions')!}
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.division_id" /></th>
 			<th><@s.text name="label.name" /></th>
+			<th><@s.text name="label.division_id" /></th>
 			<th></th>
 		</tr>
 		<#list page.getList() as division > 
 			<tr id="division_${division.id}" >
-				<td><a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>" >${(division.divisionID?html)!}</a></td>
-				<td>${(division.name?html)!}</td>
 				<td>
-					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a>
-					<a href="<@s.url action="divisionDelete" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.delete"/></a>
+					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>" >${(division.name?html)!}</a>
+				</td>
+				<td>${(division.code?html)!}</td>
+				<td>
+					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a> | 
+					<a href="<@s.url action="divisionDelete" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.remove"/></a>
 				</td>
 			</tr>	
 		</#list>

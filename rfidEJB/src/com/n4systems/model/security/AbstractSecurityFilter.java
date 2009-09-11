@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import javax.persistence.Query;
 
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -37,6 +38,10 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 		}
 		
 		return definer;
+	}
+	
+	protected String prepareFullOwnerPath(SecurityDefiner definer, BaseOrg filterOrg) {
+		return (definer.getOwnerPath().length() > 0) ? definer.getOwnerPath() + '.' + filterOrg.getFilterPath() : filterOrg.getFilterPath();
 	}
 	
 	protected String prepareField(String field, String tableAlias) {

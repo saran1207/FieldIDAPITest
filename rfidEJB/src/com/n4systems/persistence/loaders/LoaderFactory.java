@@ -11,6 +11,8 @@ import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
+import com.n4systems.model.orgs.ExternalOrg;
+import com.n4systems.model.orgs.ExternalOrgCodeExistsLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
@@ -75,14 +77,18 @@ public class LoaderFactory {
 		return new CustomerOrgPaginatedLoader(filter);
 	}
 	
-	public DivisionOrgPaginatedLoader createDivisionOrgPaginatedLoader() {
-		return new DivisionOrgPaginatedLoader(filter);
-	}
-
 	public DivisionOrgByCustomerListLoader createDivisionOrgByCustomerListLoader() {
 		return new DivisionOrgByCustomerListLoader(filter);
 	}
+
+	public DivisionOrgPaginatedLoader createDivisionOrgPaginatedLoader() {
+		return new DivisionOrgPaginatedLoader(filter);
+	}
 	
+	public <T extends ExternalOrg> ExternalOrgCodeExistsLoader<T> createExternalOrgCodeExistsLoader(Class<T> orgClass) {
+		return new ExternalOrgCodeExistsLoader<T>(filter, orgClass);
+	}
+
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
 		return new FilteredIdLoader<T>(filter, clazz);
 	}
@@ -142,7 +148,7 @@ public class LoaderFactory {
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
 		return new SecondaryOrgByNameLoader(filter);
 	}
-
+	
 	public SecondaryOrgListableLoader createSecondaryOrgListableLoader() {
 		return new SecondaryOrgListableLoader(filter);
 	}

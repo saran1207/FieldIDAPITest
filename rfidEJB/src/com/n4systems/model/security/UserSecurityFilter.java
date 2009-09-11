@@ -38,7 +38,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 				
 			} else if (definer.isOwnerFiltered() && !filterOrg.isPrimary()) {
 				// we don't need to add an owner filter for a PrimaryOrg since it's 1 to 1 with the tenant
-				addFilterParameter(builder, definer.getOwnerPath() + filterOrg.getFilterPath(), filterOrg.getId());
+				addFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
 			}
 		}
 	}
@@ -56,7 +56,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 				setParameter(query, definer.getUserPath(), filterUserId);
 				
 			} else if (definer.isOwnerFiltered() && !filterOrg.isPrimary()) {
-				setParameter(query, definer.getOwnerPath(), filterOrg.getId());
+				setParameter(query, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
 			}
 		}
 	}
@@ -82,7 +82,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 				
 			} else if (definer.isOwnerFiltered() && !filterOrg.isPrimary()) {
 				// we don't need to add an owner filter for a PrimaryOrg since it's 1 to 1 with the tenant
-				addFilterClause(clauses, definer.getOwnerPath() + filterOrg.getFilterPath(), alias, true);
+				addFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, true);
 			}
 		}
 		

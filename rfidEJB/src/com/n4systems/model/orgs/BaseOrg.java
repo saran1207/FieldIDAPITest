@@ -21,9 +21,9 @@ import com.n4systems.model.security.SecurityDefiner;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg> {
 	private static final long serialVersionUID = 1L;
-	protected static final String SECONDARY_ID_FILTER_PATH = ".secondary_id";
-	protected static final String CUSTOMER_ID_FILTER_PATH = ".customer_id";
-	protected static final String DIVISION_ID_FILTER_PATH = ".division_id";
+	protected static final String SECONDARY_ID_FILTER_PATH = "secondary_id";
+	protected static final String CUSTOMER_ID_FILTER_PATH = "customer_id";
+	protected static final String DIVISION_ID_FILTER_PATH = "division_id";
 	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "", null, null);
