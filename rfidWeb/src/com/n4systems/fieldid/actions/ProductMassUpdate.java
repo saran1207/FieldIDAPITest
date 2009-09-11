@@ -17,14 +17,16 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.search.ProductSearchAction;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.Product;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ListingPair;
+import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
-public class ProductMassUpdate extends MassUpdate {
+public class ProductMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ProductMassUpdate.class);
 	
@@ -37,14 +39,22 @@ public class ProductMassUpdate extends MassUpdate {
 	
 	private String identified;
 	
+	private OwnerPicker ownerPicker;
+	
 	public ProductMassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager, User userManager) {
 		super(customerManager, massUpdateManager, persistenceManager);
 		this.productSerialManager = productSerialManager;
 		this.userManager = userManager;
 	}
 
+	public void prepare() throws Exception {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+	}
+	
+	
 	private void applyCriteriaDefaults() {
-		setOwner(criteria.getOwner());
+	
+		setOwnerId(criteria.getOwnerId());
 		
 		setProductStatus(criteria.getProductStatus());
 		setPurchaseOrder(criteria.getPurchaseOrder());
@@ -117,13 +127,8 @@ public class ProductMassUpdate extends MassUpdate {
 		return true;
 	}
 
-	public BaseOrg getOwner() {
-		return product.getOwner();
-	}
 	
-	public void setOwner(BaseOrg owner) {
-		product.setOwner(owner);
-	}
+	
 
 	public Long getProductStatus() {
 		return (product.getProductStatus() == null) ? null : product.getProductStatus().getUniqueID();
@@ -185,4 +190,17 @@ public class ProductMassUpdate extends MassUpdate {
 	public void setIdentified(String identified) {
 		this.identified = identified;
 	}
+
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+	
 }

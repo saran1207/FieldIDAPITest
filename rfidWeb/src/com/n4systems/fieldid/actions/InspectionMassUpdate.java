@@ -13,28 +13,38 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.ListingPair;
+import com.opensymphony.xwork2.Preparable;
 
-public class InspectionMassUpdate extends MassUpdate {
+public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( InspectionMassUpdate.class );
 	
 	private InspectionManager inspectionManager;
 	private InspectionSearchContainer criteria;
 	private Inspection inspection = new Inspection();
+	
+	private OwnerPicker ownerPicker;
 
 	public InspectionMassUpdate( InspectionManager inspectionManager,  CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
 		super( customerManager, massUpdateManager, persistenceManager);
 		this.inspectionManager = inspectionManager;
 	}
 	
+	
+	public void prepare() throws Exception {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
+	}
+
+
 	private void applyCriteriaDefaults() {
 		
-		setOwner(criteria.getOwner());
+		setOwnerId(criteria.getOwnerId());
 		
 		setInspectionBook( criteria.getInspectionBook() );
 	}
@@ -87,13 +97,7 @@ public class InspectionMassUpdate extends MassUpdate {
 	}
 	
 
-	public BaseOrg getOwner() {
-		return inspection.getOwner();
-	}
 	
-	public void setOwner(BaseOrg owner) {
-		inspection.setOwner(owner);
-	}
 	
 	public String getLocation() {
 		return inspection.getLocation();
@@ -126,5 +130,17 @@ public class InspectionMassUpdate extends MassUpdate {
 
 	public void setPrintable( boolean printable ) {
 		inspection.setPrintable( printable );
+	}
+	
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
 	}
 }

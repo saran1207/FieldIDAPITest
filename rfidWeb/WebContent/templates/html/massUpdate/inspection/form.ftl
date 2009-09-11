@@ -35,9 +35,7 @@
 					<label class="label" ><@s.text name="label.owner"/>:</label> 
 					<span class="field"><@n4.orgPicker name="owner" /></span>
 				</p>
-				
 			</td>
-			
 		</tr>
 			
 		<tr>

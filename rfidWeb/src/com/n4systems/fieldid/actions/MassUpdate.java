@@ -9,7 +9,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
-public class MassUpdate extends AbstractAction {
+public class MassUpdate extends AbstractAction  {
 	private static final long serialVersionUID = 1L;
 	
 	protected String searchId;

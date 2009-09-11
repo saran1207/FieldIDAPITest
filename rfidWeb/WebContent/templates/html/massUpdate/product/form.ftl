@@ -1,6 +1,7 @@
 <title><@s.text name="title.massupdateproducts" /></title>
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>	
+	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 <h4 >Instructions </h4>
 <div class="help">

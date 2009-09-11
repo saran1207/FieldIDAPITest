@@ -75,14 +75,11 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					updateJpql += ", location = :" + paramKey;
 					bindParams.put(paramKey, inspectionSchedule.getLocation());
 				}
-				if (paramKey.equals("customer")) {
+				if (paramKey.equals("owner")) {
 					
-					if (inspectionSchedule.getOwner() == null) {
-						updateJpql += ", owner = null ";
-					} else {
-						updateJpql += ", owner = :owner ";
-						bindParams.put("owner", inspectionSchedule.getOwner());
-					}
+					updateJpql += ", owner = :owner ";
+					bindParams.put("owner", inspectionSchedule.getOwner());
+					
 				}
 
 			}
@@ -142,15 +139,11 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (entry.getValue() == true) {
 					updateQueryString += ", ";
 
-					if (entry.getKey().equals("customer")) {
+					if (entry.getKey().equals("owner")) {
 						ownershipBeingSet = true;
 
-						if (product.getOwner() == null) {
-							updateQueryString += " owner = null, ";
-						} else {
-							updateQueryString += " owner = :owner, ";
-							parameters.put("owner", product.getOwner());
-						}
+						updateQueryString += " owner = :owner ";
+						parameters.put("owner", product.getOwner());
 					}
 
 					if (entry.getKey().equals("assignedUser")) {
@@ -238,16 +231,13 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (entry.getValue() == true) {
 					updateQueryString += ", ";
 
-					if (entry.getKey().equals("customer")) {
+					if (entry.getKey().equals("owner")) {
 						ownershipBeingSet = true;
 
-						if (inspection.getOwner() == null) {
-							updateQueryString += " owner = null ";
-						} else {
-							updateQueryString += " owner = :owner ";
-							parameters.put("owner", inspection.getOwner());
-						}
+						updateQueryString += " owner = :owner ";
+						parameters.put("owner", inspection.getOwner());
 					}
+					
 					if (entry.getKey().equals("inspectionBook")) {
 						if (inspection.getBook() == null) {
 							updateQueryString += " book = null ";
@@ -304,9 +294,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 	private Map<String, Boolean> getOwnerShipSelectedAttributes(Map<String, Boolean> values) {
 		Map<String, Boolean> selectedAttributes = new HashMap<String, Boolean>();
-		selectedAttributes.put("jobSite", (values.get("jobSite") != null) ? values.get("jobSite") : false );
-		selectedAttributes.put("customer", (values.get("customer") != null) ? values.get("customer") : false);
-		selectedAttributes.put("division", (values.get("division") != null) ? values.get("division") : false);
+		selectedAttributes.put("owner", (values.get("owner") != null) ? values.get("owner") : false );
 		selectedAttributes.put("location", (values.get("location") != null) ? values.get("location") : false);
 		return selectedAttributes;
 	}

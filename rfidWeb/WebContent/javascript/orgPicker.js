@@ -17,6 +17,8 @@ function updateOwner(event) {
 
 	$$(".orgSelected").first().next('input').value= element.getAttribute("orgName");
 	
+	$$(".orgSelected").first().next('input').fire('field:change');
+	
 	$('orgSearch').hide();
 }
 
