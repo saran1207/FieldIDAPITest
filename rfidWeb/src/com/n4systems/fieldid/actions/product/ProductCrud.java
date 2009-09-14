@@ -176,7 +176,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		loadAddProductHistory();
 		if (addProductHistory != null) {
-			product.setOwner(addProductHistory.getOwner());
+			
+			setOwnerId(addProductHistory.getOwner() != null ? addProductHistory.getOwner().getId() : null);
 
 			// we need to make sure we load the producttype with its info fields
 			setProductTypeId(addProductHistory.getProductType().getId());
@@ -191,9 +192,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 			getProductTypes();
 			Long productId = productTypes.getProductTypes().iterator().next().getId();
 			setProductTypeId(productId);
+			setOwnerId(getSessionUser().getOwner().getId());
 		}
 
-		setOwnerId(getSessionUser().getOwner().getId());
+		
 	}
 
 	private void convertInputsToInfoOptions() {
