@@ -12,11 +12,13 @@ import rfid.web.helper.Constants;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.ViewTree;
 import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
-import com.n4systems.model.SavedReport;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
@@ -44,8 +46,8 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
-		query.addSimpleWhere("owner.id", getSessionUser().getId());
 		query.addSimpleWhere("id", uniqueId);
+		
 		report = persistenceManager.find(query);
 	}
 
@@ -62,7 +64,9 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	@SkipValidation
 	public String doLoad() {
 		testRequiredEntities(true);
-		InspectionSearchContainer container = new InspectionSearchContainer(getSecurityFilter(), report);
+		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getSecurityFilter());
+		
+		InspectionSearchContainer container = converter.convert(report);
 		
 		searchId = container.getSearchId();
 		setSessionVar(InspectionReportAction.REPORT_CRITERIA, container);  // TODO move this somewhere better AA.
@@ -98,7 +102,9 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 			report.setUser(fetchCurrentUser());
 										
 			InspectionSearchContainer inspectionSearchContainer = getContainer();
-			inspectionSearchContainer.toSavedReport(report);
+			convertReport(inspectionSearchContainer);
+			
+			
 			uniqueID = persistenceManager.save(report, getSessionUser().getId());
 			inspectionSearchContainer.setSavedReportId(uniqueID);
 			inspectionSearchContainer.setSavedReportModified(false);
@@ -110,6 +116,10 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+
+	private void convertReport(InspectionSearchContainer inspectionSearchContainer) {
+		report = new SavedReportSearchCriteriaConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getSecurityFilter()).convertInto(inspectionSearchContainer, report);
 	}
 
 	@SkipValidation
@@ -130,7 +140,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		}
 		try {
 			InspectionSearchContainer inspectionSearchContainer = getContainer();
-			inspectionSearchContainer.toSavedReport(report);
+			convertReport(inspectionSearchContainer);
 			persistenceManager.update(report, getSessionUser().getId());
 			inspectionSearchContainer.setSavedReportModified(false);
 			

@@ -1,17 +1,16 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.CommentTempBean;
-import rfid.ejb.session.CommentTemp;
 
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.util.ListingPair;
+import com.n4systems.model.api.Listable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
@@ -22,19 +21,20 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	private static final long serialVersionUID = 1L;
 	
 	private CommentTempBean commentTemplate;
-	private CommentTemp commentTemplateManager;
-	
+		
 	private Gson json = new Gson();
+
+	private List<Listable<Long>> commentTemplates;
 	
-	public CommentTemplateCrud(CommentTemp commentTemplateManager, PersistenceManager persistenceManager) {
+	public CommentTemplateCrud( PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.commentTemplateManager = commentTemplateManager;
+		
 		
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		commentTemplate = commentTemplateManager.findCommentTemplate(getUniqueID());
+		commentTemplate = persistenceManager.findLegacy(CommentTempBean.class, uniqueId, getSecurityFilter());
 	}
 	
 	@Override
@@ -68,9 +68,8 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	public String doSave() {
 		if (commentTemplate.getUniqueID() == null) {
 			commentTemplate.setTenant(getTenant());
-			commentTemplateManager.persistCommentTemplate(commentTemplate);
+			persistenceManager.saveAny(commentTemplate);
 		} else {
-			commentTemplateManager.updateCommentTemplate(commentTemplate);
 		}
 		
 		addActionMessage("Data has been updated.");
@@ -85,13 +84,16 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 			return ERROR;
 		}
 		
-		commentTemplateManager.removeCommentTemplate(commentTemplate);
+		persistenceManager.deleteAny(commentTemplate);
 		
 		return SUCCESS;
 	}
 	
-	public Collection<ListingPair> getCommentTemplates() {
-		return commentTemplateManager.findCommentTemplatesLP(getTenantId());
+	public List<Listable<Long>> getCommentTemplates() {
+		if (commentTemplates == null) {
+			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
+		}
+		return commentTemplates;
 	}
 
 	public String getName() {
@@ -121,10 +123,10 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	}
 
 	public boolean duplicateValueExists(String formValue) {
-		for (ListingPair listingPair : getCommentTemplates()) {
-			if(listingPair.getName() != null) {
-				if ((listingPair.getName().equals(formValue) && uniqueID == null) ||
-					(listingPair.getName().equals(formValue) && !listingPair.getId().equals(uniqueID))) {
+		for (Listable<Long> template : getCommentTemplates()) {
+			if(template.getDisplayName() != null) {
+				if ((template.getDisplayName().equals(formValue) && uniqueID == null) ||
+					(template.getDisplayName().equals(formValue) && !template.getId().equals(uniqueID))) {
 					return true;
 				}
 			}

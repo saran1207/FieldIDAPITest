@@ -110,8 +110,12 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		
 		return INPUT;
+	}
+	@Override
+	protected void clearContainer() {
+		super.clearContainer();
+		setOwnerId(null);
 	}
 
 	@SkipValidation

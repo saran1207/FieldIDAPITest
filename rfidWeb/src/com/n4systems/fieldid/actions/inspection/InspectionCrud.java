@@ -52,6 +52,7 @@ import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
@@ -69,7 +70,6 @@ public class InspectionCrud extends UploadFileSupport {
 	private final InspectionManager inspectionManager;
 	private final LegacyProductSerial legacyProductManager;
 	private final User userManager;
-	private final CommentTemp commentTemplateManager;
 	private final SafetyNetworkManager safetyNetworkManager;
 	protected final ProductManager productManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
@@ -98,7 +98,7 @@ public class InspectionCrud extends UploadFileSupport {
 	private List<SubInspection> subInspections;
 	private List<ListingPair> inspectors;
 	private List<ProductStatusBean> productStatuses;
-	private List<ListingPair> commentTemplates;
+	private List<Listable<Long>> commentTemplates;
 	private List<ListingPair> inspectionBooks;
 	private List<InspectionSchedule> availableSchedules;
 	
@@ -119,12 +119,11 @@ public class InspectionCrud extends UploadFileSupport {
 	private boolean newFile = false;
 
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
-			CommentTemp commentTemplateManager, SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+			SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
 		this.legacyProductManager = legacyProductManager;
 		this.userManager = userManager;
-		this.commentTemplateManager = commentTemplateManager;
 		this.safetyNetworkManager = safetyNetworkManager;
 		this.productManager = productManager;
 		this.inspectionHelper = new InspectionHelper(persistenceManager);
@@ -602,14 +601,14 @@ public class InspectionCrud extends UploadFileSupport {
 
 	public List<ProductStatusBean> getProductStatuses() {
 		if (productStatuses == null) {
-			productStatuses = legacyProductManager.getAllProductStatus(getTenantId());
+			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
 		return productStatuses;
 	}
 
-	public List<ListingPair> getCommentTemplates() {
+	public List<Listable<Long>> getCommentTemplates() {
 		if (commentTemplates == null) {
-			commentTemplates = commentTemplateManager.findCommentTemplatesLP(getTenantId());
+			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}
 		return commentTemplates;
 	}

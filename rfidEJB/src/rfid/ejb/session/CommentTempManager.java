@@ -15,7 +15,6 @@ import rfid.dto.CommentTempDTO;
 import rfid.ejb.entity.CommentTempBean;
 
 import com.n4systems.ejb.interceptor.TimingInterceptor;
-import com.n4systems.util.ListingPair;
 
 @Interceptors({TimingInterceptor.class})
 @Stateless 
@@ -23,44 +22,6 @@ public class CommentTempManager implements CommentTemp {
 	@PersistenceContext (unitName="rfidEM")
 	protected EntityManager em;
 	
-	@SuppressWarnings("unchecked")
-	public ArrayList<CommentTempDTO> findAllCommentTemps() {
-		List<CommentTempBean> commentTemplates = (List<CommentTempBean>)em.createQuery("from CommentTempBean ct order by ct.templateID").getResultList();
-
-		ArrayList<CommentTempDTO> commentTemplateDTOs = new ArrayList<CommentTempDTO>();
-		commentTemplateDTOs.add(new CommentTempDTO(null, null, null, null, null, null, null));
-		
-		for(CommentTempBean commentTemplate: commentTemplates) {
-			commentTemplateDTOs.add(createDTO(commentTemplate));
-		}
-		
-		return commentTemplateDTOs;
-	}
-	
-	public ArrayList<CommentTempDTO> findCommentTempsByRMan(Long tenantId) {
-		return findCommentTempsForTenant(tenantId);
-	}
-
-	@SuppressWarnings("unchecked")
-	public ArrayList<CommentTempDTO> findCommentTempsForTenant(Long tenantId) {
-		Query query = em.createQuery("from CommentTempBean ct where ct.tenant.id = :tenantId");
-		query.setParameter("tenantId", tenantId);
-		
-		ArrayList<CommentTempDTO> ctArrayList = new ArrayList<CommentTempDTO>();
-		for(CommentTempBean commentTempBean: (List<CommentTempBean>)query.getResultList()) {
-			ctArrayList.add(new CommentTempDTO(
-					commentTempBean.getUniqueID(), 
-					commentTempBean.getDateCreated(), 
-					commentTempBean.getDateModified(), 
-					commentTempBean.getModifiedBy(), 
-					commentTempBean.getTemplateID(), 
-					commentTempBean.getContents(), 
-					commentTempBean.getTenant().getId()
-					));
-		}
-
-		return ctArrayList;
-	}
 	
 	@SuppressWarnings("unchecked")
 	public ArrayList<CommentTempDTO> findCommentTemplateByDate(Long tenantId, Date beginDate, Date endDate) {
@@ -88,41 +49,9 @@ public class CommentTempManager implements CommentTemp {
 	                           obj.getModifiedBy(), obj.getTemplateID(), obj.getContents(), obj.getTenant().getId());
 	}
 
-	public CommentTempBean findCommentTemplate(Long uniqueID) {
-		return em.find(CommentTempBean.class, uniqueID);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<CommentTempBean> findCommentTemplates(Long tenantId) {
-		Query query = em.createQuery("from CommentTempBean ct where ct.tenant.id = :tenantId order by ct.templateID");
-		query.setParameter("tenantId", tenantId);
-		
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ListingPair> findCommentTemplatesLP(Long tenantId) {
-		Query query = em.createQuery("select new com.n4systems.util.ListingPair( ct.uniqueID, ct.templateID ) from CommentTempBean ct where ct.tenant.id = :tenantId order by ct.templateID");
-		query.setParameter("tenantId", tenantId);
-		
-		return query.getResultList();
-	}
-
-	public Long persistCommentTemplate(CommentTempBean commentTempBean) {
-		commentTempBean.setDateCreated(new Date());
-		commentTempBean.setDateModified(commentTempBean.getDateCreated());
-		em.persist(commentTempBean);
-		return commentTempBean.getUniqueID();
-	}
-
-	public void updateCommentTemplate(CommentTempBean commentTempBean) {
-		commentTempBean.setDateModified(commentTempBean.getDateCreated());
-		em.merge(commentTempBean);
-	}
 	
-	public void removeCommentTemplate(CommentTempBean commentTempBean) {
-		em.remove(em.merge(commentTempBean));
-	}
+
 	
+
 
 }

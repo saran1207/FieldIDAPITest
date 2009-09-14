@@ -23,6 +23,9 @@ public class OwnerFilter extends AbstractSecurityFilter {
 		if (!definer.isOwnerFiltered()) {
 			throw new SecurityException("OwnerFilter can only be used on entities with an owner");
 		}
+		if (filterOrg == null) {
+			return;
+		}
 		
 		if (filterOrg.isPrimary()) {
 			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
@@ -37,6 +40,11 @@ public class OwnerFilter extends AbstractSecurityFilter {
 		if (!definer.isOwnerFiltered()) {
 			throw new SecurityException("OwnerFilter can only be used on entities with an owner");
 		}
+		
+		if (filterOrg == null) {
+			return;
+		}
+		
 		
 		if (filterOrg.isPrimary()) {
 			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
@@ -54,13 +62,14 @@ public class OwnerFilter extends AbstractSecurityFilter {
 			throw new SecurityException("OwnerFilter can only be used on entities with an owner");
 		}
 		
-		if (filterOrg.isPrimary()) {
-			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
-			addFilterClause(clauses, definer.getTenantPath(), alias, false);
-		} else {
-			addFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, false);
+		if (filterOrg != null) {
+			if (filterOrg.isPrimary()) {
+				// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
+				addFilterClause(clauses, definer.getTenantPath(), alias, false);
+			} else {
+				addFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, false);
+			}
 		}
-		
 		return clauses.toString();
 	}
 

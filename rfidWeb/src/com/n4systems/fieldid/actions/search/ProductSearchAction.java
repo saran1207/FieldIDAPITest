@@ -23,7 +23,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.persistence.QueryFilter;
 import com.opensymphony.xwork2.Preparable;
 
 public class ProductSearchAction extends CustomizableSearchAction<ProductSearchContainer> implements Preparable {
@@ -71,8 +70,13 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-
 		return INPUT;
+	}
+	
+	@Override
+	protected void clearContainer() {
+		super.clearContainer();
+		setOwnerId(null);
 	}
 	
 	public String doPrintAllCerts() {

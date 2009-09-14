@@ -1,13 +1,18 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import com.n4systems.model.SavedReport;
-
 import rfid.ejb.entity.UserBean;
+
+import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.savedreports.SavedReport;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class SavedReportHelper {
 
-	public static boolean isModified(InspectionSearchContainer inspectionSearchContainer, SavedReport originalReport) {
-		return areReportsDifferent(originalReport, inspectionSearchContainer.toSavedReport());
+	public static boolean isModified(InspectionSearchContainer inspectionSearchContainer, SavedReport originalReport, SecurityFilter filter) {
+		SavedReport report = new SavedReportSearchCriteriaConverter(new FilteredIdLoader<BaseOrg>(filter, BaseOrg.class), filter).convertInto(inspectionSearchContainer, new SavedReport());
+		return areReportsDifferent(originalReport, report);
 	}
 	
 	private static boolean areReportsDifferent(SavedReport report1, SavedReport report2) {

@@ -3,11 +3,9 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.model.Inspection;
-import com.n4systems.model.SavedReport;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.reporting.ReportDefiner;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.search.SortTerm;
 
 
@@ -38,11 +36,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		super(Inspection.class, "id", filter, joinColumns);
 	}
 	
-	public InspectionSearchContainer(SecurityFilter filter, SavedReport report) {
-		this(filter);
-		setFromSavedReport(report);
-	}
-
 	@Override
 	protected void evalSearchTerms() {
 		addStringTerm("product.rfidNumber", rfidNumber);
@@ -73,82 +66,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addOwnerFilter(getOwner());
 	}
 	
-	/**
-	 * @return This container converted to a {@link SavedReport}
-	 */
-	public SavedReport toSavedReport() {
-		SavedReport report =  new SavedReport();
-		toSavedReport(report);
-		
-		return report;
-	}
-	
-	/**
-	 * Sets the {@link SavedReport} fields from this container
-	 * @param report	The report to set fields in
-	 */
-	public void toSavedReport(SavedReport report) {
-		report.setSortColumn(getSortColumn());
-		report.setSortDirection(getSortDirection());
-		report.setColumns(getSelectedColumns());
-		
-		report.getCriteria().clear();
-		
-		report.setInCriteria(SavedReport.PURCHASE_ORDER_NUMBER, getPurchaseOrder());
-		report.setInCriteria(SavedReport.ORDER_NUMBER, getOrderNumber());
-		report.setInCriteria(SavedReport.RFID_NUMBER, getRfidNumber());
-		report.setInCriteria(SavedReport.SERIAL_NUMBER, getSerialNumber());
-		report.setInCriteria(SavedReport.OWNER_ID, getOwnerId());
-		report.setInCriteria(SavedReport.REFERENCE_NUMBER, getReferenceNumber());
-		report.setInCriteria(SavedReport.INSPECTION_BOOK, getInspectionBook());
-		report.setInCriteria(SavedReport.INSPECTION_TYPE_GROUP, getInspectionTypeGroup());
-		report.setInCriteria(SavedReport.INSPECTOR, getInspector());
-		report.setInCriteria(SavedReport.PRODUCT_STATUS, getProductStatus());
-		report.setInCriteria(SavedReport.PRODUCT_TYPE, getProductType());
-		report.setInCriteria(SavedReport.ASSINGED_USER, getAssingedUser());
-		report.setInCriteria(SavedReport.JOB_ID, getJob());
-		report.setInCriteria(SavedReport.LOCATION, location);
-
-		if (getFromDate() != null) {
-			report.setInCriteria(SavedReport.FROM_DATE, DateHelper.date2String(SavedReport.DATE_FORMAT, getFromDate()));
-		}
-		
-		if (getToDate() != null) {
-			report.setInCriteria(SavedReport.TO_DATE, DateHelper.date2String(SavedReport.DATE_FORMAT, getToDate()));
-		}
-	}
-	
-	/**
-	 * Sets the fields of this container from a {@link SavedReport}
-	 * @param report	The SavedReport to set fields from
-	 */
-	public void setFromSavedReport(SavedReport report) {
-		setSelectedColumns(report.getColumns());
-		setSortColumn(report.getSortColumn());
-		setSortDirection(report.getSortDirection());
-		
-		setPurchaseOrder(report.getStringCriteria(SavedReport.PURCHASE_ORDER_NUMBER));
-		setOrderNumber(report.getStringCriteria(SavedReport.ORDER_NUMBER));
-		setRfidNumber(report.getStringCriteria(SavedReport.RFID_NUMBER));
-		setSerialNumber(report.getStringCriteria(SavedReport.SERIAL_NUMBER));
-		setReferenceNumber(report.getStringCriteria(SavedReport.REFERENCE_NUMBER));
-		setLocation(report.getStringCriteria(SavedReport.LOCATION));
-		//FIXME:  this must load differently.
-		//setOwner(report.getLongCriteria(SavedReport.OWNER_ID));
-		setInspectionBook(report.getLongCriteria(SavedReport.INSPECTION_BOOK));
-		setInspectionTypeGroup(report.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
-		setInspector(report.getLongCriteria(SavedReport.INSPECTOR));
-		setAssingedUser(report.getLongCriteria(SavedReport.ASSINGED_USER));
-		setProductStatus(report.getLongCriteria(SavedReport.PRODUCT_STATUS));
-		setProductType(report.getLongCriteria(SavedReport.PRODUCT_TYPE));
-		setJob(report.getLongCriteria(SavedReport.JOB_ID));
-		
-		setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, report.getCriteria().get(SavedReport.FROM_DATE)));
-		setToDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, report.getCriteria().get(SavedReport.TO_DATE)));
-		
-		setSavedReportId(report.getId());
-		setSavedReportModified(false);
-	}
 	
 	@Override
 	protected String defaultSortColumn() {

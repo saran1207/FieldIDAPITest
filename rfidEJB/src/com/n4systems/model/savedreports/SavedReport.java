@@ -1,4 +1,4 @@
-package com.n4systems.model;
+package com.n4systems.model.savedreports;
 
 import java.util.ArrayList;
 import java.util.HashMap;

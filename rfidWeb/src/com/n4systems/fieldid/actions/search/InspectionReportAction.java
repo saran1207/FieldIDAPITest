@@ -22,8 +22,8 @@ import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
-import com.n4systems.model.SavedReport;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
@@ -106,8 +106,18 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	@SkipValidation
 	public String doReportCriteria() {
 		clearContainer();
+		
 		return INPUT;
 	}
+
+	
+
+	@Override
+	protected void clearContainer() {
+		super.clearContainer();
+		setOwnerId(null);
+	}
+
 
 	@SkipValidation
 	public String doReturnToReport() {
@@ -224,7 +234,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<ListingPair> getInspectionBooks() {
 		if (inspectionBooks == null) {
-			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP( getSecurityFilter(), true );
+			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP(getSecurityFilter(), true);
 			inspectionBooks.add(new ListingPair(0L, "Inspections not in a book"));
 		}
 		return inspectionBooks;
@@ -274,13 +284,14 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public boolean isSavedReportModified() {
 		if (getContainer().isFromSavedReport()) {
 			QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
-			query.addSimpleWhere("owner.id", getSessionUser().getId());
-			query.addSimpleWhere("id", getContainer().getSavedReportId());
+			query.addSimpleWhere("user.uniqueID", getSessionUser().getId()).addSimpleWhere("id", getContainer().getSavedReportId());
+			
 			SavedReport savedReport = persistenceManager.find(query);  
-			return SavedReportHelper.isModified(getContainer(), savedReport);
+			return SavedReportHelper.isModified(getContainer(), savedReport, getSecurityFilter());
 		} else {
 			return false;
-		}
+		} 
+		
 	}
 	
 	public List<ListingPair> getEventJobs() {

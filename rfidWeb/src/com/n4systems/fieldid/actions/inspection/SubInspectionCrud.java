@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.CommentTemp;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
@@ -40,9 +39,9 @@ public class SubInspectionCrud extends InspectionCrud {
 	private boolean currentInspectionNew = true;
 
 	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, CustomerManager customerManager,
-			CommentTemp commentTemplateManager, SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+			SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 
-		super(persistenceManager, inspectionManager, userManager, legacyProductManager, commentTemplateManager, safetyNetworkManager, productManager, inspectionScheduleManager);
+		super(persistenceManager, inspectionManager, userManager, legacyProductManager, safetyNetworkManager, productManager, inspectionScheduleManager);
 	}
 
 	@Override

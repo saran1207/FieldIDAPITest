@@ -18,7 +18,6 @@ import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.CommentTemp;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.ProductCodeMapping;
@@ -46,6 +45,7 @@ import com.n4systems.model.Order;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
@@ -68,7 +68,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	// drop down lists
 	private Collection<ProductStatusBean> productStatuses;
-	private Collection<ListingPair> commentTemplates;
+	private List<Listable<Long>> commentTemplates;
 	private ProductType productType;
 	private Collection<ProductSerialExtensionBean> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -120,7 +120,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// managers
 	private LegacyProductType productTypeManager;
 	private LegacyProductSerial legacyProductSerialManager;
-	private CommentTemp commentTemplateManager;
 	private User userManager;
 	private SafetyNetworkManager safetyNetworkManager;
 
@@ -134,13 +133,12 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private Long excludeId;
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
-	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, CommentTemp commentTemplateManager, PersistenceManager persistenceManager,
+	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
 			User userManager, SafetyNetworkManager safetyNetworkManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
 			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 		this.legacyProductSerialManager = legacyProductSerialManager;
-		this.commentTemplateManager = commentTemplateManager;
 		this.userManager = userManager;
 		this.safetyNetworkManager = safetyNetworkManager;
 		this.productCodeMappingManager = productCodeMappingManager;
@@ -555,7 +553,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public Collection<ProductStatusBean> getProductStatuses() {
 		if (productStatuses == null) {
-			productStatuses = legacyProductSerialManager.getAllProductStatus(getTenantId());
+			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
 		return productStatuses;
 	}
@@ -694,9 +692,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.saveAndInspect = saveAndInspect;
 	}
 
-	public Collection<ListingPair> getCommentTemplates() {
+	public List<Listable<Long>> getCommentTemplates() {
 		if (commentTemplates == null) {
-			commentTemplates = commentTemplateManager.findCommentTemplatesLP(getTenantId());
+			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}
 		return commentTemplates;
 	}
