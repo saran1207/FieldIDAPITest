@@ -1,3 +1,5 @@
+<#include "/templates/html/common/_orgPicker.ftl"/>
+
 <@s.form action="${userSaveAction}" cssClass="inputForm" theme="css_xhtml" >
 	
 	<@s.hidden name="uniqueID" />
@@ -30,27 +32,16 @@
 		<@s.select id="tzlist" key="label.timezone" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName" labelposition="left" emptyOption="false"/>
 	</div>
 
-	<#if customer?exists || customerRequired?exists >
-		<div class="formRowHolder">
-			<#if customerOnlyAdd?exists >
-				<@s.hidden name="customerId" />
-			<#else>
-				<@s.select key="label.customer" id="customer" name="customerId" list="customers" listKey="id" listValue="name" labelposition="left" onchange="customerChanged( this )" />
-			</#if>
-			<@s.select key="label.division" id="division" name="division" list="divisions" listKey="id" listValue="name" labelposition="left" emptyOption="true"/>
-		</div>
-		<@s.hidden name="organizationalUnit" value="${Session.sessionUser.tenant.id}"/>
-	<#else>
-		<div class="formRowHolder">
-			<@s.select key="label.organizationalunit" name="owner" list="organizationalUnits" listKey="id" listValue="name" labelposition="left" required="true"/>
-		</div>
-	</#if>
+	<div class="formRowHolder">
+		<label for="owner"><@s.text name="label.owner"/></label>
+		<@n4.orgPicker key="label.owner" name="owner"/>
+	</div>
 	
 	<#if !uniqueID?exists >	
-	<div class="formRowHolder">
-		<@s.password key="label.password" name="password" labelposition="left" required="true"/>
-		<@s.password key="label.vpassword" name="passwordConfirmation" labelposition="left" required="true"/>
-	</div>
+		<div class="formRowHolder">
+			<@s.password key="label.password" name="password" labelposition="left" required="true"/>
+			<@s.password key="label.vpassword" name="passwordConfirmation" labelposition="left" required="true"/>
+		</div>
 	<#else>
 		<@s.hidden name="password" value="123456" />
 		<@s.hidden name="passwordConfirmation" value="123456"/>
@@ -62,7 +53,7 @@
 		</div>
 	</#if>
 	
-	<#if !user.admin >
+	<#if !customerUser && !user.admin>
 		<div>
 			<@s.fielderror>
 					<@s.param>userPermissions</@s.param>				

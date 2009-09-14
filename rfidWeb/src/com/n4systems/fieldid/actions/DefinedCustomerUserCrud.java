@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.List;
-
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
@@ -10,10 +8,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.UserType;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
@@ -26,9 +21,8 @@ public class DefinedCustomerUserCrud extends UserCrud {
 	
 	public Pager<UserBean> getPage() {
 		if( page == null ) {
-			CustomerOrg customerOrg = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(getOwner()).load();
-			
-			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(),	Constants.PAGE_SIZE, "", UserType.CUSTOMERS, customerOrg);
+			CustomerOrg customerOrg = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(getOwnerId()).load();
+			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, "", UserType.CUSTOMERS, customerOrg);
 		}
 		return page;
 	}
@@ -36,13 +30,10 @@ public class DefinedCustomerUserCrud extends UserCrud {
 	public boolean getCustomerOnlyAdd() { 
 		return true;
 	}
-	
-	public List<ListingPair> getPermissions() {
-		if( permissions == null ) {
-			permissions = ListHelper.intListableToListingPair(Permissions.getCustomerUserPermissions());
-		}
-		return permissions;
-	}
 
+	@Override
+	public boolean isCustomerUser() {
+		return true;
+	}
 	
 }

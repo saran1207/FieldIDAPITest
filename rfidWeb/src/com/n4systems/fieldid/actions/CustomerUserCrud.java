@@ -11,6 +11,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.security.OwnerFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -18,17 +19,12 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class CustomerUserCrud extends AnyCustomerUserCrud {
 	private static final long serialVersionUID = 1L;
 	
-	private CustomerOrg customer;
-	
 	public CustomerUserCrud( User userManager, PersistenceManager persistenceManager ) {
 		super(userManager, persistenceManager);
 	}
 	
 	private void testRequiredEntities(boolean existing) {
-		if (customer == null) {
-			addActionErrorText("error.no_customer");
-			throw new MissingEntityException("customer is required.");
-		} else if (user == null || (existing && user.getId() == null)) {
+		if (user == null || (existing && user.getId() == null)) {
 			addActionErrorText("error.no_user");
 			throw new MissingEntityException("user is required.");
 		}
@@ -80,36 +76,29 @@ public class CustomerUserCrud extends AnyCustomerUserCrud {
 		return SUCCESS;
 	}
 	
-	
 	public Pager<UserBean> getPage() {
 		if( page == null ) {
 			QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, getSecurityFilter());
+			builder.applyFilter(new OwnerFilter(getOwner()));
 			
 			builder.addOrder("firstName", "lastName");
 			builder.addSimpleWhere("active", true);
 			builder.addSimpleWhere("deleted", false);
-			builder.addSimpleWhere("owner.id", customer.getId());
 			
 			page = persistenceManager.findAllPaged(builder, getCurrentPage(), Constants.PAGE_SIZE);
 		}
 		return page;
 	}
 	
-	
 	public Long getCustomerId() {
-		return (customer != null) ? customer.getId() : null;
+		return getOwnerId();
 	}
 
 	public void setCustomerId(Long customerId) {
-		if (customerId == null) {
-			customer = null; 
-		} else if(customer == null || !customer.getId().equals(customerId)) {
-			customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(customerId).load();
-		}
-		setOwner(customer.getId());
+		setOwnerId(customerId);
 	}
 	
 	public CustomerOrg getCustomer() {
-		return customer;
+		return (CustomerOrg)getOwner();
 	}
 }

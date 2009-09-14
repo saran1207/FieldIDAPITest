@@ -30,9 +30,6 @@ public class Permissions {
 	/** permissions visible for admins to select for system users */
 	private static final int[] visibleSytemUserPermissions = { TAG, MANAGESYSTEMCONFIG, MANAGESYSTEMUSERS, MANAGEENDUSERS, CREATEINSPECTION, EDITINSPECTION, MANAGEJOBS };
 	
-	/** permissions visible for admins to select for customer users */
-	private static final int[] visibleCustomerUserPermissions = { CREATEINSPECTION, EDITINSPECTION };
-	
 	/**
 	 * @param permission a Primary permission (ie not composite)
 	 * @return The label for a primary permission
@@ -95,13 +92,6 @@ public class Permissions {
 	 */
 	public static List<Listable<Integer>> getSystemUserPermissions() {
 		return createPermissionDisplayList(visibleSytemUserPermissions);
-	}
-	
-	/**
-	 * @return A List of visible customer user permissions.  displayName will be set to the permission label.
-	 */
-	public static List<Listable<Integer>> getCustomerUserPermissions() {
-		return createPermissionDisplayList(visibleCustomerUserPermissions);
 	}
 	
 	private static List<Listable<Integer>> createPermissionDisplayList(int ... perms) {

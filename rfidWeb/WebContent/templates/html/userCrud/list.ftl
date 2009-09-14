@@ -36,17 +36,3 @@ ${action.setPageType('user','list')!}
 		</p>
 	</div>
 </#if>
-	
-
-<#if customers.empty >
-	<script type="text/javascript">
-		$('addCustomerUser').observe('click', 
-				function(event) {
-					event.stop();
-					alert('<@s.text name="warning.nocustomerscreated"/>'); 					
-				}
-			);
-				
-		
-	</script>
-</#if>

@@ -22,13 +22,12 @@ import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
@@ -54,8 +53,9 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	private static final Logger logger = Logger.getLogger( UserCrud.class );
 	
 	protected UserBean user;
+	protected OwnerPicker ownerPicker;
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
-		
+	
 	protected User userManager;
 	protected CustomerManager customerManager;
 	private String password;
@@ -95,6 +95,11 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		}
 	}
 	
+	@Override
+	protected void postInit() {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), user);
+	}
+	
 	@SkipValidation
 	public String doList() {
 		return SUCCESS;
@@ -127,26 +132,30 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 			return ERROR;
 		}
 
-		if( userPermissions != null && !user.isAdmin()) {  // needed to handle when there is an empty list submitted.
-			BitField perms = new BitField();
-			/*
-			 * we could do this by simply converting the id's back to strings and setting them on the field,
-			 * however that would unsafe, since we can't trust what's coming back.  Instead, get the list of 
-			 * permissions they were allowed to see in the first place, and ensure our key is from that set
-			 */
-			int permValue;
-			String permStr;
-			for (ListingPair allowedPerm: getPermissions()) {
-				permValue = allowedPerm.getId().intValue();
-				permStr = allowedPerm.getId().toString();
-				
-				// if our permission map contains the permission id, and it's value is true, add the permission
-				if (userPermissions.containsKey(permStr) && userPermissions.get(permStr)) {
-					perms.set(permValue);
+		if (isCustomerUser()) {
+			user.setPermissions(0);
+		} else {
+			if(userPermissions != null && !user.isAdmin()) {  // needed to handle when there is an empty list submitted.
+				BitField perms = new BitField();
+				/*
+				 * we could do this by simply converting the id's back to strings and setting them on the field,
+				 * however that would unsafe, since we can't trust what's coming back.  Instead, get the list of 
+				 * permissions they were allowed to see in the first place, and ensure our key is from that set
+				 */
+				int permValue;
+				String permStr;
+				for (ListingPair allowedPerm: getPermissions()) {
+					permValue = allowedPerm.getId().intValue();
+					permStr = allowedPerm.getId().toString();
+					
+					// if our permission map contains the permission id, and it's value is true, add the permission
+					if (userPermissions.containsKey(permStr) && userPermissions.get(permStr)) {
+						perms.set(permValue);
+					}
 				}
+				
+				user.setPermissions(perms.getMask());
 			}
-			
-			user.setPermissions(perms.getMask());
 		}
 		
 		user.setTenant( getTenant() );
@@ -283,44 +292,19 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return ERROR;
 	}
 	
-	public Long getOwner() {
-		return user.getOwner().getId();
-	}
-
-	public void setOwner(Long ownerId) {
-		user.setOwner(getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(ownerId).load());
-	}
-	
-	public Collection<ListingPair> getOrganizationalUnits() {
-		if( organizationalUnits == null ) {
-			try {
-				List<Listable<Long>> orgListables = getLoaderFactory().createInternalOrgListableLoader().load();
-				organizationalUnits = ListHelper.longListableToListingPair(orgListables);
-			} catch (InvalidQueryException e) {
-				logger.error("Unable to load list of Organizations", e);
-			}
-		}
-		return organizationalUnits;
-	}
-
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {
 		return userPermissions;
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setUserPermissions( Map permissions ) {
+	public void setUserPermissions(Map permissions) {
 		this.userPermissions = permissions;
 	}
 
 	public List<ListingPair> getPermissions() {
-		if( permissions == null ){
-			if(user.getOwner().isInternalOrg()) {
-				permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
-			} else {
-				permissions = ListHelper.intListableToListingPair(Permissions.getCustomerUserPermissions());
-			}
-				
+		if(permissions == null) {
+			permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 		}
 		return permissions;
 	}
@@ -492,22 +476,19 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return user;
 	}
 	
-	public List<ListingPair> getCustomers() {
-		if( customers == null ){ 
-			List<Listable<Long>> customerListables = getLoaderFactory().createFilteredListableLoader(CustomerOrg.class).load();
-			customers = ListHelper.longListableToListingPair(customerListables);
-		}
-		return customers;
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
 	}
-
-	public List<ListingPair> getDivisions() {
-		if( divisions == null ) {
-			divisions = new ArrayList<ListingPair>();
-			// TODO: CUSTOMER_REFACTOR: UserCrud needs to filter divisions by customers
-//			if(getCustomerId() != null) {
-//				divisions = getLoaderFactory().createDivisionOrgByCustomerListLoader().setCustomer(customer).load();
-//			}
-		}
-		return divisions;
+	
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+	
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+	
+	public boolean isCustomerUser() {
+		return false;
 	}
 }

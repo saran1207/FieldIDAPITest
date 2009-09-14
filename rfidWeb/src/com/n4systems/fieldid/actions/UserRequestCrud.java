@@ -17,8 +17,6 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.security.Permissions;
-import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
@@ -31,14 +29,10 @@ public class UserRequestCrud extends AbstractCrud {
 	private static Logger logger = Logger.getLogger(UserRequestCrud.class);
 
 	private UserRequest userRequest;
-
 	private List<UserRequest> userRequests;
-
-	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 
 	private User userManager;
 	private Collection<ListingPair> organizationalUnits;
-	private List<ListingPair> permissions;
 
 	public UserRequestCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -46,9 +40,7 @@ public class UserRequestCrud extends AbstractCrud {
 	}
 
 	@Override
-	protected void initMemberFields() {
-
-	}
+	protected void initMemberFields() {}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
@@ -61,16 +53,7 @@ public class UserRequestCrud extends AbstractCrud {
 			addFlashError(getText("error.unknownuserrequest"));
 			return ERROR;
 		}
-
-		setupPermissions();
 		return SUCCESS;
-	}
-
-	private void setupPermissions() {
-		userPermissions = new HashMap<String, Boolean>();
-		for (ListingPair permission : getPermissions()) {
-			userPermissions.put(permission.getId().toString(), false);
-		}
 	}
 
 	public String doAcceptRequest() {
@@ -78,29 +61,8 @@ public class UserRequestCrud extends AbstractCrud {
 			addFlashError(getText("error.unknownuserrequest"));
 			return ERROR;
 		}
-
-		
-		if( userPermissions != null ) {  // needed to handle when there is an empty list submitted.
-			BitField perms = new BitField();
-			/*
-			 * we could do this by simply converting the id's back to strings and setting them on the field,
-			 * however that would unsafe, since we can't trust what's coming back.  Instead, get the list of 
-			 * permissions they were allowed to see in the first place, and ensure our key is from that set
-			 */
-			int permValue;
-			String permStr;
-			for (ListingPair allowedPerm: getPermissions()) {
-				permValue = allowedPerm.getId().intValue();
-				permStr = allowedPerm.getId().toString();
-				
-				// if our permission map contains the permission id, and it's value is true, add the permission
-				if (userPermissions.containsKey(permStr) && userPermissions.get(permStr)) {
-					perms.set(permValue);
-				}
-			}
-			
-			userRequest.getUserAccount().setPermissions(perms.getMask());
-		}
+		// customer users have no permissions
+		userRequest.getUserAccount().setPermissions(0);
 		
 		try {
 			userManager.acceptRequest(userRequest);
@@ -199,22 +161,5 @@ public class UserRequestCrud extends AbstractCrud {
 			organizationalUnits = ListHelper.longListableToListingPair(orgList);
 		}
 		return organizationalUnits;
-	}
-
-	public List<ListingPair> getPermissions() {
-		if (permissions == null) {
-			permissions = ListHelper.intListableToListingPair(Permissions.getCustomerUserPermissions());
-		}
-		return permissions;
-	}
-
-	@SuppressWarnings("unchecked")
-	public Map getUserPermissions() {
-		return userPermissions;
-	}
-
-	@SuppressWarnings("unchecked")
-	public void setUserPermissions(Map userPermissions) {
-		this.userPermissions = userPermissions;
 	}
 }
