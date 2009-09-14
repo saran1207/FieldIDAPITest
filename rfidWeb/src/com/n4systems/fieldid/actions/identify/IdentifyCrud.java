@@ -99,7 +99,7 @@ public class IdentifyCrud extends AbstractCrud {
 	}
 	
 	public Long getTagOptionId() {
-		return tagOption.getId();
+		return tagOption != null ? tagOption.getId() : null;
 	}
 	
 	public TagOption getTagOption() {
