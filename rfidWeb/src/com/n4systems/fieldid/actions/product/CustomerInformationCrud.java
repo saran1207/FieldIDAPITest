@@ -11,12 +11,14 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
 public class CustomerInformationCrud extends AbstractCrud {
@@ -27,6 +29,8 @@ public class CustomerInformationCrud extends AbstractCrud {
 	private Product product;
 	private ProductManager productManager;
 	private LegacyProductSerial legacyProductManager;
+	
+	private OwnerPicker ownerPicker;
 	
 	private List<Listable<Long>> divisions;
 	
@@ -44,6 +48,12 @@ public class CustomerInformationCrud extends AbstractCrud {
 		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
 	}
 	
+	@Override
+	protected void postInit() {
+		super.postInit();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+	}
+
 	private void testRequiredEntities() {
 		if (product == null) {
 			addActionErrorText("error.noproduct");
@@ -100,13 +110,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 		product.setPurchaseOrder(purchaseOrder);
 	}
 
-	public BaseOrg getOwner() {
-		return product.getOwner();
-	}
 	
-	public void setOwner(BaseOrg owner) {
-		product.setOwner(owner);
-	}
 	
 	public Product getProduct() {
 		return product;
@@ -118,5 +122,20 @@ public class CustomerInformationCrud extends AbstractCrud {
 		}
 		return divisions;
 	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+	
+	
+	@RequiredFieldValidator(message="", key="error.owner_required")
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
 	
 }

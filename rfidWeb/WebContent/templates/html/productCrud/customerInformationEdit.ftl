@@ -1,7 +1,9 @@
 ${action.setPageType('product', 'customer_edit')!}
 <head>
-	<#include "/template/html/common/_orgPicker.ftl"/>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+</head>
 <@s.form action="customerInformationUpdate" cssClass="crudForm" theme="fieldid">
+	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID"/>
 	<h2>
 		<#if securityGuard.jobSitesEnabled>
