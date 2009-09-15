@@ -870,23 +870,24 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	}
 	
 	private void populateOwners(BaseOrg baseOrg, AbstractBaseDTOWithOwner dto) {
-		long ownerId = NULL_ID;
 		long customerId = NULL_ID;
+		long orgId = NULL_ID;
 		long divisionId = NULL_ID;
 		
 		if (baseOrg.isDivision()) {
 			divisionId = baseOrg.getId();
 			CustomerOrg customerOrg = baseOrg.getCustomerOrg();
 			customerId = customerOrg.getId();
-			ownerId = retrieveOwnerId(customerOrg.getParent());
+			orgId = retrieveOwnerId(customerOrg.getParent());
 		} else if (baseOrg.isCustomer()) {
 			customerId = baseOrg.getId();
-			ownerId = retrieveOwnerId(baseOrg.getParent());
+			orgId = retrieveOwnerId(baseOrg.getParent());
 		} else {
-			ownerId = retrieveOwnerId(baseOrg);
+			orgId = retrieveOwnerId(baseOrg);
 		}
 		
-		dto.setOwnerId(ownerId);
+		dto.setOwnerId(baseOrg.getId());
+		dto.setOrgId(orgId);
 		dto.setCustomerId(customerId);
 		dto.setDivisionId(divisionId);
 	}

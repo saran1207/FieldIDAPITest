@@ -5,6 +5,7 @@ public abstract class AbstractBaseDTOWithOwner extends AbstractBaseServiceDTO {
 	private long ownerId;
 	private long customerId;
 	private long divisionId;
+	private long orgId;
 
 	public long getOwnerId() {
 		return ownerId;
@@ -33,4 +34,10 @@ public abstract class AbstractBaseDTOWithOwner extends AbstractBaseServiceDTO {
 	public boolean divisionExists() {
 		return isValidServerId( divisionId );
 	}
+	public long getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(long orgId) {
+		this.orgId = orgId;
+	}	
 }
