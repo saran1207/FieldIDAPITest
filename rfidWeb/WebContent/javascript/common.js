@@ -1,163 +1,169 @@
 function clearForm(form, reset) {
-	var inputs = form.getElementsByTagName( "input" );
-	var selects = form.getElementsByTagName( "select" );
-	var textareas = form.getElementsByTagName( "textarea" );
+	var inputs = form.getElementsByTagName("input");
+	var selects = form.getElementsByTagName("select");
+	var textareas = form.getElementsByTagName("textarea");
 	if (reset == undefined) {
 		reset = false;
-	} 
-	
-	
-		
-	for( var i = 0; i < inputs.length; i++ ) {
-		if( inputs[i].type == "text" ) {
+	}
+
+	for ( var i = 0; i < inputs.length; i++) {
+		if (inputs[i].type == "text") {
 			if (reset) {
 				form.reset();
 			} else {
 				inputs[i].value = "";
 			}
-			if( typeof inputs[i].onchange != "undefined" && inputs[i].onchange != null ) {
-				inputs[i].onchange( inputs[i] );
+			if (typeof inputs[i].onchange != "undefined"
+					&& inputs[i].onchange != null) {
+				inputs[i].onchange(inputs[i]);
 			}
 		}
 	}
-	
-	for( var i = 0; i < textareas.length; i++ ) {
+
+	for ( var i = 0; i < textareas.length; i++) {
 		if (reset) {
-				form.reset();
+			form.reset();
 		} else {
 			textareas[i].value = "";
 		}
-		 
+
 	}
-	
-	for( var i = 0; i < selects.length; i++ ) {
+
+	for ( var i = 0; i < selects.length; i++) {
 		if (reset) {
 			form.reset();
 		} else {
 			selects[i].selectedIndex = 0;
 		}
-		
-		if( typeof selects[i].onchange != "undefined" && selects[i].onchange != null) {
-			selects[i].onchange( selects[i] ); 
+
+		if (typeof selects[i].onchange != "undefined"
+				&& selects[i].onchange != null) {
+			selects[i].onchange(selects[i]);
 		}
 	}
 }
 
-
-function getResponseNonInteractive( url, method, parameters ) {
-	if( parameters == undefined ) { parameters = null; }
-	getResponse( url, method,  parameters );
+function getResponseNonInteractive(url, method, parameters) {
+	if (parameters == undefined) {
+		parameters = null;
+	}
+	getResponse(url, method, parameters);
 }
 
+function getStandardCallbacks() {
+	return {
+		onComplete : contentCallback,
+		onFailure : failureCallback
+	};
+}
 
-function getResponse( url, method, parameters, nonInteractive) {
-	if( method == undefined || method == null ) {
-		method= "post";
+function getResponse(url, method, parameters, nonInteractive) {
+	if (method == undefined || method == null) {
+		method = "post";
 	}
-	
+
 	var ajaxOptions = getStandardCallbacks();
-	if( nonInteractive ) {
-		ajaxOptions.onFailure = function() { };
+	if (nonInteractive) {
+		ajaxOptions.onFailure = function() {
+		};
 	}
-	
-	if( parameters != undefined && parameters != null ) {
-		ajaxOptions.parameters = parameters;	
+
+	if (parameters != undefined && parameters != null) {
+		ajaxOptions.parameters = parameters;
 	}
-	
+
 	ajaxOptions.method = method
-	
+
 	try {
-		new Ajax.Request( url, ajaxOptions );
-	} catch ( e ) {
-		alert( 'your request could not be processed correctly.' );
+		new Ajax.Request(url, ajaxOptions);
+	} catch (e) {
+		alert('your request could not be processed correctly.');
 	}
 	return false;
 }
 
-function failureCallback() { 
-	alert( 'Error occurred contacting the server.' );
-}
-
-function getStandardCallbacks() {
-	return { onComplete: contentCallback, onFailure: failureCallback };
-}
-
-function contentCallback( transport ) { 
-	switch( transport.status ) {
-		case 500:
-		case 503:
-			break;
-		default:
-			evalResponse( transport.responseText );
-			
-	} 
+function failureCallback() {
+	alert('Error occurred contacting the server.');
 }
 
 
-function contentResponse( response ) {
-	return evalResponse( response ) ;
+
+function contentCallback(transport) {
+	switch (transport.status) {
+	case 500:
+	case 503:
+		break;
+	default:
+		evalResponse(transport.responseText);
+	}
 }
 
-function evalResponse( response ) {
+function contentResponse(response) {
+	return evalResponse(response);
+}
+
+function evalResponse(response) {
 	try {
-		eval( response );
-	} catch ( e ) {
-		alert( e );
+		eval(response);
+	} catch (e) {
+		alert(e);
 		return;
 	}
-	
+
 }
 
-
-function updateMessages( messages, errors, modifiedId ) {
+function updateMessages(messages, errors, modifiedId) {
 	var idPrefix = "";
-	if( modifiedId != undefined && modifiedId != null ){
+	if (modifiedId != undefined && modifiedId != null) {
 		idPrefix = modifiedId + "_";
 	}
-	
-	var messageContainer = $( idPrefix + 'message' );
-	var errorContainer = $( idPrefix + 'error' );
+
+	var messageContainer = $(idPrefix + 'message');
+	var errorContainer = $(idPrefix + 'error');
 	var highlight = true;
-	if (messages.size() == 0 && errors.size() == 0 && messageContainer.childElements().size() == 0 && errorContainer.childElements().size() == 0) {
+	if (messages.size() == 0 && errors.size() == 0
+			&& messageContainer.childElements().size() == 0
+			&& errorContainer.childElements().size() == 0) {
 		highlight = false;
 	}
-	
-	
+
 	messageContainer.update("");
 	errorContainer.update("");
-	
-	var messageList = new Element( 'ul' );
-	
-	var errorList = new Element( 'ul' );
-	
-	for( var i = 0; i < messages.length; i++ ) {
-		messageList.appendChild( new Element( 'li' ).update( new Element('span', {'class':"actionMessage"}).update(messages[i]) ) );
+
+	var messageList = new Element('ul');
+
+	var errorList = new Element('ul');
+
+	for ( var i = 0; i < messages.length; i++) {
+		messageList.appendChild(new Element('li').update(new Element('span', {
+			'class' : "actionMessage"
+		}).update(messages[i])));
 	}
-	
-	for( var i = 0; i < errors.length; i++ ) {
-		errorList.appendChild( new Element( 'li' ).update( new Element('span', {'class':"errorMessage"}).update(errors[i]) ) );
+
+	for ( var i = 0; i < errors.length; i++) {
+		errorList.appendChild(new Element('li').update(new Element('span', {
+			'class' : "errorMessage"
+		}).update(errors[i])));
 	}
-	
-	if( messages.length > 0 ) { 
-		messageContainer.appendChild( messageList );
+
+	if (messages.length > 0) {
+		messageContainer.appendChild(messageList);
 		messageContainer.show();
 	} else {
 		messageContainer.hide();
 	}
-	if( errors.length > 0 ) {
-		errorContainer.appendChild( errorList );
+	if (errors.length > 0) {
+		errorContainer.appendChild(errorList);
 		errorContainer.show();
 	} else {
 		errorContainer.hide();
 	}
-	
+
 	if (highlight) {
 		$('notifications').highlight();
 	}
 }
-	
-	
-	
+
 function findPos(obj) {
 	var curleft = curtop = 0;
 	if (obj.offsetParent) {
@@ -166,116 +172,123 @@ function findPos(obj) {
 			curtop += obj.offsetTop;
 		} while (obj = obj.offsetParent);
 	}
-	return [curleft,curtop];
-	
+	return [ curleft, curtop ];
+
 }
 
 function translate(target, relativeElement, offsetY, offsetX) {
 	var position = findPos(relativeElement);
-	
+
 	target.style.top = position[1] + offsetY + "px";
 	target.style.left = position[0] + offsetX + "px";
 }
 
-function runJavascript( container ) {
-	var scripts = container.getElementsByTagName( "script" );
-		
-	for( var i = 0; i < scripts.length; i++ ){
-		eval( scripts[i].text );
-	}
-}
-	
-function removeChildren( element ) {
-	while ( element.childNodes.length > 0 ) {
-		element.removeChild( element.firstChild );       
+function runJavascript(container) {
+	var scripts = container.getElementsByTagName("script");
+
+	for ( var i = 0; i < scripts.length; i++) {
+		eval(scripts[i].text);
 	}
 }
 
-function redirect( url ) {
+function removeChildren(element) {
+	while (element.childNodes.length > 0) {
+		element.removeChild(element.firstChild);
+	}
+}
+
+function redirect(url) {
 	window.location = url;
 	return false;
 }
 
-Ajax.Responders.register( { 
-	onComplete: function( transport ) {
-		if( transport.transport.state == 200 ) {
-			pageTracker._trackPageview( transport.url );
+Ajax.Responders.register( {
+	onComplete : function(transport) {
+		if (transport.transport.state == 200) {
+			pageTracker._trackPageview(transport.url);
 		}
-		 
-	} 
-	});
-	
-function openSection( idToOpen, openLinkId, closeLinkId ) {
-	$( openLinkId ).hide();
-	$( closeLinkId ).show();
-	var closeLink = $( closeLinkId );
-	eval( "var callBack = function() {$('" + closeLinkId +"').onclick = $('" + closeLinkId +"').suspendedOnClick };");
+
+	}
+});
+
+function openSection(idToOpen, openLinkId, closeLinkId) {
+	$(openLinkId).hide();
+	$(closeLinkId).show();
+	var closeLink = $(closeLinkId);
+	eval("var callBack = function() {$('" + closeLinkId + "').onclick = $('"
+			+ closeLinkId + "').suspendedOnClick };");
 	closeLink.suspendedOnClick = closeLink.onclick
 	closeLink.onclick = null;
-	Effect.BlindDown( idToOpen, { duration: 0.75, afterFinish: callBack } );
+	Effect.BlindDown(idToOpen, {
+		duration : 0.75,
+		afterFinish : callBack
+	});
 	return false;
 }
 
-function closeSection( idToClose, closeLinkId, openLinkId ) {
-	$( openLinkId ).show();
-	$( closeLinkId ).hide();
-	
-	var openLink = $( openLinkId );
-	eval( "var callBack = function() { $('" + openLinkId +"').onclick = $('" + openLinkId +"').suspendedOnClick }; ");
+function closeSection(idToClose, closeLinkId, openLinkId) {
+	$(openLinkId).show();
+	$(closeLinkId).hide();
+
+	var openLink = $(openLinkId);
+	eval("var callBack = function() { $('" + openLinkId + "').onclick = $('"
+			+ openLinkId + "').suspendedOnClick }; ");
 	openLink.suspendedOnClick = openLink.onclick
 	openLink.onclick = null;
-	
-	Effect.BlindUp( idToClose, { duration: 0.75, afterFinish: callBack  } );
+
+	Effect.BlindUp(idToClose, {
+		duration : 0.75,
+		afterFinish : callBack
+	});
 	return false;
 }
 
-function sortList( selectId ) {
+function sortList(selectId) {
 	var lb = $(selectId);
 	var arrTexts = new Array();
 	var names = new Object();
-	for(i=0; i<lb.length; i++)  {
-	  arrTexts[i] = lb.options[i].text;
-	  names[ lb.options[i].text ] = lb.options[i].value;
+	for (i = 0; i < lb.length; i++) {
+		arrTexts[i] = lb.options[i].text;
+		names[lb.options[i].text] = lb.options[i].value;
 	}
-	
+
 	arrTexts.sort();
 
-	for(i=0; i<lb.length; i++)  {
-	  lb.options[i].text = arrTexts[i];
-	  lb.options[i].value = names[ arrTexts[i] ];
+	for (i = 0; i < lb.length; i++) {
+		lb.options[i].text = arrTexts[i];
+		lb.options[i].value = names[arrTexts[i]];
 	}
 }
 
-
-function cleanAjaxForm( form, errorPrefix ) {
-	if( errorPrefix == null || errorPrefix == undefined ) {
+function cleanAjaxForm(form, errorPrefix) {
+	if (errorPrefix == null || errorPrefix == undefined) {
 		errorPrefix = "";
 	}
 	var inputs = form.getElements();
-	
-	for( var i = 0; inputs.size() > i; i++ ) {
+
+	for ( var i = 0; inputs.size() > i; i++) {
 		var input = inputs[i];
-		input.removeClassName( "inputError" );
-		input.title="";
+		input.removeClassName("inputError");
+		input.title = "";
 	}
-	
-	if( $( errorPrefix + 'formErrors' ) != null ) {
-		$( errorPrefix + 'formErrors' ).remove();
+
+	if ($(errorPrefix + 'formErrors') != null) {
+		$(errorPrefix + 'formErrors').remove();
 	}
 }
 
-function convertLinkToAjax(link){
-	link.observe('click', function(event) {		
+function convertLinkToAjax(link) {
+	link.observe('click', function(event) {
 		getResponse(Event.element(event).href);
-		event.stop();		
+		event.stop();
 	});
 }
 
-function convertClassedLinksToAjax(className){
+function convertClassedLinksToAjax(className) {
 	var links = $$('a.' + className);
-	
+
 	links.each(convertLinkToAjax);
-		
+
 }
 
 function convertPaginationLinksToAjax() {
@@ -283,64 +296,64 @@ function convertPaginationLinksToAjax() {
 }
 
 function showQuickView(elementId, event) {
-	
+
 	if (event != undefined) {
 		event.clickid = elementId
 	}
-	
-	var quickViewBox =  $(elementId);
+
+	var quickViewBox = $(elementId);
 	quickViewBox.removeClassName("hidden");
 	quickViewBox.addClassName("quickView");
 	var button = Event.findElement(event, "A");
-	
-	
+
 	quickViewBox.absolutize();
 	quickViewBox.show();
-	
+
 	var position = button.positionedOffset();
-	
-	quickViewBox.setStyle({
-		top: position['top'] + "px",
-		left: (position['left'] + 25) + "px"
+
+	quickViewBox.setStyle( {
+		top : position['top'] + "px",
+		left : (position['left'] + 25) + "px"
 	});
-	
+
 	var viewPort = quickViewBox.viewportOffset();
-	var boxTopRightCorner = quickViewBox.getWidth() + quickViewBox.viewportOffset().left;
-	if (boxTopRightCorner >  document.viewport.getWidth()) {
+	var boxTopRightCorner = quickViewBox.getWidth()
+			+ quickViewBox.viewportOffset().left;
+	if (boxTopRightCorner > document.viewport.getWidth()) {
 		var offset = boxTopRightCorner - document.viewport.getWidth();
-		quickViewBox.setStyle({
-			left: (position['left'] - offset) + "px"
+		quickViewBox.setStyle( {
+			left : (position['left'] - offset) + "px"
 		});
 	}
-	
+
 	quickViewBox.fx = function(event) {
-			var clickid;
-			
-			if (event.clickid != undefined) {
-				clickid = event.clickid;
-			} else {
-				var element = Event.element( event );
-				if (element.id != undefined && 
-					(element.id == elementId+ "_img" || element.id == elementId + "_button")) {
-					clickid = elementId;
-				}
+		var clickid;
+
+		if (event.clickid != undefined) {
+			clickid = event.clickid;
+		} else {
+			var element = Event.element(event);
+			if (element.id != undefined
+					&& (element.id == elementId + "_img" || element.id == elementId
+							+ "_button")) {
+				clickid = elementId;
 			}
-			
-			
-			if (clickid  != elementId) {
-				hideQuickView(elementId);
-			}
-		};
-	quickViewBox.bfx = quickViewBox.fx.bindAsEventListener( quickViewBox ) ;
-	Element.extend(document).observe( 'click', quickViewBox.bfx );
+		}
+
+		if (clickid != elementId) {
+			hideQuickView(elementId);
+		}
+	};
+	quickViewBox.bfx = quickViewBox.fx.bindAsEventListener(quickViewBox);
+	Element.extend(document).observe('click', quickViewBox.bfx);
 }
 
 function hideQuickView(elementId) {
-	var quickViewBox =  $(elementId);
+	var quickViewBox = $(elementId);
 	quickViewBox.hide();
 	quickViewBox.addClassName("hidden");
 	quickViewBox.removeClassName("quickView");
-	Element.extend(document).stopObserving( 'click', $(elementId).bfx );
+	Element.extend(document).stopObserving('click', $(elementId).bfx);
 }
 
 function alertErrors(errors) {
@@ -348,8 +361,8 @@ function alertErrors(errors) {
 	if (errors.empty) {
 		return;
 	}
-	
-	for (var i = 0; i < errors.size(); i++) {
+
+	for ( var i = 0; i < errors.size(); i++) {
 		alertMessage += errors[i] + "\n";
 	}
 	alert(alertMessage);
@@ -357,56 +370,56 @@ function alertErrors(errors) {
 
 function selectAll(containerId) {
 	var checkboxes = $$('#' + containerId + ' input[type="checkbox"]');
-	for (var i = 0; checkboxes.length > i; i++) {
+	for ( var i = 0; checkboxes.length > i; i++) {
 		checkboxes[i].checked = true;
-	}	
+	}
 }
 function selectNone(containerId) {
 	var checkboxes = $$('#' + containerId + ' input[type="checkbox"]');
-	for (var i = 0; checkboxes.length > i; i++) {
+	for ( var i = 0; checkboxes.length > i; i++) {
 		checkboxes[i].checked = false;
-	}	
+	}
 }
 
 Element.addMethods( {
-	getStyles: function(element) {
+	getStyles : function(element) {
 		element = $(element);
-		return $A(element.style).inject({}, function(styles, styleName) {
-				styles[styleName.camelize()] = element.getStyle( styleName );
-				return styles;
-			} );
-	
+		return $A(element.style).inject( {}, function(styles, styleName) {
+			styles[styleName.camelize()] = element.getStyle(styleName);
+			return styles;
+		});
+
 	},
-		
-	clone: function(element) {
+
+	clone : function(element) {
 		var clone = new Element(element.tagName);
-		$A(element.attributes).each(function(attribute) { 
-				if (attribute.name != 'style') clone[attribute.name] = attribute.value; 
-			});
-	
+		$A(element.attributes).each( function(attribute) {
+			if (attribute.name != 'style')
+				clone[attribute.name] = attribute.value;
+		});
+
 		clone.setStyle(element.getStyles());
 		clone.update(element.innerHTML);
 		return clone;
-	
-	} 
-} ); 
+
+	}
+});
 var fieldDescriptions = new Object();
-function clearDescription(event) { 
+function clearDescription(event) {
 	var element = Event.element(event);
 	if (element.hasClassName("description")) {
 		element.removeClassName("description");
 		fieldDescriptions[element.id] = element.value;
-		element.value="";
-		
-	} 
+		element.value = "";
+
+	}
 }
 function replaceDescription(event) {
 	var element = Event.element(event);
 	if (element.value.strip().empty()) {
 		element.addClassName("description");
 		element.value = fieldDescriptions[element.id];
-	
-		
+
 	}
 }
 function submitSmartSearch(event) {
@@ -416,7 +429,6 @@ function submitSmartSearch(event) {
 		event.stop();
 	}
 }
-
 
 function highlightButton(event) {
 	var element = Event.element(event);
@@ -430,13 +442,13 @@ function turnOffHighlightButton(event) {
 	element.removeClassName("activated");
 }
 
-Element.extend(document).observe("dom:loaded", function (event) {
-		$$('.secondaryNav li a').each(function(element) {
-				element.observe('mousedown', highlightButton);
-				element.observe('mouseup', turnOffHighlightButton);
-				element.observe('mouseout', turnOffHighlightButton);
-			});
+Element.extend(document).observe("dom:loaded", function(event) {
+	$$('.secondaryNav li a').each( function(element) {
+		element.observe('mousedown', highlightButton);
+		element.observe('mouseup', turnOffHighlightButton);
+		element.observe('mouseout', turnOffHighlightButton);
 	});
+});
 
 function ajaxFormEvent(event) {
 	event.stop();

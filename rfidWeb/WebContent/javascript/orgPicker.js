@@ -6,27 +6,34 @@ function showOrgSearch(event) {
 	$('orgSearch').clonePosition(element.up(".orgPicker"), {setWidth:false, setHeight:false});
 	$('orgSearch').style.position = "absolute";
 	$('orgSearch').show();
-	
+	$('orgPickerResults').setAttribute('targetId', element.up(".orgPicker").id);
 }
 
 function updateOwner(event) {
-	var element = Event.element(event);
 	event.stop();
+	var element = Event.element(event);
+	var containerTarget = element.up("*[targetId]");
 	
-	$$(".orgSelected").first().value= element.getAttribute("org");
+	var containerContext = containerTarget.getAttribute("targetId");
+	var containerId = "";
+	
+	if (containerContext != null || containerContext != "") {
+		containerId = "#" + containerContext; 
+	}
+	
+	var orgInputs = $$(containerId + " .orgSelected");
+	orgInputs.first().value= element.getAttribute("org");
+	orgInputs.first().next('input').value= element.getAttribute("orgName");
+	orgInputs.first().next('input').fire('field:change');
 
-	$$(".orgSelected").first().next('input').value= element.getAttribute("orgName");
-	
-	$$(".orgSelected").first().next('input').fire('field:change');
-	
 	$('orgSearch').hide();
 }
 
 function clearOrgSearch(event) {
 	var element =  Event.element(event);
 	event.stop();
-	$$(".orgSelected").first().value = "";
-	$$(".orgSelected").first().next('input').value = "";
+	element.up(".orgPicker").down(".orgSelected").first().value = "";
+	element.up(".orgPicker").down(".orgSelected").first().next('input').value = "";
 }
 
 function attachOrgEvents(containerCssRule) {

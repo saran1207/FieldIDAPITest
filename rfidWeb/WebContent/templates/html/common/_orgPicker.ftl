@@ -1,12 +1,12 @@
 <@n4.includeScript src="orgPicker"/>
 <#assign name>
 	<div id="orgSearch" style="display:none">
-		<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch" >
+		<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch">
 			<div class="infoSet">
 				<@s.textfield name="searchName" /> <@s.submit key="label.search"/>
 			</div>
 		</@s.form>
-		<div id="orgPickerResults">
+		<div id="orgPickerResults" targetId="">
 		</div>	
 	</div>
 </#assign>
