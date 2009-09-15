@@ -1,19 +1,13 @@
-<@s.form id="schedule_${inspectionType.id}_customer" action="productTypeScheduleCreateOverride" namespace="/ajax" theme="simple" >
+<@s.form id="schedule_${inspectionType.id}_customer" action="productTypeScheduleCreateOverride" namespace="/ajax" theme="fieldidSimple" >
 	<@s.hidden name="productTypeId" />
 	<@s.hidden name="inspectionTypeId" value="${inspectionType.id}"/>
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="customerForm" value="true" />
 	<span class="customer">
 		<#if !uniqueID?exists >
-		
-			<@s.select name="customer" list="customers" listKey="id" listValue="name">
-				<#if (action.fieldErrors['customer'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-				</#if> 
-			</@s.select>
-			
+			<@n4.orgPicker name="owner" />
 		<#else>
-			<@s.hidden name="customer" />
+			<@s.hidden name="ownerId" />
 		</#if>
 	</span>
 	
@@ -30,7 +24,7 @@
 		 <a href="javascript:void(0);" onclick="saveSchedule( '${inspectionType.id}_customer', ${inspectionType.id} ); return false;" ><@s.text name="label.add" /></a>  
 	</span>
 	<@s.fielderror>
-		<@s.param>customer</@s.param>
+		<@s.param>owner</@s.param>
 		<@s.param>frequency</@s.param>				
 	</@s.fielderror>
 </@s.form>

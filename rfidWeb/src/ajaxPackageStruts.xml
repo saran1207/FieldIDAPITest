@@ -79,9 +79,9 @@
 			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/show.ftl</result>
 		</action>
 
-		<action name="productTypeScheduleDelete" method="delete"
-			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/show.ftl</result>
+
+		<action name="productTypeScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
+			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/delete.ftl</result>
 		</action>
 
 		<action name="productTypeScheduleCreateOverride" method="save"

@@ -3,28 +3,21 @@
 <#else>
 	<#assign formId="${inspectionType.id}"/>
 </#if>
-<@s.form id="schedule_${formId}" action="productTypeScheduleSave" namespace="/ajax" theme="simple" >
+<@s.form id="schedule_${formId}" action="productTypeScheduleSave" namespace="/ajax" theme="fieldidSimple" >
 	<@s.hidden name="productTypeId" />
 	<@s.hidden name="inspectionTypeId" value="${inspectionType.id}" />
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="customerForm" />
 	<span class="customer">
 		<#if !uniqueID?exists && customer?exists >
-			<@s.select name="customer" list="customers" listKey="id" listValue="name">
-				<#if (action.fieldErrors['customer'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-				</#if> 
-			</@s.select>
+			<@n4.orgPicker name="owner" />
 		<#else>
-			${ (schedule.owner.name )! }<@s.hidden name="customer" />
-			
+			${ (schedule.owner.name )! }<@s.hidden name="ownerId" />
 		</#if>
 	</span>
 	
 	<span class="frequency">
-			
-			<@s.textfield name="frequency" /> <@s.text name="label.days"/>
-			
+		<@s.textfield name="frequency" /> <@s.text name="label.days"/>
 	</span>
 	<span class="autoSchedule">
 			, <@s.text name="label.autoscheduled"/> <@s.checkbox name="autoSchedule" /> 			
@@ -37,6 +30,6 @@
 
 
 <@s.fielderror>
-	<@s.param>customer</@s.param>
+	<@s.param>owner</@s.param>
 	<@s.param>frequency</@s.param>				
 </@s.fielderror>

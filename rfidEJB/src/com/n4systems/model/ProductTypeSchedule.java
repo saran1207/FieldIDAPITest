@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,12 +22,9 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable {
 	@ManyToOne(optional=false)
 	private InspectionType inspectionType;
 	
-	// TODO: REMOVE_ME
-//	@ManyToOne
-//	private Customer customer;
 
-	//in days
-	private Long frequency;
+	@Column(name="frequency")
+	private Long frequencyInDays;
 	private boolean autoSchedule = true;
 	
 	public ProductTypeSchedule() {}
@@ -47,48 +45,20 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable {
 		this.inspectionType = inspectionType;
 	}
 
-	// TODO: REMOVE_ME
-//	public Customer getCustomer() {
-//		return customer;
-//	}
-//
-//	public void setCustomer(Customer customer) {
-//		this.customer = customer;
-//	}
+
 
 	public Long getFrequency() {
-		return frequency;
+		return frequencyInDays;
 	}
 
 	public void setFrequency(Long frequency) {
-		this.frequency = frequency;
+		this.frequencyInDays = frequency;
 	}
 	
 	public Date getNextDate(Date startDate) {
-		return DateHelper.addDaysToDate(startDate, frequency);
+		return DateHelper.addDaysToDate(startDate, frequencyInDays);
 	}
 	
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-
-		if (obj instanceof ProductTypeSchedule) {
-			return this.equals((ProductTypeSchedule) obj);
-		} else {
-			return super.equals(obj);
-		}
-
-	}
-
-	public boolean equals(ProductTypeSchedule schedule) {
-		if (schedule == null)
-			return false;
-		if (getId() == null)
-			return super.equals(schedule);
-
-		return getId().equals(schedule.getId());
-	}
 
 	public boolean isAutoSchedule() {
 		return autoSchedule;
@@ -98,7 +68,7 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable {
 		this.autoSchedule = autoSchedule;
 	}
 	
-//	public boolean isCustomerOverride() {
-//		return customer != null;
-//	}
+	public boolean isOverride() {
+		return !getOwner().isPrimary();
+	}
 }

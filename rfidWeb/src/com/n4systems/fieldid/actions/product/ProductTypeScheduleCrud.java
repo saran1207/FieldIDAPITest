@@ -11,6 +11,7 @@ import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
@@ -21,26 +22,29 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long productTypeId;
 	private Long inspectionTypeId;
 	private ProductType productType;
 	private InspectionType inspectionType;
-	private BaseOrg owner;
+	
 	private boolean customerForm = false;
 	private ProductTypeSchedule schedule;
-	
-	private List<InspectionType> inspectionTypes;
-	private Map<String,ProductTypeSchedule> schedules;
-	private Map<String,List<ProductTypeSchedule>> customerOverrideSchedules;
-	
-	private LegacyProductType productTypeManager;
 
-	public ProductTypeScheduleCrud( LegacyProductType productTypeManager, PersistenceManager persistenceManager) {
+	private List<InspectionType> inspectionTypes;
+	private Map<String, ProductTypeSchedule> schedules;
+	private Map<String, List<ProductTypeSchedule>> customerOverrideSchedules;
+
+	private LegacyProductType productTypeManager;
+	
+	private OwnerPicker ownerPicker;
+
+	public ProductTypeScheduleCrud(LegacyProductType productTypeManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 	}
@@ -48,38 +52,45 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	@Override
 	protected void initMemberFields() {
 		schedule = new ProductTypeSchedule();
-		schedule.setTenant( getTenant() );
+		schedule.setTenant(getTenant());
+		schedule.setOwner(getPrimaryOrg());
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		getProductType();
-		for (ProductTypeSchedule schedule : productType.getSchedules() ) {
-			if( schedule.getId().equals( uniqueId ) ) {
+		for (ProductTypeSchedule schedule : productType.getSchedules()) {
+			if (schedule.getId().equals(uniqueId)) {
 				this.schedule = schedule;
 			}
 		}
 	}
+
 	
 	
+	@Override
+	protected void postInit() {
+		super.postInit();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), schedule);
+	}
+
 	@SkipValidation
 	public String doList() {
 		return SUCCESS;
-		
+
 	}
-	
+
 	@SkipValidation
 	public String doEdit() {
 		return INPUT;
 	}
-	
+
 	@SkipValidation
 	public String doShow() {
-		
+
 		return SUCCESS;
 	}
-	
-	
+
 	@SkipValidation
 	public String doDelete() {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
@@ -87,10 +98,10 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 			List<ProductTypeSchedule> schedulesToRemove = schedulesToRemove(transaction);
 			removeSchedules(transaction, schedulesToRemove);
 			transaction.commit();
-			
+
 			addFlashMessageText("message.schdeuledeleted");
 		} catch (Exception e) {
-			
+
 			addActionErrorText("error.failedtodelete");
 			transaction.rollback();
 			return ERROR;
@@ -107,43 +118,42 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 
 	private List<ProductTypeSchedule> schedulesToRemove(Transaction transaction) {
 		List<ProductTypeSchedule> schedulesToRemove = new ArrayList<ProductTypeSchedule>();
-		
+
 		if (!schedule.getOwner().isExternalOrg()) {
 			schedulesToRemove.addAll(getLoaderFactory().createInspectionFrequenciesListLoader().setInspectionTypeId(inspectionTypeId).setProductTypeId(productTypeId).load(transaction));
 		} else {
-			schedulesToRemove.add(new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, new OpenSecurityFilter()).addSimpleWhere("id", schedule.getId()).getSingleResult(transaction.getEntityManager()));
+			schedulesToRemove.add(new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, new OpenSecurityFilter()).addSimpleWhere("id", schedule.getId()).getSingleResult(
+					transaction.getEntityManager()));
 		}
-	
+
 		return schedulesToRemove;
 	}
-	
-	
+
 	public String doSave() {
 		getProductType();
 		getInspectionType();
 		try {
-			if( schedule.getId() == null ) {
-				schedule.setProductType( productType );
-				schedule.setInspectionType( inspectionType );
-				schedule.setTenant( getTenant() ); 
-				schedule.setOwner( owner );
+			if (schedule.getId() == null) {
+				schedule.setProductType(productType);
+				schedule.setInspectionType(inspectionType);
+				schedule.setTenant(getTenant());
+				schedule.setOwner(getOwner());
 				persistenceManager.save(schedule);
-				productType.getSchedules().add( schedule );
+				productType.getSchedules().add(schedule);
 			} else {
 				schedule = persistenceManager.update(schedule);
 			}
-			
+
 			productType = productTypeManager.updateProductType(productType);
-			schedule = productType.getSchedule( schedule.getInspectionType(), schedule.getOwner() );
+			schedule = productType.getSchedule(schedule.getInspectionType(), schedule.getOwner());
 		} catch (Exception e) {
-			addActionError( getText( "error.failedtosave" ) );
+			addActionError(getText("error.failedtosave"));
 			return ERROR;
 		}
-		
-		addFlashMessage( getText( "message.schedulesaved" ) );
+
+		addFlashMessage(getText("message.schedulesaved"));
 		return SUCCESS;
 	}
-	
 
 	public Long getProductTypeId() {
 		return productTypeId;
@@ -154,21 +164,21 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	}
 
 	public ProductType getProductType() {
-		if( productType == null ) {
-			productType = productTypeManager.findProductTypeAllFields( productTypeId, getTenantId() );
+		if (productType == null) {
+			productType = productTypeManager.findProductTypeAllFields(productTypeId, getTenantId());
 		}
 		return productType;
 	}
 
 	public InspectionType getInspectionType() {
-		if( inspectionType == null ) {
-			inspectionType = persistenceManager.find( InspectionType.class, inspectionTypeId, getTenant() );
+		if (inspectionType == null) {
+			inspectionType = persistenceManager.find(InspectionType.class, inspectionTypeId, getTenant());
 		}
 		return inspectionType;
 	}
 
 	public List<InspectionType> getInspectionTypes() {
-		if( inspectionTypes == null ) {
+		if (inspectionTypes == null) {
 			inspectionTypes = new ArrayList<InspectionType>();
 			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getProductType()).load();
 			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
@@ -177,30 +187,30 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 		}
 		return inspectionTypes;
 	}
-	
-	public Map<String,ProductTypeSchedule> getSchedules() {
-		if( schedules == null ){
+
+	public Map<String, ProductTypeSchedule> getSchedules() {
+		if (schedules == null) {
 			getProductType();
 			schedules = new HashMap<String, ProductTypeSchedule>();
 			for (ProductTypeSchedule schedule : productType.getSchedules()) {
-				if(schedule.getOwner().isPrimary()) {
-					schedules.put( schedule.getInspectionType().getName(), schedule );
+				if (schedule.getOwner().isPrimary()) {
+					schedules.put(schedule.getInspectionType().getName(), schedule);
 				}
 			}
 		}
 		return schedules;
 	}
-	
+
 	public Map<String, List<ProductTypeSchedule>> getCustomerOverrideSchedules() {
-		if( customerOverrideSchedules == null ){
+		if (customerOverrideSchedules == null) {
 			getProductType();
 			customerOverrideSchedules = new HashMap<String, List<ProductTypeSchedule>>();
-			for ( ProductTypeSchedule schedule : productType.getSchedules() ) {
-				if(!schedule.getOwner().isPrimary()) {
-					if( customerOverrideSchedules.get( schedule.getInspectionType().getName() ) == null ) {
-						customerOverrideSchedules.put( schedule.getInspectionType().getName(), new ArrayList<ProductTypeSchedule>() ) ;
+			for (ProductTypeSchedule schedule : productType.getSchedules()) {
+				if (schedule.isOverride()) {
+					if (customerOverrideSchedules.get(schedule.getInspectionType().getName()) == null) {
+						customerOverrideSchedules.put(schedule.getInspectionType().getName(), new ArrayList<ProductTypeSchedule>());
 					}
-					customerOverrideSchedules.get( schedule.getInspectionType().getName() ).add( schedule );
+					customerOverrideSchedules.get(schedule.getInspectionType().getName()).add(schedule);
 				}
 			}
 		}
@@ -218,32 +228,23 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	public boolean isAutoSchedule() {
 		return schedule.isAutoSchedule();
 	}
-	
-	public void setAutoSchedule( boolean autoSchedule ) {
-		schedule.setAutoSchedule( autoSchedule );
-		
+
+	public void setAutoSchedule(boolean autoSchedule) {
+		schedule.setAutoSchedule(autoSchedule);
+
 	}
-	
+
 	public Long getFrequency() {
 		return schedule.getFrequency();
 	}
-	
-	@RequiredFieldValidator( message="", key="error.frequencyisrequired" )
+
+	@RequiredFieldValidator(message = "", key = "error.frequencyisrequired")
 	public void setFrequency(Long frequency) {
 		schedule.setFrequency(frequency);
 	}
 
-	
-	public ProductTypeSchedule getSchedule( ) {
+	public ProductTypeSchedule getSchedule() {
 		return schedule;
-	}
-	
-	public BaseOrg getOwner() {
-		return owner;
-	}
-	
-	public void setOwner(BaseOrg owner) {
-		this.owner = owner;
 	}
 
 	public boolean isCustomerForm() {
@@ -253,33 +254,51 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	public void setCustomerForm(boolean customerForm) {
 		this.customerForm = customerForm;
 	}
-	
+
 	public ProductTypeSchedule newSchedule() {
 		return new ProductTypeSchedule();
-		
+
 	}
 
 	public boolean duplicateValueExists(String formValue) {
-		if(owner == null) {
+		if (getOwner() == null) {
 			return false;
 		}
-		
+
 		// check if there is already an override for this customer.
 		getProductType();
 		getInspectionType();
-		
+
 		getCustomerOverrideSchedules();
-		List<ProductTypeSchedule> existingSchedules = customerOverrideSchedules.get( inspectionType.getName() );
-		if( existingSchedules == null ){
+		List<ProductTypeSchedule> existingSchedules = customerOverrideSchedules.get(inspectionType.getName());
+		
+		if (existingSchedules == null) {
 			return false;
 		}
-		for( ProductTypeSchedule existingSchedule : existingSchedules ) {
-			if( existingSchedule.getOwner().getId().equals( owner.getId() ) 
-					&& !existingSchedule.getId().equals( schedule.getId() ) ) {
+		
+		for (ProductTypeSchedule existingSchedule : existingSchedules) {
+			if (existingSchedule.getOwner().equals(getOwner()) && !existingSchedule.equals(schedule)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
+
+	@RequiredFieldValidator(message="", key="error.owner_required")
+	@CustomValidator(type="uniqueValue", message = "", key="errors.overrideexists")
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+	
+	
 }

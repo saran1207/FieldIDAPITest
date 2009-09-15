@@ -6,13 +6,11 @@ import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class ProductTypeScheduleLoader extends SecurityFilteredLoader<ProductTypeSchedule> {
 	private Long productTypeId;
 	private Long inspectionTypeId;
-	private Long customerId;
+	private Long ownerId;
 	
 	public ProductTypeScheduleLoader(SecurityFilter filter) {
 		super(filter);
@@ -22,14 +20,10 @@ public class ProductTypeScheduleLoader extends SecurityFilteredLoader<ProductTyp
 	protected ProductTypeSchedule load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<ProductTypeSchedule> builder = null;
 		
-		if (customerId != null) {
-			builder = getCustomerOverrideBuilder(filter);
-		}
+		
+		builder = getCustomerOverrideBuilder(filter);
+	
 
-		// if we're not looking for customer overrides, or no customer override exists, fall back to the default schedule
-		if (builder == null || !builder.entityExists(em)) {
-			builder = getDefaultScheduleBuilder(filter);
-		}
 				
 		ProductTypeSchedule schedule = builder.getSingleResult(em);
 		return schedule;
@@ -43,12 +37,9 @@ public class ProductTypeScheduleLoader extends SecurityFilteredLoader<ProductTyp
 	}
 	
 	private QueryBuilder<ProductTypeSchedule> getCustomerOverrideBuilder(SecurityFilter filter) {
-		return getBaseBuilder(filter).addSimpleWhere("owner.customer_id", customerId);
+		return getBaseBuilder(filter).addSimpleWhere("owner.id", ownerId);
 	}
 	
-	private QueryBuilder<ProductTypeSchedule> getDefaultScheduleBuilder(SecurityFilter filter) {
-		return getBaseBuilder(filter).addWhere(new WhereParameter<Object>(Comparator.NULL, "owner.customer_id"));
-	}	
 	
 	public ProductTypeScheduleLoader setProductTypeId(Long productTypeId) {
 		this.productTypeId = productTypeId;
@@ -60,8 +51,8 @@ public class ProductTypeScheduleLoader extends SecurityFilteredLoader<ProductTyp
 		return this;
 	}
 
-	public ProductTypeScheduleLoader setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public ProductTypeScheduleLoader setOwner(Long ownerId) {
+		this.ownerId = ownerId;
 		return this;
 	}
 

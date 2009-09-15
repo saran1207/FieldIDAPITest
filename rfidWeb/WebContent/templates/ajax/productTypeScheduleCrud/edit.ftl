@@ -9,7 +9,7 @@
 </#if>
 
 	
-	$('${containerId}').innerHTML = "${html}";
+	$('${containerId}').update("${html}");
 	
 
 </#escape>

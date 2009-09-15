@@ -3,8 +3,8 @@
 	<#include "/templates/html/productTypeScheduleCrud/_add.ftl" >
 </#assign>
 
-	
-	$('eventFrequencyOverrideForm_${inspectionTypeId}').innerHTML = "${html}";
-	
+	var containerId  = 'eventFrequencyOverrideForm_${inspectionTypeId}';
+	$(containerId).update("${html}");
+	attachOrgEvents("#" + containerId);
 
 </#escape>

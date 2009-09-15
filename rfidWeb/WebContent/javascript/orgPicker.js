@@ -29,12 +29,16 @@ function clearOrgSearch(event) {
 	$$(".orgSelected").first().next('input').value = "";
 }
 
-document.observe("dom:loaded", function() {
-	$$(".searchOwner").each(function(element) {
+function attachOrgEvents(containerCssRule) {
+	$$(containerCssRule + " .searchOwner").each(function(element) {
 		element.observe('click', showOrgSearch);
 	});
 	
-	$$(".clearSearchOwner").each(function(element) {
+	$$(containerCssRule + " .clearSearchOwner").each(function(element) {
 		element.observe('click', clearOrgSearch);
 	});
+}
+
+document.observe("dom:loaded", function() {
+	attachOrgEvents("body");
 });

@@ -12,7 +12,7 @@ import com.n4systems.util.DateHelper;
 public class CalcNextDateAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 
-	private Long customerId;
+	private Long ownerId;
 	private Long productTypeId;
 	private Long inspectionTypeId;
 	private Date startDate;
@@ -24,7 +24,7 @@ public class CalcNextDateAction extends AbstractAction {
 
 	public String doCalculate() {
 		ProductTypeScheduleLoader loader = getLoaderFactory().createProductTypeScheduleLoader();
-		loader.setCustomerId(customerId);
+		loader.setOwner(ownerId);
 		loader.setInspectionTypeId(inspectionTypeId);
 		loader.setProductTypeId(productTypeId);
 		
@@ -41,8 +41,8 @@ public class CalcNextDateAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 	
 	public void setProductTypeId(Long productTypeId) {

@@ -6,6 +6,7 @@
 			padding-left:3px;
 		}
 	</style>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 
 ${action.setPageType('product_type', 'schedule_frequencies')!}
@@ -37,7 +38,7 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 					</div>
 					
 					<div id="eventFrequencyOverrides_${inspectionType.id}_container" <#if !schedules[inspectionType.name]?exists >style="display:none"</#if> >
-						<p style="padding-top:10px;">Customer Overrides 
+						<p style="padding-top:10px;"><@s.text name="label.overrides"/> 
 							<a id="overrideExpand_${inspectionType.id}" href="javasript:void(0);" onclick="expandOverride( ${inspectionType.id} ); return false;"><img src="<@s.url value="/images/expand.gif" includeParams="none"/>" alt="[+]" title="show customer overrides"/></a>
 							<a style="display:none" id="overrideCollapse_${inspectionType.id}" href="javasript:void(0);" onclick="collapseOverride( ${inspectionType.id} ); return false;"><img src="<@s.url value="/images/collapse.gif" includeParams="none"/>" alt="[+]" title="hide customer overrides"/></a>
 						</p>
@@ -79,7 +80,6 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 	editScheduleUrl =  '<@s.url action="productTypeScheduleEdit" namespace="/ajax" includeParams="none" />';
 	cancelScheduleUrl = '<@s.url action="productTypeScheduleShow" namespace="/ajax" includeParams="none" />';
 	removeScheduleUrl = '<@s.url action="productTypeScheduleDelete" namespace="/ajax" includeParams="none" />';
-	
 	removeWarning = '<@s.text name="warning.removedefaultschedule" />';
 </script>
 
