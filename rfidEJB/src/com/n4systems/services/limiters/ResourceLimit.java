@@ -20,6 +20,10 @@ public abstract class ResourceLimit implements Serializable {
 		return (maximum < 0);
 	}
 	
+	public boolean isLimitZero() {
+		return (maximum == 0);
+	}
+	
 	public double getUsagePercent() {
 		if (maximum == 0) {
 			// if maximum is 0, always assume 100%

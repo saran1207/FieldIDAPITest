@@ -52,10 +52,10 @@ public class TenantLimitUpdaterTask extends ScheduledTask {
 			for (Long tenantId: limits.keySet()) {
 				limit = limits.get(tenantId);
 				
-				if (limit.isUnlimited()) {
-					// if they're not limited, we can skip the checks
+				if (limit.isUnlimited() || limit.isLimitZero()) {
+					// if they're not limited or they are limited to 0, we can skip the checks
 					continue;
-				} 
+				}
 				
 				checkLimitThresholdForTenant(tenantId, type, limit);
 			}

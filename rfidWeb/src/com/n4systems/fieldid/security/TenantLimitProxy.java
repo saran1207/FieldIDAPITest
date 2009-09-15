@@ -58,4 +58,20 @@ public class TenantLimitProxy {
 	public boolean isAssetsUnlimited() {
 		return limitService.getAssets(tenantId).isUnlimited();
 	}
+	
+	public boolean isSecondaryOrgsMaxed() {
+		return limitService.getSecondaryOrgs(tenantId).isMaxed();
+	}
+	
+	public Long getSecondaryOrgsUsed() {
+		return limitService.getSecondaryOrgs(tenantId).getUsed();
+	}
+	
+	public Long getSecondaryOrgsMax() {
+		return limitService.getSecondaryOrgs(tenantId).getMaximum();
+	}
+	
+	public boolean isSecondaryOrgsUnlimited() {
+		return limitService.getSecondaryOrgs(tenantId).isUnlimited();
+	}
 }

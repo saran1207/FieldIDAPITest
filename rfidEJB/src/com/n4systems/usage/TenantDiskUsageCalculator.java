@@ -8,13 +8,16 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.services.limiters.LimitLoader;
+import com.n4systems.services.limiters.LimitType;
 import com.n4systems.util.Directory;
 
 /**
  * Calculates the sizes and number of files in Tenant directories.  Used in disk usage reports and
  * Tenant storage limit calculations.
  */
-public class TenantDiskUsageCalculator {
+public class TenantDiskUsageCalculator implements LimitLoader {
 	
 	private enum TenantDirType {
 		INSPECTION_ATTACH, INSPECTION_CHART, INSPECTION_PROOFTEST, PRODUCT_ATTACH, PRODUCT_TYPE_IMAGE, PRODUCT_TYPE_ATTACH, JOB_NOTE, USER;
@@ -25,12 +28,16 @@ public class TenantDiskUsageCalculator {
 		TenantDirType.INSPECTION_ATTACH, TenantDirType.PRODUCT_ATTACH, TenantDirType.PRODUCT_TYPE_ATTACH, TenantDirType.JOB_NOTE
 	};
 	
-	private final Tenant tenant;
-	private final Map<TenantDirType, Directory> dirs;
+	private Tenant tenant;
+	private Map<TenantDirType, Directory> dirs;
 
+	public TenantDiskUsageCalculator() {}
+	
 	public TenantDiskUsageCalculator(Tenant tenant) {
-		this.tenant = tenant;
-		
+		setTenant(tenant);
+	}
+	
+	private void initDirMap() {
 		dirs = new HashMap<TenantDirType, Directory>();
 		dirs.put(TenantDirType.INSPECTION_ATTACH, 		new Directory(getInspectionAttachmentBaseFile(tenant)));
 		dirs.put(TenantDirType.INSPECTION_CHART, 		new Directory(getInspectionChartImageBaseFile(tenant)));
@@ -40,6 +47,11 @@ public class TenantDiskUsageCalculator {
 		dirs.put(TenantDirType.PRODUCT_TYPE_ATTACH, 	new Directory(getProductTypeAttachmentBaseFile(tenant)));
 		dirs.put(TenantDirType.JOB_NOTE,  				new Directory(getJobAttachmentFileBaseFile(tenant)));
 		dirs.put(TenantDirType.USER,  					new Directory(getTenantUserBaseFile(tenant)));
+	}
+	
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
+		initDirMap();
 	}
 
 	public Tenant getTenant() {
@@ -120,6 +132,15 @@ public class TenantDiskUsageCalculator {
 	
 	public String toString() {
 		return tenant.getName() + " file usage " + FileUtils.byteCountToDisplaySize(totalSpaceUsed()) + " over " + totalFiles() + " files";
+	}
+
+	public long getLimit(Transaction transaction) {
+		// transaction is ignored since this is not a database limit
+		return totalLimitingSize();
+	}
+
+	public LimitType getType() {
+		return LimitType.DISK_SPACE;
 	}
 
 }

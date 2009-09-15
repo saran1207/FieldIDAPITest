@@ -9,7 +9,7 @@ import com.n4systems.util.persistence.search.SortTerm;
 
 public class ProductSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy"};
+	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg"};
 	
 	private String rfidNumber;
 	private String serialNumber;

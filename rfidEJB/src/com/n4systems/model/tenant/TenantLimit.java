@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.n4systems.services.limiters.LimitType;
+
 @Embeddable
 public class TenantLimit implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,18 +21,39 @@ public class TenantLimit implements Serializable {
 	@Column(name="user_limit", nullable = false)
 	private Long users;
 
-	
+	@Column(name="org_limit", nullable = false)
+	private Long secondaryOrgs;
 	
 	public TenantLimit() {
-		this(0L, 0L, 0L);
+		this(0L, 0L, 0L, 0L);
 	}
 	
-	public TenantLimit(long diskSpace, long assets, long users) {
+	public TenantLimit(long diskSpace, long assets, long users, long secondaryOrgs) {
 		this.diskSpace = diskSpace;
 		this.assets = assets;
 		this.users = users;
+		this.secondaryOrgs = secondaryOrgs;
 	}
 
+	public Long getLimitForType(LimitType type) {
+		Long limit = null;
+		switch(type) {
+			case ASSETS:
+				limit = assets;
+				break;
+			case DISK_SPACE:
+				limit = diskSpace;
+				break;
+			case EMPLOYEE_USERS:
+				limit = users;
+				break;
+			case SECONDARY_ORGS:
+				limit = secondaryOrgs;
+				break;
+		}
+		return limit;
+	}
+	
 	public Long getDiskSpaceInBytes() {
 		return diskSpace;
 	}
@@ -42,8 +65,6 @@ public class TenantLimit implements Serializable {
 	public void setDiskSpaceInBytes(Long diskSpace) {
 		this.diskSpace = diskSpace ;
 	}
-	
-	
 	
 	public void setDiskSpaceUnlimited() {
 		setDiskSpaceInBytes(UNLIMITED);
@@ -80,7 +101,23 @@ public class TenantLimit implements Serializable {
 	public void setAssetsUnlimited() {
 		setAssets(UNLIMITED);
 	}
+	
+	public Long getSecondaryOrgs() {
+		return secondaryOrgs;
+	}
 
+	public void setSecondaryOrgs(Long secondaryOrgs) {
+		this.secondaryOrgs = secondaryOrgs;
+	}
+
+	public boolean isSecondaryOrgsUnlimited() {
+		return (getSecondaryOrgs() == UNLIMITED);
+	}
+	
+	public void setSecondaryOrgsUnlimited() {
+		setSecondaryOrgs(UNLIMITED);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof TenantLimit) {
@@ -108,6 +145,10 @@ public class TenantLimit implements Serializable {
 	
 	public void addAssets(Long additionalAssets) {
 		assets = addLimits(assets, additionalAssets);
+	}
+	
+	public void addSecondaryOrgs(Long additionalSecondaryOrgs) {
+		secondaryOrgs = addLimits(secondaryOrgs, additionalSecondaryOrgs);
 	}
 	
 	private Long addLimits(Long currentLimit, Long limitToAdd) {
