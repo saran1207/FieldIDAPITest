@@ -24,7 +24,7 @@ public class EmployeeUserCountLoader extends Loader<Long> {
 		builder.addSimpleWhere("system", false);
 		builder.addSimpleWhere("active", true);
 		builder.addSimpleWhere("deleted", false);
-		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customer_id"));
+		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
 		
 		Long userCount = builder.getCount(em);
 		return userCount;

@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,9 +22,9 @@ import com.n4systems.model.security.SecurityDefiner;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg> {
 	private static final long serialVersionUID = 1L;
-	protected static final String SECONDARY_ID_FILTER_PATH = "secondary_id";
-	protected static final String CUSTOMER_ID_FILTER_PATH = "customer_id";
-	protected static final String DIVISION_ID_FILTER_PATH = "division_id";
+	protected static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
+	protected static final String CUSTOMER_ID_FILTER_PATH = "customerOrg.id";
+	protected static final String DIVISION_ID_FILTER_PATH = "divisionOrg.id";
 	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "", null, null);
@@ -37,13 +38,19 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	private AddressInfo addressInfo;
 	
 	@SuppressWarnings("unused")
-	private Long secondary_id;
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@JoinColumn(name="secondary_id")
+	private SecondaryOrg secondaryOrg;
 	
 	@SuppressWarnings("unused")
-	private Long customer_id;
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@JoinColumn(name="customer_id")
+	private CustomerOrg customerOrg;
 	
 	@SuppressWarnings("unused")
-	private Long division_id;
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@JoinColumn(name="division_id")
+	private DivisionOrg divisionOrg;
 	
 	public BaseOrg() {}
 	
@@ -60,9 +67,9 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	}
 
 	private void setSecurityFields() {
-		secondary_id = getSecondaryOrgId();
-		customer_id = getCustomerOrgId();
-		division_id = getDivisionOrgId();
+		secondaryOrg = getSecondaryOrg();
+		customerOrg = getCustomerOrg();
+		divisionOrg = getDivisionOrg();
 	}
 
 	public String getDisplayName() {
@@ -131,6 +138,12 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	abstract public InternalOrg getInternalOrg();
 	
 	/** 
+	 * @return The closest SecondaryOrg.  PrimaryOrg will return null, SecondaryOrg will return itself.  
+	 * CustomerOrg and DivisionOrg will return their parent InternalOrg if it is a SecondaryOrg
+	 */	
+	abstract public SecondaryOrg getSecondaryOrg();
+	
+	/** 
 	 * @return The closest CustomerOrg.  PrimaryOrg and SecondaryOrg will return null.  
 	 * CustomerOrg returns itself and SecondaryOrg will return its parent.
 	 */	
@@ -147,9 +160,5 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	abstract public String getFilterPath();
 	
 	abstract public BaseOrg getParent();
-	
-	abstract protected Long getSecondaryOrgId();
-	abstract protected Long getCustomerOrgId();
-	abstract protected Long getDivisionOrgId();
 	
 }

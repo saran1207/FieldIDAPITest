@@ -588,7 +588,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND LOWER(name) = :name ";
 		if (useCustomer) {
-			jpql += " AND owner.customer_id ";
+			jpql += " AND owner.customerOrg.id ";
 			if (customerId != null) {
 				jpql += "= :customerId ";
 			} else {

@@ -66,27 +66,17 @@ public class PrimaryOrg extends InternalOrg {
 	}
 
 	@Override
+	public SecondaryOrg getSecondaryOrg() {
+		return null;
+	}
+	
+	@Override
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
 	public DivisionOrg getDivisionOrg() {
-		return null;
-	}
-
-	@Override
-	protected Long getSecondaryOrgId() {
-		return null;
-	}
-	
-	@Override
-	protected Long getCustomerOrgId() {
-		return null;
-	}
-
-	@Override
-	protected Long getDivisionOrgId() {
 		return null;
 	}
 	

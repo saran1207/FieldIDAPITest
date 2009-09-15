@@ -56,7 +56,7 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 	}
 
 	public void setCustomer(Long customer) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "customer", "owner.customer_id", customer);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "customer", "owner.customerOrg.id", customer);
 	}
 	
 	public Long getJobSite() {
@@ -73,7 +73,7 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 	}
 
 	public void setDivision(Long division) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "owner.division_id", division);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "owner.divisionOrg.id", division);
 	}
 
 	public String getOrderNumber() {
@@ -205,13 +205,13 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 			} else {
 				// if the direction isn't set or set to off clear all orderby and use default
 				queryBuilder.getOrderArguments().clear();
-				queryBuilder.addOrder("owner.customer_id", "product.id");
+				queryBuilder.addOrder("owner.customerOrg.id", "product.id");
 			}
 		} catch (Exception e) {
 			// do nothing this will catch the exception of the enum valueOf on a
 			// null or non existent type.
 			queryBuilder.getOrderArguments().clear();
-			queryBuilder.addOrder("owner.customer_id", "product.id");
+			queryBuilder.addOrder("owner.customerOrg.id", "product.id");
 		}
 	}
 	

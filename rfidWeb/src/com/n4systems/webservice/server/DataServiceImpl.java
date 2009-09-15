@@ -1004,11 +1004,11 @@ public class DataServiceImpl implements DataService {
 			queryBuilder.setSimpleSelect();
 			
 			if (searchCriteria.getCustomerIds() != null && searchCriteria.getCustomerIds().size() > 0) {
-				queryBuilder.addWhere(WhereParameter.Comparator.IN, "customerIds", "owner.customer_id", searchCriteria.getCustomerIds());
+				queryBuilder.addWhere(WhereParameter.Comparator.IN, "customerIds", "owner.customerOrg.id", searchCriteria.getCustomerIds());
 			}
 			
 			if (searchCriteria.getDivisionIds() != null && searchCriteria.getDivisionIds().size() > 0) {
-				queryBuilder.addWhere(WhereParameter.Comparator.IN, "divisionIds", "owner.division_id", searchCriteria.getDivisionIds());
+				queryBuilder.addWhere(WhereParameter.Comparator.IN, "divisionIds", "owner.divisionOrg.id", searchCriteria.getDivisionIds());
 			}
 			
 			// FIXME Job sites don't exists!

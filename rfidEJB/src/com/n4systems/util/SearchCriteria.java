@@ -59,7 +59,7 @@ public class SearchCriteria extends AbstractSearchCriteria<Product> {
 	}
 
 	public void setCustomer(Long customer) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "customer", "owner.id", customer);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "customer", "owner.customerOrg.id", customer);
 	}
 
 	public Long getDivision() {
@@ -67,7 +67,7 @@ public class SearchCriteria extends AbstractSearchCriteria<Product> {
 	}
 
 	public void setDivision(Long division) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "owner.division_id", division);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "division", "owner.divisionOrg.id", division);
 	}
 
 	public String getOrderNumber() {

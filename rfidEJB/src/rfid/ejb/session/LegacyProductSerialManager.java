@@ -170,7 +170,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			String queryString = "select DISTINCT( ps ) from Product ps where ps.tenant.id = :tenantId AND state = :activeState AND (";
 
 			if (customerList.length > 0) {
-				queryString += "ps.owner.id in (:customerList) ";
+				queryString += "ps.owner.customerOrg.id in (:customerList) ";
 
 				if (divisionList.length > 0) {
 					queryString += "OR ";
@@ -178,7 +178,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			}
 
 			if (divisionList.length > 0) {
-				queryString += "ps.owner.division_id in (:divisionList)";
+				queryString += "ps.owner.divisionOrg.id in (:divisionList)";
 			}
 
 			queryString += ") AND ps.modified >= :beginDate " + " AND ps.id > :beginId ORDER BY ps.id ASC";

@@ -34,6 +34,11 @@ public class DivisionOrg extends ExternalOrg {
 	}
 
 	@Override
+	public SecondaryOrg getSecondaryOrg() {
+		return parent.getSecondaryOrg();
+	}
+	
+	@Override
 	public CustomerOrg getCustomerOrg() {
 		return parent;
 	}
@@ -41,21 +46,6 @@ public class DivisionOrg extends ExternalOrg {
 	@Override
 	public DivisionOrg getDivisionOrg() {
 		return this;
-	}
-	
-	@Override
-	protected Long getSecondaryOrgId() {
-		return parent.getSecondaryOrgId();
-	}
-	
-	@Override
-	protected Long getCustomerOrgId() {
-		return parent.getId();
-	}
-
-	@Override
-	protected Long getDivisionOrgId() {
-		return getId();
 	}
 	
 	@Override

@@ -265,16 +265,16 @@ public class UserManager implements User {
 		}
 		
 		if( customer != null ) {
-			queryString += "AND ub.owner.customer_id = :customer ";
+			queryString += "AND ub.owner.customerOrg.id = :customer ";
 		} 
 		
 		if( userType != null ) {
 			switch( userType ) {
 				case CUSTOMERS:
-					queryString += "AND ub.owner.customer_id IS NOT NULL ";
+					queryString += "AND ub.owner.customerOrg IS NOT NULL ";
 					break;
 				case EMPLOYEES:
-					queryString += "AND ub.owner.customer_id IS NULL ";
+					queryString += "AND ub.owner.customerOrg IS NULL ";
 					break;
 					
 			}
@@ -331,7 +331,7 @@ public class UserManager implements User {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
 		String queryString = "select DISTINCT ub from UserBean ub where ub.active = true and deleted = false and ub.system = false and ( " + 
 					filter.produceWhereClause(UserBean.class, "ub") + " OR ( "+
-					justTenantFilter.produceWhereClause(UserBean.class, "ub") + " AND ub.owner.customer_id IS NULL) )" +
+					justTenantFilter.produceWhereClause(UserBean.class, "ub") + " AND ub.owner.customerOrg IS NULL) )" +
 					" ORDER BY ub.firstName, ub.lastName";
 		try {
 		Query query = em.createQuery(queryString);
@@ -450,7 +450,7 @@ public class UserManager implements User {
 		jpql.append(filter.produceWhereClause(UserBean.class));
 		
 		if (ownerId != null) {
-			jpql.append(" AND (owner.id = :ownerId OR owner.customer_id IS NULL)");
+			jpql.append(" AND (owner.id = :ownerId OR owner.customerOrg IS NULL)");
 		}
 		
 		jpql.append(" ORDER BY owner.name, firstName, lastName");
