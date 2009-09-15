@@ -24,18 +24,18 @@ import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
+import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeServiceDTO;
-import com.n4systems.webservice.dto.SecondaryOrgServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
@@ -73,5 +73,5 @@ public interface ServiceDTOBeanConverter {
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates);
 	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg);
 	public DivisionOrgServiceDTO convert(DivisionOrg divisionOrg);
-	public SecondaryOrgServiceDTO convert(SecondaryOrg secondaryOrg);
+	public InternalOrgServiceDTO convert(InternalOrg internalOrg);
 }

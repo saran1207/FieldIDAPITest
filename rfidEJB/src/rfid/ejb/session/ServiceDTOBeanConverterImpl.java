@@ -56,13 +56,12 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.api.Retirable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.FindOwnerByLegacyIds;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -87,6 +86,7 @@ import com.n4systems.webservice.dto.InspectionBookServiceDTO;
 import com.n4systems.webservice.dto.InspectionInfoOptionServiceDTO;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
+import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO;
 import com.n4systems.webservice.dto.ObservationServiceDTO;
@@ -94,7 +94,6 @@ import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeScheduleServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeServiceDTO;
-import com.n4systems.webservice.dto.SecondaryOrgServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateServiceDTO;
 import com.n4systems.webservice.dto.StateSetServiceDTO;
@@ -893,8 +892,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	}
 	
 	private long retrieveOwnerId(BaseOrg baseOrg) {
-		if (baseOrg.isPrimary()) return NULL_ID;
-		
 		return baseOrg.getId();		
 	}
 	
@@ -1070,9 +1067,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return dto;
 	}
 	
-	public SecondaryOrgServiceDTO convert(SecondaryOrg secondaryOrg) {
-		SecondaryOrgServiceDTO dto = new SecondaryOrgServiceDTO();
-		populate(secondaryOrg, dto);
+	public InternalOrgServiceDTO convert(InternalOrg internalOrg) {
+		InternalOrgServiceDTO dto = new InternalOrgServiceDTO();
+		populate(internalOrg, dto);
+		
+		dto.setPrimary(internalOrg.isPrimary());
+		
 		return dto;
 	}
 	
@@ -1083,9 +1083,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	private void populate(BaseOrg baseOrg, AbstractExternalOrgServiceDTO baseOrgDto) {
 		populate(baseOrg, (AbstractBaseOrgServiceDTO)baseOrgDto);
-		if (!baseOrg.getParent().equals(baseOrg.getPrimaryOrg())) {
-			baseOrgDto.setParentId(baseOrg.getParent().getId());
-		}
+		baseOrgDto.setParentId(baseOrg.getParent().getId());
 	}
 
 }

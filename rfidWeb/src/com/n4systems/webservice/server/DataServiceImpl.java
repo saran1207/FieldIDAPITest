@@ -48,6 +48,8 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
+import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.InternalOrgPaginatedLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
@@ -89,7 +91,7 @@ import com.n4systems.webservice.dto.ProductTypeListResponse;
 import com.n4systems.webservice.dto.RequestInformation;
 import com.n4systems.webservice.dto.RequestResponse;
 import com.n4systems.webservice.dto.ResponseStatus;
-import com.n4systems.webservice.dto.SecondaryOrgListResponse;
+import com.n4systems.webservice.dto.InternalOrgListResponse;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
@@ -527,24 +529,24 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
-	public SecondaryOrgListResponse getAllSecondaryOrgs(PaginatedRequestInformation requestInformation)	throws ServiceException {
+	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation)	throws ServiceException {
 		try {
 			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			int currentPage = requestInformation.getPageNumber().intValue();			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 									
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
-			SecondaryOrgPaginatedLoader loader = loaderFactory.createSecondaryOrgPaginatedLoader();
+			InternalOrgPaginatedLoader loader = loaderFactory.createInternalOrgPaginatedLoader();
 			loader.setPageSize(RESULTS_PER_PAGE);
 			loader.setPage(currentPage);
 			
-			Pager<SecondaryOrg> pager = loader.load();
+			Pager<InternalOrg> pager = loader.load();
 			
-			SecondaryOrgListResponse response = new SecondaryOrgListResponse(pager, RESULTS_PER_PAGE);
+			InternalOrgListResponse response = new InternalOrgListResponse(pager, RESULTS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
 
-			for (SecondaryOrg secondaryOrg : pager.getList()) {
-				response.getSecondaryOrgs().add( converter.convert(secondaryOrg) );
+			for (InternalOrg internalOrg : pager.getList()) {
+				response.getInternalOrgs().add( converter.convert(internalOrg) );
 			}
 			
 			return response;

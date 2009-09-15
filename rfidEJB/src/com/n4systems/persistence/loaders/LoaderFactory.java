@@ -14,6 +14,7 @@ import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.ExternalOrgCodeExistsLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
+import com.n4systems.model.orgs.InternalOrgPaginatedLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
@@ -111,6 +112,10 @@ public class LoaderFactory {
 
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
 		return new InternalOrgListableLoader(filter);
+	}
+	
+	public InternalOrgPaginatedLoader createInternalOrgPaginatedLoader() {
+		return new InternalOrgPaginatedLoader(filter);
 	}
 
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {

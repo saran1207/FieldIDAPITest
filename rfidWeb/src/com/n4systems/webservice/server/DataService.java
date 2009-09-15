@@ -24,7 +24,7 @@ import com.n4systems.webservice.dto.ProductTypeGroupListResponse;
 import com.n4systems.webservice.dto.ProductTypeListResponse;
 import com.n4systems.webservice.dto.RequestInformation;
 import com.n4systems.webservice.dto.RequestResponse;
-import com.n4systems.webservice.dto.SecondaryOrgListResponse;
+import com.n4systems.webservice.dto.InternalOrgListResponse;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
@@ -66,5 +66,5 @@ public interface DataService {
 	public MobileUpdateInfo getMobileUpdateInfo(String currentVersion) throws ServiceException;
 	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;	
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
-	public SecondaryOrgListResponse getAllSecondaryOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
+	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
 }
