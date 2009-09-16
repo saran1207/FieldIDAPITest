@@ -23,6 +23,7 @@ import rfid.web.helper.Constants;
 import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -50,12 +51,12 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator, HasDuplicateRfidValidator {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger( UserCrud.class );
-	
+	private static final Logger logger = Logger.getLogger(UserCrud.class);
+
 	protected UserBean user;
 	protected OwnerPicker ownerPicker;
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
-	
+
 	protected User userManager;
 	protected CustomerManager customerManager;
 	private String password;
@@ -71,211 +72,216 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	private Country country;
 	private Region region;
 	private File signature;
-	
-	public UserCrud( User userManager, PersistenceManager persistenceManager) {
+
+	public UserCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
-	
+
 	@Override
 	protected void initMemberFields() {
 		user = new UserBean();
 		user.setTimeZoneID(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID));
-		initializeTimeZoneLists();	
+		initializeTimeZoneLists();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		if( user == null ) {
-			user = userManager.findUser( uniqueId, getTenantId() );
+		if (user == null) {
+			user = userManager.findUser(uniqueId, getTenantId());
 			initializeTimeZoneLists();
 		}
 	}
-	
+
 	private void initializeTimeZoneLists() {
 		country = CountryList.getInstance().getCountryByFullId(user.getTimeZoneID());
 		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
 	}
-	
+
 	@Override
 	protected void postInit() {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), user);
 	}
-	
+
 	@SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doEdit() {
-		if(user == null) {
-			addFlashErrorText( "error.unknownuser" );
-			return ERROR;
-		}
-		
+		loadPreReq();
+
 		setupPermissions();
 		return SUCCESS;
 	}
 
 	private void setupPermissions() {
 		userPermissions = new HashMap<String, Boolean>();
-		
+
 		BitField permField = new BitField(user.getPermissions());
 		for (ListingPair permission : getPermissions()) {
-			userPermissions.put(permission.getId().toString(), permField.isSet(permission.getId().intValue()));		
+			userPermissions.put(permission.getId().toString(), permField.isSet(permission.getId().intValue()));
 		}
 	}
-	
+
 	public String doSave() {
 		clearErrorsAndMessages();
-		if( user == null ) {
-			addFlashErrorText( "error.unknownuser" );
-			return ERROR;
-		}
+		loadPreReq();
 
 		if (isCustomerUser()) {
 			user.setPermissions(0);
 		} else {
-			if(userPermissions != null && !user.isAdmin()) {  // needed to handle when there is an empty list submitted.
+			if (userPermissions != null && !user.isAdmin()) { // needed to
+																// handle when
+																// there is an
+																// empty list
+																// submitted.
 				BitField perms = new BitField();
 				/*
-				 * we could do this by simply converting the id's back to strings and setting them on the field,
-				 * however that would unsafe, since we can't trust what's coming back.  Instead, get the list of 
-				 * permissions they were allowed to see in the first place, and ensure our key is from that set
+				 * we could do this by simply converting the id's back to
+				 * strings and setting them on the field, however that would
+				 * unsafe, since we can't trust what's coming back. Instead, get
+				 * the list of permissions they were allowed to see in the first
+				 * place, and ensure our key is from that set
 				 */
 				int permValue;
 				String permStr;
-				for (ListingPair allowedPerm: getPermissions()) {
+				for (ListingPair allowedPerm : getPermissions()) {
 					permValue = allowedPerm.getId().intValue();
 					permStr = allowedPerm.getId().toString();
-					
-					// if our permission map contains the permission id, and it's value is true, add the permission
+
+					// if our permission map contains the permission id, and
+					// it's value is true, add the permission
 					if (userPermissions.containsKey(permStr) && userPermissions.get(permStr)) {
 						perms.set(permValue);
 					}
 				}
-				
+
 				user.setPermissions(perms.getMask());
 			}
 		}
-		
-		user.setTenant( getTenant() );
-		user.setActive( true );
+
+		user.setTenant(getTenant());
+		user.setActive(true);
 		user.setSystem(false);
-		
+
 		try {
-			if( user.getUniqueID() == null ) {		
-				user.assignPassword( password );
+			if (user.getUniqueID() == null) {
+				user.assignPassword(password);
 				user.assignSecruityCardNumber(securityCardNumber);
-				userManager.createUser( user );
+				userManager.createUser(user);
 				uniqueID = user.getUniqueID();
 			} else {
-				userManager.updateUser( user );
+				userManager.updateUser(user);
 			}
-		} catch ( Exception e ) {
-			addActionError( getText( "error.failedtosave" ) );
-			logger.error( "failed to save user ", e);
+		} catch (Exception e) {
+			addActionError(getText("error.failedtosave"));
+			logger.error("failed to save user ", e);
 			return INPUT;
 		}
-		
-		if (user.getId().equals( getSessionUserId())) {
+
+		if (user.getId().equals(getSessionUserId())) {
 			refreshSessionUser();
 		}
-		addFlashMessageText( "message.saved" );
+		addFlashMessageText("message.saved");
 		return "saved";
 	}
-	
+
 	@SkipValidation
-	public String doRemove(){
-		if( user == null ) {
-			addFlashErrorText( "error.unknownuser" );
-			return ERROR;
-		}
-		
-		if( user.getUniqueID() != null ) {
+	public String doRemove() {
+		loadPreReq();
+
+		if (user.getUniqueID() != null) {
 			try {
-				user.archiveUser(); 
-				userManager.updateUser( user );
-			} catch( Exception e ) {
-				addFlashErrorText( "error.failedtodelete" );
-				logger.error( "failed to remove user ", e);
+				user.archiveUser();
+				userManager.updateUser(user);
+			} catch (Exception e) {
+				addFlashErrorText("error.failedtodelete");
+				logger.error("failed to remove user ", e);
 				return ERROR;
 			}
 		}
-		addFlashMessageText( "message.userdeleted" );
+		addFlashMessageText("message.userdeleted");
 		return SUCCESS;
 	}
-	
+
+	private void loadPreReq() {
+		if (user == null) {
+			addFlashErrorText("error.unknownuser");
+			throw new MissingEntityException("no user loaded");
+		}
+	}
+
 	@SkipValidation
 	public String doUploadSignature() {
-		if ( user == null ) {
+		if (user == null) {
 			return ERROR;
 		}
 		// deal with the image file
-		if(signature != null && signature.exists()) {
-			try { 
+		if (signature != null && signature.exists()) {
+			try {
 				File userImagePath = PathHandler.getSignatureImage(user);
-				
+
 				// delete the old image file if one exists
 				if (userImagePath.exists()) {
 					userImagePath.delete();
 				}
-				
+
 				// create the parent directories if needed
 				if (!userImagePath.getParentFile().exists()) {
 					userImagePath.getParentFile().mkdirs();
 				}
-				
+
 				// copy our temp image to the private location
 				FileUtils.copyFile(signature, userImagePath);
-				
+
 				addActionMessage("Image uploaded");
-			} catch( Exception e ) {
+			} catch (Exception e) {
 				logger.error("Failed to upload signature", e);
 				addActionError("Error uploading image.");
 				return ERROR;
 			}
 		}
-		
+
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doSignature() {
 		String status = null;
-		
+
 		if (user != null) {
 			File signatureImage = PathHandler.getSignatureImage(user);
 			if (!signatureImage.exists()) {
 				return ERROR;
 			}
 
-			InputStream signatureIS = null; 
+			InputStream signatureIS = null;
 			try {
-				getServletResponse().setContentLength((int)signatureImage.length());
-				
+				getServletResponse().setContentLength((int) signatureImage.length());
+
 				signatureIS = new FileInputStream(signatureImage);
-			
+
 				IOUtils.copy(signatureIS, getServletResponse().getOutputStream());
-				
+
 				IOUtils.closeQuietly(getServletResponse().getOutputStream());
 				getServletResponse().flushBuffer();
-				
+
 			} catch (Exception e) {
 				logger.error("Failed to load signature", e);
 				status = ERROR;
 			} finally {
 				IOUtils.closeQuietly(signatureIS);
 			}
-			
+
 		} else {
 			status = ERROR;
 		}
-		
+
 		return status;
 	}
-	
+
 	@SkipValidation
 	public String doRemoveSignature() {
 		if (user != null) {
@@ -284,16 +290,16 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 				if (signatureImage.exists()) {
 					signatureImage.delete();
 				}
-				
+
 				addActionMessage("Image removed");
 				return SUCCESS;
-			} catch( Exception e ) {
-				logger.error("Failed to remove signature", e );
+			} catch (Exception e) {
+				logger.error("Failed to remove signature", e);
 			}
 		}
 		return ERROR;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {
 		return userPermissions;
@@ -305,15 +311,15 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	}
 
 	public List<ListingPair> getPermissions() {
-		if(permissions == null) {
+		if (permissions == null) {
 			permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 		}
 		return permissions;
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.useridrequired")
-	@StringLengthFieldValidator( type=ValidatorType.FIELD, message = "" , key = "errors.useridlength", maxLength="15")
-	@CustomValidator(type="uniqueValue", message = "", key="errors.data.userduplicate")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.useridlength", maxLength = "15")
+	@CustomValidator(type = "uniqueValue", message = "", key = "errors.data.userduplicate")
 	public String getUserId() {
 		return user.getUserID();
 	}
@@ -321,25 +327,25 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public void setUserId(String userId) {
 		user.setUserID(userId);
 	}
-	
+
 	public String getFirstName() {
 		return user.getFirstName();
 	}
 
-	@RequiredStringValidator(message="", key="error.firstnameisrequired")
+	@RequiredStringValidator(message = "", key = "error.firstnameisrequired")
 	public void setFirstName(String firstName) {
-		user.setFirstName( firstName );
+		user.setFirstName(firstName);
 	}
 
 	public String getLastName() {
 		return user.getLastName();
 	}
 
-	@RequiredStringValidator(message="", key="error.lastnameisrequired")
+	@RequiredStringValidator(message = "", key = "error.lastnameisrequired")
 	public void setLastName(String lastName) {
-		user.setLastName( lastName );
+		user.setLastName(lastName);
 	}
-	
+
 	public String getInitials() {
 		return user.getInitials();
 	}
@@ -347,7 +353,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public void setInitials(String initials) {
 		user.setInitials(initials);
 	}
-	
+
 	public String getTimeZoneID() {
 		return region.getId();
 	}
@@ -359,14 +365,14 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		}
 	}
 
-	@RequiredStringValidator( type=ValidatorType.FIELD, message="", key="error.emailrequired" )
-	@EmailValidator( type=ValidatorType.FIELD, message="", key="error.emailformat")
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.emailrequired")
+	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.emailformat")
 	public String getEmailAddress() {
 		return user.getEmailAddress();
 	}
 
 	public void setEmailAddress(String emailAddress) {
-		user.setEmailAddress( emailAddress );
+		user.setEmailAddress(emailAddress);
 	}
 
 	public String getPosition() {
@@ -374,10 +380,10 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	}
 
 	public void setPosition(String position) {
-		user.setPosition( position );
+		user.setPosition(position);
 	}
 
-	@CustomValidator(type="duplicateRfidValidator", message = "", key="errors.data.rfidduplicate")
+	@CustomValidator(type = "duplicateRfidValidator", message = "", key = "errors.data.rfidduplicate")
 	public String getSecurityRfidNumber() {
 		return securityCardNumber;
 	}
@@ -385,7 +391,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public void setSecurityRfidNumber(String securityRfidNumber) {
 		securityCardNumber = securityRfidNumber;
 	}
-	
+
 	public String getCountryId() {
 		return country.getId();
 	}
@@ -395,7 +401,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.passwordrequired")
-	@StringLengthFieldValidator( type=ValidatorType.FIELD, message = "" , key = "errors.passwordlength", minLength="5") 
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.passwordlength", minLength = "5")
 	public String getPassword() {
 		return password;
 	}
@@ -404,24 +410,25 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		this.password = password;
 	}
 
-	@FieldExpressionValidator( expression="passwordConfirmation == password", message="", key="error.passwordsmustmatch" )
+	@FieldExpressionValidator(expression = "passwordConfirmation == password", message = "", key = "error.passwordsmustmatch")
 	public String getPasswordConfirmation() {
 		return passwordConfirmation;
 	}
 
-	public void setPasswordConfirmation( String passwordConfirmation ) {
+	public void setPasswordConfirmation(String passwordConfirmation) {
 		this.passwordConfirmation = passwordConfirmation;
 	}
 
 	public Pager<UserBean> getPage() {
-		if( page == null ) {
+		if (page == null) {
 			UserType userTypeFilter = UserType.ALL;
-			if( userType != null ) {
+			if (userType != null) {
 				try {
-					userTypeFilter = UserType.valueOf( userType );
-				} catch (IllegalArgumentException e) { }
+					userTypeFilter = UserType.valueOf(userType);
+				} catch (IllegalArgumentException e) {
+				}
 			}
-			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, listFilter, userTypeFilter );
+			page = userManager.getUsers(getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, listFilter, userTypeFilter);
 		}
 		return page;
 	}
@@ -433,15 +440,15 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public SortedSet<? extends Listable<String>> getTimeZones() {
 		return (country != null) ? country.getRegions() : new TreeSet<Listable<String>>();
 	}
-	
+
 	public boolean duplicateValueExists(String formValue) {
-		return !userManager.userIdIsUnique( getTenantId() , formValue, uniqueID );
+		return !userManager.userIdIsUnique(getTenantId(), formValue, uniqueID);
 	}
-	
+
 	public boolean validateRfid(String formValue) {
-		return !userManager.userRfidIsUnique( getTenantId() , formValue, uniqueID );
+		return !userManager.userRfidIsUnique(getTenantId(), formValue, uniqueID);
 	}
-	
+
 	public File getSignature() {
 		return signature;
 	}
@@ -449,15 +456,15 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public void setSignature(File signature) {
 		this.signature = signature;
 	}
-	
+
 	public List<StringListingPair> getUserTypes() {
 		ArrayList<StringListingPair> userTypes = new ArrayList<StringListingPair>();
-		for( int i = 0; i < UserType.values().length; i++ ) {
-			userTypes.add(new StringListingPair( UserType.values()[i].name(), UserType.values()[i].getLabel() ) );
+		for (int i = 0; i < UserType.values().length; i++) {
+			userTypes.add(new StringListingPair(UserType.values()[i].name(), UserType.values()[i].getLabel()));
 		}
 		return userTypes;
 	}
-	
+
 	public String getListFilter() {
 		return listFilter;
 	}
@@ -473,23 +480,23 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	
+
 	public UserBean getUser() {
 		return user;
 	}
-	
+
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
-	
+
 	public Long getOwnerId() {
 		return ownerPicker.getOwnerId();
 	}
-	
+
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-	
+
 	public boolean isCustomerUser() {
 		return false;
 	}

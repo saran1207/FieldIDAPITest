@@ -36,6 +36,7 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	public static OrgBuilder aDivisionOrg() {
 		return new OrgBuilder(OrgType.DIVISION, null, "first_division", null, "fdiv", null, aCustomerOrg().build());
 	}
+	
 
 	public OrgBuilder(OrgType type, Tenant tenant, String name, AddressInfo addressInfo, String code, Contact contact, BaseOrg parent) {
 		super();
@@ -47,6 +48,18 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		this.contact = contact;
 		this.parent = parent;
 	}
+	
+	
+
+	public OrgBuilder withParent(BaseOrg parent) {
+		return new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent);
+	}
+	
+	public OrgBuilder withName(String name) {
+		return new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent);
+	}
+
+	
 	
 	@Override
 	public BaseOrg build() {
@@ -84,5 +97,4 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		
 		return org;
 	}
-
 }

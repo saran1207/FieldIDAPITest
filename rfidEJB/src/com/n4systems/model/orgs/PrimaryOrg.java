@@ -152,4 +152,9 @@ public class PrimaryOrg extends InternalOrg {
 	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
 	}
+	
+	@Override
+	public boolean sameTypeAs(BaseOrg org) {
+		return org instanceof PrimaryOrg;
+	}
 }

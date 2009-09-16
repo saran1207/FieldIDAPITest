@@ -19,6 +19,7 @@ import com.n4systems.fieldid.viewhelpers.ViewTree;
 import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
+import com.n4systems.model.savedreports.SharedReportUserListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
@@ -27,15 +28,14 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	private static final Logger logger = Logger.getLogger(SavedReportCrud.class);
 	private static final String INVALID_SEARCH_ID = "invalidSearchId";
 	
-	private final ViewTreeHelper userViewHelp;
+	
 	private SavedReport report;
 	private String searchId;
 	private List<Long> shareUsers;
 	private ViewTree<Long> shareUserTree;
 	
-	public SavedReportCrud(PersistenceManager persistenceManager, User userManager) {
+	public SavedReportCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		userViewHelp = new ViewTreeHelper(persistenceManager, userManager);
 	}
 
 	@Override
@@ -51,6 +51,8 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		report = persistenceManager.find(query);
 	}
 
+	
+	
 	private void testRequiredEntities(boolean existing) {
 		if (report == null) {
 			addActionErrorText("error.noreport");
@@ -196,9 +198,8 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	
 	public ViewTree<Long> getShareUserList() {
 		if (shareUserTree == null) {
-			Long ownerId = report.getLongCriteria(SavedReport.OWNER_ID);
-
-			shareUserTree = userViewHelp.getUserViewTree(getTenant(), ownerId, getSessionUser().getId(), getSecurityFilter());
+			ViewTreeHelper userViewHelp = new ViewTreeHelper(persistenceManager, new SharedReportUserListLoader(getSecurityFilter()));
+			shareUserTree = userViewHelp.getUserViewTree(report, getSecurityFilter());
 		}
 
 		return shareUserTree;

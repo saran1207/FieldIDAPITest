@@ -57,4 +57,8 @@ public class SecondaryOrg extends InternalOrg {
 		return primaryOrg;
 	}
 	
+	@Override
+	public boolean sameTypeAs(BaseOrg org) {
+		return org instanceof SecondaryOrg;
+	}
 }

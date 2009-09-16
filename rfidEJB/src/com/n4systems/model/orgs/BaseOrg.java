@@ -128,6 +128,8 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		return (this instanceof DivisionOrg);
 	}
 	
+	abstract public boolean sameTypeAs(BaseOrg org);
+	
 	/** @return The PrimaryOrg for this Tenant */
 	abstract public PrimaryOrg getPrimaryOrg();
 	

@@ -439,35 +439,5 @@ public class UserManager implements User {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
-    public List<UserBean> getOuterUserList(Long tenantId, Long ownerId, Long userId, SecurityFilter filter) {
-		StringBuilder jpql = new StringBuilder();
-		
-		jpql.append("from ");
-		jpql.append(UserBean.class.getName());
-		jpql.append(" WHERE tenant.id = :tenantId AND active = :active AND deleted = :deleted AND system = :system AND uniqueID <> :userId AND");
-		
-		jpql.append(filter.produceWhereClause(UserBean.class));
-		
-		if (ownerId != null) {
-			jpql.append(" AND (owner.id = :ownerId OR owner.customerOrg IS NULL)");
-		}
-		
-		jpql.append(" ORDER BY owner.name, firstName, lastName");
-		
-		Query userQuery = em.createQuery(jpql.toString());
-		
-		filter.applyParameters(userQuery, UserBean.class);
-		userQuery.setParameter("tenantId", tenantId);
-		userQuery.setParameter("userId", userId);
-		userQuery.setParameter("active", true);
-		userQuery.setParameter("deleted", false);
-		userQuery.setParameter("system", false);
-		
-		if (ownerId != null) {
-			userQuery.setParameter("ownerId", ownerId);
-		}
-		
-		return (List<UserBean>)userQuery.getResultList();
-	}
+	
 }

@@ -82,4 +82,9 @@ public class CustomerOrg extends ExternalOrg {
 	public void setLegacyId(Long legacyId) {
 		this.legacyId = legacyId;
 	}
+
+	@Override
+	public boolean sameTypeAs(BaseOrg org) {
+		return org instanceof CustomerOrg;
+	}
 }

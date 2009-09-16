@@ -43,5 +43,5 @@
 </#macro>
 
 <div class="viewTreeContainer">
-	<@drawTreeNode node=viewTree firstNode=true foundNonEmptyNode=false/>
+	<@drawTreeNode node=viewTree firstNode=true foundNonEmptyNode=false />
 </div>

@@ -62,21 +62,5 @@ public interface User {
 	public void createAndEmailLoginKey(UserBean user, URI baseURI) throws MessagingException ;
 	public UserBean findUserByResetKey( String tenantName, String userName, String resetPasswordKey );
 	
-	/**
-	 * Constructs an 'Outer' list of active users.  Given an non-null, tenant, customer and division, the set of users returned 
-	 * will be:
-	 * <ol>
-	 *	<li>Employee users for this tenant</li>
-	 *	<li>Customer users for this tenant and Customer (no division)</li>
-	 *	<li>Division users for this tenant, Customer & Division</li>
-	 * </ol>
-	 * This method relies on the security filter to ensure that users are not returned outside of ones permissions.
-	 * Users are returned sorted by owner, first name and last name (in that order).
-	 * @param tenantId		Id of a Tenant
-	 * @param customerId	Id of a BaseOrg
-	 * @param userId		Id of a User to NOT include in the final list
-	 * @param filter		A SecurityFitler
-	 * @return				The set of User objects.
-	 */
-	public List<UserBean> getOuterUserList(Long tenantId, Long ownerId, Long userId, SecurityFilter filter);
+	
 }
