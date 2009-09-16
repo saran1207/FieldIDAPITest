@@ -34,7 +34,7 @@
 
 	<div class="formRowHolder">
 		<label for="owner"><@s.text name="label.owner"/></label>
-		<@n4.orgPicker key="label.owner" name="owner"/>
+		<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','external')}"/>
 	</div>
 	
 	<#if !uniqueID?exists >	

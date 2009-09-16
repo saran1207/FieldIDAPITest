@@ -80,19 +80,21 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	@Override
 	protected void initMemberFields() {
 		user = new UserBean();
-		user.setOwner(getPrimaryOrg());
-		String defaultZoneId = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
-		country = CountryList.getInstance().getCountryByFullId(defaultZoneId);
-		region = CountryList.getInstance().getRegionByFullId(defaultZoneId);	
+		user.setTimeZoneID(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID));
+		initializeTimeZoneLists();	
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		if( user == null ) {
 			user = userManager.findUser( uniqueId, getTenantId() );
-			country = CountryList.getInstance().getCountryByFullId(user.getTimeZoneID());
-			region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
+			initializeTimeZoneLists();
 		}
+	}
+	
+	private void initializeTimeZoneLists() {
+		country = CountryList.getInstance().getCountryByFullId(user.getTimeZoneID());
+		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
 	}
 	
 	@Override

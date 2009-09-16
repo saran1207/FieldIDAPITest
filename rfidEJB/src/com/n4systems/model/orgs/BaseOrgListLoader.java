@@ -68,6 +68,12 @@ public class BaseOrgListLoader extends ListLoader<BaseOrg> {
 			case NON_PRIMARY:
 				new NonPrimaryOrgFilter(filter.getOwner().getPrimaryOrg()).applyFilter(baseOrgQuery);
 				break;
+			case EXTERNAL:
+				new ExternalOrgFilter().applyFilter(baseOrgQuery);
+				break;
+			case INTERNAL:
+				new InternalOrgFilter().applyFilter(baseOrgQuery);
+				break;
 			case ALL_ORGS:
 			default:
 				break;

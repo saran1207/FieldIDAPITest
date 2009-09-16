@@ -19,7 +19,7 @@
 </#if>
 <div class="formRowHolder">
 	<label for="owner"><@s.text name="label.owner"/></label>
-	<@n4.orgPicker name="owner" theme="fieldid"/>
+	<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 </div>
 <div class="formRowHolder">
 	<#if !parentProduct?exists >

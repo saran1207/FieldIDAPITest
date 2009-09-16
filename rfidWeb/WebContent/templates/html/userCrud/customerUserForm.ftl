@@ -8,6 +8,7 @@
 </title>
 
 <#assign userSaveAction='customerUserSave' >
+<#assign employee=false>
 <#assign backToList>
 	<a href="<@s.url action="customerShow" currentPage="${currentPage!}" listFilter="${listFilter!}" uniqueID="${customer}"/>"><@s.text name="label.cancel" /></a>
 </#assign>

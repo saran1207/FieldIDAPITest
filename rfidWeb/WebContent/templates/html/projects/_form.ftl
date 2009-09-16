@@ -20,7 +20,7 @@
 	
 	<div class="infoSet">
 		<label for="name"><@s.text name="indicator.required"/> <@s.text name="label.owner"/></label>
-		<@n4.orgPicker name="owner"/>
+		<@n4.orgPicker name="owner" required="true"/>
 	</div>
 		
 	
