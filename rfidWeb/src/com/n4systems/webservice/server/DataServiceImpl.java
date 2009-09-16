@@ -49,8 +49,8 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.InternalOrgPaginatedLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.security.SecurityFilter;
@@ -79,6 +79,7 @@ import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeListResponse;
+import com.n4systems.webservice.dto.InternalOrgListResponse;
 import com.n4systems.webservice.dto.JobListResponse;
 import com.n4systems.webservice.dto.JobSiteListResponse;
 import com.n4systems.webservice.dto.MobileUpdateInfo;
@@ -91,7 +92,6 @@ import com.n4systems.webservice.dto.ProductTypeListResponse;
 import com.n4systems.webservice.dto.RequestInformation;
 import com.n4systems.webservice.dto.RequestResponse;
 import com.n4systems.webservice.dto.ResponseStatus;
-import com.n4systems.webservice.dto.InternalOrgListResponse;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
@@ -536,17 +536,25 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 									
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
-			InternalOrgPaginatedLoader loader = loaderFactory.createInternalOrgPaginatedLoader();
-			loader.setPageSize(RESULTS_PER_PAGE);
-			loader.setPage(currentPage);
+			SecondaryOrgPaginatedLoader secondaryLoader = loaderFactory.createSecondaryOrgPaginatedLoader();
+			secondaryLoader.setPageSize(RESULTS_PER_PAGE);
+			secondaryLoader.setPage(currentPage);
 			
-			Pager<InternalOrg> pager = loader.load();
+			Pager<SecondaryOrg> pager = secondaryLoader.load();
 			
 			InternalOrgListResponse response = new InternalOrgListResponse(pager, RESULTS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
 
 			for (InternalOrg internalOrg : pager.getList()) {
 				response.getInternalOrgs().add( converter.convert(internalOrg) );
+			}
+			
+			if (response.getCurrentPage() == response.getTotalPages()) {
+				PrimaryOrgByTenantLoader primaryLoader = loaderFactory.createPrimaryOrgByTenantLoader();
+				primaryLoader.setTenantId(requestInformation.getTenantId());
+				PrimaryOrg primaryOrg = primaryLoader.load();
+				
+				response.getInternalOrgs().add(converter.convert((InternalOrg)primaryOrg));
 			}
 			
 			return response;
