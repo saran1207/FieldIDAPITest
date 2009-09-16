@@ -268,16 +268,18 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetProduct.setSerialNumber(productServiceDTO.getSerialNumber());
 		}
 
+		BaseOrg owner = null;
 		if (productServiceDTO.ownerIdExists()) {
-			//FIXME add a lookup for the owner
+			owner = persistenceManager.find(BaseOrg.class, productServiceDTO.getOwnerId(), new TenantOnlySecurityFilter(tenantId));			
 		} else {
 			// This is here to support mobiles before version 1.14
 			FindOwnerByLegacyIds ownerFinder = getFindOwnerByLegacyIds(tenantId);
 			ownerFinder.setLegacyCustomerId(productServiceDTO.customerExists() ? productServiceDTO.getCustomerId() : null);
 			ownerFinder.setLegacyDivisionId(productServiceDTO.divisionExists() ? productServiceDTO.getDivisionId() : null);
 			
-			targetProduct.setOwner(ownerFinder.retrieveOwner());
+			owner = ownerFinder.retrieveOwner();
 		}
+		targetProduct.setOwner(owner);
 		
 		targetProduct.setProductStatus(convertField(ProductStatusBean.class, productServiceDTO.getProductStatusId(), targetProduct.getProductStatus()));
 		
@@ -410,15 +412,17 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspection.setModifiedBy( inspector );		
 		inspection.setInspector( inspector );
 
+		BaseOrg owner = null;
 		if (inspectionServiceDTO.ownerIdExists()) {
-			// FIXME populate with the proper owner
+			owner = persistenceManager.find(BaseOrg.class, inspectionServiceDTO.getOwnerId(), new TenantOnlySecurityFilter(tenantId));
 		} else {
 			// This is for mobile versions PRE 1.14
 			FindOwnerByLegacyIds ownerFinder = new FindOwnerByLegacyIds(persistenceManager, tenantId);
 			ownerFinder.setLegacyCustomerId(inspectionServiceDTO.customerExists() ? inspectionServiceDTO.getCustomerId() : null);
 			ownerFinder.setLegacyDivisionId(inspectionServiceDTO.divisionExists() ? inspectionServiceDTO.getDivisionId() : null);
-			inspection.setOwner(ownerFinder.retrieveOwner());
+			owner = ownerFinder.retrieveOwner();
 		}
+		inspection.setOwner(owner);
 		
 		if ( inspectionServiceDTO.inspectionBookExists() ) {
 			inspection.setBook( persistenceManager.find(InspectionBook.class, inspectionServiceDTO.getInspectionBookId()) );			
