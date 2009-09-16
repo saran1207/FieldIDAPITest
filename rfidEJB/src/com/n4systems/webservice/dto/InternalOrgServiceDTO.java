@@ -2,13 +2,14 @@ package com.n4systems.webservice.dto;
 
 public class InternalOrgServiceDTO extends AbstractBaseOrgServiceDTO {
 	
-	private boolean primary;
+	private boolean primaryOrg;
 
-	public boolean isPrimary() {
-		return primary;
+	public boolean isPrimaryOrg() {
+		return primaryOrg;
 	}
 
-	public void setPrimary(boolean primary) {
-		this.primary = primary;
+	public void setPrimaryOrg(boolean primaryOrg) {
+		this.primaryOrg = primaryOrg;
 	}
+
 }

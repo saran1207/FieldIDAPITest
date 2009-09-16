@@ -1072,7 +1072,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		InternalOrgServiceDTO dto = new InternalOrgServiceDTO();
 		populate(internalOrg, dto);
 		
-		dto.setPrimary(internalOrg.isPrimary());
+		dto.setPrimaryOrg(internalOrg.isPrimary());
 		
 		return dto;
 	}
