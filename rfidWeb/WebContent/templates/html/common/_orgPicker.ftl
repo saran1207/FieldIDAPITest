@@ -2,6 +2,7 @@
 <#assign name>
 	<div id="orgSearch" style="display:none">
 		<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch">
+			<@s.hidden name="orgTypeFilter" id="orgFilter"/>
 			<div class="infoSet">
 				<@s.textfield name="searchName" /> <@s.submit key="label.search"/>
 			</div>

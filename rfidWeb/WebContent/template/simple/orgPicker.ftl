@@ -30,7 +30,8 @@ value="${(parameters.nameValue.displayName)?default("")?html}"<#rt/>
  title="${parameters.title?html}"<#rt/>
 </#if>
 />
-<a href="#" class="searchOwner">search</a>
-<a href="#" class="clearSearchOwner">clear</a>
-
+	<a href="#" class="searchOwner" orgFilter="${orgType}"><@s.text name="label.search"/></a>
+	<#if !(parameters.required?exists) || !parameters.required>
+		<a href="#" class="clearSearchOwner"><@s.text name="label.clear"/></a>
+	</#if>
 </span>

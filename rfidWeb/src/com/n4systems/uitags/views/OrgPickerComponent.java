@@ -12,6 +12,10 @@ public class OrgPickerComponent extends UIBean {
 	public static final String TEMPLATE = "orgPicker";
 	
 	
+	
+	
+	private String orgType = "all";
+	
 	public OrgPickerComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
 	}
@@ -25,16 +29,27 @@ public class OrgPickerComponent extends UIBean {
 	public void evaluateParams() {
 		super.evaluateParams();
 		BaseOrg selectedOrg = (BaseOrg)getParameters().get("nameValue");
+		
 		addParameter("idName", name + "Id");
 		
 		if (selectedOrg != null) {
 			addParameter("idNameValue", selectedOrg.getId());
 		}
+		
+		addParameter("orgType", orgType);
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected Class getValueClassType() {
 		return BaseOrg.class;
+	}
+
+	public String getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
 	}
 	
 	

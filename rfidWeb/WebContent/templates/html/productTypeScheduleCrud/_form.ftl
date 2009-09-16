@@ -9,10 +9,15 @@
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="customerForm" />
 	<span class="customer">
-		<#if !uniqueID?exists && customer?exists >
-			<@n4.orgPicker name="owner" />
+		<#if !uniqueID?exists && customerForm>
+			<@n4.orgPicker name="owner" required="true" orgType="non_primary"/>
 		<#else>
-			${ (schedule.owner.name )! }<@s.hidden name="ownerId" />
+			<#if schedule.override >
+				${schedule.owner.name}
+			<#else>
+				<@s.text name="label.default"/> 
+			</#if>
+			<@s.hidden name="ownerId"/>
 		</#if>
 	</span>
 	

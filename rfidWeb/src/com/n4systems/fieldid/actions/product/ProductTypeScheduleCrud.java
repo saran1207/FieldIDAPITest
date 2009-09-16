@@ -38,7 +38,7 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 
 	private List<InspectionType> inspectionTypes;
 	private Map<String, ProductTypeSchedule> schedules;
-	private Map<String, List<ProductTypeSchedule>> customerOverrideSchedules;
+	private Map<String, List<ProductTypeSchedule>> overrideSchedules;
 
 	private LegacyProductType productTypeManager;
 	
@@ -53,7 +53,7 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	protected void initMemberFields() {
 		schedule = new ProductTypeSchedule();
 		schedule.setTenant(getTenant());
-		schedule.setOwner(getPrimaryOrg());
+		
 	}
 
 	@Override
@@ -66,8 +66,7 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 		}
 	}
 
-	
-	
+		
 	@Override
 	protected void postInit() {
 		super.postInit();
@@ -87,7 +86,6 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 
 	@SkipValidation
 	public String doShow() {
-
 		return SUCCESS;
 	}
 
@@ -201,20 +199,20 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 		return schedules;
 	}
 
-	public Map<String, List<ProductTypeSchedule>> getCustomerOverrideSchedules() {
-		if (customerOverrideSchedules == null) {
+	public Map<String, List<ProductTypeSchedule>> getOverrideSchedules() {
+		if (overrideSchedules == null) {
 			getProductType();
-			customerOverrideSchedules = new HashMap<String, List<ProductTypeSchedule>>();
+			overrideSchedules = new HashMap<String, List<ProductTypeSchedule>>();
 			for (ProductTypeSchedule schedule : productType.getSchedules()) {
 				if (schedule.isOverride()) {
-					if (customerOverrideSchedules.get(schedule.getInspectionType().getName()) == null) {
-						customerOverrideSchedules.put(schedule.getInspectionType().getName(), new ArrayList<ProductTypeSchedule>());
+					if (overrideSchedules.get(schedule.getInspectionType().getName()) == null) {
+						overrideSchedules.put(schedule.getInspectionType().getName(), new ArrayList<ProductTypeSchedule>());
 					}
-					customerOverrideSchedules.get(schedule.getInspectionType().getName()).add(schedule);
+					overrideSchedules.get(schedule.getInspectionType().getName()).add(schedule);
 				}
 			}
 		}
-		return customerOverrideSchedules;
+		return overrideSchedules;
 	}
 
 	public Long getInspectionTypeId() {
@@ -256,7 +254,9 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 	}
 
 	public ProductTypeSchedule newSchedule() {
-		return new ProductTypeSchedule();
+		ProductTypeSchedule newSchedule = new ProductTypeSchedule();
+		newSchedule.setOwner(getPrimaryOrg());
+		return newSchedule;
 
 	}
 
@@ -269,8 +269,8 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 		getProductType();
 		getInspectionType();
 
-		getCustomerOverrideSchedules();
-		List<ProductTypeSchedule> existingSchedules = customerOverrideSchedules.get(inspectionType.getName());
+		Map<String, List<ProductTypeSchedule>> overrideSchedules = getOverrideSchedules();
+		List<ProductTypeSchedule> existingSchedules = overrideSchedules.get(inspectionType.getName());
 		
 		if (existingSchedules == null) {
 			return false;

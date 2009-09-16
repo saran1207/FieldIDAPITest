@@ -5,19 +5,14 @@
 	<@s.hidden name="customerForm" value="true" />
 	<span class="customer">
 		<#if !uniqueID?exists >
-			<@n4.orgPicker name="owner" />
+			<@n4.orgPicker name="owner" required="true" orgType="non_primary"/>
 		<#else>
 			<@s.hidden name="ownerId" />
 		</#if>
 	</span>
 	
 	<span class="frequency">
-		<@s.textfield name="frequency">
-			<#if (action.fieldErrors['frequency'])?exists > 
-				<@s.param name="cssClass">inputError</@s.param>
-			</#if>
-		</@s.textfield> 
-		 <@s.text name="label.days"/>
+		<@s.textfield name="frequency"/><@s.text name="label.days"/>
 	</span>
 	
 	<span class="actions">

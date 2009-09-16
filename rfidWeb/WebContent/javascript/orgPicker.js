@@ -3,9 +3,14 @@ var baseOrgUrl = "";
 function showOrgSearch(event) {
 	var element =  Event.element(event);
 	event.stop();
-	$('orgSearch').clonePosition(element.up(".orgPicker"), {setWidth:false, setHeight:false});
-	$('orgSearch').style.position = "absolute";
-	$('orgSearch').show();
+	
+	$('orgFilter').value=element.getAttribute('orgFilter');
+	
+	var orgSearch = $('orgSearch');
+	orgSearch.clonePosition(element.up(".orgPicker"), {setWidth:false, setHeight:false});
+	orgSearch.style.position = "absolute";
+	orgSearch.show();
+	
 	$('orgPickerResults').setAttribute('targetId', element.up(".orgPicker").id);
 }
 

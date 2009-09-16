@@ -13,6 +13,8 @@ public class BaseOrgCrud extends AbstractCrud {
 	private List<BaseOrg> orgs;
 	private String searchName;
 	
+	private String orgTypeFilter = "all";
+	
 	
 	public BaseOrgCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -27,8 +29,8 @@ public class BaseOrgCrud extends AbstractCrud {
 	}
 	
 	public String doList() {
-		BaseOrgListLoader loader = new BaseOrgListLoader(getSecurityFilter());
-		orgs = loader.setSearchName(searchName).load();
+		orgs = new BaseOrgListLoader(getSecurityFilter()).setSearchName(searchName).setOrgType(orgTypeFilter).load();
+		
 		return SUCCESS;
 	}
 
@@ -42,6 +44,14 @@ public class BaseOrgCrud extends AbstractCrud {
 
 	public List<BaseOrg> getOrgs() {
 		return orgs;
+	}
+
+	public String getOrgTypeFilter() {
+		return orgTypeFilter;
+	}
+
+	public void setOrgTypeFilter(String orgTypeFilter) {
+		this.orgTypeFilter = orgTypeFilter;
 	}
 	
 	

@@ -45,9 +45,9 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 						
 						<div id="overrides_${inspectionType.id}"  style="display:none">
 							<div id="eventFrequencyOverrides_${inspectionType.id}" >
-								<#if customerOverrideSchedules[inspectionType.name]?exists >
-									<#list customerOverrideSchedules[inspectionType.name] as schedule >
-										<div id="eventFrequencyOverride_${inspectionType.id}_${schedule.owner.customerOrg.id}" class="override customerOverride"> 
+								<#if overrideSchedules[inspectionType.name]?exists >
+									<#list overrideSchedules[inspectionType.name] as schedule >
+										<div id="eventFrequencyOverride_${inspectionType.id}_${schedule.owner.id}" class="override customerOverride"> 
 											<#include "_show.ftl"/>
 										</div>
 									</#list>
@@ -77,9 +77,9 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 
 
 <script type="text/javascript" >
-	editScheduleUrl =  '<@s.url action="productTypeScheduleEdit" namespace="/ajax" includeParams="none" />';
-	cancelScheduleUrl = '<@s.url action="productTypeScheduleShow" namespace="/ajax" includeParams="none" />';
-	removeScheduleUrl = '<@s.url action="productTypeScheduleDelete" namespace="/ajax" includeParams="none" />';
+	editScheduleUrl =  '<@s.url action="productTypeScheduleEdit" namespace="/ajax"/>';
+	cancelScheduleUrl = '<@s.url action="productTypeScheduleShow" namespace="/ajax"/>';
+	removeScheduleUrl = '<@s.url action="productTypeScheduleDelete" namespace="/ajax"/>';
 	removeWarning = '<@s.text name="warning.removedefaultschedule" />';
 </script>
 

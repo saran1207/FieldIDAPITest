@@ -3,28 +3,16 @@ var cancelScheduleUrl = '';
 var removeScheduleUrl = '';
 var removeWarning = '';
 
-function editSchedule( inspectionTypeId, productTypeId, uniqueId ) {
-	var url = editScheduleUrl + '?inspectionTypeId=' + inspectionTypeId + '&productTypeId=' + productTypeId;
-	if( uniqueId != null ) { 
-	 	url += '&uniqueID=' + uniqueId ;
-	}
-	new Ajax.Request( url, 
-		{ method: "get", onComplete: function( transport ) { contentResponse( transport.responseText ) } } ); 
+function editSchedule( inspectionTypeId, productTypeId, uniqueId, ownerId ) {
+	getResponse(editScheduleUrl,"get", makeInspectionFrequencyParams(inspectionTypeId, productTypeId, uniqueId, ownerId)); 
 }
 
 function saveSchedule( inspectionTypeId ) {
-	$( 'schedule_' + inspectionTypeId ).request( { onComplete: function( transport ) { contentResponse( transport.responseText ) } } );
-	
+	$( 'schedule_' + inspectionTypeId ).request(getStandardCallbacks());
 }
 
 function cancelSchedule( inspectionTypeId, productTypeId, uniqueId ) {
-	var url = cancelScheduleUrl + '?inspectionTypeId=' + inspectionTypeId + '&productTypeId=' + productTypeId ;
-	if( uniqueId != null ) { 
-	 	url += '&uniqueID=' + uniqueId ;
-	}
-	new Ajax.Request( url,
-		{ method: "get", onComplete: function( transport ) { contentResponse( transport.responseText ) } } );  
-	
+	getResponse(cancelScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, productTypeId, uniqueId));  
 }
 
 function removeSchedule( inspectionTypeId, productTypeId, uniqueId, tryConfirm ) {
@@ -34,14 +22,22 @@ function removeSchedule( inspectionTypeId, productTypeId, uniqueId, tryConfirm )
 		doRemove = confirm( removeWarning );
 	}
 	 
-	if( doRemove ) {
-		var url = removeScheduleUrl + '?inspectionTypeId=' + inspectionTypeId + '&productTypeId=' + productTypeId;
-		if( uniqueId != null ) { 
-		 	url += '&uniqueID=' + uniqueId ;
-		}
-		new Ajax.Request( url, 
-			{ method: "get", onComplete: function( transport ) { contentResponse( transport.responseText ) } } );  
+	if (doRemove) {
+		getResponse(removeScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, productTypeId, uniqueId));  
 	}	
+}
+
+function makeInspectionFrequencyParams( inspectionTypeId, productTypeId, uniqueId, ownerId ) {
+	var params = new Object();
+	params.inspectionTypeId= inspectionTypeId;
+	params.productTypeId= productTypeId;
+	if (uniqueId != null) { 
+	 	params.uniqueID= uniqueId;
+	}
+	if (ownerId != null) { 
+		params.ownerId= ownerId;
+	}
+	return params;
 }
 
 function expandOverride( inspectionTypeId ) {
