@@ -5,10 +5,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.StrutsStatics;
 
-import rfid.web.helper.Constants;
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.utils.WebSession;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -19,16 +18,11 @@ public class LoginInterceptor extends AbstractInterceptor implements StrutsStati
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-		// Get the action context from the invocation so we can access the
-		// HttpServletRequest and HttpSession objects.
-		final ActionContext context = invocation.getInvocationContext();
-		HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST);
-		HttpSession session = request.getSession(true);
-		AbstractAction action = (AbstractAction) invocation.getAction();
-
-		SessionUser user = (SessionUser) session.getAttribute(Constants.SESSION_USER);
-		if (user == null || !userTenantMatchesSecurityGuard(action, user)) {
-			getForwardingUrl(request, session, context, action);
+		ActionInvocationWrapper invocationWrapper = new ActionInvocationWrapper(invocation);
+		
+		SessionUser user = invocationWrapper.getSessionUser();
+		if (user == null || !userTenantMatchesSecurityGuard(invocationWrapper.getSession(), user)) {
+			getForwardingUrl(invocationWrapper.getRequest(), invocationWrapper.getSession().getHttpSession(), invocation.getInvocationContext());
 			// User not logged in
 			return "login";
 		}
@@ -36,12 +30,12 @@ public class LoginInterceptor extends AbstractInterceptor implements StrutsStati
 		return invocation.invoke();
 	}
 
-	private void getForwardingUrl(HttpServletRequest request, HttpSession session, ActionContext context, AbstractAction action) {
+	private void getForwardingUrl(HttpServletRequest request, HttpSession session, ActionContext context) {
 		new UrlArchive("preLoginContext", request, session).storeUrl();
 	}
 
-	private boolean userTenantMatchesSecurityGuard(AbstractAction action, SessionUser user) {
-		return user.getTenant().equals(action.getSecurityGuard().getTenant());
+	private boolean userTenantMatchesSecurityGuard(WebSession session, SessionUser user) {
+		return user.getTenant().equals(session.getSecurityGuard().getTenant());
 	}
 
 }

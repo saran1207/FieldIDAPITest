@@ -21,7 +21,5 @@ public interface SystemSecurityGuard {
 	public boolean isDedicatedProgramManagerEnabled(); 
 	public boolean isMultiLocationEnabled(); 
 	public boolean isAllowIntegrationEnabled();
-	
-	@Deprecated
 	public boolean isJobSitesEnabled();
 }

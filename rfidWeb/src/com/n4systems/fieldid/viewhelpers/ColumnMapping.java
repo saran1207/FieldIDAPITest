@@ -26,7 +26,8 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	}
 	
 	public int compareTo(ColumnMapping mapping) {
-		return order - mapping.order;
+		// compare by order, only if orders are equal, fall back to the id
+		return (order < mapping.order ? -1 : (order == mapping.order ? id.compareTo(mapping.id) : 1));
 	}
 	
 	public String getId() {
@@ -84,4 +85,20 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	public void setOrder(int orderWeight) {
 		this.order = orderWeight;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ColumnMapping)) {
+			return false;
+		}
+		
+		ColumnMapping other = (ColumnMapping)obj;
+		return (id == other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
 }

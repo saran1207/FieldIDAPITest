@@ -86,7 +86,6 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 	}
 
 	public boolean isJobSitesEnabled() {
-		// XXX - feature has been removed, always return false
-		return false;
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
 }

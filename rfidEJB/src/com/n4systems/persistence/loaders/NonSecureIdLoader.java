@@ -23,7 +23,8 @@ public class NonSecureIdLoader<T extends BaseEntity> extends Loader<T> {
 		return builder.getSingleResult(em);
 	}
 
-	public void setId(Long id) {
+	public NonSecureIdLoader<T> setId(Long id) {
 		this.id = id;
+		return this;
 	}
 }

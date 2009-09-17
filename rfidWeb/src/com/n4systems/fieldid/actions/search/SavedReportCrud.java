@@ -71,7 +71,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		InspectionSearchContainer container = converter.convert(report);
 		
 		searchId = container.getSearchId();
-		setSessionVar(InspectionReportAction.REPORT_CRITERIA, container);  // TODO move this somewhere better AA.
+		getSession().setReportCriteria(container); // TODO move this somewhere better AA.
 		return SUCCESS;
 	}
 
@@ -193,7 +193,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	}
 	
 	private InspectionSearchContainer getContainer() {
-		return ((InspectionSearchContainer)getSessionVar(InspectionReportAction.REPORT_CRITERIA));
+		return (InspectionSearchContainer)getSession().getReportCriteria();
 	}
 	
 	public ViewTree<Long> getShareUserList() {

@@ -27,6 +27,7 @@ public class PathHandler {
 	private static final String TEMP_PATH_BASE = "tmp";
 	private static final String REPORT_FILE_EXT = ".jasper";
 	private static final String PROPERTIES_FILE_EXT = ".properties";
+	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
 	private static final String SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + REPORT_FILE_EXT;
 	private static final String PRODUCT_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
@@ -453,6 +454,11 @@ public class PathHandler {
 	/** @return The Tenant specific configuration properties file for a Tenant and Class */
 	public static File getPropertiesFile(Tenant tenant, Class<?> clazz) {
 		return parentize(getConfDir(tenant), mergePaths(clazz.getPackage().getName(), clazz.getSimpleName() + PROPERTIES_FILE_EXT));
+	}
+	
+	/** @return The Tenant specific configuration properties file for a Tenant and Package */
+	public static File getPropertiesFile(Tenant tenant, Package pack) {
+		return parentize(getConfDir(tenant), mergePaths(pack.getName(), PACKAGE_PROPERTIES_FILE));
 	}
 	
 	/** @return The Tenant main logo */

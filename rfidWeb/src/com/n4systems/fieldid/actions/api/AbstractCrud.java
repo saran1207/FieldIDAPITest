@@ -15,9 +15,9 @@ import com.opensymphony.xwork2.Preparable;
 abstract public class AbstractCrud extends AbstractAction implements Preparable {
 	protected Long uniqueID;
 	private Integer currentPage;
+	
 	public AbstractCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		getSession();
 	}
 	
 	public Long getUniqueID() {

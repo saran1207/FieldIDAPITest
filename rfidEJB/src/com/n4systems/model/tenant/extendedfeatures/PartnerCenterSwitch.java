@@ -26,7 +26,7 @@ public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 	}
 	
 	private void deleteAllCustomerUsers(Transaction transaction) {
-		String updateQuery = "UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE r_EndUser IS NOT NULL";
+		String updateQuery = "UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE owner.customerOrg IS NOT NULL";
 		Query query = transaction.getEntityManager().createQuery(updateQuery);
 		query.setParameter("now", new Date());
 		query.executeUpdate();

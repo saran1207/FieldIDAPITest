@@ -3,7 +3,6 @@ package com.n4systems.fieldid.utils;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.helpers.ActionInvocationTexentContextInitializer;
 import com.n4systems.fieldid.actions.helpers.FieldIdURI;
-import com.n4systems.util.ServiceLocator;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -13,7 +12,7 @@ public class NonBrandedInterceptor extends AbstractInterceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		ActionInvocationWrapper invocationWrapper = new ActionInvocationWrapper(invocation);
-		String url = new UrlArchive("none", invocationWrapper.getRequest(), invocationWrapper.getHttpSession()).extractCurrentUrl();
+		String url = new UrlArchive("none", invocationWrapper.getRequest(), invocationWrapper.getSession().getHttpSession()).extractCurrentUrl();
 		
 		FieldIdURI fieldIdURI = new FieldIdURI(invocationWrapper, null);
 		if (!fieldIdURI.isNonBrandedUrl()) {
@@ -24,7 +23,7 @@ public class NonBrandedInterceptor extends AbstractInterceptor {
 			return AbstractAction.REDIRECT_TO_URL;
 		}
 
-		new ActionInvocationTexentContextInitializer(invocationWrapper, ServiceLocator.getPersistenceManager()).destroyContext();	
+		new ActionInvocationTexentContextInitializer(invocationWrapper).destroyContext();	
 		return invocation.invoke();
 	}
 

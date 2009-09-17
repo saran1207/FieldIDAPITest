@@ -43,7 +43,7 @@ public class SelectTenantAction extends AbstractAction {
 	}
 
 	private void loadCompany() throws NoValidTenantSelectedException, IncorrectTenantDomain {
-		TenantContextInitializer intializer = new AbstractActionTenantContextInitializer(this, persistenceManager);
+		TenantContextInitializer intializer = new AbstractActionTenantContextInitializer(this);
 		intializer.forceTenantReload().init(companyID);
 	}
 	

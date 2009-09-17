@@ -1,20 +1,15 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
 
 public class ActionInvocationTexentContextInitializer extends TenantContextInitializer {
-
-	
 	private final ActionInvocationWrapper actionInvocation;
 	
-	public ActionInvocationTexentContextInitializer(ActionInvocationWrapper actionInvocation, PersistenceManager persistenceManager) {
-		super(persistenceManager);
+	public ActionInvocationTexentContextInitializer(ActionInvocationWrapper actionInvocation) {
 		this.actionInvocation = actionInvocation;
 	}
 	
@@ -29,9 +24,8 @@ public class ActionInvocationTexentContextInitializer extends TenantContextIniti
 	}
  
 	@Override
-	@SuppressWarnings("unchecked")
-	protected Map getSession() {
-		return actionInvocation.getSessionMap();
+	protected WebSession getSession() {
+		return actionInvocation.getSession();
 	}
 	
 }

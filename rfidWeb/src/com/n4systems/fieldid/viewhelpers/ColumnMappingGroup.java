@@ -21,8 +21,9 @@ public class ColumnMappingGroup implements Serializable, Comparable<ColumnMappin
 		this.order = order;
 	}
 
-	public int compareTo(ColumnMappingGroup group) {
-		return order - group.order;
+	public int compareTo(ColumnMappingGroup other) {
+		// compare by order, only if orders are equal, fall back to the id
+		return (order < other.order ? -1 : (order == other.order ? id.compareTo(other.id) : 1));
 	}
 	
 	public String getId() {
@@ -63,5 +64,20 @@ public class ColumnMappingGroup implements Serializable, Comparable<ColumnMappin
 
 	public void setDynamic(boolean dynamic) {
 		this.dynamic = dynamic;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ColumnMappingGroup)) {
+			return false;
+		}
+		
+		ColumnMappingGroup other = (ColumnMappingGroup)obj;
+		return (id == other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
 	}
 }

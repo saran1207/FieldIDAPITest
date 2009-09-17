@@ -9,22 +9,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.interceptor.ServletResponseAware;
 
 import rfid.ejb.entity.FindProductOptionManufactureBean;
 import rfid.ejb.entity.UserBean;
-import rfid.web.helper.Constants;
 import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.ExtendedTextProviderAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
-import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
@@ -46,34 +40,25 @@ import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.HostNameParser;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
 import freemarker.template.utility.StringUtil;
 
 @SuppressWarnings("serial")
-abstract public class AbstractAction extends ActionSupport implements ServletResponseAware, ServletRequestAware {
+abstract public class AbstractAction extends ExtendedTextProviderAction {
 	public static final String MISSING = "missing";
 	public static final String INVALID_SECURITY = "invalid_security";
 	public static final String REDIRECT_TO_URL = "redirect_to_url";
 	
-	@SuppressWarnings("unchecked")
-	private Map session;
-	private HttpServletResponse response;
-	private HttpServletRequest request;
+	protected final PersistenceManager persistenceManager;
+	
 	private Collection<String> flashMessages = new ArrayList<String>();
 	private Collection<String> flashErrors = new ArrayList<String>();
 	private Collection<FindProductOptionManufactureBean> searchOptions;
 	private LoaderFactory loaderFactory;
 	private Gson json;
 	private TenantLimitProxy limitProxy;
-	
-	protected final PersistenceManager persistenceManager;
-	
 	private UserBean user = null;
-	
 	private NavOptionsController navOptions;
-	
 	private String redirectUrl;
 	private RemovalHandlerFactory rhFactory;
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
@@ -83,22 +68,8 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		this.persistenceManager = persistenceManager;
 	}
 	
-	public ActionContext getActionContext() {
-		return ActionContext.getContext();
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected Map getSession() {
-		if( session == null ) {
-			session = getActionContext().getSession();
-		}
-		return session;
-	}
-	
 	public SessionUser getSessionUser() {
-		getSession();
-		SessionUser sessionUser = (SessionUser)session.get(Constants.SESSION_USER);
-		return sessionUser;
+		return getSession().getSessionUser();
 	}
 	
 	public Long getSessionUserId() {
@@ -106,32 +77,11 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	
 	public SystemSecurityGuard getSecurityGuard() {
-		return (SystemSecurityGuard)getSession().get(Constants.SECURITY_GUARD);
+		return getSession().getSecurityGuard();
 	}
 	
 	protected UserBean getUser() {
 		return persistenceManager.findLegacy(UserBean.class, getSessionUser().getUniqueID());
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected void setSessionVar(String key, Object value) {
-		getSession().put(key, value);
-	}
-	
-	protected Object getSessionVar(String key) {
-		return (sessionContains(key)) ? getSession().get(key) : null;
-	}
-	
-	protected boolean sessionContains(String key) {
-		return (key != null) ? getSession().containsKey(key) : false;
-	}
-	
-	protected Object clearSessionVar(String key) {
-		Object oldValue = null;
-		if (sessionContains(key)) {
-			oldValue = getSession().remove(key);
-		}
-		return oldValue;
 	}
 	
 	protected boolean isLoggedIn() {
@@ -141,17 +91,15 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	protected void refreshSessionUser() {
 		loadSessionUser(getSessionUser().getId());
 	}
+	
 	protected void loadSessionUser(Long userId) {
 		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter()).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "organization.primaryOrg.id"));
 		setupSessionUser(user);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void setupSessionUser(UserBean user) {
-		getSession().remove(Constants.SESSION_USER);
-		SessionUser sessionUser = new SessionUser(user);
-		getSession().put(Constants.SESSION_USER, sessionUser);
-		new AbstractActionTenantContextInitializer(this, persistenceManager).refreshSecurityGaurd();
+		getSession().setSessionUser(new SessionUser(user));
+		new AbstractActionTenantContextInitializer(this).refreshSecurityGaurd();
 	}
 	
 	public Long getTenantId() {
@@ -170,28 +118,12 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return getSessionUser().getOwner();
 	}
 	
-	public void setServletRequest(HttpServletRequest request) {
-		this.request = request;
-	}
-	
-	public HttpServletRequest getServletRequest() {
-		return request;
-	}
-
-	public void setServletResponse(HttpServletResponse response) {
-		this.response = response;	
-	}
-	
-	public HttpServletResponse getServletResponse() {
-		return response;
-	}
-	
 	public SecurityFilter getSecurityFilter() {
 		return getSessionUser().getSecurityFilter();
 	}
 	
 	public boolean isReportActive(){
-		SearchContainer searchContainer = (SearchContainer)getSession().get( InspectionReportAction.REPORT_CRITERIA );
+		SearchContainer searchContainer = getSession().getReportCriteria();
 		return ( searchContainer != null && searchContainer.getSearchId() != null );
 	}
 	
@@ -202,7 +134,6 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	
 	public void addFlashMessageText( String message ) {
 		addFlashMessage( getText( message ) );
-		
 	}
 	
 	public void addActionMessageText( String message ) {
@@ -296,7 +227,7 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	
 	public boolean isDevMode() {
-		String serverName = request.getServerName();
+		String serverName = getServletRequest().getServerName();
 		String systemDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_DOMAIN);
 		return !(serverName.toLowerCase().endsWith(systemDomain));
 	}
@@ -311,14 +242,13 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	}
 	
 	protected String getLogLinePrefix() {
-		return "[Session: " + request.getSession().getId() + ( (!isLoggedIn() ) ? "  public " : "" ) + " ] ";
+		return "[Session: " + getSession().getId() + ( (!isLoggedIn() ) ? "  public " : "" ) + " ] ";
 	}
 	
 	public String getCurrentAction() {
 		return getActionContext().getName();
 	}
 	
-
 	protected Map<String, String> decodeMapKeys(Map<String, String> encodedMap) {
 		Map<String, String> decodedMap = new HashMap<String, String>();
 		
@@ -361,7 +291,6 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return new FieldidDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
 	}
 	
-	
 	protected UserBean fetchCurrentUser() {
 		if (getSessionUserId() == null) {
 			return null;
@@ -372,13 +301,13 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 		return user;
 	}
 
-
 	public NavOptionsController getNavOptions() {
 		if (navOptions == null) {
 			navOptions = new NavOptionsController(getSessionUser(), getSecurityGuard());
 		}
 		return navOptions;
 	}
+	
 	public void setPageType(String pageType, String currentAction) {
 		navOptions = new NavOptionsController(getSessionUser(), getSecurityGuard(), pageType, currentAction);
 	}
@@ -454,7 +383,6 @@ abstract public class AbstractAction extends ActionSupport implements ServletRes
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
 	}
-	
 	
 	public String getHumanReadableFileSize(Long fileSize) {
 		String byteCountToDisplaySize = FileUtils.byteCountToDisplaySize(fileSize);

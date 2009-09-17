@@ -1,14 +1,13 @@
 package com.n4systems.fieldid.security;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.utils.ActionInvocationWrapper;
-import com.n4systems.security.SecurityContext;
-
-import rfid.web.helper.SessionUser;
-
 import org.apache.struts2.StrutsStatics;
 import org.jboss.logging.Logger;
 
+import rfid.web.helper.SessionUser;
+
+import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.ActionInvocationWrapper;
+import com.n4systems.security.SecurityContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -24,7 +23,7 @@ public class SecurityInterceptor extends AbstractInterceptor implements StrutsSt
 	public String intercept(ActionInvocation action) throws Exception {
 		ActionInvocationWrapper invokeWrapper = new ActionInvocationWrapper(action);
 		
-		String sessionId = invokeWrapper.getHttpSession().getId();
+		String sessionId = invokeWrapper.getSession().getId();
 		SessionUser user = invokeWrapper.getSessionUser();
 		
 		String actionResult;

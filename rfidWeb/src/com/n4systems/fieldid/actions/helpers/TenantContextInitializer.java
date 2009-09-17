@@ -1,34 +1,29 @@
 package com.n4systems.fieldid.actions.helpers;
 
 import java.net.URI;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import rfid.web.helper.Constants;
-
-import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.lang.TenantLanguageSessionHelper;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.n4systems.fieldid.permissions.SessionSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.model.Tenant;
+import com.n4systems.services.TenantCache;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.HostNameParser;
 
 public abstract class TenantContextInitializer {
-	private final PersistenceManager persistenceManager;
 	private boolean forceTenantReload = false;
 	private String unbrandedSubDomain;
 	private String brandedCompanyId;
 	private SystemSecurityGuard securityGuard;
 
-	public TenantContextInitializer(PersistenceManager persistenceManager) {
-		super();
-		this.persistenceManager = persistenceManager;
-	}
+	public TenantContextInitializer() {}
 
 	public TenantContextInitializer forceTenantReload() {
 		this.forceTenantReload = true;
@@ -74,7 +69,7 @@ public abstract class TenantContextInitializer {
 
 	private void loadSecurityGuard() throws NoValidTenantSelectedException {
 		if (brandedCompanyId == null) {
-			throw new NoValidTenantSelectedException("there is not company id given.");
+			throw new NoValidTenantSelectedException("Company Id cannot be null");
 		}
 		if (shouldSecurityGuardBeReloaded()) {
 			setUpSecurityGuard();
@@ -91,16 +86,14 @@ public abstract class TenantContextInitializer {
 		try {
 			resetSecurityGuard(tenant);
 		} catch (Exception e) {
-			throw new NoValidTenantSelectedException("tenant does not exist " + brandedCompanyId);
+			throw new NoValidTenantSelectedException("No Tenat exists for Company Id: " + brandedCompanyId);
 		}
 	}
 
 	private Tenant loadTenant() {
-		Tenant tenant = persistenceManager.findByName(Tenant.class, brandedCompanyId);
+		Tenant tenant = TenantCache.getInstance().findTenant(brandedCompanyId);
 		return tenant;
 	}
-
-	
 
 	private void findCurrentTenant() {
 		if (brandedCompanyId == null) {
@@ -122,7 +115,7 @@ public abstract class TenantContextInitializer {
 
 	private SystemSecurityGuard getSecurityGuard() {
 		if (securityGuard == null) {
-			securityGuard = (SystemSecurityGuard) getSession().get(Constants.SECURITY_GUARD);
+			securityGuard = getSession().getSecurityGuard();
 		}
 		return securityGuard;
 	}
@@ -131,19 +124,20 @@ public abstract class TenantContextInitializer {
 		forgetSecurityGuard();
 		securityGuard = new SessionSecurityGuard(tenant);
 		rememberSecurityGuard(securityGuard);
+		
+		new TenantLanguageSessionHelper(tenant).populateSession(getSession());
 	}
 
-	@SuppressWarnings("unchecked")
 	private void rememberSecurityGuard(SystemSecurityGuard securityGuard) {
-		getSession().put(Constants.SECURITY_GUARD, securityGuard);
+		getSession().setSecurityGuard(securityGuard);
 	}
 
 	private void forgetSecurityGuard() {
-		getSession().remove(Constants.SECURITY_GUARD);
+		getSession().clearSecurityGuard();
+		getSession().clearTenantLanguageOverrides();
 	}
 
-	@SuppressWarnings("unchecked")
-	protected abstract Map getSession();
+	protected abstract WebSession getSession();
 
 	protected abstract HttpServletRequest getRequest();
 

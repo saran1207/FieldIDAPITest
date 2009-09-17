@@ -236,7 +236,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	
 	@SuppressWarnings("unchecked")
 	public T getContainer() {
-		T container = (T)getSessionVar(containerSessionKey);
+		T container = (T)getSession().get(containerSessionKey);
 		if(container == null) {
 			container = createSearchContainer();		
 			container.setSelectedColumns(getDefaultSelectedColumns());
@@ -246,11 +246,11 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	public void setCriteria(T container) {
-		setSessionVar(containerSessionKey, container);
+		getSession().put(containerSessionKey, container);
 	}
 	
 	protected void clearContainer() {
-		clearSessionVar(containerSessionKey);
+		getSession().remove(containerSessionKey);
 	}
 	
 	protected void resetSelectedColumns() {

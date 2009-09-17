@@ -41,7 +41,10 @@ public class SignUpCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		SignUpRequest sessionSignUp = (sessionContains("signUp")) ? (SignUpRequest) getSessionVar("signUp") : new SignUpRequest();
+		SignUpRequest sessionSignUp = getSession().getSignUpRequest();
+		if (sessionSignUp == null) {
+			sessionSignUp = new SignUpRequest();
+		}
 		signUpRequest = new SignUpRequestDecorator(sessionSignUp, getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader(), getCreateHandlerFactory().getSubscriptionAgent()); 
 	}
 
@@ -65,7 +68,7 @@ public class SignUpCrud extends AbstractCrud {
 	@SkipValidation
 	public String doShow() {
 		testRequiredEntities(true);
-		clearSessionVar("signUp");
+		getSession().clearSignUpRequest();
 		return SUCCESS;
 	}
 
@@ -79,7 +82,7 @@ public class SignUpCrud extends AbstractCrud {
 		testRequiredEntities(false);
 		logger.info(getLogLinePrefix() + "signing up for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpRequest.getSignUpPackage().getName() + "]");
 		
-		setSessionVar("signUp", signUpRequest.getSignUpRequest());
+		getSession().setSignUpRequest(signUpRequest.getSignUpRequest());
 		
 		return proccessSignUp();
 	}

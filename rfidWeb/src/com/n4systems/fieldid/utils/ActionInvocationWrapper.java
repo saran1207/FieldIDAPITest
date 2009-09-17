@@ -1,17 +1,14 @@
 package com.n4systems.fieldid.utils;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.StrutsStatics;
 
-import rfid.web.helper.Constants;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.utils.WebSession;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 
@@ -35,20 +32,20 @@ public class ActionInvocationWrapper implements StrutsStatics {
 		return (HttpServletResponse)getActionContext().get(HTTP_RESPONSE);
 	}
 	
-	public HttpSession getHttpSession() {
-		return getRequest().getSession(true);
-	}
-	
-	public Map<?, ?> getSessionMap() {
-		return getActionContext().getSession();
-	}
+//	public HttpSession getHttpSession() {
+//		return getRequest().getSession(true);
+//	}
 	
 	public AbstractAction getAction() {
 		return (AbstractAction)action.getAction();
 	}
 	
+	public WebSession getSession() {
+		return new WebSession(getRequest().getSession(true));
+	}
+	
 	public SessionUser getSessionUser() {
-		return (SessionUser)getHttpSession().getAttribute(Constants.SESSION_USER);
+		return getSession().getSessionUser();
 	}
 	
 	

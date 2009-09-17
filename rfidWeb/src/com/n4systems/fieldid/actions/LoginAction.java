@@ -5,7 +5,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
-import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -118,13 +117,12 @@ public class LoginAction extends AbstractAction {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void clearSession() {
 		// grab SecuirtyGuard
 		SystemSecurityGuard securityGuard = getSecurityGuard();
 		getSession().clear();
 		// restore securityGuard
-		getSession().put(Constants.SECURITY_GUARD, securityGuard);		
+		getSession().setSecurityGuard(securityGuard);		
 	}
 
 	public String getUserName() {
