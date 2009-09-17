@@ -15,6 +15,10 @@ public class Country implements Comparable<Country>, Listable<String> {
    	@XStreamAsAttribute
 	private String name;
 	
+	@XStreamAlias("code")
+	@XStreamAsAttribute
+	private String code;
+	
 	@XStreamImplicit(itemFieldName="Region")
 	private TreeSet<Region> regions = new TreeSet<Region>();
 	
@@ -53,6 +57,14 @@ public class Country implements Comparable<Country>, Listable<String> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public SortedSet<Region> getRegions() {
