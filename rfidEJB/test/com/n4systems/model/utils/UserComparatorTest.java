@@ -4,6 +4,7 @@ import static com.n4systems.model.builders.OrgBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
@@ -12,61 +13,134 @@ import com.n4systems.model.orgs.BaseOrg;
 
 
 
-
+/**
+ * Naming:
+ * primary_org
+ * 		secondary_org
+ * 			secondary_customer
+ * 				secondary_division
+ * 		primary_customer
+ * 			primary_division
+ * 		
+ * @author aaitken
+ *
+ */
 public class UserComparatorTest {
+
+	private BaseOrg primaryOrg;
+	
+	@Before
+	public void setUp() {
+		primaryOrg = aPrimaryOrg().build();
+	}
+
 
 	@Test
 	public void should_order_users_case_insensitive_alphabetically_inside_the_same_owner() {
-		BaseOrg owner = aPrimaryOrg().build();
 		
-		UserBean user1 = anEmployee().withOwner(owner).withFirstName("A").build();
-		UserBean user2 = anEmployee().withOwner(owner).withFirstName("z").build();
+		UserBean user1 = anEmployee().withOwner(primaryOrg).withFirstName("A").build();
+		UserBean user2 = anEmployee().withOwner(primaryOrg).withFirstName("z").build();
 		
-		int actualCompareValue = new UserComparator().compare(user1, user2);
-		
-		assertTrue(new Integer(actualCompareValue).toString() + " is not less than 0", actualCompareValue < 0);
+		executeCompareAndVerify(user1, user2);
 	}
 	
 	
 	@Test
 	public void should_order_users_in_primary_org_above_users_in_secondary_org() {
-		BaseOrg primary = aPrimaryOrg().build();
-		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primary).build();
+		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(primary).build();
+		UserBean user1 = anEmployee().withOwner(primaryOrg).build();
 		UserBean user2 = anEmployee().withOwner(secondaryOrg).build();
 		
-		int actualCompareValue = new UserComparator().compare(user1, user2);
-		
-		assertTrue(new Integer(actualCompareValue).toString() + " is not less than 0", actualCompareValue < 0);
+		executeCompareAndVerify(user1, user2);
 	}
 	
 	@Test
-	public void should_order_users_in_each_secondary_org_case_insensitive_alphabetically_by_secondary_org_name() {
-		BaseOrg primary = aPrimaryOrg().build();
-		BaseOrg secondaryOrg1 = aSecondaryOrg().withParent(primary).withName("A").build();
-		BaseOrg secondaryOrg2 = aSecondaryOrg().withParent(primary).withName("z").build();
+	public void should_order_users_in_each_orgs_at_the_same_level_case_insensitive_alphabetically_by_org_name() {
+		BaseOrg secondaryOrg1 = aSecondaryOrg().withParent(primaryOrg).withName("A").build();
+		BaseOrg secondaryOrg2 = aSecondaryOrg().withParent(primaryOrg).withName("z").build();
 		
 		UserBean user1 = anEmployee().withOwner(secondaryOrg1).build();
 		UserBean user2 = anEmployee().withOwner(secondaryOrg2).build();
 		
-		int actualCompareValue = new UserComparator().compare(user1, user2);
-		
-		assertTrue(new Integer(actualCompareValue).toString() + " is not less than 0", actualCompareValue < 0);
+		executeCompareAndVerify(user1, user2);
 	}
 	
 	@Test
-	public void should_order_users_in_each_secondary_org_above_the_user_in_a_customer_directly_under_the_primary() {
-		BaseOrg primary = aPrimaryOrg().build();
-		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primary).build();
-		BaseOrg customerOrg = aCustomerOrg().withParent(primary).build();
+	public void should_order_users_in_each_secondary_org_above_the_user_in_a_primary_customer() {
+		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
+		BaseOrg customerOrg = aCustomerOrg().withParent(primaryOrg).build();
 		
 		UserBean user1 = anEmployee().withOwner(secondaryOrg).build();
 		UserBean user2 = anEmployee().withOwner(customerOrg).build();
 		
-		int actualCompareValue = new UserComparator().compare(user1, user2);
+		executeCompareAndVerify(user1, user2);
+	}
+
+	
+	@Test 
+	public void should_order_users_in_primary_division_below_primary_customer_directly_above_in_the_hierarchy() {
+		BaseOrg customerOrg = aCustomerOrg().withParent(primaryOrg).build();
+		BaseOrg divisionOrg = aDivisionOrg().withParent(customerOrg).build();
+		
+		UserBean user1 = anEmployee().withOwner(customerOrg).build();
+		UserBean user2 = anEmployee().withOwner(divisionOrg).build();
+		
+		executeCompareAndVerify(user1, user2);
+	}
+	
+	@Test 
+	public void should_order_users_in_primary_customer_below_secondary_org_directly_above_in_the_hierarchy() {
+		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
+		BaseOrg customerOrg = aCustomerOrg().withParent(secondaryOrg).build();
+		
+		
+		UserBean user1 = anEmployee().withOwner(secondaryOrg).build();
+		UserBean user2 = anEmployee().withOwner(customerOrg).build();
+		
+		executeCompareAndVerify(user1, user2);
+	}
+	
+	@Test 
+	public void should_order_users_in_secondary_division_below_secondary_customer_directly_above_in_the_hierarchy() {
+		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
+		BaseOrg customerOrg = aCustomerOrg().withParent(secondaryOrg).build();
+		BaseOrg divisionOrg = aDivisionOrg().withParent(customerOrg).build();
+		
+		UserBean user1 = anEmployee().withOwner(customerOrg).build();
+		UserBean user2 = anEmployee().withOwner(divisionOrg).build();
+		
+		executeCompareAndVerify(user1, user2);
+	}
+	
+	public void should_order_users_in_primary_customer_below_secondary_customer() {
+		
+		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
+		BaseOrg secondaryCustomerOrg = aCustomerOrg().withParent(secondaryOrg).build();
+		BaseOrg primaryCustomer = aCustomerOrg().withParent(primaryOrg).build();
+		
+		UserBean user1 = anEmployee().withOwner(primaryCustomer).build();
+		UserBean user2 = anEmployee().withOwner(secondaryCustomerOrg).build();
+		
+		executeCompareAndVerify(user1, user2);
+	}
+
+	public void should_order_users_in_primary_customer_below_secondary_division() {
+		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
+		BaseOrg secondaryDivision = aDivisionOrg().withParent(aCustomerOrg().withParent(secondaryOrg).build()).build();
+		BaseOrg primaryCustomer = aCustomerOrg().withParent(primaryOrg).build();
+		
+		UserBean user1 = anEmployee().withOwner(primaryCustomer).build();
+		UserBean user2 = anEmployee().withOwner(secondaryDivision).build();
+		
+		executeCompareAndVerify(user1, user2);
+	}
+	
+
+	private void executeCompareAndVerify(UserBean userCloserToTheBottom, UserBean userCloserToTheTop) {
+		int actualCompareValue = new UserComparator().compare(userCloserToTheBottom, userCloserToTheTop);
 		
 		assertTrue(new Integer(actualCompareValue).toString() + " is not less than 0", actualCompareValue < 0);
 	}
-
+	
 }
