@@ -49,6 +49,7 @@
 
 </div>
 <div id="secondaryContent">
+	<#include "../public/_plansAndPricing.ftl"/>
 	<#include "../public/_requestAccount.ftl"/>
 </div>
 

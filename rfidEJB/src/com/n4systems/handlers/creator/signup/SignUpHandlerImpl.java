@@ -88,7 +88,6 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	}
 
 	
-	//FIXME  i don't think this is correctly working when there is failure from netsuite.
 	private void undoAccountPlaceHolder(AccountPlaceHolder placeHolder) {
 		Transaction transaction = persistenceProvider.startTransaction();
 		try {
