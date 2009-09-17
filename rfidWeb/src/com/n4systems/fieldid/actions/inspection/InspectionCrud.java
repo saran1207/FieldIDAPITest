@@ -429,7 +429,7 @@ public class InspectionCrud extends UploadFileSupport {
 				addActionErrorText("error.new_saving_inspection_book");
 				throw new PersistenceException("could not save.");
 			}
-			bookCrud.setOwner(getOwner());
+			bookCrud.setOwnerId(getOwnerId());
 			bookCrud.setName(newInspectionBookTitle);
 			
 			
