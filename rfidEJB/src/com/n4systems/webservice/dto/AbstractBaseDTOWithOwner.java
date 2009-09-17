@@ -1,6 +1,6 @@
 package com.n4systems.webservice.dto;
 
-public abstract class AbstractBaseDTOWithOwner extends AbstractBaseServiceDTO {
+public abstract class AbstractBaseDTOWithOwner extends AbstractBaseServiceDTO implements DTOHasOwners {
 
 	private long ownerId;
 	private long customerId;

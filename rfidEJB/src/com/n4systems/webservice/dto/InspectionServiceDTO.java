@@ -3,7 +3,7 @@ package com.n4systems.webservice.dto;
 import java.util.Date;
 import java.util.List;
 
-public class InspectionServiceDTO extends AbstractInspectionServiceDTO {
+public class InspectionServiceDTO extends AbstractInspectionServiceDTO implements DTOHasOwners {
 
 	private String location;	
 	private Date utcDate;
@@ -20,11 +20,12 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO {
 	private long inspectionScheduleId;
 	private List<SubInspectionServiceDTO> subInspections;
 	private List<SubProductMapServiceDTO> newSubProducts;
+	private long orgId;
+	private long customerId;
+	private long divisionId;
 
 	// These are only used by PRE 1.14 mobile versions; now uses ownerId
 	private long organizationId;
-	private long customerId;
-	private long divisionId;
 	
 	/*
 	 * These are here only for the mobile side.  
@@ -201,4 +202,10 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO {
 	public boolean ownerIdExists() {
 		return isValidServerId(ownerId);
 	}
+	public long getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(long orgId) {
+		this.orgId = orgId;
+	}	
 }

@@ -79,6 +79,7 @@ import com.n4systems.webservice.dto.CriteriaSectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
+import com.n4systems.webservice.dto.DTOHasOwners;
 import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldNameServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldServiceDTO;
@@ -175,6 +176,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setStatus( inspection.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
 		inspectionDTO.setUtcDate(inspection.getDate());
+		
+		populateOwners(inspection.getOwner(), inspectionDTO);
 		
 		// TODO convert date to their time zone
 		inspectionDTO.setDate( AbstractBaseServiceDTO.dateToString( inspection.getDate() ) );
@@ -873,7 +876,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return userService;
 	}
 	
-	private void populateOwners(BaseOrg baseOrg, AbstractBaseDTOWithOwner dto) {
+	private void populateOwners(BaseOrg baseOrg, DTOHasOwners dto) {
 		long customerId = NULL_ID;
 		long orgId = NULL_ID;
 		long divisionId = NULL_ID;
