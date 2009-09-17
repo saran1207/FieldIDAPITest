@@ -1,4 +1,6 @@
-
+<head>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+</head>
 <#include "/templates/html/common/_formErrors.ftl"/>
 <@s.hidden name="currentPage"/>
 <@s.hidden name="uniqueID"/>
@@ -14,16 +16,8 @@
 	</span>
 </p>
 <p>
-	<label><@s.text name="label.customer"/></label>
-	<span>
-		<@s.select name="customerId" list="customers" listKey="id" listValue="name" headerKey="" headerValue="">
-			<#if (action.fieldErrors['customerId'])?exists> 
-				<@s.param name="cssClass">inputError</@s.param>
-				<@s.param name="title">${action.fieldErrors['customerId']}</@s.param>
-			</#if>  
-			
-		</@s.select>
-	</span>
+	<label for="owner"><@s.text name="label.owner"/></label>
+	<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 </p>
 
 <p>

@@ -12,6 +12,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -22,6 +23,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValueValidator {
@@ -38,6 +40,8 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	private Pager<InspectionBook> page;
 
+	private OwnerPicker ownerPicker;
+	
 	public InspectionBookCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
@@ -51,6 +55,14 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		book = persistenceManager.find(InspectionBook.class, uniqueId, getTenant());
+	}
+	
+	
+
+	@Override
+	protected void postInit() {
+		super.postInit();
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), book);
 	}
 
 	@SkipValidation
@@ -230,16 +242,8 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 		book.setOpen(open);
 	}
 	
-	public BaseOrg getOwner() {
-		return book.getOwner();
-	}
-	
-	public void setOwner(BaseOrg owner) {
-		book.setOwner(owner);
-	}
-	
 	public boolean duplicateValueExists(String formValue) {
-		return !persistenceManager.uniqueNameAvailableWithCustomer(InspectionBook.class, formValue, uniqueID, getTenantId(), getOwner().getId());
+		return !persistenceManager.uniqueNameAvailableWithCustomer(InspectionBook.class, formValue, uniqueID, getTenantId(), getOwnerId());
 	}
 
 	public void setWithClosed(boolean withClosed) {
@@ -250,4 +254,16 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 		return books;
 	}
 
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
+	}
+	
+	@RequiredFieldValidator(message="", key="error.owner_required")
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
 }
