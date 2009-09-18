@@ -270,6 +270,10 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public boolean isUsingCreditCard() {
 		return signUpRequest.isUsingCreditCard();
 	}
+	
+	public String getPurchaseOrderNumber() {
+		return signUpRequest.getPurchaseOrderNumber();
+	}
 
 	public String getCompanyN4Id() {
 		return signUpRequest.getCompanyN4Id();
