@@ -17,11 +17,29 @@ import com.n4systems.subscription.netsuite.model.NetsuiteClient;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscriptionDetails;
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
+import com.n4systems.subscription.netsuite.model.UpgradeSubscription;
+import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class RestfulTest {
 
 	public static void main(String args[]) {
 		
+		
+		UpgradeSubscription upgradeSubscription = new UpgradeSubscription();
+		upgradeSubscription.setContractExternalId(143L);
+		upgradeSubscription.setTenantExternalId(5354L);
+		upgradeSubscription.setShowPriceOnly(true);
+		
+		UpgradeSubscriptionClient upgradeSubscriptionClient = new UpgradeSubscriptionClient();
+		upgradeSubscriptionClient.setUpgradeSubscription(upgradeSubscription);
+		
+		try {
+			UpgradeSubscriptionResponse subResponse = upgradeSubscriptionClient.execute();
+			System.out.println("Upgrade cost:" +subResponse.getUpgradesubscription().getUpgrade_cost());
+			System.out.println("Next payment:"+subResponse.getUpgradesubscription().getNext_payment());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		ProductDetailsClient productDetailsLoader = new ProductDetailsClient();
 		
