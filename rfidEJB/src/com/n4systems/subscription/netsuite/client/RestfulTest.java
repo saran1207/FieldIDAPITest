@@ -122,6 +122,7 @@ public class RestfulTest {
 		
 		System.out.println("Contract value:"+pricingDetailsResponse.getPricing().getContract_value());
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
+		*/
 		
 		NetSuiteSubscriptionAgent agent = new NetSuiteSubscriptionAgent();
 		
@@ -141,7 +142,6 @@ public class RestfulTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		*/
 		
 		/*
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
@@ -214,13 +214,14 @@ public class RestfulTest {
 	private static NetsuiteTenant populateTestTenant() {
 		NetsuiteTenant tenant = new NetsuiteTenant();
 		tenant.setBillingAddress(populateTestAddress());
-		tenant.setCompanyName("TEST - Jesse Manufacturing");
+		tenant.setCompanyName("TEST - Jesse Manufacturing With A PO");
 		tenant.setCreditCard(populateTestCreditCard());
 		tenant.setEmail("badseemail@bad.com");
 		tenant.setN4Id("555242");
 		tenant.setPhone("416-555-5555");
 		tenant.setShippingAddress(populateTestAddress());
-		tenant.setUsingCreditCard(true);
+		tenant.setUsingCreditCard(false);
+		tenant.setPurchaseOrderNumber("TEST PO 123456");
 		
 		return tenant;
 	}

@@ -222,11 +222,14 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		return "";
 	}
 
-
+	// FIXME Implement using purchase order number
 	public boolean isUsingCreditCard() {
 		return true;
 	}
 
+	public String getPurchaseOrderNumber() {
+		return "";
+	}
 
 	public boolean isPurchasingPhoneSupport() {
 		return purchasingPhoneSupport;

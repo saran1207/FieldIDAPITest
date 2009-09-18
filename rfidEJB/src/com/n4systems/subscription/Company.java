@@ -12,4 +12,6 @@ public interface Company {
 	public String getUrl();
 	public boolean isUsingCreditCard();
 	public CreditCard getCreditCard();
+	public String getPurchaseOrderNumber();
+	
 }

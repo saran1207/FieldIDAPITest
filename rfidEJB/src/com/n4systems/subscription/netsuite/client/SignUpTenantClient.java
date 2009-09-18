@@ -56,8 +56,9 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 			addRequestParameter("ccnumber", company.getCreditCard().getNumber());
 			addRequestParameter("cctype", company.getCreditCard().getType().getCode());
 			addRequestParameter("ccexp", company.getCreditCard().getExpiry());
-			addRequestParameter("ccname", company.getCreditCard().getName());
-			
+			addRequestParameter("ccname", company.getCreditCard().getName());			
+		} else {
+			addRequestParameter("ponumber", company.getPurchaseOrderNumber());
 		}
 		
 		addRequestParameter("firstname", person.getFirstName());
