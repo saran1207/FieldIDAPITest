@@ -14,6 +14,7 @@ public class UpgradeSubscription {
 	private NetsuiteSubscription subscription;
 	private boolean usingCreditCard;
 	private CreditCard creditCard;
+	private String purchaseOrderNumber;
 	
 	public Long getTenantExternalId() {
 		return tenantExternalId;
@@ -63,5 +64,10 @@ public class UpgradeSubscription {
 	public void setUsingCreditCard(boolean usingCreditCard) {
 		this.usingCreditCard = usingCreditCard;
 	}
-
+	public String getPurchaseOrderNumber() {
+		return purchaseOrderNumber;
+	}
+	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+		this.purchaseOrderNumber = purchaseOrderNumber;
+	}
 }

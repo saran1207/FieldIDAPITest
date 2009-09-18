@@ -32,6 +32,8 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 				addRequestParameter("cctype", creditCard.getType().getCode());
 				addRequestParameter("ccexp", creditCard.getExpiry());
 				addRequestParameter("ccname", creditCard.getName());
+			} else {
+				addRequestParameter("ponumber", upgradeSubscription.getPurchaseOrderNumber());
 			}
 		}
 	}
