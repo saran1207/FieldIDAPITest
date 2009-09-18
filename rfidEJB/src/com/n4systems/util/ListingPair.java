@@ -1,6 +1,8 @@
 package com.n4systems.util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.n4systems.model.api.Listable;
 
@@ -12,6 +14,14 @@ public class ListingPair implements Serializable, Comparable<ListingPair>{
 
 	private String name;
 
+	public static List<ListingPair> convertToListingPairs(List<Listable<Long>> listables) {
+		List<ListingPair> listingPairs = new ArrayList<ListingPair>();
+		for (Listable<Long> listable : listables) {
+			listingPairs.add(new ListingPair(listable));
+		}
+		return listingPairs;
+	}
+	
 	public <T extends Listable<Long>> ListingPair(T listable) {
 		super();
 		this.id = listable.getId();

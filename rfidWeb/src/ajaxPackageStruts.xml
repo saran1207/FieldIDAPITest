@@ -440,5 +440,9 @@
 		<action name="orgs" method="list" class="com.n4systems.fieldid.actions.BaseOrgCrud" >
 			<result name="success" type="freemarker">/templates/ajax/baseOrg/list.ftl</result>
 		</action>
+		
+		<action name="orgList" method="show" class="com.n4systems.fieldid.actions.orgs.OrgListAction" >
+			<result name="success" type="freemarker">/templates/ajax/orgList/show.ftl</result>
+		</action>
 	</package>
 </struts>

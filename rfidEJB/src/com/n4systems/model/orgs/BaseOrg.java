@@ -163,4 +163,6 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	
 	abstract public BaseOrg getParent();
 	
+	
+	
 }

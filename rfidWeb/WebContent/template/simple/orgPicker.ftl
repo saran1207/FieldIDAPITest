@@ -11,14 +11,11 @@
  class="orgSelected"/><#rt/>
 
 <#-- Text input area. -->
-<input type="text" name="${parameters.name?default("")?html}_orgName"<#rt/>
+<input type="text" name="${parameters.name?default('')?html}_orgName"<#rt/>
 readonly="readonly"<#rt/>
-value="${(parameters.nameValue.displayName)?default("")?html}"<#rt/>
-<#if parameters.maxlength?exists>
- maxlength="${parameters.maxlength?html}"<#rt/>
-</#if>
+value="${(parameters.nameValue.displayName)?default('')?html}"<#rt/>
 <#if parameters.id?exists>
- id="${parameters.id?html}"<#rt/>
+ id="${parameters.id?html}_orgName"<#rt/>
 </#if>
 <#if parameters.title?exists>
  title="${parameters.title?html}"<#rt/>
@@ -30,8 +27,9 @@ value="${(parameters.nameValue.displayName)?default("")?html}"<#rt/>
  title="${parameters.title?html}"<#rt/>
 </#if>
 />
-	<a href="#" class="searchOwner" orgFilter="${orgType}"><@s.text name="label.search"/></a>
 	<#if !(parameters.required?exists) || !parameters.required>
-		<a href="#" class="clearSearchOwner"><@s.text name="label.clear"/></a>
-	</#if>
+		<a href="#" class="clearSearchOwner" <#if !parameters.idNameValue?exists>style="display:none"</#if> ><@s.text name="label.clear"/></a>
+	</#if>	
+	<a href="#" class="searchOwner" orgFilter="${orgType}" orgId="${parameters.id?html}"><@s.text name="label.change"/></a>
+	
 </span>

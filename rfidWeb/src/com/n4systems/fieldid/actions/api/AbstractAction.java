@@ -177,6 +177,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	public Gson getJson() {
 		if( json == null ) {
 			json = new Gson();
+			
 		}
 		return json;
 	}

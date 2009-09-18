@@ -8,6 +8,7 @@ import com.n4systems.model.api.Listable;
  * @param <T>	The id class
  */
 public class SimpleListable<T> implements Listable<T> {
+	private static final long serialVersionUID = 1L;
 	private T id;
 	private String displayName;
 
