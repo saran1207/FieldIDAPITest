@@ -12,7 +12,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;

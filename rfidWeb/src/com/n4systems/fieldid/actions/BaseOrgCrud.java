@@ -30,7 +30,6 @@ public class BaseOrgCrud extends AbstractCrud {
 	
 	public String doList() {
 		orgs = new BaseOrgListLoader(getSecurityFilter()).setSearchName(searchName).setOrgType(orgTypeFilter).load();
-		
 		return SUCCESS;
 	}
 
@@ -53,7 +52,5 @@ public class BaseOrgCrud extends AbstractCrud {
 	public void setOrgTypeFilter(String orgTypeFilter) {
 		this.orgTypeFilter = orgTypeFilter;
 	}
-	
-	
 
 }

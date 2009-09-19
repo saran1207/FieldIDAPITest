@@ -8,10 +8,11 @@ function showOrgSearch(event) {
 	
 	var orgSelector = $('orgSelector');
 	orgSelector.clonePosition(element.up(".orgPicker"), {setWidth:false, setHeight:false});
-	orgSelector.style.position = "absolute";
+	orgSelector.setStyle("position:absolute");
 	orgSelector.show();
 	$('orgSelector').setAttribute('targetId', element.up(".orgPicker").id);
-	
+	$('orgPickerResults').update("");
+	openOrgBrowser();
 	setUpOrgBrowser($(element.getAttribute("orgId")).getValue());
 }
 
@@ -24,23 +25,28 @@ function getUpdatedOrgBrowser(orgId) {
 	var params = new Object();
 	params.ownerId = orgId;
 	getResponse(orgListUrl, "get", params);
+	$('orgPickerCurrentOrg').value = orgId;
 }
 
 function updateOrgBrowser(orgLists) {
+	alert('hi');
 	updateDropDown($('orgList'), orgLists.orgList, orgLists.orgId);
+	alert('hi2');
 	updateDropDown($('customerList'), orgLists.customerList, orgLists.customerId);
+	alert('hi3');
 	updateDropDown($('divisionList'), orgLists.divisionList, orgLists.divisionId);
+	
 }
 
 function updateDropDown(select, newList, selectId) {
-	while(select.options.length > 0) {
-		select.options.length = 0;
-	}
-	var i = 0;
+	
+	select.options.length = 0;
+	
 	newList.each(function (element) {
-		select.options[i]= new Element("option", { value : element.id }).update(element.name);
-			i++;
+			var option = new Element("option", { value : element.id }).update(element.name);
+			select.insert(option);
 		});
+	
 	select.value= selectId;
 }
 
@@ -78,11 +84,20 @@ function cancelOrgBrowse(event) {
 
 function changeOrgList(event) {
 	var element = Event.element(event);
-	var selectElement = element; 
-	while(selectElement = selectElement.next('select')) {
-		selectElement.options.length = 0;
+	var selectElements = $(element.form.id).getElements(); 
+	
+	var foundMe = false;
+	for (var i = 0; i < selectElements.size(); i++) {
+		if (selectElements[i].type.startsWith('select')) {
+			if (foundMe) {
+				selectElements[i].options.length = 0;
+			} else if (selectElements[i].id == element.id) {
+				foundMe = true;
+			}
+		}
 	}
-	getUpdatedOrgBrowser(element.getValue());
+	
+	getUpdatedOrgBrowser(getOwnerValues().id);
 }
 
 function setOwner(containerId, ownerId, ownerName) {
@@ -90,6 +105,12 @@ function setOwner(containerId, ownerId, ownerName) {
 	orgInputs.first().value=ownerId;
 	orgInputs.first().next('input').value=ownerName; 
 	orgInputs.first().next('input').fire('field:change');
+	
+	var clearOrg = $$(containerId + " .clearSearchOwner");
+	
+	if (clearOrg.size() >= 1) {
+		clearOrg.first().show();
+	}
 }
 
 function clearOrgSearch(event) {
@@ -127,10 +148,10 @@ function getOwnerValues() {
 	var orgs = $('orgList');
 	
 	var org = new Object();
-	if (divisions.getValue() != -1) {
+	if (divisions.getValue() != undefined && divisions.getValue() != -1 ) {
 		org.id = divisions.getValue();
 		org.name = divisions.options[divisions.selectedIndex].text;
-	} else if (customers.getValue() != -1) {
+	} else if (customers.getValue() != undefined && customers.getValue() != -1) {
 		org.id = customers.getValue();
 		org.name = customers.options[customers.selectedIndex].text;
 	} else {
@@ -138,6 +159,26 @@ function getOwnerValues() {
 		org.name = orgs.options[orgs.selectedIndex].text;
 	}
 	return org;
+}
+
+
+function searchForOrg() { 
+	
+}
+
+
+function openOrgBrowser() {
+	$('orgBrowser').show();
+	$('switchOrgBrowser').addClassName("selected");
+	$('orgSearch').hide();
+	$('switchOrgSearch').removeClassName("selected");
+}
+
+function openOrgSearch() {
+	$('orgSearch').show();
+	$('switchOrgSearch').addClassName("selected");
+	$('orgBrowser').hide();
+	$('switchOrgBrowser').removeClassName("selected");
 }
 
 
@@ -150,7 +191,9 @@ function attachOrgEvents(containerCssRule) {
 		element.observe('click', clearOrgSearch);
 	});
 }
+	
 
 document.observe("dom:loaded", function() {
 	attachOrgEvents("body");
+	
 });
