@@ -29,11 +29,8 @@ function getUpdatedOrgBrowser(orgId) {
 }
 
 function updateOrgBrowser(orgLists) {
-	alert('hi');
 	updateDropDown($('orgList'), orgLists.orgList, orgLists.orgId);
-	alert('hi2');
 	updateDropDown($('customerList'), orgLists.customerList, orgLists.customerId);
-	alert('hi3');
 	updateDropDown($('divisionList'), orgLists.divisionList, orgLists.divisionId);
 	
 }
