@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.BaseOrgListLoader;
+import com.n4systems.tools.Pager;
 
 public class BaseOrgCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	
-	private List<BaseOrg> orgs;
+	private Pager<BaseOrg> orgs;
 	private String searchName;
 	
 	private String orgTypeFilter = "all";
@@ -29,7 +28,13 @@ public class BaseOrgCrud extends AbstractCrud {
 	}
 	
 	public String doList() {
-		orgs = new BaseOrgListLoader(getSecurityFilter()).setSearchName(searchName).setOrgType(orgTypeFilter).load();
+		orgs = new BaseOrgListLoader(getSecurityFilter())
+						.setSearchName(searchName)
+						.setOrgType(orgTypeFilter)
+						.setPage(10)
+						.setFirstPage()
+						.load();
+		
 		return SUCCESS;
 	}
 
@@ -41,7 +46,7 @@ public class BaseOrgCrud extends AbstractCrud {
 		this.searchName = searchName;
 	}
 
-	public List<BaseOrg> getOrgs() {
+	public Pager<BaseOrg> getOrgs() {
 		return orgs;
 	}
 

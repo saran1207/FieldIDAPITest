@@ -7,7 +7,9 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 
 abstract public class PaginatedLoader<T> extends SecurityFilteredLoader<Pager<T>> {
-	private int page = 1;
+	private static final int FIRST_PAGE = 1;
+	
+	private int page = FIRST_PAGE;
 	private int pageSize = 10;
 	
 	public PaginatedLoader(SecurityFilter filter) {
@@ -39,6 +41,10 @@ abstract public class PaginatedLoader<T> extends SecurityFilteredLoader<Pager<T>
 	public PaginatedLoader<T> setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 		return this;
+	}
+	
+	public PaginatedLoader<T> setFirstPage() {
+		return setPage(FIRST_PAGE);
 	}
 
 }

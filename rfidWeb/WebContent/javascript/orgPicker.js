@@ -12,7 +12,8 @@ function showOrgSearch(event) {
 }
 
 function showOrgPicker(element) {
-	$('orgFilter').value=element.getAttribute('orgFilter');
+	$$('.orgFilter').each(function(filter) { filter.value=element.getAttribute('orgFilter'); });
+	
 	var orgSelector = $('orgSelector');
 	var orgPicker=element.up(".orgPicker");
 	orgSelector.clonePosition(orgPicker, {setWidth:false, setHeight:false});
@@ -33,6 +34,7 @@ function setUpOrgBrowser(orgId) {
 function getUpdatedOrgBrowser(orgId) {
 	var params = new Object();
 	params.ownerId = orgId;
+	params.orgTypeFilter = $$('#orgBrowserForm .orgFilter').first().getValue();
 	getResponse(orgListUrl, "get", params);
 	$('orgPickerCurrentOrg').value = orgId;
 }
@@ -169,9 +171,7 @@ function getOwnerValues() {
 }
 
 
-function searchForOrg() { 
-	
-}
+
 
 
 function openOrgBrowser() {

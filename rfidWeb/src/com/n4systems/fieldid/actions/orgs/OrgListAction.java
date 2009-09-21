@@ -21,7 +21,7 @@ public class OrgListAction extends AbstractAction implements Preparable {
 
 	private DummyOwnerHolder ownerHolder = new DummyOwnerHolder();
 	private OwnerPicker ownerPicker;
-	private String orgType;
+	private String orgTypeFilter = "all";
 
 	public OrgListAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -66,22 +66,72 @@ public class OrgListAction extends AbstractAction implements Preparable {
 	}
 	
 	public List<ListingPair> getCustomers() {
-		List<Listable<Long>> customerList = new ArrayList<Listable<Long>>();
-		customerList.add(getBlankValue());
 		
-		customerList.addAll(new BaseOrgParentFilterListLoader(getSecurityFilter()).setClazz(CustomerOrg.class).setParent(getOwner().getInternalOrg()).load());
+		List<Listable<Long>> customerList = new ArrayList<Listable<Long>>();
+		if (isCustomerBlankValueRequired()) {
+			customerList.add(getBlankValue());
+		}
+		
+		if (isCustomerListRequired()) {
+			customerList.addAll(new BaseOrgParentFilterListLoader(getSecurityFilter()).setClazz(CustomerOrg.class).setParent(getOwner().getInternalOrg()).load());
+		}
+		
 		return ListingPair.convertToListingPairs(customerList);
 	}
 	
 	
 	
+	private boolean isCustomerListRequired() {
+		if (orgTypeFilter.equalsIgnoreCase("internal")) {
+			return false;
+		}
+			
+		return true;
+	}
+
+
+	private boolean isCustomerBlankValueRequired() {
+		if (orgTypeFilter.equalsIgnoreCase("all")) {
+			return true;
+		}
+		if (orgTypeFilter.equalsIgnoreCase("non_primary") && getOwner().getInternalOrg().isSecondary()) {
+			return true;
+		}		
+		return false;
+	}
+
+
 	public List<ListingPair> getDivisions() {
 		List<Listable<Long>> divisionList = new ArrayList<Listable<Long>>();
-		divisionList.add(getBlankValue());
-		if (getOwner().getCustomerOrg() != null) {
+		if (isDivisionBlankValueRequired()) {
+			divisionList.add(getBlankValue());
+		}
+		
+		if (isDivisionListRequired() && getOwner().getCustomerOrg() != null) {
 			divisionList.addAll(new BaseOrgParentFilterListLoader(getSecurityFilter()).setClazz(DivisionOrg.class).setParent(getOwner().getCustomerOrg()).load());
 		}
 		return ListingPair.convertToListingPairs(divisionList);
+	}
+	
+
+	
+
+	private boolean isDivisionListRequired() {
+		if (orgTypeFilter.equalsIgnoreCase("internal")) {
+			return false;
+		}
+		return true;
+	}
+
+
+	private boolean isDivisionBlankValueRequired() {
+		if (orgTypeFilter.equalsIgnoreCase("all")) {
+			return true;
+		} 
+		if (orgTypeFilter.equalsIgnoreCase("external")) {
+			return true;
+		}
+		return false;
 	}
 
 
@@ -90,13 +140,13 @@ public class OrgListAction extends AbstractAction implements Preparable {
 	}
 
 
-	public String getOrgType() {
-		return orgType;
+	public String getOrgTypeFilter() {
+		return orgTypeFilter;
 	}
 
 
-	public void setOrgType(String orgType) {
-		this.orgType = orgType;
+	public void setOrgTypeFilter(String orgTypeFilter) {
+		this.orgTypeFilter = orgTypeFilter;
 	}
 
 }

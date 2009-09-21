@@ -8,7 +8,7 @@
 		</div>
 		<div id="orgSearch" style="display:none">
 			<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch">
-				<@s.hidden name="orgTypeFilter" id="orgFilter"/>
+				<@s.hidden name="orgTypeFilter" cssClass="orgFilter"/>
 				<div class="infoSet">
 					<@s.textfield name="searchName" /> <@s.submit key="label.search"/>
 				</div>
@@ -19,16 +19,17 @@
 		<div id="orgBrowser" >
 			<@s.form action="orgList" id="orgBrowserForm" name="orgBrowserForm" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
 				<@s.hidden name="orgId" value="-1" id="orgPickerCurrentOrg"/>
+				<@s.hidden name="orgTypeFilter" cssClass="orgFilter"/>
 				<div class="infoSet">
-					<label><@s.text name="label.org"/></label>
+					<label class="label" for="org"><@s.text name="label.org"/></label>
 					<@s.select name="org" id="orgList"/>
 				</div>	
 				<div class="infoSet">
-					<label><@s.text name="label.customer"/></label>
+					<label class="label" for="customer"><@s.text name="label.customer"/></label>
 					<@s.select name="customer" id="customerList"/>
 				</div>
 				<div class="infoSet">
-					<label><@s.text name="label.division"/></label>
+					<label class="label" for="division"><@s.text name="label.division"/></label>
 					<@s.select name="division" id="divisionList"/>
 				</div>
 				<div class="actions">
@@ -40,30 +41,40 @@
 </#assign>
 <style>
 	#orgSelector { 
-		border: 1px solid black;
+		border: 3px solid #999;
 		background-color: white;
 	}
 	
 	#orgSelector .selections {
-		
+		background-color:#ddd;
 		overflow:auto;
 		border-bottom: 1px solid #000;
 		margin-bottom:5px;
 	}
+	
 	#orgSelector .selections .selected { 
-		position:relative;
-		top:1px;
+		background-color:white;
+		border-left:1px solid #000;
+		border-right:1px solid #000;
+		
 	}
+	
 	#orgSelector .selections a {
 		display:block;
 		float:left;
 		padding:5px;
-		border:1px solid #000;
-		border-bottom:none;
+		margin-right:5px;
 	}
+	
 	#orgSelector .selections a#closeOrgPicker {
 		float:right;
 		clear:right;
+		margin-right:0;
+		background-color:#fff;
+	}
+	
+	#orgBrowser, #orgSearch {
+		padding:5px;	
 	}
 </style>
 <@n4.includeScript>
