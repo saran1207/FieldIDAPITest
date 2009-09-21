@@ -4,13 +4,22 @@ function showOrgSearch(event) {
 	var element =  Event.element(event);
 	event.stop();
 	
-	$('orgFilter').value=element.getAttribute('orgFilter');
 	
+	Try.these(
+		function() { showOrgPicker(element); },
+		function() { showOrgPicker(element); } // second call to get IE to work on the second time you open the orgPicker. 
+	);
+}
+
+function showOrgPicker(element) {
+	$('orgFilter').value=element.getAttribute('orgFilter');
 	var orgSelector = $('orgSelector');
-	orgSelector.clonePosition(element.up(".orgPicker"), {setWidth:false, setHeight:false});
+	var orgPicker=element.up(".orgPicker");
+	orgSelector.clonePosition(orgPicker, {setWidth:false, setHeight:false});
 	orgSelector.setStyle("position:absolute");
 	orgSelector.show();
-	$('orgSelector').setAttribute('targetId', element.up(".orgPicker").id);
+	
+	$('orgSelector').setAttribute('targetId', orgPicker.id);
 	$('orgPickerResults').update("");
 	openOrgBrowser();
 	setUpOrgBrowser($(element.getAttribute("orgId")).getValue());
@@ -51,6 +60,7 @@ function updateDropDown(select, newList, selectId) {
 function updateOwner(event) {
 	event.stop();
 	var element = Event.element(event);
+	
 	var containerTarget = element.up("*[targetId]");
 	
 	var containerContext = containerTarget.getAttribute("targetId");
