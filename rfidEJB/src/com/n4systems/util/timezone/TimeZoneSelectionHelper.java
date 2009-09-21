@@ -8,7 +8,7 @@ import com.n4systems.model.api.Listable;
 public class TimeZoneSelectionHelper {
 
 	public static Country defaultCountry() {
-		return getCountryById("United States");
+		return getCountryById("US");
 	}
 	
 	public static SortedSet<? extends Listable<String>> getCountries() {

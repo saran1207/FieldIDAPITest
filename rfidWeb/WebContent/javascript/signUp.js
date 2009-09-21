@@ -29,6 +29,16 @@ function validatePromoCode(event) {
 	
 }
 
+function payPurchaseOrderClick(event) {
+	event.stop();
+	$("usingCreditCard").value = "false";
+}
+
+function payCreditCardClick(event) {
+	event.stop();
+	$("usingCreditCard").value = "true";
+}
+
 Element.extend(document).observe("dom:loaded", 
 	function() {
 		$$(".changesPrice").each(function(element) {
@@ -42,5 +52,11 @@ Element.extend(document).observe("dom:loaded",
 		});
 		$$("#promoCode").each(function(element) {
 			element.observe("change", validatePromoCode);
+		});
+		$$("#payPurchaseOrder").each(function(element) {
+			element.observe("click", payPurchaseOrderClick);
+		});
+		$$("#payCreditCard").each(function(element) {
+			element.observe("click", payCreditCardClick);
 		});
 	});

@@ -27,6 +27,8 @@ import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.util.timezone.TimeZoneSelectionHelper;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 public class SignUpCrud extends AbstractCrud {
@@ -156,6 +158,14 @@ public class SignUpCrud extends AbstractCrud {
 	public String getSignUpPackageId() {
 		return  signUpRequest.getSignUpPackage().getName();
 	}
+	
+	public boolean isUsingCreditCard() {
+		return signUpRequest.isUsingCreditCard();		
+	}
+	
+	public void setUsingCreditCard(boolean usingCreditCard) {
+		signUpRequest.setUsingCreditCard(usingCreditCard);
+	}
 
 	public void setSignUpPackageId(String signUpPackageId) {
 		SignUpPackageDetails targetPackage = SignUpPackageDetails.valueOf(signUpPackageId);
@@ -170,9 +180,13 @@ public class SignUpCrud extends AbstractCrud {
 		return signUpRequest;
 	}
 	
-	@VisitorFieldValidator(message = "")
+	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "aNeedToCheckCreditCard == true") })
 	public CreditCard getCreditCard() {
 		return signUpRequest.getCreditCard();
+	}
+	
+	public boolean isANeedToCheckCreditCard() {
+		return (isUsingCreditCard() && !getSignUp().getSignUpPackage().isFree());
 	}
 	
 	@VisitorFieldValidator(message = "")

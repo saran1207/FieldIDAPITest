@@ -7,6 +7,7 @@ import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CommunicationException;
@@ -172,6 +173,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	}
 	
 	public boolean isUsersBelowMax() {
+		if (getSignUpPackage().getUsers() == TenantLimit.UNLIMITED) return true;
 		return getUsers() <= getSignUpPackage().getUsers();
 	}
 	
@@ -188,6 +190,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	}
 
 	@RequiredStringValidator(message="", key="error.phone_number_required")
+	@RegexFieldValidator(expression="^(1\\s*[-\\/\\.]?)?(\\((\\d{3})\\)|(\\d{3}))\\s*[-\\/\\.]?\\s*(\\d{3})\\s*[-\\/\\.]?\\s*(\\d{4})\\s*(([xX]|[eE][xX][tT])\\.?\\s*(\\d+))*$", message = "", key="error.phonenumberinvalid")	
 	public void setPhoneNumber(String phoneNumber) {
 		signUpRequest.setPhoneNumber(phoneNumber);
 	}
@@ -271,10 +274,25 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.isUsingCreditCard();
 	}
 	
+	public void setUsingCreditCard(boolean usingCreditCard) {
+		signUpRequest.setUsingCreditCard(usingCreditCard);
+	}
+	
 	public String getPurchaseOrderNumber() {
 		return signUpRequest.getPurchaseOrderNumber();
 	}
+	
+	@FieldExpressionValidator(message="", key="error.ponumberrequired", expression="(purchaseOrderNumberValid == true)", fieldName="numberOfUsers")	
+	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+		signUpRequest.setPurchaseOrderNumber(purchaseOrderNumber);
+	}	
 
+	public boolean isPurchaseOrderNumberValid() {
+		if (isUsingCreditCard() || getSignUpPackage().isFree()) return true;
+		
+		return ((getPurchaseOrderNumber() != null) && (getPurchaseOrderNumber().trim().length() > 0));
+	}
+	
 	public String getCompanyN4Id() {
 		return signUpRequest.getCompanyN4Id();
 	}

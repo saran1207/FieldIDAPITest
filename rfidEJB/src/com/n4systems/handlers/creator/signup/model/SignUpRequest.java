@@ -42,11 +42,14 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private String companyN4Id;
 	
 	private CreditCard creditCard = new CreditCard();
+	private boolean usingCreditCard = true;
+	private String purchaseOrderNumber;
 	
 	private PaymentOption paymentOption = PaymentOption.ONE_YEAR_UP_FRONT;
 	
 	public SignUpRequest() {
 		this.country = TimeZoneSelectionHelper.defaultCountry();
+		this.address.setCountry(TimeZoneSelectionHelper.defaultCountry().getCode());
 	}
 
 	
@@ -212,24 +215,32 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		return getPhoneNumber();
 	}
 
-
 	public AddressInfo getShippingAddress() {
 		return getBillingAddress();
 	}
-
 
 	public String getUrl() {
 		return "";
 	}
 
-	// FIXME Implement using purchase order number
 	public boolean isUsingCreditCard() {
-		return true;
+		return usingCreditCard;
 	}
 
-	public String getPurchaseOrderNumber() {
-		return "";
+	public void setUsingCreditCard(boolean usingCreditCard) {
+		this.usingCreditCard = usingCreditCard;
 	}
+
+
+	public String getPurchaseOrderNumber() {
+		return purchaseOrderNumber;
+	}
+
+
+	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+		this.purchaseOrderNumber = purchaseOrderNumber;
+	}
+
 
 	public boolean isPurchasingPhoneSupport() {
 		return purchasingPhoneSupport;
@@ -239,9 +250,6 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
 		this.purchasingPhoneSupport = purchasingPhoneSupport;
 	}
-
-
-
 
 	public void setCreditCard(CreditCard creditCard) {
 		this.creditCard = creditCard;

@@ -48,7 +48,7 @@ public class Country implements Comparable<Country>, Listable<String> {
 	}
 	
 	public String getId() {
-		return name;
+		return code;
 	}
 
 	public String getName() {

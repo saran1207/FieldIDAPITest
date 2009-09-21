@@ -17,6 +17,7 @@
 	<h1><@s.text name="title.create_your_account"/>  with package ${signUp.signUpPackage.name?html}  $${signUp.signUpPackage.defaultPricePerUserPerMonth?html}</h1>
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
+	<@s.hidden name="usingCreditCard" id="usingCreditCard" />
 	<div class="infoSection multiColumn">
 		<h2><@s.text name="label.about_you"/></h2>
 		<div class="infoBlock">
@@ -84,7 +85,7 @@
 			
 			<div class="infoSet infoBlock">
 				<label class="label" for="country"><@s.text name="label.country"/></label>
-				<@s.textfield name="address.country" cssClass="country"/>
+				<@s.select name="address.country" list="countries" listKey="id" listValue="displayName" cssClass="country" />
 			</div>
 			<div class="infoSet infoBlock">
 				<label class="label" for="postal"><@s.text name="label.zip_code"/></label>
@@ -164,7 +165,7 @@
 	<div class="infoSection" id="creditCardInformation">
 		<div class="multiColumn">
 			<div class="infoBlock" >
-				<a href="#">Pay by Credit Card</a>
+				<a href="#" id="payCreditCard">Pay by Credit Card</a>
 				<div id="payByCC">
 					<div class="infoSet">
 						<label class="label" for="creditCard.type"><@s.text name="label.credit_card_type"/></label>
@@ -190,11 +191,11 @@
 				</div>
 			</div>
 			<div class="infoBlock">
-				<a href="#">Pay by Purchase order</a> [?]
+				<a href="#" id="payPurchaseOrder">Pay by Purchase order</a> [?]
 				<div id="payByPO">
 					<div class="infoSet">
 						<label class="label" for="po.number"><@s.text name="label.po_number"/></label>
-						<@s.textfield name="signUp.po_number" disabled="true"/>
+						<@s.textfield name="signUp.purchaseOrderNumber" />
 					</div>
 				</div>
 			</div>
