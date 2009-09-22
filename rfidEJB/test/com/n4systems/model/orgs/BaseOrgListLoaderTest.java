@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.tools.SillyPager;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -40,7 +41,7 @@ public class BaseOrgListLoaderTest  {
 				
 		QueryBuilder<BaseOrg> mockQueryBuilder = createMock(QueryBuilder.class);
 		expect(mockQueryBuilder.addOrder("name")).andReturn(mockQueryBuilder);
-		expect(mockQueryBuilder.getResultList(mockEM, 0, 10)).andReturn(new ArrayList<BaseOrg>());
+		expect(mockQueryBuilder.getPaginatedResults(mockEM, 1, 10)).andReturn(new SillyPager<BaseOrg>(new ArrayList<BaseOrg>()));
 		replay(mockQueryBuilder);
 		
 		BaseOrgListLoaderTestExtention sut = new BaseOrgListLoaderTestExtention(new OpenSecurityFilter()); 
@@ -63,7 +64,7 @@ public class BaseOrgListLoaderTest  {
 		QueryBuilder<BaseOrg> mockQueryBuilder = createMock(QueryBuilder.class);
 		expect(mockQueryBuilder.addOrder("name")).andReturn(mockQueryBuilder);
 		expect(mockQueryBuilder.addWhere(same(Comparator.LIKE), (String)anyObject(), same("name"), same(SOME_NAME_TO_LOOK_UP), same(WhereParameter.WILDCARD_BOTH))).andReturn(mockQueryBuilder);
-		expect(mockQueryBuilder.getResultList(mockEM, 0, 10)).andReturn(new ArrayList<BaseOrg>());
+		expect(mockQueryBuilder.getPaginatedResults(mockEM, 1, 10)).andReturn(new SillyPager<BaseOrg>(new ArrayList<BaseOrg>()));
 		replay(mockQueryBuilder);
 		
 		BaseOrgListLoaderTestExtention sut = new BaseOrgListLoaderTestExtention(new OpenSecurityFilter()); 
