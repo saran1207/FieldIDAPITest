@@ -97,7 +97,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 
 	@Override
 	public String toString() {
-		return String.format("%s (%d) [%s]", name, id, getTenant().toString());
+		return String.format("%s (%d) [%s]", name, id, String.valueOf(getTenant()));
 	}
 	
 	public int compareTo(BaseOrg other) {
@@ -128,7 +128,9 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		return (this instanceof DivisionOrg);
 	}
 	
-	abstract public boolean sameTypeAs(BaseOrg org);
+	public boolean sameTypeAs(BaseOrg org) {
+		return org.getClass().isInstance(this);
+	}
 	
 	/** @return The PrimaryOrg for this Tenant */
 	abstract public PrimaryOrg getPrimaryOrg();
