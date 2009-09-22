@@ -6,7 +6,8 @@ import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
 public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTenantResponse> {
-	private final boolean TESTING_MODE = true;
+	private final String TESTING_FLAG_PROPERTY = "netsuite.testing";
+	private final String testingFlag;
 	
 	private Company company;
 	private Person person;
@@ -14,6 +15,12 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 	
 	public SignUpTenantClient() {
 		super(NetsuiteSignUpTenantResponse.class, "signuptenant");
+	
+		if (System.getProperty(TESTING_FLAG_PROPERTY) == null) {
+			testingFlag = "T";
+		} else {
+			testingFlag = System.getProperty(TESTING_FLAG_PROPERTY);
+		}
 	}
 	
 	@Override
@@ -74,9 +81,7 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 			addRequestParameter("promocode", subscription.getPromoCode().trim());
 		}		
 		
-		if (TESTING_MODE) {
-			addRequestParameter("testingsignup", "T");
-		}
+		addRequestParameter("testingsignup", testingFlag);
 	}
 
 	public void setCompany(Company company) {
