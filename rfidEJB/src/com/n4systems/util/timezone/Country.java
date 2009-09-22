@@ -87,7 +87,7 @@ public class Country implements Comparable<Country>, Listable<String> {
 		return region;
 	}
 	
-	public String getFullId(Region region) {
-		return getId() + ":" + region.getId();
+	public String getFullName(Region region) {
+		return getName() + ":" + region.getId();
 	}
 }

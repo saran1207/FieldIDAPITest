@@ -62,7 +62,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		userAccount = new UserBean();
 		userRequest = new UserRequest();
 		String defaultZoneId = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
-		country = CountryList.getInstance().getCountryByFullId(defaultZoneId);
+		country = CountryList.getInstance().getCountryByFullName(defaultZoneId);
 		region = CountryList.getInstance().getRegionByFullId(defaultZoneId);
 	}
 
@@ -187,7 +187,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	public void setTimeZone(String regionId) {
 		if (country != null) {
 			region = country.getRegionById(regionId);
-			userAccount.setTimeZoneID(country.getFullId(region));
+			userAccount.setTimeZoneID(country.getFullName(region));
 		}
 	}
 

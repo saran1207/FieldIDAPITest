@@ -59,7 +59,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 		organization = new SecondaryOrg();
 		
 		String primaryOrgTimeZone = getPrimaryOrg().getDefaultTimeZone();
-		country = CountryList.getInstance().getCountryByFullId(primaryOrgTimeZone);
+		country = CountryList.getInstance().getCountryByFullName(primaryOrgTimeZone);
 		region = CountryList.getInstance().getRegionByFullId(primaryOrgTimeZone);
 	}
 
@@ -77,7 +77,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			organization = loader.load();
 		}
 		
-		country = CountryList.getInstance().getCountryByFullId(organization.getDefaultTimeZone());
+		country = CountryList.getInstance().getCountryByFullName(organization.getDefaultTimeZone());
 		region = CountryList.getInstance().getRegionByFullId(organization.getDefaultTimeZone());
 	}
 
@@ -294,7 +294,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	public void setTimeZoneID(String regionId) {
 		if (country != null) {
 			region = country.getRegionById(regionId);
-			organization.setDefaultTimeZone(country.getFullId(region));
+			organization.setDefaultTimeZone(country.getFullName(region));
 		}
 	}
 }

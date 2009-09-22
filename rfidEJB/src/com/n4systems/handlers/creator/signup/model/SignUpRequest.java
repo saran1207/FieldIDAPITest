@@ -118,7 +118,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	}
 
 	public String getFullTimeZone() {
-		return country.getFullId(region);
+		return country.getFullName(region);
 	}
 	
 	public String getUsername() {

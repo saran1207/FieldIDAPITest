@@ -94,7 +94,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	}
 
 	private void initializeTimeZoneLists() {
-		country = CountryList.getInstance().getCountryByFullId(user.getTimeZoneID());
+		country = CountryList.getInstance().getCountryByFullName(user.getTimeZoneID());
 		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
 	}
 
@@ -361,7 +361,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public void setTimeZoneID(String regionId) {
 		if (country != null) {
 			region = country.getRegionById(regionId);
-			user.setTimeZoneID(country.getFullId(region));
+			user.setTimeZoneID(country.getFullName(region));
 		}
 	}
 

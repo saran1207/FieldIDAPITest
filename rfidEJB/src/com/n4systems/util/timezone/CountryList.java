@@ -66,12 +66,23 @@ public class CountryList implements Iterable<Country> {
 		return country;
 	}
 	
-	public Country getCountryByFullId(String id) {
-		return getCountryById(id.substring(0, id.indexOf(':')));
+	public Country getCountryByName(String name) {
+		Country country = null;
+		for (Country cntry : countries) {
+			if (cntry.getName().equals(name)) {
+				country = cntry;
+				break;
+			}
+		}
+		return country;
+	}
+	
+	public Country getCountryByFullName(String id) {
+		return getCountryByName(id.substring(0, id.indexOf(':')));
 	}
 	
 	public Region getRegionByFullId(String id) {
-		Country country = getCountryByFullId(id);
+		Country country = getCountryByFullName(id);
 		return (country == null) ? null : country.getRegionById(id.substring(id.indexOf(':') + 1));
 	}
 }
