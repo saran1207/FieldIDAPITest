@@ -26,7 +26,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner(InspectionSchedule.class);
+		return new SecurityDefiner("tenant.id", "product.owner", null, "state");
 	}
 
 	public enum ScheduleStatus implements DisplayEnum {

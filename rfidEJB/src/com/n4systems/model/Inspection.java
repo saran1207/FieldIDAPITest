@@ -38,7 +38,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	private static final long serialVersionUID = 1L;
 	
 	public static final SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner(Inspection.class);
+		return new SecurityDefiner("tenant.id", "product.owner", null, "state");
 	}
 	
 	private String location;

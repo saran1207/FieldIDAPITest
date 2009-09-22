@@ -5,6 +5,7 @@ import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
+import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
@@ -98,6 +99,10 @@ public class LoaderFactory {
 		return new FilteredListableLoader(filter, clazz);
 	}
 
+	public InspectionBookListLoader createInspectionBookListLoader() {
+		return new InspectionBookListLoader(filter);
+	}
+
 	public InspectionFrequencyListLoader createInspectionFrequenciesListLoader() {
 		return new InspectionFrequencyListLoader(filter);
 	}
@@ -109,13 +114,9 @@ public class LoaderFactory {
 	public InspectionTypeListableLoader createInspectionTypeListableLoader() {
 		return new InspectionTypeListableLoader(filter);
 	}
-
+	
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
 		return new InternalOrgListableLoader(filter);
-	}
-	
-	public PrimaryOrgByTenantLoader createPrimaryOrgByTenantLoader() {
-		return new PrimaryOrgByTenantLoader();
 	}
 	
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
@@ -124,6 +125,10 @@ public class LoaderFactory {
 
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
+	}
+
+	public PrimaryOrgByTenantLoader createPrimaryOrgByTenantLoader() {
+		return new PrimaryOrgByTenantLoader();
 	}
 
 	public ProductAttachmentListLoader createProductAttachmentListLoader() {
@@ -149,7 +154,7 @@ public class LoaderFactory {
 	public ProductTypeScheduleLoader createProductTypeScheduleLoader() {
 		return new ProductTypeScheduleLoader(filter);
 	}
-
+	
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
 		return new SecondaryOrgByNameLoader(filter);
 	}
