@@ -1,4 +1,5 @@
 <@n4.includeScript src="orgPicker"/>
+<@n4.includeStyle href="orgPicker" type="feature"/>
 <#assign name>
 	<div id="orgSelector" style="display:none" targetId="">
 		<div class="selections">
@@ -9,9 +10,7 @@
 		<div id="orgSearch" style="display:none">
 			<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch">
 				<@s.hidden name="orgTypeFilter" cssClass="orgFilter"/>
-				<div class="infoSet">
-					<@s.textfield name="searchName" /> <@s.submit key="label.search"/>
-				</div>
+				<div class="infoSet"><@s.textfield name="searchName" class="searchName"/> <@s.submit key="label.search"/></div>
 			</@s.form>
 			<div id="orgPickerResults">
 			</div>	
@@ -39,44 +38,7 @@
 		</div>
 	</div>
 </#assign>
-<style>
-	#orgSelector { 
-		border: 3px solid #999;
-		background-color: white;
-	}
-	
-	#orgSelector .selections {
-		background-color:#ddd;
-		overflow:auto;
-		border-bottom: 1px solid #000;
-		margin-bottom:5px;
-	}
-	
-	#orgSelector .selections .selected { 
-		background-color:white;
-		border-left:1px solid #000;
-		border-right:1px solid #000;
-		
-	}
-	
-	#orgSelector .selections a {
-		display:block;
-		float:left;
-		padding:5px;
-		margin-right:5px;
-	}
-	
-	#orgSelector .selections a#closeOrgPicker {
-		float:right;
-		clear:right;
-		margin-right:0;
-		background-color:#fff;
-	}
-	
-	#orgBrowser, #orgSearch {
-		padding:5px;	
-	}
-</style>
+
 <@n4.includeScript>
 	orgListUrl = "<@s.url action="orgList" namespace="/ajax/"/>";
 	document.observe("dom:loaded", function() {

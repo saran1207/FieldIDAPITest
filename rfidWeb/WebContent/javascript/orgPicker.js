@@ -4,11 +4,8 @@ function showOrgSearch(event) {
 	var element =  Event.element(event);
 	event.stop();
 	
+	showOrgPicker(element);
 	
-	Try.these(
-		function() { showOrgPicker(element); },
-		function() { showOrgPicker(element); } // second call to get IE to work on the second time you open the orgPicker. 
-	);
 }
 
 function showOrgPicker(element) {
@@ -16,8 +13,9 @@ function showOrgPicker(element) {
 	
 	var orgSelector = $('orgSelector');
 	var orgPicker=element.up(".orgPicker");
-	orgSelector.clonePosition(orgPicker, {setWidth:false, setHeight:false});
 	orgSelector.setStyle("position:absolute");
+	translate(orgSelector, orgPicker, 0, 0);
+	//orgSelector.clonePosition(orgPicker, {setWidth:false, setHeight:false});
 	orgSelector.show();
 	
 	$('orgSelector').setAttribute('targetId', orgPicker.id);

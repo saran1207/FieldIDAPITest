@@ -53,7 +53,7 @@
 					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
 				</div>	
 			</#if>
-			<#include "_ownershipFilters.ftl"/>
+			
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
 				<@s.textfield name="criteria.location"/>
@@ -84,6 +84,7 @@
 					<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
 				</div>
 			</#if>
+			<#include "_ownershipFilters.ftl"/>
 			<#include "_dateRange.ftl"/>
 		</div>
 		<#include "../customizableSearch/_selectColumns.ftl"/>

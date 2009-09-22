@@ -1,17 +1,19 @@
 <#assign orgList>
 	
 	<#if !orgs.hasResults()>
-		<div><@s.text name="label.search_found_no_orgs"/></div>
+		<div class="noResults"><@s.text name="label.search_found_no_orgs"/></div>
 	<#else>
 		<#list orgs.list as org>
-			<div>
-				<div><a href="#" org="${org.id}" orgName="${org.displayName?html}" >${org.name?html}</a></div>
-				<div>${org.primaryOrg.name?html} ${(" | " + org.secondaryOrg.name?html)!} ${(" | " + org.customerOrg.name?html)!}${(" | " + org.divisionOrg.name?html)!} 
+			<div class="orgSearchResult">
+				<div class="searchedName" ><a href="#" org="${org.id}" orgName="${org.displayName?html}" >${org.name?html}</a></div>
+				<div class="heirarchy">
+					${org.primaryOrg.name?html} ${(" | " + org.secondaryOrg.name?html)!} ${(" | " + org.customerOrg.name?html)!}${(" | " + org.divisionOrg.name?html)!}
+				</div> 
 			</div>
 		</#list>
-		<div>
-			${orgs.list?size} <@s.text name="label.of"/> ${orgs.totalResults} 
-			<#if orgs.hasNextPage> <@s.label name="label.refine_your_search"/> </#if>
+		<div class="resultCount">
+			<@s.text name="label.showing"/> ${orgs.list?size} <@s.text name="label.of"/> ${orgs.totalResults} 
+			<#if orgs.hasNextPage> <@s.text name="label.refine_your_search"/> </#if>
 		</div>
 	</#if>
 </#assign>

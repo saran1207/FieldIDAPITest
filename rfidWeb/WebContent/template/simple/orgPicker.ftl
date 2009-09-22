@@ -27,9 +27,10 @@ value="${(parameters.nameValue.displayName)?default('')?html}"<#rt/>
  title="${parameters.title?html}"<#rt/>
 </#if>
 />
-	<#if !(parameters.required?exists) || !parameters.required>
-		<a href="#" class="clearSearchOwner" <#if !parameters.idNameValue?exists>style="display:none"</#if> ><@s.text name="label.clear"/></a>
-	</#if>	
-	<a href="#" class="searchOwner" orgFilter="${orgType}" orgId="${parameters.id?html}"><@s.text name="label.change"/></a>
+<#if !(parameters.required?exists) || !parameters.required>
+<a href="#" class="clearSearchOwner" <#if !parameters.idNameValue?exists>style="display:none"</#if> ><@s.text name="label.clear"/></a>
+</#if>	
+
+<a href="#" class="searchOwner" orgFilter="${orgType}" orgId="${parameters.id?html}"><@s.text name="label.choose"/></a>
 	
 </span>

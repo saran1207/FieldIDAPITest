@@ -48,15 +48,9 @@
 					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
 				</div>
 			</#if>
-			<div class="infoSet">
-				<label for="owner"><@s.text name="label.owner"/></label>
-				<@n4.orgPicker name="owner"/>
-			</div>
 			
-			<div class="infoSet">
-				<label for="criteria.location"><@s.text name="label.location"/></label>
-				<@s.textfield name="criteria.location"/>
-			</div>	
+			
+			
 		
 			<div class="infoSet">
 				<label for="criteria.referenceNumber"><@s.text name="label.referencenumber"/></label>
@@ -71,7 +65,15 @@
 				<label for="criteria.productType"><@s.text name="label.producttype"/></label>
 				<#include "../customizableSearch/_productTypeSelect.ftl"/>
 			</div>
-		
+			<div class="infoSet">
+				<label for="criteria.location"><@s.text name="label.location"/></label>
+				<@s.textfield name="criteria.location"/>
+			</div>	
+			<div class="infoSet">
+				<label for="owner"><@s.text name="label.owner"/></label>
+				<@n4.orgPicker name="owner"/>
+			</div>
+			
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>

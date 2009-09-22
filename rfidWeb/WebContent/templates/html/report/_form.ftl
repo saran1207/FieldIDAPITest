@@ -57,14 +57,8 @@
 					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
 				</div>
 			</#if>
-			<div class="infoSet">
-				<label for="owner"><@s.text name="label.owner"/></label>
-				<@n4.orgPicker name="owner"/>
-			</div>
-			<div class="infoSet">
-				<label for="criteria.location"><@s.text name="label.location"/></label>
-				<@s.textfield name="criteria.location"/>
-			</div>	
+			
+			
 			<div class="infoSet">
 				<label for="criteria.inspectionBook"><@s.text name="label.inspectionbook"/></label>
 				<@s.select key="label.inspectionbook" name="criteria.inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" />
@@ -82,12 +76,22 @@
 				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
 				<@s.select  name="criteria.productStatus" list="productStatus" listKey="uniqueID" listValue="name" emptyOption="true" />
 			</div>
+		
 			<#if securityGuard.projectsEnabled>
 				<div class="infoSet">
 					<label for="criteria.job"><@s.text name="label.job"/></label>
 					<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
 				</div>
 			</#if>
+			<div class="infoSet">
+				<label for="criteria.location"><@s.text name="label.location"/></label>
+				<@s.textfield name="criteria.location"/>
+			</div>	
+			<div class="infoSet">
+				<label for="owner"><@s.text name="label.owner"/></label>
+				<@n4.orgPicker name="owner"/>
+			</div>
+			
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>
