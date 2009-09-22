@@ -362,7 +362,7 @@ public class UserManager implements User {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getEmployeeList(SecurityFilter filter, boolean withOutDeleted) {
-		String queryString = "select DISTINCT ub from UserBean ub where ub.active = true and ub.system = false and ub.r_EndUser IS NULL AND ";
+		String queryString = "select DISTINCT ub from UserBean ub where ub.active = true and ub.system = false and owner.customerOrg IS NULL AND ";
 		if (withOutDeleted) {
 			queryString += " ub.deleted = false AND ";
 		}
