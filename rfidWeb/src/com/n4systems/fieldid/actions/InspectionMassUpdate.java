@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.CustomerManager;
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateFailureException;
@@ -17,6 +16,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
+import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
@@ -25,15 +25,13 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( InspectionMassUpdate.class );
 	
-	private InspectionManager inspectionManager;
 	private InspectionSearchContainer criteria;
 	private Inspection inspection = new Inspection();
 	
 	private OwnerPicker ownerPicker;
 
-	public InspectionMassUpdate( InspectionManager inspectionManager,  CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
+	public InspectionMassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
 		super( customerManager, massUpdateManager, persistenceManager);
-		this.inspectionManager = inspectionManager;
 	}
 	
 	
@@ -120,8 +118,10 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		}
 	}
 	
-	public Collection<ListingPair> getInspectionBooks() {	
-		return inspectionManager.findAvailableInspectionBooksLP( getSecurityFilter(), false );
+	public Collection<ListingPair> getInspectionBooks() {
+		InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+		loader.setOpenBooksOnly(true);
+		return loader.loadListingPair();
 	}
 
 	public boolean isPrintable() {

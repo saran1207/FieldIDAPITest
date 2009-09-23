@@ -53,10 +53,8 @@ import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.OwnerFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.reporting.PathHandler;
@@ -68,9 +66,7 @@ import com.n4systems.services.NextInspectionScheduleService;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.TransactionSupervisor;
-import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -742,25 +738,6 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 
 		return book;
-	}
-
-	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed) {
-		return findAvailableInspectionBooksLP(filter, withClosed, null, false);
-	}
-
-	public List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, BaseOrg owner) {
-		return findAvailableInspectionBooksLP(filter, withClosed, owner, true);
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<ListingPair> findAvailableInspectionBooksLP(SecurityFilter filter, boolean withClosed, BaseOrg owner, boolean useCustomer) {
-		QueryBuilder<ListingPair> builder = new QueryBuilder<ListingPair>(InspectionBook.class, filter);
-
-		builder.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name"));
-		builder.applyFilter(new OwnerFilter(owner));
-		builder.addOrder("name");
-		
-		return persistenceManager.findAll(builder);
 	}
 
 	/**

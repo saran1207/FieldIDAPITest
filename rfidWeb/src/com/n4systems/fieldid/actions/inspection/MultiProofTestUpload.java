@@ -9,21 +9,22 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ListingPair;
+import com.opensymphony.xwork2.Preparable;
 
-public class MultiProofTestUpload extends AbstractAction {
+public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private static final long serialVersionUID = 1L;
 	
 	private ProofTestHandler proofTestHandler;
-	private InspectionManager inspectionManager;
-	
 	private Inspection inspection = new Inspection();
 	private ProofTestType proofTestType;
 	private List<ListingPair> inspectionBooks;
@@ -33,13 +34,18 @@ public class MultiProofTestUpload extends AbstractAction {
 	
 	private Map<String, Exception> fileProcessingFailureMap = new HashMap<String, Exception>();
 	private Map<String, Map<String, Inspection>> inspectionProcessingFailureMap = new HashMap<String, Map<String, Inspection>>();
+
+	private OwnerPicker ownerPicker;
 	
-	public MultiProofTestUpload(InspectionManager inspectionManager, ProofTestHandler proofTestHandler, PersistenceManager persistenceManager) {
+	public MultiProofTestUpload(ProofTestHandler proofTestHandler, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
 		this.proofTestHandler = proofTestHandler;
 	}
 
+	public void prepare() throws Exception {
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
+	}
+	
 	public String doAdd() {		 
 		return SUCCESS;
 	}
@@ -95,7 +101,6 @@ public class MultiProofTestUpload extends AbstractAction {
 		return SUCCESS;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public String doUpload() {
 		/*
 		 * We need to move the file before the end of this request otherwise struts will clear it out
@@ -125,7 +130,10 @@ public class MultiProofTestUpload extends AbstractAction {
 
 	public List<ListingPair> getInspectionBooks() {
 		if( inspectionBooks == null ) {
-			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP( getSecurityFilter(), false, inspection.getOwner());
+			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+			loader.setOpenBooksOnly(true);
+			loader.setOwner(inspection.getOwner());
+			inspectionBooks = loader.loadListingPair();
 		}
 		return inspectionBooks;
 	}
@@ -180,5 +188,17 @@ public class MultiProofTestUpload extends AbstractAction {
 
 	public Map<String, Map<String, Inspection>> getInspectionProcessingFailureMap() {
 		return inspectionProcessingFailureMap;
+	}
+
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
 	}
 }

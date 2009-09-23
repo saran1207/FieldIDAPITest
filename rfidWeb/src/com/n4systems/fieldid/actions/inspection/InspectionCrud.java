@@ -15,7 +15,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.CommentTemp;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
@@ -53,6 +52,7 @@ import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
@@ -711,7 +711,10 @@ public class InspectionCrud extends UploadFileSupport {
 
 	public List<ListingPair> getInspectionBooks() {
 		if (inspectionBooks == null) {
-			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP(getSecurityFilter(), (uniqueID != null), getOwner());
+			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+			loader.setOpenBooksOnly((uniqueID == null));
+			loader.setOwner(getOwner());
+			inspectionBooks = loader.loadListingPair();
 		}
 		return inspectionBooks;
 	}

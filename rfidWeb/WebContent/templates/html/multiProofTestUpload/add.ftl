@@ -1,3 +1,6 @@
+<head>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+</head>
 ${action.setPageType('inspection', 'multi_proof_test')!}
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspectionBook.js" includeParams="none"/>" ></script>
@@ -63,10 +66,8 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 
 	
 	<p>
-		<label><@s.text name="label.customer"/></label>
-		<span>
-			<@s.select  name="inspection.owner.customerOrg.iD" list="customers" listKey="id" listValue="name" headerKey="" headerValue="" onchange="updateInspectionBooks(this.id, false);"/>
-		</span>
+		<label><@s.text name="label.owner"/></label>
+		<span><@n4.orgPicker name="owner" required="true" /></span>
 	</p>
 	
 	<p>
