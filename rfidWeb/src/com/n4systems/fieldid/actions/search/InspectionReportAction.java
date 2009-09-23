@@ -20,8 +20,10 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
+import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
+import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.reporting.InspectionReportType;
@@ -234,7 +236,9 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<ListingPair> getInspectionBooks() {
 		if (inspectionBooks == null) {
-			inspectionBooks = inspectionManager.findAvailableInspectionBooksLP(getSecurityFilter(), true);
+			InspectionBookListLoader bookLoader = new InspectionBookListLoader(getSecurityFilter());
+			bookLoader.setOpenBooksOnly(false);
+			inspectionBooks = bookLoader.loadListingPair();
 			inspectionBooks.add(new ListingPair(0L, "Inspections not in a book"));
 		}
 		return inspectionBooks;

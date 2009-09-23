@@ -16,6 +16,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
+import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -86,7 +87,10 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 		SecurityFilter filter = getSecurityFilter();
 
 		try {
-			books = inspectionManager.findAvailableInspectionBooksLP(filter, withClosed, getOwner());
+			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+			loader.setOpenBooksOnly(!withClosed);
+			loader.setOwner(getOwner());
+			books = loader.loadListingPair();
 			return SUCCESS;
 		} catch (Exception e) {
 			addActionErrorText("error.failedtoloadinspectionbooks");

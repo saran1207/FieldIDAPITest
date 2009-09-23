@@ -14,11 +14,14 @@ function updateInspectionBookList( list ) {
 
 var updateInspectionBooksUrl = '';
 
-function updateInspectionBooks( customerSelect, includeClosed ) {
+function updateInspectionBooks(event) {
 	
-	var customerId = $(customerSelect).getValue();
-	var url =  updateInspectionBooksUrl + '?customerId='+ customerId + '&withClosed=' + includeClosed;
+	var ownerId = Event.element(event).getValue();
+	var url =  updateInspectionBooksUrl + '?ownerId='+ ownerId + '&withClosed=false';
 
 	getResponse( url );		
 
 }
+
+Element.extend(document).observe("owner:change", updateInspectionBooks);
+

@@ -1,6 +1,10 @@
 package com.n4systems.model.inspectionbook;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -9,6 +13,9 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.util.ListHelper;
+import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.QueryBuilder;
 
 /**
  * Loads a list of inspection books.  Note that the security on this list is backwards to our normal security model.
@@ -24,55 +31,89 @@ public class InspectionBookListLoader extends ListLoader<InspectionBook> {
 		super(filter);
 	}
 
-	@SuppressWarnings("unchecked")
+	public List<ListingPair> loadListingPair() {
+		List<InspectionBook> inspectionBooks = load();
+		return ListHelper.longListableToListingPair(inspectionBooks);
+	}
+	
 	@Override
 	protected List<InspectionBook> load(EntityManager em, SecurityFilter filter) {
 		/*
 		 * This query should be moved to the QueryBuilder when it is capable of understanding 
 		 * grouping.
 		 */
-		StringBuilder inspectionBookQuery = new StringBuilder("SELECT i FROM ");
-		inspectionBookQuery.append(InspectionBook.class.getName());
-		inspectionBookQuery.append(" i WHERE ");
-		inspectionBookQuery.append("i.tenant.id = :security_tenant_id");
-		inspectionBookQuery.append(" AND ");
+		List<InspectionBook> downwardTreeList = new ArrayList<InspectionBook>();
+		List<InspectionBook> upwardTreeList = new ArrayList<InspectionBook>();
 		
-		if (openBooksOnly) {
-			inspectionBookQuery.append("i.open = true");
-			inspectionBookQuery.append(" AND ");
+		if (owner == null) {
+			downwardTreeList = getDownwardTreeList(em, filter);
+			upwardTreeList = getUpwardTreeList(filter.getOwner(), em, filter);
+		} else {
+			upwardTreeList = getUpwardTreeList(owner, em, filter);
 		}
 		
-		applyOrgFilter(inspectionBookQuery, filter.getOwner(), "security");
-		applyOrgFilter(inspectionBookQuery, owner, "owner");
-
-		Query query = em.createQuery(inspectionBookQuery.toString());
+		Set<InspectionBook> combinedSet = new TreeSet<InspectionBook>();
+		combinedSet.addAll(downwardTreeList);
+		combinedSet.addAll(upwardTreeList);
 		
-		query.setParameter("security_tenant_id", owner.getTenant().getId());
-		applyOrgParams(query, filter.getOwner(), "security");
-		applyOrgParams(query, owner, "owner");
+		return new ArrayList<InspectionBook>(combinedSet);
+	}
+	
+	private StringBuilder getStartOfQuery() {
+		StringBuilder queryString = new StringBuilder("SELECT i FROM ");
+		queryString.append(InspectionBook.class.getName());
+		queryString.append(" i WHERE ");
+		queryString.append("i.tenant.id = :security_tenant_id");
 		
-		return query.getResultList();
+		if (openBooksOnly) {
+			queryString.append(" AND ");
+			queryString.append("i.open = true");
+		}
+		
+		return queryString;
+	}
+	
+	private void applyTenantSecurity(SecurityFilter filter, Query query) {
+		query.setParameter("security_tenant_id", filter.getTenantId());								
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<InspectionBook> getDownwardTreeList(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
+		Query query = queryBuilder.createQuery(em);
+		return query.getResultList();		
 	}
 
-	private void applyOrgFilter(StringBuilder query, BaseOrg owner, String paramPrefix) {
-		query.append("(");
+	@SuppressWarnings("unchecked")
+	private List<InspectionBook> getUpwardTreeList(BaseOrg owner, EntityManager em, SecurityFilter filter) {
+		StringBuilder inspectionBookQuery = getStartOfQuery();
+		inspectionBookQuery.append(" AND ");
+		
+		inspectionBookQuery.append("(");
 		if (owner.getDivisionOrg() != null) {
-			query.append("(i.owner.divisionOrg.id = :").append(paramPrefix).append("_division_id)");
-			query.append(" OR ");
+			inspectionBookQuery.append("(i.owner.divisionOrg.id = :owner_division_id)");
+			inspectionBookQuery.append(" OR ");
 		}
 		
 		if (owner.getCustomerOrg() != null) {
-			query.append("(i.owner.customerOrg.id = :").append(paramPrefix).append("_customer_id AND i.owner.divisionOrg IS NULL)");
-			query.append(" OR ");
+			inspectionBookQuery.append("(i.owner.customerOrg.id = :owner_customer_id AND i.owner.divisionOrg IS NULL)");
+			inspectionBookQuery.append(" OR ");
 		}
 		
 		if (owner.getSecondaryOrg() != null) {
-			query.append("(i.owner.secondaryOrg.id = :").append(paramPrefix).append("_secondary_id AND i.owner.customerOrg IS NULL AND i.owner.divisionOrg IS NULL)");
-			query.append(" OR ");
+			inspectionBookQuery.append("(i.owner.secondaryOrg.id = :owner_secondary_id AND i.owner.customerOrg IS NULL AND i.owner.divisionOrg IS NULL)");
+			inspectionBookQuery.append(" OR ");
 		}
 		
-		query.append("(owner.secondaryOrg IS NULL AND owner.customerOrg IS NULL AND owner.divisionOrg IS NULL)");
-		query.append(")");
+		inspectionBookQuery.append("(owner.secondaryOrg IS NULL AND owner.customerOrg IS NULL AND owner.divisionOrg IS NULL)");
+		inspectionBookQuery.append(")");
+
+		Query query = em.createQuery(inspectionBookQuery.toString());
+		
+		applyOrgParams(query, owner, "owner");
+		applyTenantSecurity(filter, query);
+		
+		return query.getResultList();
 	}
 	
 	private void applyOrgParams(Query query, BaseOrg owner, String paramPrefix) {

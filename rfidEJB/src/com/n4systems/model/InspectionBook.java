@@ -15,7 +15,7 @@ import com.n4systems.model.parents.EntityWithOwner;
 
 @Entity
 @Table(name = "inspectionbooks")
-public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long> {
+public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<InspectionBook> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
@@ -87,5 +87,11 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 
 	public void setLegacyId(Long legacyId) {
 		this.legacyId = legacyId;
+	}
+
+	public int compareTo(InspectionBook o) {
+		if (o == null || getName() == null) return 0;
+		
+		return getName().compareToIgnoreCase(o.getName());
 	}
 }

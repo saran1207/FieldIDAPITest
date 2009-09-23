@@ -111,7 +111,7 @@ function setOwner(containerId, ownerId, ownerName) {
 	var orgInputs = $$(containerId + " .orgSelected");
 	orgInputs.first().value=ownerId;
 	orgInputs.first().next('input').value=ownerName; 
-	orgInputs.first().next('input').fire('field:change');
+	orgInputs.first().fire('owner:change');
 	
 	var clearOrg = $$(containerId + " .clearSearchOwner");
 	
