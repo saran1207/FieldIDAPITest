@@ -128,6 +128,10 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		return (this instanceof DivisionOrg);
 	}
 	
+	public boolean isLinked() {
+		return (isExternalOrg() && ((ExternalOrg)this).getLinkedOrg() != null);
+	}
+	
 	public boolean sameTypeAs(BaseOrg org) {
 		return org.getClass().isInstance(this);
 	}

@@ -21,7 +21,7 @@ public class OrgSaverTest {
 			boolean updateCalled = false;
 			
 			@Override
-			protected void save(EntityManager em, BaseOrg entity) {
+			public void save(EntityManager em, BaseOrg entity) {
 				entity.setModified(new Date());
 				super.save(em, entity);
 				assertTrue("BaseOrg was not resaved", updateCalled);

@@ -11,7 +11,7 @@ import com.n4systems.model.api.Listable;
 
 public class ListHelper {
 
-	public static <T extends Listable<Long>> Map<Long, String> longListableToMap(Collection<T> list) {
+	public static <T extends Listable<Long>, C extends Collection<T>> Map<Long, String> longListableToMap(C list) {
 		Map<Long, String> listMap = new LinkedHashMap<Long, String>();
 		
 		for(Listable<Long> listable: list) {
@@ -25,7 +25,7 @@ public class ListHelper {
 		return stringListableToMap(Arrays.asList(listables));
 	}
 	
-	public static <T extends Listable<String>> Map<String, String> stringListableToMap(List<T> list) {
+	public static <T extends Listable<String>, C extends Collection<T>> Map<String, String> stringListableToMap(C list) {
 		Map<String, String> listMap = new LinkedHashMap<String, String>();
 		
 		for(Listable<String> listable: list) {
@@ -35,7 +35,7 @@ public class ListHelper {
 		return listMap;
 	}
 	
-	public static <T extends Listable<Long>> List<ListingPair> longListableToListingPair(List<T> list) {
+	public static <T extends Listable<Long>, C extends Collection<T>> List<ListingPair> longListableToListingPair(C list) {
 		List<ListingPair> listingPair = new ArrayList<ListingPair>();
 		
 		for(Listable<Long> listable: list) {
@@ -45,7 +45,7 @@ public class ListHelper {
 		return listingPair;
 	}
 	
-	public static <T extends Listable<Integer>> List<ListingPair> intListableToListingPair(List<T> list) {
+	public static <T extends Listable<Integer>, C extends Collection<T>> List<ListingPair> intListableToListingPair(C list) {
 		List<ListingPair> listingPair = new ArrayList<ListingPair>();
 		
 		ListingPair lp;

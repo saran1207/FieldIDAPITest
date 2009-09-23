@@ -97,4 +97,10 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		
 		return org;
 	}
+
+	public OrgBuilder setAddressInfo(AddressInfo addressInfo) {
+		this.addressInfo = addressInfo;
+		return this;
+	}
+	
 }

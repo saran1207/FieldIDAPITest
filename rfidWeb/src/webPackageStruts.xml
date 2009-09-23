@@ -138,6 +138,7 @@
 				<param name="actionName">customerList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
+				<param name="withLinkedCustomers">${withLinkedCustomers}</param>
 			</result>
 		</action>
 
@@ -148,17 +149,18 @@
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
+				<param name="withLinkedCustomers">${withLinkedCustomers}</param>
 			</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">customerList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
+				<param name="withLinkedCustomers">${withLinkedCustomers}</param>
 			</result>
 		</action>
 
 		<action name="customerList" method="list" class="com.n4systems.fieldid.actions.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
-
 			<result name="input" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
 		</action>
 
@@ -1826,8 +1828,24 @@
 			</result>
 		</action>
 		
+		<action name="listConnections" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
+			<result name="success" type="freemarker">/templates/html/tempLinkCreate/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/tempLinkCreate/list.ftl</result>
+		</action>
 		
+		<action name="addConnection" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
+			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+		</action>
 		
+		<action name="saveConnection" method="save" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
+			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">listConnections</param>
+			</result>
+		</action>
 		
 	</package>
 </struts>

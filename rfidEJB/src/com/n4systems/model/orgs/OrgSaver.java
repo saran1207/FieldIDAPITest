@@ -19,7 +19,7 @@ public class OrgSaver extends Saver<BaseOrg> {
 	}
 	
 	@Override
-	protected void save(EntityManager em, BaseOrg entity) {
+	public void save(EntityManager em, BaseOrg entity) {
 		super.save(em, entity);
 		
 		// we need to re-save the org so that the security fields get set.

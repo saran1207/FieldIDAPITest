@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 
 
@@ -45,11 +46,24 @@ abstract public class ExternalOrg extends BaseOrg {
 		super.onUpdate();
 		updateFieldsFromOrg(getLinkedOrg());
 	}
-	
-	private void updateFieldsFromOrg(InternalOrg org) {
+
+	protected void updateFieldsFromOrg(InternalOrg org) {
 		if (org != null) {
 			setName(org.getName());
-			setAddressInfo(org.getAddressInfo());
+			updateAddressInfo(org.getAddressInfo());
+		}
+	}
+	
+	protected void updateAddressInfo(AddressInfo newAddressInfo) {
+		if (newAddressInfo != null) {
+			// address info is it's own entity, if this is the first save we need to wipe
+			// the id so it creates a new one.  If this is a merge, we'll capture the id
+			// and set it back on the addressinfo after it's been moved to this org
+			Long addressInfoId = (getAddressInfo() != null) ? getAddressInfo().getId() : null;
+			setAddressInfo(newAddressInfo);
+			getAddressInfo().setId(addressInfoId);
+		} else {
+			setAddressInfo(null);
 		}
 	}
 	
@@ -80,8 +94,16 @@ abstract public class ExternalOrg extends BaseOrg {
 	public Long getLegacyId() {
 		return legacyId;
 	}
-	
-	public boolean isLinked() {
-		return (linkedOrg != null);
+
+	@Override
+	public String getDisplayName() {
+		return super.getDisplayName() + " <->";
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " <->";
+	}
+	
+	
 }

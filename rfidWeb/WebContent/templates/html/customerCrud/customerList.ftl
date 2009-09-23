@@ -4,6 +4,7 @@ ${action.setPageType('customer','list')!}
 <div class="listFilter quickForm" >
 	<@s.form action="customerList" method="get">
 		<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
+		<@s.checkbox key="label.show_linked_customers" name="withLinkedCustomers" />
 		<div class="formAction">
 			<@s.submit key="hbutton.filter" />
 		</div>
@@ -29,11 +30,15 @@ ${action.setPageType('customer','list')!}
 			<td>
 				<a href="<@s.url value="customerShow.action" uniqueID="${customer.id}" />" >${customer.name}</a>
 			</td>
-			<td>${customer.code}</td>
+			<td>${customer.code!}</td>
 			<td>${customer.getInternalOrg().name}</td>
 			<td>
-				<a href="<@s.url value="customerEdit.action" uniqueID="${customer.id}" />" ><@s.text name="label.edit" /></a> | 
-				<a href="<@s.url value="customerRemove.action" uniqueID="${customer.id}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>
+				<#if customer.linked >
+					<@s.text name="label.linked_customer" />
+				<#else>
+					<a href="<@s.url value="customerEdit.action" uniqueID="${customer.id}" />" ><@s.text name="label.edit" /></a> | 
+					<a href="<@s.url value="customerRemove.action" uniqueID="${customer.id}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>
+				</#if>
 			</td>
 		</tr>
 	</#list>

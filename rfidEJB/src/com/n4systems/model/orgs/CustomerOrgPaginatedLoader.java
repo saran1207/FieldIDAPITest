@@ -9,6 +9,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 
 	private String nameFilter;
+	private boolean withLinkedCustomers = true;
 	
 	public CustomerOrgPaginatedLoader(SecurityFilter filter) {
 		super(filter);
@@ -23,6 +24,10 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 			builder.addWhere(Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
 		}
 		
+		if (!withLinkedCustomers) {
+			builder.addWhere(new WhereParameter<Object>(Comparator.NULL, "linkedOrg"));
+		}
+		
 		return builder;
 	}
 
@@ -31,4 +36,8 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 		return this;
 	}
 	
+	public CustomerOrgPaginatedLoader setWithLinkedCustomers(boolean withLinkedCustomers) {
+		this.withLinkedCustomers = withLinkedCustomers;
+		return this;
+	}
 }

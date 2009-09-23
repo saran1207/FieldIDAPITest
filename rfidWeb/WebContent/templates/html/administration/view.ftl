@@ -114,10 +114,8 @@
 		<div class="viewSection administration">
 			<h2 id="safetyNetwork"><@s.text name="label.safetynetwork" /></h2>
 			<p>
-				<label><a href="safetyNetworkList.action" class="blue"><@s.text name="title.safety_network.plural" /></a></label>
-				<span>
-				View and add Inspection companies to your safety network.
-				</span>
+				<label><a href="listConnections.action" class="blue"><@s.text name="title.safety_network.plural" /></a></label>
+				<span>View and and Safety Network connections.</span>
 			</p>
 		</div>
 	</#if>

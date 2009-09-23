@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.SimplePager;
 import com.n4systems.tools.Pager;
@@ -75,6 +76,17 @@ public class QueryBuilder<E> {
 	private Set<GroupByClause> groupByArguments = new LinkedHashSet<GroupByClause>();
 	private Set<OrderClause> orderArguments = new LinkedHashSet<OrderClause>();
 	private List<String> postFetchPaths = new ArrayList<String>();
+	
+	/** 
+     * Constructs a <tt>QueryBuilder</tt> for an UnsecuredEntity.  No SecurityFilter will
+     * be defined for this query.
+     * 
+     * @param tableClass	the target table class.
+     */
+	public QueryBuilder(Class<? extends UnsecuredEntity> tableClass) {
+		setFromArgument(tableClass, defaultAlias);
+		setSimpleSelect();
+	}
 	
 	/** 
      * Constructs a <tt>QueryBuilder</tt> setting the target table class and 
