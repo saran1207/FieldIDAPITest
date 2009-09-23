@@ -23,6 +23,7 @@ public class BaseOrgParentFilterListLoader extends ListableLoader {
 		
 		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(clazz, filter);
 		new OwnerFilter(parent).applyFilter(builder);
+		builder.setOrder("name");
 		
 		return builder;
 	}

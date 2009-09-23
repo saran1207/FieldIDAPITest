@@ -13,6 +13,7 @@ import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.Preparable;
@@ -29,9 +30,7 @@ public class OrgListAction extends AbstractAction implements Preparable {
 
 	
 	public void prepare() throws Exception {
-		
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), ownerHolder);
-		
 	}
 	
 	
@@ -64,12 +63,12 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		orgList.addAll(getLoaderFactory().createFilteredListableLoader(SecondaryOrg.class).load());
 		
 		if (getOwner().getSecondaryOrg() != null && 
-				!orgList.contains(getOwner().getSecondaryOrg())) {
-			orgList.add(new SimpleListable<Long>(getOwner().getSecondaryOrg().getId(), getOwner().getSecondaryOrg().getDisplayName()));
+				!orgList.contains(new SimpleListable<Long>(getOwner().getSecondaryOrg()))) {
+			orgList.add(new SimpleListable<Long>(getOwner().getSecondaryOrg()));
 		}
 		
 		
-		return ListingPair.convertToListingPairs(orgList);
+		return ListHelper.longListableToListingPair(orgList);
 	}
 	
 	public List<ListingPair> getCustomers() {
@@ -83,11 +82,12 @@ public class OrgListAction extends AbstractAction implements Preparable {
 			customerList.addAll(new BaseOrgParentFilterListLoader(getSecurityFilter()).setClazz(CustomerOrg.class).setParent(getOwner().getInternalOrg()).load());
 		}
 		
-		if (getOwner().getCustomerOrg() != null && !customerList.contains(getOwner().getCustomerOrg())) {
-			customerList.add(getOwner().getCustomerOrg());
+		
+		if (getOwner().getCustomerOrg() != null && !customerList.contains(new SimpleListable<Long>(getOwner().getCustomerOrg()))) {
+			customerList.add(new SimpleListable<Long>(getOwner().getCustomerOrg()));
 		}
 		
-		return ListingPair.convertToListingPairs(customerList);
+		return ListHelper.longListableToListingPair(customerList);
 	}
 	
 	
@@ -128,10 +128,8 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		if (getOwner().getDivisionOrg() != null && !divisionList.contains(getOwner().getDivisionOrg())) {
 			divisionList.add(getOwner().getDivisionOrg());
 		}
-		return ListingPair.convertToListingPairs(divisionList);
+		return ListHelper.longListableToListingPair(divisionList);
 	}
-	
-
 	
 
 	private boolean isDivisionListRequired() {

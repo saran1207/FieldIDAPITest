@@ -7,27 +7,23 @@ ${action.setPageType('customer', 'users')!}
 	<#include '../common/_pagination.ftl' />
 	<#assign userList=page.list />
 	<table class="list" id="userList">
-	<tr>
-		<th ><@s.text name="label.userid"/></th>
-    	<th ><@s.text name="label.username"/></th>
-    	<th ><@s.text name="label.division_name"/></th>
-  		<th ><@s.text name="label.emailaddress"/></th>
-		<th></th>
-	<tr>
-	<#assign count=0 >
-	<#list userList as user >
-		<tr id="user_${user.uniqueID!}" >
-			<td><a href="<@s.url action="customerUserEdit" uniqueID="${user.uniqueID!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
-			<td>${user.userLabel?html! }</td>
-			<td>
-				<#if user.owner.division>
-					${user.owner.name}
-				</#if>
-			</td>
-			<td>${user.emailAddress?html! } </td>
-			<td><div><a href="<@s.url action="customerUserDelete" uniqueID="${(user.uniqueID)!}" includeParams="get"/>"><@s.text name="label.remove" /></a></div></td>
-		</tr>
-	</#list>
+		<tr>
+			<th ><@s.text name="label.userid"/></th>
+	    	<th ><@s.text name="label.username"/></th>
+	    	<th ><@s.text name="label.division_name"/></th>
+	  		<th ><@s.text name="label.emailaddress"/></th>
+			<th></th>
+		<tr>
+		<#assign count=0 >
+		<#list userList as user >
+			<tr id="user_${user.uniqueID!}" >
+				<td><a href="<@s.url action="customersUserEdit" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
+				<td>${user.userLabel?html! }</td>
+				<td>${(user.owner.divisionOrg.name)!?html}</td>
+				<td>${user.emailAddress?html! } </td>
+				<td><div><a href="<@s.url action="customersUserDelete" uniqueID="${(user.uniqueID)!}" includeParams="get"/>"><@s.text name="label.remove" /></a></div></td>
+			</tr>
+		</#list>
 </table>
 	<#include '../common/_pagination.ftl' />
 <#elseif !page.hasResults() >

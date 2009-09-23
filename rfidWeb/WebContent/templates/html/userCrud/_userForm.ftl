@@ -1,60 +1,83 @@
 <#include "/templates/html/common/_orgPicker.ftl"/>
 
-<@s.form action="${userSaveAction}" cssClass="inputForm" theme="css_xhtml" >
-	
+<@s.form action="${userSaveAction}" cssClass="fullForm" theme="fieldid" >
+	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID" />
+	<@s.hidden name="customerId"/>
 	<@s.hidden name="currentPage" />
 	<@s.hidden name="listFilter" />
 	<@s.hidden name="userType" />
-	
-	<div class="formRowHolder">
-		<@s.textfield key="label.userid" name="userId" labelposition="left" required="true"/>
-		<@s.textfield key="label.emailaddress" name="emailAddress" labelposition="left" required="true"/>
-	</div>
-	
-	<div class="formRowHolder">
-		<@s.textfield id="firstname" key="label.firstname" name="firstName" labelposition="left" required="true"/>
-		<@s.textfield id="lastname" key="label.lastname" name="lastName" labelposition="left" required="true"/>
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.position" name="position" labelposition="left"/>
-		<@s.textfield id="initials" key="label.initials" name="initials" labelposition="left" ondblclick="updateInitials()" />
-	</div>
-	
-	<#if !uniqueID?exists >
-		<div class="formRowHolder">
-			<@s.textfield key="label.securityrfidnumber" name="securityRfidNumber" labelposition="left"/>
+	<div class="multiColumn">
+		<div class="infoBlock">
+			<div class="infoSet">
+				<label class="label" for="userId"><@s.text name="label.userid"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@s.textfield name="userId"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="emailAddress"><@s.text name="label.emailaddress"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@s.textfield key="label.emailaddress" name="emailAddress"  required="true"/>
+			</div>
+			
+			<#if user.new >
+				<div class="infoSet">
+					<label class="label" for="securityRfidNumber"><@s.text name="label.securityrfidnumber"/></label>
+					<@s.textfield key="label.securityrfidnumber" name="securityRfidNumber" />
+				</div>
+				
+				<div class="infoSet">
+					<label class="label" for="passwordEntry.password"><@s.text name="label.password"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+					<@s.password  name="passwordEntry.password"  required="true"/>
+				</div>
+				
+				<div class="infoSet">
+					<label class="label" for="passwordEntry.passwordVerify"><@s.text name="label.vpassword"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+					<@s.password name="passwordEntry.passwordVerify"  required="true"/>
+				</div>
+			</#if>
+			
+			<div class="infoSet">
+				<label class="label" for="owner"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','external')}"/>
+			</div>
 		</div>
-	</#if>
-	
-	<div class="formRowHolder">
-		<@s.select key="label.country" name="countryId" list="countries" listKey="id" listValue="displayName" labelposition="left" cssClass="changesTimeZone"/>
-		<@s.select id="tzlist" key="label.timezone" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName" labelposition="left" emptyOption="false"/>
-	</div>
-
-	<div class="formRowHolder">
-		<label for="owner"><@s.text name="label.owner"/></label>
-		<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','external')}"/>
-	</div>
-	
-	<#if !uniqueID?exists >	
-		<div class="formRowHolder">
-			<@s.password key="label.password" name="password" labelposition="left" required="true"/>
-			<@s.password key="label.vpassword" name="passwordConfirmation" labelposition="left" required="true"/>
+		
+		<div class="infoBlock">
+			<div class="infoSet">
+				<label class="label" for="firstname"><@s.text name="label.firstname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@s.textfield id="firstname" name="firstName"  required="true"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="lastname"><@s.text name="label.lastname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@s.textfield id="lastname" name="lastName"  required="true"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="initials"><@s.text name="label.initials"/></label>
+				<@s.textfield id="initials" name="initials"  ondblclick="updateInitials()" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="position"><@s.text name="label.position"/></label>
+				<@s.textfield  name="position" />
+			</div>
+			
+			<div class="infoSet">
+				<label class="label" for="countryId"><@s.text name="label.country"/></label>
+				<@s.select  name="countryId" list="countries" listKey="id" listValue="displayName"  cssClass="changesTimeZone"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="timeZoneID"><@s.text name="label.timezone"/></label>
+				<@s.select id="tzlist" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName"  emptyOption="false"/>
+			</div>
 		</div>
-	<#else>
-		<@s.hidden name="password" value="123456" />
-		<@s.hidden name="passwordConfirmation" value="123456"/>
-	</#if>
+	</div>
 	
-	<#if uniqueID?exists >
+	<#if !user.new >
 		<div class="formRowHolder uploadHolder">
 			<iframe src="<@s.url action="userUploadSignature"  uniqueID="${uniqueID}" />" scrollbar='no' width="100%" height="110px" style="border:0px; overflow:none;" frameborder="0"></iframe>
 		</div>
 	</#if>
 	
-	<#if !customerUser && !user.admin>
-		<div>
+	<#if !user.admin && employee>
+		<div class="infoBlock">
 			<@s.fielderror>
 					<@s.param>userPermissions</@s.param>				
 			</@s.fielderror>
@@ -88,9 +111,10 @@
 		</div>
 	</#if>
 	
-	<div class="formAction">
+<div class="actions">
+		<@s.submit name="save" key="label.save" />
+		<@s.text name="label.or"/>
 		${backToList}
-		<@s.submit name="save" key="hbutton.submit" />
 	</div>
 	
 </@s.form >

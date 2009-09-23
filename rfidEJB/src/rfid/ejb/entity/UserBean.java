@@ -187,7 +187,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	}
 
 	public void assignSecruityCardNumber(String rfidNumber) {
-		this.hashSecurityCardNumber = (rfidNumber == null) ? null : hashSecurityCardNumber(rfidNumber);
+		this.hashSecurityCardNumber = (rfidNumber == null || rfidNumber.length() == 0) ? null : hashSecurityCardNumber(rfidNumber);
 	}
 
 	public String getUserLabel() {

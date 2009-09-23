@@ -8,6 +8,7 @@ public class ExternalOrgFilter implements QueryFilter {
 
 	public void applyFilter(QueryBuilder<?> builder) {
 		builder.addWhere(Comparator.NOTNULL, "customerOrg", "customerOrg", "");
+		
 	}
 
 }

@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -198,7 +197,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	
 	public ViewTree<Long> getShareUserList() {
 		if (shareUserTree == null) {
-			ViewTreeHelper userViewHelp = new ViewTreeHelper(persistenceManager, new SharedReportUserListLoader(getSecurityFilter()));
+			ViewTreeHelper userViewHelp = new ViewTreeHelper(new SharedReportUserListLoader(getSecurityFilter()));
 			shareUserTree = userViewHelp.getUserViewTree(report, getSecurityFilter());
 		}
 

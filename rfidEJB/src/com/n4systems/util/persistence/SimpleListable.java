@@ -14,6 +14,10 @@ public class SimpleListable<T> implements Listable<T> {
 
 	public SimpleListable() {}
 	
+	public SimpleListable(Listable<T> listableToCopy) {
+		this(listableToCopy.getId(), listableToCopy.getDisplayName());
+	}
+	
 	public SimpleListable(T id, String displayName) {
 	    this.id = id;
 	    this.displayName = displayName;
@@ -35,4 +39,18 @@ public class SimpleListable<T> implements Listable<T> {
 		this.displayName = displayName;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof Listable) {
+			return (id.equals(getId())); 
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	
 }

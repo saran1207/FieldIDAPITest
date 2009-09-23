@@ -6,7 +6,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.model.eula.EULA;
 import com.n4systems.model.eula.EulaAcceptance;
 

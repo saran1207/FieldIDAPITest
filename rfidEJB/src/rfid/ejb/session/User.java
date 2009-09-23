@@ -26,7 +26,6 @@ public interface User {
 
 	public boolean userIdIsUnique(Long tenantId, String userId);
 	public boolean userIdIsUnique(Long tenantId, String userId, Long currentUserId);
-	public boolean userRfidIsUnique(Long tenantId, String rfidNumber);
 	public boolean userRfidIsUnique(Long tenantId, String rfidNumber, Long currentUserId);
 	
 	public UserBean findUserBeanByID(String tenantName, String userID);

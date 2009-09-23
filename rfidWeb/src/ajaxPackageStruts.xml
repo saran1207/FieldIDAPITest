@@ -45,8 +45,7 @@
 			<result name="success" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
 		</action>
 
-		<action name="productCreate" method="save"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
+		<action name="productCreate" method="save" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="input" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
 			<result name="saved" type="freemarker">/templates/ajax/productCrud/created.ftl</result>
@@ -57,8 +56,13 @@
 			<result name="success" type="freemarker">/templates/ajax/commentTemplateCrud/show.ftl</result>
 		</action>
 
-		<action name="userDelete" method="remove"
-			class="com.n4systems.fieldid.actions.UserCrud">
+		<action name="employeeUserDelete" method="delete"
+			class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
+		</action>
+		
+		<action name="customerUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="success" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
 		</action>

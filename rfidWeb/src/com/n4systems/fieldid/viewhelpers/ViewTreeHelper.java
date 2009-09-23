@@ -6,20 +6,15 @@ import java.util.List;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SharedReportUserListLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.UserComparator;
 
 public class ViewTreeHelper {
-	private final PersistenceManager persistenceManager;
 	private final SharedReportUserListLoader userListLoader;
 	
-	public ViewTreeHelper(final PersistenceManager persistenceManager, final SharedReportUserListLoader userListLoader) {
-		this.persistenceManager = persistenceManager;
+	public ViewTreeHelper(final SharedReportUserListLoader userListLoader) {
 		this.userListLoader = userListLoader;
 	}
 	

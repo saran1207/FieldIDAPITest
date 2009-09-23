@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions;
+package com.n4systems.fieldid.actions.users;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,11 +12,16 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
@@ -33,6 +38,9 @@ public class UserRequestCrud extends AbstractCrud {
 
 	private User userManager;
 	private Collection<ListingPair> organizationalUnits;
+	
+	private OwnerPicker ownerPicker;
+	
 
 	public UserRequestCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -45,7 +53,10 @@ public class UserRequestCrud extends AbstractCrud {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		userRequest = persistenceManager.find(UserRequest.class, uniqueId, getTenantId());
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 	}
+	
+	
 
 	@SkipValidation
 	public String doShow() {
@@ -147,13 +158,6 @@ public class UserRequestCrud extends AbstractCrud {
 		return userRequest;
 	}
 
-	public BaseOrg getOwner() {
-		return userRequest.getUserAccount().getOwner();
-	}
-
-	public void setOwner(BaseOrg owner) {
-		userRequest.getUserAccount().setOwner(owner);
-	}
 
 	public Collection<ListingPair> getOrganizationalUnits() {
 		if (organizationalUnits == null) {
@@ -161,5 +165,10 @@ public class UserRequestCrud extends AbstractCrud {
 			organizationalUnits = ListHelper.longListableToListingPair(orgList);
 		}
 		return organizationalUnits;
+	}
+	
+	public boolean customersExist() {
+		Pager<CustomerOrg> page = getLoaderFactory().createCustomerOrgPaginatedLoader().setPageSize(1).setFirstPage().load();
+		return page.hasResults();
 	}
 }

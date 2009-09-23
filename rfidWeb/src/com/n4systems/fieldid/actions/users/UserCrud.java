@@ -1,13 +1,10 @@
-package com.n4systems.fieldid.actions;
+package com.n4systems.fieldid.actions.users;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,23 +17,20 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.actions.utils.PasswordEntry;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.BitField;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.UserType;
 import com.n4systems.util.timezone.Country;
@@ -44,27 +38,24 @@ import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator, HasDuplicateRfidValidator {
+
+abstract public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator, HasDuplicateRfidValidator {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(UserCrud.class);
 
 	protected UserBean user;
 	protected OwnerPicker ownerPicker;
-	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 
 	protected User userManager;
-	protected CustomerManager customerManager;
-	private String password;
-	private String passwordConfirmation;
-	protected List<ListingPair> permissions;
-	protected Collection<ListingPair> organizationalUnits;
-	protected List<ListingPair> customers;
-	protected List<ListingPair> divisions;
+	
+	private PasswordEntry passwordEntry = new PasswordEntry();
+	
 	protected Pager<UserBean> page;
 	private String listFilter;
 	private String userType = UserType.ALL.name();
@@ -73,7 +64,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	private Region region;
 	private File signature;
 
-	public UserCrud(User userManager, PersistenceManager persistenceManager) {
+	protected UserCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
@@ -96,6 +87,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	private void initializeTimeZoneLists() {
 		country = CountryList.getInstance().getCountryByFullName(user.getTimeZoneID());
 		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
+		
 	}
 
 	@Override
@@ -108,59 +100,67 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return SUCCESS;
 	}
 
-	@SkipValidation
-	public String doEdit() {
-		loadPreReq();
+	protected void testRequiredEntities(boolean existing) {
+		if (user == null || (existing && user.getId() == null)) {
+			addActionErrorText("error.no_user");
+			throw new MissingEntityException("user is required.");
+		}
+	}
 
-		setupPermissions();
+	@SkipValidation
+	public String doShow() {
+		testRequiredEntities(true);
 		return SUCCESS;
 	}
 
-	private void setupPermissions() {
-		userPermissions = new HashMap<String, Boolean>();
 
-		BitField permField = new BitField(user.getPermissions());
-		for (ListingPair permission : getPermissions()) {
-			userPermissions.put(permission.getId().toString(), permField.isSet(permission.getId().intValue()));
-		}
+	@SkipValidation
+	public String doAdd() {
+		testRequiredEntities(false);
+		return SUCCESS;
 	}
 
-	public String doSave() {
-		clearErrorsAndMessages();
-		loadPreReq();
+	public String doCreate() {
+		testRequiredEntities(false);
+		save();
+		return SUCCESS;
+	}
 
-		if (isCustomerUser()) {
-			user.setPermissions(0);
-		} else {
-			if (userPermissions != null && !user.isAdmin()) { // needed to
-																// handle when
-																// there is an
-																// empty list
-																// submitted.
-				BitField perms = new BitField();
-				/*
-				 * we could do this by simply converting the id's back to
-				 * strings and setting them on the field, however that would
-				 * unsafe, since we can't trust what's coming back. Instead, get
-				 * the list of permissions they were allowed to see in the first
-				 * place, and ensure our key is from that set
-				 */
-				int permValue;
-				String permStr;
-				for (ListingPair allowedPerm : getPermissions()) {
-					permValue = allowedPerm.getId().intValue();
-					permStr = allowedPerm.getId().toString();
+	@SkipValidation
+	public String doEdit() {
+		testRequiredEntities(true);
+		return SUCCESS;
+	}
 
-					// if our permission map contains the permission id, and
-					// it's value is true, add the permission
-					if (userPermissions.containsKey(permStr) && userPermissions.get(permStr)) {
-						perms.set(permValue);
-					}
-				}
+	public String doUpdate() {
+		testRequiredEntities(true);
+		save();
+		return SUCCESS;
+	}
 
-				user.setPermissions(perms.getMask());
-			}
+	@SkipValidation
+	public String doDelete() {
+		testRequiredEntities(true);
+		
+		try {
+			user.archiveUser();
+			userManager.updateUser(user);
+		} catch (Exception e) {
+			addFlashErrorText("error.failedtodelete");
+			logger.error("failed to remove user ", e);
+			return ERROR;
 		}
+		addFlashMessageText("message.userdeleted");
+		return SUCCESS;
+	}
+	
+	
+	
+
+	protected String save() {
+		clearErrorsAndMessages();
+
+		user.setPermissions(processPermissions());
 
 		user.setTenant(getTenant());
 		user.setActive(true);
@@ -168,12 +168,12 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 
 		try {
 			if (user.getUniqueID() == null) {
-				user.assignPassword(password);
+				user.assignPassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
-				userManager.createUser(user);
+				new UserSaver().save(user);
 				uniqueID = user.getUniqueID();
 			} else {
-				userManager.updateUser(user);
+				new UserSaver().update(user);
 			}
 		} catch (Exception e) {
 			addActionError(getText("error.failedtosave"));
@@ -188,30 +188,9 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return "saved";
 	}
 
-	@SkipValidation
-	public String doRemove() {
-		loadPreReq();
+	protected abstract int processPermissions();
+		
 
-		if (user.getUniqueID() != null) {
-			try {
-				user.archiveUser();
-				userManager.updateUser(user);
-			} catch (Exception e) {
-				addFlashErrorText("error.failedtodelete");
-				logger.error("failed to remove user ", e);
-				return ERROR;
-			}
-		}
-		addFlashMessageText("message.userdeleted");
-		return SUCCESS;
-	}
-
-	private void loadPreReq() {
-		if (user == null) {
-			addFlashErrorText("error.unknownuser");
-			throw new MissingEntityException("no user loaded");
-		}
-	}
 
 	@SkipValidation
 	public String doUploadSignature() {
@@ -300,23 +279,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return ERROR;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map getUserPermissions() {
-		return userPermissions;
-	}
-
-	@SuppressWarnings("unchecked")
-	public void setUserPermissions(Map permissions) {
-		this.userPermissions = permissions;
-	}
-
-	public List<ListingPair> getPermissions() {
-		if (permissions == null) {
-			permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
-		}
-		return permissions;
-	}
-
+	
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.useridrequired")
 	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.useridlength", maxLength = "15")
 	@CustomValidator(type = "uniqueValue", message = "", key = "errors.data.userduplicate")
@@ -400,24 +363,6 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		country = CountryList.getInstance().getCountryById(countryId);
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.passwordrequired")
-	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.passwordlength", minLength = "5")
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	@FieldExpressionValidator(expression = "passwordConfirmation == password", message = "", key = "error.passwordsmustmatch")
-	public String getPasswordConfirmation() {
-		return passwordConfirmation;
-	}
-
-	public void setPasswordConfirmation(String passwordConfirmation) {
-		this.passwordConfirmation = passwordConfirmation;
-	}
 
 	public Pager<UserBean> getPage() {
 		if (page == null) {
@@ -485,6 +430,7 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 		return user;
 	}
 
+	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -500,4 +446,13 @@ public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator
 	public boolean isCustomerUser() {
 		return false;
 	}
+
+	
+	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "user.new == false") })
+	public PasswordEntry getPasswordEntry() {
+		return passwordEntry;
+	}
+	
+	public abstract boolean isEmployee();
+		
 }

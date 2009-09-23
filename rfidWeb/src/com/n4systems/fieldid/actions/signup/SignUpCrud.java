@@ -172,7 +172,6 @@ public class SignUpCrud extends AbstractCrud {
 		SignUpPackageLoader loader = getNonSecureLoaderFactory().createSignUpPackageLoader();
 		loader.setSignUpPackageTarget(targetPackage);
 		signUpRequest.setSignUpPackage(loader.load());
-		
 	}
 
 	@VisitorFieldValidator(message = "")

@@ -21,7 +21,6 @@ import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
-import com.n4systems.persistence.Transaction;
 
 
 public class InspectionTypeArchiveHandlerImplTest extends TestUsesTransactionBase {

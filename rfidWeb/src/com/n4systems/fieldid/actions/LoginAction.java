@@ -121,6 +121,8 @@ public class LoginAction extends AbstractAction {
 		// grab SecuirtyGuard
 		SystemSecurityGuard securityGuard = getSecurityGuard();
 		getSession().clear();
+		// if the security guard gets cleared here we will no longer know the tenant context.
+		
 		// restore securityGuard
 		getSession().setSecurityGuard(securityGuard);		
 	}

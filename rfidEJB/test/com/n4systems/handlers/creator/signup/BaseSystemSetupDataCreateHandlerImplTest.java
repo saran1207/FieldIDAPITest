@@ -9,8 +9,6 @@ import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
-import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandler;
-import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandlerImpl;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.StateSet;
@@ -20,7 +18,6 @@ import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
-import com.n4systems.persistence.Transaction;
 
 
 

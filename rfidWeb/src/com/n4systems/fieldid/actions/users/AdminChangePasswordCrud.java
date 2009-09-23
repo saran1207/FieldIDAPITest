@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions;
+package com.n4systems.fieldid.actions.users;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 

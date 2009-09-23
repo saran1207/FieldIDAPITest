@@ -519,14 +519,14 @@
 		</action>
 
 
-		<action name="registerUser" method="add" class="com.n4systems.fieldid.actions.UserRegistrationCrud">
+		<action name="registerUser" method="add" class="com.n4systems.fieldid.actions.users.UserRegistrationCrud">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="redirect">/</result>
 			<result name="input" type="freemarker">templates/html/userRequest/add.ftl</result>
 			<result name="success" type="freemarker">templates/html/userRequest/add.ftl</result>
 		</action>
 		
-		<action name="registerUserCreate" method="save" class="com.n4systems.fieldid.actions.UserRegistrationCrud">
+		<action name="registerUserCreate" method="save" class="com.n4systems.fieldid.actions.users.UserRegistrationCrud">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="redirect">/</result>
 			<result name="input" type="freemarker">templates/html/userRequest/add.ftl</result>
@@ -535,46 +535,34 @@
 		</action>
 
 
-		<action name="userRequestList" method="list" class="com.n4systems.fieldid.actions.UserRequestCrud">
+		<action name="userRequestList" method="list" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="input" type="freemarker">/templates/html/userRequest/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/userRequest/list.ftl</result>
 		</action>
 
-		<action name="userRequestView" method="show" class="com.n4systems.fieldid.actions.UserRequestCrud">
+		<action name="userRequestView" method="show" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="error" type="redirect-action">userRequestList</result>
 			<result name="success" type="freemarker">/templates/html/userRequest/show.ftl</result>
 		</action>
 
-		<action name="userRequestDeny" method="deny" class="com.n4systems.fieldid.actions.UserRequestCrud">
+		<action name="userRequestDeny" method="deny" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="error" type="redirect-action">userRequestList</result>
 			<result name="input" type="freemarker">templates/html/userRequest/deny.ftl</result>
 			<result name="success" type="redirect-action">userRequestList</result>
 		</action>
 
-		<action name="userRequestAccept" method="acceptRequest" class="com.n4systems.fieldid.actions.UserRequestCrud">
+		<action name="userRequestAccept" method="acceptRequest" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="error" type="redirect-action">userRequestList</result>
 			<result name="input" type="freemarker">templates/html/userRequest/accept.ftl</result>
 			<result name="success" type="redirect-action">userRequestList</result>
 		</action>
 
 
-		<action name="userList" method="list" class="com.n4systems.fieldid.actions.UserCrud">
+		<action name="userList" method="list" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/list.ftl</result>
 		</action>
 
-		<action name="userEdit" method="edit" class="com.n4systems.fieldid.actions.UserCrud">
-			<result name="success" type="freemarker">templates/html/userCrud/form.ftl</result>
-			<result name="input" type="freemarker">templates/html/userCrud/form.ftl</result>
-			<result name="error" type="redirect-action">
-				<param name="actionName">userList</param>
-				<param name="currentPage">${currentPage}</param>
-				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
-			</result>
-
-		</action>
-
-		<action name="addCustomerUser" method="edit" class="com.n4systems.fieldid.actions.AnyCustomerUserCrud">
+		<action name="addCustomerUser" method="add" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="error" type="redirect-action">
@@ -587,7 +575,7 @@
 
 		</action>
 
-		<action name="addCustomerSave" method="save" class="com.n4systems.fieldid.actions.AnyCustomerUserCrud">
+		<action name="customerUserCreate" method="create" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="error" type="redirect-action">
 				<param name="actionName">userList</param>
@@ -595,8 +583,8 @@
 				<param name="listFilter">${listFilter}</param>
 				<param name="userType">${userType}</param>
 			</result>
-			<result name="saved" type="redirect-action">
-				<param name="actionName">userEdit</param>
+			<result name="success" type="redirect-action">
+				<param name="actionName">customerUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -606,9 +594,9 @@
 		</action>
 
 
-		<action name="addEmployeeUser" method="edit" class="com.n4systems.fieldid.actions.UserCrud">
-			<result name="success" type="freemarker">templates/html/userCrud/form.ftl</result>
-			<result name="input" type="freemarker">templates/html/userCrud/form.ftl</result>
+		<action name="addEmployeeUser" method="add" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="freemarker">templates/html/employee/add.ftl</result>
+			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="redirect-action">
 				<param name="actionName">userlist</param>
 				<param name="currentPage">${currentPage}</param>
@@ -617,38 +605,60 @@
 			</result>
 
 		</action>
-
-
-		<action name="userSave" method="save" class="com.n4systems.fieldid.actions.UserCrud">
-			<result name="input" type="freemarker">templates/html/userCrud/form.ftl</result>
-			<result name="saved" type="redirect-action">
-				<param name="actionName">userEdit</param>
-				<param name="uniqueID">${uniqueID}</param>
+		
+		
+		<action name="employeeUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="freemarker">templates/html/employee/edit.ftl</result>
+			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 				<param name="userType">${userType}</param>
 			</result>
 
 		</action>
+		
+		
+		<action name="employeeUserCreate" method="create" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
+			<result name="error" type="freemarker">templates/html/employee/add.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">employeeUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+		</action>
+		
+		<action name="employeeUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="input" type="freemarker">templates/html/employee/update.ftl</result>
+			<result name="error" type="freemarker">templates/html/employee/update.ftl</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">employeeUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+		</action>
 
 
-
-		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.DefinedCustomerUserCrud">
-			<interceptor-ref name="flashSecureStack" />
-			<result name="success" type="freemarker">templates/html/userCrud/customerUserForm.ftl</result>
-			<result name="input" type="freemarker">templates/html/userCrud/customerUserForm.ftl</result>
+		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
 			<result name="error" type="redirect-action">
-				<param name="actionName">customerEdit</param>
+				<param name="actionName">userList</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
-
 		</action>
 
-		<action name="customerUserSave" method="save" class="com.n4systems.fieldid.actions.DefinedCustomerUserCrud">
-			<result name="input" type="freemarker">templates/html/userCrud/customerUserForm.ftl</result>
-			<result name="saved" type="redirect-action">
+		<action name="customerUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
+			<result name="success" type="redirect-action">
 				<param name="actionName">customerUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="customer">${customer}</param>
@@ -659,14 +669,14 @@
 		</action>
 
 
-		<action name="userSignature" method="signature" class="com.n4systems.fieldid.actions.UserCrud">
+		<action name="userSignature" method="signature" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success"></result>
 			<result name="error" type="httpheader">
 				<param name="status">404</param>
 			</result>
 		</action>
 
-		<action name="userUploadSignature" method="uploadSignature" class="com.n4systems.fieldid.actions.UserCrud">
+		<action name="userUploadSignature" method="uploadSignature" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">/templates/html/userCrud/uploadSignature.ftl</result>
 			<result name="input" type="freemarker">/templates/html/userCrud/uploadSignature.ftl</result>
 		</action>
@@ -1235,21 +1245,21 @@
 			<result name="success" type="redirectAction">editSecurityCard</result>
 		</action>
 		
-		<action name="editPassword" method="edit" class="com.n4systems.fieldid.actions.ChangePasswordCrud">
+		<action name="editPassword" method="edit" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
 			<result name="success" type="freemarker">/templates/html/changePassword/form.ftl</result>
 		</action>
 
-		<action name="updatePassword" method="update" class="com.n4systems.fieldid.actions.ChangePasswordCrud">
+		<action name="updatePassword" method="update" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changePassword/form.ftl</result>
 			<result name="success" type="redirectAction">editPassword</result>
 		</action>
 		
-		<action name="adminEditPassword" method="edit" class="com.n4systems.fieldid.actions.AdminChangePasswordCrud">
+		<action name="adminEditPassword" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="success" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 		</action>
 
-		<action name="adminUpdatePassword" method="update" class="com.n4systems.fieldid.actions.AdminChangePasswordCrud">
+		<action name="adminUpdatePassword" method="update" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1761,57 +1771,57 @@
 			</result>
 		</action>
 
-		<action name="customerUsers" method="list" class="com.n4systems.fieldid.actions.CustomerUserCrud">
-			<result name="success" type="freemarker">/templates/html/customerUser/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/customerUser/list.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customerUser/list.ftl</result>
+		<action name="customersUsers" method="list" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+			<result name="success" type="freemarker">/templates/html/customersUser/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customersUser/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customersUser/list.ftl</result>
 		</action>
 
-		<action name="customerUser" method="show" class="com.n4systems.fieldid.actions.CustomerUserCrud">
-			<result name="success" type="freemarker">/templates/html/customerUser/show.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customerUser/show.ftl</result>
+		<action name="customersUser" method="show" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+			<result name="success" type="freemarker">/templates/html/customersUser/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customersUser/show.ftl</result>
 		</action>
 
-		<action name="customerUserAdd" method="add" class="com.n4systems.fieldid.actions.CustomerUserCrud">
-			<result name="success" type="freemarker">/templates/html/customerUser/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customerUser/add.ftl</result>
+		<action name="customersUserAdd" method="add" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+			<result name="success" type="freemarker">/templates/html/customersUser/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customersUser/add.ftl</result>
 		</action>
 
-		<action name="customerUserCreate" method="create"	class="com.n4systems.fieldid.actions.CustomerUserCrud">
-			<result name="input" type="freemarker">/templates/html/customerUser/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/customerUser/add.ftl</result>
+		<action name="customersUserCreate" method="create"	class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+			<result name="input" type="freemarker">/templates/html/customersUser/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customersUser/add.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">customerUsers</param>
+				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
 			</result>
 		</action>
 		
-		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.CustomerUserCrud">
-			<result name="success" type="freemarker">/templates/html/customerUser/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customerUser/edit.ftl</result>
+		<action name="customersUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+			<result name="success" type="freemarker">/templates/html/customersUser/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customersUser/edit.ftl</result>
 		</action>
 
-		<action name="customerUserUpdate" method="update" class="com.n4systems.fieldid.actions.CustomerUserCrud">
-			<result name="input" type="freemarker">/templates/html/customerUser/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/customerUser/edit.ftl</result>
+		<action name="customersUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+			<result name="input" type="freemarker">/templates/html/customersUser/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/customersUser/edit.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">customerUsers</param>
+				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
 			</result>
 		</action>
 		
 
-		<action name="customerUserDelete" method="delete" class="com.n4systems.fieldid.actions.CustomerUserCrud">
+		<action name="customersUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="input" type="redirectAction">
-				<param name="actionName">customerUsers</param>
+				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
 			</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">customerUsers</param>
+				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
 			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">customerUsers</param>
+				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
 			</result>
 		</action>
