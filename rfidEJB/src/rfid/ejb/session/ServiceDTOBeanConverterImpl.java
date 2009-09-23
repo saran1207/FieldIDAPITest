@@ -873,6 +873,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		populateOwners(user.getOwner(), userService);
 		
+		userService.setAttachedToPrimaryOrg(user.getOwner().getInternalOrg().isPrimary());		
+		
 		return userService;
 	}
 	

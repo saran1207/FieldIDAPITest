@@ -7,6 +7,7 @@ public class UserServiceDTO extends AbstractBaseDTOWithOwner {
 	private String securityRfidNumber;
 	private boolean allowedToIdentify;
 	private boolean allowedToInspect;
+	private boolean attachedToPrimaryOrg;
 	
 	public String getUserId() {
 		return userId;
@@ -38,4 +39,11 @@ public class UserServiceDTO extends AbstractBaseDTOWithOwner {
 	public void setSecurityRfidNumber(String securityRfidNumber) {
 		this.securityRfidNumber = securityRfidNumber;
 	}
+	public boolean isAttachedToPrimaryOrg() {
+		return attachedToPrimaryOrg;
+	}
+	public void setAttachedToPrimaryOrg(boolean attachedToPrimaryOrg) {
+		this.attachedToPrimaryOrg = attachedToPrimaryOrg;
+	}
+	
 }
