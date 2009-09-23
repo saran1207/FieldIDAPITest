@@ -47,8 +47,10 @@ abstract public class ExternalOrg extends BaseOrg {
 	}
 	
 	private void updateFieldsFromOrg(InternalOrg org) {
-		setName(org.getName());
-		setAddressInfo(org.getAddressInfo());
+		if (org != null) {
+			setName(org.getName());
+			setAddressInfo(org.getAddressInfo());
+		}
 	}
 	
 	public String getCode() {
