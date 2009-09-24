@@ -70,7 +70,6 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
-import com.n4systems.webservice.dto.AbstractBaseDTOWithOwner;
 import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractExternalOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
@@ -78,8 +77,8 @@ import com.n4systems.webservice.dto.CriteriaResultServiceDTO;
 import com.n4systems.webservice.dto.CriteriaSectionServiceDTO;
 import com.n4systems.webservice.dto.CriteriaServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
-import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.DTOHasOwners;
+import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldNameServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldServiceDTO;
@@ -154,10 +153,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook) {
 		
 		InspectionBookServiceDTO bookDTO = new InspectionBookServiceDTO();
-		bookDTO.setCustomerId(inspectionBook.getOwner().getId());
 		bookDTO.setName(inspectionBook.getName());
 		bookDTO.setBookOpen(inspectionBook.isOpen());
 		bookDTO.setId(inspectionBook.getId());
+		
+		populateOwners(inspectionBook.getOwner(), bookDTO);
+		
+		bookDTO.setAttachedToPrimaryOrg(inspectionBook.getOwner().getInternalOrg().isPrimary());				
 		
 		return bookDTO;		
 	}
