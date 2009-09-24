@@ -14,7 +14,7 @@
 
 
 <@s.form action="signUpCreate" theme="fieldid" id="mainContent" cssClass="fullForm">
-	<h1><@s.text name="title.create_your_account"/>  with package ${signUp.signUpPackage.name?html}  $${signUp.signUpPackage.defaultPricePerUserPerMonth?html}</h1>
+	<h1><@s.text name="title.create_your_account"/>  <@s.text name="label.with_package"/> ${signUp.signUpPackage.name?html}  $${signUp.signUpPackage.defaultPricePerUserPerMonth?html}</h1>
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<@s.hidden name="usingCreditCard" id="usingCreditCard" />
@@ -109,21 +109,21 @@
 	</div>
 	<hr/>
 	<#if !signUp.signUpPackage.free>
-	<div class="infoSection">
-		<h2><@s.text name="label.payment_options"/></h2>
-		<div class="infoBlock ">
-			<div class="infoSet">
-				<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
-				<span class="fieldHolder shortField"><@s.textfield name="signUp.numberOfUsers" theme="simple" cssClass="changesPrice"/></span>
-			</div>
+		<div class="infoSection">
+			<h2><@s.text name="label.payment_options"/></h2>
+			<div class="infoBlock ">
+				<div class="infoSet">
+					<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
+					<span class="fieldHolder shortField"><@s.textfield name="signUp.numberOfUsers" theme="simple" cssClass="changesPrice"/></span>
+				</div>
+				
+				<div class="infoSet">
+					<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/><span></label>
+				</div>
 			
-			<div class="infoSet">
-				<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/><span></label>
 			</div>
-		
 		</div>
-	</div>
-	<hr/>
+		<hr/>
 	</#if>
 	<div class="infoSection">
 		<h2><@s.text name="label.promo_code"/></h2>
@@ -137,79 +137,78 @@
 		</div>
 	</div>
 	
-	<hr/>
+	
 	<#if !signUp.signUpPackage.free>
-	<div class="infoSection">
-		<h2><@s.text name="label.payment_options"/></h2>
-		<div class="infoBlock ">
-			<div class="infoSet">
-				<ul>
-					<#list signUp.paymentOptions as paymentOption>
-					<li class="favouredChoice">
-						<#assign paymentMap><#noparse>#</#noparse>{ '${paymentOption.paymentOption}':'<@s.text name="label.${paymentOption.paymentOption}"><@s.param>${paymentOption.pricePerUserPerMonth}</@s.param></@s.text>'}</#assign>
-						<@s.radio name="signUp.paymentOption" list="${paymentMap}" theme="simple" cssClass="changesPrice"/> 
-					</li>
-					</#list>
-				</ul>
-			</div>
-		</div>
-	</div>
-	
-	<hr/>
-	<div class="infoSection">
-		<div class="infoBlock">
-			<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> + applicable taxes!!! <#if !signUp.signUpPackage.free><@s.reset key="label.update_price" cssClass="updatePrice"/></#if>
-		</div>
-	</div>
-	
-	<hr />
-	<div class="infoSection" id="creditCardInformation">
-		<div class="multiColumn">
-			<div class="infoBlock" >
-				<a href="#" id="payCreditCard">Pay by Credit Card</a>
-				<div id="payByCC">
-					<div class="infoSet">
-						<label class="label" for="creditCard.type"><@s.text name="label.credit_card_type"/></label>
-						<@s.select name="creditCard.cCType" list="creditCard.creditCardTypes" listKey="name()" listValue="name()" cssClass="autoSize payCC"/>
-					</div>
-					
-					<div class="infoSet">
-						<label class="label" for="creditCard.name"><@s.text name="label.name_on_card" /></label>
-						<@s.textfield name="creditCard.name" cssClass="payCC" />
-					</div>
-					
-					<div class="infoSet">
-						<label class="label" for="creditCard.number"><@s.text name="label.credit_card_number" /></label>
-						<@s.textfield name="creditCard.number" cssClass="payCC" />
-					</div>
-					
-					<div class="infoSet">
-						<label class="label" for="creditCard.expiry"><@s.text name="label.expiry_date"/></label>
-						<span class="fieldHolder">
-							<@s.select name="creditCard.expiryMonth" list="creditCard.months" theme="fieldidSimple" cssClass="autoSize payCC"/> <@s.text name="label.date_seperator"/> <@s.select name="creditCard.expiryYear" list="creditCard.years" theme="fieldidSimple" cssClass="autoSize payCC"/>
-						</span>
-					</div>
+		<hr/>
+		<div class="infoSection">
+			<h2><@s.text name="label.payment_options"/></h2>
+			<div class="infoBlock ">
+				<div class="infoSet">
+					<ul>
+						<#list signUp.paymentOptions as paymentOption>
+						<li class="favouredChoice">
+							<#assign paymentMap><#noparse>#</#noparse>{ '${paymentOption.paymentOption}':'<@s.text name="label.${paymentOption.paymentOption}"><@s.param>${paymentOption.pricePerUserPerMonth}</@s.param></@s.text>'}</#assign>
+							<@s.radio name="signUp.paymentOption" list="${paymentMap}" theme="simple" cssClass="changesPrice"/> 
+						</li>
+						</#list>
+					</ul>
 				</div>
 			</div>
+		</div>
+		
+		<hr/>
+		<div class="infoSection">
 			<div class="infoBlock">
-				<a href="#" id="payPurchaseOrder">Pay by Purchase order</a> [?]
-				<div id="payByPO">
-					<div class="infoSet">
-						<label class="label" for="po.number"><@s.text name="label.po_number"/></label>
-						<@s.textfield name="signUp.purchaseOrderNumber" cssClass="payPO" />
+				<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> <@s.text name="label.plus_applicable_taxes"/> 
+				
+				<#if !signUp.signUpPackage.free><@s.reset key="label.update_price" cssClass="updatePrice"/></#if>
+			</div>
+		</div>
+		
+		<hr />
+		<div class="infoSection" id="creditCardInformation">
+			<div class="multiColumn">
+				<div class="infoBlock" >
+					<a href="#" id="payCreditCard"><@s.text name="label.pay_by_credit_card"/></a>
+					<div id="payByCC">
+						<div class="infoSet">
+							<label class="label" for="creditCard.type"><@s.text name="label.credit_card_type"/></label>
+							<@s.select name="creditCard.cCType" list="creditCard.creditCardTypes" listKey="name()" listValue="name()" cssClass="autoSize payCC"/>
+						</div>
+						
+						<div class="infoSet">
+							<label class="label" for="creditCard.name"><@s.text name="label.name_on_card" /></label>
+							<@s.textfield name="creditCard.name" cssClass="payCC" />
+						</div>
+						
+						<div class="infoSet">
+							<label class="label" for="creditCard.number"><@s.text name="label.credit_card_number" /></label>
+							<@s.textfield name="creditCard.number" cssClass="payCC" />
+						</div>
+						
+						<div class="infoSet">
+							<label class="label" for="creditCard.expiry"><@s.text name="label.expiry_date"/></label>
+							<span class="fieldHolder">
+								<@s.select name="creditCard.expiryMonth" list="creditCard.months" theme="fieldidSimple" cssClass="autoSize payCC"/> <@s.text name="label.date_seperator"/> <@s.select name="creditCard.expiryYear" list="creditCard.years" theme="fieldidSimple" cssClass="autoSize payCC"/>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="infoBlock">
+					<a href="#" id="payPurchaseOrder"><@s.text name="label.pay_by_purchase_order"/></a>
+					<div id="payByPO">
+						<div class="infoSet">
+							<label class="label" for="po.number"><@s.text name="label.po_number"/></label>
+							<@s.textfield name="signUp.purchaseOrderNumber" cssClass="payPO" />
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<hr/>
 	</#if>
-	
 	
 	
 	<div class="actions">
 		<@s.submit key="label.create_my_account"/> <@s.text name="label.or"/> <a href="<@s.url action="signUpPackages"/>"><@s.text name="label.choose_another_package"/></a> 
 	</div>
 </@s.form>
-
-
