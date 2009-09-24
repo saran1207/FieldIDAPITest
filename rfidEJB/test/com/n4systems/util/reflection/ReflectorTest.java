@@ -28,6 +28,10 @@ public class ReflectorTest {
 			return Reflector.createGetter(field);
 		}
 		
+		public String _createBooleanGetter(String field) {
+			return Reflector.createBooleanGetter(field);
+		}
+		
 		public boolean _isArray(Object o) {
 			return Reflector.isArray(o);
 		}
@@ -102,6 +106,11 @@ public class ReflectorTest {
 		assertSame(bean.getBeanMap(), Reflector.getPathValue(bean, "beanMap"));	
 	}
 	
+	@Test
+	public void get_path_value_tries_boolean_getter() throws ReflectionException {
+		assertEquals(bean.isBoolValue(), Reflector.getPathValue(bean, "boolValue"));
+	}
+	
 	@Test 
 	public void get_deep_values() throws ReflectionException {
 		assertSame(bean.getBeanB().getBeanC().getName(), Reflector.getPathValue(bean, "beanB.beanC.name"));
@@ -151,7 +160,7 @@ public class ReflectorTest {
 	@Test 
 	public void find_all_fields() {
 		// fields from child classes come before super classes
-		String[] fieldNames = {"beanB", "beanBList", "beanBArray", "beanBSet", "simpleMap", "beanMap", "id", "name"};
+		String[] fieldNames = {"beanB", "beanBList", "beanBArray", "beanBSet", "simpleMap", "beanMap", "boolValue", "id", "name"};
 		Field[] fields = Reflector.findAllFields(ReflectionTestBeanA.class);
 		
 		assertEquals(fieldNames.length, fields.length);
@@ -342,6 +351,12 @@ public class ReflectorTest {
 	public void test_create_getters() {
 		assertEquals("getMyField", exposedReflector._createGetter("myField"));
 		assertEquals("getMyField", exposedReflector._createGetter("myField[index]"));
+	}
+	
+	@Test
+	public void test_create_boolean_getters() {
+		assertEquals("isMyField", exposedReflector._createBooleanGetter("myField"));
+		assertEquals("isMyField", exposedReflector._createBooleanGetter("myField[index]"));
 	}
 	
 	@Test

@@ -14,7 +14,8 @@ public class ReflectionTestBeanA extends AbstractReflectionTestBean {
 	private Set<ReflectionTestBeanB> beanBSet = new HashSet<ReflectionTestBeanB>();
 	private Map<String, String> simpleMap = new HashMap<String, String>();
 	private Map<String, ReflectionTestBeanB> beanMap = new HashMap<String, ReflectionTestBeanB>();
-	
+	private boolean boolValue = true;
+
 	public ReflectionTestBeanA() {}
 
 	public ReflectionTestBeanB getBeanB() {
@@ -79,5 +80,13 @@ public class ReflectionTestBeanA extends AbstractReflectionTestBean {
 	
 	public String testMethod(String arg1, Long arg2, Integer arg3) {
 		return "testMethod2:" + arg1 + arg2.toString() + arg3.toString();
+	}
+	
+	public boolean isBoolValue() {
+		return boolValue;
+	}
+
+	public void setBoolValue(boolean boolValue) {
+		this.boolValue = boolValue;
 	}
 }

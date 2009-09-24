@@ -154,7 +154,8 @@ public class Reflector {
 			String pathVar = pathStack.pop();
 			
 			String methodName;
-			if (pathIsMethodCall(pathVar)) {
+			boolean isMethodCall = pathIsMethodCall(pathVar);
+			if (isMethodCall) {
 				// the path is a method call, we need to isolate the method name
 				methodName = parseMethodNameFromMethod(pathVar);
 			} else {
@@ -165,8 +166,26 @@ public class Reflector {
 			// get a list of our method args if there are any
 			Object[] methodArgs = parseMethodArgs(pathVar);
 			
-			// find our path method
-			Method method = findClassMethod(object.getClass(), methodName, methodArgs);
+			Method method;
+			try {
+				// find our path method
+				method = findClassMethod(object.getClass(), methodName, methodArgs);
+			} catch(NoSuchMethodException e1) {
+				if (isMethodCall) {
+					// nothing more we can do here
+					throw e1;
+				} else {
+					try {
+						// if the path was not a method call (ie a getter), it could be we're dealing with a 
+						// boolean which uses the isField syntax. let try and find that before rethrowing
+						method = findClassMethod(object.getClass(), createBooleanGetter(pathVar), methodArgs);
+					} catch(NoSuchMethodException e2) {
+						// the path was not a boolean getter either, we'll ignore the second NME and rethrow the first
+						throw e1;
+					}
+				}
+			}
+			
 			
 			// invoke the method with arguments (if any)
 			Object methodValue = method.invoke(object, parseMethodArgs(pathVar));
@@ -259,8 +278,17 @@ public class Reflector {
 	 */
 	protected static String createGetter(String field) {
 		String fieldNoIndex = parseFieldFromIndexPath(field);
-		// XXX - this won't play nice with booleans since they have a getter of isFieldName
 		return "get" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
+	}
+	
+	/**
+	 * Converts field names to a boolean getter using Java Beans convention.  Eg myField to isMyField
+	 * @param	field	String field name
+	 * @return			String boolean getter representation of the field
+	 */
+	protected static String createBooleanGetter(String field) {
+		String fieldNoIndex = parseFieldFromIndexPath(field);
+		return "is" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
 	}
 	
 	/**
