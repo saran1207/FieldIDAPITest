@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 
@@ -40,8 +39,6 @@ import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
 
-import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
-import fieldid.web.services.dto.InfoOptionServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 
 @Local
@@ -51,7 +48,6 @@ public interface ServiceDTOBeanConverter {
 	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(InspectionGroup inspectionGroup);
 	public Product convert( ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId );
 	public ProductServiceDTO convert(Product product);
-	public InfoOptionBean convert( InfoOptionServiceDTO infoOptionServiceDTO );
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
 	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
@@ -60,7 +56,6 @@ public interface ServiceDTOBeanConverter {
 	public InspectionSchedule convertInspectionSchedule(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO);
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );
 	public com.n4systems.webservice.dto.AutoAttributeDefinitionServiceDTO convert( AutoAttributeDefinition definition );
-	public AutoAttributeCriteriaServiceDTO convert_old( AutoAttributeCriteria criteriaIn );
 	public ProductStatusServiceDTO convert( ProductStatusBean productStatus );
 	public ProductTypeServiceDTO convert_new( ProductType productType );
 	public TenantServiceDTO convert(PrimaryOrg tenant);

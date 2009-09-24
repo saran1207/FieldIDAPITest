@@ -102,9 +102,6 @@ import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
-import fieldid.web.services.dto.AutoAttributeCriteriaServiceDTO;
-import fieldid.web.services.dto.AutoAttributeDefinitionServiceDTO;
-import fieldid.web.services.dto.InfoOptionServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 
 
@@ -321,19 +318,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 
 	
-	public InfoOptionBean convert( InfoOptionServiceDTO infoOptionServiceDTO ) {
-		
-		InfoOptionBean infoOption = new InfoOptionBean();
-				
-		infoOption.setUniqueID( convertStringToLong( infoOptionServiceDTO.getUniqueID() ) );
-		infoOption.setInfoField( findInfoField( infoOptionServiceDTO.getR_infoField() ) );
-		infoOption.setName( infoOptionServiceDTO.getName() );
-		infoOption.setStaticData( infoOptionServiceDTO.getStaticData() );
-		infoOption.setWeight( convertStringToLong( infoOptionServiceDTO.getWeight() ) );
-		
-		return infoOption;		
-	}
-	
 	public InfoOptionBean convert( com.n4systems.webservice.dto.InfoOptionServiceDTO infoOptionServiceDTO ) {
 		InfoOptionBean infoOption = null;
 		
@@ -351,20 +335,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return infoOption;
 	}
 	
-	@Deprecated
-	public InfoOptionServiceDTO convert_OLD( InfoOptionBean infoOption ) {
-		
-		InfoOptionServiceDTO infoOptionServiceDTO = new InfoOptionServiceDTO();
-				
-		infoOptionServiceDTO.setUniqueId( infoOption.getUniqueID().toString() );
-		infoOptionServiceDTO.setR_infoField( infoOption.getInfoField().getUniqueID().toString() );
-		infoOptionServiceDTO.setName( infoOption.getName() );
-		infoOptionServiceDTO.setStaticData( infoOption.isStaticData() );
-		infoOptionServiceDTO.setWeight( infoOption.getWeight().toString() );
-		
-		return infoOptionServiceDTO;		
-	}
-
 	/**
 	 * Populates an abstract inspection with the fields from an abstract inspection service dto
 	 * @param inspection
@@ -734,30 +704,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return stateServiceDTO;
 	}
 	
-	@SuppressWarnings("unused")
-	private fieldid.web.services.dto.InfoFieldServiceDTO convert( InfoFieldBean infoField ) {
-		fieldid.web.services.dto.InfoFieldServiceDTO infoFieldDTO = new fieldid.web.services.dto.InfoFieldServiceDTO();
-		infoFieldDTO.setDtoVersion( String.valueOf(InfoFieldServiceDTO.CURRENT_DTO_VERSION) );
-		infoFieldDTO.setTenantId( infoField.getProductInfo().getTenant().getId().toString() );
-		infoFieldDTO.setUniqueID(infoField.getUniqueID().toString());
-		infoFieldDTO.setName(infoField.getName());
-		infoFieldDTO.setR_productInfo(infoField.getProductInfo().getId());
-		infoFieldDTO.setRequired(infoField.isRequired());
-		infoFieldDTO.setRetired(infoField.isRetired());
-		infoFieldDTO.setUsedInTemplate(false);
-		infoFieldDTO.setUsingUnitOfMeasure(infoField.isUsingUnitOfMeasure());
-		infoFieldDTO.setR_unitOfMeasure(infoField.getUnitOfMeasure() != null ? infoField.getUnitOfMeasure().getId() : null);
-		infoFieldDTO.setFieldType(infoField.getFieldType() != null ? infoField.getFieldType() : "");
-		infoFieldDTO.setValueType( null );
-		
-		//fill the info options
-		for(InfoOptionBean infoOption: infoField.getInfoOptions()){
-			infoFieldDTO.getInfoOptions().add( convert_OLD(infoOption) );
-		}
-		
-		return infoFieldDTO;		
-	}
-	
 	private InfoFieldServiceDTO convert_new( InfoFieldBean infoField, Long productTypeId ) {		
 		InfoFieldServiceDTO infoFieldDTO = new InfoFieldServiceDTO();
 		infoFieldDTO.setDtoVersion( InfoFieldServiceDTO.CURRENT_DTO_VERSION );
@@ -784,7 +730,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	private com.n4systems.webservice.dto.InfoOptionServiceDTO convert( InfoOptionBean infoOption, Long infoFieldId ) {
 		com.n4systems.webservice.dto.InfoOptionServiceDTO infoOptionDTO = new com.n4systems.webservice.dto.InfoOptionServiceDTO();
-		infoOptionDTO.setDtoVersion( InfoOptionServiceDTO.CURRENT_DTO_VERSION );
+		infoOptionDTO.setDtoVersion( com.n4systems.webservice.dto.InfoOptionServiceDTO.CURRENT_DTO_VERSION );
 		infoOptionDTO.setId( infoOption.getUniqueID() );
 		infoOptionDTO.setName( infoOption.getName() );
 		infoOptionDTO.setStaticData( infoOption.isStaticData() );
@@ -825,40 +771,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		
 		return serviceDefinition;
-	}
-	
-	public AutoAttributeCriteriaServiceDTO convert_old( AutoAttributeCriteria criteriaIn ) {
-		AutoAttributeCriteriaServiceDTO serviceCriteria = new AutoAttributeCriteriaServiceDTO();
-		
-		AutoAttributeCriteria criteria = em.find( AutoAttributeCriteria.class, criteriaIn.getId() );
-		
-		serviceCriteria.setId( criteria.getId() );
-		serviceCriteria.setTenantId( criteria.getTenant().getId() );
-		serviceCriteria.setModified( criteria.getModified().toString() );
-		
-		serviceCriteria.setProductTypeId( criteria.getProductType().getId().toString() );
-		
-		List<String> inputs = new ArrayList<String>();
-		for( InfoFieldBean field : criteria.getInputs() ) {
-			inputs.add( field.getUniqueID().toString() );
-		}
-		serviceCriteria.setInputInfoFields( inputs );
-		
-		List<String> outputs = new ArrayList<String>();
-		for( InfoFieldBean field : criteria.getOutputs() ) {
-			outputs.add( field.getUniqueID().toString() );
-		}
-		serviceCriteria.setOutputInfoFields( outputs );
-		
-		List<AutoAttributeDefinitionServiceDTO> definitions = new ArrayList<AutoAttributeDefinitionServiceDTO>();
-		for( AutoAttributeDefinition definition : criteria.getDefinitions() ) {
-			definitions.add( convert_old( definition ) );
-		}
-		serviceCriteria.setDefinitions( definitions );
-		
-		
-		
-		return serviceCriteria;
 	}
 	
 	public com.n4systems.webservice.dto.UserServiceDTO convert(UserBean user) {
@@ -940,32 +852,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		tenantService.setUsingSerialNumber(tenant.isUsingSerialNumber());
 		
 		return tenantService;
-	}
-	
-	private AutoAttributeDefinitionServiceDTO convert_old( AutoAttributeDefinition definition ) {
-		AutoAttributeDefinitionServiceDTO serviceDefinition = new AutoAttributeDefinitionServiceDTO();
-		
-		serviceDefinition.setId( definition.getId() );
-		serviceDefinition.setTenantId( definition.getTenant().getId() );
-		serviceDefinition.setAutoAttributeCritieraId( definition.getCriteria().getId() );
-		serviceDefinition.setModified( definition.getModified().toString() );
-		
-		List<String> inputs = new ArrayList<String>();
-		for( InfoOptionBean option : definition.getInputs() ) {
-			inputs.add( option.getUniqueID().toString() );
-		}
-		serviceDefinition.setInputInfoOptions( inputs );
-		
-		List<InfoOptionServiceDTO> outputs = new ArrayList<InfoOptionServiceDTO>();
-		for( InfoOptionBean option : definition.getOutputs() ) {
-			outputs.add( convert_OLD( option ) );
-		}
-		serviceDefinition.setOutputInfoOptions( outputs );
-		
-		
-		
-		
-		return serviceDefinition;
 	}
 	
 	private InfoFieldBean findInfoField( String infoFieldIDString ) {
