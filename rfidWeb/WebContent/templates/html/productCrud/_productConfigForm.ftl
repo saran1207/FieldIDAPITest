@@ -22,6 +22,9 @@
 	<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 </div>
 <div class="formRowHolder">
+	<@s.select key="label.publishedstateselector" name="publishedState" list="publishedStates" listKey="id" listValue="name" emptyOption="false" labelposition="left" />
+</div>
+<div class="formRowHolder">
 	<#if !parentProduct?exists >
 		<@s.textfield id="location" key="label.location" name="location" labelposition="left"/>
 	<#else>

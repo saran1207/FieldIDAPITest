@@ -29,6 +29,10 @@ ${action.setPageType('product', 'show')!}
 			<span class="fieldValue">${product.rfidNumber!}</span>
 		</p>
 		<p>
+			<label><@s.text name="label.publishedoversafetynetwork"/></label>
+			<span class="fieldValue"><@s.text name="${publishedStateLabel}"/></span>
+		</p>
+		<p>
 			<label><@s.text name="label.producttype"/></label>
 			<span class="fieldValue">${product.type.name}</span>
 		</p>

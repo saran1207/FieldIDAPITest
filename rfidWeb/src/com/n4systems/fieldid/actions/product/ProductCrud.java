@@ -523,6 +523,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public String doPrint() {
 		return SUCCESS;
 	}
+	
+	public List<StringListingPair> getPublishedStates() {
+		return PublishedState.getPublishedStates(this);
+	}
 
 	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")
 	public List<InfoOptionInput> getProductInfoOptions() {
@@ -949,4 +953,15 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return ownerPicker.getOwner();
 	}
 
+	public String getPublishedState() {
+		return PublishedState.resolvePublishedState(product.isPublished()).name();
+	}
+	
+	public void setPublishedState(String stateName) {
+		product.setPublished(PublishedState.valueOf(stateName).isPublished());
+	}
+	
+	public String getPublishedStateLabel() {
+		return PublishedState.resolvePublishedState(product.isPublished()).getPastTenseLabel();
+	}
 }

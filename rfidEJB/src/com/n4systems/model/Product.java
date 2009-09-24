@@ -98,6 +98,9 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     @JoinTable(name = "projects_products" )
     private List<Project> projects = new ArrayList<Project>();
     
+    @Column(name="published", nullable=false)
+    private boolean published = false;
+    
 	public Product() {
 		this.identified = new PlainDate();
 	}
@@ -410,6 +413,14 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 
 	public void setSubProducts(List<SubProduct> subProducts) {
 		this.subProducts = subProducts;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 
 }
