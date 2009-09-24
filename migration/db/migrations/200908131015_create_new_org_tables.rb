@@ -39,7 +39,7 @@ class CreateNewOrgTables < ActiveRecord::Migration
       
       execute("ALTER TABLE org_secondary ADD PRIMARY KEY (org_id)")
       add_foreign_key(:org_secondary, :org_base,  :source_column => :org_id, :foreign_column => :id)
-      add_foreign_key(:org_secondary, :org_primary,  :source_column => :primaryorg_id, :foreign_column => :org_id, :name => :fk_org_secondary_primaryorg)
+      add_foreign_key(:org_secondary, :org_base,  :source_column => :primaryorg_id, :foreign_column => :id, :name => :fk_org_secondary_primaryorg)
   
       
       create_table :org_customer, :id => false do |t|
@@ -59,7 +59,7 @@ class CreateNewOrgTables < ActiveRecord::Migration
       
       execute("ALTER TABLE org_division ADD PRIMARY KEY (org_id)")
       add_foreign_key(:org_division, :org_base,  :source_column => :org_id, :foreign_column => :id)
-      add_foreign_key(:org_division, :org_customer,  :source_column => :parent_id, :foreign_column => :org_id, :name => :fk_org_division_parent)
+      add_foreign_key(:org_division, :org_base,  :source_column => :parent_id, :foreign_column => :id, :name => :fk_org_division_parent)
   
   
       create_table :org_extendedfeatures, :id => false do |t|
@@ -67,7 +67,7 @@ class CreateNewOrgTables < ActiveRecord::Migration
         t.string :feature, :null => false
       end
     
-      add_foreign_key(:org_extendedfeatures, :org_primary,  :source_column => :org_id, :foreign_column => :org_id)
+      add_foreign_key(:org_extendedfeatures, :org_base,  :source_column => :org_id, :foreign_column => :id)
   
     end
     
