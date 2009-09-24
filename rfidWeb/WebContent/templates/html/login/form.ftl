@@ -1,4 +1,4 @@
-<title>${(securityGuard.tenant.displayName?html)!} <@s.text name="title.sign_in"/></title>
+<title>${(securityGuard.primaryOrg.displayName?html)!} <@s.text name="title.sign_in"/></title>
 <head>
 	<style type="text/css">
 		#signInForm {
@@ -8,7 +8,7 @@
 </head>
 <div id="mainContent">
 	<div class="titleBlock">
-		<h1>${(securityGuard.tenant.displayName?html)!} <@s.text name="title.sign_in"/></h1>
+		<h1>${(securityGuard.primaryOrg.displayName?html)!} <@s.text name="title.sign_in"/></h1>
 		<p class="titleSummary"><@s.text name="instruction.already_have_a_field_id_account"/></p>
 	</div>
 	
