@@ -39,7 +39,15 @@ public class SignUpPackage {
 	}
 	
 	
-	
+	public ContractPricing getPaymentOptionWithType(String targetPaymentOption) {
+		PaymentOption option = PaymentOption.valueOf(targetPaymentOption);
+		for (ContractPricing paymentOption : paymentOptions) {
+			if (paymentOption.getPaymentOption() == option) {
+				return paymentOption;
+			}
+		}
+		throw new InvalidArgumentException("there is no contract that matches the payment option. "  + targetPaymentOption);
+	}
 	
 	
 	public Long getAssets() {

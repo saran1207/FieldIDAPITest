@@ -7,7 +7,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.web.helper.Constants;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -19,7 +18,6 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -32,7 +30,6 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(InspectionBookCrud.class);
 
-	private InspectionManager inspectionManager;
 
 	private InspectionBook book;
 
@@ -43,9 +40,8 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	private OwnerPicker ownerPicker;
 	
-	public InspectionBookCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager) {
+	public InspectionBookCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
 	}
 
 	@Override
@@ -84,8 +80,6 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	@SkipValidation
 	public String doLPList() {
-		SecurityFilter filter = getSecurityFilter();
-
 		try {
 			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
 			loader.setOpenBooksOnly(!withClosed);

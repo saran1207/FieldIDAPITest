@@ -26,6 +26,8 @@ public class DummyEntityManager implements EntityManager {
 		return null;
 	}
 	
+	
+	@SuppressWarnings("unchecked")
 	public Query createNativeQuery(String arg0, Class arg1) {
 		return null;
 	}

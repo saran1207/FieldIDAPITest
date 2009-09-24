@@ -422,7 +422,7 @@ public class InspectionCrud extends UploadFileSupport {
 				addFieldError("newInspectionBookTitle", getText("error.inspection_book_title_required"));
 				throw new ValidationException("not validated.");
 			}
-			InspectionBookCrud bookCrud = new InspectionBookCrud(persistenceManager, inspectionManager);
+			InspectionBookCrud bookCrud = new InspectionBookCrud(persistenceManager);
 			try {
 				bookCrud.prepare();
 			} catch (Exception e) {
@@ -443,8 +443,6 @@ public class InspectionCrud extends UploadFileSupport {
 					throw new PersistenceException("could not save.");
 				}
 			}
-			
-			
 		}
 	}
 	

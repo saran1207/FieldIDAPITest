@@ -175,6 +175,7 @@ function getOwnerValues() {
 function openOrgBrowser() {
 	$('orgBrowser').show();
 	$('switchOrgBrowser').addClassName("selected");
+	$('orgList').focus();
 	$('orgSearch').hide();
 	$('switchOrgSearch').removeClassName("selected");
 }
@@ -182,6 +183,7 @@ function openOrgBrowser() {
 function openOrgSearch() {
 	$('orgSearch').show();
 	$('switchOrgSearch').addClassName("selected");
+	$('orgSearchName').focus();
 	$('orgBrowser').hide();
 	$('switchOrgBrowser').removeClassName("selected");
 }

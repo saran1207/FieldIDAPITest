@@ -10,7 +10,7 @@
 		<div id="orgSearch" style="display:none">
 			<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch">
 				<@s.hidden name="orgTypeFilter" cssClass="orgFilter"/>
-				<div class="infoSet"><@s.textfield name="searchName" class="searchName"/> <@s.submit key="label.search"/></div>
+				<div class="infoSet"><@s.textfield name="searchName" class="searchName" id="orgSearchName"/> <@s.submit key="label.search"/></div>
 			</@s.form>
 			<div id="orgPickerResults">
 			</div>	
@@ -51,6 +51,7 @@
 			$$('#orgBrowser select').each(function(element) { element.observe('change', changeOrgList) });
 			$('switchOrgBrowser').observe("click", function(event) { event.stop(); openOrgBrowser(); } );
 			$('switchOrgSearch').observe("click", function(event) { event.stop(); openOrgSearch(); } );
+			
 		}
 	});
 </@n4.includeScript>

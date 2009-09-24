@@ -135,6 +135,7 @@ pre {
 .multiColumn .infoBlock {
 	float:left;
 	margin-right: 25px;
+	min-width:256px;
 }
 
 .percentBarUsed, .percentBar {
