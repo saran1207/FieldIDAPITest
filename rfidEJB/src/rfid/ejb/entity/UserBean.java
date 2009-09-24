@@ -118,7 +118,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	}
 
 	public boolean isEmployee() {
-		return owner.isInternalOrg();
+		return owner.isInternal();
 	}
 
 	public boolean isDeleted() {
@@ -327,7 +327,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	
 	@Deprecated
 	public Long getCustomerId() {
-		return (owner.isExternalOrg()) ? owner.getCustomerOrg().getId() : null;
+		return (owner.isExternal()) ? owner.getCustomerOrg().getId() : null;
 	}
 	
 	@Deprecated

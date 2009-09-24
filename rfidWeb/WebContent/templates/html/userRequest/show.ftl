@@ -1,22 +1,42 @@
 ${action.setPageType('user_registration', 'show')!}
+<#include "/templates/html/common/_orgPicker.ftl"/>
 
-<#include "_userRequest.ftl" />
-
-<div class="formAction">
-	<a href="<@s.url action="userRequestAccept" uniqueID="${uniqueID}"/>" id="acceptRequest"><@s.text name="label.accept"/></a>
-	<a href="<@s.url action="userRequestDeny" uniqueID="${uniqueID}"/>" ><@s.text name="label.deny"/></a>
-</div>
+<div id="request" class="fullForm">
+	<#include "_userRequest.ftl" />
 	
-<script type="text/javascript" >
-	$('acceptRequest').observe('click',
-			function(event){
+	<div class="actions">
+		<@s.submit theme="fieldid" id="acceptRequest" key="label.accept"/>
+		<@s.text name="label.or"/>
+		<a href="<@s.url action="userRequestDeny" uniqueID="${uniqueID}"/>" ><@s.text name="label.deny"/></a>
+	</div>
+</div>	
+
+<#include "acceptForm.ftl"/>
+
+<head>
+<@n4.includeScript>
+	document.observe("dom:loaded", function(event) {
+		$('acceptRequest').observe('click',
+				function(event){
+					event.stop();
+					<#if action.customersExist() >
+						$('request').hide();
+						$('acceptForm').show();	
+					<#else>
+						alert('<@s.text name="warning.nocustomerscreated"/>');
+					</#if>
+				}
+			);
+	
+		$('cancelAccept').observe('click', 
+			function(event) {
 				event.stop();
-				<#if action.customersExist() >
-					Lightview.show( { href:'#acceptForm', options:{ width:740, height: 500, menubar: false } } );	
-				<#else>
-					alert('<@s.text name="warning.nocustomerscreated"/>');
-				</#if>
-			}
-		);
-</script>
+				$('request').hide();
+				$('acceptForm').show();	
+			});
+		$('acceptForm').hide();
+	});
 	
+	
+</@n4.includeScript>
+</head>

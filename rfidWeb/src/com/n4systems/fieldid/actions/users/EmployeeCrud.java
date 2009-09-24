@@ -124,7 +124,7 @@ public class EmployeeCrud extends UserCrud {
 	}
 
 	@Override
-	@FieldExpressionValidator(message="", key="error.owner_must_be_an_organization", expression="owner.intenal == true")
+	@FieldExpressionValidator(message="", key="error.owner_must_be_an_organization", expression="owner.internal == true")
 	public BaseOrg getOwner() {
 		return super.getOwner();
 	}

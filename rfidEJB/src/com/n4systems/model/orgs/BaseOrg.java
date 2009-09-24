@@ -104,11 +104,11 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		return name.compareToIgnoreCase(other.getName());
 	}
 	
-	public boolean isInternalOrg() {
+	public boolean isInternal() {
 		return (this instanceof InternalOrg);
 	}
 	
-	public boolean isExternalOrg() {
+	public boolean isExternal() {
 		return (this instanceof ExternalOrg);
 	}
 	
@@ -129,7 +129,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	}
 	
 	public boolean isLinked() {
-		return (isExternalOrg() && ((ExternalOrg)this).getLinkedOrg() != null);
+		return (isExternal() && ((ExternalOrg)this).getLinkedOrg() != null);
 	}
 	
 	public boolean sameTypeAs(BaseOrg org) {

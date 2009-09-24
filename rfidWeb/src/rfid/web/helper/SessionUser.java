@@ -178,7 +178,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public boolean isCustomerUser() {
-		return owner.isExternalOrg();
+		return owner.isExternal();
 	}
 	
 	public boolean isAnEndUser() {

@@ -1,36 +1,45 @@
-<div class="view">
+<div class="fluidSets">
 
-	<div>
-		<span class="label "><@s.text name="label.created"/> </span> <span class="field ">${action.formatDateTime(userRequest.created)}</span>
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.created"/></label> 
+		<span class="fieldHolder">${action.formatDateTime(userRequest.created)}</span>
 	</div>
 
-	<div>
-		<span class="label "><@s.text name="label.userid"/> </span> <span class="field ">${userRequest.userAccount.userID}</span>
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.userid"/></label> 
+		<span class="fieldHolder">${userRequest.userAccount.userID}</span>
 	</div>
-	<div>
-		<span class="label "><@s.text name="label.emailaddress"/> </span> <span class="field ">${userRequest.userAccount.emailAddress}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.emailaddress"/></label> 
+		<span class="fieldHolder">${userRequest.userAccount.emailAddress}</span>  
 	</div>
-	<div>	
-			<span class="label "><@s.text name="label.firstname"/> </span> <span class="field ">${userRequest.userAccount.firstName}</span>  
+	<div class="infoSet">	
+		<label class="label "><@s.text name="label.firstname"/></label> 
+		<span class="fieldHolder">${userRequest.userAccount.firstName}</span>  
 	</div>
-	<div>
-			<span class="label "><@s.text name="label.lastname"/> </span> <span class="field ">${userRequest.userAccount.lastName}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.lastname"/></label> 
+		<span class="fieldHolder">${userRequest.userAccount.lastName}</span>  
 	</div>
-	<div>
-			<span class="label "><@s.text name="label.position"/> </span> <span class="field ">${userRequest.userAccount.position!}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.position"/></label> 
+		<span class="fieldHolder">${userRequest.userAccount.position!}</span>  
 	</div>
-	<div>
-			<span class="label "><@s.text name="label.timezone"/> </span> <span class="field ">${userRequest.userAccount.timeZoneID}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.timezone"/></label> 
+		<span class="fieldHolder">${userRequest.userAccount.timeZoneID}</span>  
 	</div>
-	<div>
-		
-			<span class="label "><@s.text name="label.companyname"/> </span> <span class="field ">${userRequest.companyName}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.companyname"/></label> 
+		<span class="fieldHolder">${userRequest.companyName}</span>  
 	</div>
-	<div>
-			<span class="label "><@s.text name="label.phonenumber"/> </span> <span class="field ">${userRequest.phoneNumber}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.phonenumber"/></label> 
+		<span class="fieldHolder">${userRequest.phoneNumber}</span>  
 	</div>
 					
-	<div>
-			<span class="label "><@s.text name="label.comments"/> </span> <span class="field ">${userRequest.comment}</span>  
+	<div class="infoSet">
+		<label class="label "><@s.text name="label.comments"/></label> 
+		<span class="fieldHolder">${userRequest.comment}</span>  
 	</div>		
 </div>

@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.users;
 
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
@@ -37,6 +39,7 @@ public class CustomersUserCrud extends CustomerUserCrud {
 
 
 	@Override
+	@SkipValidation
 	public String doAdd() {
 		String result = super.doAdd();
 		defaultOwnerToCustomerBeingManaged();
@@ -48,7 +51,6 @@ public class CustomersUserCrud extends CustomerUserCrud {
 		setOwnerId(getCustomerId());
 	}
 
-	
 	
 	public Pager<UserBean> getPage() {
 		if( page == null ) {
@@ -74,11 +76,9 @@ public class CustomersUserCrud extends CustomerUserCrud {
 	}
 	
 	@Override
-	@FieldExpressionValidator(message="", key="error.owner_must_be_under_this_customer", expression="owner == customer")
+	@FieldExpressionValidator(message="", key="error.owner_must_be_under_this_customer", expression="owner.customerOrg.id == customerId")
 	public BaseOrg getOwner() {
 		return super.getOwner();
 	}
-
-
 
 }

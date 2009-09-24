@@ -64,7 +64,7 @@ public class UserComparator implements Comparator<UserBean> {
 	private int compareOwnerTypes(BaseOrg owner1, BaseOrg owner2) {
 		if (owner1.sameTypeAs(owner2)) {
 			return EQUAL;
-		} else if (owner1.isInternalOrg()) {
+		} else if (owner1.isInternal()) {
 			return CLOSER_TO_THE_TOP;
 		}
 		

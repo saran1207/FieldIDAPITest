@@ -20,12 +20,13 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
 public class UserRequestCrud extends AbstractCrud {
@@ -170,5 +171,19 @@ public class UserRequestCrud extends AbstractCrud {
 	public boolean customersExist() {
 		Pager<CustomerOrg> page = getLoaderFactory().createCustomerOrgPaginatedLoader().setPageSize(1).setFirstPage().load();
 		return page.hasResults();
+	}
+
+	@RequiredFieldValidator(message="", key="error.owner_required")
+	@FieldExpressionValidator(message="", key="error.owner_be_a_customer_or_division", expression="owner.external == true")
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
+	}
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
 	}
 }

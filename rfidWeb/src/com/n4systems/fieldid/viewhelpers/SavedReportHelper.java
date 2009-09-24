@@ -54,7 +54,7 @@ public class SavedReportHelper {
 		
 		// if the user is a customer/division user, we need to ensure the division gets properly overridden.
 		// for employee users we will let the original customer/division properties continue
-		if (toUser.getOwner().isExternalOrg()) {
+		if (toUser.getOwner().isExternal()) {
 			sharedReport.setInCriteria(SavedReport.OWNER_ID, toUser.getOwner().getId());
 		}
 
