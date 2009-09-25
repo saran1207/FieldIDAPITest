@@ -3,6 +3,7 @@ package com.n4systems.fieldid.datatypes;
 public class Customer {
 	String customerID = null;
 	String customerName = null;
+	String orgUnit = null;
 	String contactName = null;
 	String contactEmail = null;
 	String streetAddress = null;
@@ -14,9 +15,10 @@ public class Customer {
 	String phone2 = null;
 	String fax = null;
 	
-	public Customer(String customerID, String customerName) {
+	public Customer(String customerID, String customerName, String orgUnit) {
 		this.customerID = customerID;
 		this.customerName = customerName;
+		this.orgUnit = orgUnit;
 	}
 	
 	public void setCustomerID(String customerID) {
@@ -25,6 +27,10 @@ public class Customer {
 	
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+	
+	public void setOrgUnit(String orgUnit) {
+		this.orgUnit = orgUnit;
 	}
 	
 	public void setContactName(String contactName) {
@@ -73,6 +79,10 @@ public class Customer {
 	
 	public String getCustomerName() {
 		return customerName;
+	}
+	
+	public String getOrgUnit() {
+		return this.orgUnit;
 	}
 	
 	public String getContactName() {

@@ -25,6 +25,7 @@ public class ManageCustomers extends TestCase {
 	IE ie = null;
 	FieldIDMisc misc = null;
 	ManageUsers mus = null;
+	ManageOrganizations mos = null;
 	Properties p;
 	InputStream in;
 	String propertyFile = "managecustomers.properties";
@@ -112,6 +113,7 @@ public class ManageCustomers extends TestCase {
 		try {
 			misc = new FieldIDMisc(ie);
 			mus = new ManageUsers(ie);
+			mos = new ManageOrganizations(ie);
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
@@ -360,6 +362,8 @@ public class ManageCustomers extends TestCase {
 		if(s != null) {
 			customerName.set(s);
 		}
+		
+		// TODO: edit Organizational Unit
 
 		TextField contactName = ie.textField(editCustomerContactNameFinder);
 		assertTrue("Could not find the text field for Contact Name", contactName.exists());
@@ -439,6 +443,8 @@ public class ManageCustomers extends TestCase {
 
 	public void addCustomer(Customer customer) throws Exception {
 		assertNotNull(customer);
+		assertNotNull(customer.getCustomerID());
+		assertNotNull(customer.getCustomerName());
 		// Add Customer is using the same form as edit customer
 		editCustomer(customer);
 	}
@@ -449,12 +455,16 @@ public class ManageCustomers extends TestCase {
 	 * @throws Exception
 	 */
 	public void validate() throws Exception {
+		mos.gotoManageOrganizations();
+		List<String> orgUnits = mos.getOrganizationNames();
+		assertTrue("There are no organizational units for this tenant", orgUnits.size() > 0);
+		String orgUnit = orgUnits.get(0);
 		gotoManageCustomers();
 		gotoAddCustomer();
 		int length = 15;
 		String customerID = misc.getRandomString(length);
 		String customerName = misc.getRandomString(length);
-		Customer customer = new Customer(customerID, customerName);
+		Customer customer = new Customer(customerID, customerName, orgUnit);
 		addCustomer(customer);
 		gotoBackToCustomerList();
 		setAddCustomerFilter(customer.getCustomerName());
@@ -464,6 +474,7 @@ public class ManageCustomers extends TestCase {
 		gotoBackToCustomerListFromEditCustomer();
 		gotoEditCustomer(customer);
 		customer.setContactName("Dev");
+		customer.setOrgUnit(orgUnit);
 		customer.setContactEmail("dev@n4systems.com");
 		customer.setStreetAddress("179 John St.");
 		customer.setCity("Toronto");

@@ -46,7 +46,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	
 	// Smoke Test customer and users
 	// Everything is static so it can be used across test cases 
-	static Customer customer = new Customer("smoke", "Smoke Test");
+	static Customer customer = new Customer("smoke", "Smoke Test", null);
 	static String customerID = "smoke";
 	static String customerName = "Smoke Test";
 	static String customerContact = "Smoke Test";

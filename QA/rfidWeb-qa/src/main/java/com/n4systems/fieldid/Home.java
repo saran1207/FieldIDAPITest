@@ -269,6 +269,7 @@ public class Home extends TestCase {
 		// Release Notes will open in a new browser.
 		IE child = ie.childBrowser(0);
 		assertTrue("A new window with the release notes could not be found.", child.exists());
+		misc.checkForOopsPage(child);
 		child.close();
 	}
 	
@@ -467,10 +468,6 @@ public class Home extends TestCase {
 			List<String> videos = getInstructionalVideoList();
 			gotoInstructionalVideos();
 			gotoHome();
-			@SuppressWarnings("unused")
-			List<String> newFeatures = getNewFeatures();
-			gotoNewFeatures();
-			gotoHome();
 			gotoChangeYourPassword();
 			gotoHome();
 			gotoViewTheInspectionHistoryForAProduct();
@@ -479,7 +476,11 @@ public class Home extends TestCase {
 			gotoHome();
 			gotoViewUpcomingInspections();
 			gotoHome();
+			@SuppressWarnings("unused")
+			List<String> newFeatures = getNewFeatures();
+			gotoNewFeatures();
 //			gotoProductInformationViaSmartSearch(serialNumber);	// tested by Smoke Test
+			gotoHome();
 		} catch (Exception e) {
 			throw e;
 		} finally {
