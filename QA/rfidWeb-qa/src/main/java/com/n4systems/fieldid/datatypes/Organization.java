@@ -2,9 +2,14 @@ package com.n4systems.fieldid.datatypes;
 
 public class Organization {
 
+	// Details
 	String name = null;
-	String adminEmail = null;
 	String nameOnCert = null;
+	String countryTimezone = null;
+	String timeZone = null;
+	String webSiteAddress = null;
+	
+	// Address
 	String streetAddress = null;
 	String city = null;
 	String state = null;
@@ -12,23 +17,32 @@ public class Organization {
 	String zip = null;
 	String phoneNumber = null;
 	String fax = null;
-	String certImage = null;
 	
-	public Organization(String name, String adminEmail) {
+	// Certificate Image
+	String certImage = null;
+
+	public Organization(String name) {
 		this.name = name;
-		this.adminEmail = adminEmail;
 	}
 	
 	public void setName(String s) {
 		this.name = s;
 	}
 	
-	public void setAdminEmail(String s) {
-		this.adminEmail = s;
-	}
-	
 	public void setNameOnCert(String s) {
 		this.nameOnCert = s;
+	}
+	
+	public void setCountryTimeZone(String s) {
+		this.countryTimezone = s;
+	}
+	
+	public void setTimeZone(String s) {
+		this.timeZone = s;
+	}
+	
+	public void setWebSiteAddress(String s) {
+		this.webSiteAddress = s;
 	}
 	
 	public void setStreetAddress(String s) {
@@ -67,12 +81,20 @@ public class Organization {
 		return this.name;
 	}
 	
-	public String getAdminEmail() {
-		return this.adminEmail;
-	}
-	
 	public String getNameOnCert() {
 		return this.nameOnCert;
+	}
+	
+	public String getCountryTimeZone() {
+		return this.countryTimezone;
+	}
+	
+	public String getTimeZone() {
+		return this.timeZone;
+	}
+	
+	public String getWebSiteAddress() {
+		return this.webSiteAddress;
 	}
 	
 	public String getStreetAddress() {

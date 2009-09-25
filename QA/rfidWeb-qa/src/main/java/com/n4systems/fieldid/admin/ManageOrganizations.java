@@ -24,37 +24,45 @@ public class ManageOrganizations extends TestCase {
 	Properties p;
 	InputStream in;
 	String propertyFile = "manageorganizations.properties";
-	Finder manageOrganizationsLinkFinder;
-	Finder manageOrganizationsPageContentHeaderFinder;
-	Finder backToAdministrationLinkFinder;
-	Finder organizationNamesFinder;
-	Finder addOrganizationLinkFinder;
-	Finder addOrganizationNameFinder;
-	Finder addOrganizationAdminEmailFinder;
-	Finder addOrganizationNameOnCertFinder;
-	Finder addOrganizationStreetAddressFinder;
-	Finder addOrganizationCityFinder;
-	Finder addOrganizationStateFinder;
-	Finder addOrganizationCountryFinder;
-	Finder addOrganizationZipFinder;
-	Finder addOrganizationPhoneNumberFinder;
-	Finder addOrganizationFaxFinder;
-	Finder addOrganizationSaveButtonFinder;
-	Finder addOrganizationCancelButtonFinder;
-	Finder organizationTableRowsFinder;
-	Finder manageOrganizationsPageForContentHeaderFinder;
-	Finder editOrganizationNameFinder;
-	Finder editOrganizationAdminEmailFinder;
-	Finder editOrganizationNameOnCertFinder;
-	Finder editOrganizationStreetAddressFinder;
-	Finder editOrganizationCityFinder;
-	Finder editOrganizationStateFinder;
-	Finder editOrganizationCountryFinder;
-	Finder editOrganizationZipFinder;
-	Finder editOrganizationPhoneNumberFinder;
-	Finder editOrganizationFaxFinder;
-	Finder editOrganizationSaveButtonFinder;
-	Finder editOrganizationCancelButtonFinder;
+	private Finder manageOrganizationsLinkFinder;
+	private Finder manageOrganizationsPageContentHeaderFinder;
+	private Finder backToAdministrationLinkFinder;
+	private Finder organizationNamesFinder;
+	private Finder addOrganizationLinkFinder;
+	private Finder addOrganizationNameFinder;
+	private Finder addOrganizationAdminEmailFinder;
+	private Finder addOrganizationNameOnCertFinder;
+	private Finder addOrganizationStreetAddressFinder;
+	private Finder addOrganizationCityFinder;
+	private Finder addOrganizationStateFinder;
+	private Finder addOrganizationCountryFinder;
+	private Finder addOrganizationZipFinder;
+	private Finder addOrganizationPhoneNumberFinder;
+	private Finder addOrganizationFaxFinder;
+	private Finder addOrganizationSaveButtonFinder;
+	private Finder addOrganizationCancelButtonFinder;
+	private Finder organizationTableRowsFinder;
+	private Finder manageOrganizationsPageForContentHeaderFinder;
+	private Finder editOrganizationNameFinder;
+	private Finder editOrganizationAdminEmailFinder;
+	private Finder editOrganizationNameOnCertFinder;
+	private Finder editOrganizationStreetAddressFinder;
+	private Finder editOrganizationCityFinder;
+	private Finder editOrganizationStateFinder;
+	private Finder editOrganizationCountryFinder;
+	private Finder editOrganizationZipFinder;
+	private Finder editOrganizationPhoneNumberFinder;
+	private Finder editOrganizationFaxFinder;
+	private Finder editOrganizationSaveButtonFinder;
+	private Finder editOrganizationCancelButtonFinder;
+	private Finder editPrimaryOrganizationLinkFinder;
+	private Finder viewAllLinkFinder;
+	private Finder manageOrganizationEditPageContentHeaderFinder;
+	private Finder editOrganizationCountryTimeZoneFinder;
+	private Finder editOrganizationTimeZoneFinder;
+	private Finder addOrganizationCountryTimeZoneFinder;
+	private Finder addOrganizationTimeZoneFinder;
+	private Finder editOrganizationWebSiteAddressFinder;
 
 	public ManageOrganizations(IE ie) {
 		this.ie = ie;
@@ -64,6 +72,14 @@ public class ManageOrganizations extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			editOrganizationWebSiteAddressFinder = xpath(p.getProperty("editorganizationnamewebsiteaddress"));
+			addOrganizationCountryTimeZoneFinder = xpath(p.getProperty("addorganizationnamecountrytimezone"));
+			addOrganizationTimeZoneFinder = xpath(p.getProperty("addorganizationnametimezone"));
+			editOrganizationCountryTimeZoneFinder = xpath(p.getProperty("editorganizationcountrytimezone"));
+			editOrganizationTimeZoneFinder = xpath(p.getProperty("editorganizationtimezone"));
+			manageOrganizationEditPageContentHeaderFinder = xpath(p.getProperty("editorganizationheader"));
+			viewAllLinkFinder = xpath(p.getProperty("viewalllink"));
+			editPrimaryOrganizationLinkFinder = xpath(p.getProperty("editprimaryorganizationlink"));
 			manageOrganizationsLinkFinder = text(p.getProperty("link"));
 			manageOrganizationsPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			backToAdministrationLinkFinder = xpath(p.getProperty("backtoadministrationlink"));
@@ -163,6 +179,25 @@ public class ManageOrganizations extends TestCase {
 		if(o.getNameOnCert() != null) {
 			nameOnCert.set(o.getNameOnCert());
 		}
+		
+		SelectList countryTimeZone = ie.selectList(addOrganizationCountryTimeZoneFinder);
+		assertTrue("Could not find the select list for Country (relating to Time Zone)", countryTimeZone.exists());
+		String ctz = o.getCountryTimeZone();
+		if(ctz != null) {
+			Option ctzo = countryTimeZone.option(text("/" + ctz + "/"));
+			assertTrue("Could not find the Country '" + ctz + "' in the list of Countries (relating to Time Zone", ctzo.exists());
+			ctzo.select();
+		}
+
+		SelectList timeZone = ie.selectList(addOrganizationTimeZoneFinder);
+		assertTrue("Could not find the select list for Time Zone", timeZone.exists());
+		String tz = o.getTimeZone();
+		if(tz != null) {
+			Option tzo = timeZone.option(text("/" + tz + "/"));
+			assertTrue("Could not find the Time Zone '" + tz + "' in the list of Time Zone", tzo.exists());
+			tzo.select();
+		}
+		
 		TextField streetAddress = ie.textField(addOrganizationStreetAddressFinder);
 		assertTrue("Could not find the field for Street Address", streetAddress.exists());
 		if(o.getStreetAddress() != null) {
@@ -183,6 +218,7 @@ public class ManageOrganizations extends TestCase {
 		if(o.getCountry() != null) {
 			country.set(o.getCountry());
 		}
+		
 		TextField zip = ie.textField(addOrganizationZipFinder);
 		assertTrue("Could not find the field for Zip", zip.exists());
 		if(o.getZip() != null) {
@@ -203,23 +239,61 @@ public class ManageOrganizations extends TestCase {
 		}
 	}
 
+	/**
+	 * Used to edit non-primary organizations
+	 * 
+	 * @param o
+	 * @throws Exception
+	 */
 	public void setEditOrganizationForm(Organization o) throws Exception {
+		setEditOrganizationForm(o, false);
+	}
+
+	/**
+	 * Can be used to edit primary or secondary organizations.
+	 * 
+	 * @param o
+	 * @throws Exception
+	 */
+	public void setEditOrganizationForm(Organization o, boolean primary) throws Exception {
 		assertNotNull(o);
 		assertNotNull("Organization Name is required", o.getName());
 		assertFalse("Organization Name cannot be blank", o.getName().equals(""));
-		assertNotNull("Organization Administrator Email is required", o.getAdminEmail());
-		assertFalse("Organization Administrator Email cannot be blank", o.getAdminEmail().equals(""));
 		TextField name = ie.textField(editOrganizationNameFinder);
 		assertTrue("Could not find the field for Name", name.exists());
 		name.set(o.getName());
-		TextField adminEmail = ie.textField(editOrganizationAdminEmailFinder);
-		assertTrue("Could not find the field for Administrator Email", adminEmail.exists());
-		adminEmail.set(o.getAdminEmail());
 		TextField nameOnCert = ie.textField(editOrganizationNameOnCertFinder);
 		assertTrue("Could not find the field for Name on certificate", nameOnCert.exists());
 		if(o.getNameOnCert() != null) {
 			nameOnCert.set(o.getNameOnCert());
 		}
+		
+		SelectList countryTimeZone = ie.selectList(editOrganizationCountryTimeZoneFinder);
+		assertTrue("Could not find the select list for Country (relating to Time Zone)", countryTimeZone.exists());
+		String ctz = o.getCountryTimeZone();
+		if(ctz != null) {
+			Option ctzo = countryTimeZone.option(text("/" + ctz + "/"));
+			assertTrue("Could not find the Country '" + ctz + "' in the list of Countries (relating to Time Zone", ctzo.exists());
+			ctzo.select();
+		}
+
+		SelectList timeZone = ie.selectList(editOrganizationTimeZoneFinder);
+		assertTrue("Could not find the select list for Time Zone", timeZone.exists());
+		String tz = o.getTimeZone();
+		if(tz != null) {
+			Option tzo = timeZone.option(text("/" + tz + "/"));
+			assertTrue("Could not find the Time Zone '" + tz + "' in the list of Time Zone", tzo.exists());
+			tzo.select();
+		}
+		
+		if(primary) {
+			TextField webSiteAddress = ie.textField(editOrganizationWebSiteAddressFinder);
+			assertTrue("Could not find the field for Web Site Address", webSiteAddress.exists());
+			if(o.getWebSiteAddress() != null) {
+				webSiteAddress.set(o.getWebSiteAddress());
+			}
+		}
+
 		TextField streetAddress = ie.textField(editOrganizationStreetAddressFinder);
 		assertTrue("Could not find the field for Street Address", streetAddress.exists());
 		if(o.getStreetAddress() != null) {
@@ -260,6 +334,59 @@ public class ManageOrganizations extends TestCase {
 		}
 	}
 
+	public Organization getOrganizationForm() throws Exception {
+		Organization result = new Organization(null);
+		TextField name = ie.textField(editOrganizationNameFinder);
+		assertTrue("Could not find the field for Name", name.exists());
+		result.setName(name.value());
+
+		TextField nameOnCert = ie.textField(editOrganizationNameOnCertFinder);
+		assertTrue("Could not find the field for Name on certificate", nameOnCert.exists());
+		result.setNameOnCert(nameOnCert.value());
+		
+		SelectList countryTimeZone = ie.selectList(editOrganizationCountryTimeZoneFinder);
+		assertTrue("Could not find the select list for Country (relating to Time Zone)", countryTimeZone.exists());
+		List<String> selected = countryTimeZone.getSelectedItems();
+		assertTrue("There is no Country (related to Time Zone) selected", selected.size() > 0);
+		result.setCountryTimeZone(selected.get(0));
+
+		SelectList timeZone = ie.selectList(editOrganizationTimeZoneFinder);
+		assertTrue("Could not find the select list for Time Zone", timeZone.exists());
+		selected = timeZone.getSelectedItems();
+		assertTrue("There is no Time Zone selected", selected.size() > 0);
+		result.setTimeZone(selected.get(0));
+
+		TextField streetAddress = ie.textField(editOrganizationStreetAddressFinder);
+		assertTrue("Could not find the field for Street Address", streetAddress.exists());
+		result.setStreetAddress(streetAddress.value());
+
+		TextField city = ie.textField(editOrganizationCityFinder);
+		assertTrue("Could not find the field for City", city.exists());
+		result.setCity(city.value());
+
+		TextField state = ie.textField(editOrganizationStateFinder);
+		assertTrue("Could not find the field for State", state.exists());
+		result.setState(state.value());
+
+		TextField country = ie.textField(editOrganizationCountryFinder);
+		assertTrue("Could not find the field for Country", country.exists());
+		result.setCountry(country.value());
+
+		TextField zip = ie.textField(editOrganizationZipFinder);
+		assertTrue("Could not find the field for Zip", zip.exists());
+		result.setZip(zip.value());
+
+		TextField phoneNumber = ie.textField(editOrganizationPhoneNumberFinder);
+		assertTrue("Could not find the field for Phone Number", phoneNumber.exists());
+		result.setPhoneNumber(phoneNumber.value());
+
+		TextField fax = ie.textField(editOrganizationFaxFinder);
+		assertTrue("Could not find the field for Fax", fax.exists());
+		result.setFax(fax.value());
+		
+		return result;
+	}
+
 	public void saveAddOrganization() throws Exception {
 		Button save = ie.button(addOrganizationSaveButtonFinder);
 		assertTrue("Could not find the Save button on Add Organization", save.exists());
@@ -285,10 +412,11 @@ public class ManageOrganizations extends TestCase {
 		gotoManageOrganizations();
 		gotoBackToAdministration();
 		gotoManageOrganizations();
+		gotoEditPrimaryOrganization();
+		gotoViewAll();
 		gotoAddOrganizationalUnit();
 		String name = "validate-" + misc.getRandomString();
-		String email = "dev@n4systems.com";
-		Organization o = new Organization(name, email);
+		Organization o = new Organization(name);
 		setAddOrganizationForm(o);
 		saveAddOrganization();
 		List<String> units = getOrganizationNames();
@@ -296,6 +424,8 @@ public class ManageOrganizations extends TestCase {
 		gotoAddOrganizationalUnit();
 		cancelAddOrganization();
 		o.setNameOnCert("N4 System");
+		o.setCountryTimeZone("Canada");
+		o.setTimeZone("Toronto");
 		o.setStreetAddress("179 John St.");
 		o.setCity("Toronto");
 		o.setState("ON");
@@ -306,6 +436,38 @@ public class ManageOrganizations extends TestCase {
 		gotoEditOrganization(o.getName());
 		setEditOrganizationForm(o);
 		saveEditOrganization();
+		gotoEditPrimaryOrganization();
+		o = getOrganizationForm();
+		if(o.getWebSiteAddress() == null) {
+			o.setWebSiteAddress("http://www.google.ca/");
+		}
+		setEditOrganizationForm(o, true);
+		saveEditOrganization();
+	}
+	
+	public void gotoViewAll() throws Exception {
+		Link l = ie.link(viewAllLinkFinder);
+		assertTrue("Could not find a link to View All on Manage Organization", l.exists());
+		l.click();
+		checkManageOrganizationsPageContentHeader();
+	}
+
+	/**
+	 * Click on the Edit link for editing the primary organization.
+	 * Assumes you are already on the Manage Organizations page.
+	 * 
+	 * @throws Exception
+	 */
+	public void gotoEditPrimaryOrganization() throws Exception {
+		Link edit = ie.link(editPrimaryOrganizationLinkFinder);
+		assertTrue("Could not find the link to edit the primary organization", edit.exists());
+		edit.click();
+		checkManageOrganizationEditPageContentHeader();
+	}
+
+	private void checkManageOrganizationEditPageContentHeader() throws Exception {
+		HtmlElement header = ie.htmlElement(manageOrganizationEditPageContentHeaderFinder);
+		assertTrue("Could not find the page header for Manage Organization -", header.exists());
 	}
 
 	public void saveEditOrganization() throws Exception {

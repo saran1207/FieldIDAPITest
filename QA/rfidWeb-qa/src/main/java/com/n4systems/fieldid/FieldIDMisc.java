@@ -102,7 +102,7 @@ public class FieldIDMisc extends TestCase {
 		assertFalse(filename.equals(""));
 		assertNotNull(format);
 		assertFalse(format.equals(""));
-		ie.waitUntilReady();
+//		ie.waitUntilReady();
 		int x = ie.top();
 		int y = ie.left();
 		int h = ie.height();
