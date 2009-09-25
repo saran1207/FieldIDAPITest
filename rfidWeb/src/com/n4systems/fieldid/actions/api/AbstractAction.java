@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.ExtendedTextProviderAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
+import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
@@ -99,6 +100,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	
 	private void setupSessionUser(UserBean user) {
 		getSession().setSessionUser(new SessionUser(user));
+		getSession().setUserSecurityGuard(new SessionUserSecurityGuard(user));
 		new AbstractActionTenantContextInitializer(this).refreshSecurityGaurd();
 	}
 	

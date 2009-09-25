@@ -12,23 +12,24 @@ import com.n4systems.util.persistence.SimpleListable;
 
 public class Permissions {
 	// Primary permissions
-	public static final int TAG 				= 1 << 0;
-	public static final int MANAGESYSTEMCONFIG	= 1 << 1;
-	public static final int MANAGESYSTEMUSERS	= 1 << 2;
-	public static final int MANAGEENDUSERS		= 1 << 3;
-	public static final int CREATEINSPECTION	= 1 << 4;
-	public static final int EDITINSPECTION		= 1 << 5;
-	public static final int MANAGEJOBS			= 1 << 6;
+	public static final int Tag 				= 1 << 0;
+	public static final int ManageSystemConfig	= 1 << 1;
+	public static final int ManageSystemUsers	= 1 << 2;
+	public static final int ManageEndUsers		= 1 << 3;
+	public static final int CreateInspection	= 1 << 4;
+	public static final int EditInspection		= 1 << 5;
+	public static final int ManageJobs			= 1 << 6;
+	public static final int ManageSafetyNetwork = 1 << 7;
 	// NOTE: We can have a most 30 permissions (1 << 30) since we're using ints
 	
 	// Composite permissions
 	public static final int ALL 				= Integer.MAX_VALUE;	// (2^31 - 1)
 	public static final int ADMIN				= ALL;
 	public static final int SYSTEM				= ALL;
-	public static final int ALLINSPECTION		= CREATEINSPECTION | EDITINSPECTION;
+	public static final int ALLINSPECTION		= CreateInspection | EditInspection;
 	
 	/** permissions visible for admins to select for system users */
-	private static final int[] visibleSytemUserPermissions = { TAG, MANAGESYSTEMCONFIG, MANAGESYSTEMUSERS, MANAGEENDUSERS, CREATEINSPECTION, EDITINSPECTION, MANAGEJOBS };
+	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateInspection, EditInspection, ManageJobs, ManageSafetyNetwork };
 	
 	/**
 	 * @param permission a Primary permission (ie not composite)
@@ -37,26 +38,29 @@ public class Permissions {
 	public static String getLabel(int permission) {
 		String label = null;
 		switch (permission) {
-			case TAG:
+			case Tag:
 				label = "label.tag_permission";
 				break;
-			case MANAGESYSTEMCONFIG:
+			case ManageSystemConfig:
 				label = "label.managesystemconfig_permission";;
 				break;
-			case MANAGESYSTEMUSERS:
+			case ManageSystemUsers:
 				label = "label.managesystemusers_permission";;
 				break;
-			case MANAGEENDUSERS:
+			case ManageEndUsers:
 				label = "label.manageendusers_permission";;
 				break;
-			case CREATEINSPECTION:
+			case CreateInspection:
 				label = "label.createinspection_permission";;
 				break;
-			case EDITINSPECTION:
+			case EditInspection:
 				label = "label.editinspection_permission";;
 				break;
-			case MANAGEJOBS:
+			case ManageJobs:
 				label = "label.managejobs_permission";;
+				break;
+			case ManageSafetyNetwork:
+				label = "label.managesafetynetwork_permission";
 				break;
 		}
 		return label;
@@ -69,19 +73,19 @@ public class Permissions {
 		String safeName = permissionName.trim().toLowerCase();
 		
 		if (safeName.equals("tag")) {
-			return TAG;
+			return Tag;
 		} else if (safeName.equals("managesystemconfig")) {
-			return MANAGESYSTEMCONFIG;
+			return ManageSystemConfig;
 		} else if (safeName.equals("managesystemusers")) {
-			return MANAGESYSTEMUSERS;
+			return ManageSystemUsers;
 		} else if (safeName.equals("manageendusers")) {
-			return MANAGEENDUSERS;
+			return ManageEndUsers;
 		} else if (safeName.equals("createinspection")) {
-			return CREATEINSPECTION;
+			return CreateInspection;
 		} else if (safeName.equals("editinspection")) {
-			return EDITINSPECTION;
+			return EditInspection;
 		} else if (safeName.equals("managejobs")) {
-			return MANAGEJOBS;
+			return ManageJobs;
 		} else {
 			throw new InvalidPermission("Unknown permission name [" + permissionName + "]");
 		}
@@ -94,6 +98,10 @@ public class Permissions {
 		return createPermissionDisplayList(visibleSytemUserPermissions);
 	}
 	
+	public static int[] getVisibleSystemUserPermissions() {
+		return visibleSytemUserPermissions;
+	}
+	
 	private static List<Listable<Integer>> createPermissionDisplayList(int ... perms) {
 		List<Listable<Integer>> displayList = new ArrayList<Listable<Integer>>();
 		for (int perm: perms) {
@@ -103,10 +111,10 @@ public class Permissions {
 	}
 	
 	/**
-	 * @return True iff one or more perms is set on user.
+	 * @return True iff one or more perms is set in permissions.
 	 */
-	public static boolean hasOneOf(UserBean user, int ... perms) {
-		BitField permField = new BitField(user.getPermissions());
+	public static boolean hasOneOf(int permissions, int ... perms) {
+		BitField permField = new BitField(permissions);
 		
 		boolean hasAccess = false;
 		for (int perm: perms) {
@@ -115,7 +123,14 @@ public class Permissions {
 				break;
 			}
 		}
-		return hasAccess;
+		return hasAccess;		
+	}
+	
+	/**
+	 * @return True iff one or more perms is set on user.
+	 */
+	public static boolean hasOneOf(UserBean user, int ... perms) {
+		return hasOneOf(user.getPermissions());
 	}
 	
 	/**

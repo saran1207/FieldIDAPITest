@@ -16,6 +16,7 @@ import rfid.web.helper.SessionUser;
 
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
@@ -25,6 +26,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final long serialVersionUID = 1L;
 	private static final String KEY_SESSION_USER = "sessionUser";
 	private static final String KEY_SECURITY_GUARD = "securityGaurd";
+	private static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
 	private static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
 	private static final String KEY_SIGNUP = "signUp";
 	
@@ -55,6 +57,14 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	
 	public void setSecurityGuard(SystemSecurityGuard securityGuard) {
 		put(KEY_SECURITY_GUARD, securityGuard);
+	}
+	
+	public UserSecurityGuard getUserSecurityGuard() {
+		return get(KEY_USER_SECURITY_GUARD, UserSecurityGuard.class);
+	}
+	
+	public void setUserSecurityGuard(UserSecurityGuard userSecurityGuard) {
+		put(KEY_USER_SECURITY_GUARD, userSecurityGuard);
 	}
 	
 	public void clearSecurityGuard() {

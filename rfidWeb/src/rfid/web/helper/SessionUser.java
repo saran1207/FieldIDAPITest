@@ -247,4 +247,8 @@ public class SessionUser implements DateTimeDefinition {
 	public String getUserName() {
 		return userID;
 	}
+
+	public int getPermissions() {
+		return permissions;
+	}
 }

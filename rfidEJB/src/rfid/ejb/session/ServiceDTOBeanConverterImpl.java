@@ -786,8 +786,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		userService.setHashPassword(user.getHashPassword());
 		userService.setSecurityRfidNumber(user.getHashSecurityCardNumber());
 		BitField permField = new BitField(user.getPermissions());
-		userService.setAllowedToIdentify(permField.isSet(Permissions.TAG));
-		userService.setAllowedToInspect(permField.isSet(Permissions.CREATEINSPECTION));
+		userService.setAllowedToIdentify(permField.isSet(Permissions.Tag));
+		userService.setAllowedToInspect(permField.isSet(Permissions.CreateInspection));
 		
 		populateOwners(user.getOwner(), userService);
 		

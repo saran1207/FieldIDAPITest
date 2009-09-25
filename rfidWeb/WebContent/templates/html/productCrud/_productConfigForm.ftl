@@ -18,12 +18,14 @@
 	</div>
 </#if>
 <div class="formRowHolder">
-	<label for="owner"><@s.text name="label.owner"/></label>
+	<label class="label" for="owner"><@s.text name="label.owner"/></label>
 	<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 </div>
+<#if userSecurityGuard.allowedManageSafetyNetwork == true >
 <div class="formRowHolder">
 	<@s.select key="label.publishedstateselector" name="publishedState" list="publishedStates" listKey="id" listValue="name" emptyOption="false" labelposition="left" />
 </div>
+</#if>
 <div class="formRowHolder">
 	<#if !parentProduct?exists >
 		<@s.textfield id="location" key="label.location" name="location" labelposition="left"/>
