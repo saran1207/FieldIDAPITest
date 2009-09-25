@@ -56,6 +56,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -404,7 +405,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		} else if( inspectionServiceDTO.getInspectionBookTitle() != null ) {
 			CustomerOrg customerOrg = persistenceManager.find(CustomerOrg.class, inspectionServiceDTO.getCustomerId());
 			
-			InspectionBook inspectionBook = inspectionManager.findInspectionBook( inspectionServiceDTO.getInspectionBookTitle(), new OrgOnlySecurityFilter(customerOrg));
+			InspectionBookByNameLoader loader = new InspectionBookByNameLoader(new OrgOnlySecurityFilter(inspector.getOwner()));
+			loader.setName(inspectionServiceDTO.getInspectionBookTitle());
+			loader.setOwner(owner);
+			InspectionBook inspectionBook = loader.load(em, new OrgOnlySecurityFilter(inspector.getOwner()));
 
 			if( inspectionBook == null ) {
 				inspectionBook = new InspectionBook();

@@ -80,6 +80,10 @@ public class InspectionBookListLoader extends ListLoader<InspectionBook> {
 	@SuppressWarnings("unchecked")
 	private List<InspectionBook> getDownwardTreeList(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
+		if (openBooksOnly) {
+			queryBuilder.addSimpleWhere("open", true);
+		}
+		
 		Query query = queryBuilder.createQuery(em);
 		return query.getResultList();		
 	}

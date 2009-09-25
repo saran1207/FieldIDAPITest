@@ -52,7 +52,9 @@ import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.inspectionbook.InspectionBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
@@ -422,27 +424,24 @@ public class InspectionCrud extends UploadFileSupport {
 				addFieldError("newInspectionBookTitle", getText("error.inspection_book_title_required"));
 				throw new ValidationException("not validated.");
 			}
-			InspectionBookCrud bookCrud = new InspectionBookCrud(persistenceManager);
-			try {
-				bookCrud.prepare();
-			} catch (Exception e) {
-				addActionErrorText("error.new_saving_inspection_book");
-				throw new PersistenceException("could not save.");
-			}
-			bookCrud.setOwnerId(getOwnerId());
-			bookCrud.setName(newInspectionBookTitle);
+
+			InspectionBookByNameLoader bookLoader = new InspectionBookByNameLoader(getSecurityFilter());
+			bookLoader.setName(newInspectionBookTitle);
+			bookLoader.setOwner(getOwner());
+			InspectionBook inspectionBook = bookLoader.load();
 			
-			
-			if (bookCrud.duplicateValueExists(newInspectionBookTitle)) {
-				inspection.setBook(inspectionManager.findInspectionBook(newInspectionBookTitle.trim(), getSecurityFilter()));
-			} else {
-				if (bookCrud.doSave().equals(SUCCESS)) {
-					inspection.setBook(bookCrud.getBook());
-				} else {
-					addActionErrorText("error.new_saving_inspection_book");
-					throw new PersistenceException("could not save.");
-				}
+			if (inspectionBook == null) {
+				inspectionBook = new InspectionBook();
+				inspectionBook.setName(newInspectionBookTitle);
+				inspectionBook.setOpen(true);
+				inspectionBook.setOwner(getOwner());
+				inspectionBook.setTenant(getTenant());
+				
+				InspectionBookSaver bookSaver = new InspectionBookSaver();
+				bookSaver.save(inspectionBook);
 			}
+			
+			inspection.setBook(inspectionBook);			
 		}
 	}
 	
