@@ -3,51 +3,14 @@ package com.n4systems.persistence;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-public class Transaction {
-	private final EntityManager entityManager;
-	private final EntityTransaction entityTransaction;
-	
-	public Transaction(final EntityManager manager) {
-		this.entityManager = manager;
-		this.entityTransaction = manager.getTransaction();
-		entityTransaction.begin();
-	}
+public interface Transaction {
 
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
+	public EntityManager getEntityManager();
 
-	public EntityTransaction getEntityTransaction() {
-		return entityTransaction;
-	}
-	
-	public void rollback() {
-		try {
-			if (entityTransaction != null && entityTransaction.isActive()) {
-				entityTransaction.rollback();
-			}
-		} finally {
-			closeEntityManager();
-		}
-	}
-	
-	public void commit() {
-		try {
-			if (entityTransaction != null && entityTransaction.isActive()) {
-				if (entityTransaction.getRollbackOnly()) {
-					entityTransaction.rollback();
-				} else {
-					entityTransaction.commit();
-				}
-			}
-		} finally {
-			closeEntityManager();
-		}
-	}
+	public EntityTransaction getEntityTransaction();
 
-	private void closeEntityManager() {
-		if (entityManager != null && entityManager.isOpen()) {
-			entityManager.close();
-		}
-	}
+	public void rollback();
+
+	public void commit();
+
 }

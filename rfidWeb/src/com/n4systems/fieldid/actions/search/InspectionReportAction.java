@@ -9,7 +9,6 @@ import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.InvalidQueryException;
@@ -20,7 +19,6 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
@@ -43,7 +41,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
-	private final InspectionManager inspectionManager;
 	private final LegacyProductSerial productSerialManager;
 	private final User userManager;
 	
@@ -62,14 +59,12 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public InspectionReportAction(
 			final PersistenceManager persistenceManager,
 			final User userManager, 
-			final InspectionManager inspectionManager, 
 			final LegacyProductSerial productSerialManager, 
 			final ProductManager productManager) {
 		
 		super(InspectionReportAction.class, REPORT_CRITERIA, "InspectionReport", persistenceManager);
 
 		this.userManager = userManager;
-		this.inspectionManager = inspectionManager;
 		this.productSerialManager = productSerialManager;
 		
 		
@@ -194,7 +189,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		return SUCCESS;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void storedPageNumber() {
 		getSession().put(REPORT_PAGE_NUMBER, getCurrentPage());
 	}

@@ -42,7 +42,6 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
@@ -91,7 +90,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	 * finds all the groups that you can view with the defined security filter.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter userFilter, Long productId) {
+	private List<InspectionGroup> findAllInspectionGroups(SecurityFilter userFilter, Long productId) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets("ig.tenant.id", "inspection.owner", null, null);
 
@@ -712,56 +711,8 @@ public class InspectionManagerImpl implements InspectionManager {
 		return lastInspectionDate;
 	}
 
-	public InspectionBook findInspectionBook(String name, SecurityFilter filter) {
-		QueryBuilder<InspectionBook> qBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
-		qBuilder.setSimpleSelect().addSimpleWhere("name", name);
-
-		InspectionBook book = null;
-		try {
-			book = persistenceManager.find(qBuilder);
-		} catch (InvalidQueryException e) {
-			logger.error("Failed while loading InspectionBook", e);
-		}
-
-		return book;
-	}
-
-	public InspectionBook findInspectionBookByLegacyId(Long id, SecurityFilter filter) {
-		QueryBuilder<InspectionBook> qBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
-		qBuilder.setSimpleSelect().addSimpleWhere("legacyId", id);
-
-		InspectionBook book = null;
-		try {
-			book = persistenceManager.find(qBuilder);
-		} catch (InvalidQueryException e) {
-			logger.error("Failed while loading InspectionBook", e);
-		}
-
-		return book;
-	}
-
-	/**
-	 * @return A list of InspectionBooks for the given SecurityFilter
-	 */
-	public List<InspectionBook> findAvailableInspectionBooks(SecurityFilter filter, boolean withClosed) {
-		QueryBuilder<InspectionBook> qBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
-		qBuilder.setSimpleSelect("book", true);
-
-		if (!withClosed) {
-			qBuilder.addSimpleWhere("book.open", true);
-		}
-
-		List<InspectionBook> books;
-		try {
-			books = persistenceManager.findAll(qBuilder);
-		} catch (InvalidQueryException e) {
-			logger.error("Failed while loading InspectionBooks", e);
-			books = new ArrayList<InspectionBook>();
-		}
-
-		return books;
-	}
-
+	
+	
 	/**
 	 * ensure that all criteria are retired under a retired section.
 	 */

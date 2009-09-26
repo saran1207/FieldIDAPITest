@@ -7,6 +7,8 @@ import java.util.Set;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
+import static com.n4systems.model.builders.TenantBuilder.*;
+;
 
 public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 
@@ -15,7 +17,7 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 	private Tenant tenant;
 	
 	public static PrimaryOrgBuilder aPrimaryOrg() {
-		return new PrimaryOrgBuilder("first_primary_org", null, null, new HashSet<ExtendedFeature>());
+		return new PrimaryOrgBuilder("first_primary_org", null, aTenant().build(), new HashSet<ExtendedFeature>());
 	}
 	
 	public PrimaryOrgBuilder(String name, Long id, Tenant tenant, Set<ExtendedFeature> features) {

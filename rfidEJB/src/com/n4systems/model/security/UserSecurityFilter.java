@@ -36,9 +36,13 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 				// we check to see if this is user filtered first since you can't get more specific then a user filter
 				addFilterParameter(builder, definer.getUserPath(), filterUserId);
 				
-			} else if (definer.isOwnerFiltered() && !filterOrg.isPrimary()) {
+			} else if (definer.isOwnerFiltered()) {
 				// we don't need to add an owner filter for a PrimaryOrg since it's 1 to 1 with the tenant
-				addFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
+				if (filterOrg.isSecondary()) {
+					addEqualOrNullFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
+				} else if (filterOrg.isExternal()) {
+					addFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
+				}
 			}
 		}
 	}
@@ -80,9 +84,14 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 				// we check to see if this is user filtered first since you can't get more specific then a user filter
 				addFilterClause(clauses, definer.getUserPath(), alias, true);
 				
-			} else if (definer.isOwnerFiltered() && !filterOrg.isPrimary()) {
+			} else if (definer.isOwnerFiltered()) {
 				// we don't need to add an owner filter for a PrimaryOrg since it's 1 to 1 with the tenant
-				addFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, true);
+				if (filterOrg.isSecondary()) {
+					addEqualOrNullFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, true);
+				} else if (filterOrg.isExternal()) {
+					addFilterClause(clauses, prepareFullOwnerPath(definer, filterOrg), alias, true);
+				}
+				
 			}
 		}
 		

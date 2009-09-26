@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.tools.SillyPager;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -29,7 +30,7 @@ public class BaseOrgListLoaderTest  {
 	public void setUp() {
 		mockEM = createMock(EntityManager.class);
 		replay(mockEM);
-		mockTransaction = createMock(Transaction.class);
+		mockTransaction = createMock(FieldIdTransaction.class);
 		expect(mockTransaction.getEntityManager()).andReturn(mockEM);
 		replay(mockTransaction);
 	}

@@ -27,13 +27,14 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Status;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.DivisionOrgByCustomerListLoader;
@@ -187,9 +188,15 @@ public class InspectionImporter extends Importer {
 					String inspectionBookName = (String) inspectionMap.get(INSPECTION_BOOK);
 					if (inspectionBookName != null) {
 						try {
-							// look up inspection book by name and customer.
-							SecurityFilter filter = new OwnerFilter(endUser);
-							InspectionBook inspectionBook = inspectionManager.findInspectionBook(inspectionBookName, filter);
+							// TODO there should be a security filter created in the importer.
+							SecurityFilter filter = new OwnerAndDownFilter(primaryOrg);
+							
+							InspectionBookByNameLoader inspectionBookLoader = new InspectionBookByNameLoader(filter);
+							inspectionBookLoader.setName(inspectionBookName);
+							inspectionBookLoader.setOwner(endUser);
+							
+							InspectionBook inspectionBook = inspectionBookLoader.load();
+							
 							if (inspectionBook != null) {
 								inspection.setBook(inspectionBook);
 							}

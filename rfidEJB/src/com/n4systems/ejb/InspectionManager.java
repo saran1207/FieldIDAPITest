@@ -15,7 +15,6 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
@@ -30,7 +29,6 @@ import com.n4systems.webservice.dto.WSSearchCritiera;
 @Local
 public interface InspectionManager {
 
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long prouductId);
 
 	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId, String... postFetchFields);
 
@@ -77,12 +75,6 @@ public interface InspectionManager {
 	public Inspection retireInspection(Inspection inspection, Long userId);
 
 	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId);
-
-	public InspectionBook findInspectionBook(String name, SecurityFilter filter);
-
-	public InspectionBook findInspectionBookByLegacyId(Long id, SecurityFilter filter);
-
-	public List<InspectionBook> findAvailableInspectionBooks(SecurityFilter filter, boolean withClosed);
 
 	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId);
 

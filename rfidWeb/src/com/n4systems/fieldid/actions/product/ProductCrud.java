@@ -333,7 +333,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("unchecked")
 	public String doSave() {
 		testProduct();
 

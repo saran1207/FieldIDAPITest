@@ -1,7 +1,7 @@
 class AddPublishedToProduct < ActiveRecord::Migration
   
   def self.up
-    add_column(:products, :published, :boolean)
+   # add_column(:products, :published, :boolean)
     
     execute "UPDATE products SET published = false"
     

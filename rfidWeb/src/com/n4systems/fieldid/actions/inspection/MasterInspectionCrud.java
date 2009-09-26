@@ -70,7 +70,6 @@ public class MasterInspectionCrud extends AbstractCrud {
 		inspection = masterInspection.getInspection();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void createNewMasterInspection() {
 		masterInspection = new MasterInspection();
 		masterInspection.setInspection(new Inspection());
@@ -80,7 +79,6 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void loadMemberFields(Long uniqueId) {
 		masterInspection = (MasterInspection) getSession().get(SESSION_KEY);
 

@@ -165,7 +165,6 @@ private static final long serialVersionUID = 1L;
 		getSession().remove( AUTO_ATTRIBUTE_DEFINITION_QUICK_FILL_OUTPUTS );
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void setSavedInputs() {
 		getSession().put( AUTO_ATTRIBUTE_DEFINITION_QUICK_FILL_INPUTS, inputInfoOptions );
 		getSession().put( AUTO_ATTRIBUTE_DEFINITION_QUICK_FILL_OUTPUTS, outputInfoOptions );

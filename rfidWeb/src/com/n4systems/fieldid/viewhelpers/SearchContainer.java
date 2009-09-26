@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryFilter;
@@ -182,7 +182,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	
 	protected void addOwnerFilter(BaseOrg owner) {
 		if (owner != null) {
-			searchFilters.add(new OwnerFilter(owner));
+			searchFilters.add(new OwnerAndDownFilter(owner));
 		}
 	}
 }

@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -27,7 +27,7 @@ public class InspectionScheduleCountListLoader extends ListLoader<InspectionSche
 	@Override
 	protected List<InspectionScheduleCount> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<InspectionScheduleCount> builder = new QueryBuilder<InspectionScheduleCount>(InspectionSchedule.class, filter);
-		builder.applyFilter(new OwnerFilter(notification.getOwner()));
+		builder.applyFilter(new OwnerAndDownFilter(notification.getOwner()));
 		
 		// we have to set the alias here and prefix our select clause arguments, otherwise hibernate generates a bad query 
 		builder.setTableAlias("isc");

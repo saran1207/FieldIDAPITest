@@ -12,6 +12,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
+import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.FluentArrayList;
 
@@ -21,7 +22,7 @@ public class InspectionFrequenciesDeleteHandlerImplTest {
 	private Transaction mockTransaction; 
 	
 	private void mockTransaction() {
-		mockTransaction = createMock(Transaction.class);
+		mockTransaction = createMock(FieldIdTransaction.class);
 		mockTransaction.commit();
 		expectLastCall().once();
 		replay(mockTransaction);

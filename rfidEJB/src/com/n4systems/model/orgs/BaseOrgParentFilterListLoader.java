@@ -2,7 +2,7 @@ package com.n4systems.model.orgs;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListableLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,7 +22,7 @@ public class BaseOrgParentFilterListLoader extends ListableLoader {
 		gaurds();
 		
 		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(clazz, filter);
-		new OwnerFilter(parent).applyFilter(builder);
+		new OwnerAndDownFilter(parent).applyFilter(builder);
 		builder.setOrder("name");
 		
 		return builder;

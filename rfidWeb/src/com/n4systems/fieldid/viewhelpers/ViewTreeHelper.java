@@ -31,7 +31,7 @@ public class ViewTreeHelper {
 		// sort the users by customer and division, so the tree nodes are added in order
 		Collections.sort(users, new UserComparator());
 		
-		ViewTree<Long> treeRoot = new ViewTree<Long>(filter.getTenantId(), "hi");
+		ViewTree<Long> treeRoot = new ViewTree<Long>(filter.getTenantId(), filter.getOwner().getPrimaryOrg().getName());
 
 		// populate the tree
 		for (UserBean user: users) {

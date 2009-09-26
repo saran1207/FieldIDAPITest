@@ -41,7 +41,12 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 	}
 	
 	protected String prepareFullOwnerPath(SecurityDefiner definer, BaseOrg filterOrg) {
-		return (definer.getOwnerPath().length() > 0) ? definer.getOwnerPath() + '.' + filterOrg.getFilterPath() : filterOrg.getFilterPath();
+		String filterPath = filterOrg.getFilterPath();
+		return prepareFullOwnerPathWithFilterPath(definer, filterPath);
+	}
+
+	protected String prepareFullOwnerPathWithFilterPath(SecurityDefiner definer, String filterPath) {
+		return (definer.getOwnerPath().length() > 0) ? definer.getOwnerPath() + '.' + filterPath : filterPath;
 	}
 	
 	protected String prepareField(String field, String tableAlias) {
@@ -56,12 +61,24 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 		return FIELD_PREFIX;
 	}
 	
+	protected <T> void addEqualOrNullFilterParameter(QueryBuilder<?> builder, String field, T value) {
+		builder.addWhere(createFilterParameter(field, value, Comparator.EQ_OR_NULL));
+	}
+	
+	protected <T> void addNullFilterParameter(QueryBuilder<?> builder, String field) {
+		builder.addWhere(createFilterParameter(field, null, Comparator.EQ_OR_NULL));
+	}
+	
 	protected <T> void addFilterParameter(QueryBuilder<?> builder, String field, T value) {
 		builder.addWhere(createFilterParameter(field, value));
 	}
 	
 	protected <T> WhereParameter<T> createFilterParameter(String field, T id) {
-		return new WhereParameter<T>(Comparator.EQ, prepareFieldName(field), field, id, null, false);
+		return createFilterParameter(field, id, Comparator.EQ);
+	}
+	
+	protected <T> WhereParameter<T> createFilterParameter(String field, T id, Comparator comparator) {
+		return new WhereParameter<T>(comparator, prepareFieldName(field), field, id, null, false);
 	}
 	
 	protected void addFilterClause(StringBuilder query, String field, String alias, boolean prependAnd) {
@@ -72,6 +89,21 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 		query.append(prepareField(field, alias));
 		query.append(" = :");
 		query.append(prepareFieldName(field));
+	}
+	
+	protected void addEqualOrNullFilterClause(StringBuilder query, String field, String alias, boolean prependAnd) {
+		if (prependAnd) {
+			query.append(" AND ");
+		}
+		query.append("(");
+		
+		addFilterClause( query, field, alias, false);
+		
+		query.append(" OR ");
+		query.append(prepareField(field, alias));
+		query.append(" IS NULL");
+		query.append(")");
+		
 	}
 	
 	protected void setParameter(Query query, String field, Object value) {
@@ -98,5 +130,7 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 	public String produceWhereClause(Class<?> queryClass, String tableAlias) {
 		return produceWhereClause(tableAlias, getSecurityDefinerFromClass(queryClass));
 	}
+
+	
 
 }

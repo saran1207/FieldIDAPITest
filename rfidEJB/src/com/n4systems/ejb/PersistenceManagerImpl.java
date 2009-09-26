@@ -485,7 +485,6 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return postFetchFields(entity, Arrays.asList(postFetchFields));
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> T postFetchFields(T entity, List<String> postFetchFields) {
 		if (entity == null) {
 			return null;

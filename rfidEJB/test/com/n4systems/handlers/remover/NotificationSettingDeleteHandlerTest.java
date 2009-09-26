@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.FluentArrayList;
 
@@ -37,7 +38,7 @@ public class NotificationSettingDeleteHandlerTest {
 		expect(mockEntityManager.createQuery(find("^SELECT \\S*id FROM " + NotificationSetting.class.getName()))).andReturn(mockQuery);
 		replay(mockEntityManager);
 		
-		Transaction mockTransaction = createMock(Transaction.class);
+		Transaction mockTransaction = createMock(FieldIdTransaction.class);
 		expect(mockTransaction.getEntityManager()).andReturn(mockEntityManager);
 		replay(mockTransaction);
 		
@@ -73,7 +74,7 @@ public class NotificationSettingDeleteHandlerTest {
 		expect(mockEntityManager.createQuery(find("^DELETE FROM " + NotificationSetting.class.getName()))).andReturn(mockDeleteQuery);
 		replay(mockEntityManager);
 		
-		Transaction mockTransaction = createMock(Transaction.class);
+		Transaction mockTransaction = createMock(FieldIdTransaction.class);
 		expect(mockTransaction.getEntityManager()).andReturn(mockEntityManager);
 		expectLastCall().atLeastOnce();
 		replay(mockTransaction);

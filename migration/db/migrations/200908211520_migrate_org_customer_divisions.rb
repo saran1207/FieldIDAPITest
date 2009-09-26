@@ -13,7 +13,7 @@ class MigrateOrgCustomerDivisions < ActiveRecord::Migration
     add_column(:org_customer, :legacy_id, :integer)
     add_column(:org_division, :legacy_id, :integer)
     
-    now = Time.now
+
     
     Customer.find(:all).each do |customer|
       customerBase = BaseOrg.new

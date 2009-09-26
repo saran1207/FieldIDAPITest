@@ -1,17 +1,20 @@
 package com.n4systems.model.savedreports;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.OwnerFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class SharedReportUserListLoader extends ListLoader<UserBean> {
 
@@ -23,12 +26,29 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 
 	@Override
 	protected List<UserBean> load(EntityManager em, SecurityFilter filter) {
-		List<UserBean> users = new ArrayList<UserBean>();
+		Set<UserBean> users = new HashSet<UserBean>();
+		
 		users.addAll(getAllUsersBelowTheOwnerOnTheReport(em, filter));
+		
 		users.addAll(getAllUsersDirectlyAboveTheOwnerOnTheReport(em, filter));
-		return users;
+		
+		users.addAll(getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(em, filter));
+		return new ArrayList<UserBean>(users);
 	}
 
+
+	private List<UserBean> getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(EntityManager em, SecurityFilter filter) {
+		List<UserBean> users = new ArrayList<UserBean>();
+		if (getOwnerForReport(em, filter).getSecondaryOrg() == null) {
+			QueryBuilder<UserBean> query = new QueryBuilder<UserBean>(UserBean.class, filter);
+			
+			query.addWhere(Comparator.NOTNULL, "owner.secondaryOrg", "owner.secondaryOrg", -1);
+			query.addWhere(Comparator.NULL, "owner.customerOrg", "owner.customerOrg", -1);
+			users.addAll(query.getResultList(em));
+		}
+		
+		return users;
+	}
 
 	private List<UserBean> getAllUsersDirectlyAboveTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
 		List<UserBean> users = new ArrayList<UserBean>();
@@ -57,8 +77,8 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		return usersBelowOwnerQuery.getResultList(em);
 	}		
 
-	private OwnerFilter getOwnerFilterForReport(EntityManager em, SecurityFilter filter) {
-		return new OwnerFilter(getOwnerForReport(em, filter));
+	private OwnerAndDownFilter getOwnerFilterForReport(EntityManager em, SecurityFilter filter) {
+		return new OwnerAndDownFilter(getOwnerForReport(em, filter));
 	}
 
 	private BaseOrg getOwnerForReport(EntityManager em, SecurityFilter filter) {

@@ -112,7 +112,4 @@
     	<property name="jndiName" value="fieldid/PopulatorLogManager/local" />
     </bean>
     
-    <bean id="notificationSettingManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/NotificationSettingManagerImpl/local" />
-    </bean>
 </beans>

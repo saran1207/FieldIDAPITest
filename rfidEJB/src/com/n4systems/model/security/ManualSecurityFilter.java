@@ -56,7 +56,8 @@ public class ManualSecurityFilter implements QueryFilter {
 		}
 		
 		if(applyOwnerFilter()) {
-			whereClause.append(" AND " + ownerTarget + '.' + owner.getFilterPath() + " = :" + ownerParamName);
+			whereClause.append(" AND ");
+			applyOwnerWhereClause(whereClause);
 		}
 		
 		if (applyUserFilter()) {
@@ -64,6 +65,16 @@ public class ManualSecurityFilter implements QueryFilter {
 		}
 		
 		return whereClause.toString();
+	}
+
+	private void applyOwnerWhereClause(StringBuffer whereClause) {
+		String ownerPath = ownerTarget + '.' + owner.getFilterPath();
+		String ownerEqualsPassedInOwner = ownerPath + " = :" + ownerParamName;
+		if (owner.isSecondary()) {
+			whereClause.append("( " + ownerEqualsPassedInOwner + " OR " + ownerPath + " IS NULL )");
+		} else  {
+			whereClause.append(ownerEqualsPassedInOwner);
+		}
 	}
 	
 	public void applyParameters(Query query) {
@@ -90,7 +101,11 @@ public class ManualSecurityFilter implements QueryFilter {
 		}
 		
 		if(applyOwnerFilter()) {
-			builder.addWhere(getOwnerWhereParameter());
+			if (owner.isSecondary()) {
+				builder.addWhere(getSecondaryOrgOwnerWhereParameter());
+			} else  {
+				builder.addWhere(getOwnerWhereParameter());
+			}
 		}
 		
 		if (applyUserFilter()) {
@@ -124,6 +139,10 @@ public class ManualSecurityFilter implements QueryFilter {
 	
 	private WhereParameter<Long> getOwnerWhereParameter() {
 		return new WhereParameter<Long>(WhereParameter.Comparator.EQ, ownerParamName, ownerTarget + '.' + owner.getFilterPath(), owner.getId(), null, false);
+	}
+	
+	private WhereParameter<Long> getSecondaryOrgOwnerWhereParameter() {
+		return new WhereParameter<Long>(WhereParameter.Comparator.EQ_OR_NULL, ownerParamName, ownerTarget + '.' + owner.getFilterPath(), owner.getId(), null, false);
 	}
 	
 	private WhereParameter<EntityState> getStateWhereParameter() {

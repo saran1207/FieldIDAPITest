@@ -130,7 +130,7 @@ public class Permissions {
 	 * @return True iff one or more perms is set on user.
 	 */
 	public static boolean hasOneOf(UserBean user, int ... perms) {
-		return hasOneOf(user.getPermissions());
+		return hasOneOf(user.getPermissions(), perms);
 	}
 	
 	/**

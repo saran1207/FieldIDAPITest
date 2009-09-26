@@ -2,6 +2,7 @@ package com.n4systems.handlers;
 
 import static org.easymock.classextension.EasyMock.*;
 
+import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
 
 public abstract class TestUsesTransactionBase {
@@ -13,7 +14,7 @@ public abstract class TestUsesTransactionBase {
 	}
 
 	protected void mockTransaction() {
-		mockTransaction = createMock(Transaction.class);
+		mockTransaction = createMock(FieldIdTransaction.class);
 		replay(mockTransaction);
 	}
 

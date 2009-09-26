@@ -83,7 +83,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	
 	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
-		filter.setTargets("p.tenant.id", "schedule.owner", null, null);
+		filter.setTargets("p.tenant.id", "schedule.product.owner", null, null);
 		String countQueryStr = "SELECT count( schedule ) FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project and " + filter.produceWhereClause();
 		
 		if (statuses != null && !statuses.isEmpty()) {
@@ -101,7 +101,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	
 	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
-		filter.setTargets("p.tenant.id", "schedule.owner", null, null);
+		filter.setTargets("p.tenant.id", "schedule.product.owner", null, null);
 		String queryStr = "SELECT schedule FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {
 			queryStr += " AND schedule.status IN (:statuses) ";

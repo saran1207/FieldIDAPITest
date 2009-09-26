@@ -131,9 +131,7 @@ public class LoaderFactory {
 		return new InspectionFrequencyListLoader(filter);
 	}
 
-	public InspectionScheduleCountListLoader createInspectionScheduleCountListLoader() {
-		return new InspectionScheduleCountListLoader(filter);
-	}
+	
 
 	public InspectionTypeListableLoader createInspectionTypeListableLoader() {
 		return new InspectionTypeListableLoader(filter);

@@ -2,8 +2,6 @@ package com.n4systems.handlers.remover;
 
 import java.util.List;
 
-import javax.management.InstanceNotFoundException;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.remover.summary.InspectionFrequencyDeleteSummary;
 import com.n4systems.model.AssociatedInspectionType;

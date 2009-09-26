@@ -49,7 +49,7 @@ public class PersistenceManager {
 	}
 
 	public static Transaction startTransaction() {
-		return new Transaction(getEntityManager());
+		return new FieldIdTransaction(getEntityManager());
 	}
 	
 	public static void rollbackTransaction(Transaction transaction) {

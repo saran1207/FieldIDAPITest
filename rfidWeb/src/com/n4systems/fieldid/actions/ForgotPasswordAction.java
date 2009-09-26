@@ -52,7 +52,6 @@ public class ForgotPasswordAction extends LoginAction {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings(value = "unchecked")
 	public String doReset() {
 		UserBean user = userManager.findUserByResetKey(getSecurityGuard().getTenantName(), userName, loginKey);
 

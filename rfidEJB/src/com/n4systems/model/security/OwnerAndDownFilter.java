@@ -3,13 +3,14 @@ package com.n4systems.model.security;
 import javax.persistence.Query;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class OwnerFilter extends AbstractSecurityFilter {
+public class OwnerAndDownFilter extends AbstractSecurityFilter {
 
 	private final BaseOrg filterOrg;
 	
-	public OwnerFilter(BaseOrg filterOrg) {
+	public OwnerAndDownFilter(BaseOrg filterOrg) {
 		this.filterOrg = filterOrg;
 	}
 
@@ -28,8 +29,8 @@ public class OwnerFilter extends AbstractSecurityFilter {
 		}
 		
 		if (filterOrg.isPrimary()) {
-			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
-			addFilterParameter(builder, definer.getTenantPath(), getTenantId());
+			// make sure the secondary org is null so that entity is not under a secondary org.
+			addNullFilterParameter(builder, prepareFullOwnerPathWithFilterPath(definer, SecondaryOrg.SECONDARY_ID_FILTER_PATH));
 		} else {
 			addFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
 		}
@@ -46,10 +47,7 @@ public class OwnerFilter extends AbstractSecurityFilter {
 		}
 		
 		
-		if (filterOrg.isPrimary()) {
-			// if the org is Primary we'll add a filter for the Tenant rather then the PriaryOrg since their 1-to-1
-			setParameter(query, definer.getTenantPath(), getTenantId());
-		} else {
+		if (!filterOrg.isPrimary()) {
 			setParameter(query, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
 		}
 	}
