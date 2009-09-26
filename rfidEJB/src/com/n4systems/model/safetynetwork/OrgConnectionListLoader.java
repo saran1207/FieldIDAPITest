@@ -26,17 +26,7 @@ public class OrgConnectionListLoader extends ListLoader<OrgConnection> {
 
 	@Override
 	protected List<OrgConnection> load(EntityManager em, SecurityFilter filter) {
-		if (filter.getOwner() == null) {
-			throw new SecurityException("SecurityFilter owner must be set to use OrgConnectionListLoader");
-		}
-		
-		QueryBuilder<OrgConnection> builder = new QueryBuilder<OrgConnection>(OrgConnection.class);
-
-		if (connectionListType.isCustomer()) {
-			builder.addSimpleWhere("vendor.id", filter.getOwner().getId());
-		} else {
-			builder.addSimpleWhere("customer.id", filter.getOwner().getId());
-		}
+		QueryBuilder<OrgConnection> builder = OrgConnectionQueryBuilderFactory.getQueryBuilder(filter, connectionListType);
 
 		List<OrgConnection> connections = builder.getResultList(em);
 		return connections;

@@ -35,6 +35,7 @@ import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
+import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
@@ -215,5 +216,9 @@ public class LoaderFactory {
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
+	}
+	
+	public VendorOrgConnectionPaginatedLoader createVendorOrgConnectionPaginatedLoader() {
+		return new VendorOrgConnectionPaginatedLoader(filter);
 	}
 }

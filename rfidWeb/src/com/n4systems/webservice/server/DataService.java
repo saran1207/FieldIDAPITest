@@ -56,7 +56,6 @@ public interface DataService {
 	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerServiceDTO customerDTO) throws ServiceException;
 	public RequestResponse createUser(RequestInformation requestInformation, UserServiceDTO customerDTO) throws ServiceException;
 	
-	public InspectionListResponse getInspectionsForCustomerDivision(PaginatedRequestInformation requestInformation, List<Long> customerIds, List<Long> divisionIds) throws ServiceException;
 	public ProductListResponse getProducts(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException;
 	public ProductListResponse getProductsByJob(PaginatedRequestInformation requestInformation, WSJobSearchCriteria searchCriteria) throws ServiceException;
 	public InspectionListResponse getInspections(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException;
@@ -67,4 +66,5 @@ public interface DataService {
 	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;	
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
 	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
+	public InternalOrgListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException;
 }

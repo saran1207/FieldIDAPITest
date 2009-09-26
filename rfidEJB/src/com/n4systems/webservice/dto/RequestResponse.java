@@ -5,6 +5,10 @@ public class RequestResponse {
 	private ResponseStatus status;
 	private String message;
 
+	public RequestResponse() {
+		status = ResponseStatus.OK;
+	}
+	
 	public ResponseStatus getStatus() {
 		return status;
 	}

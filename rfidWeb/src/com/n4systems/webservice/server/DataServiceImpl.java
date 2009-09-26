@@ -53,6 +53,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -147,8 +149,6 @@ public class DataServiceImpl implements DataService {
 	public InspectionTypeListResponse getAllInspectionTypes(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
-		
 			InspectionTypeListResponse response = new InspectionTypeListResponse();
 			
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
@@ -168,7 +168,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			response.setCurrentPage(1);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages(1);
 			
@@ -182,7 +182,6 @@ public class DataServiceImpl implements DataService {
 	
 	public StateSetListResponse getAllStateSets(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			StateSetListResponse response = new StateSetListResponse();
 			
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
@@ -202,7 +201,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			response.setCurrentPage(1);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages(1);
 			
@@ -216,8 +215,6 @@ public class DataServiceImpl implements DataService {
 	
 	public InspectionBookListResponse getAllInspectionBooks(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
-			
 			InspectionBookListResponse response = new InspectionBookListResponse();
 			
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
@@ -235,7 +232,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			response.setCurrentPage(1);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages(1);
 			
@@ -249,8 +246,6 @@ public class DataServiceImpl implements DataService {
 
 	public ProductTypeListResponse getAllProductTypes(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
-	
 			ProductTypeListResponse response = new ProductTypeListResponse();
 	
 			LegacyProductType productTypeManager = ServiceLocator.getProductType();
@@ -263,7 +258,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			response.setCurrentPage(1);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages(1);
 			
@@ -276,8 +271,6 @@ public class DataServiceImpl implements DataService {
 	
 	public ProductTypeGroupListResponse getAllProductTypeGroups(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA).intValue();
-			
 			ProductTypeGroupListResponse response = new ProductTypeGroupListResponse();
 			
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
@@ -294,7 +287,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			response.setCurrentPage(1);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages(1);
 			
@@ -313,7 +306,6 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			
-			int jobsPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA);
 			int currentPage = request.getPageNumber().intValue();
 			
 			Date modified = converter.convertStringToDate(request.getModified());
@@ -333,7 +325,7 @@ public class DataServiceImpl implements DataService {
 			jobBuilder.addOrder("id");
 			
 			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				Pager<Project> jobPage = persistenceManager.findAllPaged(jobBuilder, currentPage, jobsPerPage);
+				Pager<Project> jobPage = persistenceManager.findAllPaged(jobBuilder, currentPage, getSetupDataPageSize());
 				response.setTotalPages((int)jobPage.getTotalPages());
 				
 				for (Project job : jobPage.getList()) {
@@ -343,7 +335,7 @@ public class DataServiceImpl implements DataService {
 				//response.setTotalPages(persistenceManager.countAllPages(Project.class, jobsPerPage, securityFilter));
 			}
 			
-			response.setRecordsPerPage(jobsPerPage);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			
 			return response;
@@ -363,7 +355,6 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			
-			int usersPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA);
 			int currentPage = request.getPageNumber().intValue();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
@@ -372,18 +363,18 @@ public class DataServiceImpl implements DataService {
 			userBuilder.addOrder("uniqueID");
 			
 			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				Pager<UserBean> userPage = persistenceManager.findAllPaged(userBuilder, currentPage, usersPerPage);
+				Pager<UserBean> userPage = persistenceManager.findAllPaged(userBuilder, currentPage, getSetupDataPageSize());
 				response.setTotalPages((int)userPage.getTotalPages());
 				
 				for(UserBean user: userPage.getList()) {
 					response.getUsers().add(converter.convert(user));
 				}
 			} else {
-				response.setTotalPages(persistenceManager.countAllPages(UserBean.class, usersPerPage, securityFilter));
+				response.setTotalPages(persistenceManager.countAllPages(UserBean.class, getSetupDataPageSize(), securityFilter));
 				response.setCurrentPage(currentPage);
 			}
 			
-			response.setRecordsPerPage(usersPerPage);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			
 			logger.info("Returning Users: Tenant [" + request.getTenantId() + 
@@ -406,7 +397,6 @@ public class DataServiceImpl implements DataService {
 	
 	public AutoAttributeCriteriaListResponse getAutoAttributeCriteria(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			int currentPage = paginatedRequestInformation.getPageNumber().intValue();
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
@@ -418,7 +408,7 @@ public class DataServiceImpl implements DataService {
 			// this is so postgres can paginate correctly.
 			queryBuilder.addOrder("id");
 			
-			Pager<AutoAttributeCriteria> pager = persistenceManager.findAllPaged(queryBuilder, currentPage, RESULTS_PER_PAGE);
+			Pager<AutoAttributeCriteria> pager = persistenceManager.findAllPaged(queryBuilder, currentPage, getSetupDataPageSize());
 			
 			AutoAttributeCriteriaListResponse response = new AutoAttributeCriteriaListResponse();
 			
@@ -427,7 +417,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			response.setCurrentPage(currentPage);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages( (int)pager.getTotalPages() );
 			
@@ -441,7 +431,6 @@ public class DataServiceImpl implements DataService {
 	
 	public AutoAttributeDefinitionListResponse getAutoAttributeDefinition(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			int currentPage = paginatedRequestInformation.getPageNumber().intValue();
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
@@ -454,7 +443,7 @@ public class DataServiceImpl implements DataService {
 			// for postgres to paginate correctly.
 			queryBuilder.addOrder("id");
 			
-			Pager<AutoAttributeDefinition> pager = persistenceManager.findAllPaged(queryBuilder, currentPage, RESULTS_PER_PAGE);
+			Pager<AutoAttributeDefinition> pager = persistenceManager.findAllPaged(queryBuilder, currentPage, getSetupDataPageSize());
 			
 			AutoAttributeDefinitionListResponse response = new AutoAttributeDefinitionListResponse();
 			
@@ -463,7 +452,7 @@ public class DataServiceImpl implements DataService {
 			}
 						
 			response.setCurrentPage(currentPage);
-			response.setRecordsPerPage(RESULTS_PER_PAGE);
+			response.setRecordsPerPage(getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			response.setTotalPages( (int)pager.getTotalPages() );
 			
@@ -477,18 +466,17 @@ public class DataServiceImpl implements DataService {
 	
 	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			int currentPage = requestInformation.getPageNumber().intValue();			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 									
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			CustomerOrgPaginatedLoader loader = loaderFactory.createCustomerOrgPaginatedLoader();
-			loader.setPageSize(RESULTS_PER_PAGE);
+			loader.setPageSize(getSetupDataPageSize());
 			loader.setPage(currentPage);
 			
 			Pager<CustomerOrg> pager = loader.load();
 			
-			CustomerOrgListResponse response = new CustomerOrgListResponse(pager, RESULTS_PER_PAGE);
+			CustomerOrgListResponse response = new CustomerOrgListResponse(pager, getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			
 			for (CustomerOrg customerOrg : pager.getList()) {
@@ -504,18 +492,17 @@ public class DataServiceImpl implements DataService {
 	
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			int currentPage = requestInformation.getPageNumber().intValue();			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 									
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			DivisionOrgPaginatedLoader loader = loaderFactory.createDivisionOrgPaginatedLoader();
-			loader.setPageSize(RESULTS_PER_PAGE);
+			loader.setPageSize(getSetupDataPageSize());
 			loader.setPage(currentPage);
 			
 			Pager<DivisionOrg> pager = loader.load();
 			
-			DivisionOrgListResponse response = new DivisionOrgListResponse(pager, RESULTS_PER_PAGE);
+			DivisionOrgListResponse response = new DivisionOrgListResponse(pager, getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 
 			for (DivisionOrg divisionOrg : pager.getList()) {
@@ -529,20 +516,43 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
+	public InternalOrgListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException {
+		try {
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			VendorOrgConnectionPaginatedLoader connectionLoader = loaderFactory.createVendorOrgConnectionPaginatedLoader();
+			connectionLoader.setPageSize(getSetupDataPageSize());
+			connectionLoader.setPage(requestInformation.getPageNumber().intValue());
+			
+			Pager<OrgConnection> pager = connectionLoader.load();
+			
+			InternalOrgListResponse response = new InternalOrgListResponse(pager, getSetupDataPageSize());
+			
+			for (OrgConnection orgConnection : pager.getList()) {
+				response.getInternalOrgs().add( converter.convert(orgConnection.getVendor()) );
+			}
+			
+			return response;
+		} catch (Exception e) {
+			logger.error("Exception occured while looking up vendors", e);
+			throw new ServiceException();			
+		}
+	}
+	
 	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation)	throws ServiceException {
 		try {
-			int RESULTS_PER_PAGE = ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
 			int currentPage = requestInformation.getPageNumber().intValue();			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 									
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			SecondaryOrgPaginatedLoader secondaryLoader = loaderFactory.createSecondaryOrgPaginatedLoader();
-			secondaryLoader.setPageSize(RESULTS_PER_PAGE);
+			secondaryLoader.setPageSize(getSetupDataPageSize());
 			secondaryLoader.setPage(currentPage);
 			
 			Pager<SecondaryOrg> pager = secondaryLoader.load();
 			
-			InternalOrgListResponse response = new InternalOrgListResponse(pager, RESULTS_PER_PAGE);
+			InternalOrgListResponse response = new InternalOrgListResponse(pager, getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 
 			for (InternalOrg internalOrg : pager.getList()) {
@@ -943,18 +953,6 @@ public class DataServiceImpl implements DataService {
 		return product;
 	}
 	
-	/**
-	 * Deprecated in version 1.20; remove in version after
-	 */
-	@Deprecated 
-	public InspectionListResponse getInspectionsForCustomerDivision(PaginatedRequestInformation requestInformation, List<Long> customerIds, List<Long> divisionIds) throws ServiceException {
-		WSSearchCritiera searchCriteria = new WSSearchCritiera();
-		searchCriteria.setCustomerIds(customerIds);
-		searchCriteria.setDivisionIds(divisionIds);
-		
-		return getInspections(requestInformation, searchCriteria);
-	}
-	
 	public InspectionListResponse getInspections(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException {
 		try {
 			logger.info("Finding Inspections: Tenant [" + requestInformation.getTenantId() + "] Page [" + requestInformation.getPageNumber() + "]");
@@ -1195,4 +1193,8 @@ public class DataServiceImpl implements DataService {
 		return mobileUpdateInfo;
 	}
 
+	private int getSetupDataPageSize() {
+		return ConfigContext.getCurrentContext().getInteger( ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA ).intValue();
+	}
+	
 }
