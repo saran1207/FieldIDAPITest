@@ -110,7 +110,7 @@
 	<hr/>
 	<#if !signUp.signUpPackage.free>
 		<div class="infoSection">
-			<h2><@s.text name="label.payment_options"/></h2>
+			<h2><@s.text name="label.users_and_options"/></h2>
 			<div class="infoBlock ">
 				<div class="infoSet">
 					<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
