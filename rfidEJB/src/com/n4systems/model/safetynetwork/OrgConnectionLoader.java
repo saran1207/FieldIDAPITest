@@ -31,7 +31,7 @@ public class OrgConnectionLoader extends SecurityFilteredLoader<OrgConnection> {
 		
 		QueryBuilder<OrgConnection> builder = new QueryBuilder<OrgConnection>(OrgConnection.class);
 
-		if (connectionListType == OrgConnectionType.CUSTOMER) {
+		if (connectionListType.isCustomer()) {
 			builder.addSimpleWhere("vendor.id", filter.getOwner().getId());
 			builder.addSimpleWhere("customer.id", linkedOrgId);
 		} else {

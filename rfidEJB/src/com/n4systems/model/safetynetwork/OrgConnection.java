@@ -45,4 +45,12 @@ public class OrgConnection extends AbstractEntity implements UnsecuredEntity {
 	public void setCustomer(InternalOrg customer) {
 		this.customer = customer;
 	}
+	
+	public InternalOrg getByConnectionType(OrgConnectionType type) {
+		if (type.isCustomer()) {
+			return getCustomer();
+		} else {
+			return getVendor();
+		}
+	}
 }

@@ -448,5 +448,9 @@
 		<action name="orgList" method="show" class="com.n4systems.fieldid.actions.orgs.OrgListAction" >
 			<result name="success" type="freemarker">/templates/ajax/orgList/show.ftl</result>
 		</action>
+		
+		<action name="safetyNetworkSmartSearch" method="find" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkSmartSearchAction" >
+			<result name="success" type="freemarker">/templates/ajax/safetyNetworkSmartSearch/find.ftl</result>
+		</action>
 	</package>
 </struts>

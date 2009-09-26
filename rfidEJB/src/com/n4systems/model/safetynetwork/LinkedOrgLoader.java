@@ -20,13 +20,14 @@ public class LinkedOrgLoader extends SecurityFilteredLoader<InternalOrg> {
 
 	@Override
 	protected InternalOrg load(EntityManager em, SecurityFilter filter) {
-		OrgConnection connection = connectionLoader.load();
+		OrgConnection connection = connectionLoader.load(em, filter);
 		
 		if (connection == null) {
 			throw new SecurityException(String.format("%s Connection does not exist from [%d] to [%d]", connectionLoader.getConnectionType(), filter.getOwner().getId(), connectionLoader.getLinkedOrgId()));
 		}
 		
-		return (connectionLoader.getConnectionType() == OrgConnectionType.CUSTOMER) ? connection.getCustomer() : connection.getVendor();
+		InternalOrg org = connection.getByConnectionType(connectionLoader.getConnectionType());
+		return org;
 	}
 
 	public LinkedOrgLoader setLinkedOrgId(Long linkedOrgId) {

@@ -26,6 +26,7 @@ import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
+import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -315,14 +316,14 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		navOptions = new NavOptionsController(getSessionUser(), getSecurityGuard(), pageType, currentAction);
 	}
 	
-	protected LoaderFactory getLoaderFactory() {
+	public LoaderFactory getLoaderFactory() {
 		if (loaderFactory == null) {
 			loaderFactory = new LoaderFactory(getSecurityFilter());
 		}
 		return loaderFactory;
 	}
 	
-	protected NonSecureLoaderFactory getNonSecureLoaderFactory() {
+	public NonSecureLoaderFactory getNonSecureLoaderFactory() {
 		if (nonSecureLoaderFactory == null) {
 			nonSecureLoaderFactory = new NonSecureLoaderFactory();
 		}
@@ -405,5 +406,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		}
 		
 		return createHandlerFactory;
+	}
+	
+	public Long idOrNull(BaseEntity entity) {
+		return (entity != null) ? entity.getId() : null; 
 	}
 }

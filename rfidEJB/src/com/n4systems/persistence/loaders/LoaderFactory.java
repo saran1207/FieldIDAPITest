@@ -28,9 +28,11 @@ import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoade
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
 import com.n4systems.model.producttype.ProductTypeScheduleLoader;
+import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
@@ -81,18 +83,22 @@ public class LoaderFactory {
 		return new CurrentEulaLoader();
 	}
 
+	public CustomerLinkedOrgListLoader createCustomerLinkedOrgListLoader() {
+		return new CustomerLinkedOrgListLoader(filter);
+	}
+	
 	public CustomerLinkedOrgLoader createCustomerLinkedOrgLoader() {
 		return new CustomerLinkedOrgLoader(filter);
 	}
-	
+
 	public CustomerOrgConnectionLoader createCustomerOrgConnectionLoader() {
 		return new CustomerOrgConnectionLoader(filter);
 	}
-
+	
 	public CustomerOrgConnectionsListLoader createCustomerOrgConnectionsListLoader() {
 		return new CustomerOrgConnectionsListLoader(filter);
 	}
-	
+
 	public CustomerOrgPaginatedLoader createCustomerOrgPaginatedLoader() {
 		return new CustomerOrgPaginatedLoader(filter);
 	}
@@ -116,7 +122,7 @@ public class LoaderFactory {
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
 		return new FilteredListableLoader(filter, clazz);
 	}
-
+	
 	public InspectionBookListLoader createInspectionBookListLoader() {
 		return new InspectionBookListLoader(filter);
 	}
@@ -124,7 +130,7 @@ public class LoaderFactory {
 	public InspectionFrequencyListLoader createInspectionFrequenciesListLoader() {
 		return new InspectionFrequencyListLoader(filter);
 	}
-	
+
 	public InspectionScheduleCountListLoader createInspectionScheduleCountListLoader() {
 		return new InspectionScheduleCountListLoader(filter);
 	}
@@ -156,7 +162,7 @@ public class LoaderFactory {
 	public ProductSerialExtensionListLoader createProductSerialExtensionListLoader() {
 		return new ProductSerialExtensionListLoader(filter);
 	}
-
+	
 	public ProductStatusFilteredLoader createProductStatusFilteredLoader() {
 		return new ProductStatusFilteredLoader(filter);
 	}
@@ -197,6 +203,10 @@ public class LoaderFactory {
 		return new UserListableLoader(filter);
 	}
 	
+	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
+		return new VendorLinkedOrgListLoader(filter);
+	}
+	
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
@@ -208,5 +218,4 @@ public class LoaderFactory {
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}
-	
 }

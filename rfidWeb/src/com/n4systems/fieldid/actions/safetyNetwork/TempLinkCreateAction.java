@@ -107,16 +107,14 @@ public class TempLinkCreateAction extends AbstractAction {
 
 	public List<OrgConnection> getVendorConnections() {
 		if (vendorConnections == null) {
-			// note that we set the setCustomerTenantId here.  If I'm the customer, then this connection represents my vendor
-			vendorConnections = getNonSecureLoaderFactory().createOrgConnectionByTenantListLoader().setCustomerTenantId(getTenantId()).load();
+			vendorConnections = getLoaderFactory().createVendorOrgConnectionsListLoader().load();
 		}
 		return vendorConnections;
 	}
 
 	public List<OrgConnection> getCustomerConnections() {
 		if (customerConnections == null) {
-			// note that we set the setVendorTenantId here.  If I'm the vendor, then this connection represents my customer
-			customerConnections = getNonSecureLoaderFactory().createOrgConnectionByTenantListLoader().setVendorTenantId(getTenantId()).load();
+			customerConnections = getLoaderFactory().createCustomerOrgConnectionsListLoader().load();
 		}
 		return customerConnections;
 	}

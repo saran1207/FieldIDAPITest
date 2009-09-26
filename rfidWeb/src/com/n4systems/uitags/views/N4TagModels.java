@@ -15,6 +15,7 @@ public class N4TagModels {
     private IncludeScriptModel includeScript;
     private IncludeStyleModel includeStyle;
     private OrgPickerModel orgPicker;
+    private SafetyNetworkSmartSearchModel safetyNetworkSmartSearch;
     
     public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         this.stack = stack;
@@ -52,4 +53,11 @@ public class N4TagModels {
     	return orgPicker;
     }
 
+    public SafetyNetworkSmartSearchModel getSafetyNetworkSmartSearch() {
+    	if (safetyNetworkSmartSearch == null) {
+    		safetyNetworkSmartSearch = new SafetyNetworkSmartSearchModel(stack, req, res);
+    	}
+    	return safetyNetworkSmartSearch;
+    }
+    
 }

@@ -86,7 +86,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private String search;
 	private String identified;
 	private LineItem lineItem;
-
+	private Product linkedProduct;
 	private OwnerPicker ownerPicker;
 
 	/**
@@ -963,5 +963,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	public String getPublishedStateLabel() {
 		return PublishedState.resolvePublishedState(product.isPublished()).getPastTenseLabel();
+	}
+
+	public Long getLinkedProduct() {
+		return idOrNull(linkedProduct);
+	}
+
+	public void setLinkedProduct(Long linkedProduct) {
+//		this.linkedProduct = linkedProduct;
 	}
 }

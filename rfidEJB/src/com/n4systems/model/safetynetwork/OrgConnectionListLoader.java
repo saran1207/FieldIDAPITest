@@ -17,11 +17,8 @@ import com.n4systems.util.persistence.QueryBuilder;
  * @see CustomerOrgConnectionsListLoader
  */
 public class OrgConnectionListLoader extends ListLoader<OrgConnection> {
-	protected static final boolean CUSTOMER_LIST = true;
-	protected static final boolean VENDOR_LIST = false; 
-	
 	private final OrgConnectionType connectionListType;
-	
+
 	public OrgConnectionListLoader(SecurityFilter filter, OrgConnectionType connectionListType) {
 		super(filter);
 		this.connectionListType = connectionListType;
@@ -35,7 +32,7 @@ public class OrgConnectionListLoader extends ListLoader<OrgConnection> {
 		
 		QueryBuilder<OrgConnection> builder = new QueryBuilder<OrgConnection>(OrgConnection.class);
 
-		if (connectionListType == OrgConnectionType.CUSTOMER) {
+		if (connectionListType.isCustomer()) {
 			builder.addSimpleWhere("vendor.id", filter.getOwner().getId());
 		} else {
 			builder.addSimpleWhere("customer.id", filter.getOwner().getId());
@@ -43,6 +40,10 @@ public class OrgConnectionListLoader extends ListLoader<OrgConnection> {
 
 		List<OrgConnection> connections = builder.getResultList(em);
 		return connections;
+	}
+	
+	public OrgConnectionType getConnectionListType() {
+		return connectionListType;
 	}
 	
 }
