@@ -2,10 +2,9 @@ package com.n4systems.model.security;
 
 import static com.n4systems.model.builders.CustomerOrgBuilder.*;
 import static com.n4systems.model.builders.DivisionOrgBuilder.*;
+import static com.n4systems.model.builders.SecondaryOrgBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.junit.Assert.*;
-import static com.n4systems.model.builders.SecondaryOrgBuilder.*;
-
 
 import org.junit.Test;
 
@@ -13,6 +12,7 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 
@@ -96,7 +96,8 @@ public class UserSecurityFilterTest {
 		
 		assertEquals(user.getTenant().getId(), queryBuilder.getWhereParameterValue("filter_tenant_id"));
 		assertEquals(user.getOwner().getId(), queryBuilder.getWhereParameterValue("filter_owner_secondaryOrg_id"));
-		assertEquals(Comparator.EQ_OR_NULL, queryBuilder.getWhereParameter("filter_owner_secondaryOrg_id").getComparator());
+		
+		assertEquals(Comparator.EQ_OR_NULL, ((WhereParameter<?>)queryBuilder.getWhereParameter("filter_owner_secondaryOrg_id")).getComparator());
 	}
 	
 	
