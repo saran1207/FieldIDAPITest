@@ -344,82 +344,16 @@ public class ReportFactoryImpl implements ReportFactory {
 	 */
 	private JasperPrint generateInspectionCertificate(InspectionReportType type, Inspection inspection, UserBean user) throws NonPrintableEventType, ReportException {
 		JasperPrint jPrint = null;
-		switch (type) {
-		case INSPECTION_CERT:
-			if (inspection.getType().getGroup().getPrintOut().isWithSubInspections()) {
-				jPrint = generateInspectionFullCertificate(inspection, user);
-			} else {
-				jPrint = generateInspectionCertificate(inspection, user);
-			}
-
-			break;
-		case OBSERVATION_CERT:
-			jPrint = generateObservationCertificate(inspection, user);
-			break;
-		default:
-			throw new ReportException("Unsupported Report Type: " + type.name());
+		
+		if (inspection.getType().getGroup().getPrintOut().isWithSubInspections()) {
+			jPrint = generateInspectionFullCertificate(inspection, user);
+		} else {
+			jPrint = generateInspectionCertificate(inspection, user);
 		}
 		return jPrint;
 	}
 
-	/*
-	 * XXX - generateInspectionCertificate, generateInspectionCertificate and
-	 * generateInspectionSummaryReport should be extracted further. Too much
-	 * duplicate code - mf
-	 */
-
-	/**
-	 * Generates a JasperPrint object for an Observation report.
-	 * 
-	 * @param inspection
-	 *            The Inspection object to create the report for.
-	 * @param dateFormat
-	 *            A String date format to be used in the report
-	 * @return A jasper print object for the generated report
-	 * @throws ReportException
-	 *             On any problem generating the report.
-	 */
-	private JasperPrint generateObservationCertificate(Inspection inspection, UserBean user) throws NonPrintableEventType, ReportException {
-		if (!inspection.getType().getGroup().hasObservationPrintOut()) {
-			throw new NonPrintableEventType();
-		}
-		// observation reports are always printable
-		File jasperFile = PathHandler.getPrintOutFile(inspection.getType().getGroup().getObservationPrintOut());
-
-		// check to see if the report exists
-		if (!jasperFile.canRead()) {
-			throw new ReportException("No report file for tenant [" + inspection.getTenant().getName() + "] and Inspection Type Group [" + inspection.getType().getGroup().getName() + "] found at ["
-					+ jasperFile.getAbsolutePath() + "]");
-		}
-		ReportMap<Object> reportMap = new ReportMap<Object>();
-
-		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-
-		// images come from the inspectors organization
-		addImageStreams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
-		addOrganizationParams(reportMap, inspection.getInspector().getOwner().getInternalOrg());
-		
-		addTenantParams(reportMap, inspection.getOwner().getPrimaryOrg());
-		addUserParams(reportMap, inspection.getInspector());
-		reportMap.putAll(new ProductReportMapProducer(inspection.getProduct(), new DateTimeDefiner(user)).produceMap());
-		addOrderParams(reportMap, inspection.getProduct().getShopOrder());
-		addProductTypeParams(reportMap, inspection.getProduct().getType());
-//		addCustomerParams(reportMap, inspection.getCustomer());
-//		addDivisionParams(reportMap, inspection.getDivision());
-		reportMap.putAll(new InspectionReportMapProducer(inspection, new DateTimeDefiner(user)).produceMap());
-
-		JasperPrint jasperPrint = null;
-		try {
-
-			JRDataSource jrDataSource = (JRDataSource) new InspectionReportMapProducer(inspection, new DateTimeDefiner(user)).produceMap().get("observations");
-			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
-			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
-		} catch (Exception e) {
-			throw new ReportException("Failed to generate report", e);
-		}
-
-		return jasperPrint;
-	}
+	
 
 	private JasperPrint generateInspectionFullCertificate(Inspection inspection, UserBean user) throws NonPrintableEventType, ReportException {
 		// If the inspection is not printable, stop immediately
