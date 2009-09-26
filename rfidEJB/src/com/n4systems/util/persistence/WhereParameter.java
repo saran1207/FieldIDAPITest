@@ -5,7 +5,7 @@ import javax.persistence.Query;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.util.BitField;
 
-public class WhereParameter<T> implements ClauseArgument {
+public class WhereParameter<T> implements WhereClause<T> {
 	private static final long serialVersionUID = 1L;
 	private static final String WILDCARD_CHAR = "%";
 	public static final int WILDCARD_LEFT = (1 << 0);
@@ -42,8 +42,8 @@ public class WhereParameter<T> implements ClauseArgument {
 	private String name;
 	private String param;
 	private T value;
-	private Comparator comparator;
-	boolean chainAnd = true;
+	private Comparator comparator = Comparator.EQ;
+	private ChainOp chainOp = ChainOp.AND;
 	private int options = 0;
 	private boolean dropAlias = false;
 	
@@ -72,11 +72,19 @@ public class WhereParameter<T> implements ClauseArgument {
 	}
 	
 	public WhereParameter(Comparator comparator, String name, String param, T value, Integer options, boolean dropAlias) {
+		this(comparator, name, param, value, options, dropAlias, null);
+	}
+	
+	public WhereParameter(Comparator comparator, String name, String param, T value, Integer options, boolean dropAlias, ChainOp chainOp) {
 		this.comparator = comparator;
 		this.name = name;
 		this.param = param;
 		this.value = value;
 		this.dropAlias = dropAlias;
+		
+		if (chainOp != null) {
+			this.chainOp = chainOp;
+		}
 		
 		if(options != null) {
 			this.options = options;
@@ -84,7 +92,8 @@ public class WhereParameter<T> implements ClauseArgument {
 	}
 	
 	public String getName() {
-		return name;
+		// if name is null, use the param name (or null)
+		return (name != null) ? name : (param != null) ? param.replace('.', '_') : null;
 	}
 	
 	public void setName(String name) {
@@ -115,20 +124,12 @@ public class WhereParameter<T> implements ClauseArgument {
 		return comparator;
 	}
 	
-	public boolean isChainAnd() {
-		return chainAnd;
-	}
-
-	public void setChainAnd(boolean chainAnd) {
-		this.chainAnd = chainAnd;
+	public ChainOp getChainOperator() {
+		return chainOp;
 	}
 	
-	public String getChainOperator() {
-		String oper = "AND";
-		if(!chainAnd) {
-			oper = "OR";
-		}
-		return oper;
+	public void setChainOperator(ChainOp chainOp) {
+		this.chainOp = chainOp;
 	}
 	
 	public int getOptions() {

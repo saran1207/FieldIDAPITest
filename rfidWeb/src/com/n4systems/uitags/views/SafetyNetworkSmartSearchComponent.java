@@ -23,7 +23,7 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 
 	protected AbstractAction getAction() {
 		// find the first instance of AbsatractAction 
-		// (probably the first element but there's not guarantee)
+		// (probably the first element but there's no guarantee)
 		AbstractAction action = null;
 		for (Object stackItem: getStack().getRoot()) {
 			if (stackItem instanceof AbstractAction) {

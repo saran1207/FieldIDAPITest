@@ -22,7 +22,7 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 		product.setId(12345L);
 		product.setSerialNumber("00239284FF");
 		product.setRfidNumber("A9FF2GA9FF2G3BC8D23BC8D2");
-//		product.setOwner();
+//		product.setOwner(); 
 		
 		
 		return SUCCESS;

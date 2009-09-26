@@ -72,7 +72,7 @@ public class QueryBuilder<E> {
 	private SelectClause selectArgument;
 	private FromTable fromArgument;
 	private Set<JoinClause> joinArguments = new LinkedHashSet<JoinClause>();
-	private Map<String, WhereParameter<?>> whereParameters = new HashMap<String, WhereParameter<?>>();
+	private Map<String, WhereClause<?>> whereParameters = new HashMap<String, WhereClause<?>>();
 	private Set<GroupByClause> groupByArguments = new LinkedHashSet<GroupByClause>();
 	private Set<OrderClause> orderArguments = new LinkedHashSet<OrderClause>();
 	private List<String> postFetchPaths = new ArrayList<String>();
@@ -264,7 +264,7 @@ public class QueryBuilder<E> {
 	 * @return The {@link Map} of where parameters.
 	 */
 
-	public Map<String, WhereParameter<?>> getWhereParameters() {
+	public Map<String, WhereClause<?>> getWhereParameters() {
 		return whereParameters;
 	}
 
@@ -282,6 +282,7 @@ public class QueryBuilder<E> {
 	 * 
 	 * @return			This {@link QueryBuilder}
 	 */
+	/* XXX: These should be removed and classes should use the WhereClauseFactory instead.  I'd depreacte it but then there'd be a bazillion deprecation warnings :( */
 	public <T> QueryBuilder<E> addSimpleWhere(String param, T value) {
 		/*
 		 * note that .'s are replaced with _'s for the parameter name.  This is to handle cases for sub, object lookups (eg/ book.id )
@@ -292,11 +293,12 @@ public class QueryBuilder<E> {
 		return addWhere(WhereParameter.Comparator.EQ, param.replace('.', '_'), param, value);
 	}
 	
-	public <T> QueryBuilder<E> addWhere(WhereParameter<T> where) {
+	public <T> QueryBuilder<E> addWhere(WhereClause<T> where) {
 		whereParameters.put(where.getName(), where);
 		return this;
 	}
 	
+	/* XXX: These should be removed and classes should use the WhereClauseFactory instead.  I'd depreacte it but then there'd be a bazillion deprecation warnings :( */
 	public <T> QueryBuilder<E> addWhere(Comparator comparator, String name, String param, T value, Integer options) {
 		// we don't want to add the clause if the value is a null (use an ISNULL comparator for that)
 		if(value != null) {
@@ -309,14 +311,15 @@ public class QueryBuilder<E> {
 			}
 		}
 		return this;
-	}	
+	}
 	
+	/* XXX: These should be removed and classes should use the WhereClauseFactory instead.  I'd depreacte it but then there'd be a bazillion deprecation warnings :( */
 	public <T> QueryBuilder<E> addWhere(Comparator comparator, String name, String param, T value) {
 		addWhere(comparator, name, param, value, null);
 		return this;
 	}
 
-	public WhereParameter<?> getWhereParameter(String name) {
+	public WhereClause<?> getWhereParameter(String name) {
 		return whereParameters.get(name);
 	}
 	
@@ -474,7 +477,7 @@ public class QueryBuilder<E> {
 			clauseString += "WHERE ";
 			
 			boolean firstWhere = true;
-			for (WhereParameter<?> whereClause: whereParameters.values()) {
+			for (WhereClause<?> whereClause: whereParameters.values()) {
 				if(firstWhere) {
 					firstWhere = false;
 				} else {
@@ -518,7 +521,7 @@ public class QueryBuilder<E> {
 	}
 	
 	private QueryBuilder<E> bindParams(Query query) throws InvalidQueryException {
-		for(WhereParameter<?> whereClause: whereParameters.values()) {
+		for(WhereClause<?> whereClause: whereParameters.values()) {
 			whereClause.bind(query);
 		}
 		return this;
