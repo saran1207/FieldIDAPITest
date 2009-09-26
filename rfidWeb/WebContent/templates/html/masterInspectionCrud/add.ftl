@@ -31,7 +31,13 @@
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"  />';
 		removeSubProductUrl = "<@s.url action="removeSubProduct" namespace="/ajax"/>";
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
-		checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';	
+		checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';
+		
+		function removeSubProduct( subProductId ) {
+			var url = removeSubProductUrl + "?subProductId=" + subProductId + "&uniqueID=" + ${product.id};
+			
+			getResponse( url, "post" );
+		}	
 	</script>
 </head>
 ${action.setPageType('inspection', 'add')!}

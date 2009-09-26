@@ -286,7 +286,7 @@ public class Identify extends TestCase {
 	 * 'Add with Order' and 'Add', should have the same page header.
 	 * @throws Exception
 	 */
-	private void checkIdentifyProductPageContentHeader() throws Exception {
+	public void checkIdentifyProductPageContentHeader() throws Exception {
 		HtmlElement identifyProductContentHeader = ie.htmlElement(identifyProductContentHeaderFinder);
 		assertTrue("Could not find Identify Product page content header '" + p.getProperty("identifyproductcontentheader") + "'", identifyProductContentHeader.exists());
 	}

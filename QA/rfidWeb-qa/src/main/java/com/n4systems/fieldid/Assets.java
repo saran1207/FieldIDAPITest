@@ -1638,6 +1638,7 @@ public class Assets extends TestCase {
 		Frame lightbox = ie.frame(id("lightviewContent"));
 		Link l = lightbox.link(printPDFReportFromViewLastInspectionFinder);
 		assertNotNull("Could not find the 'PDF Report' from the view last inspection lightbox", l);
+		misc.waitForJavascript();
 		l.click();
 		IE report = ie.childBrowser();
 		helperNewWindowPDFCheck(report);
@@ -1725,7 +1726,7 @@ public class Assets extends TestCase {
 		assertTrue("Could not find the Delete button on Removal Details page", delete.exists());
 		delete.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		identify.checkAddProductPageContentHeader();
+		identify.checkIdentifyProductPageContentHeader();
 	}
 	
 	private Links helperGetSubProductLinks() throws Exception {
@@ -1904,6 +1905,7 @@ public class Assets extends TestCase {
 			setProductSearchCriteria(prop);
 			gotoProductSearchResults();
 			serialNumbers = getProductSearchResultsSerialNumbers(column);
+			serialNumber = serialNumbers.get(0);
 			gotoProductInformationViaInfoLink(serialNumber);
 			List<String> subs = getSubProducts();
 			gotoSubProduct(subs.get(0));					// goto first sub-product

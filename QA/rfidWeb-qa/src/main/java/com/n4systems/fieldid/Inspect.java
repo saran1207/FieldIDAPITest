@@ -15,6 +15,8 @@ import com.n4systems.fieldid.datatypes.Inspection;
 
 import watij.elements.Button;
 import watij.elements.Checkbox;
+import watij.elements.Div;
+import watij.elements.Divs;
 import watij.elements.HtmlElement;
 import watij.elements.Label;
 import watij.elements.Link;
@@ -67,6 +69,7 @@ public class Inspect extends TestCase {
 	private Finder editOnManageInspectionsLinkFinder;
 	private Finder saveStandardInspectionFinder;
 	private Finder inspectionDetailsHeaderFinder;
+	private Finder subComponentsOnMasterInspectionFinder;
 	
 	public Inspect(IE ie) {
 		this.ie = ie;
@@ -76,6 +79,7 @@ public class Inspect extends TestCase {
 			p.load(in);
 			misc = new FieldIDMisc(ie);
 			inspectionDetailsHeaderFinder = xpath(p.getProperty("inspectiondetailsheader"));
+			subComponentsOnMasterInspectionFinder = xpath(p.getProperty("subcomponentsonmasterinspection"));
 			saveStandardInspectionFinder = xpath(p.getProperty("saveinspection"));
 			editOnManageInspectionsLinkFinder = xpath(p.getProperty("editonmanageinspectionslinks"));
 			saveEditStandardInspectionFinder = xpath(p.getProperty("saveeditinspection"));
@@ -428,5 +432,30 @@ public class Inspect extends TestCase {
 		Span attribValue = attributeLabel.span(xpath("../SPAN"));
 		result = attribValue.text().trim();
 		return result;
+	}
+
+	public void deleteSubProductDuringMasterInspection(String subProductType, String label) throws Exception {
+		assertNotNull(subProductType);
+		assertNotNull("If there is label, set the label parameter to \"\"", label);
+		Divs subComponents = ie.divs(subComponentsOnMasterInspectionFinder);
+		assertNotNull("Could not find the list of sub components during a master inspection", subComponents);
+		Iterator<Div> i = subComponents.iterator();
+		while(i.hasNext()) {
+			Div subComponent = i.next();
+			Div pt = subComponent.div(xpath("DIV[@class='productType']"));
+			String prodType = pt.text().trim();
+			Div spl = subComponent.div(xpath("DIV[@class='subProductLabel']"));
+			String subProdLabel;
+			if(spl.exists()) {
+				subProdLabel = spl.text().trim();
+			} else {
+				subProdLabel = "";
+			}
+			if(prodType.equals(subProductType) && subProdLabel.equals(label)) {
+				Link remove = subComponent.link(xpath("../DIV[@class='subProductActions']/DIV[contains(@class,'removeSubProduct')]/A"));
+				remove.click();
+				return;
+			}
+		}
 	}
 }

@@ -139,6 +139,21 @@ public class FieldIDMisc extends TestCase {
 		return null;
 	}
 
+	/*
+	 * There are startMonitorStatus and stopMonitorStatus methods. The
+	 * startMonitorStatus will check the status bar of IE once a second.
+	 * If the status bar does not change after a period of time (max)
+	 * we assume IE is hung and send a refresh signal. If the period of
+	 * time gets reset, i.e. the status bar changes, we record the reset.
+	 * If the page appears to be hung, we refresh the page and reset the
+	 * counter.
+	 */
+	static long refreshes = 1;
+	static long resets = 1;
+	static final int TIMEOUT = 180;	// number of seconds before Watij times out 
+	private static final int dialogCheck = 5;	// number of times to loop checking for a dialog
+	public static boolean running = false;
+	
 	/**
 	 * For various reasons, e.g. transparent PNGs cause pages to occasionally
 	 * fail to load in Internet Explorer, you need to run this method once the
@@ -340,8 +355,7 @@ public class FieldIDMisc extends TestCase {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					Thread.sleep(1000);
-					Wnd w = Wnd.findWindow("#32770");
+					Wnd w = getWindowHandle();
 					IEPromptDialog confirm = new IEPromptDialog(w, ie);
 					confirm.ok();
 				} catch (Exception e) {
@@ -385,6 +399,82 @@ public class FieldIDMisc extends TestCase {
 	
 	public void killThreadToConstantlyMonitorForModalDialogs() throws Exception {
 		FieldIDMisc.enabled = false;
+	}
+	
+	/**
+	 * Checks to see if a modal dialog has been opened.
+	 * Will return true if the dialog exists. Otherwise
+	 * returns false. Does not close the dialog.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean isDialog() throws Exception {
+		boolean result = false;
+		try {
+			Wnd w = getWindowHandle();
+			IEPromptDialog confirm = new IEPromptDialog(w, ie);
+			result = confirm.exists();
+			confirm.text();
+		} catch (Exception e) {
+		}
+		return result;
+	}
+	
+	public Wnd getWindowHandle() throws Exception {
+		int n = 0;
+		Wnd w = null;
+		while(dialogCheck > n++ && w == null) {
+			Thread.sleep(1000);
+			w = Wnd.findWindow("#32770");
+		}
+		return w;
+	}
+	
+	/**
+	 * Gets the text in the body of a modal dialog.
+	 * Does not close the dialog.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getDialogText() throws Exception {
+		String result = null;
+		try {
+			Wnd w = getWindowHandle();
+			IEPromptDialog confirm = new IEPromptDialog(w, ie);
+			result = confirm.text();
+		} catch (Exception e) {
+		}
+		return result;
+	}
+	
+	/**
+	 * Clicks the OK button on a modal dialog.
+	 * 
+	 * @throws Exception
+	 */
+	public void okDialog() throws Exception {
+		try {
+			Wnd w = getWindowHandle();
+			IEPromptDialog confirm = new IEPromptDialog(w, ie);
+			confirm.ok();
+		} catch (Exception e) {
+		}
+	}
+	
+	/**
+	 * Clicks the Cancel button on a modal dialog.
+	 * 
+	 * @throws Exception
+	 */
+	public void cancelDialog() throws Exception {
+		try {
+			Wnd w = getWindowHandle();
+			IEPromptDialog confirm = new IEPromptDialog(w, ie);
+			confirm.cancel();
+		} catch (Exception e) {
+		}
 	}
 	
 	/**
