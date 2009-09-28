@@ -10,4 +10,8 @@ public enum OrgConnectionType {
 	public boolean isVendor() {
 		return !(this == VENDOR);
 	}
+	
+	public OrgConnectionType getOppositeType() {
+		return (this == CUSTOMER) ? VENDOR : CUSTOMER;
+	}
 }

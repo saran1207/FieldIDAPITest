@@ -102,6 +102,9 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private Product linkedProduct;
 
+    @Column(name="countstowardslimit", nullable=false)
+    private boolean countsTowardsLimit = true;
+    
 	public Product() {
 		this.identified = new PlainDate();
 	}
@@ -404,5 +407,13 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 	public boolean isLinked() {
 		return (linkedProduct != null);
+	}
+
+	public boolean isCountsTowardsLimit() {
+		return countsTowardsLimit;
+	}
+
+	public void setCountsTowardsLimit(boolean countsTowardsLimit) {
+		this.countsTowardsLimit = countsTowardsLimit;
 	}
 }

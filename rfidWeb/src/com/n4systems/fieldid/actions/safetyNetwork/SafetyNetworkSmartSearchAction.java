@@ -11,6 +11,7 @@ import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 
 public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(SafetyNetworkSmartSearchAction.class);
 	
 	private Long vendorId;
 	private String searchText;
@@ -34,7 +35,7 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 				return "foundone";
 			}
 		} catch(RuntimeException e) {
-			Logger.getLogger(SafetyNetworkSmartSearchAction.class).error("Failed loading linked product", e);
+			logger.error("Failed loading linked product", e);
 		}
 		
 		return "notfound";

@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgCountLoader;
-import com.n4systems.model.product.ProductCountLoader;
+import com.n4systems.model.product.ProductLimitCountLoader;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.EmployeeUserCountLoader;
 import com.n4systems.persistence.PersistenceManager;
@@ -31,7 +31,7 @@ public class TenantLimitService implements Serializable {
 	private final Map<Long, ResourceLimit> assets = new ConcurrentHashMap<Long, ResourceLimit>();
 	private final Map<Long, ResourceLimit> secondaryOrgs = new ConcurrentHashMap<Long, ResourceLimit>();
 	
-	private final ProductCountLoader productCountLoader = new ProductCountLoader();
+	private final ProductLimitCountLoader productCountLoader = new ProductLimitCountLoader();
 	private final EmployeeUserCountLoader employeeCountLoader = new EmployeeUserCountLoader();
 	private final SecondaryOrgCountLoader secondaryOrgCountLoader = new SecondaryOrgCountLoader();
 	

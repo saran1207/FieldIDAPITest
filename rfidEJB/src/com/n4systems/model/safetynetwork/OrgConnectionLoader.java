@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
-import com.n4systems.util.persistence.QueryBuilder;
 
 /**
  * Abstract loader containing the logic for securely loading a single customer or vendor OrgConnection.
@@ -16,30 +15,16 @@ import com.n4systems.util.persistence.QueryBuilder;
  */
 public class OrgConnectionLoader extends SecurityFilteredLoader<OrgConnection> {
 	private Long linkedOrgId;
-	private final OrgConnectionType connectionListType;
+	private final OrgConnectionType connectionType;
 	
 	public OrgConnectionLoader(SecurityFilter filter, OrgConnectionType connectionListType) {
 		super(filter);
-		this.connectionListType = connectionListType;
+		this.connectionType = connectionListType;
 	}
 
 	@Override
 	protected OrgConnection load(EntityManager em, SecurityFilter filter) {
-		if (filter.getOwner() == null) {
-			throw new SecurityException("SecurityFilter owner must be set to use OrgConnectionLoader");
-		}
-		
-		QueryBuilder<OrgConnection> builder = new QueryBuilder<OrgConnection>(OrgConnection.class);
-
-		if (connectionListType.isCustomer()) {
-			builder.addSimpleWhere("vendor.id", filter.getOwner().getId());
-			builder.addSimpleWhere("customer.id", linkedOrgId);
-		} else {
-			builder.addSimpleWhere("customer.id", filter.getOwner().getId());
-			builder.addSimpleWhere("vendor.id", linkedOrgId);
-		}
-
-		OrgConnection connection = builder.getSingleResult(em);
+		OrgConnection connection = OrgConnectionQueryBuilderFactory.createSingleQuery(filter, connectionType, linkedOrgId).getSingleResult(em);
 		return connection;
 	}
 	
@@ -53,6 +38,6 @@ public class OrgConnectionLoader extends SecurityFilteredLoader<OrgConnection> {
 	}
 	
 	public OrgConnectionType getConnectionType() {
-		return connectionListType;
+		return connectionType;
 	}
 }

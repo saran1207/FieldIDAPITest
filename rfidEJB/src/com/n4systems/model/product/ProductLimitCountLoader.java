@@ -11,22 +11,24 @@ import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.services.limiters.LimitLoader;
 import com.n4systems.services.limiters.LimitType;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 
-public class ProductCountLoader extends Loader<Long> implements LimitLoader {
+public class ProductLimitCountLoader extends Loader<Long> implements LimitLoader {
 	private Long tenantId;
 	
-	public ProductCountLoader() {}
+	public ProductLimitCountLoader() {}
 
 	@Override
 	protected Long load(EntityManager em) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, filter);
+		builder.addWhere(WhereClauseFactory.create("countsTowardsLimit", true));
 		
 		Long productCount = builder.getCount(em);
 		return productCount;
 	}
 
-	public ProductCountLoader setTenantId(Long tenantId) {
+	public ProductLimitCountLoader setTenantId(Long tenantId) {
 		this.tenantId = tenantId;
 		return this;
 	}
