@@ -272,8 +272,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 	
 	public Product create(Product product) throws SubProductUniquenessException {
-		linkProductOverTheSafetyNetwork(product);
-
 		runProductSavePreRecs(product);
 		Product savedProduct = persistenceManager.update(product, product.getIdentifiedBy());
 		saveSubProducts(product);
@@ -288,13 +286,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			persistenceManager.update(subProduct);
 		}
 		
-	}
-	
-	private void linkProductOverTheSafetyNetwork(Product product) {
-		String linkedId = safetyNetworkManager.findProductLink(product.getRfidNumber(), product.getOwner());
-		if (linkedId != null) {
-			product.setLinkedUuid(linkedId);
-		}
 	}
 
 	private void runProductSavePreRecs(Product product) throws SubProductUniquenessException {

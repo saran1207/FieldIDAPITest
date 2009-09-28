@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.components.UIBean;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.model.Product;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.util.ValueStack;
 
@@ -34,8 +36,8 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		return action;
 	}
 	
-	protected VendorOrgConnectionsListLoader getVendorListLoader() {
-		return getAction().getLoaderFactory().createVendorOrgConnectionsListLoader();
+	protected LoaderFactory getLoaderFactory() {
+		return getAction().getLoaderFactory();
 	}
 	
 	protected Long getTenantId() {
@@ -51,11 +53,31 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 	public void evaluateParams() {
 		super.evaluateParams();
 
+		Long linkedProductId  = null;
+		try {
+			linkedProductId = Long.valueOf((String)getParameters().get("nameValue"));
+		} catch(NumberFormatException e) {}
+		
+		boolean editMode = false;
+		if (linkedProductId != null) {
+			Product linkedProduct = loadLinkedProduct(linkedProductId);
+			
+			if (linkedProduct != null) {
+				editMode = true;
+				addParameter("linkedProduct_Id", linkedProduct.getId());
+				addParameter("linkedProduct_SerialNumber", linkedProduct.getSerialNumber());
+				addParameter("linkedProduct_RfidNumber", linkedProduct.getRfidNumber());
+				addParameter("linkedProduct_OwnerName", linkedProduct.getOwner().getDisplayName());
+				addParameter("linkedProduct_TypeName", linkedProduct.getType().getDisplayName());
+			}
+		}
+		
+		addParameter("linkedProduct_editMode", editMode);
 		addParameter("vendorList", getVendorList());
 	}
 
 	public List<ListingPair> getVendorList() {
-		VendorOrgConnectionsListLoader loader = getVendorListLoader();
+		VendorOrgConnectionsListLoader loader = getLoaderFactory().createVendorOrgConnectionsListLoader();
 		
 		List<ListingPair> vendors = new ArrayList<ListingPair>();
 		for (OrgConnection vendorConnection: loader.load()) {
@@ -63,5 +85,9 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		}
 		
 		return vendors;
+	}
+	
+	public Product loadLinkedProduct(Long linkedProductId) {
+		return getLoaderFactory().createSafetyNetworkProductLoader().setProductId(linkedProductId).load();
 	}
 }

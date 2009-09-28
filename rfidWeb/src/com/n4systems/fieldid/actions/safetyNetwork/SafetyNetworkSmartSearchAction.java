@@ -1,12 +1,17 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
+import java.util.List;
+
+import org.jboss.logging.Logger;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Product;
+import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 
 public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-
+	
 	private Long vendorId;
 	private String searchText;
 	private Product product;
@@ -16,16 +21,23 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	}
 
 	public String doFind() {
+		SafetyNetworkSmartSearchLoader smartSearchLoader = getLoaderFactory().createSafetyNetworkSmartSearchLoader();
+		smartSearchLoader.setVendorOrgId(vendorId);
+		smartSearchLoader.setSearchText(searchText);
 		
+		try {
+			List<Product> products = smartSearchLoader.load();
+			
+			// TODO: need to support multiple products
+			if (!products.isEmpty()) {
+				product = products.get(0);
+				return "foundone";
+			}
+		} catch(RuntimeException e) {
+			Logger.getLogger(SafetyNetworkSmartSearchAction.class).error("Failed loading linked product", e);
+		}
 		
-		product = new Product();
-		product.setId(12345L);
-		product.setSerialNumber("00239284FF");
-		product.setRfidNumber("A9FF2GA9FF2G3BC8D23BC8D2");
-//		product.setOwner(); 
-		
-		
-		return SUCCESS;
+		return "notfound";
 	}
 	
 	public Long getVendorId() {

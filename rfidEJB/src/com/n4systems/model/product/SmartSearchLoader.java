@@ -13,16 +13,15 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 
-public class SmartSearchListLoader extends ListLoader<Product> {
+public class SmartSearchLoader extends ListLoader<Product> {
 
 	private String searchText;
 	
-	public SmartSearchListLoader(SecurityFilter filter) {
+	public SmartSearchLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
-	@Override
-	protected List<Product> load(EntityManager em, SecurityFilter filter) {
+	protected QueryBuilder<Product> createQuery(SecurityFilter filter) {
 		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, filter);
 		
 		WhereParameterGroup whereGroup = new WhereParameterGroup("search_group");
@@ -33,12 +32,17 @@ public class SmartSearchListLoader extends ListLoader<Product> {
 		
 		builder.addWhere(whereGroup);
 		builder.addOrder("created");
-				
-		List<Product> products = builder.getResultList(em);
+		
+		return builder;
+	}
+	
+	@Override
+	public List<Product> load(EntityManager em, SecurityFilter filter) {
+		List<Product> products = createQuery(filter).getResultList(em);
 		return products;
 	}
 
-	public SmartSearchListLoader setSearchText(String searchText) {
+	public SmartSearchLoader setSearchText(String searchText) {
 		this.searchText = searchText;
 		return this;
 	}

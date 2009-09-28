@@ -1,0 +1,31 @@
+#linkedProductContainer {
+	margin: 10px 0px 0px 0px;
+}
+
+#linkedProductContainer div {
+	margin: 0px 0px 0px 10px;
+}
+
+#linkedProductContainer .leftColumn {
+	width: 300px;
+}
+
+#linkedProductContainer .rightColumn {
+}
+
+#registerOverNetworkLinkContainer {
+	margin: 10px 0px 0px 10px;
+}
+
+#networkSmartSearchContainer {
+	margin: 10px 0px 0px 10px;
+}
+
+.productInfoTitle {
+	margin: 10px 0px;
+}
+
+#unregisterSubmit {
+	margin: 0px 0px 15px 20px;
+	display: block;
+}

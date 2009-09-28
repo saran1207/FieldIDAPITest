@@ -1,8 +1,8 @@
 package rfid.ejb.session;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
-import static com.n4systems.model.builders.TenantBuilder.aTenant;
-import static org.easymock.EasyMock.expect;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
+import static com.n4systems.model.builders.TenantBuilder.*;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 
 import java.text.ParseException;
@@ -47,8 +47,8 @@ import com.n4systems.test.helpers.EJBTestCase;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
-import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
+import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 
 
@@ -110,8 +110,6 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		
 		Date createDate = new Date( 1000000L );
 		Date modifyDate = new Date( 2000000L );
-		String uuid = "thisistheuuid";
-		String linkedUuid = "thisisthelinkeduuid";
 		Date lastInspectionDate = new Date( 300000L );
 		productServiceDTO.setSerialNumber("serialTest12311123123");
 		
@@ -135,8 +133,6 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		product.setId( 1L );
 		product.setCreated(createDate);
 		product.setModified(modifyDate);
-		product.setUuid( uuid );
-		product.setLinkedUuid( linkedUuid );
 		product.setLastInspectionDate( lastInspectionDate );
 		product.setShopOrder( shopOrder );
 		product.setCustomerOrder( customerOrder );
@@ -155,8 +151,6 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		assertEquals( new Long( 1L ) ,product.getId() );
 		assertEquals( createDate ,product.getCreated());
 		assertEquals( modifyDate,product.getModified());
-		assertEquals( uuid,product.getUuid() );
-		assertEquals( linkedUuid,product.getLinkedUuid() );
 		assertEquals( lastInspectionDate,product.getLastInspectionDate() );
 		assertEquals( shopOrder, product.getShopOrder() );
 		assertEquals( customerOrder,product.getCustomerOrder() );

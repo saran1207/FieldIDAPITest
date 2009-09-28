@@ -47,7 +47,7 @@ public class DummyEntityManager implements EntityManager {
 	public void flush() {}
 	
 	public Object getDelegate() {
-		return null;
+		return this;
 	}
 	
 	public FlushModeType getFlushMode() {
@@ -59,11 +59,11 @@ public class DummyEntityManager implements EntityManager {
 	}
 	
 	public EntityTransaction getTransaction() {
-		return null;
+		return new DummyEntityTransaction();
 	}
 	
 	public boolean isOpen() {
-		return false;
+		return true;
 	}
 	
 	public void joinTransaction() {}

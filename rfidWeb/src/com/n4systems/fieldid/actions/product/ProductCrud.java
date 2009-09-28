@@ -28,7 +28,6 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProjectManager;
-import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
@@ -86,7 +85,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private String search;
 	private String identified;
 	private LineItem lineItem;
-	private Product linkedProduct;
 	private OwnerPicker ownerPicker;
 
 	/**
@@ -103,7 +101,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	// viewextras
 	private AllInspectionHelper allInspectionHelper;
-	private List<Product> linkedProducts;
 	private List<Project> projects;
 
 	private Product parentProduct;
@@ -121,7 +118,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private LegacyProductType productTypeManager;
 	private LegacyProductSerial legacyProductSerialManager;
 	private User userManager;
-	private SafetyNetworkManager safetyNetworkManager;
 
 	private ProductCodeMapping productCodeMappingManager;
 	private InspectionScheduleManager inspectionScheduleManager;
@@ -134,13 +130,12 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
-			User userManager, SafetyNetworkManager safetyNetworkManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
+			User userManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
 			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 		this.legacyProductSerialManager = legacyProductSerialManager;
 		this.userManager = userManager;
-		this.safetyNetworkManager = safetyNetworkManager;
 		this.productCodeMappingManager = productCodeMappingManager;
 		this.productManager = productManager;
 		this.orderManager = orderManager;
@@ -358,10 +353,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 				uniqueID = product.getId();
 				addFlashMessageText("message.productcreated");
-				if (product.isLinkedToManufacturer()) {
-					addFlashMessageText("message.linkedproduct");
-				}
-
 			} else {
 				// on edit, we need to know if the product type has changed
 				ProductType oldType = productTypeManager.findProductTypeForProduct(product.getId());
@@ -749,13 +740,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.saveAndSchedule = saveAndSchedule;
 	}
 
-	public List<Product> getLinkedProducts() {
-		if (linkedProducts == null) {
-			linkedProducts = safetyNetworkManager.findLinkedProducts(product);
-		}
-		return linkedProducts;
-	}
-
 	public String getSearch() {
 		return search;
 	}
@@ -965,10 +949,14 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	public Long getLinkedProduct() {
-		return idOrNull(linkedProduct);
+		return (product.getLinkedProduct() != null) ? product.getLinkedProduct().getId() : null;
 	}
 
-	public void setLinkedProduct(Long linkedProduct) {
-//		this.linkedProduct = linkedProduct;
+	public void setLinkedProduct(Long id) {
+		if (id == null) {
+			product.setLinkedProduct(null);
+		} else if (product.getLinkedProduct() == null || !product.getLinkedProduct().getId().equals(id)) {
+			product.setLinkedProduct(getLoaderFactory().createSafetyNetworkProductLoader().setProductId(id).load());
+		}
 	}
 }

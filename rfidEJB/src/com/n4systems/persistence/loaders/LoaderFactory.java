@@ -21,6 +21,7 @@ import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
+import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.productstatus.ProductStatusListLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
@@ -32,11 +33,13 @@ import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
-import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
@@ -133,8 +136,6 @@ public class LoaderFactory {
 		return new InspectionFrequencyListLoader(filter);
 	}
 
-	
-
 	public InspectionTypeListableLoader createInspectionTypeListableLoader() {
 		return new InspectionTypeListableLoader(filter);
 	}
@@ -183,6 +184,10 @@ public class LoaderFactory {
 		return new ProductTypeScheduleLoader(filter);
 	}
 	
+	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
+		return new SafetyNetworkSmartSearchLoader(filter);
+	}
+	
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
 		return new SecondaryOrgByNameLoader(filter);
 	}
@@ -193,6 +198,10 @@ public class LoaderFactory {
 	
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
+	}
+	
+	public SmartSearchLoader createSmartSearchListLoader() {
+		return new SmartSearchLoader(filter);
 	}
 	
 	public TaskConfigLoader createTaskConfigLoader() {
@@ -221,6 +230,10 @@ public class LoaderFactory {
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
+	}
+	
+	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
+		return new SafetyNetworkProductLoader(filter);
 	}
 	
 	public VendorOrgConnectionPaginatedLoader createVendorOrgConnectionPaginatedLoader() {

@@ -153,14 +153,14 @@ public class WhereParameter<T> implements WhereClause<T> {
 			case EQ_OR_NULL:
 				// prepare the value when options have been set
 				if(options > 0) {
-					query.setParameter(name, prepareStringValue());
+					query.setParameter(getName(), prepareStringValue());
 				} else {
-					query.setParameter(name, value);
+					query.setParameter(getName(), value);
 				}
 				break;
 			case IN:
 			case NOTIN:
-				query.setParameter(name, value);
+				query.setParameter(getName(), value);
 				break;
 			
 			default:
@@ -184,14 +184,14 @@ public class WhereParameter<T> implements WhereClause<T> {
 			case LE:
 			case LIKE:
 			case NOTLIKE:
-				comparison += " :" + name;
+				comparison += " :" + getName();
 				break;
 			case IN:
 			case NOTIN:
-				comparison += "( :" + name + " ) ";
+				comparison += "( :" + getName() + " ) ";
 				break;
 			case EQ_OR_NULL:
-				comparison += " :" + name + " OR " + prepareParam(table) + " " + Comparator.NULL.getOperator();
+				comparison += " :" + getName() + " OR " + prepareParam(table) + " " + Comparator.NULL.getOperator();
 			default:
 				//null and empty ops have no right side
 				break;

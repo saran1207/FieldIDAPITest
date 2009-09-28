@@ -30,6 +30,13 @@ public class OrgConnection extends AbstractEntity implements UnsecuredEntity {
 	@JoinColumn(name="customer_id", nullable=false)	
 	private BaseOrg customer;
 
+	public OrgConnection() {}
+	
+	public OrgConnection(InternalOrg vendor, InternalOrg customer) {
+		this.vendor = vendor;
+		this.customer = customer;
+	}
+	
 	public InternalOrg getVendor() {
 		return (InternalOrg)vendor;
 	}

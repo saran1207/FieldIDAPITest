@@ -111,6 +111,12 @@ public class ProductManagerImpl implements ProductManager {
 		Product product =  findProduct(id, filter, "infoOptions", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects");
 		product = fillInSubProductsOnProduct(product);
 		
+		// load linked products all the way up the chain
+		Product linkedProduct = product.getLinkedProduct(); 
+		while (linkedProduct != null) {
+			linkedProduct = linkedProduct.getLinkedProduct();
+		}
+		
 		return product;
 	}
 

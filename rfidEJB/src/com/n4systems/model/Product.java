@@ -51,9 +51,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 	@Column(length=2047)
 	private String comments;
-	
-	private String uuid;
-	private String linkedUuid;
 	private String mobileGUID;
 	
 	@Column(nullable=false)
@@ -101,6 +98,10 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     @Column(name="published", nullable=false)
     private boolean published = false;
     
+    @JoinColumn(name = "linked_id", nullable = true)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    private Product linkedProduct;
+
 	public Product() {
 		this.identified = new PlainDate();
 	}
@@ -308,40 +309,10 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return null;
 	}
 
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getLinkedUuid() {
-		return linkedUuid;
-	}
-
-	public void setLinkedUuid(String linkedUuid) {
-		this.linkedUuid = linkedUuid;
-	}
-	/**
-	 * Determines if this product is linked to a product on a manufacturer account
-	 * @return
-	 */
-	public boolean isLinkedToManufacturer() {
-		return ( linkedUuid != null );
-	}
-	
-	/**
-	 * determines if there is a possible link to this product from an inspector tenant.
-	 * @return
-	 */
-	public boolean hasPossibleInspectorProductLinked() {
-		return ( uuid != null );
-	}
-
 	public PlainDate getIdentified() {
 		return (identified != null) ? new PlainDate(identified) : null;
 	}
+	
 	public void setIdentified(PlainDate identified) {
 		this.identified = identified;
 	}
@@ -423,4 +394,15 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.published = published;
 	}
 
+	public Product getLinkedProduct() {
+		return linkedProduct;
+	}
+
+	public void setLinkedProduct(Product linkedProduct) {
+		this.linkedProduct = linkedProduct;
+	}
+	
+	public boolean isLinked() {
+		return (linkedProduct != null);
+	}
 }
