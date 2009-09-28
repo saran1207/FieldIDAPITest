@@ -54,7 +54,7 @@ import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
-import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
+import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -101,6 +101,7 @@ import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
 import com.n4systems.webservice.dto.UserListResponse;
 import com.n4systems.webservice.dto.UserServiceDTO;
+import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 import com.n4systems.webservice.dto.AuthenticationRequest.LoginType;
@@ -516,21 +517,21 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
-	public InternalOrgListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException {
+	public VendorListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
-			VendorOrgConnectionPaginatedLoader connectionLoader = loaderFactory.createVendorOrgConnectionPaginatedLoader();
+			TenantWideVendorOrgConnPaginatedLoader connectionLoader = loaderFactory.createTenantWideVendorOrgConnPaginatedLoader();
 			connectionLoader.setPageSize(getSetupDataPageSize());
-			connectionLoader.setPage(requestInformation.getPageNumber().intValue());
+			connectionLoader.setPage(requestInformation.getPageNumber().intValue());			
 			
 			Pager<OrgConnection> pager = connectionLoader.load();
 			
-			InternalOrgListResponse response = new InternalOrgListResponse(pager, getSetupDataPageSize());
+			VendorListResponse response = new VendorListResponse(pager, getSetupDataPageSize());
 			
 			for (OrgConnection orgConnection : pager.getList()) {
-				response.getInternalOrgs().add( converter.convert(orgConnection.getVendor()) );
+				response.getVendors().add( converter.convert(orgConnection) );
 			}
 			
 			return response;

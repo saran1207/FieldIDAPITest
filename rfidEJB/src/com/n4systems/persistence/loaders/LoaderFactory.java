@@ -35,11 +35,11 @@ import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
+import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
-import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
@@ -232,11 +232,12 @@ public class LoaderFactory {
 		return new VendorOrgConnectionsListLoader(filter);
 	}
 	
+	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
+		return new TenantWideVendorOrgConnPaginatedLoader(filter);
+	}
+
 	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
 		return new SafetyNetworkProductLoader(filter);
 	}
 	
-	public VendorOrgConnectionPaginatedLoader createVendorOrgConnectionPaginatedLoader() {
-		return new VendorOrgConnectionPaginatedLoader(filter);
-	}
 }

@@ -25,6 +25,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
@@ -38,6 +39,7 @@ import com.n4systems.webservice.dto.ProductTypeServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
+import com.n4systems.webservice.dto.VendorServiceDTO;
 
 import fieldid.web.services.dto.ProductStatusServiceDTO;
 
@@ -69,4 +71,5 @@ public interface ServiceDTOBeanConverter {
 	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg);
 	public DivisionOrgServiceDTO convert(DivisionOrg divisionOrg);
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg);
+	public VendorServiceDTO convert(OrgConnection orgConnections);
 }

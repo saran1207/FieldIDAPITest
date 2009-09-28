@@ -62,6 +62,7 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.FindOwnerByLegacyIds;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -100,6 +101,7 @@ import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
+import com.n4systems.webservice.dto.VendorServiceDTO;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
@@ -961,6 +963,17 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private void populate(BaseOrg baseOrg, AbstractExternalOrgServiceDTO baseOrgDto) {
 		populate(baseOrg, (AbstractBaseOrgServiceDTO)baseOrgDto);
 		baseOrgDto.setParentId(baseOrg.getParent().getId());
+	}
+
+	public VendorServiceDTO convert(OrgConnection orgConnection) {
+		InternalOrg vendor = orgConnection.getVendor();
+		
+		VendorServiceDTO vendorDTO = new VendorServiceDTO();
+		vendorDTO.setId(vendor.getId());
+		vendorDTO.setName(vendor.getName());
+		vendorDTO.setOwnerId(orgConnection.getCustomer().getId());
+		
+		return vendorDTO;
 	}
 
 }

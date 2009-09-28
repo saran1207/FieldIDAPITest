@@ -30,6 +30,7 @@ import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
 import com.n4systems.webservice.dto.UserListResponse;
 import com.n4systems.webservice.dto.UserServiceDTO;
+import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 import com.n4systems.webservice.exceptions.InspectionException;
@@ -66,5 +67,5 @@ public interface DataService {
 	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;	
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
 	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
-	public InternalOrgListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException;
+	public VendorListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException;
 }
