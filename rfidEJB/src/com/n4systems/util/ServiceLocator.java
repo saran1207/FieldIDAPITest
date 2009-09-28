@@ -4,8 +4,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import rfid.ejb.session.CommentTemp;
-import rfid.ejb.session.CommentTempManager;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductSerialManager;
 import rfid.ejb.session.LegacyProductType;
@@ -99,13 +97,6 @@ public class ServiceLocator {
 		}
 		
 		return manager;
-	}
-	
-	
-	private static final ThreadLocal<CommentTemp> commentTemp = new ThreadLocal<CommentTemp>();
-	
-	public static final CommentTemp getCommentTemp() {
-		return get(CommentTemp.class, CommentTempManager.class, commentTemp);
 	}
 	
 	

@@ -12,7 +12,7 @@ import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.session.ServiceDTOBeanConverter;
 
 import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.util.DateHelper;
+import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.util.ServiceLocator;
 
 import fieldid.web.services.dto.CommentTemplateServiceDTO;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
 			logger.error("Loading unit of measures", e);
 		}
 		
-		ArrayList<UnitOfMeasureServiceDTO> unitOfMeasureServiceList = new ArrayList<UnitOfMeasureServiceDTO>();
+		List<UnitOfMeasureServiceDTO> unitOfMeasureServiceList = new ArrayList<UnitOfMeasureServiceDTO>();
 		for (UnitOfMeasure unitOfMeasure : unitOfMeasures) {
 			unitOfMeasureServiceList.add(createUnitOfMeasureServiceDTO(unitOfMeasure));
 		}
@@ -70,12 +70,12 @@ public class UserServiceImpl implements IUserService {
 	public List<CommentTemplateServiceDTO> findCommentTemplateForDate(Long versionNumber, Long tenantId, Date beginDate) {
 		List<CommentTempBean> ct = null;
 		try {
-			ct = ServiceLocator.getCommentTemp().findCommentTemplateByDate(tenantId, beginDate, DateHelper.getTomorrow());
+			ct = new TenantFilteredListLoader<CommentTempBean>(tenantId, CommentTempBean.class).load();
 		} catch (Exception e) {
 			logger.error("finding comment templates", e);
 		}
 		
-		ArrayList<CommentTemplateServiceDTO> ctsList = new ArrayList<CommentTemplateServiceDTO>();
+		List<CommentTemplateServiceDTO> ctsList = new ArrayList<CommentTemplateServiceDTO>();
 		if (ct != null) {
 			try {
 				for (CommentTempBean template: ct) {

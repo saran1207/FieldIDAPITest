@@ -53,10 +53,6 @@
     	<property name="jndiName" value="fieldid/ProductCodeMappingManager/local"/>
     </bean>
     
-    <bean id="commentTemplateManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/CommentTempManager/local" />
-    </bean>
-    
     <bean id="persistenceManager" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="fieldid/PersistenceManagerImpl/local" />
 	</bean>
