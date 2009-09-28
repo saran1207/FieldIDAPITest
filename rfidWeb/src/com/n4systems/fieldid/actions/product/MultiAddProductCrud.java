@@ -31,6 +31,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 public class MultiAddProductCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
@@ -74,6 +75,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	protected void postInit() {
 		super.postInit();
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
+		setOwnerId(getSessionUserOwner().getId());
 	}
 
 	public String doForm() {
@@ -255,6 +257,8 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return identifiers;
 	}
 
+	
+	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
