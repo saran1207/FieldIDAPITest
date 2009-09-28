@@ -2,6 +2,8 @@ package com.n4systems.model.safetynetwork;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
@@ -28,11 +30,12 @@ public class LinkedOrgListLoader extends ListLoader<InternalOrg> {
 		
 		List<OrgConnection> connections = connectionLoader.load(em, filter);
 		
-		List<InternalOrg> orgs = new ArrayList<InternalOrg>();
+		// we need to put these into a set since there the same org may be in there more then once
+		Set<InternalOrg> orgs = new TreeSet<InternalOrg>();
 		for (OrgConnection conn: connections) {
 			orgs.add(conn.getByConnectionType(type));
 		}
-		return orgs;
+		return new ArrayList<InternalOrg>(orgs);
 	}
 
 }

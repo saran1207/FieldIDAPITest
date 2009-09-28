@@ -37,6 +37,7 @@ import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
@@ -44,6 +45,7 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -287,9 +289,19 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 		
 	}
+	
+	private void setCountsTowardsLimitFlagOnLinkedProducts(Product product) {
+		if (product.isLinked()) {
+			// if the linked product's primary org has the unlimited feature, it will not count
+			PrimaryOrg linkedPrimary = product.getLinkedProduct().getOwner().getPrimaryOrg();
+			boolean hasUnlimitedFeature = linkedPrimary.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);
+			product.setCountsTowardsLimit(!hasUnlimitedFeature);
+		}
+	}
 
 	private void runProductSavePreRecs(Product product) throws SubProductUniquenessException {
 		moveRfidFromProductSerials(product);
+		setCountsTowardsLimitFlagOnLinkedProducts(product);
 		processSubProducts(product);
 	}
 

@@ -24,7 +24,8 @@ public enum ExtendedFeature {
 	CustomCert("feature.cust_cert", "This tenant gets a custom cert creation included"), 
 	DedicatedProgramManager("feature.dedicated_program_manager", "Some individual will be assigned to this tenant."), 
 	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
-	AllowIntegration("feature.allow_integration", "Says that someone could have integration turned on.");
+	AllowIntegration("feature.allow_integration", "Says that someone could have integration turned on."),
+	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit");
 	
 	private String label;
 	private String description;
