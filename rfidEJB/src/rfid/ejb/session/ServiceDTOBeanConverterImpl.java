@@ -854,6 +854,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		tenantService.setSerialNumberFormat(tenant.getSerialNumberFormat());
 		tenantService.setUsingJobs(tenant.getExtendedFeatures().contains(ExtendedFeature.Projects));
 		tenantService.setUsingSerialNumber(tenant.isUsingSerialNumber());
+		tenantService.setUsingJobSites(tenant.getExtendedFeatures().contains(ExtendedFeature.JobSites));
 		
 		return tenantService;
 	}
