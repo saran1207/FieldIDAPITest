@@ -34,7 +34,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.User;
 
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -61,8 +60,10 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.persistence.EJBTransaction;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -80,7 +81,6 @@ public class ReportFactoryImpl implements ReportFactory {
 	
 	@EJB private ProductManager productManager;
 	@EJB private PersistenceManager persistenceManager;
-	@EJB private LegacyProductType productTypeManger;
 	@EJB private InspectionScheduleManager inspectionScheduleManager;
 	@EJB private User userManager;
 
@@ -605,7 +605,8 @@ public class ReportFactoryImpl implements ReportFactory {
 		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 
 		if (reportDefiner.getProductType() != null) {
-			reportMap.put("productType", productTypeManger.findProductType(reportDefiner.getProductType()).getName());
+			ProductType productType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getProductType()).load(new EJBTransaction(persistenceManager.getEntityManager()));
+			reportMap.put("productType", productType.getName());
 		}
 
 		if (reportDefiner.getInspectionBook() != null) { 

@@ -1,15 +1,15 @@
 package rfid.ejb.session;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Local;
 
-import rfid.dto.CommentTempDTO;
+import rfid.ejb.entity.CommentTempBean;
 
 @Local
 public interface CommentTemp {
-	public ArrayList<CommentTempDTO> findCommentTemplateByDate(Long tenantId, Date beginDate, Date endDate);
+	public List<CommentTempBean> findCommentTemplateByDate(Long tenantId, Date beginDate, Date endDate);
 	
 	
 }

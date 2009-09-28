@@ -163,7 +163,7 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 
 	public ProductType getProductType() {
 		if (productType == null) {
-			productType = productTypeManager.findProductTypeAllFields(productTypeId, getTenantId());
+			productType = getLoaderFactory().createProductTypeLoader().setId(productTypeId).setStandardPostFetches().load();
 		}
 		return productType;
 	}

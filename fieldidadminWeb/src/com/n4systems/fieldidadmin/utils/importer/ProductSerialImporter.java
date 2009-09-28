@@ -28,6 +28,7 @@ import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.DivisionOrgByCustomerListLoader;
 import com.n4systems.persistence.loaders.TenantFilteredListLoader;
@@ -125,7 +126,7 @@ public class ProductSerialImporter extends Importer {
 						if (productType == null) {
 							throw new Exception("no product type");
 						} else {
-							productType = productTypeManager.findProductTypeAllFields(productType.getId(), primaryOrg.getTenant().getId());
+							productType = new ProductTypeLoader(primaryOrg.getTenant().getId()).setId(productType.getId()).setStandardPostFetches().load();
 							ps.setType(productType);
 						}
 

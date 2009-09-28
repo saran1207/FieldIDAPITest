@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import rfid.ejb.session.LegacyProductType;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProductType;
@@ -16,20 +14,18 @@ public class DownloadProductTypeAttachedFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 	
 	private ProductType productType;
-	private LegacyProductType productTypeManager;
 	
-	public DownloadProductTypeAttachedFile(LegacyProductType productTypeManager, PersistenceManager persistenceManager) {
+	public DownloadProductTypeAttachedFile(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
 	}
 
 	public String doDownload() {
 		
 		// load the product type
-		productType =  productTypeManager.findProductTypeAllFields( uniqueID, getTenantId() );
+		productType =   getLoaderFactory().createProductTypeLoader().setId(uniqueID).setStandardPostFetches().load();
 		
 		if( productType == null ) {
-			addActionError( getText( "error.noproducttype" ) );
+			addActionErrorText("error.noproducttype");
 			return MISSING;
 		} 
 		
@@ -76,7 +72,7 @@ public class DownloadProductTypeAttachedFile extends DownloadAction {
 	}
 	
 	public String doDownloadImage() {
-		productType =  productTypeManager.findProductType( uniqueID, getTenantId() );
+		productType =  getLoaderFactory().createProductTypeLoader().setId(uniqueID).load();
 		
 		if( productType == null ) {
 			addActionError( getText( "error.noproducttype" ) );

@@ -85,7 +85,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productType = productTypeManager.findProductTypeAllFields(uniqueID, getTenantId());
+		productType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 	}
 
 	@Override

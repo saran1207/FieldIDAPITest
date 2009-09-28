@@ -17,6 +17,7 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.SimplePager;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -538,6 +539,7 @@ public class QueryBuilder<E> {
 		E result = null;
 		try {
 			result = (E)createQuery(em).getSingleResult();
+			PostFetcher.postFetchFields(result, getPostFetchPaths());
 		} catch (NoResultException e) {
 			// silently ignored
 		}
@@ -560,7 +562,9 @@ public class QueryBuilder<E> {
 			query.setMaxResults(maxResults);
 		}
 
-		return (List<E>)query.getResultList();
+		List<E> resultList = (List<E>)query.getResultList();
+		PostFetcher.postFetchFields(resultList, getPostFetchPaths());
+		return resultList;
 	}
 	
 	/**

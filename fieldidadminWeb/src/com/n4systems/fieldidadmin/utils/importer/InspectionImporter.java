@@ -34,6 +34,7 @@ import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -280,8 +281,7 @@ public class InspectionImporter extends Importer {
 	private InspectionType findInspectionType(Product product, String name) throws NamingException {
 		InspectionType type = null;
 
-		ProductType prouductType = ServiceLocator.getProductType().findProductTypeAllFields(product.getType().getId(),
-				product.getTenant().getId());
+		ProductType prouductType = new ProductTypeLoader(product.getTenant().getId()).setId(product.getType().getId()).setStandardPostFetches().load();
 		for (InspectionType inspectionType : prouductType.getInspectionTypes()) {
 			if (inspectionType.getName().equalsIgnoreCase(name)) {
 				type = inspectionType;

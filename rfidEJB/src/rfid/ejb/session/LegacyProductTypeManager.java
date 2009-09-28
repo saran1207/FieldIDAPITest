@@ -35,11 +35,14 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Interceptors({TimingInterceptor.class})
 @Stateless 
@@ -56,44 +59,9 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	@EJB protected InspectionScheduleManager inspectionScheduleManager;
 	
 	
-	public ProductType findProductType(Long uniqueID) {
-		return (ProductType)em.find(ProductType.class, uniqueID);
-	}
 	
-	/**
-	 * Provides a secure way to lookup a product type by unique id only for a single tenant
-	 */
-	public ProductType findProductType(Long uniqueID, Long tenantId) {
-		ProductType productTypeBean = null;
-		
-		try {
-			Query query = em.createQuery("from " + ProductType.class.getName() + " pi where pi.id = :id and pi.tenant.id = :tenantId AND state = :activeState");
-			query.setParameter("id", uniqueID);
-			query.setParameter("tenantId", tenantId);
-			query.setParameter("activeState", EntityState.ACTIVE);
-			
-			productTypeBean = (ProductType)query.getSingleResult();
-		} catch(NoResultException e) {}
-		
-		return productTypeBean;
-	}
 	
-	public ProductType findProductTypeAllFields(Long uniqueID, Long tenantId) {
-		ProductType productTypeBean = null;
-		
-		try {
-			productTypeBean = (ProductType)em.createQuery("from " + ProductType.class.getName() + " pi where pi.id = :id and " +
-					"pi.tenant.id = :tenantId and pi.state = :activeState")
-					.setParameter("id", uniqueID)
-					.setParameter("tenantId", tenantId)
-					.setParameter("activeState", EntityState.ACTIVE)
-					.getSingleResult();
-			
-		} catch(NoResultException e) {}
-		
-		return persistenceManager.postFetchFields(productTypeBean, "infoFields", "inspectionTypes", "attachments", "subTypes");
-	}
-	
+	//TODO remove this only used by product crud to determine if the product type has changed.
 	public ProductType findProductTypeForProduct(Long productId) throws InvalidQueryException {
 		ProductType productTypeBean = null;
 		try {
@@ -114,19 +82,10 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	}
 	
 	public ProductType findProductTypeForItemNum(String name, Long tenantId) {
-		ProductType productTypeBean = null;
+		QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class, new TenantOnlySecurityFilter(tenantId));
+		query.addWhere(Comparator.EQ, "name", "name", name, WhereParameter.IGNORE_CASE);
 		
-		try {
-			Query query = em.createQuery("from " + ProductType.class.getName() + " pi where upper(pi.name) = :name and " +
-					"pi.tenant.id = :tenantId AND pi.state = :activeState");
-			query.setParameter("name", name.toUpperCase())
-				.setParameter("tenantId", tenantId)
-				.setParameter("activeState", EntityState.ACTIVE);
-			productTypeBean = (ProductType)query.getSingleResult();
-			
-		} catch(NoResultException e) {}
-		
-		return productTypeBean;
+		return query.getSingleResult(em);
 	}
 	
 	

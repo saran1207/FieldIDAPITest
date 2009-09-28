@@ -9,7 +9,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductCodeMappingBean;
-import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.ProductCodeMapping;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -36,7 +35,6 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 	
 	private List<ProductCodeMappingBean> productCodeMappings;
 	private ProductCodeMappingBean productCodeMapping;
-	private LegacyProductType productTypeManager;
 	
 	private ProductTypeLister productTypes;
 	
@@ -46,10 +44,9 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 	
 	private boolean productTypeUpdate = false;
 	
-	public ProductCodeMappingCrud(ProductCodeMapping productCodeMappingManager, LegacyProductType productTypeManager, PersistenceManager persistenceManager) {
+	public ProductCodeMappingCrud(ProductCodeMapping productCodeMappingManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.productCodeMappingManager = productCodeMappingManager;
-		this.productTypeManager = productTypeManager;
 		
 	}
 	
@@ -195,7 +192,7 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 	public void setProductType(Long productTypeId ) {
 		ProductType productType = null ;
 		if( productTypeId != null ) {
-			productType = productTypeManager.findProductTypeAllFields( productTypeId, getTenantId() );
+			productType =  getLoaderFactory().createProductTypeLoader().setId(productTypeId).setStandardPostFetches().load();
 		}
 		this.productCodeMapping.setProductInfo( productType );
 	}

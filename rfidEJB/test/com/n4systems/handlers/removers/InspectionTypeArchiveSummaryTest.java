@@ -34,6 +34,7 @@ public class InspectionTypeArchiveSummaryTest {
 	@Test
 	public void should__e_archiveable_if_inspection_archive_summary_is_archivable() {
 		InspectionArchiveSummary stubSummary = new InspectionArchiveSummary() {
+													@SuppressWarnings("unused")
 													public boolean inspectionsCanBeArchived() {
 														return true;
 													}

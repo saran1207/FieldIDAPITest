@@ -21,9 +21,7 @@ import com.n4systems.util.ListingPair;
 @Local
 public interface LegacyProductType {
 	 
-	public ProductType findProductType(Long uniqueID);
-	public ProductType findProductType( Long uniqueID, Long tenantId );
-	public ProductType findProductTypeAllFields( Long uniqueID, Long tenantId );
+	
 	public ProductType findDefaultProductType(Long tenantId);
 	public ProductType findProductTypeForItemNum(String itemNumber, Long tenantId);
 	

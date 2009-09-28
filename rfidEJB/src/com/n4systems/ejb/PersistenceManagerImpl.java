@@ -41,6 +41,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
@@ -53,8 +54,6 @@ import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
-import com.n4systems.util.reflection.ReflectionException;
-import com.n4systems.util.reflection.Reflector;
 
 @Interceptors( { TimingInterceptor.class })
 @Stateless
@@ -464,70 +463,19 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	public <E extends Collection<T>, T> E postFetchFields(E entities, String... postFetchFields) {
-		return postFetchFields(entities, Arrays.asList(postFetchFields));
+		return PostFetcher.postFetchFields(entities, postFetchFields);
 	}
 
 	public <E extends Collection<T>, T> E postFetchFields(E entities, List<String> postFetchFields) {
-		if (entities == null) {
-			return null;
-		}
-
-		if (postFetchFields != null && !postFetchFields.isEmpty()) {
-			for (T entity : entities) {
-				postFetchFields(entity, postFetchFields);
-			}
-		}
-
-		return entities;
+		return PostFetcher.postFetchFields(entities, postFetchFields);
 	}
 
 	public <T> T postFetchFields(T entity, String... postFetchFields) {
-		return postFetchFields(entity, Arrays.asList(postFetchFields));
+		return PostFetcher.postFetchFields(entity, postFetchFields);
 	}
 
 	public <T> T postFetchFields(T entity, List<String> postFetchFields) {
-		if (entity == null) {
-			return null;
-		}
-
-		if (postFetchFields == null || postFetchFields.isEmpty()) {
-			return entity;
-		}
-
-		Object value;
-		for (String path : postFetchFields) {
-			try {
-
-				value = Reflector.getPathValue(entity, path);
-				if (value != null) {
-					// need to get at least one value if it is a collection
-					if (value instanceof Iterable) {
-						for (Object o : (Iterable<?>) value) {
-							// do anything
-							if (o != null) {
-								o.getClass();
-								break;
-							}
-						}
-					} else if (value instanceof Map<?, ?>) {
-						for (Object o : ((Map<?, ?>) value).keySet()) {
-							if (o != null) {
-								// do anything
-								o.getClass();
-								break;
-							}
-						}
-					} else {
-						value.getClass();
-					}
-				}
-
-			} catch (ReflectionException e) {
-				logger.warn(e);
-			}
-		}
-
-		return entity;
+		return PostFetcher.postFetchFields(entity, postFetchFields);
 	}
 
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, SecurityFilter filter) {

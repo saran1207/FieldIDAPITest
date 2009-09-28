@@ -42,7 +42,7 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields( Long uniqueId ) {
-		productType = productTypeManager.findProductTypeAllFields( uniqueId, getTenantId() );
+		productType =  getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 	}
 
 	@SkipValidation

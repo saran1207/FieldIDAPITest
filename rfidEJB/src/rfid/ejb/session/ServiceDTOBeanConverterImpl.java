@@ -25,7 +25,6 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
@@ -123,7 +122,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	protected EntityManager em;	
 
 	@EJB private PersistenceManager persistenceManager;	
-	@EJB private InspectionManager inspectionManager;
 	@EJB private InspectionScheduleManager inspectionScheduleManager;
 	@EJB private SerialNumberCounter serialNumberCounter;
 	
@@ -403,7 +401,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		if ( inspectionServiceDTO.inspectionBookExists() ) {
 			inspection.setBook( persistenceManager.find(InspectionBook.class, inspectionServiceDTO.getInspectionBookId()) );			
 		} else if( inspectionServiceDTO.getInspectionBookTitle() != null ) {
-			CustomerOrg customerOrg = persistenceManager.find(CustomerOrg.class, inspectionServiceDTO.getCustomerId());
+			
 			
 			InspectionBookByNameLoader loader = new InspectionBookByNameLoader(new OrgOnlySecurityFilter(inspector.getOwner()));
 			loader.setName(inspectionServiceDTO.getInspectionBookTitle());
@@ -857,30 +855,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		tenantService.setUsingJobSites(tenant.getExtendedFeatures().contains(ExtendedFeature.JobSites));
 		
 		return tenantService;
-	}
-	
-	private InfoFieldBean findInfoField( String infoFieldIDString ) {
-		InfoFieldBean infoField = null;
-		
-		Long infoFieldID = convertStringToLong( infoFieldIDString );
-		if ( infoFieldID != null ) {
-			infoField = (InfoFieldBean)em.find( InfoFieldBean.class, infoFieldID );
-		}
-		
-		return infoField;
-	}
-	
-	private Long convertStringToLong(String stringLong) {
-		if (stringLong == null || stringLong.length() == 0) return null;
-		
-		Long longValue = null;
-		try {
-			longValue = Long.valueOf(stringLong);
-		} catch (NumberFormatException e) {
-			return null;
-		}
-		
-		return longValue;
 	}
 	
 	public Date convertStringToDate(String stringDate) {

@@ -734,10 +734,6 @@ public class DataServiceImpl implements DataService {
 		return TenantCache.getInstance();
 	}
 
-	private SecurityFilter createFilterFromRequest(RequestInformation requestInformation) {
-		return new TenantOnlySecurityFilter(requestInformation.getTenantId());
-	}
-	
 	private void testTransactionId( RequestInformation requestInformation ) throws ServiceException {
 		if( !requestInformation.hasValidTransactionId() ) {
 			logger.error( "transaction Id is invalid for create product " );

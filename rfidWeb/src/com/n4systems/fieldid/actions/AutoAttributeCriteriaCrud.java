@@ -50,7 +50,8 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productType = productTypeManager.findProductTypeAllFields(uniqueId, getTenantId());
+		productType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
+		
 		if (productType != null && productType.hasCriteria()) {
 			String[] fetchList = { "inputs", "outputs" };
 			autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, productType

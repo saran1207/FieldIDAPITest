@@ -6,7 +6,6 @@ import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
-import com.n4systems.model.inspectionschedulecount.InspectionScheduleCountListLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
@@ -27,6 +26,7 @@ import com.n4systems.model.productstatus.ProductStatusListLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
+import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.producttype.ProductTypeScheduleLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
@@ -38,6 +38,7 @@ import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionPaginatedLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
@@ -172,6 +173,10 @@ public class LoaderFactory {
 	
 	public ProductTypeListableLoader createProductTypeListableLoader() {
 		return new ProductTypeListableLoader(filter);
+	}
+	
+	public ProductTypeLoader createProductTypeLoader() {
+		return new ProductTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 	
 	public ProductTypeScheduleLoader createProductTypeScheduleLoader() {

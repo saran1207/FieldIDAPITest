@@ -3,12 +3,11 @@ package fieldid.web.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import rfid.dto.CommentTempDTO;
+import rfid.ejb.entity.CommentTempBean;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.session.ServiceDTOBeanConverter;
 
@@ -43,10 +42,10 @@ public class UserServiceImpl implements IUserService {
 		return productStatusServiceDTOs;		
 	}
 	
-	public ArrayList<UnitOfMeasureServiceDTO> getUnitOfMeasureForDate( Date beginDate) {
+	public List<UnitOfMeasureServiceDTO> getUnitOfMeasureForDate( Date beginDate) {
 		return findUnitOfMeasureForDate( DEFAULT_SERVICE_VERSION, beginDate);
 	}
-	public ArrayList<UnitOfMeasureServiceDTO> findUnitOfMeasureForDate(Long versionNumber,Date beginDate) {
+	public List<UnitOfMeasureServiceDTO> findUnitOfMeasureForDate(Long versionNumber,Date beginDate) {
 		
 		Collection<UnitOfMeasure> unitOfMeasures = null;
 		try {
@@ -64,13 +63,12 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	
-	public ArrayList<CommentTemplateServiceDTO> getCommentTemplateForDate(Long tenantId, Date beginDate) {
+	public List<CommentTemplateServiceDTO> getCommentTemplateForDate(Long tenantId, Date beginDate) {
 		return findCommentTemplateForDate( DEFAULT_SERVICE_VERSION , tenantId, beginDate);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public ArrayList<CommentTemplateServiceDTO> findCommentTemplateForDate(Long versionNumber, Long tenantId, Date beginDate) {
-		ArrayList ct = null;
+	public List<CommentTemplateServiceDTO> findCommentTemplateForDate(Long versionNumber, Long tenantId, Date beginDate) {
+		List<CommentTempBean> ct = null;
 		try {
 			ct = ServiceLocator.getCommentTemp().findCommentTemplateByDate(tenantId, beginDate, DateHelper.getTomorrow());
 		} catch (Exception e) {
@@ -80,8 +78,8 @@ public class UserServiceImpl implements IUserService {
 		ArrayList<CommentTemplateServiceDTO> ctsList = new ArrayList<CommentTemplateServiceDTO>();
 		if (ct != null) {
 			try {
-				for (Iterator i = ct.iterator(); i.hasNext();) {
-					CommentTemplateServiceDTO commentTemplate = createCommentTemplateServiceDTO((CommentTempDTO)i.next() );
+				for (CommentTempBean template: ct) {
+					CommentTemplateServiceDTO commentTemplate = createCommentTemplateServiceDTO(template);
 					ctsList.add(commentTemplate);
 				}
 			} catch (Exception e) {
@@ -93,15 +91,15 @@ public class UserServiceImpl implements IUserService {
 		return ctsList;
 	}
 	
-	private CommentTemplateServiceDTO createCommentTemplateServiceDTO(CommentTempDTO ctDTO) {
+	private CommentTemplateServiceDTO createCommentTemplateServiceDTO(CommentTempBean commentTemplate) {
 		CommentTemplateServiceDTO ctsDTO = new CommentTemplateServiceDTO();
 		ctsDTO.setDtoVersion( CommentTemplateServiceDTO.CURRENT_DTO_VERSION.toString() );
-		ctsDTO.setContents(ctDTO.getContents());
-		ctsDTO.setModifiedBy(ctDTO.getModifiedBy());
-		ctsDTO.setTemplateID(ctDTO.getTemplateID());
-		ctsDTO.setUniqueID(ctDTO.getUniqueID().toString());
-		ctsDTO.setTenantId(ctDTO.getTenantId().toString());
-		ctsDTO.setDateModified(ctDTO.getDateModified().toString());
+		ctsDTO.setContents(commentTemplate.getContents());
+		ctsDTO.setModifiedBy(commentTemplate.getModifiedBy());
+		ctsDTO.setTemplateID(commentTemplate.getTemplateID());
+		ctsDTO.setUniqueID(commentTemplate.getUniqueID().toString());
+		ctsDTO.setTenantId(commentTemplate.getTenant().getId().toString());
+		ctsDTO.setDateModified(commentTemplate.getDateModified().toString());
 		
 		return ctsDTO;
 		

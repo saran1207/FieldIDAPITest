@@ -1,5 +1,8 @@
 package com.n4systems.model.producttype;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
@@ -14,6 +17,7 @@ public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
 
 	private Long id;
 
+	private List<String> postFetchFields;
 
 	public ProductTypeLoader(Long tenantId) {
 		super(tenantId);
@@ -39,7 +43,7 @@ public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
 		
 		QueryBuilder<ProductType> query = getQueryBuilder(filter);
 		query.addSimpleWhere("id", id);
-		query.addPostFetchPaths("inspectionTypes", "schedules");
+		query.getPostFetchPaths().addAll(postFetchFields);
 		
 		
 		return query.getSingleResult(em);
@@ -53,5 +57,15 @@ public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
 		this.id = id;
 		return this;
 	}	
+	
+	public ProductTypeLoader setStandardPostFetches() {
+		return setPostFetchFields("infoFields", "inspectionTypes", "attachments", "subTypes");
+	}
+	
+	
+	public ProductTypeLoader setPostFetchFields(String ...postFetchFields) {
+		this.postFetchFields = Arrays.asList(postFetchFields);
+		return this;
+	}
 
 }
