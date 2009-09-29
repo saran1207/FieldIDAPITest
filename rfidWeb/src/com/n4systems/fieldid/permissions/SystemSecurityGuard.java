@@ -22,4 +22,5 @@ public interface SystemSecurityGuard {
 	public boolean isMultiLocationEnabled(); 
 	public boolean isAllowIntegrationEnabled();
 	public boolean isJobSitesEnabled();
+	public boolean isUnlimitedLinkedAssetsEnabled();
 }
