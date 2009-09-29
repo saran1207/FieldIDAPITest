@@ -91,7 +91,7 @@
 	
 	<target name="test" depends="compile-tests" >
 		
-		<junit haltonfailure="false" >
+		<junit haltonfailure="true" >
 			<classpath refid="classpath.deps" />
 			<classpath path="${build}"/>
 			<classpath path="${build.test}"/>
