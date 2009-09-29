@@ -19,6 +19,11 @@ class MigrateJobsites < ActiveRecord::Migration
   
 	def self.up
     
+    JobSite.find_each(:all) do |site|
+      migrate_job_site(site)
+    end
+    
+    
     migrate_job_sites(AddProductHistory.find(:all, :conditions => "jobsite_id is not null"))
     migrate_job_sites(InspectionSchedule.find(:all, :conditions => "jobsite_id is not null"))
     migrate_job_sites(Inspection.find(:all, :conditions => "jobsite_id is not null"))
@@ -50,26 +55,27 @@ class MigrateJobsites < ActiveRecord::Migration
 
   def self.migrate_job_sites(models)
     models.each do |model|
-      migrate_job_site(model, model.jobsite_id)
+      update_owner(model)
     end
   end
 
-  def self.migrate_job_site(model, jobsite_id)
-    site = JobSite.find(jobsite_id)
-    
-    custorg = create_customer(site.name, site.customerId, site.modifiedby, site.tenant)
-    
-    model.owner_id = custorg.id
+  def self.update_owner(model)
+    model.owner_id = @site_to_customer[model.job_site_id]
     model.save
   end
 
-  def self.create_customer(name, code, modifiedby, tenant)
+  def self.migrate_job_site(site)
+    cust_org = create_customer(site.name, site.customerId, site.modified_by, site.tenant)
+    @site_to_customer_map[site.id] = cust_org.id    
+  end
+
+  def self.create_customer(name, code, modified_by, tenant)
     now = Time.now
     
     customerBase = BaseOrg.new
     customerBase.created = now
     customerBase.modified = now
-    customerBase.modifiedBy = User.find(modifiedby)
+    customerBase.modifiedBy = User.find(modified_by)
     customerBase.tenant = tenant
     customerBase.name = name
     customerBase.save
