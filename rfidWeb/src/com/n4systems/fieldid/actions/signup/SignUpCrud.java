@@ -140,7 +140,7 @@ public class SignUpCrud extends AbstractCrud {
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
 		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
 		
-		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest());
+		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg());
 	}
 
 	public SortedSet<? extends Listable<String>> getCountries() {

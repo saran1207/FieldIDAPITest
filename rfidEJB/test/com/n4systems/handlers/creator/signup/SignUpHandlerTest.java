@@ -20,6 +20,8 @@ import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
@@ -52,7 +54,7 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 	public void should_require_a_persistence_provider_sign_account_up() {
 		SignUpHandler sut = new SignUpHandlerImpl(null, null, null, null);
 		try {
-			sut.signUp(null);
+			sut.signUp(null, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		}
@@ -76,6 +78,8 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		AccountPlaceHolderCreateHandler mockAccountPlaceHolderCreateHandler = successfulAccountPlaceHolderCreation(signUpRequest, accountPlaceHolder);
 		
 		
+		PrimaryOrg referrerOrg = (PrimaryOrg)OrgBuilder.aPrimaryOrg().build();
+		
 		SignUpTenantResponseStub subscriptionApproval = new SignUpTenantResponseStub();
 		SubscriptionAgent mockSubscriptionAgent = successfulSubscriptionPurchase(signUpRequest, subscriptionApproval);
 		
@@ -85,14 +89,15 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		expect(mockSignUpFinalizationHandler.setAccountInformation(signUpRequest)).andReturn(mockSignUpFinalizationHandler);
 		expect(mockSignUpFinalizationHandler.setAccountPlaceHolder(accountPlaceHolder)).andReturn(mockSignUpFinalizationHandler);
 		expect(mockSignUpFinalizationHandler.setSubscriptionApproval(subscriptionApproval)).andReturn(mockSignUpFinalizationHandler);
+		expect(mockSignUpFinalizationHandler.setReferrerOrg(referrerOrg)).andReturn(mockSignUpFinalizationHandler);
 		mockSignUpFinalizationHandler.finalizeSignUp(mockTransaction);
 		replay(mockSignUpFinalizationHandler);
 		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler);
 		sut.withPersistenceProvider(mockPersistenceProvider);
-		
+
 		try {
-			sut.signUp(signUpRequest);
+			sut.signUp(signUpRequest, referrerOrg);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		}
@@ -160,7 +165,7 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest);
+			sut.signUp(signUpRequest, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		} catch (TenantNameUsedException e) {
@@ -209,7 +214,7 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest);
+			sut.signUp(signUpRequest, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		} catch (CommunicationErrorException e) {
@@ -267,7 +272,7 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest);
+			sut.signUp(signUpRequest, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		} catch (BillingValidationException e) {
@@ -304,10 +309,13 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		
 		BaseSystemStructureCreateHandler mockBaseSystemStructureCreateHandler = successfulBaseSystemCreation();
 		
+		PrimaryOrg referrerOrg = (PrimaryOrg)OrgBuilder.aPrimaryOrg().build();
+		
 		SignUpFinalizationHandler mockSignUpFinalizationHandler = createMock(SignUpFinalizationHandler.class);
 		expect(mockSignUpFinalizationHandler.setAccountInformation(signUpRequest)).andReturn(mockSignUpFinalizationHandler);
 		expect(mockSignUpFinalizationHandler.setAccountPlaceHolder(isA(AccountPlaceHolder.class))).andReturn(mockSignUpFinalizationHandler);
 		expect(mockSignUpFinalizationHandler.setSubscriptionApproval(subscriptionApproval)).andReturn(mockSignUpFinalizationHandler);
+		expect(mockSignUpFinalizationHandler.setReferrerOrg(referrerOrg)).andReturn(mockSignUpFinalizationHandler);
 		mockSignUpFinalizationHandler.finalizeSignUp(mockTransaction);
 		expectLastCall().andThrow(new RuntimeException("some exception"));
 		
@@ -319,7 +327,7 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest);
+			sut.signUp(signUpRequest, referrerOrg);
 		} catch (SignUpCompletionException e) {
 			exceptionCaught = true;
 		}

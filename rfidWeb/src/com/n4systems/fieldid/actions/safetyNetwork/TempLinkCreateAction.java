@@ -20,6 +20,7 @@ import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -53,7 +54,7 @@ public class TempLinkCreateAction extends AbstractAction {
 	
 	public TempLinkCreateAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		saver = new OrgConnectionSaver();
+		saver = new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID));
 	}
 	
 	public String doList() {

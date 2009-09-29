@@ -18,6 +18,7 @@ import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.promocode.PromoCodeByCodeLoader;
+import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
@@ -39,7 +40,9 @@ public class CreateHandlerFactory {
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {
-		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrgSaver(), new UserSaver(), getLimitResolver());
+		Long houseAccountId = ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID);
+		
+		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrgSaver(), new UserSaver(), getLimitResolver(), new OrgConnectionSaver(houseAccountId));
 	}
 
 	private LimitResolver getLimitResolver() {

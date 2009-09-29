@@ -11,10 +11,18 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import rfid.ejb.entity.UserBean;
+
+import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
@@ -79,10 +87,13 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockLimitResolver.resolve(mockTransaction)).andReturn(limitFromResolver);
 		replay(mockLimitResolver);
 		
-		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockExtendedFeatureListResolver, mockOrganizationSaver, mockUserSaver, mockLimitResolver);
+		OrgConnectionSaver mockConnSaver = createMock(OrgConnectionSaver.class);
+		
+		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockExtendedFeatureListResolver, mockOrganizationSaver, mockUserSaver, mockLimitResolver, mockConnSaver);
 		sut.setAccountInformation(accountCreationInformationStub)
 				.setAccountPlaceHolder(accountPlaceHolder)
-				.setSubscriptionApproval(signUpTenantResponseStub);
+				.setSubscriptionApproval(signUpTenantResponseStub)
+				.setReferrerOrg((PrimaryOrg)OrgBuilder.aPrimaryOrg().build());
 			
 		// exercise
 		sut.finalizeSignUp(mockTransaction);
@@ -100,4 +111,78 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		
 		assertEquals(expectedTenantLimit, accountPlaceHolder.getPrimaryOrg().getLimits());
 	}
+	
+	@Test
+	public void create_org_connection_uses_referrer_as_vendor_and_signup_as_customer() {
+		final UserBean adminUser = UserBuilder.anEmployee().build();
+		final PrimaryOrg referrerOrg = (PrimaryOrg)OrgBuilder.aPrimaryOrg().build();
+		final PrimaryOrg signupOrg =  (PrimaryOrg)OrgBuilder.aPrimaryOrg().build();
+		
+		class CreateConnectionTestClass extends SignUpFinalizationHandlerImpl {
+			public CreateConnectionTestClass() {
+				super(null, null, null, null, null);
+			}
+
+			@Override
+			public UserBean getAdminUser() { return adminUser; }
+
+			@Override
+			public PrimaryOrg getPrimaryOrg() { return signupOrg; }
+			
+			@Override
+			public OrgConnection createOrgConnection() {
+				return super.createOrgConnection();
+			}
+		};
+		
+		CreateConnectionTestClass orgTestClass = new CreateConnectionTestClass();
+		orgTestClass.setReferrerOrg(referrerOrg);
+		
+		OrgConnection conn = orgTestClass.createOrgConnection();
+		
+		assertSame(adminUser, conn.getModifiedBy());
+		assertSame(referrerOrg, conn.getVendor());
+		assertSame(signupOrg, conn.getCustomer());
+	}
+	
+	@Test(expected=InvalidArgumentException.class)
+	public void throws_exception_on_null_referrer() {
+		SignUpFinalizationHandlerImpl signupFinal = new SignUpFinalizationHandlerImpl(null, null, null, null, null);
+		signupFinal.setAccountInformation(new AccountCreationInformationStub());
+		signupFinal.setAccountPlaceHolder(new AccountPlaceHolder(null, null, null, null));
+		signupFinal.setSubscriptionApproval(new SignUpTenantResponseStub());
+		
+		signupFinal.finalizeSignUp(null);
+	}
+	
+	@Test(expected=InvalidArgumentException.class)
+	public void throws_exception_on_null_account_info() {
+		SignUpFinalizationHandlerImpl signupFinal = new SignUpFinalizationHandlerImpl(null, null, null, null, null);
+		signupFinal.setAccountPlaceHolder(new AccountPlaceHolder(null, null, null, null));
+		signupFinal.setSubscriptionApproval(new SignUpTenantResponseStub());
+		signupFinal.setReferrerOrg(new PrimaryOrg());
+		
+		signupFinal.finalizeSignUp(null);
+	}
+	
+	@Test(expected=InvalidArgumentException.class)
+	public void throws_exception_on_null_place_holder() {
+		SignUpFinalizationHandlerImpl signupFinal = new SignUpFinalizationHandlerImpl(null, null, null, null, null);
+		signupFinal.setAccountInformation(new AccountCreationInformationStub());
+		signupFinal.setSubscriptionApproval(new SignUpTenantResponseStub());
+		signupFinal.setReferrerOrg(new PrimaryOrg());
+		
+		signupFinal.finalizeSignUp(null);
+	}
+	
+	@Test(expected=InvalidArgumentException.class)
+	public void throws_exception_on_null_approval() {
+		SignUpFinalizationHandlerImpl signupFinal = new SignUpFinalizationHandlerImpl(null, null, null, null, null);
+		signupFinal.setAccountInformation(new AccountCreationInformationStub());
+		signupFinal.setAccountPlaceHolder(new AccountPlaceHolder(null, null, null, null));
+		signupFinal.setReferrerOrg(new PrimaryOrg());
+		
+		signupFinal.finalizeSignUp(null);
+	}
+	
 }

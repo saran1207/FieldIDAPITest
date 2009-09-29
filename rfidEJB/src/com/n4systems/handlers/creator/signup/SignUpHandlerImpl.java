@@ -9,6 +9,7 @@ import com.n4systems.handlers.creator.signup.exceptions.SignUpSoftFailureExcepti
 import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.BillingInfoException;
@@ -36,7 +37,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 
 	
 	//FIXME this method is big!
-	public void signUp(SignUpRequest signUp) throws SignUpCompletionException, SignUpSoftFailureException {
+	public void signUp(SignUpRequest signUp, PrimaryOrg referrerOrg) throws SignUpCompletionException, SignUpSoftFailureException {
 		if (persistenceProvider == null) {
 			throw new InvalidArgumentException("You must give a persistence provider");
 		}
@@ -74,6 +75,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			baseSystemCreator.forTenant(placeHolder.getTenant()).create(transaction);
 			
 			signUpFinalizationHandler.setAccountPlaceHolder(placeHolder).setSubscriptionApproval(subscriptionApproval).setAccountInformation(signUp);
+			signUpFinalizationHandler.setReferrerOrg(referrerOrg);
 			signUpFinalizationHandler.finalizeSignUp(transaction);
 			
 			persistenceProvider.finishTransaction(transaction);

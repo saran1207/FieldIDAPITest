@@ -2,24 +2,31 @@ package com.n4systems.model.safetynetwork;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.persistence.savers.Saver;
 
 public class OrgConnectionSaver extends Saver<OrgConnection> {
-
+	private final Long houseAccountId;
 	private final OrgSaver orgSaver;
 	
-	public OrgConnectionSaver() {
-		this(new OrgSaver());
+	public OrgConnectionSaver(Long houseAccountId) {
+		this(new OrgSaver(), houseAccountId);
 	}
 	
-	public OrgConnectionSaver(OrgSaver saver) {
+	public OrgConnectionSaver(OrgSaver saver, Long houseAccountId) {
 		this.orgSaver = saver;
+		this.houseAccountId = houseAccountId;
 	}
 	
 	@Override
 	protected void save(EntityManager em, OrgConnection conn) {
+		if (isUsingHouseAccount(conn)) {
+			// you can never link to a house account we'll fail silently is this conn has one in it
+			return;
+		}
+		
 		super.save(em, conn);
 		
 		// on save, we also need to create our linked customer
@@ -35,4 +42,12 @@ public class OrgConnectionSaver extends Saver<OrgConnection> {
 		return customerOrg;
 	}
 
+	private boolean isUsingHouseAccount(OrgConnection conn) {
+		return (isOrgHouseAccount(conn.getVendor()) || isOrgHouseAccount(conn.getCustomer()));
+	}
+	
+	private boolean isOrgHouseAccount(BaseOrg org) {
+		return org.getId().equals(houseAccountId);
+	}
+	
 }
