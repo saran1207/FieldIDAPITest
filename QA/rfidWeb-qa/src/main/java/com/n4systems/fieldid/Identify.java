@@ -1166,6 +1166,7 @@ public class Identify extends TestCase {
 		assertTrue("Could not find the Save and Create button", save.exists());
 		save.click();
 		checkAddMultipleAssetsPageContentHeader();
+		misc.checkForErrorMessagesOnCurrentPage();
 	}
 
 	public void addMultipleAssetsCancel() throws Exception {

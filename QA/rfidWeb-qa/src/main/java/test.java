@@ -1,19 +1,6 @@
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import watij.elements.Button;
-import watij.elements.Link;
-import watij.elements.Links;
-import watij.elements.SelectList;
-import watij.finders.Finder;
 import watij.runtime.ie.IE;
-import static watij.finders.FinderFactory.*;
 
 public class test {
 	

@@ -459,6 +459,7 @@ public class ManageCustomers extends TestCase {
 		List<String> orgUnits = mos.getOrganizationNames();
 		assertTrue("There are no organizational units for this tenant", orgUnits.size() > 0);
 		String orgUnit = orgUnits.get(0);
+		mos.gotoBackToAdministration();
 		gotoManageCustomers();
 		gotoAddCustomer();
 		int length = 15;

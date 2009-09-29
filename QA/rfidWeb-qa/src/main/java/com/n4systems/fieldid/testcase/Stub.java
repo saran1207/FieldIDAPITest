@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.testcase;
 
-import java.util.List;
-
-import com.n4systems.fieldid.datatypes.ProductSearchCriteria;
-import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
-
 public class Stub extends FieldIDTestCase {
 
 	protected void setUp() throws Exception {

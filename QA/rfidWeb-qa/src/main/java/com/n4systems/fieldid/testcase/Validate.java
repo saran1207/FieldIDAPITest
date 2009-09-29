@@ -223,7 +223,7 @@ public class Validate extends FieldIDTestCase {
 			login.login();
 			admin.gotoAdministration();
 			mysn.gotoManageYourSafetyNetwork();
-			String FIDAC = mysn.getFIDAC();
+//			String FIDAC = mysn.getFIDAC();
 			misc.logout();
 
 			// Test publishing your catalog
@@ -232,7 +232,7 @@ public class Validate extends FieldIDTestCase {
 			login.setPassword(password);
 			login.login();
 			admin.gotoAdministration();
-			mysn.validateManufacturer(FIDAC);
+//			mysn.validateManufacturer(FIDAC);
 			String companyName = admin.getCompanyName();
 			misc.logout();
 

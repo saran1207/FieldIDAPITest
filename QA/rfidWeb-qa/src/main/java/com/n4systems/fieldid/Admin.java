@@ -60,7 +60,6 @@ public class Admin extends TestCase {
 		gotoAdministration();
 		getCompanyID();
 		getCompanyName();
-		getFIDAC();
 	}
 
 	/**
@@ -122,20 +121,6 @@ public class Admin extends TestCase {
 		gotoAdministration();
 		mss.gotoManageSystemSettings();
 		return mss.getCompanyName();
-	}
-	
-	/**
-	 * Goes to the administration page and returns the Field ID
-	 * Access Code from the Company Summary section.
-	 * 
-	 * @return The Field ID Access Code from the Company Summary
-	 * @throws Exception
-	 * @see gotoAdministration
-	 */
-	public String getFIDAC() throws Exception {
-		gotoAdministration();
-		mysn.gotoManageYourSafetyNetwork();
-		return mysn.getFIDAC();
 	}
 	
 	/**

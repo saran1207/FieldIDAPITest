@@ -25,7 +25,6 @@ import watij.elements.TableCell;
 import watij.elements.TableCells;
 import watij.elements.TableRow;
 import watij.elements.TableRows;
-import watij.elements.TextField;
 import watij.finders.Finder;
 import watij.runtime.ie.IE;
 import junit.framework.TestCase;
@@ -38,12 +37,11 @@ public class ManageYourSafetyNetwork extends TestCase {
 	FieldIDMisc misc;
 	ManageProductTypes mpts;
 	ManageInspectionTypes mits;
-	Finder manageYourSafetyNetworkFinder;
-	Finder manageYourSafetyNetworkContentHeaderFinder;
-	Finder companyFIDACFinder;
+	private Finder manageYourSafetyNetworkFinder;
+	private Finder manageYourSafetyNetworkContentHeaderFinder;
 	private Finder safetyNetworkLinkedCompanyNamesFinder;
-	private Finder FieldIDAccessCodeTextFieldFinder;
-	private Finder linkToAnotherCompanyButtonFinder;
+//	private Finder FieldIDAccessCodeTextFieldFinder;
+//	private Finder linkToAnotherCompanyButtonFinder;
 	private Finder manageYourSafetyNetworkPublishLinkFinder;
 	private Finder manageSafetyNetworkPublishAllLinkFinder;
 	private Finder manageSafetyNetworkPublishNoneLinkFinder;
@@ -85,10 +83,9 @@ public class ManageYourSafetyNetwork extends TestCase {
 			mits = new ManageInspectionTypes(ie);
 			manageYourSafetyNetworkFinder = text(p.getProperty("link"));
 			manageYourSafetyNetworkContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			companyFIDACFinder = xpath(p.getProperty("companyfidac"));
 			safetyNetworkLinkedCompanyNamesFinder = xpath(p.getProperty("companynamecells"));
-			FieldIDAccessCodeTextFieldFinder = xpath(p.getProperty("fieldidaccesscodetextfield"));
-			linkToAnotherCompanyButtonFinder = xpath(p.getProperty("linktoanothercompanybutton"));
+//			FieldIDAccessCodeTextFieldFinder = xpath(p.getProperty("fieldidaccesscodetextfield"));
+//			linkToAnotherCompanyButtonFinder = xpath(p.getProperty("linktoanothercompanybutton"));
 			manageYourSafetyNetworkPublishLinkFinder = xpath(p.getProperty("publishlink"));
 			manageSafetyNetworkPublishAllLinkFinder = xpath(p.getProperty("setalllinkpublish"));
 			manageSafetyNetworkPublishNoneLinkFinder = xpath(p.getProperty("setnonelinkpublish"));
@@ -139,12 +136,6 @@ public class ManageYourSafetyNetwork extends TestCase {
 		assertTrue("Could not find the page header for Manage Your Safety Network", he.exists());
 	}
 
-	public String getFIDAC() throws Exception {
-		Span companyFIDAC = ie.span(companyFIDACFinder);
-		assertTrue("Could not find the Field ID Access Code", companyFIDAC.exists());
-		return companyFIDAC.text();
-	}
-
 	/**
 	 * Assumes the FIDAC provided is a company who is NOT linked to the current company.
 	 * This is part one of two for validating Manage Your Safety Network. Half the methods
@@ -157,22 +148,25 @@ public class ManageYourSafetyNetwork extends TestCase {
 	 * @param FIDAC
 	 * @throws Exception
 	 */
-	public void validateManufacturer(String FIDAC) throws Exception {
-		gotoManageYourSafetyNetwork();
-		@SuppressWarnings("unused")
-		String s = getFIDAC();
-		@SuppressWarnings("unused")
-		List<String> linkedCompanyNames = getLinkedCompanyNames();
-		linkToAnotherCompany(FIDAC);
-		gotoPublish();
-		setAllPublish();
-		setNonePublish();
-		List<String> assetTypes = getAssetTypes();
-		List<String> eventTypes = getEventTypes();
-		setAssetTypes(assetTypes);
-		setEventTypes(eventTypes);
-		publish();
-	}
+	
+	// TODO: this whole functionality needs to be redone because FIDAC is gone.
+	
+//	public void validateManufacturer(String FIDAC) throws Exception {
+//		gotoManageYourSafetyNetwork();
+//		@SuppressWarnings("unused")
+//		String s = getFIDAC();
+//		@SuppressWarnings("unused")
+//		List<String> linkedCompanyNames = getLinkedCompanyNames();
+//		linkToAnotherCompany(FIDAC);
+//		gotoPublish();
+//		setAllPublish();
+//		setNonePublish();
+//		List<String> assetTypes = getAssetTypes();
+//		List<String> eventTypes = getEventTypes();
+//		setAssetTypes(assetTypes);
+//		setEventTypes(eventTypes);
+//		publish();
+//	}
 
 	public void publish() throws Exception {
 		Button publish = ie.button(publishButtonFinder);
@@ -257,16 +251,18 @@ public class ManageYourSafetyNetwork extends TestCase {
 		checkManageSafetyNetworkPage();
 	}
 
-	public void linkToAnotherCompany(String fidac) throws Exception {
-		TextField tf = ie.textField(FieldIDAccessCodeTextFieldFinder);
-		assertTrue("Could not find the text field for linking a company via Field ID Access Code", tf.exists());
-		tf.set(fidac);
-		Button link = ie.button(linkToAnotherCompanyButtonFinder);
-		assertTrue("Could not find the button to link to another company", link.exists());
-		link.click();
-		misc.checkForErrorMessagesOnCurrentPage();
-		checkManageSafetyNetworkPage();
-	}
+	// TODO: needs to be totally redone
+	
+//	public void linkToAnotherCompany(String fidac) throws Exception {
+//		TextField tf = ie.textField(FieldIDAccessCodeTextFieldFinder);
+//		assertTrue("Could not find the text field for linking a company via Field ID Access Code", tf.exists());
+//		tf.set(fidac);
+//		Button link = ie.button(linkToAnotherCompanyButtonFinder);
+//		assertTrue("Could not find the button to link to another company", link.exists());
+//		link.click();
+//		misc.checkForErrorMessagesOnCurrentPage();
+//		checkManageSafetyNetworkPage();
+//	}
 
 	public List<String> getLinkedCompanyNames() throws Exception {
 		List<String> names = new ArrayList<String>();

@@ -1,9 +1,6 @@
 package com.n4systems.fieldid.testcase;
 
 import com.n4systems.fieldid.datatypes.CustomerUser;
-import com.n4systems.fieldid.datatypes.ProductAttribute;
-import com.n4systems.fieldid.datatypes.ProductAttributeType;
-import com.n4systems.fieldid.datatypes.ProductType;
 
 public class Validate_2009_7_0 extends FieldIDTestCase {
 
