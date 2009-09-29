@@ -1,4 +1,6 @@
-${action.setPageType('templinkcreate', 'add_connection')!}
+
+${action.setPageType('safety_network_connections', 'add')!}
+
 
 <#include "/templates/html/common/_orgPicker.ftl"/>
 

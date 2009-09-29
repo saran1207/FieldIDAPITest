@@ -1,4 +1,4 @@
-${action.setPageType('safety_network', 'import')!}
+${action.setPageType('safety_network_connections', 'import')!}
 
 <#assign loaderDiv>
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>

@@ -21,6 +21,9 @@
 			<#if navOptions.returnToReport && reportActive>
 				<a href="<@s.url action="returnToReport"/>">&#171; <@s.text name="label.return_to_report"/></a>
 			</#if>
+			<#if navOptions.onSafetyNetwork>
+				<a href="<@s.url action="safetyNetwork"/>">&#171; <@s.text name="label.back_to_safety_network"/></a>
+			</#if>
 		</div>
 	    
 	    

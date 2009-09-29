@@ -411,4 +411,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	public Long idOrNull(BaseEntity entity) {
 		return (entity != null) ? entity.getId() : null; 
 	}
+	
+	public String getHouseAccountName() {
+		return ConfigContext.getCurrentContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME);
+	}
+	
+	
 }

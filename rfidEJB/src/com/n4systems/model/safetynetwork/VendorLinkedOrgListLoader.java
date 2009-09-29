@@ -7,5 +7,5 @@ public class VendorLinkedOrgListLoader extends LinkedOrgListLoader {
 	public VendorLinkedOrgListLoader(SecurityFilter filter) {
 		super(filter, OrgConnectionType.VENDOR);
 	}
-
+	
 }

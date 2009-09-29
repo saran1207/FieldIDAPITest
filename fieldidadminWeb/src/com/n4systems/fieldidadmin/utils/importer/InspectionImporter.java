@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.NamingException;
@@ -20,21 +21,21 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Status;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
+import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -279,16 +280,18 @@ public class InspectionImporter extends Importer {
 	}
 
 	private InspectionType findInspectionType(Product product, String name) throws NamingException {
-		InspectionType type = null;
-
-		ProductType prouductType = new ProductTypeLoader(product.getTenant().getId()).setId(product.getType().getId()).setStandardPostFetches().load();
-		for (InspectionType inspectionType : prouductType.getInspectionTypes()) {
-			if (inspectionType.getName().equalsIgnoreCase(name)) {
-				type = inspectionType;
-				break;
+		TenantOnlySecurityFilter tenantFilter = new TenantOnlySecurityFilter(product.getTenant().getId());
+		
+		List<AssociatedInspectionType> associatedInspectionTypes = new AssociatedInspectionTypesLoader(tenantFilter)
+																		.setProductType(product.getType())
+																		.load();
+		
+		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
+			if (associatedInspectionType.getInspectionType().getName().equalsIgnoreCase(name)) {
+				return associatedInspectionType.getInspectionType();
 			}
 		}
 
-		return type;
+		return null;
 	}
 }

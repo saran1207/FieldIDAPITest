@@ -52,6 +52,12 @@
 			<li>
 				<a href="<@s.url action="schedule"/>" class="speedLink" id="menuSchedule"><@s.text name="speed.schedule" /></a>
 			</li>
+			
+			<#if userSecurityGuard.allowedManageSystemUsers>
+				<li>
+					<a href="<@s.url action="safetyNetwork"/>" class="speedLink" id="menuSafetyNetwork"><@s.text name="speed.safety_network" /></a>
+				</li>
+			</#if>
 			<#if securityGuard.projectsEnabled>
 				<li>
 					<a href="<@s.url action="jobs"/>" class="speedLink" id="menuProject"><@s.text name="speed.projects"/></a>

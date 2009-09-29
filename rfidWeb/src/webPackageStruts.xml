@@ -1847,5 +1847,9 @@
 			</result>
 		</action>
 		
+		<action name="safetyNetwork" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork">
+			<result name="success" type="freemarker">/templates/html/safetyNetwork/show.ftl</result>
+		</action>
+		
 	</package>
 </struts>

@@ -11,10 +11,15 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
+import com.n4systems.model.safetynetwork.ConnectionListLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.TenantCache;
+import com.n4systems.services.safetyNetwork.CatalogService;
+import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
+import com.n4systems.tools.Pager;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -178,6 +183,22 @@ public class TempLinkCreateAction extends AbstractAction {
 			remoteTenant = null;
 		} else if (remoteTenant == null || !remoteTenant.getId().equals(id)) {
 			remoteTenant = TenantCache.getInstance().findTenant(id);
+		}
+	}
+	
+	public Pager<BaseOrg> getConnections() {
+		
+			return new ConnectionListLoader(getSecurityFilter(), ConfigContext.getCurrentContext()).setPage(1).load();
+	}
+	
+	public boolean hasAPublishedCatalog(BaseOrg org) {
+		
+		try {
+			CatalogService catalogService = new CatalogServiceImpl(persistenceManager, org.getTenant());
+			return catalogService.hasCatalog();
+		} catch (Exception e) {
+			
+			return false;
 		}
 	}
 	

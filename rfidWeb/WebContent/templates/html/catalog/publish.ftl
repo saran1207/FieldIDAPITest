@@ -3,7 +3,7 @@
 	<@n4.includeStyle href="steps"/>
 	</head>
 
-${action.setPageType('safety_network', 'catalog')!}
+${action.setPageType('catalog', 'catalog')!}
 <div id="steps">
 	<div class="step">
 		<h2><@s.text name="label.what_do_you_want_to_publish"/></h2>

@@ -27,6 +27,7 @@ public class OrgConnectionQueryBuilderFactory {
 	public static QueryBuilder<OrgConnection> createSingleQuery(SecurityFilter filter, OrgConnectionType connectionType, Long linkedOrgId) {
 		QueryBuilder<OrgConnection> builder = createListQuery(filter, connectionType);
 
+		
 		if (connectionType.isCustomer()) {
 			builder.addSimpleWhere("customer.id", linkedOrgId);
 		} else {

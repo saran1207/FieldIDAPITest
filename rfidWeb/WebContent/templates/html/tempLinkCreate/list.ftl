@@ -1,4 +1,4 @@
-${action.setPageType('templinkcreate', 'list_connections')!}
+${action.setPageType('safety_network_connections', 'list')!}
 
 <h1><@s.text name="label.addconnection"/></h2>
 
@@ -67,3 +67,17 @@ ${action.setPageType('templinkcreate', 'list_connections')!}
 	</tr>
 	</#list>
 </table>
+
+
+<h1><@s.text name="label.connections"/></h2>
+
+<ul id="safetyNetwork">
+	<#list connections.list as connection>
+		<li>
+			${connection.name?html}
+			<#if action.hasAPublishedCatalog(connection)>
+				<a href="<@s.url action="publishedCatalog" uniqueID="${connection.tenant.id}"/>"><@s.text name="view_catalog"/></a>
+			</#if>
+		</li>
+	</#list>
+</ul>

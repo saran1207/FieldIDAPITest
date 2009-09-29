@@ -28,6 +28,9 @@ public class NavOptionsController {
 	
 	private String title = "";
 	private String entityIdentifier;
+	private boolean onSafetyNetwork = false;
+
+
 
 	public NavOptionsController(SessionUser user, SystemSecurityGuard securityGaurd) {
 		this.user = user;
@@ -61,10 +64,11 @@ public class NavOptionsController {
 
 			p.load(propertyFile);
 			HierarchicalProperties commonProps = p.getProperties("common");
-			this.onAdmin = commonProps.getBoolean("onAdmin");
-			this.returnToReport = commonProps.getBoolean("returnToReport");
-			this.title =  commonProps.getString("title");
-			this.entityIdentifier =  commonProps.getString("title.entity_identifier");
+			onAdmin = commonProps.getBoolean("onAdmin");
+			onSafetyNetwork = commonProps.getBoolean("onSafetyNetwork");
+			returnToReport = commonProps.getBoolean("returnToReport");
+			title =  commonProps.getString("title");
+			entityIdentifier =  commonProps.getString("title.entity_identifier");
 			
 			
 			for (HierarchicalProperties props : p.getPropertiesList("option")) {
@@ -170,5 +174,9 @@ public class NavOptionsController {
 
 	public String getEntityIdentifier() {
 		return entityIdentifier;
+	}
+	
+	public boolean isOnSafetyNetwork() {
+		return onSafetyNetwork;
 	}
 }
