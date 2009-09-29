@@ -2,7 +2,7 @@ package com.n4systems.fieldid.permissions;
 
 import com.n4systems.security.Permissions;
 
-public abstract class AbstractUserSecurityTest {
+public abstract class AbstractUserSecurityTestCase {
 	protected String constructMethodName(int permission) {
 		return "isAllowed"+resolvePermissionName(permission);
 	}

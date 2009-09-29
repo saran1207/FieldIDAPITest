@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.n4systems.security.Permissions;
 
-public class UserSecurityGuardTestCase extends AbstractUserSecurityTest {
+public class UserSecurityGuardTest extends AbstractUserSecurityTestCase {
 
 	@Test
 	public void should_have_a_method_for_every_visible_permission() {

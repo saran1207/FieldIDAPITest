@@ -10,7 +10,7 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 
-public class SessionUserSecurityGuardTest extends AbstractUserSecurityTest {
+public class SessionUserSecurityGuardTest extends AbstractUserSecurityTestCase {
 
 	@Test
 	public void ensure_each_method_protects_its_permission() {		
