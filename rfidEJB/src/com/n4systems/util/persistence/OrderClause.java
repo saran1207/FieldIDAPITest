@@ -43,4 +43,30 @@ public class OrderClause implements ClauseArgument {
 		
 		return table.prepareField(param) + " " + direction;
 	}
+
+	@Override
+	public int hashCode() {
+		return param.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OrderClause other = (OrderClause) obj;
+		if (ascending != other.ascending)
+			return false;
+		if (param == null) {
+			if (other.param != null)
+				return false;
+		} else if (!param.equals(other.param))
+			return false;
+		return true;
+	}
+	
+	
 }

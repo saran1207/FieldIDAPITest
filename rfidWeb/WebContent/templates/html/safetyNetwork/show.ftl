@@ -10,5 +10,10 @@
 			<h2 class="clean"><a href="<@s.url action="catalog"/>"><@s.text name="label.manage_catalog"/></a></h2>
 			<p><@s.text name="label.manage_catalog.full"/></p>
 		</li>
+		
+		<li>	
+			<h2 class="clean"><a href="<@s.url action="messages"/>"><@s.text name="label.inbox"/></a></h2>
+			<p><@s.text name="label.inbox.full"/></p>
+		</li>
 	</ul>
 </div>

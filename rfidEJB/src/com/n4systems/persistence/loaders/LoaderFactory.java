@@ -8,6 +8,7 @@ import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
+import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
@@ -239,5 +240,8 @@ public class LoaderFactory {
 	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
 		return new SafetyNetworkProductLoader(filter);
 	}
-	
+
+	public PaginatedMessageLoader createPaginatedMessageLoader() {
+		return new PaginatedMessageLoader(filter);
+	}
 }

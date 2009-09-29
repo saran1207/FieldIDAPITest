@@ -1,0 +1,1 @@
+${action.setPageType('inbox', 'show')!}
