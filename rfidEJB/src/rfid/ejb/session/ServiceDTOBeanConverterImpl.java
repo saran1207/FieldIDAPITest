@@ -157,8 +157,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		populateOwners(inspectionBook.getOwner(), bookDTO);
 		
-		bookDTO.setAttachedToPrimaryOrg(inspectionBook.getOwner().getInternalOrg().isPrimary());				
-		
 		return bookDTO;		
 	}
 	
