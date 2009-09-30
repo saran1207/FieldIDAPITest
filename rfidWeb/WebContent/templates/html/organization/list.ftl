@@ -1,5 +1,4 @@
 ${action.setPageType('organization','list')!}
-<#if  page.hasResults() && page.validPage() >
 	<@s.url action="organizations" id="pageAction"/>
 	
 	<h2 class="sectionTitle">
@@ -19,6 +18,7 @@ ${action.setPageType('organization','list')!}
 		</div>
 	</div>
 	
+<#if  page.hasResults() && page.validPage() >
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
