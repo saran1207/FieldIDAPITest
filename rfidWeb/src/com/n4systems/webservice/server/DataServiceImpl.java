@@ -114,7 +114,6 @@ public class DataServiceImpl implements DataService {
 	private static Logger logger = Logger.getLogger(DataServiceImpl.class);
 
 	private static int OLD_FIRST_PAGE = 1;
-	private static int FIRST_PAGE = 0;
 	
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws ServiceException {
 		
@@ -560,7 +559,12 @@ public class DataServiceImpl implements DataService {
 				response.getInternalOrgs().add( converter.convert(internalOrg) );
 			}
 			
-			if (response.getCurrentPage() == response.getTotalPages()) {
+			// Adjust to throw in the primary org
+			if (response.getTotalPages() == 0) {
+				response.setTotalPages(1);
+			}
+			
+			if (response.getCurrentPage() >= response.getTotalPages()) {
 				PrimaryOrgByTenantLoader primaryLoader = loaderFactory.createPrimaryOrgByTenantLoader();
 				primaryLoader.setTenantId(requestInformation.getTenantId());
 				PrimaryOrg primaryOrg = primaryLoader.load();
