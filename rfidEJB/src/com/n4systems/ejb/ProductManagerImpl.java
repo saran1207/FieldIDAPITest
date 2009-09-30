@@ -366,7 +366,7 @@ public class ProductManagerImpl implements ProductManager {
 		logger.info("archived schedules for product " + product);
 	}
 
-	private Product save(Product product, UserBean modifiedBy) {
+	protected Product save(Product product, UserBean modifiedBy) {
 		ProductSaver productSaver = new ProductSaver();
 		productSaver.setModifiedBy(modifiedBy);
 		
