@@ -16,6 +16,9 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 public class SmartSearchLoader extends ListLoader<Product> {
 
 	private String searchText;
+	private boolean useSerialNumber = true;
+	private boolean useRfidNumber = true;
+	private boolean useRefNumber = true;
 	
 	public SmartSearchLoader(SecurityFilter filter) {
 		super(filter);
@@ -26,16 +29,36 @@ public class SmartSearchLoader extends ListLoader<Product> {
 		
 		WhereParameterGroup whereGroup = new WhereParameterGroup("search_group");
 		
-		whereGroup.addClause(WhereClauseFactory.create("serialNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
-		whereGroup.addClause(WhereClauseFactory.create("rfidNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
-		whereGroup.addClause(WhereClauseFactory.create("customerRefNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+		if (useSerialNumber) {
+			whereGroup.addClause(WhereClauseFactory.create("serialNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+		}
+		
+		if (useRfidNumber) {
+			whereGroup.addClause(WhereClauseFactory.create("rfidNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+		}
+		
+		if (useRefNumber) {
+			whereGroup.addClause(WhereClauseFactory.create("customerRefNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+		}
 		
 		builder.addWhere(whereGroup);
 		builder.addOrder("created");
 		
 		return builder;
 	}
-	
+
+	public void setUseSerialNumber(boolean useSerialNumber) {
+		this.useSerialNumber = useSerialNumber;
+	}
+
+	public void setUseRfidNumber(boolean useRfidNumber) {
+		this.useRfidNumber = useRfidNumber;
+	}
+
+	public void setUseRefNumber(boolean useRefNumber) {
+		this.useRefNumber = useRefNumber;
+	}
+
 	@Override
 	public List<Product> load(EntityManager em, SecurityFilter filter) {
 		List<Product> products = createQuery(filter).getResultList(em);
