@@ -10,6 +10,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 
 	private final Tenant tenantOrganization;
 	private final ProductType type;
+	private String serialNumber;
 	
 	public static ProductBuilder aProduct() {
 		return new ProductBuilder(TenantBuilder.n4(), aProductType().build());
@@ -29,6 +30,11 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		return new ProductBuilder(tenantOrganization, type);
 	}
 	
+	public ProductBuilder withSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+		return this;
+	}
+	
 	@Override
 	public Product build() {
 		Product product = generate();
@@ -40,6 +46,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		Product product = new Product();
 		product.setTenant(tenantOrganization);
 		product.setType(type);
+		product.setSerialNumber(serialNumber);
 		return product;
 	}
 

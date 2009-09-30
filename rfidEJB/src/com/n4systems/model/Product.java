@@ -37,6 +37,9 @@ import com.n4systems.model.utils.PlainDate;
 public class Product extends ArchivableEntityWithOwner implements Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
+	@Column(name="network_id", nullable=true)
+	private Long networkId;
+	
 	@Column(nullable=false, length=50)
 	private String serialNumber;
 	
@@ -125,8 +128,14 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		trimSerialNumber();
 		trimRfidNumber();
 		removeBlankInfoOptions();
+		synchronizeNetworkId();
 	}
 	
+	private void synchronizeNetworkId() {
+		if (networkId == null) {
+			networkId = (linkedProduct != null) ? linkedProduct.getNetworkId() : id;
+		}
+	}
 	
 	private void trimSerialNumber() {
 		serialNumber = trimIdentifier(serialNumber);
@@ -415,5 +424,9 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 
 	public void setCountsTowardsLimit(boolean countsTowardsLimit) {
 		this.countsTowardsLimit = countsTowardsLimit;
+	}
+
+	public Long getNetworkId() {
+		return networkId;
 	}
 }

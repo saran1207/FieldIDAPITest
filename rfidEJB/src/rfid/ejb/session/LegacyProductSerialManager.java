@@ -46,6 +46,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -275,11 +276,16 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	
 	public Product create(Product product) throws SubProductUniquenessException {
 		runProductSavePreRecs(product);
-		Product savedProduct = persistenceManager.update(product, product.getIdentifiedBy());
+		
+		ProductSaver saver = new ProductSaver();
+		saver.setModifiedBy(product.getIdentifiedBy());
+		
+		saver.save(em, product);
+
 		saveSubProducts(product);
 		// XXX not sure if this should be here.
-		inspectionScheduleManager.autoSchedule(savedProduct);
-		return new FindSubProducts(persistenceManager, savedProduct).fillInSubProducts();
+		inspectionScheduleManager.autoSchedule(product);
+		return new FindSubProducts(persistenceManager, product).fillInSubProducts();
 		
 	}
 
@@ -314,7 +320,9 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		 * meaning that we do not want it persisted with the Product, the following logic essentially overrides this.
 		 */
 		saveSubProducts(product);
-		product = persistenceManager.update(product);
+		
+		ProductSaver saver = new ProductSaver();
+		product = saver.update(em, product);
 		
 		updateSchedulesOwnership(product);
 		return product;
@@ -348,7 +356,10 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			subProduct.getProduct().setOwner(product.getOwner());
 			subProduct.getProduct().setLocation(product.getLocation());
 			subProduct.setWeight(weight);
-			em.merge(subProduct.getProduct());
+
+			ProductSaver saver = new ProductSaver();
+			product = saver.update(em, subProduct.getProduct());
+			
 			weight++;
 		}
 	}
@@ -425,12 +436,15 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	private void moveRfidFromProductSerials(Product obj) {
+		ProductSaver saver = new ProductSaver();
+		
 		if (rfidExists(obj.getRfidNumber(), obj.getTenant().getId())) {
 			Collection<Product> pSerials = productManager.findProductsByRfidNumber(obj.getRfidNumber(), new TenantOnlySecurityFilter(obj.getTenant().getId()));
 			for (Product pSerial : pSerials) {
 				if (!pSerial.getId().equals(obj.getId())) {
 					pSerial.setRfidNumber(null);
-					em.merge(pSerial);
+					
+					saver.update(em, pSerial);
 
 					String auditMessage = "Moving RFID [" + obj.getRfidNumber() + "] from ProductSerial [" + pSerial.getId() + ":" + pSerial.getSerialNumber() + "] to [" + obj.getId() + ":"
 							+ obj.getSerialNumber() + "]";

@@ -30,6 +30,7 @@ import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -315,7 +316,7 @@ public class ProductManagerImpl implements ProductManager {
 			SubProduct subProductToRemove = parentProduct.getSubProducts().get(parentProduct.getSubProducts().indexOf(new SubProduct(product, parentProduct)));
 			persistenceManager.delete(subProductToRemove);
 			parentProduct.getSubProducts().remove(subProductToRemove);
-			update(parentProduct, archivedBy);
+			save(parentProduct, archivedBy);
 		}
 
 		product.archiveEntity();
@@ -325,7 +326,7 @@ public class ProductManagerImpl implements ProductManager {
 		archiveSchedules(product, archivedBy);
 		detatachFromProjects(product, archivedBy);
 
-		return update(product, archivedBy);
+		return save(product, archivedBy);
 	}
 
 	private void detatachFromProjects(Product product, UserBean archivedBy) {
@@ -365,8 +366,17 @@ public class ProductManagerImpl implements ProductManager {
 		logger.info("archived schedules for product " + product);
 	}
 
-	private Product update(Product product, UserBean modifiedBy) {
-		return persistenceManager.update(product, modifiedBy);
+	private Product save(Product product, UserBean modifiedBy) {
+		ProductSaver productSaver = new ProductSaver();
+		productSaver.setModifiedBy(modifiedBy);
+		
+		if (product.isNew()) {
+			productSaver.save(em, product);
+		} else {
+			product = productSaver.update(em, product);
+		}
+		
+		return product;
 	}
 
 	public ProductType archive(ProductType productType, Long archivedBy, String deletingPrefix) {
