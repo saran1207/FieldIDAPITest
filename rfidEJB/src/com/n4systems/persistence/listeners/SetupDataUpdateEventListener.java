@@ -13,6 +13,7 @@ import org.hibernate.event.PostUpdateEventListener;
 
 import com.n4systems.model.api.CrossTenantEntity;
 import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.tenant.HasSetupDataTenant;
 import com.n4systems.services.InvalidSetupDataGroupClassException;
 import com.n4systems.services.SetupDataGroup;
 import com.n4systems.services.SetupDataLastModUpdateService;
@@ -72,7 +73,10 @@ public class SetupDataUpdateEventListener implements PostUpdateEventListener, Po
 		SetupDataGroup group = getSetupDataGroupMap().get(entity.getClass());
 		SetupDataLastModUpdateService updateService = SetupDataLastModUpdateService.getInstance();
 		
-		if (entity instanceof HasTenant) {
+		if (entity instanceof HasSetupDataTenant) {
+			Long tenantId = ((HasSetupDataTenant)entity).getSetupDataTenant().getId();
+			updateService.touchModDate(tenantId, group);
+		} else if (entity instanceof HasTenant) {
 			// if the entity has a tenant, then we will update just for the specific tenant
 			Long tenantId = ((HasTenant)entity).getTenant().getId();
 			updateService.touchModDate(tenantId, group);

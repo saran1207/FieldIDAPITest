@@ -7,15 +7,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.tenant.HasSetupDataTenant;
 
 @Entity
 @Table(name="org_connections", uniqueConstraints = @UniqueConstraint(columnNames = {"vendor_id", "customer_id"}))
-public class OrgConnection extends AbstractEntity implements UnsecuredEntity {
+public class OrgConnection extends AbstractEntity implements UnsecuredEntity, HasSetupDataTenant {
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
@@ -59,5 +61,9 @@ public class OrgConnection extends AbstractEntity implements UnsecuredEntity {
 		} else {
 			return getVendor();
 		}
+	}
+	
+	public Tenant getSetupDataTenant() {
+		return customer.getTenant();
 	}
 }

@@ -18,6 +18,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.safetynetwork.OrgConnection;
 
 public enum SetupDataGroup {
 	/*
@@ -50,7 +51,8 @@ public enum SetupDataGroup {
 			PrimaryOrg.class,
 			SecondaryOrg.class,
 			CustomerOrg.class,
-			DivisionOrg.class
+			DivisionOrg.class,
+			OrgConnection.class
 	),
 	JOBS (
 			Project.class
