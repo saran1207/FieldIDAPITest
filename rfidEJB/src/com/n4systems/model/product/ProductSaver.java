@@ -28,7 +28,7 @@ public class ProductSaver extends Saver<Product> {
 		// the one case where this doesn't need to happen is if it was connected on create
 		if (product.getNetworkId() == null) {
 			product.touch();
-			managedProduct = super.update(em, product);
+			managedProduct = super.update(em, managedProduct);
 		}
 		
 		return managedProduct;
