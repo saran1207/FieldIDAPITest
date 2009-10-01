@@ -24,13 +24,18 @@ public class ProductSaver extends Saver<Product> {
 		setModifiedByOnProduct(product);
 		Product managedProduct = super.update(em, product);
 		
-		// on save, we also need to update which will force the network Id to get setup
+		managedProduct = resave(em, managedProduct);
+		
+		return managedProduct;
+	}
+
+	private Product resave(EntityManager em, Product managedProduct) {
+		// if the networkid is null, we need to update which will force the network Id to get setup
 		// the one case where this doesn't need to happen is if it was connected on create
-		if (product.getNetworkId() == null) {
-			product.touch();
+		if (managedProduct.getNetworkId() == null) {
+			managedProduct.touch();
 			managedProduct = super.update(em, managedProduct);
 		}
-		
 		return managedProduct;
 	}
 	

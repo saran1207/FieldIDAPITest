@@ -387,7 +387,8 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 
 	@Override
     public String toString() {
-	    return getSerialNumber() + " (" + getId() + ") tenant " + getTenant().getName();
+		String tenantName = (getTenant() != null) ? getTenant().getName() : "null";
+	    return String.format("%s (%d) tenant %s", getSerialNumber(), getId(), tenantName);
     }
 
 	public List<SubProduct> getSubProducts() {
