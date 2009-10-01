@@ -14,21 +14,24 @@ public class ProductSaver extends Saver<Product> {
 	
 	@Override
 	public void save(EntityManager em, Product product) {
-		setModifiedByOnProduct(product);
-		super.save(em, product);
-		
-		// on save, we also need to update which will force the network Id to get setup
-		// the one case where this doesn't need to happen is if it was connected on create
-		if (product.getNetworkId() == null) {
-			product.touch();
-			update(em, product);
-		}
+		// Due to the way Product is setup right now, we can call persist on it 
+		// or we'll get lazy loads, until this is fixed, we'll just always call update 
+		update(em, product);
 	}
 
 	@Override
 	public Product update(EntityManager em, Product product) {
 		setModifiedByOnProduct(product);
-		return super.update(em, product);
+		Product managedProduct = super.update(em, product);
+		
+		// on save, we also need to update which will force the network Id to get setup
+		// the one case where this doesn't need to happen is if it was connected on create
+		if (product.getNetworkId() == null) {
+			product.touch();
+			managedProduct = super.update(em, product);
+		}
+		
+		return managedProduct;
 	}
 	
 	private void setModifiedByOnProduct(Product product) {

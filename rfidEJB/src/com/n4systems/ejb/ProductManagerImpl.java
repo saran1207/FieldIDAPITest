@@ -370,11 +370,7 @@ public class ProductManagerImpl implements ProductManager {
 		ProductSaver productSaver = new ProductSaver();
 		productSaver.setModifiedBy(modifiedBy);
 		
-		if (product.isNew()) {
-			productSaver.save(em, product);
-		} else {
-			product = productSaver.update(em, product);
-		}
+		product = productSaver.update(em, product);
 		
 		return product;
 	}

@@ -280,7 +280,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		ProductSaver saver = new ProductSaver();
 		saver.setModifiedBy(product.getIdentifiedBy());
 		
-		saver.save(em, product);
+		product = saver.update(em, product);
 
 		saveSubProducts(product);
 		// XXX not sure if this should be here.
