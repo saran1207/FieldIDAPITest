@@ -101,7 +101,8 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	}
 	
 	public int compareTo(BaseOrg other) {
-		return name.compareToIgnoreCase(other.getName());
+		int cmp = name.compareToIgnoreCase(other.getName());
+		return (cmp != 0) ? cmp : getId().compareTo(other.getId());
 	}
 	
 	public boolean isInternal() {
