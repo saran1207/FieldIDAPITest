@@ -1,5 +1,6 @@
 package com.n4systems.model.producttype;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
 
 	private Long id;
 
-	private List<String> postFetchFields;
+	private List<String> postFetchFields = new ArrayList<String>();
 
 	public ProductTypeLoader(Long tenantId) {
 		super(tenantId);

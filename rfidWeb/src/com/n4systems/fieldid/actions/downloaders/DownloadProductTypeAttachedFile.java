@@ -22,7 +22,7 @@ public class DownloadProductTypeAttachedFile extends DownloadAction {
 	public String doDownload() {
 		
 		// load the product type
-		productType =   getLoaderFactory().createProductTypeLoader().setId(uniqueID).setStandardPostFetches().load();
+		productType =   getLoaderFactory().createProductTypeLoader().setId(uniqueID).setPostFetchFields("attachments").load();
 		
 		if( productType == null ) {
 			addActionErrorText("error.noproducttype");
