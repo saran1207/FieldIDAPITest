@@ -67,6 +67,27 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
 		this.searchText = searchText;
 		return this;
 	}
+	
+	public SafetyNetworkSmartSearchLoader useOnlySerialNumber() {
+		setUseSerialNumber(true);
+		setUseRfidNumber(false);
+		setUseRefNumber(false);
+		return this;
+	}
+
+	public SafetyNetworkSmartSearchLoader useOnlyRfidNumber() {
+		setUseRfidNumber(true);
+		setUseSerialNumber(false);
+		setUseRefNumber(false);
+		return this;
+	}
+
+	public SafetyNetworkSmartSearchLoader useOnlyRefNumber() {
+		setUseRefNumber(true);
+		setUseRfidNumber(false);
+		setUseSerialNumber(false);
+		return this;
+	}
 
 	public void setUseSerialNumber(boolean useSerialNumber) {
 		this.useSerialNumber = useSerialNumber;

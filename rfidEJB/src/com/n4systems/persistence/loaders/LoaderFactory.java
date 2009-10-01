@@ -34,6 +34,7 @@ import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -187,6 +188,10 @@ public class LoaderFactory {
 	
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
 		return new SafetyNetworkSmartSearchLoader(filter);
+	}
+	
+	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
+		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
 	
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {

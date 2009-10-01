@@ -23,6 +23,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 	private List<SubProductMapServiceDTO> subProducts = new ArrayList<SubProductMapServiceDTO>();
 	private List<InspectionScheduleServiceDTO> schedules = new ArrayList<InspectionScheduleServiceDTO>();
 	private String description;
+	private long vendorId;
 
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
@@ -163,5 +164,14 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 	}
 	public void setOrganizationId(long organizationId) {
 		this.organizationId = organizationId;
+	}
+	public long getVendorId() {
+		return vendorId;
+	}
+	public void setVendorId(long vendorId) {
+		this.vendorId = vendorId;
+	}	
+	public boolean vendorIdExists() {
+		return isValidServerId(vendorId);
 	}
 }

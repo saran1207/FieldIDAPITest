@@ -54,7 +54,9 @@ import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
+import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -630,9 +632,22 @@ public class DataServiceImpl implements DataService {
 				return response; 
 			}
 			
+			
 			// convert from the service dto
 			product = convertNewProduct( requestInformation.getTenantId(), productDTO );
 			
+			// Check if we need to try and register this product on the safety network
+			if (productDTO.vendorIdExists()) {
+				LoaderFactory loaderFactory = new LoaderFactory(new OrgOnlySecurityFilter(product.getOwner().getInternalOrg()));
+				SafetyNetworkBackgroundSearchLoader networkLoader = loaderFactory.createSafetyNetworkBackgroundSearchLoader();				
+				Product linkedProduct = networkLoader.setSerialNumber(productDTO.getSerialNumber())
+													 .setRfidNumber(productDTO.getRfidNumber())
+													 .setRefNumber(productDTO.getCustomerRefNumber())
+													 .setVendorOrgId(productDTO.getVendorId())
+													 .load();
+				product.setLinkedProduct(linkedProduct);
+			}
+				
 			// create the product with attached sub product transactionally
 			product = productManager.createProductWithServiceTransaction( requestInformation.getMobileGuid(), product );
 
