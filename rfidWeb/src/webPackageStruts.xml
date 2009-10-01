@@ -1224,7 +1224,7 @@
 		
 		<action name="adminSendResetPassword" method="create" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<result name="success" type="redirectAction">
-				<param name="actionName">userEdit</param>
+				<param name="actionName">adminEditPassword</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
@@ -1843,7 +1843,8 @@
 			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">listConnections</param>
+				<param name="actionName">messageAdd</param>
+				<param name="messageId">${uniqueID}</param>
 			</result>
 		</action>
 		
@@ -1870,17 +1871,10 @@
 		<action name="messageCreate" method="create"	class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="input" type="freemarker">/templates/html/messages/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/messages/add.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">message</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+			<result name="success" type="redirectAction">messages</result>
 		</action>
 		
-		<action name="messageEdit" method="edit" class="com.n4systems.fieldid.actions.message.MessageCrud">
-			<result name="success" type="freemarker">/templates/html/messages/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/messages/edit.ftl</result>
-		</action>
-
+		
 		<action name="messageUpdate" method="update" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="input" type="freemarker">/templates/html/messages/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/messages/edit.ftl</result>

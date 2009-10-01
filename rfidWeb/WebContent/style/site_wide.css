@@ -57,9 +57,12 @@ pre {
 	padding:5px 0;
 	
 }
-.minForm input[type="text"], .minForm input[type="password"], .minForm input.textbox, .minForm input.passwordBox {
+.minForm input[type="text"], .minForm input[type="password"], .minForm input.textbox, .minForm input.passwordBox, .minForm textarea {
 	width: 444px;
-	
+	border: 1px solid #666
+}
+.minForm textarea {
+	height: 150px;
 }
 
 .minForm input[type="submit"], .minForm button {
@@ -91,10 +94,11 @@ pre {
 	padding:1px 0;
 	
 }
-.fullForm input[type="text"], .fullForm input[type="password"], .fullForm input.textbox, .fullForm input.passwordBox, .fullForm textArea, .fullForm select {
+.fullForm input[type="text"], .fullForm input[type="password"], .fullForm input.textbox, .fullForm input.passwordBox, .fullForm textarea, .fullForm select {
 	width: 250px;
+	border: 1px solid #666
 }
-.fullForm textArea {
+.fullForm textarea {
 	height: 100px;
 }
 

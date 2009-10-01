@@ -87,7 +87,9 @@ public class DownloadProductTypeAttachedFile extends DownloadAction {
 		
 		File productTypeDirectory = PathHandler.getProductTypeImageFile( productType );
 		File imageFile = new File( productTypeDirectory.getAbsolutePath() + '/' + productType.getImageName() );
+		
 		fileName = productType.getImageName();
+		
 		if( !imageFile.exists() ) {
 			addActionError( getText( "error.noproductimage" ) );
 			return MISSING;

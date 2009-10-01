@@ -22,6 +22,7 @@ import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitiali
 import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.security.TenantLimitProxy;
+import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
@@ -52,6 +53,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	public static final String REDIRECT_TO_URL = "redirect_to_url";
 	
 	protected final PersistenceManager persistenceManager;
+	protected final BaseActionHelper helper;
 	
 	private Collection<String> flashMessages = new ArrayList<String>();
 	private Collection<String> flashErrors = new ArrayList<String>();
@@ -66,8 +68,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
 	private CreateHandlerFactory createHandlerFactory;
 	
+	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
+		helper = new BaseActionHelper();
 	}
 	
 	public SessionUser getSessionUser() {
@@ -416,5 +420,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		return ConfigContext.getCurrentContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME);
 	}
 	
+	
+	public BaseActionHelper getHelper() {
+		return helper;
+	}
 	
 }

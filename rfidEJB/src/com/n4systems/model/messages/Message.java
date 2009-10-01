@@ -2,8 +2,10 @@ package com.n4systems.model.messages;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.orgs.InternalOrg;
@@ -13,7 +15,7 @@ import com.n4systems.model.parents.EntityWithOwner;
 @Table(name="messages")
 public class Message extends EntityWithOwner {
 
-	private boolean read = false;
+	private boolean unread = false;
 	
 	@Column(nullable = false, length=255)
 	private String sender;
@@ -27,24 +29,26 @@ public class Message extends EntityWithOwner {
 	@Column(nullable = false)
 	private String body;
 	
+	@OneToOne(optional=false, cascade=CascadeType.REMOVE)
+	private MessageCommand command;
 	
 	public Message() {
 	}
 
 	public boolean isRead() {
-		return read;
+		return !unread;
 	}
 
 	public void setRead() {
-		read = true;
+		unread = false;
 	}
 	
 	public boolean isUnRead() {
-		return !read;
+		return unread;
 	}
 	
 	public void setUnRead() {
-		read = false;
+		unread = true;
 	}
 
 	public String getSender() {
@@ -83,6 +87,14 @@ public class Message extends EntityWithOwner {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public MessageCommand getCommand() {
+		return command;
+	}
+
+	public void setCommand(MessageCommand command) {
+		this.command = command;
 	}
 
 }

@@ -94,16 +94,7 @@ abstract public class ExternalOrg extends BaseOrg {
 	public Long getLegacyId() {
 		return legacyId;
 	}
-
-	@Override
-	public String getDisplayName() {
-		return super.getDisplayName() + " <->";
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + " <->";
-	}
+	
 	
 	
 }

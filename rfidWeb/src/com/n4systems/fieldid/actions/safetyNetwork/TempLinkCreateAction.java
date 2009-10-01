@@ -8,19 +8,19 @@ import org.jboss.logging.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
+import com.n4systems.model.messages.MessageCommandSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.safetynetwork.ConnectionListLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
-import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -40,7 +40,6 @@ public class TempLinkCreateAction extends AbstractAction {
 		}
 	};
 	
-	private final OrgConnectionSaver saver;
 	
 	private List<OrgConnection> vendorConnections;
 	private List<OrgConnection> customerConnections;
@@ -52,9 +51,11 @@ public class TempLinkCreateAction extends AbstractAction {
 	private InternalOrg remoteOrg;
 	private ConnectionType connectionType = ConnectionType.VENDOR;
 	
+	private Long uniqueID;
+	
 	public TempLinkCreateAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		saver = new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID));
+		//saver = new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID));
 	}
 	
 	public String doList() {
@@ -67,26 +68,26 @@ public class TempLinkCreateAction extends AbstractAction {
 	
 	public String doSave() {
 		try {
-			
-			OrgConnection connection = new OrgConnection();
-			connection.setModifiedBy(getUser());
+			CreateSafetyNetworkConnectionMessageCommand command = new CreateSafetyNetworkConnectionMessageCommand();
 			
 			switch (connectionType) {
 				case CUSTOMER:
-					connection.setCustomer(remoteOrg);
-					connection.setVendor(localOrg);
+					command.setCustomerOrgId(remoteOrg.getId());
+					command.setVendorOrgId(localOrg.getId());
 					break;
 				case VENDOR:
-					connection.setCustomer(localOrg);
-					connection.setVendor(remoteOrg);
+					command.setCustomerOrgId(localOrg.getId());
+					command.setVendorOrgId(remoteOrg.getId());
 					break;
 			}
 			
-			saver.save(connection);
-			addActionMessageText("message.connection_created");
+			new MessageCommandSaver().save(command);
+			uniqueID = command.getId();
+			addActionMessageText("message.invitation_sent");
 		} catch(RuntimeException e) {
 			logger.error("Failed saving OrgConnection", e);
-			addActionErrorText("error.failed_creating_connection");
+			addActionErrorText("error.failed_send_invitation");
+			
 			return ERROR;
 		}
 		
@@ -201,6 +202,11 @@ public class TempLinkCreateAction extends AbstractAction {
 			
 			return false;
 		}
+	}
+
+	
+	public Long getUniqueID() {
+		return uniqueID;
 	}
 	
 }
