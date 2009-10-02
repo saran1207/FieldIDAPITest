@@ -200,8 +200,7 @@ public class DateHelper {
 	}
 
 	public static Date addDaysToDate(Date date, Long days) {
-		// refactor to use increment
-		return new Date(date.getTime() + (millisPerDay * days));
+		return increment(date, DAY, days.intValue());
 	}
 
 	public static Long getDaysDelta(Date first, Date second) {
