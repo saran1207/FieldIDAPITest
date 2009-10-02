@@ -6,16 +6,19 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Product;
-import com.n4systems.model.security.ProductNetworkFilter;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
 
-public class ChildProductLoader extends NonSecuredListLoader<Product> {
-
+public class RecursiveLinkedChildProductLoader extends NonSecuredListLoader<Product> {
+	private final LinkedChildProductLoader linkedProductLoader;
 	private Product product;
 	
-	public ChildProductLoader() {}
+	public RecursiveLinkedChildProductLoader(LinkedChildProductLoader linkedProductLoader) {
+		this.linkedProductLoader = linkedProductLoader;
+	}
+	
+	public RecursiveLinkedChildProductLoader() {
+		this(new LinkedChildProductLoader());
+	}
 	
 	@Override
 	protected List<Product> load(EntityManager em) {
@@ -31,7 +34,7 @@ public class ChildProductLoader extends NonSecuredListLoader<Product> {
 	}
 	
 	protected void loadChildTree(EntityManager em, Product product, List<Product> allLinkedChildProducts) {
-		List<Product> linkedChildren = loadLinkedChildren(em, product);
+		List<Product> linkedChildren = linkedProductLoader.setProduct(product).load(em);
 		
 		allLinkedChildProducts.addAll(linkedChildren);
 		
@@ -39,16 +42,8 @@ public class ChildProductLoader extends NonSecuredListLoader<Product> {
 			loadChildTree(em, linkedChild, allLinkedChildProducts);
 		}
 	}
-	
-	protected List<Product> loadLinkedChildren(EntityManager em, Product product) {
-		QueryBuilder<Product> loader = new QueryBuilder<Product>(Product.class, new ProductNetworkFilter(product));
-		loader.addWhere(WhereClauseFactory.create("linkedProduct", product));
 
-		List<Product> linkedChildren = loader.getResultList(em);
-		return linkedChildren;
-	}
-
-	public ChildProductLoader setProduct(Product product) {
+	public RecursiveLinkedChildProductLoader setProduct(Product product) {
 		this.product = product;
 		return this;
 	}

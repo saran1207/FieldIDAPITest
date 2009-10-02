@@ -3,6 +3,9 @@ package com.n4systems.model.product;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.junit.Test;
@@ -74,6 +77,38 @@ public class ProductSaverTest {
 		
 		ProductSaver saver = new ProductSaver();
 		saver.save(em, product);
+	}
+	
+	@Test
+	public void update_forces_network_recalc_on_linked_product_change() {
+		Product product = ProductBuilder.aProduct().build();
+		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		
+		// we don't really need to test there here, but it may be confusing, if this test 
+		// started failing because this was returning false
+		assertTrue("This test is fine, it's the product that's broken", product.linkedProductHasChanged());
+		
+		final List<Product> linkedProducts = Arrays.asList(ProductBuilder.aProduct().build(), ProductBuilder.aProduct().build(), ProductBuilder.aProduct().build());
+		
+		RecursiveLinkedChildProductLoader loader = new RecursiveLinkedChildProductLoader() {
+			@Override
+			protected List<Product> load(EntityManager em) {
+				return linkedProducts;
+			}
+		};
+		
+		EntityManager em = createMock(EntityManager.class);
+		expect(em.merge(product)).andReturn(product);
+		expect(em.merge(product)).andReturn(product);
+		expect(em.merge(linkedProducts.get(0))).andReturn(linkedProducts.get(0));
+		expect(em.merge(linkedProducts.get(1))).andReturn(linkedProducts.get(1));
+		expect(em.merge(linkedProducts.get(2))).andReturn(linkedProducts.get(2));
+		replay(em);
+
+
+		ProductSaver saver = new ProductSaver(loader);		
+		saver.save(em, product);
+		
 	}
 	
 }

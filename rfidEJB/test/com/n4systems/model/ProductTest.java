@@ -29,10 +29,7 @@ public class ProductTest {
 		
 		assertEquals( serialNumber, product.getArchivedSerialNumber() );
 		assertNotSame( serialNumber, product.getSerialNumber() );
-		assertNotNull( product.getSerialNumber() );
-		
-		
-		
+		assertNotNull( product.getSerialNumber() );	
 	}
 	
 	@Test
@@ -67,5 +64,48 @@ public class ProductTest {
 		assertEquals(product.getId(), product.getNetworkId());		
 	}
 	
-
+	@Test
+	public void last_linked_id_synchronizes_on_load() {
+		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		
+		assertTrue(product.linkedProductHasChanged());
+		
+		product.onLoad();
+		
+		assertFalse(product.linkedProductHasChanged());
+	}
+	
+	@Test
+	public void last_linked_id_synchronizes_on_create() {
+		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		
+		assertTrue(product.linkedProductHasChanged());
+		
+		product.onCreate();
+		
+		assertFalse(product.linkedProductHasChanged());
+	}
+	
+	@Test
+	public void last_linked_id_synchronizes_on_update() {
+		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		
+		assertTrue(product.linkedProductHasChanged());
+		
+		product.onUpdate();
+		
+		assertFalse(product.linkedProductHasChanged());
+	}
+	
+	@Test
+	public void linked_id_can_get_nulled() {
+		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		product.onLoad();
+		
+		assertFalse(product.linkedProductHasChanged());
+		
+		product.setLinkedProduct(null);
+		
+		assertTrue(product.linkedProductHasChanged());
+	}
 }

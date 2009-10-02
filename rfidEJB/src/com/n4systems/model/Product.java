@@ -105,13 +105,25 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private Product linkedProduct;
 
+    @Column(insertable=false, updatable=false)
+    private Long linked_id;
+    
     @Column(name="countstowardslimit", nullable=false)
     private boolean countsTowardsLimit = true;
+    
+    @Transient
+    private Long last_linked_id;
     
 	public Product() {
 		this.identified = new PlainDate();
 	}
 	
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		synchronizeLastLinkedId();
+	}
+
 	@Override
 	protected void onCreate() {
 		super.onCreate();
@@ -132,9 +144,16 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 	
 	private void synchronizeNetworkId() {
-		if (networkId == null) {
-			networkId = (linkedProduct != null) ? linkedProduct.getNetworkId() : id;
+		if (linkedProduct != null) {
+			networkId = linkedProduct.getNetworkId();
+		} else {
+			networkId = id;
 		}
+		synchronizeLastLinkedId();
+	}
+	
+	private void synchronizeLastLinkedId() {
+		last_linked_id = linked_id;
 	}
 	
 	private void trimSerialNumber() {
@@ -413,6 +432,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 
 	public void setLinkedProduct(Product linkedProduct) {
 		this.linkedProduct = linkedProduct;
+		this.linked_id = (linkedProduct != null) ? linkedProduct.getId() : null;
 	}
 	
 	public boolean isLinked() {
@@ -429,5 +449,9 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 
 	public Long getNetworkId() {
 		return networkId;
+	}
+	
+	public boolean linkedProductHasChanged() {
+		return (last_linked_id != linked_id);
 	}
 }

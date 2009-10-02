@@ -94,15 +94,14 @@ public class ChildProductLoaderTest {
 	
 	@Test
 	public void load_child_tree_loads_all_children() {
-		class TestChildProductLoader extends ChildProductLoader {
-			@Override
-			protected List<Product> loadLinkedChildren(EntityManager em, Product product) {
+		LinkedChildProductLoader childProdLoader = new LinkedChildProductLoader() {
+			protected List<Product> load(EntityManager em) {
 				Tree<Product> products = tree.find(product);
 				return products.values();
 			}
-		}
+		};
 		
-		TestChildProductLoader loader = new TestChildProductLoader();
+		RecursiveLinkedChildProductLoader loader = new RecursiveLinkedChildProductLoader(childProdLoader);
 		
 		List<Product> products = loader.setProduct(tree.getValue()).load(new DummyEntityManager());
 		
@@ -113,8 +112,7 @@ public class ChildProductLoaderTest {
 	
 	@Test(expected=SecurityException.class)
 	public void load_throws_exception_on_null_product() {
-		new ChildProductLoader().load((EntityManager)null);
+		new RecursiveLinkedChildProductLoader().load((EntityManager)null);
 	}
-	
 	
 }
