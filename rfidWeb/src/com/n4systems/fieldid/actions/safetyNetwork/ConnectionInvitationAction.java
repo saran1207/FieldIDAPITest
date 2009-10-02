@@ -3,8 +3,8 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.jboss.logging.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -17,22 +17,16 @@ import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
-import com.n4systems.model.safetynetwork.ConnectionListLoader;
-import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.TenantCache;
-import com.n4systems.services.safetyNetwork.CatalogService;
-import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
-import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
-public class TempLinkCreateAction extends AbstractAction {
+public class ConnectionInvitationAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(TempLinkCreateAction.class);
+	private static Logger logger = Logger.getLogger(ConnectionInvitationAction.class);
 	
 	public enum ConnectionType { 
 		VENDOR("label.connection_type.vendor"),
@@ -45,9 +39,6 @@ public class TempLinkCreateAction extends AbstractAction {
 		}
 	};
 	
-	
-	private List<OrgConnection> vendorConnections;
-	private List<OrgConnection> customerConnections;
 	private List<StringListingPair> connectionTypes;
 	private List<ListingPair> tenants;
 	private List<ListingPair> remoteOrgs;
@@ -56,19 +47,14 @@ public class TempLinkCreateAction extends AbstractAction {
 	private InternalOrg remoteOrg;
 	private ConnectionType connectionType = ConnectionType.VENDOR;
 	
-	private Long uniqueID;
-	
 	private MessageDecorator message = new MessageDecorator(new Message());
 	
-	public TempLinkCreateAction(PersistenceManager persistenceManager) {
+	
+	public ConnectionInvitationAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 	
-	@SkipValidation
-	public String doList() {
-		return SUCCESS;
-	}
-	
+
 	@SkipValidation
 	public String doRemoteOrgs() {
 		return SUCCESS;
@@ -117,38 +103,16 @@ public class TempLinkCreateAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
-	protected InternalOrgListableLoader createRemoteOrgLoader() {
-		return new InternalOrgListableLoader(new TenantOnlySecurityFilter(getRemoteTenantId()));
+
+
+	public String getConnectionType() {
+		return connectionType.name();
+	}
+
+	public void setConnectionType(String connectionType) {
+		this.connectionType = ConnectionType.valueOf(connectionType);
 	}
 	
-	public List<ListingPair> getTenants() {
-		if (tenants == null) {
-			tenants = ListHelper.longListableToListingPair(TenantCache.getInstance().findAllTenants());
-		}
-		return tenants;
-	}
-	
-	public List<ListingPair> getRemoteOrgs() {
-		if (remoteOrgs == null) {
-			remoteOrgs = ListHelper.longListableToListingPair(createRemoteOrgLoader().load());
-		}
-		return remoteOrgs;
-	}
-
-	public List<OrgConnection> getVendorConnections() {
-		if (vendorConnections == null) {
-			vendorConnections = getLoaderFactory().createVendorOrgConnectionsListLoader().load();
-		}
-		return vendorConnections;
-	}
-
-	public List<OrgConnection> getCustomerConnections() {
-		if (customerConnections == null) {
-			customerConnections = getLoaderFactory().createCustomerOrgConnectionsListLoader().load();
-		}
-		return customerConnections;
-	}
-
 	public InternalOrg getLocalOrg() {
 		return localOrg;
 	}
@@ -177,13 +141,7 @@ public class TempLinkCreateAction extends AbstractAction {
 		}
 	}
 
-	public String getConnectionType() {
-		return connectionType.name();
-	}
 
-	public void setConnectionType(String connectionType) {
-		this.connectionType = ConnectionType.valueOf(connectionType);
-	}
 	
 	public List<StringListingPair> getConnectionTypes() {
 		if (connectionTypes == null) {
@@ -195,8 +153,22 @@ public class TempLinkCreateAction extends AbstractAction {
 		return connectionTypes;
 	}
 	
-	public String getConnectionTypeLabel() {
-		return connectionType.label;
+	protected InternalOrgListableLoader createRemoteOrgLoader() {
+		return new InternalOrgListableLoader(new TenantOnlySecurityFilter(getRemoteTenantId()));
+	}
+	
+	public List<ListingPair> getTenants() {
+		if (tenants == null) {
+			tenants = ListHelper.longListableToListingPair(TenantCache.getInstance().findAllTenants());
+		}
+		return tenants;
+	}
+	
+	public List<ListingPair> getRemoteOrgs() {
+		if (remoteOrgs == null) {
+			remoteOrgs = ListHelper.longListableToListingPair(createRemoteOrgLoader().load());
+		}
+		return remoteOrgs;
 	}
 	
 	public Long getRemoteTenantId() {
@@ -211,32 +183,10 @@ public class TempLinkCreateAction extends AbstractAction {
 		}
 	}
 	
-	public Pager<BaseOrg> getConnections() {
-		
-			return new ConnectionListLoader(getSecurityFilter(), ConfigContext.getCurrentContext()).setPage(1).load();
-	}
-	
-	public boolean hasAPublishedCatalog(BaseOrg org) {
-		
-		try {
-			CatalogService catalogService = new CatalogServiceImpl(persistenceManager, org.getTenant());
-			return catalogService.hasCatalog();
-		} catch (Exception e) {
-			
-			return false;
-		}
-	}
 
-	
-	public Long getUniqueID() {
-		return uniqueID;
-	}
-	
 	@VisitorFieldValidator(message="")
 	public MessageDecorator getMessage() {
 		return message;
 	}
-
-	
 
 }

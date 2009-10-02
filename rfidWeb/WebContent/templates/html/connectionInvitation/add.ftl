@@ -29,7 +29,7 @@ ${action.setPageType('safety_network_connections', 'add')!}
 	</@n4.includeScript>
 </head>
 <#include "/templates/html/common/_orgPicker.ftl"/>
-<@s.url id="cancelUrl" action="listConnections"/>
+<@s.url id="cancelUrl" action="connections"/>
 <@s.form action="connectionInvitationCreate" cssClass="fullForm contentBlock" theme="fieldid">
 	
 	<#include "../common/_formErrors.ftl"/>

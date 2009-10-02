@@ -4,7 +4,7 @@
 </head>
 	
 <div id="messageInput">
-	<h2><@s.text name="label.send_message"/></h2>
+	<h2 class="clean"><@s.text name="label.send_message"/></h2>
 	<div class="infoField">
 		<label for="from" class="label"><@s.text name="label.from"/></label>
 		<span class="fieldHolder" id="sender">${sessionUser.name?html} ${sessionUser.owner.name?html}</span> 
@@ -23,7 +23,7 @@
 		<@s.textarea name="message.body"/>
 	</div>
 	<div class="actions">
-		<@s.submit key="lable.send" id="send"/>
+		<@s.submit key="label.send" id="send"/>
 		<@s.text name="label.or"/>
 		<a href="${cancelUrl}" id="messageCancel"><@s.text name="label.cancel"/></a>
 	</div>

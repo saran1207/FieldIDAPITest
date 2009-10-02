@@ -296,9 +296,6 @@
 			<result name="error" type="freemarker">/templates/html/productCodeMappingCrud/list.ftl</result>
 		</action>
 
-		<action name="safetyNetworkList" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkCrud">
-			<result name="success" type="freemarker">/templates/html/safetyNetwork/list.ftl</result>
-		</action>
 
 
 		<action name="autoAttributeCriteriaList" method="list"
@@ -1828,22 +1825,22 @@
 			</result>
 		</action>
 		
-		<action name="listConnections" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
-			<result name="success" type="freemarker">/templates/html/tempLinkCreate/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/tempLinkCreate/list.ftl</result>
+		<action name="connections" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkConnectionCrud">
+			<result name="success" type="freemarker">/templates/html/connections/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/connections/list.ftl</result>
 		</action>
 		
-		<action name="connectionInvitationAdd" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
-			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
-			<result name="success" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+		<action name="connectionInvitationAdd" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
+			<result name="input" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
 		</action>
 		
-		<action name="connectionInvitationCreate" method="create" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
-			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
+		<action name="connectionInvitationCreate" method="create" class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
+			<result name="input" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">listConnections</param>
+				<param name="actionName">connections</param>
 			</result>
 		</action>
 		
@@ -1865,8 +1862,8 @@
 				
 		
 		<action name="messageUpdate" method="update" class="com.n4systems.fieldid.actions.message.MessageCrud">
-			<result name="input" type="freemarker">/templates/html/messages/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/messages/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/messages/show.ftl</result>
+			<result name="error" type="freemarker">/templates/html/messages/show.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">message</param>
 				<param name="uniqueID">${uniqueID}</param>

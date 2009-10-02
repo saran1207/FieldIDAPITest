@@ -7,7 +7,6 @@ import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProce
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.persistence.Transaction;
@@ -82,8 +81,10 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		if (!message.getCommand().isProcessed()) {
 			try {
 				processMessage();
+				addFlashMessageText("message.connection_accepted");
 				return SUCCESS;
 			} catch (Exception e) {
+				addActionErrorText("error.creating_connection");
 				return ERROR;
 			}
 		} 
@@ -95,14 +96,10 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
-			CreateSafetyNetworkConnectionMessageCommand command = covertCommand();
+			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor();
+			processor.setActor(getUser()).setNonSecureLoaderFactory(getNonSecureLoaderFactory());
 			
-			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor()
-																				.setActor(getUser())
-																				
-																				.setNonSecureLoaderFactory(getNonSecureLoaderFactory());
-			
-			processor.process(command, transaction);
+			processor.process(message.getCommand(), transaction);
 			
 			transaction.commit();
 		} catch (Exception e) {
@@ -111,10 +108,7 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		}
 	}
 
-	private CreateSafetyNetworkConnectionMessageCommand covertCommand() {
-		CreateSafetyNetworkConnectionMessageCommand command = (CreateSafetyNetworkConnectionMessageCommand)message.getCommand();
-		return command;
-	}
+	
 
 
 	@SkipValidation

@@ -1,5 +1,9 @@
 ${action.setPageType('inbox', 'list')!}
 
+<head>
+	<@n4.includeStyle href="messages" type="page"/>
+</head>
+	
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="messages" />
 	<#include '../common/_pagination.ftl' />

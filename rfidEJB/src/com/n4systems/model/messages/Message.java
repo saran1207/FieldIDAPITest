@@ -15,7 +15,7 @@ import com.n4systems.model.parents.EntityWithOwner;
 @Table(name="messages")
 public class Message extends EntityWithOwner {
 
-	private boolean unread = false;
+	private boolean unread = true;
 	
 	@Column(nullable = false, length=255)
 	private String sender;
