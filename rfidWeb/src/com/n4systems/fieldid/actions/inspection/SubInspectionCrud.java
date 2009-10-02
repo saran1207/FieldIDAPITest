@@ -246,7 +246,7 @@ public class SubInspectionCrud extends InspectionCrud {
 				updateAttachmentList(inspection, modifiedBy);
 			}
 		
-			inspection.setInfoOptionMap(decodeMapKeys(inspection.getInfoOptionMap()));
+			inspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 			inspection.setOwner(inspection.getInspector().getOwner());
 			inspection.setDate(convertDateTime(inspectionDate));
 			
