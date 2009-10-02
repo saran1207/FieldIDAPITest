@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.message;
+package com.n4systems.commandprocessors;
 
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.message;
+package com.n4systems.commandprocessors;
 
 import rfid.ejb.entity.UserBean;
 
