@@ -459,3 +459,16 @@ function ajaxFormEvent(event) {
 function ajaxForm(form) {
 	form.request(getStandardCallbacks());
 }
+
+
+function updateDropDown(select, newList, selectId) {
+	
+	select.options.length = 0;
+	
+	newList.each(function (element) {
+			var option = new Element("option", { value : element.id }).update(element.name);
+			select.insert(option);
+		});
+	
+	select.value= selectId;
+}

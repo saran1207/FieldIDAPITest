@@ -3,13 +3,17 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.jboss.logging.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.message.MessageDecorator;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
+import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageCommandSaver;
+import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
@@ -24,6 +28,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
+import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 public class TempLinkCreateAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -53,20 +58,29 @@ public class TempLinkCreateAction extends AbstractAction {
 	
 	private Long uniqueID;
 	
+	private MessageDecorator message = new MessageDecorator(new Message());
+	
 	public TempLinkCreateAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		//saver = new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID));
 	}
 	
+	@SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}
 	
-	public String doAdd() {
+	@SkipValidation
+	public String doRemoteOrgs() {
 		return SUCCESS;
 	}
 	
-	public String doSave() {
+	@SkipValidation
+	public String doAdd() {
+		setRemoteTenantId(getTenants().get(0).getId());
+		return SUCCESS;
+	}
+	
+	public String doCreate() {
 		try {
 			CreateSafetyNetworkConnectionMessageCommand command = new CreateSafetyNetworkConnectionMessageCommand();
 			
@@ -82,10 +96,19 @@ public class TempLinkCreateAction extends AbstractAction {
 			}
 			
 			new MessageCommandSaver().save(command);
-			uniqueID = command.getId();
+						
+			Message realMessage = message.realMessage();
+				
+			realMessage.setSender(localOrg);
+			realMessage.setReceiver(remoteOrg);
+				
+			realMessage.setCommand(command);
+				
+			new MessageSaver().save(realMessage);
+						
 			addActionMessageText("message.invitation_sent");
-		} catch(RuntimeException e) {
-			logger.error("Failed saving OrgConnection", e);
+		} catch(Exception e) {
+			logger.error("Failed while sending OrgConnection request", e);
 			addActionErrorText("error.failed_send_invitation");
 			
 			return ERROR;
@@ -209,4 +232,11 @@ public class TempLinkCreateAction extends AbstractAction {
 		return uniqueID;
 	}
 	
+	@VisitorFieldValidator(message="")
+	public MessageDecorator getMessage() {
+		return message;
+	}
+
+	
+
 }

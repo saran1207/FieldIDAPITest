@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.testutils.DummyTransaction;
+import com.n4systems.testutils.NoCommitAndRollBackTransaction;
 
 public class LinkedOrgLoaderTest {
 
@@ -22,7 +22,7 @@ public class LinkedOrgLoaderTest {
 			}
 		});
 		
-		loader.load(new DummyTransaction());
+		loader.load(new NoCommitAndRollBackTransaction());
 	}
 	
 }

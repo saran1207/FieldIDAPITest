@@ -17,26 +17,27 @@ public class CreateSafetyNetworkConnectionCommandProcessor {
 
 	private UserBean actor;
 	
-	private CreateSafetyNetworkConnectionMessageCommand command;
-	
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
+	
+	private Transaction transaction;
 
-	public void process(Transaction transaction) {
+	public void process(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
+		this.transaction = transaction;
 		OrgConnection connection = buildConnection(command);
 		
-		saveConnection(transaction, connection);
+		saveConnection(connection);
 		
 		markCommandProcessed(command);
 	}
 	
-	private void saveConnection(Transaction transaction, OrgConnection connection) {
+	private void saveConnection(OrgConnection connection) {
 		OrgConnectionSaver saver = new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID));
 		saver.save(transaction, connection);
 	}
 
 	private void markCommandProcessed(CreateSafetyNetworkConnectionMessageCommand command) {
 		command.setProcessed(true);
-		new MessageCommandSaver().update(command);
+		new MessageCommandSaver().update(transaction, command);
 	}
 
 	private OrgConnection buildConnection(CreateSafetyNetworkConnectionMessageCommand command) {
@@ -50,7 +51,7 @@ public class CreateSafetyNetworkConnectionCommandProcessor {
 	}
 
 	private InternalOrg fetchOrg(Long orgId) {
-		return (InternalOrg)nonSecureLoaderFactory.createNonSecureIdLoader(BaseOrg.class).setId(orgId).load();
+		return (InternalOrg)nonSecureLoaderFactory.createNonSecureIdLoader(BaseOrg.class).setId(orgId).load(transaction);
 	}
 
 	
@@ -59,10 +60,7 @@ public class CreateSafetyNetworkConnectionCommandProcessor {
 		return this;
 	}
 
-	public CreateSafetyNetworkConnectionCommandProcessor setCommand(CreateSafetyNetworkConnectionMessageCommand command) {
-		this.command = command;
-		return this;
-	}
+
 
 	public CreateSafetyNetworkConnectionCommandProcessor setNonSecureLoaderFactory(NonSecureLoaderFactory nonSecureLoaderFactory) {
 		this.nonSecureLoaderFactory = nonSecureLoaderFactory;

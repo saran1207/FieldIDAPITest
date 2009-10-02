@@ -1,11 +1,15 @@
 ${action.setPageType('inbox', 'show')!}
 
+<head>
+	<@n4.includeStyle href="messages" type="page"/>
+</head>
+	
 
 <div class="fullForm" >
 	
 	<div class="infoField">
 		<label for="from" class="label"><@s.text name="label.from"/></label>
-		<span class="fieldHolder">${sessionUser.name?html} ${sessionUser.owner.name?html}</span> 
+		<span class="fieldHolder">${message.sender?html}</span> 
 	</div>
 
 	<div class="infoField">
@@ -26,7 +30,7 @@ ${action.setPageType('inbox', 'show')!}
 		<p class="fieldHolder">${action.replaceCR(message.body?html)}</p>
 	</div>
 	<div class="actions">
-		<#if !message.message().command.processed>
+		<#if !message.command.processed>
 			<@s.form action="messageUpdate" theme="fieldid" >
 				<@s.hidden name="uniqueID"/>
 				<@s.submit key="label.accept" id="accept"/>

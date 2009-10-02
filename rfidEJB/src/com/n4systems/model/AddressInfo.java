@@ -19,6 +19,26 @@ public class AddressInfo extends AbstractEntity {
 	private String phone2;
 	private String fax1;
 	
+	
+	
+	public AddressInfo() {
+		super();
+	}
+	
+	public AddressInfo(AddressInfo addressInfo) {
+		super();
+		streetAddress = addressInfo.getStreetAddress();
+		city = addressInfo.city;
+		state = addressInfo.state;
+		country = addressInfo.country;
+		zip = addressInfo.zip;
+		phone1 = addressInfo.phone1;
+		phone2 = addressInfo.phone2;
+		fax1 = addressInfo.fax1;
+		
+		
+	}
+
 	public String getStreetAddress() {
 		return streetAddress;
 	}
@@ -103,5 +123,7 @@ public class AddressInfo extends AbstractEntity {
 		
 		return display;
 	}
+	
+	
 	
 }

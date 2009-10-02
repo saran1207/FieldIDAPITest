@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions.message;
 import java.util.Date;
 
 import com.n4systems.model.messages.Message;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
@@ -11,13 +10,10 @@ public class MessageDecorator {
 
 	private Message message;
 	
-	private String receiver;
 
-	
 	public MessageDecorator(Message message) {
 		super();
 		this.message = message;
-		receiver = message.getReceiver();
 	}
 	
 	public String getBody() {
@@ -25,11 +21,6 @@ public class MessageDecorator {
 	}
 
 	
-	public String getReceiver() {
-		return receiver;
-	}
-
-
 	public Date getSentTime() {
 		return message.getSentTime();
 	}
@@ -60,11 +51,6 @@ public class MessageDecorator {
 		message.setRead();
 	}
 
-	@RequiredFieldValidator(message="", key="error.recipient_is_required")
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
-
 	
 	@RequiredStringValidator(message="", key="error.subject_is_required")
 	@StringLengthFieldValidator(message="", key="error.subject_max_length", maxLength="1000")
@@ -76,7 +62,7 @@ public class MessageDecorator {
 		message.setUnRead();
 	}
 
-	public Message message() {
+	public Message realMessage() {
 		return message;
 	}
 

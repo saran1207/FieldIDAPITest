@@ -60,7 +60,7 @@ abstract public class ExternalOrg extends BaseOrg {
 			// the id so it creates a new one.  If this is a merge, we'll capture the id
 			// and set it back on the addressinfo after it's been moved to this org
 			Long addressInfoId = (getAddressInfo() != null) ? getAddressInfo().getId() : null;
-			setAddressInfo(newAddressInfo);
+			setAddressInfo(new AddressInfo(newAddressInfo));
 			getAddressInfo().setId(addressInfoId);
 		} else {
 			setAddressInfo(null);

@@ -44,18 +44,6 @@ function updateOrgBrowser(orgLists) {
 	
 }
 
-function updateDropDown(select, newList, selectId) {
-	
-	select.options.length = 0;
-	
-	newList.each(function (element) {
-			var option = new Element("option", { value : element.id }).update(element.name);
-			select.insert(option);
-		});
-	
-	select.value= selectId;
-}
-
 
 function updateOwner(event) {
 	event.stop();

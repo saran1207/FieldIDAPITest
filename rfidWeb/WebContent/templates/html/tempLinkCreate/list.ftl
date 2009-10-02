@@ -1,25 +1,8 @@
 ${action.setPageType('safety_network_connections', 'list')!}
 
-<h1><@s.text name="label.addconnection"/></h2>
 
-<@s.form action="addConnection" cssClass="fullForm contentBlock" theme="fieldid">
-	<div class="singleColumn fluidSets">
-		<div class="infoSet infoBlock">
-			<label for="connectionType" class="label"><@s.text name="label.add_a"/></label>
-			<@s.radio name="connectionType" list="connectionTypes" listKey="id" listValue="name" />
-		</div>
-		<div class="infoSet infoBlock">
-			<label for="email" class="label"><@s.text name="label.access_code"/></label>
-			<@s.select name="remoteTenantId" list="tenants" listKey="id" listValue="name" />
-		</div>
-	</div>
-	<div class="actions">
-		<@s.submit key="label.connect" id="saveButton"/>
-	</div>
-</@s.form>
-<hr>
 
-<h1><@s.text name="label.myvendorconnections"/></h2>
+<h2><@s.text name="label.myvendorconnections"/></h2>
 
 <table class="list">
 	<tr>
@@ -44,7 +27,7 @@ ${action.setPageType('safety_network_connections', 'list')!}
 </table>
 <hr>
 
-<h1><@s.text name="label.mycustomerconnections"/></h2>
+<h2><@s.text name="label.mycustomerconnections"/></h2>
 
 <table class="list">
 	<tr>
@@ -69,7 +52,7 @@ ${action.setPageType('safety_network_connections', 'list')!}
 </table>
 
 
-<h1><@s.text name="label.connections"/></h2>
+<h2><@s.text name="label.connections"/></h2>
 
 <ul id="safetyNetwork">
 	<#list connections.list as connection>

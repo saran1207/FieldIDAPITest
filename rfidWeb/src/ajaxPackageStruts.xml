@@ -453,5 +453,9 @@
 			<result name="foundone" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundOne.ftl</result>
 			<result name="notfound" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundNone.ftl</result>
 		</action>
+		
+		<action name="remoteOrgList" method="remoteOrgs" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
+			<result name="success" type="freemarker">/templates/ajax/tempLinkCreate/remoteOrgs.ftl</result>
+		</action>
 	</package>
 </struts>

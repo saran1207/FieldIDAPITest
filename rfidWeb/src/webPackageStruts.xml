@@ -1833,18 +1833,17 @@
 			<result name="error" type="freemarker">/templates/html/tempLinkCreate/list.ftl</result>
 		</action>
 		
-		<action name="addConnection" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
+		<action name="connectionInvitationAdd" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
 			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 		</action>
 		
-		<action name="saveConnection" method="save" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
+		<action name="connectionInvitationCreate" method="create" class="com.n4systems.fieldid.actions.safetyNetwork.TempLinkCreateAction">
 			<result name="input" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/tempLinkCreate/add.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">messageAdd</param>
-				<param name="messageId">${uniqueID}</param>
+				<param name="actionName">listConnections</param>
 			</result>
 		</action>
 		
@@ -1852,7 +1851,7 @@
 			<result name="success" type="freemarker">/templates/html/safetyNetwork/show.ftl</result>
 		</action>
 
-				<action name="messages" method="list" class="com.n4systems.fieldid.actions.message.MessageCrud">
+		<action name="messages" method="list" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="success" type="freemarker">/templates/html/messages/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/messages/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/messages/list.ftl</result>
@@ -1863,17 +1862,7 @@
 			<result name="input" type="freemarker">/templates/html/messages/show.ftl</result>
 		</action>
 
-		<action name="messageAdd" method="add" class="com.n4systems.fieldid.actions.message.MessageCrud">
-			<result name="success" type="freemarker">/templates/html/messages/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/messages/add.ftl</result>
-		</action>
-
-		<action name="messageCreate" method="create"	class="com.n4systems.fieldid.actions.message.MessageCrud">
-			<result name="input" type="freemarker">/templates/html/messages/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/messages/add.ftl</result>
-			<result name="success" type="redirectAction">messages</result>
-		</action>
-		
+				
 		
 		<action name="messageUpdate" method="update" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="input" type="freemarker">/templates/html/messages/edit.ftl</result>
