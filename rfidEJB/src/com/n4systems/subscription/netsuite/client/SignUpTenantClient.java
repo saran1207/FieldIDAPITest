@@ -57,6 +57,8 @@ public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTen
 		if (company.getUrl() != null) {
 			addRequestParameter("url", company.getUrl());
 		}
+		
+		addRequestParameter("password", company.getExternalPassword());
 				
 		addRequestParameter("prefercc", company.isUsingCreditCard() ? "T" : "F");
 		if (company.isUsingCreditCard()) {

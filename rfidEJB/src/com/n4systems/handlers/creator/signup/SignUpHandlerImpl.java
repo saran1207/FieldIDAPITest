@@ -48,6 +48,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			//FIXME this is the wrong spot for this.
 			signUp.setCompanyN4Id(placeHolder.getPrimaryOrg().getId());
 			signUp.setUserN4Id(placeHolder.getAdminUser().getId());
+			signUp.setExternalPassword(placeHolder.getPrimaryOrg().getExternalPassword());
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);

@@ -50,8 +50,14 @@ public class PrimaryOrg extends InternalOrg {
 	@Column(name="dateformat", nullable = false)
 	private String dateFormat = "MM/dd/yy";
 	
+	@Column(name="externalid", nullable = true)
 	private Long externalId;
 	
+	@Column(name="externalpassword")
+	private String externalPassword;	
+
+	@Column(name="externalusername")
+	private String externalUserName;
 
 	public PrimaryOrg() {}
 	
@@ -152,4 +158,22 @@ public class PrimaryOrg extends InternalOrg {
 	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
 	}
+
+	public String getExternalPassword() {
+		return externalPassword;
+	}
+
+	public void setExternalPassword(String externalPassword) {
+		this.externalPassword = externalPassword;
+	}
+
+	public String getExternalUserName() {
+		return externalUserName;
+	}
+
+	public void setExternalUserName(String externalUserName) {
+		this.externalUserName = externalUserName;
+	}
+
+	
 }

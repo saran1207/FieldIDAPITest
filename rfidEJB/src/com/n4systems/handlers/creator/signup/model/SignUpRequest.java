@@ -40,6 +40,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private boolean purchasingPhoneSupport;
 	private String userN4Id;
 	private String companyN4Id;
+	private String externalPassword;
 	
 	private CreditCard creditCard = new CreditCard();
 	private boolean usingCreditCard = true;
@@ -294,8 +295,15 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 		return companyN4Id;
 	}
 
-
 	public void setCompanyN4Id(Long companyN4Id) {
 		this.companyN4Id = companyN4Id.toString();
+	}
+
+	public String getExternalPassword() {
+		return externalPassword;
+	}
+
+	public void setExternalPassword(String externalPassword) {
+		this.externalPassword = externalPassword;
 	}
 }

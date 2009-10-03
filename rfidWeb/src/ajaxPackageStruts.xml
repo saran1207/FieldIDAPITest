@@ -449,6 +449,10 @@
 			<result name="foundone" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundOne.ftl</result>
 			<result name="notfound" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundNone.ftl</result>
 		</action>
+
+		<action name="externalAuthVerification" method="checkExternalAuthKey" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">
+			<result name="success" type="freemarker">/templates/ajax/webStoreSSO/externalCredentials.ftl</result>
+		</action>
 		
 		<action name="remoteOrgList" method="remoteOrgs" class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
 			<result name="success" type="freemarker">/templates/ajax/connectionInvitation/remoteOrgs.ftl</result>

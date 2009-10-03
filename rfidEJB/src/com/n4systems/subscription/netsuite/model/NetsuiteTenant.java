@@ -18,6 +18,7 @@ public class NetsuiteTenant implements Company, ExternalIdResponse {
 	private CreditCard creditCard;
 	private Long nsrecordid;
 	private String purchaseOrderNumber;
+	private String externalPassword;
 
 	public Long getExternalId() {
 		return getNsrecordid();
@@ -109,5 +110,13 @@ public class NetsuiteTenant implements Company, ExternalIdResponse {
 
 	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
 		this.purchaseOrderNumber = purchaseOrderNumber;
+	}
+
+	public String getExternalPassword() {
+		return externalPassword;
+	}
+
+	public void setExternalPassword(String externalPassword) {
+		this.externalPassword = externalPassword;
 	}
 }

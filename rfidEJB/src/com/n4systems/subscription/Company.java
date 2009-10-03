@@ -13,5 +13,6 @@ public interface Company {
 	public boolean isUsingCreditCard();
 	public CreditCard getCreditCard();
 	public String getPurchaseOrderNumber();
+	public String getExternalPassword();
 	
 }

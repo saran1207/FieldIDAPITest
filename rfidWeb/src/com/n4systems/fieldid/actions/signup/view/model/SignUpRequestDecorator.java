@@ -78,6 +78,9 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getEmail();
 	}
 
+	public String getExternalPassword() {
+		return signUpRequest.getExternalPassword();
+	}
 	
 	public String getFirstName() {
 		return signUpRequest.getFirstName();

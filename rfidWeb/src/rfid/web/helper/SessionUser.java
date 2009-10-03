@@ -31,6 +31,7 @@ public class SessionUser implements DateTimeDefinition {
 	private TimeZone timeZone;
 	private boolean fromQuickLogin;
 	private SecurityFilter securityFilter;
+	private String externalAuthKey;
 	
 	public SessionUser( UserBean user ) {
 		this.tenant = user.getTenant();
@@ -250,5 +251,13 @@ public class SessionUser implements DateTimeDefinition {
 
 	public int getPermissions() {
 		return permissions;
+	}
+
+	public String getExternalAuthKey() {
+		return externalAuthKey;
+	}
+
+	public void setExternalAuthKey(String externalAuthKey) {
+		this.externalAuthKey = externalAuthKey;
 	}
 }

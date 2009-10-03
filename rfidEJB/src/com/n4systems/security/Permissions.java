@@ -20,6 +20,7 @@ public class Permissions {
 	public static final int EditInspection		= 1 << 5;
 	public static final int ManageJobs			= 1 << 6;
 	public static final int ManageSafetyNetwork = 1 << 7;
+	public static final int AccessWebStore		= 1 << 8;
 	// NOTE: We can have a most 30 permissions (1 << 30) since we're using ints
 	
 	// Composite permissions
@@ -29,7 +30,7 @@ public class Permissions {
 	public static final int ALLINSPECTION		= CreateInspection | EditInspection;
 	
 	/** permissions visible for admins to select for system users */
-	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateInspection, EditInspection, ManageJobs, ManageSafetyNetwork };
+	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateInspection, EditInspection, ManageJobs, ManageSafetyNetwork, AccessWebStore };
 	
 	/**
 	 * @param permission a Primary permission (ie not composite)
@@ -61,6 +62,9 @@ public class Permissions {
 				break;
 			case ManageSafetyNetwork:
 				label = "label.managesafetynetwork_permission";
+				break;
+			case AccessWebStore:
+				label = "label.accesswebstore_permission";
 				break;
 		}
 		return label;

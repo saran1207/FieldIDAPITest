@@ -53,7 +53,8 @@ public class PrimaryOrgCreateHandlerImplTest extends TestUsesTransactionBase {
 		
 		AccountCreationInformationStub accountInfo = new AccountCreationInformationStub();
 		accountInfo.setCompanyName("some company").setTenantName("some-tenant").setFullTimeZone("Cananda:Ontario - Toronto")
-				.setSignUpPackage(new SignUpPackage(SignUpPackageDetails.Basic, new ArrayList<ContractPricing>())).setNumberOfUsers(10);
+				.setSignUpPackage(new SignUpPackage(SignUpPackageDetails.Basic, new ArrayList<ContractPricing>())).setNumberOfUsers(10)
+				.setEmail("someemail@email.com");
 		
 		
 		Capture<PrimaryOrg> capturedPrimaryOrg = new Capture<PrimaryOrg>(); 
@@ -74,8 +75,8 @@ public class PrimaryOrgCreateHandlerImplTest extends TestUsesTransactionBase {
 		
 		assertEquals("some company", createdPrimaryOrg.getDisplayName());
 		assertEquals("Cananda:Ontario - Toronto", createdPrimaryOrg.getDefaultTimeZone());
-
-		
+		assertNotNull(createdPrimaryOrg.getExternalPassword());
+		assertEquals("someemail@email.com", createdPrimaryOrg.getExternalUserName());
 	}
 
 }

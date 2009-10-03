@@ -1875,6 +1875,10 @@
 			<result name="input" type="redirectAction">messages</result>
 			<result name="error" type="redirectAction">messages</result>
 			<result name="success" type="redirectAction">messages</result>
+		</action>
+		
+		<action name="redirectToWebStore" method="redirectToStore" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">
+			<result name="success" type="redirect">${redirectUrl}</result>
 		</action>		
 	</package>
 </struts>

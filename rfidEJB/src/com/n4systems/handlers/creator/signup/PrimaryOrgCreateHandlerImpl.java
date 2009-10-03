@@ -6,6 +6,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.tools.EncryptionUtility;
 
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	private static final String DEFAULT_DATE_FORMAT = "MM/dd/yy";
@@ -36,9 +37,6 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		return primaryOrg;
 	}
 	
-
-
-	
 	private PrimaryOrg createPrimaryOrg() {
 		PrimaryOrg primaryOrg = new PrimaryOrg();
 		primaryOrg.setTenant(tenant);
@@ -48,14 +46,17 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		primaryOrg.setName(accountInfo.getCompanyName());
 		primaryOrg.setCertificateName(accountInfo.getCompanyName());
 		primaryOrg.setDefaultTimeZone(accountInfo.getFullTimeZone());
-		
+		primaryOrg.setExternalUserName(accountInfo.getEmail());
+		primaryOrg.setExternalPassword(generateExternalPassword());
 		
 		return primaryOrg;
 	}
 	
+	private String generateExternalPassword() {
+		// Can be a maximum of 16 characters
+		return EncryptionUtility.getSHA1HexHash(accountInfo.getCompanyName()+accountInfo.getEmail()).substring(0,15);
+	}
 	
-
-
 	private void guards() {
 		if (accountInfo == null) {
 			throw new InvalidArgumentException("you must specify an " + AccountCreationInformation.class.getName());

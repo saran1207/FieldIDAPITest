@@ -13,6 +13,11 @@
 			<li>
 	  			<a href="http://n4systems.helpserve.com/" target="_blank" ><@s.text name="label.support"/></a>
 	  		</li>
+			<#if userSecurityGuard.allowedAccessWebStore>
+			<li>
+	  			<a href="<@s.url action="redirectToWebStore" />" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
+	  		</li>
+			</#if>	  		
 	  		<li>
 				<a href="<@s.url action="logout" />" ><@s.text name="label.logout"/></a>
 			</li>
