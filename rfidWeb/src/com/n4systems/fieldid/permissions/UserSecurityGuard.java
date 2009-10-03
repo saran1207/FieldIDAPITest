@@ -10,4 +10,5 @@ public interface UserSecurityGuard {
 	public boolean isAllowedManageJobs();
 	public boolean isAllowedManageSafetyNetwork();
 	public boolean isAllowedManageSystemUsers();
+	public boolean isAllowedAccessWebStore();
 }

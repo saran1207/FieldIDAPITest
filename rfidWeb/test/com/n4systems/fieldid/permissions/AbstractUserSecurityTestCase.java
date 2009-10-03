@@ -18,7 +18,8 @@ public abstract class AbstractUserSecurityTestCase {
 			case Permissions.ManageJobs : permissionName = "ManageJobs"; break;
 			case Permissions.ManageSafetyNetwork : permissionName = "ManageSafetyNetwork"; break;
 			case Permissions.ManageSystemConfig : permissionName = "ManageSystemConfig"; break;
-			case Permissions.ManageSystemUsers : permissionName = "ManageSystemUsers"; break;		
+			case Permissions.ManageSystemUsers : permissionName = "ManageSystemUsers"; break;
+			case Permissions.AccessWebStore : permissionName = "AccessWebStore"; break;
 		}
 		
 		return permissionName;

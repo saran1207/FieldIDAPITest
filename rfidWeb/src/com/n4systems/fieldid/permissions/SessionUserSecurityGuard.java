@@ -43,5 +43,8 @@ public class SessionUserSecurityGuard implements UserSecurityGuard {
 	public boolean isAllowedManageSystemUsers() {
 		return Permissions.hasOneOf(permissions, Permissions.ManageSystemUsers);
 	}
-
+	
+	public boolean isAllowedAccessWebStore() {
+		return Permissions.hasOneOf(permissions, Permissions.AccessWebStore);
+	}
 }
