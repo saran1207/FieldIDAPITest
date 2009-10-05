@@ -12,6 +12,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -132,6 +133,9 @@ public class CustomerCrud extends AbstractCrud {
 		customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(uniqueId).load();
 		if (customer.getAddressInfo() == null) {
 			customer.setAddressInfo(new AddressInfo());
+		}
+		if (customer.getContact() == null) {
+			customer.setContact(new Contact());
 		}
 	}
 

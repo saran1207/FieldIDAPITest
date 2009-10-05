@@ -400,10 +400,8 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	@SuppressWarnings("unchecked")
 	public void checkForUniqueSubProducts(Product product) throws SubProductUniquenessException {
-		Collection<Product> products = (Collection<Product>) CollectionUtils.collect(product.getSubProducts(), TransformerUtils.invokerTransformer("getProduct"));
-
-		Set<Product> uniqueProducts = new HashSet<Product>(products);
-		if (products.size() != uniqueProducts.size()) {
+		Set<SubProduct> uniqueSubProducts = new HashSet<SubProduct>(product.getSubProducts());
+		if (product.getSubProducts().size() != uniqueSubProducts.size()) {
 			throw new SubProductUniquenessException();
 		}
 	}
