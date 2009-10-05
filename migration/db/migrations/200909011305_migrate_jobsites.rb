@@ -65,11 +65,11 @@ class MigrateJobsites < ActiveRecord::Migration
   end
 
   def self.migrate_job_site(site)
-    cust_org = create_customer(site.name, site.customerId, site.modified_by, site.tenant)
+    cust_org = create_customer(site.name, site.customerId, site.modified_by, site.tenant, site.id)
     @site_to_customer_map[site.id] = cust_org.id    
   end
 
-  def self.create_customer(name, code, modified_by, tenant)
+  def self.create_customer(name, code, modified_by, tenant, legacyId)
     now = Time.now
     
     customerBase = BaseOrg.new
@@ -86,6 +86,7 @@ class MigrateJobsites < ActiveRecord::Migration
     customerOrg.baseOrg = customerBase
     customerOrg.parent = tenant.primaryOrg
     customerOrg.code = code
+    customerOrg.legacy_id = legacyId
     customerOrg.save
     
     return customerBase
