@@ -15,7 +15,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 	public static final String DEFAULT_PRODUCT_CODE = "DEFAULT";
 	
 	@Column(nullable=false)
-	private int index = -1;		// we initialize with -1 to show that the index has not been set
+	private int idx = -1;		// we initialize with -1 to show that the index has not been set
 	
 	@Column(nullable=false)
 	private long quantity = 0L;
@@ -44,15 +44,15 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 	}
 	
 	public int getIndex() {
-		return index;
+		return idx;
 	}
 	
 	public void setIndex(int index) {
-		this.index = index;
+		this.idx = index;
 	}
 	
 	public int nextIndex() {
-		return ++index;
+		return ++idx;
 	}
 	
 	public long getQuantity() {
@@ -92,6 +92,6 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 	}
 
 	public boolean isIndexSet() {
-		return (index >= 0);
+		return (idx >= 0);
 	}
 }

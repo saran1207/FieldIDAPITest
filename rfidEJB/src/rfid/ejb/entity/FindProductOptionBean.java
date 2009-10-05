@@ -11,8 +11,7 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 public class FindProductOptionBean extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="optionkey")
-	private String key;
+	private String identifier;
 	private String value;
 	private String description;
 
@@ -25,11 +24,11 @@ public class FindProductOptionBean extends LegacyBaseEntity {
 	}
 
 	public String getKey() {
-		return key;
+		return getIdentifier();
 	}
 
 	public void setKey(String key) {
-		this.key = key;
+		setIdentifier(key);
 	}
 
 	public String getValue() {
@@ -39,4 +38,14 @@ public class FindProductOptionBean extends LegacyBaseEntity {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+	
+	
 }

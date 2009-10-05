@@ -128,7 +128,7 @@ public class ConfigContext {
 		Configuration globalConfig = null;
 		
 		for(Configuration config: getConfigruations()) {
-			if(config.getKey().equals(entry)) {
+			if(config.getIdentifier().equals(entry)) {
 				// global configs have a null tenant
 				if(config.getTenantId() == null) {
 					globalConfig = config;

@@ -16,7 +16,7 @@ public class Configuration extends AbstractEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="name", nullable=false)
-	private ConfigEntry key;
+	private ConfigEntry identifier;
 	
 	@Column(nullable=false)
 	private String value;
@@ -25,12 +25,12 @@ public class Configuration extends AbstractEntity {
 	
 	public Configuration() {}
 	
-	public Configuration(ConfigEntry key, String value) {
-		this(key, value, null);
+	public Configuration(ConfigEntry identifier, String value) {
+		this(identifier, value, null);
 	}
 	
-	public Configuration(ConfigEntry key, String value, Long tenantId) {
-		this.key = key;
+	public Configuration(ConfigEntry identifier, String value, Long tenantId) {
+		this.identifier = identifier;
 		this.value = value;
 		this.tenantId = tenantId;
 	}
@@ -43,12 +43,14 @@ public class Configuration extends AbstractEntity {
 		this.tenantId = tenantId;
 	}
 
+	@Deprecated
 	public ConfigEntry getKey() {
-		return key;
+		return getIdentifier();
 	}
 
+	@Deprecated
 	public void setKey(ConfigEntry key) {
-		this.key = key;
+		setIdentifier(key);
 	}
 
 	public String getValue() {
@@ -57,6 +59,14 @@ public class Configuration extends AbstractEntity {
 
 	public void setValue(String keyValue) {
 		this.value = keyValue;
+	}
+
+	public ConfigEntry getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(ConfigEntry identifier) {
+		this.identifier = identifier;
 	}
 	
 	

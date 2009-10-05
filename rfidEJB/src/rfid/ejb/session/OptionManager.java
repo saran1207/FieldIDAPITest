@@ -79,9 +79,9 @@ public class OptionManager implements Option {
 		return em.find(FindProductOptionBean.class, uniqueID);
 	}
 	
-	public FindProductOptionBean getFindProductOption(String key) {
-		Query query = em.createQuery("from FindProductOptionBean f where f.key = :key");
-		query.setParameter("key", key);
+	public FindProductOptionBean getFindProductOption(String identifier) {
+		Query query = em.createQuery("from FindProductOptionBean f where f.identifier = :identifier");
+		query.setParameter("identifier", identifier);
 		
 		return (FindProductOptionBean)query.getSingleResult();
 	}
@@ -116,13 +116,13 @@ public class OptionManager implements Option {
 		return tagOption;
 	}
 	
-	public TagOption findTagOption(OptionKey key, SecurityFilter filter) {
+	public TagOption findTagOption(OptionKey optionKey, SecurityFilter filter) {
 		QueryBuilder<TagOption> builder = new QueryBuilder<TagOption>(TagOption.class, filter);
 		
 		TagOption tagOption = null;
 		try {
 			
-			tagOption = persistenceManager.find(builder.addSimpleWhere("key", key));
+			tagOption = persistenceManager.find(builder.addSimpleWhere("optionKey", optionKey));
 			
 		} catch(InvalidQueryException e) {
 			logger.error("Unable to load TagOptions", e);

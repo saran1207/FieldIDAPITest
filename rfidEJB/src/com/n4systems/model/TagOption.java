@@ -54,8 +54,9 @@ public class TagOption extends EntityWithTenant implements Listable<Long>, Savea
 	
 	@Column(name="optionkey", nullable=false)
 	@Enumerated(EnumType.STRING)
-	private OptionKey key;
-	
+	private OptionKey optionKey;
+
+
 	@Column(nullable=false)
 	private Long weight = 0L;
 	
@@ -64,16 +65,27 @@ public class TagOption extends EntityWithTenant implements Listable<Long>, Savea
 	
 	public TagOption () {}
 	
+	@Deprecated
 	public OptionKey getKey() {
-		return key;
+		return getOptionKey();
 	}
 
+	@Deprecated
 	public void setKey(OptionKey key) {
-		this.key = key;
+		setOptionKey(key);
+	}
+	
+	
+	public OptionKey getOptionKey() {
+		return optionKey;
+	}
+
+	public void setOptionKey(OptionKey optionKey) {
+		this.optionKey = optionKey;
 	}
 
 	public String getText() {
-		return (text != null) ? text : key.getDefaultText();
+		return (text != null) ? text : optionKey.getDefaultText();
 	}
 
 	public void setText(String text) {

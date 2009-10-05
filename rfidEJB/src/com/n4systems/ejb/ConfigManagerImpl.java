@@ -24,7 +24,7 @@ public class ConfigManagerImpl implements ConfigManager {
 
 	public Configuration findEntry(ConfigEntry entry, Long tenantId) {
 		QueryBuilder<Configuration> builder = new QueryBuilder<Configuration>(Configuration.class, new OpenSecurityFilter());
-		builder.addSimpleWhere("key", entry);
+		builder.addSimpleWhere("identifier", entry);
 		
 		if(tenantId != null) {
 			builder.addSimpleWhere("tenantId", tenantId);
@@ -53,7 +53,7 @@ public class ConfigManagerImpl implements ConfigManager {
 		 *  need to lookup the entry by it's key and tenant first.  See ConfigurationBean
 		 *  for more information
 		 */
-		Configuration config = findEntry(entry.getKey(), entry.getTenantId());
+		Configuration config = findEntry(entry.getIdentifier(), entry.getTenantId());
 		
 		if(config != null) {
 			try {
@@ -80,7 +80,7 @@ public class ConfigManagerImpl implements ConfigManager {
 		 *  need to lookup the entry by it's key and tenant first.  See ConfigurationBean
 		 *  for more information
 		 */
-		Configuration config = findEntry(entry.getKey(), entry.getTenantId());
+		Configuration config = findEntry(entry.getIdentifier(), entry.getTenantId());
 		
 		try {
 			if(config != null) {

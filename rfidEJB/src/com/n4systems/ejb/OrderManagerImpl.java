@@ -90,7 +90,7 @@ public class OrderManagerImpl implements OrderManager {
 	public List<LineItem> findLineItems(Order order) {
 		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("order", order);
-		builder.setOrder("index");
+		builder.setOrder("idx");
 		
 		List<LineItem> lineItems = new ArrayList<LineItem>();
 		try {

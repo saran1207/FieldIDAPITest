@@ -6,6 +6,7 @@
 	<persistence-unit name="rfidEM">
 		<jta-data-source>java:/RFID_DS</jta-data-source>
 		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<property name="hibernate.cache.use_query_cache" value="true" />
 			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
@@ -21,7 +22,9 @@
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<property name="hibernate.max_fetch_depth" value="1" />
 			
-			<!--  
+
+			<!--
+
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 			
