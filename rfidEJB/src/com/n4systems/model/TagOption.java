@@ -52,7 +52,7 @@ public class TagOption extends EntityWithTenant implements Listable<Long>, Savea
 		}
 	}
 	
-	@Column(name="optionkey", nullable=false)
+	@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
 	private OptionKey optionKey;
 
