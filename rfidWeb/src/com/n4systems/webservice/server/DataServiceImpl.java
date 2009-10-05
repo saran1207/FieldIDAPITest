@@ -830,7 +830,7 @@ public class DataServiceImpl implements DataService {
 					 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
 					 * has special handling code to persist it anyway.  and yes it does suck ...  
 					 */
-					product.getSubProducts().addAll(subProducts);
+					product.getSubProducts().addAll(subProductNotAlreadyAdded(product, subProducts));
 					productManager.update(product);
 				}
 								
@@ -890,6 +890,18 @@ public class DataServiceImpl implements DataService {
 			logger.error( "failed while processing inspections", e );
 			throw new ServiceException("Problem processing inspections");
 		}
+	}
+	
+	private List<SubProduct> subProductNotAlreadyAdded(Product masterProduct, List<SubProduct> subProducts) {
+		List<SubProduct> notAddedSubProducts = new ArrayList<SubProduct>();
+		
+		for (SubProduct subProduct : subProducts) {
+			if (!masterProduct.getSubProducts().contains(subProduct)) {
+				notAddedSubProducts.add(subProduct);
+			}
+		}
+		
+		return notAddedSubProducts;
 	}
 	
 	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct) throws Exception {

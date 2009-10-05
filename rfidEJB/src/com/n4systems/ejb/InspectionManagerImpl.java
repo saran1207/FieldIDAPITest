@@ -283,9 +283,9 @@ public class InspectionManagerImpl implements InspectionManager {
 			inspection.setAttachments(new HashSet<FileAttachment>());
 			
 			// Pull off the sub inspection attachments and put them in a map for later use
-			Map<SubInspection, Set<FileAttachment>> subInspectionAttachments = new HashMap<SubInspection, Set<FileAttachment>>();
+			Map<Product, Set<FileAttachment>> subInspectionAttachments = new HashMap<Product, Set<FileAttachment>>();
 			for (SubInspection subInspection : inspection.getSubInspections()) {
-				subInspectionAttachments.put(subInspection, subInspection.getAttachments());
+				subInspectionAttachments.put(subInspection.getProduct(), subInspection.getAttachments());
 				subInspection.setAttachments(new HashSet<FileAttachment>());
 			}
 			
@@ -295,7 +295,7 @@ public class InspectionManagerImpl implements InspectionManager {
 			SubInspection subInspection = null;
 			for (int i =0; i < inspection.getSubInspections().size(); i++) {
 				subInspection = inspection.getSubInspections().get(i);
-				savedInspection = attachFilesToSubInspection(savedInspection, subInspection, new ArrayList<FileAttachment>(subInspectionAttachments.get(subInspection)));
+				savedInspection = attachFilesToSubInspection(savedInspection, subInspection, new ArrayList<FileAttachment>(subInspectionAttachments.get(subInspection.getProduct())));
 			}			
 
 			// If the inspection didn't have an inspection group before saving,
