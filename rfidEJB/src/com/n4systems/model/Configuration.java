@@ -15,7 +15,7 @@ public class Configuration extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="name", nullable=false)
+	@Column(nullable=false)
 	private ConfigEntry identifier;
 	
 	@Column(nullable=false)
