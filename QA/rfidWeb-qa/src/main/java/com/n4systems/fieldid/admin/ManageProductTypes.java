@@ -482,21 +482,28 @@ public class ManageProductTypes extends TestCase {
 	 */
 	public List<String> getMasterProductTypeNames() throws Exception {
 		List<String> results = new ArrayList<String>();
+		List<String> links = new ArrayList<String>();
 		Links productTypes = helperGetProductTypeLinks();
 		Iterator<Link> i = productTypes.iterator();
 		while(i.hasNext()) {
 			Link pt = i.next();
 			String name = pt.text().trim();
+			links.add(name);
+		}
+		
+		Iterator<String> j = links.iterator();
+		while(j.hasNext()) {
+			String name = j.next();
+			Link pt = ie.link(text(name));
 			pt.click();
 			gotoSubComponents(name);
 			List<String> tmp = getSubComponents();
 			if(tmp.size() > 0) {
 				results.add(name);
 			}
-			ie.back();
-			ie.back();
+			gotoViewAll();
 		}
-		
+	
 		return results;
 	}
 	

@@ -1908,10 +1908,12 @@ public class Assets extends TestCase {
 			serialNumber = serialNumbers.get(0);
 			gotoProductInformationViaInfoLink(serialNumber);
 			List<String> subs = getSubProducts();
-			gotoSubProduct(subs.get(0));					// goto first sub-product
-			gotoMasterProductUsingPartOf();					// return to master product
-			int index = subs.size()-1;
-			gotoSubProduct(index);							// goto last sub-product
+			if(subs.size() > 0) {
+				gotoSubProduct(subs.get(0));					// goto first sub-product
+				gotoMasterProductUsingPartOf();					// return to master product
+				int index = subs.size()-1;
+				gotoSubProduct(index);							// goto last sub-product
+			}
 		}
 		
 		gotoAssets();
