@@ -211,6 +211,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 
 	public void setAssignedUser(Long userId) {
 		productView.setAssignedUser(userId);
+		
 	}
 	
 	public void setProductStatus(Long statusId) {

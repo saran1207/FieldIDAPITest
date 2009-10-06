@@ -10,8 +10,6 @@ import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.safetynetwork.OrgConnection;
-import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
@@ -25,20 +23,22 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	private final LimitResolver limitResolver;
 	private final OrgSaver orgSaver;
 	private final UserSaver userSaver;
-	private final OrgConnectionSaver orgConnectionSaver;
+	private final LinkTenantHandler linkTenantHandler;
 	
 	private AccountCreationInformation accountInformation;
 	private AccountPlaceHolder accountPlaceHolder;
 	private SignUpTenantResponse subscriptionApproval;
 	private PrimaryOrg referrerOrg;
 
-	public SignUpFinalizationHandlerImpl(ExtendedFeatureListResolver extendedFeatureListResolver, OrgSaver orgSaver, UserSaver userSaver, LimitResolver limitResolver, OrgConnectionSaver orgConnectionSaver) {
+	public SignUpFinalizationHandlerImpl(ExtendedFeatureListResolver extendedFeatureListResolver, OrgSaver orgSaver, UserSaver userSaver, LimitResolver limitResolver, 
+					LinkTenantHandler linkTenantHandler) {
 		super();
 		this.extendedFeatureListResolver = extendedFeatureListResolver;
 		this.limitResolver = limitResolver;
 		this.orgSaver = orgSaver;
 		this.userSaver = userSaver;
-		this.orgConnectionSaver = orgConnectionSaver;
+		this.linkTenantHandler = linkTenantHandler;
+		
 	}
 
 	
@@ -64,17 +64,16 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		getPrimaryOrg().setLimits(limits);
 	}
 	
-	protected OrgConnection createOrgConnection() {
-		OrgConnection conn = new OrgConnection();
-		conn.setModifiedBy(getAdminUser());
-		conn.setVendor(referrerOrg);
-		conn.setCustomer(getPrimaryOrg());
-		return conn;
-	}
+	
 
 	private void linkTenants(Transaction transaction) {
-		orgConnectionSaver.save(transaction, createOrgConnection());
+		linkTenantHandler.setAccountPlaceHolder(accountPlaceHolder)
+						.setReferrerOrg(referrerOrg);
+		
+		linkTenantHandler.link(transaction);
 	}
+
+	
 
 	private void saveChanges(Transaction transaction) {
 		orgSaver.saveOrUpdate(transaction, getPrimaryOrg());
@@ -87,12 +86,12 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	}
 
 
-	protected UserBean getAdminUser() {
+	private UserBean getAdminUser() {
 		return accountPlaceHolder.getAdminUser();
 	}
 
 
-	protected PrimaryOrg getPrimaryOrg() {
+	private PrimaryOrg getPrimaryOrg() {
 		return accountPlaceHolder.getPrimaryOrg();
 	}
 	
@@ -126,8 +125,6 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	}
 
 
-	
-
 
 	public SignUpFinalizationHandler setAccountInformation(AccountCreationInformation accountInformation) {
 		this.accountInformation = accountInformation;
@@ -153,6 +150,4 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		return ExtendedFeatureFactory.getSwitchFor(feature, getPrimaryOrg());
 	}
 
-
-	
 }

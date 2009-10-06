@@ -16,6 +16,8 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 import com.n4systems.testutils.NoCommitAndRollBackTransaction;
 import com.n4systems.testutils.TestDoubleNonSecuredLoaderFactory;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.NonDataSourceBackedConfigContext;
 
 
 
@@ -30,6 +32,8 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		UserBean user = anEmployee().withOwner(primary1).build();
 		CreateSafetyNetworkConnectionMessageCommand command = createCommand(primary1, primary2);
 		
+		ConfigContext.setCurrentContext(new NonDataSourceBackedConfigContext());
+		
 		NonSecureIdLoader<BaseOrg> mockLoader = createMock(NonSecureIdLoader.class);
 		expect(mockLoader.setId(primary1.getId())).andReturn(mockLoader);
 		expect(mockLoader.load((Transaction)anyObject())).andReturn(primary1);
@@ -40,7 +44,7 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		TestDoubleNonSecuredLoaderFactory nonSecureLoaderFactory = new TestDoubleNonSecuredLoaderFactory();
 		nonSecureLoaderFactory.add(BaseOrg.class, mockLoader);
 		
-		CreateSafetyNetworkConnectionCommandProcessor sut = new CreateSafetyNetworkConnectionCommandProcessor();
+		CreateSafetyNetworkConnectionCommandProcessor sut = new CreateSafetyNetworkConnectionCommandProcessor(ConfigContext.getCurrentContext());
 		
 		sut.setActor(user).setNonSecureLoaderFactory(nonSecureLoaderFactory);
 		

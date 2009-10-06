@@ -7,4 +7,5 @@ public interface QueryFilter {
 	 * @param builder	A QueryBuilder to prepare
 	 */
 	public void applyFilter(QueryBuilder<?> builder);
+	
 }

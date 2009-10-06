@@ -92,7 +92,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 			return "saved";
 		} catch (SubProductUniquenessException e) {
-			addFieldError("subProduct.name", getText("error.samesubproduct"));
+			addActionErrorText("error.samesubproduct");
 		} catch (MissingEntityException e) {
 			addActionErrorText("error.missingattachedproduct");
 			logger.error("failed to save Product, sub product does not exist or security filter does not allow access", e);

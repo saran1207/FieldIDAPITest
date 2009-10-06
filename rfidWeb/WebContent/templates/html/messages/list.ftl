@@ -15,7 +15,7 @@ ${action.setPageType('inbox', 'list')!}
 			<th><@s.text name="label.date"/></th>
 		</tr>
 		<#list page.getList() as message > 
-			<tr id="message_${message.id}" <#if message.unRead>class="unread"</#if>>
+			<tr id="message_${message.id}" <#if message.unread>class="unread"</#if>>
 				<td>${message.sender?html}</td>
 				<td>${message.receiver?html}</td>
 				<td><a href="<@s.url action="message" uniqueID="${message.id}"/>">${helper.trimString(message.subject, 150)?html}</a></td>

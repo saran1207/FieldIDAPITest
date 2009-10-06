@@ -8,6 +8,8 @@ import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandlerImp
 import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
 import com.n4systems.handlers.creator.signup.ExtendedFeatureListResolver;
 import com.n4systems.handlers.creator.signup.LimitResolver;
+import com.n4systems.handlers.creator.signup.LinkTenantHandler;
+import com.n4systems.handlers.creator.signup.LinkTenantHandlerImp;
 import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
 import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignUpFinalizationHandler;
@@ -18,6 +20,7 @@ import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.promocode.PromoCodeByCodeLoader;
+import com.n4systems.model.safetynetwork.CatalogOnlyConnectionSaver;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
 import com.n4systems.model.stateset.StateSetSaver;
@@ -40,9 +43,12 @@ public class CreateHandlerFactory {
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {
-		Long houseAccountId = ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID);
-		
-		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrgSaver(), new UserSaver(), getLimitResolver(), new OrgConnectionSaver(houseAccountId));
+		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrgSaver(), new UserSaver(), getLimitResolver(), createLinkTenantHandler());
+	}
+
+	private LinkTenantHandler createLinkTenantHandler() {
+		Long houseAccountId = ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID);
+		return new LinkTenantHandlerImp(new OrgConnectionSaver(houseAccountId), new CatalogOnlyConnectionSaver(houseAccountId));
 	}
 
 	private LimitResolver getLimitResolver() {

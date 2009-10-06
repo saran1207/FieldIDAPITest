@@ -65,7 +65,7 @@ public enum ConfigEntry {
 	SYSTEM_DOMAIN								(   "fieldid.com"),
 	SUBSCRIPTION_AGENT							(	"com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent"),
 	HOUSE_ACCOUNT_NAME							(	"fieldid"),
-	HOUSE_ACCOUNT_ID							(	"15511550");
+	HOUSE_ACCOUNT_PRIMARY_ORG_ID				(	"15511550");
 	
 	
 	

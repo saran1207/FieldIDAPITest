@@ -7,12 +7,12 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.safetynetwork.ConnectionListLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
 
 public class SafetyNetworkConnectionCrud extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -59,8 +59,9 @@ public class SafetyNetworkConnectionCrud extends AbstractAction {
 
 	
 	
-	public Pager<BaseOrg> getConnections() {
-		return new ConnectionListLoader(getSecurityFilter(), ConfigContext.getCurrentContext()).setPage(1).load();
+	public Pager<TypedOrgConnection> getConnections() {
+			
+		return new PaginatedConnectionListLoader(getSecurityFilter()).load();
 	}
 	
 	public boolean hasAPublishedCatalog(BaseOrg org) {
@@ -68,7 +69,6 @@ public class SafetyNetworkConnectionCrud extends AbstractAction {
 			CatalogService catalogService = new CatalogServiceImpl(persistenceManager, org.getTenant());
 			return catalogService.hasCatalog();
 		} catch (Exception e) {
-			
 			return false;
 		}
 	}

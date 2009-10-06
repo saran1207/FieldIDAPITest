@@ -11,18 +11,12 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.safetynetwork.OrgConnection;
-import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
@@ -30,6 +24,8 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.DataUnit;
+
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 
 
 public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
@@ -53,6 +49,8 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		AccountPlaceHolder accountPlaceHolder = anAccountPlaceHolder().build();
 		SignUpTenantResponseStub signUpTenantResponseStub = new SignUpTenantResponseStub();
 		
+		PrimaryOrg referrerOrg = aPrimaryOrg().build();
+		
 		TenantLimit expectedTenantLimit = new TenantLimit();
 		expectedTenantLimit.setAssets(SIGN_UP_PACKAGE_BEING_USED.getAssets());
 		expectedTenantLimit.setUsers(accountCreationInformationStub.getNumberOfUsers().longValue());
@@ -61,8 +59,6 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		TenantLimit limitFromResolver = new TenantLimit();
 		limitFromResolver.setAssets(SIGN_UP_PACKAGE_BEING_USED.getAssets());
 		limitFromResolver.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
-		
-		
 		
 		Set<ExtendedFeature> featuresThatShouldBeAddedToPrimaryOrg = new FluentHashSet<ExtendedFeature>(ExtendedFeature.Integration);
 		
@@ -87,13 +83,20 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockLimitResolver.resolve(mockTransaction)).andReturn(limitFromResolver);
 		replay(mockLimitResolver);
 		
-		OrgConnectionSaver mockConnSaver = createMock(OrgConnectionSaver.class);
+
+		LinkTenantHandler mockLinkTenantHandler = createMock(LinkTenantHandler.class);
+		expect(mockLinkTenantHandler.setAccountPlaceHolder(accountPlaceHolder)).andReturn(mockLinkTenantHandler);
+		expect(mockLinkTenantHandler.setReferrerOrg(referrerOrg)).andReturn(mockLinkTenantHandler);
+		mockLinkTenantHandler.link(mockTransaction);
+		replay(mockLinkTenantHandler);
 		
-		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockExtendedFeatureListResolver, mockOrganizationSaver, mockUserSaver, mockLimitResolver, mockConnSaver);
+		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockExtendedFeatureListResolver, mockOrganizationSaver, mockUserSaver, mockLimitResolver, mockLinkTenantHandler);
+		
+		
 		sut.setAccountInformation(accountCreationInformationStub)
 				.setAccountPlaceHolder(accountPlaceHolder)
 				.setSubscriptionApproval(signUpTenantResponseStub)
-				.setReferrerOrg((PrimaryOrg)OrgBuilder.aPrimaryOrg().build());
+				.setReferrerOrg(referrerOrg);
 			
 		// exercise
 		sut.finalizeSignUp(mockTransaction);
@@ -103,6 +106,8 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		verify(mockOrganizationSaver);
 		verify(mockUserSaver);
 		verify(mockLimitResolver);
+		verify(mockLinkTenantHandler);
+		
 		
 		assertEquals(featuresThatShouldBeAddedToPrimaryOrg, accountPlaceHolder.getPrimaryOrg().getExtendedFeatures());
 		
@@ -112,38 +117,7 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		assertEquals(expectedTenantLimit, accountPlaceHolder.getPrimaryOrg().getLimits());
 	}
 	
-	@Test
-	public void create_org_connection_uses_referrer_as_vendor_and_signup_as_customer() {
-		final UserBean adminUser = UserBuilder.anEmployee().build();
-		final PrimaryOrg referrerOrg = (PrimaryOrg)OrgBuilder.aPrimaryOrg().build();
-		final PrimaryOrg signupOrg =  (PrimaryOrg)OrgBuilder.aPrimaryOrg().build();
-		
-		class CreateConnectionTestClass extends SignUpFinalizationHandlerImpl {
-			public CreateConnectionTestClass() {
-				super(null, null, null, null, null);
-			}
-
-			@Override
-			public UserBean getAdminUser() { return adminUser; }
-
-			@Override
-			public PrimaryOrg getPrimaryOrg() { return signupOrg; }
-			
-			@Override
-			public OrgConnection createOrgConnection() {
-				return super.createOrgConnection();
-			}
-		};
-		
-		CreateConnectionTestClass orgTestClass = new CreateConnectionTestClass();
-		orgTestClass.setReferrerOrg(referrerOrg);
-		
-		OrgConnection conn = orgTestClass.createOrgConnection();
-		
-		assertSame(adminUser, conn.getModifiedBy());
-		assertSame(referrerOrg, conn.getVendor());
-		assertSame(signupOrg, conn.getCustomer());
-	}
+	
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void throws_exception_on_null_referrer() {

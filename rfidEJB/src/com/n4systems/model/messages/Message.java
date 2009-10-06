@@ -43,11 +43,11 @@ public class Message extends EntityWithOwner {
 		unread = false;
 	}
 	
-	public boolean isUnRead() {
+	public boolean isUnread() {
 		return unread;
 	}
 	
-	public void setUnRead() {
+	public void setUnread() {
 		unread = true;
 	}
 

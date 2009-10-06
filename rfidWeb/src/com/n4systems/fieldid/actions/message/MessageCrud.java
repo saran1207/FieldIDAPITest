@@ -10,6 +10,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.util.ConfigContext;
 
 public class MessageCrud extends AbstractPaginatedCrud<Message> {
 	private static final Logger logger = Logger.getLogger(MessageCrud.class);
@@ -53,7 +54,7 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 	}
 
 	private void markMessageAsRead() {
-		if (message.isUnRead()) {
+		if (message.isUnread()) {
 			message.setRead();
 			try {
 				new MessageSaver().save(message);
@@ -96,7 +97,7 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
-			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor();
+			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(ConfigContext.getCurrentContext());
 			processor.setActor(getUser()).setNonSecureLoaderFactory(getNonSecureLoaderFactory());
 			
 			processor.process(message.getCommand(), transaction);

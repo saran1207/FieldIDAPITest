@@ -39,7 +39,7 @@ public class MessageDecorator {
 	}
 
 	public boolean isUnread() {
-		return message.isUnRead();
+		return message.isUnread();
 	}
 
 	@RequiredStringValidator(message="", key="error.body_is_required")
@@ -59,7 +59,7 @@ public class MessageDecorator {
 	}
 
 	public void setUnRead() {
-		message.setUnRead();
+		message.setUnread();
 	}
 
 	public Message realMessage() {

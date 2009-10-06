@@ -15,6 +15,8 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.tenant.HasSetupDataTenant;
 
+
+
 @Entity
 @Table(name="org_connections", uniqueConstraints = @UniqueConstraint(columnNames = {"vendor_id", "customer_id"}))
 public class OrgConnection extends AbstractEntity implements UnsecuredEntity, HasSetupDataTenant {

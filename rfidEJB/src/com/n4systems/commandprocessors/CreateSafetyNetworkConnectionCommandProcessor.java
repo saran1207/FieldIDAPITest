@@ -11,24 +11,26 @@ import com.n4systems.util.ConfigEntry;
 
 public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProcessor<CreateSafetyNetworkConnectionMessageCommand> {
 	
-	public CreateSafetyNetworkConnectionCommandProcessor() {
+	private final ConfigContext currentContext;
+	
+	public CreateSafetyNetworkConnectionCommandProcessor(ConfigContext currentContext) {
 		super(CreateSafetyNetworkConnectionMessageCommand.class);
+		this.currentContext = currentContext;
 	}
 	
+	@Override
 	protected void execute(CreateSafetyNetworkConnectionMessageCommand command) {
 		OrgConnection connection = buildConnection(command);
 		saveConnection(connection);
 	}
 
 	
-	
 	private void saveConnection(OrgConnection connection) {
-		OrgConnectionSaver saver = new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_ID));
+		OrgConnectionSaver saver = new OrgConnectionSaver(currentContext.getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID));
 		saver.save(transaction, connection);
 	}
 
 	
-
 	private OrgConnection buildConnection(CreateSafetyNetworkConnectionMessageCommand command) {
 		OrgConnection connection = new OrgConnection();
 		connection.setModifiedBy(actor);
@@ -41,5 +43,10 @@ public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProces
 
 	private InternalOrg fetchOrg(Long orgId) {
 		return (InternalOrg)nonSecureLoaderFactory.createNonSecureIdLoader(BaseOrg.class).setId(orgId).load(transaction);
+	}
+
+	@Override
+	protected boolean isCommandStillValid(CreateSafetyNetworkConnectionMessageCommand command) {
+		return true;
 	}
 }

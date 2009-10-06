@@ -30,6 +30,8 @@ public abstract class CommandProcessor<T extends MessageCommand> {
 	}
 	
 	protected abstract void execute(T command);
+	
+	protected abstract boolean isCommandStillValid(T command);
 
 	@SuppressWarnings("unchecked")
 	private T convertCommand(MessageCommand command) {
