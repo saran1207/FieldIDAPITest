@@ -23,6 +23,7 @@
   <Country name="Bahamas" code="BS">
     <Region name="Nassau" zone="America/Nassau"/>
   </Country>
+  
   <Country name="Bangladesh" code="BD">
     <Region name="Dhaka" zone="Asia/Dhaka"/>
   </Country>
@@ -39,6 +40,7 @@
     <Region name="Distrito Federal - Brasilia" zone="America/Sao_Paulo"/>
     <Region name="Rio de Janeiro - Rio de Janeiro" zone="America/Sao_Paulo"/>
     <Region name="São Paulo - Sao Paulo" zone="America/Sao_Paulo"/>
+    <Region name="Santarem" zone="America/Santarem"/>
   </Country>
   <Country name="Bulgaria" code="BG">
     <Region name="Sofia" zone="Europe/Sofia"/>
@@ -323,6 +325,7 @@
     <Region name="Michigan - Detroit" zone="America/Detroit"/>
     <Region name="Minnesota - Minneapolis" zone="America/Chicago"/>
     <Region name="Minnesota - St. Paul" zone="America/Chicago"/>
+    <Region name="North Dakota - Bismarck" zone="America/Chicago"/>
     <Region name="New York - New York" zone="America/New_York"/>
     <Region name="Pennsylvania - Philadelphia" zone="America/New_York"/>
     <Region name="Texas - Houston" zone="America/Chicago"/>
