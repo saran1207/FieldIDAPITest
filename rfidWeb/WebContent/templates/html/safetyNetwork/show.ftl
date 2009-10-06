@@ -15,5 +15,10 @@
 			<h2 class="clean"><a href="<@s.url action="messages"/>"><@s.text name="label.inbox"/></a></h2>
 			<p><@s.text name="label.inbox.full"/></p>
 		</li>
+		
+		<li>	
+			<h2 class="clean"><a href="<@s.url action="privacySettings"/>"><@s.text name="label.privacy_settings"/></a></h2>
+			<p><@s.text name="label.privacy_settings.full"/></p>
+		</li>
 	</ul>
 </div>

@@ -58,6 +58,9 @@ public class PrimaryOrg extends InternalOrg {
 
 	@Column(name="externalusername")
 	private String externalUserName;
+	
+	@Column(name="autopublish", nullable=false)
+	private boolean autoPublish;
 
 	public PrimaryOrg() {}
 	
@@ -175,5 +178,11 @@ public class PrimaryOrg extends InternalOrg {
 		this.externalUserName = externalUserName;
 	}
 
-	
+	public boolean isAutoPublish() {
+		return autoPublish;
+	}
+
+	public void setAutoPublish(boolean autoPublish) {
+		this.autoPublish = autoPublish;
+	}
 }

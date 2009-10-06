@@ -1865,6 +1865,16 @@
 			<result name="error" type="redirectAction">messages</result>
 			<result name="success" type="redirectAction">messages</result>
 		</action>
+
+		<action name="privacySettings" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PrivacySettingsAction">
+			<result name="success" type="freemarker">/templates/html/privacy/show.ftl</result>
+		</action>
+
+		<action name="privacySettingsSave" method="save" class="com.n4systems.fieldid.actions.safetyNetwork.PrivacySettingsAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">privacySettings</param>
+			</result>			
+		</action>
 		
 		<action name="redirectToWebStore" method="redirectToStore" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">
 			<result name="success" type="redirect">${redirectUrl}</result>

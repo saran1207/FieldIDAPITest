@@ -147,6 +147,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@Override
 	protected void initMemberFields() {
 		product = new Product();
+		product.setPublished(getPrimaryOrg().isAutoPublish());
 	}
 
 	@Override
