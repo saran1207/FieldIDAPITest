@@ -145,17 +145,6 @@
 			</tr>
 			
 			<tr>
-				<td class="description"><@s.text name="label.compliance_check"/></td>
-				<#list packages as package>
-					<td <#if package.preferred>class="preferred"</#if>>
-						<#if package.includes('Compliance') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
-						</#if>		
-					</td>
-				</#list>
-			</tr>
-			
-			<tr>
 				<td class="description"><@s.text name="label.multi_location"/></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>

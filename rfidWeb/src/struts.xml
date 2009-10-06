@@ -98,10 +98,6 @@
 				<param name="error">404</param>
 			</result>
 		</global-results>
-		<action name="productComplianceRisk" method="show" class="com.n4systems.fieldid.actions.product.ComplianceAction" >
-			<result name="error" type="freemarker">/templates/xml/productCrud/complianceRisk.ftl</result>
-			<result name="success" type="freemarker">/templates/xml/productCrud/complianceRisk.ftl</result>
-		</action>
 	</package>
 	
 	<package name="files" extends="default" namespace="/file">

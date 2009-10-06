@@ -69,10 +69,6 @@
     	<property name="jndiName" value="fieldid/MassUpdateManagerImpl/local" />
     </bean>
     
-    <bean id="complianceManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ComplianceManagerImpl/local" />
-    </bean>
-    
     <bean id="configManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/ConfigManagerImpl/local" />
     </bean>

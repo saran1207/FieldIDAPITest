@@ -33,10 +33,6 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Branding);
 	}
 
-	public boolean isComplianceEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.Compliance);
-	}
-
 	public boolean isIntegrationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
 	}

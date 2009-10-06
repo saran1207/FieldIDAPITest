@@ -13,7 +13,6 @@ public interface SystemSecurityGuard {
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature);
 	public boolean isPartnerCenterEnabled();
 	public boolean isIntegrationEnabled();
-	public boolean isComplianceEnabled();
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();
 	public boolean isEmailAlertsEnabled();

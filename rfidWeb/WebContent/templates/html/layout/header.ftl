@@ -74,12 +74,6 @@
 				</li>
 			</#if>
 			
-			<#if securityGuard.complianceEnabled >
-				<li>
-					<a href="<@s.url action="compliance"/>" class="speedLink" id="menuCompliance"><@s.text name="speed.compliance" /></a>
-				</li>
-			</#if>
-									
 		</ul>
 	</div>
 	

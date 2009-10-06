@@ -398,13 +398,6 @@
 		</action>
 
 
-		<action name="productCompliance" method="show"
-			class="com.n4systems.fieldid.actions.product.ComplianceAction">
-			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/productCrud/compliance.ftl</result>
-
-		</action>
-
 
 		<action name="productInformation" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="error" type="freemarker">/templates/html/productCrud/list.ftl</result>
@@ -803,10 +796,6 @@
 			</result>
 		</action>
 
-
-		<action name="compliance" method="show" class="com.n4systems.fieldid.actions.ComplianceAction">
-			<result name="success" type="freemarker">/templates/html/compliance/show.ftl</result>
-		</action>
 
 		<action name="inspectionTypes" method="list"
 			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
