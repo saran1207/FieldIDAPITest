@@ -277,6 +277,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			FindOwnerByLegacyIds ownerFinder = getFindOwnerByLegacyIds(tenantId);
 			ownerFinder.setLegacyCustomerId(productServiceDTO.customerExists() ? productServiceDTO.getCustomerId() : null);
 			ownerFinder.setLegacyDivisionId(productServiceDTO.divisionExists() ? productServiceDTO.getDivisionId() : null);
+			ownerFinder.setLegacyJobSiteId(productServiceDTO.jobSiteExists() ? productServiceDTO.getJobSiteId() : null);
 			
 			owner = ownerFinder.retrieveOwner();
 		}
@@ -394,6 +395,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			FindOwnerByLegacyIds ownerFinder = new FindOwnerByLegacyIds(persistenceManager, tenantId);
 			ownerFinder.setLegacyCustomerId(inspectionServiceDTO.customerExists() ? inspectionServiceDTO.getCustomerId() : null);
 			ownerFinder.setLegacyDivisionId(inspectionServiceDTO.divisionExists() ? inspectionServiceDTO.getDivisionId() : null);
+			ownerFinder.setLegacyJobSiteId(inspectionServiceDTO.jobSiteExists() ? inspectionServiceDTO.getJobSiteId() : null);
 			owner = ownerFinder.retrieveOwner();
 		}
 		inspection.setOwner(owner);

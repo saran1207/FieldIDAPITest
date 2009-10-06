@@ -11,6 +11,7 @@ public class FindOwnerByLegacyIds {
 	private final Long tenantId;
 	private Long legacyCustomerId;
 	private Long legacyDivisionId;
+	private Long legacyJobSiteId;
 	
 	public FindOwnerByLegacyIds(PersistenceManager persistenceManager, Long tenantId) {
 		this.persistenceManager = persistenceManager;
@@ -20,7 +21,12 @@ public class FindOwnerByLegacyIds {
 	public BaseOrg retrieveOwner() {
 		BaseOrg owner = null;
 		
-		if (legacyDivisionId != null) {
+		if (legacyJobSiteId != null) {
+			QueryBuilder<CustomerOrg> customerQuery = new QueryBuilder<CustomerOrg>(CustomerOrg.class, new TenantOnlySecurityFilter(tenantId));
+			customerQuery.addSimpleWhere("legacyId", legacyJobSiteId);
+			
+			owner = persistenceManager.find(customerQuery);			
+		} else if (legacyDivisionId != null) {
 			QueryBuilder<DivisionOrg> divisionQuery = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new TenantOnlySecurityFilter(tenantId));
 			divisionQuery.addSimpleWhere("legacyId", legacyDivisionId);
 			
@@ -46,5 +52,9 @@ public class FindOwnerByLegacyIds {
 
 	public void setLegacyDivisionId(Long legacyDivisionId) {
 		this.legacyDivisionId = legacyDivisionId;
+	}
+
+	public void setLegacyJobSiteId(Long legacyJobSiteId) {
+		this.legacyJobSiteId = legacyJobSiteId;
 	}
 }
