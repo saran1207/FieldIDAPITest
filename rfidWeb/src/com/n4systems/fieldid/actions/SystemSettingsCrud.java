@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -12,6 +13,7 @@ import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.reporting.PathHandler;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 
 public class SystemSettingsCrud extends AbstractCrud {
@@ -122,4 +124,23 @@ public class SystemSettingsCrud extends AbstractCrud {
 		this.newImage = newImage;
 	}
 
+	public String getDateFormat() {
+		return primaryOrg.getDateFormat();
+	}
+
+	@FieldExpressionValidator(message="", key="error.date_format_not_valid", expression="(validDateFormat == true)", fieldName="dateFormat")
+	public void setDateFormat(String dateFormat) {
+		primaryOrg.setDateFormat(dateFormat);
+	}
+	
+	public boolean isValidDateFormat() {
+		try {
+			@SuppressWarnings("unused")
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getDateFormat());
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+		
+		return true;
+	}
 }

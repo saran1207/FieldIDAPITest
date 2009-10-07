@@ -11,7 +11,7 @@ import com.n4systems.tools.EncryptionUtility;
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	private static final String DEFAULT_DATE_FORMAT = "MM/dd/yy";
 
-	private static final String DEFAULT_SERIAL_NUMBER_FORMAT = "";
+	private static final String DEFAULT_SERIAL_NUMBER_FORMAT = "NSA%y-%g";
 
 	private final OrgSaver orgSaver;
 	

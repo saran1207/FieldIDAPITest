@@ -105,11 +105,22 @@ ${action.setPageType('account_settings', 'show')!}
 		</div>
 	</div>
 </div>
-<#if securityGuard.brandingEnabled>
 	<@s.form action="systemSettingsUpdate" cssClass="crudForm pageSection largeForm" theme="fieldid">
 		<#include "../common/_formErrors.ftl"/>
-		<h2><@s.text name="label.branding_settings"/></h2>
+		<h2><@s.text name="label.system_settings" /></h2>
 		
+		<div class="infoSet">
+			<label for="dateFormat">
+				<@s.text name="label.date_format" />
+				<a href="javascript:void(0);" id="whatsThis_dateFormat_button" >?</a>
+				<div id="whatsThis_dateFormat" class="hidden" style="border :1px solid black"><@s.text name="whatsthis.date_format"/></div>
+				<script type="text/javascript">
+					$("whatsThis_dateFormat_button").observe( 'click', function(event) { showQuickView('whatsThis_dateFormat', event); } );
+				</script>				
+			</label>
+			<@s.textfield name="dateFormat" theme="fieldidSimple" />
+		</div>
+<#if securityGuard.brandingEnabled>
 		
 		<div class="infoSet">
 			<label for="systemLogo" ><@s.text name="label.system_logo"/></label>
@@ -140,8 +151,8 @@ ${action.setPageType('account_settings', 'show')!}
 			</span>
 		</div>
 		
+</#if>
 		<div class="formAction">
 			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="administration"/>"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
-</#if>

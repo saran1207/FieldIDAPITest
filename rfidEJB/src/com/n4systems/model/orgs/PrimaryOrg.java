@@ -42,7 +42,7 @@ public class PrimaryOrg extends InternalOrg {
 	private boolean usingSerialNumber = true;
 	
 	@Column(name="serialnumberformat", nullable=false)
-	private String serialNumberFormat;
+	private String serialNumberFormat = "NSA%y-%g";
 
 	@Column(name="website", length = 2056)
 	private String webSite;
