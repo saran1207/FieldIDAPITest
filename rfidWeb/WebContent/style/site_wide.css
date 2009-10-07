@@ -176,4 +176,9 @@ pre {
 	padding: 10px;
 	text-align: center;
 	font-weight: bold;
+}
+
+.infoSet .fieldHolder .unitOfMeasure input, .infoSet .fieldHolder .dates input{
+	width: 200px;
 }	
+

@@ -19,12 +19,12 @@
 	</@s.text>
 	</div>
 <#else>
-	<@s.form action="productCreate" cssClass="inputForm" theme="css_xhtml" >
-		<#include "_productForm.ftl" />
+	<@s.form action="productCreate" cssClass="fullForm fluidSets" theme="fieldid" >
 		<@s.hidden name="lineItemId" />
 		<@s.hidden name="tagOptionId" />
-		<div class="formAction">
-			<@s.reset key="hbutton.reset" onclick="clearForm(this.form); return false;" />
+		<#include "_productForm.ftl" />
+		
+		<div class="actions">
 			<@s.submit id="saveButton" name="save" key="hbutton.save" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>
 			<#if Session.sessionUser.hasAccess("createinspection") >
 				<@s.submit id="saveAndInspButton" name="saveAndInspect" key="hbutton.saveandinspect" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>

@@ -667,9 +667,7 @@ div.formAction {
 	color: #000000;
 	background-color: white;
 	border: 2px solid gray;
-	width: 270px;
-	z-index: 102;
-	float: left;
+	width:360px;
 }
 
 .crudForm .unitMeasureDiv {

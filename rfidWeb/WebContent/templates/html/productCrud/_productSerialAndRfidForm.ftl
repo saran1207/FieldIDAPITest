@@ -1,15 +1,30 @@
-<div class="formRowHolder" id="serialNumberRow_${uniqueID!}">
-	<@s.textfield id="serialNumberText"  name="serialNumber" labelposition="left" required="true" label="${action.getText( Session.sessionUser.serialNumberLabel )}" onchange="checkSerialNumber(${uniqueID!});"/>
+<div id="serialNumberRow_${uniqueID!}">
+	<div class="infoSet">
+		<label for="serialNumber" class="label"><@s.text name="${action.getText( Session.sessionUser.serialNumberLabel )}"/> <#include "../common/_requiredMarker.ftl"/></label>
+		<@s.textfield id="serialNumberText"  name="serialNumber" onchange="checkSerialNumber(${uniqueID!});"/>
 		
-	<div class="wwgrp">
-		<a href="#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
-		<span class="serialNumberStatus"></span>
-	</div>
+		
+		<span class="fieldHolder">
+			<a href="#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
+		</span>
+		<span class="fieldHolder serialNumberStatus"></span>
+		
+	</div>		
+	
 </div>
-<div class="formRowHolder">
-	<@s.textfield id="rfidNumber" key="label.rfidnumber" name="rfidNumber" labelposition="left"/>
-	<@s.textfield id="customerRefNumber" key="label.referencenumber" name="customerRefNumber" labelposition="left"/>
-</div>
-<div class="formRowHolder">
+<div class="infoSet">
 	<@n4.safetyNetworkSmartSearch name="linkedProduct"/>
 </div>
+
+<div class="multiColumn">
+	<div class="infoSet infoBlock">
+		<label for="rfidNumber" class="label"><@s.text name="label.rfidnumber"/></label>
+		<@s.textfield id="rfidNumber" name="rfidNumber" />		
+	</div>
+
+	<div class="infoSet  infoBlock">
+		<label for="customerRefNumber" class="label"><@s.text name="label.referencenumber"/></label>
+		<@s.textfield id="customerRefNumber"name="customerRefNumber" />		
+	</div>
+</div>	
+	

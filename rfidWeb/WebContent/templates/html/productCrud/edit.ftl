@@ -1,18 +1,23 @@
 
 ${action.setPageType('product', 'edit')!}
-<@s.form action="productUpdate" cssClass="inputForm" theme="css_xhtml" >
+<@s.form action="productUpdate" cssClass="fullForm fluidSets" theme="fieldid" >
 	<#include "_productForm.ftl"/>
 	<@s.hidden name="customerOrderId" />
 	<@s.hidden name="tagOptionId" />
 	
-	<div class="formAction">
-		<@s.url id="merge" action="productMergeAdd" uniqueID="${product.id}"/>
-		<@s.reset id="merge" name="merge" key="label.merge" onclick="return redirect('${merge}');" />
-		<@s.url id="deleteUrl" action="productConfirmDelete" uniqueID="${product.id}"/>
-		<@s.reset id="delete" name="delete" key="hbutton.delete" onclick="return redirect('${deleteUrl}');" />
-		<@s.url id="producturl" action="product"  uniqueID="${product.id}"/>
-		<@s.reset id="cancel" name="cancel" key="hbutton.cancel" onclick="window.location = '${producturl}'; return false;" />
+	<div class="actions">
 		<@s.submit id="saveButton" key="hbutton.save" onclick="saveProduct( this ); return false;" />
+		<@s.text name="label.or"/>
+		<a href="<@s.url action="product"  uniqueID="${product.id}"/>"><@s.text name="label.cancel"/></a>
+		
+		<@s.url id="merge" action="productMergeAdd" uniqueID="${product.id}"/>
+		 | 
+		<a href="<@s.url action="productMergeAdd" uniqueID="${product.id}"/>"><@s.text name="label.merge"/></a>
+		
+		 | 
+		<a href="<@s.url  action="productConfirmDelete" uniqueID="${product.id}"/>"><@s.text name="label.delete"/></a>
+		
+		
 	</div>
 	
 </@s.form >

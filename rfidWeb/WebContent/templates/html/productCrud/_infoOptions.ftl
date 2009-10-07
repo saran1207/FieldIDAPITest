@@ -1,15 +1,15 @@
+<head>
+	<script language="javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"> </script>
+	<script language="javascript" src="<@s.url value="/javascript/combobox.js"/>"> </script>
+	<script type="text/javascript">
+		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
+	</script>
+</head>
 <div id="infoOptions">
-	
-	<#assign fieldPrefix= 'product' />
-	<#assign useAutoAttributes=true />
-	<#if autoAttributeCriteria?exists >
-		<#assign autoAttributeInputFields=autoAttributeCriteria.inputs />
-	</#if>
-	<#assign prefix= 'product' />
-	<#assign requires='true'>
+	<h2><@s.text name="label.attributes"/></h2>
 	<@s.fielderror>
 		<@s.param>productInfoOptions</@s.param>				
 	</@s.fielderror>
-	<#include "/templates/html/common/_dynamicOptions.ftl" />
 	
+	<#include "_attributes.ftl"/>
 </div>
