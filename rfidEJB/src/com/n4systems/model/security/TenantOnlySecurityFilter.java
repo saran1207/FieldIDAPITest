@@ -3,6 +3,7 @@ package com.n4systems.model.security;
 import javax.persistence.Query;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -23,6 +24,10 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 	
 	@Override
 	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
+		if (definer.isStateFiltered()) {
+			addFilterParameter(builder, definer.getStatePath(), EntityState.ACTIVE);
+		}
+		
 		if (definer.isTenantFiltered()) {
 			addFilterParameter(builder, definer.getTenantPath(), tenantId);			
 		}
@@ -30,6 +35,10 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 
 	@Override
 	protected void applyParameters(Query query, SecurityDefiner definer) throws SecurityException {
+		if (definer.isStateFiltered()) {
+			setParameter(query, definer.getStatePath(), EntityState.ACTIVE);
+		}
+		
 		if (definer.isTenantFiltered()) {
 			setParameter(query, definer.getTenantPath(), tenantId);
 		}
@@ -38,9 +47,15 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 	@Override
 	protected String produceWhereClause(String alias, SecurityDefiner definer) throws SecurityException {
 		StringBuilder clauses = new StringBuilder();
-
+		boolean firstArgument = true;
+		
+		if (definer.isStateFiltered()) {
+			addFilterClause(clauses, definer.getStatePath(), alias, false);
+			firstArgument = false;
+		}
+		
 		if (definer.isTenantFiltered()) {
-			addFilterClause(clauses, definer.getTenantPath(), alias, false);
+			addFilterClause(clauses, definer.getTenantPath(), alias, !firstArgument);
 		}
 		
 		return clauses.toString();
