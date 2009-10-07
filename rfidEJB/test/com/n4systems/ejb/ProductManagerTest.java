@@ -17,7 +17,6 @@ import org.junit.Test;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
@@ -211,7 +210,7 @@ public class ProductManagerTest { //extends EJBTestCase {
 	}
 
 	
-	private void prepareSchedules() {
+	/*private void prepareSchedules() {
 		Query mockUpdateScheduleQuery = createMock(Query.class);
 		expect(mockUpdateScheduleQuery.executeUpdate()).andReturn(0);
 		expect(mockUpdateScheduleQuery.setParameter((String)anyObject(), (String)anyObject())).andReturn(mockUpdateScheduleQuery);
@@ -222,7 +221,7 @@ public class ProductManagerTest { //extends EJBTestCase {
 				+ " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
 				+ " WHERE product = :product AND state = :activeState ")).andReturn(mockUpdateScheduleQuery);
 		
-	}
+	}*/
 	
 	private void mockFindParentProduct(Product parentProduct, ProductRemovalSummary summary) {
 		try {

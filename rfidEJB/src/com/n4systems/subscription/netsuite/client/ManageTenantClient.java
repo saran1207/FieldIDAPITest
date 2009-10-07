@@ -2,9 +2,9 @@ package com.n4systems.subscription.netsuite.client;
 
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
 
-public class ManageTenantClient extends AbstractNetsuiteClient {
+public class ManageTenantClient extends AbstractNetsuiteClient<Object> {
 
-	private NetsuiteTenant tenant;
+	//private NetsuiteTenant tenant;
 	private Long netsuiteRecordId;
 	
 	public ManageTenantClient() {
@@ -21,7 +21,7 @@ public class ManageTenantClient extends AbstractNetsuiteClient {
 	}
 	
 	public ManageTenantClient setTenant(NetsuiteTenant tenant) {
-		this.tenant = tenant;
+		//this.tenant = tenant;
 		return this;
 	}
 	

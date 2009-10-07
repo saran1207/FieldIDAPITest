@@ -1,6 +1,7 @@
 package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
@@ -9,20 +10,15 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.CatalogOnlyConnectionSaver;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
-
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 
 
 

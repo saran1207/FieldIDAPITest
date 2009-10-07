@@ -66,7 +66,7 @@ class MigrateJobsites < ActiveRecord::Migration
   end
 
   def self.migrate_job_site(site)
-    cust_org = create_customer(site.name, site.customerId, site.modifiedby, site.tenant, site.id)
+    create_customer(site.name, site.customerId, site.modifiedby, site.tenant, site.id)
   end
 
   def self.create_customer(name, code, modified_by, tenant, legacyId)

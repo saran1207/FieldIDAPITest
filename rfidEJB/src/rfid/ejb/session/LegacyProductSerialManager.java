@@ -18,8 +18,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.TransformerUtils;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddProductHistoryBean;
@@ -398,7 +396,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	
 
-	@SuppressWarnings("unchecked")
 	public void checkForUniqueSubProducts(Product product) throws SubProductUniquenessException {
 		Set<SubProduct> uniqueSubProducts = new HashSet<SubProduct>(product.getSubProducts());
 		if (product.getSubProducts().size() != uniqueSubProducts.size()) {

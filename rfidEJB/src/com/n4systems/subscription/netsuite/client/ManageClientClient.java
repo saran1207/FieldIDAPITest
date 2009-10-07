@@ -1,6 +1,6 @@
 package com.n4systems.subscription.netsuite.client;
 
-public class ManageClientClient extends AbstractNetsuiteClient {
+public class ManageClientClient extends AbstractNetsuiteClient<Object> {
 
 	private Long netSuiteRecordId;
 	private String firstName;

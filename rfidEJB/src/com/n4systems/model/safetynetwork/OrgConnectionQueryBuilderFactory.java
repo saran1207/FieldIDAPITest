@@ -1,9 +1,5 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OrgConnectionSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;

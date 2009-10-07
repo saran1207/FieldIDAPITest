@@ -1,6 +1,5 @@
 package rfid.ejb.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
