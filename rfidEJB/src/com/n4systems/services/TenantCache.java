@@ -67,6 +67,7 @@ public class TenantCache {
 	 * @return		Tenant
 	 */
 	public Tenant findTenant(String name) {
+		name = name != null ? name.toLowerCase() : null;
 		if (!tenantNameMap.containsKey(name)) {
 			loadTenant(name);
 		}
