@@ -21,6 +21,7 @@ class RemoveOldOwnerColumns < ActiveRecord::Migration
     
     # InspectionBook
     drop_foreign_key( :inspectionbooks, :customers, :name => "fk_inspectionbooks_customers")
+    remove_index( :inspectionbooks, :name => "index_inspectionbooks_on_r_tenant_and_customer_uniqueid_and_nam")
     remove_column(    :inspectionbooks, :customer_id)
     
     # InspectionSchedule
@@ -62,7 +63,6 @@ class RemoveOldOwnerColumns < ActiveRecord::Migration
     # JobSites
     drop_foreign_key(:jobsites, :divisions, :name => "fk_jobsites_divisions")
     drop_foreign_key(:jobsites, :customers, :name => "fk_jobsites_customers")
-    drop_foreign_key(:jobsites, :tenants, :name => "fk_jobsites_tenants")
     drop_foreign_key(:jobsites, :users, :name => "fk_jobsites_users")
     
   end

@@ -17,9 +17,9 @@ require "user"
 
 class MigrateJobsites < ActiveRecord::Migration
   
-	def self.up
+  def self.up
     
-    JobSite.find_each(:all) do |site|
+    JobSite.find_each do |site|
       migrate_job_site(site)
     end
     
@@ -47,10 +47,10 @@ class MigrateJobsites < ActiveRecord::Migration
     
     drop_foreign_key(:projects, :jobsites, :name => "fk_projects_jobsites")
     remove_column(:projects, :jobsite_id)
-    
+      
   end
 	
-	def self.down
+  def self.down
   end
 
   def self.migrate_job_sites(models)
@@ -60,13 +60,13 @@ class MigrateJobsites < ActiveRecord::Migration
   end
 
   def self.update_owner(model)
-    model.owner_id = @site_to_customer[model.job_site_id]
+    customer = CustomerOrg.find(:first, :joins => :baseOrg, :conditions => { :legacy_id => model.jobsite_id, :org_base => { :tenant_id => model.tenant_id } })
+    model.owner_id = customer.id
     model.save
   end
 
   def self.migrate_job_site(site)
-    cust_org = create_customer(site.name, site.customerId, site.modified_by, site.tenant, site.id)
-    @site_to_customer_map[site.id] = cust_org.id    
+    cust_org = create_customer(site.name, site.customerId, site.modifiedby, site.tenant, site.id)
   end
 
   def self.create_customer(name, code, modified_by, tenant, legacyId)

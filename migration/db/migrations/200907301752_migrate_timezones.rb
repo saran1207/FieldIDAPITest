@@ -27,7 +27,7 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Denver":        return "United States:Colorado - Denver"
       when "America/Halifax":       return "Canada:Nova Scotia - Halifax"
       when "EST":                   return "United States:New York - New York"
-      when "Australia/Sydney":      return "Australia:Sydney"
+      when "Australia/Sydney":      return "Australia:New South Wales - Sydney"
       when "America/Los_Angeles":   return "United States:California - Los Angeles"
       when "Australia/Adelaide":    return "Australia:Adelaide"
       when "America/New_York":      return "United States:New York - New York"
@@ -47,7 +47,21 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Anchorage":     return "United States:Alaska - Anchorage"
       when "Australia/Perth":       return "Australia:Western Australia - Perth"
       when "America/Phoenix":       return "United States:Arizona - Phoenix"
-      when "Australia/NSW":         return "Australia:New South Wales - Sydney";
+      when "Australia/NSW":         return "Australia:New South Wales - Sydney"
+      when "America/Mexico_City":   return "Mexico:Federal District - Mexico City"
+      when "America/Tegucigalpa":   return "Honduras:Tegucigalpa"
+      when "America/Edmonton":      return "Canada:Alberta - Edmonton"
+      when "America/North_Dakota/Center":  return "UnitedStates:North Dakota - Bismarck"
+      when "Australia:Sydney":      return "Australia:New South Wales - Sydney"
+      when "Australia/Canberra":    return "Australia:New South Wales - Sydney"
+      when "Europe/London":         return "United Kingdom:England - London"
+      when "America/Santarem":      return "Brazil:Santarem"
+      when "America/Antigua":       return "Puerto Rico:San Juan"
+      when "America/Anguilla":       return "Puerto Rico:San Juan"
+      when "America/Knox_IN":       return "United States:Chicago"
+      when "Europe/Amsterdam":      return "Netherlands:Amsterdam"
+      when "America/Moncton":       return "Canada:Nova Scotia - Halifax"
+
       else
         return zoneid unless (zoneid.index(":").nil?)
         
