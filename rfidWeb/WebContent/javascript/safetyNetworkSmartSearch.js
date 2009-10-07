@@ -43,11 +43,11 @@ function updateLinkedProductInfo(product) {
 	showLinkedProductInfo();
 }
 
-document.observe(
+/*document.observe(
 	"dom:loaded", function() {
 		$('showSmartSearchLink').observe("click", showNetworkSmartSearch);
 		$('snSmartSearchCancel').observe("click", cancelNetworkSmartSearch);
 		$('snSmartSearchSubmit').observe("click", submitSearch);
 		$('unregisterSubmit').observe("click", cancelNetworkSmartSearch);
 	}
-);
+); */

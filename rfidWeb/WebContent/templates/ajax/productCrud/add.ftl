@@ -86,7 +86,7 @@
 						  		</span>
 						  		<span class="action">
 							  		<a href="javascript: void(0);" id="unitOfMeasureSelector_${infoField.uniqueID}" class="editLink" onclick="$('unitSelectorDiv_${infoField.uniqueID}').toggle('normal'); if( $('unitSelectorDiv_${infoField.uniqueID}').visible() ) { loadUnitOfMeasure('${infoField.uniqueID}', ${ (infoField.unitOfMeasure.id)!"null" } ); }">
-							  			<img style="border: none;" src="images/security_alarm_panel_2.png" />
+							  			<img style="border: none;" src="images/unit_of_measure.png" />
 							  		</a>
 								</span>
 								<span id="unitSelectorDiv_${infoField.uniqueID}" class="unitMeasureDiv" style="display:none;" >

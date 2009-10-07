@@ -1,6 +1,10 @@
 var autoAttributeUrl = "";
-function updateAttributes(theForm) {
-
+function updateAttributes(attribute) {
+	
+	
+	var theForm = Element.extend(attribute).up("form");
+	alert(theForm);
+	
 	var selectedProductId;
 	var elements = theForm.elements
 	for( var i = 0; i < elements.length; i++ ) {

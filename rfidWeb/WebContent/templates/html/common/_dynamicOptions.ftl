@@ -7,7 +7,7 @@
 </head>
 <@s.if test="${fieldPrefix}InfoFields != null" >
 <#if useAutoAttributes?exists && useAutoAttributes == true >
-	<#assign changeFunction="updateAttributes(this.form);" />
+	<#assign changeFunction="updateAttributes(this);" />
 
 <#else>
 	<#assign changeFunction="" />
@@ -59,7 +59,7 @@
 				  		<@s.textfield id="${infoField.uniqueID}" label="${infoField.name}" name="${prefix}InfoOptions[${stat.index}].name" labelposition="left" cssClass="dataEntry attribute${requiredClass}" readonly="true" required="${required}"/>
 				  		<div style="padding:10px 0px;">
 					  		<a href="javascript: void(0);" id="unitOfMeasureSelector_${infoField.uniqueID}" class="editLink" onclick="$('unitSelectorDiv_${infoField.uniqueID}').toggle(); if( $('unitSelectorDiv_${infoField.uniqueID}').visible() ) {  loadUnitOfMeasure('${infoField.uniqueID}'); }">
-					  			<img style="border: none;" src="images/security_alarm_panel_2.png" />
+					  			<img style="border: none;" src="images/unit_of_measure.png" />
 					  		</a>
 					  		
 					  		<div id="unitSelectorDiv_${infoField.uniqueID}" class="unitMeasureDiv" style="display:none;" >
@@ -70,13 +70,11 @@
 							  </table>
 							</div>
 						</div>
-				  		
 			  		</div>
 					
 				</#if>
 			</#if>
 		</#if>
-			
 		
 	</div>
 	
