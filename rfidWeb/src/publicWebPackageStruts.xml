@@ -29,6 +29,9 @@
 			<result name="missing" type="redirectAction">signUpPackages</result>
 			<result name="input" type="freemarker">/templates/html/signUp/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/signUp/add.ftl</result>
+			<result name="serious_error" type="redirectAction">
+				<param name="actionName">signUpComplete</param>
+			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">signUpComplete</param>
 			</result>

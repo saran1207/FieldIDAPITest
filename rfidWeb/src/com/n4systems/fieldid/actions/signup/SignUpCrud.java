@@ -100,7 +100,7 @@ public class SignUpCrud extends AbstractCrud {
 			result = SUCCESS;
 			
 		} catch (SignUpCompletionException e) {
-			addActionErrorText("error.your_account_has_been_created_but_not_activated_N4_has_been_notified_to_complete_the_process.");
+			addFlashErrorText("error.your_account_has_been_created_but_not_activated_N4_has_been_notified_to_complete_the_process");
 			logger.error(signUpLogLine("signing up"), e);
 			
 			result = "serious_error";
