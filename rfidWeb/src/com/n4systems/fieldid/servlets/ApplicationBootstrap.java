@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 
 import com.n4systems.services.Initializer;
+import com.n4systems.services.SafetyNetworkConnectionCacheInitializer;
 import com.n4systems.services.SetupDataLastModUpdateServiceInitializer;
 import com.n4systems.services.TenantCachePreloader;
 import com.n4systems.services.TenantLimitServiceInitializer;
@@ -21,7 +22,8 @@ public class ApplicationBootstrap extends HttpServlet {
 		new TaskSchedulerBootstraper(), 
 		new SetupDataLastModUpdateServiceInitializer(),
 		new TenantLimitServiceInitializer(),
-		new SignUpPackageSyncTaskInitializer()
+		new SignUpPackageSyncTaskInitializer(),
+		new SafetyNetworkConnectionCacheInitializer()
 	}; 
 	
 	private static Logger logger = Logger.getLogger(ApplicationBootstrap.class);

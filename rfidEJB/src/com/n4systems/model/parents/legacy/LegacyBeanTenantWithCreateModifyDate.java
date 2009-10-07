@@ -7,7 +7,9 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
 
 // this class this just temporary while we refactor the legacy beans to use the new AbstractEntity
 // Once a been is moved to it's new version, OrganizationAndTenant should be replaced with EntityWithTenant
@@ -24,6 +26,7 @@ abstract public class LegacyBeanTenantWithCreateModifyDate extends LegacyEntityC
 	@JoinColumn(name = "tenant_id")
 	private Tenant tenant;
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Tenant getTenant() {
 		return tenant;
 	}

@@ -7,7 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -21,9 +25,12 @@ abstract public class LegacyBaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uniqueID;
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Long getUniqueID() {
 		return uniqueID;
 	}
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Object getIdentifier() {
 		return getUniqueID();
 	}
@@ -44,8 +51,12 @@ abstract public class LegacyBaseEntity implements Serializable {
 		return false;
 	}
     
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isNew() {
 		return (uniqueID == null);
 	}
 	
+	protected <T> T enhance(SecurityEnhanced<T> entity, SecurityLevel level) {
+		return EntitySecurityEnhancer.enhance(entity, level);
+	}
 }

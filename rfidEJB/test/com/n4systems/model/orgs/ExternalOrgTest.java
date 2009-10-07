@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.security.SecurityLevel;
 
 public class ExternalOrgTest {
 	@SuppressWarnings("serial")
@@ -29,6 +30,7 @@ public class ExternalOrgTest {
 		public void onCreate() { super.onCreate(); }
 		@Override
 		public void onUpdate() { super.onUpdate(); }
+		public BaseOrg enhance(SecurityLevel level) { return null; }
 		@Override
 		public void updateAddressInfo(AddressInfo newAddressInfo) {
 			super.updateAddressInfo(newAddressInfo);

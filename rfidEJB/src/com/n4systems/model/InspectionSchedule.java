@@ -15,14 +15,19 @@ import javax.persistence.TemporalType;
 
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.model.api.DisplayEnum;
+import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 
 @Entity
 @Table(name = "inspectionschedules")
-public class InspectionSchedule extends ArchivableEntityWithOwner {
+public class InspectionSchedule extends ArchivableEntityWithOwner implements NetworkEntity<InspectionSchedule> {
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
@@ -110,6 +115,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		this(product, typeSchedule.getInspectionType());
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Product getProduct() {
 		return product;
 	}
@@ -126,6 +132,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		setOwner(product.getOwner());
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public InspectionType getInspectionType() {
 		return inspectionType;
 	}
@@ -142,10 +149,12 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		this.nextDate = new PlainDate(nextDate);
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public PlainDate getNextDate() {
 		return (nextDate != null) ? new PlainDate(nextDate) : null;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public boolean isPastDue() {
 		return (status != ScheduleStatus.COMPLETED && isPastDue(nextDate));
 	}
@@ -159,10 +168,12 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 	 * @return True if nextInspectionDate is after {@link DateHelper#getToday()
 	 *         today}
 	 */
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public static boolean isPastDue(Date nextInspectionDate) {
 		return DateHelper.getToday().after(nextInspectionDate);
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Long getDaysPastDue() {
 		Long daysPast = null;
 		if (isPastDue()) {
@@ -171,6 +182,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		return daysPast;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Long getDaysToDue() {
 		Long daysTo = null;
 		if (!isPastDue()) {
@@ -202,10 +214,12 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Date getCompletedDate() {
 		return completedDate;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public ScheduleStatus getStatus() {
 		return status;
 	}
@@ -235,6 +249,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		status = ScheduleStatus.SCHEDULED;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Inspection getInspection() {
 		return inspection;
 	}
@@ -246,6 +261,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		updateOwnershipToProduct();
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Project getProject() {
 		return project;
 	}
@@ -254,12 +270,26 @@ public class InspectionSchedule extends ArchivableEntityWithOwner {
 		this.project = project;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getLocation() {
 		return location;
 	}
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public SecurityLevel getSecurityLevel(InternalOrg fromOrg) {
+		return getProduct().getSecurityLevel(fromOrg);
+	}
+	
+	public InspectionSchedule enhance(SecurityLevel level) {
+		InspectionSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		enhanced.setProduct(enhance(product, level));
+		enhanced.setInspectionType(enhance(inspectionType, level));
+		enhanced.inspection = enhance(inspection, level);
+		return enhanced;
 	}
 
 }

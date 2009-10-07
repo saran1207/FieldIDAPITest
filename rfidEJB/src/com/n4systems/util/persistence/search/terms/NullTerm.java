@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.search.terms;
 
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 
 public class NullTerm extends SingleTermDefiner {
@@ -13,7 +14,7 @@ public class NullTerm extends SingleTermDefiner {
 		this.field = field;
 	}
 	
-	protected WhereParameter<?> getWhereParameter() {
+	protected WhereClause<?> getWhereParameter() {
 		return new WhereParameter<Object>(WhereParameter.Comparator.NULL, field);
 	}
 

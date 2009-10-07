@@ -3,6 +3,8 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.n4systems.fieldid.actions.api.AbstractAction;
+
 /**
  * The default CustomizableSearchAction OutputHandler.  Provides handling of Dates and other special types.
  */
@@ -13,7 +15,7 @@ public class DefaultHandler implements OutputHandler {
 		this.dateFormat = dateFormat;
 	}
 	
-	public String handle(Long entityId, Object cell) {
+	public String handle(AbstractAction action, Long entityId, Object cell) {
 		String cellString;
 		if (cell instanceof Date) {
 			cellString = (new SimpleDateFormat(dateFormat)).format((Date)cell);

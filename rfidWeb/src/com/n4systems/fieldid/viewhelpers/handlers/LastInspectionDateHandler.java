@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import java.util.Date;
 
 import com.n4systems.ejb.InspectionManager;
+import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.util.ServiceLocator;
 
 public class LastInspectionDateHandler extends DateTimeHandler {
@@ -13,12 +14,12 @@ public class LastInspectionDateHandler extends DateTimeHandler {
 		inspectionManager = ServiceLocator.getInspectionManager();
 	}
 
-	public String handle(Long entityId, Object value) {
+	public String handle(AbstractAction action, Long entityId, Object value) {
 		String outputDate = "";
 		
 		Date lastDate = inspectionManager.findLastInspectionDate(entityId);
 		if (lastDate != null) {
-			return super.handle(entityId, lastDate);
+			return super.handle(action, entityId, lastDate);
 		}
 		
 		return outputDate;

@@ -76,7 +76,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		}
 		
 		try {
-			List<Long> inspectionIds = persistenceManager.idSearch(criteria);
+			List<Long> inspectionIds = persistenceManager.idSearch(criteria, criteria.getSecurityFilter());
 			Long results = massUpdateManager.updateInspections(inspectionIds, inspection, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add( results.toString() );

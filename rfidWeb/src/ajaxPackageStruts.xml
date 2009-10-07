@@ -194,13 +194,6 @@
 			<result name="login" type="redirectAction">logon</result>
 		</action>
 
-		<action name="linkedInspection" method="showLinked"
-			class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/show.ftl</result>
-			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="login" type="redirectAction">logon</result>
-		</action>
-
 		<action name="inspectionBookOpen" method="open"
 			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/inspectionBook/open.ftl</result>

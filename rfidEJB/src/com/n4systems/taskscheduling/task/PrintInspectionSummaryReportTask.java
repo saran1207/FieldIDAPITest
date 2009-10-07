@@ -14,6 +14,7 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -24,6 +25,7 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 	private static final String pdfExt = ".pdf";
 	
 	private ReportDefiner reportDefiner;
+	private SecurityFilter filter;
 	private String dateFormat;
 	private String downloadLocation;
 	private Long userId;
@@ -67,7 +69,7 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 		try {
 			File reportFile = new File(user.getPrivateDir(), reportFileName +  pdfExt);
 			
-			JasperPrint p = ServiceLocator.getReportFactory().generateInspectionReport( reportDefiner, user, tenant );
+			JasperPrint p = ServiceLocator.getReportFactory().generateInspectionReport( reportDefiner, filter, user, tenant );
 			OutputStream pdf = new FileOutputStream( reportFile );
 			logger.info("Generating inspection summary report Complete [" + reportFile + "]");
 			
@@ -128,5 +130,13 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 	public void setTenant(Tenant tenant) {
     	this.tenant = tenant;
     }
+
+	public SecurityFilter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(SecurityFilter filter) {
+		this.filter = filter;
+	}
 
 }

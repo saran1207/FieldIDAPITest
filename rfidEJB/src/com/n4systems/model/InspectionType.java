@@ -23,11 +23,15 @@ import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectiontypes")
-public class InspectionType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
+public class InspectionType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<InspectionType> {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 	
@@ -66,10 +70,6 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 	private long formVersion = DEFAULT_FORM_VERSION;
 	
 	private Long legacyEventId;
-	
-	// TODO: REMOVE_ME
-//	@Enumerated(EnumType.STRING)
-//	private EntityState state = EntityState.ACTIVE;
 
 	public InspectionType() {
 		this(null);
@@ -100,6 +100,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 	    return name + " (" + getId() +")";
     }
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getDisplayName() {
 		return getName();
 	}
@@ -124,6 +125,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		return criteriaSection;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getName() {
 		return name;
 	}
@@ -132,6 +134,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.name = name;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public InspectionTypeGroup getGroup() {
 		return group;
 	}
@@ -140,6 +143,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.group = group;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public List<String> getInfoFieldNames() {
 		return infoFieldNames;
 	}
@@ -148,6 +152,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.infoFieldNames = infoFieldNames;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public List<CriteriaSection> getSections() {
 		return sections;
 	}
@@ -156,6 +161,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.sections = sections;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public Set<ProofTestType> getSupportedProofTests() {
 		return supportedProofTests;
 	}
@@ -164,10 +170,12 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.supportedProofTests = supportedProofTests;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public boolean supports(ProofTestType proofTestType) {
 		return supportedProofTests.contains(proofTestType);
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getDescription() {
 		return description;
 	}
@@ -176,6 +184,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.description = description;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public boolean isPrintable() {
 		return printable;
 	}
@@ -184,6 +193,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.printable = printable;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isRetired() {
 		return retired;
 	}
@@ -192,6 +202,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.retired = retired;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isMaster() {
 		return master;
 	}
@@ -200,6 +211,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.master = master;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Long getLegacyEventId() {
 		return legacyEventId;
 	}
@@ -208,6 +220,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.legacyEventId = legacyEventId;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public long getFormVersion() {
     	return formVersion;
     }
@@ -215,22 +228,6 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 	public void setFormVersion(long formVersion) {
     	this.formVersion = formVersion;
     }
-
-	// TODO: REMOVE_ME
-//	public void activateEntity() {
-//		if (state == EntityState.ARCHIVED) {
-//			name = archivedName;
-//		}
-//		state = EntityState.ACTIVE;
-//		
-//	}
-//
-//	public void archiveEntity() {
-//		if (state != EntityState.ARCHIVED) {
-//			state = EntityState.ARCHIVED;
-//			archiveName();
-//		}
-//	}
 	
 	private void archiveName() {
 		if (isArchived() && archivedName == null) {
@@ -239,25 +236,13 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		}
 	}
 
-	// TODO: REMOVE_ME
-//	public EntityState getEntityState() {
-//		return state;
-//	}
-//
-//	public boolean isActive() {
-//		return state == EntityState.ACTIVE;
-//	}
-//
-//	public boolean isArchived() {
-//		return state == EntityState.ARCHIVED;
-//	}
-//
-//	public void retireEntity() {
-//		state = EntityState.RETIRED;
-//	}
-
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getArchivedName() {
 		return archivedName;
+	}
+
+	public InspectionType enhance(SecurityLevel level) {
+		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 	
 }

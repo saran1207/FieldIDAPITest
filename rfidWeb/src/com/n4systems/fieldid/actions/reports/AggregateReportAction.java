@@ -48,7 +48,7 @@ public class AggregateReportAction extends AbstractAction {
 			return ERROR;
 		}
 		try {
-			List<Long> inspectionIds = persistenceManager.idSearch(criteria);
+			List<Long> inspectionIds = persistenceManager.idSearch(criteria, criteria.getSecurityFilter());
 			report = aggregateReportManager.createAggregateReport(inspectionIds);
 		} catch (Exception e) {
 			logger.error("could not produce aggregate report", e);

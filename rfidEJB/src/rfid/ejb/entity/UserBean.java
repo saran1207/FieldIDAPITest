@@ -15,10 +15,13 @@ import javax.persistence.Table;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
+import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.EncryptionUtility;
@@ -26,7 +29,7 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Listable<Long>, HasOwner, Saveable {
+public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Listable<Long>, HasOwner, Saveable, SecurityEnhanced<UserBean> {
 	private static final long serialVersionUID = 1L;
 	
 	public static SecurityDefiner createSecurityDefiner() {
@@ -84,7 +87,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	public String getModifiedBy() {
 		return modifiedBy;
 	}
-
+	
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -92,7 +95,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
-
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -134,7 +137,6 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		archivedUserID = userID;
 		userID = null;
 	}
-	
 
 	public boolean isSystem() {
 		return system;
@@ -143,7 +145,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	public void setSystem(boolean system) {
 		this.system = system;
 	}
-	
+
 	public boolean isAdmin() {
 		return admin;
 	}
@@ -167,7 +169,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	public void setHashPassword(String hashPassword) {
 		this.hashPassword = hashPassword;
 	}
-	
+
 	public String getTimeZoneID() {
 		return timeZoneID;
 	}
@@ -221,6 +223,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	public void createResetPasswordKey() {
 		resetPasswordKey = EncryptionUtility.getSHA1HexHash( emailAddress + System.currentTimeMillis() );
 	}
+
 	public String getResetPasswordKey() {
 		return resetPasswordKey;
 	}
@@ -277,7 +280,6 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		} else {
 			return getUniqueID().equals(user.getUniqueID());
 		}
-		
 	}
 	
 	@Override
@@ -288,7 +290,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 			return getUniqueID().intValue();
 		}
 	}
-	
+
 	public TimeZone getTimeZone() { 
 		return CountryList.getInstance().getRegionByFullId(timeZoneID).getTimeZone();
 	}
@@ -345,4 +347,9 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		return getDivisionId();
 	}
 	
+	public UserBean enhance(SecurityLevel level) {
+		UserBean enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		return enhanced;
+	}
+
 } 

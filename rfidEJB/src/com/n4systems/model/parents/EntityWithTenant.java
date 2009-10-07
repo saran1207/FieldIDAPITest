@@ -7,7 +7,9 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -30,6 +32,7 @@ abstract public class EntityWithTenant extends AbstractEntity implements HasTena
 		this.tenant = tenant;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Tenant getTenant() {
 		return tenant;
 	}

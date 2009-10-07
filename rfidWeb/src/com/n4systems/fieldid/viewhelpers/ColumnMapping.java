@@ -8,6 +8,7 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	private String id;
 	private String label;
 	private String pathExpression;
+	private String sortExpression;
 	private String outputHandler;
 	private boolean sortable = true;
 	private boolean onByDefault = false;
@@ -15,10 +16,11 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	
 	public ColumnMapping() {}
 	
-	public ColumnMapping(String id, String label, String pathExpression, String outputHandler, boolean sortable, boolean onByDefault, int order) {
+	public ColumnMapping(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order) {
 		this.id = id;
 		this.label = label;
 		this.pathExpression = pathExpression;
+		this.sortExpression = sortExpression;
 		this.outputHandler = outputHandler;
 		this.sortable = sortable;
 		this.onByDefault = onByDefault;
@@ -52,6 +54,15 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 
 	public void setPathExpression(String beanPath) {
 		this.pathExpression = beanPath;
+	}
+	
+	public String getSortExpression() {
+		// sort expression falls back on path expression
+		return (sortExpression != null) ? sortExpression : pathExpression;
+	}
+
+	public void setSortExpression(String sortExpression) {
+		this.sortExpression = sortExpression;
 	}
 
 	public String getOutputHandler() {

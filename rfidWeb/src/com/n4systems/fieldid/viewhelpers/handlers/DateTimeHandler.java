@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.FieldidDateFormatter;
 
@@ -15,7 +16,7 @@ public class DateTimeHandler implements OutputHandler, DateTimeDefinition {
 		this.dateTimeFormat = "yyyy-MM-dd HH:mm:ss a";
 	}
 
-	public String handle(Long entityId, Object cell) {
+	public String handle(AbstractAction action, Long entityId, Object cell) {
 		String cellString = "";
 		if (cell instanceof Date) {
 			cellString = new FieldidDateFormatter((Date)cell, this, true, true).format();

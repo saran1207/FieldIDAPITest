@@ -92,6 +92,13 @@
 				<@n4.orgPicker name="owner"/>
 			</div>
 			
+			<#if sessionUser.employeeUser>
+			<div class="container infoSet">
+				<label for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
+				<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
+			</div>
+			</#if>
+			
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>

@@ -11,6 +11,8 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 
 @SuppressWarnings("serial")
@@ -67,6 +69,7 @@ abstract public class ExternalOrg extends BaseOrg {
 		}
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getCode() {
 		return code;
 	}
@@ -83,6 +86,7 @@ abstract public class ExternalOrg extends BaseOrg {
 		this.contact = contact;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InternalOrg getLinkedOrg() {
 		return (InternalOrg)linkedOrg;
 	}
@@ -91,10 +95,9 @@ abstract public class ExternalOrg extends BaseOrg {
 		this.linkedOrg = linkedOrg;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Long getLegacyId() {
 		return legacyId;
 	}
-	
-	
 	
 }

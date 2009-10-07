@@ -22,9 +22,7 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
@@ -72,7 +70,6 @@ public class InspectionCrud extends UploadFileSupport {
 	private final InspectionManager inspectionManager;
 	private final LegacyProductSerial legacyProductManager;
 	private final User userManager;
-	private final SafetyNetworkManager safetyNetworkManager;
 	protected final ProductManager productManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	protected final InspectionHelper inspectionHelper;
@@ -121,12 +118,11 @@ public class InspectionCrud extends UploadFileSupport {
 	private boolean newFile = false;
 
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
-			SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
 		this.legacyProductManager = legacyProductManager;
 		this.userManager = userManager;
-		this.safetyNetworkManager = safetyNetworkManager;
 		this.productManager = productManager;
 		this.inspectionHelper = new InspectionHelper(persistenceManager);
 		this.inspectionScheduleManager = inspectionScheduleManager;
@@ -271,32 +267,6 @@ public class InspectionCrud extends UploadFileSupport {
 			scheduleSuggested = (inspectionSchedule != null);
 			
 		}
-	}
-
-	@SkipValidation
-	public String doShowLinked() {
-		// TODO: the display for this should be different than for a normal one.
-		// inspector should be the company not the individual. other information
-		// may need to be hidden.
-		if (product == null) {
-			addActionError(getText("error.noproduct"));
-			return MISSING;
-		}
-
-		try {
-			inspection = safetyNetworkManager.findLinkedProductInspection(product, uniqueID);
-
-			testDependices();
-		} catch (MissingEntityException e) {
-			return MISSING;
-		} catch (NullPointerException e) {
-			return MISSING;
-		} catch (InvalidQueryException e) {
-			logger.error("Invalid Query while finding linked product inspections", e);
-			return ERROR;
-		}
-
-		return SUCCESS;
 	}
 
 	@SkipValidation

@@ -48,8 +48,6 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private TableView resultsTable;
 	private ProductTypeLister productTypes;
 	
-	
-
 	public CustomizableSearchAction(
 			final Class<? extends CustomizableSearchAction<T>> implementingClass, 
 			final String sessionKey, 
@@ -65,8 +63,6 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 
 	abstract public List<ColumnMappingGroup> getDynamicGroups();
 	abstract protected T createSearchContainer();
-	
-	
 	
 	private void initializeColumnMappings() {
 		mappingGroups = ColumnMappingFactory.getMappings(implementingClass, getTenant());
@@ -110,7 +106,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		try {
 			if(isSearchIdValid()) {
 
-				resultsTable = persistenceManager.search(this);
+				resultsTable = persistenceManager.search(this, getContainer().getSecurityFilter());
 				
 			} else {
 				addFlashErrorText("error.searchexpired");
@@ -149,6 +145,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 				exportTask.setUserId(getSessionUser().getUniqueID());
 				exportTask.setPackageName(reportFileName);
 				exportTask.setSearchDefiner(new ImmutableSearchDefiner<TableView>(this));
+				exportTask.setSecurityFilter(getContainer().getSecurityFilter());
 
 				TaskExecutor.getInstance().execute(exportTask);
 				
@@ -333,6 +330,15 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	/**
+	 * Returns the entity for this row
+	 * @param rowIndex	index of the row
+	 * @return			entity object
+	 */
+	protected Object getEntityForRow(int rowIndex) {
+		return resultsTable.getEntity(rowIndex);
+	}
+	
+	/**
 	 * Returns the entity id for a given row
 	 * @param rowIndex	index of the row
 	 * @return			Id of the entity for that row
@@ -359,15 +365,22 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	 * @return		A String value for this row as returned from the specified handler
 	 */
 	public String getCell(int row, int col) {
-		String columnId = getSelectedColumns().get(col);
-		Long entityId = getIdForRow(row);
-		Object cell = resultsTable.getCell(row, col);
-		
-		OutputHandler outputHandler = cellHandlers.get(columnId);
-		String cellValue = outputHandler.handle(entityId, cell);
-		if (outputHandler.isLabel()) {
-			cellValue = getText(cellValue);
+		String cellValue;
+		try {
+			String columnId = getSelectedColumns().get(col);
+			Long entityId = getIdForRow(row);
+			Object cell = resultsTable.getCell(row, col);
+			
+			OutputHandler outputHandler = cellHandlers.get(columnId);
+			cellValue = outputHandler.handle(this, entityId, cell);
+			if (outputHandler.isLabel()) {
+				cellValue = getText(cellValue);
+			}
+		} catch(Exception e) {
+			logger.error(String.format("Failed handling cell (%d, %d)", row, col), e);
+			cellValue = "";
 		}
+		
 		return cellValue;
 	}
 	
@@ -391,12 +404,13 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	public Integer getMaxSizeForSummaryReport() {
 		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_SUMMARY_REPORT, getTenantId());
 	}
+	
 	public Integer getMaxSizeForMassUpdate() {
 		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, getTenantId());
 	}
+	
 	public Integer getMaxSizeForAssigningInspectionsToJobs() {
 		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId());
 	}
-
 
 }

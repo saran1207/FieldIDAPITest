@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
+import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.search.CustomizableSearchAction;
+
 /**
  * An interface defining a converter for TableView based output cells.
  * Used in {@link CustomizableSearchAction} to convert cells from the
@@ -17,7 +20,7 @@ public interface OutputHandler {
 	 * @param value
 	 * @return			A display
 	 */
-	public String handle(Long entityId, Object value);
+	public String handle(AbstractAction action, Long entityId, Object value);
 	
 	public boolean isLabel();
 		

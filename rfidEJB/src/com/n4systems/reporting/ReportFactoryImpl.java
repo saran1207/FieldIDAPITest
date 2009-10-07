@@ -61,6 +61,7 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.EJBTransaction;
@@ -536,7 +537,7 @@ public class ReportFactoryImpl implements ReportFactory {
 	 * @see com.n4systems.reporting.ReportFactory#generateInspectionReport(com.n4systems.util.ReportCriteria,
 	 *      java.lang.String, com.n4systems.model.Tenant)
 	 */
-	public JasperPrint generateInspectionReport(ReportDefiner reportDefiner, UserBean user, Tenant tenant) throws ReportException {
+	public JasperPrint generateInspectionReport(ReportDefiner reportDefiner, SecurityFilter filter, UserBean user, Tenant tenant) throws ReportException {
 		File jasperFile = PathHandler.getSummaryReportFile(tenant);
 
 		// check to see if the report exists
@@ -544,7 +545,7 @@ public class ReportFactoryImpl implements ReportFactory {
 			throw new ReportException("No Product report file summary report ");
 		}
 
-		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner);
+		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner, filter);
 
 		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
 		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();

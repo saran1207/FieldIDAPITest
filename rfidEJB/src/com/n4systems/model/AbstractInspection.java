@@ -1,9 +1,5 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.HasFileAttachments;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +16,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CollectionOfElements;
+
+import com.n4systems.model.api.HasFileAttachments;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "inspections")
@@ -69,10 +71,12 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	    		"\nResults: " + StringUtils.indent(resultString, 1);
     }
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isEditable() {
 		return (formVersion == type.getFormVersion());
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public InspectionType getType() {
 		return type;
 	}
@@ -81,6 +85,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.type = type;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Product getProduct() {
 		return product;
 	}
@@ -89,6 +94,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.product = product;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public Set<CriteriaResult> getResults() {
 		return results;
 	}
@@ -97,6 +103,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.results = results;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Set<FileAttachment> getAttachments() {
 		return attachments;
 	}
@@ -105,6 +112,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.attachments = attachments;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Map<String, String> getInfoOptionMap() {
 		return infoOptionMap;
 	}
@@ -113,6 +121,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.infoOptionMap = infoOptionMap;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getComments() {
 		return comments;
 	}
@@ -121,6 +130,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.comments = comments;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public long getFormVersion() {
     	return formVersion;
     }

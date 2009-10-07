@@ -60,6 +60,6 @@ public class InspectionAttributeDynamicGroupGenerator {
 		String path = (pathPrefix != null) ? pathPrefix + "." : "";
 		path +=  "infoOptionMap['" + fieldName + "']";
 		
-		return new ColumnMapping(id, fieldName, path, null, false, false, order);
+		return new ColumnMapping(id, fieldName, path, null, null, false, false, order);
 	}
 }

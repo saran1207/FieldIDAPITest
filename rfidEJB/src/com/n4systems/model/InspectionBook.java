@@ -11,11 +11,15 @@ import javax.persistence.Table;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectionbooks")
-public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<InspectionBook> {
+public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<InspectionBook>, SecurityEnhanced<InspectionBook> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
@@ -52,6 +56,7 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 	    return name + " (" + getId() + ")";
     }
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getName() {
 		return name;
 	}
@@ -64,10 +69,12 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 		this.open = open;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isOpen() {
 		return open;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Set<Inspection> getInspections() {
 		return inspections;
 	}
@@ -76,11 +83,13 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 		this.inspections = inspections;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getDisplayName() {
 		String ownerName = (getOwner() != null) ? " (" + getOwner().getName() + ")" : "";
 		return getName() + ownerName;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Long getLegacyId() {
 		return legacyId;
 	}
@@ -94,4 +103,9 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 		
 		return getName().compareToIgnoreCase(o.getName());
 	}
+
+	public InspectionBook enhance(SecurityLevel level) {
+		return EntitySecurityEnhancer.enhanceEntity(this, level);
+	}
+	
 }

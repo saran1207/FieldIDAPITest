@@ -30,13 +30,17 @@ import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 
 @Entity
 @Table(name = "producttypes")
-public class ProductType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable  {
+public class ProductType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<ProductType> {
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
 	private static final String descVariableStart = "{";
@@ -76,10 +80,6 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<ProductType> subTypes = new HashSet<ProductType>();
-
-	// TODO: REMOVE_ME
-//	@Enumerated(EnumType.STRING)
-//	private EntityState state = EntityState.ACTIVE;
 	
 	private String archivedName;
 	
@@ -113,10 +113,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 	
 	@Deprecated
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Long getUniqueID() {
 		return getId();
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getDescriptionTemplate() {
 		return descriptionTemplate;
 	}
@@ -129,11 +131,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.name = name;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getName() {
 		return name;
 	}
 	
 	@Deprecated
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getProductType() {
 		return getName();
 	}
@@ -147,6 +151,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.warnings = safetyLocationPath;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getWarnings() {
 		return warnings;
 	}
@@ -155,11 +160,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.cautionUrl = externalURL;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getCautionUrl() {
 		return cautionUrl;
 	}
 	
 	@Deprecated
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getCautions() {
 		return getCautionUrl();
 	}
@@ -173,11 +180,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.instructions = instructions;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getInstructions() {
 		return instructions;
 	}
 
 	@Deprecated
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Set<InspectionType> getInspectionTypes() {
 		Set<InspectionType> types = new HashSet<InspectionType>();
 		for (AssociatedInspectionType inspectionType : inspectionTypes) {
@@ -186,7 +195,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return types;
 	}
 
-
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Collection<InfoFieldBean> getInfoFields() {
 		return infoFields;
 	}
@@ -203,6 +212,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		}
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public boolean isHasManufactureCertificate() {
 		return hasManufactureCertificate;
 	}
@@ -211,6 +221,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.hasManufactureCertificate = hasManufactureCertificate;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getManufactureCertificateText() {
 		return manufactureCertificateText;
 	}
@@ -219,6 +230,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.manufactureCertificateText = manufactureCertificateText;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
 		return autoAttributeCriteria;
 	}
@@ -227,10 +239,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.autoAttributeCriteria = autoAttributeCriteria;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean hasCriteria() {
 		return autoAttributeCriteria != null;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Collection<InfoFieldBean> getAvailableInfoFields() {
 		ArrayList<InfoFieldBean> availableFields = new ArrayList<InfoFieldBean>(); 
 		for( InfoFieldBean infoField : infoFields ) {
@@ -294,6 +308,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return desc.toString();
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isDescriptionTemplateValid() {
 		List<String> fieldNames = new ArrayList<String>();
 		for(InfoFieldBean field: infoFields) {
@@ -304,11 +319,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 	
 	// XXX - we should pull this to a util/handler class at some point
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public static boolean isDescriptionTemplateValid(String descriptionTemplate, Collection<String> infoFieldNames) {
 		return (getInvalidDescriptionTemplateVariables(descriptionTemplate, infoFieldNames).size() > 0);
 	}
 	
 	// XXX - we should pull this to a util/handler class at some point
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public static List<String> getInvalidDescriptionTemplateVariables(String descriptionTemplate, Collection<String> infoFieldNames) {
 		String description = "" + descriptionTemplate;
 		
@@ -329,6 +346,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return invalidVariables;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Set<ProductTypeSchedule> getSchedules() {
 		return schedules;
 	}
@@ -345,6 +363,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	 * @param owner	Owner
 	 * @return		ProductTypeSchedule or null if no schedule was found
 	 */
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public ProductTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {
 		ProductTypeSchedule scheduleForOrg = null;
 		
@@ -368,6 +387,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return scheduleForOrg;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, BaseOrg owner) {
 		Date returnDate = fromDate;
 		
@@ -379,6 +399,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return returnDate;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public Set<FileAttachment> getAttachments() {
 		return attachments;
 	}
@@ -387,6 +408,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.attachments = attachments;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getImageName() {
 		return imageName;
 	}
@@ -395,10 +417,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.imageName = imageName;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public boolean hasImage() {
 		return (imageName != null);
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Set<ProductType> getSubTypes() {
 		return subTypes;
 	}
@@ -407,50 +431,15 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.subTypes = subTypes;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getDisplayName() {
 		return name;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isMaster() {
 		return !subTypes.isEmpty();
 	}
-
-	// TODO: REMOVE_ME
-//	public void activateEntity() {
-//		state = EntityState.ACTIVE;
-//	}
-//
-//	public void archiveEntity() {
-//		state = EntityState.ARCHIVED;
-//	}
-//
-//	public EntityState getEntityState() {
-//		return state;
-//	}
-//
-//	public void retireEntity() {
-//		state = EntityState.RETIRED;
-//	}
-//	
-//	public void setRetired( boolean retired ) {
-//		if( retired ) {
-//			retireEntity();
-//		} else  {
-//			activateEntity();
-//		}
-//	}
-//	
-//	public boolean isRetired() {
-//		return state == EntityState.RETIRED;
-//	}
-//
-//	public boolean isActive() {
-//		return state == EntityState.ACTIVE;
-//	}
-//	
-//	public boolean isArchived() {
-//		return state == EntityState.ARCHIVED;
-//	}
 	
 	public void archivedName(String prefix) {
 		archivedName = name;
@@ -460,16 +449,22 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		name += UUID.randomUUID().toString();
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getArchivedName() {
 		return archivedName;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public ProductTypeGroup getGroup() {
 		return group;
 	}
 
 	public void setGroup(ProductTypeGroup group) {
 		this.group = group;
+	}
+
+	public ProductType enhance(SecurityLevel level) {
+		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 	
 }

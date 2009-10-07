@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.search.terms;
 
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 
 public class SimpleTermOrNull<T> extends SingleTermDefiner {
@@ -18,7 +19,7 @@ public class SimpleTermOrNull<T> extends SingleTermDefiner {
 	
 	
 	@Override
-	protected WhereParameter<?> getWhereParameter() {
+	protected WhereClause<?> getWhereParameter() {
 		return new WhereParameter<T>(WhereParameter.Comparator.EQ_OR_NULL, field, value);
 	}
 

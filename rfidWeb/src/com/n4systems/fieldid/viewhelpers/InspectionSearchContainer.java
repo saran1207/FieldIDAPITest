@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -15,6 +16,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	
 	private Long savedReportId;
 	private boolean savedReportModified;
+	private boolean includeNetworkResults = false;
 	private String rfidNumber;
 	private String serialNumber;
 	private String orderNumber;
@@ -62,10 +64,16 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	}
 	
 	@Override
+	public SecurityFilter getSecurityFilter() {
+		// This is not ideal but if we're including network results,
+		// we need to wrap our security filter in a NetworkIdSecurityFilter
+		return (includeNetworkResults) ? new NetworkIdSecurityFilter(super.getSecurityFilter(), "product.networkId") : super.getSecurityFilter();
+	}
+
+	@Override
 	protected void evalSearchFilters() {
 		addOwnerFilter(getOwner());
 	}
-	
 	
 	@Override
 	protected String defaultSortColumn() {
@@ -92,7 +100,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	
 	
 	public String getOrderNumber() {
 		return orderNumber;
@@ -228,6 +235,14 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 
 	public Long getOwnerId() {
 		return (owner != null) ? owner.getId() : null;
+	}
+
+	public boolean isIncludeNetworkResults() {
+		return includeNetworkResults;
+	}
+
+	public void setIncludeNetworkResults(boolean includeNetworkResults) {
+		this.includeNetworkResults = includeNetworkResults;
 	}
 	
 }

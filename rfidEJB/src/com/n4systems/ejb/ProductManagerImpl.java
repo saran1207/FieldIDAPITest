@@ -7,6 +7,8 @@ import java.util.TreeSet;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -526,6 +528,7 @@ public class ProductManagerImpl implements ProductManager {
 		this.persistenceManager = persistenceManager;
 	}
 
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public SortedSet<String> findAllCommonInfoFieldNames(SecurityFilter filter) {
 		// find all the product types for a tenant and compute the common info
 		// fields
@@ -533,6 +536,7 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public SortedSet<String> findAllCommonInfoFieldNames(List<ProductType> productTypes) {
 		/*
 		 * This algorithm works by initializing our name set with all the

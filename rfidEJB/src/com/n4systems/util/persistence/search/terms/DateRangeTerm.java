@@ -1,11 +1,12 @@
 package com.n4systems.util.persistence.search.terms;
 
-import com.n4systems.util.StringUtils;
-import com.n4systems.util.persistence.WhereParameter;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.n4systems.util.StringUtils;
+import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereParameter;
 
 public class DateRangeTerm implements SearchTermDefiner {
 	private static final long serialVersionUID = 1L;
@@ -24,8 +25,8 @@ public class DateRangeTerm implements SearchTermDefiner {
 		this.end = end;
 	}
 	
-	public List<WhereParameter<?>> getWhereParameters() {
-		List<WhereParameter<?>> params = new ArrayList<WhereParameter<?>>();
+	public List<WhereClause<?>> getWhereParameters() {
+		List<WhereClause<?>> params = new ArrayList<WhereClause<?>>();
 		
 		if (start != null) {
 			params.add(getDateParameter(field, start, true));
@@ -38,7 +39,7 @@ public class DateRangeTerm implements SearchTermDefiner {
 		return params;
 	}
 	
-	private WhereParameter<Date> getDateParameter(String field, Date date, boolean isStart) {
+	private WhereClause<Date> getDateParameter(String field, Date date, boolean isStart) {
 		WhereParameter.Comparator comp = (isStart) ? WhereParameter.Comparator.GE : WhereParameter.Comparator.LE;
 		
 		String fieldName = StringUtils.pathToName(field);

@@ -171,14 +171,23 @@ public interface PersistenceManager {
 	public Query prepare(QueryBuilder<?> builder) throws InvalidQueryException;
 
 	/**
+	 * Returns a count of the number of pages
+	 * @param definer	The search definition
+	 * @param filter	SecurityFilter to use in search
+	 * @return			number of pages
+	 */
+	public int countPages(BaseSearchDefiner definer, SecurityFilter filter, long pageSize);
+	
+	/**
 	 * Returns a list of entity id's as defined by the {@link BaseSearchDefiner}.  Note that although
 	 * the BaseSearchDefiner does not enforce the search class ({@link BaseSearchDefiner#getSearchClass()}) to be
 	 * a subclass of {@link BaseEntity}, <code>"id"</code> is still assumed to be the identity field.  This means 
 	 * that legacy entities will fail handed to this method.
 	 * @param definer	The search definition
+	 * @param filter	SecurityFilter to use in search
 	 * @return			A list of Long entity ids.
 	 */
-	public List<Long> idSearch(BaseSearchDefiner definer);
+	public List<Long> idSearch(BaseSearchDefiner definer, SecurityFilter filter);
 	
 	/**
 	 * Performs a search as defined by the {@link SearchDefiner}.  Constructs a query based on the {@link SearchTerm}s and
@@ -188,9 +197,10 @@ public interface PersistenceManager {
 	 * @see SearchDefiner
 	 * @see ResultTransformer
 	 * @param definer	The search definition
+	 * @param filter	SecurityFilter to use in search
 	 * @return			The paginated entity data as returned from {@link ResultTransformer#transform(List)}
 	 */
-	public <K> K search(SearchDefiner<K> definer);
+	public <K> K search(SearchDefiner<K> definer, SecurityFilter filter);
 
 	
 	public <T> List<T> passThroughFindAll(String query, Map<String,Object> parameters) ;

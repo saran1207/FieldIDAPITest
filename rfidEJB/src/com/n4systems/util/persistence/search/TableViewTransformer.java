@@ -102,6 +102,9 @@ public class TableViewTransformer implements ResultTransformer<TableView>{
 		
 		Object finalValue;
 		for (int rowIdx = 0; rowIdx < list.size(); rowIdx++) {
+			// pull the full entity, into the row list
+			view.setEntity(rowIdx, list.get(rowIdx));
+			
 			// id's will get reflected separately 
 			try {
 				view.setId(rowIdx, (Long)Reflector.getPathValue(list.get(rowIdx), idField));

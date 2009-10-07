@@ -93,7 +93,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 				printAllTask.setDateFormat(getSessionUser().getDateFormat());
 				printAllTask.setDownloadLocation(createActionURI("download.action").toString());
 				printAllTask.setPackageName(reportFileName);
-				printAllTask.setProductIdList(persistenceManager.idSearch(this));
+				printAllTask.setProductIdList(persistenceManager.idSearch(this, getContainer().getSecurityFilter()));
 				printAllTask.setUserId(getSessionUser().getUniqueID());
 
 				TaskExecutor.getInstance().execute(printAllTask);

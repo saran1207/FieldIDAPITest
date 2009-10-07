@@ -29,6 +29,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	private static Logger logger = Logger.getLogger(ExcelReportExportTask.class);
 	
 	private SearchDefiner<TableView> searchDefiner;
+	private SecurityFilter securityFilter;
 	private Long userId;
 	private String packageName;
 	private List<String> columnTitles = new ArrayList<String>();
@@ -47,13 +48,13 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 			
 			String subject = "Excel Search Report for " + getPackageName();
 
-			int totalPages = ServiceLocator.getPersistenceManager().countAllPages(getSearchClass(), getPageSize(), getSecurityFilter());
+			int totalPages = ServiceLocator.getPersistenceManager().countPages(this, getSecurityFilter(), getPageSize());
 			
 			// we'll initalize the table view with one 1 row .. this will resize dynamically as we append tables
 			TableView masterTable = new TableView(0, getColumnTitles().size());
 			do {
 				
-				masterTable.append(ServiceLocator.getPersistenceManager().search(this));
+				masterTable.append(ServiceLocator.getPersistenceManager().search(this, getSecurityFilter()));
 				page++;
 				
 			} while(page <= totalPages);
@@ -118,10 +119,6 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	public String[] getJoinColumns() {
 		return searchDefiner.getJoinColumns();
 	}
-	
-	public SecurityFilter getSecurityFilter() {
-		return searchDefiner.getSecurityFilter();
-	}
 
 	public SearchDefiner<TableView> getSearchDefiner() {
 		return searchDefiner;
@@ -158,6 +155,13 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	public List<QueryFilter> getSearchFilters() {
 		return new ArrayList<QueryFilter>();
 	}
-	
+
+	public SecurityFilter getSecurityFilter() {
+		return securityFilter;
+	}
+
+	public void setSecurityFilter(SecurityFilter securityFilter) {
+		this.securityFilter = securityFilter;
+	}
 	
 }

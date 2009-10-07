@@ -7,7 +7,7 @@
 		
 		<#list selectedColumns as columnId >
 			<#assign column_class="" />
-			<#assign columnPath="${action.getColumnMapping(columnId).pathExpression}" />
+			<#assign columnPath="${action.getColumnMapping(columnId).sortExpression}" />
 			<#assign columnLabel="${action.getColumnMapping(columnId).label}" />
 			
 			<#if sortColumn?exists && columnPath == sortColumn>

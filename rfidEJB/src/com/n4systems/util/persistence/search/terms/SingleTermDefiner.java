@@ -1,17 +1,17 @@
 package com.n4systems.util.persistence.search.terms;
 
-import com.n4systems.util.persistence.WhereParameter;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.n4systems.util.persistence.WhereClause;
 
 public abstract class SingleTermDefiner implements SearchTermDefiner {
 	private static final long serialVersionUID = 1L;
 
-	abstract protected WhereParameter<?> getWhereParameter();
+	abstract protected WhereClause<?> getWhereParameter();
 	
-	public List<WhereParameter<?>> getWhereParameters() {
-		List<WhereParameter<?>> params = new ArrayList<WhereParameter<?>>();
+	public List<WhereClause<?>> getWhereParameters() {
+		List<WhereClause<?>> params = new ArrayList<WhereClause<?>>();
 		params.add(getWhereParameter());
 		return params;
 	}	

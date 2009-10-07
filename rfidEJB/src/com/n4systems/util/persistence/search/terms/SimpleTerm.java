@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.search.terms;
 
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 
 public class SimpleTerm<T> extends SingleTermDefiner {
@@ -15,7 +16,7 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 		this.value = value;
 	}
 	
-	protected WhereParameter<?> getWhereParameter() {
+	protected WhereParameter<T> createWhere() {
 		WhereParameter<T> param = new WhereParameter<T>(WhereParameter.Comparator.EQ, field, value);
 		
 		// String fields are automatically ignore case
@@ -24,6 +25,10 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 		}
 		
 		return param;
+	}
+	
+	protected WhereClause<?> getWhereParameter() {
+		return createWhere();
 	}
 
 	public String getField() {

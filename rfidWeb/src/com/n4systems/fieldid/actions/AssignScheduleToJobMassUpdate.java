@@ -54,7 +54,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		}
 		
 		try {
-			List<Long> scheduleIds = persistenceManager.idSearch(scheduleCriteria);
+			List<Long> scheduleIds = persistenceManager.idSearch(scheduleCriteria, scheduleCriteria.getSecurityFilter());
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
@@ -90,7 +90,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		}
 		
 		try {
-			List<Long> inspectionIds = persistenceManager.idSearch(reportCriteria);
+			List<Long> inspectionIds = persistenceManager.idSearch(reportCriteria, reportCriteria.getSecurityFilter());
 			List<Long> scheduleIds = massUpdateManager.createSchedulesForInspections(inspectionIds, getSessionUserId());
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();

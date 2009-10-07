@@ -14,6 +14,8 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -46,6 +48,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		modified = new Date();
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Date getCreated() {
 		return created;
 	}
@@ -54,6 +57,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.created = dateCreated;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Date getModified() {
 		return modified;
 	}
@@ -62,6 +66,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.modified = dateModified;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public UserBean getModifiedBy() {
 		return modifiedBy;
 	}

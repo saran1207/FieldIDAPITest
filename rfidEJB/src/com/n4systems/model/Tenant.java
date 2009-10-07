@@ -14,7 +14,7 @@ import com.n4systems.util.HashCode;
 
 @Entity
 @Table(name="tenants")
-public final class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, Saveable, Comparable<Tenant> {
+public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, Saveable, Comparable<Tenant> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false, length=255)
@@ -66,4 +66,5 @@ public final class Tenant extends BaseEntity implements Listable<Long>, NamedEnt
 	public int compareTo(Tenant other) {
 		return name.compareToIgnoreCase(other.getName());
 	}
+	
 }

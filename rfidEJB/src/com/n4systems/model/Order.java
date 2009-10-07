@@ -11,11 +11,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "orders")
-public class Order extends EntityWithOwner implements Listable<Long> {
+public class Order extends EntityWithOwner implements Listable<Long>, SecurityEnhanced<Order> {
 	private static final long serialVersionUID = 1L;
 	
 	public enum OrderType { 
@@ -49,13 +53,6 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 	@Temporal(TemporalType.DATE)
 	private Date orderDate;
 	
-	// TODO: REMOVE_ME
-//	@ManyToOne
-//	private Customer customer;
-//	
-//	@ManyToOne
-//	private Division division;
-	
 	private String poNumber;
 	private String description;
 	
@@ -70,6 +67,7 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 		this.orderNumber = orderNumber;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public OrderType getOrderType() {
 		return orderType;
 	}
@@ -78,6 +76,7 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 		this.orderType = orderType;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getOrderNumber() {
 		return orderNumber;
 	}
@@ -86,6 +85,7 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 		this.orderNumber = orderNumber;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public Date getOrderDate() {
 		return orderDate;
 	}
@@ -94,23 +94,7 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 		this.orderDate = date;
 	}
 
-	// TODO: REMOVE_ME
-//	public Customer getCustomer() {
-//		return customer;
-//	}
-//
-//	public void setCustomer(Customer customer) {
-//		this.customer = customer;
-//	}
-//
-//	public Division getDivision() {
-//		return division;
-//	}
-//
-//	public void setDivision(Division division) {
-//		this.division = division;
-//	}
-
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getPoNumber() {
 		return poNumber;
 	}
@@ -119,6 +103,7 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 		this.poNumber = poNumber;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getDescription() {
 		return description;
 	}
@@ -127,8 +112,13 @@ public class Order extends EntityWithOwner implements Listable<Long> {
 		this.description = description;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getDisplayName() {
 		return getOrderNumber();
 	}
 
+	public Order enhance(SecurityLevel level) {
+		Order enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		return enhanced;
+	}
 }

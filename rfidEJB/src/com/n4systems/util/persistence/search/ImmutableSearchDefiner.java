@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
@@ -18,10 +17,7 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 	private Class<?> searchClass;
 	private List<SearchTermDefiner> searchTerms;
 	private List<QueryFilter> searchFilters;
-	private SecurityFilter filter;
-	
-	
-	
+
 	public ImmutableSearchDefiner() {
 		super();
 	}
@@ -33,7 +29,6 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 		System.arraycopy(definer.getJoinColumns(), 0, joinColumns, 0, definer.getJoinColumns().length);  // copy the array so that it doesn't get updated.
 		searchClass = definer.getSearchClass();
 		searchTerms = new ArrayList<SearchTermDefiner>(definer.getSearchTerms());
-		filter = definer.getSecurityFilter();
 		searchFilters = new ArrayList<QueryFilter>(definer.getSearchFilters());
 	}
 
@@ -57,10 +52,6 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 		return searchTerms;
 	}
 
-	public SecurityFilter getSecurityFilter() {
-		return filter;
-	}
-
 	public int getPage() {
 		throw new NotImplementedException("don't use this method.");
 	}
@@ -77,5 +68,4 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 		return searchFilters;
 	}
 
-	
 }

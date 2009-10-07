@@ -12,11 +12,15 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectiongroups")
-public class InspectionGroup extends EntityWithTenant {
+public class InspectionGroup extends EntityWithTenant implements SecurityEnhanced<InspectionGroup> {
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "group")
@@ -31,10 +35,12 @@ public class InspectionGroup extends EntityWithTenant {
 		this.inspections = inspections;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Set<Inspection> getInspections() {
 		return inspections;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public String getMobileGuid() {
 		return mobileGuid;
 	}
@@ -43,6 +49,7 @@ public class InspectionGroup extends EntityWithTenant {
 		this.mobileGuid = mobileGuid;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Date getFirstDate() {
 		Date minDate = null;
 		for (Inspection inspection : getAvailableInspections()) {
@@ -56,6 +63,7 @@ public class InspectionGroup extends EntityWithTenant {
 		return minDate;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Date getLastDate() {
 		Date maxDate = null;
 		for (Inspection inspection : getAvailableInspections()) {
@@ -69,6 +77,7 @@ public class InspectionGroup extends EntityWithTenant {
 		return maxDate;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public List<Inspection> getAvailableInspections() {
 		List<Inspection> availableInspections = new ArrayList<Inspection>();
 
@@ -79,5 +88,9 @@ public class InspectionGroup extends EntityWithTenant {
 
 		}
 		return availableInspections;
+	}
+
+	public InspectionGroup enhance(SecurityLevel level) {
+		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 }

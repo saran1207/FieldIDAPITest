@@ -11,7 +11,11 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -78,14 +82,17 @@ abstract public class BaseEntity implements Saveable, Serializable {
         return super.hashCode();
     }
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isNew() {
 		return (id == null);
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Long getId() {
 		return id;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Object getIdentifier() {
 		return getId();
 	}
@@ -95,6 +102,7 @@ abstract public class BaseEntity implements Saveable, Serializable {
 	}
 	
 	/** Alias for {@link #getId()}.  Used by Struts/Freemarker */
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Long getID() {
 		return getId();
 	}
@@ -102,5 +110,9 @@ abstract public class BaseEntity implements Saveable, Serializable {
 	/** Alias for {@link #setId(Long)}.  Used by Struts/Freemarker */
 	public void setID(Long id) {
 		setId(id);
+	}
+	
+	protected <T> T enhance(SecurityEnhanced<T> entity, SecurityLevel level) {
+		return EntitySecurityEnhancer.enhance(entity, level);
 	}
 }

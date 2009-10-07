@@ -11,6 +11,7 @@ public class TableView extends AbstractCollection<List<Object>> {
 	
 	final private List<List<Object>> table;
 	final private List<Long> idList;
+	final private List<Object> entityList;
 	final private int columns;
 	
 	public TableView(int rowSize, int columnSize) {
@@ -25,6 +26,12 @@ public class TableView extends AbstractCollection<List<Object>> {
 		idList = new ArrayList<Long>(rowSize);
 		for (int r = 0; r < rowSize; r++) {
 			idList.add(null);
+		}
+		
+		//init the original entity list
+		entityList = new ArrayList<Object>(rowSize);
+		for (int r = 0; r < rowSize; r++) {
+			entityList.add(null);
 		}
 	}
 	
@@ -72,6 +79,18 @@ public class TableView extends AbstractCollection<List<Object>> {
 		return idList;
 	}
 
+	public void setEntity(int row, Object entity) {
+		entityList.set(row, entity);
+	}
+	
+	public Object getEntity(int row) {
+		return entityList.get(row);
+	}
+	
+	public List<Object> getEntityList() {
+		return entityList;
+	}
+	
 	@Override
 	public Iterator<List<Object>> iterator() {
 		return table.iterator();

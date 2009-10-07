@@ -7,6 +7,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
+import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.persistence.savers.Saver;
 
 public class OrgConnectionSaver extends Saver<OrgConnection> {
@@ -35,6 +36,9 @@ public class OrgConnectionSaver extends Saver<OrgConnection> {
 		
 		// on save, we also need to create our linked customer
 		orgSaver.save(em, createCustomerOrgFromConnection(conn));
+		
+		// now update the connection cache
+		SafetyNetworkSecurityCache.getInstance().connect(conn);
 	}
 
 	private void createTypedConnections(EntityManager em, OrgConnection conn) {

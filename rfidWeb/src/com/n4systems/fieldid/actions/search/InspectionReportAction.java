@@ -19,6 +19,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
+import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
@@ -103,11 +104,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	@SkipValidation
 	public String doReportCriteria() {
 		clearContainer();
-		
 		return INPUT;
 	}
-
-	
 
 	@Override
 	protected void clearContainer() {
@@ -135,7 +133,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 		try {
 			if (isSearchIdValid()) {
-				List<Long> inspectionDocs = persistenceManager.idSearch(new ImmutableSearchDefiner(this));
+				List<Long> inspectionDocs = persistenceManager.idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
 	
 				PrintAllInspectionCertificatesTask printTask = new PrintAllInspectionCertificatesTask();
 				
@@ -170,6 +168,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			
 			reportTask.setTenant(getTenant());
 			reportTask.setReportDefiner(getContainer());
+			reportTask.setFilter(getContainer().getSecurityFilter());
 			reportTask.setUserId(getSessionUser().getUniqueID());
 			reportTask.setDateFormat(getSessionUser().getDateFormat());
 			reportTask.setDownloadLocation(createActionURI("download.action").toString());
@@ -304,7 +303,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		return eventJobs;
 	}
 
-
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -315,7 +313,11 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
-		getContainer().setOwner(ownerPicker.getOwner());
-		
+		getContainer().setOwner(ownerPicker.getOwner());	
+	}
+	
+	public boolean isLocalInspection(int rowId) {
+		Inspection inspection = (Inspection)getEntityForRow(rowId);
+		return inspection.getSecurityLevel(getInternalOrg()).isLocal();
 	}
 }

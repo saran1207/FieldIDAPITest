@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ServiceLocator;
@@ -15,7 +16,7 @@ public class InspectionScheduleProductLinkHandler implements OutputHandler {
 		builder.setSimpleSelect("product.id");
 	}
 	
-	public String handle(Long entityId, Object value) {
+	public String handle(AbstractAction action, Long entityId, Object value) {
 		// look up the id of the product for this inspection, so that we can create the link		
 		return "<a href=\"product.action?uniqueID=" + getProductId(entityId) + "\" >" + (String)value + "</a>";
 		

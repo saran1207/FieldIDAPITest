@@ -2,6 +2,7 @@ package com.n4systems.util.persistence.search.terms;
 
 import java.util.List;
 
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 
 public class SimpleInTerm<T> extends SingleTermDefiner {
@@ -17,7 +18,7 @@ public class SimpleInTerm<T> extends SingleTermDefiner {
 		this.value = value;
 	}
 	
-	protected WhereParameter<?> getWhereParameter() {
+	protected WhereClause<?> getWhereParameter() {
 		WhereParameter<List<T>> param = new WhereParameter<List<T>>(WhereParameter.Comparator.IN, field, value);
 		return param;
 	}

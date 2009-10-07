@@ -516,12 +516,12 @@ public class QueryBuilder<E> {
 		return clauseString;
 	}
 	
-	private String getQueryString() throws InvalidQueryException {
+	public String getQueryString() throws InvalidQueryException {
 		String query =  getSelectClause() + " " + getFromClause() + " " + getJoinClause() + " " + getWhereClause() + " " + getGroupByClause() + " " + getOrderClause();
 		return query;
 	}
 	
-	private QueryBuilder<E> bindParams(Query query) throws InvalidQueryException {
+	public QueryBuilder<E> bindParams(Query query) throws InvalidQueryException {
 		for(WhereClause<?> whereClause: whereParameters.values()) {
 			whereClause.bind(query);
 		}

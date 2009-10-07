@@ -30,6 +30,7 @@ import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -119,6 +120,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	
 	public PrimaryOrg getPrimaryOrg() {
 		return getSecurityGuard().getPrimaryOrg();
+	}
+	
+	public InternalOrg getInternalOrg() {
+		return getSecurityFilter().getOwner().getInternalOrg();
 	}
 	
 	public BaseOrg getSessionUserOwner() {

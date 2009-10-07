@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.search.terms;
 
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 
 public class WildcardTerm extends SimpleTerm<String> {
@@ -14,8 +15,8 @@ public class WildcardTerm extends SimpleTerm<String> {
 	}
 
 	@Override
-    protected WhereParameter<?> getWhereParameter() {
-		WhereParameter<?> param = super.getWhereParameter(); 
+    protected WhereClause<?> getWhereParameter() {
+		WhereParameter<?> param = createWhere();
 		
 		param.setComparator(WhereParameter.Comparator.LIKE);
 		param.setOptions(param.getOptions() | WhereParameter.WILDCARD_RIGHT);

@@ -1,16 +1,20 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.EntityWithTenant;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
+
 @Entity
 @Table(name = "lineitems")
-public class LineItem extends EntityWithTenant implements Listable<Long> {
+public class LineItem extends EntityWithTenant implements Listable<Long>, SecurityEnhanced<LineItem> {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_PRODUCT_CODE = "DEFAULT";
 	
@@ -35,6 +39,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		setOrder(order);
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Order getOrder() {
 		return order;
 	}
@@ -43,6 +48,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		this.order = order;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public int getIndex() {
 		return idx;
 	}
@@ -55,6 +61,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		return ++idx;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public long getQuantity() {
 		return quantity;
 	}
@@ -63,6 +70,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		this.quantity = quantity;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getProductCode() {
 		return productCode;
 	}
@@ -71,6 +79,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		this.productCode = productIdent;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getLineId() {
 		return lineId;
 	}
@@ -79,6 +88,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		this.lineId = ident;
 	}
 	
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getDescription() {
 		return description;
 	}
@@ -87,11 +97,19 @@ public class LineItem extends EntityWithTenant implements Listable<Long> {
 		this.description = description;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getDisplayName() {
 		return getProductCode();
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isIndexSet() {
 		return (idx >= 0);
+	}
+	
+	public LineItem enhance(SecurityLevel level) {
+		LineItem enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		enhanced.setOrder(enhance(order, level));
+		return enhanced;
 	}
 }

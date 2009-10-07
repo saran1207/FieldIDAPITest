@@ -7,6 +7,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
+
 @Entity
 @Table(name = "org_customer")
 @PrimaryKeyJoinColumn(name="org_id")
@@ -26,26 +30,31 @@ public class CustomerOrg extends ExternalOrg {
 	public CustomerOrg() {}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InternalOrg getInternalOrg() {
 		return getParent();
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public CustomerOrg getCustomerOrg() {
 		return this;
 	}
 
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -56,6 +65,7 @@ public class CustomerOrg extends ExternalOrg {
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InternalOrg getParent() {
 		// Note the type is downcast to InternalOrg (should always be the case because of forced setter)
 		return (InternalOrg)parent;
@@ -67,8 +77,15 @@ public class CustomerOrg extends ExternalOrg {
 	}
 	
 	@Deprecated
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getCustomerId() {
 		return getCode();
 	}
-
+	
+	public CustomerOrg enhance(SecurityLevel level) {
+		CustomerOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		enhanced.setParent((InternalOrg)enhance(parent, level));
+		return enhanced;
+	}
+	
 }

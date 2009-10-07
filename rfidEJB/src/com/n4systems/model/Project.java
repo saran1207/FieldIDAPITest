@@ -253,5 +253,4 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 	public void setResources(Set<UserBean> resources) {
 		this.resources = resources;
 	}
-
 }

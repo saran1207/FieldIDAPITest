@@ -75,6 +75,7 @@ public class ColumnMappingFactory {
 					props.getParent(), 
 					props.getString("label"), 
 					props.getString("pathExpression"),
+					props.getString("sortExpression"),
 					props.getString("outputHandler"),
 					props.getBoolean("sortable"), 
 					props.getBoolean("onByDefault"), 

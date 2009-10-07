@@ -7,6 +7,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
+
 @Entity
 @Table(name = "org_division")
 @PrimaryKeyJoinColumn(name="org_id")
@@ -20,26 +24,31 @@ public class DivisionOrg extends ExternalOrg {
 	public DivisionOrg() {}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InternalOrg getInternalOrg() {
 		return parent.getInternalOrg();
 	}
 
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public CustomerOrg getCustomerOrg() {
 		return parent;
 	}
 
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public DivisionOrg getDivisionOrg() {
 		return this;
 	}
@@ -50,6 +59,7 @@ public class DivisionOrg extends ExternalOrg {
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public CustomerOrg getParent() {
 		return parent;
 	}
@@ -59,7 +69,14 @@ public class DivisionOrg extends ExternalOrg {
 	}
 	
 	@Deprecated
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getDivisionId() {
 		return getCode();
+	}
+	
+	public DivisionOrg enhance(SecurityLevel level) {
+		DivisionOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		enhanced.setParent((CustomerOrg)enhance(parent, level));
+		return enhanced;
 	}
 }

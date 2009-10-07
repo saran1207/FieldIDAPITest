@@ -8,6 +8,9 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class LegacyEntityCreateModifyDate extends LegacyBaseEntity {
@@ -31,6 +34,7 @@ abstract public class LegacyEntityCreateModifyDate extends LegacyBaseEntity {
 		dateModified = new Date();
     }
     
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Date getDateCreated() {
 		return dateCreated;
 	}
@@ -39,6 +43,7 @@ abstract public class LegacyEntityCreateModifyDate extends LegacyBaseEntity {
 		this.dateCreated = dateCreated;
 	}
     
+	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Date getDateModified() {
 		return dateModified;
 	}

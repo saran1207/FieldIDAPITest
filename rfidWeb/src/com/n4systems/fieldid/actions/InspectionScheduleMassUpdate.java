@@ -50,7 +50,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 
 		schedule.setNextDate(convertDate(nextDate));
 		try {
-			List<Long> scheduleIds = persistenceManager.idSearch(criteria);
+			List<Long> scheduleIds = persistenceManager.idSearch(criteria, criteria.getSecurityFilter());
 			Long results = massUpdateManager.updateInspectionSchedules(scheduleIds, schedule, select);
 			
 			List<String> messageArgs = new ArrayList<String>();

@@ -18,6 +18,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.tenant.TenantLimit;
 
 @Entity
@@ -65,26 +68,31 @@ public class PrimaryOrg extends InternalOrg {
 	public PrimaryOrg() {}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public PrimaryOrg getPrimaryOrg() {
 		return this;
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InternalOrg getInternalOrg() {
 		return this;
 	}
 
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public SecondaryOrg getSecondaryOrg() {
 		return null;
 	}
 	
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -94,6 +102,7 @@ public class PrimaryOrg extends InternalOrg {
 	}
 
 	@Override
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public BaseOrg getParent() {
 		return null;
 	}
@@ -160,6 +169,11 @@ public class PrimaryOrg extends InternalOrg {
 
 	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
+	}
+	
+	public PrimaryOrg enhance(SecurityLevel level) {
+		PrimaryOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		return enhanced;
 	}
 
 	public String getExternalPassword() {

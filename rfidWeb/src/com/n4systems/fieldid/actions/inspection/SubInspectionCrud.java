@@ -14,7 +14,6 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
@@ -39,9 +38,9 @@ public class SubInspectionCrud extends InspectionCrud {
 	private boolean currentInspectionNew = true;
 
 	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, CustomerManager customerManager,
-			SafetyNetworkManager safetyNetworkManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 
-		super(persistenceManager, inspectionManager, userManager, legacyProductManager, safetyNetworkManager, productManager, inspectionScheduleManager);
+		super(persistenceManager, inspectionManager, userManager, legacyProductManager, productManager, inspectionScheduleManager);
 	}
 
 	@Override
