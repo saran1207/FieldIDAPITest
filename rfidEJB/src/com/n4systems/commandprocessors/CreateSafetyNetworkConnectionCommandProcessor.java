@@ -5,6 +5,7 @@ import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -20,8 +21,10 @@ public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProces
 	
 	@Override
 	protected void execute(CreateSafetyNetworkConnectionMessageCommand command) {
-		OrgConnection connection = buildConnection(command);
-		saveConnection(connection);
+		if (isCommandStillValid(command)) {
+			OrgConnection connection = buildConnection(command);
+			saveConnection(connection);
+		}
 	}
 
 	
@@ -47,6 +50,9 @@ public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProces
 
 	@Override
 	protected boolean isCommandStillValid(CreateSafetyNetworkConnectionMessageCommand command) {
-		return true;
+		OrgConnectionExistsLoader orgConnectionExistsLoader = nonSecureLoaderFactory.createOrgConnectionExistsLoader();
+		orgConnectionExistsLoader.setCustomerId(command.getCustomerOrgId()).setVendorId(command.getVendorOrgId());
+		
+		return !orgConnectionExistsLoader.load(transaction);
 	}
 }

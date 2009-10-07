@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,6 +20,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.TenantCache;
+import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -63,6 +65,12 @@ public class ConnectionInvitationAction extends AbstractAction {
 	@SkipValidation
 	public String doAdd() {
 		setRemoteTenantId(getTenants().get(0).getId());
+		message.setSubject(getText("label.invite_connection_subject.default"));
+		
+		List<String> getTextArgs = new ArrayList<String>();
+		getTextArgs.add(getSessionUser().getName());
+		message.setBody(getText("label.invite_connection_body.default", getTextArgs));
+		
 		return SUCCESS;
 	}
 	
@@ -80,6 +88,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 					command.setVendorOrgId(remoteOrg.getId());
 					break;
 			}
+			
 			
 			new MessageCommandSaver().save(command);
 						

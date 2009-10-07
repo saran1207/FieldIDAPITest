@@ -1,0 +1,2 @@
+$('remoteCompanyError').show();
+$('remoteCompanyError').highlight();

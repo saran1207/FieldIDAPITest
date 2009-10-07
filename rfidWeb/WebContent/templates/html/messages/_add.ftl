@@ -7,7 +7,7 @@
 	<h2 class="clean"><@s.text name="label.send_message"/></h2>
 	<div class="infoField">
 		<label for="from" class="label"><@s.text name="label.from"/></label>
-		<span class="fieldHolder" id="sender">${sessionUser.name?html} ${sessionUser.owner.name?html}</span> 
+		<span class="fieldHolder" id="sender"><span id="senderUser">${sessionUser.name?html}</span> <span id="senderOrg">${sessionUser.owner.name?html}</span></span> 
 	</div>
 
 	<div class="infoField">

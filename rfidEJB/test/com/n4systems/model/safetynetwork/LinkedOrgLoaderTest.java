@@ -15,7 +15,7 @@ public class LinkedOrgLoaderTest {
 	public void load_throws_security_exception_on_null_connection() {		
 		SecurityFilter ownerFilter = new OrgOnlySecurityFilter(OrgBuilder.aPrimaryOrg().build());
 
-		LinkedOrgLoader loader = new LinkedOrgLoader(ownerFilter, new OrgConnectionLoader(null, null) {
+		LinkedOrgLoader loader = new LinkedOrgLoader(ownerFilter, new OrgConnectionByLinkedOrgLoader(null, null) {
 			@Override
 			protected OrgConnection load(EntityManager em, SecurityFilter filter) {
 				return null;

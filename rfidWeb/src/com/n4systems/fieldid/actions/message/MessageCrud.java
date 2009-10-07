@@ -57,7 +57,7 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		if (message.isUnread()) {
 			message.setRead();
 			try {
-				new MessageSaver().save(message);
+				new MessageSaver().update(message);
 			} catch (Exception e) {
 				logger.error("could not mark the message as read", e);
 			}

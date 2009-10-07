@@ -13,11 +13,11 @@ import com.n4systems.persistence.loaders.SecurityFilteredLoader;
  * @see VendorOrgConnectionsLoader
  * @see CustomerOrgConnectionsLoader
  */
-public class OrgConnectionLoader extends SecurityFilteredLoader<OrgConnection> {
+public class OrgConnectionByLinkedOrgLoader extends SecurityFilteredLoader<OrgConnection> {
 	private Long linkedOrgId;
 	private final OrgConnectionType connectionType;
 	
-	public OrgConnectionLoader(SecurityFilter filter, OrgConnectionType connectionListType) {
+	public OrgConnectionByLinkedOrgLoader(SecurityFilter filter, OrgConnectionType connectionListType) {
 		super(filter);
 		this.connectionType = connectionListType;
 	}
@@ -28,7 +28,7 @@ public class OrgConnectionLoader extends SecurityFilteredLoader<OrgConnection> {
 		return connection;
 	}
 	
-	public OrgConnectionLoader setLinkedOrgId(Long linkedOrgId) {
+	public OrgConnectionByLinkedOrgLoader setLinkedOrgId(Long linkedOrgId) {
 		this.linkedOrgId = linkedOrgId;
 		return this;
 	}

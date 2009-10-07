@@ -60,4 +60,6 @@ public abstract class CommandProcessor<T extends MessageCommand> {
 		this.nonSecureLoaderFactory = nonSecureLoaderFactory;
 		return this;
 	}
+
+	
 }

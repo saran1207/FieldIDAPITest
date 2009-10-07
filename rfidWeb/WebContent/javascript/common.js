@@ -472,3 +472,8 @@ function updateDropDown(select, newList, selectId) {
 	
 	select.value= selectId;
 }
+
+
+document.observe("dom:loaded", function() {
+		$$('.hide').invoke("hide");
+	});

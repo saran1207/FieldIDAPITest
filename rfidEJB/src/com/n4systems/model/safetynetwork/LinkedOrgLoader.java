@@ -7,15 +7,15 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 
 public class LinkedOrgLoader extends SecurityFilteredLoader<InternalOrg> {
-	private final OrgConnectionLoader connectionLoader;
+	private final OrgConnectionByLinkedOrgLoader connectionLoader;
 	
-	public LinkedOrgLoader(SecurityFilter filter, OrgConnectionLoader connectionLoader) {
+	public LinkedOrgLoader(SecurityFilter filter, OrgConnectionByLinkedOrgLoader connectionLoader) {
 		super(filter);
 		this.connectionLoader = connectionLoader;
 	}
 	
 	public LinkedOrgLoader(SecurityFilter filter, OrgConnectionType connectionType) {
-		this(filter, new OrgConnectionLoader(filter, connectionType));
+		this(filter, new OrgConnectionByLinkedOrgLoader(filter, connectionType));
 	}
 
 	@Override

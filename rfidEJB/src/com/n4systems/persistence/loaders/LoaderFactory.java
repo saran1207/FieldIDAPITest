@@ -34,10 +34,12 @@ import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
@@ -47,6 +49,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
+import com.n4systems.tools.Pager;
 
 /**
  * Provides simple access to creation of loaders.
@@ -249,4 +252,10 @@ public class LoaderFactory {
 	public PaginatedMessageLoader createPaginatedMessageLoader() {
 		return new PaginatedMessageLoader(filter);
 	}
+
+	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
+		return new PaginatedConnectionListLoader(filter);
+	}
+	
+	
 }
