@@ -6,6 +6,8 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<@n4.includeStyle type="page" href="product"/>
+	<script type="text/javascript" src="<@s.url value="javascript/safetyNetworkSmartSearch.js" encode='false' />"></script>
+	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/featureStyles/safetyNetworkSmartSearch.css"/>" />
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/ajax"/>';
@@ -16,10 +18,11 @@
 	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
 	    checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax"/>';
 	    networkSmartSearchUrl = "<@s.url action="safetyNetworkSmartSearch" namespace="/ajax/"/>";
+	    
+	   
 	</script>
 	<#include "/templates/html/common/_calendar.ftl"/>	
-	<script type="text/javascript" src="<@s.url value="javascript/safetyNetworkSmartSearch.js" encode='false' />"></script>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/featureStyles/safetyNetworkSmartSearch.css"/>" />
+	
 	
 </head>
 

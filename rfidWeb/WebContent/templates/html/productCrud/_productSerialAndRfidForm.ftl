@@ -22,4 +22,9 @@
 	<label for="customerRefNumber" class="label"><@s.text name="label.referencenumber"/></label>
 	<@s.textfield id="customerRefNumber"name="customerRefNumber" />		
 </div>
-	
+
+
+<div class="infoSet">
+	<label for="linkedProduct" class="label"><@s.text name="label.register_product"/></label>
+	<@n4.safetyNetworkSmartSearch name="linkedProduct"/>
+</div>	

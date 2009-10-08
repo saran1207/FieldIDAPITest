@@ -2,9 +2,13 @@ var networkSmartSearchUrl = "";
 
 function showNetworkSmartSearch(event) {
 	event.stop();
+	$('networkSmartSearchContainer').setStyle("position:absolute");
+	$('networkSmartSearchContainer').show();
+	translate( $('networkSmartSearchContainer'),$('registerOverNetworkLinkContainer'), 0, 0);
+	
 	$('registerOverNetworkLinkContainer').hide();
 	$('linkedProductContainer').hide();
-	$('networkSmartSearchContainer').show();
+	
 }
 
 function cancelNetworkSmartSearch(event) {
@@ -19,7 +23,7 @@ function cancelNetworkSmartSearch(event) {
 function showLinkedProductInfo() {
 	$('registerOverNetworkLinkContainer').hide();
 	$('linkedProductContainer').show();
-	$('networkSmartSearchContainer').hide();
+	$$('#networkSmartSearchContainer').invoke("hide");
 }
 
 function submitSearch(event) {
@@ -42,12 +46,15 @@ function updateLinkedProductInfo(product) {
 	
 	showLinkedProductInfo();
 }
-
-/*document.observe(
+var snSmartSearch = "";
+document.observe(
 	"dom:loaded", function() {
+			
+		document.body.insert(snSmartSearch);
+		
 		$('showSmartSearchLink').observe("click", showNetworkSmartSearch);
 		$('snSmartSearchCancel').observe("click", cancelNetworkSmartSearch);
 		$('snSmartSearchSubmit').observe("click", submitSearch);
 		$('unregisterSubmit').observe("click", cancelNetworkSmartSearch);
 	}
-); */
+); 

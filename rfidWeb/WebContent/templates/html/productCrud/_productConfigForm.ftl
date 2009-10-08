@@ -4,14 +4,15 @@
 
 	
 <#if userSecurityGuard.allowedManageSafetyNetwork == true >
-	<div class="infoSet infoBlock">
+	<div class="infoSet">
 		<label for="publishedState" class="label"><@s.text name="label.publishedstateselector"/></label>
 		<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />		
 	</div>
 </#if>
 
+
 <#if securityGuard.jobSitesEnabled >
-	<div class="infoSet infoBlock">
+	<div class="infoSet">
 		<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 		<#if !parentProduct?exists >
 			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
@@ -22,7 +23,7 @@
 		</#if>
 	</div>
 </#if>
-<div class="infoSet infoBlock">
+<div class="infoSet">
 	<label class="label" for="owner"><@s.text name="label.owner"/></label>
 	<#if !parentProduct?exists >
 		<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
@@ -33,7 +34,7 @@
 
 
 
-<div class="infoSet infoBlock">
+<div class="infoSet">
 	<label class="label" for="location"><@s.text name="label.location"/></label>
 	<#if !parentProduct?exists >
 		<@s.textfield id="location" name="location" />
@@ -41,23 +42,23 @@
 		<span class="fieldHolder" id="location">${(product.location?html)!}</span>
 	</#if>
 </div>
-<div class="infoSet infoBlock">
+<div class="infoSet">
 	<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>
 	<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />		
 </div>
 
-<div class="infoSet infoBlock">
+<div class="infoSet">
 	<label for="purchaseOrder" class="label"><@s.text name="label.purchaseorder"/></label>
 	<@s.textfield  name="purchaseOrder" />	
 </div>
 
-<div class="infoSet infoBlock">
+<div class="infoSet">
 	<label for="" class="label"><@s.text name="label.identified"/> <#include "../common/_requiredMarker.ftl"/></label>
 	<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
 </div>
 
 <#if !securityGuard.integrationEnabled>
-	<div class="infoSet infoBlock">
+	<div class="infoSet">
 		<label for="nonIntegrationOrderNumber" class="label"><@s.text name="label.ordernumber"/></label>
 		<@s.textfield id="nonIntegrationOrderNumber" name="nonIntegrationOrderNumber" />	
 	</div>
@@ -66,7 +67,7 @@
 </#if>
 
 <@s.iterator value="extentions" id="extention" status="stat" >
-	<div class="infoSet infoBlock">
+	<div class="infoSet">
 		<@s.hidden name="productExtentionValues[${stat.index}].extensionId" />
 		<@s.hidden name="productExtentionValues[${stat.index}].uniqueID" />
 		<label for="productExtentionValues[${stat.index}].value" class="label">${extentions[stat.index].extensionLabel?html}</label>
