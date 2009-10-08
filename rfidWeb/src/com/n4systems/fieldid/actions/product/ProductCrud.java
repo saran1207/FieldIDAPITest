@@ -48,6 +48,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
@@ -127,6 +128,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private ProductTypeLister productTypes;
 	private ProductSaveService productSaverService;
 	private Long excludeId;
+	private List<Product> linkedProducts;
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
@@ -326,6 +328,18 @@ public class ProductCrud extends UploadAttachmentSupport {
 		testExistingProduct();
 		setProductTypeId(product.getType().getId());
 		loadAttachments();
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doTraceability() {
+		
+		ProductsByNetworkId loader = new ProductsByNetworkId(getSecurityFilter());
+		loader.setNetworkId(product.getNetworkId());
+		
+		linkedProducts = loader.load();
+		linkedProducts.remove(product);
+		
 		return SUCCESS;
 	}
 
@@ -959,5 +973,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 		} else if (product.getLinkedProduct() == null || !product.getLinkedProduct().getId().equals(id)) {
 			product.setLinkedProduct(getLoaderFactory().createSafetyNetworkProductLoader().setProductId(id).load());
 		}
+	}
+	
+	public List<Product> getLinkedProducts() {
+		return linkedProducts;
 	}
 }

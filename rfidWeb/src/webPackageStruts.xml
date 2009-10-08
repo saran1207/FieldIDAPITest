@@ -420,6 +420,11 @@
 			<result name="success" type="freemarker">/templates/html/productCrud/show.ftl</result>
 
 		</action>
+		
+		<action name="productTraceability" method="traceability" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/traceability.ftl</result>		
+		</action>
 
 		<action name="productAdd" method="add" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
