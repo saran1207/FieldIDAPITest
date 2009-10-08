@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.utils;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +13,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.WebSession;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.ActionProxy;
 
 
 public class ActionInvocationWrapper implements StrutsStatics {
@@ -40,6 +43,10 @@ public class ActionInvocationWrapper implements StrutsStatics {
 		return (AbstractAction)action.getAction();
 	}
 	
+	public ActionProxy getProxy() {
+		return action.getProxy();
+	}
+	
 	public WebSession getSession() {
 		return new WebSession(getRequest().getSession(true));
 	}
@@ -48,5 +55,14 @@ public class ActionInvocationWrapper implements StrutsStatics {
 		return getSession().getSessionUser();
 	}
 	
+	public Method getMethod() throws SecurityException, NoSuchMethodException {
+		return getAction().getClass().getMethod(getMethodName());
+	}
 	
+	public String getMethodName() {
+		String methodName = getProxy().getMethod();
+		
+		// will convert 'show' to 'doShow'
+		return "do" + String.valueOf(methodName.charAt(0)).toUpperCase() + methodName.substring(1);
+	}
 }

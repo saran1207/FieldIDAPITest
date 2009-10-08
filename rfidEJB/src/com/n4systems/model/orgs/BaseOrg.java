@@ -189,4 +189,27 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public BaseOrg getParent();
+	
+	public boolean allowsAccessFor(BaseOrg child) {
+		if (child == null) {
+			return false;
+		}
+		
+		// this is a special case check since secondary orgs can see information from the primary
+		if (child.isSecondary() && isPrimary() && child.getPrimaryOrg().equals(this)) {
+			return true;
+		}
+		
+		if (isPrimary()) {
+			return (child.getPrimaryOrg().equals(this));
+		} else if (isSecondary()) {
+			return (child.getSecondaryOrg() != null && child.getSecondaryOrg().equals(this));
+		} else if (isCustomer()) {
+			return (child.getCustomerOrg() != null && child.getCustomerOrg().equals(this));
+		} else if (isDivision()) {
+			return (child.equals(this));
+		} else {
+			return false;
+		}
+	}
 }

@@ -98,7 +98,6 @@ public class TenantLimitService implements Serializable {
 	 * Updates all limits for all tenants
 	 */
 	public void updateAll() {
-		logger.info("Reloading all limits");
 		long startTime = System.currentTimeMillis();
 		
 		Transaction transaction = null;
@@ -107,7 +106,7 @@ public class TenantLimitService implements Serializable {
 			
 			// for each tenant, update all the limits.
 			for (PrimaryOrg primaryOrg: TenantCache.getInstance().findAllPrimaryOrgs()) {
-				logger.info("Updating all limits for [" + primaryOrg.toString() + "]");
+				logger.debug("Updating all limits for [" + primaryOrg.toString() + "]");
 				for (LimitUpdater updater: limitUpdaters) {
 					updater.updateLimitMap(primaryOrg, transaction);
 				}

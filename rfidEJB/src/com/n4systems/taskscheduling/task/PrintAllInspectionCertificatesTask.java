@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -64,7 +65,7 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 		
 		try {
 			// generate the report
-			File report = ServiceLocator.getReportFactory().generateInspectionCertificateReport(reportType, inspectionDocs, reportFileName, user);
+			File report = ServiceLocator.getReportFactory().generateInspectionCertificateReport(reportType, new HashSet<Long>(inspectionDocs), reportFileName, user);
 			
 			logger.info("Generating Multi-Inspection certificate Report Complete [" + report + "]");
 			

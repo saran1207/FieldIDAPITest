@@ -7,6 +7,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 public class MethodSecurityInterceptor<T> implements MethodInterceptor {
+	private static final String[] alwaysAllowed = {"hashCode", "getClass"};  // methods only need appear here if they would be caught by getterPrefixes
 	private static final String[] getterPrefixes = {"get", "is", "has"};
 	private static final String DEFAULT_STRING = "";
 	
@@ -19,8 +20,8 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 	}
 	
 	public Object intercept(Object dummyTarget, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-		// if it's not a getter, let it pass through
-		if (!isGetter(method)) {
+		// if it's not a secured method, let it pass through
+		if (!isSecuredMethod(method)) {
 			return passthrough(method, args);
 		}
 		
@@ -46,9 +47,16 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 		return method.invoke(target, args);
 	}
 
-	private boolean isGetter(Method method) {
+	private boolean isSecuredMethod(Method method) {
+		String methodName = method.getName();
+		for (String allowedMethod: alwaysAllowed) {
+			if (methodName.equals(allowedMethod)) {
+				return false;
+			}
+		}
+		
 		for (String prefix: getterPrefixes) {
-			if (method.getName().startsWith(prefix)) {
+			if (methodName.startsWith(prefix)) {
 				return true;
 			}
 		}

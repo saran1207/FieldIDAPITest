@@ -57,6 +57,21 @@ public class EntitySecurityEnhancer {
 	}
 	
 	/**
+	 * Returns an enhanced entity.  Entity SecurityLevel is determined via {@link NetworkEntity#getSecurityLevel(com.n4systems.model.orgs.InternalOrg)} from the entity.
+	 * Entities at {@link SecurityLevel#LOCAL} level will be returned directly, un-enhanced.
+	 * @param entity	entity to enhance
+	 * @param filter	A SecurityFilter with a BaseOrg owner
+	 * @return			The enhanced entity
+	 */
+	public static <T extends NetworkEntity<T>> T enhance(T entity, SecurityFilter filter) {
+		SecurityLevel shareLevel = entity.getSecurityLevel(filter.getOwner().getInternalOrg());
+		
+		// we don't enhance if the entity is local
+		T enhancedEntity = (shareLevel.equals(SecurityLevel.LOCAL)) ? entity : entity.enhance(shareLevel);
+		return enhancedEntity;
+	}
+	
+	/**
 	 * Returns an enhanced list of entities.  Entity SecurityLevel is determined via {@link NetworkEntity#getSecurityLevel(com.n4systems.model.orgs.InternalOrg)} from the entity.
 	 * Entities at {@link SecurityLevel#LOCAL} level will be returned directly, un-enhanced.
 	 * @param entities	List of entities implementing NetworkEntity
@@ -66,17 +81,12 @@ public class EntitySecurityEnhancer {
 	public static <T extends NetworkEntity<T>> List<T> enhanceList(List<T> entities, SecurityFilter filter) {
 		List<T> enhancedEntities = new ArrayList<T>();
 		
-		T enhancedEntity;
-		SecurityLevel shareLevel;
 		for (T entity: entities) {
-			shareLevel = entity.getSecurityLevel(filter.getOwner().getInternalOrg());
-			
-			// if the entity is local, there is no need to enhance
-			enhancedEntity = (shareLevel.equals(SecurityLevel.LOCAL)) ? entity : entity.enhance(shareLevel);
-			
-			enhancedEntities.add(enhancedEntity);
+			enhancedEntities.add(enhance(entity, filter));
 		}
 		
 		return enhancedEntities;
 	}
+
+
 }

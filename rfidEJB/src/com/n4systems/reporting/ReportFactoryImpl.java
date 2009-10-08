@@ -11,12 +11,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -61,10 +63,11 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.EJBTransaction;
+import com.n4systems.persistence.EntityManagerTransactionWrapper;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -85,6 +88,9 @@ public class ReportFactoryImpl implements ReportFactory {
 	@EJB private InspectionScheduleManager inspectionScheduleManager;
 	@EJB private User userManager;
 
+	@PersistenceContext(unitName = "rfidEM")
+	private EntityManager em;
+	
 	/**
 	 * @return A new jasper JRPdfExporter with character encoding set to UTF8
 	 */
@@ -100,7 +106,7 @@ public class ReportFactoryImpl implements ReportFactory {
 	 *      java.util.Collection, java.lang.String, java.lang.String,
 	 *      rfid.ejb.entity.UserBean)
 	 */
-	public File generateInspectionCertificateReport(InspectionReportType type, Collection<Long> inspectionIds, String packageName, UserBean user) throws ReportException, EmptyReportException {
+	public File generateInspectionCertificateReport(InspectionReportType type, Set<Long> inspectionIds, String packageName, UserBean user) throws ReportException, EmptyReportException {
 		// XXX - this could probable be improved now the the rest is a little
 		// cleaner
 		int reportsInFile = 0;
@@ -112,17 +118,20 @@ public class ReportFactoryImpl implements ReportFactory {
 		OutputStream reportOut = null;
 		File zipFile = null;
 
+		SecurityFilter filter = user.getSecurityFilter();
+		SafetyNetworkInspectionLoader inspectionLoader = new SafetyNetworkInspectionLoader(filter);
+		
 		try {
 			tempDir = PathHandler.getTempDir();
 			
 			reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
 			reportOut = new FileOutputStream(reportFile);
 
-			List<Inspection> inspections = persistenceManager.findAll(Inspection.class, new HashSet<Long>(inspectionIds), user.getTenant());
-
-			for (Inspection inspection : inspections) {
-				logger.debug("Processing Report for Inspection [" + inspection.getId() + "]");
-
+			Inspection inspection;
+			for (Long inspectionId: inspectionIds) {
+				logger.debug("Processing Report for Inspection [" + inspectionId + "]");
+				inspection = inspectionLoader.setId(inspectionId).load(em, filter);
+				
 				if (reportsInFile >= ConfigContext.getCurrentContext().getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE)) {
 					logger.debug("Exporing report pdf to [" + reportFile.getPath() + "]");
 					printToPDF(printList, reportOut);
@@ -343,7 +352,7 @@ public class ReportFactoryImpl implements ReportFactory {
 	 * @throws ReportException
 	 *             On any problem generating the report.
 	 */
-	private JasperPrint generateInspectionCertificate(InspectionReportType type, Inspection inspection, UserBean user) throws NonPrintableEventType, ReportException {
+	public JasperPrint generateInspectionCertificate(InspectionReportType type, Inspection inspection, UserBean user) throws NonPrintableEventType, ReportException {
 		JasperPrint jPrint = null;
 		
 		if (inspection.getType().getGroup().getPrintOut().isWithSubInspections()) {
@@ -606,7 +615,7 @@ public class ReportFactoryImpl implements ReportFactory {
 		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 
 		if (reportDefiner.getProductType() != null) {
-			ProductType productType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getProductType()).load(new EJBTransaction(persistenceManager.getEntityManager()));
+			ProductType productType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getProductType()).load(new EntityManagerTransactionWrapper(persistenceManager.getEntityManager()));
 			reportMap.put("productType", productType.getName());
 		}
 

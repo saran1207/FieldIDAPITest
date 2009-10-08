@@ -41,6 +41,8 @@ import com.n4systems.util.StringUtils;
 @PrimaryKeyJoinColumn(name="inspection_id")
 public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection> {
 	private static final long serialVersionUID = 1L;
+	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions",
+	"infoOptionMap", "subInspections" };
 	
 	public static final SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "product.owner", null, "state");
@@ -114,7 +116,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.date = date;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isPrintable() {
 		return printable;
 	}
@@ -123,7 +125,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.printable = printable;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public UserBean getInspector() {
 		return inspector;
 	}
@@ -141,7 +143,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.group = group;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InspectionBook getBook() {
 		return book;
 	}
@@ -150,7 +152,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.book = book;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public BaseOrg getOwner() {
 		return owner;
 	}
@@ -235,7 +237,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return state == EntityState.ARCHIVED;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean hasAnyPrintOuts() {
 		return (printable && getType().getGroup().hasPrintOut()) || getType().getGroup().hasObservationPrintOut();
 	}

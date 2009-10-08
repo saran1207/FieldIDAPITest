@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
+import org.hibernate.FlushMode;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
@@ -189,6 +190,10 @@ public class PersistenceManager {
 	
 	public static void reattach(EntityManager em, Object entity) {
 		getHibernateSession(em).lock(entity, LockMode.NONE);
+	}
+	
+	public static void setSessionReadOnly(EntityManager em) {
+		getHibernateSession(em).setFlushMode(FlushMode.MANUAL);
 	}
 	
 }

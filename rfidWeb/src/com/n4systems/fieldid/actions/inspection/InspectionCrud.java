@@ -30,6 +30,8 @@ import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.security.NetworkAwareAction;
+import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.AbstractInspection;
@@ -63,7 +65,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
-public class InspectionCrud extends UploadFileSupport {
+public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(InspectionCrud.class);
 
@@ -93,7 +95,7 @@ public class InspectionCrud extends UploadFileSupport {
 	private boolean inspectionScheduleOnInspection = false;
 	private boolean scheduleSuggested = false;
 	private String newInspectionBookTitle;
-	
+	private boolean allowNetworkResults = false;
 	private List<SubInspection> subInspections;
 	private List<ListingPair> inspectors;
 	private List<ProductStatusBean> productStatuses;
@@ -136,8 +138,12 @@ public class InspectionCrud extends UploadFileSupport {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
-
+		if (allowNetworkResults) {
+			inspection = getLoaderFactory().createSafetyNetworkInspectionLoader().setId(uniqueId).fetchAllFields().load();
+		} else {
+			inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
+		}
+		
 		if (inspection != null && !inspection.isActive()) {
 			inspection = null;
 		}
@@ -270,6 +276,7 @@ public class InspectionCrud extends UploadFileSupport {
 	}
 
 	@SkipValidation
+	@NetworkAwareAction
 	public String doShow() {
 		try {
 			product = inspection.getProduct();
@@ -945,5 +952,11 @@ public class InspectionCrud extends UploadFileSupport {
 		return ownerPicker.getOwner();
 	}
 	
-
+	public void setAllowNetworkResults(boolean allow) {
+		this.allowNetworkResults = allow;
+	}
+	
+	public boolean isLinkedInspection() {
+		return !inspection.getTenant().equals(getTenant());
+	}
 }

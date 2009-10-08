@@ -1,25 +1,17 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.reporting.ReportFactory;
 
@@ -27,91 +19,51 @@ import com.n4systems.reporting.ReportFactory;
 public class DownloadInspectionCert extends DownloadAction {
 	private static Logger logger = Logger.getLogger( DownloadInspectionCert.class );
 	private static final long serialVersionUID = 1L;
+	private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	
-	private Long productId;
 	private InspectionReportType reportType;
-
-	private ProductManager productManager;
-	private InspectionManager inspectionManager;
-	private SafetyNetworkManager safetyNetworkManager;
-	private Inspection inspection;
-	private Product product;
 	private ReportFactory reportFactory;
 	
-	
-	public DownloadInspectionCert( InspectionManager inspectionManager, ReportFactory reportFactory, 
-			SafetyNetworkManager safetyNetworkManager, ProductManager productManager, PersistenceManager persistenceManager ) {
+	public DownloadInspectionCert(ReportFactory reportFactory, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
 		this.reportFactory = reportFactory;
-		this.safetyNetworkManager = safetyNetworkManager;
-		this.productManager = productManager;
 	}
 
 	@Override
 	public String doDownload() {
-		inspection =  inspectionManager.findAllFields( uniqueID, getSecurityFilter() );
+		Inspection inspection = getLoaderFactory().createSafetyNetworkInspectionLoader().setId(uniqueID).fetchAllFields().load();
 		
-		return printCert();
-	}
-	
-	public String doDownloadLinkedInspection() {
-		product = productManager.findProduct( productId, getSecurityFilter() );
-		
-		if( product == null ) {
-			addActionError( getText( "error.noproduct" ) );
-			return MISSING;
-		}
-		
-		try {
-			inspection =  safetyNetworkManager.findLinkedProductInspection( product, uniqueID );
-		} catch(Exception e) {
-			logger.error("Failed finding linked inspection", e);
-		}
-		
-		return printCert();
+		return printCert(inspection);
 	}
 
-	private String printCert() {
-		if( inspection == null ) {
+	private String printCert(Inspection inspection) {
+		if(inspection == null) {
 			addActionError( getText( "error.noinspection" ) );
 			return MISSING;
 		} 
-		
-		JasperPrint p = null;
-		byte[] pdf = null;
-		InputStream input = null;
-		boolean failure = false;
-		
+
+		boolean failure = true;
 		try {
+			JasperPrint p = reportFactory.generateInspectionCertificate(reportType, uniqueID, fetchCurrentUser());
+			byte[] pdf = reportFactory.printToPDF(p);
 			
-			 
-			p = reportFactory.generateInspectionCertificate(reportType, uniqueID, fetchCurrentUser());
-			pdf = reportFactory.printToPDF( p );
+			fileName = constructReportFileName(inspection);
+
+			sendFile(new ByteArrayInputStream(pdf));
+			failure = false;
 			
-			SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
-			fileName = reportType.getReportNamePrefix() + "-" + sdf.format( inspection.getDate() ) + ".pdf";
-			
-			input = new ByteArrayInputStream( pdf );
-			sendFile( input );
-			
-		} catch( NonPrintableEventType nonPrintable ) {
-			logger.error( "failed to print cert", nonPrintable );
+		} catch(NonPrintableEventType npe) {
+			logger.debug("Cert was non-printable", npe);
 			return "cantprint";
-		} catch( ReportException reportException ) {
-			logger.error( "failed to print cert", reportException );
-			return ERROR;
-		} catch( IOException e ) {
-			logger.error( "failed to print cert", e );
-			failure = true;
-		} catch( Exception e ) {
-			logger.error( "failed to print cert", e );
-			return ERROR;
-		} finally {
-			IOUtils.closeQuietly( input );
+		} catch(Exception e) {
+			logger.error("Unable to download inspection cert", e);
 		}
 		
-		return ( failure ) ? ERROR : null;
+		return (failure) ? ERROR : null;
+	}
+
+	private String constructReportFileName(Inspection inspection) {
+		return reportType.getReportNamePrefix() + "-" + dateFormatter.format(inspection.getDate()) + ".pdf";
 	}
 
 	public InspectionSearchContainer getCriteria() {
@@ -122,14 +74,6 @@ public class DownloadInspectionCert extends DownloadAction {
 		} 
 		
 		return criteria;
-	}
-	
-	public Long getProductId() {
-		return productId;
-	}
-
-	public void setProductId( Long productId ) {
-		this.productId = productId;
 	}
 	
 	public String getReportType() {

@@ -1,18 +1,12 @@
 <@s.bean id="moneyUtil" name="com.n4systems.tools.MoneyUtils"/>
-<#assign linkedInspection = (Session.sessionUser.tenant.id != inspection.tenant.id) >
-
 <div id="inspection" >
 	<div id="productSummary">
 		<h2>
 			<span><@s.text name="label.productsummary"/></span>
 			
-			<#if !linkedInspection >
-				<@s.url id="inspectionCertUrl" action="downloadInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
-				<@s.url id="observationCertUrl" action="downloadInspectionCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
-			<#else>
-				<@s.url id="inspectionCertUrl" action="downloadLinkedInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" productId="${product.uniqueID}" />
-				<@s.url id="observationCertUrl" action="downloadLinkedInspectionCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" productId="${product.uniqueID}" />
-			</#if>
+			<@s.url id="inspectionCertUrl" action="downloadInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
+			<@s.url id="observationCertUrl" action="downloadInspectionCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
+				
 			<#if inspection.hasAnyPrintOuts()>
 				<div id="cert_links" class="print" onmouseover="repositionCertLinks('cert_list', 'cert_links');" >
 					<ul id="cert_list">

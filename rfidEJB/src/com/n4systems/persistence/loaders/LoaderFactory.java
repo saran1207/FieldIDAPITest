@@ -36,6 +36,7 @@ import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -257,5 +258,7 @@ public class LoaderFactory {
 		return new PaginatedConnectionListLoader(filter);
 	}
 	
-	
+	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader() {
+		return new SafetyNetworkInspectionLoader(filter);
+	}
 }

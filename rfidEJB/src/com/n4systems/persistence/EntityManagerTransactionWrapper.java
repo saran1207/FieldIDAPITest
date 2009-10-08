@@ -5,11 +5,11 @@ import javax.persistence.EntityTransaction;
 
 import com.n4systems.exceptions.NotImplementedException;
 
-public class EJBTransaction implements Transaction {
+public class EntityManagerTransactionWrapper implements Transaction {
 
 	private final EntityManager em;
 	
-	public EJBTransaction(EntityManager em) {
+	public EntityManagerTransactionWrapper(EntityManager em) {
 		super();
 		this.em = em;
 	}
