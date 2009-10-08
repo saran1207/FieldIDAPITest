@@ -1,3 +1,4 @@
+require "base_org"
 class AddSecurityFieldsToOrgBase < ActiveRecord::Migration
 	def self.up
     
@@ -8,7 +9,8 @@ class AddSecurityFieldsToOrgBase < ActiveRecord::Migration
     add_index(:org_base, :secondary_id)
     add_index(:org_base, :customer_id)
     add_index(:org_base, :division_id)
-
+    
+    BaseOrg.reset_column_information
   end
 	
 	def self.down
