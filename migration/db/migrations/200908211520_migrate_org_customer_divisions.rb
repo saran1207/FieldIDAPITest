@@ -10,10 +10,6 @@ require "division_org"
 class MigrateOrgCustomerDivisions < ActiveRecord::Migration
   def self.up
     
-    remove_column(:org_customer, :legacy_id)
-    remove_column(:org_division, :legacy_id)
-
-
     add_column(:org_customer, :legacy_id, :integer)
     add_column(:org_division, :legacy_id, :integer)
     BaseOrg.reset_column_information  
