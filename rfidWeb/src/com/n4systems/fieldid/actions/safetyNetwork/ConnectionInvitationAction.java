@@ -99,7 +99,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 				
 			new MessageSaver().save(realMessage);
 						
-			addActionMessageText("message.invitation_sent");
+			addFlashMessageText("message.invitation_sent");
 		} catch(Exception e) {
 			logger.error("Failed while sending OrgConnection request", e);
 			addActionErrorText("error.failed_send_invitation");
