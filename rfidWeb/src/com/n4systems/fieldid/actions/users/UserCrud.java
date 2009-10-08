@@ -29,8 +29,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.UserType;
 import com.n4systems.util.timezone.Country;
@@ -72,7 +70,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	@Override
 	protected void initMemberFields() {
 		user = new UserBean();
-		user.setTimeZoneID(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID));
+		user.setTimeZoneID(getSessionUserOwner().getInternalOrg().getDefaultTimeZone());		
 		initializeTimeZoneLists();
 	}
 
