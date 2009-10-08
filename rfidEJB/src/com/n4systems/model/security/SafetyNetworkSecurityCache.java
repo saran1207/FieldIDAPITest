@@ -52,7 +52,7 @@ public class SafetyNetworkSecurityCache {
 	 * @return		SecurityLevel representing the distance
 	 */
 	public SecurityLevel getConnectionSecurityLevel(InternalOrg from, InternalOrg to) {
-		return getConnectionSecurityLevel(find(from), find(to));
+		return getConnectionSecurityLevel(findOrCreate(from), findOrCreate(to));
 	}
 	
 	/** Connects two nodes together, added each to each others connection list */
