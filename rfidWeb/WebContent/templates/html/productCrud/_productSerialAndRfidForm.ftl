@@ -10,21 +10,16 @@
 		<span class="fieldHolder serialNumberStatus"></span>
 		
 	</div>		
-	
 </div>
+
+
 <div class="infoSet">
-	<@n4.safetyNetworkSmartSearch name="linkedProduct"/>
+	<label for="rfidNumber" class="label"><@s.text name="label.rfidnumber"/></label>
+	<@s.textfield id="rfidNumber" name="rfidNumber" />		
 </div>
 
-<div class="multiColumn">
-	<div class="infoSet infoBlock">
-		<label for="rfidNumber" class="label"><@s.text name="label.rfidnumber"/></label>
-		<@s.textfield id="rfidNumber" name="rfidNumber" />		
-	</div>
-
-	<div class="infoSet  infoBlock">
-		<label for="customerRefNumber" class="label"><@s.text name="label.referencenumber"/></label>
-		<@s.textfield id="customerRefNumber"name="customerRefNumber" />		
-	</div>
-</div>	
+<div class="infoSet">
+	<label for="customerRefNumber" class="label"><@s.text name="label.referencenumber"/></label>
+	<@s.textfield id="customerRefNumber"name="customerRefNumber" />		
+</div>
 	

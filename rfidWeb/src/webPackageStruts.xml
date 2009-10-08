@@ -1251,7 +1251,7 @@
 			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">userEdit</param>
+				<param name="actionName">adminEditPassword</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>

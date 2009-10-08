@@ -27,11 +27,11 @@
 		<div class="actions">
 			<@s.submit id="saveButton" name="save" key="hbutton.save" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>
 			<#if Session.sessionUser.hasAccess("createinspection") >
-				<@s.submit id="saveAndInspButton" name="saveAndInspect" key="hbutton.saveandinspect" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>
+				| <@s.submit id="saveAndInspButton" name="saveAndInspect" key="hbutton.saveandinspect" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>
 			</#if>
-			<@s.submit id="saveAndPrintButton" name="saveAndPrint" key="hbutton.saveandprint" onclick="checkDuplicateRfids('rfidNumber', this); return false;" />
+			| <@s.submit id="saveAndPrintButton" name="saveAndPrint" key="hbutton.saveandprint" onclick="checkDuplicateRfids('rfidNumber', this); return false;" />
 			<#if Session.sessionUser.hasAccess("createinspection") >
-				<@s.submit id="saveAndScheduleButton" name="saveAndSchedule" key="hbutton.saveandschedule" onclick="checkDuplicateRfids('rfidNumber', this); return false;" />
+				| <@s.submit id="saveAndScheduleButton" name="saveAndSchedule" key="hbutton.saveandschedule" onclick="checkDuplicateRfids('rfidNumber', this); return false;" />
 			</#if>
 		</div>
 	</@s.form>

@@ -37,7 +37,7 @@ ${action.setPageType('product', 'multi_add')!}
 <#else>
 	<div id="steps">
 		<div class="step">
-			<@s.form id="step1form" cssClass="inputForm" theme="css_xhtml">
+			<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
 				<#include "_step1.ftl" />
 			</@s.form>
 		</div>

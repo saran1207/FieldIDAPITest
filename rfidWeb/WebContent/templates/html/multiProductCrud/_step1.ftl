@@ -3,9 +3,10 @@
 	<div id="form1required" style="display: none;" class="errorMessage">
 		<@s.text name="error.attributesrequired"/>
 	</div>
+	
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<#include "/templates/html/productCrud/_productConfigForm.ftl"/>
-			
+	
 	<div class="stepAction">
 		<@s.submit theme="fieldidSimple" key="label.continue" onclick="validateForm1(); return false;"/>
 	</div>

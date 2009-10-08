@@ -178,7 +178,7 @@ pre {
 	font-weight: bold;
 }
 
-.infoSet .fieldHolder .unitOfMeasure input, .infoSet .fieldHolder .dates input{
+.infoSet .fieldHolder .unitOfMeasure input, .infoSet .fieldHolder input.dateTime {
 	width: 200px;
 }	
 

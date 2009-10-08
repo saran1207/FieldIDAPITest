@@ -16,14 +16,14 @@
 <div id="attachments">
 	<#list attachments as attachedFile >
 		<#if attachedFile?exists>
-			<div id="attached_${attachedFile_index}" class="fileUpload">
+			<div id="attached_${attachedFile_index}" class="fileUpload infoSet">
 				<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].id" />
 				<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].fileName" />
 				${attachments[attachedFile_index].fileName}
 				<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();return false;"><@s.text name="label.remove"/></a>
 				<div>
-					<label><@s.text name="label.comments"/></label>
-					<span><@s.textarea name="attachments[${attachedFile_index}].comments" id="attachments[${attachedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/></span>
+					<label class="label"><@s.text name="label.comments"/></label>
+					<span class="fieldHolder"><@s.textarea name="attachments[${attachedFile_index}].comments" id="attachments[${attachedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/></span>
 				</div>
 			</div>
 		</#if>
@@ -40,18 +40,20 @@
 	
 	<#list uploadedFiles as uploadedFile >
 		<#if uploadedFile?exists>
-			<div id="frame_${uploadedFile_index}" class="fileUpload">
+			<div id="frame_${uploadedFile_index}" class="fileUpload infoSet">
 				<@s.hidden name="uploadedFiles[${uploadedFile_index}].fileName" />
 				${action.getFileName(uploadedFile.fileName)}
 				<a href="javascript:void(0)" onclick="$('frame_${uploadedFile_index}').remove(); return false;"><@s.text name="label.remove"/></a>
 				<div>
-					<label><@s.text name="label.comments"/></label>
-					<span><@s.textarea name="uploadedFiles[${uploadedFile_index}].comments" id="uploadedFiles[${uploadedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/></span>
+					<label class="label"><@s.text name="label.comments"/></label>
+					<span class="fieldHolder"><@s.textarea name="uploadedFiles[${uploadedFile_index}].comments" id="uploadedFiles[${uploadedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/></span>
 				</div>
 			</div>
+			
 		</#if>
 	</#list>
 </div>
+
 
 <#if limits.diskSpaceMaxed>
 <div class="limitWarning">

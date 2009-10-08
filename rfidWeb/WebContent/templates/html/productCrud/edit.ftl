@@ -16,8 +16,6 @@ ${action.setPageType('product', 'edit')!}
 		
 		 | 
 		<a href="<@s.url  action="productConfirmDelete" uniqueID="${product.id}"/>"><@s.text name="label.delete"/></a>
-		
-		
 	</div>
 	
 </@s.form >

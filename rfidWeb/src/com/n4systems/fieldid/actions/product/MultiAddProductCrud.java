@@ -31,6 +31,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 public class MultiAddProductCrud extends UploadAttachmentSupport {
@@ -270,6 +271,10 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
+	}
+	
+	public List<StringListingPair> getPublishedStates() {
+		return PublishedState.getPublishedStates(this);
 	}
 	
 }
