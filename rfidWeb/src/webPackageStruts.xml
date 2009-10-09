@@ -1853,7 +1853,17 @@
 			<result name="input" type="freemarker">/templates/html/messages/show.ftl</result>
 		</action>
 
-				
+		<action name="invite" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
+			<result name="success" type="freemarker">/templates/html/messages/invite.ftl</result>
+			<result name="input" type="freemarker">/templates/html/messages/invite.ftl</result>
+		</action>
+		
+		<action name="sendInvite" method="send" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
+			<result name="success" type="redirectAction">				
+				<param name="actionName">invite</param>
+			</result>
+			<result name="input" type="freemarker">/templates/html/messages/invite.ftl</result>
+		</action>
 		
 		<action name="messageUpdate" method="update" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="input" type="freemarker">/templates/html/messages/show.ftl</result>

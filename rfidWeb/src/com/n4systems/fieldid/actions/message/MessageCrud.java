@@ -92,6 +92,13 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		
 		return SUCCESS;
 	}
+	
+	@SkipValidation
+	public String doInvite() {
+		message.setSubject("Invitation to connect on Field ID");
+		
+		return SUCCESS;
+	}
 
 	private void processMessage() throws Exception {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
