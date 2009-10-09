@@ -7,6 +7,7 @@ import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
+import com.n4systems.model.safetynetwork.InspectionsByNetworkIdLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class AllInspectionHelper {
@@ -37,7 +38,8 @@ public class AllInspectionHelper {
 
 	public List<Inspection> getInspections() {
 		if (inspections == null) {
-			inspections = legacyProductSerialManager.findAllInspections(product, filter);
+			InspectionsByNetworkIdLoader loader = new InspectionsByNetworkIdLoader(filter);
+			inspections = loader.setNetworkId(product.getNetworkId()).load();
 			Collections.sort(inspections);
 		}
 		return inspections;

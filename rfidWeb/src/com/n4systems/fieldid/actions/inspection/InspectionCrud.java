@@ -288,7 +288,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		inspectionGroup = inspection.getGroup();
 		return SUCCESS;
 	}
-
+	
 	@SkipValidation
 	public String doEdit() {
 		try {
