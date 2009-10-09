@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.datatypes.MassUpdateForm;
+import com.n4systems.fieldid.datatypes.Owner;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductSearchCriteria;
 import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
@@ -148,7 +149,7 @@ public class Assets extends TestCase {
 	private Finder viewLastInspectionCloseButtonFinder;
 	private Finder printPDFReportFromViewLastInspectionFinder;
 	private Finder printObservationReportFromViewLastInspectionFinder;
-	private Finder deleteAssetButtonFinder;
+	private Finder deleteAssetLinkFinder;
 	private Finder confirmDeleteAssetButtonFinder;
 	private Finder inspectionsWillBeDeletedFinder;
 	private Finder schedulesWillBeDeletedFinder;
@@ -156,6 +157,7 @@ public class Assets extends TestCase {
 	private Finder productsWillBeDetachedFromJobsFinder;
 	private Finder subProductLinksFinder;
 	private Finder subProductPartOfMasterProductLinkFinder;
+	private Finder selectColumnSafetyNetworkFinder;
 	
 	public Assets(IE ie) {
 		this.ie = ie;
@@ -167,6 +169,7 @@ public class Assets extends TestCase {
 			inspect = new Inspect(ie);
 			admin = new Admin(ie);
 			mpts = new ManageProductTypes(ie);
+			selectColumnSafetyNetworkFinder = xpath(p.getProperty("selectcolumnsafetynetwork"));
 			subProductPartOfMasterProductLinkFinder = xpath(p.getProperty("subproductlinktomasterproduct"));
 			subProductLinksFinder = xpath(p.getProperty("subproductlinksonmasterproductview"));
 			schedulesWillBeDeletedFinder = xpath(p.getProperty("scheduleswillbedeleted"));
@@ -174,7 +177,7 @@ public class Assets extends TestCase {
 			productsWillBeDetachedFromJobsFinder = xpath(p.getProperty("productswillbedetachedfromjobs"));
 			inspectionsWillBeDeletedFinder = xpath(p.getProperty("inspectionswillbedeleted"));
 			confirmDeleteAssetButtonFinder = xpath(p.getProperty("confirmdeleteproductbutton"));
-			deleteAssetButtonFinder = xpath(p.getProperty("deleteproductbutton"));
+			deleteAssetLinkFinder = xpath(p.getProperty("deleteproductlink"));
 			printObservationReportFromViewLastInspectionFinder = xpath(p.getProperty("viewlastinspectionprintobservationreport"));
 			printPDFReportFromViewLastInspectionFinder = xpath(p.getProperty("viewlastinspectionprintpdfreport"));
 			viewLastInspectionCloseButtonFinder = xpath(p.getProperty("viewlastinspectionclosebutton"));
@@ -489,6 +492,10 @@ public class Assets extends TestCase {
 		assertTrue("Could not find the checkbox for the location", location.exists());
 		location.set(c.getLocation());
 
+		Checkbox safetyNetwork = ie.checkbox(selectColumnSafetyNetworkFinder);
+		assertTrue("Could not find the checkbox for the safety network", safetyNetwork.exists());
+		safetyNetwork.set(c.getSafetyNetwork());
+
 		Checkbox orderDescription = ie.checkbox(selectColumnOrderDescriptionFinder);
 		assertTrue("Could not find the checkbox for the order description", orderDescription.exists());
 		orderDescription.set(c.getOrderDescription());
@@ -534,34 +541,21 @@ public class Assets extends TestCase {
 		if(p.getPurchaseOrder() != null) {
 			purchaseNumber.set(p.getPurchaseOrder());
 		}
+		
+		misc.gotoChooseOwner();
+		List<String> orgs = misc.getOrganizations();
+		Owner owner = new Owner(orgs.get(0));
 
 		if(p.getCustomer() != null) {
-			setCustomer(p.getCustomer());
+			owner.setCustomer(p.getCustomer());
 		}
 
 		if(p.getDivision() != null) {
-			SelectList division = ie.selectList(productSearchDivisionFinder);
-			assertTrue("Could not find the Division select list", division.exists());
-			Option o = division.option(text(p.getDivision()));
-			assertTrue("Could not find the division '" + p.getDivision() + "' on the division list.", o.exists());
-			o.select();
+			owner.setDivision(p.getDivision());
 		}
 		
-		if(p.getJobSite() != null) {
-			SelectList jobSite = ie.selectList(productSearchJobSiteFinder);
-			assertTrue("Could not find the Job Site select list", jobSite.exists());
-			Option o = jobSite.option(text(p.getJobSite()));
-			assertTrue("Could not find the job site '" + p.getJobSite() + "' on the job site list.", o.exists());
-			o.select();
-		}
-		
-		if(p.getAssignedTo() != null) {
-			SelectList assignedTo = ie.selectList(productSearchAssignedToFinder);
-			assertTrue("Could not find the Assigned To select list", assignedTo.exists());
-			Option o = assignedTo.option(text(p.getAssignedTo()));
-			assertTrue("Could not find the user '" + p.getAssignedTo() + "' on the assigned to list.", o.exists());
-			o.select();
-		}
+		misc.setOwner(owner);
+		misc.selectOwner();
 
 		TextField location = ie.textField(productSearchLocationFinder);
 		assertTrue("Could not find the Location text field", location.exists());
@@ -680,8 +674,8 @@ public class Assets extends TestCase {
 	 */
 	public List<String> getCustomersOnSearchCriteria() throws Exception {
 		List<String> results = new ArrayList<String>();
-		SelectList customer = ie.selectList(productSearchCustomerFinder);
-		assertTrue("Could not find the Customer select list", customer.exists());
+		misc.gotoChooseOwner();
+		SelectList customer = misc.getCustomerSelectListFromChooseOwner();
 		Options customers = customer.options();
 		Iterator<Option> i = customers.iterator();
 		// If there are many options on the select list, we don't want
@@ -694,6 +688,7 @@ public class Assets extends TestCase {
 				results.add(o.text());
 			}
 		}
+		misc.cancelOwner();
 		// Turn the refresh monitor back on
 		FieldIDMisc.startMonitor();
 		return results;
@@ -1670,8 +1665,8 @@ public class Assets extends TestCase {
 	 * @throws Exception
 	 */
 	public void deleteProduct(String serialNumber, String inspectionsDeleted, String schedulesDeleted, String subProductsDetached, String productsDetached) throws Exception {
-		Button delete = ie.button(deleteAssetButtonFinder);
-		assertTrue("Could not find the Delete button on Edit asset", delete.exists());
+		Link delete = ie.link(deleteAssetLinkFinder);
+		assertTrue("Could not find the Delete link on Edit asset", delete.exists());
 		delete.click();
 		checkProductInformationPageContentHeader(serialNumber);
 		String filename = "deleteProduct-Removal-Details-" + serialNumber + ".png";
@@ -1800,7 +1795,7 @@ public class Assets extends TestCase {
 	 * @param customer - this is the name of a customer who has order numbers associated with assets
 	 * @throws Exception
 	 */
-	public void validate(String column, String customer) throws Exception {
+	public void validate(String column, Owner owner) throws Exception {
 		admin.gotoAdministration();
 		mpts.gotoManageProductTypes();
 		List<String> mpt = mpts.getMasterProductTypeNames();
@@ -1815,10 +1810,11 @@ public class Assets extends TestCase {
 		getDynamicSelectColumns();
 		ProductSearchCriteria prop = new ProductSearchCriteria();
 		String today = misc.getDateString();
-		String lastMonth = misc.getDateStringLastMonth();
+		String lastMonth = misc.getDateStringBackNMonths(3);
 		prop.setFromDate(lastMonth);
 		prop.setToDate(today);
-		prop.setCustomer("");														// clears customer
+		Owner tmp = new Owner(owner.getOrganization());
+		prop.setOwner(tmp);			// clears customer & division
 		setProductSearchCriteria(prop);
 		expandProductSearchSelectColumns();
 		ProductSearchSelectColumns c = new ProductSearchSelectColumns();
@@ -1908,12 +1904,10 @@ public class Assets extends TestCase {
 			serialNumber = serialNumbers.get(0);
 			gotoProductInformationViaInfoLink(serialNumber);
 			List<String> subs = getSubProducts();
-			if(subs.size() > 0) {
-				gotoSubProduct(subs.get(0));					// goto first sub-product
-				gotoMasterProductUsingPartOf();					// return to master product
-				int index = subs.size()-1;
-				gotoSubProduct(index);							// goto last sub-product
-			}
+			gotoSubProduct(subs.get(0));					// goto first sub-product
+			gotoMasterProductUsingPartOf();					// return to master product
+			int index = subs.size()-1;
+			gotoSubProduct(index);							// goto last sub-product
 		}
 		
 		gotoAssets();
@@ -1921,7 +1915,7 @@ public class Assets extends TestCase {
 		c.setOrderNumber(true);
 		setProductSearchColumns(c);
 		prop = new ProductSearchCriteria();
-		prop.setCustomer(customer);
+		prop.setOwner(owner);
 		setProductSearchCriteria(prop);
 		gotoProductSearchResults();
 		
