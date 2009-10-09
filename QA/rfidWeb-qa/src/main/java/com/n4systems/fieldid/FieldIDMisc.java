@@ -7,12 +7,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import com.jniwrapper.win32.ui.Wnd;
+import com.n4systems.fieldid.datatypes.Owner;
 
 import watij.elements.*;
 import watij.finders.Finder;
@@ -44,6 +47,13 @@ public class FieldIDMisc extends TestCase {
 	private Finder nextPageLinkFinder;
 	private Finder firstPageLinkFinder;
 	private Finder tellUsWhatHappenedLinkFinder;
+	private Finder chooseOwnerOrganizationSelectFinder;
+	private Finder chooseOwnerCustomerSelectFinder;
+	private Finder chooseOwnerDivisionSelectFinder;
+	private Finder chooseOwnerSelectButtonFinder;
+	private Finder chooseOwnerCancelButtonFinder;
+	private Finder addProductChooseOwnerLinkFinder;
+	private Finder chooseOwnerDialogFinder;
 	
 	public FieldIDMisc(IE ie) {
 		this.ie = ie;
@@ -63,6 +73,13 @@ public class FieldIDMisc extends TestCase {
 		labelForOfXPagesFinder = xpath("//DIV[@id='pageContent']/DIV[@class='paginationWrapper']/UL/LI/SPAN[@class='gotoPage']/LABEL[@for='lastPage']");
 		nextPageLinkFinder = xpath("//DIV[@id='pageContent']/DIV[@class='paginationWrapper']/UL/LI/A[contains(text(),'Next')]");
 		firstPageLinkFinder = xpath("//DIV[@id='pageContent']/DIV[@class='paginationWrapper']/UL/LI/A[contains(text(),'First')]");
+		chooseOwnerDialogFinder = xpath("//DIV[@id='orgSelector']");
+		addProductChooseOwnerLinkFinder = xpath("//A[@class='searchOwner' and contains(text(), 'Choose')]");
+		chooseOwnerCancelButtonFinder = xpath("//INPUT[@id='cancelOrgSelect']");
+		chooseOwnerSelectButtonFinder = xpath("//INPUT[@id='selectOrg']");
+		chooseOwnerOrganizationSelectFinder = xpath("//SELECT[@id='orgList']");
+		chooseOwnerCustomerSelectFinder = xpath("//SELECT[@id='customerList']");
+		chooseOwnerDivisionSelectFinder = xpath("//SELECT[@id='divisionList']");
 	}
 	
 	/**
@@ -118,6 +135,85 @@ public class FieldIDMisc extends TestCase {
 				dir.mkdirs();
 		}
 		ImageIO.write(image, format, new File(filename));
+	}
+
+	/**
+	 * Fills in the Owner dialog. Assumes you have clicked a link to open
+	 * the dialog already. After setting the dialog you want to call either
+	 * selectOwner() or cancelOwner().
+	 * 
+	 * @param o
+	 * @throws Exception
+	 */
+	public void setOwner(Owner o) throws Exception {
+		assertNotNull(o);
+		assertNotNull(o.getOrganization());
+		
+		SelectList org = getOrganizationSelectListFromChooseOwner();
+		String s = "/^" + o.getOrganization() + "/";
+		Option o2 = org.option(text(s));
+		assertTrue("Could not find an Option matching '" + s + "'", o2.exists());
+		o2.select();
+		waitForJavascript();
+		
+		SelectList customer = getCustomerSelectListFromChooseOwner();
+		if(o.getCustomer() != null) {
+			String c = "/^" + o.getCustomer() + " /";
+			customer.option(text(c)).select();
+			waitForJavascript();
+		}
+		
+		SelectList division = getDivisionSelectListFromChooseOwner();
+		if(o.getDivision() != null) {
+			String d = "/^" + o.getDivision() + " /";
+			division.option(text(d)).select();
+		}
+	}
+	
+	public SelectList getOrganizationSelectListFromChooseOwner() throws Exception {
+		SelectList org = ie.selectList(chooseOwnerOrganizationSelectFinder);
+		assertTrue("Could not find the select list for Organization", org.exists());
+		return org;
+	}
+	
+	public SelectList getCustomerSelectListFromChooseOwner() throws Exception {
+		SelectList customer = ie.selectList(chooseOwnerCustomerSelectFinder);
+		assertTrue("Could not find the select list for Customer", customer.exists());
+		return customer;
+	}
+	
+	public SelectList getDivisionSelectListFromChooseOwner() throws Exception {
+		SelectList division = ie.selectList(chooseOwnerDivisionSelectFinder);
+		assertTrue("Could not find the select list for Division", division.exists());
+		return division;
+	}
+	
+	public void selectOwner() throws Exception {
+		Button select = ie.button(chooseOwnerSelectButtonFinder);
+		assertTrue("Could not find the Select button", select.exists());
+		select.click();
+		checkForErrorMessagesOnCurrentPage();
+	}
+
+	public void cancelOwner() throws Exception {
+		Button cancel = ie.button(chooseOwnerCancelButtonFinder);
+		assertTrue("Could not find the Cancel button", cancel.exists());
+		cancel.click();
+		checkForErrorMessagesOnCurrentPage();
+	}
+
+	public void gotoChooseOwner() throws Exception {
+		Link choose = ie.link(addProductChooseOwnerLinkFinder);
+		assertTrue("Could not find the link to choose owner during asset creation", choose.exists());
+		choose.click();
+		waitForJavascript();
+		this.checkOwnerSelectorDialog();
+	}
+
+	private void checkOwnerSelectorDialog() throws Exception {
+		Div orgSelector = ie.div(chooseOwnerDialogFinder);
+		assertTrue("Could not find the choose owner dialog", orgSelector.exists());
+		assertFalse("The choose owner dialog is not visible", !orgSelector.html().toUpperCase().contains("DISPLAY: NONE"));
 	}
 
 	/**
@@ -612,6 +708,15 @@ public class FieldIDMisc extends TestCase {
 		return lastYear;
 	}
 
+	public String getDateStringBackNMonths(int n) {
+		String lastYear = null;
+		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MONTH, -1 * n);
+		lastYear = now.format(c.getTime());
+		return lastYear;
+	}
+
 	public String getDateStringLastMonth() {
 		String lastYear = null;
 		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
@@ -745,5 +850,34 @@ public class FieldIDMisc extends TestCase {
 			monitor.quit();
 			monitor = null;
 		}
+	}
+
+	public List<String> getOrganizations() throws Exception {
+		List<String> results = new ArrayList<String>();
+		SelectList orgs = getOrganizationSelectListFromChooseOwner();
+		Iterator<Option> i = orgs.options().iterator();
+		while(i.hasNext()) {
+			Option o = i.next();
+			results.add(o.text());
+		}
+		return results;
+	}
+
+	public Owner getOwner() throws Exception {
+		Owner o = new Owner(getOrganizations().get(0));
+		List<String> customers = getCustomerSelectListFromChooseOwner().getSelectedItems();
+		String customer = null;
+		if(customers.size() > 0) {
+			customer = customers.get(0);
+		}
+		o.setCustomer(customer);
+		List<String> divisions = getDivisionSelectListFromChooseOwner().getSelectedItems();
+		String division = null;
+		if(divisions.size() > 0) {
+			division = divisions.get(0);
+		}
+		o.setDivision(division);
+
+		return o;
 	}
 }
