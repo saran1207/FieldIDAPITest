@@ -7,7 +7,7 @@ public class Organization {
 	String nameOnCert = null;
 	String countryTimezone = null;
 	String timeZone = null;
-	String webSiteAddress = null;
+	String webSiteAddress = null;	// only on primary organization
 	
 	// Address
 	String streetAddress = null;

@@ -16,6 +16,7 @@ public class ProductSearchSelectColumns {
 	boolean identifiedBy = true;
 	boolean description = true;
 	boolean location = true;
+	boolean safetyNetwork = true;
 	boolean orderDescription = true;
 	boolean orderNumber = true;
 	boolean purchaseOrder = true;
@@ -74,6 +75,10 @@ public class ProductSearchSelectColumns {
 	
 	public void setLocation(boolean b) {
 		this.location = b;
+	}
+	
+	public void setSafetyNetwork(boolean b) {
+		this.safetyNetwork = b;
 	}
 	
 	public void setOrderDescription(boolean b) {
@@ -140,6 +145,10 @@ public class ProductSearchSelectColumns {
 		return this.location;
 	}
 	
+	public boolean getSafetyNetwork() {
+		return this.safetyNetwork;
+	}
+	
 	public boolean getOrderDescription() {
 		return this.orderDescription;	
 	}
@@ -166,6 +175,7 @@ public class ProductSearchSelectColumns {
 		this.identifiedBy = true;
 		this.description = true;
 		this.location = true;
+		this.safetyNetwork = true;
 		this.orderDescription = true;
 		this.orderNumber = true;
 		this.purchaseOrder = true;
@@ -185,6 +195,7 @@ public class ProductSearchSelectColumns {
 		this.identifiedBy = false;
 		this.description = false;
 		this.location = false;
+		this.safetyNetwork = false;
 		this.orderDescription = false;
 		this.orderNumber = false;
 		this.purchaseOrder = false;

@@ -15,10 +15,12 @@ public class SystemUser {
 	String country = null;
 	String timeZone = null;
 	String password = null;
+	Owner o = null;
 	List<String> permissions = new ArrayList<String>();
 	// List of the possible permissions for all users
 	public final static String create = "Create Inspections";
 	public final static String edit = "Edit Inspections";
+
 	
 	public SystemUser(String userID, String email, String firstName, String lastName, String password) {
 		this.userID = userID;
@@ -122,5 +124,13 @@ public class SystemUser {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+	
+	public Owner getOwner() {
+		return this.o;
+	}
+	
+	public void setOwner(Owner o) {
+		this.o = o;
 	}
 }

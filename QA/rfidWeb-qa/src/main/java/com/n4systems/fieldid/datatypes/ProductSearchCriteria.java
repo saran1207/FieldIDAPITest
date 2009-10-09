@@ -6,8 +6,6 @@ public class ProductSearchCriteria {
 	String serialNumber = null;
 	String orderNumber = null;
 	String purchaseOrder = null;
-	String customer = null;
-	String division = null;
 	String jobSite = null;
 	String assignedTo = null;
 	String location = null;
@@ -17,6 +15,7 @@ public class ProductSearchCriteria {
 	String productType = null;
 	String fromDate = null;
 	String toDate = null;
+	Owner owner = null;
 
 	public ProductSearchCriteria() {
 	}
@@ -25,6 +24,14 @@ public class ProductSearchCriteria {
 		this.serialNumber = serialNumber;
 	}
 	
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public Owner getOwner() {
+		return this.owner;
+	}
+
 	public void setRFIDNumber(String rfidNumber) {
 		this.rfidNumber = rfidNumber;
 	}
@@ -58,19 +65,19 @@ public class ProductSearchCriteria {
 	}
 	
 	public void setCustomer(String customer) {
-		this.customer = customer;
+		this.owner.setCustomer(customer);
 	}
 	
 	public String getCustomer() {
-		return this.customer;
+		return this.owner.getCustomer();
 	}
 	
 	public void setDivision(String division) {
-		this.division = division;
+		this.owner.setDivision(division);
 	}
 	
 	public String getDivision() {
-		return this.division;
+		return this.owner.getDivision();
 	}
 	
 	public void setJobSite(String jobSite) {

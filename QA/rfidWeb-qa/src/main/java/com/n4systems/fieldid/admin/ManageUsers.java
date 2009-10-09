@@ -12,7 +12,10 @@ import java.util.Properties;
 import com.n4systems.fieldid.FieldIDMisc;
 import com.n4systems.fieldid.datatypes.CustomerUser;
 import com.n4systems.fieldid.datatypes.EmployeeUser;
+import com.n4systems.fieldid.datatypes.Organization;
+import com.n4systems.fieldid.datatypes.Owner;
 
+import watij.BaseHtmlFinder;
 import watij.elements.*;
 import watij.finders.Finder;
 import watij.runtime.ie.IE;
@@ -24,6 +27,7 @@ public class ManageUsers extends TestCase {
 	InputStream in;
 	String propertyFile = "managesystemusers.properties";
 	FieldIDMisc misc;
+	ManageOrganizations mos;
 	Finder listUsersFinder;
 	Finder listUsersPageContentHeaderFinder;
 	Finder listUsersFilterNameFinder;
@@ -64,9 +68,6 @@ public class ManageUsers extends TestCase {
 	private Finder editCustomerUserPositionFinder;
 	private Finder editCustomerUserInitialsFinder;
 	private Finder editCustomerUserTimeZoneFinder;
-	private Finder editCustomerUserCustomerFinder;
-	private Finder editCustomerUserDivisionFinder;
-	private Finder editCustomerUserAllOffButtonFinder;
 	private Finder editCustomerUserSubmitButtonFinder;
 	private Finder addEmployeeUserUserIDFinder;
 	private Finder addEmployeeUserEmailFinder;
@@ -82,6 +83,8 @@ public class ManageUsers extends TestCase {
 	private Finder addEmployeeUserAllOffButtonFinder;
 	private Finder addEmployeeUserSubmitButtonFinder;
 	private Finder addCustomerUserCountryFinder;
+	private Finder manageSafetyNetworkRowFinder;
+	private Finder addEmployeeUserCountryFinder;
 
 	public ManageUsers(IE ie) {
 		this.ie = ie;
@@ -90,6 +93,9 @@ public class ManageUsers extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
+			mos = new ManageOrganizations(ie);
+			addEmployeeUserCountryFinder = xpath(p.getProperty("addemployeecountry"));
+			manageSafetyNetworkRowFinder = xpath(p.getProperty("addusermanagesafetynetworkrow"));
 			listUsersFinder = xpath(p.getProperty("link"));
 			listUsersPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			listUsersFilterNameFinder = id(p.getProperty("listusersfiltername"));
@@ -106,21 +112,18 @@ public class ManageUsers extends TestCase {
 			createInspectionRowFinder = xpath(p.getProperty("addusercreateinspectionrow"));
 			editInspectionRowFinder = xpath(p.getProperty("addusereditinspectionrow"));
 			manageJobsRowFinder = xpath(p.getProperty("addusermanagejobsrow"));
-			addCustomerUserUserIDFinder = id(p.getProperty("addcustomeruserid"));
-			addCustomerUserEmailFinder = id(p.getProperty("addcustomeremail"));
-			addCustomerUserFirstNameFinder = id(p.getProperty("addcustomerfirstname"));
-			addCustomerUserLastNameFinder = id(p.getProperty("addcustomerlastname"));
-			addCustomerUserPositionFinder = id(p.getProperty("addcustomerposition"));
-			addCustomerUserInitialsFinder = id(p.getProperty("addcustomerinitials"));
-			addCustomerUserSecurityRFIDNumberFinder = id(p.getProperty("addcustomersecurityrfidnumber"));
-			addCustomerUserCountryFinder = id(p.getProperty("addcustomercountry"));
-			addCustomerUserTimeZoneFinder = id(p.getProperty("addcustomertimezone"));
-			addCustomerUserCustomerFinder = id(p.getProperty("addcustomercustomer"));
-			addCustomerUserDivisionFinder = id(p.getProperty("addcustomerdivision"));
-			addCustomerUserPasswordFinder = id(p.getProperty("addcustomerpassword"));
-			addCustomerUserVerifyPasswordFinder = id(p.getProperty("addcustomerverifypassword"));
-			addCustomerUserAllOffButtonFinder = name(p.getProperty("addcustomeralloffbutton"));
-			addCustomerUserSubmitButtonFinder = id(p.getProperty("addcustomersubmitbutton"));
+			addCustomerUserUserIDFinder = xpath(p.getProperty("addcustomeruserid"));
+			addCustomerUserEmailFinder = xpath(p.getProperty("addcustomeremail"));
+			addCustomerUserFirstNameFinder = xpath(p.getProperty("addcustomerfirstname"));
+			addCustomerUserLastNameFinder = xpath(p.getProperty("addcustomerlastname"));
+			addCustomerUserPositionFinder = xpath(p.getProperty("addcustomerposition"));
+			addCustomerUserInitialsFinder = xpath(p.getProperty("addcustomerinitials"));
+			addCustomerUserSecurityRFIDNumberFinder = xpath(p.getProperty("addcustomersecurityrfidnumber"));
+			addCustomerUserCountryFinder = xpath(p.getProperty("addcustomercountry"));
+			addCustomerUserTimeZoneFinder = xpath(p.getProperty("addcustomertimezone"));
+			addCustomerUserPasswordFinder = xpath(p.getProperty("addcustomerpassword"));
+			addCustomerUserVerifyPasswordFinder = xpath(p.getProperty("addcustomerverifypassword"));
+			addCustomerUserSubmitButtonFinder = xpath(p.getProperty("addcustomersubmitbutton"));
 			manageUsersViewAllLinkFinder = xpath(p.getProperty("manageusersviewalllink"));
 			manageUsersPageContentHeaderFinder = xpath(p.getProperty("pagecontentheader"));
 			listEditUserPageContentHeaderFinder = xpath(p.getProperty("editusercontentheader"));
@@ -131,9 +134,6 @@ public class ManageUsers extends TestCase {
 			editCustomerUserPositionFinder = xpath(p.getProperty("edituserposition"));
 			editCustomerUserInitialsFinder = xpath(p.getProperty("edituserinitials"));
 			editCustomerUserTimeZoneFinder = xpath(p.getProperty("editusertimezone"));
-			editCustomerUserCustomerFinder = xpath(p.getProperty("editusercustomer"));
-			editCustomerUserDivisionFinder = xpath(p.getProperty("edituserdivision"));
-			editCustomerUserAllOffButtonFinder = xpath(p.getProperty("edituseralloffbutton"));
 			editCustomerUserSubmitButtonFinder = xpath(p.getProperty("editusersubmitbutton"));
 			addEmployeeUserUserIDFinder = xpath(p.getProperty("addemployeeuserid"));
 			addEmployeeUserEmailFinder = xpath(p.getProperty("addemployeeemail"));
@@ -264,6 +264,8 @@ public class ManageUsers extends TestCase {
 		assertTrue("Could not find the Manage End Users permission selection", manageEndUsers.exists());
 		TableRow manageJobs = ie.row(manageJobsRowFinder);
 		assertTrue("Could not find the Manage Jobs permission selection", manageJobs.exists());
+		TableRow manageSafetyNetwork = ie.row(manageSafetyNetworkRowFinder);
+		assertTrue("Could not find the Manage Safety Network permission selection", manageSafetyNetwork.exists());
 	}
 
 	private void checkAddUserPageContentHeader() throws Exception {
@@ -288,10 +290,10 @@ public class ManageUsers extends TestCase {
 		assertTrue("Could not find the link to Add Customer User", addCustomerUser.exists());
 		addCustomerUser.click();
 		checkAddUserPageContentHeader();
-		checkAddUserCustomerPermissions();
 	}
 
 	private void checkAddUserCustomerPermissions() throws Exception {
+		misc.waitForJavascript();
 		TableRow createInspections = ie.row(createInspectionRowFinder);
 		assertTrue("Could not find the Create Inspections permission selection", createInspections.exists());
 		TableRow editInspections = ie.row(editInspectionRowFinder);
@@ -366,26 +368,6 @@ public class ManageUsers extends TestCase {
 			o.select();
 		}
 
-		SelectList addCustomerUserCustomer = ie.selectList(addCustomerUserCustomerFinder);
-		assertTrue("Could not find the Customer select list on Add User", addCustomerUserCustomer.exists());
-		String customer = u.getCustomer();
-		if(customer != null) {
-			Option o = addCustomerUserCustomer.option(text(customer));
-			assertTrue("Could not find the customer '" + customer + "'", o.exists());
-			o.select();
-			addCustomerUserCustomer.fireEvent("onchange");
-			misc.waitForJavascript();
-		}
-
-		SelectList addCustomerUserDivision = ie.selectList(addCustomerUserDivisionFinder);
-		assertTrue("Could not find the Divison select list on Add User", addCustomerUserDivision.exists());
-		String division = u.getDivision();
-		if(division != null) {
-			Option o = addCustomerUserDivision.option(text(division));
-			assertTrue("Could not find the division '" + division + "'", o.exists());
-			o.select();
-		}
-
 		TextField addCustomerUserPassword = ie.textField(addCustomerUserPasswordFinder);
 		assertTrue("Could not find the Password text field on Add User", addCustomerUserPassword.exists());
 		addCustomerUserPassword.set(u.getPassword());
@@ -393,34 +375,25 @@ public class ManageUsers extends TestCase {
 		TextField addCustomerUserVerifyPassword = ie.textField(addCustomerUserVerifyPasswordFinder);
 		assertTrue("Could not find the Verify Password text field on Add User", addCustomerUserVerifyPassword.exists());
 		addCustomerUserVerifyPassword.set(u.getPassword());
-
-		checkAddUserCustomerPermissions();
 		
-		// Turn all the permissions off...
-		Button allOff = ie.button(addCustomerUserAllOffButtonFinder);
-		assertTrue("Could not find the All Off button for Permissions", allOff.exists());
-		allOff.click();
-		
-		// then turn on the ones we need on
-		List<String> p = u.getPermissions();
-		Iterator<String> i = p.iterator();
-		while(i.hasNext()) {
-			String permission = i.next();
-			String xpath = "//DIV[@id='pageContent']/FORM/DIV/TABLE[@class='list']/TBODY/TR/TD[contains(text(),'" + permission + "')]/..";
-			TableRow tr = ie.row(xpath(xpath));
-			assertTrue("Could not find the Permission row containing '" + permission + "'", tr.exists());
-			Radio r = tr.radio(xpath("TD/INPUT[@value='true']"));
-			assertTrue("Could not find a radio button with value='true' on permission '" + permission + "'", r.exists());
-			r.set();
-		}
+		misc.gotoChooseOwner();
+		Owner o = u.getOwner();
+		misc.setOwner(o);
+		misc.selectOwner();
 		
 		Button submit = ie.button(addCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
+		misc.checkForErrorMessagesOnCurrentPage();
 		FieldIDMisc.startMonitor();
 	}
 	
-	public void validate() throws Exception {
+	public void validate(String customer) throws Exception {
+		mos.gotoManageOrganizations();
+		mos.gotoEditPrimaryOrganization();
+		Organization org = mos.getOrganization(true);
+		String orgName = org.getName();
+		mos.gotoBackToAdministration();
 		gotoManageUsers();
 		String userType = "Customers";
 		setListUsersUserType(userType);
@@ -437,6 +410,9 @@ public class ManageUsers extends TestCase {
 		String lastName = userID;
 		String password = "makemore$";
 		CustomerUser u = new CustomerUser(userID, email, firstName, lastName, password);
+		Owner o = new Owner(orgName);
+		o.setCustomer(customer);
+		u.setOwner(o);
 		addCustomerUser(u);
 		gotoViewAll();
 		setListUsersNameFilter(u.getUserID());
@@ -541,46 +517,8 @@ public class ManageUsers extends TestCase {
 			o.select();
 		}
 
-		SelectList editCustomerUserCustomer = ie.selectList(editCustomerUserCustomerFinder);
-		assertTrue("Could not find the Customer select list on edit User", editCustomerUserCustomer.exists());
-		String customer = u.getCustomer();
-		if(customer != null) {
-			Option o = editCustomerUserCustomer.option(text(customer));
-			assertTrue("Could not find the customer '" + customer + "'", o.exists());
-			o.select();
-			editCustomerUserCustomer.fireEvent("onchange");
-			misc.waitForJavascript();
-		}
+		// TODO: orgunit
 
-		SelectList editCustomerUserDivision = ie.selectList(editCustomerUserDivisionFinder);
-		assertTrue("Could not find the Divison select list on edit User", editCustomerUserDivision.exists());
-		String division = u.getDivision();
-		if(division != null) {
-			Option o = editCustomerUserDivision.option(text(division));
-			assertTrue("Could not find the division '" + division + "'", o.exists());
-			o.select();
-		}
-
-		checkEditUserCustomerPermissions();
-		
-		// Turn all the permissions off...
-		Button allOff = ie.button(editCustomerUserAllOffButtonFinder);
-		assertTrue("Could not find the All Off button for Permissions", allOff.exists());
-		allOff.click();
-		
-		// then turn on the ones we need on
-		List<String> p = u.getPermissions();
-		Iterator<String> i = p.iterator();
-		while(i.hasNext()) {
-			String permission = i.next();
-			String xpath = "//DIV[@id='pageContent']/FORM/DIV/TABLE[@class='list']/TBODY/TR/TD[contains(text(),'" + permission + "')]/..";
-			TableRow tr = ie.row(xpath(xpath));
-			assertTrue("Could not find the Permission row containing '" + permission + "'", tr.exists());
-			Radio r = tr.radio(xpath("TD/INPUT[@value='true']"));
-			assertTrue("Could not find a radio button with value='true' on permission '" + permission + "'", r.exists());
-			r.set();
-		}
-		
 		Button submit = ie.button(editCustomerUserSubmitButtonFinder);
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
@@ -604,6 +542,7 @@ public class ManageUsers extends TestCase {
 		assertFalse("First Name cannot be blank", u.getFirstName().trim().equals(""));
 		assertFalse("Last Name cannot be blank", u.getLastName().trim().equals(""));
 		assertFalse("Password cannot be blank", u.getPassword().trim().equals(""));
+
 		TextField addEmployeeUserUserID = ie.textField(addEmployeeUserUserIDFinder);
 		assertTrue("Could not find the User ID text field on Add User", addEmployeeUserUserID.exists());
 		addEmployeeUserUserID.set(u.getUserID());
@@ -638,10 +577,15 @@ public class ManageUsers extends TestCase {
 			addEmployeeUserSecurityRFIDNumber.set(u.getSecurityRFIDNumber());
 		}
 
-		// TODO: add support for country
-		
-		SelectList addEmployeeUserTimeZone = ie.selectList(addEmployeeUserTimeZoneFinder);
-		assertTrue("Could not find the Time Zone select list on Add User", addEmployeeUserTimeZone.exists());
+		SelectList addEmployeeUserCountry = getAddEmployeeUserCountrySelectList();
+		String country = u.getCountry();
+		if(country != null) {
+			Option o = addEmployeeUserCountry.option(text(country));
+			assertTrue("Could not find the country '" + country + "'", o.exists());
+			o.select();
+			misc.waitForJavascript();
+		}
+		SelectList addEmployeeUserTimeZone = getAddEmployeeUserTimeZoneSelectList();
 		String tz = u.getTimeZone();
 		if(tz != null) {
 			tz = "/" + u.getTimeZone() + "/";
@@ -650,14 +594,9 @@ public class ManageUsers extends TestCase {
 			o.select();
 		}
 
-		SelectList addEmployeeUserOrgUnit = ie.selectList(addEmployeeUserOrgUnitFinder);
-		assertTrue("Could not find the Organizational Unit select list on Add User", addEmployeeUserOrgUnit.exists());
-		String org = u.getOrgUnit();
-		if(org != null) {
-			Option o = addEmployeeUserOrgUnit.option(text(org));
-			assertTrue("Could not find the organizational unit '" + org + "'", o.exists());
-			o.select();
-		}
+		misc.gotoChooseOwner();
+		misc.setOwner(u.getOwner());
+		misc.selectOwner();
 		
 		TextField addEmployeeUserPassword = ie.textField(addEmployeeUserPasswordFinder);
 		assertTrue("Could not find the Password text field on Add User", addEmployeeUserPassword.exists());
@@ -691,6 +630,18 @@ public class ManageUsers extends TestCase {
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
 		FieldIDMisc.startMonitor();
+	}
+
+	private SelectList getAddEmployeeUserTimeZoneSelectList() throws Exception {
+		SelectList addEmployeeUserTimeZone = ie.selectList(addEmployeeUserTimeZoneFinder);
+		assertTrue("Could not find the Time Zone select list on Add User", addEmployeeUserTimeZone.exists());
+		return addEmployeeUserTimeZone;
+	}
+
+	private SelectList getAddEmployeeUserCountrySelectList() throws Exception {
+		SelectList addEmployeeUserCountry = ie.selectList(addEmployeeUserCountryFinder);
+		assertTrue("Could not find the Country select list on Add User", addEmployeeUserCountry.exists());
+		return addEmployeeUserCountry;
 	}
 
 	public CustomerUser getAddCustomerUser() throws Exception {
@@ -734,20 +685,21 @@ public class ManageUsers extends TestCase {
 		Option timeZoneSelected = addCustomerUserTimeZone.option(value(addCustomerUserTimeZone.value()));
 		u.setTimeZone(timeZoneSelected.text());
 
-		SelectList addCustomerUserCustomer = ie.selectList(addCustomerUserCustomerFinder);
-		assertTrue("Could not find the Customer select list on Add User", addCustomerUserCustomer.exists());
-		Option customerSelected = addCustomerUserCustomer.option(value(addCustomerUserCustomer.value()));
-		u.setCustomer(customerSelected.text());
-
-		SelectList addCustomerUserDivision = ie.selectList(addCustomerUserDivisionFinder);
-		assertTrue("Could not find the Divison select list on Add User", addCustomerUserDivision.exists());
-		Option divisionSelected = addCustomerUserDivision.option(value(addCustomerUserDivision.value()));
-		u.setDivision(divisionSelected.text());
-
-		checkAddUserCustomerPermissions();
-
-		// TODO: get the permissions
+		misc.gotoChooseOwner();
+		Owner o = misc.getOwner();
+		u.setOwner(o);
+		misc.cancelOwner();
 
 		return u;
+	}
+
+	public String getCountryFromAddEmployeeUser() throws Exception {
+		SelectList addEmployeeUserCountry = getAddEmployeeUserCountrySelectList();
+		return addEmployeeUserCountry.getSelectedItems().get(0);
+	}
+
+	public String getTimeZoneFromAddEmployeeUser() throws Exception {
+		SelectList addEmployeeUserTimeZone = getAddEmployeeUserTimeZoneSelectList();
+		return addEmployeeUserTimeZone.getSelectedItems().get(0);
 	}
 }

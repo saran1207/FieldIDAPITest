@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.testcase;
 
+import java.util.List;
+
 import com.n4systems.fieldid.datatypes.EmployeeUser;
+import com.n4systems.fieldid.datatypes.Owner;
 
 public class Validate extends FieldIDTestCase {
 
@@ -97,7 +100,12 @@ public class Validate extends FieldIDTestCase {
 			login.setPassword(password);
 			login.login();
 			admin.gotoAdministration();
-			mus.validate();
+			mcs.gotoManageCustomers();
+			List<String> customers = mcs.getCustomerNamesFromCurrentPage();
+			assertTrue("There should be at least one customer to test Manage Users", customers.size() > 0);
+			int index = misc.getRandomInteger(customers.size());
+			admin.gotoAdministration();
+			mus.validate(customers.get(index));
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
@@ -302,13 +310,15 @@ public class Validate extends FieldIDTestCase {
 		String password = prop.getProperty("password");
 		String serialtext = prop.getProperty("serialtext");
 		String customer = prop.getProperty("customer");
+		String orgUnit = prop.getProperty("orgunit");
 
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
-			assets.validate(serialtext, customer);
+			Owner owner = new Owner(orgUnit);
+			assets.validate(serialtext, owner);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
@@ -369,6 +379,7 @@ public class Validate extends FieldIDTestCase {
 				u.addPermission(EmployeeUser.create);
 				u.addPermission(EmployeeUser.edit);
 				u.addPermission(EmployeeUser.jobs);
+				u.addPermission(EmployeeUser.safety);
 				mus.addEmployeeUser(u);
 			}
 			misc.logout();

@@ -11,6 +11,7 @@ public class EmployeeUser extends SystemUser {
 	public final static String create = "Create Inspections";
 	public final static String edit = "Edit Inspections";
 	public final static String jobs = "Manage Jobs";
+	public final static String safety = "Manage Safety Network";
 	
 	public EmployeeUser(String userID, String email, String firstName, String lastName, String password) {
 		super(userID, email, firstName, lastName, password);

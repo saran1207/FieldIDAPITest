@@ -21,6 +21,36 @@ public class Customer {
 		this.orgUnit = orgUnit;
 	}
 	
+	public String toString() {
+		StringBuffer s = new StringBuffer(customerID);
+		s.append(',');
+		s.append(customerName);
+		s.append(',');
+		s.append(orgUnit);
+		s.append(',');
+		s.append(contactName);
+		s.append(',');
+		s.append(contactEmail);
+		s.append(',');
+		s.append(streetAddress);
+		s.append(',');
+		s.append(city);
+		s.append(',');
+		s.append(state);
+		s.append(',');
+		s.append(zip);
+		s.append(',');
+		s.append(country);
+		s.append(',');
+		s.append(phone1);
+		s.append(',');
+		s.append(phone2);
+		s.append(',');
+		s.append(fax);
+		
+		return s.toString();
+	}
+	
 	public void setCustomerID(String customerID) {
 		this.customerID = customerID;
 	}

@@ -16,6 +16,7 @@ import com.n4systems.fieldid.datatypes.Inspection;
 import com.n4systems.fieldid.datatypes.InspectionForm;
 import com.n4systems.fieldid.datatypes.InspectionType;
 import com.n4systems.fieldid.datatypes.MassUpdateScheduleForm;
+import com.n4systems.fieldid.datatypes.Owner;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductSearchSelectColumns;
 import com.n4systems.fieldid.datatypes.ProductType;
@@ -27,9 +28,11 @@ import com.n4systems.fieldid.datatypes.Criteria;
 
 public class SmokeTestEx extends FieldIDTestCase {
 
-	String company = "illinois";
-	String password = "makemore$";
+	String organization = null;
+	String company = null;
+	String password = null;
 	boolean jobs = false;			// end users do not have Jobs
+	String masterInspectionEventTypeGroup = null;
 	
 	// Smoke Test products
 	// Everything is static so it can be used across test cases 
@@ -95,6 +98,11 @@ public class SmokeTestEx extends FieldIDTestCase {
 			customer.setPhone2(customerPhone2);
 			customer.setFax(customerFax);
 		}
+		organization = prop.getProperty("organization");
+		company = prop.getProperty("company");
+		password = prop.getProperty("password");
+		jobs = Boolean.parseBoolean(prop.getProperty("jobs"));
+		masterInspectionEventTypeGroup = prop.getProperty("masterinspectioneventtypegroup");
 		login.setCompany(company);
 	}
 	
@@ -557,8 +565,11 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String today = misc.getDateString();
 		Product p = new Product(today);
 		
-		p.setCustomer(customerName);
-		p.setDivision(division);
+		String organization;
+		Owner owner = new Owner(this.organization, customerName);
+		p.setOwner(owner);
+//		p.setCustomer(customerName);
+//		p.setDivision(division);
 		p.setReferenceNumber(userid + "-ref");
 		p.setPurchaseOrder(userid + "-po");
 		p.setLocation(userid + "-location");
@@ -581,7 +592,6 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	static String masterInspectionType = "N4 Master Visual Inspection";
-	static String masterInspectionEventTypeGroup = "Inspection Report";
 	static InspectionForm masterInspectionForm = null;
 	static String masterProductType = "n4master";
 	static String subInspectionType = null;	// This gets filled in later

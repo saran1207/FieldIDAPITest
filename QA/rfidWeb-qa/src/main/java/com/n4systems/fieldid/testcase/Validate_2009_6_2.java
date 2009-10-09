@@ -163,36 +163,6 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 		}
 	}
 	
-	/**
-	 * for this test case the loginurl should be:
-	 *		https://www.fieldid.com/fieldid/
-	 * and the hosts file should be set so the www.fieldid.com
-	 * evaluate to the IP address of www.team.n4systems.com
-	 * 
-	 * @throws Exception
-	 */
-	public void testWeb1097() throws Exception {
-		try {
-			login.checkForThawteLogo();			// verify the Thawte logo appears on the regular login page
-			login.gotoRequestAnAccount();
-			login.checkForThawteLogo();			// verify the Thawte logo appears on the request account page
-			ie.back();
-			login.gotoChooseCompany();
-			login.checkForThawteLogo();			// verify the Thawte logo appears on the choose a company page
-			ie.back();
-			login.gotoSecurityCardLogin();
-			login.checkForThawteLogo();			// verify the Thawte logo appears on the security RFID login page
-			login.gotoForgotMyPassword();
-			login.checkForThawteLogo();			// verify the Thawte logo appears on the forgot password page
-		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
-			throw e;
-		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
-			throw err;
-		}
-	}
-	
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}

@@ -9,6 +9,7 @@ public class Product {
 	String assignedTo = null;		// If tenant has job sites, this can be set
 	String customer = null;			// If tenant doesn't have job sites, this can be set
 	String division = null;			// If tenant doesn't have job sites, this can be set
+	Owner owner = null;				// As of 2009.7 the concept of customer/division or jobsite no longer exist. use this instead
 	String location = null;
 	String productStatus = null;
 	String referenceNumber = null;
@@ -37,6 +38,14 @@ public class Product {
 	 */
 	public Product(String identified) {
 		this.identified = identified;
+	}
+	
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public Owner getOwner() {
+		return this.owner;
 	}
 	
 	public void setSerialNumber(String serialNumber) {
@@ -81,17 +90,29 @@ public class Product {
 	
 	public void setCustomer(String customer) {
 		this.customer = customer;
+		if(owner != null) {
+			owner.setCustomer(customer);
+		}
 	}
 	
 	public String getCustomer() {
+		if(owner != null) {
+			return owner.getCustomer();
+		}
 		return this.customer;
 	}
 	
 	public void setDivision(String division) {
 		this.division = division;
+		if(owner != null) {
+			owner.setDivision(division);
+		}
 	}
 	
 	public String getDivision() {
+		if(owner != null) {
+			return owner.getDivision();
+		}
 		return this.division;
 	}
 	
