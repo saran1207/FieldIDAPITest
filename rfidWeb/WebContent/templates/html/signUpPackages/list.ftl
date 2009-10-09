@@ -198,4 +198,7 @@
 		</tfoot>
 			
 	</table>
+	<div>
+		<@s.text name="label.have_an_account_already"/> <a href="<@s.url action="login" namespace="/"/>"><@s.text name="label.return_to_sign_in"/></a>
+	</div>
 </div>

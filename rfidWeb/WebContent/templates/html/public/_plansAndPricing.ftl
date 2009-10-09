@@ -1,5 +1,5 @@
-<h2><@s.text name="label.new_to_fieldid"/></h2>
-<p class="titleSummary"><@s.text name="label.get_a_company_account.full"/></p>
+
+
 <div class="actionButton">
 	<#if (securityGuard.tenant)?exists>
 		<@s.url id="signUpPackageUrl" namespace="public" action="signUpPackages"/>

@@ -26,10 +26,7 @@
 		
 	</@s.form>
 </div>
-<div id="secondaryContent">
-	<#include "../public/_plansAndPricing.ftl"/>
-	<#include "../public/_requestAccount.ftl"/>
-</div>
+<#include "../common/_secondary_content.ftl"/>
 
 <script type="text/javascript">
 	$('userName').select();

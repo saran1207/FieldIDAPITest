@@ -20,6 +20,8 @@
 	
 </div>
 <div id="secondaryContent">
+	<h2><@s.text name="label.new_to_fieldid"/></h2>
+	<p class="titleSummary"><@s.text name="label.new_to_fieldid.full"/></p>
 	<#include "../public/_plansAndPricing.ftl"/>
 </div>
 

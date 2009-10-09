@@ -48,11 +48,8 @@
 	</ul>
 
 </div>
-<div id="secondaryContent">
-	<#include "../public/_plansAndPricing.ftl"/>
-	<#include "../public/_requestAccount.ftl"/>
-</div>
 
+<#include "../common/_secondary_content.ftl"/>
 <@n4.includeScript>
 	function showSecurityCardSignIn() {
 		hideAllTogglable();
