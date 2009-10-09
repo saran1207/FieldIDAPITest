@@ -15,6 +15,7 @@ import com.n4systems.fieldid.*;
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerDivision;
 import com.n4systems.fieldid.datatypes.CustomerUser;
+import com.n4systems.fieldid.datatypes.Owner;
 
 import watij.elements.*;
 import watij.finders.Finder;
@@ -107,6 +108,9 @@ public class ManageCustomers extends TestCase {
 	private Finder manageCustomerAddUserLinkFinder;
 	private Finder editCustomerUserCountryFinder;
 	private Finder addCustomerUserCountryFinder;
+	private Finder customerIDFinder;
+	private Finder editCustomerOrganizationalUnitFinder;
+	private Finder removeCustomerUserLinksFinder;
 
 	public ManageCustomers(IE ie) {
 		this.ie = ie;
@@ -117,6 +121,9 @@ public class ManageCustomers extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			removeCustomerUserLinksFinder = xpath(p.getProperty("removecustomeruserlinks"));
+			editCustomerOrganizationalUnitFinder = xpath(p.getProperty("editcustomerorgunit"));
+			customerIDFinder = xpath(p.getProperty("viewallcustomerid"));
 			manageCustomerAddUserLinkFinder = xpath(p.getProperty("managecustomeradduser"));
 			manageCustomerUsersLinkFinder = xpath(p.getProperty("managecustomeruserslink"));
 			manageCustomersFinder = text(p.getProperty("link"));
@@ -286,7 +293,7 @@ public class ManageCustomers extends TestCase {
 	
 	private String getCustomerString(Customer customer) throws Exception {
 		assertNotNull(customer);
-		String c = customer.getCustomerName() + " - (" + customer.getCustomerID() + ")";
+		String c = customer.getCustomerName();
 		return c;
 	}
 
@@ -329,7 +336,7 @@ public class ManageCustomers extends TestCase {
 		assertNotNull(customer);
 		String c = getCustomerString(customer);
 		Link edit = ie.link(xpath("//DIV[@id='pageContent']/TABLE/TBODY/TR/TD[1]/A[text()='"
-				+ c + "']/../../TD[2]/A[text()='Edit']"));
+				+ c + "']/../../TD[4]/A[contains(text(),'Edit')]"));
 		assertTrue("Could not find the Edit link for customer '" + c + "'", edit.exists());
 		edit.click();
 		checkEditCustomerPageContentHeader();
@@ -362,8 +369,15 @@ public class ManageCustomers extends TestCase {
 		if(s != null) {
 			customerName.set(s);
 		}
-		
-		// TODO: edit Organizational Unit
+
+		SelectList orgUnit = ie.selectList(editCustomerOrganizationalUnitFinder);
+		assertTrue("Could not find the select list for Organizational Unit", orgUnit.exists());
+		s = customer.getOrgUnit();
+		if(s != null) {
+			Option o = orgUnit.option(text(s));
+			assertTrue("Could not find the organizational unit '" + s + "'", o.exists());
+			o.select();
+		}
 
 		TextField contactName = ie.textField(editCustomerContactNameFinder);
 		assertTrue("Could not find the text field for Contact Name", contactName.exists());
@@ -493,36 +507,188 @@ public class ManageCustomers extends TestCase {
 		gotoManageCustomers();
 		@SuppressWarnings("unused")
 		List<String> customerIDs = getCustomerIDs();
-		setAddCustomerFilter(customer.getCustomerName());
-		gotoAddCustomerFilter();
-		assertTrue(isCustomer(customer));
-		deleteCustomer(customer.getCustomerName());
-		@SuppressWarnings("unused")
-		int n = getNumberOfCustomers();
-//		addCustomerUser
-//		addCustomerDivision
+		misc.gotoFirstPage();
+
+		gotoEditCustomer(customer);
+		Customer tmp = getCustomer();
+		compareCustomers(customer, tmp);
+
+		String userID = "v-" + customer.getCustomerID().substring(0, 12);
+		String email = "darrell.grainger@n4systems.com";
+		String firstName = "Validate";
+		String lastName = customer.getCustomerID();
+		String password = "makemore$";
+		CustomerUser cu = new CustomerUser(userID, email, firstName, lastName, password);
+		gotoCustomerUsers();
+		gotoAddCustomerUser();
+		addCustomerUser(cu);
+		// TODO: confirm the add
+
+		cu.setSecurityRFIDNumber(misc.getRandomRFID());
+		cu.setInitials("vu");
+		cu.setCountry("Canada");
+		cu.setTimeZone("Toronto");
+		Owner o = new Owner(orgUnit);
+		o.setCustomer(customerName);
+		cu.setOwner(o);
+		gotoEditCustomerUser(cu.getUserID());
+		editCustomerUser(cu);
+		assertTrue("Could not find the customer we just added.", isCustomerUser(cu.getUserID()));
 		
-//		getRandomCustomer
+//		getCustomerUsers();	// not implemented yet
+//		removeCustomerUser(cu.getUserID());	// known bug, cannot remove customer if in log
+		gotoCustomerDivisions();
+		gotoAddCustomerDivision();
+		String divisionID = "v-" + customer.getCustomerID().substring(0, 12);
+		String divisionName = "Validate";
+		CustomerDivision d = new CustomerDivision(divisionID, divisionName);
+		setCustomerDivision(d);
+		addCustomerDivision();
+		// TODO: confirm the add
 
-//		editCustomerUser
-//		getCustomerUsers
-//		getRandomCustomerUser
-//		isCustomerUser
-//		deleteCustomerUser
-
+		// create a user with this division
+		
 //		gotoCustomerDivision
 //		updateCustomerDivision
 //		getCustomerDivisions
-//		getRandomCustomerDivision
 //		isCustomerDivision
 //		deleteCustomerDivision
+
+		gotoBackToCustomerList();
+		setAddCustomerFilter(customer.getCustomerName());
+		gotoAddCustomerFilter();
+		int n = getNumberOfCustomers();
+		assertTrue(n == 1);
+		assertTrue(isCustomer(customer));
+		deleteCustomer(customer.getCustomerName());
+//		@SuppressWarnings("unused")
 	}
 	
+	private void compareCustomers(Customer customer, Customer tmp) {
+		assertNotNull(customer);
+		assertNotNull(tmp);
+		assertEquals(customer.toString(), tmp.toString());
+	}
+
+	public void removeCustomerUser(String userID) throws Exception {
+		Links removes = ie.links(removeCustomerUserLinksFinder);
+		Iterator<Link> i = removes.iterator();
+		while(i.hasNext()) {
+			Link remove = i.next();
+			Link id = remove.link(xpath("../../../TD[1]/A[contains(text(),'" + userID + "')]"));
+			if(id.exists()) {
+				remove.click();
+				// TODO: check it removed without error
+				misc.checkForErrorMessagesOnCurrentPage();
+				return;
+			}
+		}
+	}
+
+	public Customer getCustomer() throws Exception {
+		Customer c = new Customer(null, null, null);
+		String s;
+		
+		TextField customerID = ie.textField(editCustomerCustomerIDFinder);
+		assertTrue("Could not find the text field for Customer ID", customerID.exists());
+		c.setCustomerID(customerID.value());
+
+		TextField customerName = ie.textField(editCustomerCustomerNameFinder);
+		assertTrue("Could not find the text field for Customer Name", customerName.exists());
+		c.setCustomerName(customerName.value());
+
+		SelectList orgUnit = ie.selectList(editCustomerOrganizationalUnitFinder);
+		assertTrue("Could not find the select list for Organizational Unit", orgUnit.exists());
+		c.setOrgUnit(orgUnit.getSelectedItems().get(0));
+
+		TextField contactName = ie.textField(editCustomerContactNameFinder);
+		assertTrue("Could not find the text field for Contact Name", contactName.exists());
+		s = contactName.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setContactName(s);
+
+		TextField contactEmail = ie.textField(editCustomerContactEmailFinder);
+		assertTrue("Could not find the text field for Contact Email", contactEmail.exists());
+		s = contactEmail.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setContactEmail(s);
+
+		TextField street = ie.textField(editCustomerStreetFinder);
+		assertTrue("Could not find the text field for Street", street.exists());
+		s = street.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setStreetAddress(street.value());
+
+		TextField city = ie.textField(editCustomerCityFinder);
+		assertTrue("Could not find the text field for City", city.exists());
+		s = city.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setCity(s);
+
+		TextField state = ie.textField(editCustomerStateFinder);
+		assertTrue("Could not find the text field for State", state.exists());
+		s = state.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setState(s);
+
+		TextField zip = ie.textField(editCustomerZipFinder);
+		assertTrue("Could not find the text field for Zip", zip.exists());
+		s = zip.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setZip(s);
+
+		TextField country = ie.textField(editCustomerCountryFinder);
+		assertTrue("Could not find the text field for Country", country.exists());
+		s = country.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setCountry(s);
+
+		TextField phone1 = ie.textField(editCustomerPhone1Finder);
+		assertTrue("Could not find the text field for Phone 1", phone1.exists());
+		s = phone1.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setPhone1(s);
+
+		TextField phone2 = ie.textField(editCustomerPhone2Finder);
+		assertTrue("Could not find the text field for Phone 2", phone2.exists());
+		s = phone2.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setPhone2(s);
+
+		TextField fax = ie.textField(editCustomerFaxFinder);
+		assertTrue("Could not find the text field for Fax", fax.exists());
+		s = fax.value();
+		if(s.equals("")) {
+			s = null;
+		}
+		c.setFax(s);
+
+		return c;
+	}
+
 	public void gotoAddCustomerUser() throws Exception {
 		Link add = ie.link(addCustomerUserLinkFinder);
 		assertTrue("Could not find the link to add a customer user", add.exists());
 		add.click();
-		checkManageUsersPageContentHeader();
+		checkManageCustomerPageContentHeader();
 	}
 	
 	private void checkManageUsersPageContentHeader() throws Exception {
@@ -566,7 +732,7 @@ public class ManageCustomers extends TestCase {
 
 	public void deleteCustomer(String customerName) throws Exception {
 		assertNotNull(customerName);
-		Link remove = ie.link(xpath("//A[contains(text(),'" + customerName + "')]/../../TD[2]/A[contains(text(),'Remove')]"));
+		Link remove = ie.link(xpath("//A[contains(text(),'" + customerName + "')]/../../TD[4]/A[contains(text(),'Remove')]"));
 		assertTrue("Could not find the Remove link for customer '" + customerName + "'", remove.exists());
 		misc.createThreadToCloseAreYouSureDialog();
 		remove.click();
@@ -599,7 +765,7 @@ public class ManageCustomers extends TestCase {
 		return results;
 	}
 
-	private List<String> getCustomerNamesFromCurrentPage() throws Exception {
+	public List<String> getCustomerNamesFromCurrentPage() throws Exception {
 		List<String> results = new ArrayList<String>();
 		
 		Links customers = ie.links(customerNameAndIDLinkFinder);
@@ -608,9 +774,7 @@ public class ManageCustomers extends TestCase {
 		while(i.hasNext()) {
 			Link customer = i.next();
 			String s = customer.text();
-			int j = s.indexOf("- (");
-			String c = s.substring(0, j).trim();
-			results.add(c);
+			results.add(s.trim());
 		}
 
 		return results;
@@ -639,16 +803,13 @@ public class ManageCustomers extends TestCase {
 	private List<String> getCustomerIDsFromCurrentPage() throws Exception {
 		List<String> results = new ArrayList<String>();
 		
-		Links customers = ie.links(customerNameAndIDLinkFinder);
-		assertNotNull("Could not find any links to customers", customers);
-		Iterator<Link> i = customers.iterator();
+		TableCells customers = ie.cells(customerIDFinder);
+		assertNotNull("Could not find any cells containing customers IDs", customers);
+		Iterator<TableCell> i = customers.iterator();
 		while(i.hasNext()) {
-			Link customer = i.next();
+			TableCell customer = i.next();
 			String s = customer.text().trim();
-			int j = s.indexOf("(") + 1;
-			int k = s.length() - 1;
-			String c = s.substring(j, k).trim();
-			results.add(c);
+			results.add(s);
 		}
 
 		return results;
@@ -656,7 +817,7 @@ public class ManageCustomers extends TestCase {
 
 	public void gotoBackToCustomerListFromEditCustomer() throws Exception {
 		Link l = ie.link(backToCustomerListFromEditLinkFinder);
-		assertTrue("Could not find the 'Back to customer list' link", l.exists());
+		assertTrue("Could not find the 'View All' link", l.exists());
 		l.click();
 		this.checkManageCustomersPageContentHeader();
 	}
@@ -720,14 +881,9 @@ public class ManageCustomers extends TestCase {
 			assertTrue("Could not find the time zone '" + tz + "'", o.exists());
 			o.select();
 		}
-		SelectList division = ie.selectList(addCustomerUserDivisionFinder);
-		assertTrue("Could not find the Division field", timeZone.exists());
-		String d = u.getDivision();
-		if(d != null) {
-			Option o = division.option(text("/" + d + "/"));
-			assertTrue("Could not find the division '" + d + "'", o.exists());
-			o.select();
-		}
+
+		// TODO: org unit
+		
 		TextField password = ie.textField(addCustomerUserPasswordFinder);
 		assertTrue("Could not find the Password field", password.exists());
 		password.set(u.getPassword());
@@ -735,20 +891,6 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the Verify Password field", verify.exists());
 		verify.set(u.getPassword());
 		
-		List<String> p = u.getPermissions();
-		Table permissions = ie.table(addCustomerUserPermissionsTableFinder);
-		assertTrue("Could not find the table with permission", permissions.exists());
-
-		if(p.contains(CustomerUser.create)) {
-			Radio r = permissions.radio(xpath("TBODY/TR/TD[contains(text(),'" + CustomerUser.create + "')]/../TD[2]/INPUT[@value='true']"));
-			r.set();
-		}
-		
-		if(p.contains(CustomerUser.edit)) {
-			Radio r = permissions.radio(xpath("TBODY/TR/TD[contains(text(),'" + CustomerUser.edit + "')]/../TD[2]/INPUT[@value='true']"));
-			r.set();
-		}
-
 		Button save = ie.button(addCustomerUserSaveButtonFinder);
 		assertTrue("Could not find the Submit button", save.exists());
 		save.click();
@@ -893,7 +1035,7 @@ public class ManageCustomers extends TestCase {
 		Link user = getLinkToCustomerUser(userID);
 		assertTrue("Could not find the link to edit user '" + userID + "'", user.exists());
 		user.click();
-		checkManageUserPageContentHeader(userID);
+		checkManageCustomerPageContentHeader();
 	}
 
 	public void editCustomerUser(CustomerUser u) throws Exception {
@@ -921,15 +1063,15 @@ public class ManageCustomers extends TestCase {
 		if(u.getInitials() != null) {
 			initials.set(u.getInitials());
 		}
-//		SelectList country = ie.selectList(editCustomerUserCountryFinder);
-//		assertTrue("Could not find the Country field", country.exists());
-//		String c = u.getCountry();
-//		if(c != null) {
-//			Option o = country.option(text(c));
-//			assertTrue("Could not find the Country '" + c + "' in the list of countries", o.exists());
-//			o.select();
-//			misc.waitForJavascript();
-//		}
+		SelectList country = ie.selectList(editCustomerUserCountryFinder);
+		assertTrue("Could not find the Country field", country.exists());
+		String c = u.getCountry();
+		if(c != null) {
+			Option o = country.option(text(c));
+			assertTrue("Could not find the Country '" + c + "' in the list of countries", o.exists());
+			o.select();
+			misc.waitForJavascript();
+		}
 		SelectList timeZone = ie.selectList(editCustomerUserTimeZoneFinder);
 		assertTrue("Could not find the Time Zone field", timeZone.exists());
 		String tz = u.getTimeZone();
@@ -938,35 +1080,9 @@ public class ManageCustomers extends TestCase {
 			assertTrue("Could not find the time zone '" + tz + "'", o.exists());
 			o.select();
 		}
-		SelectList division = ie.selectList(editCustomerUserDivisionFinder);
-		assertTrue("Could not find the Division field", timeZone.exists());
-		String d = u.getDivision();
-		if(d != null) {
-			Option o = division.option(text("/" + d + "/"));
-			assertTrue("Could not find the division '" + d + "'", o.exists());
-			o.select();
-		}
-		
-		List<String> p = u.getPermissions();
-		Table permissions = ie.table(editCustomerUserPermissionsTableFinder);
-		assertTrue("Could not find the table with permission", permissions.exists());
 
-		if(p.contains(CustomerUser.create)) {
-			Radio r = permissions.radio(xpath("TBODY/TR/TD[contains(text(),'" + CustomerUser.create + "')]/../TD[2]/INPUT[@value='true']"));
-			r.set();
-		} else {
-			Radio r = permissions.radio(xpath("TBODY/TR/TD[contains(text(),'" + CustomerUser.create + "')]/../TD[3]/INPUT[@value='false']"));
-			r.set();
-		}
+		// TODO: org unit
 		
-		if(p.contains(CustomerUser.edit)) {
-			Radio r = permissions.radio(xpath("TBODY/TR/TD[contains(text(),'" + CustomerUser.edit + "')]/../TD[2]/INPUT[@value='true']"));
-			r.set();
-		} else {
-			Radio r = permissions.radio(xpath("TBODY/TR/TD[contains(text(),'" + CustomerUser.edit + "')]/../TD[3]/INPUT[@value='false']"));
-			r.set();
-		}
-
 		saveEditCustomerUser();
 		checkManageCustomerPageContentHeader();
 		FieldIDMisc.startMonitor();
