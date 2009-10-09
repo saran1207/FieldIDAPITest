@@ -53,8 +53,8 @@
 					<@s.text name="label.or"/>
 					<a href="#" id="snSmartSearchCancel"><@s.text name="label.cancel" /></a>
 				</div>
-				<span id="smartSearchStatus"></span>
 			</@s.form>
+			<div id="snSmartSearchResults"></div>
 		</div>
 	</#assign>
 	snSmartSearch = '${snSmartSearch?js_string}';

@@ -8,7 +8,7 @@
 <#assign requires='true'>
 <@s.if test="${fieldPrefix}InfoFields != null" >
 	<#if useAutoAttributes?exists && useAutoAttributes == true >
-		<#assign changeFunction="updateAttributes(this.form);" />
+		<#assign changeFunction="updateAttributes(this);" />
 	
 	<#else>
 		<#assign changeFunction="" />

@@ -13,7 +13,7 @@ function showNetworkSmartSearch(event) {
 
 function cancelNetworkSmartSearch(event) {
 	event.stop();
-	$('smartSearchStatus').update('');
+	$('snSmartSearchResults').update('');
 	$('linkedProductId').value = null;
 	$('registerOverNetworkLinkContainer').show();
 	$('linkedProductContainer').hide();
@@ -26,11 +26,12 @@ function showLinkedProductInfo() {
 	$$('#networkSmartSearchContainer').invoke("hide");
 }
 
+var ajaxUpdatingImage = ""
 function submitSearch(event) {
 	event.stop();
-	$('smartSearchStatus').update('');
-	var params = new Object();
+	$('snSmartSearchResults').update(ajaxUpdatingImage);
 	
+	var params = new Object();
 	params.vendorId = $('snSmartSearchVendors').getValue();
 	params.searchText = $('snSmartSearchText').getValue();
 	
@@ -46,11 +47,25 @@ function updateLinkedProductInfo(product) {
 	
 	showLinkedProductInfo();
 }
+
+function updateLinkedProductFromMultipleResults(event) {
+	var result = Event.element(event);
+	var product = new Object();
+	
+	product.id = result.getAttribute("productId");
+	product.serialNumber = result.getAttribute("serialNumber");
+	product.rfidNumber = result.getAttribute("rfidNumber");
+	product.owner = result.getAttribute("owner");
+	product.type = result.getAttribute("productType");
+	
+	updateLinkedProductInfo(product);
+}
+
 var snSmartSearch = "";
 document.observe(
 	"dom:loaded", function() {
 			
-		document.body.insert(snSmartSearch);
+		Element.extend(document.body).insert(snSmartSearch);
 		
 		$('showSmartSearchLink').observe("click", showNetworkSmartSearch);
 		$('snSmartSearchCancel').observe("click", cancelNetworkSmartSearch);

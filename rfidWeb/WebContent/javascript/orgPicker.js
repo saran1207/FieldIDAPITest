@@ -32,7 +32,7 @@ function setUpOrgBrowser(orgId) {
 function getUpdatedOrgBrowser(orgId) {
 	var params = new Object();
 	params.ownerId = orgId;
-	params.orgTypeFilter = $$('#orgBrowserForm .orgFilter').first().getValue();
+	params.orgTypeFilter =$('orgFilter').getValue();
 	getResponse(orgListUrl, "get", params);
 	$('orgPickerCurrentOrg').value = orgId;
 }

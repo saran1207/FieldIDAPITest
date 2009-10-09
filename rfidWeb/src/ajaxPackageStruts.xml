@@ -441,6 +441,7 @@
 		<action name="safetyNetworkSmartSearch" method="find" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkSmartSearchAction" >
 			<result name="foundone" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundOne.ftl</result>
 			<result name="notfound" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundNone.ftl</result>
+			<result name="foundMany" type="freemarker">/templates/ajax/safetyNetwork/smartSearchFoundMany.ftl</result>
 		</action>
 
 		<action name="externalAuthVerification" method="checkExternalAuthKey" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">

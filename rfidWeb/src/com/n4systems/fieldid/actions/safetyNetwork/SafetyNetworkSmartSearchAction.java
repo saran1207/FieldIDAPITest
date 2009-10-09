@@ -16,29 +16,42 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	private Long vendorId;
 	private String searchText;
 	private Product product;
+	private List<Product> products;
 	
 	public SafetyNetworkSmartSearchAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 
 	public String doFind() {
+		SafetyNetworkSmartSearchLoader smartSearchLoader = setupLoader();
+		
+		try {
+			products = smartSearchLoader.load();
+			if (!products.isEmpty()) {
+				if (products.size() == 1) {
+					product = products.get(0);
+					return "foundone";
+				} else {
+					return "foundMany";
+				}
+					
+			}
+			return "notfound";
+			
+		} catch(Exception e) {
+			addActionErrorText("error.could_not_access_the_safety_network");
+			logger.error("Failed loading linked product", e);
+			return ERROR;
+		}
+		
+		
+	}
+
+	private SafetyNetworkSmartSearchLoader setupLoader() {
 		SafetyNetworkSmartSearchLoader smartSearchLoader = getLoaderFactory().createSafetyNetworkSmartSearchLoader();
 		smartSearchLoader.setVendorOrgId(vendorId);
 		smartSearchLoader.setSearchText(searchText);
-		
-		try {
-			List<Product> products = smartSearchLoader.load();
-			
-			// TODO: need to support multiple products
-			if (!products.isEmpty()) {
-				product = products.get(0);
-				return "foundone";
-			}
-		} catch(RuntimeException e) {
-			logger.error("Failed loading linked product", e);
-		}
-		
-		return "notfound";
+		return smartSearchLoader;
 	}
 	
 	public Long getVendorId() {
@@ -59,5 +72,9 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	
 	public Product getProduct() {
 		return product;
+	}
+
+	public List<Product> getProducts() {
+		return products;
 	}
 }
