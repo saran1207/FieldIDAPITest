@@ -104,7 +104,7 @@ public class ReportFactoryImpl implements ReportFactory {
 				}
 
 				try {
-					printList.add(generateProductCertificate(productId, user));
+					printList.add(generateProductCertificate(productManager.findProduct(productId), user));
 					reportsInFile++;
 					totalReports++;
 				} catch (ReportException e) {
@@ -150,45 +150,38 @@ public class ReportFactoryImpl implements ReportFactory {
 	 * @see com.n4systems.reporting.ReportFactory#generateProductCertificate(java.lang.Long,
 	 *      java.lang.String)
 	 */
-	public JasperPrint generateProductCertificate(Long productId, UserBean user) throws ReportException, NonPrintableManufacturerCert {
+	public JasperPrint generateProductCertificate(Product product, UserBean user) throws ReportException, NonPrintableManufacturerCert {
 
-		Product productSerial = null;
-		try {
-			productSerial = productManager.findProduct(productId);
-		} catch (Exception e) {
-			throw new ReportException("Failed loading ProductSerial", e);
-		}
-
-		if (!productSerial.getType().isHasManufactureCertificate()) {
+		if (!product.getType().isHasManufactureCertificate()) {
 			throw new NonPrintableManufacturerCert("no cert for product.");
 		}
 
-		File jasperFile = PathHandler.getReportFile(productSerial);
+		File jasperFile = PathHandler.getReportFile(product);
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
-			throw new ReportException("No Product report file for tenant [" + productSerial.getTenant().getName() + "]");
+			throw new ReportException("No Product report file for tenant [" + product.getTenant().getName() + "]");
 		}
 
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 
-		addImageStreams(reportMap, productSerial.getOwner().getInternalOrg());
+		addImageStreams(reportMap, product.getOwner().getInternalOrg());
 
-		addTenantParams(reportMap, productSerial.getOwner().getPrimaryOrg());
-		addOrganizationParams(reportMap, productSerial.getOwner().getInternalOrg());
-		addUserParams(reportMap, productSerial.getIdentifiedBy());
+		addTenantParams(reportMap, product.getOwner().getPrimaryOrg());
+		addOrganizationParams(reportMap, product.getOwner().getInternalOrg());
+		addUserParams(reportMap, product.getIdentifiedBy());
 
-		reportMap.putAll(new ProductReportMapProducer(productSerial, new DateTimeDefiner(user)).produceMap());
-		addProductTypeParams(reportMap, productSerial.getType());
-		addOrderParams(reportMap, productSerial.getShopOrder());
+		reportMap.putAll(new ProductReportMapProducer(product, new DateTimeDefiner(user)).produceMap());
+		addProductTypeParams(reportMap, product.getType());
+		addOrderParams(reportMap, product.getShopOrder());
 
-		addCustomerParams(reportMap, productSerial.getOwner().getCustomerOrg());
-		addDivisionParams(reportMap, productSerial.getOwner().getDivisionOrg());
+		addCustomerParams(reportMap, product.getOwner().getCustomerOrg());
+		addDivisionParams(reportMap, product.getOwner().getDivisionOrg());
 
 		List<Product> reportCollection = new ArrayList<Product>();
-		reportCollection.add(productSerial);
+		reportCollection.add(product);
 
 		JasperPrint jasperPrint = null;
 		try {

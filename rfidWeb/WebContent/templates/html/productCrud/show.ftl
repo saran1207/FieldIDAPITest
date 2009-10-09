@@ -70,28 +70,6 @@ ${action.setPageType('product', 'show')!}
 		</#if>	
 	</div>
 	
-	<#if product.linked >
-	<div class="viewSection smallViewSection" >
-		<h2><@s.text name="label.linkedproductsummary"/></h2>
-		<p>
-			<label><@s.text name="label.vendor"/></label>
-			<span class="fieldValue">${(product.linkedProduct.owner.displayName)!}</span>
-		</p>
-		<p>
-			<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
-			<span class="fieldValue">${(product.linkedProduct.serialNumber)!}</span>
-		</p>
-		<p>
-			<label><@s.text name="label.rfidnumber"/></label>
-			<span class="fieldValue">${(product.linkedProduct.rfidNumber)!}</span>
-		</p>
-		<p>
-			<label><@s.text name="label.producttype"/></label>
-			<span class="fieldValue">${(product.type.displayName)!}</span>
-		</p>
-	</div>
-	</#if>
-	
 	<#include "_customerInformation.ftl"/>
 	
 	<#if !product.orderedInfoOptionList.isEmpty() >

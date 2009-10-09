@@ -12,10 +12,10 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Product;
+import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.ReportFactory;
 
@@ -28,15 +28,13 @@ public class DownloadManufacturerCert extends DownloadAction {
 	private ProductManager productManager;
 	private Product product;
 	private ReportFactory reportFactory;
-	private SafetyNetworkManager safetyNetworkManager;
 
 	private long linkedProductId;
 
-	public DownloadManufacturerCert(ProductManager productManager, ReportFactory reportFactory, SafetyNetworkManager safetyNetworkManager, PersistenceManager persistenceManager) {
+	public DownloadManufacturerCert(ProductManager productManager, ReportFactory reportFactory, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.productManager = productManager;
 		this.reportFactory = reportFactory;
-		this.safetyNetworkManager = safetyNetworkManager;
 	}
 
 	public String doDownloadLinked() {
@@ -48,7 +46,11 @@ public class DownloadManufacturerCert extends DownloadAction {
 			return MISSING;
 		}
 
-		List<Product> linkedProducts = safetyNetworkManager.findLinkedProducts(ownedProduct);
+		ProductsByNetworkId loader = new ProductsByNetworkId(getSecurityFilter());
+		loader.setNetworkId(ownedProduct.getNetworkId());
+		
+		List<Product> linkedProducts = loader.load();
+		
 		for (Product linkedProduct : linkedProducts) {
 			if (linkedProduct.getId().equals(linkedProductId)) {
 				product = linkedProduct;
@@ -60,7 +62,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	@Override
 	public String doDownload() {
-		product = productManager.findProduct(uniqueID, getSecurityFilter());
+		product = productManager.findProductAllFields(uniqueID, getSecurityFilter());
 
 		if (product == null) {
 			addActionError(getText("error.noproduct"));
@@ -77,7 +79,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 		boolean failure = false;
 
 		try {
-			p = reportFactory.generateProductCertificate(product.getId(), fetchCurrentUser());
+			p = reportFactory.generateProductCertificate(product, fetchCurrentUser());
 			pdf = CertificatePrinter.printToPDF(p);
 		} catch (NonPrintableEventType nonPrintable) {
 			logger.error("failed to print cert", nonPrintable);
