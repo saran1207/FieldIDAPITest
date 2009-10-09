@@ -69,7 +69,7 @@ abstract public class ExternalOrg extends BaseOrg {
 		}
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public String getCode() {
 		return code;
 	}
@@ -78,10 +78,11 @@ abstract public class ExternalOrg extends BaseOrg {
 		this.code = code;
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Contact getContact() {
 		return contact;
 	}
-
+	
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}

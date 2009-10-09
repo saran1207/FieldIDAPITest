@@ -24,31 +24,31 @@ public class DivisionOrg extends ExternalOrg {
 	public DivisionOrg() {}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public InternalOrg getInternalOrg() {
 		return parent.getInternalOrg();
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public CustomerOrg getCustomerOrg() {
 		return parent;
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public DivisionOrg getDivisionOrg() {
 		return this;
 	}
@@ -59,7 +59,7 @@ public class DivisionOrg extends ExternalOrg {
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public CustomerOrg getParent() {
 		return parent;
 	}
@@ -77,6 +77,7 @@ public class DivisionOrg extends ExternalOrg {
 	public DivisionOrg enhance(SecurityLevel level) {
 		DivisionOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setParent((CustomerOrg)enhance(parent, level));
+		enhanced.setContact(enhance(getContact(), level));
 		return enhanced;
 	}
 }

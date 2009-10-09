@@ -1,13 +1,19 @@
 package com.n4systems.model.security;
 
 public enum SecurityLevel {
-	// These values MUST be kept in order of least restricted to most restricted
-	ALLOWED,
-	LOCAL,
-	DIRECT,
-	ONE_AWAY,
-	MANY_AWAY,
-	DENIED;
+	ALLOWED			(0),
+	LOCAL			(1),	// from a network distance perspective LOCAL and LOCAL_ENDUSER are the same thing
+	LOCAL_ENDUSER	(1),	
+	DIRECT			(2),
+	ONE_AWAY		(3),
+	MANY_AWAY		(4),
+	DENIED			(5);
+
+	private int level;
+	
+	SecurityLevel(int level) {
+		this.level = level;
+	}
 	
 	public boolean isLocal() {
 		return (this.equals(ALLOWED) || this.equals(LOCAL));
@@ -28,11 +34,6 @@ public enum SecurityLevel {
 			return false;
 		}
 		
-		/*
-		 * Default to comparing the ordinal.
-		 * Ordinal is the position of the enum in the list starting at 0.
-		 * eg/ LOCAL will have a lower ordinal then ONE_AWAY and thus will deny access.
-		 */
-		return (ordinal() >= other.ordinal());
+		return (level >= other.level);
 	}	
 }

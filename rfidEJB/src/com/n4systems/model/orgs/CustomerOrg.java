@@ -30,31 +30,31 @@ public class CustomerOrg extends ExternalOrg {
 	public CustomerOrg() {}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public InternalOrg getInternalOrg() {
 		return getParent();
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public CustomerOrg getCustomerOrg() {
 		return this;
 	}
-
+	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -65,7 +65,7 @@ public class CustomerOrg extends ExternalOrg {
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public InternalOrg getParent() {
 		// Note the type is downcast to InternalOrg (should always be the case because of forced setter)
 		return (InternalOrg)parent;
@@ -85,6 +85,7 @@ public class CustomerOrg extends ExternalOrg {
 	public CustomerOrg enhance(SecurityLevel level) {
 		CustomerOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setParent((InternalOrg)enhance(parent, level));
+		enhanced.setContact(enhance(getContact(),level));
 		return enhanced;
 	}
 	

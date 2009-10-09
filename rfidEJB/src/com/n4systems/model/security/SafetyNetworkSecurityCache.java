@@ -3,6 +3,9 @@ package com.n4systems.model.security;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.apache.log4j.Logger;
+
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.util.HashCode;
@@ -13,6 +16,7 @@ import com.n4systems.util.HashCode;
  * which determines the network distance from one InternalOrg to another. 
  */
 public class SafetyNetworkSecurityCache {
+	private static final Logger logger = Logger.getLogger("com.n4systems.securitylog");
 	private static final SafetyNetworkSecurityCache self = new SafetyNetworkSecurityCache();
 	
 	public static SafetyNetworkSecurityCache getInstance() {
@@ -22,7 +26,7 @@ public class SafetyNetworkSecurityCache {
 	/**
 	 * Convenience method for {@link SafetyNetworkSecurityCache#getInstance()#getConnectionSecurityLevel(InternalOrg, InternalOrg)}
 	 */
-	public static SecurityLevel getSecurityLevel(InternalOrg from, InternalOrg to) {
+	public static SecurityLevel getSecurityLevel(BaseOrg from, BaseOrg to) {
 		return self.getConnectionSecurityLevel(from, to);
 	}
 	
@@ -51,8 +55,18 @@ public class SafetyNetworkSecurityCache {
 	 * @param to	The org to find the distance to
 	 * @return		SecurityLevel representing the distance
 	 */
-	public SecurityLevel getConnectionSecurityLevel(InternalOrg from, InternalOrg to) {
-		return getConnectionSecurityLevel(findOrCreate(from), findOrCreate(to));
+	private SecurityLevel getConnectionSecurityLevel(BaseOrg from, BaseOrg to) {
+		// if the from org is an end user, and they're within the same tenant
+		// then they're a local end user and we should stop here
+		
+		SecurityLevel level;
+		if (from.isExternal() && from.getTenant().equals(to.getTenant())) {
+			level = SecurityLevel.LOCAL_ENDUSER;
+		} else {
+			level = getConnectionSecurityLevel(findOrCreate(from.getInternalOrg()), findOrCreate(to.getInternalOrg()));
+		}
+		
+		return level;
 	}
 	
 	/** Connects two nodes together, added each to each others connection list */

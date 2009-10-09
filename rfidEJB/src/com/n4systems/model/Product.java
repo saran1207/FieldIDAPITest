@@ -29,7 +29,7 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
@@ -379,7 +379,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.identified = new PlainDate(identified);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public String getLocation() {
 		return location;
 	}
@@ -495,8 +495,8 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public SecurityLevel getSecurityLevel(InternalOrg fromOrg) {
-		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner().getInternalOrg());
+	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner());
 	}
 	
 	public Product enhance(SecurityLevel level) {

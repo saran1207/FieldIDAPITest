@@ -24,25 +24,25 @@ public class SecondaryOrg extends InternalOrg {
 	public SecondaryOrg() {}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public InternalOrg getInternalOrg() {
 		return this;
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public SecondaryOrg getSecondaryOrg() {
 		return this;
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -52,7 +52,7 @@ public class SecondaryOrg extends InternalOrg {
 		return SECONDARY_ID_FILTER_PATH;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}

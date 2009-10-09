@@ -68,31 +68,31 @@ public class PrimaryOrg extends InternalOrg {
 	public PrimaryOrg() {}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public PrimaryOrg getPrimaryOrg() {
 		return this;
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public InternalOrg getInternalOrg() {
 		return this;
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public SecondaryOrg getSecondaryOrg() {
 		return null;
 	}
 	
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -170,11 +170,6 @@ public class PrimaryOrg extends InternalOrg {
 	public void setExternalId(Long externalId) {
 		this.externalId = externalId;
 	}
-	
-	public PrimaryOrg enhance(SecurityLevel level) {
-		PrimaryOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
-		return enhanced;
-	}
 
 	public String getExternalPassword() {
 		return externalPassword;
@@ -198,5 +193,10 @@ public class PrimaryOrg extends InternalOrg {
 
 	public void setAutoPublish(boolean autoPublish) {
 		this.autoPublish = autoPublish;
+	}
+
+	public PrimaryOrg enhance(SecurityLevel level) {
+		PrimaryOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		return enhanced;
 	}
 }

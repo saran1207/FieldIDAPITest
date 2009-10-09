@@ -38,9 +38,9 @@ public class EntitySecurityEnhancer {
 		
 		T enhancedEntity = (T)e.create();
 		
-		if (entity instanceof HasOwner) {
-			enhanceOwner((HasOwner)entity, (HasOwner)enhancedEntity, level);
-		}
+//		if (entity instanceof HasOwner) {
+//			enhanceOwner((HasOwner)entity, (HasOwner)enhancedEntity, level);
+//		}
 		
 		return enhancedEntity;
 	}
@@ -57,22 +57,22 @@ public class EntitySecurityEnhancer {
 	}
 	
 	/**
-	 * Returns an enhanced entity.  Entity SecurityLevel is determined via {@link NetworkEntity#getSecurityLevel(com.n4systems.model.orgs.InternalOrg)} from the entity.
+	 * Returns an enhanced entity.  Entity SecurityLevel is determined via {@link NetworkEntity#getSecurityLevel(com.n4systems.model.orgs.BaseOrg)} from the entity.
 	 * Entities at {@link SecurityLevel#LOCAL} level will be returned directly, un-enhanced.
 	 * @param entity	entity to enhance
 	 * @param filter	A SecurityFilter with a BaseOrg owner
 	 * @return			The enhanced entity
 	 */
 	public static <T extends NetworkEntity<T>> T enhance(T entity, SecurityFilter filter) {
-		SecurityLevel shareLevel = entity.getSecurityLevel(filter.getOwner().getInternalOrg());
+		SecurityLevel shareLevel = entity.getSecurityLevel(filter.getOwner());
 		
-		// we don't enhance if the entity is local
-		T enhancedEntity = (shareLevel.equals(SecurityLevel.LOCAL)) ? entity : entity.enhance(shareLevel);
+//		T enhancedEntity = (shareLevel.equals(SecurityLevel.LOCAL)) ? entity : entity.enhance(shareLevel);
+		T enhancedEntity = entity.enhance(shareLevel);
 		return enhancedEntity;
 	}
 	
 	/**
-	 * Returns an enhanced list of entities.  Entity SecurityLevel is determined via {@link NetworkEntity#getSecurityLevel(com.n4systems.model.orgs.InternalOrg)} from the entity.
+	 * Returns an enhanced list of entities.  Entity SecurityLevel is determined via {@link NetworkEntity#getSecurityLevel(com.n4systems.model.orgs.BaseOrg)} from the entity.
 	 * Entities at {@link SecurityLevel#LOCAL} level will be returned directly, un-enhanced.
 	 * @param entities	List of entities implementing NetworkEntity
 	 * @param filter	A SecurityFilter with a BaseOrg owner

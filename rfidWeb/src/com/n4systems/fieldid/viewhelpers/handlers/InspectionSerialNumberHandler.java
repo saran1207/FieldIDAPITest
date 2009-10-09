@@ -11,7 +11,7 @@ public class InspectionSerialNumberHandler implements OutputHandler {
 	public String handle(AbstractAction action, Long entityId, Object value) {
 		Product product = (Product)value;
 		
-		SecurityLevel level = product.getSecurityLevel(action.getInternalOrg());
+		SecurityLevel level = product.getSecurityLevel(action.getSecurityFilter().getOwner());
 		
 		// build the product info link for local products, just show the serial for network products
 		String serialNumber;

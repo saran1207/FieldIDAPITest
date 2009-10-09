@@ -16,10 +16,11 @@ import javax.persistence.TemporalType;
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.PlainDate;
@@ -280,8 +281,8 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public SecurityLevel getSecurityLevel(InternalOrg fromOrg) {
-		return getProduct().getSecurityLevel(fromOrg);
+	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner());
 	}
 	
 	public InspectionSchedule enhance(SecurityLevel level) {

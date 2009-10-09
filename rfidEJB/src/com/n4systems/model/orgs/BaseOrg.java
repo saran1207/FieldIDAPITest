@@ -14,16 +14,17 @@ import javax.persistence.Table;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, SecurityEnhanced<BaseOrg> {
+public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg> {
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
 	public static final String CUSTOMER_ID_FILTER_PATH = "customerOrg.id";
@@ -75,7 +76,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		divisionOrg = getDivisionOrg();
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public String getDisplayName() {
 		if (getParent() == null) {
 			return name;
@@ -83,7 +84,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		return name  +  " <- " +  getParent().getDisplayName(); 
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public String getName() {
 		return name;
 	}
@@ -92,7 +93,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		this.name = (displayName != null) ? displayName.trim() : null;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public AddressInfo getAddressInfo() {
 		return addressInfo;
 	}
@@ -151,34 +152,29 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	}
 	
 	/** @return The PrimaryOrg for this Tenant */
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public PrimaryOrg getPrimaryOrg();
 	
 	/** 
 	 * @return The closest InternalOrg.  PrimaryOrg and SecondaryOrg will return themselves.  
 	 * CustomerOrg and SecondaryOrg will return the parent of the CustomerOrg
 	 */
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public InternalOrg getInternalOrg();
 	
 	/** 
 	 * @return The closest SecondaryOrg.  PrimaryOrg will return null, SecondaryOrg will return itself.  
 	 * CustomerOrg and DivisionOrg will return their parent InternalOrg if it is a SecondaryOrg
 	 */	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public SecondaryOrg getSecondaryOrg();
 	
 	/** 
 	 * @return The closest CustomerOrg.  PrimaryOrg and SecondaryOrg will return null.  
 	 * CustomerOrg returns itself and SecondaryOrg will return its parent.
 	 */	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public CustomerOrg getCustomerOrg();
 
 	/** 
 	 * @return The closest DivisionOrg.  Will be null unless this is a DivisionOrg
 	 */	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public DivisionOrg getDivisionOrg();
 	
 	/**
@@ -187,7 +183,6 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public String getFilterPath();
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	abstract public BaseOrg getParent();
 	
 	public boolean allowsAccessFor(BaseOrg child) {
@@ -211,5 +206,10 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		} else {
 			return false;
 		}
+	}
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, this);
 	}
 }

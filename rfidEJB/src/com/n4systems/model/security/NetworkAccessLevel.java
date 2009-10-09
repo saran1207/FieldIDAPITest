@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Retention(value=RetentionPolicy.RUNTIME)
 public @interface NetworkAccessLevel {
 	public abstract SecurityLevel value() default SecurityLevel.ALLOWED;
+	public abstract boolean allowCustomerUsers() default true;
 }

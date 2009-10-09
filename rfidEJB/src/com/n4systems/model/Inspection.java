@@ -28,9 +28,9 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.DateHelper;
@@ -264,8 +264,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	}
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public SecurityLevel getSecurityLevel(InternalOrg fromOrg) {
-		return getProduct().getSecurityLevel(fromOrg);
+	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner());
 	}
 	
 	public Inspection enhance(SecurityLevel level) {
@@ -275,6 +275,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		enhanced.setGroup(enhance(group, level));
 		enhanced.setType(enhance(getType(), level));
 		enhanced.setProduct(enhance(getProduct(), level));
+		enhanced.setOwner(enhance(getOwner(), level));
 		
 		List<SubInspection> enhancedSubInspections = new ArrayList<SubInspection>();
 		for (SubInspection subInspection: getSubInspections()) {

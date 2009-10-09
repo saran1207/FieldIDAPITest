@@ -318,6 +318,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public boolean isLocalInspection(int rowId) {
 		Inspection inspection = (Inspection)getEntityForRow(rowId);
-		return inspection.getSecurityLevel(getInternalOrg()).isLocal();
+		return inspection.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
 	}
 }
