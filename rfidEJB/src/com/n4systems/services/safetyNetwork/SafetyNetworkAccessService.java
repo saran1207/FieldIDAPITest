@@ -3,18 +3,21 @@ package com.n4systems.services.safetyNetwork;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
-import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.QueryFilter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class SafetyNetworkAccessService {
 
 	private PersistenceManager persistenceManager;
-	private Tenant tenant;
+	private QueryFilter filter;
 	
-	public SafetyNetworkAccessService(PersistenceManager persistenceManager, Tenant tenant) {
+	public SafetyNetworkAccessService(PersistenceManager persistenceManager, QueryFilter filter) {
 		super();
 		this.persistenceManager = persistenceManager;
-		this.tenant = tenant;
+		this.filter = filter;
 	}
 	
 	
@@ -27,10 +30,10 @@ public class SafetyNetworkAccessService {
 
 
 	private boolean hasAccessToLinkedTenant(Tenant linkedTenant) {
-		throw new NotImplementedException("Disabled for Tenant refactor");
+		QueryBuilder<TypedOrgConnection> query = new QueryBuilder<TypedOrgConnection>(TypedOrgConnection.class, filter);
+		query.addWhere(Comparator.EQ, "otherTenant", "connectedOrg.tenant", linkedTenant);
+		return (persistenceManager.findCount(query) > 0);
 	}
-	
-	
 	
 	
 }

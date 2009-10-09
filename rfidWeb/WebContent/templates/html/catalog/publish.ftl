@@ -1,8 +1,9 @@
 <head>
 	<@n4.includeStyle type="page" href="publishedCatalog"/>
 	<@n4.includeStyle href="steps"/>
-	</head>
-
+	
+</head>
+<title><@s.text name="label.import_catalog"/></title>
 ${action.setPageType('catalog', 'catalog')!}
 <div id="steps">
 	<div class="step">

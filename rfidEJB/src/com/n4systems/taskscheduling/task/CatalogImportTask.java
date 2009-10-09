@@ -13,6 +13,7 @@ import rfid.ejb.session.LegacyProductType;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -117,7 +118,7 @@ public class CatalogImportTask implements Runnable {
 		
 		linkedCatalogAccess = null;
 		
-		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, tenant);
+		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, new UserSecurityFilter(user));
 		try { 
 			linkedCatalogAccess = safetyNetwork.getCatalogAccess(linkedTenant);
 		} catch (NoAccessToTenantException e) {

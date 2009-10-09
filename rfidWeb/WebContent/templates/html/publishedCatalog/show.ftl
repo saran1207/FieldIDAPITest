@@ -67,7 +67,7 @@ ${action.setPageType('safety_network_connections', 'import')!}
 		</div>
 	</div>
 	
-	<@s.url id="cancelUrl" action="safetyNetworkList" />
+	<@s.url id="cancelUrl" action="connections" />
 	
 	<div id="cancelButton" class="stepAction" >
 		<@s.submit key="label.cancel_import" id="cancel" onclick="return redirect('${cancelUrl}');"/>

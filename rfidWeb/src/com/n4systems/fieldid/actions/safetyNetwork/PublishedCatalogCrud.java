@@ -63,7 +63,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 	}
 	
 	public String doShow() {
-		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, getTenant());
+		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, getSecurityFilter());
 		try { 
 			linkedCatalogAccess = safetyNetwork.getCatalogAccess(linkedTenant);
 		} catch (NoAccessToTenantException e) {
