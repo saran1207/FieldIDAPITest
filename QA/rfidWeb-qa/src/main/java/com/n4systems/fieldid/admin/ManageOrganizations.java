@@ -147,6 +147,24 @@ public class ManageOrganizations extends TestCase {
 	
 	public List<String> getOrganizationNames() throws Exception {
 		List<String> results = new ArrayList<String>();
+
+		Link next;
+		boolean more;
+		do {
+			next = ie.link(text("Next>"));
+			more = next.exists(); 
+			results.addAll(getOrganizationNamesOnCurrentPage());
+			if(more) {
+				next.click();
+			}
+		} while(more);
+		
+		assertTrue("There is less than one organization", results.size() > 0);
+		return results;
+	}
+	
+	private List<String> getOrganizationNamesOnCurrentPage() throws Exception {
+		List<String> results = new ArrayList<String>();
 		TableRows trs = getOrganizationTableRows();
 		Iterator<TableRow> i = trs.iterator();
 		while(i.hasNext()) {
@@ -155,7 +173,7 @@ public class ManageOrganizations extends TestCase {
 			String name = td.text().trim();
 			results.add(name);
 		}
-		assertTrue("There are less than one organizations", results.size() > 0);
+
 		return results;
 	}
 	
@@ -187,6 +205,7 @@ public class ManageOrganizations extends TestCase {
 			Option ctzo = countryTimeZone.option(text("/" + ctz + "/"));
 			assertTrue("Could not find the Country '" + ctz + "' in the list of Countries (relating to Time Zone", ctzo.exists());
 			ctzo.select();
+			misc.waitForJavascript();
 		}
 
 		SelectList timeZone = ie.selectList(addOrganizationTimeZoneFinder);
@@ -257,11 +276,12 @@ public class ManageOrganizations extends TestCase {
 	 */
 	public void setEditOrganizationForm(Organization o, boolean primary) throws Exception {
 		assertNotNull(o);
-		assertNotNull("Organization Name is required", o.getName());
-		assertFalse("Organization Name cannot be blank", o.getName().equals(""));
-		TextField name = ie.textField(editOrganizationNameFinder);
-		assertTrue("Could not find the field for Name", name.exists());
-		name.set(o.getName());
+		if(o.getName() != null) {
+			TextField name = ie.textField(editOrganizationNameFinder);
+			assertTrue("Could not find the field for Name", name.exists());
+			name.set(o.getName());
+		}
+
 		TextField nameOnCert = ie.textField(editOrganizationNameOnCertFinder);
 		assertTrue("Could not find the field for Name on certificate", nameOnCert.exists());
 		if(o.getNameOnCert() != null) {
@@ -275,6 +295,7 @@ public class ManageOrganizations extends TestCase {
 			Option ctzo = countryTimeZone.option(text("/" + ctz + "/"));
 			assertTrue("Could not find the Country '" + ctz + "' in the list of Countries (relating to Time Zone", ctzo.exists());
 			ctzo.select();
+			misc.waitForJavascript();
 		}
 
 		SelectList timeZone = ie.selectList(editOrganizationTimeZoneFinder);
@@ -415,12 +436,27 @@ public class ManageOrganizations extends TestCase {
 		gotoEditPrimaryOrganization();
 		gotoViewAll();
 		gotoAddOrganizationalUnit();
-		String name = "validate-" + misc.getRandomString();
+		String random = misc.getRandomString();
+		String name = "validate-" + random;
 		Organization o = new Organization(name);
+		o.setNameOnCert("Validate System");
+		o.setCountryTimeZone("Canada");
+		o.setTimeZone("Edmonton");
+		o.setStreetAddress("123 Anywhere St.");
+		o.setCity("Edmonton");
+		o.setState("AB");
+		o.setCountry("Canada");
+		o.setZip("A1B 2C3");
+		o.setPhoneNumber("(780) 555-1212");
+		o.setFax("(780) 555-1213");
 		setAddOrganizationForm(o);
 		saveAddOrganization();
 		List<String> units = getOrganizationNames();
 		assertTrue(units.contains(name));
+		gotoEditOrganization(name);
+		Organization tmp = getOrganization(false);
+		cancelEditOrganization();
+		compareOrganizations(o, tmp);
 		gotoAddOrganizationalUnit();
 		cancelAddOrganization();
 		o.setNameOnCert("N4 System");
@@ -436,15 +472,103 @@ public class ManageOrganizations extends TestCase {
 		gotoEditOrganization(o.getName());
 		setEditOrganizationForm(o);
 		saveEditOrganization();
+		gotoEditOrganization(o.getName());
+		tmp = getOrganization(false);
+		cancelEditOrganization();
+		compareOrganizations(o, tmp);
 		gotoEditPrimaryOrganization();
-		o = getOrganizationForm();
-		if(o.getWebSiteAddress() == null) {
+		o = getOrganization(true);
+		if(o.getWebSiteAddress() != null && o.getWebSiteAddress().equals("")) {
 			o.setWebSiteAddress("http://www.google.ca/");
 		}
 		setEditOrganizationForm(o, true);
 		saveEditOrganization();
+		gotoEditPrimaryOrganization();
+		tmp = getOrganization(true);
+		cancelEditOrganization();
+		compareOrganizations(o, tmp);
 	}
 	
+	public void cancelEditOrganization() throws Exception {
+		Button cancel = ie.button(editOrganizationCancelButtonFinder);
+		assertTrue("Could not find the Cancel button on Edit Organization", cancel.exists());
+		cancel.click();
+		checkManageOrganizationsPageContentHeader();
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+
+	private void compareOrganizations(Organization o, Organization tmp) throws Exception {
+		assertNotNull("The original Organization is null", o);
+		assertNotNull("The Organization collect from the edit page is null", tmp);
+		assertEquals("The Organization name fields don't match", o.getName(), tmp.getName());
+		assertEquals("The Organization name on certificate fields don't match", o.getNameOnCert(), tmp.getNameOnCert());
+		assertEquals("The Organization country time zone fields don't match", o.getCountryTimeZone(), tmp.getCountryTimeZone());
+		assertTrue("The Organization time zone fields don't match", tmp.getTimeZone().contains(o.getTimeZone()));
+		assertEquals("The Organization street address fields don't match", o.getStreetAddress(), tmp.getStreetAddress());
+		assertEquals("The Organization city fields don't match", o.getCity(), tmp.getCity());
+		assertEquals("The Organization state fields don't match", o.getState(), tmp.getState());
+		assertEquals("The Organization country fields don't match", o.getCountry(), tmp.getCountry());
+		assertEquals("The Organization zip code fields don't match", o.getZip(), tmp.getZip());
+		assertEquals("The Organization phone number fields don't match", o.getPhoneNumber(), tmp.getPhoneNumber());
+		assertEquals("The Organization fax fields don't match", o.getFax(), tmp.getFax());
+	}
+
+	public Organization getOrganization(boolean primary) throws Exception {
+		Organization o = new Organization(null);
+
+		TextField name = ie.textField(editOrganizationNameFinder);
+		assertTrue("Could not find the field for Name", name.exists());
+		o.setName(name.value());
+		
+		TextField nameOnCert = ie.textField(editOrganizationNameOnCertFinder);
+		assertTrue("Could not find the field for Name on certificate", nameOnCert.exists());
+		o.setNameOnCert(nameOnCert.value());
+		
+		SelectList countryTimeZone = ie.selectList(editOrganizationCountryTimeZoneFinder);
+		assertTrue("Could not find the select list for Country (relating to Time Zone)", countryTimeZone.exists());
+		o.setCountryTimeZone(countryTimeZone.getSelectedItems().get(0));
+		
+		SelectList timeZone = ie.selectList(editOrganizationTimeZoneFinder);
+		assertTrue("Could not find the select list for Time Zone", timeZone.exists());
+		o.setTimeZone(timeZone.getSelectedItems().get(0));
+		
+		if(primary) {
+			TextField webSiteAddress = ie.textField(editOrganizationWebSiteAddressFinder);
+			assertTrue("Could not find the field for Web Site Address", webSiteAddress.exists());
+			o.setWebSiteAddress(webSiteAddress.value());
+		}
+
+		TextField streetAddress = ie.textField(editOrganizationStreetAddressFinder);
+		assertTrue("Could not find the field for Street Address", streetAddress.exists());
+		o.setStreetAddress(streetAddress.value());
+
+		TextField city = ie.textField(editOrganizationCityFinder);
+		assertTrue("Could not find the field for City", city.exists());
+		o.setCity(city.value());
+
+		TextField state = ie.textField(editOrganizationStateFinder);
+		assertTrue("Could not find the field for State", state.exists());
+		o.setState(state.value());
+
+		TextField country = ie.textField(editOrganizationCountryFinder);
+		assertTrue("Could not find the field for Country", country.exists());
+		o.setCountry(country.value());
+
+		TextField zip = ie.textField(editOrganizationZipFinder);
+		assertTrue("Could not find the field for Zip", zip.exists());
+		o.setZip(zip.value());
+
+		TextField phoneNumber = ie.textField(editOrganizationPhoneNumberFinder);
+		assertTrue("Could not find the field for Phone Number", phoneNumber.exists());
+		o.setPhoneNumber(phoneNumber.value());
+
+		TextField fax = ie.textField(editOrganizationFaxFinder);
+		assertTrue("Could not find the field for Fax", fax.exists());
+		o.setFax(fax.value());
+
+		return o;
+	}
+
 	public void gotoViewAll() throws Exception {
 		Link l = ie.link(viewAllLinkFinder);
 		assertTrue("Could not find a link to View All on Manage Organization", l.exists());
@@ -480,6 +604,28 @@ public class ManageOrganizations extends TestCase {
 
 	public void gotoEditOrganization(String name) throws Exception {
 		assertNotNull(name);
+
+		Link next;
+		boolean more;
+		do {
+			next = ie.link(text("Next>"));
+			more = next.exists();
+			Link edit = findEditOrganizationLinkOnCurrentPage(name);
+			if(edit != null && edit.exists()) {
+				edit.click();
+				misc.checkForErrorMessagesOnCurrentPage();
+				checkManageOrganizationsPageForContentHeader();
+				return;
+			}
+			if(more) {
+				next.click();
+			}
+		} while(more);
+		
+		fail("Did not find Edit link for '" + name + "'");
+	}
+	
+	private Link findEditOrganizationLinkOnCurrentPage(String name) throws Exception {
 		TableRows trs = getOrganizationTableRows();
 		Iterator<TableRow> i = trs.iterator();
 		while(i.hasNext()) {
@@ -488,13 +634,10 @@ public class ManageOrganizations extends TestCase {
 			if(td.exists()) {
 				Link edit = tr.link(xpath("TD/A[contains(text(),'Edit')]"));
 				assertTrue("Found the organization row but could not find the Edit link", edit.exists());
-				edit.click();
-				misc.checkForErrorMessagesOnCurrentPage();
-				checkManageOrganizationsPageForContentHeader();
-				return;
+				return edit;
 			}
 		}
-		fail("Did not find Edit link for '" + name + "'");
+		return null;
 	}
 
 	private void checkManageOrganizationsPageForContentHeader() throws Exception {
