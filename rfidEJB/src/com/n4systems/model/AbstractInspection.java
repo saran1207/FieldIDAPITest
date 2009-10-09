@@ -76,7 +76,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		return (formVersion == type.getFormVersion());
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InspectionType getType() {
 		return type;
 	}
@@ -85,7 +85,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.type = type;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Product getProduct() {
 		return product;
 	}

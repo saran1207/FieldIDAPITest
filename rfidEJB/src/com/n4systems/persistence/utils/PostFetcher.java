@@ -51,7 +51,7 @@ public class PostFetcher {
 				value = Reflector.getPathValue(entity, path);
 				if (value != null) {
 					// need to get at least one value if it is a collection
-					if (value instanceof Iterable) {
+					if (value instanceof Iterable<?>) {
 						for (Object o : (Iterable<?>) value) {
 							// do anything
 							if (o != null) {
@@ -73,7 +73,7 @@ public class PostFetcher {
 				}
 
 			} catch (ReflectionException e) {
-				logger.warn(e);
+				logger.warn(String.format("Unable to post-fetch [%s] from [%s]", path, entity.getClass().getName()), e);
 			}
 		}
 

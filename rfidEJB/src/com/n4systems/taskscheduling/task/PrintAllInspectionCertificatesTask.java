@@ -15,7 +15,12 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.model.Inspection;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.reporting.InspectionCertificateReportGenerator;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -25,6 +30,8 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 	private static Logger logger = Logger.getLogger(PrintAllInspectionCertificatesTask.class);
 	private static final String FILE_NAME_DATE_FORMAT = "yyyy-MM-dd";
 	
+	private final InspectionCertificateReportGenerator reportGen;
+	
 	private Tenant tenant;
 	private List<Long> inspectionDocs = new ArrayList<Long>(); 
 	private String dateFormat;
@@ -32,23 +39,33 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 	private String downloadLocation;
 	private InspectionReportType reportType;
 	
-	public PrintAllInspectionCertificatesTask() {}
+	public PrintAllInspectionCertificatesTask(InspectionCertificateReportGenerator reportGen) {
+		this.reportGen = reportGen;
+	}
+	
+	public PrintAllInspectionCertificatesTask() {
+		this(new InspectionCertificateReportGenerator());
+	}
 	
 	public void run() {
-		
 		UserBean user = ServiceLocator.getUser().getUser(userId);
 		
 		logger.info("Generating Multi-Inspection certificate report for user [" + user.toString() + "]");
 		
-        try { 
+		Transaction transaction = null;
+        try {
+        	transaction = PersistenceManager.startTransaction();
+        	
         	String reportFileName = createReportFileName();
         	
-        	String body = generateReport(user, reportFileName);
+        	String body = generateReport(user, reportFileName, transaction);
 	        
 	        sendMessage(user, reportFileName, body);
-	            
+	        
+	        PersistenceManager.finishTransaction(transaction);
         } catch (Exception e) {
         	logger.error("Unable to generate Multi-Inspection certificate report", e);
+        	PersistenceManager.rollbackTransaction(transaction);
         }
 	}
 	
@@ -60,12 +77,15 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
     }
 	
 	/** Generates the report and returns the body text of the message. */
-	private String generateReport(UserBean user, String reportFileName) throws UnsupportedEncodingException, NonPrintableEventType, ReportException {
+	private String generateReport(UserBean user, String reportFileName, Transaction transaction) throws UnsupportedEncodingException, NonPrintableEventType, ReportException {
 		StringBuilder body = new StringBuilder();
 		
 		try {
-			// generate the report
-			File report = ServiceLocator.getReportFactory().generateInspectionCertificateReport(reportType, new HashSet<Long>(inspectionDocs), reportFileName, user);
+			// we need to make sure we don't have any duplicate inspection doc ids.  We'll do this by converting them to a set and 
+			// then back to a List
+			List<Long> inspectionIds = new ArrayList<Long>(new HashSet<Long>(inspectionDocs));
+			
+			File report = generateReport(user, reportFileName, inspectionIds, transaction);
 			
 			logger.info("Generating Multi-Inspection certificate Report Complete [" + report + "]");
 			
@@ -81,6 +101,26 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 		
 		return body.toString();
 	}
+
+	private File generateReport(UserBean user, String reportFileName, List<Long> inspectionIds, Transaction transaction) throws ReportException, EmptyReportException {
+		List<Inspection> inspections = loadInspections(user, inspectionIds, transaction);
+		
+		return reportGen.generate(reportType, inspections, reportFileName, user, transaction);
+	}
+
+	private List<Inspection> loadInspections(UserBean user, List<Long> inspectionIds, Transaction transaction) {
+		SafetyNetworkInspectionLoader inspectionLoader = createSafetyNetworkInspectionLoader(user);
+		
+		List<Inspection> inspections = new ArrayList<Inspection>();
+
+		Inspection inspection;
+		for (Long inspectionId: inspectionIds) {
+			inspection = inspectionLoader.setId(inspectionId).load(transaction);
+			inspections.add(inspection);
+		}
+		
+		return inspections;
+	}
 	
 	/** Sends the download link email. */
 	private void sendMessage(UserBean user, String reportFileName, String body) {
@@ -95,6 +135,10 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
         }
 	}
 
+	protected SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(UserBean user) {
+		return new SafetyNetworkInspectionLoader(user.getSecurityFilter());
+	}
+	
 	public Tenant getTenant() {
     	return tenant;
     }

@@ -139,7 +139,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		if (allowNetworkResults) {
-			inspection = getLoaderFactory().createSafetyNetworkInspectionLoader().setId(uniqueId).fetchAllFields().load();
+			inspection = getLoaderFactory().createSafetyNetworkInspectionLoader().setId(uniqueId).load();
 		} else {
 			inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
 		}

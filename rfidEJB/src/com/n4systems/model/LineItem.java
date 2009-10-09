@@ -61,7 +61,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		return ++idx;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public long getQuantity() {
 		return quantity;
 	}
@@ -70,7 +70,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.quantity = quantity;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getProductCode() {
 		return productCode;
 	}
@@ -79,7 +79,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.productCode = productIdent;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getLineId() {
 		return lineId;
 	}
@@ -88,7 +88,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.lineId = ident;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getDescription() {
 		return description;
 	}
@@ -97,7 +97,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.description = description;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getDisplayName() {
 		return getProductCode();
 	}

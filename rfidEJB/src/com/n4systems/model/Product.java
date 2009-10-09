@@ -211,7 +211,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.serialNumber = serialNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getComments() {
 		return comments;
 	}

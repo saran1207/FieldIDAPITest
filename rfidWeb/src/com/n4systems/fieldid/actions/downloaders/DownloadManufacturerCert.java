@@ -16,6 +16,7 @@ import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Product;
+import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.ReportFactory;
 
 public class DownloadManufacturerCert extends DownloadAction {
@@ -77,7 +78,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 		try {
 			p = reportFactory.generateProductCertificate(product.getId(), fetchCurrentUser());
-			pdf = reportFactory.printToPDF(p);
+			pdf = CertificatePrinter.printToPDF(p);
 		} catch (NonPrintableEventType nonPrintable) {
 			logger.error("failed to print cert", nonPrintable);
 			return "cantprint";

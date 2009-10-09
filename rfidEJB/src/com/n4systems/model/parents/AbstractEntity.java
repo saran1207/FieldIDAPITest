@@ -48,7 +48,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		modified = new Date();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Date getCreated() {
 		return created;
 	}
@@ -57,7 +57,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.created = dateCreated;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Date getModified() {
 		return modified;
 	}
@@ -66,7 +66,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.modified = dateModified;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public UserBean getModifiedBy() {
 		return modifiedBy;
 	}

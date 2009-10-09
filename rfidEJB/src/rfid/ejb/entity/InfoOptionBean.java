@@ -83,4 +83,11 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 		}
 	}
 
+	@Override
+	public String toString() {
+		String staticStr = (staticData) ? "static" : "dynamic";
+		return String.format("InfoOption [%s = %s (%s)]", infoField.getName(), name, staticStr);
+	}
+
+	
 }

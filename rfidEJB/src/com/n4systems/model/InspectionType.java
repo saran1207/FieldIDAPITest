@@ -134,7 +134,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.name = name;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public InspectionTypeGroup getGroup() {
 		return group;
 	}

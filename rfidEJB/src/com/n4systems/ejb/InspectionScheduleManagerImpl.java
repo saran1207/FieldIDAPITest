@@ -14,7 +14,6 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.interceptor.TimingInterceptor;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
@@ -29,7 +28,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.services.InspectionScheduleServiceImpl;
-import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -139,26 +137,22 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		
 		return query.getResultList();
 	}
-	
-	public InspectionSchedule getNextScheduleFor(Product product, InspectionType type) {
+
+	public InspectionSchedule getNextScheduleFor(Long productId, Long typeId) {
 		InspectionSchedule schedule = null;
 		
 		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("product", product).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("inspectionType", type);
+		query.addSimpleWhere("product.id", productId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("inspectionType.id", typeId);
 		query.addOrder("nextDate");
 		
-		try { 
-			Pager<InspectionSchedule> schedules = persistenceManager.findAllPaged(query, 1, 1);
-			if (schedules.hasResults()) {
-				schedule = schedules.getList().get(0);
-			}
-		} catch (InvalidQueryException e) {
-			logger.error("bad query", e);
+		List<InspectionSchedule> schedules = query.getResultList(em, 1, 1);
+			
+		if (!schedules.isEmpty()) {
+			schedule = schedules.get(0);
 		}
-		
+
 		return schedule;
 	}
-	
 	
 	public List<InspectionSchedule> getAvailableSchedulesFor(Product product) {
 		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());

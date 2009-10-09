@@ -16,6 +16,7 @@ import com.n4systems.util.StringUtils;
 @PrimaryKeyJoinColumn(name="inspection_id")
 public class SubInspection extends AbstractInspection implements SecurityEnhanced<SubInspection> {
 	private static final long serialVersionUID = 1L;
+	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap"};
 	
 	@Column( length = 255 )
 	private String name;

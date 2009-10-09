@@ -94,7 +94,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.orderDate = date;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getPoNumber() {
 		return poNumber;
 	}
@@ -103,7 +103,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.poNumber = poNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getDescription() {
 		return description;
 	}

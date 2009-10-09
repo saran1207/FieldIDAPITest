@@ -15,6 +15,7 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -73,7 +74,7 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 			OutputStream pdf = new FileOutputStream( reportFile );
 			logger.info("Generating inspection summary report Complete [" + reportFile + "]");
 			
-			ServiceLocator.getReportFactory().printToPDF( p, pdf );
+			CertificatePrinter.printToPDF( p, pdf );
 			logger.info("Printing pdf Complete[" + reportFile + "]");
 			
 			body = "<h4>Your Inspection Report print out is ready.</h4>";

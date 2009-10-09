@@ -100,7 +100,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	}
 	
 	protected void loadSessionUser(Long userId) {
-		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter()).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "organization.primaryOrg.id"));
+		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter()).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "owner.primaryOrg.id"));
 		setupSessionUser(user);
 	}
 	

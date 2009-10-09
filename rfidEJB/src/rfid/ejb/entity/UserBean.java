@@ -19,6 +19,7 @@ import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.SecurityLevel;
@@ -303,6 +304,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		return (getUniqueID() == null);
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public BaseOrg getOwner() {
 		return owner;
 	}

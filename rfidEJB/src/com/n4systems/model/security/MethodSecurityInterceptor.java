@@ -35,7 +35,7 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 		boolean accessAllowed = methodSecurityLevel.allows(userSecurityLevel);
 		
 		if (!accessAllowed) {
-			System.out.println("Access Denined: " + method.getName());
+			System.out.println(String.format("Access Denined: %s @ %s", method.toGenericString(), userSecurityLevel.name()));
 		}
 		
 		

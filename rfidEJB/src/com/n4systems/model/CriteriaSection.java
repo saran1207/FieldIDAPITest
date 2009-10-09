@@ -86,4 +86,10 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	public void setName( String name ) {
 		setTitle( name );
 	}
+
+	@Override
+	public String toString() {
+		return "CriteriaSection [" + title + "]";
+	}
+	
 }
