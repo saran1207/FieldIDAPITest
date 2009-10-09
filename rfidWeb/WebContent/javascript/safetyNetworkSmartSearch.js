@@ -64,9 +64,9 @@ document.observe(
 			
 		Element.extend(document.body).insert(snSmartSearch);
 		
-		$('showSmartSearchLink').observe("click", showNetworkSmartSearch);
-		$('snSmartSearchCancel').observe("click", cancelNetworkSmartSearch);
-		$('snSmartSearchSubmit').observe("click", submitSearch);
-		$('unregisterSubmit').observe("click", cancelNetworkSmartSearch);
+		$$('#showSmartSearchLink').invoke("observe", "click", showNetworkSmartSearch);
+		$$('#snSmartSearchCancel').invoke("observe", "click", cancelNetworkSmartSearch);
+		$$('#snSmartSearchSubmit').invoke("observe", "click", submitSearch);
+		$$('#unregisterSubmit').invoke("observe", "click", cancelNetworkSmartSearch);
 	}
 ); 
