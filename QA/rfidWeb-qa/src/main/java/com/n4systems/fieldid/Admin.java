@@ -45,7 +45,6 @@ public class Admin extends TestCase {
 			yourProductsAndEquipmentSetupFinder = xpath(p.getProperty("yourproductsandequipmentsetup"));
 			autoCompleteTemplatesFinder = xpath(p.getProperty("autocompletetemplates"));
 			dataSynchronizationFinder = xpath(p.getProperty("datasynchronization"));
-			safetyNetworkFinder = xpath(p.getProperty("safetynetwork"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -83,16 +82,6 @@ public class Admin extends TestCase {
 	public void checkAdminPageContentHeader() throws Exception {
 		HtmlElement contentHeader = ie.htmlElement(adminPageContentHeaderFinder);
 		assertTrue("Could not find the content header for Administration page", contentHeader.exists());
-		HtmlElement systemAccessAndSetupSectionHeader = ie.htmlElement(systemAccessAndSetupSectionHeaderFinder);
-		assertTrue("Could not find the System Access and Setup section header", systemAccessAndSetupSectionHeader.exists());
-		HtmlElement yourProductsAndEquipmentSetupHeader = ie.htmlElement(yourProductsAndEquipmentSetupFinder);
-		assertTrue("Could not find the System Access and Setup section header", yourProductsAndEquipmentSetupHeader.exists());
-		HtmlElement autoCompleteTemplatesHeader = ie.htmlElement(autoCompleteTemplatesFinder);
-		assertTrue("Could not find the System Access and Setup section header", autoCompleteTemplatesHeader.exists());
-		HtmlElement dataSynchronizationHeader = ie.htmlElement(dataSynchronizationFinder);
-		assertTrue("Could not find the System Access and Setup section header", dataSynchronizationHeader.exists());
-		HtmlElement safetyNetworkHeader = ie.htmlElement(safetyNetworkFinder);
-		assertTrue("Could not find the System Access and Setup section header", safetyNetworkHeader.exists());
 	}
 
 	/**
