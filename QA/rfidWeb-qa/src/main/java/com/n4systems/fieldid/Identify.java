@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import com.n4systems.fieldid.datatypes.Owner;
 import com.n4systems.fieldid.datatypes.Product;
 
 import watij.elements.*;
@@ -160,7 +161,7 @@ public class Identify extends TestCase {
 			addProductOrderNumberFinder = id(p.getProperty("ordernumber"));
 			addProductProductTypeFinder = id(p.getProperty("producttype"));
 			addProductCommentsFinder = id(p.getProperty("comments"));
-			addProductCommentTemplatesFinder = id(p.getProperty("commenttemplate"));
+			addProductCommentTemplatesFinder = xpath(p.getProperty("commenttemplate"));
 			addProductRequiredInputFieldsFinder = xpath(p.getProperty("requiredinputfields"));
 			addProductRequiredUOMFieldsFinder = xpath(p.getProperty("requireduomfields"));
 			orderResultsDivFinder = xpath(p.getProperty("orderresultsdiv"));
@@ -576,14 +577,7 @@ public class Identify extends TestCase {
 		if(assignedtoset) {
 			assertTrue("Product has 'Assigned To' defined but could not find an assigned to field", assignedTo.exists());
 		}
-		SelectList customer = ie.selectList(addProductCustomerFinder);
-		if(customerset) {
-			assertTrue("Product has 'Customer' defined but could not find a customer field", customer.exists());
-		}
-		SelectList division = ie.selectList(addProductDivisionFinder);
-		if(divisionset) {
-			assertTrue("Product has 'Division' defined but could not find a division field", division.exists());
-		}
+		
 		TextField location = ie.textField(addProductLocationFinder);
 		assertTrue("Could not find the text field for location", location.exists());
 		SelectList productStatus = ie.selectList(addProductProductStatusFinder);
@@ -603,8 +597,6 @@ public class Identify extends TestCase {
 		SelectList commentTemplates = ie.selectList(addProductCommentTemplatesFinder);
 		assertTrue("Could not find the select list for comment templates", commentTemplates.exists());
 		
-		Button resetForm = ie.button(addProductResetFormButtonFinder);
-		assertTrue("Could not find the 'Reset Form' button", resetForm.exists());
 		Button save = ie.button(addProductSaveButtonFinder);
 		assertTrue("Could not find the 'Save' button", save.exists());
 		Button saveInspect = ie.button(addProductSaveAndInspectButtonFinder);
@@ -646,19 +638,11 @@ public class Identify extends TestCase {
 			assertTrue("Could not find the user '" + p.getAssignedTo() + "' on the assigned to list.", assign.exists());
 			assign.select();
 		}
-		
-		if(p.getCustomer() != null) {
-			Option c = customer.option(text(p.getCustomer()));
-			assertTrue("Could not find the customer '" + p.getCustomer() + "' on the list of customers.", c.exists());
-			c.select();
-			customer.fireEvent("onchange");
-			misc.waitForJavascript();
-		}
-		
-		if(p.getDivision() != null) {
-			Option d = division.option(text(p.getDivision()));
-			assertTrue("Could not find the division '" + p.getDivision() + "' on the list of divisions.", d.exists());
-			d.select();
+
+		if(p.getOwner() != null) {
+			misc.gotoChooseOwner();
+			misc.setOwner(p.getOwner());
+			misc.selectOwner();
 		}
 		
 		if(p.getLocation() != null) {
@@ -906,8 +890,6 @@ public class Identify extends TestCase {
 	}
 
 	private void checkButtons() throws Exception {
-		Button resetForm = ie.button(addProductResetFormButtonFinder);
-		assertTrue("Could not find the 'Reset Form' button", resetForm.exists());
 		Button save = ie.button(addProductSaveButtonFinder);
 		assertTrue("Could not find the 'Save' button", save.exists());
 		Button saveInspect = ie.button(addProductSaveAndInspectButtonFinder);
@@ -927,22 +909,6 @@ public class Identify extends TestCase {
 		assertTrue("Could not find the text field for reference number", referenceNumber.exists());
 		TextField purchaseOrder = ie.textField(addProductPurchaseOrderFinder);
 		assertTrue("Could not find the text field for purchase order", purchaseOrder.exists());
-		SelectList jobSite = ie.selectList(addProductJobSiteFinder);
-		if(jobsites) {
-			assertTrue("Could not find a job site field", jobSite.exists());
-		}
-		SelectList assignedTo = ie.selectList(addProductAssignedToFinder);
-		if(jobsites) {
-			assertTrue("Could not find an assigned to field", assignedTo.exists());
-		}
-		SelectList customer = ie.selectList(addProductCustomerFinder);
-		if(!jobsites) {
-			assertTrue("Could not find a customer field", customer.exists());
-		}
-		SelectList division = ie.selectList(addProductDivisionFinder);
-		if(!jobsites) {
-			assertTrue("Could not find a division field", division.exists());
-		}
 		TextField location = ie.textField(addProductLocationFinder);
 		assertTrue("Could not find the text field for location", location.exists());
 		SelectList productStatus = ie.selectList(addProductProductStatusFinder);
