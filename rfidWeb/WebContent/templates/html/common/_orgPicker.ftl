@@ -18,7 +18,7 @@
 		<div id="orgBrowser" >
 			<@s.form action="orgList" id="orgBrowserForm" name="orgBrowserForm" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
 				<@s.hidden name="orgId" value="-1" id="orgPickerCurrentOrg"/>
-				<@s.hidden name="orgTypeFilter" id="orgFilter"/>
+				<@s.hidden name="orgTypeFilter" id="orgFilter" class="orgFilter"/>
 				<div class="infoSet">
 					<label class="label" for="org"><@s.text name="label.org"/></label>
 					<@s.select name="org" id="orgList"/>

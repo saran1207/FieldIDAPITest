@@ -1,0 +1,36 @@
+.subSystemList {
+	overflow:hidden;
+}
+
+.subSystemList li { 
+	float:left;
+	min-height:75px;
+	padding-right:20px;
+	width:400px;
+}
+.subSystemList li h2 {
+	font-size:1.5em;
+}
+
+#safetyNetworkConnections {
+	width:700px;
+	margin: 10px
+}
+
+
+#safetyNetworkConnections li {
+	overflow:hidden;
+	border-bottom: 1px solid #aaa;
+	padding: 10px 0;
+}
+
+#safetyNetworkConnections div {
+	display:block;
+	float:left;
+	padding:10px;
+}
+
+
+#safetyNetworkConnections div.typeAndCatalog {
+	float:right;	
+}

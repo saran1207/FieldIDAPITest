@@ -230,7 +230,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
     }
 	
 	private void archiveName() {
-		if (isArchived() && archivedName == null) {
+		if (isArchived() && (archivedName == null || archivedName.length() == 0)) {
 			archivedName = name;
 			name = UUID.randomUUID().toString();
 		}

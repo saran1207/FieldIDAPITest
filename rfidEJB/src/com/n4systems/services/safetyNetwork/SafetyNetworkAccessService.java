@@ -9,12 +9,12 @@ import com.n4systems.model.Tenant;
 public class SafetyNetworkAccessService {
 
 	private PersistenceManager persistenceManager;
-//	private Tenant tenant;
+	private Tenant tenant;
 	
 	public SafetyNetworkAccessService(PersistenceManager persistenceManager, Tenant tenant) {
 		super();
 		this.persistenceManager = persistenceManager;
-//		this.tenant = persistenceManager.find(Tenant.class, tenant.getId(), "linkedTenants");
+		this.tenant = tenant;
 	}
 	
 	

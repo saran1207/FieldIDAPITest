@@ -9,7 +9,7 @@ function showOrgSearch(event) {
 }
 
 function showOrgPicker(element) {
-	$$('.orgFilter').each(function(filter) { filter.value=element.getAttribute('orgFilter'); });
+	$$('.orgFilter').each(function(filter) { filter.value = element.getAttribute('orgFilter'); });
 	
 	var orgSelector = $('orgSelector');
 	var orgPicker=element.up(".orgPicker");

@@ -62,7 +62,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 	
 	@SkipValidation
 	public String doAdd() {
-		setRemoteTenantId(getTenants().get(0).getId());
+		localOrg = getInternalOrg();
 		message.setSubject(getText("label.invite_connection_subject.default"));
 		
 		List<String> getTextArgs = new ArrayList<String>();
@@ -132,7 +132,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 		if (id == null) {
 			localOrg = null;
 		} else if (localOrg == null || !localOrg.getId().equals(id)) {
-			localOrg = (InternalOrg)getNonSecureLoaderFactory().createNonSecureIdLoader(BaseOrg.class).setId(id).load();
+			localOrg = (InternalOrg)getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(id).load();
 		}
 	}
 	

@@ -61,7 +61,7 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 	
 	private void archiveInspectionType() {
 		inspectionType.archiveEntity();
-		inspectionTypeSaver.update(transaction, inspectionType);
+		inspectionType = inspectionTypeSaver.update(transaction, inspectionType);
 	}
 
 	public InspectionTypeArchiveSummary summary(Transaction transaction) {

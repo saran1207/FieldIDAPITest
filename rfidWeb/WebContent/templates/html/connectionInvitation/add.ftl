@@ -13,16 +13,20 @@ ${action.setPageType('safety_network_connections', 'add')!}
 <div id="chooseTenant" >	
 	<@s.form action="findRemoteOrg" namespace="/ajax" id="findRemoteOrg" cssClass="fullForm contentBlock" theme="fieldid">	
 	
-		<h2 class="clean"><@s.text name="lable.find_a_company"/></h2>
+		<h2 class="clean"><@s.text name="label.find_a_company"/></h2>
 		<div class="singleColumn fluidSets">
 			<div class="infoSet infoBlock">
 				<label for="remoteTenantId" class="label"><@s.text name="label.access_code"/></label>
-				<@s.textfield name="name"/><@s.submit key="label.search"/>
+				<span class="fieldHolder">
+					<@s.textfield name="name" theme="fieldidSimple"/>
+					<span class="errorMessage hide" id="remoteCompanyError">
+						<@s.text name="error.company_does_not_exist"/>
+					</span>
+				</span>
+				<@s.submit key="label.search"/>
 			</div>
 		</div>
-		<div class="errorMessage hide" id="remoteCompanyError">
-			<@s.text name="error.company_does_not_exist"/>
-		</div>
+		
 		<div class="actions">
 			<a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
 		</div>
@@ -46,7 +50,7 @@ ${action.setPageType('safety_network_connections', 'add')!}
 				<span class="fieldHolder"><@s.radio name="connectionType" list="connectionTypes" listKey="id" listValue="name" /></span>
 			</div>
 			<div class="infoSet infoBlock">
-				<label for="localOrg" class="label"><@s.text name="label.to"/></label>
+				<label for="localOrg" class="label"><@s.text name="label.to_my_org"/></label>
 				<@n4.orgPicker name="localOrg" required="true" orgType="internal" id="localOrgName"/>
 			</div>
 			

@@ -86,7 +86,7 @@ public class BaseOrgListLoader extends PaginatedLoader<BaseOrg> {
 	protected QueryBuilder<BaseOrg> createBuilder(SecurityFilter filter) {
 		QueryBuilder<BaseOrg> baseOrgQuery = getQueryBuilder(filter);
 		if (searchName != null) {
-			baseOrgQuery.addWhere(Comparator.LIKE, "searchName", "name", searchName, WhereParameter.WILDCARD_BOTH);
+			baseOrgQuery.addWhere(Comparator.LIKE, "searchName", "name", searchName, WhereParameter.WILDCARD_BOTH | WhereParameter.IGNORE_CASE);
 		}
 		
 		applyOrgTypeFiltering(filter, baseOrgQuery);

@@ -1,5 +1,7 @@
 <title><@s.text name="label.safety_network" /></title>
-
+<head>
+	<@n4.includeStyle href="safetyNetwork" type="page"/>
+</head>
 <div id="mainContent">
 	<ul class="subSystemList">
 		<li>	

@@ -4,6 +4,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.TenantCache;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 
 public class RemoteOrgAction extends AbstractAction {
 
@@ -19,6 +21,14 @@ public class RemoteOrgAction extends AbstractAction {
 		tenant = TenantCache.getInstance().findTenant(getName().trim());
 		
 		if (tenant != null) {
+			if (tenant.getName().equalsIgnoreCase(ConfigContext.getCurrentContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME))) {
+				return ERROR;
+			}
+			
+			if (tenant.equals(getPrimaryOrg().getTenant())) {
+				return ERROR;
+			}
+			
 			return SUCCESS;
 		} else {
 			return ERROR;

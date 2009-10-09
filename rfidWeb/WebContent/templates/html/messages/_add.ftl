@@ -23,7 +23,7 @@
 		<@s.textarea name="message.body"/>
 	</div>
 	<div class="actions">
-		<@s.submit key="label.send" id="send"/>
+		<@s.submit key="label.sendinvitation" id="send"/>
 		<@s.text name="label.or"/>
 		<a href="${cancelUrl}" id="messageCancel"><@s.text name="label.cancel"/></a>
 	</div>
