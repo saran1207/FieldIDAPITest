@@ -23,6 +23,10 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	}
 
 	public String doFind() {
+		if (searchText == null || searchText.trim().length() == 0) {
+			return "notfound";
+		}
+		
 		SafetyNetworkSmartSearchLoader smartSearchLoader = setupLoader();
 		
 		try {
@@ -34,7 +38,6 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 				} else {
 					return "foundMany";
 				}
-					
 			}
 			return "notfound";
 			
@@ -43,8 +46,6 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 			logger.error("Failed loading linked product", e);
 			return ERROR;
 		}
-		
-		
 	}
 
 	private SafetyNetworkSmartSearchLoader setupLoader() {

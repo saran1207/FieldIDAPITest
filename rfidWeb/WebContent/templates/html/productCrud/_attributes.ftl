@@ -15,7 +15,6 @@
 	</#if>
 	
 	<@s.iterator value="${fieldPrefix}InfoFields" id="infoField" status="stat" >
-		
 		<#if requires?exists && requires == 'true' && infoField.required  >
 			<#assign required='true' />
 		<#else>

@@ -165,7 +165,11 @@ public class OrgListAction extends AbstractAction implements Preparable {
 
 
 	public void setOrgTypeFilter(String orgTypeFilter) {
-		this.orgTypeFilter = orgTypeFilter;
+		if (orgTypeFilter == null || orgTypeFilter.trim().length() == 0) {
+			this.orgTypeFilter = "all";
+		} else {
+			this.orgTypeFilter = orgTypeFilter;
+		}
 	}
 
 }

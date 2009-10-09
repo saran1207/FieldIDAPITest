@@ -17,7 +17,7 @@
 	    originalProductType = ${productTypeId!0};
 	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
 	    checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax"/>';
-	    networkSmartSearchUrl = "<@s.url action="safetyNetworkSmartSearch" namespace="/ajax/"/>";
+	    
 	    
 	   
 	</script>

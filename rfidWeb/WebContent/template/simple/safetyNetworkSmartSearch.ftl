@@ -7,9 +7,6 @@
 			<a href="#" id="showSmartSearchLink"><@s.text name="label.registeroversafetynetwork" /></a>
 		</div>
 		
-		
-		
-		
 		<div id="linkedProductContainer"  style="display: none;">
 			<h4 class="productInfoTitle"><@s.text name="label.linkedproductinfo"/></h4>
 			<div class="leftColumn" style="float: left;">
@@ -43,11 +40,11 @@
 	
 	 <#assign snSmartSearch>
     	<div id="networkSmartSearchContainer"style="display: none;">
-			<@s.form action="orgList" id="orgBrowserForm" name="orgBrowserForm" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
+			<@s.form action="safetyNetworkSmartSearch" id="snSmartSearch" name="snSmartSearch" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
 				<label class="label" for="smartSearchVendors"><@s.text name="label.vendor"/></label>
-				<@s.select id="snSmartSearchVendors" list="parameters.vendorList" listKey="id" listValue="name"/>
+				<@s.select id="snSmartSearchVendors" name="vendorId" list="parameters.vendorList" listKey="id" listValue="name"/>
 				<label class="label" for="snSmartSearchText"><@s.text name="label.smart_search_search_types"/></label>
-				<@s.textfield id="snSmartSearchText" />
+				<@s.textfield id="snSmartSearchText" name="searchText"/>
 				<div class="actions">
 					<@s.submit id="snSmartSearchSubmit" key="label.load"/>
 					<@s.text name="label.or"/>

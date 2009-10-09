@@ -15,7 +15,6 @@ function showOrgPicker(element) {
 	var orgPicker=element.up(".orgPicker");
 	orgSelector.setStyle("position:absolute");
 	translate(orgSelector, orgPicker, 0, 0);
-	//orgSelector.clonePosition(orgPicker, {setWidth:false, setHeight:false});
 	orgSelector.show();
 	
 	$('orgSelector').setAttribute('targetId', orgPicker.id);

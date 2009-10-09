@@ -31,11 +31,8 @@ function submitSearch(event) {
 	event.stop();
 	$('snSmartSearchResults').update(ajaxUpdatingImage);
 	
-	var params = new Object();
-	params.vendorId = $('snSmartSearchVendors').getValue();
-	params.searchText = $('snSmartSearchText').getValue();
 	
-	getResponse(networkSmartSearchUrl, "get", params);
+	$('snSmartSearch').request(getStandardCallbacks())
 }
 
 function updateLinkedProductInfo(product) {
