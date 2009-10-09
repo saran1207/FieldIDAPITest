@@ -25,6 +25,14 @@ class PrepareTablesForOwnerMigration < ActiveRecord::Migration
     add_owner_column(:producttypeschedules)
     add_owner_column(:projects)
     
+    
+    Tenant.reset_column_information
+    BaseOrg.reset_column_information
+    PrimaryOrg.reset_column_information
+    SecondaryOrg.reset_column_information
+    CustomerOrg.reset_column_information
+    DivisionOrg.reset_column_information
+
   end
 	
 	def self.down

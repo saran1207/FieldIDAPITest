@@ -10,6 +10,7 @@ class MoveTenantFromInspectionTypeToAit < ActiveRecord::Migration
     end
     add_foreign_key(:associatedinspectiontypes, :organization, :source_column => :r_tenant, :foreign_column => :id)
     change_column(:associatedinspectiontypes, :r_tenant, :integer, :null => false)
+    AssociatedInspectionType.reset_column_information
   end
   
   def self.down

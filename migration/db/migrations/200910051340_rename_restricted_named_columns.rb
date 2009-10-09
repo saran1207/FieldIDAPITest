@@ -3,5 +3,6 @@ class RenameRestrictedNamedColumns < ActiveRecord::Migration
     rename_column(:lineitems, :index, :idx)
     rename_column(:findproductoption, :optionkey, :identifier)
     rename_column(:configurations, :name, :identifier)
+    
   end
 end

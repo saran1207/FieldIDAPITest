@@ -1,3 +1,4 @@
+require "product"
 class AddPublishedToProduct < ActiveRecord::Migration
   
   def self.up
@@ -8,7 +9,7 @@ class AddPublishedToProduct < ActiveRecord::Migration
     execute "ALTER TABLE products MODIFY published BIT NOT NULL"
     
     add_index(:products, :published)
-    
+    Product.reset_column_information  
   end
 
   def self.down

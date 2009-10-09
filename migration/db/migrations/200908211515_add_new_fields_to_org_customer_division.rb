@@ -7,6 +7,9 @@ class AddNewFieldsToOrgCustomerDivision < ActiveRecord::Migration
     add_column(:org_division, :code, :string) 
     add_column(:org_division, :contactemail, :string)
     add_column(:org_division, :contactname, :string)
+    
+    CustomerOrg.reset_column_information
+    DivisionOrg.reset_column_information
   end
 	
 	def self.down

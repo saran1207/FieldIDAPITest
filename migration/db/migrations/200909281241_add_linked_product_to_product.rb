@@ -1,3 +1,4 @@
+require "product"
 class AddLinkedProductToProduct < ActiveRecord::Migration
   
   def self.up
@@ -5,7 +6,7 @@ class AddLinkedProductToProduct < ActiveRecord::Migration
     remove_column(:products, :linkeduuid)
     add_column(:products, :linked_id, :integer)
     add_foreign_key(:products, :products, :source_column => :linked_id, :foreign_column => :id, :name => "fk_linked_product_id")
-    
+    Product.reset_column_information  
   end
 
   def self.down

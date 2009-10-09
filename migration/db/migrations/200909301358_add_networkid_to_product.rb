@@ -7,7 +7,7 @@ class AddNetworkidToProduct < ActiveRecord::Migration
     add_column(:products, :network_id, :integer)
     add_index(:products, :network_id)
     
-    
+    Product.reset_column_information  
     Product.find_each do |product|
       product.network_id = product.id
       product.save

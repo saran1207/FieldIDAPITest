@@ -1,3 +1,5 @@
+require "customer_org"
+require "division_org"
 class AddOrgLink < ActiveRecord::Migration
   def self.up
     add_column(:org_customer, :linked_id, :integer)
@@ -5,6 +7,8 @@ class AddOrgLink < ActiveRecord::Migration
     
     add_column(:org_division, :linked_id, :integer)
     add_foreign_key(:org_division, :org_base,  :source_column => :linked_id, :foreign_column => :id, :name => "fk_division_linked_org")
+    CustomerOrg.reset_column_information  
+    DivisionOrg.reset_column_information  
   end
   
   def self.down
