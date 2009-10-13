@@ -61,7 +61,7 @@ class MigrateTimezones < ActiveRecord::Migration
       when "America/Knox_IN":       return "United States:Chicago"
       when "Europe/Amsterdam":      return "Netherlands:Amsterdam"
       when "America/Moncton":       return "Canada:Nova Scotia - Halifax"
-
+      when "America/Puerto_Rico":   return "Puerto Rico:San Juan"
       else
         return zoneid unless (zoneid.index(":").nil?)
         

@@ -1,3 +1,5 @@
+require "customer_org"
+require "division_org"
 class AddNewFieldsToOrgCustomerDivision < ActiveRecord::Migration
 	def self.up
     add_column(:org_customer, :code, :string) 

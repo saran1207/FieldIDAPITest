@@ -6,7 +6,7 @@ class AddMessages < ActiveRecord::Migration
       t.string :receiver, :null => false
       t.string :subject, :limit => 1000, :null => false
       t.text :body, :null => false
-      t.boolean :read, :null => false
+      t.boolean :unread, :null => false
     end
     
     create_foreign_keys_for_entity_with_owner(:messages)
