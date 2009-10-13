@@ -22,6 +22,7 @@
 		<pattern>*ajax/uploadImage.action*</pattern>
 		<pattern>*ajax/inspection.action*</pattern>
 		<pattern>*ajax/linkedInspection.action*</pattern>
+		<pattern>*ajax/introVideo.action*</pattern>
 	</decorator>
 	
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">

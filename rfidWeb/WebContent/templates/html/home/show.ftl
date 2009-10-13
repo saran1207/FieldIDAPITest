@@ -66,6 +66,9 @@
 	</div>
 	<div id="helpVideos" class="dashboardSection">
 		<h3 ><@s.text name="label.instructionalvidoes"/> <span class="moreLink"><a href="<@s.url action="instructionalVideos"/>"><@s.text name="label.more"/></a></span></h3>
+		<div id="introVideo" class="highlightBlock">
+			<@s.text name="label.new_to_fieldid"/> <a href="<@s.url action="introVideo" namespace="ajax/"/>" id="showVideo" rel='iframe' title='<@s.text name="label.intro_video"/> ::  :: width: 640, height: 480' class='lightview'><@s.text name="label.watch"/></a> <@s.text name="label.the_intro_video_now"/>
+		</div>
 		<ul class="informationList">
 			<#list summary as video >
 				<li>${video.name?html} - <a href="${video.url}" target="_blank"><@s.text name="label.watchnow"/></a></li>

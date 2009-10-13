@@ -53,3 +53,14 @@ h3 {
 	font-size: 1em;
 	padding: 1px 0;
 }
+
+.highlightBlock {
+	border: 1px solid #d9cb6a;
+	background-color: #FFFF99;
+}
+
+#introVideo {
+	font-size: 1.2em;
+	padding:5px;
+	margin:5px 0;
+}
