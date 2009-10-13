@@ -31,8 +31,8 @@ ${action.setPageType('user_registration', 'show')!}
 		$('cancelAccept').observe('click', 
 			function(event) {
 				event.stop();
-				$('request').hide();
-				$('acceptForm').show();	
+				$('request').show();
+				$('acceptForm').hide();	
 			});
 		$('acceptForm').hide();
 	});
