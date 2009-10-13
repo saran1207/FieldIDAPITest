@@ -26,7 +26,6 @@ public class InspectionTypeArchiveTask implements Runnable {
 	private InspectionTypeArchiveHandler archiveHandler;
 	
 	
-	
 	public InspectionTypeArchiveTask(InspectionType inspectionType, UserBean user, RemovalHandlerFactory handlerFactory) {
 		super();
 		this.inspectionType = inspectionType;
@@ -93,7 +92,7 @@ public class InspectionTypeArchiveTask implements Runnable {
 	
 	private void sendSuccessEmailResponse() {
 		String subject = "Inspection Type Removal Completed";
-		String body = "<h2>Inspection Type Removed " + inspectionType.getArchivedName() + "</h2>";
+		String body = "<h2>Inspection Type Removed " +  inspectionType.getArchivedName() + "</h2>";
 		
 		logger.info("Sending email [" + currentUser.getEmailAddress() + "]");
 		try {

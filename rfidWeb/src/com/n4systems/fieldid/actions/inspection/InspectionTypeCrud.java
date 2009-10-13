@@ -161,13 +161,11 @@ public class InspectionTypeCrud extends AbstractCrud {
 		try {
 			if (fillArchiveSummary(transaction).canBeRemoved()) {
 			
-				inspectionType.archiveEntity();
-				new InspectionTypeSaver().update(transaction, inspectionType);
-				
-				InspectionTypeArchiveTask task = new InspectionTypeArchiveTask(inspectionType, fetchCurrentUser(), getRemovalHandlerFactory());
-				TaskExecutor.getInstance().execute(task);
-				
+				archiveInspection(transaction);
 				transaction.commit();
+				
+				startBackgroundTask();
+				
 				addFlashMessageText("message.deleted_inspection_type");
 			} else {
 				addFlashErrorText("error.can_not_delete_inspection_type");
@@ -180,6 +178,16 @@ public class InspectionTypeCrud extends AbstractCrud {
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+
+	private void archiveInspection(Transaction transaction) {
+		inspectionType.archiveEntity();
+		inspectionType = new InspectionTypeSaver().update(transaction, inspectionType);
+	}
+
+	private void startBackgroundTask() {
+		InspectionTypeArchiveTask task = new InspectionTypeArchiveTask(inspectionType, fetchCurrentUser(), getRemovalHandlerFactory());
+		TaskExecutor.getInstance().execute(task);
 	}
 
 	
