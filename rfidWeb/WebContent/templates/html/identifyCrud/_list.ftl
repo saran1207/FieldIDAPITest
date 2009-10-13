@@ -21,15 +21,15 @@
 			<div class="twoColumn lastColumn" >
 				<div class="infoSet">
 					<label><@s.text name="label.purchaseorder"/></label>
-					<span>${order.ponumber!}</span>
+					<span>${order.poNumber!}</span>
 				</div>
 				<div class="infoSet">
 					<label><@s.text name="label.customer"/></label>
-					<span>${(order.owner.displayName)!}</span>
+					<span>${(order.owner.customerOrg.name)!}</span>
 				</div>
 				<div class="infoSet">
 					<label><@s.text name="label.division"/></label>
-					<span>${(order.division.displayName)!}</span>
+					<span>${(order.owner.divisionOrg.name)!}</span>
 				</div>
 			</div>
 		</div>
