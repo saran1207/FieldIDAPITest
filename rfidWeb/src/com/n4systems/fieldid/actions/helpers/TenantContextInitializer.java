@@ -86,7 +86,7 @@ public abstract class TenantContextInitializer {
 		try {
 			resetSecurityGuard(tenant);
 		} catch (Exception e) {
-			throw new NoValidTenantSelectedException("No Tenat exists for Company Id: " + brandedCompanyId);
+			throw new NoValidTenantSelectedException("No Tenant exists for Company Id: " + brandedCompanyId);
 		}
 	}
 

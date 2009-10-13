@@ -35,7 +35,7 @@ public class SelectTenantAction extends AbstractAction {
 			
 			return REDIRECT_TO_URL;
 		} catch (Exception e) {
-			logger.error(getLogLinePrefix() + "Error loading the tenant company", e);
+			logger.debug(getLogLinePrefix() + "Error loading the tenant company", e);
 		}
 		
 		addActionErrorText("error.company_does_not_exists");
