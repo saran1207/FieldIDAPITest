@@ -186,7 +186,7 @@ h2 a {
 	background-image: url(../images/menu/home.jpg);
 }
 
-#menuHome :hover {
+#menuHome:hover {
 	background-image: url(../images/menu/home_hot.jpg);
 }
 
@@ -194,7 +194,7 @@ h2 a {
 	background-image: url(../images/menu/identify.jpg);
 }
 
-#menuIdentify :hover {
+#menuIdentify:hover {
 	background-image: url(../images/menu/identify_hot.jpg);
 }
 
@@ -202,7 +202,7 @@ h2 a {
 	background-image: url(../images/menu/inspect.jpg);
 }
 
-#menuInspect :hover {
+#menuInspect:hover {
 	background-image: url(../images/menu/inspect_hot.jpg);
 }
 
@@ -210,7 +210,7 @@ h2 a {
 	background-image: url(../images/menu/search.jpg);
 }
 
-#menuAssets :hover {
+#menuAssets:hover {
 	background-image: url(../images/menu/search_hot.jpg);
 }
 
@@ -218,7 +218,7 @@ h2 a {
 	background-image: url(../images/menu/reporting.jpg);
 }
 
-#menuReport :hover {
+#menuReport:hover {
 	background-image: url(../images/menu/reporting_hot.jpg);
 }
 
@@ -226,7 +226,7 @@ h2 a {
 	background-image: url(../images/menu/schedule.jpg);
 }
 
-#menuSchedule :hover {
+#menuSchedule:hover {
 	background-image: url(../images/menu/schedule_hot.jpg);
 }
 
@@ -234,7 +234,7 @@ h2 a {
 	background-image: url(../images/menu/administration.jpg);
 }
 
-#menuAdministration :hover {
+#menuAdministration:hover {
 	background-image: url(../images/menu/administration_hot.jpg);
 }
 
@@ -242,7 +242,7 @@ h2 a {
 	background-image: url(../images/menu/compliance.jpg);
 }
 
-#menuCompliance :hover {
+#menuCompliance:hover {
 	background-image: url(../images/menu/compliance_hot.jpg);
 }
 
@@ -250,8 +250,16 @@ h2 a {
 	background-image: url(../images/menu/project.jpg);
 }
 
-#menuProject :hover {
+#menuProject:hover {
 	background-image: url(../images/menu/project_hot.jpg);
+}
+
+#menuSafetyNetwork {
+	background-image: url(../images/menu/safety_network.jpg);
+}
+
+#menuSafetyNetwork:hover {
+	background-image: url(../images/menu/safety_network_hot.jpg);
 }
 
 .errorMessage,.error {
