@@ -61,12 +61,6 @@
 		<property name="jndiName" value="fieldid/UserManager/local" />
 	</bean>
 
-	<bean id="customerManager"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="fieldid/CustomerManagerImpl/local" />
-	</bean>
-
-	
 
 	<bean id="orderMappingManager"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
