@@ -93,13 +93,7 @@
 	<include file="ajaxPackageStruts.xml"/>
 	<include file="aHtmlPackageStruts.xml"/>
 	
-	<package name="xmlActions" extends="default" namespace="/xml">
-		<global-results>
-			<result name="no_permission" type="httpheader">
-				<param name="error">404</param>
-			</result>
-		</global-results>
-	</package>
+	
 	
 	<package name="files" extends="default" namespace="/file">
 		<global-results>
