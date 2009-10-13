@@ -1,15 +1,11 @@
 package com.n4systems.fieldid.actions.search;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -20,8 +16,10 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
@@ -30,23 +28,16 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private static final long serialVersionUID = 1L;
 	
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
-	private final LegacyProductSerial productSerialManager;
-	private final User userManager;
 	private List<ListingPair> employees;
 	
 	private OwnerPicker ownerPicker;
 	
 	public ProductSearchAction( 
-			final LegacyProductType productTypeManager, 
-			final LegacyProductSerial productSerialManager, 
 			final PersistenceManager persistenceManager, 
-			final User userManager, 
 			final ProductManager productManager) {
 		
 		super(ProductSearchAction.class, SEARCH_CRITERIA, "ProductReport", persistenceManager);
 
-		this.productSerialManager = productSerialManager;
-		this.userManager = userManager;
 		
 		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
 	}
@@ -134,13 +125,14 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		getContainer().setToDate(convertToEndOfDay(toDate));
 	}
 
-	public Collection<ProductStatusBean> getProductStatuses() {
-		return productSerialManager.getAllProductStatus(getTenantId());
+	public List<ProductStatusBean> getProductStatuses() {
+		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 	
 	public List<ListingPair> getEmployees() {
 		if(employees == null) {
-			employees = userManager.getEmployeeList(getSecurityFilter());
+			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+			employees = ListHelper.longListableToListingPair(loader.load());
 		}
 		return employees;
 	}

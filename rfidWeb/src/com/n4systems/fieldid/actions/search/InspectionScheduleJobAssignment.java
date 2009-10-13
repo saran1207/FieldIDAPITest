@@ -2,10 +2,6 @@ package com.n4systems.fieldid.actions.search;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.User;
-
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -22,9 +18,8 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	
 	private Project job;
 	
-	public InspectionScheduleJobAssignment(LegacyProductType productTypeManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager,
-			InspectionManager inspectionManager, User userManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, productTypeManager, productSerialManager, persistenceManager, inspectionManager, userManager, productManager, inspectionScheduleManager);
+	public InspectionScheduleJobAssignment(PersistenceManager persistenceManager, InspectionManager inspectionManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, persistenceManager, inspectionManager, productManager, inspectionScheduleManager);
 	}
 
 	private void testRequiredEntities() {

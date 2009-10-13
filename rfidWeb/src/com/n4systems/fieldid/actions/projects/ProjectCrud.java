@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.session.User;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -57,10 +56,10 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	
 	
 
-	public ProjectCrud(PersistenceManager persistenceManager, ProjectManager projectManager, User userManager) {
+	public ProjectCrud(PersistenceManager persistenceManager, ProjectManager projectManager) {
 		super(persistenceManager);
 		this.projectManager = projectManager;
-		jobResources = new JobResourcesCrud(persistenceManager, userManager);
+		jobResources = new JobResourcesCrud(persistenceManager);
 	}
 
 	@Override

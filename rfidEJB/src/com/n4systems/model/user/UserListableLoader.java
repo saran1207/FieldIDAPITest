@@ -34,7 +34,7 @@ public class UserListableLoader extends ListableLoader {
 		}
 		
 		if (noCustomer) {
-			builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "r_EndUser"));
+			builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
 		}
 		
 		

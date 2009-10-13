@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -25,11 +24,13 @@ import com.n4systems.model.Project;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
+import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
 import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
@@ -42,7 +43,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
-	private final LegacyProductSerial productSerialManager;
 	private final User userManager;
 	
 	private InspectionReportType reportType;
@@ -60,13 +60,11 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public InspectionReportAction(
 			final PersistenceManager persistenceManager,
 			final User userManager, 
-			final LegacyProductSerial productSerialManager, 
 			final ProductManager productManager) {
 		
 		super(InspectionReportAction.class, REPORT_CRITERIA, "InspectionReport", persistenceManager);
 
 		this.userManager = userManager;
-		this.productSerialManager = productSerialManager;
 		
 		
 		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
@@ -214,7 +212,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<ProductStatusBean> getProductStatus() {
 		if (statuses == null) {
-			statuses = productSerialManager.getAllProductStatus( getTenantId() );
+			
+			statuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
 		
 		return statuses;
@@ -246,7 +245,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	 
 	public List<ListingPair> getEmployees() {
 		if(employees == null) {
-			employees = userManager.getEmployeeList(getSecurityFilter());
+			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+			employees = ListHelper.longListableToListingPair(loader.load());
 		}
 		return employees;
 	}

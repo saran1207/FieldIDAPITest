@@ -50,8 +50,10 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.StringListingPair;
@@ -793,7 +795,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public List<ListingPair> getEmployees() {
 		if (employees == null) {
-			employees = userManager.getEmployeeList(getSecurityFilter());
+			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+			employees = ListHelper.longListableToListingPair(loader.load());
+			
 		}
 		return employees;
 	}

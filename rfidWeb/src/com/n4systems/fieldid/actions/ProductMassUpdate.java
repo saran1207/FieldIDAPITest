@@ -21,7 +21,9 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.Product;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -177,7 +179,8 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	
 	public List<ListingPair> getEmployees() {
 		if( employees == null ) {
-			employees = userManager.getEmployeeList(getSecurityFilter());
+			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+			employees = ListHelper.longListableToListingPair(loader.load());
 		}
 		return employees;
 	}

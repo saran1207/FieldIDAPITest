@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EmployeeAlreadyAttachedException;
@@ -16,6 +15,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
+import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.services.JobResourceService;
 import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
@@ -32,11 +32,9 @@ public class JobResourcesCrud extends AbstractCrud {
 	private Pager<UserBean> resources;
 	private List<ListingPair> employees;
 	
-	private User userManager;
 	
-	public JobResourcesCrud(PersistenceManager persistenceManager, User userManager) {
+	public JobResourcesCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.userManager = userManager;
 	}
 	
 	@Override
@@ -114,7 +112,8 @@ public class JobResourcesCrud extends AbstractCrud {
 	public List<ListingPair> getEmployees() {
 		if (employees == null) {
 			List<ListingPair> assignedEmployees = ListHelper.longListableToListingPair(getPage().getList());
-			employees = userManager.getEmployeeList(getSecurityFilter(), true);
+			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+			employees = ListHelper.longListableToListingPair(loader.load());
 			employees.removeAll(assignedEmployees);
 		}
 		return employees;

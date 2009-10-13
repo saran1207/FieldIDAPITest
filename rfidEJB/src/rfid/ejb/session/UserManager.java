@@ -343,32 +343,7 @@ public class UserManager implements User {
 		return ListHelper.longListableToListingPair(users);
 	}
 	
-	/**
-	 * Returns a collection of users for a particular tenant and end user 
-	 * @param tenantid the tenant to return the list of users for
-	 * @param endUserID optional argument to filter the list to a particular end user
-	 * @deprecated Use UserListableLoader
-	 */
-	public List<ListingPair> getEmployeeList( SecurityFilter filter ) {
-		return getEmployeeList(filter, false);
-	}
 	
-	/**
-	 * @deprecated Use UserListableLoader
-	 */
-	@SuppressWarnings("unchecked")
-	public List<ListingPair> getEmployeeList(SecurityFilter filter, boolean withOutDeleted) {
-		String queryString = "select DISTINCT ub from UserBean ub where ub.active = true and ub.system = false and owner.customerOrg IS NULL AND ";
-		if (withOutDeleted) {
-			queryString += " ub.deleted = false AND ";
-		}
-		queryString += filter.produceWhereClause(UserBean.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
-		
-		Query query = em.createQuery(queryString);
-		filter.applyParameters(query, UserBean.class);
-		
-		return ListHelper.longListableToListingPair( (List<UserBean>)query.getResultList() );
-	}
 	
 	public void saveUserRequest( UserRequest userRequest, UserBean userAccount ) throws DuplicateUserException, DuplicateRfidException {
 		userAccount.setActive( false );

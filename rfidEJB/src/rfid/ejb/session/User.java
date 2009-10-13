@@ -42,14 +42,7 @@ public interface User {
 	
 	public List<ListingPair> getUserList( SecurityFilter filter );
 	public List<ListingPair> getInspectorList( SecurityFilter filter );
-	/**
-	 * @deprecated Use UserListableLoader
-	 */
-	public List<ListingPair> getEmployeeList( SecurityFilter filter );
-	/**
-	 * @deprecated Use UserListableLoader
-	 */
-	public List<ListingPair> getEmployeeList( SecurityFilter filter, boolean withOutDeleted );
+
 	
 	public Pager<UserBean> getUsers( SecurityFilter filter, boolean activeOnly, int pageNumber, int pageSize, String nameFilter, UserType userType );
 	public Pager<UserBean> getUsers( SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer );

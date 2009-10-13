@@ -6,9 +6,6 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -23,7 +20,9 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.model.utils.CompressedScheduleStatus;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Preparable;
@@ -33,9 +32,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	private static final long serialVersionUID = 1L;
 	
 	private final InfoFieldDynamicGroupGenerator infoGroupGen;
-	private final LegacyProductSerial productSerialManager;
 	private final InspectionManager inspectionManager;
-	private final User userManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	
 	private List<ListingPair> employees;
@@ -44,32 +41,24 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	private OwnerPicker ownerPicker;
 	
 	public InspectionScheduleAction(
-			final LegacyProductType productTypeManager, 
-			final LegacyProductSerial productSerialManager, 
 			final PersistenceManager persistenceManager, 
 			final InspectionManager inspectionManager, 
-			final User userManager, 
 			final ProductManager productManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
-		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, productTypeManager, productSerialManager, persistenceManager, inspectionManager, userManager, productManager, inspectionScheduleManager);
+		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, persistenceManager, inspectionManager, productManager, inspectionScheduleManager);
 	}
 	
 	
 	public <T extends CustomizableSearchAction<InspectionScheduleSearchContainer>>InspectionScheduleAction(String sessionKey, Class<T> implementingClass,
-			final LegacyProductType productTypeManager, 
-			final LegacyProductSerial productSerialManager, 
 			final PersistenceManager persistenceManager, 
 			final InspectionManager inspectionManager, 
-			final User userManager, 
 			final ProductManager productManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
 		super(implementingClass, sessionKey, "InspectionScheduleReport", persistenceManager);
 		
-		this.productSerialManager = productSerialManager;
 		this.inspectionManager = inspectionManager;
-		this.userManager = userManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		
 		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
@@ -141,7 +130,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	public List<ListingPair> getProductStatuses() {
 		List<ListingPair> psList = new ArrayList<ListingPair>();
-		for(ProductStatusBean psBean: productSerialManager.getAllProductStatus(getTenantId())) {
+		for(ProductStatusBean psBean: getLoaderFactory().createProductStatusListLoader().load()) {
 			psList.add(new ListingPair(psBean.getUniqueID(), psBean.getName()));
 		}
 		return psList;
@@ -153,7 +142,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	public List<ListingPair> getEmployees() {
 		if(employees == null) {
-			employees = userManager.getEmployeeList(getSecurityFilter());
+			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+			employees = ListHelper.longListableToListingPair(loader.load());
 		}
 		return employees;
 	}

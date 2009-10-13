@@ -13,7 +13,7 @@ public class AllCustomerUserDeleter extends BaseDeleter<UserBean> {
 
 	@Override
 	protected void remove(EntityManager em, UserBean entity) {
-		Query query = em.createQuery("UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE r_EndUser IS NOT NULL");
+		Query query = em.createQuery("UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE owner.customerOrg IS NOT NULL");
 		query.setParameter("now", new Date());
 		query.executeUpdate();
 	}
