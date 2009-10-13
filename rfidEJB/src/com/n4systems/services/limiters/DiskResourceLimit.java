@@ -10,10 +10,6 @@ public class DiskResourceLimit extends ResourceLimit {
 		super();
 	}
 
-	public long getAvailableMB() {
-		return getAvailable(DataUnit.MEBIBYTES);
-	}
-
 	public long getMaximumMB() {
 		return getMaximum(DataUnit.MEBIBYTES);
 	}
@@ -22,10 +18,6 @@ public class DiskResourceLimit extends ResourceLimit {
 		return getUsed(DataUnit.MEBIBYTES);
 	}
 	
-	public long getAvailable(DataUnit newUnit) {
-		return dataStorageUnit.convertTo(getAvailable(), newUnit);
-	}
-
 	public long getMaximum(DataUnit newUnit) {
 		return dataStorageUnit.convertTo(getMaximum(), newUnit);
 	}
