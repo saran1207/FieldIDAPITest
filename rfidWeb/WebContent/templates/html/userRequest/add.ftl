@@ -83,7 +83,7 @@
 </div>
 <div id="secondaryContent">
 	<h2><@s.text name="label.how_soon_can_i_login"/></h2>
-	<p class="titleSummary"><@s.text name="label.how_soon_can_i_login.full"><@s.param>${securityGuard.name.displayName?html}</@s.param></@s.text></p>
+	<p class="titleSummary"><@s.text name="label.how_soon_can_i_login.full"><@s.param>${securityGuard.primaryOrg.name?html}</@s.param></@s.text></p>
 	<h2><@s.text name="label.will_i_get_notified_when_i_can_sign_in"/></h2>
 	<p class="titleSummary"><@s.text name="label.will_i_get_notified_when_i_can_sign_in.full"/></p>
 </div>
