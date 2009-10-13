@@ -25,6 +25,8 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	private final SignUpFinalizationHandler signUpFinalizationHandler;
 	
 	private PersistenceProvider persistenceProvider;
+	private AccountPlaceHolder placeHolder;
+	private SignUpTenantResponse subscriptionApproval;
 	
 	
 	public SignUpHandlerImpl(AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler, BaseSystemStructureCreateHandler baseSystemCreator, SubscriptionAgent subscriptionAgent, SignUpFinalizationHandler signUpFinalizationHandler) {
@@ -38,52 +40,78 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	
 	//FIXME this method is big!
 	public void signUp(SignUpRequest signUp, PrimaryOrg referrerOrg) throws SignUpCompletionException, SignUpSoftFailureException {
-		if (persistenceProvider == null) {
-			throw new InvalidArgumentException("You must give a persistence provider");
-		}
-		AccountPlaceHolder placeHolder = null;
+		guard();
+		
 		Transaction transaction = persistenceProvider.startTransaction();
-		try {
-			placeHolder = createAccountPlaceHolder(signUp, transaction);
-			//FIXME this is the wrong spot for this.
-			signUp.setCompanyN4Id(placeHolder.getPrimaryOrg().getId());
-			signUp.setUserN4Id(placeHolder.getAdminUser().getId());
-			signUp.setExternalPassword(placeHolder.getPrimaryOrg().getExternalPassword());
+		try { 
+			placeHolder = createPlaceHolder(signUp, transaction);
+			
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
 			throw new TenantNameUsedException("tenant name could not be saved", e);
 		}
 		
-		SignUpTenantResponse subscriptionApproval = null;
+		
 		try {
-			
 			subscriptionApproval = subscriptionAgent.buy(signUp, signUp, signUp);
-			
-		} catch (CommunicationException e) {
-			undoAccountPlaceHolder(placeHolder);
-			throw new CommunicationErrorException("could not complete process", e);
-		} catch (BillingInfoException e) {
-			undoAccountPlaceHolder(placeHolder);
-			throw new BillingValidationException("could not complete process", e);
 		} catch (Exception e) {
-			undoAccountPlaceHolder(placeHolder);
-			throw new ProcessFailureException("could not complete process", e);
+			processSubscriptionApprovalError(e, placeHolder);
 		}
 		
 		transaction = persistenceProvider.startTransaction();
 		try {
-			baseSystemCreator.forTenant(placeHolder.getTenant()).create(transaction);
-			
-			signUpFinalizationHandler.setAccountPlaceHolder(placeHolder).setSubscriptionApproval(subscriptionApproval).setAccountInformation(signUp);
-			signUpFinalizationHandler.setReferrerOrg(referrerOrg);
-			signUpFinalizationHandler.finalizeSignUp(transaction);
+			finalizeAccount(signUp, referrerOrg, placeHolder, transaction, subscriptionApproval);
 			
 			persistenceProvider.finishTransaction(transaction);
 		} catch (RuntimeException e) {
 			persistenceProvider.rollbackTransaction(transaction);
 			throw new SignUpCompletionException("The final step of activating the account has failed. The subscription information been entered.", e);
 		}
+	}
+
+
+	private void guard() {
+		if (persistenceProvider == null) {
+			throw new InvalidArgumentException("You must give a persistence provider");
+		}
+	}
+
+	private void processSubscriptionApprovalError(Exception e, AccountPlaceHolder placeHolder) {
+		undoAccountPlaceHolder(placeHolder);
+		convertExecption(e);
+	}
+
+
+	private void convertExecption(Exception e) {
+		if (CommunicationException.class.isAssignableFrom(e.getClass())) {
+			throw new CommunicationErrorException("could not complete process", e);
+		} else if (BillingInfoException.class.isAssignableFrom(e.getClass())) {
+			throw new BillingValidationException("could not complete process", e);
+		} else {
+			throw new ProcessFailureException("could not complete process", e);
+		}
+	}
+	
+	private void finalizeAccount(SignUpRequest signUp, PrimaryOrg referrerOrg, AccountPlaceHolder placeHolder, Transaction transaction, SignUpTenantResponse subscriptionApproval) {
+		baseSystemCreator.forTenant(placeHolder.getTenant()).create(transaction);
+		
+		signUpFinalizationHandler.setAccountPlaceHolder(placeHolder).setSubscriptionApproval(subscriptionApproval).setAccountInformation(signUp);
+		signUpFinalizationHandler.setReferrerOrg(referrerOrg);
+		signUpFinalizationHandler.finalizeSignUp(transaction);
+	}
+
+
+	private AccountPlaceHolder createPlaceHolder(SignUpRequest signUp, Transaction transaction) {
+		AccountPlaceHolder placeHolder = null;
+		
+		
+		placeHolder = createAccountPlaceHolder(signUp, transaction);
+		signUp.setCompanyN4Id(placeHolder.getPrimaryOrg().getId());
+		signUp.setUserN4Id(placeHolder.getAdminUser().getId());
+		signUp.setExternalPassword(placeHolder.getPrimaryOrg().getExternalPassword());
+		
+		return placeHolder;
 	}
 
 	private AccountPlaceHolder createAccountPlaceHolder(SignUpRequest signUp, Transaction transaction) {
