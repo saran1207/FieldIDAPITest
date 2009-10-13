@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
@@ -32,8 +31,8 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	private Project job;
 	private List<ListingPair> jobs;
 	
-	public AssignScheduleToJobMassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
-		super(customerManager, massUpdateManager, persistenceManager);
+	public AssignScheduleToJobMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
+		super(massUpdateManager, persistenceManager);
 		setSelect(new HashMap<String, Boolean>());
 		getSelect().put("job",true);
 	}

@@ -21,7 +21,6 @@ import rfid.ejb.session.ServiceDTOBeanConverter;
 import rfid.ejb.session.User;
 import rfid.util.PopulatorLogger;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -77,7 +76,6 @@ import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
-import com.n4systems.webservice.dto.CustomerServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
@@ -674,36 +672,7 @@ public class DataServiceImpl implements DataService {
 		}
 		return response;
 	}
-	
-	/**
-	 * Creates a customer and attached divisions from a CustomerServiceDTO.  If the customer or divisions already existed (defined by the rules 
-	 * in {@link CustomerManager#findOrCreateCustomer()}), this method will do nothing.
-	 */
-	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerServiceDTO customerDTO) throws ServiceException {
-		// TODO: CUSTOMER_REFACTOR: DataService fix create customer (or don't it's only used by the importer)
-//		RequestResponse response = new RequestResponse();
-//		response.setStatus(ResponseStatus.OK);
-//		
-//		try {
-//			CustomerManager customerManager = ServiceLocator.getCustomerManager();
-//	
-//			LegacySecurityFilter filter = createFilterFromRequest(requestInformation);
-//
-//			Customer customer = customerManager.findOrCreateCustomer(customerDTO.getName(), customerDTO.getCustomerId(), requestInformation.getTenantId(), filter);
-//				
-//			for (DivisionServiceDTO divisionService: customerDTO.getDivisions()) {
-//				customerManager.findOrCreateDivision(divisionService.getName(), customer.getId(), filter);
-//			}
-//			
-//		} catch (Exception e) {
-//			logger.error("Failed while creating Customer and Divisions", e);
-//			throw new ServiceException("Unable to create Customer");
-//		}
-//		
-//		return response;
-		return null;
-	}
-	
+		
 	/**
 	 * Creates a user from a UserServiceDTO.  If the user already exists, this method will do nothing.
 	 */

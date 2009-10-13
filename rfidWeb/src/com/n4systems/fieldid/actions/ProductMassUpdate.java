@@ -11,7 +11,6 @@ import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
@@ -43,8 +42,8 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	
 	private OwnerPicker ownerPicker;
 	
-	public ProductMassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager, User userManager) {
-		super(customerManager, massUpdateManager, persistenceManager);
+	public ProductMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager, User userManager) {
+		super(massUpdateManager, persistenceManager);
 		this.productSerialManager = productSerialManager;
 		this.userManager = userManager;
 	}

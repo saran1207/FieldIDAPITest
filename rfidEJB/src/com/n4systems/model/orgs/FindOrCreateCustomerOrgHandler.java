@@ -62,6 +62,11 @@ public class FindOrCreateCustomerOrgHandler {
 			}
 		}
 		
+		// If we find more than one by code, we act like we didn't find it 
+		if (matchedCustomers.size() > 1) {
+			matchedCustomers = new ArrayList<CustomerOrg>();
+		}
+		
 		//if we didn't find a customer, then lets try the full name
 		if(matchedCustomers.isEmpty()) {
 			String fuzzyName = FuzzyResolver.mungString(name);

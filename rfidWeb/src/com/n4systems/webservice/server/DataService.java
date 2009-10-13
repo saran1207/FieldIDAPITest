@@ -7,7 +7,6 @@ import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
-import com.n4systems.webservice.dto.CustomerServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
@@ -54,7 +53,6 @@ public interface DataService {
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
-	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerServiceDTO customerDTO) throws ServiceException;
 	public RequestResponse createUser(RequestInformation requestInformation, UserServiceDTO customerDTO) throws ServiceException;
 	
 	public ProductListResponse getProducts(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException;

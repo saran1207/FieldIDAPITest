@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -15,15 +14,13 @@ public class MassUpdate extends AbstractAction  {
 	protected String searchId;
 	private Long currentPage;
 	
-	protected CustomerManager customerManager;
 	protected MassUpdateManager massUpdateManager;
 	
 	protected Map<String,Boolean> select = new HashMap<String,Boolean>();
 	
-	public MassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
+	public MassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		
-		this.customerManager = customerManager;
 		this.massUpdateManager = massUpdateManager;
 	}
 	

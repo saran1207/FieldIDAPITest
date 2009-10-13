@@ -27,8 +27,6 @@ import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.AutoAttributeManagerImpl;
 import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.ConfigManagerImpl;
-import com.n4systems.ejb.CustomerManager;
-import com.n4systems.ejb.CustomerManagerImpl;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionManagerImpl;
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -104,13 +102,6 @@ public class ServiceLocator {
 	
 	public static final ConfigManager getConfigManager() {
 		return get(ConfigManager.class, ConfigManagerImpl.class, configManager);
-	}
-	
-	
-	private static final ThreadLocal<CustomerManager> customerManager = new ThreadLocal<CustomerManager>();
-	
-	public static final CustomerManager getCustomerManager() {
-		return get(CustomerManager.class, CustomerManagerImpl.class, customerManager);
 	}
 
 	

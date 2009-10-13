@@ -33,10 +33,6 @@
     	<property name="jndiName" value="fieldid/UserManager/local" />
     </bean>
     
-    <bean id="customerManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/CustomerManagerImpl/local"/>
-    </bean>
-    
     <bean id="unitOfMeasureManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/UnitOfMeasureManagerImpl/local" />
     </bean>

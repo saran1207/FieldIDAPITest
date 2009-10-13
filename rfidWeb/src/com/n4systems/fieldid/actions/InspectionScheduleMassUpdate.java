@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
@@ -25,8 +24,8 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 	private InspectionSchedule schedule = new InspectionSchedule();
 	private String nextDate;
 	
-	public InspectionScheduleMassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
-		super(customerManager, massUpdateManager, persistenceManager);
+	public InspectionScheduleMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
+		super(massUpdateManager, persistenceManager);
 		
 	}
 	

@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateFailureException;
@@ -30,8 +29,8 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	
 	private OwnerPicker ownerPicker;
 
-	public InspectionMassUpdate(CustomerManager customerManager, MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
-		super( customerManager, massUpdateManager, persistenceManager);
+	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
+		super(massUpdateManager, persistenceManager);
 	}
 	
 	

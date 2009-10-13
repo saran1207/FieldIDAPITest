@@ -385,7 +385,6 @@ public class OrderManagerImpl implements OrderManager {
 	 * Attempts to resolve or create a customer.  If customerName and customerId are null, then null 
 	 * will be returned.  If customerName is null then customerId will be used for both values.  If
 	 * customerId is null then customerName will be used for both values.
-	 * @see CustomerManager#findOrCreateCustomer(String, String, Long, SecurityFilter)
 	 * @param customerName	name of the customer
 	 * @param customerCode	short name of the customer
 	 * @param tenant		a Tenant

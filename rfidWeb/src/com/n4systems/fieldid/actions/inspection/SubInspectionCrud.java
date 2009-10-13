@@ -9,7 +9,6 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
 
-import com.n4systems.ejb.CustomerManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -37,7 +36,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	private MasterInspection masterInspectionHelper;
 	private boolean currentInspectionNew = true;
 
-	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, CustomerManager customerManager,
+	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, 
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 
 		super(persistenceManager, inspectionManager, userManager, legacyProductManager, productManager, inspectionScheduleManager);
