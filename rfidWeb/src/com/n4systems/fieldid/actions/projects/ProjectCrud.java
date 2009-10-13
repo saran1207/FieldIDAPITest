@@ -29,6 +29,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
@@ -65,6 +66,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	@Override
 	protected void initMemberFields() {
 		project = new Project();
+		project.setOwner(getSessionUserOwner());
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), project);
 	}
 
@@ -355,6 +357,8 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		this.justAssignedOn = justAssignedOn;
 	}
 
+	
+	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -363,6 +367,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return ownerPicker.getOwnerId();
 	}
 
+	
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
