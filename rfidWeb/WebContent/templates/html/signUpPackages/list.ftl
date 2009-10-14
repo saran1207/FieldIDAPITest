@@ -66,7 +66,7 @@
 				<td class="description"><@s.text name="label.rfid_enabled"/></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
-						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 					</td>
 				</#list>
 			</tr>
@@ -75,7 +75,7 @@
 				<td class="description"><@s.text name="label.mobile_access"/></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
-						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 					</td>
 				</#list>
 			</tr>
@@ -84,7 +84,7 @@
 				<td class="description"><@s.text name="label.safety_network_compatible"/></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
-						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 					</td>
 				</#list>
 			</tr>
@@ -94,7 +94,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('EmailAlerts') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 						</#if>
 					</td>
 				</#list>
@@ -105,7 +105,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('Projects') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 						</#if>
 					</td>
 				</#list>
@@ -116,7 +116,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('Branding') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>" />
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>" />
 						</#if>
 					</td>
 				</#list>
@@ -127,7 +127,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('PartnerCenter') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 						</#if>
 					</td>
 				</#list>
@@ -149,7 +149,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('MultiLocation') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 						</#if>
 					</td>
 				</#list>
@@ -160,7 +160,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('CustomCert') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 						</#if>
 					</td>
 				</#list>
@@ -171,7 +171,7 @@
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
 						<#if package.includes('DedicatedProgramManager') >
-							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="lable.x"/>"/>
+							<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 						</#if>
 					</td>
 				</#list>

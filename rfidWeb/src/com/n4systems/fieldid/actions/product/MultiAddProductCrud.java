@@ -81,7 +81,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 
 	public String doForm() {
 		if (getMaxProducts() == 0) {
-			addActionMessageText("error.you_can_not_and_anymore_products");
+			addActionMessageText("error.you_can_not_add_anymore_products");
 			return ERROR;
 		}
 		return SUCCESS;

@@ -40,7 +40,7 @@ public class ValidPromoCodeCrud extends AbstractCrud {
 			addActionErrorText("error.could_not_contact_billing_provider");
 			logger.error(getLogLinePrefix() + "could not contact billing provider (netsuite)", e);
 		} catch (Exception e) {
-			addActionErrorText("error.could_not_find_");
+			addActionErrorText("error.could_not_find_promo_code");
 			logger.error(getLogLinePrefix() + "could not contact billing provider (netsuite)", e);
 		}
 		return ERROR;

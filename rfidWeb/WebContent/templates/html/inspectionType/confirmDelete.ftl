@@ -10,7 +10,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 		</div>
 	<#else>
 		<div class="errors">
-			<@s.text name="error.can_not_delete_inspection_type"><@s.param>${archiveSummary.inspectionsPartOfMaster}</@s.param></@s.text>
+			<@s.text name="error.can_not_delete_inspection_type.part_of_master"><@s.param>${archiveSummary.inspectionsPartOfMaster}</@s.param></@s.text>
 		</div>
 	</#if>
 		

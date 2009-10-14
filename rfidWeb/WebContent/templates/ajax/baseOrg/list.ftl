@@ -13,7 +13,7 @@
 		</#list>
 		<div class="resultCount">
 			<@s.text name="label.showing"/> ${orgs.list?size} <@s.text name="label.of"/> ${orgs.totalResults} 
-			<#if orgs.hasNextPage> <@s.text name="label.refine_your_search"/> </#if>
+			<#if orgs.hasNextPage> <@s.text name="label.refine_your_search_if_organization_is_not_on_the_list"/> </#if>
 		</div>
 	</#if>
 </#assign>

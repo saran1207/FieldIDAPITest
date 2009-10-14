@@ -70,7 +70,7 @@ public class CreditCardDecorator extends CreditCard {
 		delegateCard.setNumber(number);
 	}
 
-	@RequiredStringValidator(message="", key="error.type_required")
+	@RequiredStringValidator(message="", key="error.cc_type_required")
 	public void setCCType(String type) {
 		setType(CreditCardType.valueOf(type));
 	}
