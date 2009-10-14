@@ -8,6 +8,10 @@
 	<@s.textfield name="primaryOrg.dateFormat" label="Date Format" />
 	<@s.label name="otherDateFormat" label="Other Date Format" />
 	<@s.label name="formattedDate" label="Example Date" />
+	<@s.textfield name="diskSpace" label="Disk space limit in bytes (-1 for unlimited)" />
+	<@s.textfield name="assets" label="Asset limit (-1 for unlimited)" />
+	<@s.textfield name="users" label="User limit (-1 for unlimited)" />
+	<@s.textfield name="secondaryOrgs" label="Secondary Orgs limit (-1 for unlimited)" />
 
 	<@s.label name="extendedFeaturesLabel" label="Extended features (if you change any, add a note below)" />
 	<@s.iterator  value="availableExtendedFeatures" >

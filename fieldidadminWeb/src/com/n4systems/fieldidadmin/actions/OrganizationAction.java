@@ -255,4 +255,36 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	public ExtendedFeature[] getAvailableExtendedFeatures() {
 		return ExtendedFeature.values();
 	}
+	
+	public Long getDiskSpace() {
+		return primaryOrg.getLimits().getDiskSpaceInBytes();
+	}
+	
+	public void setDiskSpace(Long diskSpace) {
+		primaryOrg.getLimits().setDiskSpaceInBytes(diskSpace);
+	}
+	
+	public Long getAssets() {
+		return primaryOrg.getLimits().getAssets();
+	}
+	
+	public void setAssets(Long assets) {
+		primaryOrg.getLimits().setAssets(assets);
+	}
+	
+	public Long getUsers() {
+		return primaryOrg.getLimits().getUsers();
+	}
+	
+	public void setUsers(Long users) {
+		primaryOrg.getLimits().setUsers(users);
+	}
+	
+	public Long getSecondaryOrgs() {
+		return primaryOrg.getLimits().getSecondaryOrgs();
+	}
+	
+	public void setSecondaryOrgs(Long secondaryOrgs) {
+		primaryOrg.getLimits().setSecondaryOrgs(secondaryOrgs);
+	}
 }
