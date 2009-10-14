@@ -230,8 +230,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return customer;
 	}
 	
-	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, BaseOrg owner, FileDataContainer fileData) throws NonUniqueProductException {
-		Long customerId = (owner != null) ?  owner.getId() : null;
+	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {
+		Long customerId = (customer != null) ?  customer.getId() : null;
 		
 		// we must have a valid serial number
 		if(serial == null || serial.length() == 0) {
@@ -247,7 +247,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				return null;
 			} else {
 				// create product is set, lets create a default
-				product = createProduct(primaryOrg, user, owner, serial, fileData.getExtraInfo());
+				product = createProduct(primaryOrg, user, customer, serial, fileData.getExtraInfo());
 			}
 		}
 		
@@ -266,7 +266,12 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		product.setIdentifiedBy(user);
 		product.setModifiedBy(user);
 		
-		product.setOwner(owner);
+		if (owner != null) {
+			product.setOwner(owner);
+		} else {
+			// if the owner was null, it goes against the primary
+			product.setOwner(primaryOrg);
+		}
 		
 		Date now = new Date();
 		product.setIdentified(now);
@@ -328,7 +333,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			throw new RuntimeException( e );
 		}
 
-		String message = "Created Product [" + product.getId() +  "] serial [" + serialNumber + "] owner [" + owner.getName() + "]";
+		String message = "Created Product [" + product.toString() + "] Owner [" + product.getOwner().getName() + "]";
 		writeLogMessage(primaryOrg.getTenant(), message);
 		
 		return product;
