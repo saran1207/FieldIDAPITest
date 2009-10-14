@@ -60,7 +60,7 @@
 	<@s.text name="warning.disk_space_maxed"/>
 </div>
 <#else>
-<p>
+<p class="actions">
 	<button onclick="addUploadFile('${uploadFileType!}'); return false;" ><@s.text name="label.attachfile"/></button>
 </p>
 </#if>
