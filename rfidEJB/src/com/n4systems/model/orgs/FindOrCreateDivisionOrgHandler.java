@@ -32,7 +32,7 @@ public class FindOrCreateDivisionOrgHandler {
 		
 		/*
 		 * we get the customer in 3 steps.  First we attempt an exact name match on the 
-		 * customer code.  Failing that, we attempt to resolve against the full customer name.
+		 * division code.  Failing that, we attempt to resolve against the full division name.
 		 * failing that, we'll create one
 		 */
 		List<DivisionOrg> matchedDivisions = new ArrayList<DivisionOrg>();
@@ -42,7 +42,12 @@ public class FindOrCreateDivisionOrgHandler {
 			}
 		}
 		
-		//if we didn't find a customer, then lets try the full name
+		// If we find more than one by code, we act like we didn't find it 
+		if (matchedDivisions.size() > 1) {
+			matchedDivisions = new ArrayList<DivisionOrg>();
+		}
+		
+		//if we didn't find a division, then lets try the full name
 		if(matchedDivisions.isEmpty()) {
 			String fuzzyName = FuzzyResolver.mungString(name);
 			for(DivisionOrg div: divisions) {
