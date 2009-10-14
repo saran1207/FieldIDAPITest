@@ -58,6 +58,13 @@ public class StringUtils {
 	}
 	
 	/**
+	 * @return false iff str is non-null and has non-zero length after trimming.  true otherwise.
+	 */
+	public static boolean isEmpty(String str) {
+		return !isNotEmpty(str);
+	}
+	
+	/**
 	 * Replaces '.'s in a string path (such as an ognl path) with '_'s for use in places
 	 * where '.'s have special meanings (eg for use a parameter names in a jpql query).  
 	 * @param str	A path String

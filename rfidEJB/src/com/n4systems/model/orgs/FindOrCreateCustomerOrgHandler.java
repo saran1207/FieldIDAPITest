@@ -7,6 +7,7 @@ import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.FuzzyResolver;
+import com.n4systems.util.StringUtils;
 
 public class FindOrCreateCustomerOrgHandler {
 	private ListLoader<CustomerOrg> loader;
@@ -91,6 +92,11 @@ public class FindOrCreateCustomerOrgHandler {
 
 	private CustomerOrg createCustomer(PrimaryOrg primaryOrg, String name, String code) { 
 		CustomerOrg customer = new CustomerOrg();
+		
+		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(code)) {
+			throw new InvalidExternalOrgException(String.format("Name/Code cannot be empty. Name [%s], Code [%s]", name, code));
+		}
+		
 		customer.setTenant(primaryOrg.getTenant());
 		customer.setParent(primaryOrg);
 		customer.setCode(code);

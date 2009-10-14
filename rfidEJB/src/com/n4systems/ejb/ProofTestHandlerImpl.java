@@ -46,6 +46,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FuzzyResolver;
+import com.n4systems.util.StringUtils;
 
 @Interceptors({TimingInterceptor.class})
 @Stateless
@@ -97,7 +98,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	public Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg owner, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
+	public Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
@@ -106,13 +107,13 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		PrimaryOrg primaryOrg = inspector.getOwner().getPrimaryOrg();
 		
 		// sending a null customer will lookup products with no customer (rather then products for any customer)
-		Long customerId = (owner != null) ? owner.getId() : null;
+		Long customerId = (customer != null) ? customer.getId() : null;
 		
 		//if our customer is null, then let's see if we're supposed to resolve a customer by name from the FileDataContainer
 		if(customerId == null && fileData.isResolveCustomer()) {
 			// lets resolve a customer from the file data container.  This will also create a customer if resolution fails and createCustomer is set
 			try {
-				owner = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
+				customer = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
 			} catch (DuplicateExtenalOrgException e) {
 				// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
 				String message = "Prooftest [" + fileData.getFileName() + "] rejected";
@@ -121,11 +122,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 			
 			// If the customer is still null then, we were unalbe to find or create a customer.  Let's assume we we're supposed to use no customer
-			if(owner == null) {
+			if(customer == null) {
 				logger.warn("Unable to find or create customer.  Assuming no customer.");
 				customerId = null;
 			} else {
-				customerId = owner.getId();
+				customerId = customer.getId();
 			}
 
 		}
@@ -141,7 +142,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			inspection = null;
 			try {
 				// find a product for this tenant, serial and customer
-				product = findOrCreateProduct(primaryOrg, inspector, serialNumber, owner, fileData);
+				product = findOrCreateProduct(primaryOrg, inspector, serialNumber, customer, fileData);
 			} catch (NonUniqueProductException e) {
 				writeLogMessage(tenant, "There are multiple Product with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
@@ -169,7 +170,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date inspectionDateRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(inspectionDate), inspector.getTimeZone());
 
 			// if we find a product then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, new UserSecurityFilter(owner, null));
+			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, inspector.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
 			for (Inspection insp: inspections) {
@@ -182,7 +183,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, inspector, owner, product, book, inspectionDateInUTC, fileData);
+				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
@@ -206,6 +207,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	}
 	
 	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) throws DuplicateExtenalOrgException {
+		// if the customer name is null or empty, we'll assume it's for no customer
+		if (StringUtils.isEmpty(customerName)) {
+			return null;
+		}
+		
 		LegacyFindOrCreateCustomerOrgHandler findOrCreateCust = getFindOrCreateCustomerHandler();
 		findOrCreateCust.setFindOnly(!createCustomer);
 	
@@ -331,7 +337,15 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData ) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
-		inspection.setOwner(owner);
+		
+		if (owner != null) {
+			inspection.setOwner(owner);
+		} else {
+			// if the passed in owner is null, use the one from the product
+			// this can happen if the proof test had no customer set, meaning this product is from the primary
+			inspection.setOwner(product.getOwner());
+		}
+		
 		inspection.setProduct(product);
 		inspection.setDate(inspectionDate);
 		inspection.setInspector(inspector);

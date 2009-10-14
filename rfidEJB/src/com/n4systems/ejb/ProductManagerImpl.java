@@ -154,7 +154,7 @@ public class ProductManagerImpl implements ProductManager {
 	 * Notice that the customer id passed in is not the "security filter"
 	 * customer id
 	 */
-	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long ownerId) throws NonUniqueProductException {
+	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException {
 		Product product = null;
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
@@ -162,10 +162,10 @@ public class ProductManagerImpl implements ProductManager {
 			QueryBuilder<Product> qBuilder = basicProductQuery(filter);
 			qBuilder.addWhere(Comparator.EQ, "serialNumber", "serialNumber", rawSerialNumber.trim(), WhereParameter.IGNORE_CASE);
 			
-			if (ownerId == null) {
-				qBuilder.addWhere(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "owner"));
+			if (customerId == null) {
+				qBuilder.addWhere(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "owner.customerOrg"));
 			} else {
-				qBuilder.addSimpleWhere("owner.id", ownerId);
+				qBuilder.addSimpleWhere("owner.customerOrg.id", customerId);
 			}
 
 			

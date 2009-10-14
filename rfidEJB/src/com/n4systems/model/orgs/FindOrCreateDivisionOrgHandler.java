@@ -7,6 +7,7 @@ import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.FuzzyResolver;
+import com.n4systems.util.StringUtils;
 
 public class FindOrCreateDivisionOrgHandler {
 	private ListLoader<DivisionOrg> loader;
@@ -71,6 +72,11 @@ public class FindOrCreateDivisionOrgHandler {
 
 	private DivisionOrg createDivision(CustomerOrg customer, String name, String code) { 
 		DivisionOrg division = new DivisionOrg();
+		
+		if (StringUtils.isEmpty(name) || StringUtils.isEmpty(code)) {
+			throw new InvalidExternalOrgException(String.format("Name/Code cannot be empty. Name [%s], Code [%s]", name, code));
+		}
+		
 		division.setTenant(customer.getTenant());
 		division.setParent(customer);
 		division.setCode(code);
