@@ -153,7 +153,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	}
 
 	public List<QueryFilter> getSearchFilters() {
-		return new ArrayList<QueryFilter>();
+		return searchDefiner.getSearchFilters();
 	}
 
 	public SecurityFilter getSecurityFilter() {
