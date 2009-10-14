@@ -78,10 +78,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public String getDisplayName() {
-		if (getParent() == null) {
-			return name;
-		}
-		return name  +  " <- " +  getParent().getDisplayName(); 
+		return name;
 	}
 	
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)

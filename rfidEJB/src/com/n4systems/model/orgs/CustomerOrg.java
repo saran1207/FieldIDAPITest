@@ -89,4 +89,8 @@ public class CustomerOrg extends ExternalOrg {
 		return enhanced;
 	}
 	
+	@Override
+	public String getDisplayName() {
+		return getCustomerOrg().getName() + " (" + getInternalOrg().getName() + ")";		
+	}
 }

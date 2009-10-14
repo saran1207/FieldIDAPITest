@@ -80,4 +80,11 @@ public class DivisionOrg extends ExternalOrg {
 		enhanced.setContact(enhance(getContact(), level));
 		return enhanced;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return getName() + ", " + getCustomerOrg().getDisplayName();		
+	}
+	
+	
 }
