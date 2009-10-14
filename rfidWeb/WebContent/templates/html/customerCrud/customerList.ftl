@@ -4,7 +4,6 @@ ${action.setPageType('customer','list')!}
 <div class="listFilter quickForm" >
 	<@s.form action="customerList" method="get">
 		<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
-		<@s.checkbox key="label.show_linked_customers" name="withLinkedCustomers" />
 		<div class="formAction">
 			<@s.submit key="hbutton.filter" />
 		</div>

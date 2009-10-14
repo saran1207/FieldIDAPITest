@@ -41,7 +41,6 @@ public class CustomerCrud extends AbstractCrud {
 	private CustomerOrg customer;
 	private Pager<CustomerOrg> customerPage;
 	private String listFilter;
-	private Boolean withLinkedCustomers = true;
 	private Pager<UserBean> userList;
 	private List<ListingPair> internalOrgList;
 	
@@ -142,7 +141,6 @@ public class CustomerCrud extends AbstractCrud {
 	public Pager<CustomerOrg> getPage() {
 		if (customerPage == null) {
 			CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
-			loader.setWithLinkedCustomers(withLinkedCustomers);
 			loader.setPage(getCurrentPage()).setPageSize(CRUD_RESULTS_PER_PAGE);
 			loader.setNameFilter(listFilter);
 			customerPage = loader.load();
@@ -229,11 +227,5 @@ public class CustomerCrud extends AbstractCrud {
 		return customer;
 	}
 	
-	public Boolean isWithLinkedCustomers() {
-		return withLinkedCustomers;
-	}
-
-	public void setWithLinkedCustomers(Boolean withLinkedCustomers) {
-		this.withLinkedCustomers = withLinkedCustomers;
-	}
+	
 }
