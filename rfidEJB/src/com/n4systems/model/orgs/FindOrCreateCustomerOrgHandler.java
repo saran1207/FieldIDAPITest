@@ -57,7 +57,7 @@ public class FindOrCreateCustomerOrgHandler {
 		 */
 		List<CustomerOrg> matchedCustomers = new ArrayList<CustomerOrg>();
 		for(CustomerOrg cust: customers) {
-			if(cust.getCode().equalsIgnoreCase(code)) {
+			if(cust.getCode() != null && cust.getCode().equalsIgnoreCase(code)) {
 				matchedCustomers.add(cust);
 			}
 		}

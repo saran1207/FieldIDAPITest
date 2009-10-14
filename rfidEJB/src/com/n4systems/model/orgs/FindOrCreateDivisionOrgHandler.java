@@ -37,7 +37,7 @@ public class FindOrCreateDivisionOrgHandler {
 		 */
 		List<DivisionOrg> matchedDivisions = new ArrayList<DivisionOrg>();
 		for(DivisionOrg div: divisions) {
-			if(div.getCode().equalsIgnoreCase(code)) {
+			if(div.getCode() != null && div.getCode().equalsIgnoreCase(code)) {
 				matchedDivisions.add(div);
 			}
 		}
