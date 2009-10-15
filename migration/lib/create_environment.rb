@@ -52,6 +52,13 @@ module ActiveRecord
   end
 end
 
+module ::JdbcSpec
+  module MySQL
+    def create_table(name, options = {}) #:nodoc:
+      super(name, {:options => "ENGINE=InnoDB"}.merge(options))
+    end
+  end
+end
 
 require "migration_pieces"
 
