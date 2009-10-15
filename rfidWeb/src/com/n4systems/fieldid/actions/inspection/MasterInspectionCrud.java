@@ -257,7 +257,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return (product != null) ? product.getId() : null;
 	}
 
-	public void setProductId(Long productId) {
+	public void setProductId(Long productId) {		
 		if (productId == null) {
 			product = null;
 
@@ -271,7 +271,10 @@ public class MasterInspectionCrud extends AbstractCrud {
 			}
 
 		}
-		masterInspection.setMasterProduct(product);
+		
+		if (masterInspection != null) {
+			masterInspection.setMasterProduct(product);
+		}
 	}
 
 	public Long getInspectionGroupId() {

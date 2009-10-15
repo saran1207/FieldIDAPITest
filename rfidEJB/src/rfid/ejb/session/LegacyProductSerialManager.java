@@ -356,7 +356,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			subProduct.setWeight(weight);
 
 			ProductSaver saver = new ProductSaver();
-			product = saver.update(em, subProduct.getProduct());
+			saver.update(em, subProduct.getProduct());
 			
 			weight++;
 		}

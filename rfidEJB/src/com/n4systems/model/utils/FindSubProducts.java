@@ -28,7 +28,8 @@ public class FindSubProducts {
 	
 	public List<SubProduct> findSubProducts() {
 		QueryBuilder<SubProduct> subProductQuery = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("masterProduct", product).addOrder("weight").addOrder("created").addOrder("id");
-		return persistenceManager.findAll(subProductQuery);
+		List<SubProduct> subProducts = persistenceManager.findAll(subProductQuery);
+		return subProducts;
 	}
 	
 	
