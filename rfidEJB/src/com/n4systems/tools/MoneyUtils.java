@@ -1,7 +1,10 @@
 package com.n4systems.tools;
 
+import java.math.BigDecimal;
+
 public class MoneyUtils {
 
+	private final BigDecimal oneHundred = new BigDecimal(100);
 	private final int PRECISION = 2;
 	private String zero;
 	
@@ -36,6 +39,15 @@ public class MoneyUtils {
 		return amount.substring(0, amount.length() - PRECISION) + "." + 
 				amount.substring(amount.length() - PRECISION, amount.length());
 		
+	}
+	
+	public Double fromCentsToDouble(Long cents) {
+		if( cents == null ) {
+			return null;
+		}
+
+		BigDecimal amount = new BigDecimal(cents);
+		return amount.divide(oneHundred).doubleValue();
 	}
 	
 }

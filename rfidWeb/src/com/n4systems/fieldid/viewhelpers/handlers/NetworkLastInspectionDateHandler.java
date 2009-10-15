@@ -9,17 +9,28 @@ public class NetworkLastInspectionDateHandler extends DateTimeHandler {
 
 	private LastInspectionDateLoader lastDateLoader = new LastInspectionDateLoader();	
 	
+	public NetworkLastInspectionDateHandler(AbstractAction action) {
+		super(action);
+	}
+	
 	@Override
-	public String handle(AbstractAction action, Long entityId, Object cell) {
+	public String handleWeb(Long entityId, Object cell) {
 		Long networkId = (Long)cell;
 		
-		Date lastDate = lastDateLoader.setNetworkId(networkId).load();
+		Date lastDate = getLastDate(networkId);
 		
-		return super.handle(action, entityId, lastDate);
+		return super.handleWeb(entityId, lastDate);
+	}
+	
+
+	@Override
+	public Object handleExcel(Long entityId, Object value) {
+		return getLastDate(entityId);
 	}
 
-	public boolean isLabel() {
-		return false;
+	private Date getLastDate(Long networkId) {
+		Date lastDate = lastDateLoader.setNetworkId(networkId).load();
+		return lastDate;
 	}
 
 }

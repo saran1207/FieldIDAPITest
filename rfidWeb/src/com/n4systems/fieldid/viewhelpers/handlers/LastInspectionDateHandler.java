@@ -10,24 +10,29 @@ public class LastInspectionDateHandler extends DateTimeHandler {
 
 	private final InspectionManager inspectionManager;
 		
-	public LastInspectionDateHandler() {
+	public LastInspectionDateHandler(AbstractAction action) {
+		super(action);
 		inspectionManager = ServiceLocator.getInspectionManager();
 	}
 
-	public String handle(AbstractAction action, Long entityId, Object value) {
+	public String handleWeb(Long entityId, Object value) {
 		String outputDate = "";
 		
-		Date lastDate = inspectionManager.findLastInspectionDate(entityId);
+		Date lastDate = getLastDate(entityId);
 		if (lastDate != null) {
-			return super.handle(action, entityId, lastDate);
+			return super.handleWeb(entityId, lastDate);
 		}
 		
 		return outputDate;
 	}
-	
-	public boolean isLabel() {
-		return false;
-	}
 
+	private Date getLastDate(Long entityId) {
+		Date lastDate = inspectionManager.findLastInspectionDate(entityId);
+		return lastDate;
+	}
 	
+	@Override
+	public Object handleExcel(Long entityId, Object value) {
+		return getLastDate(entityId);
+	}
 }

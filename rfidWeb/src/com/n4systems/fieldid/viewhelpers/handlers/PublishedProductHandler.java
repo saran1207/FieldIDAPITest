@@ -3,14 +3,18 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.product.PublishedState;
 
-public class PublishedProductHandler implements OutputHandler {
+public class PublishedProductHandler extends WebOutputHandler {
 
-	public String handle(AbstractAction action, Long entityId, Object value) {
-		return PublishedState.resolvePublishedState((Boolean)value).getPastTenseLabel();
+	protected PublishedProductHandler(AbstractAction action) {
+		super(action);
 	}
 
-	public boolean isLabel() {
-		return true;
+	public String handleWeb(Long entityId, Object value) {
+		return action.getText(PublishedState.resolvePublishedState((Boolean)value).getPastTenseLabel());
+	}
+
+	public Object handleExcel(Long entityId, Object value) {
+		return handleWeb(entityId, value);
 	}
 
 }

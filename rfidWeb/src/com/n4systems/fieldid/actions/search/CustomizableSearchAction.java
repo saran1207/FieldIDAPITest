@@ -20,7 +20,7 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingFactory;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
-import com.n4systems.fieldid.viewhelpers.handlers.OutputHandler;
+import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
 import com.n4systems.util.ConfigContext;
@@ -32,6 +32,7 @@ import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
@@ -44,7 +45,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private final String excelReportFileName;
 	private String searchId;
 	private SortedSet<ColumnMappingGroup> mappingGroups;
-	private Map<String, OutputHandler> cellHandlers = new HashMap<String, OutputHandler>();
+	private Map<String, WebOutputHandler> cellHandlers = new HashMap<String, WebOutputHandler>();
 	private TableView resultsTable;
 	private ProductTypeLister productTypes;
 	
@@ -77,7 +78,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	private void registerCellHandler(String columnId, String className) {
-		CellHandlerFactory handlerFactory = new CellHandlerFactory(getSessionUser().getDateFormat(), getSessionUser().getDateTimeFormat(), getSessionUser().getTimeZone());
+		CellHandlerFactory handlerFactory = new CellHandlerFactory(this);
 		
 		// ask our handlerFactory for a handler
 		cellHandlers.put(columnId, handlerFactory.getHandler(className));
@@ -121,6 +122,18 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return status;
 	}
 
+	protected ExcelOutputHandler[] prepareExcelHandlers() {
+		List<String> columnIds = getSelectedColumns();
+		
+		ExcelOutputHandler[] excelHandlers = new ExcelOutputHandler[columnIds.size()];
+		
+		for (int col = 0; col < excelHandlers.length; col++) {
+			excelHandlers[col] = cellHandlers.get(columnIds.get(col));
+		}
+		
+		return excelHandlers;
+	}
+	
 	public String doExport() {
 		String status = SUCCESS;
 
@@ -146,7 +159,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 				exportTask.setPackageName(reportFileName);
 				exportTask.setSearchDefiner(new ImmutableSearchDefiner<TableView>(this));
 				exportTask.setSecurityFilter(getContainer().getSecurityFilter());
-
+				exportTask.setCellHandlers(prepareExcelHandlers());
+				
 				TaskExecutor.getInstance().execute(exportTask);
 				
 				addActionMessage( getText( "message.emailshortly" ) );
@@ -371,11 +385,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 			Long entityId = getIdForRow(row);
 			Object cell = resultsTable.getCell(row, col);
 			
-			OutputHandler outputHandler = cellHandlers.get(columnId);
-			cellValue = outputHandler.handle(this, entityId, cell);
-			if (outputHandler.isLabel()) {
-				cellValue = getText(cellValue);
-			}
+			WebOutputHandler outputHandler = cellHandlers.get(columnId);
+			cellValue = outputHandler.handleWeb(entityId, cell);
 		} catch(Exception e) {
 			logger.error(String.format("Failed handling cell (%d, %d)", row, col), e);
 			cellValue = "";

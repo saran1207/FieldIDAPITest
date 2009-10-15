@@ -8,26 +8,25 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 /**
  * The default CustomizableSearchAction OutputHandler.  Provides handling of Dates and other special types.
  */
-public class DefaultHandler implements OutputHandler {
-	private String dateFormat; 
-	
-	public DefaultHandler(String dateFormat) {
-		this.dateFormat = dateFormat;
+public class DefaultHandler extends WebOutputHandler {
+
+	public DefaultHandler(AbstractAction action) {
+		super(action);
 	}
 	
-	public String handle(AbstractAction action, Long entityId, Object cell) {
+	public String handleWeb(Long entityId, Object cell) {
 		String cellString;
 		if (cell instanceof Date) {
-			cellString = (new SimpleDateFormat(dateFormat)).format((Date)cell);
+			cellString = (new SimpleDateFormat(action.getSessionUser().getDateFormat())).format((Date)cell);
 		} else {
 			cellString = String.valueOf(cell);
 		}
 		
 		return cellString;
 	}
-	
-	public boolean isLabel() {
-		return false;
+
+	public Object handleExcel(Long entityId, Object value) {
+		return value;
 	}
 
 }

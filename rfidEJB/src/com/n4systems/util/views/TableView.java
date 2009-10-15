@@ -35,9 +35,11 @@ public class TableView extends AbstractCollection<List<Object>> {
 		}
 	}
 	
-	public void append(TableView tableView) {
-		for (List<Object> row: tableView) {
-			table.add(row);
+	public void append(TableView other) {
+		for (int row = 0; row < other.getRowSize(); row++) {
+			table.add(other.getRow(row));
+			idList.add(other.getId(row));
+			entityList.add(other.getEntity(row));
 		}
 	}
 	

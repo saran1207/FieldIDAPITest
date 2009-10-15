@@ -20,7 +20,9 @@ import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
+import com.n4systems.util.views.TableViewExcelHandler;
 
 
 public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView> {
@@ -33,6 +35,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	private Long userId;
 	private String packageName;
 	private List<String> columnTitles = new ArrayList<String>();
+	private ExcelOutputHandler[] cellHandlers; 
 	
 	private int page = 0; 
 	@SuppressWarnings("unused")
@@ -58,7 +61,11 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 				page++;
 				
 			} while(page <= totalPages);
-					
+			
+			// we now need to run all the cell handlers on the table so the values are properly converted
+			TableViewExcelHandler tableHandler = new TableViewExcelHandler(cellHandlers);
+			tableHandler.handle(masterTable);
+			
 			// create an excel builder and add our data
 			ExcelBuilder excelBuilder = new ExcelBuilder(dateTimeDefiner);
 			excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
@@ -164,4 +171,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 		this.securityFilter = securityFilter;
 	}
 	
+	public void setCellHandlers(ExcelOutputHandler[] cellHandlers) {
+		this.cellHandlers = cellHandlers;
+	}
 }

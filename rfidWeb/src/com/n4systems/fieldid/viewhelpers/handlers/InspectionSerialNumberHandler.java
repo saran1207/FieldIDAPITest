@@ -4,11 +4,13 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Product;
 import com.n4systems.model.security.SecurityLevel;
 
-public class InspectionSerialNumberHandler implements OutputHandler {
+public class InspectionSerialNumberHandler extends WebOutputHandler {
 
-	public InspectionSerialNumberHandler() {}
+	public InspectionSerialNumberHandler(AbstractAction action) {
+		super(action);
+	}
 	
-	public String handle(AbstractAction action, Long entityId, Object value) {
+	public String handleWeb(Long entityId, Object value) {
 		Product product = (Product)value;
 		
 		SecurityLevel level = product.getSecurityLevel(action.getSecurityFilter().getOwner());
@@ -23,9 +25,11 @@ public class InspectionSerialNumberHandler implements OutputHandler {
 		
 		return serialNumber;
 	}
-	
-	public boolean isLabel() {
-		return false;
+
+	public Object handleExcel(Long entityId, Object value) {
+		Product product = (Product)value;
+		
+		return product.getSerialNumber();
 	}
 	
 }

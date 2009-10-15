@@ -4,11 +4,13 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Product;
 import com.n4systems.model.security.SecurityLevel;
 
-public class InspectionRfidNumberHandler implements OutputHandler {
+public class InspectionRfidNumberHandler extends WebOutputHandler {
 
-	public InspectionRfidNumberHandler() {}
+	public InspectionRfidNumberHandler(AbstractAction action) {
+		super(action);
+	}
 	
-	public String handle(AbstractAction action, Long entityId, Object value) {
+	public String handleWeb(Long entityId, Object value) {
 		Product product = (Product)value;
 		
 		if (product.getRfidNumber() == null) {
@@ -19,18 +21,20 @@ public class InspectionRfidNumberHandler implements OutputHandler {
 		SecurityLevel level = product.getSecurityLevel(action.getSecurityFilter().getOwner());
 		
 		// build the product info link for local products, just show the serial for network products
-		String serialNumber;
+		String rfidNumber;
 		if (level.isLocal()) { 
-			serialNumber = String.format("<a href='product.action?uniqueID=%d'>%s</a>", product.getId(), product.getRfidNumber());
+			rfidNumber = String.format("<a href='product.action?uniqueID=%d'>%s</a>", product.getId(), product.getRfidNumber());
 		} else {
-			serialNumber = product.getRfidNumber();
+			rfidNumber = product.getRfidNumber();
 		}
 		
-		return serialNumber;
+		return rfidNumber;
 	}
-	
-	public boolean isLabel() {
-		return false;
+
+	public Object handleExcel(Long entityId, Object value) {
+		Product product = (Product)value;
+		
+		return (product.getRfidNumber() != null) ? product.getRfidNumber() : "";
 	}
 	
 }
