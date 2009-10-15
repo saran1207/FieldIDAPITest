@@ -139,16 +139,13 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	 *            the productType to set
 	 */
 	public void setProductTypeId(Long productType) {
-		try {
 		if (productType == null) {
 			this.productType = null;
 		} else if (this.productType == null || productType.equals(this.productType.getId())) {
 			this.productType = persistenceManager.find(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter())
-														.addSimpleWhere("id", productType).addFetch("inspectionTypes"));
+														.addSimpleWhere("id", productType));
 		}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 	public ProductType getProductType() {
