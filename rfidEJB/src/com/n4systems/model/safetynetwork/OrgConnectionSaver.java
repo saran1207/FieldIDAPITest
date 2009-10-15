@@ -42,17 +42,17 @@ public class OrgConnectionSaver extends Saver<OrgConnection> {
 	}
 
 	private void createTypedConnections(EntityManager em, OrgConnection conn) {
-		TypedOrgConnection customerOrgConnection = createTypedConnection(conn, conn.getVendor(), conn.getCustomer());
+		TypedOrgConnection customerOrgConnection = createTypedConnection(conn, conn.getVendor(), conn.getCustomer(), ConnectionType.CUSTOMER);
 		em.persist(customerOrgConnection);
 		
 		
-		TypedOrgConnection vendorOrgConnection = createTypedConnection(conn, conn.getCustomer(), conn.getVendor());
+		TypedOrgConnection vendorOrgConnection = createTypedConnection(conn, conn.getCustomer(), conn.getVendor(), ConnectionType.VENDOR);
 		em.persist(vendorOrgConnection);
 	}
 
-	private TypedOrgConnection createTypedConnection(OrgConnection conn, InternalOrg owner, InternalOrg connectedOrg) {
+	private TypedOrgConnection createTypedConnection(OrgConnection conn, InternalOrg owner, InternalOrg connectedOrg, ConnectionType connectionType) {
 		TypedOrgConnection customerOrgConnection = new TypedOrgConnection(owner.getTenant(), owner);
-		customerOrgConnection.setConnectionType(ConnectionType.CUSTOMER);
+		customerOrgConnection.setConnectionType(connectionType);
 		customerOrgConnection.setConnectedOrg(connectedOrg);
 		customerOrgConnection.setOrgConnection(conn);
 		return customerOrgConnection;

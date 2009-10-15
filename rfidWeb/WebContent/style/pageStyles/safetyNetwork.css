@@ -34,3 +34,7 @@
 #safetyNetworkConnections div.typeAndCatalog {
 	float:right;	
 }
+
+.typeAndCatalog {
+	text-align:right;
+}
