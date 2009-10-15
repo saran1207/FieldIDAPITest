@@ -124,6 +124,15 @@ public class AddressInfo extends AbstractEntity {
 		return display;
 	}
 	
-	
+	public void copyFieldsTo(AddressInfo other) {
+		other.streetAddress = streetAddress;
+		other.city = city;
+		other.state = state;
+		other.country = country;
+		other.zip = zip;
+		other.phone1 = phone1;
+		other.phone2 = phone2;
+		other.fax1 = fax1;
+	}
 	
 }

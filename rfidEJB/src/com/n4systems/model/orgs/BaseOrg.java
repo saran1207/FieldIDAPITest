@@ -39,7 +39,7 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "addressinfo_id")
-	private AddressInfo addressInfo;
+	private AddressInfo addressInfo = new AddressInfo();
 	
 	@SuppressWarnings("unused")
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)

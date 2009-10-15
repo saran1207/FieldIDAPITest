@@ -58,12 +58,10 @@ abstract public class ExternalOrg extends BaseOrg {
 	
 	protected void updateAddressInfo(AddressInfo newAddressInfo) {
 		if (newAddressInfo != null) {
-			// address info is it's own entity, if this is the first save we need to wipe
-			// the id so it creates a new one.  If this is a merge, we'll capture the id
-			// and set it back on the addressinfo after it's been moved to this org
-			Long addressInfoId = (getAddressInfo() != null) ? getAddressInfo().getId() : null;
-			setAddressInfo(new AddressInfo(newAddressInfo));
-			getAddressInfo().setId(addressInfoId);
+			if (getAddressInfo() == null) {
+				setAddressInfo(new AddressInfo());
+			}
+			newAddressInfo.copyFieldsTo(getAddressInfo());
 		} else {
 			setAddressInfo(null);
 		}

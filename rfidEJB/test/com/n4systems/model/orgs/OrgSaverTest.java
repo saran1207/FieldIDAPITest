@@ -3,13 +3,16 @@ package com.n4systems.model.orgs;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.easymock.EasyMock;
 import org.junit.Test;
 
+import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.testutils.DummyEntityManager;
 
 
@@ -39,42 +42,68 @@ public class OrgSaverTest {
 	}
 	
 	@Test
-	public void update_linked_fields_sets_the_org_and_updates() {
+	public void update_internal_org_updates_linked_orgs() {
+		PrimaryOrg mainOrg = OrgBuilder.aPrimaryOrg().buildPrimary();
 		
-		class TestOrgSaver extends OrgSaver {
-			private int updateCount = 0;
-			private List<ExternalOrg> linkedOrgs = Arrays.asList(new CustomerOrg(), new DivisionOrg());
-			
-			public TestOrgSaver() {
-				super(null);
-			}
-			
-			protected void updateLinkedFields(EntityManager em, InternalOrg org) {
-				super.updateLinkedFields(em, org);
-				
-				assertEquals("Linked orgs were not updated", linkedOrgs.size(), updateCount);
-				
-				for (ExternalOrg extOrg: linkedOrgs) {
-					assertEquals("Org was not set on link", org, extOrg.getLinkedOrg());
-				}
-			}
-			
-			public List<ExternalOrg> loadLinkedOrgs(EntityManager em, InternalOrg org) {
+		final List<ExternalOrg> linkedOrgs = Arrays.asList(OrgBuilder.aCustomerOrg().buildCustomerAsExternal(), OrgBuilder.aCustomerOrg().buildCustomerAsExternal());
+		
+		OrgSaver saver = new OrgSaver(new LinkedOrgListLoader() {
+			protected List<ExternalOrg> load(EntityManager em) {
 				return linkedOrgs;
 			}
-
-			@Override
-			protected BaseOrg update(EntityManager em, BaseOrg entity) {
-				updateCount++;
-				return entity;
+		});
+		
+		EntityManager em = EasyMock.createMock(EntityManager.class);
+		
+		EasyMock.expect(em.merge(mainOrg)).andReturn(mainOrg);
+		em.persist(EasyMock.anyObject());
+		
+		for (ExternalOrg linkedOrg: linkedOrgs) {
+			EasyMock.expect(em.merge(linkedOrg)).andReturn(linkedOrg);
+			em.persist(EasyMock.anyObject());
+		}
+		
+		EasyMock.replay(em);
+		
+		saver.update(em, mainOrg);
+	}
+	
+	@Test
+	public void update_creates_and_persists_null_address_info() {
+		PrimaryOrg mainOrg = OrgBuilder.aPrimaryOrg().buildPrimary();
+		
+		OrgSaver saver = new OrgSaver(new LinkedOrgListLoader() {
+			@SuppressWarnings("unchecked")
+			protected List<ExternalOrg> load(EntityManager em) {
+				return Collections.EMPTY_LIST;
 			}
-		};
+		});
 		
-		TestOrgSaver saver = new TestOrgSaver();
+		mainOrg.setAddressInfo(null);
 		
-		PrimaryOrg testOrg = new PrimaryOrg();
-		testOrg.setId(1L);
+		EntityManager em = EasyMock.createMock(EntityManager.class);
 		
-		saver.updateLinkedFields(null, testOrg);
+		EasyMock.expect(em.merge(mainOrg)).andReturn(mainOrg);
+		em.persist(EasyMock.anyObject());
+		EasyMock.replay(em);
+		
+		BaseOrg newMain = saver.update(em, mainOrg);
+		assertNotNull(newMain.getAddressInfo());
+	}
+	
+	@Test
+	public void save_creates_null_address_info() {
+		PrimaryOrg mainOrg = OrgBuilder.aPrimaryOrg().buildPrimary();
+		
+		OrgSaver saver = new OrgSaver();
+		
+		mainOrg.setAddressInfo(null);
+		
+		EntityManager em = EasyMock.createMock(EntityManager.class);
+		em.persist(mainOrg);
+		EasyMock.expect(em.merge(mainOrg)).andReturn(mainOrg);
+		
+		saver.save(em, mainOrg);
+		assertNotNull(mainOrg.getAddressInfo());
 	}
 }

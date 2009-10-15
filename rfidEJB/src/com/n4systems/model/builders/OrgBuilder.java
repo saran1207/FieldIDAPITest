@@ -6,6 +6,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
@@ -37,7 +38,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		return new OrgBuilder(OrgType.DIVISION, null, "first_division", null, "fdiv", null, aCustomerOrg().build());
 	}
 	
-
 	public OrgBuilder(OrgType type, Tenant tenant, String name, AddressInfo addressInfo, String code, Contact contact, BaseOrg parent) {
 		super();
 		this.type = type;
@@ -49,8 +49,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		this.parent = parent;
 	}
 	
-	
-
 	public OrgBuilder withParent(BaseOrg parent) {
 		return new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent);
 	}
@@ -58,8 +56,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	public OrgBuilder withName(String name) {
 		return new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent);
 	}
-
-	
 	
 	@Override
 	public BaseOrg build() {
@@ -67,35 +63,69 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		
 		switch (type) {
 			case PRIMARY:
-				org = new PrimaryOrg();
-				org.setTenant(tenant);
+				org = buildPrimary();
 				break;
 			case SECONDARY:
-				org = new SecondaryOrg();
-				((SecondaryOrg)org).setPrimaryOrg((PrimaryOrg)parent);
-				org.setTenant(parent.getTenant());
+				org = buildSecondary();
 				break;
 			case CUSTOMER:
-				org = new CustomerOrg();
-				((CustomerOrg)org).setCode(code);
-				((CustomerOrg)org).setContact(contact);
-				((CustomerOrg)org).setParent((InternalOrg)parent);
-				org.setTenant(parent.getTenant());
+				org = buildCustomer();
 				break;
 			case DIVISION:
-				org = new DivisionOrg();
-				((DivisionOrg)org).setCode(code);
-				((DivisionOrg)org).setContact(contact);
-				((DivisionOrg)org).setParent((CustomerOrg)parent);
-				org.setTenant(parent.getTenant());
+				org = buildDivision();
 				break;
 		}
 		
+		return org;
+	}
+	
+	private void build(BaseOrg org) {
 		org.setId(id);
 		org.setName(name);
 		org.setAddressInfo(addressInfo);
-		
+	}
+	
+	public PrimaryOrg buildPrimary() {
+		PrimaryOrg org = new PrimaryOrg();
+		build(org);
+		org.setTenant(tenant);
 		return org;
+	}
+	
+	public SecondaryOrg buildSecondary() {
+		SecondaryOrg org = new SecondaryOrg();
+		build(org);
+		org.setPrimaryOrg((PrimaryOrg)parent);
+		org.setTenant(parent.getTenant());
+		return org;
+	}
+	
+	public CustomerOrg buildCustomer() {
+		CustomerOrg org = new CustomerOrg();
+		build(org);
+		org.setCode(code);
+		org.setContact(contact);
+		org.setParent((InternalOrg)parent);
+		org.setTenant(parent.getTenant());
+		return org;
+	}
+	
+	public DivisionOrg buildDivision() {
+		DivisionOrg org = new DivisionOrg();
+		build(org);
+		org.setCode(code);
+		org.setContact(contact);
+		org.setParent((CustomerOrg)parent);
+		org.setTenant(parent.getTenant());
+		return org;
+	}
+	
+	public ExternalOrg buildCustomerAsExternal() {
+		return buildCustomer();
+	}
+	
+	public ExternalOrg buildDivisionAsExternal() {
+		return buildDivision();
 	}
 
 	public OrgBuilder setAddressInfo(AddressInfo addressInfo) {
