@@ -5,54 +5,94 @@
 		${action.setPageType('customer','add')!}
 	</#if>
 </title>
-<@s.form action="customerEdit!save" cssClass="inputForm oneColumn" theme="css_xhtml">
+<@s.form action="customerEdit!save" cssClass="fullForm " theme="fieldid">
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="currentPage" />
-	
-	<div class="formRowHolder">
-		<@s.textfield key="label.customerid" required="true" name="customerId" size="30" labelposition="left" />
+	<#if customer.linkedOrg?exists>
+		<p class="instructions">
+			<@s.text name="instructions.linked_customer_edit"/>
+		</p>
+	</#if>
+	<div class="multiColumn">
+		<div class="infoBlock">
+			<div class="infoSet">
+				<label class="label" for="customerId"><@s.text name="label.customerid"/> <#include "../common/_requiredMarker.ftl"/></label>
+				<@s.textfield  name="customerId" size="30" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="customerName"><@s.text name="label.customername"/> <#include "../common/_requiredMarker.ftl"/></label>
+				<@s.textfield name="customerName" size="50" cssClass="linkedCustomerControlled" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="parentOrgId"><@s.text name="label.organizationalunit"/> <#include "../common/_requiredMarker.ftl"/></label>
+				<@s.select  name="parentOrgId" list="parentOrgs" listKey="id" listValue="name" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="contactName"><@s.text name="label.contactname"/></label>
+				<@s.textfield  name="contactName" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="accountManagerEmail"><@s.text name="label.contactemail"/></label>
+				<@s.textfield  name="accountManagerEmail" />
+			</div>
+		</div>
+		<div class="infoBlock">
+			<div class="infoSet">
+				<label class="label" for="addressInfo.streetAddress"><@s.text name="label.streetaddress"/></label>
+				<@s.textfield  name="addressInfo.streetAddress" cssClass="linkedCustomerControlled"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.city"><@s.text name="label.city"/></label>
+				<@s.textfield  name="addressInfo.city" cssClass="linkedCustomerControlled" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.state"><@s.text name="label.state"/></label>
+				<@s.textfield  name="addressInfo.state" cssClass="linkedCustomerControlled"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.zip"><@s.text name="label.zip"/></label>
+				<@s.textfield  name="addressInfo.zip" cssClass="linkedCustomerControlled" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.country"><@s.text name="label.country"/></label>
+				<@s.textfield  name="addressInfo.country" cssClass="linkedCustomerControlled" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.phone1"><@s.text name="label.phone1"/></label>
+				<@s.textfield  name="addressInfo.phone1" cssClass="linkedCustomerControlled"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.phone2"><@s.text name="label.phone2"/></label>
+				<@s.textfield  name="addressInfo.phone2" cssClass="linkedCustomerControlled" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="addressInfo.fax1"><@s.text name="label.fax"/></label>
+				<@s.textfield  name="addressInfo.fax1" cssClass="linkedCustomerControlled"/>
+			</div>
+		</div>
 	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.customername" required="true" name="customerName" size="50" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.select key="label.organizationalunit" name="parentOrgId" list="parentOrgs" listKey="id" listValue="name" labelposition="left" required="true"/>
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.contactname" name="contactName" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.contactemail" name="accountManagerEmail" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.streetaddress" name="addressInfo.streetAddress" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.city" name="addressInfo.city" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.state" name="addressInfo.state" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.zip" name="addressInfo.zip" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.country" name="addressInfo.country" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.phone1" name="addressInfo.phone1" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.phone2" name="addressInfo.phone2" labelposition="left" />
-	</div>
-	<div class="formRowHolder">
-		<@s.textfield key="label.fax" name="addressInfo.fax1" labelposition="left" />
-	</div>
-	<div class="formAction" >
-		<a href="<@s.url action="customerList" currentPage="${currentPage}" listFilter="${listFilter!}"/>" ><@s.text name="label.backtocustomerlist"/></a> 
+	<div class="actions" >
+		<@s.submit  key="label.save"/> 
+		
+		<@s.text name="label.or"/>  
+		
 		<#if uniqueID?exists>  
-			| <a href="<@s.url action="customerShow" uniqueID="${uniqueID!}" currentPage="${currentPage!}" listFilter="${listFilter!}"/>" ><@s.text name="hbutton.cancel" /></a>
-		</#if> 
-		<@s.submit key="hbutton.save" />
+			<a href="<@s.url action="customerShow" uniqueID="${uniqueID!}" currentPage="${currentPage!}" listFilter="${listFilter!}"/>" ><@s.text name="hbutton.cancel" /></a>
+		<#else>
+			<a href="<@s.url action="customerList" currentPage="${currentPage}" listFilter="${listFilter!}"/>" ><@s.text name="label.cancel"/></a>
+		</#if>
+		 
+		
 	</div>
 </@s.form>
+
+
+<head>
+	<#if customer.linkedOrg?exists>
+		<@n4.includeScript>
+			document.observe("dom:loaded", function() {
+					$$(".linkedCustomerControlled").invoke("disable");
+				});
+		</@n4.includeScript>
+	</#if>
+</head>
