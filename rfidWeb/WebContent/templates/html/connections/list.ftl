@@ -4,28 +4,34 @@ ${action.setPageType('safety_network_connections', 'list')!}
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 </head>
 
-<ul id="safetyNetworkConnections">
+
+<table class="list" id="safetyNetworkConnections">
+	<tr>
+		<th></th>
+		<th><@s.text name="label.company_name"/></th>
+		<th><@s.text name="label.connection_type"/></th>
+		<th><@s.text name="label.catalog"/></th>
+		
+	</tr>
+	
 	<#list connections.list as connection>
-		<li>
-			<div class="connectionLogo">
+		<tr>
+			<td>
 				<#assign tenant=connection.connectedOrg.tenant/>
 				<#include "../common/_displayTenantLogo.ftl"/>
-			</div> 
-			<div class="connectionName">
+			</td>
+			<td>
 			${(connection.connectedOrg.primaryOrg.name?html)!}<br/>
 			${(connection.connectedOrg.secondaryOrg.name?html)!}
-			</div>
-			<div class="typeAndCatalog">
-				<span class="connectionType">
-					<@s.text name="${connection.connectionType.label}"/>
-				</span>
-				<br/>
-				<span class="catalogLink">
-					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
-						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>"><@s.text name="label.view_catalog"/></a>
-					</#if>
-				</span>
-			</div>
-		</li>
+			</td>
+			<td><@s.text name="${connection.connectionType.label}"/></td>
+			<td>
+				<#if action.hasAPublishedCatalog(connection.connectedOrg)>
+					<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>"><@s.text name="label.view_catalog"/></a>
+				<#else>
+					<@s.text name="label.not_published"/>
+				</#if>
+			</td>
+		</tr>
 	</#list>
-</ul>
+</table>

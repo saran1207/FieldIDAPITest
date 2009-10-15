@@ -310,6 +310,10 @@ h2 a {
 	background-color: #D0DAFD;
 }
 
+.list tr:hover td {
+	color: #333;
+}
+
 .list td.name {
 	vertical-align: top;
 }
