@@ -41,7 +41,7 @@ public class NetSuiteContractPriceHandler {
 					
 					if (contractLength != null) {						
 						GetPricingDetailsResponse response = getPricingDetailsFromNetsuite(populateSubscription(paymentOption, contractLength));									
-						contractPrices.add(populateNetSuiteContractPrice(contractLength.getNsrecordid(), paymentOption, productInformation.getSyncId(), response.getPricing().getStandardPrice()));
+						contractPrices.add(populateNetSuiteContractPrice(contractLength.getNsrecordid(), paymentOption, productInformation.getSyncId(), response.getPricing().getPrice()));
 					}
 				} else {
 					contractPrices.add(populateNetSuiteContractPrice(productInformation.getExternalId(), paymentOption, productInformation.getSyncId(), 0F));

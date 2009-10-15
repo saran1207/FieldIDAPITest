@@ -51,6 +51,9 @@ public class PricingDetails implements Pricing {
 	public Float getDiscountPrice() {
 		return disc_price;
 	}
+	public Float getPrice() {
+		return disc_price != null ? disc_price : std_price;
+	}
 	public Float getDiscountTotal() {
 		return discount_total;
 	}

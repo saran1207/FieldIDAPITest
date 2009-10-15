@@ -28,6 +28,10 @@ public class LocalPricing implements Pricing {
 	public Float getDiscountPrice() {
 		return 95.00F;
 	}
+	
+	public Float getPrice() {
+		return 95.00F;
+	}
 
 	public Float getDiscountTotal() {
 		return 15.00F;

@@ -6,6 +6,7 @@ public interface Pricing {
 	public PaymentFrequency getFrequency();
 	public Float getStoragePrice();
 	public Float getDiscountPrice();
+	public Float getPrice();
 	public Integer getDiscountMonths();
 	public Float getContractValue();
 	public Float getDiscountTotal();

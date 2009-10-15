@@ -5,10 +5,17 @@ function updatePriceClick(event) {
 }
 
 function updatePrice() {
+	var elementNames = new Hash();
+
+	var form = $('mainContent').serialize(true);
+	
 	var parameters = new Object();
+	
 	$$(".changesPrice").each(function(element) {
-		parameters[element.name] = element.getValue();
+		parameters[element.name] = form[element.name];
 	});
+
+	
 	getResponse(pricingUrl, "get", parameters);
 }
 
