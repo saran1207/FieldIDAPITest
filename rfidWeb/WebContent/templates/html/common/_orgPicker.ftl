@@ -5,7 +5,7 @@
 		<div class="selections">
 			<a href="#" id="switchOrgBrowser"><@s.text name="label.browse"/></a>
 			<a href="#" id="switchOrgSearch"><@s.text name="label.search"/></a>
-			<a href="#" id="closeOrgPicker">x</a>
+			<a href="#" id="closeOrgPicker"><img src="<@s.url value="/images/x.gif"/>" alt="x"/></a>
 		</div>
 		<div id="orgSearch" style="display:none">
 			<@s.form action="orgs" namespace="/ajax" theme="fieldid" >
