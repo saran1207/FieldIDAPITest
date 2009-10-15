@@ -33,7 +33,7 @@ ${action.setPageType('job', 'list')!}
 			<th><@s.text name="label.type"/></th>
 			<th><@s.text name="label.projectid"/></th>
 			<th><@s.text name="label.title" /></th>
-			
+			<th><@s.text name="label.organization" /></th>
 			<th><@s.text name="label.customer" /></th>
 			<th><@s.text name="label.division" /></th>
 			
@@ -51,7 +51,7 @@ ${action.setPageType('job', 'list')!}
 				<td>${project.eventJob?string(action.getText("label.eventjob"), action.getText("label.assetjob"))}</td>
 				<td>${project.projectID?html}</td>
 				<td><a href="<@s.url action="job" uniqueID="${project.id}" />" >${project.name?html}</td>
-				
+				<td>${(project.owner.internalOrg.name?html)!}</td>
 				<td>${(project.owner.customerOrg.name?html)!}</td>
 				<td>${(project.owner.divisionOrg.name?html)!}</td>
 				<td>${action.formatDateTime(project.started)}</td>

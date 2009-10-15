@@ -8,7 +8,11 @@
 	<#else>	
 		<h2><@s.text name="label.customerinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
 	</#if>
-		
+	
+	<p>
+		<label><@s.text name="label.organization"/></label>
+		<span class="fieldValue">${(product.owner.internalOrg.name)!}</span>
+	</p>
 	<p>
 		<label><@s.text name="label.customername"/></label>
 		<span class="fieldValue">${(product.owner.customerOrg.name)!}</span>

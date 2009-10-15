@@ -49,6 +49,10 @@ ${action.setPageType('job', 'show')!}
 				<span>${(project.name?html) !}</span>
 			</div>
 			
+			<div class="infoSet">
+				<label for="organization"><@s.text name="label.organization"/> </label>
+				<span>${(project.owner.internalOrg.name?html) !}</span>
+			</div>
 			
 			<div class="infoSet">
 				<label for="customer"><@s.text name="label.customer"/> </label>

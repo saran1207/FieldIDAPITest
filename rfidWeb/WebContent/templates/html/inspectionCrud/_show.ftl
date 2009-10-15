@@ -55,6 +55,10 @@
 	
 	<h2><@s.text name="label.customerinformation"/></h2>
 	
+	<p>
+		<label><@s.text name="label.organization"/></label>
+		<span>${(inspection.owner.internalOrg.name)!?html}</span>
+	</p>
 	
 	<p>
 		<label><@s.text name="label.customer"/></label>
