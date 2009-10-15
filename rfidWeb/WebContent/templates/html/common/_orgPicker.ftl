@@ -8,12 +8,15 @@
 			<a href="#" id="closeOrgPicker">x</a>
 		</div>
 		<div id="orgSearch" style="display:none">
-			<@s.form action="orgs" namespace="/ajax" theme="fieldid" cssClass="ajaxSearch">
+			<@s.form action="orgs" namespace="/ajax" theme="fieldid" >
 				<@s.hidden name="orgTypeFilter" cssClass="orgFilter"/>
 				<div class="infoSet"><@s.textfield name="searchName" class="searchName" id="orgSearchName"/> <@s.submit key="label.search"/></div>
 			</@s.form>
 			<div id="orgPickerResults">
-			</div>	
+			</div>
+			<div id="orgPickerLoading" style="display:none">	
+				<#include "/templates/html/common/_loadingImage.ftl"/>	<@s.text name="label.loading"/>
+			</div>
 		</div>
 		<div id="orgBrowser" >
 			<@s.form action="orgList" id="orgBrowserForm" name="orgBrowserForm" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
@@ -35,6 +38,9 @@
 					<@s.submit key="label.select" id="selectOrg"/> <@s.submit key="label.cancel" id="cancelOrgSelect"/>
 				</div>	
 			</@s.form>
+			<div id="orgBrowserLoading" style="display:none">
+				<#include "/templates/html/common/_loadingImage.ftl"/>	<@s.text name="label.loading"/>
+			</div>
 		</div>
 	</div>
 </#assign>
@@ -44,7 +50,7 @@
 	document.observe("dom:loaded", function() {
 		if ($('orgSelector') == null) {
 			$('fieldidBody').insert("${name?js_string}");
-			$$('.ajaxSearch').each(function(element) {element.observe("submit", ajaxFormEvent)});
+			$('orgs').observe("submit", searchForOrgs);
 			$('selectOrg').observe("click", selectOrg);
 			$('cancelOrgSelect').observe("click", cancelOrgBrowse);
 			$('closeOrgPicker').observe("click", cancelOrgBrowse);

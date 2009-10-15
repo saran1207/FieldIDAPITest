@@ -20,3 +20,4 @@
 $("orgPickerResults").update("${orgList?js_string}");
 
 $$("#orgPickerResults a").each(function(element) { element.observe('click', updateOwner); });
+$('orgPickerLoading').hide();

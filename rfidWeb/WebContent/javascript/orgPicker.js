@@ -29,6 +29,8 @@ function setUpOrgBrowser(orgId) {
 	}
 }
 function getUpdatedOrgBrowser(orgId) {
+	$('selectOrg').disable();
+	$('orgBrowserLoading').show();
 	var params = new Object();
 	params.ownerId = orgId;
 	params.orgTypeFilter =$('orgFilter').getValue();
@@ -36,11 +38,16 @@ function getUpdatedOrgBrowser(orgId) {
 	$('orgPickerCurrentOrg').value = orgId;
 }
 
+function resultsReturned() {
+	$('selectOrg').enable();
+	$('orgBrowserLoading').hide();
+}
+
 function updateOrgBrowser(orgLists) {
 	updateDropDown($('orgList'), orgLists.orgList, orgLists.orgId);
 	updateDropDown($('customerList'), orgLists.customerList, orgLists.customerId);
 	updateDropDown($('divisionList'), orgLists.divisionList, orgLists.divisionId);
-	
+	resultsReturned();
 }
 
 
@@ -175,6 +182,12 @@ function openOrgSearch() {
 	$('switchOrgBrowser').removeClassName("selected");
 }
 
+function searchForOrgs(event) {
+	$('orgPickerLoading').show();
+	$('orgPickerResults').update("");
+	ajaxFormEvent(event);
+}
+
 
 function attachOrgEvents(containerCssRule) {
 	$$(containerCssRule + " .searchOwner").each(function(element) {
@@ -186,6 +199,7 @@ function attachOrgEvents(containerCssRule) {
 	});
 }
 	
+
 
 document.observe("dom:loaded", function() {
 	attachOrgEvents("body");
