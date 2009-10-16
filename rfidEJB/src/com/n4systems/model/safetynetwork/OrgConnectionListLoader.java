@@ -25,7 +25,7 @@ public class OrgConnectionListLoader extends ListLoader<OrgConnection> {
 
 	@Override
 	protected List<OrgConnection> load(EntityManager em, SecurityFilter filter) {
-		List<OrgConnection> connections = OrgConnectionQueryBuilderFactory.createListQuery(filter, connectionListType).getResultList(em);
+		List<OrgConnection> connections = OrgConnectionQueryBuilderFactory.createAllConnectionsQuery(filter, connectionListType).getResultList(em);
 		return connections;
 	}
 	

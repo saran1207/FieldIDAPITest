@@ -52,7 +52,7 @@ public class SafetyNetworkProductLoader extends SecurityFilteredLoader<Product> 
 		
 		// if the owner was for an ExternalOrg, we need to make sure the linked org 
 		// is one I'm allowed to see
-		if (!((ExternalOrg)product.getOwner()).getLinkedOrg().allowsAccessFor(filter.getOwner())) {
+		if (!filter.getOwner().allowsAccessFor(((ExternalOrg)product.getOwner()).getLinkedOrg())) {
 			throw new SecurityException(String.format("Org [%s] attempted access to Product for org [%s] ", filter.getOwner().toString(), product.getOwner().toString()));
 		}
 		

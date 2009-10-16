@@ -13,7 +13,7 @@ public class OrgConnectionQueryBuilderFactory {
 		}
 	}
 	
-	public static QueryBuilder<OrgConnection> createListQuery(SecurityFilter filter, OrgConnectionType connectionType) {
+	public static QueryBuilder<OrgConnection> createAllConnectionsQuery(SecurityFilter filter, OrgConnectionType connectionType) {
 		checkFilter(filter);
 		
 		// create this query builder using an OrgConnection security filter.  note that we apply the security to the opposite side since 
@@ -24,8 +24,8 @@ public class OrgConnectionQueryBuilderFactory {
 		return builder;
 	}
 	
-	public static QueryBuilder<OrgConnection> createSingleQuery(SecurityFilter filter, OrgConnectionType connectionType, Long linkedOrgId) {
-		QueryBuilder<OrgConnection> builder = createListQuery(filter, connectionType);
+	public static QueryBuilder<OrgConnection> createSingleOrgQuery(SecurityFilter filter, OrgConnectionType connectionType, Long linkedOrgId) {
+		QueryBuilder<OrgConnection> builder = createAllConnectionsQuery(filter, connectionType);
 
 		
 		if (connectionType.isCustomer()) {

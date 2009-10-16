@@ -1,5 +1,7 @@
 package com.n4systems.model.safetynetwork;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.junit.Test;
@@ -17,7 +19,7 @@ public class LinkedOrgLoaderTest {
 
 		LinkedOrgLoader loader = new LinkedOrgLoader(ownerFilter, new OrgConnectionByLinkedOrgLoader(null, null) {
 			@Override
-			protected OrgConnection load(EntityManager em, SecurityFilter filter) {
+			protected List<OrgConnection> load(EntityManager em, SecurityFilter filter) {
 				return null;
 			}
 		});

@@ -1,9 +1,11 @@
 package com.n4systems.model.safetynetwork;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.persistence.loaders.SecurityFilteredLoader;
+import com.n4systems.persistence.loaders.ListLoader;
 
 /**
  * Abstract loader containing the logic for securely loading a single customer or vendor OrgConnection.
@@ -13,7 +15,7 @@ import com.n4systems.persistence.loaders.SecurityFilteredLoader;
  * @see VendorOrgConnectionsLoader
  * @see CustomerOrgConnectionsLoader
  */
-public class OrgConnectionByLinkedOrgLoader extends SecurityFilteredLoader<OrgConnection> {
+public class OrgConnectionByLinkedOrgLoader extends ListLoader<OrgConnection> {
 	private Long linkedOrgId;
 	private final OrgConnectionType connectionType;
 	
@@ -23,9 +25,9 @@ public class OrgConnectionByLinkedOrgLoader extends SecurityFilteredLoader<OrgCo
 	}
 
 	@Override
-	protected OrgConnection load(EntityManager em, SecurityFilter filter) {
-		OrgConnection connection = OrgConnectionQueryBuilderFactory.createSingleQuery(filter, connectionType, linkedOrgId).getSingleResult(em);
-		return connection;
+	protected List<OrgConnection> load(EntityManager em, SecurityFilter filter) {
+		List<OrgConnection> connections = OrgConnectionQueryBuilderFactory.createSingleOrgQuery(filter, connectionType, linkedOrgId).getResultList(em);
+		return connections;
 	}
 	
 	public OrgConnectionByLinkedOrgLoader setLinkedOrgId(Long linkedOrgId) {

@@ -70,7 +70,7 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
 		List<Product> securedProducts = new ArrayList<Product>();
 		
 		BaseOrg myOwner = filter.getOwner();
-		ExternalOrg productOwner;
+		InternalOrg productLinkedOwner;
 		for (Product unsecureProduct: unsecuredProducts) {
 			
 			// InternalOrg are always allowed
@@ -79,10 +79,10 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
 				
 			// if we have an ExternalOrg, it must be linked (otherwise it couldn't be for me)
 			} else if (unsecureProduct.getOwner().isLinked()) {
-				productOwner = (ExternalOrg)unsecureProduct.getOwner();
+				productLinkedOwner = ((ExternalOrg)unsecureProduct.getOwner()).getLinkedOrg();
 				
 				// now we need to check if the linked org, is one that I can see
-				if (productOwner.getLinkedOrg().allowsAccessFor(myOwner)) {
+				if (myOwner.allowsAccessFor(productLinkedOwner)) {
 					securedProducts.add(unsecureProduct);
 				}
 			}
