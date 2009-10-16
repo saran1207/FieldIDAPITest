@@ -37,7 +37,7 @@
 		</@s.iterator>
 	</div>
 </@s.form>
-<div class="stepAction">
+<div class="stepAction" id="step4Actions">
 	<@s.form action="productMultiAddCreate" namespace="/" id="masterForm" theme="fieldid">
 		<@s.submit key="label.save_and_create" onclick="mergeAndSubmit('step1form', 'step4form', 'masterForm'); return false;"/>
 		<@s.text name="label.or"/> <a href="#step3" onclick="backToStep3(); return false;"><@s.text name="label.back_to_step"/> 3</a>

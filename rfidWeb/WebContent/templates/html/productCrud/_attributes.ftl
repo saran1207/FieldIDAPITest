@@ -17,8 +17,10 @@
 	<@s.iterator value="${fieldPrefix}InfoFields" id="infoField" status="stat" >
 		<#if requires?exists && requires == 'true' && infoField.required  >
 			<#assign required='true' />
+			<#assign requiredClass='requiredField'/>
 		<#else>
 			<#assign required='false' />
+			<#assign requiredClass=''/>
 		</#if>
 		
 		<@s.if test="${prefix}InfoOptions[${stat.index}].name == null" >
@@ -35,14 +37,14 @@
 				<#if infoField.retired >
 					<label class="label">${infoField.name} (<@s.text name="label.retired"/>)</label>
 					<span id="${infoField.uniqueID}" class="attribute fieldHolder" >
-						<@s.label id="${infoField.uniqueID}" cssClass="attribute" name="${prefix}InfoOptions[${stat.index}].name" />
+						<@s.label id="${infoField.uniqueID}" cssClass="attribute ${requiredClass}" name="${prefix}InfoOptions[${stat.index}].name" />
 						<@s.hidden name="${prefix}InfoOptions[${stat.index}].name" />
 						<@s.hidden name="${prefix}InfoOptions[${stat.index}].uniqueIDString" /> 
 					</span>
 				<#else>
 					<label class="label">${infoField.name?html} <#if  requires?exists && requires == 'true' && infoField.required ><#include "../common/_requiredMarker.ftl"/></#if> </label>	
 					<#if infoField.fieldType == "selectbox" || infoField.fieldType == "combobox" >
-						<@s.select cssClass="attribute"  list="%{ getComboBoxInfoOptions( ${fieldPrefix}InfoFields[${stat.index}], ${prefix}InfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="${prefix}InfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
+						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( ${fieldPrefix}InfoFields[${stat.index}], ${prefix}InfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="${prefix}InfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
 							<#if autoAttributeInputFields?exists && autoAttributeInputFields.contains( infoField ) >
 							 	<@s.param name="onchange">${changeFunction}</@s.param>
 							</#if>  
@@ -64,11 +66,11 @@
 					</#if>
 					<#if infoField.fieldType == "textfield" >
 					  	<#if !infoField.usingUnitOfMeasure >
-						  	<@s.textfield id="${infoField.uniqueID}" cssClass="attribute"  name="${prefix}InfoOptions[${stat.index}].name"  required="${required}"  theme="fieldid"/>
+						  	<@s.textfield id="${infoField.uniqueID}" cssClass="attribute  ${requiredClass}"  name="${prefix}InfoOptions[${stat.index}].name"  required="${required}"  theme="fieldid"/>
 						<#else>
 							<div class="fieldHolder">
 						  		<span class="unitOfMeasure">
-						  			<@s.textfield id="${infoField.uniqueID}" name="${prefix}InfoOptions[${stat.index}].name" theme="fieldidSimple" cssClass="dataEntry attribute unitOfMeasure" readonly="true" required="${required}"/>
+						  			<@s.textfield id="${infoField.uniqueID}" name="${prefix}InfoOptions[${stat.index}].name" theme="fieldidSimple" cssClass="dataEntry attribute unitOfMeasure  ${requiredClass}" readonly="true" required="${required}"/>
 						  		</span>
 						  		<span class="action">
 							  		<a href="javascript: void(0);" id="unitOfMeasureSelector_${infoField.uniqueID}" class="editLink" onclick="$('unitSelectorDiv_${infoField.uniqueID}').toggle('normal'); if( $('unitSelectorDiv_${infoField.uniqueID}').visible() ) { loadUnitOfMeasure('${infoField.uniqueID}', ${ (infoField.unitOfMeasure.id)!"null" } ); }">
