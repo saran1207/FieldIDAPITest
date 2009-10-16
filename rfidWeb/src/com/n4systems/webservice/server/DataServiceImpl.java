@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import javax.naming.NamingException;
 
@@ -835,16 +836,22 @@ public class DataServiceImpl implements DataService {
 			
 			if (savedInspections != null) {
 				for (Inspection savedInspection : savedInspections) {
-					InspectionSchedule schedule = inspectionSchedules.get(savedInspection);
-					try {
-						if (schedule != null) {
-							schedule.completed(savedInspection);
-							scheduleManager.update(schedule);
+					for (Entry<Inspection, InspectionSchedule> scheduleEntry : inspectionSchedules.entrySet()) {
+						if (savedInspection.equals(scheduleEntry.getKey())) {
+							InspectionSchedule schedule = scheduleEntry.getValue();
+							try {
+								if (schedule != null) {
+									schedule.completed(scheduleEntry.getKey());
+									scheduleManager.update(schedule);
+								}
+							} catch (Exception e) {
+								logger.error("failed to attach schedule to inspection", e);
+								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on product with serial number "+savedInspection.getProduct().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+								// We allow the inspection to still go through even if this happens
+							}
+							
+							break;
 						}
-					} catch (Exception e) {
-						logger.error("failed to attach schedule to inspection", e);
-						populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on product with serial number "+savedInspection.getProduct().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
-						// We allow the inspection to still go through even if this happens
 					}
 				}
 			}
