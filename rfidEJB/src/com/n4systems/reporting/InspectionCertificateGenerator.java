@@ -27,6 +27,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.LineItem;
+import com.n4systems.model.PrintOut;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.inspectionschedule.NextInspectionScheduleLoader;
@@ -58,25 +59,42 @@ public class InspectionCertificateGenerator {
 	public JasperPrint generate(InspectionReportType type, Inspection inspection, UserBean user, Transaction transaction) throws NonPrintableEventType, ReportException {
 		JasperPrint jPrint = null;
 		
-		if (inspection.getType().getGroup().getPrintOut() == null) {
-			throw new NonPrintableEventType("Event type group [" + inspection.getType().getGroup().getDisplayName() + "] does not have a printout");
+		PrintOut printOutToPrint = null;
+		
+		switch(type) {
+			case INSPECTION_CERT:
+				printOutToPrint = inspection.getType().getGroup().getPrintOut();
+				break;
+			case OBSERVATION_CERT:
+				printOutToPrint = inspection.getType().getGroup().getObservationPrintOut();
+				break;
 		}
 		
-		if (inspection.getType().getGroup().getPrintOut().isWithSubInspections()) {
-			jPrint = generateFull(inspection, user);
-		} else {
-			jPrint = generate(inspection, user, transaction);
+		if (printOutToPrint == null) {
+			throw new NonPrintableEventType("Event type group [" + inspection.getType().getGroup().getDisplayName() + "] does not have a printout of type " + type.getDisplayName());
 		}
+		
+		
+		
+		
+		if (printOutToPrint.isWithSubInspections()) {
+			jPrint = generateFull(inspection, user, printOutToPrint);
+		} else {
+			jPrint = generate(inspection, user, transaction, printOutToPrint);
+		}
+	
+		
+		
 		return jPrint;
 	}
 
-	private JasperPrint generateFull(Inspection inspection, UserBean user) throws NonPrintableEventType, ReportException {
+	private JasperPrint generateFull(Inspection inspection, UserBean user, PrintOut printOut) throws NonPrintableEventType, ReportException {
 		// If the inspection is not printable, stop immediately
-		if (!inspection.isPrintable() || !inspection.getType().getGroup().hasPrintOut()) {
+		if (!inspection.isPrintable()) {
 			throw new NonPrintableEventType();
 		}
 
-		File jasperFile = PathHandler.getPrintOutFile(inspection.getType().getGroup().getPrintOut());
+		File jasperFile = PathHandler.getPrintOutFile(printOut);
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
@@ -117,13 +135,13 @@ public class InspectionCertificateGenerator {
 		return jasperPrint;
 	}
 
-	private JasperPrint generate(Inspection inspection, UserBean user, Transaction transaction) throws NonPrintableEventType, ReportException {
+	private JasperPrint generate(Inspection inspection, UserBean user, Transaction transaction, PrintOut printOut) throws NonPrintableEventType, ReportException {
 		// If the inspection is not printable, stop immediately
-		if (!inspection.isPrintable() || !inspection.getType().getGroup().hasPrintOut()) {
+		if (!inspection.isPrintable()) {
 			throw new NonPrintableEventType();
 		}
 
-		File jasperFile = PathHandler.getPrintOutFile(inspection.getType().getGroup().getPrintOut());
+		File jasperFile = PathHandler.getPrintOutFile(printOut);
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
