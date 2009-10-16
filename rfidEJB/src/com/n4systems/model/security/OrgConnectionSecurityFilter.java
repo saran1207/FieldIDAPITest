@@ -38,8 +38,8 @@ public class OrgConnectionSecurityFilter implements QueryFilter {
 			whereGroup.addClause(WhereClauseFactory.create(orgTarget + ".tenant.id", filter.getTenantId()));
 		} else if (filter.getOwner().isSecondary()) {
 			// secondaries can see themselves + primary
-			whereGroup.addClause(WhereClauseFactory.create(orgTarget + ".id", filter.getOwner().getId()));
-			whereGroup.addClause(WhereClauseFactory.create(orgTarget + ".id", filter.getOwner().getPrimaryOrg().getId(), ChainOp.OR));		
+			whereGroup.addClause(WhereClauseFactory.create("connection_filter_" + orgTarget + "_secondary", orgTarget + ".id", filter.getOwner().getId()));
+			whereGroup.addClause(WhereClauseFactory.create(orgTarget + ".id", filter.getOwner().getPrimaryOrg().getId(), ChainOp.OR, "connection_filter_" + orgTarget + "_primary"));
 		} else {
 			// customers/divisions are locked to their parent internal org
 			whereGroup.addClause(WhereClauseFactory.create(orgTarget + ".id", filter.getOwner().getInternalOrg().getId()));

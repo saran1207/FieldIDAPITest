@@ -3,6 +3,8 @@ package com.n4systems.model.safetynetwork;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Product;
+import com.n4systems.model.orgs.ExternalOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -34,8 +36,25 @@ public class SafetyNetworkProductLoader extends SecurityFilteredLoader<Product> 
 		// security check.
 		Product product = productLoader.load(em, new OpenSecurityFilter());
 		
-		// the act of calling load on the linked org loader will cause a security exception if no connection exists
-		vendorOrgLoader.setLinkedOrgId(product.getOwner().getId()).load(em, filter);
+		// First we need to ensure that the InternalOrg owner for this product is one of my vendors.
+		// if, it is not, this loader will throw a SecurityException
+		InternalOrg vendor = vendorOrgLoader.setLinkedOrgId(product.getOwner().getInternalOrg().getId()).load(em, filter);
+		
+		// this check is extraneous but is here as a fail safe
+		if (vendor == null) {
+			throw new SecurityException(String.format("Org [%s] attempted access to Product for org [%s] ", filter.getOwner().toString(), product.getOwner().toString()));
+		}
+		
+		// If the owner is an InternalOrg, we can stop here.
+		if (product.getOwner().isInternal()) {
+			return product;
+		}
+		
+		// if the owner was for an ExternalOrg, we need to make sure the linked org 
+		// is one I'm allowed to see
+		if (!((ExternalOrg)product.getOwner()).getLinkedOrg().allowsAccessFor(filter.getOwner())) {
+			throw new SecurityException(String.format("Org [%s] attempted access to Product for org [%s] ", filter.getOwner().toString(), product.getOwner().toString()));
+		}
 		
 		return product;
 	}

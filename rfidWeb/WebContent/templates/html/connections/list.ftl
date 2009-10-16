@@ -9,6 +9,7 @@ ${action.setPageType('safety_network_connections', 'list')!}
 	<tr>
 		<th></th>
 		<th><@s.text name="label.company_name"/></th>
+		<th><@s.text name="label.myorganization"/></th>
 		<th><@s.text name="label.connection_type"/></th>
 		<th><@s.text name="label.catalog"/></th>
 		
@@ -24,6 +25,10 @@ ${action.setPageType('safety_network_connections', 'list')!}
 			${(connection.connectedOrg.primaryOrg.name?html)!}<br/>
 			${(connection.connectedOrg.secondaryOrg.name?html)!}
 			</td>
+			<td>
+			${(connection.owner.internalOrg.name?html)!}
+			</td>
+			
 			<td><@s.text name="${connection.connectionType.label}"/></td>
 			<td>
 				<#if action.hasAPublishedCatalog(connection.connectedOrg)>

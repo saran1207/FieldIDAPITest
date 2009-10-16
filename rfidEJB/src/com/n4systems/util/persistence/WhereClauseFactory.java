@@ -39,6 +39,15 @@ public class WhereClauseFactory {
 		return create(null, null, param, value, null, chainOp);
 	}
 
+	/*
+	 * NOTE: the name has been moved to the last parameter here since if it were first, it could create an ambiguous situation
+	 * with the method create(String param, T value, Integer options, ChainOp chainOp) in the case when you call
+	 * create(String, String, Integer, ChainOp)
+	 */
+	public static <T> WhereClause<T> create(String param, T value, ChainOp chainOp, String name) {  
+		return create(null, name, param, value, null, chainOp);
+	}
+	
 	public static <T> WhereClause<T> create(Comparator comparator, String name, String param, T value) {
 		return create(comparator, name, param, value, null, null);
 	}
@@ -49,6 +58,10 @@ public class WhereClauseFactory {
 	
 	public static <T> WhereClause<T> create(String param, T value) {
 		return create(null, null, param, value, null, null);
+	}
+	
+	public static <T> WhereClause<T> create(String name, String param, T value) {
+		return create(null, name, param, value, null, null);
 	}
 	
 	public static <T> WhereClause<T> create(String param, T value, Integer options, ChainOp chainOp) {

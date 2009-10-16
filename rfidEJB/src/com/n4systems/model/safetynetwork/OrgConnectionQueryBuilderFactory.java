@@ -24,8 +24,6 @@ public class OrgConnectionQueryBuilderFactory {
 		return builder;
 	}
 	
-
-	
 	public static QueryBuilder<OrgConnection> createSingleQuery(SecurityFilter filter, OrgConnectionType connectionType, Long linkedOrgId) {
 		QueryBuilder<OrgConnection> builder = createListQuery(filter, connectionType);
 
