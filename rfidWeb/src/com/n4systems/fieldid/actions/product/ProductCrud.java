@@ -338,9 +338,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 		
 		ProductsByNetworkId loader = new ProductsByNetworkId(getSecurityFilter());
 		loader.setNetworkId(product.getNetworkId());
+		loader.setExcludeProductId(product.getId());
 		
 		linkedProducts = loader.load();
-		linkedProducts.remove(product);
 		
 		return SUCCESS;
 	}
