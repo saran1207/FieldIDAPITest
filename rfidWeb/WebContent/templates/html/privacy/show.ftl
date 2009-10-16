@@ -7,8 +7,6 @@ ${action.setPageType('privacy', 'show')!}
 	<@s.checkbox name="autoPublish" />
 </div>
 <div class="actions">
-	<@s.submit key="hbutton.save" />
-	<@s.text name="label.or"/>
-	<a href="<@s.url action="safetyNetwork"/>"><@s.text name="label.cancel"/>
+	<@s.submit key="hbutton.save" /> <@s.text name="label.or"/> <a href="<@s.url action="safetyNetwork"/>"><@s.text name="label.cancel"/></a>
 </div>
 </@s.form>
