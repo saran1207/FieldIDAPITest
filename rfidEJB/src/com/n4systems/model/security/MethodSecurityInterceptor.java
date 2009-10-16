@@ -2,11 +2,16 @@ package com.n4systems.model.security;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.log4j.Logger;
+
+import com.n4systems.util.CollectionFactory;
 
 public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 	private static final Logger logger = Logger.getLogger("com.n4systems.securitylog");
@@ -86,8 +91,25 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 	}
 	
 	private Object getDefaultValue(Method method) {
-		// Strings default to an empty string, everything else comes back null
-		return (method.getReturnType().equals(String.class)) ? DEFAULT_STRING : null;
+		Class<?> returnType = method.getReturnType();
+		
+		// Strings default to an empty string
+		if (returnType.equals(String.class)) {
+			return DEFAULT_STRING;
+		}
+		
+		// on collections, we return an empty collection
+		if (Collection.class.isAssignableFrom(returnType)) {
+			return CollectionFactory.createCollection(returnType, 0);
+		}
+		
+		// maps return empty maps
+		if (Map.class.isAssignableFrom(returnType)) {
+			return MapUtils.EMPTY_MAP;
+		}
+		
+		// everything else returns null
+		return null;
 	}
 	
 }

@@ -1,7 +1,5 @@
 package com.n4systems.util;
 
-import antlr.collections.List;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +8,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import antlr.collections.List;
 
 public class CollectionFactory {
 
@@ -24,7 +24,7 @@ public class CollectionFactory {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E extends Collection<T>, T> Collection<T> createCollection(E collection) {
-		return createCollection(collection.getClass(), collection.size());
+		return (Collection<T>) createCollection(collection.getClass(), collection.size());
 	}
 	
 	/**
@@ -33,25 +33,24 @@ public class CollectionFactory {
 	 * @param capacity
 	 * @return
 	 */
-	public static <E extends Collection<T>, T> Collection<T> createCollection(Class<E> collectionClass, Integer capacity) {
-		Collection<T> collection;
+	@SuppressWarnings("unchecked")
+	public static Collection<?> createCollection(Class<?> collectionClass, Integer capacity) {
+		Collection<?> collection;
 		
 		//more specifc implementations must come first (ie SortedSet before Set)
 		if (List.class.isAssignableFrom(collectionClass)) {
-			collection = new ArrayList<T>(capacity);
+			collection = new ArrayList(capacity);
 		} else if (SortedSet.class.isAssignableFrom(collectionClass)) {
-			collection = new TreeSet<T>();
+			collection = new TreeSet();
 		} else if (Set.class.isAssignableFrom(collectionClass)) {
-			collection = new HashSet<T>(capacity);
+			collection = new HashSet(capacity);
 		} else if (Queue.class.isAssignableFrom(collectionClass)) {
-			collection = new LinkedList<T>();	
+			collection = new LinkedList();	
 		} else {
 			// array list is default, but we should never reach this anyway
-			collection = new ArrayList<T>(capacity);
+			collection = new ArrayList(capacity);
 		}
 		
 		return collection;
 	}
-	
-	
 }
