@@ -41,8 +41,9 @@ public class DownloadOrganizationImages extends DownloadAction {
 		if(tenant != null) {
 			File logo = PathHandler.getTenantLogo(tenant);
 			if (!logo.exists()) {
-				logger.error("No logo image found at [" + logo.getAbsolutePath() + "]");
-				return ERROR;
+				logger.debug("No logo image found at [" + logo.getAbsolutePath() + "]");
+				logo = getHouseAccountLogoPath(); 
+				
 			}
 			
 			InputStream input = null;
@@ -66,14 +67,20 @@ public class DownloadOrganizationImages extends DownloadAction {
 		return null;
 	}
 	
+	private File getHouseAccountLogoPath() {
+		Tenant houseAccount = TenantCache.getInstance().findTenant(getHouseAccountName());
+		return PathHandler.getTenantLogo(houseAccount);
+	}
+
 	public String doDownloadCertLogo() {
 		if( uniqueID != null ) {
 			organization = (InternalOrg)getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(uniqueID).load();
 			
 			if(organization != null) {
 				File certLogoFile = PathHandler.getCertificateLogo(organization, false);
+				
 				if (!certLogoFile.exists()) {
-					logger.error("No certificate logo file found at [" + certLogoFile.getAbsolutePath() + "]");
+					logger.debug("No certificate logo file found at [" + certLogoFile.getAbsolutePath() + "]");
 					return ERROR;
 				}
 	
