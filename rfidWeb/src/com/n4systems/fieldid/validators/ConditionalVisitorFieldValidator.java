@@ -51,14 +51,12 @@ public class ConditionalVisitorFieldValidator extends VisitorFieldValidator {
 		} catch (ValidationException e) {
 			throw e;
 		} catch (Exception e) {
-			// let this pass, but it will be logged right below
+			// let this pass
 		}
 
 		if ((obj != null) && (obj instanceof Boolean)) {
 			answer = (Boolean) obj;
-		} else {
-			log.warn("Got result of " + obj + " when trying to get Boolean.");
-		}
+		} 
 
 		return answer;
 	}
