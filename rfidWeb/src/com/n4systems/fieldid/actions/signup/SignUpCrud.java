@@ -92,6 +92,11 @@ public class SignUpCrud extends AbstractCrud {
 	private String proccessSignUp() {
 		String result;
 		try {
+			if (signUpRequest.getSignUpPackage().isFree()) {
+				signUpRequest.setUsingCreditCard(false);
+				signUpRequest.setPurchaseOrderNumber("");
+			}
+			
 			createAccount();
 			
 			addFlashMessageText("message.your_account_has_been_created");
@@ -138,6 +143,7 @@ public class SignUpCrud extends AbstractCrud {
 	
 
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
+		
 		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
 		
 		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg());
