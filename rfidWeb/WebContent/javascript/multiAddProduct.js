@@ -28,16 +28,18 @@ function convertAndAppendInputsToForm(form, inputs) {
 var maxProducts;
 function quantityIsValid() {
 	var quantity = $('quantity').getValue();
-	if (quantity == null || isNaN(parseInt(quantity)) || quantity < 1 || quantity > maxProducts) {
+	if (quantity == null || isNaN(parseInt(quantity))  || quantity < 1 || quantity > maxProducts) {
 		$('quantityInvalid').show();
 		$('step2next').disable();
 		return false;
 	} else {
+		$('quantity').value=parseInt(quantity);
 		$('quantityInvalid').hide();
 		$('step2next').enable();
 		return true;
 	}
 }
+
 
 function notNullOrBlank(field) {
 	if (field != null && !field.blank()) {
@@ -103,6 +105,9 @@ function validateForm1() {
 	}
 	
 	$('form1required').show();
+	$('form1required').scrollTo();
+	$('form1required').highlight();
+	
 	return false;
 }
 
