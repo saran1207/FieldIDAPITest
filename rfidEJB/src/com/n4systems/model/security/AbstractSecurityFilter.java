@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
+import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
@@ -11,15 +14,20 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 abstract public class AbstractSecurityFilter implements SecurityFilter {
 	private static final String FIELD_PREFIX = "filter_";
-	
+	private static Logger logger = Logger.getLogger(SecurityFilter.class);
 	/**
 	 * Invokes the public static createSecurityDefiner() method on clazz.
 	 * @param clazz		An entity class to get a SecurityDefiner from
 	 * @return			The SecurityDefiner as returned by createSecurityDefiner()
 	 * @throws SecurityException	On any exception thrown while reflecting or invoking createSecurityDefiner() or if SecurityDefiner was null.
 	 */
-	protected SecurityDefiner getSecurityDefinerFromClass(Class<?> clazz) throws SecurityException {
+	protected SecurityDefiner getSecurityDefinerFromClass(Class<?> clazz) {
 		SecurityDefiner definer = null;
+		
+		// UnsecuredEntities do not have a security definer
+		if (UnsecuredEntity.class.isAssignableFrom(clazz)) {
+			return null;
+		}
 		
 		try {
 			Method staticSecurityDefinerGetter = clazz.getMethod("createSecurityDefiner");
@@ -28,13 +36,13 @@ abstract public class AbstractSecurityFilter implements SecurityFilter {
 			definer = (SecurityDefiner)staticSecurityDefinerGetter.invoke(null);
 
 		} catch (NoSuchMethodException e) {
-			throw new SecurityException(clazz.getName() + " must define the static public method createSecurityDefiner()", e);
+			logger.warn(clazz.getName() + " should define the static public method createSecurityDefiner() or implement UnsecuredEntity", e);
 		} catch (Exception e) {
-			throw new SecurityException("Could not invoke createSecurityDefiner() on " + clazz.getName(), e);
+			logger.warn("Could not invoke createSecurityDefiner() on " + clazz.getName(), e);
 		}
 		
 		if (definer == null) {
-			throw new SecurityException(clazz.getName() + " returned null SecurityDefiner");
+			logger.warn("Returning null security definer from class [" + clazz.getName() + "]");
 		}
 		
 		return definer;

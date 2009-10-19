@@ -5,11 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table( name="instructionalvideos" )
-public class InstructionalVideo extends AbstractEntity implements NamedEntity {
+public class InstructionalVideo extends AbstractEntity implements NamedEntity, UnsecuredEntity {
 
 	private static final long serialVersionUID = 1L;
 

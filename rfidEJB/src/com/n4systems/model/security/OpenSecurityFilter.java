@@ -13,14 +13,14 @@ public class OpenSecurityFilter extends AbstractSecurityFilter {
 
 	@Override
 	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
-		if (definer.isStateFiltered()) {
+		if (definer != null && definer.isStateFiltered()) {
 			addFilterParameter(builder, definer.getStatePath(), EntityState.ACTIVE);
 		}
 	}
 
 	@Override
 	protected void applyParameters(Query query, SecurityDefiner definer) throws SecurityException {
-		if (definer.isStateFiltered()) {
+		if (definer != null && definer.isStateFiltered()) {
 			setParameter(query, definer.getStatePath(), EntityState.ACTIVE);
 		}
 	}
@@ -29,7 +29,7 @@ public class OpenSecurityFilter extends AbstractSecurityFilter {
 	protected String produceWhereClause(String alias, SecurityDefiner definer) throws SecurityException {
 		StringBuilder clauses = new StringBuilder();
 		
-		if (definer.isStateFiltered()) {
+		if (definer != null && definer.isStateFiltered()) {
 			addFilterClause(clauses, definer.getStatePath(), alias, false);
 		}
 		

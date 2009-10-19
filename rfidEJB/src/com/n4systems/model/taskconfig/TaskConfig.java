@@ -1,15 +1,16 @@
 package com.n4systems.model.taskconfig;
 
-import com.n4systems.model.parents.AbstractStringIdEntity;
-import com.n4systems.taskscheduling.ScheduledTask;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.parents.AbstractStringIdEntity;
+import com.n4systems.taskscheduling.ScheduledTask;
+
 @Entity
 @Table(name = "tasks")
-public class TaskConfig extends AbstractStringIdEntity {
+public class TaskConfig extends AbstractStringIdEntity implements UnsecuredEntity {
 	private static final long serialVersionUID = 1L;
 	private static final String DEFAULT_TASK_GROUP = "default";
 	
