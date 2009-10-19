@@ -7,7 +7,7 @@ ${action.setPageType('comment_template', 'list')!}
 
 <#list commentTemplates as commentTemplate>
 	<tr>
-		<td>${commentTemplate.name}</td>
+		<td>${commentTemplate.displayName?html}</td>
 		<td>
 			<a href="<@s.url value="commentTemplateEdit.action" uniqueID="${commentTemplate.id}" />" ><@s.text name="label.edit" /></a>&nbsp;&nbsp;
 			<a href="<@s.url value="commentTemplateRemove.action" uniqueID="${commentTemplate.id}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>

@@ -19,8 +19,8 @@ import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Product;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
-import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductCleaner;
@@ -44,7 +44,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	// drop down lists
 	private List<ListingPair> employees;
 	private List<ProductStatusBean> productStatuses;
-	private List<ListingPair> commentTemplates;
+	private List<Listable<Long>> commentTemplates;
 	private List<ProductSerialExtensionBean> extentions;
 	private ProductTypeLister productTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -155,10 +155,9 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return productStatuses;
 	}
 
-	public List<ListingPair> getCommentTemplates() {
+	public List<Listable<Long>> getCommentTemplates() {
 		if (commentTemplates == null) {
-			CommentTemplateListableLoader loader = getLoaderFactory().createCommentTemplateListableLoader();
-			commentTemplates = ListHelper.longListableToListingPair(loader.load());
+			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}
 		return commentTemplates;
 	}
