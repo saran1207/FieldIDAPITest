@@ -19,7 +19,7 @@
 	</h2>
 	
 	<@s.form action="schedule!createSearch" id="reportForm" cssClass="crudForm twoColumns" theme="fieldid" cssStyle="${listPage?exists?string('display:none;','')}" >
-		
+		<#include "../common/_formErrors.ftl"/>
 		<div class="sectionContent" >
 			<div class="container">
 				<div class="infoSet">

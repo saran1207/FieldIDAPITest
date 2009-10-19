@@ -34,8 +34,11 @@ import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
+import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.Validation;
 
+@Validation
 public abstract class CustomizableSearchAction<T extends SearchContainer> extends AbstractPaginatedAction implements SearchDefiner<TableView> {
 	private static final long serialVersionUID = 1L;
 	protected Logger logger = Logger.getLogger(CustomizableSearchAction.class);

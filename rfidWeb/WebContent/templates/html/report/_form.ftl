@@ -24,7 +24,7 @@
 		<@s.text name="label.reportcriteria"/>
 	</h2>
 	<@s.form action="report!createSearch" id="reportForm" cssClass="crudForm twoColumns" theme="fieldid" cssStyle="${listPage?exists?string('display:none;','')}" >
-		
+		<#include "../common/_formErrors.ftl"/>
 		<div class="sectionContent" >
 			<div class="infoSet">
 				<label for="criteria.rfidNumber"><@s.text name="label.rfidnumber"/></label> 

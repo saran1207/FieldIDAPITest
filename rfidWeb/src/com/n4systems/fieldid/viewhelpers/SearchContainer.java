@@ -22,6 +22,8 @@ import com.n4systems.util.persistence.search.terms.SimpleTermOrNull;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 
 abstract public class SearchContainer implements BaseSearchDefiner, Serializable {
+	private static final String STRUTS_VALUE_WHEN_YOU_SELECT_NO_VALUES_FROM_CHECKBOXES = "false";
+
 	private static final long serialVersionUID = 1L;
 	
 	private final String searchClassIdField;
@@ -67,6 +69,9 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	}
 	
 	public List<String> getSelectedColumns() {
+		if (selectedColumns.size() == 1 && selectedColumns.get(0).equalsIgnoreCase(STRUTS_VALUE_WHEN_YOU_SELECT_NO_VALUES_FROM_CHECKBOXES)) {
+			selectedColumns.clear();
+		}
 		return selectedColumns;
 	}
 
