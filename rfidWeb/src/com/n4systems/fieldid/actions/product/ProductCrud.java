@@ -775,6 +775,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
 		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
 	}
+	
 
 	public Long getTagOptionId() {
 		return tagOptionId;

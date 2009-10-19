@@ -1,11 +1,18 @@
-<#assign fieldPrefix= 'product' />
-<#assign useAutoAttributes=true />
+<#if !fieldPrefix?exists>
+	<#assign fieldPrefix= 'product' />
+</#if>
+<#if !useAutoAttributes?exists>
+	<#assign useAutoAttributes=true />
+</#if>
 <#if autoAttributeCriteria?exists >
 	<#assign autoAttributeInputFields=autoAttributeCriteria.inputs />
 </#if>
-
-<#assign prefix= 'product' />
-<#assign requires='true'>
+<#if !prefix?exists>
+	<#assign prefix= 'product' />
+</#if>
+<#if !requires?exists>
+	<#assign requires=true>
+</#if>
 <@s.if test="${fieldPrefix}InfoFields != null" >
 	<#if useAutoAttributes?exists && useAutoAttributes == true >
 		<#assign changeFunction="updateAttributes(this);" />
@@ -15,11 +22,9 @@
 	</#if>
 	
 	<@s.iterator value="${fieldPrefix}InfoFields" id="infoField" status="stat" >
-		<#if requires?exists && requires == 'true' && infoField.required  >
-			<#assign required='true' />
+		<#if requires && infoField.required  >
 			<#assign requiredClass='requiredField'/>
 		<#else>
-			<#assign required='false' />
 			<#assign requiredClass=''/>
 		</#if>
 		
@@ -42,13 +47,13 @@
 						<@s.hidden name="${prefix}InfoOptions[${stat.index}].uniqueIDString" /> 
 					</span>
 				<#else>
-					<label class="label">${infoField.name?html} <#if  requires?exists && requires == 'true' && infoField.required ><#include "../common/_requiredMarker.ftl"/></#if> </label>	
+					<label class="label">${infoField.name?html} <#if  requires == true && infoField.required ><#include "../common/_requiredMarker.ftl"/></#if> </label>	
 					<#if infoField.fieldType == "selectbox" || infoField.fieldType == "combobox" >
 						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( ${fieldPrefix}InfoFields[${stat.index}], ${prefix}InfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="${prefix}InfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
 							<#if autoAttributeInputFields?exists && autoAttributeInputFields.contains( infoField ) >
 							 	<@s.param name="onchange">${changeFunction}</@s.param>
 							</#if>  
-							<#if !(noblanks?exists && noblanks == 'true') >
+							<#if !(noblanks?exists && noblanks) >
 								<@s.param name="headerKey">0</@s.param>
 								<@s.param name="headerValue"></@s.param>
 							</#if>
@@ -66,11 +71,11 @@
 					</#if>
 					<#if infoField.fieldType == "textfield" >
 					  	<#if !infoField.usingUnitOfMeasure >
-						  	<@s.textfield id="${infoField.uniqueID}" cssClass="attribute  ${requiredClass}"  name="${prefix}InfoOptions[${stat.index}].name"  required="${required}"  theme="fieldid"/>
+						  	<@s.textfield id="${infoField.uniqueID}" cssClass="attribute  ${requiredClass}"  name="${prefix}InfoOptions[${stat.index}].name"   theme="fieldid"/>
 						<#else>
 							<div class="fieldHolder">
 						  		<span class="unitOfMeasure">
-						  			<@s.textfield id="${infoField.uniqueID}" name="${prefix}InfoOptions[${stat.index}].name" theme="fieldidSimple" cssClass="dataEntry attribute unitOfMeasure  ${requiredClass}" readonly="true" required="${required}"/>
+						  			<@s.textfield id="${infoField.uniqueID}" name="${prefix}InfoOptions[${stat.index}].name" theme="fieldidSimple" cssClass="dataEntry attribute unitOfMeasure  ${requiredClass}" readonly="true" />
 						  		</span>
 						  		<span class="action">
 							  		<a href="javascript: void(0);" id="unitOfMeasureSelector_${infoField.uniqueID}" class="editLink" onclick="$('unitSelectorDiv_${infoField.uniqueID}').toggle('normal'); if( $('unitSelectorDiv_${infoField.uniqueID}').visible() ) { loadUnitOfMeasure('${infoField.uniqueID}', ${ (infoField.unitOfMeasure.id)!"null" } ); }">
