@@ -51,7 +51,7 @@ ${action.setPageType('inspection', 'add')!}
 		<div class="performedInspection">
 			<span>${(inspectionType.name)!}</span> 
 			<span>
-				<a class="exitLink" href="<@s.url action="subInspectionAdd"  uniqueID="0" productId="${product.id}" type="${type}" parentProductId="${product.id}" token="${token}"/>">
+				<a class="exitLink" href="<@s.url action="subInspectionAdd" uniqueID="0" productId="${product.id}" type="${type}" parentProductId="${product.id}" token="${token}" scheduleId="${scheduleId!}" />">
 					<#if !masterInspection.mainInspectionStored >
 						<@s.text name="label.you_must_perform_this_event"/>
 					<#else>

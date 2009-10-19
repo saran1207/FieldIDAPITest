@@ -391,4 +391,13 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return new ArrayList<ProductType>(product.getType().getSubTypes());
 	}
 
+	public void setScheduleId(Long scheduleId) {
+		if (masterInspection != null) {
+			masterInspection.setScheduleId(scheduleId);
+		}
+	}
+	
+	public Long getScheduleId() {
+		return (masterInspection != null) ? masterInspection.getScheduleId() : null;
+	}
 }
