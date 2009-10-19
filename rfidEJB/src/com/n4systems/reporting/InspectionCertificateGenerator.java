@@ -356,17 +356,13 @@ public class InspectionCertificateGenerator {
 	}
 
 	private InputStream resolveCertificateMainLogo(InternalOrg organization) throws ReportException {
-		InputStream logoStream = null;
-		File tenantLogo = PathHandler.getCertificateLogo(organization);
-
 		try {
-			logoStream = new FileInputStream(tenantLogo);
-			
+			File tenantLogo = PathHandler.getCertificateLogo(organization);
+			return new FileInputStream(tenantLogo);
 		} catch (FileNotFoundException e) {
-			throw new ReportException("Failed creating certificate logo input stream", e);
+			return null;
 		}
 
-		return logoStream;
 	}
 
 

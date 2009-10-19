@@ -462,7 +462,6 @@ public class ReportFactoryImpl implements ReportFactory {
 
 		try {
 			logoStream = new FileInputStream(tenantLogo);
-			
 		} catch (FileNotFoundException e) {
 			return null;
 		}
