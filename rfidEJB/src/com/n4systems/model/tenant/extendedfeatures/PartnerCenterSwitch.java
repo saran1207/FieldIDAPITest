@@ -8,7 +8,10 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.CustomerUserIdListLoader;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
 
 public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 	
@@ -26,10 +29,12 @@ public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 	}
 	
 	private void deleteAllCustomerUsers(Transaction transaction) {
-		String updateQuery = "UPDATE " + UserBean.class.getName() + " u SET dateModified = :now, deleted=true WHERE owner.customerOrg IS NOT NULL";
+		CustomerUserIdListLoader loader = new CustomerUserIdListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
+		String updateQuery = "UPDATE " + UserBean.class.getName() + " SET dateModified = :now, deleted=true WHERE id in (:ids)";
 		Query query = transaction.getEntityManager().createQuery(updateQuery);
 		query.setParameter("now", new Date());
-		query.executeUpdate();
+		LargeUpdateQueryRunner queryRunner = new LargeUpdateQueryRunner(query, loader.load());
+		queryRunner.executeUpdate();
 	}
 
 }
