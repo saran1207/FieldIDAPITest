@@ -2,33 +2,45 @@ package com.n4systems.model.security;
 
 import javax.persistence.Query;
 
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 
 
-public class OpenSecurityFilter implements SecurityFilter {
+public class OpenSecurityFilter extends AbstractSecurityFilter {
 
 	public OpenSecurityFilter() {}
 
-	public void applyFilter(QueryBuilder<?> builder) {
+	@Override
+	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
+		if (definer.isStateFiltered()) {
+			addFilterParameter(builder, definer.getStatePath(), EntityState.ACTIVE);
+		}
 	}
 
-	public void applyParameters(Query query, Class<?> queryClass) {
+	@Override
+	protected void applyParameters(Query query, SecurityDefiner definer) throws SecurityException {
+		if (definer.isStateFiltered()) {
+			setParameter(query, definer.getStatePath(), EntityState.ACTIVE);
+		}
 	}
 
-	public String produceWhereClause(Class<?> queryClass) {
-		return "";
-	}
-
-	public String produceWhereClause(Class<?> queryClass, String tableAlias) {
-		return "";
-	}
-
-	public Long getTenantId() {
-		return null;
+	@Override
+	protected String produceWhereClause(String alias, SecurityDefiner definer) throws SecurityException {
+		StringBuilder clauses = new StringBuilder();
+		
+		if (definer.isStateFiltered()) {
+			addFilterClause(clauses, definer.getStatePath(), alias, false);
+		}
+		
+		return clauses.toString();
 	}
 
 	public BaseOrg getOwner() {
+		return null;
+	}
+
+	public Long getTenantId() {
 		return null;
 	}
 
@@ -39,4 +51,6 @@ public class OpenSecurityFilter implements SecurityFilter {
 	public boolean hasOwner() {
 		return false;
 	}
+
+
 }

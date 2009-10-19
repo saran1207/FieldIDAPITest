@@ -37,6 +37,10 @@ public class SafetyNetworkInspectionLoader extends SecurityFilteredLoader<Inspec
 		// to load this inspection we will first do an unsecured load by id
 		Inspection inspection = inspectionLoader.load(em);
 		
+		if (inspection == null) {
+			return null;
+		}
+		
 		// XXX the following is a hack to post-load the fields for each sub inspection.
 		// we need a better way of doing this
 		PostFetcher.postFetchFields(inspection.getSubInspections(), SubInspection.ALL_FIELD_PATHS);
