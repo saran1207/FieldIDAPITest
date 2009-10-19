@@ -3,7 +3,7 @@
 <p>
 	<label><@s.text name="label.comments"/></label>
 	<span>
-		<@s.select name="commentTemplate" list="commentTemplates" listKey="id" listValue="name" emptyOption="true" onchange="changeComments(this)"/> 
+		<@s.select name="commentTemplate" list="commentTemplates" listKey="id" listValue="displayName" emptyOption="true" onchange="changeComments(this)"/> 
 		
 		<@s.textarea name="comments" id="comments"  cols="50" rows="3"/>
 	</span>
