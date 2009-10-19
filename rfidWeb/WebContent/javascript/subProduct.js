@@ -82,8 +82,10 @@ function submitSearchForm(event) {
 
 var removeSubProductUrl = "";
 function removeSubProduct( subProductId ) {
-	var url = removeSubProductUrl + "?subProductId=" + subProductId + "&uniqueID=" + $('uniqueID').getValue();
-	getResponse( url, "post" );
+	var params = new Object();
+	params.subProductId =  subProductId;
+	params.uniqueID = $('productId').getValue();
+	getResponse( removeSubProductUrl, "post", params );
 }
 
 
