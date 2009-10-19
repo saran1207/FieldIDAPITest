@@ -1,1 +1,1 @@
-$('totalPrice').update('${price}');
+if ($('totalPrice') != null) $('totalPrice').update('${price}');
