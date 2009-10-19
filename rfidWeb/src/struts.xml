@@ -8,6 +8,8 @@
 	<constant name="struts.ui.theme" value="css_xhtml" />
 	<constant name="struts.url.includeParams" value="none" />
 	<constant name="struts.multipart.maxSize" value="10000000" />
+	<constant name="struts.multipart.saveDir" value="/var/fieldid/tmp"/>
+	
 
 	<bean type="org.apache.struts2.views.TagLibrary" name="n4" class="com.n4systems.uitags.views.N4TagLibrary"/>
 	<package name="default" extends="struts-default">
