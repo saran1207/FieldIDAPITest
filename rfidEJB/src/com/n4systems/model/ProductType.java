@@ -387,6 +387,15 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return scheduleForOrg;
 	}
 	
+	public ProductTypeSchedule getDefaultSchedule(InspectionType type) {
+		for (ProductTypeSchedule schedule: schedules) {
+			if (schedule.getInspectionType().equals(type) && schedule.getOwner().isPrimary()) {
+				return  schedule;
+			}				
+		}
+		return null;
+	}
+	
 	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, BaseOrg owner) {
 		Date returnDate = fromDate;

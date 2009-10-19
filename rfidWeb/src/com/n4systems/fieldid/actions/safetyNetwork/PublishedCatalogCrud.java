@@ -80,7 +80,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 		Set<Long> importTheseInspectionTypeIds = covertSelectedIdsToSet(importInspectionTypeIds);
 		
 		try {
-			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getTenant(), linkedCatalogAccess, productTypeManager);
+			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getPrimaryOrg(), linkedCatalogAccess, productTypeManager);
 			importCatalogService.setImportProductTypeIds(importTheseProductTypeIds);
 			importCatalogService.setImportInspectionTypeIds(importTheseInspectionTypeIds);
 			importCatalogService.setImportAllRelations(usingPackage);
@@ -113,7 +113,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 			
 			importTask.setImportInspectionTypeIds(covertSelectedIdsToSet(importInspectionTypeIds));
 			importTask.setImportProductTypeIds(covertSelectedIdsToSet(importProductTypeIds));
-			importTask.setTenant(getTenant());
+			importTask.setPrimaryOrg(getPrimaryOrg());
 			importTask.setLinkedTenant(getLinkedTenant());
 			importTask.setUsingPackages(usingPackage);
 			importTask.setUser(fetchCurrentUser());

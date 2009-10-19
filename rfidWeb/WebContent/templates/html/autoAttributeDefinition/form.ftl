@@ -13,7 +13,7 @@ ${action.setPageType('auto_attribute', 'definitions')!}
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="criteriaId"/>
 		
-	<div id="inputlist"  class="fluidSets"style="width:750px;   padding:10px;  border:1px solid #cfdddd;">
+	<div id="inputlist"  class="fluidSets" style="width:750px;   padding:10px;  border:1px solid #cfdddd;">
 		<h3><@s.text name="label.inputfields" /></h3>
 		<#assign noblanks=true />
 		<#assign noComboBox=true/>

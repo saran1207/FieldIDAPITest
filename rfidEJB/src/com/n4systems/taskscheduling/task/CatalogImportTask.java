@@ -13,6 +13,7 @@ import rfid.ejb.session.LegacyProductType;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
@@ -26,7 +27,7 @@ public class CatalogImportTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(CatalogImportTask.class);
 
 	private UserBean user;
-	private Tenant tenant;
+	private PrimaryOrg primaryOrg;
 	private Tenant linkedTenant;
 	private Set<Long> importProductTypeIds;
 	private Set<Long> importInspectionTypeIds;
@@ -51,7 +52,7 @@ public class CatalogImportTask implements Runnable {
 	private void doImport() {
 		failed = false;
 		try {
-			importCatalogService = new ImportCatalogService(persistenceManager, tenant, linkedCatalogAccess, productTypeManager);
+			importCatalogService = new ImportCatalogService(persistenceManager, primaryOrg, linkedCatalogAccess, productTypeManager);
 			importCatalogService.setImportAllRelations(true);
 			importCatalogService.setImportProductTypeIds(importProductTypeIds);
 			importCatalogService.setImportInspectionTypeIds(importInspectionTypeIds);
@@ -122,7 +123,7 @@ public class CatalogImportTask implements Runnable {
 		try { 
 			linkedCatalogAccess = safetyNetwork.getCatalogAccess(linkedTenant);
 		} catch (NoAccessToTenantException e) {
-			logger.warn("attempt to access non linked tenant catalog for " + linkedTenant.getName() + " by " + tenant.getName());
+			logger.warn("attempt to access non linked tenant catalog for " + linkedTenant.getName() + " by " + primaryOrg.getTenant().getName());
 		}
 	}
 
@@ -134,13 +135,6 @@ public class CatalogImportTask implements Runnable {
 		this.user = user;
 	}
 
-	public Tenant getTenant() {
-		return tenant;
-	}
-
-	public void setTenant(Tenant tenant) {
-		this.tenant = tenant;
-	}
 
 	public Tenant getLinkedTenant() {
 		return linkedTenant;
@@ -172,6 +166,14 @@ public class CatalogImportTask implements Runnable {
 
 	public void setUsingPackages(boolean usingPackages) {
 		this.usingPackages = usingPackages;
+	}
+
+	public PrimaryOrg getPrimaryOrg() {
+		return primaryOrg;
+	}
+
+	public void setPrimaryOrg(PrimaryOrg primaryOrg) {
+		this.primaryOrg = primaryOrg;
 	}
 	
 }

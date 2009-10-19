@@ -11,6 +11,9 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.producttype.ProductTypeScheduleSaver;
+import com.n4systems.services.TenantCache;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeRelationshipsImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -21,14 +24,18 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 	private Map<Long, ProductType> importedProductTypeMapping = new HashMap<Long, ProductType>();
 	private Map<Long, InspectionType> importedInspectionTypeMapping = new HashMap<Long, InspectionType>();
 	private ProductTypeRelationshipsImportSummary summary;
+	private ProductTypeScheduleSaver productTypeScheduleSaver;
+	private PrimaryOrg primaryOrg;
 	
-	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
-		this(persistenceManager, tenant, importCatalog, new ProductTypeRelationshipsImportSummary());
+	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, ProductTypeScheduleSaver productTypeScheduleSaver) {
+		this(persistenceManager, primaryOrg, importCatalog, productTypeScheduleSaver, new ProductTypeRelationshipsImportSummary());
 	}
 	
-	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, ProductTypeRelationshipsImportSummary summary) {
-		super(persistenceManager, tenant, importCatalog);
+	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, ProductTypeScheduleSaver productTypeScheduleSaver, ProductTypeRelationshipsImportSummary summary) {
+		super(persistenceManager, primaryOrg.getTenant(), importCatalog);
 		this.summary = summary;
+		this.productTypeScheduleSaver = productTypeScheduleSaver;
+		this.primaryOrg = primaryOrg;
 	}
 	
 	
@@ -61,16 +68,24 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 
 
 	private void importProductTypeSchedules(ProductType originalProductType, ProductType importedProductType, InspectionType connectedInspectionType) {
-		if (originalProductType.getSchedule(connectedInspectionType, null) != null) {
-			ProductTypeSchedule originalSchedule = originalProductType.getSchedule(connectedInspectionType, null);
-			ProductTypeSchedule importedSchedule = new ProductTypeSchedule();
-			importedSchedule.setAutoSchedule(originalSchedule.isAutoSchedule());
-			importedSchedule.setFrequency(originalSchedule.getFrequency());
-			importedSchedule.setInspectionType(importedInspectionTypeMapping.get(connectedInspectionType.getId()));
-			importedSchedule.setProductType(importedProductType);
-			importedSchedule.setTenant(tenant);
-			importedProductType.getSchedules().add(importedSchedule);
+		if (originalProductType.getDefaultSchedule(connectedInspectionType) != null) {
+			ProductTypeSchedule originalSchedule = originalProductType.getDefaultSchedule(connectedInspectionType);
+			
+			ProductTypeSchedule importedSchedule = copyProductTypeSchedule(connectedInspectionType, originalSchedule);
+			
+			productTypeScheduleSaver.save(importedSchedule);
 		}
+	}
+
+	private ProductTypeSchedule copyProductTypeSchedule(InspectionType connectedInspectionType, ProductTypeSchedule originalSchedule) {
+		ProductTypeSchedule importedSchedule = new ProductTypeSchedule();
+		importedSchedule.setAutoSchedule(originalSchedule.isAutoSchedule());
+		importedSchedule.setFrequency(originalSchedule.getFrequency());
+		importedSchedule.setInspectionType(importedInspectionTypeMapping.get(connectedInspectionType.getId()));
+		importedSchedule.setProductType(importedProductTypeMapping.get(originalSchedule.getProductType().getId()));
+		importedSchedule.setOwner(primaryOrg);
+		importedSchedule.setTenant(tenant);
+		return importedSchedule;
 	}
 	
 	

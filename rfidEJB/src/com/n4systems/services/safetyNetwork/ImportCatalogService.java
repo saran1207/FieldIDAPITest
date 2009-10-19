@@ -5,11 +5,12 @@ import java.util.Set;
 import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Tenant;
-import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeImportHandler;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.producttype.ProductTypeScheduleSaver;
 import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeGroupHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeImportHandler;
+import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeGroupImportHandler;
+import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeRelationshipsImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogStateSetsImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
@@ -30,14 +31,14 @@ public class ImportCatalogService {
 	private CatalogImportSummary summary = new CatalogImportSummary();
 	
 	
-	public ImportCatalogService(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType legacyProductTypeManager) {
+	public ImportCatalogService(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, LegacyProductType legacyProductTypeManager) {
 		super();
-		importProductType = new CatalogProductTypeImportHandler(persistenceManager, tenant, importCatalog, legacyProductTypeManager, summary.getProductTypeImportSummary());
-		importInspectionType = new CatalogInspectionTypeImportHandler(persistenceManager, tenant, importCatalog, summary.getInspectionTypeImportSummary());
-		importInspectionTypeGroup = new CatalogInspectionTypeGroupHandler(persistenceManager, tenant, importCatalog, summary.getInspectionTypeGroupImportSummary());
-		importStateSets = new CatalogStateSetsImportHandler(persistenceManager, tenant, importCatalog, summary.getStateSetImportSummary());
-		importProductTypeGroup = new CatalogProductTypeGroupImportHandler(persistenceManager, tenant, importCatalog, summary.getProductTypeGroupImportSummary());
-		importProductTypeInspectionTypeRelations = new CatalogProductTypeRelationshipsImportHandler(persistenceManager, tenant, importCatalog, summary.getProductTypeRelationshipsImportSummary());
+		importProductType = new CatalogProductTypeImportHandler(persistenceManager, primaryOrg.getTenant(), importCatalog, legacyProductTypeManager, summary.getProductTypeImportSummary());
+		importInspectionType = new CatalogInspectionTypeImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getInspectionTypeImportSummary());
+		importInspectionTypeGroup = new CatalogInspectionTypeGroupHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getInspectionTypeGroupImportSummary());
+		importStateSets = new CatalogStateSetsImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getStateSetImportSummary());
+		importProductTypeGroup = new CatalogProductTypeGroupImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getProductTypeGroupImportSummary());
+		importProductTypeInspectionTypeRelations = new CatalogProductTypeRelationshipsImportHandler(persistenceManager, primaryOrg, importCatalog, new ProductTypeScheduleSaver(), summary.getProductTypeRelationshipsImportSummary());
 	}
 	
 	

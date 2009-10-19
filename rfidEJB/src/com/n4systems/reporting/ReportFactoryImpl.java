@@ -464,7 +464,7 @@ public class ReportFactoryImpl implements ReportFactory {
 			logoStream = new FileInputStream(tenantLogo);
 			
 		} catch (FileNotFoundException e) {
-			throw new ReportException("Failed creating certificate logo input stream", e);
+			return null;
 		}
 
 		return logoStream;
