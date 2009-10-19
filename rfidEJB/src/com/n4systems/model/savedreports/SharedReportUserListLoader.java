@@ -33,6 +33,8 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		users.addAll(getAllUsersDirectlyAboveTheOwnerOnTheReport(em, filter));
 		
 		users.addAll(getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(em, filter));
+		
+		users.removeAll(userGoingToShareTheReport(em, filter));
 		return new ArrayList<UserBean>(users);
 	}
 
@@ -89,10 +91,18 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		Long reportsOwnerId = report.getLongCriteria(SavedReport.OWNER_ID);
 		
 		if (reportsOwnerId == null) {
-			reportsOwnerId = filter.getOwner().getPrimaryOrg().getId();
+			reportsOwnerId = filter.getOwner().getId();
 		}
 		
 		return reportsOwnerId;
+	}
+	
+	private Set<UserBean> userGoingToShareTheReport(EntityManager em, SecurityFilter filter) {
+		Set<UserBean> user = new HashSet<UserBean>(1);
+		if (filter.getUserId() != null) {
+			user.add(em.find(UserBean.class, filter.getUserId()));
+		}
+		return user;
 	}
 
 	public SharedReportUserListLoader setReport(SavedReport report) {
