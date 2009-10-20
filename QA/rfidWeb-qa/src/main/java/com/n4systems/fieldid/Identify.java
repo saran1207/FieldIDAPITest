@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -111,6 +113,7 @@ public class Identify extends TestCase {
 	private Finder addProductSaveAndScheduleButtonFinder;
 	private Finder addProductResetFormButtonFinder;
 	private Finder attachFileButtonFinder;
+	private Finder addProductPublishFinder;
 	
 	public Identify(IE ie) {
 		this.ie = ie;
@@ -120,6 +123,7 @@ public class Identify extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			addProductPublishFinder = xpath(p.getProperty("addproductpublished"));
 			identifyFinder = id(p.getProperty("link"));
 			addProductContentHeaderFinder = xpath(p.getProperty("addproductcontentheader"));
 			identifyProductContentHeaderFinder = xpath(p.getProperty("identifyproductcontentheader"));
@@ -549,7 +553,7 @@ public class Identify extends TestCase {
 	 * @param generate - if set to true, generate a new serial number
 	 * @throws Exception
 	 */
-	public void setProduct(Product p, boolean generate) throws Exception {
+	public String setProduct(Product p, boolean generate) throws Exception {
 		assertNotNull(p);
 		assertTrue("You either have to generate a serial number or provide one.", generate || (p.getSerialNumber() != null));
 		
@@ -577,7 +581,12 @@ public class Identify extends TestCase {
 		if(assignedtoset) {
 			assertTrue("Product has 'Assigned To' defined but could not find an assigned to field", assignedTo.exists());
 		}
-		
+		SelectList published = getPublishOverSafetyNetworkSelectList();
+		if(p.getPublished()) {
+			published.option(text("/Publish/")).select();
+		} else {
+			published.option(text("/Do Not Publish/")).select();
+		}
 		TextField location = ie.textField(addProductLocationFinder);
 		assertTrue("Could not find the text field for location", location.exists());
 		SelectList productStatus = ie.selectList(addProductProductStatusFinder);
@@ -677,9 +686,21 @@ public class Identify extends TestCase {
 
 		handleRequiredFieldsOnAddProduct(comments);
 
+		if(p.getComments() != null) {
+			comments.set(p.getComments());
+		}
+		
 		FieldIDMisc.startMonitor();	// turn the monitor back on
+		
+		return p.getSerialNumber();
 	}
 	
+	private SelectList getPublishOverSafetyNetworkSelectList() throws Exception {
+		SelectList published = ie.selectList(addProductPublishFinder);
+		assertTrue("Could not find the select list for Publish Over Safety Network", published.exists());
+		return published;
+	}
+
 	public void addProductSave() throws Exception {
 		Button submit = ie.button(addProductSaveButtonFinder);
 		assertNotNull(submit);
@@ -1261,6 +1282,27 @@ public class Identify extends TestCase {
 
 		TextField orderNumber = ie.textField(orderNumberTextFieldFinder);
 		result = orderNumber.exists();
+		return result;
+	}
+
+	public List<String> getProductStatusFromAddAsset() throws Exception {
+		List<String> results = new ArrayList<String>();
+		SelectList ps = ie.selectList(addProductProductStatusFinder);
+		assertTrue("Could not find the select list for Product Status", ps.exists());
+		Options pss = ps.options();
+		Iterator<Option> i = pss.iterator();
+		while(i.hasNext()) {
+			Option status = i.next();
+			results.add(status.text().trim());
+		}
+		return results;
+	}
+
+	public boolean getPublishOverSafetyNetworkSetting() throws Exception {
+		boolean result = false;
+		SelectList published = getPublishOverSafetyNetworkSelectList();
+		String s = published.getSelectedItems().get(0);
+		result = !s.contains("Do Not Publish");
 		return result;
 	}
 }

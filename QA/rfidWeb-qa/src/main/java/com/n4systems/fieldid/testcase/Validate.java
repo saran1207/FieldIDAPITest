@@ -79,7 +79,7 @@ public class Validate extends FieldIDTestCase {
 			login.setPassword(password);
 			login.login();
 			admin.gotoAdministration();
-			mcs.validate();
+			mcs.validate(false);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;
@@ -100,7 +100,7 @@ public class Validate extends FieldIDTestCase {
 			login.setPassword(password);
 			login.login();
 			admin.gotoAdministration();
-			mcs.gotoManageCustomers();
+			mcs.gotoManageCustomers(false);
 			List<String> customers = mcs.getCustomerNamesFromCurrentPage();
 			assertTrue("There should be at least one customer to test Manage Users", customers.size() > 0);
 			int index = misc.getRandomInteger(customers.size());

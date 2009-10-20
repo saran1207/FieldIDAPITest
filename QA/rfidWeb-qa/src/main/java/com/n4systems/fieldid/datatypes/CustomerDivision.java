@@ -15,6 +15,25 @@ public class CustomerDivision {
 	String phone2;
 	String fax;
 	
+	public String toString() {
+		StringBuffer s = new StringBuffer();
+		
+		s.append((divisionName == null) ? "" : divisionName); s.append(",");
+		s.append((divisionID == null) ? "" : divisionID); s.append(",");
+		s.append((contactName == null) ? "" : contactName); s.append(",");
+		s.append((contactEmail == null) ? "" : contactEmail); s.append(",");
+		s.append((streetAddress == null) ? "" : streetAddress); s.append(",");
+		s.append((city == null) ? "" : city); s.append(",");
+		s.append((state == null) ? "" : state); s.append(",");
+		s.append((zip == null) ? "" : zip); s.append(",");
+		s.append((country == null) ? "" : country); s.append(",");
+		s.append((phone1 == null) ? "" : phone1); s.append(",");
+		s.append((phone2 == null) ? "" : phone2); s.append(",");
+		s.append((fax == null) ? "" : fax);
+		
+		return s.toString();
+	}
+	
 	public CustomerDivision(String divisionID, String divisionName) {
 		this.divisionID = divisionID;
 		this.divisionName = divisionName;

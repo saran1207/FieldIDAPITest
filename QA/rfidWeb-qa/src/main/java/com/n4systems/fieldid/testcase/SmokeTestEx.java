@@ -785,15 +785,15 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 */
 	private void createCustomer() throws Exception {
 		admin.gotoAdministration();
-		mcs.gotoManageCustomers();
+		mcs.gotoManageCustomers(false);
 		mcs.setAddCustomerFilter(customer.getCustomerName());
-		mcs.gotoAddCustomerFilter();
+		mcs.gotoAddCustomerFilter(false);
 		if(mcs.isCustomer(customer)) {
 			mcs.gotoEditCustomer(customer);
-			mcs.editCustomer(customer);
+			mcs.editCustomer(customer, false);
 		} else {
-			mcs.gotoAddCustomer();
-			mcs.addCustomer(customer);
+			mcs.gotoAddCustomer(false);
+			mcs.addCustomer(customer, false);
 		}
 	}
 
@@ -805,35 +805,35 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void createDivisions() throws Exception {
-		mcs.gotoCustomerDivisions();
+		mcs.gotoCustomerDivisions(false);
 		CustomerDivision d = new CustomerDivision(null,null);
 		if(!mcs.isCustomerDivision(createDivision)) {
-			mcs.gotoAddCustomerDivision();
+			mcs.gotoAddCustomerDivision(false);
 			d.setDivisionID(createDivision);
 			d.setDivisionName(createDivision);
 			mcs.setCustomerDivision(d);
-			mcs.addCustomerDivision();
+			mcs.addCustomerDivision(false);
 		}
 		if(!mcs.isCustomerDivision(editorDivision)) {
-			mcs.gotoAddCustomerDivision();
+			mcs.gotoAddCustomerDivision(false);
 			d.setDivisionID(editorDivision);
 			d.setDivisionName(editorDivision);
 			mcs.setCustomerDivision(d);
-			mcs.addCustomerDivision();
+			mcs.addCustomerDivision(false);
 		}
 		if(!mcs.isCustomerDivision(bothDivision)) {
-			mcs.gotoAddCustomerDivision();
+			mcs.gotoAddCustomerDivision(false);
 			d.setDivisionID(bothDivision);
 			d.setDivisionName(bothDivision);
 			mcs.setCustomerDivision(d);
-			mcs.addCustomerDivision();
+			mcs.addCustomerDivision(false);
 		}
 		if(!mcs.isCustomerDivision(neitherDivision)) {
-			mcs.gotoAddCustomerDivision();
+			mcs.gotoAddCustomerDivision(false);
 			d.setDivisionID(neitherDivision);
 			d.setDivisionName(neitherDivision);
 			mcs.setCustomerDivision(d);
-			mcs.addCustomerDivision();
+			mcs.addCustomerDivision(false);
 		}
 	}
 
@@ -851,11 +851,11 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 */
 	private void createUsers() throws Exception {
 		admin.gotoAdministration();
-		mcs.gotoManageCustomers();
+		mcs.gotoManageCustomers(false);
 		mcs.setAddCustomerFilter(customer.getCustomerName());
-		mcs.gotoAddCustomerFilter();
+		mcs.gotoAddCustomerFilter(false);
 		mcs.gotoCustomer(customer);
-		mcs.gotoUsers();
+		mcs.gotoUsers(false);
 
 		// Create User
 		CustomerUser u = new CustomerUser(createUser, userEmail, createFirstName, createLastName, password);
@@ -868,7 +868,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		List<String> permissions = new ArrayList<String>();
 		permissions.add(CustomerUser.create);
 		u.setPermissions(permissions);
-		addUser(u);
+		addUser(u, false);
 		
 		// Edit User
 		u.setUserID(editorUser);
@@ -879,7 +879,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		permissions = new ArrayList<String>();
 		permissions.add(CustomerUser.edit);
 		u.setPermissions(permissions);
-		addUser(u);
+		addUser(u, false);
 		
 		// Both User
 		u.setUserID(bothUser);
@@ -891,7 +891,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		permissions.add(CustomerUser.edit);
 		permissions.add(CustomerUser.create);
 		u.setPermissions(permissions);
-		addUser(u);
+		addUser(u, false);
 		
 		// Neither User
 		u.setUserID(neitherUser);
@@ -901,7 +901,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		u.setInitials("nu");
 		permissions = new ArrayList<String>();
 		u.setPermissions(permissions);
-		addUser(u);
+		addUser(u, false);
 		
 		// Admin User
 		u.setUserID(adminUser);
@@ -913,7 +913,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		permissions.add(CustomerUser.edit);
 		permissions.add(CustomerUser.create);
 		u.setPermissions(permissions);
-		addUser(u);
+		addUser(u, false);
 	}
 	
 	/**
@@ -924,13 +924,13 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @param u
 	 * @throws Exception
 	 */
-	private void addUser(CustomerUser u) throws Exception {
+	private void addUser(CustomerUser u, boolean jobsites) throws Exception {
 		 if(!mcs.isUser(u.getUserID())) {
 			mcs.gotoAddUser();
-			mcs.addCustomerUser(u);
+			mcs.addCustomerUser(u, jobsites);
 		} else {
 			mcs.gotoEditUser(u.getUserID());
-			mcs.editCustomerUser(u);
+			mcs.editCustomerUser(u, jobsites);
 		}
 	}
 	

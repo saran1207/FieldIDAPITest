@@ -63,6 +63,7 @@ public class ManageOrganizations extends TestCase {
 	private Finder addOrganizationCountryTimeZoneFinder;
 	private Finder addOrganizationTimeZoneFinder;
 	private Finder editOrganizationWebSiteAddressFinder;
+	private Finder primaryOrganizationNameFinder;
 
 	public ManageOrganizations(IE ie) {
 		this.ie = ie;
@@ -72,6 +73,7 @@ public class ManageOrganizations extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			primaryOrganizationNameFinder = xpath(p.getProperty("primaryorganizationname"));
 			editOrganizationWebSiteAddressFinder = xpath(p.getProperty("editorganizationnamewebsiteaddress"));
 			addOrganizationCountryTimeZoneFinder = xpath(p.getProperty("addorganizationnamecountrytimezone"));
 			addOrganizationTimeZoneFinder = xpath(p.getProperty("addorganizationnametimezone"));
@@ -145,7 +147,7 @@ public class ManageOrganizations extends TestCase {
 		return trs;
 	}
 	
-	public List<String> getOrganizationNames() throws Exception {
+	public List<String> getSecondaryOrganizationNames() throws Exception {
 		List<String> results = new ArrayList<String>();
 
 		Link next;
@@ -159,7 +161,6 @@ public class ManageOrganizations extends TestCase {
 			}
 		} while(more);
 		
-		assertTrue("There is less than one organization", results.size() > 0);
 		return results;
 	}
 	
@@ -451,7 +452,7 @@ public class ManageOrganizations extends TestCase {
 		o.setFax("(780) 555-1213");
 		setAddOrganizationForm(o);
 		saveAddOrganization();
-		List<String> units = getOrganizationNames();
+		List<String> units = getSecondaryOrganizationNames();
 		assertTrue(units.contains(name));
 		gotoEditOrganization(name);
 		Organization tmp = getOrganization(false);
@@ -643,5 +644,13 @@ public class ManageOrganizations extends TestCase {
 	private void checkManageOrganizationsPageForContentHeader() throws Exception {
 		HtmlElement header = ie.htmlElement(manageOrganizationsPageForContentHeaderFinder);
 		assertTrue("Could not find the page header for Manage Organizations - ", header.exists());
+	}
+
+	public String getPrimaryOrganizationName() throws Exception {
+		String result;
+		Span name = ie.span(primaryOrganizationNameFinder);
+		assertTrue("Could not find the primary organization name on Manage Organizations page", name.exists());
+		result = name.text().trim();
+		return result;
 	}
 }

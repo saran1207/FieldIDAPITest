@@ -18,7 +18,24 @@ public class Product {
 	String productType = null;
 	String comments = null;
 	String commentTemplate = null;
+	boolean published = false;
 	
+	public String toString() {
+		StringBuffer s = new StringBuffer(serialNumber);
+		s.append(",");	s.append((rfidNumber == null) ? "" : rfidNumber);
+		s.append(",");	s.append(published ? "Published" : "Not Published");
+		s.append(",");	s.append((purchaseOrder == null) ? "" : purchaseOrder);
+		s.append(",");	s.append(owner);
+		s.append(",");	s.append((location == null) ? "" : location);
+		s.append(",");	s.append((productStatus == null) ? "" : productStatus);
+		s.append(",");	s.append((referenceNumber == null) ? "" : referenceNumber);
+		s.append(",");	s.append((identified == null) ? "" : identified);
+		s.append(",");	s.append((orderNumber == null) ? "" : orderNumber);
+		s.append(",");	s.append((productType == null) ? "" : productType);
+		s.append(",");	s.append((comments == null) ? "" : comments);
+		
+		return s.toString();
+	}
 	/**
 	 * Must have a serial number and identified date.
 	 *
@@ -178,5 +195,19 @@ public class Product {
 	
 	public String getCommentTemplate() {
 		return this.commentTemplate;
+	}
+	
+	// if string contains Not, e.g. Not Published, set false
+	// other wise all input will be true.
+	public void setPublished(String s) {
+		published = s.contains("Not") ? false : true;
+	}
+	
+	public void setPublished(boolean b) {
+		published = b;
+	}
+	
+	public boolean getPublished() {
+		return this.published;
 	}
 }

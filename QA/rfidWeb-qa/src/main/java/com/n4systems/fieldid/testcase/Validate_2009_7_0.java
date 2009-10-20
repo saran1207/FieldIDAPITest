@@ -3,6 +3,7 @@ package com.n4systems.fieldid.testcase;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerUser;
 import com.n4systems.fieldid.datatypes.EmployeeUser;
 import com.n4systems.fieldid.datatypes.Organization;
@@ -21,6 +22,530 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 		password = prop.getProperty("password");
 	}
 
+	public void test() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	/**
+	 * OU: Adding a Customer.
+	 * 
+	 * Requirements
+	 * ----------------------------------------------------------------------------------------------------------
+	 * 1. Each customer will be assigned to OU
+	 * 2. A customer can be assigned to the tenant (all OU's) allowing each OU to see that customer
+	 * 3. If the system user adding the customer belongs to one OU they can add the customer to only their OU or on the tenant level
+	 * 4. If the system user adding the customer belongs to multiple OU's they can add the customer to any one (1) OU or on the tenant level
+	 * 5. If the system user adding the customer belongs to the tenant they can add the customer to any one (1) OU or on the tenant level
+	 * 6. If a customer is assigned on the tenant level any system user (with Manage Customer permission) can then assign that customer to their OU. This will provide a warning telling the system user that by moving this to a specific OU all other OU's in your company can now longer see this customer.
+	 * 
+	 * @throws Exception
+	 */
+	public void testWeb1078() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+
+			admin.gotoAdministration();
+			mos.gotoManageOrganizations();
+			String primaryOrganizationName = mos.getPrimaryOrganizationName();
+			List<String> secondaryOrganizations = mos.getSecondaryOrganizationNames();
+			if(secondaryOrganizations.size() < 1) {
+				mos.gotoAddOrganizationalUnit();
+				Organization o = new Organization(misc.getRandomString());
+				mos.setAddOrganizationForm(o);
+				mos.saveAddOrganization();
+				secondaryOrganizations.add(o.getName());
+			}
+			admin.gotoAdministration();
+			mcs.gotoManageCustomers(false);
+			mcs.gotoAddCustomer(false);
+			
+			String primaryCustomerID = misc.getRandomString();
+			String primaryCustomerName = primaryCustomerID;
+			Customer primaryCustomer = new Customer(primaryCustomerID, primaryCustomerName, primaryOrganizationName);
+			mcs.addCustomer(primaryCustomer, false);
+			
+			mcs.gotoAddCustomer(false);
+			String secondaryCustomerID = misc.getRandomString();
+			String secondaryCustomerName = secondaryCustomerID;
+			String secondaryOrganizationName = secondaryOrganizations.get(0);
+			Customer secondaryCustomer = new Customer(secondaryCustomerID, secondaryCustomerName, secondaryOrganizationName);
+			mcs.addCustomer(secondaryCustomer, false);
+			
+			admin.gotoAdministration();
+			mus.gotoManageUsers();
+			mus.gotoAddEmployeeUser();
+			String secondaryOrganizationEmployeeID = misc.getRandomString(15);
+			String email = "darrell.grainger@n4systems.com";
+			String firstName = secondaryOrganizationEmployeeID;
+			String lastName = "Employee";
+			EmployeeUser u = new EmployeeUser(secondaryOrganizationEmployeeID, email , firstName, lastName, password);
+			u.addPermission(EmployeeUser.endusers);
+			u.addPermission(EmployeeUser.sysusers);
+			Owner owner = new Owner(secondaryOrganizationName);
+			u.setOwner(owner);
+			mus.addEmployeeUser(u);
+
+			misc.logout();
+			login.setUserName(secondaryOrganizationEmployeeID);
+			login.setPassword(password);
+			login.login();
+			admin.gotoAdministration();
+			mcs.gotoManageCustomers(false);
+			mcs.gotoAddCustomer(false);
+			
+			// try to add a customer, primary organization (should fail)
+			boolean passed = false;
+			try {
+				primaryCustomerID = misc.getRandomString();
+				primaryCustomerName = primaryCustomerID;
+				primaryCustomer = new Customer(primaryCustomerID, primaryCustomerName, primaryOrganizationName);
+				mcs.addCustomer(primaryCustomer, false);
+			} catch (Exception e) {
+				// adding a primary should fail and throw an exception
+				passed = true;
+			}
+			assertTrue("Was able to create a primary customer as a secondary employee", passed);
+
+			// add a customer, secondary organization
+			mcs.gotoAddCustomer(false);
+			secondaryCustomerID = misc.getRandomString();
+			secondaryCustomerName = secondaryCustomerID;
+			secondaryCustomer = new Customer(secondaryCustomerID, secondaryCustomerName, secondaryOrganizationName);
+			mcs.addCustomer(secondaryCustomer, false);
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1086() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1080() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1161() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1157() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1159() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1158() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb592() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb547() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1049() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1168() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1002() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1048() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1144() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1162() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1164() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1057() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1079() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1087() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1209() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1077() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1204() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1165() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1208() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
+	public void testWeb1101() throws Exception {
+
+		try {
+			login.setCompany(company);
+			login.setUserName(userid);
+			login.setPassword(password);
+			login.login();
+			// TODO: put your test code here
+		} catch (Exception e) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw e;
+		} catch (Error err) {
+			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
+			throw err;
+		}
+	}
+	
 	public void testWeb1050() throws Exception {
 		String country = prop.getProperty("country");
 		String timeZone = prop.getProperty("timezone");
@@ -46,7 +571,7 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 		}
 	}
 	
-	public void Broken_testWeb1099() throws Exception {
+	public void testWeb1099() throws Exception {
 		String primaryCountry = prop.getProperty("web1099primarycountry");
 		String primaryTimeZone = prop.getProperty("web1099primarytimezone");
 		String secondaryCountry = prop.getProperty("web1099secondarycountry");

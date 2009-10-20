@@ -111,6 +111,9 @@ public class ManageCustomers extends TestCase {
 	private Finder customerIDFinder;
 	private Finder editCustomerOrganizationalUnitFinder;
 	private Finder removeCustomerUserLinksFinder;
+	private Finder manageJobSitesFinder;
+	private Finder manageJobSitesPageContentHeaderFinder;
+	private Finder editJobSitePageContentHeaderFinder;
 
 	public ManageCustomers(IE ie) {
 		this.ie = ie;
@@ -121,16 +124,19 @@ public class ManageCustomers extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
+			manageJobSitesPageContentHeaderFinder = xpath(p.getProperty("jobsitescontentheader"));
 			removeCustomerUserLinksFinder = xpath(p.getProperty("removecustomeruserlinks"));
 			editCustomerOrganizationalUnitFinder = xpath(p.getProperty("editcustomerorgunit"));
 			customerIDFinder = xpath(p.getProperty("viewallcustomerid"));
 			manageCustomerAddUserLinkFinder = xpath(p.getProperty("managecustomeradduser"));
 			manageCustomerUsersLinkFinder = xpath(p.getProperty("managecustomeruserslink"));
-			manageCustomersFinder = text(p.getProperty("link"));
-			manageCustomersPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
+			manageCustomersFinder = xpath(p.getProperty("customerslink"));
+			manageJobSitesFinder = xpath(p.getProperty("jobsiteslink"));
+			manageCustomersPageContentHeaderFinder = xpath(p.getProperty("customercontentheader"));
 			manageCustomersFilterTextFieldFinder = id(p.getProperty("managecustomersfiltertextfield"));
 			manageCustomersFilterButtonFinder = id(p.getProperty("managecustomersfilterbutton"));
 			manageCustomersAddCustomerFinder = xpath(p.getProperty("managecustomersaddcustomer"));
+			editJobSitePageContentHeaderFinder = xpath(p.getProperty("editjobsitecontentheader"));
 			editCustomerPageContentHeaderFinder = xpath(p.getProperty("editcustomercontentheader"));
 			editCustomerCustomerIDFinder = id(p.getProperty("editcustomercustomerid"));
 			editCustomerCustomerNameFinder = id(p.getProperty("editcustomercustomername"));
@@ -144,7 +150,7 @@ public class ManageCustomers extends TestCase {
 			editCustomerPhone1Finder = id(p.getProperty("editcustomerphone1"));
 			editCustomerPhone2Finder = id(p.getProperty("editcustomerphone2"));
 			editCustomerFaxFinder = id(p.getProperty("editcustomerfax"));
-			editCustomerSaveButtonFinder = id(p.getProperty("editcustomersavebutton"));
+			editCustomerSaveButtonFinder = xpath(p.getProperty("editcustomersavebutton"));
 			backToCustomerListLinkFinder = xpath(p.getProperty("managecustomerbacktocustomerlist"));
 			editCustomerFromViewCustomerFinder = xpath(p.getProperty("editcustomerfromviewcustomer"));
 			backToCustomerListFromEditLinkFinder = xpath(p.getProperty("editcustomerbacktocustomerlist"));
@@ -218,16 +224,29 @@ public class ManageCustomers extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void gotoManageCustomers() throws Exception {
-		Link manageCustomers = ie.link(manageCustomersFinder);
-		assertTrue("Could not find the link to Manage Customers", manageCustomers.exists());
+	public void gotoManageCustomers(boolean jobsites) throws Exception {
+		Link manageCustomers;
+		if(jobsites) {
+			manageCustomers = ie.link(manageJobSitesFinder);
+			assertTrue("Could not find the link to Manage Job Sites", manageCustomers.exists());
+		} else {
+			manageCustomers = ie.link(manageCustomersFinder);
+			assertTrue("Could not find the link to Manage Customers", manageCustomers.exists());
+		}
+		
 		manageCustomers.click();
-		checkManageCustomersPageContentHeader();
+		checkManageCustomersPageContentHeader(jobsites);
 	}
 
-	private void checkManageCustomersPageContentHeader() throws Exception {
-		HtmlElement contentHeader = ie.htmlElement(manageCustomersPageContentHeaderFinder);
-		assertTrue("Could not find the content header on Manage Customers page.", contentHeader.exists());
+	private void checkManageCustomersPageContentHeader(boolean jobsites) throws Exception {
+		HtmlElement contentHeader;
+		if(jobsites) {
+			contentHeader = ie.htmlElement(manageJobSitesPageContentHeaderFinder);
+			assertTrue("Could not find the content header on Manage Job Sites page.", contentHeader.exists());
+		} else {
+			contentHeader = ie.htmlElement(manageCustomersPageContentHeaderFinder);
+			assertTrue("Could not find the content header on Manage Customers page.", contentHeader.exists());
+		}
 	}
 	
 	/**
@@ -237,11 +256,11 @@ public class ManageCustomers extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void gotoAddCustomer() throws Exception {
+	public void gotoAddCustomer(boolean jobsites) throws Exception {
 		Link addCustomer = ie.link(manageCustomersAddCustomerFinder);
 		assertTrue("Could not find the link to add a customer", addCustomer.exists());
 		addCustomer.click();
-		checkManageCustomersPageContentHeader();
+		checkManageCustomersPageContentHeader(jobsites);
 	}
 
 	/**
@@ -264,11 +283,11 @@ public class ManageCustomers extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void gotoAddCustomerFilter() throws Exception {
+	public void gotoAddCustomerFilter(boolean jobsites) throws Exception {
 		Button filter = ie.button(manageCustomersFilterButtonFinder);
 		assertTrue("Could not find the Filter button", filter.exists());
 		filter.click();
-		checkManageCustomersPageContentHeader();
+		checkManageCustomersPageContentHeader(jobsites);
 	}
 
 	/**
@@ -312,12 +331,18 @@ public class ManageCustomers extends TestCase {
 		Link c = ie.link(text(getCustomerString(customer)));
 		assertTrue("Could not find a link to the customer name: '" + customer.getCustomerName() + "', customer ID: '" + customer.getCustomerID() + "'", c.exists());
 		c.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(false);
 	}
 
-	private void checkManageCustomerPageContentHeader() throws Exception {
-		HtmlElement contentHeader = ie.htmlElement(editCustomerPageContentHeaderFinder);
-		assertTrue("Could not find the content header for Edit Customer page", contentHeader.exists());
+	private void checkManageCustomerPageContentHeader(boolean jobsites) throws Exception {
+		HtmlElement contentHeader;
+		if(jobsites) {
+			contentHeader = ie.htmlElement(editJobSitePageContentHeaderFinder);
+			assertTrue("Could not find the content header for Edit Job Site page", contentHeader.exists());
+		} else {
+			contentHeader = ie.htmlElement(editCustomerPageContentHeaderFinder);
+			assertTrue("Could not find the content header for Edit Customer page", contentHeader.exists());
+		}
 	}
 
 	/**
@@ -354,7 +379,7 @@ public class ManageCustomers extends TestCase {
 	 * @param customer
 	 * @throws Exception
 	 */
-	public void editCustomer(Customer customer) throws Exception {
+	public void editCustomer(Customer customer, boolean jobsites) throws Exception {
 		assertNotNull(customer);
 		TextField customerID = ie.textField(editCustomerCustomerIDFinder);
 		assertTrue("Could not find the text field for Customer ID", customerID.exists());
@@ -452,15 +477,15 @@ public class ManageCustomers extends TestCase {
 		Button save = ie.button(editCustomerSaveButtonFinder);
 		assertTrue("Could not find the Save button for editing a customer", save.exists());
 		save.click();
-		this.checkManageCustomerPageContentHeader();
+		this.checkManageCustomerPageContentHeader(jobsites);
 	}
 
-	public void addCustomer(Customer customer) throws Exception {
+	public void addCustomer(Customer customer, boolean jobsites) throws Exception {
 		assertNotNull(customer);
 		assertNotNull(customer.getCustomerID());
 		assertNotNull(customer.getCustomerName());
 		// Add Customer is using the same form as edit customer
-		editCustomer(customer);
+		editCustomer(customer, jobsites);
 	}
 	
 	/**
@@ -468,25 +493,25 @@ public class ManageCustomers extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void validate() throws Exception {
+	public void validate(boolean jobsites) throws Exception {
 		mos.gotoManageOrganizations();
-		List<String> orgUnits = mos.getOrganizationNames();
+		List<String> orgUnits = mos.getSecondaryOrganizationNames();
 		assertTrue("There are no organizational units for this tenant", orgUnits.size() > 0);
 		String orgUnit = orgUnits.get(0);
 		mos.gotoBackToAdministration();
-		gotoManageCustomers();
-		gotoAddCustomer();
+		gotoManageCustomers(jobsites);
+		gotoAddCustomer(jobsites);
 		int length = 15;
 		String customerID = misc.getRandomString(length);
 		String customerName = misc.getRandomString(length);
 		Customer customer = new Customer(customerID, customerName, orgUnit);
-		addCustomer(customer);
-		gotoBackToCustomerList();
+		addCustomer(customer, jobsites);
+		gotoBackToCustomerList(jobsites);
 		setAddCustomerFilter(customer.getCustomerName());
-		gotoAddCustomerFilter();
+		gotoAddCustomerFilter(jobsites);
 		gotoCustomer(customer);
 		gotoEditCustomerFromViewCustomer();
-		gotoBackToCustomerListFromEditCustomer();
+		gotoBackToCustomerListFromEditCustomer(jobsites);
 		gotoEditCustomer(customer);
 		customer.setContactName("Dev");
 		customer.setOrgUnit(orgUnit);
@@ -499,12 +524,12 @@ public class ManageCustomers extends TestCase {
 		customer.setPhone1("(416) 599-6464");
 		customer.setPhone2("(416) 599-6466");
 		customer.setFax("(416) 599-6463");
-		editCustomer(customer);
-		gotoBackToCustomerList();
+		editCustomer(customer, jobsites);
+		gotoBackToCustomerList(jobsites);
 		@SuppressWarnings("unused")
 		List<String> customers = getCustomerNames();
 		gotoBackToAdministration();
-		gotoManageCustomers();
+		gotoManageCustomers(jobsites);
 		@SuppressWarnings("unused")
 		List<String> customerIDs = getCustomerIDs();
 		misc.gotoFirstPage();
@@ -520,8 +545,8 @@ public class ManageCustomers extends TestCase {
 		String password = "makemore$";
 		CustomerUser cu = new CustomerUser(userID, email, firstName, lastName, password);
 		gotoCustomerUsers();
-		gotoAddCustomerUser();
-		addCustomerUser(cu);
+		gotoAddCustomerUser(jobsites);
+		addCustomerUser(cu, jobsites);
 		// TODO: confirm the add
 
 		cu.setSecurityRFIDNumber(misc.getRandomRFID());
@@ -532,18 +557,18 @@ public class ManageCustomers extends TestCase {
 		o.setCustomer(customerName);
 		cu.setOwner(o);
 		gotoEditCustomerUser(cu.getUserID());
-		editCustomerUser(cu);
+		editCustomerUser(cu, jobsites);
 		assertTrue("Could not find the customer we just added.", isCustomerUser(cu.getUserID()));
 		
 //		getCustomerUsers();	// not implemented yet
 //		removeCustomerUser(cu.getUserID());	// known bug, cannot remove customer if in log
-		gotoCustomerDivisions();
-		gotoAddCustomerDivision();
+		gotoCustomerDivisions(jobsites);
+		gotoAddCustomerDivision(jobsites);
 		String divisionID = "v-" + customer.getCustomerID().substring(0, 12);
 		String divisionName = "Validate";
 		CustomerDivision d = new CustomerDivision(divisionID, divisionName);
 		setCustomerDivision(d);
-		addCustomerDivision();
+		addCustomerDivision(jobsites);
 		// TODO: confirm the add
 
 		// create a user with this division
@@ -554,9 +579,9 @@ public class ManageCustomers extends TestCase {
 //		isCustomerDivision
 //		deleteCustomerDivision
 
-		gotoBackToCustomerList();
+		gotoBackToCustomerList(jobsites);
 		setAddCustomerFilter(customer.getCustomerName());
-		gotoAddCustomerFilter();
+		gotoAddCustomerFilter(jobsites);
 		int n = getNumberOfCustomers();
 		assertTrue(n == 1);
 		assertTrue(isCustomer(customer));
@@ -684,11 +709,11 @@ public class ManageCustomers extends TestCase {
 		return c;
 	}
 
-	public void gotoAddCustomerUser() throws Exception {
+	public void gotoAddCustomerUser(boolean jobsites) throws Exception {
 		Link add = ie.link(addCustomerUserLinkFinder);
 		assertTrue("Could not find the link to add a customer user", add.exists());
 		add.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 	}
 	
 	private void checkManageUsersPageContentHeader() throws Exception {
@@ -815,11 +840,11 @@ public class ManageCustomers extends TestCase {
 		return results;
 	}
 
-	public void gotoBackToCustomerListFromEditCustomer() throws Exception {
+	public void gotoBackToCustomerListFromEditCustomer(boolean jobsites) throws Exception {
 		Link l = ie.link(backToCustomerListFromEditLinkFinder);
 		assertTrue("Could not find the 'View All' link", l.exists());
 		l.click();
-		this.checkManageCustomersPageContentHeader();
+		this.checkManageCustomersPageContentHeader(jobsites);
 	}
 
 	public void gotoEditCustomerFromViewCustomer() throws Exception {
@@ -828,14 +853,14 @@ public class ManageCustomers extends TestCase {
 		edit.click();
 	}
 
-	public void gotoBackToCustomerList() throws Exception {
+	public void gotoBackToCustomerList(boolean jobsites) throws Exception {
 		Link l = ie.link(backToCustomerListLinkFinder);
 		assertTrue("Could not find the 'Back to customer list' link", l.exists());
 		l.click();
-		this.checkManageCustomersPageContentHeader();
+		this.checkManageCustomersPageContentHeader(jobsites);
 	}
 
-	public void addCustomerUser(CustomerUser u) throws Exception {
+	public void addCustomerUser(CustomerUser u, boolean jobsites) throws Exception {
 		assertNotNull(u);
 		TextField userID = ie.textField(addCustomerUserUserIDFinder);
 		assertTrue("Could not find the User ID field", userID.exists());
@@ -882,7 +907,9 @@ public class ManageCustomers extends TestCase {
 			o.select();
 		}
 
-		// TODO: org unit
+		misc.gotoChooseOwner();
+		misc.setOwner(u.getOwner());
+		misc.selectOwner();
 		
 		TextField password = ie.textField(addCustomerUserPasswordFinder);
 		assertTrue("Could not find the Password field", password.exists());
@@ -895,7 +922,7 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the Submit button", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 	}
 
 	private void checkManageUserPageContentHeader(String userID) throws Exception {
@@ -904,11 +931,11 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the User ID in the header", header.text().contains(userID));
 	}
 	
-	public void gotoAddCustomerDivision() throws Exception {
+	public void gotoAddCustomerDivision(boolean jobsites) throws Exception {
 		Link add = ie.link(manageCustomerAddDivisionFinder);
 		assertTrue("Could not find the link to add a division", add.exists());
 		add.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 	}
 	
 	public void setCustomerDivision(CustomerDivision d) throws Exception {
@@ -986,15 +1013,15 @@ public class ManageCustomers extends TestCase {
 		Button submit = ie.button(manageCustomerDivisionSubmitButtonFinder);
 		assertTrue("Could not find the Submit button for adding a division", submit.exists());
 		submit.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(false);
 	}
 
-	public void gotoCustomerDivisions() throws Exception {
+	public void gotoCustomerDivisions(boolean jobsites) throws Exception {
 		Link d = ie.link(customerDivisionsLinkFinder);
 		assertTrue("Could not find the link to customer divisions", d.exists());
 		d.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 	}
 
 	public void gotoCustomerUsers() throws Exception {
@@ -1002,7 +1029,7 @@ public class ManageCustomers extends TestCase {
 		assertTrue("Could not find the link to customer users", u.exists());
 		u.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(false);
 	}
 
 	public String getAddDivisionMessage() throws Exception {
@@ -1035,10 +1062,10 @@ public class ManageCustomers extends TestCase {
 		Link user = getLinkToCustomerUser(userID);
 		assertTrue("Could not find the link to edit user '" + userID + "'", user.exists());
 		user.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(false);
 	}
 
-	public void editCustomerUser(CustomerUser u) throws Exception {
+	public void editCustomerUser(CustomerUser u, boolean jobsites) throws Exception {
 		assertNotNull(u);
 		FieldIDMisc.stopMonitor();
 		TextField userID = ie.textField(editCustomerUserUserIDFinder);
@@ -1081,10 +1108,12 @@ public class ManageCustomers extends TestCase {
 			o.select();
 		}
 
-		// TODO: org unit
+		misc.gotoChooseOwner();
+		misc.setOwner(u.getOwner());
+		misc.selectOwner();
 		
 		saveEditCustomerUser();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 		FieldIDMisc.startMonitor();
 	}
 
@@ -1159,12 +1188,12 @@ public class ManageCustomers extends TestCase {
 		return div.exists();
 	}
 
-	public void addCustomerDivision() throws Exception {
+	public void addCustomerDivision(boolean jobsites) throws Exception {
 		Button save = ie.button(manageCustomerAddDivisionSaveFinder);
 		assertTrue("Could not find the Save button on Add Division", save.exists());
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 	}
 
 	public boolean isUser(String userID) throws Exception {
@@ -1176,20 +1205,20 @@ public class ManageCustomers extends TestCase {
 		Link l = ie.link(manageCustomerAddUserLinkFinder);
 		assertTrue("Could not find the link to Add User", l.exists());
 		l.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(false);
 	}
 
-	public void gotoUsers() throws Exception {
+	public void gotoUsers(boolean jobsites) throws Exception {
 		Link l = ie.link(manageCustomerUsersLinkFinder);
 		assertTrue("Could not find the link to this customer's Users", l.exists());
 		l.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(jobsites);
 	}
 
 	public void gotoEditUser(String userID) throws Exception {
 		Link l = ie.link(xpath("//TABLE[@id='userList']/TBODY/TR/TD[1]/A[contains(text(),'" + userID + "')]"));
 		assertTrue("Could not find the link to user '" + userID + "'", l.exists());
 		l.click();
-		checkManageCustomerPageContentHeader();
+		checkManageCustomerPageContentHeader(false);
 	}
 }

@@ -5,6 +5,13 @@ public class Owner {
 	String customer = null;
 	String division = null;
 	
+	public String toString() {
+		StringBuffer s = new StringBuffer();
+		s.append((organization == null) ? "" : organization);
+		s.append(",");	s.append((customer == null) ? "" : customer);
+		s.append(",");	s.append((division == null) ? "" : division);
+		return s.toString();
+	}
 	public Owner(String organization) {
 		this.organization = organization;
 	}

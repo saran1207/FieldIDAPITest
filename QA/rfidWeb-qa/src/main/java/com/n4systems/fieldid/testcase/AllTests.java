@@ -18,8 +18,8 @@ public class AllTests {
 		suite.addTestSuite(Validate.class);
 		suite.addTestSuite(Validate_2009_6_2.class);
 		suite.addTestSuite(Validate_2009_7_0.class);
-		suite.addTestSuite(EmbeddedLogin.class);
-		//suite.addTestSuite(BrandedLogin.class);
+//		suite.addTestSuite(EmbeddedLogin.class);
+//		//suite.addTestSuite(BrandedLogin.class);
 //		suite.addTestSuite(EmployeePermissions.class);
 //		suite.addTestSuite(WEB_186.class);
 //		//suite.addTestSuite(WEB_252.class);	// timeout testing. takes over 3 hours to run

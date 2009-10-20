@@ -5,6 +5,15 @@ public class CustomerUser extends SystemUser {
 	String customer = null;
 	String division = null;
 
+	public String toString() {
+		StringBuffer s = new StringBuffer(super.toString());
+		
+		s.append(",");	s.append((customer == null) ? "" : customer);
+		s.append(",");	s.append((division == null) ? "" : division);
+
+		return s.toString();
+	}
+	
 	public CustomerUser(String userID, String email, String firstName, String lastName, String password) {
 		super(userID, email, firstName, lastName, password);
 	}

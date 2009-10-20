@@ -21,6 +21,23 @@ public class SystemUser {
 	public final static String create = "Create Inspections";
 	public final static String edit = "Edit Inspections";
 
+	public String toString() {
+		StringBuffer s = new StringBuffer();
+		
+		s.append((userID == null) ? "" : userID);	s.append(",");
+		s.append((email == null) ? "" : email);	s.append(",");
+		s.append((firstName == null) ? "" : firstName);	s.append(",");
+		s.append((lastName == null) ? "" : lastName);	s.append(",");
+		s.append((position == null) ? "" : position);	s.append(",");
+		s.append((initials == null) ? "" : initials);	s.append(",");
+		s.append((securityRFIDNumber == null) ? "" : securityRFIDNumber);	s.append(",");
+		s.append((country == null) ? "" : country);	s.append(",");
+		s.append((timeZone == null) ? "" : timeZone);	s.append(",");
+		s.append((password == null) ? "" : password);	s.append(",");
+		s.append(o.toString());
+		
+		return s.toString();
+	}
 	
 	public SystemUser(String userID, String email, String firstName, String lastName, String password) {
 		this.userID = userID;
@@ -72,6 +89,11 @@ public class SystemUser {
 	
 	public void addPermission(String permission) {
 		permissions.add(permission);
+	}
+	
+	public void addAllPermissions() {
+		permissions.add(create);
+		permissions.add(edit);
 	}
 
 	public String getUserID() {

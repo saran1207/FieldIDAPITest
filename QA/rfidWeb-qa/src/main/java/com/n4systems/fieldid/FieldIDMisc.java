@@ -146,11 +146,12 @@ public class FieldIDMisc extends TestCase {
 	 * @throws Exception
 	 */
 	public void setOwner(Owner o) throws Exception {
+		stopMonitor();
 		assertNotNull(o);
 		assertNotNull(o.getOrganization());
 		
 		SelectList org = getOrganizationSelectListFromChooseOwner();
-		String s = "/^" + o.getOrganization() + "/";
+		String s = "/" + o.getOrganization() + "/";
 		Option o2 = org.option(text(s));
 		assertTrue("Could not find an Option matching '" + s + "'", o2.exists());
 		o2.select();
@@ -165,9 +166,11 @@ public class FieldIDMisc extends TestCase {
 		
 		SelectList division = getDivisionSelectListFromChooseOwner();
 		if(o.getDivision() != null) {
-			String d = "/^" + o.getDivision() + " /";
+			String d = "/^" + o.getDivision() + "/";
 			division.option(text(d)).select();
+			waitForJavascript();
 		}
+		startMonitor();
 	}
 	
 	public SelectList getOrganizationSelectListFromChooseOwner() throws Exception {

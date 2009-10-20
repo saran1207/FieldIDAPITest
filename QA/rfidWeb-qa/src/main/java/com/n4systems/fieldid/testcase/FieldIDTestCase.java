@@ -54,9 +54,7 @@ public abstract class FieldIDTestCase extends TestCase {
 	protected ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 	protected static String timestamp = null;
 	protected static boolean once = true;
-	protected String loginURL = "https://n4.grumpy.n4/fieldid/";
-//	protected String loginURL = "https://n4.team.n4systems.com/fieldid/";
-//	protected String loginURL = "https://n4.fieldid.com/fieldid/";	// !!! use with caution !!!
+	protected String loginURL = "https://n4.team.n4systems.com/fieldid/";	// default to staging
 	protected Properties prop;
 	protected InputStream in;
 	protected String propertyFile;

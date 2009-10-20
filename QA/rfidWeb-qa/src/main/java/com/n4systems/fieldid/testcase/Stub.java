@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.testcase;
 
 import com.n4systems.fieldid.datatypes.Owner;
+import com.n4systems.fieldid.datatypes.Product;
 
 public class Stub extends FieldIDTestCase {
 
@@ -12,15 +13,11 @@ public class Stub extends FieldIDTestCase {
 		String method = getName();
 
 		try {
-			login.setCompany("unirope");
+			login.setCompany("crosby");
 			login.setUserName("n4systems");
 			login.setPassword("makemore$");
 			login.login();
-			identify.gotoAddProduct();
-			misc.gotoChooseOwner();
-			Owner o = new Owner("Unirope Ltd. Edmonton", "Testing", "Division #1");
-			misc.setOwner(o);
-			misc.selectOwner();
+			mysn.validateTenant("Field ID");
 			Thread.sleep(1);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");

@@ -158,6 +158,19 @@ public class Assets extends TestCase {
 	private Finder subProductLinksFinder;
 	private Finder subProductPartOfMasterProductLinkFinder;
 	private Finder selectColumnSafetyNetworkFinder;
+	private Finder assetViewSerialNumberFinder;
+	private Finder assetViewRFIDNumberFinder;
+	private Finder assetViewPublishedFinder;
+	private Finder assetViewProductTypeFinder;
+	private Finder assetViewProductStatusFinder;
+	private Finder assetViewIdentifiedFinder;
+	private Finder assetViewOrderNumberFinder;
+	private Finder assetViewCustomerFinder;
+	private Finder assetViewDivisionFinder;
+	private Finder assetViewLocationFinder;
+	private Finder assetViewReferenceNumberFinder;
+	private Finder assetViewPurchaseOrderFinder;
+	private Finder assetViewCommentFinder;
 	
 	public Assets(IE ie) {
 		this.ie = ie;
@@ -169,6 +182,19 @@ public class Assets extends TestCase {
 			inspect = new Inspect(ie);
 			admin = new Admin(ie);
 			mpts = new ManageProductTypes(ie);
+			assetViewSerialNumberFinder = xpath(p.getProperty("assetviewserialnumber"));
+			assetViewRFIDNumberFinder = xpath(p.getProperty("assetviewrfidnumber"));
+			assetViewPublishedFinder = xpath(p.getProperty("assetviewpublished"));
+			assetViewProductTypeFinder = xpath(p.getProperty("assetviewproducttype"));
+			assetViewProductStatusFinder = xpath(p.getProperty("assetviewproductstatus"));
+			assetViewIdentifiedFinder = xpath(p.getProperty("assetviewidentified"));
+			assetViewOrderNumberFinder = xpath(p.getProperty("assetviewordernumber"));
+			assetViewCustomerFinder = xpath(p.getProperty("assetviewcustomer"));
+			assetViewDivisionFinder = xpath(p.getProperty("assetviewdivision"));
+			assetViewLocationFinder = xpath(p.getProperty("assetviewlocation"));
+			assetViewReferenceNumberFinder = xpath(p.getProperty("assetviewreferencenumber"));
+			assetViewPurchaseOrderFinder = xpath(p.getProperty("assetviewpurchaseorder"));
+			assetViewCommentFinder = xpath(p.getProperty("assetviewcomments"));
 			selectColumnSafetyNetworkFinder = xpath(p.getProperty("selectcolumnsafetynetwork"));
 			subProductPartOfMasterProductLinkFinder = xpath(p.getProperty("subproductlinktomasterproduct"));
 			subProductLinksFinder = xpath(p.getProperty("subproductlinksonmasterproductview"));
@@ -1932,5 +1958,144 @@ public class Assets extends TestCase {
 //		this.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
 //		this.editEmployeeProduct(p);
 //		this.checkEndUserEditProduct(divisional);
+	}
+
+	/**
+	 * Compares what is on the web to the Product object. Assumes you
+	 * used something like home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+	 * to get to the View Asset page first.
+	 * 
+	 * @param p
+	 */
+	public void validateAsset(Product p) throws Exception {
+		Product tmp = getProduct();
+		assertEquals("Serial numbers don't match.", p.getSerialNumber(), tmp.getSerialNumber());
+		assertEquals("Identified dates don't match.", p.getIdentified(), tmp.getIdentified());
+		if(p.getAssignedTo() != null) {
+			assertEquals("Assigned To fields don't match.", p.getAssignedTo(), tmp.getAssignedTo());
+		}
+		if(p.getComments() != null) {
+			assertEquals("Comments fields don't match.", p.getComments(), tmp.getComments());
+		}
+		if(p.getCustomer() != null) {
+			assertEquals("Customer fields don't match.", p.getCustomer(), tmp.getCustomer());
+		}
+		if(p.getDivision() != null) {
+			assertEquals("Division fields don't match.", p.getDivision(), tmp.getDivision());
+		}
+		if(p.getJobSite() != null) {
+			assertEquals("Job Site fields don't match.", p.getJobSite(), tmp.getJobSite());
+		}
+		if(p.getLocation() != null) {
+			assertEquals("Location fields don't match.", p.getLocation(), tmp.getLocation());
+		}
+		if(p.getOrderNumber() != null) {
+			assertEquals("Order Number fields don't match.", p.getOrderNumber(), tmp.getOrderNumber());
+		}
+		if(p.getProductStatus() != null) {
+			assertEquals("Product Status fields don't match.", p.getProductStatus(), tmp.getProductStatus());
+		}
+		if(p.getProductType() != null) {
+			assertEquals("Product Type fields don't match.", p.getProductType(), tmp.getProductType());
+		}
+		assertEquals("Published fields don't match.", p.getPublished(), tmp.getPublished());
+		if(p.getPurchaseOrder() != null) {
+			assertEquals("Purchase Order fields don't match.", p.getPurchaseOrder(), tmp.getPurchaseOrder());
+		}
+		if(p.getReferenceNumber() != null) {
+			assertEquals("Reference Number fields don't match.", p.getReferenceNumber(), tmp.getReferenceNumber());
+		}
+		if(p.getRFIDNumber() != null) {
+			assertEquals("RFID Number fields don't match.", p.getRFIDNumber(), tmp.getRFIDNumber());
+		}
+	}
+
+	/**
+	 * Creates a Product object from the information on the View Asset page.
+	 * 
+	 * @return
+	 */
+	public Product getProduct() throws Exception {
+		Product p = new Product(null);
+		String s;
+
+		Span serialNumber = ie.span(assetViewSerialNumberFinder);
+		assertTrue("Could not find the serial number on the Asset View page", serialNumber.exists());
+		s = serialNumber.text().trim();
+		p.setSerialNumber(s);
+		
+		Span rfidNumber = ie.span(assetViewRFIDNumberFinder);
+		assertTrue("Could not find the rfid number on the Asset View page", rfidNumber.exists());
+		s = rfidNumber.text().trim();
+		if(s.equals(""))	s = null;
+		p.setRFIDNumber(s);
+		
+		Span published = ie.span(assetViewPublishedFinder);
+		assertTrue("Could not find the Published Over Safety Network on the Asset View page", published.exists());
+		s = published.text().trim();
+		p.setPublished(s);
+		
+		Span productType = ie.span(assetViewProductTypeFinder);
+		assertTrue("Could not find the Product Type on the Asset View page", productType.exists());
+		s = productType.text().trim();
+		p.setProductType(s);
+		
+		Span productStatus = ie.span(assetViewProductStatusFinder);
+		assertTrue("Could not find the Product Type on the Asset View page", productStatus.exists());
+		s = productStatus.text().trim();
+		if(s.equals(""))	s = null;
+		p.setProductStatus(s);
+		
+		Span identified = ie.span(assetViewIdentifiedFinder);
+		assertTrue("Could not find the identified on the Asset View page", identified.exists());
+		s = identified.text().trim();
+		p.setIdentified(s);
+		
+		Span orderNumber = ie.span(assetViewOrderNumberFinder);
+		assertTrue("Could not find the Order Number on the Asset View page", orderNumber.exists());
+		s = orderNumber.text().trim();
+		if(s.equals("Connect To Order") || s.equals(""))	s = null;
+		p.setOrderNumber(s);
+		
+		Span customer = ie.span(assetViewCustomerFinder);
+		assertTrue("Could not find the customer on the Asset View page", customer.exists());
+		s = customer.text().trim();
+		p.setCustomer(s);
+		
+		Span division = ie.span(assetViewDivisionFinder);
+		assertTrue("Could not find the division on the Asset View page", division.exists());
+		s = division.text().trim();
+		if(s.equals(""))	s = null;
+		p.setDivision(s);
+		
+		Span location = ie.span(assetViewLocationFinder);
+		assertTrue("Could not find the location on the Asset View page", location.exists());
+		s = location.text().trim();
+		if(s.equals(""))	s = null;
+		p.setLocation(s);
+		
+		Span referenceNumber = ie.span(assetViewReferenceNumberFinder);
+		assertTrue("Could not find the Reference Number on the Asset View page", referenceNumber.exists());
+		s = referenceNumber.text().trim();
+		if(s.equals(""))	s = null;
+		p.setReferenceNumber(s);
+		
+		Span purchaseOrder = ie.span(assetViewPurchaseOrderFinder);
+		assertTrue("Could not find the Purchase Order on the Asset View page", purchaseOrder.exists());
+		s = purchaseOrder.text().trim();
+		if(s.equals(""))	s = null;
+		p.setPurchaseOrder(s);
+
+		// Comments don't always exist.
+		HtmlElement comment = ie.htmlElement(assetViewCommentFinder);
+		if(comment.exists()) {
+			s = comment.text().trim();
+		} else {
+			s = "";
+		}
+		if(s.equals(""))	s = null;
+		p.setComments(s);
+		
+		return p;
 	}
 }

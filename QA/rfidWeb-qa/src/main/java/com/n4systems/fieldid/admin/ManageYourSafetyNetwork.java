@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
+import com.n4systems.fieldid.Admin;
 import com.n4systems.fieldid.FieldIDMisc;
+import com.n4systems.fieldid.Identify;
+
 import watij.elements.Button;
 import watij.elements.Checkbox;
 import watij.elements.Div;
@@ -37,6 +41,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 	FieldIDMisc misc;
 	ManageProductTypes mpts;
 	ManageInspectionTypes mits;
+	Admin admin;
 	private Finder manageYourSafetyNetworkFinder;
 	private Finder manageYourSafetyNetworkContentHeaderFinder;
 	private Finder safetyNetworkLinkedCompanyNamesFinder;
@@ -71,6 +76,14 @@ public class ManageYourSafetyNetwork extends TestCase {
 	private Finder step3ViewDetailsLinkFinder;
 	private Finder renamedElementsTableRowsFinder;
 	private Finder step4YouAreDoneMessageFinder;
+	private Finder manageYourSettingsAndPrivacyFinder;
+	private Finder manageYourSettingsAndPrivacyContentHeaderFinder;
+	private Finder cancelManageYourSettingsAndPrivacyFinder;
+	private Finder autoPublishAssetsFinder;
+	private Finder saveManageYourSettingsAndPrivacyFinder;
+	private Finder backToSafetyNetworkLinkFinder;
+	private Finder manageAndAddNewConnectionsFinder;
+	private Finder safetyNetworkConnectionsContentHeaderFinder;
 
 	public ManageYourSafetyNetwork(IE ie) {
 		this.ie = ie;
@@ -81,7 +94,16 @@ public class ManageYourSafetyNetwork extends TestCase {
 			misc = new FieldIDMisc(ie);
 			mpts = new ManageProductTypes(ie);
 			mits = new ManageInspectionTypes(ie);
-			manageYourSafetyNetworkFinder = text(p.getProperty("link"));
+			admin = new Admin(ie);
+			safetyNetworkConnectionsContentHeaderFinder = xpath(p.getProperty("safetynetworkconnectionspageheader"));
+			manageAndAddNewConnectionsFinder = xpath(p.getProperty("manageandaddnewconnections"));
+			backToSafetyNetworkLinkFinder = xpath(p.getProperty("backtosafetynetworklink"));
+			saveManageYourSettingsAndPrivacyFinder = xpath(p.getProperty("savemanageyoursettingsandprivacy"));
+			autoPublishAssetsFinder = xpath(p.getProperty("autopublishassets"));
+			cancelManageYourSettingsAndPrivacyFinder = xpath(p.getProperty("cancelmanageyoursettingsandprivacy"));
+			manageYourSettingsAndPrivacyContentHeaderFinder = xpath(p.getProperty("manageyoursettingsandprivacyheader"));
+			manageYourSettingsAndPrivacyFinder = xpath(p.getProperty("manageyoursettingsandprivacy"));
+			manageYourSafetyNetworkFinder = xpath(p.getProperty("link"));
 			manageYourSafetyNetworkContentHeaderFinder = xpath(p.getProperty("contentheader"));
 			safetyNetworkLinkedCompanyNamesFinder = xpath(p.getProperty("companynamecells"));
 //			FieldIDAccessCodeTextFieldFinder = xpath(p.getProperty("fieldidaccesscodetextfield"));
@@ -283,8 +305,39 @@ public class ManageYourSafetyNetwork extends TestCase {
 	}
 
 	public void validateTenant(String companyName) throws Exception {
+		Identify identify = new Identify(ie);
 		gotoManageYourSafetyNetwork();
+		gotoManageYourSettingsAndPrivacy();
+		gotoCancelManageYourSettingsAndPrivacy();
+		gotoManageYourSettingsAndPrivacy();
+		boolean autoPublishAssets = getAutoPublishAssets();
+		setAutoPublishAssets(true);
+		gotoSaveManageYourSettingsAndPrivacy();
+		identify.gotoIdentify();
+		identify.gotoAddProduct();
+		assertTrue(identify.getPublishOverSafetyNetworkSetting());
+		gotoManageYourSafetyNetwork();
+		gotoManageYourSettingsAndPrivacy();
+		setAutoPublishAssets(false);
+		gotoSaveManageYourSettingsAndPrivacy();
+		identify.gotoIdentify();
+		identify.gotoAddProduct();
+		assertFalse(identify.getPublishOverSafetyNetworkSetting());
+		gotoManageYourSafetyNetwork();
+		gotoManageYourSettingsAndPrivacy();
+		setAutoPublishAssets(!autoPublishAssets);
+		gotoSaveManageYourSettingsAndPrivacy();
+		gotoBackToSafetyNetwork();
+		gotoManageYourSettingsAndPrivacy();
+		setAutoPublishAssets(autoPublishAssets);
+		gotoSaveManageYourSettingsAndPrivacy();
+		assertTrue(getAutoPublishAssets() == autoPublishAssets);
+		gotoManageYourSafetyNetwork();
+//		gotoPublishAndManageYourCatalog();
+//		gotoInbox();
+		gotoManageAndAddNewConnections();
 		List<String> catalogs = getLinkedCompanyWithPublishedCatalogs();
+		// TODO: this code assumes the company name is linked
 		assertTrue("Could not find the Import Catalog option for the company '" + companyName + "'", catalogs.contains(companyName));
 		gotoImportCatalog(companyName);
 		gotoCancelCatalogImport();
@@ -341,7 +394,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 		}
 		Thread.sleep(10*60*1000);	// sleep for 10 minutes
 		
-		misc.gotoBackToAdministration();
+		admin.gotoAdministration();
 		mpts.gotoManageProductTypes();
 		List<String> pts = mpts.getProductTypeNames();
 		Iterator<String> j = importedProductTypes.iterator();
@@ -349,7 +402,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 			String pt = j.next();
 			assertTrue("The imported product type '" + pt + "' did not import correctly.", pts.contains(pt));
 		}
-		misc.gotoBackToAdministration();
+		admin.gotoAdministration();
 		mits.gotoManageInspectionTypes();
 		List<String> its = mits.getInspectionTypes();
 		Iterator<String> k = importedInspectionTypes.iterator();
@@ -357,6 +410,72 @@ public class ManageYourSafetyNetwork extends TestCase {
 			String it = k.next();
 			assertTrue("The imported inspect type '" + it + "' did not import correctly.", its.contains(it));
 		}
+	}
+
+	public void gotoManageAndAddNewConnections() throws Exception {
+		Link l = ie.link(manageAndAddNewConnectionsFinder);
+		assertTrue("Could not find a link to Manage and Add New Connections", l.exists());
+		l.click();
+		checkSafetyNetworkConnectionsPage();
+	}
+
+	private void checkSafetyNetworkConnectionsPage() throws Exception {
+		HtmlElement he = ie.htmlElement(safetyNetworkConnectionsContentHeaderFinder);
+		assertTrue("Could not find the page header for Safety Network Connections", he.exists());
+	}
+
+	public void gotoBackToSafetyNetwork() throws Exception {
+		Link l = ie.link(backToSafetyNetworkLinkFinder);
+		assertTrue("Could not find a link to go back to Safety Network", l.exists());
+		l.click();
+		checkManageSafetyNetworkPage();
+	}
+
+	public void gotoSaveManageYourSettingsAndPrivacy() throws Exception {
+		Button save = ie.button(saveManageYourSettingsAndPrivacyFinder);
+		assertTrue("Could not find a button to Save Manage Your Settings And Privacy", save.exists());
+		save.click();
+		checkSettingsAndPrivacyPage();
+		misc.checkForErrorMessagesOnCurrentPage();
+	}
+
+	public void setAutoPublishAssets(boolean b) throws Exception {
+		Checkbox c = getAutoPublishAssetsCheckbox();
+		c.set(b);
+	}
+
+	private Checkbox getAutoPublishAssetsCheckbox() throws Exception {
+		Checkbox c = ie.checkbox(autoPublishAssetsFinder);
+		assertTrue("Could not find the Auto publish assets checkbox", c.exists());
+		return c;
+	}
+	
+	public boolean getAutoPublishAssets() throws Exception {
+		boolean result = false;
+		
+		Checkbox c = getAutoPublishAssetsCheckbox();
+		result = c.checked();
+		
+		return result;
+	}
+
+	public void gotoCancelManageYourSettingsAndPrivacy() throws Exception {
+		Link l = ie.link(cancelManageYourSettingsAndPrivacyFinder);
+		assertTrue("Could not find a link to Cancel Manage Your Settings And Privacy", l.exists());
+		l.click();
+		checkManageSafetyNetworkPage();
+	}
+
+	public void gotoManageYourSettingsAndPrivacy() throws Exception {
+		Link l = ie.link(manageYourSettingsAndPrivacyFinder);
+		assertTrue("Could not find a link to Manage Your Settings And Privacy", l.exists());
+		l.click();
+		checkSettingsAndPrivacyPage();
+	}
+
+	private void checkSettingsAndPrivacyPage() throws Exception {
+		HtmlElement he = ie.htmlElement(manageYourSettingsAndPrivacyContentHeaderFinder);
+		assertTrue("Could not find the page header for Manage Your Settings and Privacy", he.exists());
 	}
 
 	public String getStep4YouAreDoneMessage() throws Exception {
@@ -635,7 +754,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 		Iterator<TableCell> i = companyNames.iterator();
 		while(i.hasNext()) {
 			TableCell companyName = i.next();
-			Link importCatalog = companyName.link(xpath("../TD[3]/A[contains(text(),'Import Catalog')]"));
+			Link importCatalog = companyName.link(xpath("../TD[5]/A[contains(text(),'View Catalog')]"));
 			if(importCatalog.exists()) {
 				String s = companyName.text().trim();
 				results.add(s);

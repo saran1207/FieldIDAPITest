@@ -1007,8 +1007,8 @@ public class Reporting extends TestCase {
 		gotoSavedReport(book);
 
 		// save the results to a file
-		String filename = book + ".csv";
-		dumpReportingSearchResults(filename);
+//		String filename = book + ".csv";
+//		dumpReportingSearchResults(filename);
 		
 		// email an excel spreadsheet with results
 		exportToExcel();
