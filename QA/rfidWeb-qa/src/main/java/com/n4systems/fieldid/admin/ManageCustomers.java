@@ -544,6 +544,8 @@ public class ManageCustomers extends TestCase {
 		String lastName = customer.getCustomerID();
 		String password = "makemore$";
 		CustomerUser cu = new CustomerUser(userID, email, firstName, lastName, password);
+		Owner o = new Owner(orgUnit);
+		cu.setOwner(o );
 		gotoCustomerUsers();
 		gotoAddCustomerUser(jobsites);
 		addCustomerUser(cu, jobsites);
@@ -553,7 +555,6 @@ public class ManageCustomers extends TestCase {
 		cu.setInitials("vu");
 		cu.setCountry("Canada");
 		cu.setTimeZone("Toronto");
-		Owner o = new Owner(orgUnit);
 		o.setCustomer(customerName);
 		cu.setOwner(o);
 		gotoEditCustomerUser(cu.getUserID());

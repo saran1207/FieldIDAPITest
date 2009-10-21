@@ -41,7 +41,6 @@ public class ManageYourSafetyNetwork extends TestCase {
 	FieldIDMisc misc;
 	ManageProductTypes mpts;
 	ManageInspectionTypes mits;
-	Admin admin;
 	private Finder manageYourSafetyNetworkFinder;
 	private Finder manageYourSafetyNetworkContentHeaderFinder;
 	private Finder safetyNetworkLinkedCompanyNamesFinder;
@@ -94,7 +93,6 @@ public class ManageYourSafetyNetwork extends TestCase {
 			misc = new FieldIDMisc(ie);
 			mpts = new ManageProductTypes(ie);
 			mits = new ManageInspectionTypes(ie);
-			admin = new Admin(ie);
 			safetyNetworkConnectionsContentHeaderFinder = xpath(p.getProperty("safetynetworkconnectionspageheader"));
 			manageAndAddNewConnectionsFinder = xpath(p.getProperty("manageandaddnewconnections"));
 			backToSafetyNetworkLinkFinder = xpath(p.getProperty("backtosafetynetworklink"));
@@ -393,6 +391,7 @@ public class ManageYourSafetyNetwork extends TestCase {
 			}
 		}
 		Thread.sleep(10*60*1000);	// sleep for 10 minutes
+		Admin admin = new Admin(ie);
 		
 		admin.gotoAdministration();
 		mpts.gotoManageProductTypes();

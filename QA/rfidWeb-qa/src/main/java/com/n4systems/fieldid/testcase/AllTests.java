@@ -14,7 +14,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for com.n4systems.fieldid.testcase");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(SmokeTestEx.class);	// run smoke test first so it creates stuff for Validate to use
+		suite.addTestSuite(SmokeTestEx2.class);	// run smoke test first so it creates stuff for Validate to use
 		suite.addTestSuite(Validate.class);
 		suite.addTestSuite(Validate_2009_6_2.class);
 		suite.addTestSuite(Validate_2009_7_0.class);

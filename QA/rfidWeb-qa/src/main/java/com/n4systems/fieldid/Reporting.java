@@ -416,15 +416,6 @@ public class Reporting extends TestCase {
 			purchaseOrder.set(r.getPurchaseOrder());
 		}
 		
-		SelectList jobSite = ie.selectList(reportingSearchCriteriaJobSiteFinder);
-		String jobSiteText = r.getJobSite();
-		if(jobSiteText != null) {
-			assertTrue("Could not find the Job Site select list", jobSite.exists());
-			Option o = jobSite.option(text(jobSiteText));
-			assertTrue("Could not find the Job Site '" + jobSiteText + "'", o.exists());
-			o.select();
-		}
-		
 		SelectList assignedTo = ie.selectList(reportingSearchCriteriaAssignedToFinder);
 		String assignedToText = r.getAssignedTo();
 		if(assignedToText != null) {
@@ -433,18 +424,11 @@ public class Reporting extends TestCase {
 			assertTrue("Could not find the Assigned To '" + assignedToText + "'", o.exists());
 			o.select();
 		}
-		
-		if(r.getCustomer() != null) {
-			setCustomer(r.getCustomer());
-		}
-		
-		SelectList division = ie.selectList(reportingSearchCriteriaDivisionFinder);
-		assertTrue("Could not find the Division select list", division.exists());
-		String divisionText = r.getDivision();
-		if(divisionText != null) {
-			Option o = division.option(text(divisionText));
-			assertTrue("Could not find the Division '" + divisionText + "'", o.exists());
-			o.select();
+
+		if(r.getOwner() != null) {
+			misc.gotoChooseOwner();
+			misc.setOwner(r.getOwner());
+			misc.selectOwner();
 		}
 		
 		SelectList inspectionBook = getInspectionBookSelectList();

@@ -265,13 +265,14 @@ public class Validate extends FieldIDTestCase {
 		String userid = prop.getProperty("userid");
 		String password = prop.getProperty("password");
 		boolean jobs = Boolean.parseBoolean(prop.getProperty("jobs"));
+		boolean newFeaturesPDF = Boolean.parseBoolean(prop.getProperty("newfeaturespdf"));
 
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
-			home.validate(jobs);
+			home.validate(jobs, newFeaturesPDF);	// second parameter is true of new features PDF ready.
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
 			throw e;

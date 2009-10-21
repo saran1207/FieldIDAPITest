@@ -185,7 +185,7 @@ public class Identify extends TestCase {
 			addMultipleAssetsIdentifiedFinder = id(p.getProperty("addmultipleidentified"));
 			addMultipleAssetsProductTypeFinder = id(p.getProperty("addmultipleproducttype"));
 			addMultipleAssetsCommentsFinder = id(p.getProperty("addmultiplecomments"));
-			addMultipleAssetsCommentTemplatesFinder = id(p.getProperty("addmultiplecommenttemplates"));
+			addMultipleAssetsCommentTemplatesFinder = xpath(p.getProperty("addmultiplecommenttemplates"));
 			backtoStep1LinkFinder = xpath(p.getProperty("backtostep1"));
 			addMultipleAssetsQuantityFinder = xpath(p.getProperty("addmultiplestep2quantity"));
 			addMultipleAssetsStep2ContinueButtonFinder = xpath(p.getProperty("addmultiplestep2continuebutton"));
@@ -760,9 +760,9 @@ public class Identify extends TestCase {
 			Label requiredField = requiredFields.get(i);
 			String inputID;
 			if(requiredField.exists()) {
-				inputID = requiredField.htmlFor();
-				IEHtmlElement field = (IEHtmlElement) ie.htmlElement(id(inputID));
+				IEHtmlElement field = (IEHtmlElement) requiredField.htmlElement(xpath("../SPAN/*"));
 				assertTrue("Could not find a required product type attribute input field", field.exists());
+				inputID = field.id();
 				String tag = field.tag();
 				if(tag.equals("INPUT")) {			// text field
 					TextField t = ie.textField(id(inputID));
@@ -790,9 +790,9 @@ public class Identify extends TestCase {
 			Label requiredField = requiredFields.get(i);
 			String inputID;
 			if(requiredField.exists()) {
-				inputID = requiredField.htmlFor();
-				IEHtmlElement field = (IEHtmlElement) ie.htmlElement(id(inputID));
+				IEHtmlElement field = (IEHtmlElement) requiredField.htmlElement(xpath("../SPAN/*"));
 				assertTrue("Could not find a required product type attribute input field", field.exists());
+				inputID = field.id();
 				String tag = field.tag();
 				if(tag.equals("INPUT")) {		// unit of measure
 					if(field.value().equals("")) {

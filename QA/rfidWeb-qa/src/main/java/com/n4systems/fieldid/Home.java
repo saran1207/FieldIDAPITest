@@ -432,7 +432,13 @@ public class Home extends TestCase {
 		return companyURL.exists();
 	}
 
-	public void validate(boolean jobs) throws Exception {
+	/**
+	 * 
+	 * @param jobs
+	 * @param newFeaturePDF - if new features PDF not ready, set to false
+	 * @throws Exception
+	 */
+	public void validate(boolean jobs, boolean newFeaturePDF) throws Exception {
 		String testURL = "http://www.google.com/";
 		String testTitle = "Google";	// can be full title or part of title
 		admin.gotoAdministration();
@@ -478,7 +484,9 @@ public class Home extends TestCase {
 			gotoHome();
 			@SuppressWarnings("unused")
 			List<String> newFeatures = getNewFeatures();
-			gotoNewFeatures();
+			if(newFeaturePDF) {
+				gotoNewFeatures();
+			}
 //			gotoProductInformationViaSmartSearch(serialNumber);	// tested by Smoke Test
 			gotoHome();
 		} catch (Exception e) {

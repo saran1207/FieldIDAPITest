@@ -19,12 +19,25 @@ public class ReportingSearchCriteria {
 	String job = null;
 	String fromDate = null;
 	String toDate = null;
+	Owner owner = null;
 	
 	public ReportingSearchCriteria() {
 	}
 	
 	public ReportingSearchCriteria(String serialNumber) {
 		this.serialNumber = serialNumber;
+	}
+	
+	public void setOwner(Owner o) {
+		owner = o;
+		if(owner != null) {
+			this.customer = owner.getCustomer();
+			this.division = owner.getDivision();
+		}
+	}
+	
+	public Owner getOwner() {
+		return owner;
 	}
 
 	public void setRFIDNumber(String s) {

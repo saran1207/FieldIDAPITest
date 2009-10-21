@@ -110,8 +110,8 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			mcs.gotoManageCustomers(false);
 			mcs.gotoAddCustomer(false);
 			
-			// try to add a customer, primary organization (should fail)
-			boolean passed = false;
+			// try to add a customer, primary organization (should work)
+			boolean passed = true;
 			try {
 				primaryCustomerID = misc.getRandomString();
 				primaryCustomerName = primaryCustomerID;
@@ -119,9 +119,9 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 				mcs.addCustomer(primaryCustomer, false);
 			} catch (Exception e) {
 				// adding a primary should fail and throw an exception
-				passed = true;
+				passed = false;
 			}
-			assertTrue("Was able to create a primary customer as a secondary employee", passed);
+			assertTrue("Was not able to create a primary customer as a secondary employee", passed);
 
 			// add a customer, secondary organization
 			mcs.gotoAddCustomer(false);
