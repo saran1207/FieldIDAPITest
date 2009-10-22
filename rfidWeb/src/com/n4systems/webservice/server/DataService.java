@@ -6,6 +6,7 @@ import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
+import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
@@ -53,7 +54,6 @@ public interface DataService {
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
-	public RequestResponse createUser(RequestInformation requestInformation, UserServiceDTO customerDTO) throws ServiceException;
 	
 	public ProductListResponse getProducts(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException;
 	public ProductListResponse getProductsByJob(PaginatedRequestInformation requestInformation, WSJobSearchCriteria searchCriteria) throws ServiceException;
@@ -66,4 +66,9 @@ public interface DataService {
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
 	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation) throws ServiceException;
 	public VendorListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException;
+	
+	/* Used Only by Techlink Importer */
+	public RequestResponse createUser(RequestInformation requestInformation, UserServiceDTO customerDTO) throws ServiceException;
+	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerOrgCreateServiceDTO customer) throws ServiceException;
+	/* Used Only by Techlink Importer */
 }

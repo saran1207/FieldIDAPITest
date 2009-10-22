@@ -828,9 +828,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		user.setUniqueID((userDTO.getId() == NULL_ID) ? null : userDTO.getId());
 		user.setUserID(userDTO.getUserId());
-
-		// TODO: CUSTOMER_REFACTOR: need to set owner on UserBean from UserServiceDTO
-//		user.setR_EndUser((userDTO.getCustomerId() == NULL_ID) ? null : userDTO.getId());
 		
 		return user;
 	}

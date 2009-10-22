@@ -49,6 +49,8 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
+import com.n4systems.model.orgs.LegacyFindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
@@ -60,6 +62,7 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
@@ -76,8 +79,10 @@ import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
+import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
+import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -715,6 +720,39 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("Failed while creating User", e);
 			throw new ServiceException("Unable to create User");
+		}
+		
+		return response;
+	}
+	
+	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerOrgCreateServiceDTO customer) throws ServiceException {
+		RequestResponse response = new RequestResponse();
+		response.setStatus(ResponseStatus.OK);
+
+		PersistenceManager pm = ServiceLocator.getPersistenceManager();
+		LegacyFindOrCreateCustomerOrgHandler customerHandler = new LegacyFindOrCreateCustomerOrgHandler(pm);
+		LegacyFindOrCreateDivisionOrgHandler divisionHandler = new LegacyFindOrCreateDivisionOrgHandler(pm);
+
+		
+		PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(requestInformation.getTenantId());
+		try {
+
+			CustomerOrg customerOrg = customerHandler.findOrCreate(primaryOrg, customer.getName(), customer.getCode());
+			
+			for (DivisionOrgServiceDTO division: customer.getDivisions()) {
+				try {
+					divisionHandler.findOrCreate(customerOrg, division.getName());
+				} catch (DuplicateExtenalOrgException e) {
+					String message = String.format("Unable to create Division [%s] on Customer [%s]", division.getName(), customerOrg.toString());
+					logger.error(message, e);
+					throw new ServiceException(message);
+				}
+			}
+			
+		} catch (DuplicateExtenalOrgException e) {
+			String message = String.format("Unable to create Customer [%s, %s] on PrimaryOrg [%s]", customer.getName(), customer.getCode(), primaryOrg.toString());
+			logger.error(message, e);
+			throw new ServiceException(message);
 		}
 		
 		return response;
