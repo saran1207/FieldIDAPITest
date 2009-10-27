@@ -30,12 +30,6 @@
 			value="fieldid/PersistenceManagerImpl/local" />
 	</bean>
 
-	<bean id="safetyNetworkManager"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName"
-			value="fieldid/SafetyNetworkManagerImpl/local" />
-	</bean>
-
 	<bean id="productTypeManager"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName"
