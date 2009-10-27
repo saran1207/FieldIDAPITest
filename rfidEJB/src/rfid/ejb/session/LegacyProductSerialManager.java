@@ -31,7 +31,6 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.SafetyNetworkManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -64,9 +63,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	@EJB
 	private PersistenceManager persistenceManager;
-
-	@EJB
-	private SafetyNetworkManager safetyNetworkManager;
 
 	@EJB
 	private InspectionScheduleManager inspectionScheduleManager;
@@ -507,24 +503,11 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			inspection = (Inspection) inspectionQuery.getSingleResult();
 		} catch (NoResultException e) {
 		}
-		Inspection linkedInspection = safetyNetworkManager.findLatestLinkedProductInspection(product);
-
-		if (linkedInspection != null && inspection != null) {
-			if (linkedInspection.getDate().after(inspection.getDate())) {
-				return linkedInspection;
-			} else {
-				return inspection;
-			}
-		} else if (linkedInspection == null) {
-			return inspection;
-		} else {
-			return linkedInspection;
-		}
+		return inspection;
 	}
 
 	public Long countAllInspections(Product product, SecurityFilter securityFilter) {
 		Long count = countAllLocalInspections(product, securityFilter);
-		count += safetyNetworkManager.findCountLinkedProductInspection(product);
 		return count;
 	}
 	
@@ -546,11 +529,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		} catch (NoResultException e) {
 			inspection = new ArrayList<Inspection>();
 			logger.error("could not load inspections from local", e);
-		}
-		try {
-			inspection.addAll(safetyNetworkManager.findLinkedProductInspections(product));
-		} catch (Exception e) {
-			logger.error("could not load inspections from safety network", e);
 		}
 		return inspection;
 	}

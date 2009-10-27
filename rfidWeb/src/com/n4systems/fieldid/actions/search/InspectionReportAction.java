@@ -25,6 +25,7 @@ import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.user.UserListableLoader;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
@@ -132,10 +133,10 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		try {
 			if (isSearchIdValid()) {
 				List<Long> inspectionDocs = persistenceManager.idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
-	
-				PrintAllInspectionCertificatesTask printTask = new PrintAllInspectionCertificatesTask();
+
+				PrintAllInspectionCertificatesTask printTask = new PrintAllInspectionCertificatesTask(new DateTimeDefiner(getUser()), getLoaderFactory().createSafetyNetworkInspectionLoader());
 				
-				printTask.setInspectionDocs(inspectionDocs);
+				printTask.setInspectionIds(inspectionDocs);
 				printTask.setTenant(getTenant());
 				printTask.setDateFormat(getSessionUser().getDateFormat());
 				printTask.setDownloadLocation(createActionURI("download.action").toString());

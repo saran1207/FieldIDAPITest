@@ -3,9 +3,7 @@ package com.n4systems.model.builders;
 import java.lang.reflect.Field;
 import java.util.Random;
 
-import com.n4systems.model.BaseEntity;
-
-public abstract class BaseBuilder<K extends BaseEntity> {
+public abstract class BaseBuilder<K> {
 
 	protected Long id;
 	

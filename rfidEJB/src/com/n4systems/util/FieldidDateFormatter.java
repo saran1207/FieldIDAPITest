@@ -7,20 +7,34 @@ import com.n4systems.model.utils.PlainDate;
 
 
 public class FieldidDateFormatter {
-
 	private Date date;
 	private boolean convertTimeZone = true;
 	private boolean showTime = true;
 	private DateTimeDefinition definition;
 	
 	public FieldidDateFormatter(Date date, DateTimeDefinition definition, boolean convertTimeZone, boolean showTime) {
-		super();
 		this.date = date;
 		this.convertTimeZone = convertTimeZone;
 		this.showTime = showTime;
 		this.definition = definition;
 	}
 	
+	public FieldidDateFormatter(Date date, DateTimeDefinition definition, boolean showAndConvertTime) {
+		this(
+			date,
+			definition,
+			showAndConvertTime,
+			showAndConvertTime
+		);
+	}
+	
+	public FieldidDateFormatter(Date date, DateTimeDefinition definition) {
+		this(
+			date,
+			definition,
+			!(date instanceof PlainDate)
+		);
+	}
 	
 	public String format() {
 		if (date == null) {
@@ -36,7 +50,6 @@ public class FieldidDateFormatter {
         return formatTheDate(userTime);
 	}
 
-
 	private String formatTheDate(Date userTime) {
 		if (showTime) {
         	return (new SimpleDateFormat(definition.getDateTimeFormat())).format(userTime) + " " + DateHelper.getTimeZoneShortName(userTime, definition.getTimeZone());
@@ -44,7 +57,6 @@ public class FieldidDateFormatter {
         	return (new SimpleDateFormat(definition.getDateFormat())).format(userTime);
         }
 	}
-
 
 	private Date convertDate() {
 		Date userTime;

@@ -43,9 +43,13 @@ public class ReportMap<V> extends HashMap<String, V> {
 		decodeValues(this);
 	}
 	
+	public void putEmpty(String key) {
+		put(key, null);
+	}
+	
 	public void putEmpty(String...keys) {
 		for(String key: keys) {
-			put(key, null);
+			putEmpty(key);
 		}
 	}
 

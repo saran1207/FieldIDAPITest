@@ -20,10 +20,6 @@
     <bean id="productSerialManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/LegacyProductSerialManager/local" />
     </bean>
-    
-	<bean id="safetyNetworkManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/SafetyNetworkManagerImpl/local" />
-    </bean>
 
 	<bean id="optionManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/OptionManager/local" />
@@ -71,10 +67,6 @@
     
     <bean id="inspectionManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/InspectionManagerImpl/local" />
-    </bean>
-    
-    <bean id="reportFactoryManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ReportFactoryImpl/local" />
     </bean>
     
     <bean id="proofTestHandler" class="org.springframework.jndi.JndiObjectFactoryBean">

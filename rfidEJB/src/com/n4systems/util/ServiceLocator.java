@@ -41,11 +41,7 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProductManagerImpl;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.ProofTestHandlerImpl;
-import com.n4systems.ejb.SafetyNetworkManager;
-import com.n4systems.ejb.SafetyNetworkManagerImpl;
 import com.n4systems.exceptions.EJBLookupException;
-import com.n4systems.reporting.ReportFactory;
-import com.n4systems.reporting.ReportFactoryImpl;
 
 public class ServiceLocator {
 	private static final String APP_PREFIX = "fieldid/";
@@ -119,13 +115,6 @@ public class ServiceLocator {
 	}
 	
 	
-	private static final ThreadLocal<ReportFactory> reportFactory = new ThreadLocal<ReportFactory>();
-	
-	public static final ReportFactory getReportFactory() {
-		return get(ReportFactory.class, ReportFactoryImpl.class, reportFactory);
-	}
-	
-	
 	private static final ThreadLocal<SerialNumberCounter> serialNumberCounter = new ThreadLocal<SerialNumberCounter>();
 	
 	public static final SerialNumberCounter getSerialNumberCounter() {
@@ -175,13 +164,6 @@ public class ServiceLocator {
 	
 	public static final ProofTestHandler getProofTestHandler() {
 		return get(ProofTestHandler.class, ProofTestHandlerImpl.class, proofTestHandler);
-	}
-	
-	
-	private static final ThreadLocal<SafetyNetworkManager> safetyNetworkManager = new ThreadLocal<SafetyNetworkManager>();
-	
-	public static final SafetyNetworkManager getSafetyNetworkManager() {
-		return get(SafetyNetworkManager.class, SafetyNetworkManagerImpl.class, safetyNetworkManager);
 	}
 
 	

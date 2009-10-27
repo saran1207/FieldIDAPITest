@@ -57,6 +57,7 @@ public class PathHandler {
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
 	private static final String BUTTON_IMAGE_PATH_BASE = COMMON_IMAGE_PATH_BASE + "/buttons";
 	private static final String BUTTON_IMAGE_EXT = ".png";
+	private static final String N4_LOGO_IMAGE = COMMON_IMAGE_PATH_BASE + "/n4_logo.gif";
 	
 	// paths are in the format <tenant id>/<created year>/<created month>/<inspection id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
@@ -416,6 +417,10 @@ public class PathHandler {
 	
 	public static File getCommonImageFile(String fileName) {
 		return absolutize(mergePaths(COMMON_IMAGE_PATH_BASE, fileName));
+	}
+	
+	public static File getN4LogoImageFile() {
+		return absolutize(N4_LOGO_IMAGE);
 	}
 	
 	public static File getCommonTemplatePath() {

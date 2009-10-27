@@ -16,6 +16,7 @@ import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.reporting.CertificatePrinter;
+import com.n4systems.reporting.InspectionSummaryGenerator;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -31,8 +32,16 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 	private String downloadLocation;
 	private Long userId;
 	private Tenant tenant; 
+	private InspectionSummaryGenerator repotGen;
 	
-	public PrintInspectionSummaryReportTask() {}
+	public PrintInspectionSummaryReportTask(InspectionSummaryGenerator reportGen) {
+		this.repotGen = reportGen;
+	}
+
+	public PrintInspectionSummaryReportTask() {
+		this(new InspectionSummaryGenerator());
+	}
+
 	
 	public void run() {
 		UserBean user = ServiceLocator.getUser().getUser(userId);
@@ -70,7 +79,7 @@ public class PrintInspectionSummaryReportTask implements Runnable {
 		try {
 			File reportFile = new File(user.getPrivateDir(), reportFileName +  pdfExt);
 			
-			JasperPrint p = ServiceLocator.getReportFactory().generateInspectionReport( reportDefiner, filter, user, tenant );
+			JasperPrint p = repotGen.generate( reportDefiner, filter, user, tenant );
 			OutputStream pdf = new FileOutputStream( reportFile );
 			logger.info("Generating inspection summary report Complete [" + reportFile + "]");
 			

@@ -443,4 +443,7 @@ public class DateHelper {
 		return cal.getTime();
 	}
 
+	public static String format(Date date, DateTimeDefinition dateTimeDefinition) {
+		return new FieldidDateFormatter(date, dateTimeDefinition).format();
+	}
 }

@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,6 +17,7 @@ import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.InspectionCertificateReportGenerator;
@@ -31,20 +31,18 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 	private static final String FILE_NAME_DATE_FORMAT = "yyyy-MM-dd";
 	
 	private final InspectionCertificateReportGenerator reportGen;
+	private final SafetyNetworkInspectionLoader inspectionLoader;
 	
 	private Tenant tenant;
-	private List<Long> inspectionDocs = new ArrayList<Long>(); 
+	private List<Long> inspectionIds = new ArrayList<Long>();
 	private String dateFormat;
 	private Long userId;
 	private String downloadLocation;
 	private InspectionReportType reportType;
 	
-	public PrintAllInspectionCertificatesTask(InspectionCertificateReportGenerator reportGen) {
-		this.reportGen = reportGen;
-	}
-	
-	public PrintAllInspectionCertificatesTask() {
-		this(new InspectionCertificateReportGenerator());
+	public PrintAllInspectionCertificatesTask(DateTimeDefiner dateDefiner, SafetyNetworkInspectionLoader inspectionLoader) {
+		this.reportGen = new InspectionCertificateReportGenerator(dateDefiner);
+		this.inspectionLoader = inspectionLoader;
 	}
 	
 	public void run() {
@@ -81,11 +79,9 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 		StringBuilder body = new StringBuilder();
 		
 		try {
-			// we need to make sure we don't have any duplicate inspection doc ids.  We'll do this by converting them to a set and 
-			// then back to a List
-			List<Long> inspectionIds = new ArrayList<Long>(new HashSet<Long>(inspectionDocs));
+			List<Inspection> inspections = loadInspections(user, transaction);
 			
-			File report = generateReport(user, reportFileName, inspectionIds, transaction);
+			File report = reportGen.generate(reportType, inspections, reportFileName, user, transaction);
 			
 			logger.info("Generating Multi-Inspection certificate Report Complete [" + report + "]");
 			
@@ -102,15 +98,7 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 		return body.toString();
 	}
 
-	private File generateReport(UserBean user, String reportFileName, List<Long> inspectionIds, Transaction transaction) throws ReportException, EmptyReportException {
-		List<Inspection> inspections = loadInspections(user, inspectionIds, transaction);
-		
-		return reportGen.generate(reportType, inspections, reportFileName, user, transaction);
-	}
-
-	private List<Inspection> loadInspections(UserBean user, List<Long> inspectionIds, Transaction transaction) {
-		SafetyNetworkInspectionLoader inspectionLoader = createSafetyNetworkInspectionLoader(user);
-		
+	private List<Inspection> loadInspections(UserBean user, Transaction transaction) {
 		List<Inspection> inspections = new ArrayList<Inspection>();
 
 		Inspection inspection;
@@ -134,10 +122,6 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
 	        logger.error("Unable to send Multi-Inspection certificate report email", e);
         }
 	}
-
-	protected SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(UserBean user) {
-		return new SafetyNetworkInspectionLoader(user.getSecurityFilter());
-	}
 	
 	public Tenant getTenant() {
     	return tenant;
@@ -147,12 +131,12 @@ public class PrintAllInspectionCertificatesTask implements Runnable {
     	this.tenant = tenant;
     }
 
-	public List<Long> getInspectionDocs() {
-    	return inspectionDocs;
+	public List<Long> getInspectionIds() {
+    	return inspectionIds;
     }
 
-	public void setInspectionDocs(List<Long> inspectionDocs) {
-    	this.inspectionDocs = inspectionDocs;
+	public void setInspectionIds(List<Long> inspectionDocs) {
+    	this.inspectionIds = inspectionDocs;
     }
 
 	public String getDateFormat() {

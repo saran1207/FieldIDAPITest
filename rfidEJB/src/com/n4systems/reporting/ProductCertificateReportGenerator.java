@@ -16,30 +16,29 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.EmptyReportException;
-import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.persistence.Transaction;
+import com.n4systems.model.Product;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.FileHelper;
 
-public class InspectionCertificateReportGenerator {
+public class ProductCertificateReportGenerator {
 	private static final String pdfExt = ".pdf";
-	private Logger logger = Logger.getLogger(InspectionCertificateReportGenerator.class);
+	private Logger logger = Logger.getLogger(ProductCertificateReportGenerator.class);
 	
-	private final InspectionCertificateGenerator certGenerator;
+	private final ProductCertificateGenerator certGenerator;
 	
-	public InspectionCertificateReportGenerator(InspectionCertificateGenerator certGenerator) {
+	public ProductCertificateReportGenerator(ProductCertificateGenerator certGenerator) {
 		this.certGenerator = certGenerator;
 	}
 	
-	public InspectionCertificateReportGenerator(DateTimeDefiner dateDefiner) {
-		this(new InspectionCertificateGenerator(dateDefiner));
+	public ProductCertificateReportGenerator() {
+		this(new ProductCertificateGenerator());
 	}
 	
-	public File generate(InspectionReportType type, List<Inspection> inspections, String packageName, UserBean user, Transaction transaction) throws ReportException, EmptyReportException {
+	public File generate(List<Product> products, String packageName, UserBean user) throws ReportException, EmptyReportException {
+		// XXX - this could probable be improved now the the rest is a little
+		// cleaner
 		int reportsInFile = 0;
 		int totalReports = 0;
 		int reportFileCount = 1;
@@ -48,16 +47,17 @@ public class InspectionCertificateReportGenerator {
 		File reportFile;
 		OutputStream reportOut = null;
 		File zipFile = null;
-		
+
 		try {
 			tempDir = PathHandler.getTempDir();
-			
+
 			reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
 			reportOut = new FileOutputStream(reportFile);
 
-			for (Inspection inspection: inspections) {
-				logger.debug("Processing Report for Inspection [" + inspection.getId() + "]");
-				
+			// builds sets of pdfs.
+			for (Product product: products) {
+				logger.debug("Processing Report for Product [" + product.getId() + "]");
+
 				if (reportsInFile >= ConfigContext.getCurrentContext().getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE)) {
 					logger.debug("Exporing report pdf to [" + reportFile.getPath() + "]");
 					CertificatePrinter.printToPDF(printList, reportOut);
@@ -72,14 +72,11 @@ public class InspectionCertificateReportGenerator {
 				}
 
 				try {
-					JasperPrint cert = certGenerator.generate(type, inspection, transaction);
-					printList.add(cert);
-					reportsInFile += cert.getPages().size();
-					totalReports += cert.getPages().size();
-				} catch (NonPrintableEventType npe) {
-					logger.debug("Report for Inspection [" + inspection.getId() + "] is not Printable");
+					printList.add(certGenerator.generate(product, user));
+					reportsInFile++;
+					totalReports++;
 				} catch (ReportException e) {
-					logger.warn("Failed generating report for Inspection [" + inspection.getId() + "].  Moving on to next Inspection.", e);
+					logger.debug("Report for Product [" + product.getId() + "] is NonPrintable");
 				}
 			}
 
@@ -100,18 +97,16 @@ public class InspectionCertificateReportGenerator {
 
 			zipFile = FileHelper.zipDirectory(tempDir, user.getPrivateDir(), packageName);
 		} catch (IOException e) {
-			throw new ReportException("error with file access", e);
+			throw new ReportException("File access product occured", e);
 		} finally {
 			// close any streams that haven't been closed yet and clean up the
 			// temp dir
 			IOUtils.closeQuietly(reportOut);
 
-			if (tempDir != null) {
-				try {
-					FileUtils.deleteDirectory(tempDir);
-				} catch (IOException e) {
-					logger.error("could not delete the directory " + tempDir.toString(), e);
-				}
+			try {
+				FileUtils.deleteDirectory(tempDir);
+			} catch (IOException e) {
+				logger.error("could not delete the directory " + tempDir.toString(), e);
 			}
 		}
 

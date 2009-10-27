@@ -8,11 +8,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.exceptions.EmptyReportException;
-import com.n4systems.reporting.ReportFactory;
+import com.n4systems.model.Product;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.reporting.ProductCertificateReportGenerator;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 
@@ -23,28 +25,35 @@ public class PrintAllProductCertificatesTask implements Runnable {
 	private String dateFormat;
 	private String packageName;
 	private String downloadLocation;
-	private Long userId;
+	private UserBean user;
+	
+	private final ProductCertificateReportGenerator certGen;
+	private final FilteredIdLoader<Product> productLoader;
+	
+	PrintAllProductCertificatesTask(ProductCertificateReportGenerator certGen, FilteredIdLoader<Product> productLoader) {
+		this.certGen = certGen;
+		this.productLoader = productLoader;
+	}
+	
+	public PrintAllProductCertificatesTask(FilteredIdLoader<Product> productLoader) {
+		this(new ProductCertificateReportGenerator(), productLoader);
+	}
 	
 	public void run() {
+		logger.debug(String.format("Generating manufacturer certificate report [%s]", packageName));
 		
+		Transaction transaction = null;
 		try {
-			// get the report factory and user manager
-			ReportFactory reportFactory = ServiceLocator.getReportFactory();
-			User userManager = ServiceLocator.getUser();
-			MailManager mailManager = ServiceLocator.getMailManager();
+			transaction = PersistenceManager.startTransaction();
 			
-			UserBean user = userManager.getUser(userId);
 			
-			logger.info("Generating report ... ");
-			
-			String subject = "Manufacturer Certificate Report for " + packageName;
 			String body;
-			
 			try {
-				// generate the report
-				File report = reportFactory.generateProductCertificateReport(productIdList, packageName, user);
+				List<Product> products = loadProducts(user, transaction);
 				
-				logger.info("Generating report Complete [" + report + "]");
+				File report = certGen.generate(products, packageName, user);
+				
+				logger.debug(String.format("Generating report Complete [%s]", packageName));
 				
 				body = "<h4>Your Report is ready</h4>";
 				body += "<br />Please click the link below to download your report package.<br />";
@@ -55,12 +64,37 @@ public class PrintAllProductCertificatesTask implements Runnable {
 				body = "<h4>Your report contained no manufacturer certificates. </h4>";
 			}
 
-			logger.info("Sending notification email [" + user.getEmailAddress() + "]");
-			mailManager.sendMessage(new MailMessage(subject, body, user.getEmailAddress()));
+			sendMessage(user, body);
 			
+			PersistenceManager.finishTransaction(transaction);
 		} catch (Exception e) {
 			logger.error("Print all Product Certificates job failed", e);
+			PersistenceManager.rollbackTransaction(transaction);
 		}
+	}
+	
+	private void sendMessage(UserBean user, String body) {
+		logger.debug(String.format("Sending manufacturer certificate report email [%s]", user.getEmailAddress()));
+		
+		String subject = "Manufacturer Certificate Report for " + packageName;
+
+		try {
+	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, user.getEmailAddress()));
+        } catch (Exception e) {
+	        logger.error("Unable to send Multi-Inspection certificate report email", e);
+        }
+	}
+	
+	private List<Product> loadProducts(UserBean user, Transaction transaction) {
+		List<Product> products = new ArrayList<Product>();
+		
+		Product product;
+		for (Long productId: productIdList) {
+			product = productLoader.setId(productId).load(transaction);
+			products.add(product);
+		}
+		
+		return products;
 	}
 
 	public List<Long> getProductIdList() {
@@ -95,12 +129,12 @@ public class PrintAllProductCertificatesTask implements Runnable {
 		this.downloadLocation = downloadLocation;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public UserBean getUser() {
+		return user;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUser(UserBean user) {
+		this.user = user;
 	}
 
 }

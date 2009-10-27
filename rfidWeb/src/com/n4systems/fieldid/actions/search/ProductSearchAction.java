@@ -15,6 +15,7 @@ import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
+import com.n4systems.model.Product;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.taskscheduling.TaskExecutor;
@@ -79,13 +80,13 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 				String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
 				String reportFileName = "manufacturer_certificate_report_" + tenantName + "_" + dateString;
 
-				PrintAllProductCertificatesTask printAllTask = new PrintAllProductCertificatesTask();
+				PrintAllProductCertificatesTask printAllTask = new PrintAllProductCertificatesTask(getLoaderFactory().createFilteredIdLoader(Product.class));
 				
 				printAllTask.setDateFormat(getSessionUser().getDateFormat());
 				printAllTask.setDownloadLocation(createActionURI("download.action").toString());
 				printAllTask.setPackageName(reportFileName);
 				printAllTask.setProductIdList(persistenceManager.idSearch(this, getContainer().getSecurityFilter()));
-				printAllTask.setUserId(getSessionUser().getUniqueID());
+				printAllTask.setUser(getUser());
 
 				TaskExecutor.getInstance().execute(printAllTask);
 				addActionMessage( getText( "message.emailshortly" ) );

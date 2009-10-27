@@ -1,23 +1,19 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Product;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.reporting.CertificatePrinter;
-import com.n4systems.reporting.ReportFactory;
+import com.n4systems.reporting.ProductCertificateGenerator;
 
 public class DownloadManufacturerCert extends DownloadAction {
 
@@ -27,14 +23,14 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	private ProductManager productManager;
 	private Product product;
-	private ReportFactory reportFactory;
+	private ProductCertificateGenerator certGen;
 
 	private long linkedProductId;
 
-	public DownloadManufacturerCert(ProductManager productManager, ReportFactory reportFactory, PersistenceManager persistenceManager) {
+	public DownloadManufacturerCert(ProductManager productManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.productManager = productManager;
-		this.reportFactory = reportFactory;
+		this.certGen = new ProductCertificateGenerator();
 	}
 
 	public String doDownloadLinked() {
@@ -73,39 +69,23 @@ public class DownloadManufacturerCert extends DownloadAction {
 	}
 
 	private String generateCertificate() {
-		JasperPrint p = null;
-		byte[] pdf = null;
-		InputStream input = null;
-		boolean failure = false;
-
 		try {
-			p = reportFactory.generateProductCertificate(product, fetchCurrentUser());
-			pdf = CertificatePrinter.printToPDF(p);
-		} catch (NonPrintableEventType nonPrintable) {
-			logger.error("failed to print cert", nonPrintable);
-			return "cantprint";
-		} catch (ReportException reportException) {
-			logger.error("failed to print cert", reportException);
-			return ERROR;
-		}
-
-		try {
+			
+			JasperPrint p = certGen.generate(product, fetchCurrentUser());
+			byte[] pdf = CertificatePrinter.printToPDF(p);
+			
 			fileName = "certificate-" + product.getSerialNumber() + ".pdf";
-
-			input = new ByteArrayInputStream(pdf);
-			sendFile(input);
-
-		} catch (IOException e) {
-			logger.error("failed to print cert", e);
-			failure = true;
+			sendFile(new ByteArrayInputStream(pdf));
+			
+		} catch (NonPrintableEventType npe) {
+			logger.debug("Cert was non-printable", npe);
+			return "cantprint";
 		} catch (Exception e) {
-			logger.error("failed to print cert", e);
+			logger.error("Unable to download inspection cert", e);
 			return ERROR;
-		} finally {
-			IOUtils.closeQuietly(input);
 		}
 
-		return (failure) ? ERROR : null;
+		return null;
 	}
 
 	public long getLinkedProductId() {

@@ -11,6 +11,7 @@ import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.CertificatePrinter;
@@ -24,11 +25,9 @@ public class DownloadInspectionCert extends DownloadAction {
 	private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	
 	private InspectionReportType reportType;
-	private InspectionCertificateGenerator certGen;
 	
 	public DownloadInspectionCert(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		certGen = new InspectionCertificateGenerator();
 	}
 
 	@Override
@@ -49,7 +48,9 @@ public class DownloadInspectionCert extends DownloadAction {
 		try {
 			transaction = PersistenceManager.startTransaction();
 			
-			JasperPrint p = certGen.generate(reportType, inspection, fetchCurrentUser(), transaction);
+			InspectionCertificateGenerator certGen = new InspectionCertificateGenerator(new DateTimeDefiner(getUser()));
+			JasperPrint p = certGen.generate(reportType, inspection, transaction);
+			
 			byte[] pdf = CertificatePrinter.printToPDF(p);
 			
 			fileName = constructReportFileName(inspection);
