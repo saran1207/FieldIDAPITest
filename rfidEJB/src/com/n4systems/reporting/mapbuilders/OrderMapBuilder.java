@@ -11,7 +11,7 @@ public class OrderMapBuilder extends AbstractMapBuilder<Order> {
 	
 	@Override
 	protected void setAllFields(Order entity, Transaction transaction) {
-		setField(ReportField.ORDER_NUMBER, entity);
+		setField(ReportField.ORDER_NUMBER, entity.getOrderNumber());
 	}
 
 }
