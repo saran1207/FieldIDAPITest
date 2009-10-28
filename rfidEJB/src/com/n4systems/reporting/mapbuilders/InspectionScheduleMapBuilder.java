@@ -26,8 +26,10 @@ public class InspectionScheduleMapBuilder extends AbstractMapBuilder<Inspection>
 	protected void setAllFields(Inspection entity, Transaction transaction) {
 		InspectionSchedule is = loadNextInspectionSchedule(entity, transaction);
 		
-		setField(ReportField.NEXT_DATE,			is.getNextDate());
-		setField(ReportField.NEXT_DATE_STRING,	DateHelper.format(is.getNextDate(), dateDefiner));
+		if (is != null) {
+			setField(ReportField.NEXT_DATE,			is.getNextDate());
+			setField(ReportField.NEXT_DATE_STRING,	DateHelper.format(is.getNextDate(), dateDefiner));
+		}
 	}
 	
 	private InspectionSchedule loadNextInspectionSchedule(Inspection inspection, Transaction transaction) {
