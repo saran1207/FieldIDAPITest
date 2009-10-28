@@ -1,5 +1,7 @@
 package com.n4systems.webservice.dto;
 
+import com.n4systems.model.Observation;
+
 
 public class ObservationResultServiceDTO {
 
@@ -11,12 +13,28 @@ public class ObservationResultServiceDTO {
 	private String text;
 	private ObservationState state;
 
+	private long criteriaResultId;
+	private long orderIndex;
+	
+	public long getCriteriaResultId() {
+		return criteriaResultId;
+	}
+	public void setCriteriaResultId(long criteriaResultId) {
+		this.criteriaResultId = criteriaResultId;
+	}
+	public long getOrderIndex() {
+		return orderIndex;
+	}
+	public void setOrderIndex(long orderIndex) {
+		this.orderIndex = orderIndex;
+	}
 	public ObservationType getType() {
 		return type;
 	}
 	public void setType(ObservationType type) {
 		this.type = type;
 	}
+	
 	public String getText() {
 		return text;
 	}

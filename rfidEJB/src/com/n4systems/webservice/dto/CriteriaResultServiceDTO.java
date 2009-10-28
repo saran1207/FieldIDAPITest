@@ -1,5 +1,6 @@
 package com.n4systems.webservice.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
@@ -7,8 +8,8 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	private long criteriaId;
 	private long stateId;
 	private long inspectionId;
-	private List<ObservationResultServiceDTO> recommendations;
-	private List<ObservationResultServiceDTO> deficiencies;
+	private List<ObservationResultServiceDTO> recommendations = new ArrayList<ObservationResultServiceDTO>();
+	private List<ObservationResultServiceDTO> deficiencies = new ArrayList<ObservationResultServiceDTO>();
 
 	public long getCriteriaId() {
 		return criteriaId;

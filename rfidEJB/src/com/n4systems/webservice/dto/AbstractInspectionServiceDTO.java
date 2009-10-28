@@ -1,5 +1,6 @@
 package com.n4systems.webservice.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractInspectionServiceDTO extends AbstractBaseServiceDTO {
@@ -10,8 +11,8 @@ public abstract class AbstractInspectionServiceDTO extends AbstractBaseServiceDT
 	private ProductServiceDTO product;
 	private long productId;
 	private long formVersion;
-	private List<CriteriaResultServiceDTO> results;
-	private List<InspectionInfoOptionServiceDTO> infoOptions;
+	private List<CriteriaResultServiceDTO> results = new ArrayList<CriteriaResultServiceDTO>();
+	private List<InspectionInfoOptionServiceDTO> infoOptions = new ArrayList<InspectionInfoOptionServiceDTO>();
 	private List<ImageServiceDTO> images;
 	
 	public String getComments() {

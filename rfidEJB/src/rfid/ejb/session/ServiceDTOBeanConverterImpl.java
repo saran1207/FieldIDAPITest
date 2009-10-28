@@ -8,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -102,6 +104,8 @@ import com.n4systems.webservice.dto.SubInspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
 import com.n4systems.webservice.dto.VendorServiceDTO;
+import com.n4systems.webservice.dto.ObservationResultServiceDTO.ObservationState;
+import com.n4systems.webservice.dto.ObservationResultServiceDTO.ObservationType;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
 import fieldid.web.services.dto.ProductStatusServiceDTO;
@@ -176,6 +180,18 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setUtcDate(inspection.getDate());
 		
 		populateOwners(inspection.getOwner(), inspectionDTO);
+		
+		for (CriteriaResult criteriaResult : inspection.getResults()) {
+			inspectionDTO.getResults().add( convert(criteriaResult) );
+		}
+		
+		Map<String, String> infoOptionMap = inspection.getInfoOptionMap();
+		Set<String> infoOptionKeys = inspection.getInfoOptionMap().keySet();
+		Iterator<String> It = infoOptionKeys.iterator();
+		while (It.hasNext()) {
+			String infoFieldName = (String) (It.next()); 
+			inspectionDTO.getInfoOptions().add( convert(inspection.getId(), infoFieldName, infoOptionMap.get(infoFieldName)) );
+		}
 		
 		// TODO convert date to their time zone
 		inspectionDTO.setDate( AbstractBaseServiceDTO.dateToString( inspection.getDate() ) );
@@ -672,6 +688,86 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return criteriaServiceDTO;
 	}
 	
+	private CriteriaResultServiceDTO convert( CriteriaResult criteriaResult) {
+		
+		CriteriaResultServiceDTO criteriaResultServiceDTO = new CriteriaResultServiceDTO();
+		criteriaResultServiceDTO.setId( criteriaResult.getId() );
+		criteriaResultServiceDTO.setCriteriaId(criteriaResult.getCriteria().getId());
+		criteriaResultServiceDTO.setInspectionId(criteriaResult.getInspection().getId());
+		criteriaResultServiceDTO.setStateId( criteriaResult.getState().getId() );
+		
+		int i = 0;
+		for (Recommendation recommendation : criteriaResult.getRecommendations()) {
+			criteriaResultServiceDTO.getRecommendations().add(convert(recommendation, ObservationServiceDTO.RECOMMENDATION, i, criteriaResult.getId()));
+			i++;
+		}
+		
+		i = 0;
+		for (Deficiency deficiency : criteriaResult.getDeficiencies()) {
+			criteriaResultServiceDTO.getDeficiencies().add(convert(deficiency, ObservationServiceDTO.DEFICIENCY, i, criteriaResult.getId()));
+			i++;			
+		}
+		
+		return criteriaResultServiceDTO;
+	}
+
+	private ObservationType convert(Observation.Type type) {
+		ObservationType observationType = null;
+		switch (type) {
+			case DEFICIENCY:
+				observationType = ObservationType.DEFICIENCY;
+				break;
+			case RECOMMENDATION:
+				observationType = ObservationType.RECOMENDATION;
+				break;
+		}
+		return observationType;
+	}
+	
+	private ObservationState convert(Observation.State state) {
+		ObservationState observationState = null;
+		switch (state) {
+			case COMMENT:
+				observationState = ObservationState.COMMENT;
+				break;
+			case OUTSTANDING:
+				observationState = ObservationState.OUTSTANDING;
+				break;
+			case REPAIRED:
+				observationState = ObservationState.REPAIRED;
+				break;
+			case REPAIREDONSITE:
+				observationState = ObservationState.REPAIREDONSITE;
+				break;
+		}
+		return observationState;
+	}
+	
+	private ObservationResultServiceDTO convert( Observation observation, String typeDiscriminator, int orderIndex, long criteriaResultId) {
+		
+		ObservationResultServiceDTO observationResultServiceDTO = new ObservationResultServiceDTO();
+		
+		observationResultServiceDTO.setState( convert(observation.getState()) );
+		observationResultServiceDTO.setText( observation.getText() );
+		observationResultServiceDTO.setType( convert(observation.getType()) );
+		
+		observationResultServiceDTO.setCriteriaResultId(criteriaResultId);
+		observationResultServiceDTO.setOrderIndex(orderIndex);
+		
+		return observationResultServiceDTO;
+		
+	}
+
+	private InspectionInfoOptionServiceDTO convert(long inspectionId, String infoFieldName, String infoOptionValue) {
+		
+		InspectionInfoOptionServiceDTO inspectionInfoOptionServiceDTO = new InspectionInfoOptionServiceDTO();
+		inspectionInfoOptionServiceDTO.setInspectionId(inspectionId);
+		inspectionInfoOptionServiceDTO.setInfoFieldName(infoFieldName);
+		inspectionInfoOptionServiceDTO.setInfoOptionValue(infoOptionValue);
+		
+		return inspectionInfoOptionServiceDTO;
+	}
+
 	private ObservationServiceDTO convert( String observationText, String typeDiscriminator, int orderIndex, long criteriaId ) {
 		ObservationServiceDTO observation = new ObservationServiceDTO();
 		observation.setObservationText(observationText);
