@@ -6,7 +6,7 @@ import java.util.Properties;
 import org.junit.*;
 
 import com.n4systems.fieldid.PropertyLoader;
-import com.n4systems.fieldid.selenium.admin.console.AdminConsoleOrganizations;
+import com.n4systems.fieldid.selenium.admin.console.AdminConsoleOrganizationsPage;
 import com.thoughtworks.selenium.*;
 
 /**
@@ -55,7 +55,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	protected String baseURL;
 
 	// List of different modules uses by the test cases
-	AdminConsoleOrganizations adminConsoleOrgs;
+	AdminConsoleOrganizationsPage adminConsoleOrgs;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -69,7 +69,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		port = Integer.parseInt(p.getProperty("port"));
 		baseURL = p.getProperty("baseurl");
 		selenium = new DefaultSelenium(server, port, browserType, baseURL);
-		adminConsoleOrgs = new AdminConsoleOrganizations(selenium);
+		adminConsoleOrgs = new AdminConsoleOrganizationsPage(selenium);
 		selenium.start();
 		selenium.windowFocus();
 		selenium.windowMaximize();

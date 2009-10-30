@@ -3,77 +3,49 @@ package com.n4systems.fieldid.selenium.admin.console;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.fieldid.PropertyLoader;
 import com.thoughtworks.selenium.DefaultSelenium;
 
-public class AdminConsoleOrganizations {
+public class AdminConsoleOrganizationsPage {
 
 	private DefaultSelenium selenium;
-	private PropertyLoader p;
-	private static final String pageLoadDefaultTimeout = "30000";
+	private static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
 	
 	// locators for the elements on the page I want to interact with
-	private String serialNumberFormatInputLocator;
-	private String dateFormatInputLocator;
-	private String diskSpaceLimitInputLocator;
-	private String assetLimitInputLocator;
-	private String userLimitInputLocator;
-	private String secondaryOrgsLimitInputLocator;
-	private String integrationLabelLocator;
-	private String jobsitesLabelLocator;
-	private String projectsLabelLocator;
-	private String brandingLabelLocator;
-	private String partnercenterLabelLocator;
-	private String emailalertsLabelLocator;
-	private String customcertLabelLocator;
-	private String dedicatedprogrammanagerLabelLocator;
-	private String multilocationLabelLocator;
-	private String allowintegrationLabelLocator;
-	private String unlimitedlinkedassetsLabelLocator;
-	private String submitButtonLocator;
-	private String cancelButtonLocator;
-	private String serialNumberFormatOptionsLocator;
-	private String username;
-	private String password;
-	private String contextRoot;
-	private String usernameInputLocator;
-	private String passwordInputLocator;
-	private String loginSubmitButtonLocator;
-	private String pageTitle;
+	private static final String serialNumberFormatInputLocator = "//input[@id='organizationUpdate_primaryOrg_serialNumberFormat']";
+	private static final String dateFormatInputLocator = "//input[@id='organizationUpdate_primaryOrg_dateFormat']";
+	private static final String diskSpaceLimitInputLocator = "//input[@id='organizationUpdate_diskSpace']";
+	private static final String assetLimitInputLocator = "//input[@id='organizationUpdate_assets']";
+	private static final String userLimitInputLocator = "//input[@id='organizationUpdate_users']";
+	private static final String secondaryOrgsLimitInputLocator = "//input[@id='organizationUpdate_secondaryOrgs']";
+	private static final String integrationLabelLocator = "//LABEL[text()='Integration']@for";
+	private static final String jobsitesLabelLocator = "//LABEL[text()='JobSites']@for";
+	private static final String projectsLabelLocator = "//LABEL[text()='Projects']@for";
+	private static final String brandingLabelLocator = "//LABEL[text()='Branding']@for";
+	private static final String partnercenterLabelLocator = "//LABEL[text()='PartnerCenter']@for";
+	private static final String emailalertsLabelLocator = "//LABEL[text()='EmailAlerts']@for";
+	private static final String customcertLabelLocator = "//LABEL[text()='CustomCert']@for";
+	private static final String dedicatedprogrammanagerLabelLocator = "//LABEL[text()='DedicatedProgramManager']@for";
+	private static final String multilocationLabelLocator = "//LABEL[text()='MultiLocation']@for";
+	private static final String allowintegrationLabelLocator = "//LABEL[text()='AllowIntegration']@for";
+	private static final String unlimitedlinkedassetsLabelLocator = "//LABEL[text()='UnlimitedLinkedAssets']@for";
+	private static final String submitButtonLocator = "//input[@value='Submit']";
+	private static final String cancelButtonLocator = "//input[@value='Cancel']";
+	private static final String serialNumberFormatOptionsLocator = "//pre[contains(text(),'Serial Number Format Options.')]";
+	private static final String username = "n4systems";
+	private static final String password = "makesome$";
+	private static final String contextRoot = "/fieldidadmin/";
+	private static final String usernameInputLocator = "signIntoSystem_username";
+	private static final String passwordInputLocator = "signIntoSystem_password";
+	private static final String loginSubmitButtonLocator = "signIntoSystem_0";
+	private static final String pageTitle = "Field ID Administration";
 
-	public AdminConsoleOrganizations(DefaultSelenium selenium) {
+	public AdminConsoleOrganizationsPage(DefaultSelenium selenium) {
 		this.selenium = selenium;
-		p = new PropertyLoader(getClass());
-		serialNumberFormatInputLocator = p.getProperty("serialnumberformat");
-		dateFormatInputLocator = p.getProperty("dateformat");
-		diskSpaceLimitInputLocator = p.getProperty("diskspacelimit");
-		assetLimitInputLocator = p.getProperty("assetlimit");
-		userLimitInputLocator = p.getProperty("userlimit");
-		secondaryOrgsLimitInputLocator = p.getProperty("secondaryorgslimit");
-		integrationLabelLocator = p.getProperty("integration");
-		jobsitesLabelLocator = p.getProperty("jobsites");
-		projectsLabelLocator = p.getProperty("projects");
-		brandingLabelLocator = p.getProperty("branding");
-		partnercenterLabelLocator = p.getProperty("partnercenter");
-		emailalertsLabelLocator = p.getProperty("emailalerts");
-		customcertLabelLocator = p.getProperty("customercert");
-		dedicatedprogrammanagerLabelLocator = p.getProperty("dedicatedprogrammanager");
-		multilocationLabelLocator = p.getProperty("multilocation");
-		allowintegrationLabelLocator = p.getProperty("allowintegration");
-		unlimitedlinkedassetsLabelLocator = p.getProperty("unlimitedlinkedassets");
-		submitButtonLocator = p.getProperty("submit");
-		cancelButtonLocator = p.getProperty("cancel");
-		serialNumberFormatOptionsLocator = p.getProperty("serialnumberformatoptions");
-		username = p.getProperty("username");
-		password = p.getProperty("password");
-		contextRoot = p.getProperty("contextroot");
-		usernameInputLocator = p.getProperty("usernameinput");
-		passwordInputLocator = p.getProperty("passwordinput");
-		loginSubmitButtonLocator = p.getProperty("loginsubmit");
-		pageTitle = p.getProperty("pagetitle");
 	}
 	
+	/**
+	 * Checks to make sure we are getting the correct title on the page.
+	 */
 	private void assertPageTitle() {
 		assertEquals(pageTitle, selenium.getTitle());
 	}
