@@ -13,7 +13,7 @@ ${action.setPageType('product', 'inspections')!}
 			<tr>
 				<td>${action.formatDateTime(inspection.date)}</td>
 				<td>${inspection.type.name}</td>
-				<td>${inspection.status!}</td>
+				<td><@s.text name="${(inspection.status.label?html)!}"/></td>
 				<td>
 					<#assign user=inspection.inspector />
 					<#include "../inspectionCrud/_userName.ftl"/>

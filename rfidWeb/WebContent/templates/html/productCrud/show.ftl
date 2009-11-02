@@ -147,7 +147,7 @@ ${action.setPageType('product', 'show')!}
 			</p>
 			<p>
 				<label><@s.text name="label.result"/></label>
-				<span class="fieldValue">${ lastInspection.status! }</span>
+				<span class="fieldValue"><@s.text name="${(lastInspection.status.label?html)!}"/></span>
 			</p>
 			<p>
 				<label><@s.text name="label.details"/></label>
