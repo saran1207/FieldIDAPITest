@@ -609,10 +609,13 @@ public class DataServiceImpl implements DataService {
 				throw new ServiceException();
 			}
 			
-			
+			// we want to ensure this doesn't change on update.  The converter will leave it alone if it's not set.
+			productDTO.setIdentifiedById(0);
+		
 			Product product = converter.convert(productDTO, existingProduct, requestInformation.getTenantId());
 			
-			ServiceLocator.getProductSerialManager().update(product);
+			// on edit, the identified by user is populated with the modified user
+			ServiceLocator.getProductSerialManager().update(product, product.getModifiedBy());
 			
 			return response;
 		} catch (Exception e) {
@@ -653,7 +656,7 @@ public class DataServiceImpl implements DataService {
 			}
 				
 			// create the product with attached sub product transactionally
-			product = productManager.createProductWithServiceTransaction( requestInformation.getMobileGuid(), product );
+			product = productManager.createProductWithServiceTransaction( requestInformation.getMobileGuid(), product, product.getModifiedBy() );
 
 			// create any new subproducts (this is not currently used by mobile (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
@@ -664,7 +667,7 @@ public class DataServiceImpl implements DataService {
 					 * has special handling code to persist it anyway.  and yes it does suck ...  
 					 */
 					product.getSubProducts().addAll(subProducts);
-					productManager.update(product);
+					productManager.update(product, product.getModifiedBy());
 				}
 			}
 			
@@ -785,7 +788,7 @@ public class DataServiceImpl implements DataService {
 		Product product = convertNewProduct( tenantId, productDTO );
 		
 	
-		product = productManager.create(product);
+		product = productManager.create(product, product.getIdentifiedBy());
 	
 
 		logSuccessfulProductCreate( tenantId, populatorLogger, product );
@@ -839,7 +842,7 @@ public class DataServiceImpl implements DataService {
 					 * has special handling code to persist it anyway.  and yes it does suck ...  
 					 */
 					product.getSubProducts().addAll(subProductNotAlreadyAdded(product, subProducts));
-					productManager.update(product);
+					productManager.update(product, product.getModifiedBy());
 				}
 								
 				// we also need to get the product for any sub-inspections

@@ -160,7 +160,7 @@ public class ProductSerialImporter extends Importer {
 
 						Collection<InfoOptionBean> options = processInfoFields(productSerial, ps);
 						ps.setInfoOptions(new TreeSet(options));
-						ps = productSerialManager.create(ps);
+						ps = productSerialManager.create(ps, null);
 
 						successes.add(productSerial);
 					} else {

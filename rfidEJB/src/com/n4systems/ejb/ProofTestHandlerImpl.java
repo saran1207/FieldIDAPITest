@@ -326,7 +326,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		try {
-			product =  legacyProductManager.create(product);
+			product =  legacyProductManager.create(product, user);
 		} catch( SubProductUniquenessException e ) {
 			logger.error( "received a subproduct uniquness error this should not be possible form this type of update.", e );
 			throw new RuntimeException( e );

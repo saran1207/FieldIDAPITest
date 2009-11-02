@@ -14,6 +14,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 	private String location;
 	private String orderNumber;
 	private String identified; // date
+	private long modifiedById;
 	private long identifiedById;
 	private String lastInspectionDate; //date
 	private long productTypeId;
@@ -116,6 +117,15 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 	}
 	public void setIdentifiedById(long identifiedById) {
 		this.identifiedById = identifiedById;
+	}
+	public boolean modifiedByIdExists() {
+		return isValidServerId(modifiedById);
+	}
+	public long getModifiedById() {
+		return modifiedById;
+	}
+	public void setModifiedById(long modifiedById) {
+		this.modifiedById = modifiedById;
 	}
 	public String getServerRequestGuid() {
 		return serverRequestGuid;

@@ -71,7 +71,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 		testRequiredEntities();
 		
 		try {	
-			legacyProductManager.update(product);
+			legacyProductManager.update(product, getUser());
 			addFlashMessageText("message.productupdated");
 			
 		} catch (Exception e) {

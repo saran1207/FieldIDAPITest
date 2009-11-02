@@ -217,16 +217,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return piList;
 	}
 
-	@Deprecated
-	public void updateRFID(Long rProductSerial, String rfidNumber) {
-		Product obj = em.find(Product.class, rProductSerial);
-
-		obj.setRfidNumber(rfidNumber);
-
-		moveRfidFromProductSerials(obj);
-
-	}
-
 	public boolean rfidExists(String rfidNumber, Long tenantId) {
 		return rfidExists(rfidNumber, tenantId, null);
 	}
@@ -263,17 +253,17 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return (rfidCount > 0) ? true : false;
 	}
 
-	public void create(List<Product> products) throws SubProductUniquenessException {
+	public void create(List<Product> products, UserBean modifiedBy) throws SubProductUniquenessException {
 		for (Product product: products) {
-			create(product);
+			create(product, modifiedBy);
 		}
 	}
 	
-	public Product create(Product product) throws SubProductUniquenessException {
-		runProductSavePreRecs(product);
+	public Product create(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+		runProductSavePreRecs(product, modifiedBy);
 		
 		ProductSaver saver = new ProductSaver();
-		saver.setModifiedBy(product.getIdentifiedBy());
+		saver.setModifiedBy(modifiedBy);
 		
 		product = saver.update(em, product);
 
@@ -300,15 +290,15 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void runProductSavePreRecs(Product product) throws SubProductUniquenessException {
-		moveRfidFromProductSerials(product);
+	private void runProductSavePreRecs(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+		moveRfidFromProductSerials(product, modifiedBy);
 		setCountsTowardsLimitFlagOnLinkedProducts(product);
-		processSubProducts(product);
+		processSubProducts(product, modifiedBy);
 	}
 
-	public Product update(Product product) throws SubProductUniquenessException {
+	public Product update(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
 		product.touch();
-		runProductSavePreRecs(product);
+		runProductSavePreRecs(product, modifiedBy);
 		
 		/*
 		 * TODO: The saving of sub products should NOT be here!!!  The list of sub products is marked as @Transient,
@@ -317,6 +307,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		saveSubProducts(product);
 		
 		ProductSaver saver = new ProductSaver();
+		saver.setModifiedBy(modifiedBy);
 		product = saver.update(em, product);
 		
 		updateSchedulesOwnership(product);
@@ -338,7 +329,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void processSubProducts(Product product) throws SubProductUniquenessException {
+	private void processSubProducts(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
 
 		checkForUniqueSubProducts(product);
 		clearOldSubProducts(product);
@@ -346,13 +337,14 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		long weight = 0;
 		for (SubProduct subProduct : product.getSubProducts()) {
 
-			detachFromPreviousParent(product, subProduct);
+			detachFromPreviousParent(product, subProduct, modifiedBy);
 
 			subProduct.getProduct().setOwner(product.getOwner());
 			subProduct.getProduct().setLocation(product.getLocation());
 			subProduct.setWeight(weight);
 
 			ProductSaver saver = new ProductSaver();
+			saver.setModifiedBy(modifiedBy);
 			saver.update(em, subProduct.getProduct());
 			
 			weight++;
@@ -374,7 +366,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void detachFromPreviousParent(Product product, SubProduct subProduct) {
+	private void detachFromPreviousParent(Product product, SubProduct subProduct, UserBean modifiedBy) {
 		Product parentProduct = productManager.parentProduct(subProduct.getProduct());
 
 		if (parentProduct != null && !parentProduct.equals(product)) {
@@ -383,7 +375,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 				SubProduct subProductToRemove = persistenceManager.find(query);
 				parentProduct.getSubProducts().remove(subProductToRemove);
 				persistenceManager.delete(subProductToRemove);
-				update(parentProduct);
+				update(parentProduct, modifiedBy);
 			} catch (SubProductUniquenessException e) {
 				logger.error("parnet product is in an invalid state in the database", e);
 				throw new RuntimeException("parnet product is in an invalid state in the database", e);
@@ -404,14 +396,14 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	 * creates the product serial and updates the given users add
 	 * productHistory.
 	 */
-	public Product createWithHistory(Product product, Long userId) throws SubProductUniquenessException {
-		product = create(product);
+	public Product createWithHistory(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+		product = create(product, modifiedBy);
 
-		AddProductHistoryBean addProductHistory = getAddProductHistory(userId);
+		AddProductHistoryBean addProductHistory = getAddProductHistory(modifiedBy.getUniqueID());
 
 		if (addProductHistory == null) {
 			addProductHistory = new AddProductHistoryBean();
-			addProductHistory.setUser(em.find(UserBean.class, userId));
+			addProductHistory.setUser(modifiedBy);
 		}
 
 		addProductHistory.setOwner(product.getOwner());
@@ -427,19 +419,20 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return product;
 	}
 
-	private void moveRfidFromProductSerials(Product obj) {
+	private void moveRfidFromProductSerials(Product product, UserBean modifiedBy) {
 		ProductSaver saver = new ProductSaver();
+		saver.setModifiedBy(modifiedBy);
 		
-		if (rfidExists(obj.getRfidNumber(), obj.getTenant().getId())) {
-			Collection<Product> pSerials = productManager.findProductsByRfidNumber(obj.getRfidNumber(), new TenantOnlySecurityFilter(obj.getTenant().getId()));
-			for (Product pSerial : pSerials) {
-				if (!pSerial.getId().equals(obj.getId())) {
-					pSerial.setRfidNumber(null);
+		if (rfidExists(product.getRfidNumber(), product.getTenant().getId())) {
+			Collection<Product> duplicateRfidProducts = productManager.findProductsByRfidNumber(product.getRfidNumber(), new TenantOnlySecurityFilter(product.getTenant().getId()));
+			for (Product duplicateRfidProduct : duplicateRfidProducts) {
+				if (!duplicateRfidProduct.getId().equals(product.getId())) {
+					duplicateRfidProduct.setRfidNumber(null);
 					
-					saver.update(em, pSerial);
+					saver.update(em, duplicateRfidProduct);
 
-					String auditMessage = "Moving RFID [" + obj.getRfidNumber() + "] from ProductSerial [" + pSerial.getId() + ":" + pSerial.getSerialNumber() + "] to [" + obj.getId() + ":"
-							+ obj.getSerialNumber() + "]";
+					String auditMessage = "Moving RFID [" + product.getRfidNumber() + "] from ProductSerial [" + duplicateRfidProduct.getId() + ":" + duplicateRfidProduct.getSerialNumber() + "] to [" + product.getId() + ":"
+							+ product.getSerialNumber() + "]";
 					auditLogger.info(auditMessage);
 				}
 			}
@@ -563,9 +556,9 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return inspectionQuery;
 	}
 
-	public Product createProductWithServiceTransaction(String transactionGUID, Product product) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
+	public Product createProductWithServiceTransaction(String transactionGUID, Product product, UserBean modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
 
-		product = create(product);
+		product = create(product, modifiedBy);
 
 		TransactionSupervisor transaction = new TransactionSupervisor(persistenceManager);
 		transaction.completeProductTransaction(transactionGUID, product.getTenant());

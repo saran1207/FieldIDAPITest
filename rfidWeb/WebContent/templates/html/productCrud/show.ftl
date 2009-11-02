@@ -44,6 +44,14 @@ ${action.setPageType('product', 'show')!}
 			<label><@s.text name="label.identified"/></label>
 			<span class="fieldValue">${action.formatDate(product.identified, false)}</span>
 		</p>
+		<p>
+			<label><@s.text name="label.identifiedby"/></label>
+			<span class="fieldValue">${(product.identifiedBy.displayName)!}</span>
+		</p>
+		<p>
+			<label><@s.text name="label.modifiedby"/></label>
+			<span class="fieldValue">${(product.modifiedBy.displayName)!}</span>
+		</p>
 		<#if !securityGuard.integrationEnabled >
 		<p>
 			<label><@s.text name="label.ordernumber"/></label>

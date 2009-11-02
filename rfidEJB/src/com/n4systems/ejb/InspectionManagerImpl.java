@@ -26,6 +26,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.interceptor.AuditInterceptor;
@@ -355,7 +356,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		persistenceManager.save(inspection, userId);
 
 		// update the product data
-		updateProduct(inspection, productStatus);
+		updateProduct(inspection, productStatus, userId);
 
 		// update the next inspection date
 		processNextInspection(inspection, nextInspectionDate);
@@ -647,7 +648,8 @@ public class InspectionManagerImpl implements InspectionManager {
 		return product;
 	}
 
-	private void updateProduct(Inspection inspection, ProductStatusBean productStatus) {
+	private void updateProduct(Inspection inspection, ProductStatusBean productStatus, Long modifiedById) {
+		UserBean modifiedBy = em.find(UserBean.class, modifiedById);
 		Product product = em.find(Product.class, inspection.getProduct().getId());
 
 		updateProductInspectionDate(product);
@@ -659,7 +661,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		product.setProductStatus(productStatus);
 		try {
-			legacyProductManager.update(product);
+			legacyProductManager.update(product, modifiedBy);
 		} catch (SubProductUniquenessException e) {
 			logger.error("received a subproduct uniquness error this should not be possible form this type of update.", e);
 			throw new RuntimeException(e);

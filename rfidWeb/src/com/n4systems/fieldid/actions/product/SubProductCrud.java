@@ -87,7 +87,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 		try {	
 			processSubProducts();
-			product = productManager.update(product);
+			product = productManager.update(product, getUser());
 			addFlashMessageText("message.productupdated");
 
 			return "saved";
@@ -142,7 +142,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		try {	
 			SubProduct target = product.getSubProducts().get(product.getSubProducts().indexOf(new SubProduct(subProduct.getProduct(), product)));
 			target.setLabel(subProduct.getLabel());
-			product = productManager.update(product);
+			product = productManager.update(product, getUser());
 			addFlashMessageText("message.productupdated");
 
 			return "saved";
@@ -177,7 +177,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		
 		product.setSubProducts(reorderedList);
 		try {
-			product = productManager.update(product);
+			product = productManager.update(product, getUser());
 		} catch (SubProductUniquenessException e) {
 			return null;
 		} catch (Exception e) {
@@ -213,7 +213,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 		try {
 			product.getSubProducts().remove(subProductToRemove);
-			productManager.update(product);
+			productManager.update(product, getUser());
 
 			MasterInspection masterInspection = (MasterInspection) getSession().get("masterInspection");
 			if (MasterInspection.matchingMasterInspection(masterInspection, token)) {

@@ -64,12 +64,12 @@ public class ProductSaveService {
 
 	private void createProduct() throws SubProductUniquenessException {
 		saveRequirements();
-		product = productManager.createWithHistory(product, user.getId());
+		product = productManager.createWithHistory(product, user);
 	}
 
 	private void updateProduct() throws SubProductUniquenessException {
 		saveRequirements();
-		product = productManager.update(product);
+		product = productManager.update(product, user);
 	}
 
 	private void saveRequirements() {

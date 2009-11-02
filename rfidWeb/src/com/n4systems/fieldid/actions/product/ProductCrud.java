@@ -17,7 +17,6 @@ import rfid.ejb.entity.ProductCodeMappingBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
 import rfid.ejb.session.ProductCodeMapping;
@@ -350,18 +349,16 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		product.setTenant(getTenant());
 		product.setIdentified(convertDate(identified));
-		UserBean user = fetchCurrentUser();
-
-		if (user != null) {
-			product.setIdentifiedBy(user);
-		}
 
 		try {
 			convertInputsToInfoOptions();
 			convertInputsToExtensionValues();
 			processOrderMasters();
-
+			
 			if (product.isNew()) {
+				// we only set identified by on save
+				product.setIdentifiedBy(fetchCurrentUser());
+				
 				ProductSaveService saver = getProductSaveService();
 				saver.setUploadedAttachments(getUploadedFiles());
 				saver.setProduct(product);

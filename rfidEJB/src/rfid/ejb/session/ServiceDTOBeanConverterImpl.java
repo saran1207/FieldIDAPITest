@@ -232,6 +232,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setSerialNumber(product.getSerialNumber());
 		productDTO.setComments(product.getComments());
 		productDTO.setIdentifiedById(product.getIdentifiedBy() != null ? product.getIdentifiedBy().getUniqueID() : 0);
+		productDTO.setModifiedById(product.getModifiedBy() != null ? product.getModifiedBy().getUniqueID() : 0);
 		productDTO.setOrderNumber(product.getShopOrder() != null ? product.getShopOrder().getOrder().getOrderNumber() : "");
 		
 		if (product.getDescription() != null && product.getDescription().length() >= 255) {
@@ -306,6 +307,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetProduct.setIdentifiedBy( user );
 		}
 	
+		if (productServiceDTO.modifiedByIdExists()) {
+			UserBean modifiedBy = em.find(UserBean.class, productServiceDTO.getModifiedById());
+			targetProduct.setIdentifiedBy(modifiedBy);
+		}
+		
 		if ( productServiceDTO.getInfoOptions() != null ) {			
 			Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
 			for ( com.n4systems.webservice.dto.InfoOptionServiceDTO infoOptionServiceDTO : productServiceDTO.getInfoOptions() ) {

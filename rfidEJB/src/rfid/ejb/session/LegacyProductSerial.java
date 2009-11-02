@@ -10,6 +10,7 @@ import rfid.ejb.entity.AddProductHistoryBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -24,10 +25,10 @@ public interface LegacyProductSerial {
 	public Long countAllInspections( Product product, SecurityFilter securityFilter );
 	public Long countAllLocalInspections(Product product, SecurityFilter securityFilter);
 	
-	public void create(List<Product> products) throws SubProductUniquenessException;
-	public Product create(Product product) throws SubProductUniquenessException;
+	public void create(List<Product> products, UserBean modifiedBy) throws SubProductUniquenessException;
+	public Product create(Product product, UserBean modifiedBy) throws SubProductUniquenessException;
 	
-	public Product createWithHistory( Product product, Long userId ) throws SubProductUniquenessException;	
+	public Product createWithHistory( Product product, UserBean modifiedBy ) throws SubProductUniquenessException;	
 	
 	public boolean duplicateSerialNumber( String serialNumber, Long uniqueID, Tenant tenant );
 	
@@ -64,16 +65,15 @@ public interface LegacyProductSerial {
 	
 	public boolean rfidExists(String rfidNumber, Long tenantId);
 	public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID);
-	public void updateRFID(Long rProductSerial, String rfidNumber);
 	
 	/*####################################
 	 * updating product
 	 #########################################################*/
 	
-	public Product update(Product productSerial) throws SubProductUniquenessException;
+	public Product update(Product productSerial, UserBean modifiedBy) throws SubProductUniquenessException;
 	
 	public void update(ProductSerialExtensionValueBean productSerialExtensionValue);	
 	
 	
-	public Product createProductWithServiceTransaction( String transactionGUID, Product product ) throws TransactionAlreadyProcessedException, SubProductUniquenessException;
+	public Product createProductWithServiceTransaction( String transactionGUID, Product product, UserBean modifiedBy ) throws TransactionAlreadyProcessedException, SubProductUniquenessException;
 }

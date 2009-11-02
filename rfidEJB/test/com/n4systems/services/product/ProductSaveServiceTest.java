@@ -49,7 +49,7 @@ public class ProductSaveServiceTest {
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.createWithHistory(product, user.getId())).andReturn(expectedProduct);
+			expect(mockProductManager.createWithHistory(product, user)).andReturn(expectedProduct);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -70,7 +70,7 @@ public class ProductSaveServiceTest {
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.createWithHistory(product, user.getId())).andThrow(new SubProductUniquenessException());
+			expect(mockProductManager.createWithHistory(product, user)).andThrow(new SubProductUniquenessException());
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -91,7 +91,7 @@ public class ProductSaveServiceTest {
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.update(product)).andReturn(product);
+			expect(mockProductManager.update(product, user)).andReturn(product);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -111,7 +111,7 @@ public class ProductSaveServiceTest {
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.update(product)).andThrow(new SubProductUniquenessException());
+			expect(mockProductManager.update(product, user)).andThrow(new SubProductUniquenessException());
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
