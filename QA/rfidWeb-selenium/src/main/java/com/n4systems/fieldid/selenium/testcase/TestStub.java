@@ -5,7 +5,6 @@ import org.junit.*;
 
 public class TestStub extends FieldIDTestCase {
 
-	String tenant;
 	String userid;
 	String password;
 	
@@ -17,39 +16,38 @@ public class TestStub extends FieldIDTestCase {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		tenant = p.getProperty("tenant");
-		userid = p.getProperty("userid");
-		password = p.getProperty("password");
+		userid = "n4systems";
+		password = "makesome$";
 	}
 	
 	@Test
-	public void test() throws Exception {
-		adminConsoleOrgs.gotoFieldIDAdministrationConsole();
-		adminConsoleOrgs.loginToFieldIDAdministrationConsole();
-		int totalTenants = adminConsoleOrgs.getTotalTenants();
-		List<String> tenants = adminConsoleOrgs.getTenantIDs();
-		adminConsoleOrgs.gotoEditTenant(tenants.get(0));
-		String serialNumberFormat = adminConsoleOrgs.getTenantSerialNumberFormat();
-		String dateFormat = adminConsoleOrgs.getTenantDateFormat();
-		long diskSpaceLimit = adminConsoleOrgs.getTenantDiskSpaceLimit();
-		long assetLimit = adminConsoleOrgs.getTenantAssetLimit();
-		long userLimit = adminConsoleOrgs.getTenantUserLimit();
-		long secondaryOrgLimit = adminConsoleOrgs.getTenantSecondaryOrgLimit();
-		boolean integration = adminConsoleOrgs.hasIntegration();
-		boolean jobsites = adminConsoleOrgs.hasJobSites();
-		boolean projects = adminConsoleOrgs.hasProjects();
-		boolean branding = adminConsoleOrgs.hasBranding();
-		boolean partnercenter = adminConsoleOrgs.hasPartnerCenter();
-		boolean emailalerts = adminConsoleOrgs.hasEmailAlerts();
-		boolean customcert = adminConsoleOrgs.hasCustomCert();
-		boolean matt = adminConsoleOrgs.hasDedicatedProgramManager();
-		boolean multilocation = adminConsoleOrgs.hasMultiLocation();
-		boolean allowintegration = adminConsoleOrgs.hasAllowIntegration();
-		boolean unlimitedlinkedassets = adminConsoleOrgs.hasUnlimitedLinkedAssets();
-		String options = adminConsoleOrgs.getSerialNumberFormatOptions();
-		adminConsoleOrgs.gotoCancelEditTenant();
-		adminConsoleOrgs.gotoEditTenant(tenants.get(0));
-		adminConsoleOrgs.gotoSubmitEditTenant();
+	public void proofOfConcept() throws Exception {
+		adminConsoleOrgPages.gotoFieldIDAdministrationConsole();
+		adminConsoleOrgPages.loginToFieldIDAdministrationConsole();
+		int totalTenants = adminConsoleOrgPages.getTotalTenants();
+		List<String> tenants = adminConsoleOrgPages.getTenantIDs();
+		adminConsoleOrgPages.gotoEditTenant(tenants.get(0));
+		String serialNumberFormat = adminConsoleOrgPages.getTenantSerialNumberFormat();
+		String dateFormat = adminConsoleOrgPages.getTenantDateFormat();
+		long diskSpaceLimit = adminConsoleOrgPages.getTenantDiskSpaceLimit();
+		long assetLimit = adminConsoleOrgPages.getTenantAssetLimit();
+		long userLimit = adminConsoleOrgPages.getTenantUserLimit();
+		long secondaryOrgLimit = adminConsoleOrgPages.getTenantSecondaryOrgLimit();
+		boolean integration = adminConsoleOrgPages.hasIntegration();
+		boolean jobsites = adminConsoleOrgPages.hasJobSites();
+		boolean projects = adminConsoleOrgPages.hasProjects();
+		boolean branding = adminConsoleOrgPages.hasBranding();
+		boolean partnercenter = adminConsoleOrgPages.hasPartnerCenter();
+		boolean emailalerts = adminConsoleOrgPages.hasEmailAlerts();
+		boolean customcert = adminConsoleOrgPages.hasCustomCert();
+		boolean matt = adminConsoleOrgPages.hasDedicatedProgramManager();
+		boolean multilocation = adminConsoleOrgPages.hasMultiLocation();
+		boolean allowintegration = adminConsoleOrgPages.hasAllowIntegration();
+		boolean unlimitedlinkedassets = adminConsoleOrgPages.hasUnlimitedLinkedAssets();
+		String options = adminConsoleOrgPages.getSerialNumberFormatOptions();
+		adminConsoleOrgPages.gotoCancelEditTenant();
+		adminConsoleOrgPages.gotoEditTenant(tenants.get(0));
+		adminConsoleOrgPages.gotoSubmitEditTenant();
 		
 		System.out.println("Total tenants: " + totalTenants);
 		System.out.println("List of tenant IDs:\n" + tenants);

@@ -11,35 +11,43 @@ public class AdminConsoleOrganizationsPage {
 	private static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
 	
 	// locators for the elements on the page I want to interact with
-	private static final String serialNumberFormatInputLocator = "//input[@id='organizationUpdate_primaryOrg_serialNumberFormat']";
-	private static final String dateFormatInputLocator = "//input[@id='organizationUpdate_primaryOrg_dateFormat']";
-	private static final String diskSpaceLimitInputLocator = "//input[@id='organizationUpdate_diskSpace']";
-	private static final String assetLimitInputLocator = "//input[@id='organizationUpdate_assets']";
-	private static final String userLimitInputLocator = "//input[@id='organizationUpdate_users']";
-	private static final String secondaryOrgsLimitInputLocator = "//input[@id='organizationUpdate_secondaryOrgs']";
-	private static final String integrationLabelLocator = "//LABEL[text()='Integration']@for";
-	private static final String jobsitesLabelLocator = "//LABEL[text()='JobSites']@for";
-	private static final String projectsLabelLocator = "//LABEL[text()='Projects']@for";
-	private static final String brandingLabelLocator = "//LABEL[text()='Branding']@for";
-	private static final String partnercenterLabelLocator = "//LABEL[text()='PartnerCenter']@for";
-	private static final String emailalertsLabelLocator = "//LABEL[text()='EmailAlerts']@for";
-	private static final String customcertLabelLocator = "//LABEL[text()='CustomCert']@for";
-	private static final String dedicatedprogrammanagerLabelLocator = "//LABEL[text()='DedicatedProgramManager']@for";
-	private static final String multilocationLabelLocator = "//LABEL[text()='MultiLocation']@for";
-	private static final String allowintegrationLabelLocator = "//LABEL[text()='AllowIntegration']@for";
-	private static final String unlimitedlinkedassetsLabelLocator = "//LABEL[text()='UnlimitedLinkedAssets']@for";
-	private static final String submitButtonLocator = "//input[@value='Submit']";
-	private static final String cancelButtonLocator = "//input[@value='Cancel']";
-	private static final String serialNumberFormatOptionsLocator = "//pre[contains(text(),'Serial Number Format Options.')]";
+	private static final String organizationsTableLocator = "css=table";
+	private static final String serialNumberFormatInputLocator = "css=#organizationUpdate_primaryOrg_serialNumberFormat";
+	private static final String dateFormatInputLocator = "css=#organizationUpdate_primaryOrg_dateFormat";
+	private static final String diskSpaceLimitInputLocator = "css=#organizationUpdate_diskSpace";
+	private static final String assetLimitInputLocator = "css=#organizationUpdate_assets";
+	private static final String userLimitInputLocator = "css=#organizationUpdate_users";
+	private static final String secondaryOrgsLimitInputLocator = "css=#organizationUpdate_secondaryOrgs";
+	private static final String integrationLocator = "css=#organizationUpdate_extendedFeatures_'Integration'_";
+	private static final String jobsitesLocator = "css=#organizationUpdate_extendedFeatures_'JobSites'_";
+	private static final String projectsLocator = "css=#organizationUpdate_extendedFeatures_'Projects'_";
+	private static final String brandingLocator = "css=#organizationUpdate_extendedFeatures_'Branding'_";
+	private static final String partnercenterLocator = "css=#organizationUpdate_extendedFeatures_'PartnerCenter'_";
+	private static final String emailalertsLocator = "css=#organizationUpdate_extendedFeatures_'EmailAlerts'_";
+	private static final String customcertLocator = "css=#organizationUpdate_extendedFeatures_'CustomCert'_";
+	private static final String dedicatedprogrammanagerLocator = "css=#organizationUpdate_extendedFeatures_'DedicatedProgramManager'_";
+	private static final String multilocationLocator = "css=#organizationUpdate_extendedFeatures_'MultiLocation'_";
+	private static final String allowintegrationLocator = "css=#organizationUpdate_extendedFeatures_'AllowIntegration'_";
+	private static final String unlimitedlinkedassetsLocator = "css=#organizationUpdate_extendedFeatures_'UnlimitedLinkedAssets'_";
+	private static final String submitButtonLocator = "css=#organizationUpdate_0";
+	private static final String cancelButtonLocator = "css=[value='Cancel']";
+	private static final String serialNumberFormatOptionsLocator = "css=pre";	// assume there is only one <PRE> tag
 	private static final String username = "n4systems";
 	private static final String password = "makesome$";
 	private static final String contextRoot = "/fieldidadmin/";
-	private static final String usernameInputLocator = "signIntoSystem_username";
-	private static final String passwordInputLocator = "signIntoSystem_password";
-	private static final String loginSubmitButtonLocator = "signIntoSystem_0";
+	private static final String usernameInputLocator = "css=#signIntoSystem_username";
+	private static final String passwordInputLocator = "css=#signIntoSystem_password";
+	private static final String loginSubmitButtonLocator = "css=#signIntoSystem_0";
 	private static final String pageTitle = "Field ID Administration";
 
+	/**
+	 * Initialize the library to use the same instance of Selenium as the
+	 * test cases.
+	 * 
+	 * @param selenium Initialized instance of selenium used to access the application under test
+	 */
 	public AdminConsoleOrganizationsPage(DefaultSelenium selenium) {
+		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}
 	
@@ -92,9 +100,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasUnlimitedLinkedAssets() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(unlimitedlinkedassetsLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(unlimitedlinkedassetsLocator);
 		return result;
 	}
 
@@ -107,9 +113,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasAllowIntegration() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(allowintegrationLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(allowintegrationLocator);
 		return result;
 	}
 
@@ -122,9 +126,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasMultiLocation() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(multilocationLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(multilocationLocator);
 		return result;
 	}
 
@@ -137,9 +139,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasDedicatedProgramManager() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(dedicatedprogrammanagerLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(dedicatedprogrammanagerLocator);
 		return result;
 	}
 
@@ -152,9 +152,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasCustomCert() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(customcertLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(customcertLocator);
 		return result;
 	}
 
@@ -167,9 +165,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasEmailAlerts() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(emailalertsLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(emailalertsLocator);
 		return result;
 	}
 
@@ -182,9 +178,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasPartnerCenter() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(partnercenterLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(partnercenterLocator);
 		return result;
 	}
 
@@ -197,9 +191,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasBranding() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(brandingLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(brandingLocator);
 		return result;
 	}
 
@@ -212,9 +204,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasProjects() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(projectsLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(projectsLocator);
 		return result;
 	}
 
@@ -227,9 +217,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasJobSites() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(jobsitesLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(jobsitesLocator);
 		return result;
 	}
 
@@ -242,9 +230,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public boolean hasIntegration() {
 		boolean result = false;
-		String s1 = selenium.getAttribute(integrationLabelLocator);
-		String locator = "//INPUT[@id=\"" + s1 + "\"]";
-		result = selenium.isChecked(locator);
+		result = selenium.isChecked(integrationLocator);
 		return result;
 	}
 
@@ -318,9 +304,14 @@ public class AdminConsoleOrganizationsPage {
 	}
 
 	/**
-	 * Before calling this method you need to log into the
+	 * Before calling this method you need to go to the
 	 * Field ID Administration Console using the method
 	 * gotoFieldIDAdministrationConsole().
+	 * 
+	 * This assumes the username and password to login with
+	 * are hard coded and change very infrequently. For this
+	 * reason they are hard coded into this class.
+	 * 
 	 */
 	public void loginToFieldIDAdministrationConsole() {
 		selenium.type(usernameInputLocator, username);
@@ -360,10 +351,16 @@ public class AdminConsoleOrganizationsPage {
 	 * will find the row containing the tenant ID then click the
 	 * Edit link for that tenant.
 	 * 
+	 * This method assumes the tenant IDs are in a table. It will
+	 * search for a cell containing the tenant ID, look for a cell
+	 * on the same row which contains a link with the text 'Edit'
+	 * then click it. 
+	 * 
 	 * @param tenantID
 	 */
 	public void gotoEditTenant(String tenantID) {
-		String editTenantLocator = "//td[text()='" + tenantID +"']/../td[3]/a[contains(text(),'Edit')]";
+		assertTrue("The tenantID must not be null", tenantID != null);
+		String editTenantLocator = "//td[text()='" + tenantID +"']/../td/a[text()='Edit']";
 		selenium.click(editTenantLocator);
 		selenium.waitForPageToLoad(pageLoadDefaultTimeout);
 		assertPageTitle();
@@ -379,7 +376,7 @@ public class AdminConsoleOrganizationsPage {
 	 * @return list of tenant IDs
 	 */
 	public List<String> getTenantIDs() {
-		String tableLocator = "//*[@id='content']/table[1]";
+		String tableLocator = organizationsTableLocator;
 		String column = "1";	// columns are zero index
 		List<String> result = new ArrayList<String>();
 		Number rows = selenium.getXpathCount(tableLocator + "/tbody/tr");
