@@ -41,6 +41,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setAssingedUser(savedReport.getLongCriteria(SavedReport.ASSINGED_USER));
 		container.setProductStatus(savedReport.getLongCriteria(SavedReport.PRODUCT_STATUS));
 		container.setProductType(savedReport.getLongCriteria(SavedReport.PRODUCT_TYPE));
+		container.setProductTypeGroup(savedReport.getLongCriteria(SavedReport.PRODUCT_TYPE_GROUP));
 		container.setJob(savedReport.getLongCriteria(SavedReport.JOB_ID));
 		
 		container.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
@@ -76,6 +77,7 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.INSPECTOR, container.getInspector());
 		report.setInCriteria(SavedReport.PRODUCT_STATUS, container.getProductStatus());
 		report.setInCriteria(SavedReport.PRODUCT_TYPE, container.getProductType());
+		report.setInCriteria(SavedReport.PRODUCT_TYPE_GROUP, container.getProductTypeGroup());
 		report.setInCriteria(SavedReport.ASSINGED_USER, container.getAssingedUser());
 		report.setInCriteria(SavedReport.JOB_ID, container.getJob());
 		report.setInCriteria(SavedReport.LOCATION, container.getLocation());

@@ -45,6 +45,7 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String REFERENCE_NUMBER = "referenceNumber";
 	public static final String LOCATION = "location";
 	public static final String OWNER_ID = "ownerId";
+	public static final String PRODUCT_TYPE_GROUP = "productTypeGroup";
 	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(SavedReport.class);
