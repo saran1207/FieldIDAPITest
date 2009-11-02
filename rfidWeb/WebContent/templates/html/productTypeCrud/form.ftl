@@ -51,53 +51,34 @@
 		
 	</script>
 </head>
-<@s.form action="productTypeUpdate" theme="simple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
+<@s.form action="productTypeUpdate" theme="fieldidSimple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
 	<@s.hidden name="uniqueID" />
 	<#include "/templates/html/common/_formErrors.ftl" />
 	<h2><@s.text name="label.productinformation"/></h2>
 	<p>
 		<label><@s.text name="label.group"/></label>
 		<span>
-			<@s.select name="group" list="productTypeGroups" listKey="id" listValue="name" emptyOption="true">
-				<#if (action.fieldErrors['group'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['group']}</@s.param>
-				</#if>
-			</@s.select>
+			<@s.select name="group" list="productTypeGroups" listKey="id" listValue="name" emptyOption="true"/>
 		</span>
 	</p>
 	<p>
 		<label><@s.text name="label.name"/></label>
 		<span>
-			<@s.textfield name="name">
-				<#if (action.fieldErrors['name'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['name']}</@s.param>
-				</#if>
-			</@s.textfield>
+			<@s.textfield name="name"/>
+				
 		</span>
 	</p>
 		
 	<p>
 		<label><@s.text name="label.warnings"/></label>
 		<span>
-			<@s.textarea name="warnings"  rows="3" cols="50">
-				<#if (action.fieldErrors['warnings'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['warnings']}</@s.param>
-				</#if>
-			</@s.textarea>
+			<@s.textarea name="warnings"  rows="3" cols="50"/>
 		</span>
 	</p>
 	<p>
 		<label><@s.text name="label.instructions" /></label>
 		<span>	
-			<@s.textarea name="instructions"  rows="3" cols="50" >
-				<#if (action.fieldErrors['instructions'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['instructions']}</@s.param>
-				</#if>
-			</@s.textarea>
+			<@s.textarea name="instructions"  rows="3" cols="50" />
 		</span>
 	</p>
 	
@@ -107,12 +88,7 @@
 			<@s.fielderror>
 				<@s.param>cautionsUrl</@s.param>				
 			</@s.fielderror>
-			<@s.textfield name="cautionsUrl" >
-				<#if (action.fieldErrors['cautionsUrl'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['cautionsUrl']}</@s.param>
-				</#if>
-			</@s.textfield>
+			<@s.textfield name="cautionsUrl" />
 		</span>
 	</p>
 	
@@ -126,24 +102,13 @@
 	<p>
 		<label><@s.text name="label.manufacturercertificatetext" /></label>
 		<span>
-			<@s.textarea  name="manufacturerCertificateText" rows="5" cols="50" >
-				<#if (action.fieldErrors['manufacturerCertificateText'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['manufacturerCertificateText']}</@s.param>
-				</#if>
-			</@s.textarea>
-			
+			<@s.textarea  name="manufacturerCertificateText" rows="5" cols="50" />
 		</span>
 	</p>
 	<p>
 		<label><@s.text name="label.productdescription" /></label>
 		<span>
-			<@s.textfield name="descriptionTemplate" >
-				<#if (action.fieldErrors['descriptionTemplate'])?exists> 
-					<@s.param name="cssClass">inputError</@s.param>
-					<@s.param name="title">${action.fieldErrors['descriptionTemplate']}</@s.param>
-				</#if>
-			</@s.textfield>
+			<@s.textfield name="descriptionTemplate" />
 		</span>
 	</p>
 	

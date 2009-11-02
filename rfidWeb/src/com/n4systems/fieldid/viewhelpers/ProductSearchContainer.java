@@ -9,7 +9,7 @@ import com.n4systems.util.persistence.search.SortTerm;
 
 public class ProductSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg"};
+	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "type.group"};
 	
 	private String rfidNumber;
 	private String serialNumber;
@@ -18,6 +18,7 @@ public class ProductSearchContainer extends SearchContainer {
 	private String referenceNumber;
 	private String purchaseOrder;
 	private Long productTypeId;
+	private Long productTypeGroupId;
 	private Long productStatusId;
 	private Long assignedUserId;
 	private BaseOrg owner;
@@ -37,6 +38,7 @@ public class ProductSearchContainer extends SearchContainer {
 		addStringTerm("customerRefNumber", referenceNumber);
 		addStringTerm("purchaseOrder", purchaseOrder);
 		addSimpleTerm("type.id", productTypeId);
+		addSimpleTerm("type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
 		addSimpleTerm("assignedUser.uniqueID", assignedUserId);
 		addDateRangeTerm("identified", fromDate, toDate);
@@ -157,6 +159,12 @@ public class ProductSearchContainer extends SearchContainer {
 	public void setOwner(BaseOrg owner) {
 		this.owner = owner;
 	}
-	
-	
+
+	public Long getProductTypeGroup() {
+		return productTypeGroupId;
+	}
+
+	public void setProductTypeGroup(Long productTypeGroupId) {
+		this.productTypeGroupId = productTypeGroupId;
+	}
 }

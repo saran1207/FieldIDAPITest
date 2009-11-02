@@ -11,6 +11,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class ProductTypeLister {
@@ -18,6 +19,7 @@ public class ProductTypeLister {
 	private SecurityFilter filter;
 	private List<ListingPair> productTypes;
 	private List<String> orderedProductTypeGroups;
+	private List<ListingPair> productTypeGroups;
 	private Map<String,List<ListingPair>> groupedProductTypes;
 	
 	
@@ -29,10 +31,22 @@ public class ProductTypeLister {
 
 	public List<String> getGroups() {
 		if (orderedProductTypeGroups == null) {
-			QueryBuilder<String> query = new QueryBuilder<String>(ProductTypeGroup.class, filter).setSimpleSelect("name").addOrder("orderIdx");
+			QueryBuilder<String> query = new QueryBuilder<String>(ProductTypeGroup.class, filter)
+					.setSimpleSelect("name")
+					.addOrder("orderIdx");
 			orderedProductTypeGroups = persistenceManager.findAll(query);
 		}
 		return orderedProductTypeGroups;
+	}
+	
+	public List<ListingPair> getProductTypeGroups() {
+		if (productTypeGroups == null) {
+			QueryBuilder<ListingPair> query = new QueryBuilder<ListingPair>(ProductTypeGroup.class, filter)
+					.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name"))
+					.addOrder("orderIdx");
+			productTypeGroups = persistenceManager.findAll(query);
+		}
+		return productTypeGroups;
 	}
 
 	public List<ListingPair> getGroupedProductTypes(String group) {

@@ -12,7 +12,7 @@ import com.n4systems.util.persistence.search.SortTerm;
 
 public class InspectionSearchContainer extends SearchContainer implements ReportDefiner {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg"};
+	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group"};
 	
 	private Long savedReportId;
 	private boolean savedReportModified;
@@ -25,6 +25,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private String location;
 	private BaseOrg owner;
 	private Long productTypeId;
+	private Long productTypeGroupId;
 	private Long productStatusId;
 	private Long assignedUserId;
 	private Long inspectionTypeGroupId;
@@ -47,11 +48,13 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addStringTerm("product.customerRefNumber", referenceNumber);
 		addWildcardTerm("location", location);
 		addSimpleTerm("product.type.id", productTypeId);
+		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
 		addSimpleTerm("inspector.uniqueID", inspectorId);
 		addSimpleTerm("schedule.project.id", jobId);
+		
 		
 		// when inspectionBookId is 0, we search for inspections not in a book
 		if(inspectionBookId != null && inspectionBookId == 0) {
@@ -115,6 +118,14 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 
 	public void setProductType(Long productTypeId) {
 		this.productTypeId = productTypeId;
+	}
+	
+	public Long getProductTypeGroup() {
+		return productTypeGroupId;
+	}
+
+	public void setProductTypeGroup(Long productTypeGroupId) {
+		this.productTypeGroupId = productTypeGroupId;
 	}
 	
 	public Long getProductStatus() {

@@ -11,7 +11,7 @@ import com.n4systems.util.persistence.search.SortTerm;
 
 public class InspectionScheduleSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg"};
+	private static final String[] joinColumns = {"product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "product.type.group"};
 	
 	private String rfidNumber;
 	private String serialNumber;
@@ -21,6 +21,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	private String referenceNumber;
 	private Long productStatusId;
 	private Long productTypeId;
+	private Long productTypeGroupId;
 	private Long assignedUserId;
 	private Long inspectionTypeId;
 	private Long jobId;
@@ -45,6 +46,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addStringTerm("product.customerRefNumber", referenceNumber);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.type.id", productTypeId);
+		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
 		addSimpleTerm("inspectionType.group.id", inspectionTypeId);
 		addSimpleTerm("project.id", jobId);
@@ -204,5 +206,13 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 
 	public Long getOwnerId() {
 		return (owner != null) ? owner.getId() : null;
+	}
+
+	public Long getProductTypeGroup() {
+		return productTypeGroupId;
+	}
+
+	public void setProductTypeGroup(Long productTypeGroupId) {
+		this.productTypeGroupId = productTypeGroupId;
 	}
 }

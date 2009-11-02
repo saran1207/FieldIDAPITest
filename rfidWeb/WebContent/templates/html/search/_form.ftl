@@ -61,10 +61,17 @@
 				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
 				<@s.select  name="criteria.productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
 			</div>
+
+			<div class="infoSet">
+				<label for="criteria.productTypeGroup"><@s.text name="label.product_type_group"/></label>
+				<@s.select name="criteria.productTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="productTypeGroupChanged(this)" list="productTypes.productTypeGroups" listKey="id" listValue="name"/>
+			</div>
+
 			<div class="infoSet">
 				<label for="criteria.productType"><@s.text name="label.producttype"/></label>
-				<#include "../customizableSearch/_productTypeSelect.ftl"/>
+				<@s.select name="criteria.productType" emptyOption="true" onchange="productTypeChanged(this)" list="productTypes.productTypes" listKey="id" listValue="name"/>
 			</div>
+			
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
 				<@s.textfield name="criteria.location"/>
