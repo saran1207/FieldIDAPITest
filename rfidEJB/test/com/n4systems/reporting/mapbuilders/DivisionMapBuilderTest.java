@@ -16,6 +16,7 @@ import com.n4systems.util.ReportMap;
 
 public class DivisionMapBuilderTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetAllFields() {
 		Transaction transaction = EasyMock.createMock(Transaction.class);

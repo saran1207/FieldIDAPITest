@@ -41,7 +41,7 @@ public class SimpleListable<T> implements Listable<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj != null && obj instanceof Listable) {
+		if (obj != null && obj instanceof Listable<?>) {
 			return (id.equals(getId())); 
 		}
 		return super.equals(obj);

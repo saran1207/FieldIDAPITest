@@ -16,6 +16,7 @@ import com.n4systems.util.ReportMap;
 
 public class OrganizationMapBuilderTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetAllFields() {
 		Transaction transaction = new DummyTransaction();

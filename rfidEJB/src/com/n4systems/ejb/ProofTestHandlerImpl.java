@@ -40,7 +40,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;

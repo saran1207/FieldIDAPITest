@@ -1,6 +1,5 @@
 package com.n4systems.webservice.dto;
 
-import com.n4systems.model.Observation;
 
 
 public class ObservationResultServiceDTO {

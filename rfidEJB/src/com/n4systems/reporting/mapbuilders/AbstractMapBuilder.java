@@ -19,7 +19,6 @@ public abstract class AbstractMapBuilder<T> implements MapBuilder<T> {
 		}
 	}
 	
-	@Override
 	public void addParams(ReportMap<Object> params, T entity, Transaction transaction) {
 		this.params = params;
 		

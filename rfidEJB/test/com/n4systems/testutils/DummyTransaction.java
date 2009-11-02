@@ -9,20 +9,16 @@ public class DummyTransaction implements Transaction {
 	private DummyEntityManager em = new DummyEntityManager();
 	private DummyEntityTransaction et = new DummyEntityTransaction();
 	
-	@Override
 	public EntityManager getEntityManager() {
 		return em;
 	}
 
-	@Override
 	public EntityTransaction getEntityTransaction() {
 		return et;
 	}
 
-	@Override
 	public void commit() {}
 	
-	@Override
 	public void rollback() {}
 
 }

@@ -15,6 +15,7 @@ import com.n4systems.util.ReportMap;
 
 public class PrimaryOrgMapBuilderTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetAllFields() {
 		ReportMap<Object> params = new ReportMap<Object>();

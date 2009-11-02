@@ -18,6 +18,7 @@ import com.n4systems.util.ReportMap;
 
 public class BaseInspectionMapBuilderTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetAllFields() {
 		MapBuilder<UserBean> inspectorMapBuilder = EasyMock.createMock(MapBuilder.class);

@@ -52,7 +52,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	private void createDefaultTagOptions(Transaction transaction) {
 		TagOption tagOption = new TagOption();
 		tagOption.setTenant(tenant);
-		tagOption.setKey(TagOption.OptionKey.SHOPORDER);
+		tagOption.setOptionKey(TagOption.OptionKey.SHOPORDER);
 
 		tagSaver.save(transaction, tagOption);
 	}

@@ -52,10 +52,6 @@ public class ReflectorTest {
 			return Reflector.isMap(o);
 		}
 
-		public Object _parseArgumentToType(String arg) {
-			return Reflector.parseArgumentToType(arg);
-		}
-
 		public String _parseFieldFromIndexPath(String path) {
 			return Reflector.parseFieldFromIndexPath(path);
 		}

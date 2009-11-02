@@ -64,9 +64,9 @@ public class OrderUtilAction extends AbstractAction {
 				OrderResolver resolver = PluginFactory.createResolver(tagOption.getResolverClassName());
 				
 				try {
-					order = orderManager.processOrderFromPlugin(resolver, orderNumber, tagOption.getKey().getOrderType(), getTenantId());
+					order = orderManager.processOrderFromPlugin(resolver, orderNumber, tagOption.getOptionKey().getOrderType(), getTenantId());
 				} catch(OrderProcessingException e) {
-					logger.error("Failed loading order [" + orderNumber + "], type [" + tagOption.getKey().getOrderType().name() + "] from plugin system", e);
+					logger.error("Failed loading order [" + orderNumber + "], type [" + tagOption.getOptionKey().getOrderType().name() + "] from plugin system", e);
 					addFlashErrorText("error.failedfindingorder");
 				}
 			}

@@ -60,7 +60,7 @@ public class IdentifyCrud extends AbstractCrud {
 	}
 
 	public String doShowOrder() {
-		OrderType orderType = tagOption.getKey().getOrderType();
+		OrderType orderType = tagOption.getOptionKey().getOrderType();
 		
 		if(orderType == null || orderNumber == null) {
 			return INPUT;

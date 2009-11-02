@@ -14,6 +14,7 @@ import com.n4systems.util.ReportMap;
 
 public class LineItemMapBuilderTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetAllFields() {
 		Transaction transaction = new DummyTransaction();
