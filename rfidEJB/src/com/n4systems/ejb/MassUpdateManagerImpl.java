@@ -1,11 +1,12 @@
 package com.n4systems.ejb;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -24,14 +25,18 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ReportCriteria;
 import com.n4systems.util.SearchCriteria;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Stateless
@@ -43,7 +48,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	@EJB
 	private PersistenceManager persistenceManager;
 
-	private Long updateInspectionSchedules(Set<Long> scheduleIds, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
+	public Long updateInspectionSchedules(Set<Long> scheduleIds, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		if (scheduleIds.size() == 0) {
 			return 0L;
 		}
@@ -99,9 +104,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			result = new Long(updateStmt.executeUpdate());
 			
 			//update products as well.
-			QueryBuilder<Long> productIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
-			productIdQuery.setSimpleSelect("product.id").addWhere(Comparator.IN, "ids", "id", scheduleIds);
-			modifyProudcts(persistenceManager.findAll(productIdQuery));
+			modifyProductsForSchedules(scheduleIds);
 			
 		} catch (Exception e) {
 			throw new UpdateFailureException(e);
@@ -109,7 +112,55 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 		return result;
 	}
+	
+	public Long deleteInspectionSchedules(Set<Long> ids) throws UpdateFailureException {
+		if (ids == null || ids.isEmpty()) {
+			return 0L;
+		}
+		
+		Set<Long> incompleteSchedules = getIncompleteSchedules(ids);
+		
+		if (incompleteSchedules.isEmpty()) {
+			return 0L;
+		}
+		
+		// we'll modify the products first as we won't be able to find the product ids
+		// after we delete.
+		modifyProductsForSchedules(incompleteSchedules);
+		
+		String deleteStmt = String.format("DELETE from %s WHERE id IN (:ids)", InspectionSchedule.class.getName());
+		
+		LargeInListQueryExecutor deleteRunner = new LargeInListQueryExecutor();
+		int removeCount = deleteRunner.executeUpdate(em.createQuery(deleteStmt), ListHelper.toList(incompleteSchedules));
+		
+		return new Long(removeCount);
+	}
 
+	private Set<Long> getIncompleteSchedules(Set<Long> scheduleIds) {
+		QueryBuilder<Long> incompleteScheduleBuilder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		incompleteScheduleBuilder.setSimpleSelect("id", true);
+		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "status", Arrays.asList(ScheduleStatusGrouping.NON_COMPLETE.getMembers())));
+		
+		// we will leave our id list empty for now as, the LargeInListQueryExecutor will handle setting this
+		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
+		
+		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
+		List<Long> incompleteSchedules = queryExecutor.getResultList(em, incompleteScheduleBuilder, ListHelper.toList(scheduleIds));
+		
+		return ListHelper.toSet(incompleteSchedules);
+	}
+
+	private void modifyProductsForSchedules(Set<Long> scheduleIds) {
+		QueryBuilder<Long> productIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		productIdQuery.setSimpleSelect("product.id", true);
+		productIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
+		
+		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
+		List<Long> productIds = queryExecutor.getResultList(em, productIdQuery, ListHelper.toList(scheduleIds));
+
+		modifyProudcts(productIds);
+	}
+	
 	public Long modifyProudcts(List<Long> ids) {
 		if (ids == null || ids.size() == 0) {
 			return 0L;
@@ -117,10 +168,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		
 		String updateQueryString = "UPDATE " + Product.class.getName() + " SET modified = :now WHERE id IN (:ids)";
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
-	}
-	
-	public Long updateInspectionSchedules(List<Long> ids, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
-		return updateInspectionSchedules(new TreeSet<Long>(ids), inspectionSchedule, values);
 	}
 
 	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
@@ -203,7 +250,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(values);
 				InspectionSchedule schedule = new InspectionSchedule();
 				schedule.setProduct(product);
-				updateInspectionSchedules(persistenceManager.findAll(scheduleIds), schedule, selectedAttributes);
+				updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
 			}
 
 		} catch (InvalidQueryException iqe) {
@@ -282,7 +329,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(values);
 				InspectionSchedule schedule = new InspectionSchedule();
 				schedule.completed(inspection);
-				updateInspectionSchedules(persistenceManager.findAll(scheduleIds), schedule, selectedAttributes);
+				updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
 			}
 
 		} catch (InvalidQueryException iqe) {

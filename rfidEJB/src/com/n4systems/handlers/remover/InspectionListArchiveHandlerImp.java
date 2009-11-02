@@ -16,7 +16,7 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.utils.LargeInClauseSelect;
-import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
+import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
 
@@ -55,7 +55,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		query.setParameter("archived", EntityState.ARCHIVED);
 		query.setParameter("now", new Date());
  
-		new LargeUpdateQueryRunner(query, ids).executeUpdate();
+		new LargeInListQueryExecutor().executeUpdate(query, ids);
 	}
 
 

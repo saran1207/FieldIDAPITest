@@ -48,6 +48,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -331,7 +332,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			selectedAttributes.put("location", true);
 			InspectionSchedule schedule = new InspectionSchedule();
 			schedule.setProduct(product);
-			massUpdateManager.updateInspectionSchedules(persistenceManager.findAll(scheduleIds), schedule, selectedAttributes);
+			massUpdateManager.updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

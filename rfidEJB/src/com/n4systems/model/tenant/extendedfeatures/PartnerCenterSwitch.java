@@ -11,7 +11,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.CustomerUserIdListLoader;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
+import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 
 public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 	
@@ -33,8 +33,8 @@ public class PartnerCenterSwitch extends ExtendedFeatureSwitch {
 		String updateQuery = "UPDATE " + UserBean.class.getName() + " SET dateModified = :now, deleted=true WHERE id in (:ids)";
 		Query query = transaction.getEntityManager().createQuery(updateQuery);
 		query.setParameter("now", new Date());
-		LargeUpdateQueryRunner queryRunner = new LargeUpdateQueryRunner(query, loader.load());
-		queryRunner.executeUpdate();
+		LargeInListQueryExecutor queryRunner = new LargeInListQueryExecutor();
+		queryRunner.executeUpdate(query, loader.load());
 	}
 
 }

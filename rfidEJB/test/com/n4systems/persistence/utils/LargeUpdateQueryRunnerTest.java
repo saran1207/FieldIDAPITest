@@ -4,6 +4,8 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -11,6 +13,7 @@ import javax.persistence.Query;
 import org.junit.Test;
 
 import com.n4systems.test.helpers.FluentArrayList;
+import com.n4systems.testutils.TestHelper;
 
 
 public class LargeUpdateQueryRunnerTest {
@@ -22,9 +25,9 @@ public class LargeUpdateQueryRunnerTest {
 		Query mockQuery = createMock(Query.class);
 		replay(mockQuery);
 		
-		LargeUpdateQueryRunner sut = new LargeUpdateQueryRunner(mockQuery, ids);
+		LargeInListQueryExecutor sut = new LargeInListQueryExecutor();
 
-		assertEquals(0, sut.executeUpdate());
+		assertEquals(0, sut.executeUpdate(mockQuery, ids));
 		verify(mockQuery);
 	}
 	
@@ -37,9 +40,9 @@ public class LargeUpdateQueryRunnerTest {
 		expect(mockQuery.executeUpdate()).andReturn(1);
 		replay(mockQuery);
 		
-		LargeUpdateQueryRunner sut = new LargeUpdateQueryRunner(mockQuery, ids);
+		LargeInListQueryExecutor sut = new LargeInListQueryExecutor();
 
-		assertEquals(1, sut.executeUpdate());
+		assertEquals(1, sut.executeUpdate(mockQuery, ids));
 		verify(mockQuery);
 	}
 	
@@ -52,28 +55,27 @@ public class LargeUpdateQueryRunnerTest {
 		expect(mockQuery.executeUpdate()).andReturn(2);
 		replay(mockQuery);
 		
-		LargeUpdateQueryRunner sut = new LargeUpdateQueryRunner(mockQuery, ids);
+		LargeInListQueryExecutor sut = new LargeInListQueryExecutor();
 
-		assertEquals(2, sut.executeUpdate());
+		assertEquals(2, sut.executeUpdate(mockQuery, ids));
 		verify(mockQuery);
 	}
 	
 	@Test
 	public void should_make_correctly_handle_max_in_clause_size_ids_in_list() {
 		List<Long> ids = new FluentArrayList<Long>();
-		for (long i = 0; i < LargeUpdateQueryRunner.MAX_IDS_IN_AN_IN_CLAUSE; i++) {
+		for (long i = 0; i < LargeInListQueryExecutor.DEFAULT_MAX_IN_LIST_SIZE; i++) {
 			ids.add(i);
 		}
 		
 		Query mockQuery = createMock(Query.class);
 		expect(mockQuery.setParameter("ids", ids)).andReturn(mockQuery);
 		expect(mockQuery.executeUpdate()).andReturn(ids.size());
-		expectLastCall().once();
 		replay(mockQuery);
 		
-		LargeUpdateQueryRunner sut = new LargeUpdateQueryRunner(mockQuery, ids);
+		LargeInListQueryExecutor sut = new LargeInListQueryExecutor();
 
-		assertEquals(ids.size(), sut.executeUpdate());
+		assertEquals(ids.size(), sut.executeUpdate(mockQuery, ids));
 		verify(mockQuery);
 	}
 	
@@ -81,7 +83,7 @@ public class LargeUpdateQueryRunnerTest {
 	@Test
 	public void should_make_correctly_handle_max_in_clause_size_plus_1_ids_in_list() {
 		List<Long> firstListIds = new ArrayList<Long>();
-		for (long i = 0; i < LargeUpdateQueryRunner.MAX_IDS_IN_AN_IN_CLAUSE; i++) {
+		for (long i = 0; i < LargeInListQueryExecutor.DEFAULT_MAX_IN_LIST_SIZE; i++) {
 			firstListIds.add(i);
 		}
 		
@@ -94,21 +96,65 @@ public class LargeUpdateQueryRunnerTest {
 		
 		Query mockQuery = createMock(Query.class);
 		expect(mockQuery.setParameter("ids", firstListIds)).andReturn(mockQuery);
-		expectLastCall().once();
 		expect(mockQuery.executeUpdate()).andReturn(firstListIds.size());
-		expectLastCall().once();
-		
 		expect(mockQuery.setParameter("ids", secondListIds)).andReturn(mockQuery);
-		expectLastCall().once();
 		expect(mockQuery.executeUpdate()).andReturn(secondListIds.size());
-		expectLastCall().once();
 		
 		replay(mockQuery);
 		
-		LargeUpdateQueryRunner sut = new LargeUpdateQueryRunner(mockQuery, ids);
+		LargeInListQueryExecutor sut = new LargeInListQueryExecutor();
 
-		assertEquals(ids.size(), sut.executeUpdate());
+		assertEquals(ids.size(), sut.executeUpdate(mockQuery, ids));
 		verify(mockQuery);
 	}
 	
+	@Test
+	public void get_result_list_handles_empty_list() {
+		Query query = createMock(Query.class);
+		replay(query);
+		
+		LargeInListQueryExecutor executor = new LargeInListQueryExecutor();
+		List<?> results = executor.getResultList(query, Collections.EMPTY_LIST);
+		
+		assertTrue(results.isEmpty());
+		verify(query);
+	}
+	
+	@Test
+	public void get_result_list_handles_less_then_max_size() {
+		LargeInListQueryExecutor executor = new LargeInListQueryExecutor(10, "test");
+		
+		List<Long> inList = Arrays.asList(TestHelper.randomLongs(9));
+		
+		Query query = createMock(Query.class);
+		expect(query.setParameter("test", inList)).andReturn(query);
+		expect(query.getResultList()).andReturn(Arrays.asList(new Object()));
+		replay(query);
+		
+		List<?> results = executor.getResultList(query, inList);
+		
+		assertEquals(1, results.size());
+		verify(query);
+	}
+	
+	@Test
+	public void get_result_list_handles_more_then_max_size() {
+		LargeInListQueryExecutor executor = new LargeInListQueryExecutor(10, "test");
+		
+		List<Long> inList = Arrays.asList(TestHelper.incrementingLongs(21));
+		
+		Query query = createMock(Query.class);
+		expect(query.setParameter("test", inList.subList(0, 10))).andReturn(query);
+		expect(query.getResultList()).andReturn(Arrays.asList(1L));
+		expect(query.setParameter("test", inList.subList(10, 20))).andReturn(query);
+		expect(query.getResultList()).andReturn(Arrays.asList(2L));
+		expect(query.setParameter("test", inList.subList(20, 21))).andReturn(query);
+		expect(query.getResultList()).andReturn(Arrays.asList(3L));
+		replay(query);
+		
+		List<?> results = executor.getResultList(query, inList);
+
+		assertEquals(Arrays.asList(1L, 2L, 3L), results);
+		verify(query);
+	}
 }

@@ -3,9 +3,17 @@ package com.n4systems.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.n4systems.model.api.Listable;
 
@@ -57,5 +65,26 @@ public class ListHelper {
 		}
 		
 		return listingPair;
+	}
+	
+	
+	public static <K, T extends Collection<K>> Set<K> toSet(T collection) {
+		return new HashSet<K>(collection);
+	}
+	
+	public static <K, T extends Collection<K>> SortedSet<K> toSortedSet(T collection) {
+		return new TreeSet<K>(collection);
+	}
+	
+	public static <K, T extends Collection<K>> List<K> toList(T collection) {
+		return new ArrayList<K>(collection);
+	}
+	
+	public static <K, T extends Collection<K>> Queue<K> toQueue(T collection) {
+		return new LinkedList<K>(collection);
+	}
+	
+	public static <K, T extends Collection<K>> BlockingQueue<K> toBlockingQueue(T collection) {
+		return new LinkedBlockingQueue<K>(collection);
 	}
 }

@@ -12,7 +12,7 @@ public class BaseDeleter<T extends Saveable> implements Deleter<T> {
 	/**
 	 * Subclasses should override this method if a non-default remove is required. 
 	 */
-	protected void remove(EntityManager em, T entity) {
+	public void remove(EntityManager em, T entity) {
 		em.remove(entity);
 	}
 	

@@ -8,7 +8,7 @@ import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.utils.LargeUpdateQueryRunner;
+import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 
 public class NotificationSettingDeleteHandlerImpl implements NotificationSettingDeleteHandler {
 
@@ -18,7 +18,7 @@ public class NotificationSettingDeleteHandlerImpl implements NotificationSetting
 		List<Long> notificationsToDelete = getNotificationIdsWithInspectionType(transaction);
 		
 		String deleteQuery = "DELETE FROM " + NotificationSetting.class.getName() + " WHERE id IN (:ids)";
-		new LargeUpdateQueryRunner(transaction.getEntityManager().createQuery(deleteQuery), notificationsToDelete).executeUpdate();
+		new LargeInListQueryExecutor().executeUpdate(transaction.getEntityManager().createQuery(deleteQuery), notificationsToDelete);
 	}
 
 	public NotificationSettingDeleteSummary summary(Transaction transaction) {

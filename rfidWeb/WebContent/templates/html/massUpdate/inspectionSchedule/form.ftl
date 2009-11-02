@@ -18,11 +18,11 @@
 			<th><@s.text name="label.fieldstoupdate"/></th>
 		</tr>
 		<tr>
-			<td><@s.checkbox name="select['nextDate']" id="check_nextDate" value="true"/></td>
+			<td><@s.checkbox name="select['nextDate']" id="check_nextDate"/></td>
 			<td>
 				<label class="label"><@s.text name="label.nextinspectiondate"/>:</label>
 				<span class="field">
-					<@s.textfield key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" />
+					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" />
 					<img src="images/icons/FieldID_CALENDAR-CHECK-normal.png" border="0" id="nextDateTrigger">
 					<script type="text/javascript">
 						Calendar.setup({
@@ -39,6 +39,14 @@
 				</span>
 			</td>
 		</tr>
+		<tr>
+			<td><@s.checkbox name="select['removeIncomplete']" id="check_removeIncomplete" onchange="disableOtherFields(this.checked);" /></td>
+			<td>
+				<p>
+					<label class="label"><@s.text name="label.removeincompleteschedules"/></label> 
+				</p>
+			</td>
+		</tr>
 	</table>	
 		
 	<div class="formAction">
@@ -52,5 +60,15 @@
 		var field = $('check_' + fieldType );
 		
 		field.checked = true;
+	}
+	
+	function disableOtherFields(disable) {
+		if (disable) {
+			$('check_nextDate').disable();
+			$('input_nextDate').disable();
+		} else {
+			$('check_nextDate').enable();
+			$('input_nextDate').enable();
+		}
 	}
 </script>

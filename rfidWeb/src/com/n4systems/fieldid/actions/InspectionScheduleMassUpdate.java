@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -11,9 +10,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.util.ListHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class InspectionScheduleMassUpdate extends MassUpdate {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +21,8 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 	private InspectionScheduleSearchContainer criteria;
 	private InspectionSchedule schedule = new InspectionSchedule();
 	private String nextDate;
-	
+	private boolean removeIncomplete = false;
+
 	public InspectionScheduleMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
 		
@@ -47,14 +46,24 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 			return ERROR;
 		}
 
-		schedule.setNextDate(convertDate(nextDate));
 		try {
-			List<Long> scheduleIds = persistenceManager.idSearch(criteria, criteria.getSecurityFilter());
-			Long results = massUpdateManager.updateInspectionSchedules(scheduleIds, schedule, select);
+			Set<Long> scheduleIds = ListHelper.toSet(persistenceManager.idSearch(criteria, criteria.getSecurityFilter()));
 			
-			List<String> messageArgs = new ArrayList<String>();
-			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.inspectionschedulemassupdatesuccessful", messageArgs));
+			Long results;
+			String messageKey;
+			if (select.containsKey("removeIncomplete")) {
+				messageKey = "message.inspectionschedulemassremovesuccessful";
+				
+				results = massUpdateManager.deleteInspectionSchedules(scheduleIds);
+			} else {
+				messageKey = "message.inspectionschedulemassupdatesuccessful";
+				
+				schedule.setNextDate(convertDate(nextDate));
+				results = massUpdateManager.updateInspectionSchedules(scheduleIds, schedule, select);	
+			}
+			
+			addFlashMessage(getText(messageKey, new String[] {results.toString()}));	
+			
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("failed to run a mass update on inspection schedules", e);
@@ -80,9 +89,16 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 		return nextDate;
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.nextdaterequired")
 	@CustomValidator(type = "n4systemsDateValidator",  message = "", key = "error.mustbeadate" )
 	public void setNextDate(String nextDate) {
 		this.nextDate = nextDate;
+	}
+	
+	public boolean isRemoveIncomplete() {
+		return removeIncomplete;
+	}
+
+	public void setRemoveIncomplete(boolean removeIncomplete) {
+		this.removeIncomplete = removeIncomplete;
 	}
 }
