@@ -70,14 +70,14 @@ public class TestStub extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void loginPageUnitTests() throws Exception {
-		String username = "n4systems";
-		String password = "makemore$";
+	public void testLoginPageUnitTests() throws Exception {
 		
 		loginPage.gotoLoginPage();
-		loginPage.setUserName(username);
-		loginPage.setPassword(password);
-		loginPage.gotoSignInUserName();
+		forgotPasswordPage.gotoIForgotMyPassword();
+		loginPage.gotoReturnToSignInFromForgotPassword();
+		forgotPasswordPage.gotoIForgotMyPassword();
+		forgotPasswordPage.setUserName("darrell");
+		
 		Thread.sleep(1);
 	}
 

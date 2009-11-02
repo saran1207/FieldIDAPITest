@@ -1,0 +1,48 @@
+This is the design decision for this test framework. Please keep this
+document up to date for future people taking over this test framework.
+
+Package names are used to break the code apart by 'feature'. A 'feature' would
+be things like Login, Identify, Inspect. So all the classes in the
+com.n4systems.fieldid.selenium.login package would be for the Login 'feature'.
+
+Within the package you will find a number of classes ending in Page, e.g.
+LoginPage. A 'page' is a physical page on the screen. If you change the URL for
+the current page then you need a separate class for that new 'page'. Whenever
+you change the 'page' you need to use the selenium.waitForPageToLoad() method.
+If the look of the 'page' changes but you don't actually navigate away from the
+'page' then a call to selenium.waitForPageToLoad() is not necessary and
+actually will cause things to fail. For example, switching from User Name and
+Password login to Security RFID Number does not actually change the page. It
+just makes some things invisible and other things visible.
+
+Page classes will hold almost everything you see on the 'page'. The one
+exception are goto*() methods. Whenever we go to another 'page', the validation
+of that page belongs to the new 'page'. So the goto*() method is placed in the
+page we are going to and not the 'page' we are coming from. For example, the
+method gotoIForgotMyPassword() clicks a link on the Login page but the code is
+placed in the ForgotPasswordPage class because the code to validate the page
+we arrived on is in the ForgotPasswordPage class.
+
+Feature classes are placed in the com.n4systems.fieldid.selenium package. So
+the class which uses all the code in the com.n4systems.fieldid.selenium.login
+package will be com.n4systems.fieldid.selenium.LoginFeature.
+
+The test cases will reside in the com.n4systems.fieldid.selenium.testcase
+package. All classes in this package will extend FieldIDTestCase. This class
+will search for the following environment variables:
+
+	seleniumserver
+	seleniumport
+	seleniumbrowser
+	seleniumresource
+	seleniumdomain
+	seleniumtenant
+
+and use these to determine where the Selenium Server is running, which browser
+to run the test cases in and the base URL to assume all relative URLs are built
+from. If you run things from the TestCase level, it assumes you have set all
+the related variables. If you don't have the environment variables set up, you
+can (a) create an Ant script that will set them up or (b) create a TestSuite
+which will initialize them using FieldIDTestCase.setEnvironmentVariables().
+
+Darrell Grainger - November 2nd, 2009

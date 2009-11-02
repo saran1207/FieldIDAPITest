@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
-import com.n4systems.fieldid.selenium.login.LoginPage;
+import com.n4systems.fieldid.selenium.login.*;
 import com.n4systems.fieldid.selenium.admin.console.AdminConsoleOrganizationsPage;
 import com.thoughtworks.selenium.*;
 
@@ -40,7 +40,7 @@ import com.thoughtworks.selenium.*;
  * @author Darrell Grainger
  *
  */
-public class FieldIDTestCase extends SeleneseTestBase {
+public class FieldIDTestCase extends SeleneseTestCase {
 
 	// Some useful constants:
 	public static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
@@ -71,6 +71,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	// List of different modules uses by the test cases
 	AdminConsoleOrganizationsPage adminConsoleOrgPage;
 	LoginPage loginPage;
+	ForgotPasswordPage forgotPasswordPage;
+	SendPasswordPage sendPasswordPage;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -99,6 +101,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private void initLibriaries() {
 		adminConsoleOrgPage = new AdminConsoleOrganizationsPage(selenium);
 		loginPage = new LoginPage(selenium);
+		forgotPasswordPage = new ForgotPasswordPage(selenium);
+		sendPasswordPage = new SendPasswordPage(selenium);
 	}
 
 	private void initSeleniumInstance() {
