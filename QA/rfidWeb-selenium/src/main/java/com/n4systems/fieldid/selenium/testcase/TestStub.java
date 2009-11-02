@@ -5,9 +5,6 @@ import org.junit.*;
 
 public class TestStub extends FieldIDTestCase {
 
-	String userid;
-	String password;
-	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		FieldIDTestCase.setUpBeforeClass();
@@ -16,38 +13,39 @@ public class TestStub extends FieldIDTestCase {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		userid = "n4systems";
-		password = "makesome$";
 	}
 	
 	@Test
 	public void proofOfConcept() throws Exception {
-		adminConsoleOrgPages.gotoFieldIDAdministrationConsole();
-		adminConsoleOrgPages.loginToFieldIDAdministrationConsole();
-		int totalTenants = adminConsoleOrgPages.getTotalTenants();
-		List<String> tenants = adminConsoleOrgPages.getTenantIDs();
-		adminConsoleOrgPages.gotoEditTenant(tenants.get(0));
-		String serialNumberFormat = adminConsoleOrgPages.getTenantSerialNumberFormat();
-		String dateFormat = adminConsoleOrgPages.getTenantDateFormat();
-		long diskSpaceLimit = adminConsoleOrgPages.getTenantDiskSpaceLimit();
-		long assetLimit = adminConsoleOrgPages.getTenantAssetLimit();
-		long userLimit = adminConsoleOrgPages.getTenantUserLimit();
-		long secondaryOrgLimit = adminConsoleOrgPages.getTenantSecondaryOrgLimit();
-		boolean integration = adminConsoleOrgPages.hasIntegration();
-		boolean jobsites = adminConsoleOrgPages.hasJobSites();
-		boolean projects = adminConsoleOrgPages.hasProjects();
-		boolean branding = adminConsoleOrgPages.hasBranding();
-		boolean partnercenter = adminConsoleOrgPages.hasPartnerCenter();
-		boolean emailalerts = adminConsoleOrgPages.hasEmailAlerts();
-		boolean customcert = adminConsoleOrgPages.hasCustomCert();
-		boolean matt = adminConsoleOrgPages.hasDedicatedProgramManager();
-		boolean multilocation = adminConsoleOrgPages.hasMultiLocation();
-		boolean allowintegration = adminConsoleOrgPages.hasAllowIntegration();
-		boolean unlimitedlinkedassets = adminConsoleOrgPages.hasUnlimitedLinkedAssets();
-		String options = adminConsoleOrgPages.getSerialNumberFormatOptions();
-		adminConsoleOrgPages.gotoCancelEditTenant();
-		adminConsoleOrgPages.gotoEditTenant(tenants.get(0));
-		adminConsoleOrgPages.gotoSubmitEditTenant();
+		String userid = "n4systems";
+		String password = "makesome$";
+		
+		adminConsoleOrgPage.gotoFieldIDAdministrationConsole();
+		adminConsoleOrgPage.loginToFieldIDAdministrationConsole(userid, password);
+		int totalTenants = adminConsoleOrgPage.getTotalTenants();
+		List<String> tenants = adminConsoleOrgPage.getTenantIDs();
+		adminConsoleOrgPage.gotoEditTenant(tenants.get(0));
+		String serialNumberFormat = adminConsoleOrgPage.getTenantSerialNumberFormat();
+		String dateFormat = adminConsoleOrgPage.getTenantDateFormat();
+		long diskSpaceLimit = adminConsoleOrgPage.getTenantDiskSpaceLimit();
+		long assetLimit = adminConsoleOrgPage.getTenantAssetLimit();
+		long userLimit = adminConsoleOrgPage.getTenantUserLimit();
+		long secondaryOrgLimit = adminConsoleOrgPage.getTenantSecondaryOrgLimit();
+		boolean integration = adminConsoleOrgPage.hasIntegration();
+		boolean jobsites = adminConsoleOrgPage.hasJobSites();
+		boolean projects = adminConsoleOrgPage.hasProjects();
+		boolean branding = adminConsoleOrgPage.hasBranding();
+		boolean partnercenter = adminConsoleOrgPage.hasPartnerCenter();
+		boolean emailalerts = adminConsoleOrgPage.hasEmailAlerts();
+		boolean customcert = adminConsoleOrgPage.hasCustomCert();
+		boolean matt = adminConsoleOrgPage.hasDedicatedProgramManager();
+		boolean multilocation = adminConsoleOrgPage.hasMultiLocation();
+		boolean allowintegration = adminConsoleOrgPage.hasAllowIntegration();
+		boolean unlimitedlinkedassets = adminConsoleOrgPage.hasUnlimitedLinkedAssets();
+		String options = adminConsoleOrgPage.getSerialNumberFormatOptions();
+		adminConsoleOrgPage.gotoCancelEditTenant();
+		adminConsoleOrgPage.gotoEditTenant(tenants.get(0));
+		adminConsoleOrgPage.gotoSubmitEditTenant();
 		
 		System.out.println("Total tenants: " + totalTenants);
 		System.out.println("List of tenant IDs:\n" + tenants);
@@ -69,6 +67,17 @@ public class TestStub extends FieldIDTestCase {
 		System.out.println("AllowIntegration: " + allowintegration);
 		System.out.println("UnlimitedLinkedAssets" + unlimitedlinkedassets);
 		System.out.println(options);
+	}
+	
+	@Test
+	public void loginPageUnitTests() throws Exception {
+		String username = "n4systems";
+		String password = "makemore$";
+		
+		loginPage.gotoLoginPage();
+		loginPage.setUserName(username);
+		loginPage.setPassword(password);
+		loginPage.gotoSignInUserName();
 		Thread.sleep(1);
 	}
 

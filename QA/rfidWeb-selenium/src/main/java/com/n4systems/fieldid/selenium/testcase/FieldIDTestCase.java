@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
+import com.n4systems.fieldid.selenium.login.LoginPage;
 import com.n4systems.fieldid.selenium.admin.console.AdminConsoleOrganizationsPage;
 import com.thoughtworks.selenium.*;
 
@@ -11,7 +12,8 @@ import com.thoughtworks.selenium.*;
  *	seleniumserver
  *	seleniumport
  *	seleniumbrowser
- *	seleniumbaseurl
+ *	seleniumresource
+ *	seleniumdomain
  * 
  * The seleniumserver is the host name for where the selenium-server.jar
  * is running from.
@@ -24,30 +26,51 @@ import com.thoughtworks.selenium.*;
  * 		*iehta		Runs tests in Internet Explorer
  * 		*chrome		runs tests in Firefox
  * 
- * The seleniumbaseurl is the location of Field ID Web. Examples would be:
+ * The seleniumresource is the protocol you want to use to access the
+ * website. It must be one of the following:
  * 
- * 	https://www.grumpy.n4/
- * 	https://n4.team.n4systems.com/
+ * 		http
+ * 		https
+ * 
+ * The seleniumdomain is the base domain for the website. For example, if
+ * the website is http://unirope.grumpy.n4/fieldid/ then the domain would
+ * be grumpy.n4. If the website was https://foo.team.n4systems.com/fieldid/
+ * then the domain would be team.n4systems.com
  * 
  * @author Darrell Grainger
  *
  */
 public class FieldIDTestCase extends SeleneseTestBase {
 
+	// Some useful constants:
+	public static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
+
 	// All these environment variables need to be set
-	protected static final String seleniumserverenv = 	"seleniumserver";
-	protected static final String seleniumportenv = 	"seleniumport";
-	protected static final String seleniumbrowserenv = 	"seleniumbrowser";
-	protected static final String seleniumbaseurlenv = 	"seleniumbaseurl";
+	protected static final String seleniumserverenv = 		"seleniumserver";
+	protected static final String seleniumportenv = 		"seleniumport";
+	protected static final String seleniumbrowserenv = 		"seleniumbrowser";
+	protected static final String seleniumresoureceenv = 	"seleniumresource";
+	protected static final String seleniumdomainenv = 		"seleniumdomain";
+	protected static final String seleniumtenantenv = 		"seleniumtenant";
 	
-	protected String seleniumServer;
-	protected int seleniumPort;
-	protected String seleniumBrowserType;
-	protected String seleniumURL;
+	/**
+	 * All these variables need to be set. They can either be set at the
+	 * Test Suite level or they can be set using the environment variables
+	 * listed above. If you run the individual test case or test class,
+	 * you will need the environment variables defined. If you 
+	 */
+	protected static String seleniumServer = null;
+	protected static int seleniumPort = -1;
+	protected static String seleniumBrowserType = null;
+	protected String resourceType = null;
+	protected String tenant = null;
+	protected String domain = null;
+	protected static String seleniumURL = null;
 	protected DefaultSelenium selenium;
 
 	// List of different modules uses by the test cases
-	AdminConsoleOrganizationsPage adminConsoleOrgPages;
+	AdminConsoleOrganizationsPage adminConsoleOrgPage;
+	LoginPage loginPage;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -74,7 +97,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * 
 	 */
 	private void initLibriaries() {
-		adminConsoleOrgPages = new AdminConsoleOrganizationsPage(selenium);
+		adminConsoleOrgPage = new AdminConsoleOrganizationsPage(selenium);
+		loginPage = new LoginPage(selenium);
 	}
 
 	private void initSeleniumInstance() {
@@ -88,15 +112,47 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	}
 
 	private void initEnvironmentVariables() {
-		seleniumServer = System.getenv(seleniumserverenv);
-		assertTrue("Need the environment variable '" + seleniumserverenv + "' set.", seleniumServer != null);
-		String tmp = System.getenv(seleniumportenv);
-		assertTrue("Need the environment variable '" + seleniumportenv + "' set.", tmp != null);
-		seleniumPort = Integer.parseInt(tmp);
-		seleniumBrowserType = System.getenv(seleniumbrowserenv);
-		assertTrue("Need the environment variable '" + seleniumbrowserenv + "' set.", seleniumBrowserType != null);
-		seleniumURL = System.getenv(seleniumbaseurlenv);
-		assertTrue("Need the environment variable '" + seleniumbaseurlenv + "' set.", seleniumURL != null);
+		if(seleniumServer == null) {
+			seleniumServer = System.getenv(seleniumserverenv);
+			assertTrue("Need the environment variable '" + seleniumserverenv + "' set.", seleniumServer != null);
+		}
+		if(seleniumPort == -1) {
+			String tmp = System.getenv(seleniumportenv);
+			assertTrue("Need the environment variable '" + seleniumportenv + "' set.", tmp != null);
+			seleniumPort = Integer.parseInt(tmp);
+		}
+		if(seleniumBrowserType == null) {
+			seleniumBrowserType = System.getenv(seleniumbrowserenv);
+			assertTrue("Need the environment variable '" + seleniumbrowserenv + "' set.", seleniumBrowserType != null);
+		}
+		if(seleniumURL == null) {
+			String tmp = System.getenv(seleniumresoureceenv);
+			assertTrue("Need the environment variable '" + seleniumresoureceenv + "' set.", tmp != null);
+			seleniumURL = tmp + "://";
+			tmp = System.getenv(seleniumtenantenv);
+			assertTrue("Need the environment variable '" + seleniumtenantenv + "' set.", tmp != null);
+			seleniumURL += tmp + ".";
+			tmp = System.getenv(seleniumdomainenv);
+			assertTrue("Need the environment variable '" + seleniumdomainenv + "' set.", tmp != null);
+			seleniumURL += tmp;
+		}
+	}
+	
+	/**
+	 * This is called from the TestSuite in order to initial the environment
+	 * from the test suite level. By calling this, it will override the
+	 * environment variables.
+	 * 
+	 * @param server
+	 * @param port
+	 * @param browser
+	 * @param url
+	 */
+	public static void setEnvironmentVariables(String server, int port, String browser, String url) {
+		seleniumServer = server;
+		seleniumPort = port;
+		seleniumBrowserType = browser;
+		seleniumURL = url;
 	}
 
 	@After

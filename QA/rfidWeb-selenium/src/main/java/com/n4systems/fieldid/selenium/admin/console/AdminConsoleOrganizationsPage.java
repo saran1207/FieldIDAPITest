@@ -3,15 +3,16 @@ package com.n4systems.fieldid.selenium.admin.console;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
 import com.thoughtworks.selenium.DefaultSelenium;
 
 public class AdminConsoleOrganizationsPage {
 
 	private DefaultSelenium selenium;
-	private static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
 	
 	// locators for the elements on the page I want to interact with
-	private static final String organizationsTableLocator = "css=table";
+	private static final String organizationsTableLocator = "//div[@id='content']/table";	// must be xpath
 	private static final String serialNumberFormatInputLocator = "css=#organizationUpdate_primaryOrg_serialNumberFormat";
 	private static final String dateFormatInputLocator = "css=#organizationUpdate_primaryOrg_dateFormat";
 	private static final String diskSpaceLimitInputLocator = "css=#organizationUpdate_diskSpace";
@@ -32,8 +33,6 @@ public class AdminConsoleOrganizationsPage {
 	private static final String submitButtonLocator = "css=#organizationUpdate_0";
 	private static final String cancelButtonLocator = "css=[value='Cancel']";
 	private static final String serialNumberFormatOptionsLocator = "css=pre";	// assume there is only one <PRE> tag
-	private static final String username = "n4systems";
-	private static final String password = "makesome$";
 	private static final String contextRoot = "/fieldidadmin/";
 	private static final String usernameInputLocator = "css=#signIntoSystem_username";
 	private static final String passwordInputLocator = "css=#signIntoSystem_password";
@@ -63,7 +62,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public void gotoSubmitEditTenant() {
 		selenium.click(submitButtonLocator);
-		selenium.waitForPageToLoad(pageLoadDefaultTimeout);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 	}
 
@@ -72,7 +71,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public void gotoCancelEditTenant() {
 		selenium.click(cancelButtonLocator);
-		selenium.waitForPageToLoad(pageLoadDefaultTimeout);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 	}
 
@@ -308,16 +307,12 @@ public class AdminConsoleOrganizationsPage {
 	 * Field ID Administration Console using the method
 	 * gotoFieldIDAdministrationConsole().
 	 * 
-	 * This assumes the username and password to login with
-	 * are hard coded and change very infrequently. For this
-	 * reason they are hard coded into this class.
-	 * 
 	 */
-	public void loginToFieldIDAdministrationConsole() {
+	public void loginToFieldIDAdministrationConsole(String username, String password) {
 		selenium.type(usernameInputLocator, username);
 		selenium.type(passwordInputLocator, password);
 		selenium.click(loginSubmitButtonLocator);
-		selenium.waitForPageToLoad(pageLoadDefaultTimeout);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 	}
 
@@ -327,7 +322,7 @@ public class AdminConsoleOrganizationsPage {
 	 */
 	public void gotoFieldIDAdministrationConsole() {
 		selenium.open(contextRoot);
-		selenium.waitForPageToLoad(pageLoadDefaultTimeout);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 	}
 	
@@ -362,7 +357,7 @@ public class AdminConsoleOrganizationsPage {
 		assertTrue("The tenantID must not be null", tenantID != null);
 		String editTenantLocator = "//td[text()='" + tenantID +"']/../td/a[text()='Edit']";
 		selenium.click(editTenantLocator);
-		selenium.waitForPageToLoad(pageLoadDefaultTimeout);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 	}
 
