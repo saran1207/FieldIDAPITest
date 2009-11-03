@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class FluentArrayList<E> extends ArrayList<E> {
-
+	private static final long serialVersionUID = 1L;
+	
 	public FluentArrayList() {
 		super();
 	}
@@ -22,11 +23,6 @@ public class FluentArrayList<E> extends ArrayList<E> {
 		super(Arrays.asList(objects));
 	}
 	
-
-	private static final long serialVersionUID = 1L;
-
-	
-	
 	
 	public FluentArrayList<E> stickOn(E obj) {
 		this.add(obj);
@@ -37,4 +33,14 @@ public class FluentArrayList<E> extends ArrayList<E> {
 		this.addAll(Arrays.asList(objs));
 		return this;
 	}
+	
+	public E first() {
+		return iterator().hasNext() ? iterator().next() : null;
+	}
+
+	public E last() {
+		return isEmpty() ? null : get(size() - 1); 
+	}
+	
+	
 }

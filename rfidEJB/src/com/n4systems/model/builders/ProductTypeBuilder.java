@@ -9,6 +9,7 @@ import java.util.Set;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.model.ProductType;
+import com.n4systems.model.ProductTypeGroup;
 
 public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 
@@ -18,6 +19,7 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
     private final String cautionsURL;
     private final boolean manufactureCertificate;
     private final String descriptionTemplate;
+    private final ProductTypeGroup group;
     private final Collection<InfoFieldBean> infoFields;
     private final Set<ProductType> subTypes;
      
@@ -27,10 +29,10 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 	}
 	
 	public ProductTypeBuilder() {
-		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<ProductType>());
+		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<ProductType>(), null);
 	}
 	
-	public ProductTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<ProductType> subTypes) {
+	public ProductTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<ProductType> subTypes, ProductTypeGroup group) {
 		super();
 		this.name = name;
 		this.warnings = warnings;
@@ -40,20 +42,26 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 		this.manufactureCertificate = manufactureCertificate;
 		this.infoFields = infoFields;
 		this.subTypes = subTypes;
+		this.group = group;
 	}
 	
 	
 
 	public ProductTypeBuilder named(String name) {
-		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes);
+		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group);
 	}
 	
 	public ProductTypeBuilder withFields(InfoFieldBean...infoFields) {
-		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, Arrays.asList(infoFields), subTypes);
+		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, Arrays.asList(infoFields), subTypes, group);
 	}
 	
 	public ProductTypeBuilder withSubTypes(ProductType...subTypes) {
-		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, new HashSet<ProductType>(Arrays.asList(subTypes)));
+		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, new HashSet<ProductType>(Arrays.asList(subTypes)), group);
+	}
+	
+	public ProductTypeBuilder withGroup(ProductTypeGroup group) {
+		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group);
+		
 	}
 	
 	@Override
@@ -74,5 +82,7 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 		productType.setSubTypes(subTypes);
 		return productType;
 	}
+
+
 
 }
