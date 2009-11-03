@@ -611,6 +611,8 @@ public class DataServiceImpl implements DataService {
 				throw new ServiceException();
 			}
 			
+			productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
+			
 			// we want to ensure this doesn't change on update.  The converter will leave it alone if it's not set.
 			productDTO.setIdentifiedById(0);
 		
@@ -775,12 +777,22 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private Product convertNewProduct( Long tenantId, ProductServiceDTO productDTO ) throws Exception {
+		productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
+		
 		Product product = new Product();
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 		
 		product = converter.convert( productDTO, product, tenantId );
 		
 		return product;
+	}
+	
+	private ProductServiceDTO fixModifyByFromOldVersionsOfMobile(ProductServiceDTO productDTO) {
+		if (!productDTO.modifiedByIdExists()) {
+			productDTO.setModifiedById(productDTO.getIdentifiedById());
+		}
+		
+		return productDTO;
 	}
 	
 	private Product createProduct(ProductServiceDTO productDTO, Long tenantId) throws Exception {

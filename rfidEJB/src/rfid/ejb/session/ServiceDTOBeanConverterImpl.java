@@ -309,8 +309,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 		if (productServiceDTO.modifiedByIdExists()) {
 			UserBean modifiedBy = em.find(UserBean.class, productServiceDTO.getModifiedById());
-			targetProduct.setIdentifiedBy(modifiedBy);
-		}
+			targetProduct.setModifiedBy(modifiedBy);
+		} 
 		
 		if ( productServiceDTO.getInfoOptions() != null ) {			
 			Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
