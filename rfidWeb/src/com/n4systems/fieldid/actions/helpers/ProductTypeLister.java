@@ -21,7 +21,8 @@ public class ProductTypeLister {
 	private List<String> orderedProductTypeGroups;
 	private List<ListingPair> productTypeGroups;
 	private Map<String,List<ListingPair>> groupedProductTypes;
-	
+
+	private Map<Long,List<ListingPair>> groupedProductTypesById;
 	
 	public ProductTypeLister(PersistenceManager persistenceManager, SecurityFilter filter) {
 		super();
@@ -63,6 +64,25 @@ public class ProductTypeLister {
 		List<ListingPair> list = groupedProductTypes.get(group);
 		return list;
 	}
+	
+	public List<ListingPair> getGroupedProductTypesById(Long groupId) {
+		if (groupId == null) {
+			groupId = -1L;
+		}
+		if (groupedProductTypesById == null) {
+			groupedProductTypesById = new HashMap<Long, List<ListingPair>>();
+			
+			
+			for (ListingPair group : getProductTypeGroups()) {
+				List<ListingPair> types = getGroupedProductTypes(group.getName());
+				groupedProductTypesById.put(group.getId(), types);
+			}
+			groupedProductTypesById.put(-1L, productTypes);
+		}
+		
+		List<ListingPair> list = groupedProductTypesById.get(groupId);
+		return list;
+	}
 
 	public List<ListingPair> getProductTypes() {
 		if (productTypes == null) {
@@ -70,6 +90,9 @@ public class ProductTypeLister {
 		}
 		return productTypes;
 	}
+	
+	
+	
 	
 	
 	private void assignGroupToList(String groupName, List<ListingPair> types) {

@@ -462,7 +462,6 @@ function ajaxForm(form) {
 
 
 function updateDropDown(select, newList, selectId) {
-	
 	select.options.length = 0;
 	
 	newList.each(function (element) {
