@@ -70,15 +70,7 @@
 				<@s.textfield name="criteria.referenceNumber"/>
 			</div>
 			
-			<div class="infoSet">
-				<label for="criteria.productTypeGroup"><@s.text name="label.product_type_group"/></label>
-				<@s.select name="criteria.productTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="productTypeGroupChanged(this)" list="productTypes.productTypeGroups" listKey="id" listValue="name"/>
-			</div>
-
-			<div class="infoSet">
-				<label for="criteria.productType"><@s.text name="label.producttype"/></label>
-				<@s.select name="criteria.productType" emptyOption="true" onchange="productTypeChanged(this)" list="productTypes.productTypes" listKey="id" listValue="name"/>
-			</div>
+			<#include "../customizableSearch/_productTypeSelect.ftl"/>
 				
 			<div class="infoSet">
 				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
