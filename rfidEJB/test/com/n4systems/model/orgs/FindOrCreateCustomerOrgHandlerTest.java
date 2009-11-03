@@ -55,6 +55,8 @@ public class FindOrCreateCustomerOrgHandlerTest {
 		assertFalse(sut.orgWasCreated());
 		verify(customerLoader);
 	}
+	
+	
 
 
 	
@@ -118,9 +120,6 @@ public class FindOrCreateCustomerOrgHandlerTest {
 	
 	private class ExternalOrgFuzzyMatcherSpy<T extends ExternalOrg> extends ExternalOrgFuzzyFinder<T> {
 		private T extenalOrg;
-		private String code;
-		
-		private String name;
 		
 		public ExternalOrgFuzzyMatcherSpy(T extenalOrg) {
 			this.extenalOrg = extenalOrg;
@@ -128,19 +127,9 @@ public class FindOrCreateCustomerOrgHandlerTest {
 		
 		@Override
 		public T find(String code, String name, List<T> orgs) {
-			this.code = code;
-			this.name = name;
 			return extenalOrg;
 		}
 		
-		public String getCode() {
-			return code;
-		}
-
-
-		public String getName() {
-			return name;
-		}
 	}
 
 }

@@ -350,7 +350,7 @@ public class ProductManagerImpl implements ProductManager {
 		idBuilder.setSimpleSelect("id");
 		idBuilder.addWhere(WhereClauseFactory.create("product.id", product.getId()));
 		
-		return new TreeSet(persistenceManager.findAll(idBuilder));
+		return new TreeSet<Long>(persistenceManager.findAll(idBuilder));
 	}
 
 	private void archiveSchedules(Product product, UserBean archivedBy) {

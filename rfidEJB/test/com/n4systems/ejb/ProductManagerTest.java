@@ -5,9 +5,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.easymock.classextension.EasyMock;
 import org.junit.After;
 import org.junit.Before;
@@ -28,8 +25,6 @@ public class ProductManagerTest { //extends EJBTestCase {
 	
 	private static final String MY_GOOD_SERIAL_NUMBER = "my-good-serial-number";
 	private ProductManagerImpl productManager;
-	private Query mockQuery;
-	private EntityManager mockEntityManager;
 	private PersistenceManager mockPersitenceManager;
 	private UserBean testUser;
 	private Product product;
@@ -39,7 +34,6 @@ public class ProductManagerTest { //extends EJBTestCase {
 	public void setUp() throws Exception {
 		productManager = new ProductManagerImpl();
 		
-		mockEntityManager = createMock(EntityManager.class);
 				
 		mockPersitenceManager = createMock(PersistenceManager.class);
 		testUser = new UserBean();
