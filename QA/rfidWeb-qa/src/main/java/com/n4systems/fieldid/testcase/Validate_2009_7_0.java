@@ -17,12 +17,12 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		company = prop.getProperty("company");
-		userid = prop.getProperty("userid");
-		password = prop.getProperty("password");
+		company = prop.getProperty("company", "NOT SET");
+		userid = prop.getProperty("userid", "NOT SET");
+		password = prop.getProperty("password", "NOT SET");
 	}
 
-	public void test() throws Exception {
+	public void atest() throws Exception {
 
 		try {
 			login.setCompany(company);
@@ -547,8 +547,8 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 	}
 	
 	public void testWeb1050() throws Exception {
-		String country = prop.getProperty("country");
-		String timeZone = prop.getProperty("timezone");
+		String country = prop.getProperty("country", "NOT SET");
+		String timeZone = prop.getProperty("timezone", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -572,10 +572,10 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 	}
 	
 	public void testWeb1099() throws Exception {
-		String primaryCountry = prop.getProperty("web1099primarycountry");
-		String primaryTimeZone = prop.getProperty("web1099primarytimezone");
-		String secondaryCountry = prop.getProperty("web1099secondarycountry");
-		String secondaryTimeZone = prop.getProperty("web1099secondarytimezone");
+		String primaryCountry = prop.getProperty("web1099primarycountry", "NOT SET");
+		String primaryTimeZone = prop.getProperty("web1099primarytimezone", "NOT SET");
+		String secondaryCountry = prop.getProperty("web1099secondarycountry", "NOT SET");
+		String secondaryTimeZone = prop.getProperty("web1099secondarytimezone", "NOT SET");
 		
 		try {
 			login.setCompany(company);

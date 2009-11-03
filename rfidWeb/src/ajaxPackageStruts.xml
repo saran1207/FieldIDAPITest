@@ -458,8 +458,5 @@
 			<result name="error" type="freemarker">/templates/ajax/remoteOrg/not_found.ftl</result>
 		</action>
 		
-		<action name="introVideo"  class="com.n4systems.fieldid.actions.SimpleAction">
-			<result name="success" type="freemarker">/templates/aHtml/introVideo/show.ftl</result>
-		</action>
 	</package>
 </struts>

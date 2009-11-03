@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.admin;
 
 import static watij.finders.FinderFactory.*;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -14,6 +16,7 @@ import com.n4systems.fieldid.datatypes.CustomerUser;
 import com.n4systems.fieldid.datatypes.EmployeeUser;
 import com.n4systems.fieldid.datatypes.Organization;
 import com.n4systems.fieldid.datatypes.Owner;
+import com.n4systems.fieldid.datatypes.SystemUser;
 
 import watij.BaseHtmlFinder;
 import watij.elements.*;
@@ -85,6 +88,16 @@ public class ManageUsers extends TestCase {
 	private Finder addCustomerUserCountryFinder;
 	private Finder manageSafetyNetworkRowFinder;
 	private Finder addEmployeeUserCountryFinder;
+	private Finder userIDLinkFinder;
+	private Finder editEmployeeUserUserIDFinder;
+	private Finder editEmployeeUserEmailFinder;
+	private Finder editEmployeeUserFirstNameFinder;
+	private Finder editEmployeeUserLastNameFinder;
+	private Finder editEmployeeUserPositionFinder;
+	private Finder editEmployeeUserInitialsFinder;
+	private Finder editEmployeeUserTimeZoneFinder;
+	private Finder editEmployeeUserSubmitButtonFinder;
+	private Finder editEmployeeUserCountryFinder;
 
 	public ManageUsers(IE ie) {
 		this.ie = ie;
@@ -94,60 +107,70 @@ public class ManageUsers extends TestCase {
 			p.load(in);
 			misc = new FieldIDMisc(ie);
 			mos = new ManageOrganizations(ie);
-			addEmployeeUserCountryFinder = xpath(p.getProperty("addemployeecountry"));
-			manageSafetyNetworkRowFinder = xpath(p.getProperty("addusermanagesafetynetworkrow"));
-			listUsersFinder = xpath(p.getProperty("link"));
-			listUsersPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			listUsersFilterNameFinder = id(p.getProperty("listusersfiltername"));
-			listUsersFilterUserTypeFinder = id(p.getProperty("listusersfilterusertype"));
-			listUsersSearchButtonFinder = id(p.getProperty("listusersfiltersearchbutton"));
-			listUsersClearButtonFinder = id(p.getProperty("listusersfilterclearbutton"));
-			listUsersAddEmployeeUserFinder = xpath(p.getProperty("listusersaddemployee"));
-			listUsersAddCustomerUserFinder = xpath(p.getProperty("listusersaddcustomer"));
-			listAddUserPageContentHeaderFinder = xpath(p.getProperty("addusercontentheader"));
-			tagProductsRowFinder = xpath(p.getProperty("addusertagproductsrow"));
-			manageSystemConfigurationRowFinder = xpath(p.getProperty("addusermanagesystemconfigurationrow"));
-			manageSystemUsersRowFinder = xpath(p.getProperty("addusermanagesystemusersrow"));
-			manageEndUsersRowFinder = xpath(p.getProperty("addusermanageendusersrow"));
-			createInspectionRowFinder = xpath(p.getProperty("addusercreateinspectionrow"));
-			editInspectionRowFinder = xpath(p.getProperty("addusereditinspectionrow"));
-			manageJobsRowFinder = xpath(p.getProperty("addusermanagejobsrow"));
-			addCustomerUserUserIDFinder = xpath(p.getProperty("addcustomeruserid"));
-			addCustomerUserEmailFinder = xpath(p.getProperty("addcustomeremail"));
-			addCustomerUserFirstNameFinder = xpath(p.getProperty("addcustomerfirstname"));
-			addCustomerUserLastNameFinder = xpath(p.getProperty("addcustomerlastname"));
-			addCustomerUserPositionFinder = xpath(p.getProperty("addcustomerposition"));
-			addCustomerUserInitialsFinder = xpath(p.getProperty("addcustomerinitials"));
-			addCustomerUserSecurityRFIDNumberFinder = xpath(p.getProperty("addcustomersecurityrfidnumber"));
-			addCustomerUserCountryFinder = xpath(p.getProperty("addcustomercountry"));
-			addCustomerUserTimeZoneFinder = xpath(p.getProperty("addcustomertimezone"));
-			addCustomerUserPasswordFinder = xpath(p.getProperty("addcustomerpassword"));
-			addCustomerUserVerifyPasswordFinder = xpath(p.getProperty("addcustomerverifypassword"));
-			addCustomerUserSubmitButtonFinder = xpath(p.getProperty("addcustomersubmitbutton"));
-			manageUsersViewAllLinkFinder = xpath(p.getProperty("manageusersviewalllink"));
-			manageUsersPageContentHeaderFinder = xpath(p.getProperty("pagecontentheader"));
-			listEditUserPageContentHeaderFinder = xpath(p.getProperty("editusercontentheader"));
-			editCustomerUserUserIDFinder = xpath(p.getProperty("edituseruserid"));
-			editCustomerUserEmailFinder = xpath(p.getProperty("edituseremail"));
-			editCustomerUserFirstNameFinder = xpath(p.getProperty("edituserfirstname"));
-			editCustomerUserLastNameFinder = xpath(p.getProperty("edituserlastname"));
-			editCustomerUserPositionFinder = xpath(p.getProperty("edituserposition"));
-			editCustomerUserInitialsFinder = xpath(p.getProperty("edituserinitials"));
-			editCustomerUserTimeZoneFinder = xpath(p.getProperty("editusertimezone"));
-			editCustomerUserSubmitButtonFinder = xpath(p.getProperty("editusersubmitbutton"));
-			addEmployeeUserUserIDFinder = xpath(p.getProperty("addemployeeuserid"));
-			addEmployeeUserEmailFinder = xpath(p.getProperty("addemployeeemail"));
-			addEmployeeUserFirstNameFinder = xpath(p.getProperty("addemployeefirstname"));
-			addEmployeeUserLastNameFinder = xpath(p.getProperty("addemployeelastname"));
-			addEmployeeUserPositionFinder = xpath(p.getProperty("addemployeeposition"));
-			addEmployeeUserInitialsFinder = xpath(p.getProperty("addemployeeinitials"));
-			addEmployeeUserSecurityRFIDNumberFinder = xpath(p.getProperty("addemployeerfid"));
-			addEmployeeUserTimeZoneFinder = xpath(p.getProperty("addemployeetimezone"));		
-			addEmployeeUserOrgUnitFinder = xpath(p.getProperty("addemployeeorgunit"));
-			addEmployeeUserPasswordFinder = xpath(p.getProperty("addemployeepassword"));
-			addEmployeeUserVerifyPasswordFinder = xpath(p.getProperty("addemployeeverifypassword"));
-			addEmployeeUserAllOffButtonFinder = xpath(p.getProperty("addemployeealloffbutton"));
-			addEmployeeUserSubmitButtonFinder = xpath(p.getProperty("addemployeesubmitbutton"));
+			editEmployeeUserUserIDFinder = xpath(p.getProperty("editemployeeuseruserid", "NOT SET"));
+			editEmployeeUserEmailFinder = xpath(p.getProperty("editemployeeuseremail", "NOT SET"));
+			editEmployeeUserFirstNameFinder = xpath(p.getProperty("editemployeeuserfirstname", "NOT SET"));
+			editEmployeeUserLastNameFinder = xpath(p.getProperty("editemployeeuserlastname", "NOT SET"));
+			editEmployeeUserPositionFinder = xpath(p.getProperty("editemployeeuserposition", "NOT SET"));
+			editEmployeeUserInitialsFinder = xpath(p.getProperty("editemployeeuserinitials", "NOT SET"));
+			editEmployeeUserCountryFinder = xpath(p.getProperty("editemployeeusercountry", "NOT SET"));
+			editEmployeeUserTimeZoneFinder = xpath(p.getProperty("editemployeeusertimezone", "NOT SET"));
+			editEmployeeUserSubmitButtonFinder = xpath(p.getProperty("editemployeeusersubmit", "NOT SET"));
+			userIDLinkFinder = xpath(p.getProperty("useridlinks", "NOT SET"));
+			addEmployeeUserCountryFinder = xpath(p.getProperty("addemployeecountry", "NOT SET"));
+			manageSafetyNetworkRowFinder = xpath(p.getProperty("addusermanagesafetynetworkrow", "NOT SET"));
+			listUsersFinder = xpath(p.getProperty("link", "NOT SET"));
+			listUsersPageContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
+			listUsersFilterNameFinder = id(p.getProperty("listusersfiltername", "NOT SET"));
+			listUsersFilterUserTypeFinder = id(p.getProperty("listusersfilterusertype", "NOT SET"));
+			listUsersSearchButtonFinder = id(p.getProperty("listusersfiltersearchbutton", "NOT SET"));
+			listUsersClearButtonFinder = id(p.getProperty("listusersfilterclearbutton", "NOT SET"));
+			listUsersAddEmployeeUserFinder = xpath(p.getProperty("listusersaddemployee", "NOT SET"));
+			listUsersAddCustomerUserFinder = xpath(p.getProperty("listusersaddcustomer", "NOT SET"));
+			listAddUserPageContentHeaderFinder = xpath(p.getProperty("addusercontentheader", "NOT SET"));
+			tagProductsRowFinder = xpath(p.getProperty("addusertagproductsrow", "NOT SET"));
+			manageSystemConfigurationRowFinder = xpath(p.getProperty("addusermanagesystemconfigurationrow", "NOT SET"));
+			manageSystemUsersRowFinder = xpath(p.getProperty("addusermanagesystemusersrow", "NOT SET"));
+			manageEndUsersRowFinder = xpath(p.getProperty("addusermanageendusersrow", "NOT SET"));
+			createInspectionRowFinder = xpath(p.getProperty("addusercreateinspectionrow", "NOT SET"));
+			editInspectionRowFinder = xpath(p.getProperty("addusereditinspectionrow", "NOT SET"));
+			manageJobsRowFinder = xpath(p.getProperty("addusermanagejobsrow", "NOT SET"));
+			addCustomerUserUserIDFinder = xpath(p.getProperty("addcustomeruserid", "NOT SET"));
+			addCustomerUserEmailFinder = xpath(p.getProperty("addcustomeremail", "NOT SET"));
+			addCustomerUserFirstNameFinder = xpath(p.getProperty("addcustomerfirstname", "NOT SET"));
+			addCustomerUserLastNameFinder = xpath(p.getProperty("addcustomerlastname", "NOT SET"));
+			addCustomerUserPositionFinder = xpath(p.getProperty("addcustomerposition", "NOT SET"));
+			addCustomerUserInitialsFinder = xpath(p.getProperty("addcustomerinitials", "NOT SET"));
+			addCustomerUserSecurityRFIDNumberFinder = xpath(p.getProperty("addcustomersecurityrfidnumber", "NOT SET"));
+			addCustomerUserCountryFinder = xpath(p.getProperty("addcustomercountry", "NOT SET"));
+			addCustomerUserTimeZoneFinder = xpath(p.getProperty("addcustomertimezone", "NOT SET"));
+			addCustomerUserPasswordFinder = xpath(p.getProperty("addcustomerpassword", "NOT SET"));
+			addCustomerUserVerifyPasswordFinder = xpath(p.getProperty("addcustomerverifypassword", "NOT SET"));
+			addCustomerUserSubmitButtonFinder = xpath(p.getProperty("addcustomersubmitbutton", "NOT SET"));
+			manageUsersViewAllLinkFinder = xpath(p.getProperty("manageusersviewalllink", "NOT SET"));
+			manageUsersPageContentHeaderFinder = xpath(p.getProperty("pagecontentheader", "NOT SET"));
+			listEditUserPageContentHeaderFinder = xpath(p.getProperty("editusercontentheader", "NOT SET"));
+			editCustomerUserUserIDFinder = xpath(p.getProperty("edituseruserid", "NOT SET"));
+			editCustomerUserEmailFinder = xpath(p.getProperty("edituseremail", "NOT SET"));
+			editCustomerUserFirstNameFinder = xpath(p.getProperty("edituserfirstname", "NOT SET"));
+			editCustomerUserLastNameFinder = xpath(p.getProperty("edituserlastname", "NOT SET"));
+			editCustomerUserPositionFinder = xpath(p.getProperty("edituserposition", "NOT SET"));
+			editCustomerUserInitialsFinder = xpath(p.getProperty("edituserinitials", "NOT SET"));
+			editCustomerUserTimeZoneFinder = xpath(p.getProperty("editusertimezone", "NOT SET"));
+			editCustomerUserSubmitButtonFinder = xpath(p.getProperty("editusersubmitbutton", "NOT SET"));
+			addEmployeeUserUserIDFinder = xpath(p.getProperty("addemployeeuserid", "NOT SET"));
+			addEmployeeUserEmailFinder = xpath(p.getProperty("addemployeeemail", "NOT SET"));
+			addEmployeeUserFirstNameFinder = xpath(p.getProperty("addemployeefirstname", "NOT SET"));
+			addEmployeeUserLastNameFinder = xpath(p.getProperty("addemployeelastname", "NOT SET"));
+			addEmployeeUserPositionFinder = xpath(p.getProperty("addemployeeposition", "NOT SET"));
+			addEmployeeUserInitialsFinder = xpath(p.getProperty("addemployeeinitials", "NOT SET"));
+			addEmployeeUserSecurityRFIDNumberFinder = xpath(p.getProperty("addemployeerfid", "NOT SET"));
+			addEmployeeUserTimeZoneFinder = xpath(p.getProperty("addemployeetimezone", "NOT SET"));		
+			addEmployeeUserOrgUnitFinder = xpath(p.getProperty("addemployeeorgunit", "NOT SET"));
+			addEmployeeUserPasswordFinder = xpath(p.getProperty("addemployeepassword", "NOT SET"));
+			addEmployeeUserVerifyPasswordFinder = xpath(p.getProperty("addemployeeverifypassword", "NOT SET"));
+			addEmployeeUserAllOffButtonFinder = xpath(p.getProperty("addemployeealloffbutton", "NOT SET"));
+			addEmployeeUserSubmitButtonFinder = xpath(p.getProperty("addemployeesubmitbutton", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -459,6 +482,10 @@ public class ManageUsers extends TestCase {
 	}
 
 	public void gotoEditCustomerUser(CustomerUser u) throws Exception {
+		gotoEditUser(u);
+	}
+	
+	public void gotoEditUser(SystemUser u) throws Exception {
 		String userID = u.getUserID();
 		Link user = ie.link(text(userID));
 		assertTrue("Could not find a link to edit user '" + userID + "'", user.exists());
@@ -701,5 +728,134 @@ public class ManageUsers extends TestCase {
 	public String getTimeZoneFromAddEmployeeUser() throws Exception {
 		SelectList addEmployeeUserTimeZone = getAddEmployeeUserTimeZoneSelectList();
 		return addEmployeeUserTimeZone.getSelectedItems().get(0);
+	}
+
+	public List<String> getUserIDs() throws Exception {
+		List<String> results = new ArrayList<String>();
+		
+		FieldIDMisc.stopMonitor();
+		
+		boolean loopFlag = true;
+		do {
+			List<String> tmp = getUserIDsFromCurrentPage();
+			results.addAll(tmp);
+			if (ie.link(text("Next>")).exists()) {
+				ie.link(text("Next>")).click();
+				ie.waitUntilReady();
+			} else {
+				loopFlag = false;
+			}
+		} while (loopFlag);
+
+		FieldIDMisc.startMonitor();
+
+		return results;
+	}
+
+	private List<String> getUserIDsFromCurrentPage() throws Exception {
+		List<String> results = new ArrayList<String>();
+
+		Links userIDs = ie.links(userIDLinkFinder);
+		assertNotNull("Could not find any links to user ids", userIDs);
+		Iterator<Link> i = userIDs.iterator();
+		while(i.hasNext()) {
+			Link userID = i.next();
+			String s = userID.text();
+			results.add(s.trim());
+		}
+
+		return results;
+	}
+
+	public void gotoEditEmployeeUser(EmployeeUser u) throws Exception {
+		gotoEditUser(u);
+	}
+
+	public void editEmployeeUser(EmployeeUser u) throws Exception {
+		FieldIDMisc.stopMonitor();
+		assertNotNull(u);
+		assertFalse("User ID cannot be blank", u.getUserID().trim().equals(""));
+		assertFalse("Email cannot be blank", u.getEmail().trim().equals(""));
+		assertFalse("First Name cannot be blank", u.getFirstName().trim().equals(""));
+		assertFalse("Last Name cannot be blank", u.getLastName().trim().equals(""));
+		TextField editEmployeeUserUserID = ie.textField(editEmployeeUserUserIDFinder);
+		assertTrue("Could not find the User ID text field on Edit User", editEmployeeUserUserID.exists());
+		if(u.getUserID() != null) {
+			editEmployeeUserUserID.set(u.getUserID());
+		}
+		TextField editEmployeeUserEmail = ie.textField(editEmployeeUserEmailFinder);
+		assertTrue("Could not find the Email text field on edit User", editEmployeeUserEmail.exists());
+		if(u.getEmail() != null) {
+			editEmployeeUserEmail.set(u.getEmail());
+		}
+
+		TextField editEmployeeUserFirstName = ie.textField(editEmployeeUserFirstNameFinder);
+		assertTrue("Could not find the First Name text field on edit User", editEmployeeUserFirstName.exists());
+		if(u.getFirstName() != null) {
+			editEmployeeUserFirstName.set(u.getFirstName());
+		}
+
+		TextField editEmployeeUserLastName = ie.textField(editEmployeeUserLastNameFinder);
+		assertTrue("Could not find the Last Name text field on edit User", editEmployeeUserLastName.exists());
+		if(u.getLastName() != null) {
+			editEmployeeUserLastName.set(u.getLastName());
+		}
+
+		TextField editEmployeeUserPosition = ie.textField(editEmployeeUserPositionFinder);
+		assertTrue("Could not find the Position text field on edit User", editEmployeeUserPosition.exists());
+		if(u.getPosition() != null) {
+			editEmployeeUserPosition.set(u.getPosition());
+		}
+
+		TextField editEmployeeUserInitials = ie.textField(editEmployeeUserInitialsFinder);
+		assertTrue("Could not find the Initials text field on edit User", editEmployeeUserInitials.exists());
+		if(u.getInitials() != null) {
+			editEmployeeUserInitials.set(u.getInitials());
+		}
+
+		SelectList editEmployeeUserCountry = ie.selectList(editEmployeeUserCountryFinder);
+		assertTrue("Could not find the Country select list on edit User", editEmployeeUserCountry.exists());
+		String c = u.getCountry();
+		if(c != null) {
+			c = "/" + c + "/";
+			Option o = editEmployeeUserCountry.option(text(c));
+			assertTrue("Could not find the country '" + c + "'", o.exists());
+			o.select();
+		}
+
+		SelectList editEmployeeUserTimeZone = ie.selectList(editEmployeeUserTimeZoneFinder);
+		assertTrue("Could not find the Time Zone select list on edit User", editEmployeeUserTimeZone.exists());
+		String tz = u.getTimeZone();
+		if(tz != null) {
+			tz = "/" + tz + "/";
+			Option o = editEmployeeUserTimeZone.option(text(tz));
+			assertTrue("Could not find the time zone '" + tz + "'", o.exists());
+			o.select();
+		}
+
+		// TODO: orgunit
+
+		// Turn all the permissions off...
+		Button allOff = ie.button(addEmployeeUserAllOffButtonFinder);
+		assertTrue("Could not find the All Off button for Permissions", allOff.exists());
+		allOff.click();
+		
+		// then turn on the ones we need on
+		List<String> p = u.getPermissions();
+		Iterator<String> i = p.iterator();
+		while(i.hasNext()) {
+			String permission = i.next();
+			String xpath = "//DIV[@id='pageContent']/FORM/DIV/TABLE[@class='list']/TBODY/TR/TD[contains(text(),'" + permission + "')]/..";
+			TableRow tr = ie.row(xpath(xpath));
+			assertTrue("Could not find the Permission row containing '" + permission + "'", tr.exists());
+			Radio r = tr.radio(xpath("TD/INPUT[@value='true']"));
+			assertTrue("Could not find a radio button with value='true' on permission '" + permission + "'", r.exists());
+			r.set();
+		}
+
+		Button submit = ie.button(editEmployeeUserSubmitButtonFinder);
+		assertTrue("Could not find the Submit button", submit.exists());
+		submit.click();
+		FieldIDMisc.startMonitor();
 	}
 }

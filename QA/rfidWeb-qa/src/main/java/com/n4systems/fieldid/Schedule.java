@@ -72,37 +72,37 @@ public class Schedule extends TestCase {
 			p.load(in);
 			assets = new Assets(ie);
 			misc = new FieldIDMisc(ie);
-			scheduleResultsInspectNowLinksFinder = xpath(p.getProperty("scheduleresultsinspectnowlinks"));
-			scheduleMassUpdateContentHeaderFinder = xpath(p.getProperty("massupdatecontentheader"));
-			massUpdateInstructionsFinder = xpath(p.getProperty("massupdateinstructions"));
-			massUpdateSaveButtonFinder = xpath(p.getProperty("massupdatesavebutton"));
-			massUpdateNextInspectionDateFinder = xpath(p.getProperty("massupdatenextinspectiondate"));
-			massUpdateLinkFinder = xpath(p.getProperty("massupdatelink"));
-			exportToExcelFinder = xpath(p.getProperty("exporttoexcel"));
-			selectColumnCustomerNameFinder = xpath(p.getProperty("selectcolumncustomername"));
-			selectColumnDivisionFinder = xpath(p.getProperty("selectcolumndivision"));
-			selectColumnLocationFinder = xpath(p.getProperty("selectcolumnlocation"));
-			selectColumnScheduledDateFinder = xpath(p.getProperty("selectcolumnscheduleddate"));
-			selectColumnStatusFinder = xpath(p.getProperty("selectcolumnstatus"));
-			selectColumnDaysPastDueFinder = xpath(p.getProperty("selectcolumndayspastdue"));
-			selectColumnInspectionTypeFinder = xpath(p.getProperty("selectcolumninspectiontype"));
-			selectColumnLastInspectionDateFinder = xpath(p.getProperty("selectcolumnlastinspectiondate"));
-			selectColumnSerialNumberFinder = xpath(p.getProperty("selectcolumnserialnumber"));
-			selectColumnRFIDNumberFinder = xpath(p.getProperty("selectcolumnrfidnumber"));
-			selectColumnReferenceNumberFinder = xpath(p.getProperty("selectcolumnreferencenumber"));
-			selectColumnProductTypeFinder = xpath(p.getProperty("selectcolumnproducttype"));
-			selectColumnProductStatusFinder = xpath(p.getProperty("selectcolumnproductstatus"));
-			selectColumnDateIdentifiedFinder = xpath(p.getProperty("selectcolumndateidentified"));
-			selectColumnIdentifiedByFinder = xpath(p.getProperty("selectcolumnidentifiedby"));
-			selectColumnDescriptionFinder = xpath(p.getProperty("selectcolumndescription"));
-			selectColumnPartNumberFinder = xpath(p.getProperty("selectcolumnpartnumber"));
-			selectColumnOrderDescriptionFinder = xpath(p.getProperty("selectcolumnorderdescription"));
-			selectColumnOrderNumberFinder = xpath(p.getProperty("selectcolumnordernumber"));
-			selectColumnPurchaseOrderFinder = xpath(p.getProperty("selectcolumnpurchaseorder"));
-			scheduleFinder = id(p.getProperty("link"));
-			scheduleContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			scheduleSearchRunButtonFinder = id(p.getProperty("schedulerunbutton"));
-			scheduleSearchResultsContentHeaderFinder = xpath(p.getProperty("searchresultscontentheader"));
+			scheduleResultsInspectNowLinksFinder = xpath(p.getProperty("scheduleresultsinspectnowlinks", "NOT SET"));
+			scheduleMassUpdateContentHeaderFinder = xpath(p.getProperty("massupdatecontentheader", "NOT SET"));
+			massUpdateInstructionsFinder = xpath(p.getProperty("massupdateinstructions", "NOT SET"));
+			massUpdateSaveButtonFinder = xpath(p.getProperty("massupdatesavebutton", "NOT SET"));
+			massUpdateNextInspectionDateFinder = xpath(p.getProperty("massupdatenextinspectiondate", "NOT SET"));
+			massUpdateLinkFinder = xpath(p.getProperty("massupdatelink", "NOT SET"));
+			exportToExcelFinder = xpath(p.getProperty("exporttoexcel", "NOT SET"));
+			selectColumnCustomerNameFinder = xpath(p.getProperty("selectcolumncustomername", "NOT SET"));
+			selectColumnDivisionFinder = xpath(p.getProperty("selectcolumndivision", "NOT SET"));
+			selectColumnLocationFinder = xpath(p.getProperty("selectcolumnlocation", "NOT SET"));
+			selectColumnScheduledDateFinder = xpath(p.getProperty("selectcolumnscheduleddate", "NOT SET"));
+			selectColumnStatusFinder = xpath(p.getProperty("selectcolumnstatus", "NOT SET"));
+			selectColumnDaysPastDueFinder = xpath(p.getProperty("selectcolumndayspastdue", "NOT SET"));
+			selectColumnInspectionTypeFinder = xpath(p.getProperty("selectcolumninspectiontype", "NOT SET"));
+			selectColumnLastInspectionDateFinder = xpath(p.getProperty("selectcolumnlastinspectiondate", "NOT SET"));
+			selectColumnSerialNumberFinder = xpath(p.getProperty("selectcolumnserialnumber", "NOT SET"));
+			selectColumnRFIDNumberFinder = xpath(p.getProperty("selectcolumnrfidnumber", "NOT SET"));
+			selectColumnReferenceNumberFinder = xpath(p.getProperty("selectcolumnreferencenumber", "NOT SET"));
+			selectColumnProductTypeFinder = xpath(p.getProperty("selectcolumnproducttype", "NOT SET"));
+			selectColumnProductStatusFinder = xpath(p.getProperty("selectcolumnproductstatus", "NOT SET"));
+			selectColumnDateIdentifiedFinder = xpath(p.getProperty("selectcolumndateidentified", "NOT SET"));
+			selectColumnIdentifiedByFinder = xpath(p.getProperty("selectcolumnidentifiedby", "NOT SET"));
+			selectColumnDescriptionFinder = xpath(p.getProperty("selectcolumndescription", "NOT SET"));
+			selectColumnPartNumberFinder = xpath(p.getProperty("selectcolumnpartnumber", "NOT SET"));
+			selectColumnOrderDescriptionFinder = xpath(p.getProperty("selectcolumnorderdescription", "NOT SET"));
+			selectColumnOrderNumberFinder = xpath(p.getProperty("selectcolumnordernumber", "NOT SET"));
+			selectColumnPurchaseOrderFinder = xpath(p.getProperty("selectcolumnpurchaseorder", "NOT SET"));
+			scheduleFinder = id(p.getProperty("link", "NOT SET"));
+			scheduleContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
+			scheduleSearchRunButtonFinder = id(p.getProperty("schedulerunbutton", "NOT SET"));
+			scheduleSearchResultsContentHeaderFinder = xpath(p.getProperty("searchresultscontentheader", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -122,7 +122,7 @@ public class Schedule extends TestCase {
 
 	public void checkSchedulePageContentHeader() throws Exception {
 		HtmlElement scheduleContentHeader = ie.htmlElement(scheduleContentHeaderFinder);
-		assertTrue("Could not find Schedule page content header '" + p.getProperty("contentheader") + "'", scheduleContentHeader.exists());
+		assertTrue("Could not find Schedule page content header '" + p.getProperty("contentheader", "NOT SET") + "'", scheduleContentHeader.exists());
 	}
 
 	public String getSelectDisplayColumnsHeader() throws Exception {
@@ -138,7 +138,7 @@ public class Schedule extends TestCase {
 
 	private void checkSchedulesearchResultsPageContentHeader() throws Exception {
 		HtmlElement scheduleSearchResultsContentHeader = ie.htmlElement(scheduleSearchResultsContentHeaderFinder);
-		assertTrue("Could not find Schedule Search Results page content header '" + p.getProperty("searchresultscontentheader") + "'", scheduleSearchResultsContentHeader.exists());
+		assertTrue("Could not find Schedule Search Results page content header '" + p.getProperty("searchresultscontentheader", "NOT SET") + "'", scheduleSearchResultsContentHeader.exists());
 	}
 
 	public void expandScheduleSearchResultsSearchCriteria() throws Exception {

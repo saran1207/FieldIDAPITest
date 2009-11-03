@@ -39,12 +39,12 @@ public class Admin extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
-			adminFinder = id(p.getProperty("link"));
-			adminPageContentHeaderFinder = xpath(p.getProperty("admincontentheader"));
-			systemAccessAndSetupSectionHeaderFinder = xpath(p.getProperty("systemaccessandsetupheader"));
-			yourProductsAndEquipmentSetupFinder = xpath(p.getProperty("yourproductsandequipmentsetup"));
-			autoCompleteTemplatesFinder = xpath(p.getProperty("autocompletetemplates"));
-			dataSynchronizationFinder = xpath(p.getProperty("datasynchronization"));
+			adminFinder = id(p.getProperty("link", "NOT SET"));
+			adminPageContentHeaderFinder = xpath(p.getProperty("admincontentheader", "NOT SET"));
+			systemAccessAndSetupSectionHeaderFinder = xpath(p.getProperty("systemaccessandsetupheader", "NOT SET"));
+			yourProductsAndEquipmentSetupFinder = xpath(p.getProperty("yourproductsandequipmentsetup", "NOT SET"));
+			autoCompleteTemplatesFinder = xpath(p.getProperty("autocompletetemplates", "NOT SET"));
+			dataSynchronizationFinder = xpath(p.getProperty("datasynchronization", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {

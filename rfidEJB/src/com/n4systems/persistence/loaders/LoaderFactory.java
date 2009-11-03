@@ -29,7 +29,6 @@ import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoade
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
 import com.n4systems.model.producttype.ProductTypeLoader;
-import com.n4systems.model.producttype.ProductTypeScheduleLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
@@ -184,10 +183,6 @@ public class LoaderFactory {
 	
 	public ProductTypeLoader createProductTypeLoader() {
 		return new ProductTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
-	}
-	
-	public ProductTypeScheduleLoader createProductTypeScheduleLoader() {
-		return new ProductTypeScheduleLoader(filter);
 	}
 	
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {

@@ -62,11 +62,14 @@ abstract public class BaseEntity implements Saveable, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-
-		if (obj != null && obj.getClass().isInstance(this)) {
+		if (obj == null) {
+			return false;
+		}
+		
+		if (obj.getClass().isInstance(this) || getClass().isInstance(obj)) {
 			BaseEntity entity = (BaseEntity)obj;
-			if (entity.id != null) {
-				return entity.id.equals(this.id);
+			if (entity.getId() != null) {
+				return entity.getId().equals(getId());
 			} else {
 				return super.equals(obj);
 			}
@@ -77,7 +80,7 @@ abstract public class BaseEntity implements Saveable, Serializable {
 	@Override
     public int hashCode() {
         if (!isNew()) {
-                return id.hashCode();
+                return getId().hashCode();
         }
         return super.hashCode();
     }

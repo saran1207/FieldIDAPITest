@@ -84,55 +84,55 @@ public class MyAccount extends TestCase {
 			p.load(in);
 			misc = new FieldIDMisc(ie);
 			reporting = new Reporting(ie);
-			myAccountFinder = text(p.getProperty("link"));
-			myAccountContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			myAccountChangeYourPasswordFinder = text(p.getProperty("changeyourpassword"));
-			changePasswordContentHeaderFinder = xpath(p.getProperty("changepasswordcontentheader"));
-			currentPasswordFinder = id(p.getProperty("changepasswordcurrentpassword"));
-			confirmPasswordFinder = id(p.getProperty("changepasswordconfirmpassword"));
-			newPasswordFinder = id(p.getProperty("changepasswordnewpassword"));
-			changePasswordSaveButtonFinder = id(p.getProperty("changepasswordsavebutton"));
-			changePasswordCancelButtonFinder = value(p.getProperty("changepasswordcancelbutton"));
-			myAccountChangeYourSecurityCardFinder = text(p.getProperty("changeyoursecuritycard"));
-			changeSecurityCardContentHeaderFinder = xpath(p.getProperty("changesecuritycardcontentheader"));
-			changeSecurityCardSaveButtonFinder = id(p.getProperty("changesecuritycardsavebutton"));
-			securityRfidNumberFinder = id(p.getProperty("changesecurityrfidnumber"));
-			myAccountUserNameFinder = xpath(p.getProperty("myaccountusername"));
-			myAccountEmailAddressFinder = xpath(p.getProperty("myaccountemailaddress"));
-			myAccountFirstNameFinder = xpath(p.getProperty("myaccountfirstname"));
-			myAccountLastNameFinder = xpath(p.getProperty("myaccountlastname"));
-			myAccountPositionFinder = xpath(p.getProperty("myaccountposition"));
-			myAccountInitialsFinder = xpath(p.getProperty("myaccountinitials"));
-			myAccountOrgUnitFinder = xpath(p.getProperty("myaccountorgunit"));
-			myAccountAddNotificationFinder = xpath(p.getProperty("myaccountaddnotification"));
-			addNotificationContentHeaderFinder = xpath(p.getProperty("addnotificationcontentheader"));
-			noNotificationsConfiguredFinder = xpath(p.getProperty("nonotificationsmessage"));
-			notificationNamesFinder = xpath(p.getProperty("notificationnames"));
-			addNotificationNameFinder = id(p.getProperty("addnotificationname"));
-			addNotificationCustomerFinder = id(p.getProperty("addnotificationcustomer"));
-			addNotificationDivisionFinder = id(p.getProperty("addnotificationdivision"));
-			addNotificationAssetTypesFinder = id(p.getProperty("addnotificationassettype"));
-			addNotificationEventTypesFinder = id(p.getProperty("addnotificationeventtype"));
-			addNotificationFrequencyFinder = id(p.getProperty("addnotificationfrequency"));
-			addNotificationForEventsStartingFinder = id(p.getProperty("addnotificationforeventsstarting"));
-			addNotificationForTheNextFinder = id(p.getProperty("addnotificationforthenext"));
-			addNotificationSaveButtonFinder = id(p.getProperty("addnotificationsavebutton"));
-			addNotificationAddEmailButtonFinder = xpath(p.getProperty("addnotificationaddemailbutton"));
-			addNotificationCancelButtonFinder = xpath(p.getProperty("addnotificationcancelbutton"));
-			addNotificationJobSiteFinder = id(p.getProperty("addnotificationjobsite"));
-			notificationTableRowsFinder = xpath(p.getProperty("notificationrows"));
-			myAccountNoNotificationsSetAddNotificationFinder = xpath(p.getProperty("myaccountaddnotification2"));
-			myAccountNoSavedReportsGoToReportingFinder = text(p.getProperty("myaccountnosavedreports"));
-			myAccountSavedReportsFinder = xpath(p.getProperty("myaccountsavedreportcells"));
-			myAccountShareSavedReportSaveButton = id(p.getProperty("myaccountsharesavedreportsavebutton"));
-			myAccountShareSavedReportCancelButton = value(p.getProperty("myaccountsharesavedreportcancelbutton"));
-			savedReportsFinder = xpath(p.getProperty("savedreportlink"));
-			notificationSettingsFinder = xpath(p.getProperty("notificationsettingslink"));
-			addNotificationFinder = xpath(p.getProperty("addnotificationlink"));
-			changePasswordFinder = xpath(p.getProperty("changepassword"));
-			securityCardFinder = xpath(p.getProperty("securitycard"));
-			shareUsersCheckboxIDFinder = xpath(p.getProperty("sharedreportusers"));
-			changeSecurityCardCancelButtonFinder = xpath(p.getProperty("changesecuritycardcancelbutton"));
+			myAccountFinder = text(p.getProperty("link", "NOT SET"));
+			myAccountContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
+			myAccountChangeYourPasswordFinder = text(p.getProperty("changeyourpassword", "NOT SET"));
+			changePasswordContentHeaderFinder = xpath(p.getProperty("changepasswordcontentheader", "NOT SET"));
+			currentPasswordFinder = id(p.getProperty("changepasswordcurrentpassword", "NOT SET"));
+			confirmPasswordFinder = id(p.getProperty("changepasswordconfirmpassword", "NOT SET"));
+			newPasswordFinder = id(p.getProperty("changepasswordnewpassword", "NOT SET"));
+			changePasswordSaveButtonFinder = id(p.getProperty("changepasswordsavebutton", "NOT SET"));
+			changePasswordCancelButtonFinder = value(p.getProperty("changepasswordcancelbutton", "NOT SET"));
+			myAccountChangeYourSecurityCardFinder = text(p.getProperty("changeyoursecuritycard", "NOT SET"));
+			changeSecurityCardContentHeaderFinder = xpath(p.getProperty("changesecuritycardcontentheader", "NOT SET"));
+			changeSecurityCardSaveButtonFinder = id(p.getProperty("changesecuritycardsavebutton", "NOT SET"));
+			securityRfidNumberFinder = id(p.getProperty("changesecurityrfidnumber", "NOT SET"));
+			myAccountUserNameFinder = xpath(p.getProperty("myaccountusername", "NOT SET"));
+			myAccountEmailAddressFinder = xpath(p.getProperty("myaccountemailaddress", "NOT SET"));
+			myAccountFirstNameFinder = xpath(p.getProperty("myaccountfirstname", "NOT SET"));
+			myAccountLastNameFinder = xpath(p.getProperty("myaccountlastname", "NOT SET"));
+			myAccountPositionFinder = xpath(p.getProperty("myaccountposition", "NOT SET"));
+			myAccountInitialsFinder = xpath(p.getProperty("myaccountinitials", "NOT SET"));
+			myAccountOrgUnitFinder = xpath(p.getProperty("myaccountorgunit", "NOT SET"));
+			myAccountAddNotificationFinder = xpath(p.getProperty("myaccountaddnotification", "NOT SET"));
+			addNotificationContentHeaderFinder = xpath(p.getProperty("addnotificationcontentheader", "NOT SET"));
+			noNotificationsConfiguredFinder = xpath(p.getProperty("nonotificationsmessage", "NOT SET"));
+			notificationNamesFinder = xpath(p.getProperty("notificationnames", "NOT SET"));
+			addNotificationNameFinder = id(p.getProperty("addnotificationname", "NOT SET"));
+			addNotificationCustomerFinder = id(p.getProperty("addnotificationcustomer", "NOT SET"));
+			addNotificationDivisionFinder = id(p.getProperty("addnotificationdivision", "NOT SET"));
+			addNotificationAssetTypesFinder = id(p.getProperty("addnotificationassettype", "NOT SET"));
+			addNotificationEventTypesFinder = id(p.getProperty("addnotificationeventtype", "NOT SET"));
+			addNotificationFrequencyFinder = id(p.getProperty("addnotificationfrequency", "NOT SET"));
+			addNotificationForEventsStartingFinder = id(p.getProperty("addnotificationforeventsstarting", "NOT SET"));
+			addNotificationForTheNextFinder = id(p.getProperty("addnotificationforthenext", "NOT SET"));
+			addNotificationSaveButtonFinder = id(p.getProperty("addnotificationsavebutton", "NOT SET"));
+			addNotificationAddEmailButtonFinder = xpath(p.getProperty("addnotificationaddemailbutton", "NOT SET"));
+			addNotificationCancelButtonFinder = xpath(p.getProperty("addnotificationcancelbutton", "NOT SET"));
+			addNotificationJobSiteFinder = id(p.getProperty("addnotificationjobsite", "NOT SET"));
+			notificationTableRowsFinder = xpath(p.getProperty("notificationrows", "NOT SET"));
+			myAccountNoNotificationsSetAddNotificationFinder = xpath(p.getProperty("myaccountaddnotification2", "NOT SET"));
+			myAccountNoSavedReportsGoToReportingFinder = text(p.getProperty("myaccountnosavedreports", "NOT SET"));
+			myAccountSavedReportsFinder = xpath(p.getProperty("myaccountsavedreportcells", "NOT SET"));
+			myAccountShareSavedReportSaveButton = id(p.getProperty("myaccountsharesavedreportsavebutton", "NOT SET"));
+			myAccountShareSavedReportCancelButton = value(p.getProperty("myaccountsharesavedreportcancelbutton", "NOT SET"));
+			savedReportsFinder = xpath(p.getProperty("savedreportlink", "NOT SET"));
+			notificationSettingsFinder = xpath(p.getProperty("notificationsettingslink", "NOT SET"));
+			addNotificationFinder = xpath(p.getProperty("addnotificationlink", "NOT SET"));
+			changePasswordFinder = xpath(p.getProperty("changepassword", "NOT SET"));
+			securityCardFinder = xpath(p.getProperty("securitycard", "NOT SET"));
+			shareUsersCheckboxIDFinder = xpath(p.getProperty("sharedreportusers", "NOT SET"));
+			changeSecurityCardCancelButtonFinder = xpath(p.getProperty("changesecuritycardcancelbutton", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -161,7 +161,7 @@ public class MyAccount extends TestCase {
 	 */
 	public void checkMyAccountContentHeader() throws Exception {
 		HtmlElement myAccountContentHeader = ie.htmlElement(myAccountContentHeaderFinder);
-		assertTrue("Could not find My Account page content header '" + p.getProperty("contentheader") + "'", myAccountContentHeader.exists());
+		assertTrue("Could not find My Account page content header '" + p.getProperty("contentheader", "NOT SET") + "'", myAccountContentHeader.exists());
 	}
 	
 	/**
@@ -182,7 +182,7 @@ public class MyAccount extends TestCase {
 	 */
 	public void checkChangePasswordContentHeader() throws Exception {
 		HtmlElement changePasswordContentHeader = ie.htmlElement(changePasswordContentHeaderFinder);
-		assertTrue("Could not find Change Password page content header '" + p.getProperty("changepasswordcontentheader") + "'", changePasswordContentHeader.exists());
+		assertTrue("Could not find Change Password page content header '" + p.getProperty("changepasswordcontentheader", "NOT SET") + "'", changePasswordContentHeader.exists());
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class MyAccount extends TestCase {
 	 */
 	private void checkChangeSecurityCardContentHeader() throws Exception {
 		HtmlElement changeSecurityCardContentHeader = ie.htmlElement(changeSecurityCardContentHeaderFinder);
-		assertTrue("Could not find Change Security Card page content header '" + p.getProperty("contentheader") + "'", changeSecurityCardContentHeader.exists());
+		assertTrue("Could not find Change Security Card page content header '" + p.getProperty("contentheader", "NOT SET") + "'", changeSecurityCardContentHeader.exists());
 	}
 
 	/**
@@ -438,7 +438,7 @@ public class MyAccount extends TestCase {
 	@SuppressWarnings("unused")
 	private void checkAddUpcomingInspectionsNotificationContentHeader() throws Exception {
 		HtmlElement contentHeader = ie.htmlElement(addNotificationContentHeaderFinder);
-		assertTrue("Could not find Add Upcoming Inspections Notification page content header '" + p.getProperty("addnotificationcontentheader") + "'", contentHeader.exists());
+		assertTrue("Could not find Add Upcoming Inspections Notification page content header '" + p.getProperty("addnotificationcontentheader", "NOT SET") + "'", contentHeader.exists());
 	}
 
 	/**

@@ -74,32 +74,32 @@ public class Home extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
-			homeFinder = id(p.getProperty("link"));
-			homeContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			homeSmartSearchTextFieldFinder = id(p.getProperty("smartsearchtextfield"));
-			homeViewUpcomingInspectionsFinder = text(p.getProperty("viewupcominginspections"));
-			homeViewTheInspectionHistoryForAProductFinder = text(p.getProperty("viewinspectionhistory"));
-			homeFindAProductFinder = text(p.getProperty("findaproduct"));
-			homeChangeYourPasswordFinder = xpath(p.getProperty("changeyourpassword"));
-			homeSearchButtonFinder = id(p.getProperty("searchbutton"));
-			homeNewFeatureFinder = xpath(p.getProperty("newfeatures"));
-			homeInstructionalVideosFinder = xpath(p.getProperty("instructionalvideos"));
-			instructionalVideosContentHeaderFinder = xpath(p.getProperty("instructionalvideoscontentheader"));
-			jobsSectionHeaderFinder = xpath(p.getProperty("jobssectionheader"));
-			homeJobsTableMessageFinder = xpath(p.getProperty("jobtablemessage"));
-			homeJobsTableHeaderFinder = xpath(p.getProperty("jobtableheader"));
-			jobTitlesFinder = xpath(p.getProperty("jobtitles"));
-			maxJobsOnHomePage = Integer.parseInt(p.getProperty("maxjobslisted"));
-			jobsTextPart1 = p.getProperty("jobstextpart1");
-			jobsTextPart2 = p.getProperty("jobstextpart2");
-			jobsTableHeader1 = p.getProperty("jobstableheader1");
-			jobsTableHeader2 = p.getProperty("jobstableheader2");
-			jobsTableHeader3 = p.getProperty("jobstableheader3");
-			newFeatureListFinder = xpath(p.getProperty("newfeaturelist"));
-			videoListFinder = xpath(p.getProperty("videolist"));
-			gotoSectionFinder = id(p.getProperty("gotosection"));
-			gotoSectionHeaderFinder = xpath(p.getProperty("gotosectionheader"));
-			companyWebSiteURLFinder = xpath(p.getProperty("companywebsiteurl"));
+			homeFinder = id(p.getProperty("link", "NOT SET"));
+			homeContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
+			homeSmartSearchTextFieldFinder = id(p.getProperty("smartsearchtextfield", "NOT SET"));
+			homeViewUpcomingInspectionsFinder = text(p.getProperty("viewupcominginspections", "NOT SET"));
+			homeViewTheInspectionHistoryForAProductFinder = text(p.getProperty("viewinspectionhistory", "NOT SET"));
+			homeFindAProductFinder = text(p.getProperty("findaproduct", "NOT SET"));
+			homeChangeYourPasswordFinder = xpath(p.getProperty("changeyourpassword", "NOT SET"));
+			homeSearchButtonFinder = id(p.getProperty("searchbutton", "NOT SET"));
+			homeNewFeatureFinder = xpath(p.getProperty("newfeatures", "NOT SET"));
+			homeInstructionalVideosFinder = xpath(p.getProperty("instructionalvideos", "NOT SET"));
+			instructionalVideosContentHeaderFinder = xpath(p.getProperty("instructionalvideoscontentheader", "NOT SET"));
+			jobsSectionHeaderFinder = xpath(p.getProperty("jobssectionheader", "NOT SET"));
+			homeJobsTableMessageFinder = xpath(p.getProperty("jobtablemessage", "NOT SET"));
+			homeJobsTableHeaderFinder = xpath(p.getProperty("jobtableheader", "NOT SET"));
+			jobTitlesFinder = xpath(p.getProperty("jobtitles", "NOT SET"));
+			maxJobsOnHomePage = Integer.parseInt(p.getProperty("maxjobslisted", "NOT SET"));
+			jobsTextPart1 = p.getProperty("jobstextpart1", "NOT SET");
+			jobsTextPart2 = p.getProperty("jobstextpart2", "NOT SET");
+			jobsTableHeader1 = p.getProperty("jobstableheader1", "NOT SET");
+			jobsTableHeader2 = p.getProperty("jobstableheader2", "NOT SET");
+			jobsTableHeader3 = p.getProperty("jobstableheader3", "NOT SET");
+			newFeatureListFinder = xpath(p.getProperty("newfeaturelist", "NOT SET"));
+			videoListFinder = xpath(p.getProperty("videolist", "NOT SET"));
+			gotoSectionFinder = id(p.getProperty("gotosection", "NOT SET"));
+			gotoSectionHeaderFinder = xpath(p.getProperty("gotosectionheader", "NOT SET"));
+			companyWebSiteURLFinder = xpath(p.getProperty("companywebsiteurl", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -143,7 +143,7 @@ public class Home extends TestCase {
 
 	public void checkHomePageContentHeader() throws Exception {
 		HtmlElement homeContentHeader = ie.htmlElement(homeContentHeaderFinder);
-		assertTrue("Could not find Home page content header '" + p.getProperty("contentheader") + "'", homeContentHeader.exists());
+		assertTrue("Could not find Home page content header '" + p.getProperty("contentheader", "NOT SET") + "'", homeContentHeader.exists());
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class Home extends TestCase {
 	private TextField helperSmartSearch() throws Exception {
 		gotoHome();
 		TextField ss = ie.textField(homeSmartSearchTextFieldFinder);
-		assertTrue("Could not find Home page Smart Search Text Field '" + p.getProperty("homesmartsearchtextfield") + "'", ss.exists());
+		assertTrue("Could not find Home page Smart Search Text Field '" + p.getProperty("homesmartsearchtextfield", "NOT SET") + "'", ss.exists());
 		return ss;
 	}
 	
@@ -292,7 +292,7 @@ public class Home extends TestCase {
 	 */
 	private void checkInstructionalVideosContentHeader() throws Exception {
 		HtmlElement instVideosContentHeader = ie.htmlElement(instructionalVideosContentHeaderFinder);
-		assertTrue("Could not find Instructional Videos page content header '" + p.getProperty("contentheader") + "'", instVideosContentHeader.exists());
+		assertTrue("Could not find Instructional Videos page content header '" + p.getProperty("contentheader", "NOT SET") + "'", instVideosContentHeader.exists());
 	}
 	
 	/**
@@ -369,7 +369,7 @@ public class Home extends TestCase {
 	 */
 	public void checkJobsSectionHeader() throws Exception {
 		HtmlElement jobsSectionHeader = ie.htmlElement(jobsSectionHeaderFinder);
-		assertTrue("Could not find Jobs section header '" + p.getProperty("jobssectionheader") + "'", jobsSectionHeader.exists());
+		assertTrue("Could not find Jobs section header '" + p.getProperty("jobssectionheader", "NOT SET") + "'", jobsSectionHeader.exists());
 	}
 	
 	/**

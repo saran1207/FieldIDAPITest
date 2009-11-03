@@ -19,9 +19,9 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		company = prop.getProperty("company");
-		userid = prop.getProperty("userid");
-		password = prop.getProperty("password");
+		company = prop.getProperty("company", "NOT SET");
+		userid = prop.getProperty("userid", "NOT SET");
+		password = prop.getProperty("password", "NOT SET");
 	}
 	
 	public void testWeb1095() throws Exception {
@@ -91,8 +91,8 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			assets.gotoEditProduct(serialNumber);
 			assets.deleteProduct(serialNumber, "0", null, "0", "0");
 			assets.confirmDeleteProduct();
-			boolean jobsites = Boolean.parseBoolean(prop.getProperty("jobsites"));
-			boolean integration = Boolean.parseBoolean(prop.getProperty("integration"));
+			boolean jobsites = Boolean.parseBoolean(prop.getProperty("jobsites", "NOT SET"));
+			boolean integration = Boolean.parseBoolean(prop.getProperty("integration", "NOT SET"));
 			identify.validateAddProductPage(jobsites, integration);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");

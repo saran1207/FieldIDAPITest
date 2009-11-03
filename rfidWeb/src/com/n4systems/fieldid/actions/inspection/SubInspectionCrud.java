@@ -245,7 +245,6 @@ public class SubInspectionCrud extends InspectionCrud {
 			}
 		
 			inspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
-			inspection.setOwner(inspection.getInspector().getOwner());
 			inspection.setDate(convertDateTime(inspectionDate));
 			
 			masterInspectionHelper.setSchedule(inspectionSchedule);

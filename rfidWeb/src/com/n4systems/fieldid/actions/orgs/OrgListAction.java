@@ -86,8 +86,16 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		if (getOwner().getCustomerOrg() != null && !customerList.contains(new SimpleListable<Long>(getOwner().getCustomerOrg()))) {
 			customerList.add(new SimpleListable<Long>(getOwner().getCustomerOrg()));
 		}
+		if (selectFirstCustomer(customerList) ) {
+			setOwnerId(customerList.get(0).getId());
+		}
 		
 		return ListHelper.longListableToListingPair(customerList);
+	}
+
+
+	private boolean selectFirstCustomer(List<Listable<Long>> customerList) {
+		return !isCustomerBlankValueRequired() && getOwner().isInternal() && !customerList.isEmpty();
 	}
 	
 	

@@ -43,13 +43,9 @@ public class FuzzyResolver {
 		return resolvedString;
 	}
 	
-	public static String mungString(String input) {
-		return mungString(input, true);
-	}
 	
-	public static String mungString(String input, boolean stripNumeric) {
-		String mungStringRegex = (stripNumeric) ? nonAlphaRegex : nonAlNumRegex;
-		return mungString(input, mungStringRegex);
+	public static String mungString(String input) {
+		return mungString(input, nonAlNumRegex);
 	}
 	
 	public static String mungString(String input, String mungStringRegex) {

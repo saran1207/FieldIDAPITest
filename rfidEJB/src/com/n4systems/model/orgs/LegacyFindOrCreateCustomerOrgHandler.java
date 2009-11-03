@@ -16,14 +16,14 @@ public class LegacyFindOrCreateCustomerOrgHandler extends FindOrCreateCustomerOr
 	}
 
 	@Override
-	protected List<CustomerOrg> loadCustomerList() {
-		QueryBuilder<CustomerOrg> allCustomersBuilder = new QueryBuilder<CustomerOrg>(CustomerOrg.class, new TenantOnlySecurityFilter(getPrimaryOrg().getTenant()));
+	protected List<CustomerOrg> loadOrgList() {
+		QueryBuilder<CustomerOrg> allCustomersBuilder = new QueryBuilder<CustomerOrg>(CustomerOrg.class, new TenantOnlySecurityFilter(getParent().getTenant()));
 		
 		return persistenceManager.findAll(allCustomersBuilder);
 	}
 
 	@Override
-	protected void persistCustomer(CustomerOrg customer) {
+	protected void saveOrg(CustomerOrg customer) {
 		persistenceManager.save(customer);
 	}
 

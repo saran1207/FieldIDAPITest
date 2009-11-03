@@ -11,22 +11,42 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 
+
+// TODO  not thread safe for finding a unique name.  2 report threads could get the same name.
 public class FileHelper {
 	
 	public static File getNonConflictingFile(File directory, String fileName, String suffix) throws IOException {
-		int fileNum = 1;
+		createParentDirectoryIfMissing(directory);
+		return produceUniqueFile(directory, fileName, suffix);
+	}
+
+	private static void createParentDirectoryIfMissing(File directory) {
+		if (!directory.exists()) {
+			 directory.mkdirs();
+		}
+	}
+	
+	private static File produceUniqueFile(File directory, String fileName,	String suffix) {
 		File file = new File(directory, fileName + suffix);
 		
 		// if the file exists, we'll need to append numbers until we find one that doesn't
 		if(file.exists()) {
-			// find a file that doesn't exist
-			while((file = new File(directory, fileName + "-" + fileNum + suffix)).exists()) {
-				fileNum++;
-			}
+			file = adjustNameForUniqueness(directory, fileName, suffix);
 		}
 		
 		return file;
 	}
+
+	
+	private static File adjustNameForUniqueness(File directory,	String fileName, String suffix) {
+		File file;
+		int fileNum = 1;
+		while((file = new File(directory, fileName + "-" + fileNum + suffix)).exists()) {
+			fileNum++;
+		}
+		return file;
+	}
+	
 	
 	// XXX - make me recursive
 	public static File zipDirectory(File zipDirectory, File outputDirectory, String fileName) throws FileNotFoundException, IOException {

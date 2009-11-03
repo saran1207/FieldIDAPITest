@@ -39,16 +39,16 @@ public class ManageSystemSettings extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
-			settingsFinder = text(p.getProperty("link"));
-			settingsPageContentHeaderFinder = xpath(p.getProperty("contentheader"));
-			webSiteAddressFinder = id(p.getProperty("websiteaddress"));
-			saveButtonFinder = id(p.getProperty("savebutton"));
-			removeSystemLogoFinder = id(p.getProperty("removesystemlogo"));
-			systemLogoPreviewImageFinder = id(p.getProperty("systemlogopreviewimage"));
-			cancelLinkFinder = xpath(p.getProperty("cancellink"));
-			embeddedLoginCodeFinder = xpath(p.getProperty("embeddedlogincodespan"));
-			companyIDFinder = xpath(p.getProperty("companyid"));
-			companyNameFinder = xpath(p.getProperty("companyname"));
+			settingsFinder = text(p.getProperty("link", "NOT SET"));
+			settingsPageContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
+			webSiteAddressFinder = id(p.getProperty("websiteaddress", "NOT SET"));
+			saveButtonFinder = id(p.getProperty("savebutton", "NOT SET"));
+			removeSystemLogoFinder = id(p.getProperty("removesystemlogo", "NOT SET"));
+			systemLogoPreviewImageFinder = id(p.getProperty("systemlogopreviewimage", "NOT SET"));
+			cancelLinkFinder = xpath(p.getProperty("cancellink", "NOT SET"));
+			embeddedLoginCodeFinder = xpath(p.getProperty("embeddedlogincodespan", "NOT SET"));
+			companyIDFinder = xpath(p.getProperty("companyid", "NOT SET"));
+			companyNameFinder = xpath(p.getProperty("companyname", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {

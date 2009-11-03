@@ -3,6 +3,7 @@ package com.n4systems.handlers.remover;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,30 +16,26 @@ import com.n4systems.model.Product;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.archivers.InspectionListArchiver;
 import com.n4systems.persistence.utils.LargeInClauseSelect;
-import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
 
 
 public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiveHandler {
 
-	private final ScheduleListDeleteHandler scheduleListDeleter;  
-	
+	private final ScheduleListDeleteHandler scheduleListDeleter;
 	private InspectionType inspectionType;
 
-	
 	public InspectionListArchiveHandlerImp(ScheduleListDeleteHandler scheduleListDeleter) {
 		super();
 		this.scheduleListDeleter = scheduleListDeleter;
 	}
 	
-	
 	public void remove(Transaction transaction) {
 		archiveInspections(transaction.getEntityManager());
 		scheduleListDeleter.targetCompleted().setInspectionType(inspectionType).remove(transaction);
 	}
-
 
 	private void archiveInspections(EntityManager em) {
 		List<Long> ids = getInspectionIds(em);
@@ -47,18 +44,10 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		updateProductsLastInspectionDate(em, ids);
 	}
 
-
 	private void archiveInspections(EntityManager em, List<Long> ids) {
-		String archiveQuery = "UPDATE " + Inspection.class.getName() + " SET state = :archived, modified = :now " +
-			" WHERE id IN(:ids)";
-		Query query = em.createQuery(archiveQuery);
-		query.setParameter("archived", EntityState.ARCHIVED);
-		query.setParameter("now", new Date());
- 
-		new LargeInListQueryExecutor().executeUpdate(query, ids);
+		InspectionListArchiver archiver = new InspectionListArchiver(new TreeSet<Long>(ids));
+		archiver.archive(em);
 	}
-
-
 
 	private void updateProductsLastInspectionDate(EntityManager em, List<Long> ids) {
 		
@@ -98,7 +87,6 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		return queryBuilder.getResultList(em);
 	}
 	
-	
 	public InspectionArchiveSummary summary(Transaction transaction) {
 		InspectionArchiveSummary summary = new InspectionArchiveSummary();
 		
@@ -107,7 +95,6 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		
 		return summary;
 	}
-
 
 	private Long inspectionToBeDeleted(Transaction transaction) {
 		String archiveQuery = "SELECT COUNT(id) FROM " + Inspection.class.getName() + " i WHERE i.type = :inspectionType AND i.state = :active";
@@ -118,15 +105,9 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		return (Long)query.getSingleResult();
 	}
 	
-
-	
-	
 	public InspectionListArchiveHandlerImp setInspectionType(InspectionType inspectionType) {
 		this.inspectionType = inspectionType;
-		
 		return this;
 	}
-	
-
 	
 }

@@ -9,8 +9,8 @@
 			<li><a href="<@s.url action="schedule!createSearch"/>?criteria.status=INCOMPLETE"><@s.text name="label.viewupcominginspections"/></a></li>
  			<li><a href="<@s.url action="report"/>"><@s.text name="label.viewinspectionhistory"/></a></li>
 			<li><a href="<@s.url action="search"/>"><@s.text name="label.findaproduct"/></a></li>
-			<#if securityGuard.brandingEnabled && tenant.webSite?exists >
-				<li><a href="${tenant.webSite?html}" target="_blank">${tenant.displayName?html} <@s.text name="label.web_site"/></a></li>
+			<#if securityGuard.brandingEnabled && primaryOrg.webSite?exists >
+				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
 			</#if>
 		</ul>
 	</div>
@@ -58,16 +58,16 @@
 	<div id="releaseNotes" class="dashboardSection">
 		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes-${action.getText('app.majorversion')}.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
 		<ul class="informationList">
-			<li>Improved pagination</li>
-			<li>Record address information on divisions</li>
-			<li>New branded login screen</li>
-			<li>Upload attachments when identifying assets</li>
+			<li>Visit the Field ID Store for all hardware purchases</li>
+			<li>Share inspection information over the Safety Network</li>
+			<li>Separate your branches with Advanced Multi-Location</li>
+			<li>New Asset View on Field ID Mobile</li>
 		</ul>
 	</div>
 	<div id="helpVideos" class="dashboardSection">
 		<h3 ><@s.text name="label.instructionalvidoes"/> <span class="moreLink"><a href="<@s.url action="instructionalVideos"/>"><@s.text name="label.more"/></a></span></h3>
 		<div id="introVideo" class="highlightBlock">
-			<@s.text name="label.new_to_fieldid"/> <a href="<@s.url action="introVideo" namespace="ajax/"/>" id="showVideo" rel='iframe' title='<@s.text name="label.intro_video"/> ::  :: width: 650, height: 490' class='lightview'><@s.text name="label.watch"/></a> <@s.text name="label.the_intro_video_now"/>
+			<@s.text name="label.new_to_fieldid"/> <a href="http://www.n4systems.com/qwe__wqe/training/intro/overview.html" id="showVideo" rel='iframe' title='<@s.text name="label.intro_video"/> ::  :: width: 700, height: 570' class='lightview'><@s.text name="label.watch"/></a> <@s.text name="label.the_intro_video_now"/>
 		</div>
 		<ul class="informationList">
 			<#list summary as video >

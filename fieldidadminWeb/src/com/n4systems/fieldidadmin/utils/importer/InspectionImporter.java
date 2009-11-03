@@ -34,6 +34,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
+import com.n4systems.model.orgs.FindOrCreateExternalOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -126,9 +127,9 @@ public class InspectionImporter extends Importer {
 					String serialNumber = (String) inspectionMap.get(SERIAL_NUMBER);
 
 					TenantFilteredListLoader<CustomerOrg> customerLoader = new TenantFilteredListLoader<CustomerOrg>(primaryOrg.getTenant(), CustomerOrg.class);
-					FindOrCreateCustomerOrgHandler customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
+					FindOrCreateExternalOrgHandler<CustomerOrg, PrimaryOrg> customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
 
-					CustomerOrg endUser = customerSearcher.findOnly(primaryOrg, (String)inspectionMap.get(ENDUSER_IDENTIFIER));
+					CustomerOrg endUser = customerSearcher.find(primaryOrg, (String)inspectionMap.get(ENDUSER_IDENTIFIER));
 					
 					if (endUser == null) {
 						throw new Exception("no end user");
@@ -213,10 +214,13 @@ public class InspectionImporter extends Importer {
 						DivisionOrgByCustomerListLoader divisionLoader = new DivisionOrgByCustomerListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
 						divisionLoader.setCustomer(endUser);
 						
-						FindOrCreateDivisionOrgHandler divisionSearcher = new FindOrCreateDivisionOrgHandler(divisionLoader, new OrgSaver());
-						divisionSearcher.setFindOnly(!createMissingDivisions);
-
-						DivisionOrg division = divisionSearcher.findOrCreate(endUser, (String)inspectionMap.get(DIVISION));
+						FindOrCreateExternalOrgHandler<DivisionOrg, CustomerOrg> divisionSearcher = new FindOrCreateDivisionOrgHandler(divisionLoader, new OrgSaver());
+						DivisionOrg division;
+						if (createMissingDivisions) {
+							division = divisionSearcher.findOrCreate(endUser, (String)inspectionMap.get(DIVISION));
+						} else {
+							division = divisionSearcher.find(endUser, (String)inspectionMap.get(DIVISION));
+						}
 						
 						if (division == null) {
 							if (createMissingDivisions) {

@@ -1,9 +1,12 @@
 <#escape x as x?j_string >
+<#if schedule.new>
+	<#assign schedule=action.newSchedule() />
+</#if>
 <#assign html>
 	<#include "/templates/html/productTypeScheduleCrud/_show.ftl" >
 </#assign>
 var container = null;
-<#if schedule.override>
+<#if !schedule.new && schedule.override>
 	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.owner.id}"/>
 	container = $('${containerId}');
 	<#if schedule.id?exists >

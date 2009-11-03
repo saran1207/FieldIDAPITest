@@ -98,11 +98,11 @@ public class SmokeTestEx extends FieldIDTestCase {
 			customer.setPhone2(customerPhone2);
 			customer.setFax(customerFax);
 		}
-		organization = prop.getProperty("organization");
-		company = prop.getProperty("company");
-		password = prop.getProperty("password");
-		jobs = Boolean.parseBoolean(prop.getProperty("jobs"));
-		masterInspectionEventTypeGroup = prop.getProperty("masterinspectioneventtypegroup");
+		organization = prop.getProperty("organization", "NOT SET");
+		company = prop.getProperty("company", "NOT SET");
+		password = prop.getProperty("password", "NOT SET");
+		jobs = Boolean.parseBoolean(prop.getProperty("jobs", "NOT SET"));
+		masterInspectionEventTypeGroup = prop.getProperty("masterinspectioneventtypegroup", "NOT SET");
 		login.setCompany(company);
 	}
 	

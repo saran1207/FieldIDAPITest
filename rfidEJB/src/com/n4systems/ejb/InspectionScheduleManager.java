@@ -32,7 +32,6 @@ public interface InspectionScheduleManager {
 	public List<InspectionScheduleCount> getInspectionScheduleCount(Date fromDate, Date toDate, Long tenantId);
 	public List<InspectionScheduleCount> getInspectionScheduleCount(Date fromDate, Date toDate, SecurityFilter secFilter);
 	
-	public InspectionSchedule getNextScheduleFor(Long productId, Long typeId);
 	public List<InspectionSchedule> getAvailableSchedulesFor(Product product);
 	
 	public boolean schedulePastDue(Long scheduleId);

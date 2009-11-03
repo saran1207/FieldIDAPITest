@@ -87,13 +87,13 @@ function changeOrgList(event) {
 	var element = Event.element(event);
 	var selectElements = $(element.form.id).getElements(); 
 	
-	var foundMe = false;
+	var foundElement = false;
 	for (var i = 0; i < selectElements.size(); i++) {
 		if (selectElements[i].type.startsWith('select')) {
-			if (foundMe) {
+			if (foundElement) {
 				selectElements[i].options.length = 0;
 			} else if (selectElements[i].id == element.id) {
-				foundMe = true;
+				foundElement = true;
 			}
 		}
 	}
@@ -149,10 +149,10 @@ function getOwnerValues() {
 	var orgs = $('orgList');
 	
 	var org = new Object();
-	if (divisions.getValue() != undefined && divisions.getValue() != -1 ) {
+	if (isValueDefined(divisions.getValue(), -1)) {
 		org.id = divisions.getValue();
 		org.name = divisions.options[divisions.selectedIndex].text;
-	} else if (customers.getValue() != undefined && customers.getValue() != -1) {
+	} else if (isValueDefined(customers.getValue(), -1)) {
 		org.id = customers.getValue();
 		org.name = customers.options[customers.selectedIndex].text;
 	} else {

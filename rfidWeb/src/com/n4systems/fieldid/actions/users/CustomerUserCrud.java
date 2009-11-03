@@ -7,6 +7,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
@@ -28,7 +29,7 @@ public class CustomerUserCrud extends UserCrud {
 	
 	@Override
 	protected int processPermissions() {
-		return 0;
+		return Permissions.CUSTOMER;
 	}
 
 

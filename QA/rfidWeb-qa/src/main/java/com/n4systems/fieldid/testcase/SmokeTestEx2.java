@@ -63,12 +63,12 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		company = prop.getProperty("company");
+		company = prop.getProperty("company", "NOT SET");
 		login.setCompany(company);
-		password = prop.getProperty("password");
-		email = prop.getProperty("email");
-		n4systems = prop.getProperty("n4systems");
-		jobsites = Boolean.parseBoolean(prop.getProperty("jobsites"));
+		password = prop.getProperty("password", "NOT SET");
+		email = prop.getProperty("email", "NOT SET");
+		n4systems = prop.getProperty("n4systems", "NOT SET");
+		jobsites = Boolean.parseBoolean(prop.getProperty("jobsites", "NOT SET"));
 	}
 	
 	public void testCreatingCustomersDivisionsAndUsers() throws Exception {

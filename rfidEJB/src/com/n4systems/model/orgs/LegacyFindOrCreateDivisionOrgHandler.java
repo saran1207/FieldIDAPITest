@@ -16,15 +16,15 @@ public class LegacyFindOrCreateDivisionOrgHandler extends FindOrCreateDivisionOr
 	}
 
 	@Override
-	protected List<DivisionOrg> loadDivisionList() {
-		QueryBuilder<DivisionOrg> allDivisionsBuilder = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new TenantOnlySecurityFilter(getCustomer().getTenant()));
-		allDivisionsBuilder.addSimpleWhere("parent.id", getCustomer().getId());
+	protected List<DivisionOrg> loadOrgList() {
+		QueryBuilder<DivisionOrg> allDivisionsBuilder = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new TenantOnlySecurityFilter(getParent().getTenant()));
+		allDivisionsBuilder.addSimpleWhere("parent.id", getParent().getId());
 		
 		return persistenceManager.findAll(allDivisionsBuilder);
 	}
 
 	@Override
-	protected void persistDivision(DivisionOrg division) {
+	protected void saveOrg(DivisionOrg division) {
 		persistenceManager.save(division);
 	}
 

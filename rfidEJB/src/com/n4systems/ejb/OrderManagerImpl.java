@@ -30,7 +30,6 @@ import com.n4systems.model.orgs.LegacyFindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.plugins.PluginException;
 import com.n4systems.plugins.integration.CustomerOrderTransfer;
 import com.n4systems.plugins.integration.OrderResolver;
@@ -218,17 +217,11 @@ public class OrderManagerImpl implements OrderManager {
 		
 		CustomerOrg customer;
 		DivisionOrg division;
-		try {
 			
-			customer = processCustomer(orderData.get(OrderKey.ORDER_CUSTOMER_NAME), orderData.get(OrderKey.ORDER_CUSTOMER_ID), tenant);
-			division = processDivision(orderData.get(OrderKey.ORDER_DIVISION_NAME), customer); 
+		customer = processCustomer(orderData.get(OrderKey.ORDER_CUSTOMER_NAME), orderData.get(OrderKey.ORDER_CUSTOMER_ID), tenant);
+		division = processDivision(orderData.get(OrderKey.ORDER_DIVISION_NAME), customer); 
 		
-		} catch (DuplicateExtenalOrgException e) {
-			String message = type.name() + " Order [" + orderNumber + "] rejected";
-			logger.warn(message, e);
-			// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
-			throw new OrderProcessingException(message, e);
-		}
+		
 		
 		order.setOwner((division != null) ? division : customer);
 
@@ -391,7 +384,7 @@ public class OrderManagerImpl implements OrderManager {
 	 * @return				A customer or null
 	 * @throws DuplicateExtenalOrgException 
 	 */
-	private CustomerOrg processCustomer(String customerName, String customerCode, Tenant tenant) throws DuplicateExtenalOrgException {
+	private CustomerOrg processCustomer(String customerName, String customerCode, Tenant tenant) {
 		// if neither are set, do nothing
 		if(customerName == null && customerCode == null) {
 			return null;
@@ -419,7 +412,7 @@ public class OrderManagerImpl implements OrderManager {
 	 * @return				A Division or null
 	 * @throws DuplicateExtenalOrgException 
 	 */
-	private DivisionOrg processDivision(String divisionName, CustomerOrg customer) throws DuplicateExtenalOrgException {
+	private DivisionOrg processDivision(String divisionName, CustomerOrg customer) {
 		// we'll need both of these to do anything
 		if(divisionName == null || customer == null) {
 			return null;
@@ -588,20 +581,11 @@ public class OrderManagerImpl implements OrderManager {
 		DivisionOrg division = null;
 		
 		if(orderTransfer.getCustomerName() != null || orderTransfer.getCustomerId() != null) {
+			customer = processCustomer(orderTransfer.getCustomerName(), orderTransfer.getCustomerId(), tenant);
 			
-			try {
-				customer = processCustomer(orderTransfer.getCustomerName(), orderTransfer.getCustomerId(), tenant);
-				
-				if(orderTransfer.getDivisionName() != null) {
-					division = processDivision(orderTransfer.getDivisionName(), customer);
-				}
-			} catch (DuplicateExtenalOrgException e) {
-				String message = type.name() + " Order [" + orderTransfer.getOrderNumber() + "] rejected";
-				logger.warn(message, e);
-				// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
-				throw new OrderProcessingException(message, e);
+			if(orderTransfer.getDivisionName() != null) {
+				division = processDivision(orderTransfer.getDivisionName(), customer);
 			}
-			
 		}
 		
 		// try and look up the order first

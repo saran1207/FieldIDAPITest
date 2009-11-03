@@ -41,13 +41,18 @@ abstract public class LegacyBaseEntity implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		
-		if( obj != null  && obj.getClass().isInstance(this)) {
-			if( this.uniqueID.equals( ((LegacyBaseEntity)obj).uniqueID ) ) {
-				return true;
-			}
+		if (obj == null) {
+			return false;
 		}
 		
+		if(obj.getClass().isInstance(this) || getClass().isInstance(obj)) {
+			LegacyBaseEntity otherBase = (LegacyBaseEntity)obj;
+			if (otherBase.getUniqueID() != null) {
+				return otherBase.getUniqueID().equals(getUniqueID());
+			} else {
+				return super.equals(obj);
+			}
+		}
 		return false;
 	}
     

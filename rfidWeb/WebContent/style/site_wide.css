@@ -94,9 +94,13 @@ pre {
 	padding:1px 0;
 	
 }
-.fullForm input[type="text"], .fullForm input[type="password"], .fullForm input.textbox, .fullForm input.passwordBox, .fullForm textarea, .fullForm select {
+.fullForm input[type="text"], .fullForm input[type="password"] {
 	width: 250px;
-	border: 1px solid #666
+	border: 1px solid #666;
+}
+ .fullForm input.textbox, .fullForm input.passwordBox, .fullForm textarea, .fullForm select {
+	width: 250px;
+	border: 1px solid #666;
 }
 .fullForm textarea {
 	height: 100px;

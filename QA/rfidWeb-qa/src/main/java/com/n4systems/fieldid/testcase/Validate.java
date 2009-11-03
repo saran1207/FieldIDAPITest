@@ -12,9 +12,9 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testLogin() throws Exception {
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.validate(company, userid, password);
@@ -28,9 +28,9 @@ public class Validate extends FieldIDTestCase {
 	}
 	
 	public void testAdministration() throws Exception {
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -48,9 +48,9 @@ public class Validate extends FieldIDTestCase {
 	}
 	
 	public void testAdministrationManageOrganizations() throws Exception {
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -69,9 +69,9 @@ public class Validate extends FieldIDTestCase {
 	}
 	
 	public void testAdministrationManageCustomers() throws Exception {
-		String company = prop.getProperty("company");	// tenant with more than 20 customers
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");	// tenant with more than 20 customers
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -90,9 +90,9 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testAdministrationManageUsers() throws Exception {
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -118,9 +118,9 @@ public class Validate extends FieldIDTestCase {
 	// Manage User Registrations
 	
 	public void testAdministrationManageSystemSettings() throws Exception {
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -139,9 +139,9 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testAdministrationManageProductTypes() throws Exception {
-		String company = prop.getProperty("company");	// someone with more than 20 product types but not much more
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");	// someone with more than 20 product types but not much more
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -166,9 +166,9 @@ public class Validate extends FieldIDTestCase {
 	// Manage Product Statuses
 		
 	public void testAdministrationManageInspectionTypes() throws Exception {
-		String company = prop.getProperty("company");	// more than 20 inspection types but not many more
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");	// more than 20 inspection types but not many more
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -187,9 +187,9 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testAdministrationManageEventTypeGroups() throws Exception {
-		String company = prop.getProperty("company");	// more than 20 inspection types but not many more
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");	// more than 20 inspection types but not many more
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -216,12 +216,12 @@ public class Validate extends FieldIDTestCase {
 	// Data Log
 	
 	public void testAdministrationManageYourSafetyNetwork() throws Exception {
-		String company = prop.getProperty("company");	// Needs to be a manufacturer tenant
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
-		String linkedCompany = prop.getProperty("linkedcompany");
-		String linkedUserid = prop.getProperty("linkeduserid");
-		String linkedPassword = prop.getProperty("linkedpassword");
+		String company = prop.getProperty("company", "NOT SET");	// Needs to be a manufacturer tenant
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
+		String linkedCompany = prop.getProperty("linkedcompany", "NOT SET");
+		String linkedUserid = prop.getProperty("linkeduserid", "NOT SET");
+		String linkedPassword = prop.getProperty("linkedpassword", "NOT SET");
 
 		try {
 			// Log into a company and get its Field ID Access Code
@@ -261,11 +261,11 @@ public class Validate extends FieldIDTestCase {
 	}
 	
 	public void testHome() throws Exception {
-		String company = prop.getProperty("company");	// tenant with jobs
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
-		boolean jobs = Boolean.parseBoolean(prop.getProperty("jobs"));
-		boolean newFeaturesPDF = Boolean.parseBoolean(prop.getProperty("newfeaturespdf"));
+		String company = prop.getProperty("company", "NOT SET");	// tenant with jobs
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
+		boolean jobs = Boolean.parseBoolean(prop.getProperty("jobs", "NOT SET"));
+		boolean newFeaturesPDF = Boolean.parseBoolean(prop.getProperty("newfeaturespdf", "NOT SET"));
 
 		try {
 			login.setCompany(company);
@@ -283,10 +283,10 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testIdentify() throws Exception {
-		String company = prop.getProperty("company");	// tenant with integration and known order number
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
-		String orderNumber = prop.getProperty("ordernumber");
+		String company = prop.getProperty("company", "NOT SET");	// tenant with integration and known order number
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
+		String orderNumber = prop.getProperty("ordernumber", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -306,12 +306,12 @@ public class Validate extends FieldIDTestCase {
 	// Inspect
 	
 	public void testAssets() throws Exception {
-		String company = prop.getProperty("company");	// tenant with 10000+ assets
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
-		String serialtext = prop.getProperty("serialtext");
-		String customer = prop.getProperty("customer");
-		String orgUnit = prop.getProperty("orgunit");
+		String company = prop.getProperty("company", "NOT SET");	// tenant with 10000+ assets
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
+		String serialtext = prop.getProperty("serialtext", "NOT SET");
+		String customer = prop.getProperty("customer", "NOT SET");
+		String orgUnit = prop.getProperty("orgunit", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -330,9 +330,9 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testReporting() throws Exception {
-		String company = prop.getProperty("company");	// tenant with 10000+ inspections
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");	// tenant with 10000+ inspections
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -352,14 +352,14 @@ public class Validate extends FieldIDTestCase {
 	// need a validate for Schedule
 
 	public void testJobs() throws Exception {
-		String n4systems = prop.getProperty("n4systems");
-		String n4password = prop.getProperty("n4password");
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
-		String email = prop.getProperty("email");
-		String firstName = prop.getProperty("firstname");
-		String lastName = prop.getProperty("lastname");
+		String n4systems = prop.getProperty("n4systems", "NOT SET");
+		String n4password = prop.getProperty("n4password", "NOT SET");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
+		String email = prop.getProperty("email", "NOT SET");
+		String firstName = prop.getProperty("firstname", "NOT SET");
+		String lastName = prop.getProperty("lastname", "NOT SET");
 
 		try {
 			login.setCompany(company);
@@ -399,9 +399,9 @@ public class Validate extends FieldIDTestCase {
 	}
 
 	public void testMyAccount() throws Exception {
-		String company = prop.getProperty("company");
-		String userid = prop.getProperty("userid");
-		String password = prop.getProperty("password");
+		String company = prop.getProperty("company", "NOT SET");
+		String userid = prop.getProperty("userid", "NOT SET");
+		String password = prop.getProperty("password", "NOT SET");
 
 		try {
 			login.setCompany(company);

@@ -56,6 +56,10 @@ public class WhereClauseFactory {
 		return create(comparator, null, param, value, null, null);
 	}
 	
+	public static <T> WhereClause<T> create(Comparator comparator, String param, T value, ChainOp chainOp) {
+		return create(comparator, null, param, value, null, chainOp);
+	}
+	
 	public static <T> WhereClause<T> create(String param, T value) {
 		return create(null, null, param, value, null, null);
 	}

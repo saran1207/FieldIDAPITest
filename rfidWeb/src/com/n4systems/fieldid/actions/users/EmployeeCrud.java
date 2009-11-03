@@ -18,11 +18,10 @@ import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
 public class EmployeeCrud extends UserCrud {
+	private static final long serialVersionUID = 1L;
 
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 	protected List<ListingPair> permissions;
-	
-	
 	
 	public EmployeeCrud(User userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
@@ -36,8 +35,6 @@ public class EmployeeCrud extends UserCrud {
 			userPermissions.put(permission.getId().toString(), permField.isSet(permission.getId().intValue()));
 		}
 	}
-	
-	
 	
 	
 	@Override
@@ -85,7 +82,11 @@ public class EmployeeCrud extends UserCrud {
 
 	@Override
 	protected int processPermissions() {
-		int permission = 0; 
+		int permission = defaultPermissionValue();
+		
+		
+		
+		
 		if (userPermissions != null && !user.isAdmin()) { // needed to
 						// handle when
 						// there is an
@@ -114,11 +115,15 @@ public class EmployeeCrud extends UserCrud {
 				
 			permission = perms.getMask();
 			
-		}
+		} 
 		return permission;
 	}
 
 	
+	private int defaultPermissionValue() {
+		return (user.isAdmin()) ? Permissions.ADMIN : Permissions.NO_PERMISSIONS;
+	}
+
 	public boolean isEmployee() {
 		return true;
 	}

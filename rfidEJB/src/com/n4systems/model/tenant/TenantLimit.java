@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import com.n4systems.services.limiters.LimitType;
+import com.n4systems.util.HashCode;
 
 @Embeddable
 public class TenantLimit implements Serializable {
@@ -122,17 +123,19 @@ public class TenantLimit implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj instanceof TenantLimit) {
 			TenantLimit otherLimit = (TenantLimit)obj;
-			return (otherLimit.users.equals(users) 
-						&& otherLimit.diskSpace.equals(diskSpace) 
-						&& otherLimit.assets.equals(assets));
+			return (
+					otherLimit.getUsers().equals(getUsers()) &&
+					otherLimit.getDiskSpaceInBytes().equals(getDiskSpaceInBytes()) &&
+					otherLimit.getAssets().equals(getAssets()) &&
+					otherLimit.getSecondaryOrgs().equals(getSecondaryOrgs())
+			);
 		}
 		return super.equals(obj);
 	}
 
 	@Override
 	public int hashCode() {
-		Long sum = (assets + users + diskSpace);
-		return sum.hashCode();
+		return HashCode.newHash().add(getUsers()).add(getDiskSpaceInBytes()).add(getAssets()).add(getSecondaryOrgs()).toHash();
 	}
 
 	public void addUsers(Long additionalUsers) {

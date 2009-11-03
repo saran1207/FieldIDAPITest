@@ -6,6 +6,7 @@
 	</#if>
 </title>
 <@s.form action="customerEdit!save" cssClass="fullForm " theme="fieldid">
+	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="currentPage" />
 	<#if customer.linkedOrg?exists>
@@ -27,6 +28,7 @@
 				<label class="label" for="parentOrgId"><@s.text name="label.organizationalunit"/> <#include "../common/_requiredMarker.ftl"/></label>
 				<@s.select  name="parentOrgId" list="parentOrgs" listKey="id" listValue="name" />
 			</div>
+			
 			<div class="infoSet">
 				<label class="label" for="contactName"><@s.text name="label.contactname"/></label>
 				<@s.textfield  name="contactName" />

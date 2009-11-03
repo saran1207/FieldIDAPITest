@@ -4,12 +4,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +19,7 @@ import javax.persistence.Query;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
@@ -39,6 +42,7 @@ import com.n4systems.util.persistence.SimpleSelect;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
+@Interceptors( { TimingInterceptor.class })
 @Stateless
 public class MassUpdateManagerImpl implements MassUpdateManager {
 
@@ -262,81 +266,71 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-	public Long updateInspections(List<Long> ids, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
-		Long result = 0L;
-		try {
-			if (ids.size() == 0) {
-				return 0L;
-			}
-
-			String updateQueryString = "UPDATE Inspection SET modified = :now";
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("now", new Date());
-			boolean ownershipBeingSet = false;
+	public Long updateInspections(List<Long> ids, Inspection inspectionChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
+		if (ids.isEmpty()) {
+			return 0L;
+		}
+		
+		UserBean user = persistenceManager.findLegacy(UserBean.class, userId);
+		
+		Set<String> updateKeys = getEnabledKeys(fieldMap);
+		
+		boolean ownershipChanged = false;
+		Inspection changeTarget;
+		for (Long id: ids) {
+			changeTarget = persistenceManager.find(Inspection.class, id);
 			
-			for (Map.Entry<String, Boolean> entry : values.entrySet()) {
-				if (entry.getValue() == true) {
-					updateQueryString += ", ";
+			for (String updateKey: updateKeys) {
+				if (updateKey.equals("owner")) {
+					ownershipChanged = true;
+					changeTarget.setOwner(inspectionChanges.getOwner());
+				}
+				
+				if (updateKey.equals("inspectionBook")) {
+					changeTarget.setBook(inspectionChanges.getBook());
+				}
 
-					if (entry.getKey().equals("owner")) {
-						ownershipBeingSet = true;
+				if (updateKey.equals("location")) {
+					ownershipChanged = true;
+					changeTarget.setLocation(inspectionChanges.getLocation());
+				}
 
-						updateQueryString += " owner = :owner ";
-						parameters.put("owner", inspection.getOwner());
-					}
-					
-					if (entry.getKey().equals("inspectionBook")) {
-						if (inspection.getBook() == null) {
-							updateQueryString += " book = null ";
-						} else {
-							updateQueryString += " book = :inspectionBook ";
-							parameters.put("inspectionBook", inspection.getBook());
-						}
-					}
-
-					if (entry.getKey().equals("location")) {
-						ownershipBeingSet = true;
-						updateQueryString += " location = :location";
-						parameters.put("location", inspection.getLocation());
-					}
-
-					if (entry.getKey().equals("printable")) {
-						updateQueryString += " printable = :printable";
-						parameters.put("printable", inspection.isPrintable());
-					}
+				if (updateKey.equals("printable")) {
+					changeTarget.setPrintable(inspectionChanges.isPrintable());
 				}
 			}
-
-			if (userId == null) {
-				updateQueryString += ", modifiedBy = null ";
-			} else {
-				updateQueryString += ", modifiedBy = :modifiedBy ";
-				parameters.put("modifiedBy", em.find(UserBean.class, userId));
-			}
-
-			Query updateQuery = em.createQuery(updateQueryString + " WHERE id IN ( :ids )");
-			updateQuery.setParameter("ids", ids);
-			for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-				updateQuery.setParameter(entry.getKey(), entry.getValue());
-			}
-
-			updateQuery.executeUpdate();
-
-			result = new Long(ids.size());
 			
-			if (ownershipBeingSet) {
-				QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
-				Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(values);
-				InspectionSchedule schedule = new InspectionSchedule();
-				schedule.completed(inspection);
-				updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
-			}
-
-		} catch (InvalidQueryException iqe) {
-			throw new UpdateFailureException(iqe);
+			persistenceManager.update(changeTarget, user);
+		}
+			
+		if (ownershipChanged) {
+			updateCompletedInspectionOwnership(ids, inspectionChanges, fieldMap);
 		}
 
-		return result;
+		return new Long(ids.size());
+	}
+
+	private void updateCompletedInspectionOwnership(List<Long> ids, Inspection inspection, Map<String, Boolean> fieldMap) throws UpdateFailureException {
+		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
+		
+		Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(fieldMap);
+		
+		InspectionSchedule schedule = new InspectionSchedule();
+		
+		schedule.completed(inspection);
+		
+		updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
+	}
+	
+	/** Extracts a set of keys, whose values are True */
+	private Set<String> getEnabledKeys(Map<String, Boolean> values) {
+		Set<String> keys = new HashSet<String>();
+		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
+			if (entry.getValue()) {
+				keys.add(entry.getKey());
+			}
+		}
+		return keys;
 	}
 
 	private Map<String, Boolean> getOwnerShipSelectedAttributes(Map<String, Boolean> values) {

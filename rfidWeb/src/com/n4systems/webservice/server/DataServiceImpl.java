@@ -62,7 +62,6 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
-import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
@@ -72,7 +71,10 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameterGroup;
+import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
@@ -745,14 +747,14 @@ public class DataServiceImpl implements DataService {
 			for (DivisionOrgServiceDTO division: customer.getDivisions()) {
 				try {
 					divisionHandler.findOrCreate(customerOrg, division.getName());
-				} catch (DuplicateExtenalOrgException e) {
+				} catch (Exception e) {
 					String message = String.format("Unable to create Division [%s] on Customer [%s]", division.getName(), customerOrg.toString());
 					logger.error(message, e);
 					throw new ServiceException(message);
 				}
 			}
 			
-		} catch (DuplicateExtenalOrgException e) {
+		} catch (Exception e) {
 			String message = String.format("Unable to create Customer [%s, %s] on PrimaryOrg [%s]", customer.getName(), customer.getCode(), primaryOrg.toString());
 			logger.error(message, e);
 			throw new ServiceException(message);
@@ -1054,13 +1056,17 @@ public class DataServiceImpl implements DataService {
 			QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			
+			WhereParameterGroup customerDivisionWhere = new WhereParameterGroup("customerDivision");
+			
 			if (searchCriteria.getCustomerIds() != null && searchCriteria.getCustomerIds().size() > 0) {
-				queryBuilder.addWhere(WhereParameter.Comparator.IN, "customerIds", "owner.customerOrg.id", searchCriteria.getCustomerIds());
+				customerDivisionWhere.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "owner.customerOrg.id", searchCriteria.getCustomerIds()));
 			}
 			
 			if (searchCriteria.getDivisionIds() != null && searchCriteria.getDivisionIds().size() > 0) {
-				queryBuilder.addWhere(WhereParameter.Comparator.IN, "divisionIds", "owner.divisionOrg.id", searchCriteria.getDivisionIds());
+				customerDivisionWhere.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "owner.divisionOrg.id", searchCriteria.getDivisionIds(), ChainOp.OR));
 			}
+			
+			queryBuilder.addWhere(customerDivisionWhere);
 			
 			Date createDate = converter.convertStringToDate(searchCriteria.getCreateDate()); 
 			if (createDate != null) {
@@ -1069,8 +1075,7 @@ public class DataServiceImpl implements DataService {
 			
 			// This is for postgres to ensure paging works
 			queryBuilder.addOrder("id");
-			
-			
+						
 			Pager<Product> productPage = null;
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
 				productPage = persistenceManager.findAllPaged(queryBuilder, CURRENT_PAGE, PRODUCTS_PER_PAGE);

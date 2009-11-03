@@ -6,6 +6,7 @@
 			<a href="#" id="switchOrgBrowser"><@s.text name="label.browse"/></a>
 			<a href="#" id="switchOrgSearch"><@s.text name="label.search"/></a>
 			<a href="#" id="closeOrgPicker"><img src="<@s.url value="/images/x.gif"/>" alt="x"/></a>
+			<div class="clearBoth"></div>
 		</div>
 		<div id="orgSearch" style="display:none">
 			<@s.form action="orgs" namespace="/ajax" theme="fieldid" >
@@ -61,3 +62,14 @@
 		}
 	});
 </@n4.includeScript>
+<!--[if IE 6]>
+	<style>
+		#orgBrowserLoading {
+			margin-right:10px;
+		}
+		#orgBrowserForm .fieldHolder,#orgBrowserForm .label, #orgBrowser .infoSet {
+			width:300px;
+		} 
+	</style>
+<![endif]-->
+

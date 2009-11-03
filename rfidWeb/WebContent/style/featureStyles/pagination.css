@@ -1,5 +1,5 @@
 .paginationWrapper {
-	overflow:auto;
+	overflow:hidden;
 	width:100%;
 	clear:both;
 }

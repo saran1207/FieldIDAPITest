@@ -39,7 +39,7 @@
 	
 	<p>
 		<label><@s.text name="label.owner"/></label>
-		<span><@n4.orgPicker name="owner" required="true" /></span>
+		<span><@n4.orgPicker name="owner" required="true" id="ownerId" /></span>
 	</p>	
 	
 	<p>

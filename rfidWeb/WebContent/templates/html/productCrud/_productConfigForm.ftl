@@ -3,10 +3,10 @@
 </head>
 
 	
-<#if userSecurityGuard.allowedManageSafetyNetwork == true >
+<#if userSecurityGuard.allowedManageSafetyNetwork == true && publishedState?exists>
 	<div class="infoSet">
 		<label for="publishedState" class="label"><@s.text name="label.publishedstateselector"/></label>
-		<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />		
+		<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />
 	</div>
 </#if>
 

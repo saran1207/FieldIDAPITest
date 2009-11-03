@@ -15,7 +15,7 @@ public class CustomerOrgBuilder extends BaseBuilder<CustomerOrg>{
 	private InternalOrg parent;
 	
 	public static CustomerOrgBuilder aCustomerOrg() {
-		return new CustomerOrgBuilder(null, "Some Customer", "some", null);
+		return new CustomerOrgBuilder(null, "Some Customer", "some", aPrimaryOrg().build());
 	}
 	
 	public static CustomerOrgBuilder aPrimaryCustomerOrg() {

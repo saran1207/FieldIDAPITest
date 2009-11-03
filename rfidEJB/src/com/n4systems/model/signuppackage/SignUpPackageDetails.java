@@ -8,7 +8,7 @@ import com.n4systems.util.DataUnit;
 
 public enum SignUpPackageDetails {
 	
-	Free("FIDFREE", "Free", 5L, 1L, 5L, 0L),
+	Free("FIDFREE", "Free", 5L, 1L, 25L, 0L),
 	
 	Basic("FIDBASIC", "Basic", 50L, 5L, 250L, 0L, ExtendedFeature.EmailAlerts),
 	

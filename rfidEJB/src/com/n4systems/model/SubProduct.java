@@ -86,7 +86,7 @@ public class SubProduct extends AbstractEntity {
 	public boolean equals(Object obj) {
 		if (obj instanceof SubProduct && obj != null) {
 			SubProduct subProduct = (SubProduct) obj;
-			return product.equals(subProduct.getProduct());
+			return getProduct().equals(subProduct.getProduct());
 		}
 		
 		return super.equals(obj);
@@ -94,7 +94,7 @@ public class SubProduct extends AbstractEntity {
 	
 	@Override
 	public int hashCode() {
-		return product.hashCode();
+		return getProduct().hashCode();
 	}
 
 	public Product getMasterProduct() {

@@ -120,12 +120,12 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 	}
 	
 	public boolean equals(State state) {
-		if (id.equals(state.getId())) {
+		if (getId().equals(state.getId())) {
 			return true;
 		} 
 		
-		return (displayText.equalsIgnoreCase(state.getDisplayText()) && 
-				status.equals(state.getStatus()) && 
-				buttonName.equals(state.getButtonName()));
+		return (getDisplayText().equalsIgnoreCase(state.getDisplayText()) && 
+				getStatus().equals(state.getStatus()) && 
+				getButtonName().equals(state.getButtonName()));
 	}
 }

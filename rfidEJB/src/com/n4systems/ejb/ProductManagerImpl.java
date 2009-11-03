@@ -2,6 +2,7 @@ package com.n4systems.ejb;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -37,6 +38,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.persistence.archivers.InspectionListArchiver;
 import com.n4systems.services.product.ProductMerger;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ArchiveProductTypeTask;
@@ -47,6 +49,7 @@ import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.ProductTypeRemovalSummary;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -338,18 +341,16 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	private void archiveInspections(Product product, UserBean archivedBy) {
-		String updateQuery = "UPDATE " + Inspection.class.getName() + " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
-				+ " WHERE product = :product AND state = :activeState ";
-
-		Query update = em.createQuery(updateQuery);
-		update.setParameter("archiveState", EntityState.ARCHIVED);
-		update.setParameter("archivingUser", archivedBy);
-		update.setParameter("now", new Date());
-
-		update.setParameter("product", product);
-		update.setParameter("activeState", EntityState.ACTIVE);
-
-		update.executeUpdate();
+		InspectionListArchiver archiver = new InspectionListArchiver(getInspectionIdsForProduct(product));
+		archiver.archive(em);	
+	}
+	
+	private Set<Long> getInspectionIdsForProduct(Product product) {
+		QueryBuilder<Long> idBuilder = new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter());
+		idBuilder.setSimpleSelect("id");
+		idBuilder.addWhere(WhereClauseFactory.create("product.id", product.getId()));
+		
+		return new TreeSet(persistenceManager.findAll(idBuilder));
 	}
 
 	private void archiveSchedules(Product product, UserBean archivedBy) {

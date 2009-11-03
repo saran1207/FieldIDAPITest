@@ -24,9 +24,9 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		company = prop.getProperty("company");
-		userid = prop.getProperty("userid");
-		password = prop.getProperty("password");
+		company = prop.getProperty("company", "NOT SET");
+		userid = prop.getProperty("userid", "NOT SET");
+		password = prop.getProperty("password", "NOT SET");
 	}
 	
 	/**

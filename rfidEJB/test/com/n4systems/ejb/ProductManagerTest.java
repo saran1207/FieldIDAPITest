@@ -3,7 +3,6 @@ package com.n4systems.ejb;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
@@ -234,52 +233,6 @@ public class ProductManagerTest { //extends EJBTestCase {
 		} catch (Exception e) {
 			fail("can't mock the product manager");
 		}
-	}
-
-	@Test public void test_archive_inspections() {
-		setUpArchiveInspection();
-		replay(mockEntityManager);
-		productManager.setPersistenceManager(mockPersitenceManager);
-		try {
-			Method archiveInspections = productManager.getClass().getDeclaredMethod("archiveInspections",
-					Product.class, UserBean.class);
-			archiveInspections.setAccessible(true);
-			archiveInspections.invoke(productManager, product, testUser);
-		} catch (Exception e) {
-			fail("failed to call the method." + e.toString());
-		}
-
-		verifyArchiveInspections();
-	}
-
-	private void verifyArchiveInspections() {
-		//verify(mockEntityManager);
-		verify(mockQuery);
-	}
-
-	private void setUpArchiveInspection() {
-		mockQuery = createMock(Query.class);
-
-		expect(mockQuery.setParameter((String) anyObject(), anyObject())).andReturn(mockQuery);
-		expectLastCall().atLeastOnce();
-		
-		expect(mockQuery.executeUpdate()).andReturn(4);
-		replay(mockQuery);
-
-		Query mockIndexingQuery = createMock(Query.class);
-		
-		expect(mockIndexingQuery.setParameter((String) anyObject(), anyObject())).andReturn(mockIndexingQuery);
-		expectLastCall().atLeastOnce();
-		expect(mockIndexingQuery.getResultList()).andReturn(new ArrayList<Long>());
-		replay(mockIndexingQuery);
-		
-		
-		expect(mockEntityManager.createQuery("select id from Inspection WHERE product = :product AND state = :archiveState")).andReturn(mockIndexingQuery);
-		expect(mockEntityManager.createQuery((String) anyObject())).andReturn(mockQuery);
-		
-
-		productManager.setEntityManager(mockEntityManager);
-		
 	}
 
 }

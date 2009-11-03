@@ -14,7 +14,7 @@
 		<#if sessionUser.hasAccess("manageendusers") == true >
 			<p>
 				<label><a href="<@s.url action="customerList"/>" ><@s.text name="title.manage_customers.plural" /></a></label>
-				<span >View and setup all of your customers in Field ID.</span>
+				<span >View and setup all of your <@s.text name='label.customers'/> in Field ID.</span>
 			</p>
 		</#if>
 		
@@ -27,7 +27,7 @@
 			<#if securityGuard.partnerCenterEnabled>
 				<p>
 					<label><a href="userRequestList.action" ><@s.text name="title.manage_user_registrations.plural" /></a></label>
-					<span >Accept or deny requests for customer user accounts.</span>
+					<span >Accept or deny requests for <@s.text name='label.customer'/> user accounts.</span>
 				</p>
 			</#if>
 		</#if>

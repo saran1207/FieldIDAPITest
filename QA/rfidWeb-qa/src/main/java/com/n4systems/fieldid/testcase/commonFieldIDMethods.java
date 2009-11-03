@@ -1225,7 +1225,7 @@ public class commonFieldIDMethods {
 	 */
 	public String getLogo() {
 		String result = "";
-		String logo = p.getProperty("logo");
+		String logo = p.getProperty("logo", "NOT SET");
 		if (getTenant().length() > 0 && !logo.equals("")) {
 			result = getBaseURL();
 			result += logo;

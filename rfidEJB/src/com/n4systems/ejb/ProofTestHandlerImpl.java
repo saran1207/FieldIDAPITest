@@ -40,7 +40,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.persistence.loaders.DuplicateExtenalOrgException;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
@@ -111,15 +110,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		//if our customer is null, then let's see if we're supposed to resolve a customer by name from the FileDataContainer
 		if(customerId == null && fileData.isResolveCustomer()) {
 			// lets resolve a customer from the file data container.  This will also create a customer if resolution fails and createCustomer is set
-			try {
-				customer = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
-			} catch (DuplicateExtenalOrgException e) {
-				// TODO: CUSTOMER_REFACTOR: Send alert email when more then 1 customer/division is found
-				String message = "Prooftest [" + fileData.getFileName() + "] rejected";
-				logger.warn(message, e);
-				throw new FileProcessingException(message, e);
-			}
 			
+			customer = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
+						
 			// If the customer is still null then, we were unalbe to find or create a customer.  Let's assume we we're supposed to use no customer
 			if(customer == null) {
 				logger.warn("Unable to find or create customer.  Assuming no customer.");
@@ -205,21 +198,30 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return inspectionMap;
 	}
 	
-	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) throws DuplicateExtenalOrgException {
+	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) {
 		// if the customer name is null or empty, we'll assume it's for no customer
 		if (StringUtils.isEmpty(customerName)) {
 			return null;
 		}
 		
 		LegacyFindOrCreateCustomerOrgHandler findOrCreateCust = getFindOrCreateCustomerHandler();
-		findOrCreateCust.setFindOnly(!createCustomer);
 	
-		CustomerOrg customer = findOrCreateCust.findOrCreate(primaryOrg, customerName.trim());
+		
+		
+		CustomerOrg customer = null;
+		String cleanedCustomerName = cleanCustomerName(customerName);
+		
+		if (createCustomer) {
+			customer = findOrCreateCust.findOrCreate(primaryOrg, cleanedCustomerName); 
+		} else {
+			customer = findOrCreateCust.find(primaryOrg, cleanedCustomerName);
+		}
+		
 			
 		if (customer != null) {
 			// if we've found or created a customer, log about it
 			
-			if (findOrCreateCust.customerWasCreated()) {
+			if (findOrCreateCust.orgWasCreated()) {
 				writeLogMessage(primaryOrg.getTenant(), "Created Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCode() + "]");
 			} else {
 				logger.debug("Found Customer [" + customer.getId() +  "] for Name [" + customer.getName() + "] on CustId [" + customer.getCode() + "]");
@@ -227,6 +229,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 			
 		return customer;
+	}
+
+	private String cleanCustomerName(String customerName) {
+		return customerName.trim();
 	}
 	
 	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {

@@ -49,6 +49,27 @@ public class CustomerCrud extends AbstractCrud {
 		this.userManager = userManager;
 		this.saver = new OrgSaver();
 	}
+	
+	@Override
+	protected void initMemberFields() {
+		customer = new CustomerOrg();
+		customer.setAddressInfo(new AddressInfo());
+		customer.setTenant(getTenant());
+		customer.setParent(getSessionUserOwner().getInternalOrg());
+	}
+
+	@Override
+	protected void loadMemberFields(Long uniqueId) {
+		customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(uniqueId).load();
+		if (customer.getAddressInfo() == null) {
+			customer.setAddressInfo(new AddressInfo());
+		}
+		if (customer.getContact() == null) {
+			customer.setContact(new Contact());
+		}
+	}
+
+	
 
 	@SkipValidation
 	public String doList() {
@@ -119,24 +140,6 @@ public class CustomerCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	@Override
-	protected void initMemberFields() {
-		customer = new CustomerOrg();
-		customer.setAddressInfo(new AddressInfo());
-		customer.setTenant(getTenant());
-		customer.setParent(getSessionUserOwner().getInternalOrg());
-	}
-
-	@Override
-	protected void loadMemberFields(Long uniqueId) {
-		customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(uniqueId).load();
-		if (customer.getAddressInfo() == null) {
-			customer.setAddressInfo(new AddressInfo());
-		}
-		if (customer.getContact() == null) {
-			customer.setContact(new Contact());
-		}
-	}
 
 	public Pager<CustomerOrg> getPage() {
 		if (customerPage == null) {

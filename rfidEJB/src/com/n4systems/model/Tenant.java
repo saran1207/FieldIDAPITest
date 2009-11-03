@@ -50,12 +50,12 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	}
 
 	public boolean equals(Tenant tenant) {
-		return (id.equals(tenant.id) && name.equals(tenant.name));
+		return (getId().equals(tenant.getId()) && getName().equals(tenant.getName()));
 	}
 
 	@Override
 	public int hashCode() {
-		return HashCode.newHash().add(id).add(name).toHash();
+		return HashCode.newHash().add(getId()).add(getName()).toHash();
 	}
 
 	@Override

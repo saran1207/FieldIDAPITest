@@ -12,6 +12,14 @@ development:
   host: localhost
   username: root
   encoding: utf8
+
+staging:
+  adapter: jdbcmysql
+  database: fieldid
+  host: localhost
+  username: root
+  password: makemore$
+  encoding: utf8
  
 production:
   adapter: jdbcpostgresql

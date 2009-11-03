@@ -28,7 +28,7 @@ public class NextInspectionScheduleLoader extends Loader<InspectionSchedule> {
 		query.addSimpleWhere("product.id", productId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("inspectionType.id", typeId);
 		query.addOrder("nextDate");
 		
-		List<InspectionSchedule> schedules = query.getResultList(em, 1, 1);
+		List<InspectionSchedule> schedules = query.getResultList(em, 0, 1);
 			
 		if (!schedules.isEmpty()) {
 			schedule = schedules.get(0);

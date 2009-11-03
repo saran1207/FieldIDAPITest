@@ -15,3 +15,6 @@
 <@n4.includeScript src="scriptaculous" />
 <@n4.includeScript src="json2" />
 <@n4.includeScript src="common" />
+<!--[if IE 6]>
+<@n4.includeScript src="common-ie6" />
+<![endif]-->

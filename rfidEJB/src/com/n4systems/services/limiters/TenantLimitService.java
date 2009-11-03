@@ -26,10 +26,10 @@ public class TenantLimitService implements Serializable {
 		return self;
 	}
 	
-	private final Map<Long, ResourceLimit> diskSpace = new ConcurrentHashMap<Long, ResourceLimit>();
-	private final Map<Long, ResourceLimit> employeeUsers = new ConcurrentHashMap<Long, ResourceLimit>();
-	private final Map<Long, ResourceLimit> assets = new ConcurrentHashMap<Long, ResourceLimit>();
-	private final Map<Long, ResourceLimit> secondaryOrgs = new ConcurrentHashMap<Long, ResourceLimit>();
+	private final Map<Long, ResourceLimit> diskSpace = new ResourceLimitConcurrentHashMap();
+	private final Map<Long, ResourceLimit> employeeUsers = new ResourceLimitConcurrentHashMap();
+	private final Map<Long, ResourceLimit> assets = new ResourceLimitConcurrentHashMap();
+	private final Map<Long, ResourceLimit> secondaryOrgs = new ResourceLimitConcurrentHashMap();
 	
 	private final ProductLimitCountLoader productCountLoader = new ProductLimitCountLoader();
 	private final EmployeeUserCountLoader employeeCountLoader = new EmployeeUserCountLoader();
@@ -45,32 +45,29 @@ public class TenantLimitService implements Serializable {
 	private TenantLimitService() {}
 	
 	public ResourceLimit getDiskSpace(Long tenantId) {
-		ResourceLimit limit = diskSpace.get(tenantId);
-		return limit;
+		return diskSpace.get(tenantId);
 	}
 	
 	public ResourceLimit getEmployeeUsers(Long tenantId) {
 		// user counts are refreshed in real-time
 		refreshEmployeeUserCount(tenantId);
-		
-		ResourceLimit limit = employeeUsers.get(tenantId);
-		return limit;
+		return employeeUsers.get(tenantId);
 	}
+	
+	
 	
 	public ResourceLimit getAssets(Long tenantId) {
 		// asset counts are refreshed in real-time
 		refreshAssetCount(tenantId);
-		
-		ResourceLimit limit = assets.get(tenantId);
-		return limit;
+		return assets.get(tenantId);
 	}
 	
 	public ResourceLimit getSecondaryOrgs(Long tenantId) {
 		// secondaryorg counts are refreshed in real-time
 		refreshSecondaryOrgCount(tenantId);
+		return secondaryOrgs.get(tenantId);
+	
 		
-		ResourceLimit limit = secondaryOrgs.get(tenantId);
-		return limit;
 	}
 	
 	public Map<Long, ResourceLimit> getLimitForType(LimitType type) {
@@ -175,4 +172,25 @@ public class TenantLimitService implements Serializable {
 			return limit;
 		}
 	}
+	
+	
+	private class ResourceLimitConcurrentHashMap extends ConcurrentHashMap<Long, ResourceLimit> {
+		private static final long serialVersionUID = 1L;
+		
+		
+		public ResourceLimitConcurrentHashMap() {
+			super();
+		}
+
+				
+		@Override
+		public ResourceLimit get(Object key) {
+			ResourceLimit resourceLimit = super.get(key);
+			return (resourceLimit != null) ? resourceLimit : new NullResourceLimit();
+		}
+
+	}
 }
+
+
+

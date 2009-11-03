@@ -9,11 +9,8 @@ class User < ActiveRecord::Base
   set_primary_key :uniqueid
 
   belongs_to  :tenant,              :foreign_key => 'tenant_id',       :class_name => 'Tenant'
-  belongs_to  :organization,        :foreign_key => 'r_organization', :class_name => 'Organization'
-  belongs_to  :customer,            :foreign_key => 'r_enduser',      :class_name => 'Customer'
-  belongs_to  :division,            :foreign_key => 'r_division',     :class_name => 'Division'
-  has_many    :permissionActionFKs, :foreign_key => 'r_fieldiduser',  :class_name => 'Permissions'
-  has_many    :permissionActions,                                     :class_name => 'PermissionAction',          :through => :permissionActionFKs
+  
+  belongs_to :owner,                :foreign_key => 'owner_id',         :class_name => 'BaseOrg'
 
   def id
     uniqueid

@@ -58,6 +58,8 @@ public class ProductViewModeConverter {
 			model.setPurchaseOrder(view.getPurchaseOrder());
 			model.setComments(view.getComments());
 			
+			model.setPublished(primaryOrg.isAutoPublish());
+			
 			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getProductInfoOptions(), model.getType().getInfoFields());
 			model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
 			

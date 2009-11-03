@@ -1,7 +1,7 @@
 package com.n4systems.model.orgs;
 
 import static org.junit.Assert.*;
-
+import static org.easymock.EasyMock.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -9,10 +9,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.persistence.utils.TestQuery;
 import com.n4systems.testutils.DummyEntityManager;
 
 
@@ -53,19 +53,27 @@ public class OrgSaverTest {
 			}
 		});
 		
-		EntityManager em = EasyMock.createMock(EntityManager.class);
+		EntityManager em = createMock(EntityManager.class);
 		
-		EasyMock.expect(em.merge(mainOrg)).andReturn(mainOrg);
-		em.persist(EasyMock.anyObject());
+		expect(em.merge(mainOrg)).andReturn(mainOrg);
+		
+		
+		em.persist(anyObject());
 		
 		for (ExternalOrg linkedOrg: linkedOrgs) {
-			EasyMock.expect(em.merge(linkedOrg)).andReturn(linkedOrg);
-			em.persist(EasyMock.anyObject());
+			expect(em.merge(linkedOrg)).andReturn(linkedOrg);
+			mockEMSecurityPropogationForCustomerUpdates(em);
+			em.persist(anyObject());
 		}
 		
-		EasyMock.replay(em);
+		replay(em);
 		
 		saver.update(em, mainOrg);
+		verify(em);
+	}
+
+	private void mockEMSecurityPropogationForCustomerUpdates(EntityManager em) {
+		expect(em.createQuery((String)anyObject())).andReturn(new TestQuery());
 	}
 	
 	@Test
@@ -81,11 +89,11 @@ public class OrgSaverTest {
 		
 		mainOrg.setAddressInfo(null);
 		
-		EntityManager em = EasyMock.createMock(EntityManager.class);
+		EntityManager em = createMock(EntityManager.class);
 		
-		EasyMock.expect(em.merge(mainOrg)).andReturn(mainOrg);
-		em.persist(EasyMock.anyObject());
-		EasyMock.replay(em);
+		expect(em.merge(mainOrg)).andReturn(mainOrg);
+		em.persist(anyObject());
+		replay(em);
 		
 		BaseOrg newMain = saver.update(em, mainOrg);
 		assertNotNull(newMain.getAddressInfo());
@@ -99,9 +107,9 @@ public class OrgSaverTest {
 		
 		mainOrg.setAddressInfo(null);
 		
-		EntityManager em = EasyMock.createMock(EntityManager.class);
+		EntityManager em = createMock(EntityManager.class);
 		em.persist(mainOrg);
-		EasyMock.expect(em.merge(mainOrg)).andReturn(mainOrg);
+		expect(em.merge(mainOrg)).andReturn(mainOrg);
 		
 		saver.save(em, mainOrg);
 		assertNotNull(mainOrg.getAddressInfo());

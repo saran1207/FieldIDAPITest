@@ -78,40 +78,40 @@ public class Inspect extends TestCase {
 			p = new Properties();
 			p.load(in);
 			misc = new FieldIDMisc(ie);
-			inspectionDetailsHeaderFinder = xpath(p.getProperty("inspectiondetailsheader"));
-			subComponentsOnMasterInspectionFinder = xpath(p.getProperty("subcomponentsonmasterinspection"));
-			saveStandardInspectionFinder = xpath(p.getProperty("saveinspection"));
-			editOnManageInspectionsLinkFinder = xpath(p.getProperty("editonmanageinspectionslinks"));
-			saveEditStandardInspectionFinder = xpath(p.getProperty("saveeditinspection"));
-			storeEditMasterInspectionButtonFinder = xpath(p.getProperty("masterinspectioneditstorebutton"));
-			editInspectionPageContentHeaderFinder = xpath(p.getProperty("editinspectionpagecontentheader"));
-			editThisEventMasterInspectionLinkFinder = xpath(p.getProperty("editthiseventmasterinspectionlinks"));
-			inspectEditLinkFinder = xpath(p.getProperty("editinspectionlink"));
-			inspectManageInspectionLinksFinder = xpath(p.getProperty("inspectmanageinspectionlinks"));
-			inspectSmartSearchLoadButtonFinder = xpath(p.getProperty("inspectsmartsearchloadbutton"));
-			inspectSmartSearchTextFieldFinder = xpath(p.getProperty("inspectsmartsearchtextfield"));
-			viewInspectionPageContentHeaderFinder = xpath(p.getProperty("viewinspectionpagecontentheader"));
-			saveMasterInspectionButtonFinder = xpath(p.getProperty("masterinspectionsavebutton"));
-			storeMasterInspectionButtonFinder = xpath(p.getProperty("masterinspectionstorebutton"));
-			customerBaseSelectListFinder = xpath(p.getProperty("masterinspectioncustomer"));
-			divisionBaseSelectListFinder = xpath(p.getProperty("masterinspectiondivision"));
-			locationBaseTextFieldFinder = xpath(p.getProperty("masterinspectionlocation"));
-			inspectorBaseSelectListFinder = xpath(p.getProperty("masterinspectioninspector"));
-			inspectionDateBaseTextFieldFinder = xpath(p.getProperty("masterinspectioninspectiondate"));
-			scheduledForBaseSelectListFinder = xpath(p.getProperty("masterinspectionscheduledfor"));
-			inspectionBookBaseSelectListFinder = xpath(p.getProperty("masterinspectioninspectionbook"));
-			addNewInspectionBookBaseLinkFinder = xpath(p.getProperty("masterinspectionaddnewbook"));
-			inspectionBookNewBaseSelectListFinder = xpath(p.getProperty("masterinspectioninspectionbookadd"));
-			commentTemplateBaseSelectListFinder = xpath(p.getProperty("masterinspectioncommenttemplates"));
-			commentsBaseTextFieldFinder = xpath(p.getProperty("masterinspectioncomments"));
-			printableBaseCheckboxFinder = xpath(p.getProperty("masterinspectionprintable"));
-			productStatusBaseSelectListFinder = xpath(p.getProperty("masterinspectionproductstatus"));
-			nextInspectionDateBaseTextFieldFinder = xpath(p.getProperty("masterinspectionnextinspection"));
-			masterInspectionStartEventLinkFinder = xpath(p.getProperty("youmustperformthisevent"));
-			startNewInspectionListFinder = xpath(p.getProperty("startnewinspectionlist"));
-			inspectionPageContentHeaderFinder = xpath(p.getProperty("inspectionpagecontentheader"));
-			inspectFinder = xpath(p.getProperty("link"));
-			inspectContentHeaderFinder = xpath(p.getProperty("contentheader"));
+			inspectionDetailsHeaderFinder = xpath(p.getProperty("inspectiondetailsheader", "NOT SET"));
+			subComponentsOnMasterInspectionFinder = xpath(p.getProperty("subcomponentsonmasterinspection", "NOT SET"));
+			saveStandardInspectionFinder = xpath(p.getProperty("saveinspection", "NOT SET"));
+			editOnManageInspectionsLinkFinder = xpath(p.getProperty("editonmanageinspectionslinks", "NOT SET"));
+			saveEditStandardInspectionFinder = xpath(p.getProperty("saveeditinspection", "NOT SET"));
+			storeEditMasterInspectionButtonFinder = xpath(p.getProperty("masterinspectioneditstorebutton", "NOT SET"));
+			editInspectionPageContentHeaderFinder = xpath(p.getProperty("editinspectionpagecontentheader", "NOT SET"));
+			editThisEventMasterInspectionLinkFinder = xpath(p.getProperty("editthiseventmasterinspectionlinks", "NOT SET"));
+			inspectEditLinkFinder = xpath(p.getProperty("editinspectionlink", "NOT SET"));
+			inspectManageInspectionLinksFinder = xpath(p.getProperty("inspectmanageinspectionlinks", "NOT SET"));
+			inspectSmartSearchLoadButtonFinder = xpath(p.getProperty("inspectsmartsearchloadbutton", "NOT SET"));
+			inspectSmartSearchTextFieldFinder = xpath(p.getProperty("inspectsmartsearchtextfield", "NOT SET"));
+			viewInspectionPageContentHeaderFinder = xpath(p.getProperty("viewinspectionpagecontentheader", "NOT SET"));
+			saveMasterInspectionButtonFinder = xpath(p.getProperty("masterinspectionsavebutton", "NOT SET"));
+			storeMasterInspectionButtonFinder = xpath(p.getProperty("masterinspectionstorebutton", "NOT SET"));
+			customerBaseSelectListFinder = xpath(p.getProperty("masterinspectioncustomer", "NOT SET"));
+			divisionBaseSelectListFinder = xpath(p.getProperty("masterinspectiondivision", "NOT SET"));
+			locationBaseTextFieldFinder = xpath(p.getProperty("masterinspectionlocation", "NOT SET"));
+			inspectorBaseSelectListFinder = xpath(p.getProperty("masterinspectioninspector", "NOT SET"));
+			inspectionDateBaseTextFieldFinder = xpath(p.getProperty("masterinspectioninspectiondate", "NOT SET"));
+			scheduledForBaseSelectListFinder = xpath(p.getProperty("masterinspectionscheduledfor", "NOT SET"));
+			inspectionBookBaseSelectListFinder = xpath(p.getProperty("masterinspectioninspectionbook", "NOT SET"));
+			addNewInspectionBookBaseLinkFinder = xpath(p.getProperty("masterinspectionaddnewbook", "NOT SET"));
+			inspectionBookNewBaseSelectListFinder = xpath(p.getProperty("masterinspectioninspectionbookadd", "NOT SET"));
+			commentTemplateBaseSelectListFinder = xpath(p.getProperty("masterinspectioncommenttemplates", "NOT SET"));
+			commentsBaseTextFieldFinder = xpath(p.getProperty("masterinspectioncomments", "NOT SET"));
+			printableBaseCheckboxFinder = xpath(p.getProperty("masterinspectionprintable", "NOT SET"));
+			productStatusBaseSelectListFinder = xpath(p.getProperty("masterinspectionproductstatus", "NOT SET"));
+			nextInspectionDateBaseTextFieldFinder = xpath(p.getProperty("masterinspectionnextinspection", "NOT SET"));
+			masterInspectionStartEventLinkFinder = xpath(p.getProperty("youmustperformthisevent", "NOT SET"));
+			startNewInspectionListFinder = xpath(p.getProperty("startnewinspectionlist", "NOT SET"));
+			inspectionPageContentHeaderFinder = xpath(p.getProperty("inspectionpagecontentheader", "NOT SET"));
+			inspectFinder = xpath(p.getProperty("link", "NOT SET"));
+			inspectContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
 		} catch (FileNotFoundException e) {
 			fail("Could not find the file '" + propertyFile + "' when initializing Home class");
 		} catch (IOException e) {
@@ -130,7 +130,7 @@ public class Inspect extends TestCase {
 
 	private void checkPageContentHeader() throws Exception {
 		HtmlElement inspectContentHeader = ie.htmlElement(inspectContentHeaderFinder);
-		assertTrue("Could not find Inspect page content header '" + p.getProperty("contentheader") + "'", inspectContentHeader.exists());
+		assertTrue("Could not find Inspect page content header '" + p.getProperty("contentheader", "NOT SET") + "'", inspectContentHeader.exists());
 	}
 
 	/**

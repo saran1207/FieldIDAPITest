@@ -26,6 +26,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
+import com.n4systems.model.orgs.FindOrCreateExternalOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
@@ -110,9 +111,9 @@ public class ProductSerialImporter extends Importer {
 					String serialNumber = (String) productSerial.get(SERIAL_NUMBER);
 					
 					TenantFilteredListLoader<CustomerOrg> customerLoader = new TenantFilteredListLoader<CustomerOrg>(primaryOrg.getTenant(), CustomerOrg.class);
-					FindOrCreateCustomerOrgHandler customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
+					FindOrCreateExternalOrgHandler<CustomerOrg, PrimaryOrg> customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
 					
-					CustomerOrg customer = customerSearcher.findOnly(primaryOrg, (String)productSerial.get(ENDUSER_IDENTIFIER));
+					CustomerOrg customer = customerSearcher.find(primaryOrg, (String)productSerial.get(ENDUSER_IDENTIFIER));
 					
 					if (customer == null) {
 						throw new Exception("no customer");
@@ -135,10 +136,13 @@ public class ProductSerialImporter extends Importer {
 							DivisionOrgByCustomerListLoader divisionLoader = new DivisionOrgByCustomerListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
 							divisionLoader.setCustomer(customer);
 							
-							FindOrCreateDivisionOrgHandler divisionSearcher = new FindOrCreateDivisionOrgHandler(divisionLoader, new OrgSaver());
-							divisionSearcher.setFindOnly(!createMissingDivisions);
-		
-							DivisionOrg division = divisionSearcher.findOrCreate(customer, (String)productSerial.get(DIVISION));
+							FindOrCreateExternalOrgHandler<DivisionOrg, CustomerOrg> divisionSearcher = new FindOrCreateDivisionOrgHandler(divisionLoader, new OrgSaver());
+							DivisionOrg division;
+							if (createMissingDivisions) {
+								division = divisionSearcher.findOrCreate(customer, (String)productSerial.get(DIVISION));
+							} else {
+								division = divisionSearcher.find(customer, (String)productSerial.get(DIVISION));
+							}
 
 							if (division == null) {
 								if (createMissingDivisions) {

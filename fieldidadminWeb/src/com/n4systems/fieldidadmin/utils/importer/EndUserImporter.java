@@ -14,6 +14,7 @@ import org.ho.yaml.Yaml;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.FindOrCreateCustomerOrgHandler;
+import com.n4systems.model.orgs.FindOrCreateExternalOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.TenantFilteredListLoader;
@@ -67,7 +68,7 @@ public class EndUserImporter extends Importer {
 				try {
 					
 					TenantFilteredListLoader<CustomerOrg> customerLoader = new TenantFilteredListLoader<CustomerOrg>(primaryOrg.getTenant(), CustomerOrg.class);
-					FindOrCreateCustomerOrgHandler customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
+					FindOrCreateExternalOrgHandler<CustomerOrg, PrimaryOrg> customerSearcher = new FindOrCreateCustomerOrgHandler(customerLoader, new OrgSaver());
 
 					customerSearcher.findOrCreate(primaryOrg, (String)endUser.get("endUserName"), (String)endUser.get("endUserId"));
 					successes.add( endUser );

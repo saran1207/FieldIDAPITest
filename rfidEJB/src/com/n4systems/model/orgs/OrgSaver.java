@@ -3,6 +3,7 @@ package com.n4systems.model.orgs;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.n4systems.model.AddressInfo;
 import com.n4systems.persistence.savers.Saver;
@@ -10,6 +11,7 @@ import com.n4systems.persistence.savers.Saver;
 public class OrgSaver extends Saver<BaseOrg> {
 
 	private final LinkedOrgListLoader linkedOrgLoader;
+	
 	
 	public OrgSaver() {
 		linkedOrgLoader = new LinkedOrgListLoader();
@@ -45,9 +47,30 @@ public class OrgSaver extends Saver<BaseOrg> {
 			updateLinkedFields(em, (InternalOrg)attachedOrg);
 		}
 		
+		propogateSecurityInformation(attachedOrg, em);
+		
 		return attachedOrg;
 	}
 	
+	private void propogateSecurityInformation(BaseOrg entity, EntityManager em) {
+		if (entity instanceof CustomerOrg) {
+			CustomerOrg customer = (CustomerOrg)entity;
+			updateDivisionsSecurityInformation(customer, em);
+		}
+	}
+
+	private void updateDivisionsSecurityInformation(CustomerOrg customer, EntityManager em) {
+		String updateQuery = "UPDATE " + BaseOrg.class.getName() + " SET secondaryOrg = :secondaryOrg WHERE customerOrg = :customer";
+		
+		Query query = em.createQuery(updateQuery);
+			
+		query.setParameter("secondaryOrg", customer.getSecondaryOrg());
+		query.setParameter("customer", customer);
+		
+		query.executeUpdate();
+		
+	}
+
 	protected void ensureAddressInfoIsNotNull(BaseOrg entity) {
 		if (entity.getAddressInfo() == null) {
 			entity.setAddressInfo(new AddressInfo());

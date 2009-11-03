@@ -462,6 +462,12 @@ function ajaxForm(form) {
 
 
 function updateDropDown(select, newList, selectId) {
+	replaceSelectList(select, newList);
+	
+	setValueOnSelect(select, selectId);
+}
+
+function replaceSelectList(select, newList) {
 	select.options.length = 0;
 	
 	newList.each(function (element) {
@@ -469,7 +475,23 @@ function updateDropDown(select, newList, selectId) {
 			select.insert(option);
 		});
 	
-	select.value= selectId;
+}
+
+function setValueOnSelect(selectElement, valueToSelect) {
+	for ( var i = 0; i < selectElement.options.length; i++) {
+		if (selectElement.options[i].value == valueToSelect) {
+			selectElement.selectedIndex = i;
+			return
+		}
+	}
+}
+
+function isValueDefined(value, additionalUndefinedValue) {
+	if (additionalUndefinedValue == undefined) {
+		additionalUndefinedValue = null;
+	}
+	
+	return (value != undefined &&  value != null && value != additionalUndefinedValue);
 }
 
 

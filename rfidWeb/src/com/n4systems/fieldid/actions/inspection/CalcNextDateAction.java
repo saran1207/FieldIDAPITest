@@ -4,8 +4,10 @@ import java.util.Date;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.model.InspectionType;
+import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
-import com.n4systems.model.producttype.ProductTypeScheduleLoader;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 
@@ -23,12 +25,13 @@ public class CalcNextDateAction extends AbstractAction {
 	}
 
 	public String doCalculate() {
-		ProductTypeScheduleLoader loader = getLoaderFactory().createProductTypeScheduleLoader();
-		loader.setOwner(ownerId);
-		loader.setInspectionTypeId(inspectionTypeId);
-		loader.setProductTypeId(productTypeId);
+		ProductType productType = getLoaderFactory().createProductTypeLoader().setId(productTypeId).load();
 		
-		ProductTypeSchedule schedule = loader.load();
+		InspectionType inspectionType = getLoaderFactory().createFilteredIdLoader(InspectionType.class).setId(inspectionTypeId).load();
+		
+		BaseOrg owner = getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(ownerId).load();
+		
+		ProductTypeSchedule schedule = productType.getSchedule(inspectionType, owner);
 		
 		if (schedule != null) {
 			if (startDate == null) {

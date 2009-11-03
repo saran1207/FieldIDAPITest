@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
@@ -23,6 +24,7 @@ import com.opensymphony.xwork2.Preparable;
 
 public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(MultiProofTestUpload.class);
 	
 	private ProofTestHandler proofTestHandler;
 	private Inspection inspection = new Inspection();
@@ -91,6 +93,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 			} catch (Exception e) {
 				fileProcessingFailureMap.put(proofTest.getName(), e);
 				inspectionProcessingFailureMap.put(proofTest.getName(), new HashMap<String, Inspection>());
+				logger.error("failed while processing multiproof upload for file " + proofTest.getName(), e);
 			}
 			
 			
