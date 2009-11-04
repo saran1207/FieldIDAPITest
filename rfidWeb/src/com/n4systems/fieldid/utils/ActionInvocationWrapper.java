@@ -61,8 +61,14 @@ public class ActionInvocationWrapper implements StrutsStatics {
 	
 	public String getMethodName() {
 		String methodName = getProxy().getMethod();
-		
-		// will convert 'show' to 'doShow'
+		if (!methodName.equals("execute")) {
+			return convertNameToDoMethod(methodName);
+		}
+		return methodName;
+	}
+
+	private String convertNameToDoMethod(String methodName) {
 		return "do" + String.valueOf(methodName.charAt(0)).toUpperCase() + methodName.substring(1);
 	}
+	
 }

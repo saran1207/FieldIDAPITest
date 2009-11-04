@@ -13,7 +13,8 @@
 			<result name="missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="input" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="invalid_security" type="freemarker">/templates/ajax/ajax/error.ftl</result>
-			<result name="no_permission" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="feature_required" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="user_permission_required" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="tenant_missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 		</global-results>
 

@@ -13,7 +13,7 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 	public String intercept(ActionInvocation call) throws Exception {
 		ActionInvocationWrapper wrapper = new ActionInvocationWrapper(call);
 		AbstractAction action = wrapper.getAction();
-		String methodName = getMethodName(call);
+		String methodName = wrapper.getMethodName();
 		Class<?> actionClass = action.getClass();
 		
 		if (action.getTenant() != null) {
@@ -22,7 +22,7 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 				action.addActionErrorText("permission.require_extended_feature");
 				wrapper.getRequest().setAttribute("requiredFeature", requiredFeature);
 						
-				return "no_permission";
+				return "feature_required";
 			}
 		}
 		return call.invoke();
@@ -41,14 +41,5 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 		return requiredFeature;
 	}
 
-	private String getMethodName(ActionInvocation call) {
-		String methodName = call.getProxy().getMethod();
-		if (!methodName.equals("execute")) {
-			char firstLetter = methodName.charAt(0);
-			methodName = methodName.substring(1);
-			methodName = "do" + Character.toUpperCase(firstLetter) + methodName;
-		}
-		return methodName;
-	}
 
 }

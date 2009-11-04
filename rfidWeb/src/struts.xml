@@ -17,6 +17,7 @@
 		<interceptors>
 			<interceptor name="login" class="com.n4systems.fieldid.utils.LoginInterceptor" />
 			<interceptor name="enabledFeatures" class="com.n4systems.fieldid.permissions.ExtendedFeatureInterceptor" />
+			<interceptor name="userPermissions" class="com.n4systems.fieldid.permissions.UserPermissionInterceptor" />
 			<interceptor name="security" class="com.n4systems.fieldid.security.SecurityInterceptor" />
 			<interceptor name="flashScope" class="com.n4systems.fieldid.utils.FlashScopeInterceptor" />
 			<interceptor name="tenatRequired" class="com.n4systems.fieldid.utils.RequiredTenantInterceptor" />
@@ -42,6 +43,7 @@
 				<interceptor-ref name="safetyNetworkAware"/>
 				<interceptor-ref name="publicStack" />
 				<interceptor-ref name="enabledFeatures"/>
+				<interceptor-ref name="userPermissions"/>
 			</interceptor-stack>
 
 			<interceptor-stack name="flashSecureStack">
@@ -72,7 +74,8 @@
 				<param name="actionName">chooseCompany</param>
             	<param name="namespace">/</param>
 			</result>
-			<result name="no_permission" type="freemarker">/templates/html/common/featureRequired.ftl</result>
+			<result name="feature_required" type="freemarker">/templates/html/common/featureRequired.ftl</result>
+			<result name="user_permission_required" type="freemarker">/templates/html/common/userPermissionRequired.ftl</result>
 			<result name="redirect_to_url" type="redirect">
 				<param name="location">${redirectUrl}</param>
 			</result>
