@@ -3,21 +3,23 @@
 	<description>FieldID Build Variables</description>
 
 	<property environment="env" />
-
+	
 	<!-- <dirname property="build.home" file="asdasdasd../" /> -->
 
-	<property name="source.level" value="1.5" />
+	<property name="source.level" value="1.6" />
 
 	<property name="build.home" value="../" />
 	<property name="fieldidEar.home" location="${build.home}/fieldid" />
 	<property name="fieldidEjb.home" location="${build.home}/rfidEJB" />
 	<property name="fieldidWeb.home" location="${build.home}/rfidWeb" />
 	<property name="fieldidAdmin.home" location="${build.home}/fieldidadminWeb" />
+	<property name="testUtils.home" location="${build.home}/TestUtils" />
 
 	<property name="fieldidEar" value="fieldid.ear" />
 	<property name="fieldidEjb" value="rfidEJB.jar" />
 	<property name="fieldidWeb" value="rfidWeb.war" />
 	<property name="fieldidAdmin" value="fieldidadminWeb.war" />
+	<property name="testUtils" value="testUtils.jar" />
 
 	<property name="src" location="src" />
 	<property name="test" location="test" />
@@ -34,6 +36,8 @@
 	<property name="ear_home.test_lib_path" value="test_libs" />
 	<property name="ear_home.lib" location="${ear_home.ear_content}/${ear_home.lib_path}" />
 	<property name="ear_home.test_lib" location="${ear_home}/${ear_home.test_lib_path}" />
+	
+	<property name="testUtils_lib" location="${testUtils.home}/dist"/>
 
 	<property name="jboss_home" value="${env.JBOSS_HOME}" />
 	<property name="jboss_home.client" value="${jboss_home}/client" />

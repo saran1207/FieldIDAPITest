@@ -1,6 +1,7 @@
 package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
@@ -24,8 +25,6 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.DataUnit;
-
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 
 
 public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {

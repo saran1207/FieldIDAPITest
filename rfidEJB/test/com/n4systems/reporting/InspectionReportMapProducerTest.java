@@ -14,7 +14,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.test.helpers.asserts.Asserts;
+import com.n4systems.test.helpers.Asserts;
 import com.n4systems.util.ReportMap;
 
 public class InspectionReportMapProducerTest {

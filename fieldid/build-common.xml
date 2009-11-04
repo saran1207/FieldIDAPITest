@@ -6,6 +6,7 @@
 
 	<path id="classpath.tests">
 		<fileset dir="${ear_home.test_lib}" includes="*.jar" />
+		<fileset dir="${testUtils_lib}" includes="*.jar" /> 
 	</path>
 	
 	<target name="clean">

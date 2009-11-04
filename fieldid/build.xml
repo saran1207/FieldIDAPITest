@@ -19,6 +19,7 @@
 	</target>
 	
 	<target name="test-deps">
+		<ant dir="${testUtils.home}" inheritAll="false" target="build"/>
 		<ant dir="${fieldidEjb.home}" inheritAll="false" target="test"/>
 		<ant dir="${fieldidWeb.home}" inheritAll="false" target="test"/>
 		<ant dir="${fieldidAdmin.home}" inheritAll="false" target="test"/>

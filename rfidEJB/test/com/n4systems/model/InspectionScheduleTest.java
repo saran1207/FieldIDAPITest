@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
-import static com.n4systems.test.helpers.asserts.Asserts.assertInRange;
+import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
+import static com.n4systems.model.builders.ProductBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.Date;
@@ -10,9 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
-import static com.n4systems.model.builders.ProductBuilder.*;
-import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
-
+import static com.n4systems.test.helpers.Asserts.*;
 
 public class InspectionScheduleTest {
 

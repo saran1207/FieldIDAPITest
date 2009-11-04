@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="testUtils-jar" default="build">
+	<import file="../fieldid/build-vars.xml" />
+	<description>Field ID test utils. Any generic test helpers should be placed in here.</description>
+	
+	<target name="clean-dirs">
+		<delete dir="${build}" />
+		<delete dir="${build.test}" />
+		<delete dir="${dist}" />
+	</target>
+	<target name="init-dirs" depends="clean-dirs">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build.test}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	
+	
+	<target name="build" depends="init-dirs">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
+			<classpath >
+				<fileset dir="${ear_home.test_lib}" includes="*.jar" />
+			</classpath>
+		</javac>
+		
+		<jar jarfile="${dist}/${testUtils}" basedir="${build}" level="9">
+			
+		</jar>
+	</target>
+
+	
+	
+	
+</project>

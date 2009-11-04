@@ -1,4 +1,4 @@
-package com.n4systems.test.helpers.asserts;
+package com.n4systems.test.helpers;
 
 import static org.junit.Assert.*;
 
