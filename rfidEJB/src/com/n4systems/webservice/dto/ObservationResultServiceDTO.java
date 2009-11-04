@@ -4,7 +4,7 @@ package com.n4systems.webservice.dto;
 
 public class ObservationResultServiceDTO {
 
-	public enum ObservationType { RECOMENDATION, DEFICIENCY };
+	public enum ObservationType { RECOMMENDATION, DEFICIENCY };
 	
 	public enum ObservationState { OUTSTANDING, REPAIREDONSITE, REPAIRED, COMMENT };
 	
