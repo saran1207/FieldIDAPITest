@@ -3,11 +3,11 @@ package com.n4systems.fieldid.selenium.admin.console;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
 import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class AdminConsoleOrganizationsPage {
+public class AdminConsoleOrganizationsPage extends SeleneseTestBase {
 
 	private DefaultSelenium selenium;
 	

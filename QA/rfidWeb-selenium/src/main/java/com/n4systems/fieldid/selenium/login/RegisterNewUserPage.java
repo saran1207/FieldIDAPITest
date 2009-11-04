@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.selenium.login;
 
-import static org.junit.Assert.assertTrue;
-
 import com.n4systems.fieldid.selenium.datatypes.RegisterNewUserData;
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
 import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class RegisterNewUserPage {
+public class RegisterNewUserPage extends SeleneseTestBase {
 
 	private DefaultSelenium selenium;
 	private static final String stringForPageTitle = "Field ID : Safety Management - Register a New User";

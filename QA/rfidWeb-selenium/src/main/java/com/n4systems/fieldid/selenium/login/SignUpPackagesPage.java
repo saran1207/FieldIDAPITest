@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.selenium.login;
 
-import static org.junit.Assert.assertTrue;
-
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
 import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class SignUpPackagesPage {
+public class SignUpPackagesPage extends SeleneseTestBase {
 
 	private DefaultSelenium selenium;
 	private static final String plansAndPricingLinkLocator = "css=#plansPricingButton > a";

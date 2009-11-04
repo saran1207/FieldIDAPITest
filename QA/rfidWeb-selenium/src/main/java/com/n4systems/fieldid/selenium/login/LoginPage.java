@@ -4,8 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
 import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class LoginPage {
+public class LoginPage extends SeleneseTestBase {
 
 	private DefaultSelenium selenium;
 	private static final String startStringForPageTitle = "Field ID : Safety Management - ";
@@ -60,8 +61,13 @@ public class LoginPage {
 		selenium.open("/fieldid/");
 		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
+		verifyPageContent();
 	}
 	
+	private void verifyPageContent() {
+		verifyTrue(true);
+	}
+
 	public void gotoReturnToSignInFromSendPasswordPage() {
 		assertTrue("Could not find the link to return to sign in", selenium.isElementPresent(returnToSignInFromSendPasswordButtonLocator));
 		selenium.click(returnToSignInFromSendPasswordButtonLocator);
