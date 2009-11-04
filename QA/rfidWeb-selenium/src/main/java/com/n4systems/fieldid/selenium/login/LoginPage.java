@@ -20,9 +20,9 @@ public class LoginPage {
 	private static final String rememberMySignInInformationLocator = "css=#signInForm_rememberMe";
 	private static final String plansAndPricingLinkLocator = "css=#plansPricingButton > a";
 	private static final String requestAnAccountLinkLocator = "css=#requestAccountButton > a";
-	private static final String signInUserNameButtonLocator = "css=#signInButton";
-	private static final String signInWithSecurityRFIDNumberButtonLocator = "css=#signInWithSecurityButton";
 	private static final String returnToSignInFromSendPasswordButtonLocator = "//input[@value='Return to Sign In')]";
+	private static final String returnToSignInFromSignUpPackagesLinkLocator = "//A[contains(text(),'Return to Sign In')]";
+	private static final String returnToSignInFromRegiserNewUserButtonLocator = "//input[@value='Return to Sign In')]";
 	
 	/**
 	 * Initialize the library to use the same instance of Selenium as the
@@ -65,6 +65,20 @@ public class LoginPage {
 	public void gotoReturnToSignInFromSendPasswordPage() {
 		assertTrue("Could not find the link to return to sign in", selenium.isElementPresent(returnToSignInFromSendPasswordButtonLocator));
 		selenium.click(returnToSignInFromSendPasswordButtonLocator);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
+		assertPageTitle();
+	}
+	
+	public void gotoReturnToSignInFromRegisterNewUserPage() {
+		assertTrue("Could not find the link to return to sign in", selenium.isElementPresent(returnToSignInFromRegiserNewUserButtonLocator));
+		selenium.click(returnToSignInFromRegiserNewUserButtonLocator);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
+		assertPageTitle();
+	}
+	
+	public void gotoReturnToSignInFromSignUpPackagesPage() {
+		assertTrue("Could not find the link to return to sign in", selenium.isElementPresent(returnToSignInFromSignUpPackagesLinkLocator));
+		selenium.click(returnToSignInFromSignUpPackagesLinkLocator);
 		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 	}
@@ -134,6 +148,13 @@ public class LoginPage {
 		assertPageTitle();
 	}
 	
+	public void gotoReturnToSignInFromRegisterNewUser() {
+		assertTrue("Could not find the link to return to sign in", selenium.isElementPresent(returnToSignInLinkLocator));
+		selenium.click(returnToSignInLinkLocator);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
+		assertPageTitle();
+	}
+	
 	/**
 	 * Toggles the remember my sign in information checkbox.
 	 */
@@ -154,32 +175,6 @@ public class LoginPage {
 		}
 	}
 	
-	// This stuff should move to the HomePage class
-	/**
-	 * Click the sign in button for signing in with User Name and Password.
-	 * If the user name and password are not set, this will generate an
-	 * error.
-	 */
-	public void gotoSignInUserName() {
-		assertTrue("Could not find the Sign In button", selenium.isElementPresent(signInUserNameButtonLocator));
-		selenium.click(signInUserNameButtonLocator);
-		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
-		// TODO: verify we arrived at the correct page
-	}
-	
-	// This stuff should move to the HomePage class
-	/**
-	 * Click the sign in button for signing in with Security RFID Number.
-	 * If the Security RFID Number is not set, this will generate an
-	 * error.
-	 */
-	public void gotoSignInSecurityRFIDNumber() {
-		assertTrue("Could not find the Sign In button", selenium.isElementPresent(signInWithSecurityRFIDNumberButtonLocator));
-		selenium.click(signInWithSecurityRFIDNumberButtonLocator);
-		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
-		// TODO: verify the switch went okay
-	}
-
 	// This stuff should go to the ChooseCompanyPage class
 	/**
 	 * Clicks on the link to take us to the Choose A Company page.
