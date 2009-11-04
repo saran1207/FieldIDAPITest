@@ -19,12 +19,22 @@
 				</span>
 			</span>
 		</div>
-		
+				
 		<div class="infoSet">
 			<label for="rfidNumber" class="label"><@s.text name="label.rfidnumber"/></label>
 			<@s.textfield name="rfidNumber" id="subProductRfidNumber_${productTypeId}" />
 		</div>
 		
+		<div class="infoSet">
+			<label for="customerRefNumber" class="label"><@s.text name="label.referencenumber"/></label>
+			<@s.textfield id="subcustomerRefNumber_${productTypeId}"name="customerRefNumber" />		
+		</div>
+		
+		<div class="infoSet">
+			<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>
+			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />		
+		</div>
+
 		<#include "/templates/html/productCrud/_attributes.ftl"/>
 		
 		<div class="actions">
