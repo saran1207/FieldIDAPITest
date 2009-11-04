@@ -6,6 +6,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
@@ -13,6 +16,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table ( name= "userrequest" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UserRequest extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	

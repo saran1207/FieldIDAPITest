@@ -11,6 +11,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.stat.Statistics;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.api.Saveable;
@@ -189,11 +190,20 @@ public class PersistenceManager {
 	}
 	
 	public static void reattach(EntityManager em, Object entity) {
-		getHibernateSession(em).lock(entity, LockMode.NONE);
+		getHibernateSession(em).lock(entity, LockMode.NONE);	
 	}
 	
 	public static void setSessionReadOnly(EntityManager em) {
 		getHibernateSession(em).setFlushMode(FlushMode.MANUAL);
+	}
+	
+	public static Statistics getHibernateStats() {
+		EntityManager em = getEntityManager();
+		
+		Statistics stats = getHibernateSession(em).getSessionFactory().getStatistics();
+		
+		em.close();
+		return stats;
 	}
 	
 }

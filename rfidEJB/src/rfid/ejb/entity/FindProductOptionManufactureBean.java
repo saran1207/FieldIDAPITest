@@ -5,11 +5,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 
 // XXX - Rename me
 @Entity
 @Table (name = "findproductoption_manufacture")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class FindProductOptionManufactureBean extends LegacyBeanTenantWithCreateModifyDate implements Comparable<FindProductOptionManufactureBean> {
 	private static final long serialVersionUID = 1L;
 	

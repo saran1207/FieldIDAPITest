@@ -11,6 +11,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasUser;
@@ -27,6 +30,7 @@ import com.n4systems.model.parents.legacy.LegacyBeanTenant;
  */
 @Entity
 @Table(name = "addproducthistory")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, HasOwner {
 	private static final long serialVersionUID = 1L;
 	

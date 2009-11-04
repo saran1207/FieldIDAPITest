@@ -10,6 +10,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
@@ -19,6 +22,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "eulaacceptances")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class EulaAcceptance extends EntityWithTenant {
 
 	private static final long serialVersionUID = 1L;

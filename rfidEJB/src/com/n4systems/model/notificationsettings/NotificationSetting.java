@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
@@ -27,6 +29,7 @@ import com.n4systems.model.parents.EntityWithOwner;
 
 @Entity
 @Table(name = "notificationsettings")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class NotificationSetting extends EntityWithOwner implements HasUser, Saveable {
 	private static final long serialVersionUID = 1L;
 

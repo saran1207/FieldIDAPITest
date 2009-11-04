@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -20,6 +23,7 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectiongroups")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InspectionGroup extends EntityWithTenant implements SecurityEnhanced<InspectionGroup> {
 	private static final long serialVersionUID = 1L;
 

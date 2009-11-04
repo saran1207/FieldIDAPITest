@@ -7,11 +7,16 @@
 		<jta-data-source>java:/RFID_DS</jta-data-source>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
-			<property name="hibernate.cache.use_query_cache" value="true" />
 			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			<property name="hibernate.max_fetch_depth" value="1" />
+			
+			<property name="hibernate.cache.use_second_level_cache" value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
+			<property name="hibernate.generate_statistics" value="true" />
+			
 		</properties>
 	</persistence-unit>
 	<persistence-unit name="fieldid" transaction-type="RESOURCE_LOCAL">
@@ -22,9 +27,7 @@
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<property name="hibernate.max_fetch_depth" value="1" />
 			
-
 			<!--
-
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 			
@@ -36,6 +39,10 @@
 			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			
+			<property name="hibernate.cache.use_second_level_cache" value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
+			<property name="hibernate.generate_statistics" value="true" />
 			
 			<!-- 
 			<property name="hibernate.transaction.flush_before_completion" value="true" />

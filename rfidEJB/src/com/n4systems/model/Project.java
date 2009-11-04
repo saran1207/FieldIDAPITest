@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.IndexColumn;
 
 import rfid.ejb.entity.UserBean;
@@ -29,6 +31,7 @@ import com.n4systems.util.DateHelper;
 
 @Entity
 @Table( name="projects" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Project extends EntityWithOwner implements NamedEntity, Listable<Long>, Retirable {
 
 	private static final long serialVersionUID = 1L;

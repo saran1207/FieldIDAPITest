@@ -14,6 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
@@ -25,6 +28,7 @@ import com.n4systems.model.parents.EntityWithTenant;
  */
 @Entity
 @Table ( name="autoattributecriteria" )
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class AutoAttributeCriteria extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	

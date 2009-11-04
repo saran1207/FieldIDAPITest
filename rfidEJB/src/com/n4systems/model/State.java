@@ -6,6 +6,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
@@ -13,6 +16,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "states")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class State extends EntityWithTenant implements Listable<Long>, Retirable, NamedEntity {
 	private static final long serialVersionUID = 1L;
 		

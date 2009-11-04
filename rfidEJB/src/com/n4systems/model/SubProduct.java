@@ -7,10 +7,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table(name="subproducts")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SubProduct extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;

@@ -7,6 +7,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
@@ -14,6 +17,7 @@ import com.n4systems.model.security.SecurityLevel;
 @Entity
 @Table(name = "org_customer")
 @PrimaryKeyJoinColumn(name="org_id")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CustomerOrg extends ExternalOrg {
 	private static final long serialVersionUID = 1L;
 	

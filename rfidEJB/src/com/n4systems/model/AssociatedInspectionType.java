@@ -4,11 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name="associatedinspectiontypes")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class AssociatedInspectionType extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 

@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.api.Saveable;
@@ -21,6 +24,7 @@ import com.n4systems.services.SetupDataGroup;
 
 @Entity
 @Table(name = "setupdatalastmoddates")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SetupDataLastModDates implements HasTenantId, Saveable, Serializable {
 	private static final long serialVersionUID = 1L;
 

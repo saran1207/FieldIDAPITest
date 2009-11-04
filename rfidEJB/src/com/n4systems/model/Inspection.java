@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.IndexColumn;
 
 import rfid.ejb.entity.UserBean;
@@ -39,6 +41,7 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspectionsmaster")
 @PrimaryKeyJoinColumn(name="inspection_id")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection> {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap", "subInspections" };

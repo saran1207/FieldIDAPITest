@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
@@ -17,6 +20,7 @@ import com.n4systems.util.DateHelper;
 
 @Entity
 @Table(name = "producttypeschedules")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProductTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<ProductTypeSchedule> {
 	private static final long serialVersionUID = 1L;
 	

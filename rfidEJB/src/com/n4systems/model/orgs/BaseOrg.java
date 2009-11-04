@@ -11,6 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
@@ -24,6 +27,7 @@ import com.n4systems.model.security.SecurityLevel;
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg> {
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";

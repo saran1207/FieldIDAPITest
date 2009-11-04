@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.api.NetworkEntity;
@@ -28,6 +31,7 @@ import com.n4systems.util.DateHelper;
 
 @Entity
 @Table(name = "inspectionschedules")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InspectionSchedule extends ArchivableEntityWithOwner implements NetworkEntity<InspectionSchedule> {
 	private static final long serialVersionUID = 1L;
 

@@ -10,6 +10,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.parents.EntityWithTenant;
 
 @SuppressWarnings("serial")
@@ -17,6 +20,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 @Table(name = "observations")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 abstract public class Observation extends EntityWithTenant {
 
 	public enum Type { 

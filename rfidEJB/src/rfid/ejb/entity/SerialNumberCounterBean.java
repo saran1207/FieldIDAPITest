@@ -7,11 +7,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 
 @Entity
 @Table(name = "serialnumbercounter")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SerialNumberCounterBean extends LegacyBeanTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 	

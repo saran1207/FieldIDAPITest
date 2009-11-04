@@ -3,10 +3,14 @@ package rfid.ejb.entity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 
 @Entity
 @Table(name = "CommentTemplate")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CommentTempBean extends LegacyBeanTenantWithCreateModifyDate {
 	private static final long serialVersionUID = 1L;
 	

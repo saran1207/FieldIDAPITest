@@ -8,11 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.parents.EntityWithOwner;
 
 @Entity
 @Table(name="messages")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Message extends EntityWithOwner {
 
 	private boolean unread = true;

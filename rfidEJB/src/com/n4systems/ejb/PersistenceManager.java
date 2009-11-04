@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.hibernate.collection.AbstractPersistentCollection;
+import org.hibernate.stat.Statistics;
 
 import rfid.ejb.entity.UserBean;
 
@@ -206,4 +207,6 @@ public interface PersistenceManager {
 	public <T> List<T> passThroughFindAll(String query, Map<String,Object> parameters) ;
 	public <T> T passThroughFind(String queryStr, Map<String,Object> parameters);
 	public int executeUpdate(String updateStmt, Map<String,Object> parameters);
+	
+	public Statistics getHibernateStats();
 }

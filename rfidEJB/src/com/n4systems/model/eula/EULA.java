@@ -8,11 +8,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table(name = "eulas")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class EULA extends AbstractEntity implements UnsecuredEntity {
 	private static final long serialVersionUID = 1L;
 

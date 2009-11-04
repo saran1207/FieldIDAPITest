@@ -8,6 +8,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
@@ -16,6 +19,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name="catalogs")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Catalog extends EntityWithTenant implements Saveable{
 
 	private static final long serialVersionUID = 1L;

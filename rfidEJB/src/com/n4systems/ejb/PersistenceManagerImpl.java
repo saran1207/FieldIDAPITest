@@ -25,6 +25,7 @@ import org.hibernate.Session;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.impl.SessionImpl;
+import org.hibernate.stat.Statistics;
 
 import rfid.ejb.entity.UserBean;
 
@@ -795,5 +796,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	public int executeUpdate(String updateStr, Map<String,Object> parameters) {
 		Query updateStmt = createQuery(updateStr, parameters);
 		return updateStmt.executeUpdate();
+	}
+	
+	public Statistics getHibernateStats() {
+		Statistics stats = getHibernateSession().getSessionFactory().getStatistics();
+		return stats;
 	}
 }

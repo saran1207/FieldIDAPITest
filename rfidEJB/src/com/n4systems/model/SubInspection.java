@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
@@ -14,6 +17,7 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspectionssub")
 @PrimaryKeyJoinColumn(name="inspection_id")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SubInspection extends AbstractInspection implements SecurityEnhanced<SubInspection> {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap"};
