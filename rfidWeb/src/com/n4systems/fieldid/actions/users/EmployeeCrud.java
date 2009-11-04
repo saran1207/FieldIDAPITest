@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.users;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 public class EmployeeCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
@@ -48,8 +50,10 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	@SkipValidation
 	public String doAdd() {
+		
 		String result = super.doAdd();
 		setupPermissions();
+		isEmployeeLimitReached();
 		return result;
 	}
 	
@@ -61,8 +65,7 @@ public class EmployeeCrud extends UserCrud {
 		return result;
 	}
 	
-	
-	
+		
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {
 		return userPermissions;
@@ -83,9 +86,6 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	protected int processPermissions() {
 		int permission = defaultPermissionValue();
-		
-		
-		
 		
 		if (userPermissions != null && !user.isAdmin()) { // needed to
 						// handle when
@@ -133,6 +133,17 @@ public class EmployeeCrud extends UserCrud {
 	public BaseOrg getOwner() {
 		return super.getOwner();
 	}
+	
+	@RequiredFieldValidator(message="")
+	public boolean isEmployeeLimitReached() {
+		if (user.isNew() && getLimits().isEmployeeUsersMaxed()) {
+			addActionError(getText("label.exceeded_your_employee_user_limit", new String[] { getLimits().getEmployeeUsersMax().toString() } ));
+			return true;
+		}
+		return false;
+	}
+
+	
 
 	
 }
