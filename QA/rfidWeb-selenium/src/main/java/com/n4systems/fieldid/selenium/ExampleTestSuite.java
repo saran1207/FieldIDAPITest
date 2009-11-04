@@ -1,33 +1,28 @@
 package com.n4systems.fieldid.selenium;
 
-import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.testcase.TestStub;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import com.n4systems.fieldid.selenium.testcase.*;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+/**
+ * Each FieldIDTestCase is actually a suite of test cases. If you want to 
+ * setup for all test cases and run them at one big group, you'd add them to
+ * the @Suite.SuiteClasses array.
+ * 
+ * @author Darrell Grainger
+ *
+ */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ TestStub.class, ProofOfConcept.class })
+public class ExampleTestSuite extends FieldIDTestCase {
 
-public class ExampleTestSuite {
-
-	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for Field ID");
-
-		/**
-		 * This is an example of setting up the environment.
-		 * Rather than hard code the values here we can also
-		 * make a test suite which reads the information from
-		 * some other dynamic source or calls the same test
-		 * cases with different information, over and over.
-		 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		String server = "localhost";
 		int port = 4444;
-		String browser = "*chrome";
 		String url = "https://unirope.team.n4systems.com";
+		String browser = "*chrome";
 		FieldIDTestCase.setEnvironmentVariables(server, port, browser, url);
-		
-		//$JUnit-BEGIN$
-		suite.addTestSuite(TestStub.class);
-		//$JUnit-END$
-		return suite;
 	}
-
 }

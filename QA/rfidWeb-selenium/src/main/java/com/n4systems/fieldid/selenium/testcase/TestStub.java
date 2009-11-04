@@ -15,7 +15,7 @@ public class TestStub extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testLoginPageUnitTests() throws Exception {
+	public void loginPageUnitTests() throws Exception {
 		
 		loginPage.gotoLoginPage();
 		forgotPasswordPage.gotoIForgotMyPassword();

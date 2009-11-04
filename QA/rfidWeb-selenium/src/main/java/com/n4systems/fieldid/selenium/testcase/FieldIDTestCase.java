@@ -37,10 +37,13 @@ import com.thoughtworks.selenium.*;
  * be grumpy.n4. If the website was https://foo.team.n4systems.com/fieldid/
  * then the domain would be team.n4systems.com
  * 
+ * Additionally, we extend SeleneseTestBase as it implements all the various
+ * assert statements from junit.framework.Test.
+ * 
  * @author Darrell Grainger
  *
  */
-public class FieldIDTestCase extends SeleneseTestCase {
+public class FieldIDTestCase extends SeleneseTestBase {
 
 	// Some useful constants:
 	public static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
