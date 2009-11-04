@@ -1,6 +1,7 @@
 <#assign html>
 	<#assign productId=product.id />
 	<#assign inInspection=true />
+	<#assign updateSubProductAction="updateSubProductInInspection"/>
 	<#include "/templates/html/subProductCrud/_header.ftl"/>
 </#assign>
 
