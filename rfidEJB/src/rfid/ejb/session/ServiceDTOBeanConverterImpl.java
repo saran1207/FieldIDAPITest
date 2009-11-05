@@ -164,27 +164,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return bookDTO;		
 	}
 	
-	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Inspection inspection) {
-		
-		com.n4systems.webservice.dto.InspectionServiceDTO inspectionDTO = new com.n4systems.webservice.dto.InspectionServiceDTO();
-		persistenceManager.reattach( inspection, false );
-		inspectionDTO.setId( inspection.getId() );
-		inspectionDTO.setComments( inspection.getComments() );
-		inspectionDTO.setProductId( inspection.getProduct().getId() );
-		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
-		inspectionDTO.setLocation( inspection.getLocation() );
-		inspectionDTO.setInspectorId( inspection.getInspector().getUniqueID() );
-		inspectionDTO.setInspectionTypeId( inspection.getType().getId() );
-		inspectionDTO.setStatus( inspection.getStatus().name() );
-		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
-		inspectionDTO.setUtcDate(inspection.getDate());
-		
-		populateOwners(inspection.getOwner(), inspectionDTO);
-		
-		for (CriteriaResult criteriaResult : inspection.getResults()) {
-			inspectionDTO.getResults().add( convert(criteriaResult) );
-		}
-		
+	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractInspection inspection) {
+		inspectionDTO.setComments(inspection.getComments());
+		inspectionDTO.setFormVersion(inspection.getFormVersion());
+		inspectionDTO.setId(inspection.getId());
+
 		Map<String, String> infoOptionMap = inspection.getInfoOptionMap();
 		Set<String> infoOptionKeys = inspection.getInfoOptionMap().keySet();
 		Iterator<String> It = infoOptionKeys.iterator();
@@ -193,11 +177,49 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			inspectionDTO.getInfoOptions().add( convert(inspection.getId(), infoFieldName, infoOptionMap.get(infoFieldName)) );
 		}
 		
+		inspectionDTO.setInspectionTypeId( inspection.getType().getId() );
+		inspectionDTO.setProductId( inspection.getProduct().getId() );
+		for (CriteriaResult criteriaResult : inspection.getResults()) {
+			inspectionDTO.getResults().add( convert(criteriaResult) );
+		}
+		
+	}
+	
+	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Inspection inspection) {
+		
+		com.n4systems.webservice.dto.InspectionServiceDTO inspectionDTO = new com.n4systems.webservice.dto.InspectionServiceDTO();
+		persistenceManager.reattach( inspection, false );
+		
+		populateAbstractInspectionInfo(inspectionDTO, inspection);
+		
+		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
+		inspectionDTO.setLocation( inspection.getLocation() );
+		inspectionDTO.setInspectorId( inspection.getInspector().getUniqueID() );
+		inspectionDTO.setStatus( inspection.getStatus().name() );
+		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
+		inspectionDTO.setUtcDate(inspection.getDate());
+
+		populateOwners(inspection.getOwner(), inspectionDTO);
+		
 		// TODO convert date to their time zone
 		inspectionDTO.setDate( AbstractBaseServiceDTO.dateToString( inspection.getDate() ) );
-		inspectionDTO.setFormVersion(inspection.getFormVersion());
+		
+		for (SubInspection subInspection : inspection.getSubInspections()) {
+			inspectionDTO.getSubInspections().add(convert(subInspection));
+		}
+		
 		return inspectionDTO;
 				
+	}
+	
+	public SubInspectionServiceDTO convert(SubInspection subInspection) {
+		SubInspectionServiceDTO subInspectionDTO = new SubInspectionServiceDTO();
+		
+		populateAbstractInspectionInfo(subInspectionDTO, subInspection);
+		
+		subInspectionDTO.setName(subInspection.getName());
+		
+		return subInspectionDTO;
 	}
 	
 	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(InspectionGroup inspectionGroup) {
