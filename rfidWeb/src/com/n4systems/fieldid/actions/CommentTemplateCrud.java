@@ -9,14 +9,17 @@ import rfid.ejb.entity.CommentTempBean;
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.api.Listable;
+import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @Validation
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
 	
@@ -48,6 +51,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	}
 	
 	@SkipValidation 
+	@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig, Permissions.Tag, Permissions.CreateInspection, Permissions.EditInspection})
 	public String doShow() {
 		if( commentTemplate == null ) {
 			commentTemplate = new CommentTempBean();

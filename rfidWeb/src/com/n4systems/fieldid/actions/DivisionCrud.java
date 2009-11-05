@@ -7,6 +7,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
@@ -14,6 +15,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -22,6 +24,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @Validation
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
 public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DivisionCrud.class);

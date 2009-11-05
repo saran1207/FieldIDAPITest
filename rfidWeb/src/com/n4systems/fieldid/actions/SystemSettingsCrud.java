@@ -10,12 +10,15 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 

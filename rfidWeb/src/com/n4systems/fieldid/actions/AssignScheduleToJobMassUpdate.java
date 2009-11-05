@@ -13,14 +13,17 @@ import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
 import com.n4systems.fieldid.actions.search.InspectionScheduleJobAssignment;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(AssignScheduleToJobMassUpdate.class);

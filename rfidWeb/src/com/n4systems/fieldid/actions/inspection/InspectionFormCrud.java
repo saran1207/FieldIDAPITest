@@ -7,14 +7,16 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.StateSet;
+import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
-
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionFormCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 

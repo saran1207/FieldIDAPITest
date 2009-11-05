@@ -12,10 +12,13 @@ import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class DataLogAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(DataLogAction.class);

@@ -13,13 +13,16 @@ import rfid.ejb.session.LegacyProductType;
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ProductType;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +66,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doShow() {
 
 		if (autoAttributeCriteria == null || autoAttributeCriteria.isNew()) {

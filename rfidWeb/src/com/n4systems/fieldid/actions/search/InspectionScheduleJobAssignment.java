@@ -7,10 +7,13 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Project;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteriaJob";
 	private static final long serialVersionUID = 1L;

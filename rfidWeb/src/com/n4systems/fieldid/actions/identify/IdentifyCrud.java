@@ -12,6 +12,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
@@ -19,8 +20,10 @@ import com.n4systems.model.TagOption;
 import com.n4systems.model.Order.OrderType;
 import com.n4systems.plugins.PluginFactory;
 import com.n4systems.plugins.integration.OrderResolver;
+import com.n4systems.security.Permissions;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class IdentifyCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(IdentifyCrud.class);

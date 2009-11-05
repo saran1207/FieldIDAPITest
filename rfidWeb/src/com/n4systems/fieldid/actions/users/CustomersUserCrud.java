@@ -9,14 +9,17 @@ import rfid.web.helper.Constants;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
 public class CustomersUserCrud extends CustomerUserCrud {
 	private static final long serialVersionUID = 1L;
 	

@@ -6,7 +6,10 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.security.Permissions;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class AdminChangePasswordCrud extends ChangePasswordCrud {
 	private static final long serialVersionUID = 1L;
 	

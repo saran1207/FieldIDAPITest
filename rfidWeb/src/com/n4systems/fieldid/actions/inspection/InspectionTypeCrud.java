@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
@@ -23,6 +24,7 @@ import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.InspectionTypeArchiveTask;
 import com.n4systems.util.ListingPair;
@@ -30,7 +32,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(InspectionTypeCrud.class);

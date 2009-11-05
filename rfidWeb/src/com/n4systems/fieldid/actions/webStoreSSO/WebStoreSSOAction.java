@@ -8,8 +8,11 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.security.Permissions;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class WebStoreSSOAction extends AbstractAction {
 	private static Logger logger = Logger.getLogger(WebStoreSSOAction.class);
 	private static final long serialVersionUID = 1L;

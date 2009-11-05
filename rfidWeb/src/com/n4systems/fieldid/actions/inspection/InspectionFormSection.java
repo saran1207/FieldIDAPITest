@@ -6,13 +6,16 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Observation;
 import com.n4systems.model.Recommendation;
+import com.n4systems.security.Permissions;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionFormSection extends InspectionFormCrud {
 	private static final long serialVersionUID = 1L;
 	

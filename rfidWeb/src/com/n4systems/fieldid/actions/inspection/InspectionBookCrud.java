@@ -12,12 +12,14 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -25,6 +27,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;
@@ -79,6 +82,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={})
 	public String doLPList() {
 		try {
 			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());

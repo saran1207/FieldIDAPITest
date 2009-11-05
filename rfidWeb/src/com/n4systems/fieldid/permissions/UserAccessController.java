@@ -5,20 +5,19 @@ import com.n4systems.security.Permissions;
 
 public class UserAccessController {
 	private final AbstractAction action;
-	private final UserPermissionLocator permissionLocator;
+	private final AnnotationFilterLocator<UserPermissionFilter> filterLocator;
 	
 	public UserAccessController(AbstractAction action) {
 		this.action = action;
-		this.permissionLocator = new UserPermissionLocator(action.getClass()); 
+		this.filterLocator = new AnnotationFilterLocator<UserPermissionFilter>(action.getClass(), UserPermissionFilter.class);
 	}
 
 	public boolean userHasAccessToAction(String methodName) {
-		int[] userRequiresOneOfThesePermissions = permissionLocator.getActionPermissionRequirements(methodName);
-		if (userRequiresOneOfThesePermissions.length == 0) {
+		UserPermissionFilter filter = filterLocator.getFilter(methodName);
+		if (filter == null) {
 			return true;
-		} 
-		
-		return Permissions.hasOneOf(action.getSessionUser().getPermissions(), userRequiresOneOfThesePermissions);
+		}
+		return Permissions.hasOneOf(action.getSessionUser().getPermissions(), filter.userRequiresOneOf());
 	}
 
 }

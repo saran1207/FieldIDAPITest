@@ -15,6 +15,7 @@ import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AssociatedInspectionType;
@@ -24,7 +25,9 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.security.Permissions;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class SubProductCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;
@@ -102,16 +105,6 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		}
 
 		return INPUT;
-	}
-
-	@SkipValidation
-	public String doShow() {
-		if (product == null || product.isNew()) {
-			addActionErrorText("error.noproduct");
-			return MISSING;
-		}
-		subProducts = SubProductHelper.convert(product.getSubProducts());
-		return SUCCESS;
 	}
 
 	

@@ -16,6 +16,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.CopyInspectionFactory;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
@@ -25,8 +26,10 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
+
 
 public class MasterInspectionCrud extends AbstractCrud {
 	protected static final String SESSION_KEY = "masterInspection";
@@ -101,6 +104,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doAdd() {
 
 		if (masterInspection == null) {
@@ -146,6 +150,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doEdit() {
 
 		if (masterInspection == null) {
@@ -171,6 +176,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 
 	@Validations(requiredFields = { @RequiredFieldValidator(message = "", key = "error.masterinspectionnotcomplete", fieldName = "inspectionComplete") })
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
 	public String doSave() {
 
 		if (masterInspection == null) {

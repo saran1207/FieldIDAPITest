@@ -14,14 +14,17 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiProofTestUpload.class);

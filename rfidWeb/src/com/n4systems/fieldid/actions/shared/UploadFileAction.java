@@ -7,7 +7,9 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -15,6 +17,8 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @SuppressWarnings("serial")
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag, Permissions.ManageSystemConfig, Permissions.ManageSystemUsers, 
+											Permissions.CreateInspection, Permissions.EditInspection, Permissions.ManageJobs})
 public class UploadFileAction extends AbstractAction {
 	private File upload;
 	private String uploadFileName;

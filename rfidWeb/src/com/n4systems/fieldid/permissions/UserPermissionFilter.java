@@ -5,5 +5,5 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserPermissionFilter {
-	int[] userRequiresOnOf() default {};
+	int[] userRequiresOneOf() default {};
 }

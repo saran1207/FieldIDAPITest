@@ -17,7 +17,9 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Tenant;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -28,6 +30,8 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListingPair;
 
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class PublishedCatalogCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(PublishedCatalogCrud.class);

@@ -10,9 +10,13 @@ import rfid.ejb.session.SerialNumberCounter;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Product;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.security.Permissions;
 
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class ProductUtilAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;

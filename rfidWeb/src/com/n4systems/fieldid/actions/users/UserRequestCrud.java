@@ -15,11 +15,13 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -29,6 +31,7 @@ import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class UserRequestCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

@@ -13,9 +13,11 @@ import com.n4systems.exceptions.NonEmployeeUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.UserListableLoader;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.JobResourceService;
 import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
@@ -23,6 +25,7 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class JobResourcesCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(JobResourcesCrud.class);

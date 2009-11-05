@@ -60,12 +60,12 @@ public class UserAccessControllerTest {
 			return SUCCESS;
 		}
 		
-		@UserPermissionFilter(userRequiresOnOf={Permissions.CreateInspection})
+		@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 		public String doSinglePermissionRequiredAction() {
 			return SUCCESS;
 		}
 		
-		@UserPermissionFilter(userRequiresOnOf={Permissions.Tag, Permissions.CreateInspection, Permissions.EditInspection})
+		@UserPermissionFilter(userRequiresOneOf={Permissions.Tag, Permissions.CreateInspection, Permissions.EditInspection})
 		public String doMultiPermissionRequiredAction() {
 			return SUCCESS;
 		}

@@ -10,16 +10,19 @@ import rfid.web.helper.Constants;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTypeGroup> implements HasDuplicateValueValidator{
 	
 	private static final long serialVersionUID = 1L;

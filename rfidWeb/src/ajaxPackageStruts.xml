@@ -19,11 +19,6 @@
 		</global-results>
 
 	
-		<action name="divisionList" method="list"
-			class="com.n4systems.fieldid.actions.DivisionCrud">
-			<result name="success" type="freemarker">/templates/ajax/division/list.ftl</result>
-			<result name="error" type="freemarker">/templates/ajax/division/list.ftl</result>
-		</action>
 
 		<action name="productTypeImageRemove" method="removeImage"
 			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
@@ -209,7 +204,7 @@
 			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/inspectionBook/delete.ftl</result>
 		</action>
-
+		
 		<action name="inspectionAttributeAdd" method="add"
 			class="com.n4systems.fieldid.actions.inspection.InspectionAttributeAction">
 			<result name="success" type="freemarker">/templates/ajax/inspectionType/addAttribute.ftl</result>
@@ -296,10 +291,6 @@
 			<result name="success" type="freemarker">/templates/html/orders/list.ftl</result>
 		</action>
 
-		<action name="inspectionBookDelete" method="delete"
-			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
-			<result name="success" type="freemarker">/templates/ajax/inspectionBook/delete.ftl</result>
-		</action>
 		
 		<action name="unitOfMeasure" method="show"
 			class="com.n4systems.fieldid.actions.UnitOfMeasureAction">

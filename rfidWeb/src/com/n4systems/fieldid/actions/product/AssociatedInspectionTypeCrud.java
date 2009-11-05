@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.AssociatedInspectionType;
@@ -16,8 +17,10 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssociatedInspectionTypeCrud extends AbstractCrud {
 
 	private static Logger logger = Logger.getLogger(AssociatedInspectionTypeCrud.class);

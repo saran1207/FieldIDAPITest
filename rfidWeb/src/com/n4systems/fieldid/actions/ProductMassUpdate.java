@@ -18,17 +18,20 @@ import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.product.PublishedState;
 import com.n4systems.fieldid.actions.search.ProductSearchAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.Product;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class ProductMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ProductMassUpdate.class);

@@ -14,6 +14,7 @@ import rfid.web.helper.Constants;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.api.Listable;
@@ -25,6 +26,7 @@ import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
@@ -35,6 +37,7 @@ import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final Logger logger = Logger.getLogger(OrganizationalCrud.class);
 	private static final long serialVersionUID = 1L;

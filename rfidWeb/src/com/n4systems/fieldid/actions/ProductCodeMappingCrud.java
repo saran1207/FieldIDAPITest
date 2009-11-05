@@ -17,8 +17,10 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.ProductType;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -26,6 +28,7 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class ProductCodeMappingCrud extends AbstractCrud {
 
 

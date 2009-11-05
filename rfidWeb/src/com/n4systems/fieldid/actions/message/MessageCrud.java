@@ -7,11 +7,14 @@ import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProce
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class MessageCrud extends AbstractPaginatedCrud<Message> {
 	private static final Logger logger = Logger.getLogger(MessageCrud.class);
 	

@@ -7,17 +7,20 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueValidator{
 
 	

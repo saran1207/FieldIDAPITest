@@ -17,6 +17,7 @@ import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
@@ -26,6 +27,7 @@ import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductCleaner;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.model.user.UserListableLoader;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -34,6 +36,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class MultiAddProductCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddProductCrud.class);

@@ -12,12 +12,14 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -25,6 +27,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 public class InspectionScheduleCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(InspectionScheduleCrud.class);
@@ -118,6 +121,9 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
+	
+	
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.ManageJobs})
 	public String doSave() {
 		testRequiredEntities(true);
 		try {

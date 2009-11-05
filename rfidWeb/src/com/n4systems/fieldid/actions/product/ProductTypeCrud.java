@@ -28,6 +28,7 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldid.validators.HasProductDescriptionTemplateValidator;
 import com.n4systems.model.FileAttachment;
@@ -36,6 +37,7 @@ import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductTypeRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -48,6 +50,7 @@ import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @Validation
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateValueValidator,
 		HasProductDescriptionTemplateValidator {
 	private static final long serialVersionUID = 1L;

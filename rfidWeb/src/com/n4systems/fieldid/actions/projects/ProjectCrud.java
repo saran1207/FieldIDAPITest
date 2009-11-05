@@ -14,6 +14,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
@@ -23,6 +24,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.JobListService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -34,6 +36,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;
@@ -84,6 +87,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={})
 	public String doShow() {
 		testRequiredEntities(true);
 		jobResources.setJobId(uniqueID);
@@ -91,6 +95,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={})
 	public String doList() {
 		try {
 			JobListService jobListService = new JobListService(persistenceManager, getSecurityFilter(), Constants.PAGE_SIZE);

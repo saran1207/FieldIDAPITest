@@ -2,11 +2,14 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Tenant;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class RemoteOrgAction extends AbstractAction {
 
 	private String name;

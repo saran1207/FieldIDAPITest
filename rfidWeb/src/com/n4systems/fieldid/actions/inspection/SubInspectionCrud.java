@@ -18,6 +18,7 @@ import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.CopyInspectionFactory;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
@@ -27,6 +28,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubInspection;
+import com.n4systems.security.Permissions;
 
 public class SubInspectionCrud extends InspectionCrud {
 	private static final long serialVersionUID = 1L;
@@ -79,6 +81,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doAdd() {
 		if (masterInspectionHelper == null) {
 			addActionErrorText("error.nomasterinspection");
@@ -152,6 +155,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doEdit() {
 		if (masterInspectionHelper == null) {
 			addActionErrorText("error.nomasterinspection");
@@ -163,6 +167,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
 	public String doStoreSubInspection() {
 		if (masterInspectionHelper == null) {
 			addActionErrorText("error.nomasterinspection");

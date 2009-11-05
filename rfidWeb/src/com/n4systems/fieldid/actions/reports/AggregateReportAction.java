@@ -12,6 +12,7 @@ import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.util.AggregateReport;
 
+
 public class AggregateReportAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(AggregateReportAction.class);

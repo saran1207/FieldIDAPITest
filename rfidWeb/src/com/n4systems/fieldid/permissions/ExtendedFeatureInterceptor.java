@@ -17,28 +17,23 @@ public class ExtendedFeatureInterceptor extends AbstractInterceptor {
 		Class<?> actionClass = action.getClass();
 		
 		if (action.getTenant() != null) {
-			ExtendedFeature requiredFeature = findRequiredExtendedFeature(action, methodName, actionClass);
-			if (requiredFeature != null && !action.getSecurityGuard().isExtendedFeatureEnabled(requiredFeature)) {
+			ExtendedFeature requiredFeature = findRequiredExtendedFeature(methodName, actionClass);
+			if (isUserDoesHaveAccess(action, requiredFeature)) {
 				action.addActionErrorText("permission.require_extended_feature");
 				wrapper.getRequest().setAttribute("requiredFeature", requiredFeature);
-						
 				return "feature_required";
 			}
 		}
 		return call.invoke();
 	}
 
-	private ExtendedFeature findRequiredExtendedFeature(AbstractAction action, String methodName, Class<?> actionClass) throws NoSuchMethodException {
-		ExtendedFeature requiredFeature = null;
-		ExtendedFeatureFilter methodFilter = actionClass.getMethod(methodName).getAnnotation(ExtendedFeatureFilter.class);
-		ExtendedFeatureFilter classFilter = actionClass.getAnnotation(ExtendedFeatureFilter.class); 
-		
-		if (methodFilter != null) {
-			requiredFeature = methodFilter.requiredFeature();
-		} else if (classFilter != null) {
-			requiredFeature = classFilter.requiredFeature();
-		}
-		return requiredFeature;
+	private boolean isUserDoesHaveAccess(AbstractAction action, ExtendedFeature requiredFeature) {
+		return requiredFeature != null && !action.getSecurityGuard().isExtendedFeatureEnabled(requiredFeature);
+	}
+
+	private ExtendedFeature findRequiredExtendedFeature(String methodName, Class<?> actionClass) throws NoSuchMethodException {
+		ExtendedFeatureFilter filter = new AnnotationFilterLocator<ExtendedFeatureFilter>(actionClass, ExtendedFeatureFilter.class).getFilter(methodName);
+		return (filter != null) ? filter.requiredFeature() : null;
 	}
 
 

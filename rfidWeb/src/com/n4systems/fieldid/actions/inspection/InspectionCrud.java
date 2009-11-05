@@ -30,6 +30,7 @@ import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
@@ -57,6 +58,7 @@ import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectionbook.InspectionBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
@@ -64,6 +66,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
+
 
 public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private static final long serialVersionUID = 1L;
@@ -179,6 +182,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doQuickInspect() {
 
 		if (product == null) {
@@ -207,6 +211,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 	
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
 	public String doSelect() {
 		if (inspection == null) {
 			addActionError(getText("error.noinspection"));
@@ -232,6 +237,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doAdd() {
 		testDependices();
 
@@ -290,6 +296,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 	
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doEdit() {
 		try {
 			setProductId(inspection.getProduct().getId());
@@ -325,6 +332,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 	}
 
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
 	public String doSave() {
 		try {
 			testDependices();
@@ -463,6 +471,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doDelete() {
 		try {
 			testDependices();

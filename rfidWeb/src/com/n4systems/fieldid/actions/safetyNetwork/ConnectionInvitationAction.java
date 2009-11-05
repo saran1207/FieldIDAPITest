@@ -9,6 +9,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.message.MessageDecorator;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.messages.Message;
@@ -18,12 +19,15 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class ConnectionInvitationAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ConnectionInvitationAction.class);

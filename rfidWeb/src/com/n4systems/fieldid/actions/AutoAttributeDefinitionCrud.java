@@ -14,12 +14,15 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ProductType;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.StringListingPair;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AutoAttributeDefinitionCrud extends AbstractCrud {
 
 private static final long serialVersionUID = 1L;

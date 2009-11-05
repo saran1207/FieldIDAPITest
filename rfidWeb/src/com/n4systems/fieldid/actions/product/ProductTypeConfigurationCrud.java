@@ -11,13 +11,16 @@ import rfid.ejb.session.LegacyProductType;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.model.ProductType;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class ProductTypeConfigurationCrud extends AbstractCrud {
 		     
 	private static final long serialVersionUID = 1L;

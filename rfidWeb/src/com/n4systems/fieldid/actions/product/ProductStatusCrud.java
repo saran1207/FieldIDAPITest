@@ -9,9 +9,12 @@ import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class ProductStatusCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

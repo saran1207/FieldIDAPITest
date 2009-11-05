@@ -25,8 +25,7 @@
 			</result>
 		</action>
 
-		<action name="viewProductTypeImage" method="viewImage"
-			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
+		<action name="viewProductTypeImage" method="viewImage" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
 			<result name="success" type="freemarker">/templates/html/productTypeCrud/viewImage.ftl</result>
 		</action>
 
@@ -908,19 +907,6 @@
 				<param name="type">${type}</param>
 			</result>
 			<result name="oneFoundMaster" type="redirectAction">
-				<param name="actionName">masterInspectionAdd</param>
-				<param name="productId">${productId}</param>
-				<param name="type">${type}</param>
-			</result>
-		</action>
-		
-		<action name="selectInspectionAdd" method="select" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="regular" type="redirectAction">
-				<param name="actionName">inspectionAdd</param>
-				<param name="productId">${productId}</param>
-				<param name="type">${type}</param>
-			</result>
-			<result name="master" type="redirectAction">
 				<param name="actionName">masterInspectionAdd</param>
 				<param name="productId">${productId}</param>
 				<param name="type">${type}</param>

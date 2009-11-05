@@ -10,7 +10,10 @@ import rfid.ejb.session.SerialNumberCounter;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.security.Permissions;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class MultiAddProductSerialNumberGenAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddProductSerialNumberGenAction.class);

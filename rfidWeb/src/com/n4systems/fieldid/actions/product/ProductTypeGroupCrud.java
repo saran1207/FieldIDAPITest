@@ -10,14 +10,17 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

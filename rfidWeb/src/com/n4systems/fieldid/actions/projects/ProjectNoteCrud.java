@@ -9,14 +9,17 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Project;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class ProjectNoteCrud extends UploadFileSupport {
 
 	private static final Logger logger = Logger.getLogger(ProjectNoteCrud.class);
@@ -47,6 +50,7 @@ public class ProjectNoteCrud extends UploadFileSupport {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={})
 	public String doList() {
 		if (project == null) {
 			addActionErrorText("error.noproject");

@@ -11,11 +11,14 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
+import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ProductMergeTask;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class ProductMergeAction extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

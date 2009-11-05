@@ -12,14 +12,17 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( InspectionMassUpdate.class );

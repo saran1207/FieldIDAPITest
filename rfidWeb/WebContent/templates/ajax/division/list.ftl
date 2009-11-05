@@ -1,1 +1,0 @@
-updateDivisionList( ${json.toJson(divisions)} );

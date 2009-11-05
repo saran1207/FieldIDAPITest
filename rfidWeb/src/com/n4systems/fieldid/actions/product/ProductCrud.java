@@ -262,21 +262,21 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doAddNoHistory() {
 		product.setIdentified(DateHelper.getToday());
 		return SUCCESS;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doAdd() {
 		applyDefaults();
 		return SUCCESS;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doAddWithOrder() {
 
 		if (lineItem == null || lineItem.getId() == null) {
@@ -331,7 +331,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doEdit() {
 		testExistingProduct();
 		setProductTypeId(product.getType().getId());
@@ -351,7 +351,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doSave() {
 		testProduct();
 
@@ -429,7 +429,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doConnectToShopOrder() {
 		testExistingProduct();
 
@@ -470,7 +470,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doConnectToCustomerOrder() {
 		testExistingProduct();
 
@@ -501,7 +501,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doConfirmDelete() {
 		testExistingProduct();
 		try {
@@ -513,7 +513,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doDelete() {
 		testExistingProduct();
 		try {
@@ -531,7 +531,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOnOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doProductTypeChange() {
 		return SUCCESS;
 	}

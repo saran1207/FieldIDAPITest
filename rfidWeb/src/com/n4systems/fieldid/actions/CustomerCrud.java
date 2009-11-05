@@ -11,6 +11,7 @@ import rfid.ejb.session.User;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
@@ -19,6 +20,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -29,6 +31,7 @@ import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @Validation
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
 public class CustomerCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
