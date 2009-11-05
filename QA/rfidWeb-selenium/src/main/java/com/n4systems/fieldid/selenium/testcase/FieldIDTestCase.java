@@ -38,14 +38,19 @@ import com.thoughtworks.selenium.*;
  * then the domain would be team.n4systems.com
  * 
  * Additionally, we extend SeleneseTestBase as it implements all the various
- * assert statements from junit.framework.Test.
+ * assert statements from junit.framework.Test. The SeleneseTestCase and
+ * SeleneseTestBase are based on jUnit3 so I have implemented the setUp() and
+ * tearDown() methods here to be jUnit4 compatible.
  * 
  * @author Darrell Grainger
  *
  */
 public class FieldIDTestCase extends SeleneseTestBase {
 
-	// Some useful constants:
+	// My instance of selenium for all the classes to share.
+    protected DefaultSelenium selenium;
+
+    // Some useful constants:
 	public static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
 
 	// All these environment variables need to be set
@@ -69,13 +74,14 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	protected String tenant = null;
 	protected String domain = null;
 	protected static String seleniumURL = null;
-	protected DefaultSelenium selenium;
+//	protected DefaultSelenium selenium;
 
 	// List of different modules uses by the test cases
 	AdminConsoleOrganizationsPage adminConsoleOrgPage;
 	LoginPage loginPage;
 	ForgotPasswordPage forgotPasswordPage;
 	SendPasswordPage sendPasswordPage;
+	ChooseACompanyPage chooseACompany;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -83,7 +89,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 
 	@Before
 	public void setUp() throws Exception {
-		
+
 		// Initial all the required environment variables
 		initEnvironmentVariables();
 		initSeleniumInstance();
@@ -106,6 +112,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		loginPage = new LoginPage(selenium);
 		forgotPasswordPage = new ForgotPasswordPage(selenium);
 		sendPasswordPage = new SendPasswordPage(selenium);
+		chooseACompany = new ChooseACompanyPage(selenium);
 	}
 
 	private void initSeleniumInstance() {
@@ -164,10 +171,14 @@ public class FieldIDTestCase extends SeleneseTestBase {
 
 	@After
 	public void tearDown() throws Exception {
-		super.tearDown();
-		if(selenium != null) {
-			selenium.stop();
-		}
+    	try {
+    		checkForVerificationErrors();
+    	} finally {
+    	    if (selenium != null) {
+    	        selenium.stop();
+    	        selenium = null;
+    	    }
+    	}
 	}
 
 	@AfterClass

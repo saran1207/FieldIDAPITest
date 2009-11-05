@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.selenium.login;
 
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
-public class SendPasswordPage extends SeleneseTestBase {
+public class SendPasswordPage extends FieldIDTestCase {
 
-	private DefaultSelenium selenium;
+	private Selenium selenium;
 	private static final String stringForPageTitle = "Field ID : Safety Management - Password Reset Email Sent";
 	private static final String resetPasswordButtonLocator = "css=#sendPassword_label_reset_password";
 	private static final String messageBodyLocator = "ccs=p.actionInstructions";
@@ -18,7 +17,7 @@ public class SendPasswordPage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public SendPasswordPage(DefaultSelenium selenium) {
+	public SendPasswordPage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}

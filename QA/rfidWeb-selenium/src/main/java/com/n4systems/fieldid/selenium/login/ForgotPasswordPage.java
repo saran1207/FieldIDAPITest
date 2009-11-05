@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.selenium.login;
 
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
-public class ForgotPasswordPage extends SeleneseTestBase {
+public class ForgotPasswordPage extends FieldIDTestCase {
 
-	private DefaultSelenium selenium;
+	private Selenium selenium;
 	private static final String stringForPageTitle = "Field ID : Safety Management - Forgot Password";
 	private static final String usernameLocator = "css=#userName";
 	private static final String forgotMyPasswordLinkLocator = "//A[contains(text(),'I forgot my password')]";
@@ -17,7 +16,7 @@ public class ForgotPasswordPage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public ForgotPasswordPage(DefaultSelenium selenium) {
+	public ForgotPasswordPage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}

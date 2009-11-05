@@ -1,15 +1,13 @@
 package com.n4systems.fieldid.selenium.admin.console;
 
-import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
-public class AdminConsoleOrganizationsPage extends SeleneseTestBase {
+public class AdminConsoleOrganizationsPage extends FieldIDTestCase {
 
-	private DefaultSelenium selenium;
+	private Selenium selenium;
 	
 	// locators for the elements on the page I want to interact with
 	private static final String organizationsTableLocator = "//div[@id='content']/table";	// must be xpath
@@ -45,7 +43,7 @@ public class AdminConsoleOrganizationsPage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public AdminConsoleOrganizationsPage(DefaultSelenium selenium) {
+	public AdminConsoleOrganizationsPage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}
@@ -397,7 +395,7 @@ public class AdminConsoleOrganizationsPage extends SeleneseTestBase {
 	public int getTotalTenants() {
 		String totalTenantText = "Total Tenants: ";	// string preceding tenant total
 		String s1 = selenium.getBodyText(); 
-		assertNotNull(s1);
+		assertTrue(s1 != null);
 		int start = s1.indexOf(totalTenantText) + totalTenantText.length();
 		assertTrue(start != -1);
 		int end = s1.indexOf(" ", start+1);

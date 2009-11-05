@@ -1,14 +1,11 @@
 package com.n4systems.fieldid.selenium.login;
 
-import static org.junit.Assert.assertTrue;
-
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
-public class LoginPage extends SeleneseTestBase {
+public class LoginPage extends FieldIDTestCase {
 
-	private DefaultSelenium selenium;
+	private Selenium selenium;
 	private static final String startStringForPageTitle = "Field ID : Safety Management - ";
 	private static final String endStringForPageTitle = " Sign In";
 	private static final String securityRFIDNumberLocator = "css=#secureRfidNumber";
@@ -17,13 +14,22 @@ public class LoginPage extends SeleneseTestBase {
 	private static final String returnToSignInLinkLocator = "//A[contains(text(),'Return to Sign In')]";
 	private static final String signInWithSecurityRFIDNumberLocator = "//A[contains(text(),'Sign in with Security RFID Number')]";
 	private static final String signInWithUserNameLocator = "//A[contains(text(),'Sign in with User Name')]";
-	private static final String notTheCompanyIWantLinkLocator = "//A[contains(text(),'is not the company I want.')]";
 	private static final String rememberMySignInInformationLocator = "css=#signInForm_rememberMe";
 	private static final String plansAndPricingLinkLocator = "css=#plansPricingButton > a";
 	private static final String requestAnAccountLinkLocator = "css=#requestAccountButton > a";
 	private static final String returnToSignInFromSendPasswordButtonLocator = "//input[@value='Return to Sign In')]";
 	private static final String returnToSignInFromSignUpPackagesLinkLocator = "//A[contains(text(),'Return to Sign In')]";
 	private static final String returnToSignInFromRegiserNewUserButtonLocator = "//input[@value='Return to Sign In')]";
+	private static final String n4systemsLinkLocator = "//A[contains(text(),'N4 Systems Inc.')]";
+	private static final Object n4systemsWebSiteTitleString = "N4 Systems | Safety Through Innovation";
+	private static final String poweredByFieldIDImageLocator = "css=.poweredBy > img";
+	private static final String thawteSiteSealLinkLocator = "//*[@id='sslCert']/A/IMG[@alt='Click to verify']/..";
+	private static final Object thawteSiteSealWindowTitleString = "thawte : siteseal";
+	private static final String thawteOrganizationString = "N4 Systems Inc.";
+	private static final String thawteDomainString = "*.fieldid.com";
+	private static final String thawteCountryString = "Canada";
+	private static final String thawteStatusString = "Valid";
+	private static final String returnToSignInFromChooseACompanyButtonLocator = "css=#signInToCompany_label_find_sign_in";
 	
 	/**
 	 * Initialize the library to use the same instance of Selenium as the
@@ -31,7 +37,7 @@ public class LoginPage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public LoginPage(DefaultSelenium selenium) {
+	public LoginPage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}
@@ -56,16 +62,81 @@ public class LoginPage extends SeleneseTestBase {
 	 * This method assumes that the seleniumURL variable was set correctly
 	 * and Selenium has opened a page with the correct domain.
 	 * 
+	 * @return true if the go to was successful
 	 */
 	public void gotoLoginPage() {
 		selenium.open("/fieldid/");
 		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
-		verifyPageContent();
+		assertPageContent();
 	}
 	
-	private void verifyPageContent() {
-		verifyTrue(true);
+	private void assertPageContent() {
+		assertTrue("Could not find link to N4 Systems on the login page", selenium.isElementPresent(n4systemsLinkLocator));
+		assertTrue("Could not find User Name input on the login page", selenium.isElementPresent(usernameLocator));
+		assertTrue("Could not find Password input on the login page", selenium.isElementPresent(passwordLocator));
+		assertTrue("Could not find Security RFID input on the login page", selenium.isElementPresent(securityRFIDNumberLocator));
+		assertTrue("Could not find RFID Sign In button on the login page", selenium.isElementPresent(signInWithSecurityRFIDNumberLocator));
+		assertTrue("Could not find User Name Sign In button on the login page", selenium.isElementPresent(signInWithUserNameLocator));
+		assertTrue("Could not find remember sign in information checkbox on the login page", selenium.isElementPresent(rememberMySignInInformationLocator));
+		assertTrue("Could not find Powered By Field ID image on the login page", selenium.isElementPresent(poweredByFieldIDImageLocator));
+
+	}
+	
+	public void gotoReturnToSignInFromChooseACompany() {
+		assertTrue("Could not find the Find Sign In Page button", selenium.isElementPresent(returnToSignInFromChooseACompanyButtonLocator));
+		selenium.click(returnToSignInFromChooseACompanyButtonLocator);
+		assertPageTitle();
+		assertPageContent();
+	}
+	
+	/**
+	 * If this is run against production or we fake running against production
+	 * the Thawte Logo appears and this will click on the Logo to open a new
+	 * window with our site seal. To fake production, set the DNS resolution
+	 * to make www.fieldid.com and ${tenant}.fieldid.com point to the test
+	 * machine. On a Windows computer you can do this by editing the HOSTS
+	 * file located in C:\Windows\system32\drivers\etc\.
+	 */
+	public void gotoThawteCertificate() {
+		if(selenium.isElementPresent(thawteSiteSealLinkLocator)) {
+			selenium.click(thawteSiteSealLinkLocator);
+			verifyThawteSiteSealPresent();
+		}
+	}
+	
+	private void verifyThawteSiteSealPresent() {
+		String titles[] = selenium.getAllWindowTitles();
+		boolean found = false;
+		for(int i = 0; i < titles.length; i++) {
+			if(titles[i].equals(thawteSiteSealWindowTitleString)) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("Could not find the window with <title> '" + n4systemsWebSiteTitleString + "'", found);
+		assertTrue("Could not find the organization information", selenium.isTextPresent(thawteOrganizationString));
+		assertTrue("Could not find the domain information", selenium.isTextPresent(thawteDomainString));
+		assertTrue("Could not find the country information", selenium.isTextPresent(thawteCountryString));
+		assertTrue("Could not find the current status information", selenium.isTextPresent(thawteStatusString));
+	}
+
+	public void gotoN4Systems() {
+		assertTrue("Could not find the link to open the N4 Systems website", selenium.isElementPresent(n4systemsLinkLocator));
+		selenium.click(n4systemsLinkLocator);
+		verifyN4SystemsWebSiteTitle();
+	}
+	
+	private void verifyN4SystemsWebSiteTitle() {
+		String titles[] = selenium.getAllWindowTitles();
+		boolean found = false;
+		for(int i = 0; i < titles.length; i++) {
+			if(titles[i].equals(n4systemsWebSiteTitleString)) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("Could not find the window with <title> '" + n4systemsWebSiteTitleString + "'", found);
 	}
 
 	public void gotoReturnToSignInFromSendPasswordPage() {
@@ -179,17 +250,6 @@ public class LoginPage extends SeleneseTestBase {
 		if((selenium.isChecked(rememberMySignInInformationLocator) && !b) || (!selenium.isChecked(rememberMySignInInformationLocator) && b)) {
 			setRememberMySignInInformation();
 		}
-	}
-	
-	// This stuff should go to the ChooseCompanyPage class
-	/**
-	 * Clicks on the link to take us to the Choose A Company page.
-	 */
-	public void gotoNotTheCompanyIWant() {
-		assertTrue("Could not find the link to 'tenant' is not the company I want", selenium.isElementPresent(notTheCompanyIWantLinkLocator));
-		selenium.click(notTheCompanyIWantLinkLocator);
-		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
-		// TODO: verify we arrived at the correct page
 	}
 	
 	// This stuff should go to the SignUpPage class

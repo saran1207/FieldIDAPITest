@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
 
-public class TestStub extends FieldIDTestCase {
+public class LoginUnitTests extends FieldIDTestCase {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -32,12 +32,31 @@ public class TestStub extends FieldIDTestCase {
 		loginPage.gotoSignInWithUserNameLink();
 	}
 	
-	@Ignore("Waiting for the unit test code to be completed")
 	@Test
-	public void loginFeatureTest() throws Exception {
-		// put code here to use all LoginPage unit tests
+	public void goToN4SystemsFromLoginPage() throws Exception {
+		loginPage.gotoLoginPage();
+		loginPage.gotoN4Systems();
 	}
-
+	
+	@Ignore("Only used when testing production environment")
+	@Test
+	public void goToThawteSiteSealFromLoginPage() throws Exception {
+		loginPage.gotoLoginPage();
+		loginPage.gotoThawteCertificate();
+	}
+	
+	@Test
+	public void goToForgotPassword() throws Exception {
+		loginPage.gotoLoginPage();
+		forgotPasswordPage.gotoIForgotMyPassword();
+	}
+	
+	@Test
+	public void goToChooseACompany() throws Exception {
+		loginPage.gotoLoginPage();
+		chooseACompany.gotoNotTheCompanyIWant();
+	}
+	
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
