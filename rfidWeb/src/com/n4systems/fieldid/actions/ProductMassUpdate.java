@@ -15,6 +15,7 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.fieldid.actions.product.PublishedState;
 import com.n4systems.fieldid.actions.search.ProductSearchAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
@@ -24,6 +25,7 @@ import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
@@ -204,5 +206,16 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
+
+	public void setPublished(String stateName) {
+		product.setPublished(PublishedState.valueOf(stateName).isPublished());
+	}
 	
+	public String getPublished() {
+		return PublishedState.resolvePublishedState(product.isPublished()).name();
+	}
+	
+	public List<StringListingPair> getPublishedStates() {
+		return PublishedState.getPublishedStates(this);
+	}
 }

@@ -231,6 +231,11 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 						parameters.put("identified", product.getIdentified());
 					}
 
+					if (entry.getKey().equals("published")) {
+						updateQueryString += " published = :published ";
+						parameters.put("published", product.isPublished());
+					}
+					
 				}
 			}
 

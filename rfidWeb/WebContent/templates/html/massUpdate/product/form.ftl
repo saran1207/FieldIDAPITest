@@ -96,6 +96,17 @@
 			</td>
 		</tr>
 		
+		
+		<#if userSecurityGuard.allowedManageSafetyNetwork == true>
+		<tr>
+			<td><@s.checkbox name="select['published']" id="check_published" /></td>
+			<td>
+				<label class="label"><@s.text name="label.publishedstateselector"/>:</label>
+				<@s.select name="published" list="publishedStates" listKey="id" listValue="name" onchange="selectField('published');" />
+			</td>
+		</tr>
+		</#if>
+		
 	</table>	
 		
 	<div class="formAction">
