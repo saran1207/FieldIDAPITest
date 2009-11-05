@@ -12,7 +12,7 @@ public class ValidatePromoCodeClient extends AbstractNetsuiteClient<NetSuiteVali
 
 	@Override
 	protected void addRequestParameters() {
-		addRequestParameter("code", code);
+		addRequestParameter("promocode", code);
 	}
 
 	public String getCode() {
