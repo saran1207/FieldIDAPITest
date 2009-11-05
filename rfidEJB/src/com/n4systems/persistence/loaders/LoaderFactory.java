@@ -33,7 +33,9 @@ import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
+import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
@@ -133,10 +135,14 @@ public class LoaderFactory {
 		return new FilteredListableLoader(filter, clazz);
 	}
 	
+	public HasLinkedProductsLoader createHasLinkedProductsLoader() {
+		return new HasLinkedProductsLoader(filter);
+	}
+	
 	public InspectionBookListLoader createInspectionBookListLoader() {
 		return new InspectionBookListLoader(filter);
 	}
-	
+
 	public InspectionFrequencyListLoader createInspectionFrequenciesListLoader() {
 		return new InspectionFrequencyListLoader(filter);
 	}
@@ -157,14 +163,26 @@ public class LoaderFactory {
 		return new NotificationSettingByUserListLoader(filter);
 	}
 
+	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
+		return new PaginatedConnectionListLoader(filter);
+	}
+
+	public PaginatedMessageLoader createPaginatedMessageLoader() {
+		return new PaginatedMessageLoader(filter);
+	}
+	
 	public PrimaryOrgByTenantLoader createPrimaryOrgByTenantLoader() {
 		return new PrimaryOrgByTenantLoader();
 	}
-
+	
 	public ProductAttachmentListLoader createProductAttachmentListLoader() {
 		return new ProductAttachmentListLoader(filter);
 	}
-
+	
+	public ProductsByNetworkId createProductsByNetworkId() {
+		return new ProductsByNetworkId(filter);
+	}
+	
 	public ProductSerialExtensionListLoader createProductSerialExtensionListLoader() {
 		return new ProductSerialExtensionListLoader(filter);
 	}
@@ -185,12 +203,20 @@ public class LoaderFactory {
 		return new ProductTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 	
-	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
-		return new SafetyNetworkSmartSearchLoader(filter);
-	}
-	
 	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
+	}
+	
+	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader() {
+		return new SafetyNetworkInspectionLoader(filter);
+	}
+	
+	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
+		return new SafetyNetworkProductLoader(filter);
+	}
+	
+	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
+		return new SafetyNetworkSmartSearchLoader(filter);
 	}
 	
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
@@ -213,14 +239,18 @@ public class LoaderFactory {
 		return new TaskConfigLoader();
 	}
 	
+	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
+		return new TenantWideVendorOrgConnPaginatedLoader(filter);
+	}
+
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
-	
+
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
-	
+
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
 		return new VendorLinkedOrgListLoader(filter);
 	}
@@ -235,25 +265,5 @@ public class LoaderFactory {
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
-	}
-	
-	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
-		return new TenantWideVendorOrgConnPaginatedLoader(filter);
-	}
-
-	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
-		return new SafetyNetworkProductLoader(filter);
-	}
-
-	public PaginatedMessageLoader createPaginatedMessageLoader() {
-		return new PaginatedMessageLoader(filter);
-	}
-
-	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
-		return new PaginatedConnectionListLoader(filter);
-	}
-	
-	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader() {
-		return new SafetyNetworkInspectionLoader(filter);
 	}
 }

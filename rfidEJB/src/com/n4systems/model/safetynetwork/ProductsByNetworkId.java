@@ -53,5 +53,4 @@ public class ProductsByNetworkId extends ListLoader<Product> {
 		return this;
 	}
 	
-	
 }
