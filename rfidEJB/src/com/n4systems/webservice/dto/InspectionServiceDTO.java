@@ -1,5 +1,6 @@
 package com.n4systems.webservice.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private long productStatusId;
 	private long jobSiteId;
 	private long inspectionScheduleId;
-	private List<SubInspectionServiceDTO> subInspections;
+	private List<SubInspectionServiceDTO> subInspections = new ArrayList<SubInspectionServiceDTO>();
 	private List<SubProductMapServiceDTO> newSubProducts;
 	private long orgId;
 	private long customerId;
