@@ -41,7 +41,7 @@ public class LoginUnitTests extends FieldIDTestCase {
 	@Ignore("Only used when testing production environment")
 	@Test
 	public void goToThawteSiteSealFromLoginPage() throws Exception {
-		loginPage.gotoLoginPage();
+		loginPage.gotoLoginPage("https://fieldid.fieldid.com/fieldid/");
 		loginPage.gotoThawteCertificate();
 	}
 	
@@ -52,9 +52,47 @@ public class LoginUnitTests extends FieldIDTestCase {
 	}
 	
 	@Test
+	public void returnToLoginPageFromForgotPassword() throws Exception {
+		loginPage.gotoLoginPage();
+		forgotPasswordPage.gotoIForgotMyPassword();
+		loginPage.gotoReturnToSignInFromForgotPassword();
+	}
+	
+	@Test
 	public void goToChooseACompany() throws Exception {
 		loginPage.gotoLoginPage();
 		chooseACompany.gotoNotTheCompanyIWant();
+	}
+	
+	@Test
+	public void returnToLoginPageFromChooseACompany() throws Exception {
+		loginPage.gotoLoginPage();
+		chooseACompany.gotoNotTheCompanyIWant();
+		chooseACompany.setCompanyID(tenant);
+		loginPage.gotoReturnToSignInFromChooseACompany();
+	}
+	
+	@Test
+	public void goToRequestAnAccount() throws Exception {
+		loginPage.gotoLoginPage();
+		registerNewUser.gotoRequestAnAccount();
+	}
+	
+	@Test
+	public void returnToLoginPageFromRequestAnAccount() throws Exception {
+		loginPage.gotoLoginPage();
+		registerNewUser.gotoRequestAnAccount();
+		loginPage.gotoReturnToSignInFromRegisterNewUserPage();
+	}
+	
+	@Test
+	public void loginIn() throws Exception {
+		loginPage.gotoLoginPage();
+		String username = "n4systems";
+		String password = "makemore$";
+		loginPage.setUserName(username);
+		loginPage.setPassword(password);
+		homePage.gotoSignInUserName();
 	}
 	
 	@After

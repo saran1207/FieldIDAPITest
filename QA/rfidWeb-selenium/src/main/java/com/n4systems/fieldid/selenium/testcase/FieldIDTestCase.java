@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
+
+import com.n4systems.fieldid.selenium.home.HomePage;
 import com.n4systems.fieldid.selenium.login.*;
 import com.n4systems.fieldid.selenium.admin.console.AdminConsoleOrganizationsPage;
 import com.thoughtworks.selenium.*;
@@ -60,6 +62,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	protected static final String seleniumresoureceenv = 	"seleniumresource";
 	protected static final String seleniumdomainenv = 		"seleniumdomain";
 	protected static final String seleniumtenantenv = 		"seleniumtenant";
+	protected static final String seleniumdebugenv = 		"seleniumdebug";
 	
 	/**
 	 * All these variables need to be set. They can either be set at the
@@ -74,7 +77,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	protected String tenant = null;
 	protected String domain = null;
 	protected static String seleniumURL = null;
-//	protected DefaultSelenium selenium;
+	protected static boolean seleniumdebug = false;
 
 	// List of different modules uses by the test cases
 	AdminConsoleOrganizationsPage adminConsoleOrgPage;
@@ -82,6 +85,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	ForgotPasswordPage forgotPasswordPage;
 	SendPasswordPage sendPasswordPage;
 	ChooseACompanyPage chooseACompany;
+	RegisterNewUserPage registerNewUser;
+	HomePage homePage;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -113,6 +118,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		forgotPasswordPage = new ForgotPasswordPage(selenium);
 		sendPasswordPage = new SendPasswordPage(selenium);
 		chooseACompany = new ChooseACompanyPage(selenium);
+		registerNewUser = new RegisterNewUserPage(selenium);
+		homePage = new HomePage(selenium);
 	}
 
 	private void initSeleniumInstance() {
@@ -139,16 +146,24 @@ public class FieldIDTestCase extends SeleneseTestBase {
 			seleniumBrowserType = System.getenv(seleniumbrowserenv);
 			assertTrue("Need the environment variable '" + seleniumbrowserenv + "' set.", seleniumBrowserType != null);
 		}
+		if(tenant == null) {
+			tenant = System.getenv(seleniumtenantenv);
+			assertTrue("Need the environment variable '" + seleniumtenantenv + "' set.", tenant != null);
+		}
+		if(domain == null) {
+			domain = System.getenv(seleniumdomainenv);
+			assertTrue("Need the environment variable '" + seleniumdomainenv + "' set.", domain != null);
+		}
 		if(seleniumURL == null) {
 			String tmp = System.getenv(seleniumresoureceenv);
 			assertTrue("Need the environment variable '" + seleniumresoureceenv + "' set.", tmp != null);
 			seleniumURL = tmp + "://";
-			tmp = System.getenv(seleniumtenantenv);
-			assertTrue("Need the environment variable '" + seleniumtenantenv + "' set.", tmp != null);
-			seleniumURL += tmp + ".";
-			tmp = System.getenv(seleniumdomainenv);
-			assertTrue("Need the environment variable '" + seleniumdomainenv + "' set.", tmp != null);
-			seleniumURL += tmp;
+			seleniumURL += tenant + ".";
+			seleniumURL += domain;
+		}
+		String s = System.getenv(seleniumdebugenv);
+		if(s != null) {
+			seleniumdebug = Boolean.parseBoolean(s);
 		}
 	}
 	
@@ -162,7 +177,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * @param browser
 	 * @param url
 	 */
-	public static void setEnvironmentVariables(String server, int port, String browser, String url) {
+	public static void setEnvironmentVariables(String server, int port, String browser, String url, String tenant, String domain) {
 		seleniumServer = server;
 		seleniumPort = port;
 		seleniumBrowserType = browser;
@@ -172,6 +187,9 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	@After
 	public void tearDown() throws Exception {
     	try {
+    		if(seleniumdebug) {
+    			selenium.captureScreenshot(getClass().getSimpleName() + ".png");
+    		}
     		checkForVerificationErrors();
     	} finally {
     	    if (selenium != null) {

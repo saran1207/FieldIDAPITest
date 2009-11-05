@@ -15,13 +15,11 @@ public class LoginPage extends FieldIDTestCase {
 	private static final String signInWithSecurityRFIDNumberLocator = "//A[contains(text(),'Sign in with Security RFID Number')]";
 	private static final String signInWithUserNameLocator = "//A[contains(text(),'Sign in with User Name')]";
 	private static final String rememberMySignInInformationLocator = "css=#signInForm_rememberMe";
-	private static final String plansAndPricingLinkLocator = "css=#plansPricingButton > a";
 	private static final String requestAnAccountLinkLocator = "css=#requestAccountButton > a";
 	private static final String returnToSignInFromSendPasswordButtonLocator = "//input[@value='Return to Sign In')]";
 	private static final String returnToSignInFromSignUpPackagesLinkLocator = "//A[contains(text(),'Return to Sign In')]";
 	private static final String returnToSignInFromRegiserNewUserButtonLocator = "//input[@value='Return to Sign In')]";
 	private static final String n4systemsLinkLocator = "//A[contains(text(),'N4 Systems Inc.')]";
-	private static final Object n4systemsWebSiteTitleString = "N4 Systems | Safety Through Innovation";
 	private static final String poweredByFieldIDImageLocator = "css=.poweredBy > img";
 	private static final String thawteSiteSealLinkLocator = "//*[@id='sslCert']/A/IMG[@alt='Click to verify']/..";
 	private static final Object thawteSiteSealWindowTitleString = "thawte : siteseal";
@@ -30,6 +28,8 @@ public class LoginPage extends FieldIDTestCase {
 	private static final String thawteCountryString = "Canada";
 	private static final String thawteStatusString = "Valid";
 	private static final String returnToSignInFromChooseACompanyButtonLocator = "css=#signInToCompany_label_find_sign_in";
+	private static final Object n4systemsWebSiteTitleString = "N4 Systems | Safety Through Innovation";
+	private static final String n4systemsWebSiteWindowLocator = "//TITLE[@text()-'" + n4systemsWebSiteTitleString + "']";
 	
 	/**
 	 * Initialize the library to use the same instance of Selenium as the
@@ -86,6 +86,7 @@ public class LoginPage extends FieldIDTestCase {
 	public void gotoReturnToSignInFromChooseACompany() {
 		assertTrue("Could not find the Find Sign In Page button", selenium.isElementPresent(returnToSignInFromChooseACompanyButtonLocator));
 		selenium.click(returnToSignInFromChooseACompanyButtonLocator);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 		assertPageContent();
 	}
@@ -101,6 +102,7 @@ public class LoginPage extends FieldIDTestCase {
 	public void gotoThawteCertificate() {
 		if(selenium.isElementPresent(thawteSiteSealLinkLocator)) {
 			selenium.click(thawteSiteSealLinkLocator);
+			selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 			verifyThawteSiteSealPresent();
 		}
 	}
@@ -124,6 +126,8 @@ public class LoginPage extends FieldIDTestCase {
 	public void gotoN4Systems() {
 		assertTrue("Could not find the link to open the N4 Systems website", selenium.isElementPresent(n4systemsLinkLocator));
 		selenium.click(n4systemsLinkLocator);
+		selenium.focus(n4systemsWebSiteWindowLocator);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		verifyN4SystemsWebSiteTitle();
 	}
 	
@@ -250,39 +254,5 @@ public class LoginPage extends FieldIDTestCase {
 		if((selenium.isChecked(rememberMySignInInformationLocator) && !b) || (!selenium.isChecked(rememberMySignInInformationLocator) && b)) {
 			setRememberMySignInInformation();
 		}
-	}
-	
-	// This stuff should go to the SignUpPage class
-	/**
-	 * Go to the Sign Up page. Not all tenants have the link to the Sign Up
-	 * page. If the tenant does NOT have the extended feature PartnerCenter
-	 * enabled, the link to Plans and Pricing will be available. Currently,
-	 * this list includes:
-	 * 
-	 * 		fieldid
-	 * 		jergens
-	 * 		msa
-	 * 		rtc
-	 * 		seafit
-	 * 
-	 */
-	public void gotoPlansAndPricing() {
-		assertTrue("Could not find the link to Plans and Pricing", selenium.isElementPresent(plansAndPricingLinkLocator));
-		selenium.click(plansAndPricingLinkLocator);
-		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
-		// TODO: verify we arrived at the correct page
-	}
-	
-	// This stuff should go to the RequestAccountPage class
-	/**
-	 * Go to Request an Account. This is requesting a customer account with
-	 * the current tenant. If the tenant has PartnerCenter enabled, this link
-	 * is available. Otherwise, this method will throw an exception.
-	 */
-	public void gotoRequestAnAccount() {
-		assertTrue("Could not find the link to Request an Account", selenium.isElementPresent(requestAnAccountLinkLocator));
-		selenium.click(requestAnAccountLinkLocator);
-		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
-		// TODO: verify we arrived at the correct page
 	}
 }

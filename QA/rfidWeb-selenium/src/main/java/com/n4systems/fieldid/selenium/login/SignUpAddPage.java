@@ -7,7 +7,7 @@ import com.thoughtworks.selenium.SeleneseTestBase;
 public class SignUpAddPage extends SeleneseTestBase {
 
 	private DefaultSelenium selenium;
-	private static final Object stringForPageTitle = "failure";
+	private static final Object stringForPageTitle = "Field ID : Safety Management - Create Your Account";
 	private static final String signUpNowFreeLinkLocator = "//TR[@class='signUp']/TD[2]/A[contains(text(),'Sign Up Now')]";
 	private static final String signUpNowBasicLinkLocator = "//TR[@class='signUp']/TD[3]/A[contains(text(),'Sign Up Now')]";
 	private static final String signUpNowPlusLinkLocator = "//TR[@class='signUp']/TD[4]/A[contains(text(),'Sign Up Now')]";

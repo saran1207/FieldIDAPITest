@@ -21,9 +21,10 @@ public class ExampleTestSuite extends FieldIDTestCase {
 	public static void setUpBeforeClass() throws Exception {
 		String server = "localhost";
 		int port = 4444;
-//		String url = "https://unirope.team.n4systems.com";
-		String url = "https://fieldid.fieldid.com";
+		String tenant = "unirope";
+		String domain = "team.n4systems.com";
+		String url = "https://" + tenant + "." + domain;
 		String browser = "*chrome";
-		FieldIDTestCase.setEnvironmentVariables(server, port, browser, url);
+		FieldIDTestCase.setEnvironmentVariables(server, port, browser, url, tenant, domain);
 	}
 }
