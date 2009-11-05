@@ -46,14 +46,14 @@ public class CacheManager {
 	}
 	
 	public void logSecondLevelRegionStats(String name, SecondLevelCacheStatistics stats) {		
-		String extraInfo = String.format("SizeInMem [%8d], ElementsInMem [%5d], ElementsOnDisk [%5d]", stats.getSizeInMemory(), stats.getElementCountOnDisk(), stats.getElementCountInMemory());
+		String extraInfo = String.format("SizeInMem [%8d], ElementsInMem [%5d], ElementsOnDisk [%5d]", stats.getSizeInMemory(), stats.getElementCountInMemory(), stats.getElementCountOnDisk());
 
 		logHitMissCounts(name, stats.getHitCount(), stats.getMissCount(), stats.getPutCount(), extraInfo);
 	}
 	
 	private double calcHitRatio(double hits, double misses) {
 		double total = hits + misses;
-		return (total > 0) ? (hits / total) : 0;
+		return (total > 0) ? (hits / total * 100.0) : 0.0;
 	}
 	
 	private void logHitMissCounts(String cacheName, double hits, double misses, double puts) {
@@ -65,7 +65,7 @@ public class CacheManager {
 			
 		double ratio = calcHitRatio(hits, misses);
 		
-		String message = String.format("%-95s: Hit [%5.0f], Miss [%5.0f], Puts [%5.0f], HitMissRatio [%5.2f]%s", cacheName, hits, misses, puts, ratio, extra);
+		String message = String.format("%-95s: HitPct [%5.1f%%], Hit [%5.0f], Miss [%5.0f], Puts [%5.0f]%s", cacheName, ratio, hits, misses, puts, extra);
 		logger.info(message);
 	}
 	
