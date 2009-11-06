@@ -755,85 +755,69 @@ public class InspectionManagerImpl implements InspectionManager {
 		return inspectionType;
 	}
 
-	public Pager<InspectionGroup> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
 		List<Long> customerIds = searchCriteria.getCustomerIds();
 		List<Long> divisionIds = searchCriteria.getDivisionIds();
-		List<Long> jobSiteIds = searchCriteria.getJobSiteIds();
 
 		boolean setCustomerInfo = (customerIds != null && customerIds.size() > 0);
 		boolean setDivisionInfo = (divisionIds != null && divisionIds.size() > 0);
-		boolean setJobSiteInfo = (jobSiteIds != null && jobSiteIds.size() > 0);
 
-		String selectStatement = " from InspectionGroup ig ";
+		String selectStatement = " from Inspection i ";
 
-		String whereClause = "where ig.id in (select i.group.id from Inspection i where ( ";
+		String whereClause = "where ( ";
 		if (setCustomerInfo) {
 			whereClause += "i.product.owner.customerOrg.id in (:customerIds) ";
 
-			if (setDivisionInfo || setJobSiteInfo) {
+			if (setDivisionInfo) {
 				whereClause += "or ";
 			}
 		}
 
 		if (setDivisionInfo) {
 			whereClause += "i.product.owner.divisionOrg.id in (:divisionIds)";
-
-			if (setJobSiteInfo) {
-				whereClause += "or ";
-			}
-		}
-
-		// FIXME jobsites don't exist anymore!
-		
-		if (setJobSiteInfo) {
-			whereClause += "i.product.jobSite.id in (:jobSiteIds)";
 		}
 
 		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Inspection.class, "i") + ")";
 
-		Query query = em.createQuery("select ig " + selectStatement + whereClause + " ORDER BY ig.id");
+		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		if (setCustomerInfo)
 			query.setParameter("customerIds", customerIds);
 		if (setDivisionInfo)
 			query.setParameter("divisionIds", divisionIds);
-		if (setJobSiteInfo)
-			query.setParameter("jobSiteIds", jobSiteIds);
 		securityFilter.applyParameters(query, Inspection.class);
 
-		Query countQuery = em.createQuery("select count( ig.id ) " + selectStatement + whereClause);
+		Query countQuery = em.createQuery("select count( i.id ) " + selectStatement + whereClause);
 		if (setCustomerInfo)
 			countQuery.setParameter("customerIds", customerIds);
 		if (setDivisionInfo)
 			countQuery.setParameter("divisionIds", divisionIds);
-		if (setJobSiteInfo)
-			countQuery.setParameter("jobSiteIds", jobSiteIds);
 		securityFilter.applyParameters(countQuery, Inspection.class);
 
-		return new Page<InspectionGroup>(query, countQuery, page, pageSize);
+		return new Page<Inspection>(query, countQuery, page, pageSize);
 	}
 
-	public Pager<InspectionGroup> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
 		List<Long> jobIds = searchCriteria.getJobIds();
 
-		String selectStatement = " from InspectionGroup ig ";
+		String selectStatement = " from Inspection i ";
 
-		String whereClause = "where ig.id in (select i.group.id from Inspection i where ( ";
+		String whereClause = "where ( ";
 		
 		whereClause += "i.product.id in (select sch.product.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
 
 		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(InspectionGroup.class, "i") + ")";
 
-		Query query = em.createQuery("select ig " + selectStatement + whereClause + " ORDER BY ig.id");
+		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		query.setParameter("jobIds", jobIds);
 		securityFilter.applyParameters(query, InspectionGroup.class);
 
-		Query countQuery = em.createQuery("select count( ig.id ) " + selectStatement + whereClause);
+		Query countQuery = em.createQuery("select count( i.id ) " + selectStatement + whereClause);
 		countQuery.setParameter("jobIds", jobIds);
 		securityFilter.applyParameters(countQuery, InspectionGroup.class);
 
-		return new Page<InspectionGroup>(query, countQuery, page, pageSize);
+		return new Page<Inspection>(query, countQuery, page, pageSize);
 	}
 	
 	public boolean isMasterInspection(Long id) {

@@ -78,9 +78,9 @@ public interface InspectionManager {
 
 	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId);
 
-	public Pager<InspectionGroup> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
+	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	
-	public Pager<InspectionGroup> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
+	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 
 	public boolean isMasterInspection(Long id);
 

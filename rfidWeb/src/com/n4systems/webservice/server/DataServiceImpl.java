@@ -34,7 +34,6 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
@@ -55,6 +54,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -113,6 +113,8 @@ import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 import com.n4systems.webservice.dto.AuthenticationRequest.LoginType;
+import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
+import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -1024,20 +1026,20 @@ public class DataServiceImpl implements DataService {
 			int INSPECTIONS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_INSPECTIONS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 	
-			Pager<InspectionGroup> inspectionGroups = null;			
+			Pager<Inspection> inspections = null;			
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
-				for( InspectionGroup inspectionGroup : inspectionGroups.getList() ) {
-					response.getInspections().addAll(converter.convert(inspectionGroup));
+				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
+				for( Inspection inspection : inspections.getList() ) {
+					response.getInspections().add(converter.convert(inspection));
 				}
 			} else {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
+				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
 			}
 			
 			response.setCurrentPage(CURRENT_PAGE);
 			response.setRecordsPerPage(INSPECTIONS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
-			response.setTotalPages( (int)inspectionGroups.getTotalPages() );
+			response.setTotalPages( (int)inspections.getTotalPages() );
 			
 			logger.info("Returning Inspections: Tenant [" + requestInformation.getTenantId() + 
 					"] Page [" + response.getCurrentPage() + "/" + response.getTotalPages() + 
@@ -1050,6 +1052,28 @@ public class DataServiceImpl implements DataService {
 			logger.error( "failed while processing inspections", e );
 			throw new ServiceException();
 		}		
+	}
+	
+	public FindProductResponse findProduct(FindProductRequestInformation requestInformation) throws ServiceException {
+		try {
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();			
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
+			SmartSearchLoader smartSearchLoader = new SmartSearchLoader(securityFilter);
+			smartSearchLoader.setSearchText(requestInformation.getSearchText());
+			
+			List<Product> products = smartSearchLoader.load();
+			
+			FindProductResponse response = new FindProductResponse();
+			
+			for (Product product : products) {
+				response.getProducts().add( converter.convert(product));
+			}
+			
+			return response;			
+		} catch (Exception e) {
+			logger.error("failed while finding product for handheld", e);
+			throw new ServiceException();
+		}
 	}
 	
 	public ProductListResponse getProducts(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException {
@@ -1196,20 +1220,20 @@ public class DataServiceImpl implements DataService {
 			int INSPECTIONS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_INSPECTIONS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 	
-			Pager<InspectionGroup> inspectionGroups = null;			
+			Pager<Inspection> inspections = null;			
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
-				for( InspectionGroup inspectionGroup : inspectionGroups.getList() ) {
-					response.getInspections().addAll(converter.convert(inspectionGroup));
+				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
+				for( Inspection inspection : inspections.getList() ) {
+					response.getInspections().add(converter.convert(inspection));
 				}
 			} else {
-				inspectionGroups = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
+				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
 			}
 			
 			response.setCurrentPage(CURRENT_PAGE);
 			response.setRecordsPerPage(INSPECTIONS_PER_PAGE);
 			response.setStatus(ResponseStatus.OK);
-			response.setTotalPages( (int)inspectionGroups.getTotalPages() );
+			response.setTotalPages( (int)inspections.getTotalPages() );
 			
 			logger.info("Returning Inspections By Job: Tenant [" + requestInformation.getTenantId() + 
 					"] Page [" + response.getCurrentPage() + "/" + response.getTotalPages() + 

@@ -6,7 +6,6 @@ public class WSSearchCritiera {
 
 	private List<Long> customerIds;
 	private List<Long> divisionIds;
-	private List<Long> jobSiteIds;
 	private String createDate;
 	
 	public List<Long> getCustomerIds() {
@@ -20,12 +19,6 @@ public class WSSearchCritiera {
 	}
 	public void setDivisionIds(List<Long> divisionIds) {
 		this.divisionIds = divisionIds;
-	}
-	public List<Long> getJobSiteIds() {
-		return jobSiteIds;
-	}
-	public void setJobSiteIds(List<Long> jobSiteIds) {
-		this.jobSiteIds = jobSiteIds;
 	}
 	public String getCreateDate() {
 		return createDate;
