@@ -26,7 +26,7 @@
 					<img src="images/icons/FieldID_CALENDAR-CHECK-normal.png" border="0" id="nextDateTrigger">
 					<script type="text/javascript">
 						Calendar.setup({
-							inputField  : "massUpdateInspectionScheduleSave_nextDate",
+							inputField  : "input_nextDate",
 							ifFormat    : "${Session.sessionUser.otherDateFormat}",
 							button      : "nextDateTrigger"
 						});
