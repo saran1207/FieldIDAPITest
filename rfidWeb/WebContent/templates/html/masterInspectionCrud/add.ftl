@@ -83,33 +83,34 @@ ${action.setPageType('inspection', 'add')!}
 	</@s.form>
 	</div>
 
-<div class="columnSeperator" >
-	<@s.text name="label.or"/>
-</div>
-
-<div id="addComponents" class="componentTypes" >
-	<div class="inspectionHeader">
-		<h3><@s.text name="label.add_new_component"/></h3>
-		<p class="instructions smallInstructions">
-			<@s.text name="instructions.add_new_component"/>
-		</p>
+<#if sessionUser.hasAccess("tag") >
+	<div class="columnSeperator" >
+		<@s.text name="label.or"/>
 	</div>
 	
-	<#list subTypes?sort_by('name') as type >
-		<div id="subProductType_${type.id}" class="component"> 
-			<div class="definition">
-				<div class="identifier">${type.name}</div> 
-				<div class="createOptions">
-					<a href="<@s.url action="productAdd" namespace="/ajax"  productTypeId="${type.id}" token="${token}"/>" onclick="addSubProduct(${type.id}, ${(product.owner.id)}); return false"><@s.text name="label.add_new" /></a> | 
-					<a href='<@s.url action="products" namespace="/ajax"  productTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' >
-			  			<@s.text name="label.find_existing" />
-			  		</a>
-			  	</div>
-		  	</div>
+	<div id="addComponents" class="componentTypes" >
+		<div class="inspectionHeader">
+			<h3><@s.text name="label.add_new_component"/></h3>
+			<p class="instructions smallInstructions">
+				<@s.text name="instructions.add_new_component"/>
+			</p>
 		</div>
-	</#list>
-</div>
-
+		
+		<#list subTypes?sort_by('name') as type >
+			<div id="subProductType_${type.id}" class="component"> 
+				<div class="definition">
+					<div class="identifier">${type.name}</div> 
+					<div class="createOptions">
+						<a href="<@s.url action="productAdd" namespace="/ajax"  productTypeId="${type.id}" token="${token}"/>" onclick="addSubProduct(${type.id}, ${(product.owner.id)}); return false"><@s.text name="label.add_new" /></a> | 
+						<a href='<@s.url action="products" namespace="/ajax"  productTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' >
+				  			<@s.text name="label.find_existing" />
+				  		</a>
+				  	</div>
+			  	</div>
+			</div>
+		</#list>
+	</div>
+</#if>
 
 
 

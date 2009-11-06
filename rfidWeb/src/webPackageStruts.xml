@@ -11,7 +11,7 @@
 			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
 		</global-results>
 
-		<action name="administration" class="com.n4systems.fieldid.actions.SimpleAction">
+		<action name="administration" class="com.n4systems.fieldid.actions.AdministrationAction">
 			<result name="success" type="freemarker">/templates/html/administration/view.ftl</result>
 			<result name="error" type="freemarker">/templates/html/administration/view.ftl</result>
 			<result name="input" type="freemarker">/templates/html/administration/view.ftl</result>
@@ -946,7 +946,7 @@
 			<result name="success" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
 		</action>
 
-		<action name="inspectionCreate" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+		<action name="inspectionCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
 			<result name="error" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -963,7 +963,7 @@
 
 		</action>
 
-		<action name="inspectionUpdate" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+		<action name="inspectionUpdate" method="update" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
 			<result name="error" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1024,7 +1024,7 @@
 		</action>
 
 
-		<action name="baseInspectionCreate" method="storeMaster"
+		<action name="baseInspectionCreate" method="storeNewMasterInspection"
 			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
 			<result name="input" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
@@ -1035,7 +1035,7 @@
 			</result>
 		</action>
 
-		<action name="subInspectionCreate" method="storeSubInspection"
+		<action name="subInspectionCreate" method="storeNewSubInspection"
 			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
 			<result name="input" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
@@ -1051,7 +1051,7 @@
 			<result name="success" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
 		</action>
 
-		<action name="baseInspectionUpdate" method="storeMaster"
+		<action name="baseInspectionUpdate" method="storeNewMasterInspection"
 			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
 			<result name="input" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
@@ -1062,7 +1062,7 @@
 			</result>
 		</action>
 
-		<action name="subInspectionUpdate" method="storeSubInspection"
+		<action name="subInspectionUpdate" method="storeExistingSubInspection"
 			class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
 			<result name="input" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>

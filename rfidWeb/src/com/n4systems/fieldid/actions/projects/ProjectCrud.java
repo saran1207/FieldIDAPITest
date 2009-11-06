@@ -87,7 +87,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={})
+	@UserPermissionFilter(open=true)
 	public String doShow() {
 		testRequiredEntities(true);
 		jobResources.setJobId(uniqueID);
@@ -95,7 +95,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={})
+	@UserPermissionFilter(open=true)
 	public String doList() {
 		try {
 			JobListService jobListService = new JobListService(persistenceManager, getSecurityFilter(), Constants.PAGE_SIZE);

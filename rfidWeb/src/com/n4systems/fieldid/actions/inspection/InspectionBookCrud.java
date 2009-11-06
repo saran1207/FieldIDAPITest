@@ -82,7 +82,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={})
+	@UserPermissionFilter(open=true)
 	public String doLPList() {
 		try {
 			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());

@@ -332,8 +332,19 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 	}
 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
-	public String doSave() {
+	
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	public String doCreate() {
+		return save();
+	}
+	
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	public String doUpdate() {
+		
+		return save();
+	}
+	
+	private String save() {
 		try {
 			testDependices();
 		} catch (MissingEntityException e) {

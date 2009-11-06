@@ -167,8 +167,18 @@ public class SubInspectionCrud extends InspectionCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
-	public String doStoreSubInspection() {
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	public String doStoreNewSubInspection() {
+		return storeSubInspection();
+	}
+	
+	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	public String doStoreExistingSubInspection() {
+		return storeSubInspection();
+	}
+	
+	public String storeSubInspection() {
 		if (masterInspectionHelper == null) {
 			addActionErrorText("error.nomasterinspection");
 			return MISSING;
@@ -211,7 +221,19 @@ public class SubInspectionCrud extends InspectionCrud {
 		return SUCCESS;
 	}
 
-	public String doStoreMaster() {
+	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	public String doStoreNewMasterInspection() {
+		return storeMasterInspection();
+	}
+	
+	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	public String doStoreExistingMasterInspection() {
+		return storeMasterInspection();
+	}
+	
+	public String storeMasterInspection() {
 		if (masterInspectionHelper == null) {
 			addActionErrorText("error.nomasterinspection");
 			return MISSING;

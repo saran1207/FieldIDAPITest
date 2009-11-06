@@ -48,7 +48,7 @@ public class ProjectEventCrud extends AbstractCrud {
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={})
+	@UserPermissionFilter(open=true)
 	public String doList() {
 		if (project == null || !project.isEventJob()) {
 			addActionErrorText("error.noproject");

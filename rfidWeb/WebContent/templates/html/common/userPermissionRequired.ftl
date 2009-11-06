@@ -1,14 +1,9 @@
-<title><@s.text name="title.you_need_more_permissions_to_do_this"/></title>
-
-
-You need to contact your Field ID administrator increase your permission level you need
-one of these
- 		list permissions for this action
- 		
-if customer user 
-		say you can not do this action no matter what.
-		
+<title><@s.text name="title.you_do_not_have_access_to_this_action"/></title>
+<div id="noPermissionMessage">
+	<p>You do not have the permissions to perform this action.</p>
+	<#if sessionUser.employeeUser>
+		<p>Please contact your Field ID administrator for more information.</p>
+	</#if>
 	
- 
- 
-
+	<p><@s.text name="label.return_to"/> <a href="<@s.url action="home" namespace="/"/>" ><@s.text name="label.home"/></a></p>
+</div>		

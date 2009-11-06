@@ -19,7 +19,7 @@ public class UserAccessControllerTest {
 	@Test
 	public void should_allow_access_to_action_when_there_is_no_permissions_required() throws Exception {
 		UserAccessController sut = new UserAccessController(new SampleAction());
-		assertTrue(sut.userHasAccessToAction("doSomeAction"));
+		assertTrue(sut.userHasAccessToAction("doSomeActionSameAsClassPermissions"));
 	}
 	
 	@Test
@@ -41,6 +41,22 @@ public class UserAccessControllerTest {
 		assertTrue(sut.userHasAccessToAction("doMultiPermissionRequiredAction"));
 	}
 	
+	@Test
+	public void should_allow_anyone_access() throws Exception {
+		UserAccessController noPermissionUser = new UserAccessController(new SampleAction(Permissions.NO_PERMISSIONS));
+		assertTrue(noPermissionUser.userHasAccessToAction("doSomeActionThatIsAlwaysOpenToEveryUser"));
+		
+		UserAccessController adminUser = new UserAccessController(new SampleAction(Permissions.ADMIN));
+		assertTrue(adminUser.userHasAccessToAction("doSomeActionThatIsAlwaysOpenToEveryUser"));
+		
+	}
+	
+	@Test 
+	public void should_deny_access_to_any_user() {
+		UserAccessController noPermissionUser = new UserAccessController(new SampleAction(Permissions.ADMIN));
+		assertFalse(noPermissionUser.userHasAccessToAction("doSomeActionThatIsBlocksEveryOne"));
+	}
+	
 	
 	@SuppressWarnings("unused")
 	private class SampleAction extends AbstractAction {
@@ -56,7 +72,7 @@ public class UserAccessControllerTest {
 			this.permissions = permissions;
 		}
 		
-		public String doSomeAction() {
+		public String doSomeActionSameAsClassPermissions() {
 			return SUCCESS;
 		}
 		
@@ -69,6 +85,16 @@ public class UserAccessControllerTest {
 		public String doMultiPermissionRequiredAction() {
 			return SUCCESS;
 		}
+		
+		@UserPermissionFilter(open=true)
+		public String doSomeActionThatIsAlwaysOpenToEveryUser() {
+			return SUCCESS;
+		}
+		
+		@UserPermissionFilter()
+		public String doSomeActionThatIsBlocksEveryOne() {
+			return SUCCESS;
+		}
 
 		@Override
 		public SessionUser getSessionUser() {
@@ -76,7 +102,6 @@ public class UserAccessControllerTest {
 			expect(mock.getPermissions()).andReturn(permissions);
 			replay(mock);
 			return mock;
-			
 		}
 	}
 	

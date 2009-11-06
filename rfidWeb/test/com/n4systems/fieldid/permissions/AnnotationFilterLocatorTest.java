@@ -54,6 +54,19 @@ public class AnnotationFilterLocatorTest {
 		assertNull(sut.getFilter("methodWithOutPermission"));
 	}
 	
+	@Test
+	public void should_not_find_annotation_on_overrided_methods() throws Exception {
+		AnnotationFilterLocator<ExtendedFeatureFilter> sut = new AnnotationFilterLocator<ExtendedFeatureFilter>(ExtendedPermissionClassWithNoPermissionOnIt.class, ExtendedFeatureFilter.class);
+		assertNull(sut.getFilter("methodWithPermission"));
+		assertNull(sut.getFilter("methodWithOutPermission"));
+	}
+	
+	@Test
+	public void should_find_annotation_on_method_that_has_not_been_overridden() throws Exception {
+		AnnotationFilterLocator<ExtendedFeatureFilter> sut = new AnnotationFilterLocator<ExtendedFeatureFilter>(ExtendedPermissionClassWithNoPermissionOnIt.class, ExtendedFeatureFilter.class);
+		assertNotNull(sut.getFilter("methodWithPermissionToNotBeOverrided"));
+	}
+	
 	
 	@SuppressWarnings("unused")
 	@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Branding)
@@ -64,10 +77,24 @@ public class AnnotationFilterLocatorTest {
 		
 		public void methodWithOutPermission() {
 		}
+		
+		@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.CustomCert)
+		public void methodWithPermissionToNotBeOverrided() {
+		}
 	}
 	
 	@SuppressWarnings("unused")
 	private class NoPermissionRequiredAction {
+		public void methodWithOutPermission() {
+		}
+	}
+	
+	private class ExtendedPermissionClassWithNoPermissionOnIt extends PermissionRequiredAction {
+		@Override
+		public void methodWithPermission() {
+		}
+		
+		@Override
 		public void methodWithOutPermission() {
 		}
 	}

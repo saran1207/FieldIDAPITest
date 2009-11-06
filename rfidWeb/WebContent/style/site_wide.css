@@ -186,3 +186,12 @@ pre {
 	width: 200px;
 }	
 
+#noPermissionMessage {
+	padding:20px;
+	font-size: 2em;
+	text-align: center;
+}
+
+#noPermissionMessage p {
+	margin: 5px 0;
+}

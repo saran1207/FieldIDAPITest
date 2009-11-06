@@ -14,10 +14,13 @@ public class UserAccessController {
 
 	public boolean userHasAccessToAction(String methodName) {
 		UserPermissionFilter filter = filterLocator.getFilter(methodName);
-		if (filter == null) {
+		if (allowAnyOne(filter)) {
 			return true;
 		}
 		return Permissions.hasOneOf(action.getSessionUser().getPermissions(), filter.userRequiresOneOf());
 	}
 
+	private boolean allowAnyOne(UserPermissionFilter filter) {
+		return filter == null || filter.open();
+	}
 }

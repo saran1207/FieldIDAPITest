@@ -12,6 +12,8 @@ import com.n4systems.util.persistence.SimpleListable;
 
 public class Permissions {
 	
+	
+	
 	// Primary permissions
 	public static final int Tag 				= 1 << 0;
 	public static final int ManageSystemConfig	= 1 << 1;
@@ -31,6 +33,8 @@ public class Permissions {
 	public static final int SYSTEM				= ALL;
 	public static final int CUSTOMER			= NO_PERMISSIONS;
 	public static final int ALLINSPECTION		= CreateInspection | EditInspection;
+	
+	
 	
 	/** permissions visible for admins to select for system users */
 	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateInspection, EditInspection, ManageJobs, ManageSafetyNetwork, AccessWebStore };
