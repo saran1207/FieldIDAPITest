@@ -107,6 +107,16 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		return INPUT;
 	}
 
+	@SkipValidation
+	public String doShow() {
+		if (product == null || product.isNew()) {
+			addActionErrorText("error.noproduct");
+			return MISSING;
+		}
+		subProducts = SubProductHelper.convert(product.getSubProducts());
+		return SUCCESS;
+	}
+
 	
 	public String doUpdate() {
 		if (product == null || product.isNew()) {
