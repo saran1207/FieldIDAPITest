@@ -8,7 +8,7 @@ public class SignUpPackagesPage extends SeleneseTestBase {
 
 	private DefaultSelenium selenium;
 	private static final String plansAndPricingLinkLocator = "css=#plansPricingButton > a";
-	private static final Object stringForPageTitle = "failure";
+	private static final Object stringForPageTitle = "Field ID : Safety Management -";	// TODO: WEB-1347
 	private static final String columnHeaderFreeLocator = "css=#package_Free";
 	private static final String columnHeaderBasicLocator = "css=#package_Basic";
 	private static final String columnHeaderPlusLocator = "css=#package_Plus";
@@ -36,6 +36,7 @@ public class SignUpPackagesPage extends SeleneseTestBase {
 	public void gotoChooseAnotherPackage() {
 		assertTrue("Could not find the link to return to the Sign Up Package page", selenium.isElementPresent(chooseAnotherPackageLinkLocator));
 		selenium.click(chooseAnotherPackageLinkLocator);
+		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();
 		assertPageContent();
 	}
@@ -58,7 +59,7 @@ public class SignUpPackagesPage extends SeleneseTestBase {
 	 * 
 	 */
 	public void gotoPlansAndPricing() {
-		assertTrue("Could not find the link to Plans and Pricing", selenium.isElementPresent(plansAndPricingLinkLocator));
+		assertTrue("Could not find the link to Plans and Pricing. Maybe this tenant has PartnerCenter enabled.", selenium.isElementPresent(plansAndPricingLinkLocator));
 		selenium.click(plansAndPricingLinkLocator);
 		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();

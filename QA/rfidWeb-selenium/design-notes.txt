@@ -45,4 +45,20 @@ the related variables. If you don't have the environment variables set up, you
 can (a) create an Ant script that will set them up or (b) create a TestSuite
 which will initialize them using FieldIDTestCase.setEnvironmentVariables().
 
-Darrell Grainger - November 2nd, 2009
+If there is something trivial wrong with the product. File a bug then modify
+the automation so it skips over the bug. Put a comment at the point you modified
+the code. The comment should have the format // TODO: WEB-xxxx where xxxx is the
+bug number we are waiting to be fixed. When the bug is fixed, hopefully the
+automation will give us a false negative. When we examine the code we'll find
+the TODO comment, fix the automation and change the comment to just
+// WEB-xxxx so we know this code was related to that bug.
+
+Additionally, we should scan the code ever so often for TODO statements. If
+maintenance is schedule as a weekly event, part of that would be to scan the
+code for the TODO statements.
+
+An example of a trivial bug would be the title of the page is wrong, e.g.
+// TODO: WEB-1347.
+
+
+Darrell Grainger - November 6nd, 2009

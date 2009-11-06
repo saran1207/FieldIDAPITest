@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
 
-public class LoginUnitTests extends FieldIDTestCase {
+public class LoginCommonUnitTests extends FieldIDTestCase {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -67,18 +67,6 @@ public class LoginUnitTests extends FieldIDTestCase {
 		goToChooseACompany();
 		chooseACompany.setCompanyID(tenant);
 		loginPage.gotoReturnToSignInFromChooseACompany();
-	}
-	
-	@Test
-	public void goToRequestAnAccount() throws Exception {
-		goToLoginPage();
-		registerNewUser.gotoRequestAnAccount();
-	}
-	
-	@Test
-	public void returnToLoginPageFromRequestAnAccount() throws Exception {
-		goToRequestAnAccount();
-		loginPage.gotoReturnToSignInFromRegisterNewUserPage();
 	}
 	
 	@Test

@@ -47,7 +47,7 @@ public class RegisterNewUserPage extends SeleneseTestBase {
 	 * is available. Otherwise, this method will throw an exception.
 	 */
 	public void gotoRequestAnAccount() {
-		assertTrue("Could not find the link to Request an Account", selenium.isElementPresent(requestAnAccountLinkLocator));
+		assertTrue("Could not find the link to Request an Account. Maybe this tenant doesn't have PartnerCenter enabled.", selenium.isElementPresent(requestAnAccountLinkLocator));
 		selenium.click(requestAnAccountLinkLocator);
 		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		assertPageTitle();

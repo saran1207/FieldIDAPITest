@@ -87,6 +87,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	ChooseACompanyPage chooseACompany;
 	RegisterNewUserPage registerNewUser;
 	HomePage homePage;
+	SignUpPackagesPage signUpPackages;
+	SignUpAddPage signUpAdd;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -120,6 +122,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		chooseACompany = new ChooseACompanyPage(selenium);
 		registerNewUser = new RegisterNewUserPage(selenium);
 		homePage = new HomePage(selenium);
+		signUpPackages = new SignUpPackagesPage(selenium);
+		signUpAdd = new SignUpAddPage(selenium);
 	}
 
 	private void initSeleniumInstance() {

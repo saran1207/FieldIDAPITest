@@ -14,17 +14,17 @@ import com.n4systems.fieldid.selenium.testcase.*;
  *
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ LoginUnitTests.class })
+@Suite.SuiteClasses({ LoginCommonUnitTests.class, LoginNoPartnerCenterUnitTests.class })
 public class ExampleTestSuite extends FieldIDTestCase {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		String server = "localhost";
 		int port = 4444;
-		String tenant = "unirope";
-		String domain = "team.n4systems.com";
+		String tenant = "rtc";
+		String domain = "grumpy.n4";
 		String url = "https://" + tenant + "." + domain;
-		String browser = "*chrome";
+		String browser = "*iehta";
 		FieldIDTestCase.setEnvironmentVariables(server, port, browser, url, tenant, domain);
 	}
 }
