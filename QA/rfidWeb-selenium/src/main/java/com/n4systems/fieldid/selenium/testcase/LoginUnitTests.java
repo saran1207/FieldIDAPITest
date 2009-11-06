@@ -21,73 +21,69 @@ public class LoginUnitTests extends FieldIDTestCase {
 	
 	@Test
 	public void goToSignInWithSecurityRFIDNumber() throws Exception {
-		loginPage.gotoLoginPage();
+		goToLoginPage();
 		loginPage.gotoSignInWithSecurityRFIDNumberLink();
 	}
 	
 	@Test
 	public void goToSignInWithUserName() throws Exception {
-		loginPage.gotoLoginPage();
-		loginPage.gotoSignInWithSecurityRFIDNumberLink();
+		goToSignInWithSecurityRFIDNumber();
 		loginPage.gotoSignInWithUserNameLink();
 	}
 	
 	@Test
 	public void goToN4SystemsFromLoginPage() throws Exception {
-		loginPage.gotoLoginPage();
+		goToLoginPage();
 		loginPage.gotoN4Systems();
 	}
 	
 	@Ignore("Only used when testing production environment")
 	@Test
 	public void goToThawteSiteSealFromLoginPage() throws Exception {
-		loginPage.gotoLoginPage("https://fieldid.fieldid.com/fieldid/");
+		goToLoginPage();
 		loginPage.gotoThawteCertificate();
 	}
 	
 	@Test
 	public void goToForgotPassword() throws Exception {
-		loginPage.gotoLoginPage();
+		goToLoginPage();
 		forgotPasswordPage.gotoIForgotMyPassword();
 	}
 	
 	@Test
 	public void returnToLoginPageFromForgotPassword() throws Exception {
-		loginPage.gotoLoginPage();
-		forgotPasswordPage.gotoIForgotMyPassword();
+		goToForgotPassword();
 		loginPage.gotoReturnToSignInFromForgotPassword();
 	}
 	
 	@Test
 	public void goToChooseACompany() throws Exception {
-		loginPage.gotoLoginPage();
+		goToLoginPage();
 		chooseACompany.gotoNotTheCompanyIWant();
 	}
 	
 	@Test
 	public void returnToLoginPageFromChooseACompany() throws Exception {
-		loginPage.gotoLoginPage();
-		chooseACompany.gotoNotTheCompanyIWant();
+		goToChooseACompany();
 		chooseACompany.setCompanyID(tenant);
 		loginPage.gotoReturnToSignInFromChooseACompany();
 	}
 	
 	@Test
 	public void goToRequestAnAccount() throws Exception {
-		loginPage.gotoLoginPage();
+		goToLoginPage();
 		registerNewUser.gotoRequestAnAccount();
 	}
 	
 	@Test
 	public void returnToLoginPageFromRequestAnAccount() throws Exception {
-		loginPage.gotoLoginPage();
-		registerNewUser.gotoRequestAnAccount();
+		goToRequestAnAccount();
 		loginPage.gotoReturnToSignInFromRegisterNewUserPage();
 	}
 	
 	@Test
 	public void loginIn() throws Exception {
-		loginPage.gotoLoginPage();
+		goToLoginPage();
 		String username = "n4systems";
 		String password = "makemore$";
 		loginPage.setUserName(username);

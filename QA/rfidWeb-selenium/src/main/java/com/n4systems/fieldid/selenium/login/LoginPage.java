@@ -29,7 +29,7 @@ public class LoginPage extends FieldIDTestCase {
 	private static final String thawteStatusString = "Valid";
 	private static final String returnToSignInFromChooseACompanyButtonLocator = "css=#signInToCompany_label_find_sign_in";
 	private static final Object n4systemsWebSiteTitleString = "N4 Systems | Safety Through Innovation";
-	private static final String n4systemsWebSiteWindowLocator = "//TITLE[@text()-'" + n4systemsWebSiteTitleString + "']";
+	private static final String n4systemsWebSiteWindowLocator = "//TITLE[@text()='" + n4systemsWebSiteTitleString + "']";
 	
 	/**
 	 * Initialize the library to use the same instance of Selenium as the
@@ -126,8 +126,8 @@ public class LoginPage extends FieldIDTestCase {
 	public void gotoN4Systems() {
 		assertTrue("Could not find the link to open the N4 Systems website", selenium.isElementPresent(n4systemsLinkLocator));
 		selenium.click(n4systemsLinkLocator);
-		selenium.focus(n4systemsWebSiteWindowLocator);
-		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
+		try { Thread.sleep(2000); } catch (Exception e) { }
+//		selenium.waitForPageToLoad(FieldIDTestCase.pageLoadDefaultTimeout);
 		verifyN4SystemsWebSiteTitle();
 	}
 	
