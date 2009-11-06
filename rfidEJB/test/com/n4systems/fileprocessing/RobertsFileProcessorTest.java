@@ -57,7 +57,7 @@ public class RobertsFileProcessorTest {
 	@Test
 	public void test_version_8() throws FileProcessingException {
 		FileDataContainer dataContainer = new FileDataContainer();
-		processor.processFile(dataContainer, produceRobertsFile("roberts_v8.log"));
+		processor.processFile(dataContainer, produceRobertsFile("roberts_v8.roberts"));
 		
 		confirmRegularDataFromRobertsProcessing(dataContainer);
 		assertNull(dataContainer.getPeakLoadDuration());
@@ -66,7 +66,7 @@ public class RobertsFileProcessorTest {
 	@Test
 	public void test_version_7() throws FileProcessingException {
 		FileDataContainer dataContainer = new FileDataContainer();
-		processor.processFile(dataContainer, produceRobertsFile("roberts_v7.log"));
+		processor.processFile(dataContainer, produceRobertsFile("roberts_v7.roberts"));
 		
 		confirmRegularDataFromRobertsProcessing(dataContainer);
 		assertNull(dataContainer.getPeakLoadDuration());
