@@ -175,9 +175,20 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
+	
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	public String doCreate() {
+		return save();
+	}
+	
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	public String doUpdate() {
+		return save();
+	}
+	
+	
 	@Validations(requiredFields = { @RequiredFieldValidator(message = "", key = "error.masterinspectionnotcomplete", fieldName = "inspectionComplete") })
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
-	public String doSave() {
+	private String save() {
 
 		if (masterInspection == null) {
 			return ERROR;
