@@ -1,17 +1,17 @@
 VERSION = 9
-Customer = U.S. NAVY
-Addr1 = 
-Addr2 = 
-User Paragraph = ||      THANK YOU FOR CHOOSING MARINE AND INDUSTRIAL SUPPLY.||                          ||||||||||||||
+Customer = <CUSTOMER NAME>
+Addr1 = <addr1>
+Addr2 = <addr2>
+User Paragraph = <COMMENTS GO HERE>
 Description = 35 TON SHACKLE
 Test Method = PROOF = 1.50 x WLL 
 WLL = 60000
 Test Number = 11260
 Size = 30 TON
-Length = 
-Order No. = 
+Length = 12 ft
+Order No. = ON12345
 Test Info = Proof Test Time: 02:03 min:sec
-Serial No. = 11
+Serial No. = SERIALNUMBER
 Test Time =  0
 Maximum Load =  600000
 Load Units = lbs.
