@@ -1,6 +1,6 @@
 package com.n4systems.fileprocessing.roberts;
 
-import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.jfree.data.xy.XYSeries;
@@ -17,7 +17,6 @@ abstract public class LegacyRobertsParser implements RobertsParser {
 	private static final int INSPECTION_DATE_LINE = 18;
 	private static final int DATA_START_LINE = 26;
 
-	private final DateFormat outputDateFormatter = DateFormat.getDateInstance();
 	private final RobertsSerialNumberConverter serialConverter;
 	private final RobertsChartGenerator chartGen;
 	
@@ -72,11 +71,11 @@ abstract public class LegacyRobertsParser implements RobertsParser {
 		fileDataContainer.setChart(chartGen.generate(xySeries));
 	}
 
-	private String parseDate(String inputDate) {
+	private Date parseDate(String inputDate) {
 		if (inputDate == null) {
 			return null;
 		}
-		return outputDateFormatter.format(DateHelper.string2Date("MM/dd/yy", inputDate));
+		return DateHelper.string2Date("MM/dd/yy", inputDate);
 	}
 	
 }

@@ -3,7 +3,9 @@ package com.n4systems.fileprocessing;
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Before;
@@ -15,12 +17,15 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
 
 public class RobertsFileProcessorTest {
-
-	RobertsFileProcessor processor;
+	private Date inspectionDate;
+	private RobertsFileProcessor processor;
 	
 	@Before
 	public void setUp() throws Exception {
 		processor = new RobertsFileProcessor();
+		
+		inspectionDate = (new SimpleDateFormat("dd-MM-yyyy")).parse("16-01-2009");
+		
 		ConfigContext.setCurrentContext(new NonDataSourceBackedConfigContext());
 	}
 	
@@ -79,7 +84,7 @@ public class RobertsFileProcessorTest {
 		assertEquals("<COMMENTS GO HERE>", dataContainer.getComments());
 		assertEquals(Arrays.asList("SERIALNUMBER"), dataContainer.getSerialNumbers());
 		assertEquals("<CUSTOMER NAME>", dataContainer.getCustomerName());
-		assertEquals("Jan 16, 2009", dataContainer.getInspectionDate());
+		assertEquals(inspectionDate, dataContainer.getInspectionDate());
 		assertTrue(dataContainer.getChart().length > 0);
 	}
 	

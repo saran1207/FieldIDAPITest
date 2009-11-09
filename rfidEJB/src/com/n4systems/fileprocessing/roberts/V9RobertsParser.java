@@ -1,6 +1,6 @@
 package com.n4systems.fileprocessing.roberts;
 
-import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +16,21 @@ import com.n4systems.util.DateHelper;
 
 public class V9RobertsParser implements RobertsParser {
 	private static final int DATA_START_LINE = 26;
-	
-	private final DateFormat outputDateFormatter = DateFormat.getDateInstance();
-	private final RobertsSerialNumberConverter serialConverter =  new RobertsSerialNumberConverter();
-	private final RobertsChartGenerator chartGen = new RobertsChartGenerator();
 
+	private final RobertsSerialNumberConverter serialConverter;
+	private final RobertsChartGenerator chartGen;
+	
 	private boolean peakLoadReached;
 	private boolean peakLoadLost;
 	
-	public V9RobertsParser() {}
+	public V9RobertsParser(RobertsSerialNumberConverter serialConverter, RobertsChartGenerator chartGen) {
+		this.serialConverter = serialConverter;
+		this.chartGen = chartGen;
+	}
+	
+	public V9RobertsParser() {
+		this(new RobertsSerialNumberConverter(), new RobertsChartGenerator());
+	}
 	
 	@Override
 	public void extractData(FileDataContainer fileDataContainer, List<String> lines) throws FileProcessingException {
@@ -92,11 +98,8 @@ public class V9RobertsParser implements RobertsParser {
 		fileDataContainer.setChart(chartGen.generate(xySeries));
 	}
 	
-	private String parseDate(String inputDate) {
-		if (inputDate == null) {
-			return null;
-		}
-		return outputDateFormatter.format(DateHelper.string2Date("MM/dd/yy", inputDate));
+	private Date parseDate(String inputDate) {
+		return DateHelper.string2Date("MM/dd/yy", inputDate);
 	}
 	
 	private double calculatePeakLoadDuration(double peakLoadDuration, double load, double peakLimit) {

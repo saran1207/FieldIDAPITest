@@ -1,8 +1,6 @@
 package com.n4systems.ejb;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,8 +83,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		InspectionBook book = persistenceManager.find(InspectionBook.class, inspectionBookId, tenantId);
 		
 		return createOrUpdateProofTest(fileData, user, customer, book, false);
-		 
-		
 	}
 	
 	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, UserBean inspector) throws FileProcessingException  {
@@ -122,9 +118,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 
 		}
-		
-		// parse our inspection date to a Date object
-		Date inspectionDate = parseInspectionDateInInspectorLocalTime(fileData.getInspectionDate());
+		Date inspectionDate = fileData.getInspectionDate();
 
 		Product product;
 		List<Inspection> inspections;
@@ -424,18 +418,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	
 	private boolean chartImageExists(Inspection inspection) {
 		return PathHandler.getChartImageFile(inspection).exists();
-	}
-	
-	private Date parseInspectionDateInInspectorLocalTime(String inspectionDateString) throws FileProcessingException {
-		Date inspectionDate = null;
-		
-		try {
-			inspectionDate = DateFormat.getDateInstance().parse(inspectionDateString);
-		} catch (ParseException e) {
-			throw new FileProcessingException("Invalid date: " + inspectionDateString, e);
-		}
-		
-		return inspectionDate;
 	}
 	
 	private void writeLogMessage(Tenant tenant, String message) {

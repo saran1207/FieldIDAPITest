@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,8 +35,6 @@ public class WiropFileProcessor extends FileProcessor {
 	private static final int TEST_DATE = 5;
 	
 	public void processFile(FileDataContainer fileDataContainer, InputStream file) throws FileProcessingException {
-		DateFormat dateFormat = DateFormat.getDateInstance();
-		
 		Chart chart = fileDataContainer.getChartData();
 		chart.setUsingPeakDots(true);
 		chart.setDisplayName("Proof Test");
@@ -65,7 +62,7 @@ public class WiropFileProcessor extends FileProcessor {
 			
 			// parse the date ... this step is so stupid ... 
 			Date inspectionDate = DateHelper.string2Date(headerDateFormat, headers[TEST_DATE].trim());
-			fileDataContainer.setInspectionDate(dateFormat.format(inspectionDate));
+			fileDataContainer.setInspectionDate(inspectionDate);
 			logger.info("Wirop log test date [" + headers[TEST_DATE] + "]");
 			
 			fileDataContainer.setCustomerName(headers[CUSTOMER_NAME].trim());

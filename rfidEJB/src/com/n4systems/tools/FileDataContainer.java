@@ -1,6 +1,7 @@
 package com.n4systems.tools;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class FileDataContainer {
 	
 	private List<String> serialNumbers = new ArrayList<String>();
 	private String peakLoad;
-	private String inspectionDate;
+	private Date inspectionDate;
 	private String testDuration;
 	private String peakLoadDuration;
 	private String comments;
@@ -106,11 +107,11 @@ public class FileDataContainer {
 		this.peakLoad = peakLoad;
 	}
 
-	public String getInspectionDate() {
+	public Date getInspectionDate() {
 		return inspectionDate;
 	}
 
-	public void setInspectionDate(String inspectionDate) {
+	public void setInspectionDate(Date inspectionDate) {
 		this.inspectionDate = inspectionDate;
 	}
 

@@ -1,7 +1,6 @@
 package com.n4systems.fileprocessing;
 
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,7 +46,7 @@ public class ChantFileProcessor extends FileProcessor {
 		Chart chart = fileDataContainer.getChartData();
 		chart.setDisplayName("Proof Test");
 		
-		logger.info("Started processing of Chant log");
+		logger.debug("Started processing of Chant log");
 		try {
 			// initialize the parser
 			initialize(file);
@@ -70,7 +69,7 @@ public class ChantFileProcessor extends FileProcessor {
 				// we must at least one series otherwise what's the point.
 				throw new FileProcessingException("No series defined in file");
 			}
-			logger.info("Found " + chartSeriesNodes.size() + " series");
+			logger.debug("Found " + chartSeriesNodes.size() + " series");
 			
 			// create a chart series for each channel
 			for(Node chartSeriesNode: chartSeriesNodes) {
@@ -93,7 +92,7 @@ public class ChantFileProcessor extends FileProcessor {
 			// document objects can be large so we'll clear it asap
 			doc = null;
 		}
-		logger.info("Chant log parsing completed sucessfully");
+		logger.debug("Chant log parsing completed sucessfully");
 	}
 
 	/*
@@ -144,7 +143,7 @@ public class ChantFileProcessor extends FileProcessor {
 		Node fixDataNode = doc.selectSingleNode(formXPath("dtFixedData"));
 		
 		// start with inspection date
-		String inspectionDate = parseInspectionDate(fixDataNode);
+		Date inspectionDate = parseInspectionDate(fixDataNode);
 		fileDataContainer.setInspectionDate(inspectionDate);
 		/*
 		 * XXX - for now we're going to pull the duration directly as a string from the file
@@ -157,8 +156,7 @@ public class ChantFileProcessor extends FileProcessor {
 		
 		fileDataContainer.setSerialNumbers(serialNumber);
 		
-		
-		logger.info("Chant file is for serial number [" + serialNumber + "] and inspection date [" + inspectionDate + "]");
+		logger.debug("Chant file is for serial number [" + serialNumber + "] and inspection date [" + String.valueOf(inspectionDate) + "]");
 		// note: FileDataContainer.PEAK_LOAD is set later on when processing series data
 	}
 	
@@ -166,20 +164,11 @@ public class ChantFileProcessor extends FileProcessor {
 	 * Parses the inspection date from a dtFixedData node.  Can throw a FileProcessingException if
 	 * the date fails parsing
 	 */
-	private String parseInspectionDate(Node fixedDataNode) throws FileProcessingException {
-		/* 
-		 *  We parse the string date into a Date object and then back out to
-		 *  a string for two reasons:
-		 *  1. because it ensures that we actually have a date and it is valid.  I'd rather
-		 *  the processing fail here rather then at InspectionDoc construction time.
-		 *  2. because the application only has day resolution of inspection dates.  We will discard the unnecessary
-		 *  precision here.
-		 */
-		
+	private Date parseInspectionDate(Node fixedDataNode) throws FileProcessingException {
 		String dateString = getChildNodeText(fixedDataNode, "Date");
 		SimpleDateFormat inputFormatter = new SimpleDateFormat(INPUT_DATE_FORMAT);
-		Date inspectionDate = null;
 		
+		Date inspectionDate = null;
 		try {
 			//the date string is *almost* in ISO8601 format except that the offset is -04:00 rather then -0400 or GMT-04:00.
 			// this removes the last ':' to put it into 'Z' format
@@ -189,8 +178,7 @@ public class ChantFileProcessor extends FileProcessor {
 			throw new FileProcessingException("Unable to parse inspection date", e);
 		}
 		
-		// format in local standard format
-		return DateFormat.getDateInstance().format(inspectionDate);
+		return inspectionDate;
 	}
 	
 	/*
@@ -216,7 +204,7 @@ public class ChantFileProcessor extends FileProcessor {
 		
 		// pull all the series meta data
 		series.setYAxisName(getChildNodeText(chartSeries, "YName"));
-		logger.info("Processing series metadata with axis name [" + series.getYAxisName() + "]");
+		logger.debug("Processing series metadata with axis name [" + series.getYAxisName() + "]");
 		
 		series.setYAxisUnit(getChildNodeText(chartSeries, "YUnits"));
 		series.setPeakName(getChildNodeText(chartSeries, "YPeakName"));

@@ -158,10 +158,11 @@ public class NationalAutomationFileProcessor extends FileProcessor {
 				
 				if (inspectionDateCell != null) {
 					if (inspectionDateCell.getDateCellValue() != null) {
-						DateFormat dateFormat = DateFormat.getDateInstance();
-						fileDataContainer.setInspectionDate(dateFormat.format(inspectionDateCell.getDateCellValue()));
+						fileDataContainer.setInspectionDate(inspectionDateCell.getDateCellValue());
 					} else if (inspectionDateCell.getRichStringCellValue() != null) {
-						fileDataContainer.setInspectionDate(inspectionDateCell.getRichStringCellValue().getString());
+						String inspectionDateString = inspectionDateCell.getRichStringCellValue().getString();
+						// since we don't what format this date will be in, this is the best we can do
+						fileDataContainer.setInspectionDate(DateFormat.getDateInstance().parse(inspectionDateString));
 					}
 				}
 			}
