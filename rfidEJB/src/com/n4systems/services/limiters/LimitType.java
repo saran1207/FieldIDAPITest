@@ -63,7 +63,7 @@ public enum LimitType {
 		int lastThreshold = -1;
 		
 		int usagePcnt = (int)Math.floor(limit.getUsagePercent() * 100.0);
-		for (int i = alertThresholds.length - 1; i > 0; i--) {
+		for (int i = alertThresholds.length - 1; i >= 0; i--) {
 			// working backwards, find the first threshold that is passed
 			if (usagePcnt >= alertThresholds[i]) {
 				lastThreshold = alertThresholds[i];

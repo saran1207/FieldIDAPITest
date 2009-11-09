@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
@@ -36,6 +37,10 @@ public class AlertStatus implements HasTenantId, Saveable, Serializable {
 	@Column(name="assets", nullable=false)
 	private int assets = NORMAL_STATUS;
 	
+	@Column(nullable=false)
+	private int secondaryOrgs = NORMAL_STATUS;
+	
+	
 	public AlertStatus() {}
 
 	public boolean isNew() {
@@ -53,22 +58,6 @@ public class AlertStatus implements HasTenantId, Saveable, Serializable {
 		this.tenantId = r_tenant;
 	}
 	
-	public int getDiskSpace() {
-		return diskSpace;
-	}
-
-	public void setDiskSpace(int diskSpace) {
-		this.diskSpace = diskSpace;
-	}
-	
-	public int getAssets() {
-		return assets;
-	}
-
-	public void setAssets(int assets) {
-		this.assets = assets;
-	}
-
 	public boolean isLevelAtNormal(LimitType type) {
 		return (alertLevel(type) == NORMAL_STATUS);
 	}
@@ -83,6 +72,8 @@ public class AlertStatus implements HasTenantId, Saveable, Serializable {
 				return diskSpace;
 			case ASSETS:
 				return assets;
+			case SECONDARY_ORGS: 
+				return secondaryOrgs;
 			default:
 				return NORMAL_STATUS;
 		}
@@ -96,6 +87,11 @@ public class AlertStatus implements HasTenantId, Saveable, Serializable {
 			case ASSETS:
 				assets = level;
 				break;
+			case SECONDARY_ORGS:
+				secondaryOrgs = level;
+				break;
+			default:
+				throw new InvalidArgumentException("you have passed an un known type to set limit. [" + type.toString() + "]");
 		}
 	}
 	
@@ -107,6 +103,11 @@ public class AlertStatus implements HasTenantId, Saveable, Serializable {
 			case ASSETS:
 				assets = NORMAL_STATUS;
 				break;
+			case SECONDARY_ORGS:
+				secondaryOrgs = NORMAL_STATUS;
+				break;
+			default:
+				throw new InvalidArgumentException("you have passed an un known type to clear status. [" + type.toString() + "]");
 		}
 	}
 }
