@@ -58,6 +58,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	@EJB private PopulatorLog populatorLogManager;
 	
 	/*
+	 *  TODO: we should look at splitting this apart as it's getting pretty fat.  I would also consider splitting the logic of PT's coming from databridge and multi-proof.  There's
+	 *  probably as much logic in here separating the two methods as there is shared.
+	 */
+	
+	/*
 	 * XXX Lame alert: all of the createOrUpdateProofTest methods, return a Map<String, Inspection>.  This is a map of serial numbers processed from the file
 	 * to the inspections they created or updated (or null on failure).  This sucks 'cause really only the Roberts processor has the ability
 	 * to hold more then a single serial number per file and even then it's only the way in which CG uses it that makes it possible.
@@ -100,6 +105,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		Tenant tenant = inspector.getTenant();
 		PrimaryOrg primaryOrg = inspector.getOwner().getPrimaryOrg();
 		
+		// this used to figure out which owner to take when we create the inspection later
+		boolean customerWasResolved = false;
+		
 		// sending a null customer will lookup products with no customer (rather then products for any customer)
 		Long customerId = (customer != null) ? customer.getId() : null;
 		
@@ -114,6 +122,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				logger.warn("Unable to find or create customer.  Assuming no customer.");
 				customerId = null;
 			} else {
+				customerWasResolved = true;
 				customerId = customer.getId();
 			}
 
@@ -169,7 +178,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData);
+				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData, customerWasResolved);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
@@ -338,12 +347,22 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return product;
 	}
 	
-	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData ) {
+	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData, boolean customerWasResolved ) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		
 		if (owner != null) {
-			inspection.setOwner(owner);
+			/*
+			 * if we resolved a customer (meaning it was from databridge) and the products owner is a division, we need to see if the resolved
+			 * owner is the parent of the products owner.  If that is the case, we preserve the division from the product on the inspection.
+			 * In all other cases we will use the resolved owner directly.
+			 */
+			if (customerWasResolved && product.getOwner().isDivision() && product.getOwner().getParent().equals(owner)) {
+				inspection.setOwner(product.getOwner());
+			} else {
+				inspection.setOwner(owner);
+			}
+			
 		} else {
 			// if the passed in owner is null, use the one from the product
 			// this can happen if the proof test had no customer set, meaning this product is from the primary
