@@ -2,15 +2,7 @@
 	<#include "_notificationArea.ftl"/>
     <div id="contentTitle">
 	    <h1>
-	    	<#if title?exists && title?length gt 0 >
-	    		${title}
-	    	<#else>
-			    <#if navOptions.useEntityTitle()>
-			    	<@s.text name="${navOptions.title}.singular"/> <#if navOptions.entityIdentifier?exists >- ${("("+navOptions.entityIdentifier+"?html)!")?eval}</#if>
-			    <#else>
-			    	<@s.text name="${navOptions.title}.plural"/>
-			    </#if>
-			 </#if>
+	    	<#include "_title.ftl"/>
 	    </h1>
 	    
 	    
