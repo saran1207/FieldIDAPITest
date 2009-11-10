@@ -74,8 +74,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	protected static int seleniumPort = -1;
 	protected static String seleniumBrowserType = null;
 	protected String resourceType = null;
-	protected String tenant = null;
-	protected String domain = null;
+	protected static String tenant = null;
+	protected static String domain = null;
 	protected static String seleniumURL = null;
 	protected static boolean seleniumdebug = false;
 
@@ -174,18 +174,35 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	/**
 	 * This is called from the TestSuite in order to initial the environment
 	 * from the test suite level. By calling this, it will override the
-	 * environment variables.
+	 * environment variables. If you don't want to change a value, pass in
+	 * null for the strings and 0 for the integer.
 	 * 
-	 * @param server
-	 * @param port
-	 * @param browser
-	 * @param url
+	 * @param server	selenium server name/ip
+	 * @param port		selenium port address
+	 * @param browser	selenium string for browser type, e.g. "*iehta"
+	 * @param url		URL for application under test
+	 * @param t			Field ID tenant
+	 * @param d			Field ID domain
 	 */
-	public static void setEnvironmentVariables(String server, int port, String browser, String url, String tenant, String domain) {
-		seleniumServer = server;
-		seleniumPort = port;
-		seleniumBrowserType = browser;
-		seleniumURL = url;
+	public static void setEnvironmentVariables(String server, int port, String browser, String url, String t, String d) {
+		if(server != null) {
+			seleniumServer = server;
+		}
+		if(port != 0) {
+			seleniumPort = port;
+		}
+		if(browser != null) {
+			seleniumBrowserType = browser;
+		}
+		if(url != null) {
+			seleniumURL = url;
+		}
+		if(t != null) {
+			tenant = t;
+		}
+		if(d != null) {
+			domain = d;
+		}
 	}
 
 	@After

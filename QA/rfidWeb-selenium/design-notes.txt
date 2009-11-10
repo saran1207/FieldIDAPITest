@@ -60,5 +60,10 @@ code for the TODO statements.
 An example of a trivial bug would be the title of the page is wrong, e.g.
 // TODO: WEB-1347.
 
+A gotcha to watch out for is page loads. Any time you do an action in the
+browser which loads a new page (click a button, click a link, etc.) you need
+to add a selenium.waitForPageToLoad between the click and verifying you
+arrived at the correct page.
+
 
 Darrell Grainger - November 6nd, 2009

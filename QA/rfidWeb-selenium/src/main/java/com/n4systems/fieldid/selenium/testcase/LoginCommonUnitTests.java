@@ -7,6 +7,7 @@ public class LoginCommonUnitTests extends FieldIDTestCase {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		FieldIDTestCase.setUpBeforeClass();
+		FieldIDTestCase.setEnvironmentVariables(null, 0, "*iehta", null, null, null);
 	}
 
 	@Before

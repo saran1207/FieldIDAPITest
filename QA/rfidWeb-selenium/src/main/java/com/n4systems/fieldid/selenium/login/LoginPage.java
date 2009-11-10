@@ -210,6 +210,8 @@ public class LoginPage extends FieldIDTestCase {
 		assertTrue("Could not find the link to switch to Sign in with Security RFID Number", selenium.isElementPresent(signInWithSecurityRFIDNumberLocator));
 		selenium.click(signInWithSecurityRFIDNumberLocator);
 		assertPageTitle();
+		assertFalse(selenium.isVisible(usernameLocator));
+		assertFalse(selenium.isVisible(passwordLocator));
 	}
 
 	/**
@@ -220,6 +222,7 @@ public class LoginPage extends FieldIDTestCase {
 		assertTrue("Could not find the link to switch to Sign in with User Name", selenium.isElementPresent(signInWithUserNameLocator));
 		selenium.click(signInWithUserNameLocator);
 		assertPageTitle();
+		assertFalse(selenium.isVisible(securityRFIDNumberLocator));
 	}
 
 	public void gotoReturnToSignInFromForgotPassword() {
