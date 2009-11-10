@@ -100,11 +100,8 @@ public class ServiceLocator {
 		return get(ConfigManager.class, ConfigManagerImpl.class, configManager);
 	}
 
-	
-	private static final ThreadLocal<MailManager> mailManager = new ThreadLocal<MailManager>();
-	
 	public static final MailManager getMailManager() {
-		return get(MailManager.class, MailManagerImpl.class, mailManager);
+		return new MailManagerImpl();
 	}
 	
 	

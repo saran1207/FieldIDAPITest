@@ -38,7 +38,7 @@ public class SendInvitationAction extends AbstractAction {
 	}
 	
 	public String doSend() {
-		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "invitation.ftl");
+		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "invitation");
 		
 		invitationMessage.getToAddresses().add(email);
 		invitationMessage.getTemplateMap().put("customMessage", body);

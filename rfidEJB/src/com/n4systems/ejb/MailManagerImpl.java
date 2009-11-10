@@ -3,8 +3,6 @@ package com.n4systems.ejb;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -15,15 +13,13 @@ import javax.mail.Transport;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
 
-@Interceptors({TimingInterceptor.class})
-@Stateless
 public class MailManagerImpl implements MailManager {
 	private static Logger logger = Logger.getLogger(MailManagerImpl.class);
+	private static Logger mailLog = Logger.getLogger("mailLog");
 
 	private Authenticator getAuthenticator() {
 		Authenticator auth = new Authenticator() {
@@ -47,39 +43,57 @@ public class MailManagerImpl implements MailManager {
 	}
 	
 	public void sendMessage(MailMessage mailMessage) throws NoSuchProviderException, MessagingException {
-		sendMessage(mailMessage, true);
+		fillOutMessage(mailMessage);
+		transportMessage(mailMessage);
 	}
+
 	
-	public void sendMessage(MailMessage mailMessage, boolean setDefaults) throws NoSuchProviderException, MessagingException {
+	private void fillOutMessage(MailMessage mailMessage) {
+		mailMessage.setFromAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_FROM_ADDR));
+		mailMessage.setSubjectPrefix(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_SUBJECT_PREFIX));
+		mailMessage.setReplyTo(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_REPLY_TO));
 		
-		if(setDefaults) {
-			mailMessage.setFromAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_FROM_ADDR));
-			mailMessage.setSubjectPrefix(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_SUBJECT_PREFIX));
-			mailMessage.setReplyTo(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_REPLY_TO));
-			
-			if(mailMessage.getContentType().isHtml()) {
-				mailMessage.setBodyHeader(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_HTML_HEADER));
-				mailMessage.setBodyFooter(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_HTML_FOOTER));
-			} else {
-				mailMessage.setBodyHeader(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_PLAIN_HEADER));
-				mailMessage.setBodyFooter(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_PLAIN_FOOTER));			
-			}
-			
-			StringTokenizer st = new StringTokenizer(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_ATTACHMENT_LIST), ",");
-			while(st.hasMoreTokens()) {
-				try {
-					mailMessage.addAttachment(st.nextToken());
-				} catch(Exception e) {
-					logger.warn("Failed attaching default attachment", e);
-				}
-			}
+		if(mailMessage.getContentType().isHtml()) {
+			mailMessage.setBodyHeader(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_HTML_HEADER));
+			mailMessage.setBodyFooter(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_HTML_FOOTER));
+		} else {
+			mailMessage.setBodyHeader(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_PLAIN_HEADER));
+			mailMessage.setBodyFooter(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_PLAIN_FOOTER));			
 		}
 		
-		logger.debug("Sending message: " + mailMessage);
-		Session mailSession = Session.getInstance(getMailProperties(), getAuthenticator());
-		Message message = mailMessage.compileMessage(mailSession);
-		Transport.send(message);
-		logger.debug("Message sent");
+		StringTokenizer st = new StringTokenizer(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_ATTACHMENT_LIST), ",");
+		while(st.hasMoreTokens()) {
+			try {
+				mailMessage.addAttachment(st.nextToken());
+			} catch(Exception e) {
+				logger.warn("Failed attaching default attachment", e);
+			}
+		}
 	}
 	
+	private void transportMessage(MailMessage mailMessage) throws MessagingException {
+		logger.debug("Sending message: " + mailMessage);
+		
+		if (ConfigContext.getCurrentContext().getBoolean(ConfigEntry.MAIL_DELIVERY_ON)) {
+			mailMessage(mailMessage);
+		} else {
+			logMessage(mailMessage);
+		}
+		
+		logger.debug("Message sent");
+	}
+
+	private void logMessage(MailMessage mailMessage) {
+		mailLog.info(mailMessage.toString());
+	}
+
+	private Message mailMessage(MailMessage mailMessage) throws MessagingException {
+		Session mailSession = Session.getInstance(getMailProperties(), getAuthenticator());
+		Message message = mailMessage.compileMessage(mailSession);
+		
+		
+		Transport.send(message);
+		return message;
+	}
+
 }

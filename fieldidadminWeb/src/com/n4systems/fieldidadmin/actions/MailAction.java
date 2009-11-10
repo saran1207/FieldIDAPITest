@@ -1,11 +1,11 @@
 package com.n4systems.fieldidadmin.actions;
 
-import com.n4systems.ejb.MailManager;
+import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.MailMessage.ContentType;
 
 public class MailAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
-	private MailManager mailManager;
 	
 	private String toAddress;
 	private String subject;
@@ -20,19 +20,16 @@ public class MailAction extends AbstractAdminAction {
 	
 	public String doSend() {
 		try {
-			MailMessage message = new MailMessage();
-			message.setSubject(subject);
-			message.setBody(body);
+			ContentType contentType = html ? MailMessage.ContentType.HTML : MailMessage.ContentType.PLAIN;
+			MailMessage message = new MailMessage(contentType, subject, body);
 			message.getToAddresses().add(toAddress);
 			
-			if(!html) {
-				message.setContentType(MailMessage.ContentType.PLAIN);
-			}
+			
 			
 			if(attachmentPath != null && attachmentPath.length() > 0) {
 				message.addAttachment(attachmentPath);
 			}
-			mailManager.sendMessage(message);
+			new MailManagerImpl().sendMessage(message);
 			
 		} catch(Exception e) {
 			addActionError("Send Failed: " + e.getMessage());
@@ -89,12 +86,5 @@ public class MailAction extends AbstractAdminAction {
 		this.attachmentPath = attachmentPath;
 	}
 
-	public MailManager getMailManager() {
-		return mailManager;
-	}
-
-	public void setMailManager(MailManager mailManager) {
-		this.mailManager = mailManager;
-	}
-
+	
 }

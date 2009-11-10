@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.MailManager;
+import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.DuplicateRfidException;
@@ -45,7 +45,6 @@ public class UserManager implements User {
 	protected EntityManager em;
 	
 	@EJB private PersistenceManager persistenceManager;
-	@EJB private MailManager mailManager;
 	
 	public UserBean findUser(String tenantName, String userID, String plainTextPassword) {
 		
@@ -392,7 +391,7 @@ public class UserManager implements User {
 		message.getToAddresses().add(user.getEmailAddress());
 		logger.info("Sending loginkey notification to [" + user.getEmailAddress() + "]");
 		
-		mailManager.sendMessage(message);
+		new MailManagerImpl().sendMessage(message);
 	}
 	
 	public UserBean findUserByResetKey( String tenantName, String userName, String resetPasswordKey ) {

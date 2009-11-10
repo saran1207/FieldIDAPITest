@@ -32,6 +32,7 @@ import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.SubscriptionAgentFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ServiceLocator;
 
 public class CreateHandlerFactory {
 
@@ -39,7 +40,7 @@ public class CreateHandlerFactory {
 	
 	
 	public SignUpHandler getSignUpHandler() {
-		return new SignUpHandlerImpl(getAccountPlaceHolderCreateHandler(), getBaseSystemStructureCreateHandler(), getSubscriptionAgent(), getSignUpFinalizationHandler());
+		return new SignUpHandlerImpl(getAccountPlaceHolderCreateHandler(), getBaseSystemStructureCreateHandler(), getSubscriptionAgent(), getSignUpFinalizationHandler(), ServiceLocator.getMailManager());
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {

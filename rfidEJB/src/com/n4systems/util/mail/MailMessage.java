@@ -50,12 +50,14 @@ public class MailMessage implements Serializable {
 	transient private Message message;
 	
 	public enum ContentType {
-		PLAIN("text/plain"), HTML("text/html");
+		PLAIN("text/plain", "txt"), HTML("text/html", "html");
 		
 		private String contentTypeString;
+		private String fileExtension;
 		
-		ContentType(String contentTypeString) {
+		ContentType(String contentTypeString, String fileExtension) {
 			this.contentTypeString = contentTypeString;
+			this.fileExtension = fileExtension;
 		}
 		
 		public String getContentTypeString() {
@@ -64,6 +66,10 @@ public class MailMessage implements Serializable {
 		
 		public boolean isHtml() {
 			return (this == HTML) ? true : false;
+		}
+
+		public String fileExtension() {
+			return fileExtension;
 		}
 	}
 	
@@ -77,7 +83,6 @@ public class MailMessage implements Serializable {
 	
 	public MailMessage(String subject, String body) {
 		this(ContentType.HTML, subject, body);
-		applyDefaultFooter();
 	}
 	
 	public MailMessage(String subject, String body, String toAddress) {
@@ -137,7 +142,7 @@ public class MailMessage implements Serializable {
 		return contentType;
 	}
 
-	public void setContentType(ContentType contentType) {
+	private void setContentType(ContentType contentType) {
 		this.contentType = contentType;
 	}
 
@@ -273,32 +278,26 @@ public class MailMessage implements Serializable {
 	}
 	
 	
-	public void applyDefaultFooter() {
-		bodyFooter = "<br/><br/>---<br/>" +
-				"The Field ID Team<br/><br/>" +
-				"contact@n4systems.com <br/>" +
-				"179 John Street, Suite 101<br/>" +
-				"Toronto, Ontario, Canada <br/>" +
-				"M5T1X4 <br />" +
-				"1-800-99-N4SYS<br/><br/>" +
-				"<hr/>This e-mail address as it is not a valid return address and is not monitored - for questions please email support@n4systems.com</hr>";
 	
-	}
 
 	@Override
 	public String toString() {
-		return "MailMessage: " 
-			+ "subjectPrefix [" + subjectPrefix
-			+ "] subject [" + subject
-			+ "] bodyHeader [" + bodyHeader
-			+ "] body [" + body
-			+ "] bodyFooter [" + bodyFooter
-			+ "] fromAddress [" + fromAddress
-			+ "] replyTo [" + replyTo
-			+ "] contentType [" + contentType
-			+ "] toAddresses [" + toAddresses
-			+ "] ccAddresses [" + ccAddresses
-			+ "] bccAddresses [" + bccAddresses
-			+ "] attachments [" + attachments.keySet() + "]";
+		try {
+			return "MailMessage: " 
+				+ "subjectPrefix [" + subjectPrefix
+				+ "] subject [" + subject
+				+ "] bodyHeader [" + bodyHeader
+				+ "] body [" + getBody() 
+				+ "] bodyFooter [" + bodyFooter
+				+ "] fromAddress [" + fromAddress
+				+ "] replyTo [" + replyTo
+				+ "] contentType [" + getContentType().toString()
+				+ "] toAddresses [" + toAddresses
+				+ "] ccAddresses [" + ccAddresses
+				+ "] bccAddresses [" + bccAddresses
+				+ "] attachments [" + attachments.keySet() + "]";
+		} catch (MessagingException e) {
+			throw new RuntimeException("could not produce message string", e);
+		}
 	}
 }

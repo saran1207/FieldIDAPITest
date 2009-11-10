@@ -1,7 +1,7 @@
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
 </head>
-
+<title><@s.text name="title.sign_up_for_an_account"/></title>
 
 <div id="mainContent" class="fullScreen">
 	<h1><@s.text name="title.sign_up_for_an_account"/></h1>

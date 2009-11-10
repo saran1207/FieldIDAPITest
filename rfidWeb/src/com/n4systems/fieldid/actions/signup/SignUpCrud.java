@@ -138,7 +138,7 @@ public class SignUpCrud extends AbstractCrud {
 	}
 
 	private String signUpLogLine(String action) {
-		return getLogLinePrefix() + action + ("for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpRequest.getSignUpPackage().getName() + "]");
+		return getLogLinePrefix() + action + (" for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpRequest.getSignUpPackage().getName() + "]");
 	}
 	
 
@@ -146,7 +146,7 @@ public class SignUpCrud extends AbstractCrud {
 		
 		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
 		
-		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg());
+		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()));
 	}
 
 	public SortedSet<? extends Listable<String>> getCountries() {

@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.ejb.MailManager;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
@@ -26,6 +27,7 @@ import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.util.mail.MailMessage;
 
 
 
@@ -51,17 +53,13 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 	
 
 	@Test(expected=InvalidArgumentException.class)
-	public void should_require_a_persistence_provider_sign_account_up() {
-		SignUpHandler sut = new SignUpHandlerImpl(null, null, null, null);
-		try {
-			sut.signUp(null, null);
-		} catch (SignUpCompletionException e) {
-			fail("exception thrown");
-		}
+	public void should_require_a_persistence_provider_sign_account_up() throws Exception {
+		SignUpHandler sut = new SignUpHandlerImpl(null, null, null, null, null);
+		sut.signUp(null, null, null);
 	}
 	
 	@Test
-	public void should_successfully_sign_account_up() {
+	public void should_successfully_sign_account_up() throws Exception {
 		
 		PersistenceProvider mockPersistenceProvider = createMock(PersistenceProvider.class);
 		
@@ -93,21 +91,21 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		mockSignUpFinalizationHandler.finalizeSignUp(mockTransaction);
 		replay(mockSignUpFinalizationHandler);
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler);
+		MailManager mailManager = createMock(MailManager.class);
+		mailManager.sendMessage((MailMessage)anyObject());
+		replay(mailManager);
+		
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler, mailManager);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 
-		try {
-			sut.signUp(signUpRequest, referrerOrg);
-		} catch (SignUpCompletionException e) {
-			fail("exception thrown");
-		}
-		
+		sut.signUp(signUpRequest, referrerOrg, null);
 		
 		verify(mockPersistenceProvider);
 		verify(mockAccountPlaceHolderCreateHandler);
 		verify(mockSubscriptionAgent);
 		verify(mockSystemStructureHandler);
 		verify(mockSignUpFinalizationHandler);
+		verify(mailManager);
 	}
 
 	private BaseSystemStructureCreateHandler successfulBaseSystemCreation() {
@@ -159,13 +157,13 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		replay(mockAccountPlaceHolderCreateHandler);
 		
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, null, null);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, null, null, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest, null);
+			sut.signUp(signUpRequest, null, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		} catch (TenantNameUsedException e) {
@@ -208,13 +206,13 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		replay(mockSubscriptionAgent);
 		
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest, null);
+			sut.signUp(signUpRequest, null, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		} catch (CommunicationErrorException e) {
@@ -266,13 +264,13 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		replay(mockSubscriptionAgent);
 		
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest, null);
+			sut.signUp(signUpRequest, null, null);
 		} catch (SignUpCompletionException e) {
 			fail("exception thrown");
 		} catch (BillingValidationException e) {
@@ -321,13 +319,13 @@ public class SignUpHandlerTest extends TestUsesTransactionBase {
 		
 		replay(mockSignUpFinalizationHandler);
 		
-		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockBaseSystemStructureCreateHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler);
+		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockBaseSystemStructureCreateHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler, null);
 		sut.withPersistenceProvider(mockPersistenceProvider);
 		
 		boolean exceptionCaught = false;
 		
 		try {
-			sut.signUp(signUpRequest, referrerOrg);
+			sut.signUp(signUpRequest, referrerOrg, null);
 		} catch (SignUpCompletionException e) {
 			exceptionCaught = true;
 		}

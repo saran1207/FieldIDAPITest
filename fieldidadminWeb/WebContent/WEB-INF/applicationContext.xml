@@ -19,11 +19,6 @@
 			value="fieldid/ConfigManagerImpl/local" />
 	</bean>
 
-	<bean id="mailManager"
-		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="fieldid/MailManagerImpl/local" />
-	</bean>
-
 	<bean id="persistenceManager"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName"
@@ -35,8 +30,6 @@
 		<property name="jndiName"
 			value="fieldid/LegacyProductTypeManager/local" />
 	</bean>
-
-	
 
 	<bean id="productSerialManager"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
@@ -77,10 +70,6 @@
 	<bean id="importManager" class="org.springframework.jndi.JndiObjectFactoryBean">
     	<property name="jndiName" value="fieldid/ImportManagerImpl/local" />
     </bean>
-	
-
-
-	
 	
 </beans>
 
