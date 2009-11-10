@@ -5,7 +5,6 @@ import com.thoughtworks.selenium.Selenium;
 
 public class LoginPage extends FieldIDTestCase {
 
-	private Selenium selenium;
 	private static final String startStringForPageTitle = "Field ID : Safety Management - ";
 	private static final String endStringForPageTitle = " Sign In";
 	private static final String securityRFIDNumberLocator = "css=#secureRfidNumber";

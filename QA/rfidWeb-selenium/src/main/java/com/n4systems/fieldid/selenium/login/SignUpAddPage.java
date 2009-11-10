@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.selenium.login;
 
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
 public class SignUpAddPage extends SeleneseTestBase {
 
-	private DefaultSelenium selenium;
-	private static final Object stringForPageTitle = "Field ID : Safety Management - Create Your Account";
+	private static final String stringForPageTitle = "Field ID : Safety Management - Create Your Account";
 	private static final String signUpNowFreeLinkLocator = "//TR[@class='signUp']/TD[2]/A[contains(text(),'Sign Up Now')]";
 	private static final String signUpNowBasicLinkLocator = "//TR[@class='signUp']/TD[3]/A[contains(text(),'Sign Up Now')]";
 	private static final String signUpNowPlusLinkLocator = "//TR[@class='signUp']/TD[4]/A[contains(text(),'Sign Up Now')]";
@@ -51,7 +50,7 @@ public class SignUpAddPage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public SignUpAddPage(DefaultSelenium selenium) {
+	public SignUpAddPage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}

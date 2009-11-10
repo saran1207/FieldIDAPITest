@@ -1,12 +1,10 @@
 package com.n4systems.fieldid.selenium.login;
 
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
-
+import com.thoughtworks.selenium.Selenium;
 public class SignUpPackagesPage extends SeleneseTestBase {
 
-	private DefaultSelenium selenium;
 	private static final String plansAndPricingLinkLocator = "css=#plansPricingButton > a";
 	private static final Object stringForPageTitle = "Field ID : Safety Management -";	// TODO: WEB-1347
 	private static final String columnHeaderFreeLocator = "css=#package_Free";
@@ -22,7 +20,7 @@ public class SignUpPackagesPage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public SignUpPackagesPage(DefaultSelenium selenium) {
+	public SignUpPackagesPage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}

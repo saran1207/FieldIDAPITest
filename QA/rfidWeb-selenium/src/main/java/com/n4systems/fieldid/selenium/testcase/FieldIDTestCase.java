@@ -50,7 +50,7 @@ import com.thoughtworks.selenium.*;
 public class FieldIDTestCase extends SeleneseTestBase {
 
 	// My instance of selenium for all the classes to share.
-    protected DefaultSelenium selenium;
+    //protected DefaultSelenium selenium;
 
     // Some useful constants:
 	public static final String pageLoadDefaultTimeout = "30000";	// give a page 30 seconds to load
@@ -100,9 +100,12 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		// Initial all the required environment variables
 		initEnvironmentVariables();
 		initSeleniumInstance();
-		initLibriaries();
+		startSeleniumBrowser();
 		
-		// Startup the browser
+		initLibriaries();
+	}
+
+	private void startSeleniumBrowser() {
 		selenium.start();
 		selenium.windowFocus();
 		selenium.windowMaximize();
@@ -207,17 +210,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 
 	@After
 	public void tearDown() throws Exception {
-    	try {
-    		if(seleniumdebug) {
-    			selenium.captureScreenshot(getClass().getSimpleName() + ".png");
-    		}
-    		checkForVerificationErrors();
-    	} finally {
-    	    if (selenium != null) {
-    	        selenium.stop();
-    	        selenium = null;
-    	    }
-    	}
+		super.tearDown();
 	}
 
 	@AfterClass

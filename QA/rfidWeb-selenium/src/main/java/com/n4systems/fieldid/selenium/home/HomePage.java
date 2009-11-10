@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.selenium.home;
 
 import com.n4systems.fieldid.selenium.testcase.FieldIDTestCase;
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
 public class HomePage extends SeleneseTestBase {
 
-	private DefaultSelenium selenium;
 	private static final String signInUserNameButtonLocator = "css=#signInButton";
 	private static final String signInWithSecurityRFIDNumberButtonLocator = "css=#signInWithSecurityButton";
 	private static final String stringForPageTitle = "Field ID : Safety Management - Home";
@@ -17,7 +16,7 @@ public class HomePage extends SeleneseTestBase {
 	 * 
 	 * @param selenium Initialized instance of selenium used to access the application under test
 	 */
-	public HomePage(DefaultSelenium selenium) {
+	public HomePage(Selenium selenium) {
 		assertTrue("Instance of Selenium is null", selenium != null);
 		this.selenium = selenium;
 	}

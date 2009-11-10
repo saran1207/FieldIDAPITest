@@ -5,7 +5,6 @@ import com.thoughtworks.selenium.Selenium;
 
 public class SendPasswordPage extends FieldIDTestCase {
 
-	private Selenium selenium;
 	private static final String stringForPageTitle = "Field ID : Safety Management - Password Reset Email Sent";
 	private static final String resetPasswordButtonLocator = "css=#sendPassword_label_reset_password";
 	private static final String messageBodyLocator = "ccs=p.actionInstructions";

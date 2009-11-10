@@ -7,7 +7,6 @@ import com.thoughtworks.selenium.Selenium;
 
 public class AdminConsoleOrganizationsPage extends FieldIDTestCase {
 
-	private Selenium selenium;
 	
 	// locators for the elements on the page I want to interact with
 	private static final String organizationsTableLocator = "//div[@id='content']/table";	// must be xpath

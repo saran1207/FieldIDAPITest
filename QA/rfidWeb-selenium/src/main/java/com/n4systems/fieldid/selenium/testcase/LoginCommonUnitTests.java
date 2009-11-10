@@ -22,8 +22,12 @@ public class LoginCommonUnitTests extends FieldIDTestCase {
 	
 	@Test
 	public void goToSignInWithSecurityRFIDNumber() throws Exception {
+		// given we are on login page.
 		goToLoginPage();
+		
 		loginPage.gotoSignInWithSecurityRFIDNumberLink();
+		
+		
 	}
 	
 	@Test

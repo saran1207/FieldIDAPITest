@@ -5,7 +5,6 @@ import com.thoughtworks.selenium.Selenium;
 
 public class ChooseACompanyPage extends FieldIDTestCase {
 
-	private Selenium selenium;
 	private static final String stringForPageTitle = "Field ID : Safety Management - Choose A Company";
 	private static final String notTheCompanyIWantLinkLocator = "//A[contains(text(),'is not the company I want.')]";
 	private static final String companyIDFieldLocator = "css=#companyId";

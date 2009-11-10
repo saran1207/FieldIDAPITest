@@ -5,7 +5,6 @@ import com.thoughtworks.selenium.Selenium;
 
 public class ForgotPasswordPage extends FieldIDTestCase {
 
-	private Selenium selenium;
 	private static final String stringForPageTitle = "Field ID : Safety Management - Forgot Password";
 	private static final String usernameLocator = "css=#userName";
 	private static final String forgotMyPasswordLinkLocator = "//A[contains(text(),'I forgot my password')]";
