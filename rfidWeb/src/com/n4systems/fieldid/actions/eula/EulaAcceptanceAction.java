@@ -15,7 +15,6 @@ public class EulaAcceptanceAction extends AbstractAction {
 
 	private EULA currentEULA;
 	
-	private EulaAcceptance acceptance;
 	private Long eulaId;
 	
 	
@@ -56,21 +55,48 @@ public class EulaAcceptanceAction extends AbstractAction {
 
 	public String doCreate() {
 		testRequiredEntities(false);
-		if (!getCurrentEULA().getId().equals(eulaId)) {
+		
+		if (eulaBeingAcceptedIsTheLatestOne()) {
 			addActionErrorText("error.not_accepting_the_current_eula");
 			return INPUT;
 		}
 		
-		acceptance = new EulaAcceptance();
+		try {
+			acceptEula();
+			addFlashMessageText("message.accepted_eula");
+			return SUCCESS;
+		} catch (Exception e) {
+			addActionMessageText("error.could_not_save_eula");
+			return ERROR;
+		}
+	}
+
+	private boolean eulaBeingAcceptedIsTheLatestOne() {
+		return !getCurrentEULA().getId().equals(eulaId);
+	}
+
+	private void acceptEula() {
+		EulaAcceptance acceptance = createAcceptance();
+		
+		saveAcceptance(acceptance);
+
+		updateSessionWithEulaAcceptance();
+	}
+
+	private void updateSessionWithEulaAcceptance() {
+		getSession().getEulaAcceptance().latestEulaHasBeenAccepted();
+	}
+
+	private void saveAcceptance(EulaAcceptance acceptance) {
+		persistenceManager.save(acceptance);
+	}
+
+	private EulaAcceptance createAcceptance() {
+		EulaAcceptance acceptance = new EulaAcceptance();
 		acceptance.setAcceptor(fetchCurrentUser());
 		acceptance.setEula(getCurrentEULA());
 		acceptance.setTenant(getTenant());
-		
-		persistenceManager.save(acceptance);
-		addFlashMessageText("message.accepted_eula");
-		
-		
-		return SUCCESS;
+		return acceptance;
 	}
 
 	public EULA getCurrentEULA() {

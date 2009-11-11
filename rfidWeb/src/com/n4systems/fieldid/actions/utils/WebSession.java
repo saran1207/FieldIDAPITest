@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
@@ -29,6 +30,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
 	private static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
 	private static final String KEY_SIGNUP = "signUp";
+	private static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
 	
 	private final HttpSession session;
 	
@@ -82,6 +84,17 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	public void clearSessionUser() {
 		remove(KEY_SESSION_USER);
 	}
+	
+	
+	public SessionEulaAcceptance getEulaAcceptance() {
+		return get(KEY_EULA_ACCEPTANCE, SessionEulaAcceptance.class);
+	}
+	
+	
+	public void setEulaAcceptance(SessionEulaAcceptance sessionEulaAcceptance) {
+		put(KEY_EULA_ACCEPTANCE, sessionEulaAcceptance);
+	}
+	
 	
 	public SearchContainer getReportCriteria() {
 		// TODO: the report criteria key should be moved here
@@ -310,5 +323,6 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 		}
 		return values;
 	}
-	
+
+
 }

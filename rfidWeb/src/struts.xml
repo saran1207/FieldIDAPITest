@@ -24,6 +24,8 @@
 			<interceptor name="missingEntity" class="com.n4systems.fieldid.utils.MissingEntityInterceptor" />
 			<interceptor name="forceNonBranded" class="com.n4systems.fieldid.utils.NonBrandedInterceptor"/>
 			<interceptor name="safetyNetworkAware" class="com.n4systems.fieldid.security.SafetyNetworkAwareInterceptor"/>
+			<interceptor name="eulaRequired" class="com.n4systems.fieldid.utils.EULAInterceptor"/>
+			
 			
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
@@ -36,7 +38,7 @@
 				<interceptor-ref name="enabledFeatures"/>
 			</interceptor-stack>
 			
-			<interceptor-stack name="secureStack">
+			<interceptor-stack name="loggedInStack">
 				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="login" />
 				<interceptor-ref name="security" />
@@ -44,6 +46,11 @@
 				<interceptor-ref name="publicStack" />
 				<interceptor-ref name="enabledFeatures"/>
 				<interceptor-ref name="userPermissions"/>
+			</interceptor-stack>
+			
+			<interceptor-stack name="secureStack">
+				<interceptor-ref name="loggedInStack" />
+				<interceptor-ref name="eulaRequired" />
 			</interceptor-stack>
 
 			<interceptor-stack name="flashSecureStack">
@@ -70,15 +77,18 @@
 
 		<global-results>
 			<result name="login" type="redirectAction">login</result>
+			<result name="require_eula" type="redirectAction">eulaAcceptanceAdd</result>
 			<result name="tenant_missing" type="redirectAction">
 				<param name="actionName">chooseCompany</param>
             	<param name="namespace">/</param>
 			</result>
 			<result name="feature_required" type="freemarker">/templates/html/common/featureRequired.ftl</result>
 			<result name="user_permission_required" type="freemarker">/templates/html/common/userPermissionRequired.ftl</result>
+			
 			<result name="redirect_to_url" type="redirect">
 				<param name="location">${redirectUrl}</param>
 			</result>
+			
 		</global-results>
 
 		

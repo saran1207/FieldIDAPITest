@@ -32,6 +32,7 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean fromQuickLogin;
 	private SecurityFilter securityFilter;
 	private String externalAuthKey;
+	private boolean admin;
 	
 	public SessionUser( UserBean user ) {
 		this.tenant = user.getTenant();
@@ -46,6 +47,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.dateFormat = owner.getPrimaryOrg().getDateFormat();
 		this.otherDateFormat = DateHelper.java2Unix(dateFormat);
 		this.securityFilter = new UserSecurityFilter(user);
+		this.admin = user.isAdmin(); 
 	}
 
 	public Tenant getTenant() {
@@ -260,4 +262,13 @@ public class SessionUser implements DateTimeDefinition {
 	public void setExternalAuthKey(String externalAuthKey) {
 		this.externalAuthKey = externalAuthKey;
 	}
+
+	
+
+	public boolean isAdmin() {
+		return admin ;
+	}
+	
+	
+	
 }

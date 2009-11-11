@@ -1161,7 +1161,6 @@
 			<result name="redirect" type="redirect">
 				<param name="location">${previousUrl}</param>
 			</result>
-			<result name="eula" type="redirectAction">eulaAcceptanceAdd</result>
 		</action>
 
 		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
@@ -1590,10 +1589,6 @@
 		</action>
 		
 		
-		
-		
-		
-		
 		<action name="organizations" method="list" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
@@ -1689,12 +1684,14 @@
 		</action>
 		
 		<action name="eulaAcceptanceAdd" method="add" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
+			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="alreadyAccepted" type="redirectAction">home</result>
 		</action>
 
 		<action name="eulaAcceptanceCreate" method="create"	class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
+			<interceptor-ref name="loggedInStack" />
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="success" type="redirectAction">home</result>

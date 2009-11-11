@@ -5,6 +5,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
+import rfid.web.helper.SessionEulaAcceptance;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -76,10 +77,6 @@ public class LoginAction extends AbstractAction {
 			if (loginUser != null) {
 				logUserIn(loginUser);
 				
-				if (loginUser.isAdmin()) {
-					return "eula";
-				}
-				
 				if (previousUrl != null) {
 					return "redirect";
 				}
@@ -147,8 +144,13 @@ public class LoginAction extends AbstractAction {
 		fetchPerviousUrl();
 		clearSession();
 		loadSessionUser(loginUser.getUniqueID());
+		loadEULAInformation();
 		rememberMe();
 		logger.info(getLogLinePrefix() + "Login: " + userName + " of " + getSecurityGuard().getTenantName());
+	}
+
+	private void loadEULAInformation() {
+		getSession().setEulaAcceptance(new SessionEulaAcceptance(getLoaderFactory().createCurrentEulaLoader(), getLoaderFactory().createLatestEulaAcceptanceLoader()));
 	}
 
 	private void fetchPerviousUrl() {

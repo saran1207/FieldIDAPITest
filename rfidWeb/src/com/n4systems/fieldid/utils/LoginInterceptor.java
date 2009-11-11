@@ -21,13 +21,16 @@ public class LoginInterceptor extends AbstractInterceptor implements StrutsStati
 		ActionInvocationWrapper invocationWrapper = new ActionInvocationWrapper(invocation);
 		
 		SessionUser user = invocationWrapper.getSessionUser();
-		if (user == null || !userTenantMatchesSecurityGuard(invocationWrapper.getSession(), user)) {
+		if (isUserLoggedIn(invocationWrapper, user)) {
 			getForwardingUrl(invocationWrapper.getRequest(), invocationWrapper.getSession().getHttpSession(), invocation.getInvocationContext());
-			// User not logged in
 			return "login";
 		}
 
 		return invocation.invoke();
+	}
+
+	private boolean isUserLoggedIn(ActionInvocationWrapper invocationWrapper, SessionUser user) {
+		return user == null || !userTenantMatchesSecurityGuard(invocationWrapper.getSession(), user);
 	}
 
 	private void getForwardingUrl(HttpServletRequest request, HttpSession session, ActionContext context) {
