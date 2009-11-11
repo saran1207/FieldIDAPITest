@@ -14,7 +14,7 @@ public class LoginPage extends FieldIDTestCase {
 	private static final String signInWithSecurityRFIDNumberLocator = "//A[contains(text(),'Sign in with Security RFID Number')]";
 	private static final String signInWithUserNameLocator = "//A[contains(text(),'Sign in with User Name')]";
 	private static final String rememberMySignInInformationLocator = "css=#signInForm_rememberMe";
-	private static final String requestAnAccountLinkLocator = "css=#requestAccountButton > a";
+	//private static final String requestAnAccountLinkLocator = "css=#requestAccountButton > a";
 	private static final String returnToSignInFromSendPasswordButtonLocator = "//input[@value='Return to Sign In')]";
 	private static final String returnToSignInFromSignUpPackagesLinkLocator = "//A[contains(text(),'Return to Sign In')]";
 	private static final String returnToSignInFromRegiserNewUserLinkLocator = "//A[contains(@text,'Return to Sign In')]";
@@ -28,7 +28,7 @@ public class LoginPage extends FieldIDTestCase {
 	private static final String thawteStatusString = "Valid";
 	private static final String returnToSignInFromChooseACompanyButtonLocator = "css=#signInToCompany_label_find_sign_in";
 	private static final Object n4systemsWebSiteTitleString = "N4 Systems | Safety Through Innovation";
-	private static final String n4systemsWebSiteWindowLocator = "//TITLE[@text()='" + n4systemsWebSiteTitleString + "']";
+	//private static final String n4systemsWebSiteWindowLocator = "//TITLE[@text()='" + n4systemsWebSiteTitleString + "']";
 	
 	/**
 	 * Initialize the library to use the same instance of Selenium as the

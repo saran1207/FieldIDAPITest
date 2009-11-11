@@ -20,7 +20,7 @@ import com.thoughtworks.selenium.Selenium;
  */
 public class CommonMethods extends FieldIDTestCase {
 
-	private Selenium selenium;
+
 	private Random r = new Random();
 
 	/**
