@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.mail.MessagingException;
 
 import com.n4systems.freemarker.FreemarkerTemplateFactory;
-import com.n4systems.util.mail.MailMessage.ContentType;
 
 import freemarker.template.Template;
 

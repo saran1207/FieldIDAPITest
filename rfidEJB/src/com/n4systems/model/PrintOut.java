@@ -38,10 +38,6 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 	@Column(nullable = false)
 	private String pdfTemplate;
 
-	// TODO: REMOVE_ME
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	private Tenant tenant;
-
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private PrintOutType type;
@@ -109,14 +105,6 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 		this.type = type;
 	}
 
-	// TODO: REMOVE_ME
-//	public Tenant getTenant() {
-//		return tenant;
-//	}
-//
-//	public void setTenant(Tenant tenant) {
-//		this.tenant = tenant;
-//	}
 
 	public boolean isCustom() {
 		return custom;

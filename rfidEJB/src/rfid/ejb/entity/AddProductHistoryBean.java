@@ -38,14 +38,6 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	@JoinColumn(name = "r_fieldiduser")
 	private UserBean user;
 	
-	// TODO: REMOVE_ME
-//	@ManyToOne(optional = true)
-//	@JoinColumn(name = "r_owner")
-//	private Customer owner;
-//	
-//	@ManyToOne(optional = true)
-//	@JoinColumn(name = "r_division")
-//	private Division division;
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="owner_id", nullable = false)
@@ -77,27 +69,6 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	public void setUser(UserBean user) {
 		this.user = user;
 	}
-
-	// TODO: REMOVE_ME
-//	public Customer getOwner() {
-//		return owner;
-//	}
-//
-//
-//	public void setOwner(Customer owner) {
-//		this.owner = owner;
-//	}
-//
-//
-//	public Division getDivision() {
-//		return division;
-//	}
-//
-//
-//	public void setDivision(Division division) {
-//		this.division = division;
-//	}
-
 
 	public BaseOrg getOwner() {
 		return owner;

@@ -14,6 +14,6 @@ public class PermissionsTest {
 		UserBean user = new UserBean();
 		user.setPermissions(Permissions.ALL);
 		
-		//assertTrue(Permissions.hasOneOf(user, Permissions.NO_PERMISSIONS));
+		assertFalse(Permissions.hasOneOf(user, Permissions.NO_PERMISSIONS));
 	}
 }
