@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
+import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingFactory;
@@ -21,10 +21,12 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.ExcelReportExportTask;
+import com.n4systems.model.downloadlink.DownloadCoordinator;
+import com.n4systems.model.utils.DateTimeDefiner;
+import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -137,46 +139,34 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	public String doExport() {
-		String status = SUCCESS;
-
-		if (isSearchIdValid()) {
+		if (!isSearchIdValid()) {
+			addFlashError(getText("error.searchexpired"));
+			return INPUT;
+		}
+		String reportName = excelReportFileName + " - " + DateHelper.format(new PlainDate(), new DateTimeDefiner(getUser()));
+		String downloadUrl = DownloadLinkAction.buildDownloadUrl(this);
+		
+		try {
+			DownloadCoordinator dlc = new DownloadCoordinator(getUser());
 			
-			// setup the title of the report
-			String tenantName = getTenant().getDisplayName().replace(" ", "_");	
-			String fileDateFormat = "MM-dd-yyyy";
-			String dateString = new SimpleDateFormat(fileDateFormat).format(new java.util.Date());
-			String reportFileName = excelReportFileName + "_" + tenantName + "_" + dateString;
-
-			// build the list of column titles from our package properties
-			List<String> titles = new ArrayList<String>();
-			for(ColumnMapping mapping: getSelectedMappings()) {
-				titles.add(getText(mapping.getLabel()));
-			}
+			dlc.generateExcel(reportName, new ImmutableSearchDefiner<TableView>(this), buildExcelColumnTitles(), prepareExcelHandlers(), downloadUrl);
 			
-			try {
-				ExcelReportExportTask exportTask = new ExcelReportExportTask();
-				
-				exportTask.setColumnTitles(titles);
-				exportTask.setUserId(getSessionUser().getUniqueID());
-				exportTask.setPackageName(reportFileName);
-				exportTask.setSearchDefiner(new ImmutableSearchDefiner<TableView>(this));
-				exportTask.setSecurityFilter(getContainer().getSecurityFilter());
-				exportTask.setCellHandlers(prepareExcelHandlers());
-				
-				TaskExecutor.getInstance().execute(exportTask);
-				
-				addActionMessage( getText( "message.emailshortly" ) );
-			} catch (Exception e) {
-				logger.error("Unable to execute ExcelExportTask", e);
-				addActionError( getText( "error.cannotschedule" ) );
-				status =  ERROR;
-			}
-		} else {
-			addFlashError( getText( "error.searchexpired" ) );
-			status = INPUT;
+			addActionMessage(getText("message.emailshortly"));
+		} catch (RuntimeException e) {
+			logger.error("Unable to execute ExcelExportTask", e);
+			addActionError(getText("error.cannotschedule"));
+			return ERROR;
 		}
 		
-		return status;
+		return SUCCESS;
+	}
+
+	private List<String> buildExcelColumnTitles() {
+		List<String> titles = new ArrayList<String>();
+		for(ColumnMapping mapping: getSelectedMappings()) {
+			titles.add(getText(mapping.getLabel()));
+		}
+		return titles;
 	}
 	
 	private ColumnMapping findMapping(String id) {

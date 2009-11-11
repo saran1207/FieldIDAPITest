@@ -53,15 +53,15 @@ public class ImmutableSearchDefiner<K> implements SearchDefiner<K> {
 	}
 
 	public int getPage() {
-		throw new NotImplementedException("don't use this method.");
+		throw new NotImplementedException();
 	}
 
 	public int getPageSize() {
-		throw new NotImplementedException("don't use this method.");
+		throw new NotImplementedException();
 	}
 
 	public void setTotalResults(int totalResults) {
-		throw new NotImplementedException("don't use this method.");
+		throw new NotImplementedException();
 	}
 
 	public List<QueryFilter> getSearchFilters() {

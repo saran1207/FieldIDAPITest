@@ -37,7 +37,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 			final PersistenceManager persistenceManager, 
 			final ProductManager productManager) {
 		
-		super(ProductSearchAction.class, SEARCH_CRITERIA, "ProductReport", persistenceManager);
+		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager);
 
 		
 		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);

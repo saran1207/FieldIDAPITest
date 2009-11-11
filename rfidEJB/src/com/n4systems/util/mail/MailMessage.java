@@ -29,6 +29,8 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.io.IOUtils;
 
+import com.n4systems.model.downloadlink.DownloadLink;
+
 public class MailMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -88,6 +90,11 @@ public class MailMessage implements Serializable {
 	public MailMessage(String subject, String body, String toAddress) {
 		this(subject, body);
 		getToAddresses().add(toAddress);
+	}
+	
+	public MailMessage(String subject, String body, DownloadLink link) throws IOException {
+		this(subject, body, link.getUser().getEmailAddress());
+		addAttachment(link.getFile());
 	}
 
 	public String getSubjectPrefix() {

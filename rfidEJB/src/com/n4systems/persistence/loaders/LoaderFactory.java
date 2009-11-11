@@ -3,6 +3,7 @@ package com.n4systems.persistence.loaders;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
+import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
@@ -123,6 +124,10 @@ public class LoaderFactory {
 		return new DivisionOrgPaginatedLoader(filter);
 	}
 
+	public DownloadLinkListLoader createDownloadLinkListLoader() {
+		return new DownloadLinkListLoader(filter);
+	}
+
 	public <T extends ExternalOrg> ExternalOrgCodeExistsLoader<T> createExternalOrgCodeExistsLoader(Class<T> orgClass) {
 		return new ExternalOrgCodeExistsLoader<T>(filter, orgClass);
 	}
@@ -130,7 +135,7 @@ public class LoaderFactory {
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
 		return new FilteredIdLoader<T>(filter, clazz);
 	}
-
+	
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
 		return new FilteredListableLoader(filter, clazz);
 	}
@@ -138,7 +143,7 @@ public class LoaderFactory {
 	public HasLinkedProductsLoader createHasLinkedProductsLoader() {
 		return new HasLinkedProductsLoader(filter);
 	}
-	
+
 	public InspectionBookListLoader createInspectionBookListLoader() {
 		return new InspectionBookListLoader(filter);
 	}
@@ -166,7 +171,7 @@ public class LoaderFactory {
 	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
 		return new PaginatedConnectionListLoader(filter);
 	}
-
+	
 	public PaginatedMessageLoader createPaginatedMessageLoader() {
 		return new PaginatedMessageLoader(filter);
 	}
@@ -238,7 +243,7 @@ public class LoaderFactory {
 	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
-	
+
 	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}
@@ -250,7 +255,7 @@ public class LoaderFactory {
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
-
+	
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
 		return new VendorLinkedOrgListLoader(filter);
 	}

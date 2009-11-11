@@ -121,16 +121,6 @@
 			<result name="error" type="chain">commentTemplateList</result>
 		</action>
 
-		<action name="download" class="com.n4systems.fieldid.actions.SimpleAction">
-			<result name="success" type="freemarker">/templates/html/secureFileAccess/secureFileAccess.ftl</result>
-			<result name="error" type="freemarker">/templates/html/secureFileAccess/secureFileAccess.ftl</result>
-		</action>
-
-		<action name="pushFile" method="fileDownload" class="com.n4systems.fieldid.actions.SecureFileAccess">
-			<result name="success"></result>
-			<result name="input" type="freemarker">/templates/html/common/error.ftl</result>
-		</action>
-
 		<action name="customerShow" method="show" class="com.n4systems.fieldid.actions.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/show.ftl</result>
 			<result name="error" type="redirectAction">
@@ -1877,5 +1867,22 @@
 		<action name="redirectToWebStore" method="redirectToStore" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">
 			<result name="success" type="redirect">${redirectUrl}</result>
 		</action>		
+		
+		<action name="downloadFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="inputName">fileStream</param>
+				<param name="contentLength">${fileSize}</param>
+				<param name="contentDisposition">inline; filename="${fileName}"</param>
+			</result>
+			<result name="error" type="redirectAction">showDownloads</result>
+		</action>
+		
+		<action name="showDownloads" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/downloads/show.ftl</result>
+			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
+		</action>
+		
 	</package>
 </struts>

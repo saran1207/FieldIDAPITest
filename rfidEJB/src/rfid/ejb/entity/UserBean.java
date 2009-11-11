@@ -256,7 +256,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 
 	@Override
     public String toString() {
-	    return getUserID() + " (" + getUniqueID() + ")";
+	    return String.format("%s (%d) {%s}", getUserID(), getUniqueID(), getTenant());
     }
 
 	public String getHashSecurityCardNumber() {

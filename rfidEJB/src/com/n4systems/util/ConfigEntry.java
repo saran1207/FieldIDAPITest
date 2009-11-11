@@ -53,7 +53,7 @@ public enum ConfigEntry {
 	UPLOAD_FILE_SIZE_LIMIT_DEFAULT_IN_KB			(	"5120"				),
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_ATTACHMENT_IN_KB	(	"2048"				), 
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB (	"100"				),
-	
+	DOWNLOAD_TTL_DAYS							(	"2"						),
 	
 	// ones below here are never overridden by the tenant.
 	FIELDID_ADMINISTRATOR_EMAIL					(	"team@n4systems.com"	),

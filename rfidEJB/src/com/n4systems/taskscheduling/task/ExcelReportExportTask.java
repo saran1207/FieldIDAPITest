@@ -4,17 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ExcelBuilder;
 import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -25,74 +22,52 @@ import com.n4systems.util.views.TableView;
 import com.n4systems.util.views.TableViewExcelHandler;
 
 
-public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView> {
+public class ExcelReportExportTask extends DownloadTask implements SearchDefiner<TableView> {
 	private static final long serialVersionUID = 1L;
-	private static final int PAGE_SIZE = 100;
-	private static Logger logger = Logger.getLogger(ExcelReportExportTask.class);
+	private static final int PAGE_SIZE = 256;
 	
+	private final PersistenceManager persistenceManager;
 	private SearchDefiner<TableView> searchDefiner;
-	private SecurityFilter securityFilter;
-	private Long userId;
-	private String packageName;
 	private List<String> columnTitles = new ArrayList<String>();
-	private ExcelOutputHandler[] cellHandlers; 
+	private ExcelOutputHandler[] cellHandlers;
 	
-	private int page = 0; 
-	@SuppressWarnings("unused")
-    private int totalResults = 0;
+	private int page = 0;
 	
-	public void run() {
-		try {
-			UserBean user = ServiceLocator.getUser().getUser(getUserId());
-			
-			DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);
-			
-			logger.info("Generating report ... ");
-			
-			String subject = "Excel Search Report for " + getPackageName();
+	public ExcelReportExportTask(DownloadLink downloadLink, String downloadUrl, PersistenceManager persistenceManager) {
+		super(downloadLink, downloadUrl, "excelReportDownload");
+		this.persistenceManager = persistenceManager;
+	}
+	
+	public ExcelReportExportTask(DownloadLink downloadLink, String downloadUrl) {
+		this(downloadLink, downloadUrl, ServiceLocator.getPersistenceManager());
+	}
+	
+	@Override
+	protected void generateFile(File downloadFile, UserBean user) throws Exception {
+		SecurityFilter filter = user.getSecurityFilter();
+		
+		DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);
 
-			int totalPages = ServiceLocator.getPersistenceManager().countPages(this, getSecurityFilter(), getPageSize());
+		int totalPages = persistenceManager.countPages(this, filter, getPageSize());
+		
+		// we'll initalize the table view with one 1 row .. this will resize dynamically as we append tables
+		TableView masterTable = new TableView(0, getColumnTitles().size());
+		do {
+			masterTable.append(persistenceManager.search(this, filter));
+			page++;
 			
-			// we'll initalize the table view with one 1 row .. this will resize dynamically as we append tables
-			TableView masterTable = new TableView(0, getColumnTitles().size());
-			do {
-				
-				masterTable.append(ServiceLocator.getPersistenceManager().search(this, getSecurityFilter()));
-				page++;
-				
-			} while(page <= totalPages);
-			
-			// we now need to run all the cell handlers on the table so the values are properly converted
-			TableViewExcelHandler tableHandler = new TableViewExcelHandler(cellHandlers);
-			tableHandler.handle(masterTable);
-			
-			// create an excel builder and add our data
-			ExcelBuilder excelBuilder = new ExcelBuilder(dateTimeDefiner);
-			excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
-
-			// setup the output file
-			File tempDir = PathHandler.getTempDir();
-			File reportFile = new File(tempDir, getPackageName() + ".xls");
-			
-			//write the file
-			excelBuilder.writeToFile(reportFile);
-			
-			logger.info("Export to Excel Complete [" + reportFile.getPath() + "]");
-			
-			// TODO this should use a resource file to put out the correct language and move html to the template system for emails.
-			String body = "<h4>Your Excel report is ready</h4>";
-			body += "<br />Please see the attached Excel file.<br />";
-			
-			logger.info("Sending notification email [" + user.getEmailAddress() + "]");
-			MailMessage message = new MailMessage(subject, body, user.getEmailAddress());
-			message.addAttachment(reportFile);
-			ServiceLocator.getMailManager().sendMessage(message);
-			
-			FileUtils.deleteDirectory(tempDir);
-			
-		} catch (Exception e) {
-			logger.error("Excel Export Task failed", e);
-		}
+		} while(page <= totalPages);
+		
+		// we now need to run all the cell handlers on the table so the values are properly converted
+		TableViewExcelHandler tableHandler = new TableViewExcelHandler(cellHandlers);
+		tableHandler.handle(masterTable);
+		
+		// create an excel builder and add our data
+		ExcelBuilder excelBuilder = new ExcelBuilder(dateTimeDefiner);
+		excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
+		
+		//write the file
+		excelBuilder.writeToFile(downloadFile);		
 	}
 
 	public List<SortTerm> getSortTerms() {
@@ -111,9 +86,7 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 		return PAGE_SIZE;
 	}
 
-	public void setTotalResults(int totalResults) {
-		this.totalResults = totalResults;
-	}
+	public void setTotalResults(int totalResults) {}
 
 	public Class<?> getSearchClass() {
 		return searchDefiner.getSearchClass();
@@ -130,14 +103,6 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	public SearchDefiner<TableView> getSearchDefiner() {
 		return searchDefiner;
 	}
-
-	public Long getUserId() { 
-		return userId;
-	}
-	
-	public String getPackageName() {
-		return packageName;
-	}
 	
 	public List<String> getColumnTitles() {
 		return columnTitles;
@@ -147,14 +112,6 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 		this.searchDefiner = searchDefiner;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
-	}
-
 	public void setColumnTitles(List<String> columnTitles) {
 		this.columnTitles = columnTitles;
 	}
@@ -162,16 +119,9 @@ public class ExcelReportExportTask implements Runnable, SearchDefiner<TableView>
 	public List<QueryFilter> getSearchFilters() {
 		return searchDefiner.getSearchFilters();
 	}
-
-	public SecurityFilter getSecurityFilter() {
-		return securityFilter;
-	}
-
-	public void setSecurityFilter(SecurityFilter securityFilter) {
-		this.securityFilter = securityFilter;
-	}
 	
 	public void setCellHandlers(ExcelOutputHandler[] cellHandlers) {
 		this.cellHandlers = cellHandlers;
 	}
+
 }
