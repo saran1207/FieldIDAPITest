@@ -17,7 +17,7 @@ public class LoginPage extends FieldIDTestCase {
 	//private static final String requestAnAccountLinkLocator = "css=#requestAccountButton > a";
 	private static final String returnToSignInFromSendPasswordButtonLocator = "//input[@value='Return to Sign In')]";
 	private static final String returnToSignInFromSignUpPackagesLinkLocator = "//A[contains(text(),'Return to Sign In')]";
-	private static final String returnToSignInFromRegiserNewUserLinkLocator = "//A[contains(@text,'Return to Sign In')]";
+	private static final String returnToSignInFromRegiserNewUserLinkLocator = "//A[contains(text(),'Return to Sign In')]";
 	private static final String n4systemsLinkLocator = "//A[contains(text(),'N4 Systems Inc.')]";
 	private static final String poweredByFieldIDImageLocator = "css=.poweredBy > img";
 	private static final String thawteSiteSealLinkLocator = "//*[@id='sslCert']/A/IMG[@alt='Click to verify']/..";
