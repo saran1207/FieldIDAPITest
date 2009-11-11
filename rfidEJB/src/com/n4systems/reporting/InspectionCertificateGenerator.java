@@ -20,6 +20,7 @@ import com.n4systems.model.PrintOut;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubInspection;
+import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.mapbuilders.BaseInspectionMapBuilder;
@@ -66,6 +67,11 @@ public class InspectionCertificateGenerator {
 			throw new NonPrintableEventType("Event type group [" + inspection.getType().getGroup().getDisplayName() + "] does not have a printout of type " + type.getDisplayName());
 		}
 		
+		if (canCertBePrinted(inspection, printOutToPrint)) {
+			throw new NonPrintableEventType();
+		}
+
+		
 		if (printOutToPrint.isWithSubInspections()) {
 			jPrint = generateFull(inspection, transaction, printOutToPrint);
 		} else {
@@ -73,6 +79,11 @@ public class InspectionCertificateGenerator {
 		}
 	
 		return jPrint;
+	}
+	
+
+	private boolean canCertBePrinted(Inspection inspection, PrintOut printOut) {
+		return !inspection.isPrintable() && printOut.getType().equals(PrintOutType.CERT);
 	}
 	
 	private ReportMap<Object> createMainReportMap(Inspection inspection, File jasperFile, Transaction transaction) {
@@ -150,10 +161,6 @@ public class InspectionCertificateGenerator {
 	}
 
 	private File resolveJasperFile(Inspection inspection, PrintOut printOut) throws NonPrintableEventType, ReportException {
-		if (!inspection.isPrintable()) {
-			throw new NonPrintableEventType();
-		}
-
 		File jasperFile = PathHandler.getPrintOutFile(printOut);
 
 		// check to see if the report exists
@@ -163,4 +170,5 @@ public class InspectionCertificateGenerator {
 		
 		return jasperFile;
 	}
+
 }
