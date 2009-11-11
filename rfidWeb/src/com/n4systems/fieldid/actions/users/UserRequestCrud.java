@@ -12,7 +12,6 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -57,7 +56,7 @@ public class UserRequestCrud extends AbstractCrud {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		userRequest = persistenceManager.find(UserRequest.class, uniqueId, getTenantId());
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), userRequest.getUserAccount());
 	}
 	
 	
