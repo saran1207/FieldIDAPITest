@@ -316,6 +316,11 @@
 		<action name="promoCodeSave" method="save" class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
 			<result name="success" type="redirectAction">promoCodes</result>
 		</action>
+		<action name="promoCodeDelete" method="delete" class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="error" type="redirectAction">promoCodes</result>
+			<result name="input" type="redirectAction">promoCodes</result>
+			<result name="success" type="redirectAction">promoCodes</result>
+		</action>
 	</package>
 	
 	

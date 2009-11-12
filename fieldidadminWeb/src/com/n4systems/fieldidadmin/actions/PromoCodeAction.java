@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.promocode.PromoCode;
 import com.n4systems.model.promocode.PromoCodeSaver;
@@ -55,6 +56,18 @@ public class PromoCodeAction extends AbstractAdminAction implements Preparable {
 		
 		PromoCodeSaver saver = new PromoCodeSaver();
 		saver.saveOrUpdate(promoCode);
+		
+		return SUCCESS;
+	}
+	
+	
+	public String doDelete() {
+		PromoCodeSaver saver = new PromoCodeSaver();
+		try {
+			saver.remove(promoCode);
+		} catch (EntityStillReferencedException e) {
+			return INPUT;
+		}
 		
 		return SUCCESS;
 	}
