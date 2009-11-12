@@ -9,7 +9,10 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import rfid.ejb.entity.UserBean;
+
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
 
 // TODO change class to use the calendar to properly handle dates.  using millisecond addition does not handle time zones
@@ -445,5 +448,13 @@ public class DateHelper {
 
 	public static String format(Date date, DateTimeDefinition dateTimeDefinition) {
 		return new FieldidDateFormatter(date, dateTimeDefinition).format();
+	}
+	
+	public static String getFormattedCurrentDate(UserBean user) {
+		return format(new PlainDate(), new DateTimeDefiner(user));
+	}
+	
+	public static String getFormattedCurrentDateTime(UserBean user) {
+		return format(new Date(), new DateTimeDefiner(user));
 	}
 }

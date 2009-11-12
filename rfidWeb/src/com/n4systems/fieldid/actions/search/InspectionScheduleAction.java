@@ -56,7 +56,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 			final ProductManager productManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
-		super(implementingClass, sessionKey, "InspectionScheduleReport", persistenceManager);
+		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager);
 		
 		this.inspectionManager = inspectionManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;

@@ -36,7 +36,7 @@ public abstract class DownloadTask implements Runnable {
 		this(downloadLink, downloadUrl, templateName, new DownloadLinkSaver(), ServiceLocator.getMailManager());
 	}
 	
-	abstract protected void generateFile(File downloadFile, UserBean user) throws Exception;
+	abstract protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception;
 	
 	public void run() {
 		logger.info(String.format("Download Task Started [%s]", downloadLink));
@@ -44,7 +44,7 @@ public abstract class DownloadTask implements Runnable {
 		updateDownloadLinkState(DownloadState.INPROGRESS);
 		
 		try {
-			generateFile(downloadLink.getFile(), downloadLink.getUser());
+			generateFile(downloadLink.getFile(), downloadLink.getUser(), downloadLink.getName());
 			
 			updateDownloadLinkState(DownloadState.COMPLETED);
 	
@@ -56,7 +56,7 @@ public abstract class DownloadTask implements Runnable {
 			
 			updateDownloadLinkState(DownloadState.FAILED);
 			try {
-				sendFailureNotification(mailManager, downloadLink);
+				sendFailureNotification(mailManager, downloadLink, e);
 			} catch(MessagingException me) {
 				logger.error("Failed to send failure notification", me);
 			}
@@ -79,7 +79,7 @@ public abstract class DownloadTask implements Runnable {
 		mailManager.sendMessage(tMail);
 	}
 	
-	protected void sendFailureNotification(MailManager mailManager, DownloadLink downloadLink) throws MessagingException {
+	protected void sendFailureNotification(MailManager mailManager, DownloadLink downloadLink, Exception cause) throws MessagingException {
 		// sub classes may override this to send failure notices
 	}
 }

@@ -43,7 +43,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 	}
 	
 	@Override
-	protected void generateFile(File downloadFile, UserBean user) throws Exception {
+	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
 		SecurityFilter filter = user.getSecurityFilter();
 		
 		DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);

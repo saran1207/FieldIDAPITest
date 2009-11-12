@@ -20,7 +20,6 @@ import com.n4systems.model.PrintOut;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.mapbuilders.BaseInspectionMapBuilder;
@@ -52,25 +51,11 @@ public class InspectionCertificateGenerator {
 	public JasperPrint generate(InspectionReportType type, Inspection inspection, Transaction transaction) throws NonPrintableEventType, ReportException {
 		JasperPrint jPrint = null;
 		
-		PrintOut printOutToPrint = null;
-		
-		switch(type) {
-			case INSPECTION_CERT:
-				printOutToPrint = inspection.getType().getGroup().getPrintOut();
-				break;
-			case OBSERVATION_CERT:
-				printOutToPrint = inspection.getType().getGroup().getObservationPrintOut();
-				break;
+		if (!inspection.isPrintableForReportType(type)) {
+			throw new NonPrintableEventType(String.format("Inspection [%s] was not printable or did not have a PrintOut for InspectionReportType [%s]", inspection.getId(), type.getDisplayName()));
 		}
 		
-		if (printOutToPrint == null) {
-			throw new NonPrintableEventType("Event type group [" + inspection.getType().getGroup().getDisplayName() + "] does not have a printout of type " + type.getDisplayName());
-		}
-		
-		if (canCertBePrinted(inspection, printOutToPrint)) {
-			throw new NonPrintableEventType();
-		}
-
+		PrintOut printOutToPrint = inspection.getType().getGroup().getPrintOutForReportType(type);
 		
 		if (printOutToPrint.isWithSubInspections()) {
 			jPrint = generateFull(inspection, transaction, printOutToPrint);
@@ -79,11 +64,6 @@ public class InspectionCertificateGenerator {
 		}
 	
 		return jPrint;
-	}
-	
-
-	private boolean canCertBePrinted(Inspection inspection, PrintOut printOut) {
-		return !inspection.isPrintable() && printOut.getType().equals(PrintOutType.CERT);
 	}
 	
 	private ReportMap<Object> createMainReportMap(Inspection inspection, File jasperFile, Transaction transaction) {

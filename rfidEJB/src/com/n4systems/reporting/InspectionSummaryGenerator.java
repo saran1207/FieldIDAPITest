@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
+import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.ExtendedFeature;
@@ -26,33 +27,41 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.EntityManagerTransactionWrapper;
 import com.n4systems.util.ReportMap;
+import com.n4systems.util.ServiceLocator;
 
 public class InspectionSummaryGenerator {
 	private static final String n4LogoFileName = "n4_logo.gif";
 	private Logger logger = Logger.getLogger(InspectionSummaryGenerator.class);
 	
-	private PersistenceManager persistenceManager;
-	private User userManager;
+	private final PersistenceManager persistenceManager;
+	private final InspectionManager inspectionManager;
+	private final User userManager;
 	
-	public InspectionSummaryGenerator() {}
+	public InspectionSummaryGenerator(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager) {
+		this.persistenceManager = persistenceManager;
+		this.inspectionManager = inspectionManager;
+		this.userManager = userManager;
+	}
 	
-	public JasperPrint generate(ReportDefiner reportDefiner, SecurityFilter filter, UserBean user, Tenant tenant) throws ReportException {
-		File jasperFile = PathHandler.getSummaryReportFile(tenant);
+	public InspectionSummaryGenerator() {
+		this(ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager(), ServiceLocator.getUser());
+	}
+	
+	public JasperPrint generate(ReportDefiner reportDefiner, UserBean user) throws ReportException {
+		File jasperFile = PathHandler.getSummaryReportFile(user.getTenant());
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
-			throw new ReportException("No Product report file summary report ");
+			throw new ReportException("Could not access Jasper File " + jasperFile);
 		}
 
-		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner, filter);
+		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner, user.getSecurityFilter());
 
 		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
 		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();
@@ -62,7 +71,7 @@ public class InspectionSummaryGenerator {
 		try {
 			Inspection inspection;
 			for (Long inspectionId : inspectionIds) {
-				inspection = persistenceManager.find(Inspection.class, inspectionId);
+				inspection = inspectionManager.findAllFields(inspectionId, user.getSecurityFilter());
 
 				ReportMap<Object> inspectionMap = new ReportMap<Object>();
 				inspectionMap.put("date", inspection.getDate());

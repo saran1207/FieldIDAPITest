@@ -10,7 +10,6 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
@@ -25,11 +24,7 @@ import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.user.UserListableLoader;
-import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.InspectionReportType;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -63,7 +58,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			final User userManager, 
 			final ProductManager productManager) {
 		
-		super(InspectionReportAction.class, REPORT_CRITERIA, "InspectionReport", persistenceManager);
+		super(InspectionReportAction.class, REPORT_CRITERIA, "Inspection Report", persistenceManager);
 
 		this.userManager = userManager;
 		
@@ -128,58 +123,45 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	@SuppressWarnings("unchecked")
 	public String doPrintAllCerts() {
-		String status = SUCCESS;
+		if (!isSearchIdValid()) {
+			addFlashError(getText("error.reportexpired"));
+			return INPUT;
+		}
+		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			if (isSearchIdValid()) {
-				List<Long> inspectionDocs = persistenceManager.idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
-
-				PrintAllInspectionCertificatesTask printTask = new PrintAllInspectionCertificatesTask(new DateTimeDefiner(getUser()), getLoaderFactory().createSafetyNetworkInspectionLoader());
-				
-				printTask.setInspectionIds(inspectionDocs);
-				printTask.setTenant(getTenant());
-				printTask.setDateFormat(getSessionUser().getDateFormat());
-				printTask.setDownloadLocation(createActionURI("download.action").toString());
-				printTask.setReportType(reportType);
-				printTask.setUserId(getSessionUser().getUniqueID());
+			List<Long> inspectionIds = persistenceManager.idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
 	
-				TaskExecutor.getInstance().execute(printTask);
-				addActionMessage( getText( "message.emailshortly" ) );
-			} else {
-				addFlashError( getText( "error.reportexpired" ) );
-				status = INPUT;
-			}
-		
-		} catch(InvalidQueryException e) {
-			logger.error("Unable to schedule ReportJob.", e);
-			addFlashError( getText( "error.reportgeneration" ) );
-			status = ERROR;
+			getDownloadCoordinator().generateAllInspectionCertificates(reportName, getDownloadLinkUrl(), reportType, inspectionIds);
+	
+			addActionMessage(getText("message.emailshortly"));
+		} catch(RuntimeException e) {
+			logger.error("Failed to print all inspection certs", e);
+			addFlashError(getText("error.reportgeneration"));
+			return ERROR;
 		}
 		
-		return status;
+		return SUCCESS;
 	}
 	
 	public String doPrint() {
-		String status = SUCCESS;
-		
-		if (isSearchIdValid()) {
-			PrintInspectionSummaryReportTask reportTask = new  PrintInspectionSummaryReportTask();
-			
-			reportTask.setTenant(getTenant());
-			reportTask.setReportDefiner(getContainer());
-			reportTask.setFilter(getContainer().getSecurityFilter());
-			reportTask.setUserId(getSessionUser().getUniqueID());
-			reportTask.setDateFormat(getSessionUser().getDateFormat());
-			reportTask.setDownloadLocation(createActionURI("download.action").toString());
-			
-			TaskExecutor.getInstance().execute(reportTask);
-			addActionMessageText("message.emailshortly");
-		} else {
-			addFlashError( getText( "error.reportexpired" ) );
-			status = INPUT;
+		if (!isSearchIdValid()) {
+			addFlashError(getText("error.reportexpired"));
+			return INPUT;
 		}
-	
-		return status;
+		String reportName = String.format("Inspection Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
+		
+		try {
+			getDownloadCoordinator().generateInspectionSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
+			
+			addActionMessageText("message.emailshortly");
+		} catch(RuntimeException e) {
+			logger.error("Failed to print inspection report summary", e);
+			addFlashError(getText("error.reportgeneration"));
+			return ERROR;
+		}
+		
+		return SUCCESS;
 	}
 	
 	@SkipValidation

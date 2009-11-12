@@ -35,6 +35,7 @@ import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
 
@@ -242,6 +243,17 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean hasAnyPrintOuts() {
 		return (printable && getType().getGroup().hasPrintOut()) || getType().getGroup().hasObservationPrintOut();
+	}
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isPrintableForReportType(InspectionReportType reportType) { 
+		if (!printable) {
+			return false;
+		}
+		
+		PrintOut printOut = getType().getGroup().getPrintOutForReportType(reportType);
+		
+		return (printOut != null);
 	}
 
 	@Override

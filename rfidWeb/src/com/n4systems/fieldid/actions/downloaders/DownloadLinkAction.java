@@ -104,10 +104,10 @@ public class DownloadLinkAction extends AbstractAction {
 	}
 	
 	public String getExpiresText(Date created) {
-		Long expireTTL = ConfigContext.getCurrentContext().getLong(ConfigEntry.DOWNLOAD_TTL_DAYS, getTenantId());
+		Integer expireTTL = ConfigContext.getCurrentContext().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
 
 		// add the TTL and truncate back to midnight
-		Date expiresOn = DateHelper.truncate(DateHelper.addDaysToDate(created, expireTTL), DateHelper.DAY);
+		Date expiresOn = DateHelper.truncate(DateHelper.addDaysToDate(created, expireTTL.longValue()), DateHelper.DAY);
 
 		// this won't overflow unless the ttl is set to about 6 billion years
 		int daysLeft = DateHelper.getDaysFromToday(expiresOn).intValue();

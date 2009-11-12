@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -18,12 +19,13 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Product;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.FileHelper;
+import com.n4systems.util.ListHelper;
 
 public class ProductCertificateReportGenerator {
-	private static final String pdfExt = ".pdf";
+	private static final String PDF_EXT = "pdf";
 	private Logger logger = Logger.getLogger(ProductCertificateReportGenerator.class);
 	
 	private final ProductCertificateGenerator certGenerator;
@@ -36,81 +38,66 @@ public class ProductCertificateReportGenerator {
 		this(new ProductCertificateGenerator());
 	}
 	
-	public File generate(List<Product> products, String packageName, UserBean user) throws ReportException, EmptyReportException {
-		// XXX - this could probable be improved now the the rest is a little
-		// cleaner
-		int reportsInFile = 0;
-		int totalReports = 0;
-		int reportFileCount = 1;
-		List<JasperPrint> printList = new ArrayList<JasperPrint>();
-		File tempDir = null;
-		File reportFile;
-		OutputStream reportOut = null;
-		File zipFile = null;
-
+	public void generate(List<Product> products, File outputFile, String packageName, UserBean user, Transaction transaction) throws ReportException, EmptyReportException {
+		int reportsPerPage = ConfigContext.getCurrentContext().getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
+		
+		// first filter out any non printable products, then we subdivide the list into groups corresponding to each pdf file that will be created
+		List<List<Product>> productFileGroups = ListHelper.splitList(filterNonPrintableProducts(products), reportsPerPage);
+		
+		if (productFileGroups.isEmpty()) {
+			throw new EmptyReportException("Report contained no products with manufacturer certificates");
+		}
+		
+		int pageNumber = 1;
+		ZipOutputStream zipOut = null;
 		try {
-			tempDir = PathHandler.getTempDir();
-
-			reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
-			reportOut = new FileOutputStream(reportFile);
-
-			// builds sets of pdfs.
-			for (Product product: products) {
-				logger.debug("Processing Report for Product [" + product.getId() + "]");
-
-				if (reportsInFile >= ConfigContext.getCurrentContext().getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE)) {
-					logger.debug("Exporing report pdf to [" + reportFile.getPath() + "]");
-					CertificatePrinter.printToPDF(printList, reportOut);
-					reportFileCount++;
-
-					reportsInFile = 0;
-					printList = new ArrayList<JasperPrint>();
-
-					reportOut.close();
-					reportFile = new File(tempDir, packageName + "_" + reportFileCount + pdfExt);
-					reportOut = new FileOutputStream(reportFile);
-				}
-
-				try {
-					printList.add(certGenerator.generate(product, user));
-					reportsInFile++;
-					totalReports++;
-				} catch (ReportException e) {
-					logger.debug("Report for Product [" + product.getId() + "] is NonPrintable");
-				}
+			zipOut = new ZipOutputStream(new FileOutputStream(outputFile));
+			
+			for (List<Product> productPage: productFileGroups) {
+				zipOut.putNextEntry(new ZipEntry(createPageFileName(packageName, pageNumber)));
+				
+				generateReportPage(zipOut, productPage, user);
+				pageNumber++;
 			}
-
-			// export any remaining certs
-			if (printList.size() > 0) {
-				CertificatePrinter.printToPDF(printList, reportOut);
-				reportOut.close();
-			} else {
-				// there were no certs left, the file created will be empty and
-				// should be deleted
-				reportOut.close();
-				reportFile.delete();
-			}
-
-			if (totalReports == 0) {
-				throw new EmptyReportException("No printable reports found");
-			}
-
-			zipFile = FileHelper.zipDirectory(tempDir, user.getPrivateDir(), packageName);
-		} catch (IOException e) {
-			throw new ReportException("File access product occured", e);
+		} catch(IOException e) {
+			throw new ReportException("Could not write to zip file");
 		} finally {
-			// close any streams that haven't been closed yet and clean up the
-			// temp dir
-			IOUtils.closeQuietly(reportOut);
-
-			try {
-				FileUtils.deleteDirectory(tempDir);
-			} catch (IOException e) {
-				logger.error("could not delete the directory " + tempDir.toString(), e);
+			IOUtils.closeQuietly(zipOut);
+		}
+	}
+	
+	private List<Product> filterNonPrintableProducts(List<Product> products) {
+		List<Product> printableProducts = new ArrayList<Product>();
+		
+		for (Product product: products) {
+			if (product.getType().isHasManufactureCertificate()) {
+				printableProducts.add(product);
 			}
 		}
-
-		return zipFile;
+		return printableProducts;
+	}
+	
+	private void generateReportPage(OutputStream reportOut, List<Product> products, UserBean user) {
+		List<JasperPrint> page = new ArrayList<JasperPrint>();
+		
+		for (Product product: products) {
+			try {
+				JasperPrint cert = certGenerator.generate(product, user);
+				page.add(cert);
+			} catch (Exception e) {
+				logger.warn("Failed to manufacturer certificate for Product [" + product.getId() + "].  Moving on to next Product.", e);
+			}
+		}
+		
+		try {
+			CertificatePrinter.printToPDF(page, reportOut);
+		} catch(Exception e) {
+			logger.warn("Failed to print report page, Moving on to next page.", e);
+		}
 	}
 
+	private String createPageFileName(String packageName, int page) {
+		// note any /'s get replaced with _'s so we don't create directories within the zip file
+		return String.format("%s - %d.%s", packageName.replace('/', '_'), page, PDF_EXT);
+	}
 }

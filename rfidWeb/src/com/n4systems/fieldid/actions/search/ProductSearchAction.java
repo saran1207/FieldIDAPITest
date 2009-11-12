@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.search;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -9,17 +8,14 @@ import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
-import com.n4systems.model.Product;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserListableLoader;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
@@ -72,37 +68,25 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	}
 	
 	public String doPrintAllCerts() {
-		String status = SUCCESS;
+		if (!isSearchIdValid()) {
+			addFlashError( getText( "error.searchexpired" ) );
+			return INPUT;
+		}
+		String reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
+
 		try {
-			if (isSearchIdValid()) {
+			List<Long> productIds = persistenceManager.idSearch(this, getSecurityFilter());
+			
+			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), productIds);
 
-				String tenantName = getTenant().getDisplayName().replace(" ", "_");
-				String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
-				String reportFileName = "manufacturer_certificate_report_" + tenantName + "_" + dateString;
-
-				PrintAllProductCertificatesTask printAllTask = new PrintAllProductCertificatesTask(getLoaderFactory().createFilteredIdLoader(Product.class));
-				
-				printAllTask.setDateFormat(getSessionUser().getDateFormat());
-				printAllTask.setDownloadLocation(createActionURI("download.action").toString());
-				printAllTask.setPackageName(reportFileName);
-				printAllTask.setProductIdList(persistenceManager.idSearch(this, getContainer().getSecurityFilter()));
-				printAllTask.setUser(getUser());
-
-				TaskExecutor.getInstance().execute(printAllTask);
-				addActionMessage( getText( "message.emailshortly" ) );
-				
-			} else {
-				addFlashError( getText( "error.searchexpired" ) );
-				status = INPUT;
-			}
-		
-		} catch(InvalidQueryException e) {
-			addFlashError( getText( "error.reportgeneration" ) );
-			logger.error(e);
-			status = ERROR;
+			addActionMessage(getText("message.emailshortly"));
+		} catch(Exception e) {
+			logger.error("Failed to print all manufacturer certs", e);
+			addFlashError(getText("error.reportgeneration"));
+			return ERROR;
 		}
 		
-		return status;
+		return SUCCESS;
 	}
 	
 	@SkipValidation

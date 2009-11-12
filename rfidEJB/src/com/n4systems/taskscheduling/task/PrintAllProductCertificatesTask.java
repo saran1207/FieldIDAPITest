@@ -1,88 +1,62 @@
 package com.n4systems.taskscheduling.task;
 
 import java.io.File;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.mail.MessagingException;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.ejb.MailManager;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.model.Product;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.ProductCertificateReportGenerator;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 
-public class PrintAllProductCertificatesTask implements Runnable {
-	private static final Logger logger = Logger.getLogger( PrintAllProductCertificatesTask.class );
-	
-	private List<Long> productIdList = new ArrayList<Long>();
-	private String dateFormat;
-	private String packageName;
-	private String downloadLocation;
-	private UserBean user;
-	
+public class PrintAllProductCertificatesTask extends DownloadTask {
 	private final ProductCertificateReportGenerator certGen;
 	private final FilteredIdLoader<Product> productLoader;
 	
-	PrintAllProductCertificatesTask(ProductCertificateReportGenerator certGen, FilteredIdLoader<Product> productLoader) {
+	private List<Long> productIdList;
+	
+	public PrintAllProductCertificatesTask(DownloadLink downloadLink, String downloadUrl, ProductCertificateReportGenerator certGen, FilteredIdLoader<Product> productLoader) {
+		super(downloadLink, downloadUrl, "printAllProductCerts");
 		this.certGen = certGen;
 		this.productLoader = productLoader;
 	}
 	
-	public PrintAllProductCertificatesTask(FilteredIdLoader<Product> productLoader) {
-		this(new ProductCertificateReportGenerator(), productLoader);
+	public PrintAllProductCertificatesTask(DownloadLink downloadLink, String downloadUrl) {
+		this(downloadLink, downloadUrl, new ProductCertificateReportGenerator(), new FilteredIdLoader<Product>(downloadLink.getUser().getSecurityFilter(), Product.class));
 	}
 	
-	public void run() {
-		logger.debug(String.format("Generating manufacturer certificate report [%s]", packageName));
-		
+	@Override
+	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
 		Transaction transaction = null;
 		try {
 			transaction = PersistenceManager.startTransaction();
+						
+			List<Product> products = loadProducts(user, transaction);
 			
-			
-			String body;
-			try {
-				List<Product> products = loadProducts(user, transaction);
+			certGen.generate(products, downloadFile, downloadName, user, transaction);
 				
-				File report = certGen.generate(products, packageName, user);
-				
-				logger.debug(String.format("Generating report Complete [%s]", packageName));
-				
-				body = "<h4>Your Report is ready</h4>";
-				body += "<br />Please click the link below to download your report package.<br />";
-				body += "If you are not logged in you will be prompted to do so.<br /><br />";
-				body += "<a href='" + downloadLocation + "?downloadPath=" + URLEncoder.encode(report.getName(), "UTF-8") + "'>Click here to download your report</a>";
-				
-			} catch(EmptyReportException e) {
-				body = "<h4>Your report contained no manufacturer certificates. </h4>";
-			}
-
-			sendMessage(user, body);
-			
 			PersistenceManager.finishTransaction(transaction);
 		} catch (Exception e) {
-			logger.error("Print all Product Certificates job failed", e);
 			PersistenceManager.rollbackTransaction(transaction);
+			throw e;
 		}
 	}
 	
-	private void sendMessage(UserBean user, String body) {
-		logger.debug(String.format("Sending manufacturer certificate report email [%s]", user.getEmailAddress()));
-		
-		String subject = "Manufacturer Certificate Report for " + packageName;
-
-		try {
-	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, user.getEmailAddress()));
-        } catch (Exception e) {
-	        logger.error("Unable to send Multi-Inspection certificate report email", e);
-        }
+	@Override
+	protected void sendFailureNotification(MailManager mailManager, DownloadLink downloadLink, Exception cause) throws MessagingException {
+		// if the failure was caused by an empty report, we send a message.  Otherwise the failure is silent to the end user
+		if (cause instanceof EmptyReportException) {
+			mailManager.sendMessage(new MailMessage(downloadLink, "We're sorry, your report did not conain any Products with manufacturer certificates."));
+		}
 	}
 	
 	private List<Product> loadProducts(UserBean user, Transaction transaction) {
@@ -97,44 +71,8 @@ public class PrintAllProductCertificatesTask implements Runnable {
 		return products;
 	}
 
-	public List<Long> getProductIdList() {
-		return productIdList;
-	}
-
 	public void setProductIdList(List<Long> productIdList) {
 		this.productIdList = productIdList;
 	}
-
-	public String getDateFormat() {
-		return dateFormat;
-	}
-
-	public void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-
-	public String getPackageName() {
-		return packageName;
-	}
-
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
-	}
-
-	public String getDownloadLocation() {
-		return downloadLocation;
-	}
-
-	public void setDownloadLocation(String downloadLocation) {
-		this.downloadLocation = downloadLocation;
-	}
-
-	public UserBean getUser() {
-		return user;
-	}
-
-	public void setUser(UserBean user) {
-		this.user = user;
-	}
-
+	
 }

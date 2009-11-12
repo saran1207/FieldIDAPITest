@@ -87,4 +87,23 @@ public class ListHelper {
 	public static <K, T extends Collection<K>> BlockingQueue<K> toBlockingQueue(T collection) {
 		return new LinkedBlockingQueue<K>(collection);
 	}
+	
+	public static <K> List<List<K>> splitList(List<K> list, int subListSize) {
+		if (subListSize < 1) {
+			throw new IllegalArgumentException("subListSize must be > 0");
+		}
+		
+		List<List<K>> masterList = new ArrayList<List<K>>();
+		
+		for (int i = 0; i <= (list.size() - subListSize); i += subListSize) {
+			masterList.add(list.subList(i, i + subListSize));
+		}
+		
+		if ((list.size() % subListSize) != 0) {
+			// add in anything remaining
+			masterList.add(list.subList(list.size() - (list.size() % subListSize), list.size()));
+		}
+		
+		return masterList;
+	}
 }

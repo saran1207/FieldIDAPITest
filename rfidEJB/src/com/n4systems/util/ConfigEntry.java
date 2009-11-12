@@ -53,21 +53,21 @@ public enum ConfigEntry {
 	UPLOAD_FILE_SIZE_LIMIT_DEFAULT_IN_KB			(	"5120"				),
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_ATTACHMENT_IN_KB	(	"2048"				), 
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB (	"100"				),
-	DOWNLOAD_TTL_DAYS							(	"2"						),
+	
 	
 	// ones below here are never overridden by the tenant.
 	FIELDID_ADMINISTRATOR_EMAIL					(	"team@n4systems.com"	),
-	SYSTEM_USER_USERNAME						(	"n4systems"			),
+	SYSTEM_USER_USERNAME						(	"n4systems"				),
 	SYSTEM_USER_PASSWORD						(	"2a3bb4bc2f0cf8f2c09cd8aef2824a901d186fe7"	),
 	SYSTEM_USER_ADDRESS							(	"admin@n4systems.com"						),
 	UNBRANDED_SUBDOMAIN							(	"www"										),
 	GLOBAL_APPLICATION_ROOT						(	"/var/fieldid"			),
 	DEFAULT_TIMEZONE_ID							(	"United States:New York - New York"			),
-	SYSTEM_DOMAIN								(   "fieldid.com"),
+	SYSTEM_DOMAIN								(   "fieldid.com"			),
 	SUBSCRIPTION_AGENT							(	"com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent"),
-	HOUSE_ACCOUNT_NAME							(	"fieldid"),
-	HOUSE_ACCOUNT_PRIMARY_ORG_ID				(	"15511550");
-	
+	HOUSE_ACCOUNT_NAME							(	"fieldid"				),
+	HOUSE_ACCOUNT_PRIMARY_ORG_ID				(	"15511550"				),
+	DOWNLOAD_TTL_DAYS							(	"2"						);
 	
 	
 	private String defaultValue;

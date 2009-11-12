@@ -92,9 +92,8 @@ public class MailMessage implements Serializable {
 		getToAddresses().add(toAddress);
 	}
 	
-	public MailMessage(String subject, String body, DownloadLink link) throws IOException {
-		this(subject, body, link.getUser().getEmailAddress());
-		addAttachment(link.getFile());
+	public MailMessage(DownloadLink link, String body) {
+		this(link.getName(), body, link.getUser().getEmailAddress());
 	}
 
 	public String getSubjectPrefix() {

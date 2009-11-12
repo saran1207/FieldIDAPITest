@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
-import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingFactory;
@@ -21,9 +20,6 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
-import com.n4systems.model.downloadlink.DownloadCoordinator;
-import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -143,13 +139,10 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 			addFlashError(getText("error.searchexpired"));
 			return INPUT;
 		}
-		String reportName = excelReportFileName + " - " + DateHelper.format(new PlainDate(), new DateTimeDefiner(getUser()));
-		String downloadUrl = DownloadLinkAction.buildDownloadUrl(this);
+		String reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
-			DownloadCoordinator dlc = new DownloadCoordinator(getUser());
-			
-			dlc.generateExcel(reportName, new ImmutableSearchDefiner<TableView>(this), buildExcelColumnTitles(), prepareExcelHandlers(), downloadUrl);
+			getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), new ImmutableSearchDefiner<TableView>(this), buildExcelColumnTitles(), prepareExcelHandlers());
 			
 			addActionMessage(getText("message.emailshortly"));
 		} catch (RuntimeException e) {

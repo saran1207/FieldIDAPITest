@@ -1,25 +1,31 @@
 package com.n4systems.model.downloadlink;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.persistence.savers.Saver;
+import com.n4systems.reporting.InspectionReportType;
+import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
+import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
+import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
+import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 
 public class DownloadCoordinator {
-
-	private final TaskExecutor taskExecutor;
-	private final DownloadLinkSaver linkSaver;
+	private final Executor executor;
+	private final Saver<DownloadLink> linkSaver;
 	private final UserBean user;
 	
-	public DownloadCoordinator(UserBean user, DownloadLinkSaver linkSaver, TaskExecutor taskExecutor) {
+	public DownloadCoordinator(UserBean user, Saver<DownloadLink> linkSaver, Executor executor) {
 		this.linkSaver = linkSaver;
 		this.user = user;
-		this.taskExecutor = taskExecutor;
+		this.executor = executor;
 	}
 	
 	public DownloadCoordinator(UserBean user) {
@@ -38,20 +44,63 @@ public class DownloadCoordinator {
 		return link;
 	}
 	
-	private ExcelReportExportTask createExcelTask(DownloadLink link, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers, String downloadUrl) {
-		ExcelReportExportTask exportTask = new ExcelReportExportTask(link, downloadUrl);
-		exportTask.setSearchDefiner(searchDefiner);
-		exportTask.setColumnTitles(columnTitles);
-		exportTask.setCellHandlers(outputHandlers);
+	private ExcelReportExportTask createExcelTask(DownloadLink link, String downloadUrl, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers) {
+		ExcelReportExportTask task = new ExcelReportExportTask(link, downloadUrl);
+		task.setSearchDefiner(searchDefiner);
+		task.setColumnTitles(columnTitles);
+		task.setCellHandlers(outputHandlers);
 		
-		return exportTask;
+		return task;
 	}
 	
-	public void generateExcel(String name, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers, String downloadUrl) {
+	public void generateExcel(String name, String downloadUrl, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
-		ExcelReportExportTask exportTask = createExcelTask(link, searchDefiner, columnTitles, outputHandlers, downloadUrl);
+		ExcelReportExportTask task = createExcelTask(link, downloadUrl, searchDefiner, columnTitles, outputHandlers);
 		
-		taskExecutor.execute(exportTask);
+		executor.execute(task);
+	}
+	
+	private PrintAllInspectionCertificatesTask createPrintAllInspectionCertificatesTask(DownloadLink link, String downloadUrl, InspectionReportType type, List<Long> inspectionIds) {
+		PrintAllInspectionCertificatesTask task = new PrintAllInspectionCertificatesTask(link, downloadUrl);
+		task.setReportType(type);
+		task.setInspectionIds(inspectionIds);
+		
+		return task;
+	}
+	
+	public void generateAllInspectionCertificates(String name, String downloadUrl, InspectionReportType type, List<Long> inspectionIds) {
+		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
+		PrintAllInspectionCertificatesTask task = createPrintAllInspectionCertificatesTask(link, downloadUrl, type, inspectionIds);
+		
+		executor.execute(task);
+	}
+	
+	private PrintAllProductCertificatesTask createPrintAllProductCertificatesTask(DownloadLink link, String downloadUrl, List<Long> productIds) {
+		PrintAllProductCertificatesTask task = new PrintAllProductCertificatesTask(link, downloadUrl);
+		task.setProductIdList(productIds);
+		
+		return task;
+	}
+	
+	public void generateAllProductCertificates(String name, String downloadUrl, List<Long> productIds) {
+		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
+		PrintAllProductCertificatesTask task = createPrintAllProductCertificatesTask(link, downloadUrl, productIds);
+		
+		executor.execute(task);
+	}
+	
+	private PrintInspectionSummaryReportTask createPrintInspectionSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner) {
+		PrintInspectionSummaryReportTask task = new PrintInspectionSummaryReportTask(link, downloadUrl);
+		task.setReportDefiner(reportDefiner);
+		
+		return task;
+	}
+	
+	public void generateInspectionSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
+		DownloadLink link = createDownloadLink(name, ContentType.PDF);
+		PrintInspectionSummaryReportTask task = createPrintInspectionSummaryReportTask(link, downloadUrl, reportDefiner);
+		
+		executor.execute(task);
 	}
 	
 }

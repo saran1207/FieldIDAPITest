@@ -18,6 +18,7 @@ import rfid.web.helper.SessionUser;
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.ExtendedTextProviderAction;
+import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
 import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
@@ -29,6 +30,7 @@ import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.downloadlink.DownloadCoordinator;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -68,7 +70,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	private RemovalHandlerFactory rhFactory;
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
 	private CreateHandlerFactory createHandlerFactory;
-	
+	private DownloadCoordinator downloadCoordinator;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -430,4 +432,14 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		return helper;
 	}
 	
+	public DownloadCoordinator getDownloadCoordinator() {
+		if (downloadCoordinator == null) {
+			downloadCoordinator = new DownloadCoordinator(getUser());
+		}
+		return downloadCoordinator;
+	}
+	
+	public String getDownloadLinkUrl() {
+		return DownloadLinkAction.buildDownloadUrl(this);
+	}
 }

@@ -15,6 +15,7 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.reporting.InspectionReportType;
 
 @Entity
 @Table(name="inspectiontypegroups")
@@ -111,5 +112,16 @@ public class InspectionTypeGroup extends EntityWithTenant implements NamedEntity
 
 	public void setObservationPrintOut(PrintOut observationPrintOut) {
 		this.observationPrintOut = observationPrintOut;
+	}
+	
+	public PrintOut getPrintOutForReportType(InspectionReportType reportType) {
+		switch (reportType) {
+			case INSPECTION_CERT:
+				return printOut;
+			case OBSERVATION_CERT:
+				return observationPrintOut;
+			default:
+				throw new IllegalArgumentException("Unknown InspectionReportType " + reportType.name());
+		}
 	}
 }
