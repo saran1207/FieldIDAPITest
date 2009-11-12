@@ -11,6 +11,7 @@ import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
+import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.ExternalOrg;
@@ -84,6 +85,10 @@ public class LoaderFactory {
 		return new AutoAttributeCriteriaByProductTypeIdLoader(filter);
 	}
 
+	public BaseOrgParentFilterListLoader createBaseParentFilterLoader() {
+		return new BaseOrgParentFilterListLoader(filter);
+	}
+
 	public CatalogLoader createCatalogLoader() {
 		return new CatalogLoader();
 	}
@@ -95,19 +100,19 @@ public class LoaderFactory {
 	public CurrentEulaLoader createCurrentEulaLoader() {
 		return new CurrentEulaLoader();
 	}
-
+	
 	public CustomerLinkedOrgListLoader createCustomerLinkedOrgListLoader() {
 		return new CustomerLinkedOrgListLoader(filter);
 	}
-	
+
 	public CustomerLinkedOrgLoader createCustomerLinkedOrgLoader() {
 		return new CustomerLinkedOrgLoader(filter);
 	}
-
+	
 	public CustomerOrgConnectionLoader createCustomerOrgConnectionLoader() {
 		return new CustomerOrgConnectionLoader(filter);
 	}
-	
+
 	public CustomerOrgConnectionsListLoader createCustomerOrgConnectionsListLoader() {
 		return new CustomerOrgConnectionsListLoader(filter);
 	}
@@ -267,7 +272,7 @@ public class LoaderFactory {
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-	
+
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

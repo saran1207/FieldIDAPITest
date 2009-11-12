@@ -63,11 +63,9 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 		</span>
 	</p>
 	
-
-	
 	<p>
-		<label><@s.text name="label.owner"/></label>
-		<span><@n4.orgPicker name="owner" required="true" /></span>
+		<label><@s.text name="label.customer"/></label>
+		<span><@n4.orgPicker name="owner" required="true" orgType="customer"/></span>
 	</p>
 	
 	<p>

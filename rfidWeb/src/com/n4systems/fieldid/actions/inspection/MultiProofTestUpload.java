@@ -51,6 +51,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
 	}
 	
+	
 	public String doAdd() {		 
 		return SUCCESS;
 	}
@@ -59,7 +60,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		
 		/*
 		 *  Note that inspection will have the Customer and InspectionBook attached.
-		 *  These objects are no fully constructed.  They are actually just holders for the Id's
+		 *  These objects are not fully constructed.  They are actually just holders for the Id's
 		 *  DO NOT! persist this inspection on the attached Customer/InspectionBook!!
 		 */
 		inspection = (Inspection)getSession().get( "proofTestFiles_inspection" );
@@ -106,6 +107,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		
 		return SUCCESS;
 	}
+	
 	
 	public String doUpload() {
 		/*
@@ -196,6 +198,8 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		return inspectionProcessingFailureMap;
 	}
 
+	
+	
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}

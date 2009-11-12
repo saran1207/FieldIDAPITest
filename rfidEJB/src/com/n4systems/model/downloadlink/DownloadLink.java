@@ -1,8 +1,6 @@
 package com.n4systems.model.downloadlink;
 
 import java.io.File;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,8 +20,6 @@ import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
 @Entity
 @Table(name = "downloads")

@@ -14,7 +14,6 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -40,7 +39,6 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(UserRegistrationCrud.class);
 	
-	private Tenant tenant;
 	private UserBean userAccount;
 
 	private UserRequest userRequest;

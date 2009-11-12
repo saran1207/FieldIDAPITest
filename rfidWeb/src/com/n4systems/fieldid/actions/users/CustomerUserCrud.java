@@ -24,7 +24,7 @@ public class CustomerUserCrud extends UserCrud {
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
 		if (existing && user.isEmployee()) {
-			addActionErrorText("error.");
+			addActionErrorText("error.user_should_be_for_a_customer");
 			throw new MissingEntityException("employee user was loaded for when a customer user was expected.");
 		}
 	}

@@ -44,9 +44,6 @@ public class BaseOrgListLoader extends PaginatedLoader<BaseOrg> {
 		super(filter);
 	}
 
-	
-	
-
 
 	private void applyOrgTypeFiltering(SecurityFilter filter, QueryBuilder<BaseOrg> baseOrgQuery) {
 		switch (orgType) {
@@ -58,6 +55,9 @@ public class BaseOrgListLoader extends PaginatedLoader<BaseOrg> {
 				break;
 			case INTERNAL:
 				new InternalOrgFilter().applyFilter(baseOrgQuery);
+				break;
+			case CUSTOMER:
+				new CustomerOrgFilter().applyFilter(baseOrgQuery);
 				break;
 			case ALL_ORGS:
 			default:
