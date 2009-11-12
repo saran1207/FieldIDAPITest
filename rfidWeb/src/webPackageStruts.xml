@@ -982,7 +982,7 @@
 			<result name="success" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
 		</action>
 
-		<action name="masterInspectionCreate" method="save"
+		<action name="masterInspectionCreate" method="create"
 			class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
 			<result name="error" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
@@ -997,7 +997,7 @@
 			<result name="success" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
 		</action>
 
-		<action name="masterInspectionUpdate" method="save"
+		<action name="masterInspectionUpdate" method="update"
 			class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
 			<result name="error" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
