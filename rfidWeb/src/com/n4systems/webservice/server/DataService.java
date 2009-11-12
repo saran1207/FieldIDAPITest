@@ -33,6 +33,8 @@ import com.n4systems.webservice.dto.UserServiceDTO;
 import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
+import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformation;
+import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.exceptions.InspectionException;
@@ -58,6 +60,7 @@ public interface DataService {
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
 	
 	public FindProductResponse findProduct(FindProductRequestInformation requestInformation) throws ServiceException;
+	public FindInspectionResponse findInspection(FindInspectionRequestInformation requestInformation) throws ServiceException;
 	public ProductListResponse getProducts(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException;
 	public ProductListResponse getProductsByJob(PaginatedRequestInformation requestInformation, WSJobSearchCriteria searchCriteria) throws ServiceException;
 	public InspectionListResponse getInspections(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException;

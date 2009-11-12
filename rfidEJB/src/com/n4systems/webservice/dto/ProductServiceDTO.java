@@ -1,6 +1,7 @@
 package com.n4systems.webservice.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
@@ -25,6 +26,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 	private List<InspectionScheduleServiceDTO> schedules = new ArrayList<InspectionScheduleServiceDTO>();
 	private String description;
 	private long vendorId;
+	private Date modified;
 
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
@@ -184,4 +186,10 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
 	public boolean vendorIdExists() {
 		return isValidServerId(vendorId);
 	}
+	public Date getModified() {
+		return modified;
+	}
+	public void setModified(Date modified) {
+		this.modified = modified;
+	}	
 }

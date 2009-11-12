@@ -43,6 +43,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -113,11 +114,14 @@ import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 import com.n4systems.webservice.dto.AuthenticationRequest.LoginType;
+import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformation;
+import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
+import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
 
 public class DataServiceImpl implements DataService {
 
@@ -1059,9 +1063,12 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
 			SmartSearchLoader smartSearchLoader = new SmartSearchLoader(securityFilter);
-			smartSearchLoader.setSearchText(requestInformation.getSearchText());
+			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader);
 			
-			List<Product> products = smartSearchLoader.load();
+			List<Product> products = realTimeProductLookupHandler
+										.setSearchText(requestInformation.getSearchText())
+										.setModified(requestInformation.getModified())
+										.lookup();
 			
 			FindProductResponse response = new FindProductResponse();
 			
@@ -1072,6 +1079,26 @@ public class DataServiceImpl implements DataService {
 			return response;			
 		} catch (Exception e) {
 			logger.error("failed while finding product for handheld", e);
+			throw new ServiceException();
+		}
+	}
+	
+	public FindInspectionResponse findInspection(FindInspectionRequestInformation requestInformation) throws ServiceException {
+		try {	
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(requestInformation.getTenantId());			
+			NewestInspectionsForProductIdLoader loader = new NewestInspectionsForProductIdLoader(filter);
+			
+			List<Inspection> inspections = loader.setProductId(requestInformation.getProductId()).load();
+			
+			FindInspectionResponse response = new FindInspectionResponse();
+			for (Inspection inspection : inspections) {
+				response.getInspections().add(converter.convert(inspection));
+			}
+						
+			return response;
+		} catch (Exception e) {
+			logger.error("failed while finding inspection for a given product id", e);
 			throw new ServiceException();
 		}
 	}

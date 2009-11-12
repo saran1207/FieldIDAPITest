@@ -11,6 +11,11 @@ public class DateHelper {
 		return calendar.getTime();
 	}
 	
-	
+	public static Date createDate(int year, int month, int day) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day);
+		
+		return calendar.getTime();
+	}
 	
 }

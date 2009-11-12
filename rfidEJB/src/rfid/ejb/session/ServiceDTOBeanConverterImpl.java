@@ -256,6 +256,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setIdentifiedById(product.getIdentifiedBy() != null ? product.getIdentifiedBy().getUniqueID() : 0);
 		productDTO.setModifiedById(product.getModifiedBy() != null ? product.getModifiedBy().getUniqueID() : 0);
 		productDTO.setOrderNumber(product.getShopOrder() != null ? product.getShopOrder().getOrder().getOrderNumber() : "");
+		productDTO.setModified(product.getModified());
 		
 		if (product.getDescription() != null && product.getDescription().length() >= 255) {
 			productDTO.setDescription(product.getDescription().substring(0, 255));
