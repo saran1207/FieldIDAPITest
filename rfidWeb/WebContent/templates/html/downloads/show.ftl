@@ -42,3 +42,23 @@ ${action.setPageType('my_account', 'downloads')!}
 </#if>
 
 <h2 class="sectionTitle"><@s.text name="label.downloads_software"/></h2>
+<#if !staticDownloads.empty>
+	<table class="list">
+		<tr>
+			<th><@s.text name="label.name" /></th>
+			<th><@s.text name="label.description" /></th>
+			<th></th>
+		</tr>
+		<#list staticDownloads as staticDownload>
+			<tr>
+				<td>${staticDownload.name}</td>
+				<td>${staticDownload.description}</td>
+				<td><a href="${staticDownload.url}" target="_blank"><@s.text name="label.download"/></a></td>
+			</tr>	
+		</#list>
+	</table>
+<#else>
+	<div class="emptyList" >
+		<h2><@s.text name="label.nodownloads" /></h2>
+	</div>
+</#if>

@@ -55,6 +55,7 @@ public class PathHandler {
 	private static final String DEFAULT_INSPECTION_REPORTNAME = "default_inspection_cert" + REPORT_FILE_EXT;
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
+	private static final String COMMON_CONFIG_BASE = COMMON_PATH_BASE + "/conf";
 	private static final String BUTTON_IMAGE_PATH_BASE = COMMON_IMAGE_PATH_BASE + "/buttons";
 	private static final String BUTTON_IMAGE_EXT = ".png";
 	private static final String N4_LOGO_IMAGE = COMMON_IMAGE_PATH_BASE + "/n4_logo.gif";
@@ -427,6 +428,10 @@ public class PathHandler {
 		return absolutize(COMMON_TEMPLATE_BASE);
 	}
 	
+	public static File getCommonConfigPath() {
+		return absolutize(COMMON_CONFIG_BASE);
+	}
+	
 	public static File getProductTypeAttachmentFile(ProductType productType) {
 		return absolutize(mergePaths(getProductTypeAttachmentBasePath(productType.getTenant()), getProductTypePath(productType)));
 	}
@@ -505,5 +510,10 @@ public class PathHandler {
 	/** @return The signature image for a user  */
 	public static File getSignatureImage(UserBean user) {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
+	}
+	
+	/** @return A file from the common config directory */
+	public static File getCommonConfigFile(String fileName) {
+		return absolutize(mergePaths(COMMON_CONFIG_BASE, fileName));
 	}
 }

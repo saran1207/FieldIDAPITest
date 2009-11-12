@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.staticdownloads.StaticDownload;
+import com.n4systems.model.staticdownloads.StaticDownloadCache;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -101,6 +103,10 @@ public class DownloadLinkAction extends AbstractAction {
 			downloads = getLoaderFactory().createDownloadLinkListLoader().load();
 		}
 		return downloads;
+	}
+	
+	public List<StaticDownload> getStaticDownloads() {
+		return StaticDownloadCache.getInstance().getStaticDownloads();
 	}
 	
 	public String getExpiresText(Date created) {
