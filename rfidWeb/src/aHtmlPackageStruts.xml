@@ -17,33 +17,33 @@
 
 
 		<action name="reportResults" method="export" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
-			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
 		</action>
 
 		<action name="searchResults" method="export" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
-			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
 		</action>
 
 		<action name="scheduleResults" method="export" class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
-			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
 		</action>
 
 		<action name="searchPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
-			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
 		</action>
 
 		<action name="reportPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
-			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/printAllCerts.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
 		</action>
 
 		<action name="printReport" method="print" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
-			<result name="success" type="freemarker">/templates/aHtml/report/print.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/report/print.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/customizableSearch/downloadNotificationLightBox.ftl</result>
 			<result name="input" type="freemarker">/templates/aHtml/report/expired.ftl</result>
 		</action>
 	</package>

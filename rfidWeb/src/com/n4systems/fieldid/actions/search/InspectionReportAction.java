@@ -133,8 +133,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			List<Long> inspectionIds = persistenceManager.idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
 	
 			getDownloadCoordinator().generateAllInspectionCertificates(reportName, getDownloadLinkUrl(), reportType, inspectionIds);
-	
-			addActionMessage(getText("message.emailshortly"));
 		} catch(RuntimeException e) {
 			logger.error("Failed to print all inspection certs", e);
 			addFlashError(getText("error.reportgeneration"));
@@ -153,8 +151,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		
 		try {
 			getDownloadCoordinator().generateInspectionSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
-			
-			addActionMessageText("message.emailshortly");
 		} catch(RuntimeException e) {
 			logger.error("Failed to print inspection report summary", e);
 			addFlashError(getText("error.reportgeneration"));

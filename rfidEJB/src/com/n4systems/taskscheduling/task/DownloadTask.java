@@ -48,10 +48,13 @@ public abstract class DownloadTask implements Runnable {
 			
 			updateDownloadLinkState(DownloadState.COMPLETED);
 	
-			sendSuccessNotification(mailManager, downloadLink);
-		} catch(MessagingException me) {
-			logger.error("Failed to send success notification, the download has not been affected", me);
-			return;
+			try {
+				// we don't want exceptions coming from the notification to 
+				// hit the failure block
+				sendSuccessNotification(mailManager, downloadLink);
+			} catch(Exception e) {
+				logger.error("Failed to send success notification, the download has not been affected", e);
+			}
 		} catch(Exception e) {
 			logger.error("Failed to generate download", e);
 			

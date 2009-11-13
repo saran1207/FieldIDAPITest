@@ -153,4 +153,25 @@ public class DownloadTaskTest {
 		assertEquals(2, linkSaver.updateCount);
 		assertEquals(1, downloadTask.sendFailureNotificationCount);
 	}
+	
+	@Test
+	public void failing_to_send_message_does_not_fail_download() throws NoSuchProviderException, MessagingException {
+		DownloadLinkTestSaver linkSaver = new DownloadLinkTestSaver(DownloadState.INPROGRESS, DownloadState.COMPLETED);
+		
+		MailManager mail = new MailManager() {
+			
+			@Override
+			public void sendMessage(MailMessage mailMessage) throws NoSuchProviderException, MessagingException {
+				throw new MessagingException();
+			}
+		};
+		
+		EmptyDownloadTask downloadTask = new EmptyDownloadTask(link, DOWNLOAD_URL, MESSAGE_TEMPLATE, linkSaver, mail);
+		downloadTask.run();
+		
+		assertEquals(DownloadState.COMPLETED, link.getState());
+		
+		assertEquals(1, downloadTask.genereateFileCount);
+		assertEquals(2, linkSaver.updateCount);
+	}
 }

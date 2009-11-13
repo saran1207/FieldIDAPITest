@@ -78,8 +78,6 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 			List<Long> productIds = persistenceManager.idSearch(this, getSecurityFilter());
 			
 			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), productIds);
-
-			addActionMessage(getText("message.emailshortly"));
 		} catch(Exception e) {
 			logger.error("Failed to print all manufacturer certs", e);
 			addFlashError(getText("error.reportgeneration"));

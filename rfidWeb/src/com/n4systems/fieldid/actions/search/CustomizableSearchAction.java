@@ -143,8 +143,6 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		
 		try {
 			getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), new ImmutableSearchDefiner<TableView>(this), buildExcelColumnTitles(), prepareExcelHandlers());
-			
-			addActionMessage(getText("message.emailshortly"));
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute ExcelExportTask", e);
 			addActionError(getText("error.cannotschedule"));
