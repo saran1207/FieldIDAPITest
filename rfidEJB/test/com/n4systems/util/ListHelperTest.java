@@ -10,6 +10,7 @@ import org.junit.Test;
 
 public class ListHelperTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_split_list_simple_divides_even() {
 		List<Integer>[] lists = new List[4];
@@ -35,6 +36,7 @@ public class ListHelperTest {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_split_list_simple_divides_odd() {
 		List<Integer>[] lists = new List[4];
