@@ -12,6 +12,7 @@ import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
 import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
+import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteClient;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
@@ -22,7 +23,7 @@ public class RestfulTest {
 
 	public static void main(String args[]) {
 		
-		
+		/*
 		UpgradeSubscription upgradeSubscription = new UpgradeSubscription();
 		upgradeSubscription.setContractExternalId(143L);
 		upgradeSubscription.setTenantExternalId(5354L);
@@ -49,6 +50,7 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		/*
 		TenantRestfulSaver tenantSaver = new TenantRestfulSaver();
@@ -122,6 +124,7 @@ public class RestfulTest {
 		System.out.println("Everything:"+pricingDetailsResponse.getPricing().toString());
 		*/
 		
+		/*
 		NetSuiteSubscriptionAgent agent = new NetSuiteSubscriptionAgent();
 		
 		try {
@@ -140,8 +143,8 @@ public class RestfulTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		
-		/*
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
 		promoClient.setCode("SOMETHING");
 		
@@ -157,8 +160,8 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 		
+		/*
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
 		detailsClient.setTenantExternalId(5187L);
 		try {
@@ -185,6 +188,7 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	private static NetsuiteSubscription populateTestSubscription() {

@@ -121,6 +121,7 @@ import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
+import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
 import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
 
 public class DataServiceImpl implements DataService {
@@ -1088,8 +1089,12 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(requestInformation.getTenantId());			
 			NewestInspectionsForProductIdLoader loader = new NewestInspectionsForProductIdLoader(filter);
+			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 			
-			List<Inspection> inspections = loader.setProductId(requestInformation.getProductId()).load();
+			List<Inspection> inspections = lookupHandler
+											.setProductId(requestInformation.getProductId())
+											.setLastInspectionDate(requestInformation.getLastInspectionDate())
+											.lookup();
 			
 			FindInspectionResponse response = new FindInspectionResponse();
 			for (Inspection inspection : inspections) {

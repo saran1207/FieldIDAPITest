@@ -4,6 +4,7 @@ import static com.n4systems.model.builders.InspectionTypeBuilder.*;
 import static com.n4systems.model.builders.ProductBuilder.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Inspection;
@@ -17,6 +18,8 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	private final InspectionType inspectionType;
 	private final Product product;
 	private final List<SubInspection> subInspections;
+	
+	private Date inspectionDate;
 	
 		
 	public static InspectionBuilder anInspection() {
@@ -45,6 +48,11 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 		return new InspectionBuilder(inspectionType, product, subInspections);
 	}
 	
+	public InspectionBuilder withInspectionDate(Date inspectionDate) {
+		this.inspectionDate = inspectionDate;
+		return this;
+	}
+	
 	@Override
 	public Inspection build() {
 		Inspection inspection = new Inspection();
@@ -52,7 +60,7 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 		inspection.setType(inspectionType);
 		inspection.setProduct(product);
 		inspection.setSubInspections(subInspections);
-		
+		inspection.setDate(inspectionDate);
 		
 		return inspection;
 	}
