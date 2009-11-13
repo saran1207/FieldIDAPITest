@@ -112,7 +112,7 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 		try {
 			// if the address info is new, 
 			// we need to nullify it or it'll screw with the delete process
-			if (division.getAddressInfo().isNew()) {
+			if (division.getAddressInfo() != null && division.getAddressInfo().isNew()) {
 				division.setAddressInfo(null);
 			}
 			
@@ -123,7 +123,7 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 			return ERROR;
 		} catch (Exception e) {
 			logger.error("Failed deleteing division", e);
-			addFlashError(getText("error.saving_divsion"));
+			addFlashError(getText("error.deleting_divsion"));
 			return ERROR;
 		}
 		
