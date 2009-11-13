@@ -102,7 +102,7 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 			throw new IllegalStateException("user cannot be null");
 		}
 		
-		File downloadFile = new File(user.getPrivateDir(), createFileName());
+		File downloadFile = new File(user.getPrivateDir(), createFilesystemName());
 		
 		if (createParents) {
 			ensureParentDirectoriesExist(downloadFile);
@@ -111,7 +111,7 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 		return downloadFile;
 	}
 	
-	public String createFileName() {
+	private String createFilesystemName() {
 		if (getId() == null) {
 			throw new IllegalStateException("id cannot be null");
 		}

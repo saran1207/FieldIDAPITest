@@ -20,9 +20,9 @@ public abstract class DownloadTask implements Runnable {
 	
 	private final String templateName;
 	private final String downloadUrl;
-	private final DownloadLink downloadLink;
 	private final DownloadLinkSaver linkSaver;
 	private final MailManager mailManager;
+	protected final DownloadLink downloadLink;
 	
 	public DownloadTask(DownloadLink downloadLink, String downloadUrl, String templateName, DownloadLinkSaver linkSaver, MailManager mailManager) {
 		this.downloadLink = downloadLink;
@@ -50,7 +50,8 @@ public abstract class DownloadTask implements Runnable {
 	
 			sendSuccessNotification(mailManager, downloadLink);
 		} catch(MessagingException me) {
-			logger.error("Failed to send success notification", me);
+			logger.error("Failed to send success notification, the download has not been affected", me);
+			return;
 		} catch(Exception e) {
 			logger.error("Failed to generate download", e);
 			

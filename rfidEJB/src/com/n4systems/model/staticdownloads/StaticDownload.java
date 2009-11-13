@@ -2,6 +2,7 @@ package com.n4systems.model.staticdownloads;
 
 import java.io.Serializable;
 
+import com.n4systems.util.HashCode;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
@@ -22,6 +23,12 @@ public class StaticDownload implements Serializable {
 	private String description;
 	
 	public StaticDownload() {}
+	
+	public StaticDownload(String name, String url, String desc) {
+		this.name = name;
+		this.url = url;
+		this.description = desc;
+	}
 
 	public String getName() {
 		return name;
@@ -45,6 +52,20 @@ public class StaticDownload implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof StaticDownload) {
+			StaticDownload other = (StaticDownload)obj;
+			return (name.equals(other.name) && url.equals(other.url) && description.equals(other.description));
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCode.newHash().add(name).add(url).add(description).toHash();
 	}
 	
 }

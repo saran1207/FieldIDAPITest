@@ -1,0 +1,4 @@
+<list>
+	<StaticDownload url="http://www.google.com" name="Google" desc="The Google Search Engine" />
+	<StaticDownload url="http://www.xkcd.com" name="XKCD" desc="Web Comics" />
+</list>

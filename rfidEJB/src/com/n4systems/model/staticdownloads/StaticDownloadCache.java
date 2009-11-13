@@ -12,8 +12,8 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 
 import com.n4systems.reporting.PathHandler;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.n4systems.util.serialization.Serializer;
+import com.n4systems.util.serialization.XStreamSerializer;
 
 public class StaticDownloadCache implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,14 +34,23 @@ public class StaticDownloadCache implements Serializable {
 		self = cache;
 	}
 	
+	private final Serializer<List<StaticDownload>> serializer;
 	private final File configFile;
 	
 	private List<StaticDownload> staticDownloads = new CopyOnWriteArrayList<StaticDownload>();
 
 	private transient long lastReload = NEVER;
 	
-	private StaticDownloadCache() {
-		configFile = PathHandler.getCommonConfigFile(CONFIG_FILE_NAME);
+	protected StaticDownloadCache(File configFile, Serializer<List<StaticDownload>> serializer) {
+		this.configFile = configFile;
+		this.serializer = serializer;
+	}
+	
+	protected StaticDownloadCache() {
+		this(
+			PathHandler.getCommonConfigFile(CONFIG_FILE_NAME), 
+			new XStreamSerializer<List<StaticDownload>>(StaticDownload.class)
+		);
 	}
 	
 	public List<StaticDownload> getStaticDownloads() { 
@@ -55,17 +64,12 @@ public class StaticDownloadCache implements Serializable {
 		return (configFile.lastModified() > lastReload);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private synchronized void reloadStaticDownloads() {
-		XStream xstream = new XStream(new DomDriver());
-		xstream.autodetectAnnotations(true);
-		xstream.processAnnotations(StaticDownload.class);
-
 		InputStream configIn = null;
 		try {
 			configIn = new BufferedInputStream(new FileInputStream(configFile));
 		
-			List<StaticDownload> downloadList = (List<StaticDownload>)xstream.fromXML(configIn);
+			List<StaticDownload> downloadList = serializer.deserialize(configIn);
 			
 			staticDownloads.clear();
 			staticDownloads.addAll(downloadList);
