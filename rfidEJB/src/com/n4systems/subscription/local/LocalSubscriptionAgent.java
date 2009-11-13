@@ -61,8 +61,8 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		contractPrices.add(populateContractPrice(158L, "FIDENTERPRISE", PaymentOption.TWO_YEARS_UP_FRONT, 175F));
 
 		contractPrices.add(populateContractPrice(151L, "FIDUNLIMITED", PaymentOption.MONTH_TO_MONTH, 225F));
-		contractPrices.add(populateContractPrice(151L, "FIDUNLIMITED", PaymentOption.ONE_YEAR_UP_FRONT, 225F));
-		contractPrices.add(populateContractPrice(160L, "FIDUNLIMITED", PaymentOption.TWO_YEARS_UP_FRONT, 225F));
+		contractPrices.add(populateContractPrice(151L, "FIDUNLIMITED", PaymentOption.ONE_YEAR_UP_FRONT, 225.5F));
+		contractPrices.add(populateContractPrice(160L, "FIDUNLIMITED", PaymentOption.TWO_YEARS_UP_FRONT, 202.1F));
 
 		return contractPrices;
 	}

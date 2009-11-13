@@ -74,8 +74,8 @@ public class SignUpPackage {
 		return signPackageDetails.isPreferred();
 	}
 
-	public int getDefaultPricePerUserPerMonth() {
-		return getDefaultPaymentOption().getPricePerUserPerMonth().intValue();
+	public float getDefaultPricePerUserPerMonth() {
+		return getDefaultPaymentOption().getPricePerUserPerMonth();
 	}
 
 	public Long getContract(PaymentOption paymentOption) {

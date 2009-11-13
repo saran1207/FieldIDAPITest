@@ -17,7 +17,7 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(SignUpPackagePriceCrud.class);
 	
 	private SignUpRequest subscription = new SignUpRequest();
-	private Long price;
+	private Float price;
 	
 	public SignUpPackagePriceCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -63,10 +63,10 @@ public class SignUpPackagePriceCrud extends AbstractCrud {
 	private void findPrice() throws CommunicationException {
 		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
 		PriceCheckResponse priceResponse = subscriptionAgent.priceCheck(getSignUp());
-		price = priceResponse.getPricing().getFirstPaymentTotal().longValue();
+		price = priceResponse.getPricing().getFirstPaymentTotal();
 	}
 	
-	public Long getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 	

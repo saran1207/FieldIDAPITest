@@ -14,7 +14,7 @@
 
 
 <@s.form action="signUpCreate" theme="fieldid" id="mainContent" cssClass="fullForm">
-	<h1><@s.text name="title.create_your_account"/>  <@s.text name="label.with_package"/> ${signUp.signUpPackage.name?html}  $${signUp.signUpPackage.defaultPricePerUserPerMonth?html}</h1>
+	<h1><@s.text name="title.create_your_account"/>  <@s.text name="label.with_package"/> ${signUp.signUpPackage.name?html}  <@s.text name="label.per_user_per_month"><@s.param>${signUp.signUpPackage.defaultPricePerUserPerMonth?string.currency}</@s.param></@s.text></h1>
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<@s.hidden name="usingCreditCard" id="usingCreditCard" />
@@ -147,7 +147,7 @@
 					<ul>
 						<#list signUp.paymentOptions as paymentOption>
 						<li class="favouredChoice">
-							<#assign paymentMap><#noparse>#</#noparse>{ '${paymentOption.paymentOption}':'<@s.text name="label.${paymentOption.paymentOption}"><@s.param>${paymentOption.pricePerUserPerMonth}</@s.param></@s.text>'}</#assign>
+							<#assign paymentMap><#noparse>#</#noparse>{ '${paymentOption.paymentOption}':'<@s.text name="label.${paymentOption.paymentOption}"><@s.param>${paymentOption.pricePerUserPerMonth?string.currency}</@s.param></@s.text>'}</#assign>
 							<@s.radio name="signUp.paymentOption" list="${paymentMap}" theme="simple" cssClass="changesPrice"/> 
 						</li>
 						</#list>
@@ -159,7 +159,7 @@
 		<hr/>
 		<div class="infoSection">
 			<div class="infoBlock">
-				<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> <@s.text name="label.plus_applicable_taxes"/> 
+				<@s.text name="label.total_amount_payable"/> <span id="totalPrice">${price?string.currency}</span> <@s.text name="label.plus_applicable_taxes"/> 
 				
 				<#if !signUp.signUpPackage.free><@s.reset key="label.update_price" cssClass="updatePrice"/></#if>
 			</div>

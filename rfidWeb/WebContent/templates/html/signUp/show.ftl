@@ -106,8 +106,7 @@
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.selected_payment_option"/></label>
 					<span class="fieldHolder">
-					<@s.text name="label.${signUp.paymentOption}"><@s.param>${signUpPackage.getPaymentOptionWithType(signUp.paymentOption).pricePerUserPerMonth}</@s.param></@s.text>
-					
+						<@s.text name="label.${signUp.paymentOption}"><@s.param>${signUpPackage.getPaymentOptionWithType(signUp.paymentOption).pricePerUserPerMonth?string.currency}</@s.param></@s.text>
 					</span>
 				</div>
 			</div>
@@ -116,7 +115,7 @@
 		<hr/>
 		<div class="infoSection">
 			<div class="infoBlock">
-				<@s.text name="label.total_amount_payable"/> $<span id="totalPrice">${price}</span> <@s.text name="label.plus_applicable_taxes"/>
+				<@s.text name="label.total_amount_payable"/> <span id="totalPrice">${price?string.currency}</span> <@s.text name="label.plus_applicable_taxes"/>
 			</div>
 		</div>
 		<hr />

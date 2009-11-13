@@ -21,7 +21,7 @@
 				<td class="description"><@s.text name="label.price"/></td>
 				<#list packages as package>
 					<td <#if package.preferred>class="preferred"</#if>>
-						$${package.defaultPricePerUserPerMonth?html}
+						${package.defaultPricePerUserPerMonth?string.currency}
 					</td>
 				</#list>
 			</tr>
