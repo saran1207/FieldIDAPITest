@@ -15,8 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.api.HasFileAttachments;
@@ -28,7 +26,6 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspections")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public abstract class AbstractInspection extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 

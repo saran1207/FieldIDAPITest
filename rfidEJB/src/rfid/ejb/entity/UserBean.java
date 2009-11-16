@@ -12,9 +12,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
@@ -33,7 +30,6 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Listable<Long>, HasOwner, Saveable, SecurityEnhanced<UserBean> {
 	private static final long serialVersionUID = 1L;
 	

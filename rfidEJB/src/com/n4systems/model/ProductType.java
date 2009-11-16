@@ -23,9 +23,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -43,7 +40,6 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "producttypes")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProductType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<ProductType> {
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";

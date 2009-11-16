@@ -11,9 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.HasUser;
@@ -23,7 +20,6 @@ import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name = "downloads")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class DownloadLink extends EntityWithTenant implements HasUser, Saveable {
 	private static final long serialVersionUID = 1L;
 	private static final String DOWNLOAD_FILE_EXT = "dl";

@@ -9,9 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.SecurityEnhanced;
@@ -22,7 +19,6 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectionbooks")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<InspectionBook>, SecurityEnhanced<InspectionBook> {
 	private static final long serialVersionUID = 1L;
 	

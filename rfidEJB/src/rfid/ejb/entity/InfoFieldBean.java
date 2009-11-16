@@ -1,9 +1,5 @@
 package rfid.ejb.entity;
 
-import com.n4systems.model.ProductType;
-import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.model.parents.legacy.LegacyBaseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,13 +19,14 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
+
+import com.n4systems.model.ProductType;
+import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
 @Table(name = "infofield")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean> {
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFUALT_WEIGHT = 0L;

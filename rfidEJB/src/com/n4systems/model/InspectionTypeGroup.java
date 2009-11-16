@@ -6,9 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
@@ -19,7 +16,6 @@ import com.n4systems.reporting.InspectionReportType;
 
 @Entity
 @Table(name="inspectiontypegroups")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InspectionTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	

@@ -10,8 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.api.Listable;
@@ -21,7 +19,6 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "criteriasections")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CriteriaSection extends EntityWithTenant implements Listable<Long>, NamedEntity, Retirable {
 	private static final long serialVersionUID = 1L;
 

@@ -5,9 +5,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 /*
@@ -15,7 +12,6 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
  */
 @Entity
 @Table(name = "productserial_infooption")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProductSerialInfoOptionBean extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 

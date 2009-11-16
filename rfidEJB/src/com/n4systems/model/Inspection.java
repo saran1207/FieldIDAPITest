@@ -20,8 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.IndexColumn;
 
 import rfid.ejb.entity.UserBean;
@@ -42,7 +40,6 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspectionsmaster")
 @PrimaryKeyJoinColumn(name="inspection_id")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection> {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap", "subInspections" };
@@ -241,21 +238,37 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	}
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public boolean hasAnyPrintOuts() {
-		return (printable && getType().getGroup().hasPrintOut()) || getType().getGroup().hasObservationPrintOut();
-	}
-	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isPrintableForReportType(InspectionReportType reportType) { 
 		if (!printable) {
 			return false;
 		}
 		
 		PrintOut printOut = getType().getGroup().getPrintOutForReportType(reportType);
-		
 		return (printOut != null);
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isInspectionCertPrintable() { 
+		return isPrintableForReportType(InspectionReportType.INSPECTION_CERT);
+	}
+
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isObservationCertPrintable() { 
+		return isPrintableForReportType(InspectionReportType.OBSERVATION_CERT);
+	}
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isAnyCertPrintable() {
+		boolean isAnyPrintable = false;
+		for (InspectionReportType reportType: InspectionReportType.values()) {
+			if (isPrintableForReportType(reportType)) {
+				isAnyPrintable = true;
+				break;
+			}
+		}
+		return isAnyPrintable;
+	}
+	
 	@Override
     public String toString() {
 		String subInspectionString = new String();

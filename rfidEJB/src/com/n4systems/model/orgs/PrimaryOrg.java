@@ -15,8 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
@@ -28,7 +26,6 @@ import com.n4systems.model.tenant.TenantLimit;
 @Entity
 @Table(name = "org_primary")
 @PrimaryKeyJoinColumn(name="org_id")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class PrimaryOrg extends InternalOrg {
 	private static final long serialVersionUID = 1L;
 

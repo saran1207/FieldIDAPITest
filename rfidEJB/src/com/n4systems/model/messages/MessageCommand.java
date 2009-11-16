@@ -11,8 +11,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.parents.AbstractEntity;
@@ -22,7 +20,6 @@ import com.n4systems.model.parents.AbstractEntity;
 @Table(name="messagecommands")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "commandtype", discriminatorType = DiscriminatorType.STRING)
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public abstract class MessageCommand extends AbstractEntity {
 	public enum Type { 
 		CREATE_SAFETY_NETWORK_CONNECTION("create safety network connection");

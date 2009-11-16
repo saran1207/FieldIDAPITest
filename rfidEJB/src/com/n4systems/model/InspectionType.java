@@ -16,8 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
@@ -33,7 +31,6 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectiontypes")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InspectionType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<InspectionType> {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;

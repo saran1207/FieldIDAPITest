@@ -9,16 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithOwner;
 
 @Entity
 @Table(name="typedorgconnections")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class TypedOrgConnection extends EntityWithOwner {
 	public enum ConnectionType {
 		CUSTOMER("label.customer"), VENDOR("label.vendor"), CATALOG_ONLY("label.catalog_only");

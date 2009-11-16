@@ -7,9 +7,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.orgs.BaseOrg;
@@ -22,7 +19,6 @@ import com.n4systems.model.tenant.HasSetupDataTenant;
 
 @Entity
 @Table(name="org_connections", uniqueConstraints = @UniqueConstraint(columnNames = {"vendor_id", "customer_id"}))
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class OrgConnection extends AbstractEntity implements UnsecuredEntity, HasSetupDataTenant {
 	private static final long serialVersionUID = 1L;
 

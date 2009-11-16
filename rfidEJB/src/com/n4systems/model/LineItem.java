@@ -5,9 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -17,7 +14,6 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "lineitems")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class LineItem extends EntityWithTenant implements Listable<Long>, SecurityEnhanced<LineItem> {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_PRODUCT_CODE = "DEFAULT";

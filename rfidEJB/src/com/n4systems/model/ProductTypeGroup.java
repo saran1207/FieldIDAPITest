@@ -4,16 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name="producttypegroups")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class ProductTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	

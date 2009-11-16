@@ -22,9 +22,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
@@ -43,7 +40,6 @@ import com.n4systems.model.utils.PlainDate;
 
 @Entity
 @Table(name = "products")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Product extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Product> {
 	private static final long serialVersionUID = 1L;
 	

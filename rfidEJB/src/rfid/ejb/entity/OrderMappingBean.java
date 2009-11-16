@@ -6,15 +6,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
 @Table(name = "ordermapping")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class OrderMappingBean extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 	

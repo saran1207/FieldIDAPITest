@@ -4,16 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table( name="instructionalvideos" )
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InstructionalVideo extends AbstractEntity implements NamedEntity, UnsecuredEntity {
 
 	private static final long serialVersionUID = 1L;

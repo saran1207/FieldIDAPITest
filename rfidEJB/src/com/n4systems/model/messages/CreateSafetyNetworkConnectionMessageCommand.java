@@ -3,12 +3,8 @@ package com.n4systems.model.messages;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @DiscriminatorValue(value = "CREATE_SAFETY_NETWORK_CONNECTION")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CreateSafetyNetworkConnectionMessageCommand extends MessageCommand {
 
 	

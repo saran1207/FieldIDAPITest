@@ -4,15 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "requesttransactions")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class RequestTransaction extends EntityWithTenant implements NamedEntity {
 
 	private static final long serialVersionUID = 1L;

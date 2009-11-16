@@ -11,8 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.parents.EntityWithTenant;
@@ -20,7 +18,6 @@ import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "criteriaresults")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class CriteriaResult extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	

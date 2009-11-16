@@ -6,15 +6,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.ConfigEntry;
 
 @Entity
 @Table( name = "configurations" )
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Configuration extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	

@@ -1,7 +1,5 @@
 package rfid.ejb.entity;
 
-import com.n4systems.model.parents.legacy.LegacyBaseEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -10,12 +8,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
 @Table(name = "infooption")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoOptionBean> {
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFAULT_WEIGHT = 0L;

@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
@@ -24,7 +22,6 @@ import com.n4systems.model.tenant.LimitAdjuster;
 
 @Entity
 @Table(name = "promocodes")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class PromoCode extends AbstractEntity implements Saveable {
 	private static final long serialVersionUID = 1L;
 	

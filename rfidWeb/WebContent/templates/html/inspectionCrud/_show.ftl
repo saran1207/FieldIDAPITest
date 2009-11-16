@@ -7,13 +7,13 @@
 			<@s.url id="inspectionCertUrl" action="downloadInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
 			<@s.url id="observationCertUrl" action="downloadInspectionCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
 				
-			<#if inspection.hasAnyPrintOuts()>
+			<#if inspection.anyCertPrintable>
 				<div id="cert_links" class="print" onmouseover="repositionCertLinks('cert_list', 'cert_links');" >
 					<ul id="cert_list">
-						<#if inspection.printable && inspection.type.group.hasPrintOut()>
+						<#if inspection.inspectionCertPrintable>
 							<li><a href="${inspectionCertUrl}" target="_blank" >${inspection.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a></li>
 						</#if>
-						<#if inspection.type.group.hasObservationPrintOut()>
+						<#if inspection.observationCertPrintable>
 							<li><a href="${observationCertUrl}" target="_blank" ><@s.text name="label.printobservationcertificate"/></a></li>
 						</#if>
 					</ul>

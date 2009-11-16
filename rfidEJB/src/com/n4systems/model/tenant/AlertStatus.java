@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.api.Saveable;
@@ -18,7 +15,6 @@ import com.n4systems.services.limiters.LimitType;
 
 @Entity
 @Table(name = "alertstatus")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class AlertStatus implements HasTenantId, Saveable, Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final int NORMAL_STATUS = 0;

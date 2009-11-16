@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
@@ -27,7 +25,6 @@ import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name="savedreports")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class SavedReport extends EntityWithTenant implements NamedEntity, Listable<Long>, HasUser {
 	private static final long serialVersionUID = 1L;
 	public static final String TO_DATE = "toDate";

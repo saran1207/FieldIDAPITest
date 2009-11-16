@@ -10,9 +10,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
@@ -22,7 +19,6 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "orders")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Order extends EntityWithOwner implements Listable<Long>, SecurityEnhanced<Order> {
 	private static final long serialVersionUID = 1L;
 	

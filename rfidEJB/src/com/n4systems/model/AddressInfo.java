@@ -3,14 +3,10 @@ package com.n4systems.model;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table(name = "addressinfo")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class AddressInfo extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	
