@@ -78,4 +78,21 @@ public class TenantLimitTest {
 	
 
 	
+	@Test
+	public void should_find_if_asset_limit_is_greater_than_a_supplied_limit() throws Exception {
+		TenantLimit limit = new TenantLimit();
+		limit.setAssets(10L);
+		
+		TenantLimit unlimitedAssets = new TenantLimit();
+		unlimitedAssets.setAssetsUnlimited();
+		
+		assertTrue(limit.isAssetLimitGreaterThan(1L));
+		assertFalse(limit.isAssetLimitGreaterThan(TenantLimit.UNLIMITED));
+		assertFalse(limit.isAssetLimitGreaterThan(25L));
+		assertTrue(limit.isAssetLimitGreaterThan(10L));
+		assertTrue(limit.isAssetLimitGreaterThan(10L));
+		
+		assertTrue(unlimitedAssets.isAssetLimitGreaterThan(TenantLimit.UNLIMITED));
+	}
+	
 }

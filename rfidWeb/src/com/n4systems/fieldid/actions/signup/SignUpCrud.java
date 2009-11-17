@@ -92,10 +92,7 @@ public class SignUpCrud extends AbstractCrud {
 	private String proccessSignUp() {
 		String result;
 		try {
-			if (signUpRequest.getSignUpPackage().isFree()) {
-				signUpRequest.setUsingCreditCard(false);
-				signUpRequest.setPurchaseOrderNumber("");
-			}
+			adjustHandleFreeAccount();
 			
 			createAccount();
 			
@@ -135,6 +132,13 @@ public class SignUpCrud extends AbstractCrud {
 		}
 
 		return result;
+	}
+
+	private void adjustHandleFreeAccount() {
+		if (signUpRequest.getSignUpPackage().isFree()) {
+			signUpRequest.setUsingCreditCard(false);
+			signUpRequest.setPurchaseOrderNumber("");
+		}
 	}
 
 	private String signUpLogLine(String action) {

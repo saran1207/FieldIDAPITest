@@ -95,4 +95,6 @@ public class SignUpPackage {
 		ExtendedFeature featureToLookUp = ExtendedFeature.valueOf(feature);
 		return signPackageDetails.includesFeature(featureToLookUp);
 	}
+	
+	
 }

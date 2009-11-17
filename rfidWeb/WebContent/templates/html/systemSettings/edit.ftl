@@ -74,6 +74,12 @@ ${action.setPageType('account_settings', 'show')!}
 			</span>
 		</div>
 		<div class="infoSet">
+			<label><@s.text name="label.your_current_package"/></label>
+			<span class="fieldHolder">
+				${(tenant.currentPlan.name?html)!}  <a href="<@s.url action="accountUpgrade"/>"><@s.text name="label.upgrade_your_account"/></a>
+			</span>
+		</div>
+		<div class="infoSet">
 			<label><@s.text name="label.disk_space"/></label>
 			<div class="fieldHolder" style="float:left; padding: 5px 0;">
 				

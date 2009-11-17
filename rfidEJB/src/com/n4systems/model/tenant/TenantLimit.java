@@ -161,12 +161,25 @@ public class TenantLimit implements Serializable {
 		return currentLimit + limitToAdd;
 	}
 
+	public boolean isAssetLimitGreaterThan(long assetLimit) {
+		if (isAssetsUnlimited())
+			return true;
+		if (assetLimit == TenantLimit.UNLIMITED) 
+			return false;
+		
+		return assets >= assetLimit;
+	}
+	
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		
 		return "users = [" + users + "] assets = [" + assets + "] diskspace = [" + diskSpace + "]";
 	}
-	
+
 	
 	
 	

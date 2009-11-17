@@ -1884,5 +1884,17 @@
 			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
 		</action>
 		
+
+		<action name="accountUpgrade" method="add" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
+			<result name="success" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
+		</action>
+
+		<action name="accountUpgradeComplete" method="create" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
+			<result name="input" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/accountUpgrade/show.ftl</result>
+		</action>
+		
 	</package>
 </struts>
