@@ -8,6 +8,7 @@ import static org.easymock.classextension.EasyMock.*;
 import static com.n4systems.test.helpers.Asserts.*;
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitchTestDouble;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.test.helpers.FluentHashSet;
+import com.n4systems.util.DataUnit;
 
 public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 
@@ -157,6 +159,23 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	}
 
 
+	
+	@Test
+	public void should_increase_the_diskspace_limit_from_5M_to_1000MB_when_upgrading_from_Free_to_Plus() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		
+		PrimaryOrg primaryOrg = aPrimaryOrg().withDiskSpaceLimit(5L, DataUnit.MEGABYTES).build();
+		
+		
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
+		
+		sut.upgradeTo(upgradePackage, mockTransaction);
+		
+		Long actualDiskSpaceLimit = DataUnit.BYTES.convertTo(primaryOrg.getLimits().getDiskSpaceInBytes(), DataUnit.MEGABYTES);
+		
+		assertEquals(upgradePackage.getDiskSpaceInMB(), actualDiskSpaceLimit);
+	}
+	
 	private OrgSaver successfulOrgSaver(PrimaryOrg primaryOrg) {
 		OrgSaver orgSaver = createMock(OrgSaver.class);
 		expect(orgSaver.update(mockTransaction, primaryOrg)).andReturn(primaryOrg);

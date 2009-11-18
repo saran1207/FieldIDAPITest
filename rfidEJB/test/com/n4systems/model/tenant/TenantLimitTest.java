@@ -95,4 +95,22 @@ public class TenantLimitTest {
 		assertTrue(unlimitedAssets.isAssetLimitGreaterThan(TenantLimit.UNLIMITED));
 	}
 	
+	
+	@Test
+	public void should_find_if_disk_limit_is_greater_than_a_supplied_limit() throws Exception {
+		TenantLimit limit = new TenantLimit();
+		limit.setDiskSpaceInBytes(10L);
+		
+		TenantLimit unlimitedDiskSpace = new TenantLimit();
+		unlimitedDiskSpace.setDiskSpaceUnlimited();
+		
+		assertTrue(limit.isDiskLimitInBytesGreaterThan(1L));
+		assertFalse(limit.isDiskLimitInBytesGreaterThan(TenantLimit.UNLIMITED));
+		assertFalse(limit.isDiskLimitInBytesGreaterThan(25L));
+		assertTrue(limit.isDiskLimitInBytesGreaterThan(10L));
+		assertTrue(limit.isDiskLimitInBytesGreaterThan(10L));
+		
+		assertTrue(unlimitedDiskSpace.isDiskLimitInBytesGreaterThan(TenantLimit.UNLIMITED));
+	}
+	
 }

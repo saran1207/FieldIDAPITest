@@ -162,23 +162,31 @@ public class TenantLimit implements Serializable {
 	}
 
 	public boolean isAssetLimitGreaterThan(long assetLimit) {
-		if (isAssetsUnlimited())
-			return true;
-		if (assetLimit == TenantLimit.UNLIMITED) 
-			return false;
-		
-		return assets >= assetLimit;
+		return isCurrentLimitGreaterThan(assetLimit, assets);
+	}
+
+	
+	public boolean isDiskLimitInBytesGreaterThan(long diskLimit) {
+		return isCurrentLimitGreaterThan(diskLimit, diskSpace);
 	}
 	
-	
+	private boolean isCurrentLimitGreaterThan(long newLimit, long currentLimit) {
+		if (currentLimit == TenantLimit.UNLIMITED)
+			return true;
+		if (newLimit == TenantLimit.UNLIMITED) 
+			return false;
+		
+		return currentLimit >= newLimit;
+	}
 	
 	
 	
 	@Override
 	public String toString() {
-		
 		return "users = [" + users + "] assets = [" + assets + "] diskspace = [" + diskSpace + "]";
 	}
+
+	
 
 	
 	
