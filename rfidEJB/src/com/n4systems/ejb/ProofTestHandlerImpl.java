@@ -105,8 +105,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		Tenant tenant = inspector.getTenant();
 		PrimaryOrg primaryOrg = inspector.getOwner().getPrimaryOrg();
 		
-		// this used to figure out which owner to take when we create the inspection later
-		boolean customerWasResolved = false;
+		
+		
 		
 		// sending a null customer will lookup products with no customer (rather then products for any customer)
 		Long customerId = (customer != null) ? customer.getId() : null;
@@ -122,11 +122,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				logger.warn("Unable to find or create customer.  Assuming no customer.");
 				customerId = null;
 			} else {
-				customerWasResolved = true;
 				customerId = customer.getId();
 			}
 
-		}
+		} 
 		Date inspectionDate = fileData.getInspectionDate();
 
 		Product product;
@@ -178,7 +177,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData, customerWasResolved);
+				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
@@ -347,17 +346,17 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return product;
 	}
 	
-	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData, boolean customerWasResolved ) {
+	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		
 		if (owner != null) {
 			/*
-			 * if we resolved a customer (meaning it was from databridge) and the products owner is a division, we need to see if the resolved
-			 * owner is the parent of the products owner.  If that is the case, we preserve the division from the product on the inspection.
+			 * if the products owner is a division, we need to see if the resolved owner is the parent
+			 * of the products owner.  If that is the case, we preserve the division from the product on the inspection.
 			 * In all other cases we will use the resolved owner directly.
 			 */
-			if (customerWasResolved && product.getOwner().isDivision() && product.getOwner().getParent().equals(owner)) {
+			if (product.getOwner().isDivision() && product.getOwner().getParent().equals(owner)) {
 				inspection.setOwner(product.getOwner());
 			} else {
 				inspection.setOwner(owner);
