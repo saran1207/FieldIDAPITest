@@ -14,6 +14,9 @@ import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.TenantCache;
+import com.n4systems.services.limiters.TenantLimitService;
+import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.SubscriptionAgent;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 public class AccountUpgrade extends AbstractAction {
@@ -35,14 +38,21 @@ public class AccountUpgrade extends AbstractAction {
 	}
 
 	public String doCreate() {
-		String result = null;
+		String result = upgradeAccount();
 		
+		updateCachedValues();
+		
+		return result;
+	}
+
+
+	private String upgradeAccount() {
+		String result;
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
-			new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver()).upgradeTo(upgradePackage.getSignPackageDetails(), transaction);
-			// do i need this?
-			TenantCache.getInstance().reloadPrimaryOrg(getTenantId());
+			upgradeAccount(transaction);
+			
 			addActionMessageText("message.upgrade_successful");
 			result = SUCCESS;
 		} catch (Exception e) {
@@ -52,20 +62,35 @@ public class AccountUpgrade extends AbstractAction {
 		} finally {
 			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
 		}
-		
 		return result;
 	}
 
 
-	public SignUpPackage currentPackage() {
-		return getNonSecureLoaderFactory().createSignUpPackageListLoader().load().get(0);
+	private void updateCachedValues() {
+		TenantCache.getInstance().reloadPrimaryOrg(getTenantId());
+		TenantLimitService.getInstance().updateAll();
+	}
+
+
+	private void upgradeAccount(Transaction transaction) {
+		new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver()).upgradeTo(upgradePackage.getSignPackageDetails(), transaction);
+	}
+
+
+	public SignUpPackageDetails currentPackage() {
+		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
+		
+		try {
+			return SignUpPackageDetails.retrieveBySyncId(subscriptionAgent.currentPackageFor(getPrimaryOrg().getExternalId()));
+		} catch (CommunicationException e) {
+			return null;
+		} 
 	}
 	
 	public List<SignUpPackage> getPackages() {
 		if (availablePackagesForUpdate == null) {
 			List<SignUpPackage> fullPackageList = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
-			availablePackagesForUpdate = new UpgradePackageFilter(currentPackage().getSignPackageDetails()).reduceToAvailablePackages(fullPackageList);
-			
+			availablePackagesForUpdate = new UpgradePackageFilter(currentPackage()).reduceToAvailablePackages(fullPackageList);
 		}
 		return availablePackagesForUpdate;
 	}

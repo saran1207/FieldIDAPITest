@@ -53,11 +53,11 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		TenantLimit expectedTenantLimit = new TenantLimit();
 		expectedTenantLimit.setAssets(SIGN_UP_PACKAGE_BEING_USED.getAssets());
 		expectedTenantLimit.setUsers(accountCreationInformationStub.getNumberOfUsers().longValue());
-		expectedTenantLimit.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
+		expectedTenantLimit.setDiskSpaceInBytes(DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
 		
 		TenantLimit limitFromResolver = new TenantLimit();
 		limitFromResolver.setAssets(SIGN_UP_PACKAGE_BEING_USED.getAssets());
-		limitFromResolver.setDiskSpaceInBytes(DataUnit.MEGABYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
+		limitFromResolver.setDiskSpaceInBytes(DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED.getDiskSpaceInMB(), DataUnit.BYTES));
 		
 		Set<ExtendedFeature> featuresThatShouldBeAddedToPrimaryOrg = new FluentHashSet<ExtendedFeature>(ExtendedFeature.Integration);
 		

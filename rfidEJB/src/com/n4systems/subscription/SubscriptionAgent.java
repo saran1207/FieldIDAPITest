@@ -14,4 +14,11 @@ public abstract class SubscriptionAgent {
 	public abstract List<ContractPrice> retrieveContractPrices() throws CommunicationException;
 	
 	public abstract Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException;
+	
+	public String currentPackageFor(Long tenantExternalId) throws CommunicationException {
+		String[] a = {"FIDFREE", "FIDBASIC", "FIDPLUS", "FIDENTERPRISE", "FIDUNLIMITED"};
+		
+		return a[(int) (tenantExternalId % 5)];
+		
+	}
 }

@@ -2,7 +2,7 @@
 ${action.setPageType('account_settings', 'show')!}
 
 <div id="currentPackage">
-	${action.currentPackage().name?html}
+	${action.currentPackage().getName()?html}
 </div>
 <#include "/templates/html/common/_formErrors.ftl"/>
 <table id="packages">

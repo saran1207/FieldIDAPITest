@@ -92,7 +92,7 @@ public enum SignUpPackageDetails {
 	}
 	
 	public LimitAdjuster getLimitAdjuster() {
-		return new LimitAdjuster(assets, diskSpace, DataUnit.MEGABYTES);
+		return new LimitAdjuster(assets, diskSpace, DataUnit.MEBIBYTES);
 	}
 	
 	

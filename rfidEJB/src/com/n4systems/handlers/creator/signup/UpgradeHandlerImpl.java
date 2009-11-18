@@ -20,12 +20,14 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 		this.orgSaver = orgSaver;
 	}
 
+
 	public void upgradeTo(SignUpPackageDetails upgradePackage, Transaction transaction) {
 		enableFeatures(upgradePackage, transaction);
 		adjustLimits(upgradePackage);
 		saveOrg(transaction);
 	}
 
+	
 	private void enableFeatures(SignUpPackageDetails upgradePackage, Transaction transaction) {
 		for (ExtendedFeature feature : upgradePackage.getExtendedFeatures()) {
 			ExtendedFeatureSwitch featureSwitch = getSwitchFor(feature);
@@ -33,39 +35,39 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 		}
 	}
 	
+	
 	protected ExtendedFeatureSwitch getSwitchFor(ExtendedFeature feature) {
 		return ExtendedFeatureFactory.getSwitchFor(feature, getPrimaryOrg());
 	}
+	
 	
 	private void adjustLimits(SignUpPackageDetails upgradePackage) {
 		TenantLimit currentLimits = primaryOrg.getLimits();
 		
 		adjustAssetLimit(upgradePackage, currentLimits);
-		
 		adjustDiskSpaceLimit(upgradePackage, currentLimits);
 	}
 
+	
 	private void adjustDiskSpaceLimit(SignUpPackageDetails upgradePackage, TenantLimit currentLimits) {
-		Long packageDiskLimitInBytes = DataUnit.MEGABYTES.convertTo(upgradePackage.getDiskSpaceInMB(), DataUnit.BYTES);
+		Long packageDiskLimitInBytes = DataUnit.MEBIBYTES.convertTo(upgradePackage.getDiskSpaceInMB(), DataUnit.BYTES);
 		
 		if (!currentLimits.isDiskLimitInBytesGreaterThan(packageDiskLimitInBytes)) {
 			currentLimits.setDiskSpaceInBytes(packageDiskLimitInBytes);
 		}
 	}
 
+	
 	private void adjustAssetLimit(SignUpPackageDetails upgradePackage, TenantLimit currentLimits) {
 		Long upgradeAssetLimit = upgradePackage.getAssets();
 		if (!currentLimits.isAssetLimitGreaterThan(upgradeAssetLimit))
 			currentLimits.setAssets(upgradeAssetLimit);
 	}
 
-	
-	
 
 	private void saveOrg(Transaction transaction) {
 		orgSaver.update(transaction, primaryOrg);
 	}
-	
 	
 
 	protected PrimaryOrg getPrimaryOrg() {
