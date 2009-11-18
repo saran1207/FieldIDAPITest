@@ -7,8 +7,6 @@ import java.util.Map;
 
 import javax.ejb.Local;
 
-import rfid.ejb.entity.ProductStatusBean;
-
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -52,16 +50,16 @@ public interface InspectionManager {
 
 	public FileDataContainer createFileDataContainer(Inspection inspection, File proofTestFile) throws ProcessingProofTestException;
 
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, ProductStatusBean> productStatus, Map<Inspection, Date> nextInspectionDates)
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates)
 			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct;
 
-	public Inspection createInspection(Inspection inspection, ProductStatusBean productStatus, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException,
+	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException,
 			UnknownSubProduct;
 
-	public Inspection createInspection(Inspection inspection, ProductStatusBean productStatus, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles)
+	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
 
-	public Inspection createInspection(Inspection inspection, ProductStatusBean productStatus, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
+	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
 
 	public Inspection updateInspection(Inspection inspection, Long userId) throws ProcessingProofTestException, FileAttachmentException;

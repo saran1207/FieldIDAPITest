@@ -25,7 +25,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 
@@ -250,7 +249,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	 * WARNING: All inspections passed into this method <b>MUST</b> be for the same
 	 * Product (The Product on the Inspection may be changed otherwise).
 	 */
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, ProductStatusBean> productStatus, Map<Inspection, Date> nextInspectionDates)
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates)
 			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
 		List<Inspection> savedInspections = new ArrayList<Inspection>();
 
@@ -290,7 +289,7 @@ public class InspectionManagerImpl implements InspectionManager {
 				subInspection.setAttachments(new HashSet<FileAttachment>());
 			}
 			
-			savedInspection = createInspection(inspection, productStatus.get(inspection), nextInspectionDates.get(inspection), inspection.getModifiedBy().getId(), (FileDataContainer) null, fileAttachments);
+			savedInspection = createInspection(inspection, nextInspectionDates.get(inspection), inspection.getModifiedBy().getId(), (FileDataContainer) null, fileAttachments);
 			
 			// handle the subinspection attachments
 			SubInspection subInspection = null;
@@ -318,21 +317,21 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	@Interceptors({AuditInterceptor.class})
 	@CustomAuditHandler(CreateInspectionAuditHandler.class)
-	public Inspection createInspection(Inspection inspection, ProductStatusBean productStatus, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException,
+	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException,
 			UnknownSubProduct {
-		return createInspection(inspection, productStatus, nextInspectionDate, userId, (FileDataContainer) null, (List<FileAttachment>) null);
+		return createInspection(inspection, nextInspectionDate, userId, (FileDataContainer) null, (List<FileAttachment>) null);
 	}
 
 	@Interceptors({AuditInterceptor.class})
 	@CustomAuditHandler(CreateInspectionAuditHandler.class)
-	public Inspection createInspection(Inspection inspection, ProductStatusBean productStatus, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles)
+	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
-		return createInspection(inspection, productStatus, nextInspectionDate, userId, createFileDataContainer(inspection, proofTestFile), uploadedFiles);
+		return createInspection(inspection, nextInspectionDate, userId, createFileDataContainer(inspection, proofTestFile), uploadedFiles);
 	}
 
 	@Interceptors({AuditInterceptor.class})
 	@CustomAuditHandler(CreateInspectionAuditHandler.class)
-	public Inspection createInspection(Inspection inspection, ProductStatusBean productStatus, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
+	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 
 		// if the inspection has no group, lets create a new one now
@@ -356,7 +355,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		persistenceManager.save(inspection, userId);
 
 		// update the product data
-		updateProduct(inspection, productStatus, userId);
+		updateProduct(inspection, userId);
 
 		// update the next inspection date
 		processNextInspection(inspection, nextInspectionDate);
@@ -648,7 +647,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		return product;
 	}
 
-	private void updateProduct(Inspection inspection, ProductStatusBean productStatus, Long modifiedById) {
+	private void updateProduct(Inspection inspection, Long modifiedById) {
 		UserBean modifiedBy = em.find(UserBean.class, modifiedById);
 		Product product = em.find(Product.class, inspection.getProduct().getId());
 
@@ -658,8 +657,8 @@ public class InspectionManagerImpl implements InspectionManager {
 		// inspections data.
 		product.setOwner(inspection.getOwner());
 		product.setLocation(inspection.getLocation());
-
-		product.setProductStatus(productStatus);
+		product.setProductStatus(inspection.getProductStatus());
+		
 		try {
 			legacyProductManager.update(product, modifiedBy);
 		} catch (SubProductUniquenessException e) {

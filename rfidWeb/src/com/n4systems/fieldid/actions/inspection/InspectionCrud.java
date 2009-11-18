@@ -84,7 +84,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected Product product;
 	protected Inspection inspection;
 	protected String nextInspectionDate;
-	protected ProductStatusBean productStatus;
 	protected List<CriteriaResult> criteriaResults;
 	protected String inspectionDate;
 	protected String charge;
@@ -242,7 +241,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		testDependices();
 
 		// set defaults.
-		productStatus = product.getProductStatus();
+		inspection.setProductStatus(product.getProductStatus());
 		inspection.setOwner(product.getOwner());
 		inspection.setLocation(product.getLocation());
 		inspection.setDate(DateHelper.getTodayWithTime());
@@ -380,7 +379,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				inspection.setFormVersion(inspection.getType().getFormVersion());
 				
 				// it's save time
-				inspection = inspectionManager.createInspection(inspection, productStatus, nextInspection, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+				inspection = inspectionManager.createInspection(inspection, nextInspection, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 				uniqueID = inspection.getId();
 				
 			} else {
@@ -616,14 +615,14 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	public Long getProductStatus() {
-		return (productStatus != null) ? productStatus.getUniqueID() : null;
+		return (inspection.getProductStatus() != null) ? inspection.getProductStatus().getUniqueID() : null;
 	}
 
 	public void setProductStatus(Long productStatus) {
 		if (productStatus == null) {
-			this.productStatus.setUniqueID(null);
-		} else if (this.productStatus == null || !productStatus.equals(this.productStatus.getUniqueID())) {
-			this.productStatus = legacyProductManager.findProductStatus(productStatus, getTenantId());
+			inspection.setProductStatus(null);
+		} else if (inspection.getProductStatus() == null || !productStatus.equals(inspection.getProductStatus().getUniqueID())) {
+			inspection.setProductStatus(legacyProductManager.findProductStatus(productStatus, getTenantId()));
 		}
 	}
 

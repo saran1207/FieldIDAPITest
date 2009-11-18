@@ -109,7 +109,7 @@ public class SubInspectionCrud extends InspectionCrud {
 
 		setUpSupportedProofTestTypes();
 		encodeInfoOptionMapForUseInForm();
-		productStatus = masterInspectionHelper.getProductStatus();
+		inspection.setProductStatus(masterInspectionHelper.getProductStatus());
 		nextInspectionDate = convertDate(masterInspectionHelper.getNextDate());
 		setScheduleId(masterInspectionHelper.getScheduleId());
 		reattachUploadedFiles();
@@ -251,7 +251,7 @@ public class SubInspectionCrud extends InspectionCrud {
 				inspection.setProduct(product);
 				inspection.setFormVersion(inspection.getType().getFormVersion());
 
-				masterInspectionHelper.setProductStatus(productStatus);
+				masterInspectionHelper.setProductStatus(inspection.getProductStatus());
 
 				if (inspection.isEditable()) {
 					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);

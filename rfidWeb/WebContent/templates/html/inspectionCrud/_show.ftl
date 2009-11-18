@@ -44,7 +44,12 @@
 				${product.type.name!""?html}
 			</span>
 		</p>
-		
+		<p>
+			<label><@s.text name="label.productstatus"/></label>
+			<span>
+				${(inspection.productStatus.name)!}
+			</span>
+		</p>
 		<p>
 			<label><@s.text name="label.desc"/></label>
 			<span>

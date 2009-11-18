@@ -369,6 +369,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		inspection.setProduct(product);
+		inspection.setProductStatus(product.getProductStatus());
 		inspection.setDate(inspectionDate);
 		inspection.setInspector(inspector);
 		inspection.setBook(book);
@@ -408,8 +409,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		try {
-			// now we can create our inspection, now that the ProductStatus is from the ProductSerial
-			inspectionManager.createInspection(inspection, product.getProductStatus(), nextDate, inspector.getUniqueID(), fileData, null);
+			inspectionManager.createInspection(inspection, nextDate, inspector.getUniqueID(), fileData, null);
 			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an inspection, log the failure

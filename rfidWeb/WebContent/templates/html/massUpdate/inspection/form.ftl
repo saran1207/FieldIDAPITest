@@ -37,6 +37,16 @@
 				</p>
 			</td>
 		</tr>
+		
+		<tr>
+			<td><@s.checkbox name="select['productStatus']" id="check_productStatus" /></td>
+			<td>
+				<p>
+					<label class="label" ><@s.text name="label.productstatus"/>:</label> 
+					<span class="field"><@s.select  name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('productStatus');" /></span>
+				</p>
+			</td>
+		</tr>
 			
 		<tr>
 			<td><@s.checkbox name="select['inspectionBook']" id="check_inspectionBook"/></td>

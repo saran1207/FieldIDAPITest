@@ -203,7 +203,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 					masterInspection.cleanSubInspectionsForNonValidSubProducts(product);
 				}
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
-				inspection = inspectionManager.createInspection(master, masterInspection.getProductStatus(), masterInspection.getNextDate(), getSessionUser().getUniqueID(), masterInspection
+				inspection = inspectionManager.createInspection(master, masterInspection.getNextDate(), getSessionUser().getUniqueID(), masterInspection
 						.getProofTestFile(), masterInspection.getUploadedFiles());
 				uniqueID = inspection.getId();
 			} else {

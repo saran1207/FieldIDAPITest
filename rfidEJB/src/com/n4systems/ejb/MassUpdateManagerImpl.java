@@ -303,6 +303,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (updateKey.equals("printable")) {
 					changeTarget.setPrintable(inspectionChanges.isPrintable());
 				}
+				
+				if (updateKey.equals("productStatus")) {
+					changeTarget.setProductStatus(inspectionChanges.getProductStatus());
+				}
 			}
 			
 			persistenceManager.update(changeTarget, user);

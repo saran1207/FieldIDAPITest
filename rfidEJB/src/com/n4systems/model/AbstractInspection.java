@@ -11,11 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CollectionOfElements;
+
+import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -37,6 +40,10 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = false)
 	private Product product;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(name="productstatus_id")
+	private ProductStatusBean productStatus;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy = "inspection", cascade=CascadeType.ALL)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
@@ -92,6 +99,15 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public ProductStatusBean getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(ProductStatusBean productStatus) {
+		this.productStatus = productStatus;
 	}
 
 	@NetworkAccessLevel(SecurityLevel.DIRECT)

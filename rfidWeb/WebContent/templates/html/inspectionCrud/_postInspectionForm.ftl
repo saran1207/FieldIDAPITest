@@ -18,14 +18,15 @@
 			<@s.checkbox name="printable" /> <@s.text name="label.printableexplination"/>
 		</span> 
 	</p>
+	
+	<p>
+		<label><@s.text name="label.productstatus"/></label>
+		<span>
+			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
+		</span>
+	</p>
+		
 	<#if !inspection.id?exists >
-		<p>
-			<label><@s.text name="label.productstatus"/></label>
-			<span>
-				<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
-			</span>
-		</p>
-
 		<p>
 			<label><@s.text name="label.nextinspectiondate"/>:</label>
 			

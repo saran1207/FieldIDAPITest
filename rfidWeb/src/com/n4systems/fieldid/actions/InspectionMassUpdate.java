@@ -7,6 +7,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.session.LegacyProductSerial;
+
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateFailureException;
@@ -27,26 +30,25 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( InspectionMassUpdate.class );
 	
+	private LegacyProductSerial productSerialManager;
 	private InspectionSearchContainer criteria;
 	private Inspection inspection = new Inspection();
 	
 	private OwnerPicker ownerPicker;
 
-	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
+	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyProductSerial productSerialManager) {
 		super(massUpdateManager, persistenceManager);
+		this.productSerialManager = productSerialManager;
 	}
-	
 	
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
 	}
 
-
-	private void applyCriteriaDefaults() {
-		
+	private void applyCriteriaDefaults() {	
 		setOwnerId(criteria.getOwnerId());
-		
-		setInspectionBook( criteria.getInspectionBook() );
+		setInspectionBook(criteria.getInspectionBook());
+		setProductStatus(criteria.getProductStatus());
 	}
 	
 	private boolean findCriteria() {
@@ -96,14 +98,11 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		return INPUT;
 	}
 	
-
-	
-	
 	public String getLocation() {
 		return inspection.getLocation();
 	}
 	
-	public void setLocation( String location ) {
+	public void setLocation(String location) {
 		inspection.setLocation( location );
 	}
 	
@@ -111,7 +110,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		return ( inspection.getBook() == null ) ? null : inspection.getBook().getId();
 	}
 	
-	public void setInspectionBook( Long inspectionBookId ) {
+	public void setInspectionBook(Long inspectionBookId) {
 		if( inspectionBookId == null ) {
 			inspection.setBook( null );
 		} else if( inspection.getBook() == null || !inspectionBookId.equals( inspection.getBook().getId() ) ) {
@@ -130,8 +129,8 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		return inspection.isPrintable();
 	}
 
-	public void setPrintable( boolean printable ) {
-		inspection.setPrintable( printable );
+	public void setPrintable(boolean printable) {
+		inspection.setPrintable(printable);
 	}
 	
 	public Long getOwnerId() {
@@ -144,5 +143,21 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
+	}
+	
+	public Collection<ProductStatusBean> getProductStatuses() {
+		return productSerialManager.getAllProductStatus(getTenantId());
+	}
+	
+	public Long getProductStatus() {
+		return (inspection.getProductStatus() == null) ? null : inspection.getProductStatus().getUniqueID();
+	}
+
+	public void setProductStatus(Long productStatus) {
+		if (productStatus == null) {
+			inspection.setProductStatus(null);
+		} else if (inspection.getProductStatus() == null || !productStatus.equals(inspection.getProductStatus().getUniqueID())) {
+			inspection.setProductStatus(productSerialManager.findProductStatus(productStatus, getTenantId()));
+		}
 	}
 }

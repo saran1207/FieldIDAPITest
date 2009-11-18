@@ -481,6 +481,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}			
 		}
 		
+		inspection.setProductStatus(convertProductStatus(inspectionServiceDTO));	
+		
 		inspection.getAttachments().addAll( convertToFileAttachments(inspectionServiceDTO.getImages(), tenant, inspector) );
 		
 		return inspection;
@@ -1007,7 +1009,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return convertStringToDate(inspectionServiceDTO.getNextDate());
 	}
 
-	public ProductStatusBean convertProductStatus(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
+	private ProductStatusBean convertProductStatus(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
 		if (inspectionServiceDTO.getProductStatusId() == -1L) {
 			return null;
 		}

@@ -14,7 +14,6 @@ import javax.naming.NamingException;
 
 import org.ho.yaml.Yaml;
 
-import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.User;
@@ -143,16 +142,14 @@ public class InspectionImporter extends Importer {
 						throw new Exception("no product ");
 					}
 
-					ProductStatusBean productStatus = null;
 					if ((String) inspectionMap.get(PRODUCT_STATUS) != null) {
 						try {
-							productStatus = productSerialManager.FindProductStatusByName(primaryOrg.getTenant().getId(),
-									(String) inspectionMap.get(PRODUCT_STATUS));
+							inspection.setProductStatus(productSerialManager.FindProductStatusByName(primaryOrg.getTenant().getId(), (String)inspectionMap.get(PRODUCT_STATUS)));
 						} catch (Exception e) {
 							throw new Exception("failed to load product status");
 						}
 					} else {
-						productStatus = product.getProductStatus();
+						inspection.setProductStatus(product.getProductStatus());
 					}
 
 					Date inspectionDate = null;
@@ -264,8 +261,7 @@ public class InspectionImporter extends Importer {
 						}
 					}
 
-					inspectionManager.createInspection(inspection, productStatus, nextInspectionDate, inspector
-							.getUniqueID());
+					inspectionManager.createInspection(inspection, nextInspectionDate, inspector.getUniqueID());
 					successes.add(inspectionMap);
 
 				} catch (Exception e) {

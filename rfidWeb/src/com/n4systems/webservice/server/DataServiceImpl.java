@@ -13,7 +13,6 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.LegacyProductSerial;
 import rfid.ejb.session.LegacyProductType;
@@ -847,7 +846,7 @@ public class DataServiceImpl implements DataService {
 			Long tenantId = requestInformation.getTenantId();
 			
 			List<Inspection> inspections = new ArrayList<Inspection>();
-			Map<Inspection, ProductStatusBean> productStatus = new HashMap<Inspection, ProductStatusBean>();
+//			Map<Inspection, ProductStatusBean> productStatus = new HashMap<Inspection, ProductStatusBean>();
 			Map<Inspection, Date> nextInspectionDates = new HashMap<Inspection, Date>();
 			Map<Inspection, InspectionSchedule> inspectionSchedules = new HashMap<Inspection, InspectionSchedule>();
 			Product product = null;
@@ -877,7 +876,6 @@ public class DataServiceImpl implements DataService {
 				
 				Inspection inspection = converter.convert(inspectionServiceDTO, tenantId);
 				inspections.add( inspection );
-				productStatus.put(inspection, converter.convertProductStatus(inspectionServiceDTO));
 				nextInspectionDates.put(inspection, converter.convertNextDate(inspectionServiceDTO));
 				inspectionSchedules.put(inspection, converter.convertInspectionSchedule(inspectionServiceDTO));				
 			}	
@@ -885,7 +883,7 @@ public class DataServiceImpl implements DataService {
 			List<Inspection> savedInspections = null;
 			
 			try {
-				savedInspections = inspectionManager.createInspections( requestInformation.getMobileGuid(), inspections, productStatus, nextInspectionDates);
+				savedInspections = inspectionManager.createInspections( requestInformation.getMobileGuid(), inspections, nextInspectionDates);
 				logger.info( "save inspections on product " + product.getSerialNumber() );
 				populatorLogger.logMessage(tenantId, "Created inspection for product with serial number "+product.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 			} catch ( TransactionAlreadyProcessedException e) {

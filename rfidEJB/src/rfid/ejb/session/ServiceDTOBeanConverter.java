@@ -53,7 +53,6 @@ public interface ServiceDTOBeanConverter {
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
 	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
-	public ProductStatusBean convertProductStatus( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO );
 	public Date convertNextDate( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO );
 	public InspectionSchedule convertInspectionSchedule(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO);
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );

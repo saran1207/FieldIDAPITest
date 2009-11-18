@@ -79,7 +79,7 @@ public class CopyInspectionFactory {
 	protected static void copyAbstractInspection( AbstractInspection newInspection, AbstractInspection originalInspection ) {
 		copyEntity( newInspection, originalInspection );
 		
-		
+		newInspection.setProductStatus(originalInspection.getProductStatus());
 		newInspection.setProduct( originalInspection.getProduct() );
 		newInspection.setType( originalInspection.getType() );
 		newInspection.setComments( originalInspection.getComments() );

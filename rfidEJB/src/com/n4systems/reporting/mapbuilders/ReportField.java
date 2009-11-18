@@ -40,6 +40,7 @@ public enum ReportField {
 	PRODUCT_TYPE_NAME_LEGACY		("itemNumber"),
 	PRODUCT_TYPE_WARNING			("productWarning"),
 	PRODUCT_TYPE_CERT_TEXT			("certificateText"),
+	PRODUCT_STATUS					("productStatus"),
 	ORDER_NUMBER					("orderNumber"),
 	LINE_ITEM_DESC					("customerPartDescription"),
 	LINE_ITEM_PRODUCT_CODE			("productName"),
