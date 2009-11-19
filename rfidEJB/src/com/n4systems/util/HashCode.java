@@ -27,9 +27,13 @@ public class HashCode {
 		currentHash = (fODD_PRIME_NUMBER * currentHash) + value;
 		return this;
 	}
-
+	
+	private HashCode addNull() {
+		return add(0);
+	}
+	
 	public HashCode add(Boolean b) {
-		return add(b.booleanValue());
+		return (b == null) ? addNull() : add(b.booleanValue());
 	}
 	
 	public HashCode add(boolean b) {
@@ -37,7 +41,7 @@ public class HashCode {
 	}
 
 	public HashCode add(Character c) {
-		return addToHash(c.charValue());
+		return (c == null) ? addNull() : addToHash(c.charValue());
 	}
 	
 	public HashCode add(char c) {
@@ -45,7 +49,7 @@ public class HashCode {
 	}
 
 	public HashCode add(Integer i) {
-		return addToHash(i.intValue());
+		return (i == null) ? addNull() : addToHash(i.intValue());
 	}
 	
 	public HashCode add(int i) {
@@ -53,7 +57,7 @@ public class HashCode {
 	}
 
 	public HashCode add(Long l) {
-		return add(l.longValue());
+		return (l == null) ? addNull() : add(l.longValue());
 	}
 	
 	public HashCode add(long l) {
@@ -61,7 +65,7 @@ public class HashCode {
 	}
 
 	public HashCode add(Float f) {
-		return add(f.floatValue());
+		return (f == null) ? addNull() : add(f.floatValue());
 	}
 	
 	public HashCode add(float f) {
@@ -69,7 +73,7 @@ public class HashCode {
 	}
 
 	public HashCode hash(Double d) {
-		return add(d.doubleValue());
+		return (d == null) ? addNull() : add(d.doubleValue());
 	}
 	
 	public HashCode hash(double d) {
@@ -83,7 +87,7 @@ public class HashCode {
 	public HashCode add(Object obj) {
 		HashCode result = this;
 		if (obj == null) {
-			result = add(0);
+			result = addNull();
 		} else if (!isArray(obj)) {
 			result = add(obj.hashCode());
 		} else {
