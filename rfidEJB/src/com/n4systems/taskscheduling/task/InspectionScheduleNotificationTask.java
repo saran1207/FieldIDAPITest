@@ -52,21 +52,24 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 		Date now = new Date();
 		Date startDate, endDate;
 		for (NotificationSetting setting: loader.load()) {
-			
-			// need to check if we're actually supposed to notify today			
-			if (!setting.getFrequency().isSameDay(now)) {
-				continue;
+			try {
+				// need to check if we're actually supposed to notify today			
+				if (!setting.getFrequency().isSameDay(now)) {
+					continue;
+				}
+				
+				PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(setting.getTenant().getId());
+				
+				dateFormatter = new SimpleDateFormat(primaryOrg.getDateFormat());
+				
+				// resolve the relative times to hard dates, so they can be used in a query
+				startDate = setting.getPeriodStart().getRelative(now);
+				endDate = setting.getPeriodEnd().getRelative(startDate);
+				
+				generateNotificationMessage(setting, startDate, endDate);
+			} catch(Exception e) {
+				logger.error("Failed sending notification: " + setting.getId(), e);
 			}
-			
-			PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(setting.getTenant().getId());
-			
-			dateFormatter = new SimpleDateFormat(primaryOrg.getDateFormat());
-			
-			// resolve the relative times to hard dates, so they can be used in a query
-			startDate = setting.getPeriodStart().getRelative(now);
-			endDate = setting.getPeriodEnd().getRelative(startDate);
-			
-			generateNotificationMessage(setting, startDate, endDate);
 		}
 		
 		logger.info("Completed Inspection Schedule Notification Task");
