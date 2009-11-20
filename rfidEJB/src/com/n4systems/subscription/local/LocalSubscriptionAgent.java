@@ -1,5 +1,8 @@
 package com.n4systems.subscription.local;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +16,14 @@ import com.n4systems.subscription.Response;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.subscription.ValidatePromoCodeResponse;
 
 public class LocalSubscriptionAgent extends SubscriptionAgent {
 
+	private static String[] a = {"FIDFREE", "FIDBASIC", "FIDPLUS", "FIDENTERPRISE", "FIDUNLIMITED"};
+	private static String tempDirectory = "/tmp";
+	
 	@Override
 	public SignUpTenantResponse buy(Subscription subscription, Company company, Person client) {
 		return new LocalSignUpTenantResponse();
@@ -69,6 +76,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	
 	private LocalContractPrice populateContractPrice(Long externalId, String syncId, PaymentOption paymentOption, Float price) {
 		LocalContractPrice localContractPrice = new LocalContractPrice();
+		
 		localContractPrice.setExternalId(externalId);
 		localContractPrice.setPaymentOption(paymentOption);
 		localContractPrice.setPrice(price);
@@ -81,5 +89,52 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	public Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException {
 		return new LocalResponse();
 	}
+
+	@Override
+	public String currentPackageFor(Long tenantExternalId) throws CommunicationException {
+		String result;
+		
+		result = findPackageFromFile(tenantExternalId);
+		if (result != null) {
+			return result;
+		}
+		return pickAPackage(tenantExternalId);
+	}
+
+	private String pickAPackage(Long tenantExternalId) {
+		return a[(int) (tenantExternalId % a.length)];
+	}
+	
+
+
+	private String findPackageFromFile(Long tenantExternalId) {
+		File tenantFile = new File(tempDirectory + "/" + tenantExternalId.toString() + ".pacakge");
+		String packageName = null;
+		
+		if (tenantFile.exists()) {
+			char[] buffer = new char[1000];
+			FileReader reader = null;
+			
+			try {
+				reader = new FileReader(tenantFile);
+				reader.read(buffer, 0, 999);
+				packageName = new String(buffer);
+			} catch (Exception e) {			
+			} finally {
+				if (reader != null)
+					try { reader.close(); } catch (IOException e) {}
+			}
+			
+			
+		}
+		return packageName;
+	}
+
+	@Override
+	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+		return true;
+	}
+	
+	
 
 }

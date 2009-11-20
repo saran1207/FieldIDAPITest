@@ -3,6 +3,7 @@ package com.n4systems.subscription.netsuite;
 import java.io.IOException;
 import java.util.List;
 
+import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.BillingInfoField;
 import com.n4systems.subscription.CommunicationException;
@@ -14,6 +15,7 @@ import com.n4systems.subscription.Response;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.subscription.ValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.client.PricingDetailsClient;
 import com.n4systems.subscription.netsuite.client.ProductDetailsClient;
@@ -139,6 +141,14 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		
 		return packageName;
 	}
+	
+	@Override
+	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+		throw new NotImplementedException();
+	}
+
+
+	
 	
 	
 }

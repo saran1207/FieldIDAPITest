@@ -1,8 +1,8 @@
 package com.n4systems.subscription.netsuite.client;
 
 import com.n4systems.subscription.CreditCard;
-import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
-import com.n4systems.subscription.netsuite.model.UpgradeSubscription;
+import com.n4systems.subscription.Subscription;
+import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSubscriptionResponse> {
@@ -15,13 +15,20 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 	
 	@Override
 	protected void addRequestParameters() {
+		addUpgradeRequestParameters();
+		addSubscriptionRequestParameters(upgradeSubscription.getSubscription());
+	}
+
+	private void addUpgradeRequestParameters() {
 		addRequestParameter("tenantid", upgradeSubscription.getTenantExternalId().toString());
 		addRequestParameter("itemid", upgradeSubscription.getContractExternalId().toString());
 		addRequestParameter("newusers", upgradeSubscription.getNewUsers().toString());
 		addRequestParameter("storageinc", upgradeSubscription.getStorageIncrement().toString());
 		addRequestParameter("showpriceonly", upgradeSubscription.isShowPriceOnly() ? "T" : "F");
-		
-		NetsuiteSubscription subscription = upgradeSubscription.getSubscription(); 
+	}
+
+	private void addSubscriptionRequestParameters(Subscription subscription) {
+		 
 		if (subscription != null) {
 			addRequestParameter("months", subscription.getMonths().toString());
 			addRequestParameter("frequency", subscription.getFrequency().getCode());

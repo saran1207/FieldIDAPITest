@@ -1,9 +1,11 @@
 package com.n4systems.subscription.netsuite.model;
 
 import com.n4systems.subscription.CreditCard;
+import com.n4systems.subscription.Subscription;
+import com.n4systems.subscription.UpgradeSubscription;
 
 
-public class UpgradeSubscription {
+public class NetSuiteUpgradeSubscription implements UpgradeSubscription {
 
 	private Long tenantExternalId;
 	private Long contractExternalId;
@@ -11,7 +13,7 @@ public class UpgradeSubscription {
 	private Integer storageIncrement = 0;
 	private boolean showPriceOnly;
 	
-	private NetsuiteSubscription subscription;
+	private Subscription subscription;
 	private boolean usingCreditCard;
 	private CreditCard creditCard;
 	private String purchaseOrderNumber;
@@ -46,7 +48,7 @@ public class UpgradeSubscription {
 	public void setShowPriceOnly(boolean showPriceOnly) {
 		this.showPriceOnly = showPriceOnly;
 	}
-	public NetsuiteSubscription getSubscription() {
+	public Subscription getSubscription() {
 		return subscription;
 	}
 	public void setSubscription(NetsuiteSubscription subscription) {
