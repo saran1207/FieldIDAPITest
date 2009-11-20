@@ -10,6 +10,7 @@ import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
+import com.n4systems.webservice.dto.InspectionImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeListResponse;
@@ -58,6 +59,7 @@ public interface DataService {
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
+	public RequestResponse createInspectionImage(RequestInformation requestInformation, InspectionImageServiceDTO inspectionImageServiceDTO ) throws ServiceException, ProductException, InspectionException;
 	
 	public FindProductResponse findProduct(FindProductRequestInformation requestInformation) throws ServiceException;
 	public FindInspectionResponse findInspection(FindInspectionRequestInformation requestInformation) throws ServiceException;

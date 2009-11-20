@@ -29,8 +29,10 @@ import com.n4systems.exceptions.FindProductFailure;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionSchedule;
@@ -40,8 +42,11 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
+import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
+import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
@@ -85,7 +90,9 @@ import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
+import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
+import com.n4systems.webservice.dto.InspectionImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionListResponse;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeListResponse;
@@ -927,6 +934,58 @@ public class DataServiceImpl implements DataService {
 			throw new ServiceException("Problem processing inspections");
 		}
 	}
+	
+	public RequestResponse createInspectionImage(RequestInformation requestInformation, InspectionImageServiceDTO inspectionImageServiceDTO ) throws ServiceException, InspectionException {
+		RequestResponse response = new RequestResponse();
+	
+		Long tenantId = requestInformation.getTenantId();
+		
+		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+		InspectionManager inspectionManager = ServiceLocator.getInspectionManager();
+		User userManager = ServiceLocator.getUser();
+		
+		FileAttachment newFileAttachment = null;
+		
+		try {
+
+			UserBean inspector = userManager.findUserBean(inspectionImageServiceDTO.getInspectorId());
+			
+			//1. find out inspection using inspection Mobile Guid
+			Inspection inspection = null;
+			SubInspection subInspection = null;
+			
+			if (inspectionImageServiceDTO.isFromSubInspection()) {
+				InspectionByMobileGuidLoader<SubInspection> loader = new InspectionByMobileGuidLoader<SubInspection>(new TenantOnlySecurityFilter(tenantId), SubInspection.class);
+				subInspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
+				
+				InspectionBySubInspectionLoader masterInspectionLoader = new InspectionBySubInspectionLoader();
+				masterInspectionLoader.setSubInspection(subInspection);
+				
+				//2. convert Inspection image
+				newFileAttachment = converter.convert(subInspection, inspectionImageServiceDTO, inspector);
+				subInspection.getAttachments().add(newFileAttachment);
+				
+				//3. persist image file
+				inspectionManager.createInspectionImage("", masterInspectionLoader.load(), subInspection, newFileAttachment);
+			} else {
+				InspectionByMobileGuidLoader<Inspection> loader = new InspectionByMobileGuidLoader<Inspection>(new TenantOnlySecurityFilter(tenantId), Inspection.class);
+				inspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
+				
+				newFileAttachment = converter.convert(inspection, inspectionImageServiceDTO, inspector);
+				inspection.getAttachments().add(newFileAttachment);
+				
+				inspectionManager.createInspectionImage("", inspection, null, newFileAttachment);
+			}
+			
+				
+		} catch (Exception e) {
+			logger.error( "failed while processing inspection image", e );
+			throw new ServiceException("Problem processing inspection image");
+		}
+		
+		return response;
+	}
+	
 	
 	private List<SubProduct> subProductNotAlreadyAdded(Product masterProduct, List<SubProduct> subProducts) {
 		List<SubProduct> notAddedSubProducts = new ArrayList<SubProduct>();
