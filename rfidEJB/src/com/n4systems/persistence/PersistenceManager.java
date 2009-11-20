@@ -107,10 +107,13 @@ public class PersistenceManager {
 		return managedEntity;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends Saveable> void executeDeleter(Deleter<T> deleter, T entity) throws EntityStillReferencedException {
 		Transaction transaction = startTransaction();
 		try {
-			deleter.remove(transaction, entity);
+			T reloadedEntity = (T) transaction.getEntityManager().find(entity.getClass(), entity.getIdentifier());
+			
+			deleter.remove(transaction, reloadedEntity);
 			
 			// flush the transaction early to force the RuntimeException
 			transaction.getEntityManager().flush();

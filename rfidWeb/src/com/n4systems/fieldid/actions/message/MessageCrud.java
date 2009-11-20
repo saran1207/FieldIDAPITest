@@ -16,6 +16,8 @@ import com.n4systems.util.ConfigContext;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class MessageCrud extends AbstractPaginatedCrud<Message> {
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger logger = Logger.getLogger(MessageCrud.class);
 	
 	private Message message;
@@ -130,6 +132,7 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		} catch (Exception e) {
 			return ERROR;
 		}
+		
 		return SUCCESS;
 	}
 
