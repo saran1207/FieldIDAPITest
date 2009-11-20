@@ -57,6 +57,16 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	@Column(nullable=false)
 	private long formVersion;
 	
+	private String mobileGUID;
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public String getMobileGUID() {
+		return mobileGUID;
+	}
+	public void setMobileGUID(String mobileGUID) {
+		this.mobileGUID = mobileGUID;
+	}
+
 	public AbstractInspection() {}
 
 	public AbstractInspection(Tenant tenant) {

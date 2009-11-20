@@ -9,8 +9,10 @@ import javax.ejb.Local;
 import rfid.ejb.entity.ProductStatusBean;
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
@@ -53,6 +55,7 @@ public interface ServiceDTOBeanConverter {
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
 	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
+	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException;
 	public Date convertNextDate( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO );
 	public InspectionSchedule convertInspectionSchedule(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO);
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );

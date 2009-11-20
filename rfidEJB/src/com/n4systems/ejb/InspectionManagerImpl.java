@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,6 +69,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
@@ -314,6 +316,28 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		return savedInspections;
 	}
+	
+	
+	/**
+	 * This will persist an entire list of inspections. If it encounters an
+	 * inspection with no inspection group it will apply that inspection group
+	 * to all the rest of the inspections with no inspection group.
+	 * WARNING: All inspections passed into this method <b>MUST</b> be for the same
+	 * Product (The Product on the Inspection may be changed otherwise).
+	 */
+	public Inspection createInspectionImage(String transactionGUID, Inspection inspection, SubInspection subInspection, FileAttachment newFileAttachment)
+			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
+	
+		if ( subInspection != null) {
+			inspection = attachUploadedFile(inspection, subInspection, newFileAttachment);
+		} else {
+			inspection = attachUploadedFile(inspection, null, newFileAttachment);
+		}
+		
+		return persistenceManager.update(inspection);
+		
+	}
+	
 
 	@Interceptors({AuditInterceptor.class})
 	@CustomAuditHandler(CreateInspectionAuditHandler.class)
@@ -591,6 +615,17 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 		return inspection;
 	}
+	
+	
+	private Inspection attachUploadedFile(Inspection inspection, SubInspection subInspection, FileAttachment uploadedFile) throws FileAttachmentException {
+
+		List<FileAttachment> uploadedFiles = new ArrayList<FileAttachment>(); 
+		uploadedFiles.add(uploadedFile);
+		
+		return  attachUploadedFiles(inspection, subInspection, uploadedFiles);
+		
+	}
+	
 
 	private void setProofTestData(Inspection inspection, FileDataContainer fileData) {
 		if (fileData == null) {

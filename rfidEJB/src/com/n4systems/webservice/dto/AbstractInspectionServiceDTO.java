@@ -15,6 +15,15 @@ public abstract class AbstractInspectionServiceDTO extends AbstractBaseServiceDT
 	private List<InspectionInfoOptionServiceDTO> infoOptions = new ArrayList<InspectionInfoOptionServiceDTO>();
 	private List<ImageServiceDTO> images;
 	
+	private String inspectionMobileGUID;
+	
+	
+	public String getInspectionMobileGUID() {
+		return inspectionMobileGUID;
+	}
+	public void setInspectionMobileGUID(String inspectionMobileGUID) {
+		this.inspectionMobileGUID = inspectionMobileGUID;
+	}
 	public String getComments() {
 		return comments;
 	}

@@ -57,6 +57,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -406,6 +407,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		inspection.setFormVersion(inspectionServiceDTO.getFormVersion());
 		
+		inspection.setMobileGUID(inspectionServiceDTO.getInspectionMobileGUID());
+		
+		
 	}
 	
 	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException {
@@ -486,6 +490,29 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspection.getAttachments().addAll( convertToFileAttachments(inspectionServiceDTO.getImages(), tenant, inspector) );
 		
 		return inspection;
+	}
+	
+	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException {
+
+		List<ImageServiceDTO> images = new ArrayList<ImageServiceDTO>();
+		images.add(inspectionImageServiceDTO.getImage());
+		
+		return convertToFileAttachment(inspectionImageServiceDTO.getImage(), inspection.getTenant(), inspector);
+
+	}
+	
+	private FileAttachment convertToFileAttachment(ImageServiceDTO imageServiceDTO, Tenant tenant, UserBean modifiedBy) throws IOException {
+
+		
+		List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>(); 
+		
+		List<ImageServiceDTO> images = new ArrayList<ImageServiceDTO>();
+		images.add(imageServiceDTO);
+
+		fileAttachments = convertToFileAttachments(images, tenant, modifiedBy);
+		
+		return fileAttachments.get(0);
+		
 	}
 	
 	private List<FileAttachment> convertToFileAttachments(List<ImageServiceDTO> images, Tenant tenant, UserBean modifiedBy) throws IOException {
