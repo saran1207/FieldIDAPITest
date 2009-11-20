@@ -3,8 +3,6 @@ package com.n4systems.model.security;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
@@ -16,7 +14,6 @@ import com.n4systems.util.HashCode;
  * which determines the network distance from one InternalOrg to another. 
  */
 public class SafetyNetworkSecurityCache {
-	private static final Logger logger = Logger.getLogger("com.n4systems.securitylog");
 	private static final SafetyNetworkSecurityCache self = new SafetyNetworkSecurityCache();
 	
 	public static SafetyNetworkSecurityCache getInstance() {

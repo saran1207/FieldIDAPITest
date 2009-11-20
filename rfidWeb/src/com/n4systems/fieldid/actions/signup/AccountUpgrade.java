@@ -7,6 +7,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
+import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
@@ -73,7 +74,10 @@ public class AccountUpgrade extends AbstractAction {
 
 
 	private void upgradeAccount(Transaction transaction) {
-		new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver()).upgradeTo(upgradePackage.getSignPackageDetails(), transaction);
+		UpgradeRequest upgradeRequest = new UpgradeRequest();
+		upgradeRequest.setUpgradePackage(upgradePackage.getSignPackageDetails());
+		
+		new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).upgradeTo(upgradeRequest, transaction);
 	}
 
 

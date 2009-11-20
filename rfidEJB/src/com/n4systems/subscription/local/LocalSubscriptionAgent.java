@@ -125,7 +125,6 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 					try { reader.close(); } catch (IOException e) {}
 			}
 			
-			
 		}
 		return packageName;
 	}

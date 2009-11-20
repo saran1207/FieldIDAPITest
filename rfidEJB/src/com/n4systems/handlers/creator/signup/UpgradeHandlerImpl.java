@@ -8,23 +8,41 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.util.DataUnit;
 
 public class UpgradeHandlerImpl implements UpgradeHandler {
 
 	private final PrimaryOrg primaryOrg;
 	private final OrgSaver orgSaver;
+	private final SubscriptionAgent subscriptionAgent;
 	
-	public UpgradeHandlerImpl(PrimaryOrg primaryOrg, OrgSaver orgSaver) {
+	public UpgradeHandlerImpl(PrimaryOrg primaryOrg, OrgSaver orgSaver, SubscriptionAgent subscriptionAgent) {
 		this.primaryOrg = primaryOrg;
 		this.orgSaver = orgSaver;
+		this.subscriptionAgent = subscriptionAgent;
 	}
 
 
-	public void upgradeTo(SignUpPackageDetails upgradePackage, Transaction transaction) {
-		enableFeatures(upgradePackage, transaction);
-		adjustLimits(upgradePackage);
-		saveOrg(transaction);
+	public void upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) {
+		if (confirmUpgrade()) {
+			enableFeatures(upgradeRequest.getUpgradePackage(), transaction);
+			adjustLimits(upgradeRequest.getUpgradePackage());
+			saveOrg(transaction);
+		}
+	}
+
+
+	private boolean confirmUpgrade() {
+		
+		
+		
+		try {
+			return subscriptionAgent.upgrade(null);
+		} catch (CommunicationException e) {
+			return false;
+		}
 	}
 
 	

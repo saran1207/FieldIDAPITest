@@ -23,6 +23,9 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactoryTestDouble;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitchTestDouble;
+import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.DataUnit;
@@ -30,6 +33,8 @@ import com.n4systems.util.DataUnit;
 public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 
 	
+	private UpgradeRequest upgradeRequest = new UpgradeRequest();
+
 	@Before
 	public void setUp() {
 		mockTransaction();
@@ -40,12 +45,14 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withNoExtendedFeatures().build();
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Basic;
 		
+		upgradeRequest.setUpgradePackage(upgradePackage);
 		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		HashSet<ExtendedFeature> expectedFeatures = new FluentHashSet<ExtendedFeature>(upgradePackage.getExtendedFeatures());
 		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		Set<ExtendedFeature> actualFeatures = primaryOrg.getExtendedFeatures();
 		
@@ -59,14 +66,15 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		ExtendedFeature currentExtendedFeatureNotIncludedInPackage = ExtendedFeature.DedicatedProgramManager;
 		PrimaryOrg primaryOrg = aPrimaryOrg().withExtendedFeatures(currentExtendedFeatureNotIncludedInPackage).build();
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Basic;
+		upgradeRequest.setUpgradePackage(upgradePackage);
 		
-		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		HashSet<ExtendedFeature> expectedFeatures = new FluentHashSet<ExtendedFeature>(upgradePackage.getExtendedFeatures())
 				.stickOn(currentExtendedFeatureNotIncludedInPackage);
 		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		Set<ExtendedFeature> actualFeatures = primaryOrg.getExtendedFeatures();
 		
@@ -80,10 +88,12 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	public void should_use_extended_feature_switches_to_add_extended_features() throws Exception {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withNoExtendedFeatures().build();
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Basic;
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		
-		UpgradeHandlerImplTenatSwitchOverride sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
+		UpgradeHandlerImplTenatSwitchOverride sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		assertEquals(new FluentArrayList<ExtendedFeature>(upgradePackage.getExtendedFeatures()), sut.requestedFeatureSwitches);
 		for (ExtendedFeatureSwitchTestDouble feautureSwitch : sut.featureSwitches) {
@@ -97,12 +107,13 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	public void should_save_primary_org_after_upgrading() throws Exception {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withNoExtendedFeatures().build();
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Basic;
-		
+		upgradeRequest.setUpgradePackage(upgradePackage);
 		OrgSaver orgSaver = successfulOrgSaver(primaryOrg);
 		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, orgSaver);
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, orgSaver, subscriptionAgent);
 		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		verify(orgSaver);
 	}
@@ -111,13 +122,13 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	@Test
 	public void should_increase_the_asset_limit_from_25_to_unlimited_when_upgrading_from_Free_to_Plus() throws Exception {
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
-		
+		upgradeRequest.setUpgradePackage(upgradePackage);
 		PrimaryOrg primaryOrg = aPrimaryOrg().withAssetLimit(25L).build();
 		
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
-		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		Long actualAssetLimit = primaryOrg.getLimits().getAssets();
 		
@@ -127,14 +138,16 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	@Test
 	public void should_keep_the_current_number_of_assets_when_an_account_already_has_more_assets_than_the_new_package_provides() throws Exception {
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Basic;
-		
+		upgradeRequest.setUpgradePackage(upgradePackage);
 		long startingAssetLimit = upgradePackage.getAssets() + 25L;
 		
 		PrimaryOrg primaryOrg = aPrimaryOrg().withAssetLimit(startingAssetLimit).build();
 		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		long actualAssetLimit = primaryOrg.getLimits().getAssets();
 		
@@ -145,10 +158,11 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	public void should_keep_the_current_number_of_assets_when_an_account_already_has_unlimited_assets() throws Exception {
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Basic;
 		PrimaryOrg primaryOrg = aPrimaryOrg().withAssetLimit(TenantLimit.UNLIMITED).build();
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
-		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		long actualAssetLimit = primaryOrg.getLimits().getAssets();
 		
@@ -160,17 +174,64 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	@Test
 	public void should_increase_the_diskspace_limit_from_5M_to_1000MB_when_upgrading_from_Free_to_Plus() throws Exception {
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
-		
 		PrimaryOrg primaryOrg = aPrimaryOrg().withDiskSpaceLimit(5L, DataUnit.MEBIBYTES).build();
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
-		
-		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg));
-		
-		sut.upgradeTo(upgradePackage, mockTransaction);
+		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
 		Long actualDiskSpaceLimit = DataUnit.BYTES.convertTo(primaryOrg.getLimits().getDiskSpaceInBytes(), DataUnit.MEBIBYTES);
 		
 		assertEquals(upgradePackage.getDiskSpaceInMB(), actualDiskSpaceLimit);
+	}
+	
+	
+	
+	@Test
+	public void should_send_upgrade_information_to_subscription_agent() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		PrimaryOrg primaryOrg = aPrimaryOrg().build();
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		
+		sut.upgradeTo(upgradeRequest, mockTransaction);
+		
+		verify(subscriptionAgent);
+	}
+	
+	@Test
+	public void should_not_upgrade_primary_org_when_subscription_agent_reports_failure() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		
+		PrimaryOrg primaryOrg = aPrimaryOrg().withNoExtendedFeatures().withAssetLimit(0L).withDiskSpaceLimit(0L, DataUnit.BYTES).build();
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForFailingUpgrade();
+		
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		
+		sut.upgradeTo(upgradeRequest, mockTransaction);
+		
+		assertTrue(primaryOrg.getExtendedFeatures().isEmpty());
+		assertEquals(new Long(0), primaryOrg.getLimits().getAssets());
+		assertEquals(new Long(0), primaryOrg.getLimits().getDiskSpaceInBytes());
+		verify(subscriptionAgent);
+	}
+
+	private SubscriptionAgent subScriptionAgentForSuccessfulUpgrade() throws CommunicationException {
+		return createSubscriptionAgentForUpgrade(true);
+	}
+	
+	private SubscriptionAgent subScriptionAgentForFailingUpgrade() throws CommunicationException {
+		return createSubscriptionAgentForUpgrade(false);
+	}
+
+	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws CommunicationException {
+		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
+		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andReturn(upgradeResult);
+		replay(subscriptionAgent);
+		return subscriptionAgent;
 	}
 	
 	private OrgSaver successfulOrgSaver(PrimaryOrg primaryOrg) {
@@ -184,8 +245,8 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		private List<ExtendedFeature> requestedFeatureSwitches = new ArrayList<ExtendedFeature>();
 		private List<ExtendedFeatureSwitchTestDouble> featureSwitches = new ArrayList<ExtendedFeatureSwitchTestDouble>();
 		
-		public UpgradeHandlerImplTenatSwitchOverride(PrimaryOrg primaryOrg, OrgSaver orgSaver) {
-			super(primaryOrg, orgSaver);
+		public UpgradeHandlerImplTenatSwitchOverride(PrimaryOrg primaryOrg, OrgSaver orgSaver, SubscriptionAgent subscriptionAgent) {
+			super(primaryOrg, orgSaver, subscriptionAgent);
 		}
 
 		@Override
