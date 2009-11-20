@@ -18,9 +18,11 @@ import com.n4systems.subscription.ValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.client.PricingDetailsClient;
 import com.n4systems.subscription.netsuite.client.ProductDetailsClient;
 import com.n4systems.subscription.netsuite.client.SignUpTenantClient;
+import com.n4systems.subscription.netsuite.client.SubscriptionDetailsClient;
 import com.n4systems.subscription.netsuite.client.UploadNoteClient;
 import com.n4systems.subscription.netsuite.client.ValidatePromoCodeClient;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
+import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
@@ -120,4 +122,23 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		
 		return response;
 	}
+
+	@Override
+	public String currentPackageFor(Long tenantExternalId) throws CommunicationException {
+		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
+		detailsClient.setTenantExternalId(tenantExternalId);
+				
+		GetSubscriptionDetailsResponse response = null;
+		try {
+			response = detailsClient.execute();
+		} catch (IOException e) {
+			throw new CommunicationException();
+		}
+		
+		String packageName = response.getSubscription() != null ? response.getSubscription().getAccountType() : null;
+		
+		return packageName;
+	}
+	
+	
 }
