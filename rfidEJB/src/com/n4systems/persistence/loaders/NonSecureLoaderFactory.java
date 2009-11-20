@@ -2,6 +2,7 @@ package com.n4systems.persistence.loaders;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.downloadlink.AllDownloadLinksByDateLoader;
+import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.product.LastInspectionDateLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.signuppackage.ContractPricingByExternalIdLoader;
@@ -24,6 +25,10 @@ public class NonSecureLoaderFactory {
 		return new ContractPricingByExternalIdLoader();
 	}
 
+	public InspectionBySubInspectionLoader createInspectionBySubInspectionLoader() {
+		return new InspectionBySubInspectionLoader();
+	}
+
 	public LastInspectionDateLoader createLastInspectionDateLoader(Long networkId) {
 		return new LastInspectionDateLoader();
 	}
@@ -31,7 +36,7 @@ public class NonSecureLoaderFactory {
 	public <T extends BaseEntity> NonSecureIdLoader<T> createNonSecureIdLoader(Class<T> clazz) {
 		return new NonSecureIdLoader<T>(clazz);
 	}
-
+	
 	public OrgConnectionExistsLoader createOrgConnectionExistsLoader() {
 		return new OrgConnectionExistsLoader();
 	}
