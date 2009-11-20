@@ -3,11 +3,11 @@ ${action.setPageType('product', 'traceability')!}
 <#list linkedProducts as linkedProduct>
 	<#assign tenant=linkedProduct.tenant/>
 	<h2>
-		<a href="javascript:void(0);" id="criteria_open_${tenant.id}" onclick="openSection('viewSection_${tenant.id}', 'criteria_open_${tenant.id}', 'criteria_close_${tenant.id}');return false"><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
-		<a href="javascript:void(0);" id="criteria_close_${tenant.id}" onclick="closeSection('viewSection_${tenant.id}', 'criteria_close_${tenant.id}', 'criteria_open_${tenant.id}');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif"/>" /></a>				 	
+		<a href="javascript:void(0);" id="criteria_open_${linkedProduct.id}" onclick="openSection('viewSection_${linkedProduct.id}', 'criteria_open_${linkedProduct.id}', 'criteria_close_${linkedProduct.id}');return false"><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
+		<a href="javascript:void(0);" id="criteria_close_${linkedProduct.id}" onclick="closeSection('viewSection_${linkedProduct.id}', 'criteria_close_${linkedProduct.id}', 'criteria_open_${linkedProduct.id}');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif"/>" /></a>				 	
 		<#include "../common/_displayTenantLogo.ftl"/>&nbsp;${linkedProduct.owner.internalOrg.name}
 	</h2>
-	<div class="viewSection" id="viewSection_${tenant.id}" style="display:none;">
+	<div class="viewSection" id="viewSection_${linkedProduct.id}" style="display:none;">
 	<div class="viewSection smallViewSection">
 		<h2><@s.text name="label.productsummary"/></h2>
 		<p>
@@ -43,7 +43,35 @@ ${action.setPageType('product', 'traceability')!}
 			</p>			
 		</#if>	
 	</div>
-	<#include "_customerInformation.ftl" />
+	
+	<div class="viewSection smallViewSection" id="customerInformation" >
+		<#if securityGuard.jobSitesEnabled >
+			<h2><@s.text name="label.siteinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
+			<p>
+				<label><@s.text name="label.assignedto"/></label>
+				<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
+			</p>
+		<#else>	
+			<h2><@s.text name="label.customerinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
+		</#if>
+		
+		
+		
+		
+		<p>
+			<label><@s.text name="label.location"/></label>
+			<span class="fieldValue">${(product.location)!}</span>
+		</p>
+		<p>
+			<label><@s.text name="label.referencenumber"/></label>
+			<span class="fieldValue">${product.customerRefNumber!}</span>
+		</p>
+		<p>
+			<label><@s.text name="label.purchaseorder"/></label>
+			<span class="fieldValue">${product.purchaseOrder!}</span>
+		</p>
+	</div>
+	
 	<#if !linkedProduct.orderedInfoOptionList.isEmpty() >
 		<div class="viewSection smallViewSection" >
 			<h2>${linkedProduct.type.name} <@s.text name="label.attributes"/></h2>

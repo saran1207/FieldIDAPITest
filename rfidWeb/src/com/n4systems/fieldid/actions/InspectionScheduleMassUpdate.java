@@ -28,7 +28,6 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 
 	public InspectionScheduleMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
-		
 	}
 	
 	@SkipValidation
@@ -54,7 +53,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 			
 			Long results;
 			String messageKey;
-			if (select.containsKey("removeIncomplete")) {
+			if (select.get("removeIncomplete") == true) {
 				messageKey = "message.inspectionschedulemassremovesuccessful";
 				
 				results = massUpdateManager.deleteInspectionSchedules(scheduleIds);
