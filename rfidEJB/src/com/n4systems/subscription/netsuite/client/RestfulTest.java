@@ -2,22 +2,7 @@ package com.n4systems.subscription.netsuite.client;
 
 import java.io.IOException;
 
-import com.n4systems.subscription.AddressInfo;
-import com.n4systems.subscription.CreditCard;
-import com.n4systems.subscription.CreditCardType;
-import com.n4systems.subscription.PaymentFrequency;
-import com.n4systems.subscription.Response;
-import com.n4systems.subscription.SignUpTenantResponse;
-import com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent;
-import com.n4systems.subscription.netsuite.model.GetItemDetailsResponse;
-import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
-import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
-import com.n4systems.subscription.netsuite.model.NetsuiteClient;
-import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
-import com.n4systems.subscription.netsuite.model.NetsuiteTenant;
-import com.n4systems.subscription.netsuite.model.UpgradeSubscription;
-import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class RestfulTest {
 
@@ -191,7 +176,7 @@ public class RestfulTest {
 		*/
 	}
 	
-	private static NetsuiteSubscription populateTestSubscription() {
+	/*private static NetsuiteSubscription populateTestSubscription() {
 		NetsuiteSubscription subscription = new NetsuiteSubscription();
 		subscription.setFrequency(PaymentFrequency.Monthly);
 		subscription.setMonths(12);
@@ -249,6 +234,6 @@ public class RestfulTest {
 		addressInfo.setPostal("M5T1X4");
 		
 		return addressInfo;
-	}
+	}*/
 	
 }
