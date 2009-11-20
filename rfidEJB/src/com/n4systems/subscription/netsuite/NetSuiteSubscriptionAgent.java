@@ -137,7 +137,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 			throw new CommunicationException();
 		}
 		
-		String packageName = response.getSubscription() != null ? response.getSubscription().getAccountType() : null;
+		String packageName = response.getSubscription() != null ? response.getSubscription().getFieldid() : null;
 		
 		return packageName;
 	}
