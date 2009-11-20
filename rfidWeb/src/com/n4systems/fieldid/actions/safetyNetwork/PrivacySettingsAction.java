@@ -15,7 +15,8 @@ public class PrivacySettingsAction extends AbstractAction {
 	private final OrgSaver saver;
 	
 	private boolean autoPublish;
-
+	private boolean autoAcceptConnections;
+	
 	public PrivacySettingsAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.saver = new OrgSaver();
@@ -24,6 +25,7 @@ public class PrivacySettingsAction extends AbstractAction {
 	public String doShow() {
 		
 		autoPublish = getPrimaryOrg().isAutoPublish();
+		autoAcceptConnections = getPrimaryOrg().isAutoAcceptConnections();
 		
 		return SUCCESS;
 	}
@@ -31,6 +33,7 @@ public class PrivacySettingsAction extends AbstractAction {
 	public String doSave() {
 		PrimaryOrg primaryOrg = getPrimaryOrg();
 		primaryOrg.setAutoPublish(autoPublish);
+		primaryOrg.setAutoAcceptConnections(autoAcceptConnections);
 		saver.saveOrUpdate(primaryOrg);
 		addFlashMessageText("label.settings_updated");
 		return SUCCESS;
@@ -43,5 +46,14 @@ public class PrivacySettingsAction extends AbstractAction {
 	public void setAutoPublish(boolean autoPublish) {
 		this.autoPublish = autoPublish;
 	}
+
+	public boolean isAutoAcceptConnections() {
+		return autoAcceptConnections;
+	}
+
+	public void setAutoAcceptConnections(boolean autoAcceptConnections) {
+		this.autoAcceptConnections = autoAcceptConnections;
+	}
+	
 
 }

@@ -64,6 +64,10 @@ public class PrimaryOrg extends InternalOrg {
 	
 	@Column(name="autopublish", nullable=false)
 	private boolean autoPublish;
+	
+	@Column(name="autoaccept", nullable=false)
+	private boolean autoAcceptConnections;
+	
 
 	public PrimaryOrg() {}
 	
@@ -193,6 +197,14 @@ public class PrimaryOrg extends InternalOrg {
 
 	public void setAutoPublish(boolean autoPublish) {
 		this.autoPublish = autoPublish;
+	}
+
+	public boolean isAutoAcceptConnections() {
+		return autoAcceptConnections;
+	}
+
+	public void setAutoAcceptConnections(boolean autoAcceptConnections) {
+		this.autoAcceptConnections = autoAcceptConnections;
 	}
 
 	public PrimaryOrg enhance(SecurityLevel level) {

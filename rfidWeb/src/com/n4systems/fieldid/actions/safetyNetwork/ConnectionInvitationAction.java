@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.message.MessageDecorator;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -19,8 +19,11 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -54,10 +57,9 @@ public class ConnectionInvitationAction extends AbstractAction {
 	private MessageDecorator message = new MessageDecorator(new Message());
 	
 	
-	public ConnectionInvitationAction(PersistenceManager persistenceManager) {
+	public ConnectionInvitationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
-	
 
 	@SkipValidation
 	public String doRemoteOrgs() {
@@ -77,44 +79,69 @@ public class ConnectionInvitationAction extends AbstractAction {
 	}
 	
 	public String doCreate() {
+		Transaction transaction = null;
 		try {
-			CreateSafetyNetworkConnectionMessageCommand command = new CreateSafetyNetworkConnectionMessageCommand();
+			transaction = PersistenceManager.startTransaction();
 			
-			switch (connectionType) {
-				case CUSTOMER:
-					command.setCustomerOrgId(remoteOrg.getId());
-					command.setVendorOrgId(localOrg.getId());
-					break;
-				case VENDOR:
-					command.setCustomerOrgId(localOrg.getId());
-					command.setVendorOrgId(remoteOrg.getId());
-					break;
+			CreateSafetyNetworkConnectionMessageCommand command = createCommand(transaction);
+			
+			String feedbackMessage;
+			if (remoteOrg.getPrimaryOrg().isAutoAcceptConnections()) {
+				feedbackMessage = "message.invitation_accepted";
+				autoAcceptConnection(command, transaction);
+			} else {
+				feedbackMessage = "message.invitation_sent";
+				sendInvitationMessage(command, transaction);
 			}
 			
-			
-			new MessageCommandSaver().save(command);
-						
-			Message realMessage = message.realMessage();
-				
-			realMessage.setSender(localOrg);
-			realMessage.setReceiver(remoteOrg);
-				
-			realMessage.setCommand(command);
-				
-			new MessageSaver().save(realMessage);
-						
-			addFlashMessageText("message.invitation_sent");
+			PersistenceManager.finishTransaction(transaction);
+			addFlashMessageText(feedbackMessage);
 		} catch(Exception e) {
+			PersistenceManager.rollbackTransaction(transaction);
 			logger.error("Failed while sending OrgConnection request", e);
 			addActionErrorText("error.failed_send_invitation");
-			
 			return ERROR;
 		}
 		
 		return SUCCESS;
 	}
-	
 
+	private void autoAcceptConnection(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
+		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(ConfigContext.getCurrentContext());
+		processor.setNonSecureLoaderFactory(getNonSecureLoaderFactory());
+		processor.setActor(getUser());
+		processor.process(command, transaction);
+	}
+
+	private void sendInvitationMessage(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
+		Message realMessage = message.realMessage();
+			
+		realMessage.setSender(localOrg);
+		realMessage.setReceiver(remoteOrg);
+			
+		realMessage.setCommand(command);
+			
+		new MessageSaver().save(transaction, realMessage);
+	}
+
+	private CreateSafetyNetworkConnectionMessageCommand createCommand(Transaction transaction) {
+		CreateSafetyNetworkConnectionMessageCommand command = new CreateSafetyNetworkConnectionMessageCommand();
+		
+		switch (connectionType) {
+			case CUSTOMER:
+				command.setCustomerOrgId(remoteOrg.getId());
+				command.setVendorOrgId(localOrg.getId());
+				break;
+			case VENDOR:
+				command.setCustomerOrgId(localOrg.getId());
+				command.setVendorOrgId(remoteOrg.getId());
+				break;
+		}
+		
+		
+		new MessageCommandSaver().save(transaction, command);
+		return command;
+	}
 
 	public String getConnectionType() {
 		return connectionType.name();
