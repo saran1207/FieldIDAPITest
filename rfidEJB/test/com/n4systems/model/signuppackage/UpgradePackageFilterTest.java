@@ -14,9 +14,9 @@ public class UpgradePackageFilterTest {
 	@Test
 	public void should_find_all_package_above_free_for_a_free_account() throws Exception {
 		SignUpPackageDetails currentPackage = SignUpPackageDetails.Free;
-		List<SignUpPackageDetails> expectedPackages = new FluentArrayList<SignUpPackageDetails>(SignUpPackageDetails.Basic, SignUpPackageDetails.Plus, SignUpPackageDetails.Enterprise, SignUpPackageDetails.Unlimited);
+		List<SignUpPackage> expectedPackages = getSignUpPackages(SignUpPackageDetails.Basic, SignUpPackageDetails.Plus, SignUpPackageDetails.Enterprise, SignUpPackageDetails.Unlimited);
 		
-		List<SignUpPackageDetails> actualPackages = new UpgradePackageFilter(currentPackage).availablePackages();
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
@@ -24,9 +24,9 @@ public class UpgradePackageFilterTest {
 	@Test
 	public void should_find_all_package_above_plus_for_a_plus_account() throws Exception {
 		SignUpPackageDetails currentPackage = SignUpPackageDetails.Plus;
-		List<SignUpPackageDetails> expectedPackages = new FluentArrayList<SignUpPackageDetails>(SignUpPackageDetails.Enterprise, SignUpPackageDetails.Unlimited);
+		List<SignUpPackage> expectedPackages = getSignUpPackages(SignUpPackageDetails.Enterprise, SignUpPackageDetails.Unlimited);
 		
-		List<SignUpPackageDetails> actualPackages = new UpgradePackageFilter(currentPackage).availablePackages();
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
@@ -34,15 +34,15 @@ public class UpgradePackageFilterTest {
 	@Test
 	public void should_find_no_package_above_an_unlimited_account() throws Exception {
 		SignUpPackageDetails currentPackage = SignUpPackageDetails.Unlimited;
-		List<SignUpPackageDetails> expectedPackages = new FluentArrayList<SignUpPackageDetails>();
+		List<SignUpPackage> expectedPackages = new FluentArrayList<SignUpPackage>();
 		
-		List<SignUpPackageDetails> actualPackages = new UpgradePackageFilter(currentPackage).availablePackages();
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
 	
 	@Test
-	public void should_reduce_list_of_sign_up_packages_to_the_list() throws Exception {
+	public void should_reduce_list_of_sign_up_packages_to_the_list_minus_the_free_account() throws Exception {
 		List<SignUpPackage> allFullPackages = getSignUpPackages();
 		
 		
@@ -51,16 +51,64 @@ public class UpgradePackageFilterTest {
 		expectedPackages.remove(0);
 		
 		
-		List<SignUpPackage> actualPackages = new UpgradePackageFilter(currentPackage).reduceToAvailablePackages(allFullPackages);
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(allFullPackages);
+		
+		assertEquals(expectedPackages, actualPackages);
+	}
+	
+	@Test
+	public void should_find_no_packages_if_the_current_package_is_null_which_means_legacy() throws Exception {
+		SignUpPackageDetails currentPackage = SignUpPackageDetails.getLegacyPackage();
+		List<SignUpPackage> expectedPackages = new FluentArrayList<SignUpPackage>();
+		
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
 	
 	
 	
+	@Test
+	public void should_find_name_of_current_package() throws Exception {
+		SignUpPackageDetails currentPackage = SignUpPackageDetails.Free;
+		
+		assertEquals(currentPackage.getName(), UpgradePackageFilter.createUpgradePackageFilter(currentPackage).getPackageName());
+	}
+	
+	@Test
+	public void should_find_name_of_current_package_when_it_is_legacy_package() throws Exception {
+		SignUpPackageDetails currentPackage = SignUpPackageDetails.getLegacyPackage();
+		
+		assertEquals("Legacy", UpgradePackageFilter.createUpgradePackageFilter(currentPackage).getPackageName());
+	}
+	
+	
+	
+	@Test
+	public void should_not_be_upgradable() throws Exception {
+		
+		assertFalse(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.getLegacyPackage()).isUpgradable());
+		assertFalse(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Unlimited).isUpgradable());
+	}
+	
+	@Test
+	public void should_be_upgradable() throws Exception {
+		
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Free).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Basic).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Plus).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Enterprise).isUpgradable());
+	}
+
+	
+	
 	private List<SignUpPackage> getSignUpPackages() {
+		return getSignUpPackages(SignUpPackageDetails.values());
+	}
+	
+	private List<SignUpPackage> getSignUpPackages(SignUpPackageDetails...packageDetails) {
 		List<SignUpPackage> packages = new ArrayList<SignUpPackage>();
-		for (SignUpPackageDetails signUpPackageDetail : SignUpPackageDetails.values()) {
+		for (SignUpPackageDetails signUpPackageDetail : packageDetails) {
 			packages.add(new SignUpPackage(signUpPackageDetail, new ArrayList<ContractPricing>()));
 		}
 		

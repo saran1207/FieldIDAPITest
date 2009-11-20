@@ -1,4 +1,3 @@
-
 <head>
 	<style type="text/css">
 		#previewImage {
@@ -76,7 +75,10 @@ ${action.setPageType('account_settings', 'show')!}
 		<div class="infoSet">
 			<label><@s.text name="label.your_current_package"/></label>
 			<span class="fieldHolder">
-				${(tenant.currentPlan.name?html)!}  <a href="<@s.url action="accountUpgrade"/>"><@s.text name="label.upgrade_your_account"/></a>
+				${(action.currentPackageFilter().packageName?html)!}  
+				<#if userSecurityGuard.allowedAccessWebStore && action.currentPackageFilter().upgradable>
+					<a href="<@s.url action="accountUpgrade"/>"><@s.text name="label.upgrade_your_account"/></a>
+				</#if>
 			</span>
 		</div>
 		<div class="infoSet">

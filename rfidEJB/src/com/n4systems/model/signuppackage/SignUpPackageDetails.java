@@ -26,6 +26,10 @@ public enum SignUpPackageDetails {
 	
 	
 	public static SignUpPackageDetails retrieveBySyncId(String syncId) {
+		if (syncId == null) {
+			return getLegacyPackage();
+		}
+		
 		for (SignUpPackageDetails signUpPackageDetails : SignUpPackageDetails.values()) {
 			if (signUpPackageDetails.getSyncId().equals(syncId)) {
 				return signUpPackageDetails;
@@ -34,6 +38,11 @@ public enum SignUpPackageDetails {
 		
 		return null;
 	}
+	
+	public static SignUpPackageDetails getLegacyPackage() {
+		return null;
+	}
+	
 	
 	private static final SignUpPackageDetails PREFERRED_PACKAGE = SignUpPackageDetails.Enterprise;
 	private String syncId;

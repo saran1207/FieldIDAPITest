@@ -9,10 +9,12 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.signup.AccountHelper;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
@@ -22,6 +24,8 @@ import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
+	private AccountHelper accountHelper; 
+	
 	private PrimaryOrg primaryOrg;
 	private File uploadedImage;
 	private String imageDirectory;
@@ -40,8 +44,14 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		initMemberFields();
-
 	}
+	
+	@Override
+	protected void postInit() {
+		super.postInit();
+		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg());
+	}
+
 
 	@SkipValidation
 	public String doEdit() {
@@ -145,5 +155,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 		}
 		
 		return true;
+	}
+	
+	public UpgradePackageFilter currentPackageFilter() {
+		return accountHelper.currentPackageFilter();
 	}
 }

@@ -95,6 +95,25 @@ public class SignUpPackage {
 		ExtendedFeature featureToLookUp = ExtendedFeature.valueOf(feature);
 		return signPackageDetails.includesFeature(featureToLookUp);
 	}
+
+	@Override
+	public int hashCode() {
+		return signPackageDetails.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		SignUpPackage other = (SignUpPackage) obj;
+				
+		return (signPackageDetails.equals(other.signPackageDetails));
+	}
+	
+	
 	
 	
 }

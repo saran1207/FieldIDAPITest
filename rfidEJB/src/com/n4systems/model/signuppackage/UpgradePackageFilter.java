@@ -1,36 +1,30 @@
 package com.n4systems.model.signuppackage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class UpgradePackageFilter {
 
-	private final SignUpPackageDetails currentPackage;
+
+
+public abstract class UpgradePackageFilter {
 	
-	public UpgradePackageFilter(SignUpPackageDetails currentPackage) {
-		this.currentPackage = currentPackage;
+	public static UpgradePackageFilter createUpgradePackageFilter(SignUpPackage currentPackage) {
+		return createUpgradePackageFilter(currentPackage.getSignPackageDetails());
 	}
 	
-	public UpgradePackageFilter(SignUpPackage currentPackage) {
-		this.currentPackage = currentPackage.getSignPackageDetails();
-	}
-
-	protected List<SignUpPackageDetails> availablePackages() {
-		List<SignUpPackageDetails> listOfPackageDetails = Arrays.asList(SignUpPackageDetails.values());
-		int currentPackageIndex = listOfPackageDetails.indexOf(currentPackage);
-		return listOfPackageDetails.subList(currentPackageIndex + 1, listOfPackageDetails.size()); 
-	}
-
-	public List<SignUpPackage> reduceToAvailablePackages(List<SignUpPackage> allFullPackages) {
-		List<SignUpPackage> filteredPackages = new ArrayList<SignUpPackage>();
-		for (SignUpPackage signUpPackage : allFullPackages) {
-			if (availablePackages().contains(signUpPackage.getSignPackageDetails())) {
-				filteredPackages.add(signUpPackage);
-			}
+	public static UpgradePackageFilter createUpgradePackageFilter(SignUpPackageDetails currentPackage) {
+		
+		if (currentPackage == SignUpPackageDetails.getLegacyPackage() ) {
+			return new LegacyUpgradePackageFilter();
 		}
-		return filteredPackages;
+		
+		return new UpgradePackageFilterSignUpBacked(currentPackage);
 	}
 	
+	
+	public abstract List<SignUpPackage> reduceToAvailablePackages(List<SignUpPackage> allFullPackages);
 
+	public abstract String getPackageName();
+	
+	public abstract boolean isUpgradable();
+	
 }

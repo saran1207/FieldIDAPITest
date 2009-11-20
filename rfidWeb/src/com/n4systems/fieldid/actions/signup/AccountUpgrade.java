@@ -5,7 +5,8 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
@@ -14,22 +15,45 @@ import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
-import com.n4systems.subscription.CommunicationException;
-import com.n4systems.subscription.SubscriptionAgent;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
-public class AccountUpgrade extends AbstractAction {
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
+public class AccountUpgrade extends AbstractCrud {
 
 	private List<SignUpPackage> availablePackagesForUpdate;
 
 
 	private SignUpPackage upgradePackage;
 
+	private AccountHelper accountHelper;
+	
+	
+
 	public AccountUpgrade(PersistenceManager persistenceManager) {
 		super(persistenceManager);
+		
 	}
+
+	
+	@Override
+	protected void initMemberFields() {
+	}
+	@Override
+	protected void loadMemberFields(Long uniqueId) {
+	}
+	
+	
+
+	@Override
+	protected void postInit() {
+		super.postInit();
+		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg());
+	}
+
 
 
 	@SkipValidation
@@ -81,20 +105,14 @@ public class AccountUpgrade extends AbstractAction {
 	}
 
 
-	public SignUpPackageDetails currentPackage() {
-		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
-		
-		try {
-			return SignUpPackageDetails.retrieveBySyncId(subscriptionAgent.currentPackageFor(getPrimaryOrg().getExternalId()));
-		} catch (CommunicationException e) {
-			return null;
-		} 
+	public UpgradePackageFilter currentPackageFilter() {
+		return accountHelper.currentPackageFilter();
 	}
 	
 	public List<SignUpPackage> getPackages() {
 		if (availablePackagesForUpdate == null) {
 			List<SignUpPackage> fullPackageList = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
-			availablePackagesForUpdate = new UpgradePackageFilter(currentPackage()).reduceToAvailablePackages(fullPackageList);
+			availablePackagesForUpdate = currentPackageFilter().reduceToAvailablePackages(fullPackageList);
 		}
 		return availablePackagesForUpdate;
 	}
@@ -111,5 +129,9 @@ public class AccountUpgrade extends AbstractAction {
 		upgradePackage = loader.setSignUpPackageTarget(targetPackage).load();
 		
 	}
+
+
+
+	
 
 }
