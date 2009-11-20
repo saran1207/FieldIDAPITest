@@ -2,7 +2,8 @@ package com.n4systems.subscription.netsuite.client;
 
 import java.io.IOException;
 
-import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
+import com.n4systems.subscription.netsuite.model.NetSuiteUpgradeSubscription;
+import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class RestfulTest {
 
@@ -129,7 +130,8 @@ public class RestfulTest {
 			e.printStackTrace();
 		}
 		*/
-		
+
+		/*
 		ValidatePromoCodeClient promoClient = new ValidatePromoCodeClient();
 		promoClient.setCode("SOMETHING");
 		
@@ -145,10 +147,23 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		/*
+		ProductDetailsClient productDetailsClient = new ProductDetailsClient();
+		try {
+			GetItemDetailsResponse response = productDetailsClient.execute();
+			System.out.println(response.getDetails());
+		} catch (IOException e) {
+			
+		}
+		*/
+
+		/*
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
-		detailsClient.setTenantExternalId(5187L);
+		// detailsClient.setTenantExternalId(6457324234L); // Bullshit 
+		// detailsClient.setTenantExternalId(1142L); // Known but no subscription record 
+		detailsClient.setTenantExternalId(6457L); // Known
 		try {
 			GetSubscriptionDetailsResponse subResponse = detailsClient.execute();
 			if (subResponse.getSubscription() == null) {
@@ -159,7 +174,27 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
+		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
+		NetSuiteUpgradeSubscription upgradeSubscription = new NetSuiteUpgradeSubscription();
+		upgradeSubscription.setTenantExternalId(6457L);
+		upgradeSubscription.setContractExternalId(143L);
+		upgradeSubscription.setNewUsers(10);
+		upgradeSubscription.setShowPriceOnly(true);
+		upgradeClient.setUpgradeSubscription(upgradeSubscription);
+		
+		UpgradeSubscriptionResponse upgradeResponse = null;
+		
+		try {
+			upgradeResponse = upgradeClient.execute();
+			System.out.println("Upgrade cost: "+upgradeResponse.getUpgradesubscription().getUpgrade_cost());
+			System.out.println("Next payment: "+upgradeResponse.getUpgradesubscription().getNext_payment());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/*
 		PricingDetailsClient pricingClient = new PricingDetailsClient();
 		pricingClient.setSubscription(populateTestSubscription());
 		

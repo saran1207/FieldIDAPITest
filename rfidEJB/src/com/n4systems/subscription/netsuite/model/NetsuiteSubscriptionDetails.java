@@ -12,6 +12,7 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 	private String nextbillingdate;
 	private String storage;
 	private String phonesupport;
+	private String fieldid;
 	
 	public void setTenantid(Long tenantid) {
 		this.tenantid = tenantid;
@@ -77,4 +78,11 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 		return tenantid;
 	}
 
+	public String getFieldid() {
+		return fieldid;
+	}
+
+	public void setFieldid(String fieldid) {
+		this.fieldid = fieldid;
+	}
 }
