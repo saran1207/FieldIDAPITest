@@ -749,7 +749,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				observationType = ObservationType.DEFICIENCY;
 				break;
 			case RECOMMENDATION:
-				observationType = ObservationType.RECOMMENDATION;
+				observationType = ObservationType.RECOMENDATION;
 				break;
 		}
 		return observationType;
