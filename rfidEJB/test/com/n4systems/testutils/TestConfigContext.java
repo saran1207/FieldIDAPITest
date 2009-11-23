@@ -14,6 +14,10 @@ public class TestConfigContext extends ConfigContext {
 		return textContext;
 	}
 	
+	public static void resetToDefaultContext() {
+		ConfigContext.setCurrentContext(null);
+	}
+	
 	private void setAsCurrentContext() {
 		markClean();
 		ConfigContext.setCurrentContext(this);

@@ -68,10 +68,11 @@ public class InspectionAttachmentSaverTest {
 	}
 	
 	@After
-	public void cleanup_temp_files() throws IOException {
+	public void cleanup_temp_files_and_config_context() throws IOException {
 		if (appRoot.exists()) {
 			FileUtils.deleteDirectory(appRoot);
 		}
+		TestConfigContext.resetToDefaultContext();
 	}
 	
 	@Test
