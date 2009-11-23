@@ -55,6 +55,14 @@ public class ConfigContext {
 		dirty.set(true);
 	}
 	
+	protected void markClean() {
+		dirty.set(false);
+	}
+	
+	protected boolean isDirty() {
+		return dirty.get();
+	}
+	
 	/**
 	 * Reloads the master configuration list.
 	 */
@@ -73,7 +81,7 @@ public class ConfigContext {
 		try {
 			// load all configs from the PersistenceManager.
 			configruations.addAll(ServiceLocator.getPersistenceManager().findAll(Configuration.class));
-			dirty.set(false);
+			markClean();
 		} catch(Exception e) {
 			logger.error("Failed loading configurations", e);
 		}
@@ -87,7 +95,7 @@ public class ConfigContext {
 	 * @return The master list of configurations
 	 */
 	private CopyOnWriteArrayList<Configuration> getConfigruations() {
-		if(dirty.get()) {
+		if(isDirty()) {
 			// if the list is dirty, reload the configs
 			reloadConfigurations();
 		}	

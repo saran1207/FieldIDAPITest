@@ -9,9 +9,9 @@ import java.io.OutputStream;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.io.IOUtils;
-import org.jboss.util.NotImplementedException;
 
 import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -39,7 +39,7 @@ public class InspectionAttachmentSaver extends Saver<FileAttachment> {
 		em.merge(targetInspection);
 	}
 	
-	private void writeFileToDisk( FileAttachment attachment) {
+	private void writeFileToDisk(FileAttachment attachment) {
 		File path = resolveAttachmentPath(attachment);
 		
 		// need to ensure the parent directory exists
@@ -59,14 +59,12 @@ public class InspectionAttachmentSaver extends Saver<FileAttachment> {
 	}
 	
 	private File resolveAttachmentPath(FileAttachment attachment) {
-		File attachmentDir;
+		File attachmentFile;
 		if (subInspection == null) {
-			attachmentDir = PathHandler.getAttachmentFile(inspection);
+			attachmentFile = PathHandler.getInspectionAttachmentFile(inspection, attachment);
 		} else {
-			attachmentDir = PathHandler.getAttachmentFile(inspection, subInspection);
+			attachmentFile = PathHandler.getInspectionAttachmentFile(inspection, subInspection, attachment);
 		}
-		
-		File attachmentFile = new File(attachmentDir, attachment.getFileName());
 		return attachmentFile;
 	}
 

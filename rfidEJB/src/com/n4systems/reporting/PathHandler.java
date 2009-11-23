@@ -351,6 +351,14 @@ public class PathHandler {
 	private static String getNotePath(ProductAttachment note) {
 		return note.getId().toString();
 	}
+
+	public static File getInspectionAttachmentFile(Inspection inspection, SubInspection subInspection, FileAttachment attachment) {
+		return new File(getAttachmentFile(inspection, subInspection), attachment.getFileName());
+	}
+	
+	public static File getInspectionAttachmentFile(Inspection inspection, FileAttachment attachment) {
+		return new File(getAttachmentFile(inspection), attachment.getFileName());
+	}
 	
 	public static File getAttachmentFile(Inspection inspection, SubInspection subInspection ) {
 		return absolutize(mergePaths(getInspectionAttachmentBasePath(inspection.getTenant()), getAttachmentPath(inspection), getSubInspectionPath(subInspection)));
