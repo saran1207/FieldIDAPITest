@@ -3,7 +3,6 @@ package com.n4systems.subscription.netsuite;
 import java.io.IOException;
 import java.util.List;
 
-import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.BillingInfoField;
 import com.n4systems.subscription.CommunicationException;
@@ -21,12 +20,14 @@ import com.n4systems.subscription.netsuite.client.PricingDetailsClient;
 import com.n4systems.subscription.netsuite.client.ProductDetailsClient;
 import com.n4systems.subscription.netsuite.client.SignUpTenantClient;
 import com.n4systems.subscription.netsuite.client.SubscriptionDetailsClient;
+import com.n4systems.subscription.netsuite.client.UpgradeSubscriptionClient;
 import com.n4systems.subscription.netsuite.client.UploadNoteClient;
 import com.n4systems.subscription.netsuite.client.ValidatePromoCodeClient;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
+import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
@@ -144,7 +145,18 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	
 	@Override
 	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
-		throw new NotImplementedException();
+		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
+		upgradeClient.setUpgradeSubscription(upgradeSubscription);
+		
+		UpgradeSubscriptionResponse response = null;
+		
+		try {
+			response = upgradeClient.execute();
+		} catch (IOException e) {
+			throw new CommunicationException();
+		}
+		
+		return response != null ? response.getResult().equals("OK") : false;
 	}
 
 	@Override

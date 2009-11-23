@@ -26,7 +26,8 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 		}
 		addRequestParameter("newusers", upgradeSubscription.getNewUsers().toString());
 		addRequestParameter("storageinc", upgradeSubscription.getStorageIncrement().toString());
-		addRequestParameter("showpriceonly", upgradeSubscription.isShowPriceOnly() ? "T" : "F");
+		//addRequestParameter("showpriceonly", upgradeSubscription.isShowPriceOnly() ? "T" : "F");
+		addRequestParameter("showpriceonly", "T");
 	}
 
 	private void addSubscriptionRequestParameters(Subscription subscription) {
