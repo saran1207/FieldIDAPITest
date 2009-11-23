@@ -57,7 +57,6 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -487,60 +486,57 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		inspection.setProductStatus(convertProductStatus(inspectionServiceDTO));	
 		
-		inspection.getAttachments().addAll( convertToFileAttachments(inspectionServiceDTO.getImages(), tenant, inspector) );
+		inspection.getAttachments().addAll( convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, inspector) );
 		
 		return inspection;
 	}
 	
-	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException {
-
-		List<ImageServiceDTO> images = new ArrayList<ImageServiceDTO>();
-		images.add(inspectionImageServiceDTO.getImage());
-		
+	public FileAttachment convert(AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException {
 		return convertToFileAttachment(inspectionImageServiceDTO.getImage(), inspection.getTenant(), inspector);
 
 	}
 	
 	private FileAttachment convertToFileAttachment(ImageServiceDTO imageServiceDTO, Tenant tenant, UserBean modifiedBy) throws IOException {
-
+		// some files come prepended with a '\'.  We should remove these here.
+		String fileName = imageServiceDTO.getFileName().replace("\\", "");
 		
-		List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>(); 
+		FileAttachment fileAttachment = new FileAttachment(tenant, modifiedBy, fileName);
+		fileAttachment.setComments(imageServiceDTO.getComments());
 		
-		List<ImageServiceDTO> images = new ArrayList<ImageServiceDTO>();
-		images.add(imageServiceDTO);
-
-		fileAttachments = convertToFileAttachments(images, tenant, modifiedBy);
-		
-		return fileAttachments.get(0);
-		
+		return fileAttachment;
 	}
 	
-	private List<FileAttachment> convertToFileAttachments(List<ImageServiceDTO> images, Tenant tenant, UserBean modifiedBy) throws IOException {
-
+	private FileAttachment convertFileAttachmentAndWriteToTemp(ImageServiceDTO imageServiceDTO, Tenant tenant, UserBean modifiedBy) throws IOException {
+		FileAttachment fileAttachment = null;
+		
+		try {
+			File tempImageFile = PathHandler.getTempFile(imageServiceDTO.getFileName());
+			tempImageFile.getParentFile().mkdirs();
+			
+			FileOutputStream fileOut = new FileOutputStream(tempImageFile);
+			fileOut.write(imageServiceDTO.getImage());
+			
+			// Must get the full path name and then remove the temporary root path to conform to how the processor accepts it
+			String fileName = tempImageFile.getPath();
+			fileName = fileName.substring(fileName.indexOf(PathHandler.getTempRoot().getPath()) +  PathHandler.getTempRoot().getPath().length());
+			
+			fileAttachment = new FileAttachment(tenant, modifiedBy, fileName);
+			fileAttachment.setComments(imageServiceDTO.getComments());
+		
+		} catch (IOException e) {
+			logger.error("Problem saving images from mobile", e);
+			throw e;
+		}
+		
+		return fileAttachment;
+	}
+	
+	private List<FileAttachment> convertToFileAttachmentsAndWriteToTemp(List<ImageServiceDTO> images, Tenant tenant, UserBean modifiedBy) throws IOException {
 		List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>(); 
 		
 		if (images != null) {
 			for (ImageServiceDTO imageServiceDTO : images) {
-				try {
-					File tempImageFile = PathHandler.getTempFile(imageServiceDTO.getFileName());
-					tempImageFile.getParentFile().mkdirs();
-					
-					FileOutputStream fileOut = new FileOutputStream(tempImageFile);
-					fileOut.write(imageServiceDTO.getImage());
-					
-					// Must get the full path name and then remove the temporary root path to conform to how the processor accepts it
-					String fileName = tempImageFile.getPath();
-					fileName = fileName.substring(fileName.indexOf(PathHandler.getTempRoot().getPath()) +  PathHandler.getTempRoot().getPath().length());
-					
-					FileAttachment fileAttachment = new FileAttachment(tenant, modifiedBy, fileName);
-					fileAttachment.setComments(imageServiceDTO.getComments());
-					
-					fileAttachments.add(fileAttachment);
-					
-				} catch (IOException e) {
-					logger.error("Problem saving images from mobile", e);	
-					throw e;
-				}
+				fileAttachments.add(convertFileAttachmentAndWriteToTemp(imageServiceDTO, tenant, modifiedBy));
 			}
 		}
 		
@@ -551,7 +547,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		SubInspection subInspection = new SubInspection();
 		populate(subInspection, subInspectionServiceDTO, tenant);
 		subInspection.setName(subInspectionServiceDTO.getName());
-		subInspection.getAttachments().addAll( convertToFileAttachments(subInspectionServiceDTO.getImages(), tenant, inspector) );
+		subInspection.getAttachments().addAll( convertToFileAttachmentsAndWriteToTemp(subInspectionServiceDTO.getImages(), tenant, inspector) );
 		
 		return subInspection;
 	}

@@ -45,6 +45,7 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
@@ -90,7 +91,6 @@ import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
-import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionListResponse;
@@ -941,42 +941,39 @@ public class DataServiceImpl implements DataService {
 		Long tenantId = requestInformation.getTenantId();
 		
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		InspectionManager inspectionManager = ServiceLocator.getInspectionManager();
 		User userManager = ServiceLocator.getUser();
-		
-		FileAttachment newFileAttachment = null;
-		
 		try {
 
 			UserBean inspector = userManager.findUserBean(inspectionImageServiceDTO.getInspectorId());
 			
-			//1. find out inspection using inspection Mobile Guid
-			Inspection inspection = null;
-			SubInspection subInspection = null;
+			InspectionAttachmentSaver attachmentSaver = new InspectionAttachmentSaver();
+			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
 			
+			//1. find out inspection using inspection Mobile Guid
+			AbstractInspection targetInspection;
 			if (inspectionImageServiceDTO.isFromSubInspection()) {
 				InspectionByMobileGuidLoader<SubInspection> loader = new InspectionByMobileGuidLoader<SubInspection>(new TenantOnlySecurityFilter(tenantId), SubInspection.class);
-				subInspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
+				SubInspection subInspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
 				InspectionBySubInspectionLoader masterInspectionLoader = new InspectionBySubInspectionLoader();
 				masterInspectionLoader.setSubInspection(subInspection);
+				Inspection masterInspection = masterInspectionLoader.load();
 				
-				//2. convert Inspection image
-				newFileAttachment = converter.convert(subInspection, inspectionImageServiceDTO, inspector);
-				subInspection.getAttachments().add(newFileAttachment);
-				
-				//3. persist image file
-				inspectionManager.createInspectionImage("", masterInspectionLoader.load(), subInspection, newFileAttachment);
+				attachmentSaver.setInspection(masterInspection);
+				attachmentSaver.setSubInspection(subInspection);
+
+				targetInspection = subInspection;
 			} else {
 				InspectionByMobileGuidLoader<Inspection> loader = new InspectionByMobileGuidLoader<Inspection>(new TenantOnlySecurityFilter(tenantId), Inspection.class);
-				inspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
+				Inspection inspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
-				newFileAttachment = converter.convert(inspection, inspectionImageServiceDTO, inspector);
-				inspection.getAttachments().add(newFileAttachment);
+				attachmentSaver.setInspection(inspection);
 				
-				inspectionManager.createInspectionImage("", inspection, null, newFileAttachment);
+				targetInspection = inspection;
 			}
 			
+			FileAttachment newFileAttachment = converter.convert(targetInspection, inspectionImageServiceDTO, inspector);
+			attachmentSaver.save(newFileAttachment);
 				
 		} catch (Exception e) {
 			logger.error( "failed while processing inspection image", e );
@@ -985,7 +982,6 @@ public class DataServiceImpl implements DataService {
 		
 		return response;
 	}
-	
 	
 	private List<SubProduct> subProductNotAlreadyAdded(Product masterProduct, List<SubProduct> subProducts) {
 		List<SubProduct> notAddedSubProducts = new ArrayList<SubProduct>();
