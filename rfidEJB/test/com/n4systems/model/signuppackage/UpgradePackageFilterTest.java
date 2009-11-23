@@ -1,5 +1,6 @@
 package com.n4systems.model.signuppackage;
 
+import static com.n4systems.model.builders.SignUpPackageBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -7,36 +8,38 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.n4systems.subscription.PaymentOption;
 import com.n4systems.test.helpers.FluentArrayList;
 
 public class UpgradePackageFilterTest {
 
 	@Test
 	public void should_find_all_package_above_free_for_a_free_account() throws Exception {
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.Free;
+		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Free);
 		List<SignUpPackage> expectedPackages = getSignUpPackages(SignUpPackageDetails.Basic, SignUpPackageDetails.Plus, SignUpPackageDetails.Enterprise, SignUpPackageDetails.Unlimited);
 		
-		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentContract).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
 	
 	@Test
 	public void should_find_all_package_above_plus_for_a_plus_account() throws Exception {
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.Plus;
+		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Plus);
+		
 		List<SignUpPackage> expectedPackages = getSignUpPackages(SignUpPackageDetails.Enterprise, SignUpPackageDetails.Unlimited);
 		
-		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentContract).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
 	
 	@Test
 	public void should_find_no_package_above_an_unlimited_account() throws Exception {
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.Unlimited;
+		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Unlimited);
 		List<SignUpPackage> expectedPackages = new FluentArrayList<SignUpPackage>();
 		
-		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentContract).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
@@ -45,23 +48,22 @@ public class UpgradePackageFilterTest {
 	public void should_reduce_list_of_sign_up_packages_to_the_list_minus_the_free_account() throws Exception {
 		List<SignUpPackage> allFullPackages = getSignUpPackages();
 		
-		
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.Free;
+		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Free);
 		List<SignUpPackage> expectedPackages = new ArrayList<SignUpPackage>(allFullPackages);
 		expectedPackages.remove(0);
 		
 		
-		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(allFullPackages);
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentContract).reduceToAvailablePackages(allFullPackages);
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
 	
 	@Test
 	public void should_find_no_packages_if_the_current_package_is_null_which_means_legacy() throws Exception {
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.getLegacyPackage();
+		ContractPricing currentContract = ContractPricing.getLegacyContractPricing(); 
 		List<SignUpPackage> expectedPackages = new FluentArrayList<SignUpPackage>();
 		
-		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentPackage).reduceToAvailablePackages(getSignUpPackages());
+		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentContract).reduceToAvailablePackages(getSignUpPackages());
 		
 		assertEquals(expectedPackages, actualPackages);
 	}
@@ -70,38 +72,58 @@ public class UpgradePackageFilterTest {
 	
 	@Test
 	public void should_find_name_of_current_package() throws Exception {
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.Free;
+		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Free);
 		
-		assertEquals(currentPackage.getName(), UpgradePackageFilter.createUpgradePackageFilter(currentPackage).getPackageName());
+		assertEquals(currentContract.getSignUpPackage().getName(), UpgradePackageFilter.createUpgradePackageFilter(currentContract).getPackageName());
 	}
+
+	
 	
 	@Test
 	public void should_find_name_of_current_package_when_it_is_legacy_package() throws Exception {
-		SignUpPackageDetails currentPackage = SignUpPackageDetails.getLegacyPackage();
-		
-		assertEquals("Legacy", UpgradePackageFilter.createUpgradePackageFilter(currentPackage).getPackageName());
+		ContractPricing currentContract = ContractPricing.getLegacyContractPricing(); 
+		assertEquals("Legacy", UpgradePackageFilter.createUpgradePackageFilter(currentContract).getPackageName());
 	}
 	
 	
 	
 	@Test
 	public void should_not_be_upgradable() throws Exception {
-		
-		assertFalse(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.getLegacyPackage()).isUpgradable());
-		assertFalse(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Unlimited).isUpgradable());
+		assertFalse(UpgradePackageFilter.createUpgradePackageFilter(ContractPricing.getLegacyContractPricing()).isUpgradable());
+		assertFalse(UpgradePackageFilter.createUpgradePackageFilter(createCurrentContract(SignUpPackageDetails.Unlimited)).isUpgradable());
 	}
 	
 	@Test
 	public void should_be_upgradable() throws Exception {
 		
-		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Free).isUpgradable());
-		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Basic).isUpgradable());
-		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Plus).isUpgradable());
-		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(SignUpPackageDetails.Enterprise).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(createCurrentContract(SignUpPackageDetails.Free)).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(createCurrentContract(SignUpPackageDetails.Basic)).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(createCurrentContract(SignUpPackageDetails.Plus)).isUpgradable());
+		assertTrue(UpgradePackageFilter.createUpgradePackageFilter(createCurrentContract(SignUpPackageDetails.Enterprise)).isUpgradable());
 	}
 
 	
+	@Test
+	public void should_find_upgrade_contract_only_one_that_matches() throws Exception {
+		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Free, 10L, PaymentOption.ONE_YEAR_UP_FRONT);
+		
+		SignUpPackage upgradePackage = createSignUpPackage(SignUpPackageDetails.Basic).withContract(createCurrentContract(SignUpPackageDetails.Basic, 30L, PaymentOption.ONE_YEAR_UP_FRONT)).build();
+		
+		ContractPricing actualUpgradeContract = UpgradePackageFilter.createUpgradePackageFilter(currentContract).getUpgradeContractForPackage(upgradePackage);
+		
+		assertEquals(upgradePackage.getContractId(PaymentOption.ONE_YEAR_UP_FRONT), actualUpgradeContract.getExternalId());
+	}
 	
+
+	private ContractPricing createCurrentContract(SignUpPackageDetails signUpPackage, long contractId, PaymentOption paymentOption) {
+		ContractPricing currentContract = new ContractPricing();
+		currentContract.setSignUpPackage(signUpPackage);
+		currentContract.setExternalId(contractId);
+		currentContract.setPaymentOption(paymentOption);
+		return currentContract;
+		
+	}
+
 	private List<SignUpPackage> getSignUpPackages() {
 		return getSignUpPackages(SignUpPackageDetails.values());
 	}
@@ -113,5 +135,11 @@ public class UpgradePackageFilterTest {
 		}
 		
 		return packages;
+	}
+	
+	private ContractPricing createCurrentContract(SignUpPackageDetails signUpAccount) {
+		ContractPricing currentContract = new ContractPricing();
+		currentContract.setSignUpPackage(signUpAccount);
+		return currentContract;
 	}
 }

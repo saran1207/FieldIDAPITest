@@ -10,6 +10,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
@@ -24,6 +25,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class AccountUpgrade extends AbstractCrud {
 
+	
 	private List<SignUpPackage> availablePackagesForUpdate;
 
 
@@ -51,7 +53,7 @@ public class AccountUpgrade extends AbstractCrud {
 	@Override
 	protected void postInit() {
 		super.postInit();
-		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg());
+		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
 	}
 
 
@@ -98,10 +100,18 @@ public class AccountUpgrade extends AbstractCrud {
 
 
 	private void upgradeAccount(Transaction transaction) {
-		UpgradeRequest upgradeRequest = new UpgradeRequest();
-		upgradeRequest.setUpgradePackage(upgradePackage.getSignPackageDetails());
-		
+		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).upgradeTo(upgradeRequest, transaction);
+	}
+
+
+	private UpgradeRequest createUpgradeRequest() {
+		ContractPricing upgradeContract = accountHelper.currentPackageFilter().getUpgradeContractForPackage(upgradePackage);
+		UpgradeRequest upgradeRequest = new UpgradeRequest();
+		upgradeRequest.setUpgradePackage(upgradeContract.getSignUpPackage());
+		upgradeRequest.setContractExternalId(upgradeContract.getExternalId());
+		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
+		return upgradeRequest;
 	}
 
 
@@ -130,8 +140,5 @@ public class AccountUpgrade extends AbstractCrud {
 		
 	}
 
-
-
-	
 
 }

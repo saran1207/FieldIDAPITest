@@ -16,7 +16,6 @@ public abstract class SubscriptionAgent {
 	
 	public abstract Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException;
 	
-	public abstract String currentPackageFor(Long tenantExternalId) throws CommunicationException ;
 	
 	public abstract boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException;
 	

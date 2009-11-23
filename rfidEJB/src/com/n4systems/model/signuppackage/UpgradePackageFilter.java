@@ -7,17 +7,12 @@ import java.util.List;
 
 public abstract class UpgradePackageFilter {
 	
-	public static UpgradePackageFilter createUpgradePackageFilter(SignUpPackage currentPackage) {
-		return createUpgradePackageFilter(currentPackage.getSignPackageDetails());
-	}
-	
-	public static UpgradePackageFilter createUpgradePackageFilter(SignUpPackageDetails currentPackage) {
-		
-		if (currentPackage == SignUpPackageDetails.getLegacyPackage() ) {
+	public static UpgradePackageFilter createUpgradePackageFilter(ContractPricing contractPricing) {
+		if (contractPricing == ContractPricing.getLegacyContractPricing() ) {
 			return new LegacyUpgradePackageFilter();
 		}
 		
-		return new UpgradePackageFilterSignUpBacked(currentPackage);
+		return new UpgradePackageFilterSignUpBacked(contractPricing);
 	}
 	
 	
@@ -26,5 +21,8 @@ public abstract class UpgradePackageFilter {
 	public abstract String getPackageName();
 	
 	public abstract boolean isUpgradable();
+
+	public abstract ContractPricing getUpgradeContractForPackage(SignUpPackage upgradePackage);
+
 	
 }

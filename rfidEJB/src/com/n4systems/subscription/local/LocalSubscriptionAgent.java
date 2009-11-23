@@ -2,6 +2,7 @@ package com.n4systems.subscription.local;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +22,40 @@ import com.n4systems.subscription.ValidatePromoCodeResponse;
 
 public class LocalSubscriptionAgent extends SubscriptionAgent {
 
-	private static String[] a = {"FIDFREE", "FIDBASIC", "FIDPLUS", "FIDENTERPRISE", "FIDUNLIMITED"};
+	private static final String packageExtension = ".package";
 	private static String tempDirectory = "/tmp";
 	
 	@Override
 	public SignUpTenantResponse buy(Subscription subscription, Company company, Person client) {
-		return new LocalSignUpTenantResponse();
+		LocalSignUpTenantResponse signUpResponse = new LocalSignUpTenantResponse();
+		
+		writePackageInfo(signUpResponse.getTenant().getExternalId(), subscription.getContractExternalId()); 
+		return signUpResponse;
 	}
 
+	private void writePackageInfo(Long externalId, Long contractId) {
+		File tenantFile = currentContractFile(externalId);
+		
+		if (tenantFile.exists()) {
+			tenantFile.delete();
+		}
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(tenantFile);
+			fileWriter.write(contractId.toString());
+			fileWriter.close();
+		} catch (IOException e) {}
+		finally {
+			if (fileWriter != null) {
+				try {
+					fileWriter.close();
+				} catch (IOException e) {}
+			}
+		}
+		
+	}
+
+	
 	@Override
 	public ValidatePromoCodeResponse validatePromoCode(String code)	throws CommunicationException {
 		return new LocalValidatePromoCodeResponse();
@@ -89,36 +116,25 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	public Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException {
 		return new LocalResponse();
 	}
-
-	@Override
-	public String currentPackageFor(Long tenantExternalId) throws CommunicationException {
-		String result;
-		
-		result = findPackageFromFile(tenantExternalId);
-		if (result != null) {
-			return result;
-		}
-		return pickAPackage(tenantExternalId);
-	}
-
-	private String pickAPackage(Long tenantExternalId) {
-		return a[(int) (tenantExternalId % a.length)];
-	}
 	
 
 
-	private String findPackageFromFile(Long tenantExternalId) {
-		File tenantFile = new File(tempDirectory + "/" + tenantExternalId.toString() + ".pacakge");
-		String packageName = null;
+	private Long findContractFromFile(Long tenantExternalId) {
+		File tenantFile = currentContractFile(tenantExternalId);
+		Long contractId = null;
 		
 		if (tenantFile.exists()) {
-			char[] buffer = new char[1000];
 			FileReader reader = null;
-			
+			String readContractId = "";
 			try {
+				char[] buffer = new char[1];
 				reader = new FileReader(tenantFile);
-				reader.read(buffer, 0, 999);
-				packageName = new String(buffer);
+				while(reader.ready()) {
+					reader.read(buffer);
+					readContractId += buffer[0];
+				}
+				contractId = Long.valueOf(readContractId);
+				
 			} catch (Exception e) {			
 			} finally {
 				if (reader != null)
@@ -126,20 +142,26 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 			}
 			
 		}
-		return packageName;
+		return contractId;
+	}
+
+	private File currentContractFile(Long tenantExternalId) {
+		File tenantFile = new File(tempDirectory + "/" + tenantExternalId.toString() + packageExtension);
+		return tenantFile;
 	}
 
 	@Override
 	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId());
 		return true;
 	}
 
 	@Override
 	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
-		List<ContractPrice> contractPricings = retrieveContractPrices(); 
-		
-		return contractPricings.get((int)(tenantExternalId % contractPricings.size())).getExternalId();
+		return findContractFromFile(tenantExternalId);
 	}
+
+	
 	
 	
 

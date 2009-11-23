@@ -26,7 +26,7 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 
 
 	public void upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) {
-		if (confirmUpgrade()) {
+		if (confirmUpgrade(upgradeRequest)) {
 			enableFeatures(upgradeRequest.getUpgradePackage(), transaction);
 			adjustLimits(upgradeRequest.getUpgradePackage());
 			saveOrg(transaction);
@@ -34,12 +34,10 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	}
 
 
-	private boolean confirmUpgrade() {
-		
-		
+	private boolean confirmUpgrade(UpgradeRequest upgradeRequest) {
 		
 		try {
-			return subscriptionAgent.upgrade(null);
+			return subscriptionAgent.upgrade(upgradeRequest);
 		} catch (CommunicationException e) {
 			return false;
 		}

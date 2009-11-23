@@ -7,15 +7,13 @@ import java.util.List;
 public class UpgradePackageFilterSignUpBacked extends UpgradePackageFilter {
 
 	private final SignUpPackageDetails currentPackage;
+	private final ContractPricing currentContract;
 
-	protected UpgradePackageFilterSignUpBacked(SignUpPackageDetails currentPackage) {
-		this.currentPackage = currentPackage;
-	}
-
-	protected UpgradePackageFilterSignUpBacked(SignUpPackage currentPackage) {
-		this(currentPackage.getSignPackageDetails());
-	}
-
+	protected UpgradePackageFilterSignUpBacked(ContractPricing currentContract) {
+		this.currentContract = currentContract;
+		this.currentPackage = currentContract.getSignUpPackage();
+	} 
+	
 	protected List<SignUpPackageDetails> availablePackages() {
 		List<SignUpPackageDetails> listOfPackageDetails = Arrays.asList(SignUpPackageDetails.values());
 		int currentPackageIndex = listOfPackageDetails.indexOf(currentPackage);
@@ -38,6 +36,11 @@ public class UpgradePackageFilterSignUpBacked extends UpgradePackageFilter {
 
 	public boolean isUpgradable() {
 		return !availablePackages().isEmpty();
+	}
+
+	@Override
+	public ContractPricing getUpgradeContractForPackage(SignUpPackage upgradePackage) {
+		return upgradePackage.getContract(currentContract.getPaymentOption());
 	}
 
 	

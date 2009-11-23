@@ -19,4 +19,9 @@ public class LegacyUpgradePackageFilter extends UpgradePackageFilter {
 		return false;
 	}
 
+	@Override
+	public ContractPricing getUpgradeContractForPackage(SignUpPackage upgradePackage) {
+		throw new CanNotUpgradeException();
+	}
+
 }

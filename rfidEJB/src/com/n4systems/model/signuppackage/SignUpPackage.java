@@ -78,14 +78,19 @@ public class SignUpPackage {
 		return getDefaultPaymentOption().getPricePerUserPerMonth();
 	}
 
-	public Long getContract(PaymentOption paymentOption) {
+	public Long getContractId(PaymentOption paymentOption) {
+		return getContract(paymentOption).getExternalId();
+	}
+	
+	public ContractPricing getContract(PaymentOption paymentOption) {
 		for (ContractPricing contract : paymentOptions) {
 			if (contract.getPaymentOption() == paymentOption) {
-				return contract.getExternalId();
+				return contract;
 			}
 		}
 		throw new InvalidArgumentException("there is no contract that matches the given payment option.");
 	}
+	
 	
 	public boolean isFree() {
 		return getDefaultPricePerUserPerMonth() == 0; 
@@ -112,6 +117,8 @@ public class SignUpPackage {
 				
 		return (signPackageDetails.equals(other.signPackageDetails));
 	}
+
+	
 	
 	
 	

@@ -8,8 +8,14 @@ import com.n4systems.subscription.Subscription;
 
 public class LocalSignUpTenantResponse implements SignUpTenantResponse {
 
+	private LocalExternalIdResponse tenantExternalIdResponse;
+	private LocalExternalIdResponse clientExternalIdResponse;
+
 	public ExternalIdResponse getClient() {
-		return new LocalExternalIdResponse(new Random().nextLong());
+		if (clientExternalIdResponse == null)
+			clientExternalIdResponse = new LocalExternalIdResponse(new Random().nextLong());
+		
+		return clientExternalIdResponse;
 	}
 
 	public Subscription getSubscription() {
@@ -17,7 +23,10 @@ public class LocalSignUpTenantResponse implements SignUpTenantResponse {
 	}
 
 	public ExternalIdResponse getTenant() {
-		return new LocalExternalIdResponse(new Random().nextLong());
+		if (tenantExternalIdResponse == null)
+			tenantExternalIdResponse = new LocalExternalIdResponse(new Random().nextLong());
+		
+		return tenantExternalIdResponse;
 	}
 
 	public String getResult() {

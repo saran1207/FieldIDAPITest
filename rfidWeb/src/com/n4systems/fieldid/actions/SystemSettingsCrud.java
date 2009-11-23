@@ -49,7 +49,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void postInit() {
 		super.postInit();
-		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg());
+		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
 	}
 
 
