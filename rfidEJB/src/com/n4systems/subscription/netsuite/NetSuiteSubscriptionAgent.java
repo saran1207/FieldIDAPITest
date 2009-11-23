@@ -147,6 +147,23 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		throw new NotImplementedException();
 	}
 
+	@Override
+	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
+		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
+		detailsClient.setTenantExternalId(tenantExternalId);
+				
+		GetSubscriptionDetailsResponse response = null;
+		try {
+			response = detailsClient.execute();
+		} catch (IOException e) {
+			throw new CommunicationException();
+		}
+		
+		Long contractId = response.getSubscription() != null ? response.getSubscription().getContractId() : null;
+		
+		return contractId;
+	}
+
 
 	
 	

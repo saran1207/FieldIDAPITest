@@ -2,8 +2,7 @@ package com.n4systems.subscription.netsuite.client;
 
 import java.io.IOException;
 
-import com.n4systems.subscription.netsuite.model.NetSuiteUpgradeSubscription;
-import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
+import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
 
 public class RestfulTest {
 
@@ -159,7 +158,6 @@ public class RestfulTest {
 		}
 		*/
 
-		/*
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
 		// detailsClient.setTenantExternalId(6457324234L); // Bullshit 
 		// detailsClient.setTenantExternalId(1142L); // Known but no subscription record 
@@ -174,8 +172,8 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 		
+		/*
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		NetSuiteUpgradeSubscription upgradeSubscription = new NetSuiteUpgradeSubscription();
 		upgradeSubscription.setTenantExternalId(6457L);
@@ -193,6 +191,7 @@ public class RestfulTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		/*
 		PricingDetailsClient pricingClient = new PricingDetailsClient();

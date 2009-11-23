@@ -133,6 +133,13 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		return true;
 	}
+
+	@Override
+	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
+		List<ContractPrice> contractPricings = retrieveContractPrices(); 
+		
+		return contractPricings.get((int)(tenantExternalId % contractPricings.size())).getExternalId();
+	}
 	
 	
 
