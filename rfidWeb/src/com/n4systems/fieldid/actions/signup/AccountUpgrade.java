@@ -24,17 +24,14 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class AccountUpgrade extends AbstractCrud {
-
 	
 	private List<SignUpPackage> availablePackagesForUpdate;
-
 
 	private SignUpPackage upgradePackage;
 
 	private AccountHelper accountHelper;
 	
 	
-
 	public AccountUpgrade(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		
