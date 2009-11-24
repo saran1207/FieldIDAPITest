@@ -77,7 +77,7 @@ ${action.setPageType('account_settings', 'show')!}
 			<span class="fieldHolder">
 				${(action.currentPackageFilter().packageName?html)!}  
 				<#if userSecurityGuard.allowedAccessWebStore && action.currentPackageFilter().upgradable>
-					<a href="<@s.url action="accountUpgrade"/>"><@s.text name="label.upgrade_your_account"/></a>
+					<a href="<@s.url action="accountUpgrades"/>"><@s.text name="label.upgrade_your_account"/></a>
 				</#if>
 			</span>
 		</div>

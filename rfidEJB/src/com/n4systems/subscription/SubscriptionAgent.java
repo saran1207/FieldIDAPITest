@@ -20,4 +20,8 @@ public abstract class SubscriptionAgent {
 	public abstract boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException;
 	
 	public abstract Long contractIdFor(Long tenantExternalId) throws CommunicationException;
+	
+	public abstract UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException;
+		
+	
 }

@@ -14,8 +14,7 @@ public class UpgradeSubscriptionResponse extends BaseResponse {
 	public UpgradeSubscriptionPaymentDetails getUpgradesubscription() {
 		return upgradesubscription;
 	}
-	public void setUpgradesubscription(
-			UpgradeSubscriptionPaymentDetails upgradesubscription) {
+	public void setUpgradesubscription(UpgradeSubscriptionPaymentDetails upgradesubscription) {
 		this.upgradesubscription = upgradesubscription;
 	}
 }

@@ -10,6 +10,7 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.util.DataUnit;
 
 public class UpgradeHandlerImpl implements UpgradeHandler {
@@ -25,12 +26,14 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	}
 
 
-	public void upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) {
+	public boolean upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) {
 		if (confirmUpgrade(upgradeRequest)) {
 			enableFeatures(upgradeRequest.getUpgradePackage(), transaction);
 			adjustLimits(upgradeRequest.getUpgradePackage());
 			saveOrg(transaction);
+			return true;
 		}
+		return false;
 	}
 
 
@@ -89,6 +92,15 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	protected PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}
+
+
+	@Override
+	public UpgradeCost priceForUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException {
+		return subscriptionAgent.costToUpgradeTo(upgradeRequest);
+	}
+
+
+	
 	
 
 }

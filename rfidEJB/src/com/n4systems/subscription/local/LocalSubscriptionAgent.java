@@ -17,6 +17,7 @@ import com.n4systems.subscription.Response;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.subscription.ValidatePromoCodeResponse;
 
@@ -159,6 +160,11 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	@Override
 	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
 		return findContractFromFile(tenantExternalId);
+	}
+
+	@Override
+	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+		return new UpgradeCost(1000F, 4000F, "JAN. 18, 2009");
 	}
 
 	

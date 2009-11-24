@@ -25,6 +25,7 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitchTestDouble;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.test.helpers.FluentHashSet;
@@ -211,14 +212,38 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		
 		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
 		
-		sut.upgradeTo(upgradeRequest, mockTransaction);
+		assertFalse(sut.upgradeTo(upgradeRequest, mockTransaction));
 		
 		assertTrue(primaryOrg.getExtendedFeatures().isEmpty());
 		assertEquals(new Long(0), primaryOrg.getLimits().getAssets());
 		assertEquals(new Long(0), primaryOrg.getLimits().getDiskSpaceInBytes());
 		verify(subscriptionAgent);
 	}
-
+	
+	
+	@Test
+	public void should_find_price_for_upgrade_package() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		PrimaryOrg primaryOrg = aPrimaryOrg().build();
+		SubscriptionAgent subscriptionAgent = createSubscriptionAgentForUpgrade(new UpgradeCost(300.0F, 4000.0F, "DEC. 10 2009"));
+		
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		
+		UpgradeCost expectedCost = new UpgradeCost(300.0F, 4000.0F, "DEC. 10 2009");
+		
+		assertEquals(expectedCost, sut.priceForUpgrade(upgradeRequest));
+	}
+	
+	
+	private SubscriptionAgent createSubscriptionAgentForUpgrade(UpgradeCost upgradeCost) throws CommunicationException {
+		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
+		expect(subscriptionAgent.costToUpgradeTo((UpgradeSubscription)anyObject())).andReturn(upgradeCost);
+		replay(subscriptionAgent);
+		return subscriptionAgent;
+	}
+	
 	private SubscriptionAgent subScriptionAgentForSuccessfulUpgrade() throws CommunicationException {
 		return createSubscriptionAgentForUpgrade(true);
 	}

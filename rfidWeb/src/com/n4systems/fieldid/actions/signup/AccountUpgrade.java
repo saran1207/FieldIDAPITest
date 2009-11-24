@@ -19,6 +19,8 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
+import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.UpgradeCost;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 
@@ -26,15 +28,12 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 public class AccountUpgrade extends AbstractCrud {
 	
 	private List<SignUpPackage> availablePackagesForUpdate;
-
 	private SignUpPackage upgradePackage;
-
 	private AccountHelper accountHelper;
 	
 	
 	public AccountUpgrade(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		
 	}
 
 	
@@ -54,8 +53,12 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 
 
-
 	@SkipValidation
+	public String doList() {
+		return SUCCESS;
+	}
+	
+	
 	public String doAdd() {
 		return SUCCESS;
 		
@@ -98,7 +101,10 @@ public class AccountUpgrade extends AbstractCrud {
 
 	private void upgradeAccount(Transaction transaction) {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
-		new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).upgradeTo(upgradeRequest, transaction);
+		
+		if (!new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).upgradeTo(upgradeRequest, transaction)) {
+			throw new RuntimeException();
+		}
 	}
 
 
@@ -135,6 +141,24 @@ public class AccountUpgrade extends AbstractCrud {
 		SignUpPackageLoader loader = getNonSecureLoaderFactory().createSignUpPackageLoader();
 		upgradePackage = loader.setSignUpPackageTarget(targetPackage).load();
 		
+	}
+
+	public SignUpPackage getUpgradePackage() {
+		return upgradePackage;
+	}
+	
+	
+	public UpgradeCost getUpgradeCost() {
+		UpgradeRequest upgradeRequest = createUpgradeRequest();
+		upgradeRequest.setShowPriceOnly(true);
+		
+		UpgradeCost cost = null;
+		try {
+			cost = new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).priceForUpgrade(upgradeRequest);
+		} catch (CommunicationException e) {}
+		
+		
+		return cost; 
 	}
 
 
