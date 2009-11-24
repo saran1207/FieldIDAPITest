@@ -3,6 +3,8 @@ package com.n4systems.subscription.netsuite.client;
 import java.io.IOException;
 
 import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
+import com.n4systems.subscription.netsuite.model.NetSuiteUpgradeSubscription;
+import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class RestfulTest {
 
@@ -168,12 +170,12 @@ public class RestfulTest {
 				System.out.println("No active subscription");
 			} else {
 				System.out.println("Account type: "+subResponse.getSubscription().getAccountType());
+				System.out.println("Contract id: "+subResponse.getSubscription().getContractId());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		/*
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		NetSuiteUpgradeSubscription upgradeSubscription = new NetSuiteUpgradeSubscription();
 		upgradeSubscription.setTenantExternalId(6457L);
@@ -188,10 +190,10 @@ public class RestfulTest {
 			upgradeResponse = upgradeClient.execute();
 			System.out.println("Upgrade cost: "+upgradeResponse.getUpgradesubscription().getUpgrade_cost());
 			System.out.println("Next payment: "+upgradeResponse.getUpgradesubscription().getNext_payment());
+			System.out.println("Was ok?"+upgradeResponse.getResult().equals("OK"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 		
 		/*
 		PricingDetailsClient pricingClient = new PricingDetailsClient();

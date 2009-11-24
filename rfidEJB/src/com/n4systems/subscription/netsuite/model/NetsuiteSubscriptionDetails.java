@@ -5,7 +5,7 @@ import com.n4systems.subscription.SubscriptionDetails;
 public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 
 	private Long tenantid;
-	private Long subscriptionitem;
+	private Long itemid;
 	private String accounttype;
 	private String startdate;
 	private String enddate;
@@ -18,8 +18,8 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 		this.tenantid = tenantid;
 	}
 
-	public void setSubscriptionitem(Long subscriptionitem) {
-		this.subscriptionitem = subscriptionitem;
+	public void setItemid(Long itemid) {
+		this.itemid = itemid;
 	}
 
 	public void setAccounttype(String accounttype) {
@@ -51,7 +51,7 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 	}
 
 	public Long getContractId() {
-		return subscriptionitem;
+		return itemid;
 	}
 
 	public String getEndDate() {
