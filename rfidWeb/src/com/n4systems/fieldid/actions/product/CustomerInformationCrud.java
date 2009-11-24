@@ -18,6 +18,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
@@ -138,4 +139,19 @@ public class CustomerInformationCrud extends AbstractCrud {
 	}
 
 	
+	public boolean isLinked() {
+		if (product == null) {
+			return false;
+		} else if (product.isLinked()) {
+			return true;
+		}
+		
+		// this checks if there are any products linked to this product
+		HasLinkedProductsLoader hasLinkedLoader = getLoaderFactory().createHasLinkedProductsLoader();
+		hasLinkedLoader.setNetworkId(product.getNetworkId());
+		hasLinkedLoader.setProductId(product.getId());
+		
+		boolean hasLinked = hasLinkedLoader.load();
+		return hasLinked;
+	}
 }

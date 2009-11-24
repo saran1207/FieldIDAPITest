@@ -78,9 +78,9 @@ public class InternalOrgListerTest {
 	
 	
 	@Test
-	public void should_list_of_only_secondary_orgs_when_the_NON_PRIMARY_filter_is_applied() throws Exception {
+	public void should_list_of_primary_and_secondary_orgs_when_the_NON_PRIMARY_filter_is_applied() throws Exception {
 		InternalOrgLister sut = new InternalOrgLister(OrgType.NON_PRIMARY, secondaryOrgLoader, primaryOrg);
-		List<Listable<Long>> expectedInternalOrgs = new FluentArrayList<Listable<Long>>().stickOn(secondaryOrg);
+		List<Listable<Long>> expectedInternalOrgs = new FluentArrayList<Listable<Long>>().stickOn(primaryOrg).stickOn(secondaryOrg);
 				
 		List<Listable<Long>> actualInternalOrgs = sut.getInternalOrgs();
 		

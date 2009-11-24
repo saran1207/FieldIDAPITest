@@ -24,7 +24,7 @@ public class CustomerOrgLister {
 		
 		ArrayList<Listable<Long>> customerList = new ArrayList<Listable<Long>>();
 		
-		if (includeBlankInList()) {
+		if (includeBlankInList(currentlySelectedOrg)) {
 			customerList.add(createBlankValue());
 		}
 		
@@ -48,9 +48,13 @@ public class CustomerOrgLister {
 		return false;
 	}
 
-	protected boolean includeBlankInList() {
+	protected boolean includeBlankInList(BaseOrg currentlySelectedOrg) {
 		if (orgType == OrgType.CUSTOMER || orgType == OrgType.EXTERNAL) 
 			return false;
+		if (orgType == OrgType.NON_PRIMARY && currentlySelectedOrg.getInternalOrg().isPrimary())
+			return false;
+		
+			
 		return includeCustomerList();
 	}
 

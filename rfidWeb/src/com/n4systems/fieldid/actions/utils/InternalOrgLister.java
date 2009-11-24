@@ -38,7 +38,7 @@ public class InternalOrgLister {
 	}
 
 	private boolean includePrimaryOrgInList() {
-		return orgType != OrgType.NON_PRIMARY && orgType != OrgType.SECONDARY;
+		return orgType != OrgType.SECONDARY;
 	}
 
 	
