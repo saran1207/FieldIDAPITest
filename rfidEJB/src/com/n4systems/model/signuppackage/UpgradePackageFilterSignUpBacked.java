@@ -43,5 +43,14 @@ public class UpgradePackageFilterSignUpBacked extends UpgradePackageFilter {
 		return upgradePackage.getContract(currentContract.getPaymentOption());
 	}
 
+	public SignUpPackage getCurrentPackage(List<SignUpPackage> allFullPackages) {
+		
+		for (SignUpPackage signUpPackage : allFullPackages) {
+			if (signUpPackage.hasContract(currentContract)) {
+				return signUpPackage;
+			}
+		}
+		return null;
+	}
 	
 }

@@ -26,7 +26,7 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	}
 
 
-	public boolean upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) {
+	public boolean upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException {
 		if (confirmUpgrade(upgradeRequest)) {
 			enableFeatures(upgradeRequest.getUpgradePackage(), transaction);
 			adjustLimits(upgradeRequest.getUpgradePackage());
@@ -37,13 +37,8 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	}
 
 
-	private boolean confirmUpgrade(UpgradeRequest upgradeRequest) {
-		
-		try {
-			return subscriptionAgent.upgrade(upgradeRequest);
-		} catch (CommunicationException e) {
-			return false;
-		}
+	private boolean confirmUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException {
+		return subscriptionAgent.upgrade(upgradeRequest);
 	}
 
 	

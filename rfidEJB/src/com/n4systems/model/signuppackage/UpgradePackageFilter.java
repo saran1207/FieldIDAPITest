@@ -24,5 +24,6 @@ public abstract class UpgradePackageFilter {
 
 	public abstract ContractPricing getUpgradeContractForPackage(SignUpPackage upgradePackage);
 
+	public abstract SignUpPackage getCurrentPackage(List<SignUpPackage> allFullPackages);
 	
 }

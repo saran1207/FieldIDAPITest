@@ -48,7 +48,4 @@ public class AccountHelper {
 		return ContractPricing.getLegacyContractPricing();
 	}
 	
-	
-	
-	
 }

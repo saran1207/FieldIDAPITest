@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.signup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -27,7 +28,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class AccountUpgrade extends AbstractCrud {
 	
-	private List<SignUpPackage> availablePackagesForUpdate;
+	private List<DecoratedSignUpPackage> availablePackagesForUpdate;
 	private SignUpPackage upgradePackage;
 	private AccountHelper accountHelper;
 	
@@ -79,17 +80,27 @@ public class AccountUpgrade extends AbstractCrud {
 		
 		try {
 			upgradeAccount(transaction);
-			
-			addActionMessageText("message.upgrade_successful");
-			result = SUCCESS;
+			result = handleUpgradeSuccess(transaction, "message.upgrade_successful");
+		} catch (CommunicationException e) {
+			result = handleUpgradeError(transaction, "error.communicating_with_billing_provider");
 		} catch (Exception e) {
-			com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
-			addFlashErrorText("error.could_not_upgrade");
-			result = ERROR;
-		} finally {
-			com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
-		}
+			result = handleUpgradeError(transaction, "error.could_not_upgrade");
+		} 
 		return result;
+	}
+
+
+	private String handleUpgradeSuccess(Transaction transaction, String successMessage) {
+		addActionMessageText(successMessage);
+		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
+		return SUCCESS;
+	}
+
+
+	private String handleUpgradeError(Transaction transaction, String errorMessage) {
+		com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
+		addFlashErrorText(errorMessage);
+		return ERROR;
 	}
 
 
@@ -99,10 +110,10 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 
 
-	private void upgradeAccount(Transaction transaction) {
+	private void upgradeAccount(Transaction transaction) throws CommunicationException {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		
-		if (!new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).upgradeTo(upgradeRequest, transaction)) {
+		if (!getUpgradeHandler().upgradeTo(upgradeRequest, transaction)) {
 			throw new RuntimeException();
 		}
 	}
@@ -122,10 +133,18 @@ public class AccountUpgrade extends AbstractCrud {
 		return accountHelper.currentPackageFilter();
 	}
 	
-	public List<SignUpPackage> getPackages() {
+	public List<DecoratedSignUpPackage> getPackages() {
 		if (availablePackagesForUpdate == null) {
-			List<SignUpPackage> fullPackageList = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
-			availablePackagesForUpdate = currentPackageFilter().reduceToAvailablePackages(fullPackageList);
+			availablePackagesForUpdate = new ArrayList<DecoratedSignUpPackage>();
+			
+			List<SignUpPackage> allSignUpPackages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
+			
+			
+			availablePackagesForUpdate.add(new CurrentSignUpPackage(currentPackageFilter().getCurrentPackage(allSignUpPackages)));
+			for (SignUpPackage upgradePackage : currentPackageFilter().reduceToAvailablePackages(allSignUpPackages)) {
+				availablePackagesForUpdate.add(new UpgradablePackage(upgradePackage));
+			}
+			
 		}
 		return availablePackagesForUpdate;
 	}
@@ -150,16 +169,48 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	public UpgradeCost getUpgradeCost() {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
-		upgradeRequest.setShowPriceOnly(true);
 		
-		UpgradeCost cost = null;
+		
 		try {
-			cost = new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent()).priceForUpgrade(upgradeRequest);
-		} catch (CommunicationException e) {}
-		
-		
-		return cost; 
+			return getUpgradeHandler().priceForUpgrade(upgradeRequest);
+		} catch (CommunicationException e) {
+			return null;
+		}
 	}
 
 
+	private UpgradeHandlerImpl getUpgradeHandler() {
+		return new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
+	}
+
+
+	public abstract class DecoratedSignUpPackage extends SignUpPackage {
+		public DecoratedSignUpPackage(SignUpPackage signPackage) {
+			super(signPackage.getSignPackageDetails(), signPackage.getPaymentOptions());
+		}
+		
+		public abstract boolean isCurrent();
+		
+	}
+	
+	public class CurrentSignUpPackage extends DecoratedSignUpPackage {
+		public CurrentSignUpPackage(SignUpPackage signPackage) {
+			super(signPackage);
+		}
+		
+		public boolean isCurrent() {
+			return true;
+		}
+		
+	}
+	public class UpgradablePackage extends DecoratedSignUpPackage {
+		public UpgradablePackage(SignUpPackage signPackage) {
+			super(signPackage);
+		}
+		
+		public boolean isCurrent() {
+			return false;
+		}
+		
+	}
 }

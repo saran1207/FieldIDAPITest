@@ -3,7 +3,6 @@ package com.n4systems.subscription.netsuite;
 import java.io.IOException;
 import java.util.List;
 
-import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.BillingInfoField;
 import com.n4systems.subscription.CommunicationException;
@@ -23,6 +22,7 @@ import com.n4systems.subscription.netsuite.client.ProductDetailsClient;
 import com.n4systems.subscription.netsuite.client.SignUpTenantClient;
 import com.n4systems.subscription.netsuite.client.SubscriptionDetailsClient;
 import com.n4systems.subscription.netsuite.client.UpgradeSubscriptionClient;
+import com.n4systems.subscription.netsuite.client.UpgradeSubscriptionCostClient;
 import com.n4systems.subscription.netsuite.client.UploadNoteClient;
 import com.n4systems.subscription.netsuite.client.ValidatePromoCodeClient;
 import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
@@ -149,6 +149,8 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
 	@Override
 	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
+		
+		
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
 		detailsClient.setTenantExternalId(tenantExternalId);
 				
@@ -166,11 +168,29 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
 	@Override
 	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
-		throw new NotImplementedException();
+		UpgradeSubscriptionClient upgradeClient = createUpgradeCostSubscriptionClient(upgradeSubscription);
+		
+		UpgradeSubscriptionResponse response = null;
+		
+		try {
+			response = upgradeClient.execute();
+		} catch (IOException e) {
+			throw new CommunicationException();
+		}
+		
+		
+		return createUpgradeCost(response);
 	}
 
+	
+	private UpgradeSubscriptionClient createUpgradeCostSubscriptionClient(UpgradeSubscription upgradeSubscription) {
+		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionCostClient();
+		upgradeClient.setUpgradeSubscription(upgradeSubscription);
+		return upgradeClient;
+	}
 
-	
-	
+	private UpgradeCost createUpgradeCost(UpgradeSubscriptionResponse response) {
+		return new UpgradeCost(response.getUpgradesubscription().getUpgrade_cost(), response.getUpgradesubscription().getNext_payment(), response.getNext_payment_date());
+	}
 	
 }

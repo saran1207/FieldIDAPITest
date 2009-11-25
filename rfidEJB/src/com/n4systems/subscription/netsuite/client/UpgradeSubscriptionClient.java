@@ -16,7 +16,14 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 	@Override
 	protected void addRequestParameters() {
 		addUpgradeRequestParameters();
+		addUpgradePriceOnlyFlag();
 		addSubscriptionRequestParameters(upgradeSubscription.getSubscription());
+	}
+
+	protected void addUpgradePriceOnlyFlag() {
+		//addRequestParameter("showpriceonly", upgradeSubscription.isShowPriceOnly() ? "T" : "F");
+		addRequestParameter("showpriceonly", "T");
+		
 	}
 
 	private void addUpgradeRequestParameters() {
@@ -26,8 +33,7 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 		}
 		addRequestParameter("newusers", upgradeSubscription.getNewUsers().toString());
 		addRequestParameter("storageinc", upgradeSubscription.getStorageIncrement().toString());
-		//addRequestParameter("showpriceonly", upgradeSubscription.isShowPriceOnly() ? "T" : "F");
-		addRequestParameter("showpriceonly", "T");
+		
 	}
 
 	private void addSubscriptionRequestParameters(Subscription subscription) {

@@ -220,6 +220,26 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		verify(subscriptionAgent);
 	}
 	
+	@Test(expected=CommunicationException.class)
+	public void should_not_upgrade_primary_org_when_there_is_a_communication_error() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		
+		PrimaryOrg primaryOrg = aPrimaryOrg().build();
+		
+		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
+		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andThrow(new CommunicationException());
+		replay(subscriptionAgent);
+		
+		
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		
+		sut.upgradeTo(upgradeRequest, mockTransaction);
+		
+	}
+	
+	
+	
 	
 	@Test
 	public void should_find_price_for_upgrade_package() throws Exception {
@@ -281,7 +301,6 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 			featureSwitches.add(newSwitch);
 			return newSwitch;
 		}
-		
 	}		
 		
 }

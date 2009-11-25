@@ -11,8 +11,6 @@ public interface UpgradeSubscription {
 
 	public Integer getStorageIncrement();
 
-	public boolean isShowPriceOnly();
-
 	public Subscription getSubscription();
 
 	public CreditCard getCreditCard();

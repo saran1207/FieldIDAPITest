@@ -105,9 +105,9 @@ public class UpgradePackageFilterTest {
 	
 	@Test
 	public void should_find_upgrade_contract_only_one_that_matches() throws Exception {
-		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Free, 10L, PaymentOption.ONE_YEAR_UP_FRONT);
+		ContractPricing currentContract = createContract(SignUpPackageDetails.Free, 10L, PaymentOption.ONE_YEAR_UP_FRONT);
 		
-		SignUpPackage upgradePackage = createSignUpPackage(SignUpPackageDetails.Basic).withContract(createCurrentContract(SignUpPackageDetails.Basic, 30L, PaymentOption.ONE_YEAR_UP_FRONT)).build();
+		SignUpPackage upgradePackage = createSignUpPackage(SignUpPackageDetails.Basic).withContracts(createContract(SignUpPackageDetails.Basic, 30L, PaymentOption.ONE_YEAR_UP_FRONT)).build();
 		
 		ContractPricing actualUpgradeContract = UpgradePackageFilter.createUpgradePackageFilter(currentContract).getUpgradeContractForPackage(upgradePackage);
 		
@@ -115,7 +115,20 @@ public class UpgradePackageFilterTest {
 	}
 	
 
-	private ContractPricing createCurrentContract(SignUpPackageDetails signUpPackage, long contractId, PaymentOption paymentOption) {
+	@Test
+	public void should_retrun_current_sign_up_package() throws Exception {
+		ContractPricing currentContract = createContract(SignUpPackageDetails.Free, 10L, PaymentOption.ONE_YEAR_UP_FRONT);
+		
+		SignUpPackage currentPackage = createSignUpPackage(SignUpPackageDetails.Free).withContracts(currentContract).build();
+		
+		
+		UpgradePackageFilter sut = UpgradePackageFilter.createUpgradePackageFilter(currentContract);
+		SignUpPackage actualCurrentPackage = sut.getCurrentPackage(new FluentArrayList<SignUpPackage>(currentPackage));
+		
+		assertEquals(currentPackage, actualCurrentPackage);
+	}
+	
+	private ContractPricing createContract(SignUpPackageDetails signUpPackage, long contractId, PaymentOption paymentOption) {
 		ContractPricing currentContract = new ContractPricing();
 		currentContract.setSignUpPackage(signUpPackage);
 		currentContract.setExternalId(contractId);

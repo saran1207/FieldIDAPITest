@@ -6,7 +6,7 @@ import com.n4systems.subscription.UpgradeCost;
 
 public interface UpgradeHandler {
 
-	public boolean upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction);
+	public boolean upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException;
 
 	public UpgradeCost priceForUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException;
 

@@ -11,7 +11,6 @@ public class UpgradeRequest implements UpgradeSubscription {
 	private Long contractExternalId;
 	private Integer newUsers = 0;
 	private Integer storageIncrement = 0;
-	private boolean showPriceOnly;
 	
 	private Subscription subscription;
 	private boolean usingCreditCard;
@@ -44,12 +43,6 @@ public class UpgradeRequest implements UpgradeSubscription {
 	}
 	public void setStorageIncrement(Integer storageIncrement) {
 		this.storageIncrement = storageIncrement;
-	}
-	public boolean isShowPriceOnly() {
-		return showPriceOnly;
-	}
-	public void setShowPriceOnly(boolean showPriceOnly) {
-		this.showPriceOnly = showPriceOnly;
 	}
 	public Subscription getSubscription() {
 		return subscription;

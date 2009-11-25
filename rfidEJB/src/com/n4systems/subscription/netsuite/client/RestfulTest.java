@@ -178,9 +178,9 @@ public class RestfulTest {
 		
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		NetSuiteUpgradeSubscription upgradeSubscription = new NetSuiteUpgradeSubscription();
-		upgradeSubscription.setTenantExternalId(6457L);
+		upgradeSubscription.setTenantExternalId(6490L);
 		upgradeSubscription.setContractExternalId(143L);
-		upgradeSubscription.setNewUsers(10);
+		upgradeSubscription.setNewUsers(0);
 		upgradeSubscription.setShowPriceOnly(true);
 		upgradeClient.setUpgradeSubscription(upgradeSubscription);
 		

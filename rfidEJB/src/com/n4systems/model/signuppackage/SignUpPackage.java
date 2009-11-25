@@ -9,7 +9,6 @@ import com.n4systems.subscription.PaymentOption;
 
 public class SignUpPackage {
 	
-	
 	private SignUpPackageDetails signPackageDetails;
 	private List<ContractPricing> paymentOptions;
 
@@ -116,6 +115,15 @@ public class SignUpPackage {
 		SignUpPackage other = (SignUpPackage) obj;
 				
 		return (signPackageDetails.equals(other.signPackageDetails));
+	}
+
+	public boolean hasContract(ContractPricing currentContract) {
+		for (ContractPricing contract : paymentOptions) {
+			if (contract.equals(currentContract)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	

@@ -1,6 +1,6 @@
 package com.n4systems.model.builders;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.n4systems.model.signuppackage.ContractPricing;
@@ -11,10 +11,10 @@ public class SignUpPackageBuilder extends BaseBuilder<SignUpPackage> {
 
 	private SignUpPackageDetails signUpPackageDetail;
 	
-	private ContractPricing contract;
+	private List<ContractPricing> contracts;
 	
 	public static SignUpPackageBuilder createSignUpPackage(SignUpPackageDetails signUpPackageDetail) {
-		return new SignUpPackageBuilder(signUpPackageDetail, null);
+		return new SignUpPackageBuilder(signUpPackageDetail, new ContractPricing[]{});
 	}
 
 	
@@ -25,25 +25,20 @@ public class SignUpPackageBuilder extends BaseBuilder<SignUpPackage> {
 		return new SignUpPackageBuilder(signUpPackageDetail, contract);
 	}
 	
-	private SignUpPackageBuilder(SignUpPackageDetails signUpPackageDetail, ContractPricing contract) {
+	private SignUpPackageBuilder(SignUpPackageDetails signUpPackageDetail, ContractPricing... contracts) {
 		super();
 		this.signUpPackageDetail = signUpPackageDetail;
-		this.contract = contract;
+		this.contracts = Arrays.asList(contracts);
 		
 	}
 	
-	public SignUpPackageBuilder withContract(ContractPricing contract) {
-		return new SignUpPackageBuilder(signUpPackageDetail, contract);
+	public SignUpPackageBuilder withContracts(ContractPricing... contracts) {
+		return new SignUpPackageBuilder(signUpPackageDetail, contracts);
 	}
 
 
 	@Override
 	public SignUpPackage build() {
-		
-		
-		List<ContractPricing> contracts = new ArrayList<ContractPricing>();
-		contracts.add(contract);
-		
 		return new SignUpPackage(signUpPackageDetail, contracts);
 	}
 	

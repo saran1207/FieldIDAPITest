@@ -24,4 +24,8 @@ public class LegacyUpgradePackageFilter extends UpgradePackageFilter {
 		throw new CanNotUpgradeException();
 	}
 
+	public SignUpPackage getCurrentPackage(List<SignUpPackage> allFullPackages) {
+		return null;
+	}
+
 }
