@@ -31,6 +31,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
 	private static final String KEY_SIGNUP = "signUp";
 	private static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
+	private static final String VENDOR_CONTEXT = "vendor_context";
 	
 	private final HttpSession session;
 	
@@ -131,6 +132,14 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	
 	public void clearSignUpRequest() {
 		remove(KEY_SIGNUP);
+	}
+	
+	public void setVendorContext(Long vendorContext) {
+		put(VENDOR_CONTEXT, vendorContext);
+	}
+	
+	public Long getVendorContext() {
+		return get(VENDOR_CONTEXT, Long.class);
 	}
 	
 	@Override

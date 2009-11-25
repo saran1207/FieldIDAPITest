@@ -485,10 +485,27 @@ td.formAction {
 	font-weight: bold;
 }
 
+.vendorContext {
+	float: left;
+	margin: 10px 0 15px;
+}
+
+.vendorContext span {
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.vendorContext div {
+	float: left;
+	padding: 0;
+	margin: 0;
+}
+
 .listOfLinks {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	clear: both;
+	/* clear: both; */
 	width: 100%;
 	text-align: right;
 }

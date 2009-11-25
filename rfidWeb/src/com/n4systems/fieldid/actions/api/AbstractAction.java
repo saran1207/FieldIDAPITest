@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -16,6 +17,7 @@ import rfid.ejb.entity.UserBean;
 import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
+import com.n4systems.caching.Cache;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.ExtendedTextProviderAction;
 import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
@@ -44,6 +46,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.HostNameParser;
+import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -441,5 +444,17 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	
 	public String getDownloadLinkUrl() {
 		return DownloadLinkAction.buildDownloadUrl(this);
+	}
+	
+	public List<ListingPair> getVendorContextList() {
+		return Cache.getVendorListStore().getAsListingPair(getSessionUserOwner().getInternalOrg());
+	}
+	
+	public void setVendorContext(Long vendorContext) {
+		getSession().setVendorContext(vendorContext);
+	}
+	
+	public Long getVendorContext() {
+		return getSession().getVendorContext();
 	}
 }
