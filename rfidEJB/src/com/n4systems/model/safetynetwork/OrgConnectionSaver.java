@@ -2,6 +2,8 @@ package com.n4systems.model.safetynetwork;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.caching.Cache;
+import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -13,14 +15,16 @@ import com.n4systems.persistence.savers.Saver;
 public class OrgConnectionSaver extends Saver<OrgConnection> {
 	private final Long houseAccountId;
 	private final OrgSaver orgSaver;
+	private final VendorListCacheStore vendorCache;
 	
 	public OrgConnectionSaver(Long houseAccountId) {
-		this(new OrgSaver(), houseAccountId);
+		this(new OrgSaver(), houseAccountId, Cache.getVendorListStore());
 	}
 	
-	public OrgConnectionSaver(OrgSaver saver, Long houseAccountId) {
+	public OrgConnectionSaver(OrgSaver saver, Long houseAccountId, VendorListCacheStore vendorCache) {
 		this.orgSaver = saver;
 		this.houseAccountId = houseAccountId;
+		this.vendorCache = vendorCache;
 	}
 	
 	@Override
@@ -39,6 +43,9 @@ public class OrgConnectionSaver extends Saver<OrgConnection> {
 		
 		// now update the connection cache
 		SafetyNetworkSecurityCache.getInstance().connect(conn);
+		
+		// and reset the Vendor cache for the customer side
+		vendorCache.expire(conn.getCustomer());
 	}
 
 	private void createTypedConnections(EntityManager em, OrgConnection conn) {

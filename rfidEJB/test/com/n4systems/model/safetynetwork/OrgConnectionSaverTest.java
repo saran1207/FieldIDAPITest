@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgSaver;
@@ -56,7 +57,7 @@ public class OrgConnectionSaverTest {
 		
 		class TestOrgConnectionSaver extends OrgConnectionSaver {
 			public TestOrgConnectionSaver(OrgSaver saver) {
-				super(saver, -1L);
+				super(saver, -1L, new VendorListCacheStore());
 			}
 			
 			public CustomerOrg createCustomerOrgFromConnection(OrgConnection conn) {
@@ -77,9 +78,10 @@ public class OrgConnectionSaverTest {
 		// we don't expect to see the save call here
 		replay(orgSaver);
 		
-		OrgConnectionSaver orgConnSaver = new OrgConnectionSaver(orgSaver, conn.getVendor().getId());
+		OrgConnectionSaver orgConnSaver = new OrgConnectionSaver(orgSaver, conn.getVendor().getId(), new VendorListCacheStore());
 		
 		orgConnSaver.save(em, conn);
+		verify(orgSaver);
 	}
 	
 	@Test
@@ -90,8 +92,23 @@ public class OrgConnectionSaverTest {
 		// we don't expect to see the save call here
 		replay(orgSaver);
 		
-		OrgConnectionSaver orgConnSaver = new OrgConnectionSaver(orgSaver, conn.getCustomer().getId());
+		OrgConnectionSaver orgConnSaver = new OrgConnectionSaver(orgSaver, conn.getCustomer().getId(), new VendorListCacheStore());
 		
 		orgConnSaver.save(em, conn);
+		verify(orgSaver);
+	}
+	
+	@Test
+	public void save_expires_customers_cache_entry() {
+		DummyEntityManager em = new DummyEntityManager();
+		
+		VendorListCacheStore vendorCache = createMock(VendorListCacheStore.class);
+		vendorCache.expire(conn.getCustomer());
+		replay(vendorCache);
+		
+		OrgConnectionSaver orgConnSaver = new OrgConnectionSaver(createMock(OrgSaver.class), -1l, vendorCache);
+		orgConnSaver.save(em, conn);
+
+		verify(vendorCache);
 	}
 }
