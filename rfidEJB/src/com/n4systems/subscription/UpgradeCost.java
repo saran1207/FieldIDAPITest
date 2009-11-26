@@ -9,7 +9,7 @@ public class UpgradeCost {
 	public UpgradeCost(float immediateCharge, float nextPayment, String nextPaymentDate) {
 		this.immediateCharge = immediateCharge;
 		this.nextPayment = nextPayment;
-		this.nextPaymentDate = nextPaymentDate;
+		this.nextPaymentDate = nextPaymentDate != null ? nextPaymentDate : "";
 	}
 
 	public float getImmediateCharge() {

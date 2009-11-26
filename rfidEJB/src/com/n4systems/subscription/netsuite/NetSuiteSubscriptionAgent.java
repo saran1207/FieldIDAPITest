@@ -145,7 +145,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		}
 		
 		
-		return response != null && response.getResult().equals("OK") ? new UpgradeResponse(null, null) : null;
+		return response != null && response.getResult().equals("OK") ? new UpgradeResponse(createUpgradeCost(response), upgradeSubscription.getContractExternalId()) : null;
 	}
 
 	@Override
@@ -189,6 +189,9 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	private UpgradeCost createUpgradeCost(UpgradeSubscriptionResponse response) {
+		if (response.getUpgradesubscription() == null ) {
+			return new UpgradeCost(0F, 0F, response.getNext_payment_date());
+		}
 		return new UpgradeCost(response.getUpgradesubscription().getUpgrade_cost(), response.getUpgradesubscription().getNext_payment(), response.getNext_payment_date());
 	}
 	

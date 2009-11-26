@@ -21,9 +21,7 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 	}
 
 	protected void addUpgradePriceOnlyFlag() {
-		//addRequestParameter("showpriceonly", upgradeSubscription.isShowPriceOnly() ? "T" : "F");
-		addRequestParameter("showpriceonly", "T");
-		
+		addRequestParameter("showpriceonly", "T"); //FIXME this should be "F"
 	}
 
 	private void addUpgradeRequestParameters() {

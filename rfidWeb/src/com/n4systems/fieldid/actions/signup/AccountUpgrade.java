@@ -88,7 +88,10 @@ public class AccountUpgrade extends AbstractCrud {
 		} catch (CommunicationException e) {
 			upgradeCost = null;
 		}
-	
+		if (upgradeRequest == null) {
+			addActionErrorText("error.could_not_contact_billing_provider");
+			return ERROR;
+		}
 		return SUCCESS;
 	}
 
@@ -111,7 +114,7 @@ public class AccountUpgrade extends AbstractCrud {
 			result = handleUpgradeError(transaction, "error.could_not_contact_billing_provider", e);
 		} catch (UpgradeCompletionException e) {
 			result = handleUpgradeError(transaction, "error.applying_upgrade_to_account", e);
-			sendNotificationOfIncompleteUpgrade(getPrimaryOrg(), e);
+			
 		} catch (Exception e) {
 			result = handleUpgradeError(transaction, "error.could_not_upgrade", e);
 		} 
@@ -119,18 +122,23 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 
 
-	private void sendNotificationOfIncompleteUpgrade(PrimaryOrg primaryOrg, UpgradeCompletionException e) {
+	private void sendNotificationOfIncompleteUpgrade() {
 		MailMessage message = new MailMessage();
 		
 		message.getToAddresses().add(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
 		message.setSubject("FAILED TO APPLY UPGRADE to " + getPrimaryOrg().getName());
-		message.setBody("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing contract " + e.getResponse().getContractId());
+		message.setBody("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing contract " + upgradeContract());
 		
 		try {
 			new MailManagerImpl().sendMessage(message);
-		} catch (Exception e1) {
-			logger.error("failed to send message about failure", e1);
+		} catch (Exception e) {
+			logger.error("failed to send message about failure", e);
 		}
+	}
+
+
+	private ContractPricing upgradeContract() {
+		return accountHelper.currentPackageFilter().getUpgradeContractForPackage(upgradePackage);
 	}
 
 
@@ -146,6 +154,7 @@ public class AccountUpgrade extends AbstractCrud {
 		com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
 		logger.error("upgrade failed", e);
 		addFlashErrorText(errorMessage);
+		sendNotificationOfIncompleteUpgrade();
 		return ERROR;
 	}
 
@@ -169,7 +178,7 @@ public class AccountUpgrade extends AbstractCrud {
 
 
 	private UpgradeRequest createUpgradeRequest() {
-		ContractPricing upgradeContract = accountHelper.currentPackageFilter().getUpgradeContractForPackage(upgradePackage);
+		ContractPricing upgradeContract = upgradeContract();
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 		upgradeRequest.setUpgradePackage(upgradeContract.getSignUpPackage());
 		upgradeRequest.setContractExternalId(upgradeContract.getExternalId());
