@@ -60,6 +60,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
@@ -604,11 +605,23 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {						
-		ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 		
-		Product product = lookupProduct(lookupInformation, request.getTenantId());
+		try {
+			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
+			
+			Product product = lookupProduct(lookupInformation, request.getTenantId());
+			
+			product.setLocation(request.getLocation());
+			
+			ProductSaver saver = new ProductSaver();
+			saver.update(product);
+			
+		} catch (Exception e) {
+			logger.error("Exception occured while doing a limited product update");
+			throw new ServiceException();
+		}
 		
-		return null;
+		return new RequestResponse();
 	}
 	
 	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
