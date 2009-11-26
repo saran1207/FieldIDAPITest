@@ -20,6 +20,6 @@ ${action.setPageType('account_settings', 'show')!}
 	</div>
 	
 	<div class="formActions">
-		<a href="<@s.url action="systemSettingsEdit"/>"><@s.text name="label.back_to"/> <@s.text name="label.account_settings"/></a>
+		<a href="<@s.url action="systemSettingsEdit"/>"><@s.text name="label.back_to"/> <@s.text name="label.system_settings"/></a>
 	</div>
 </div>

@@ -197,8 +197,8 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 	
 	
-	@RequiredFieldValidator(message="", key="error.vaild_upgrade_package_must_be_selected")
-	@ExpressionValidator(message="", key="error.vaild_upgrade_package_must_be_selected", expression="upgradePackageAvailable")
+	@RequiredFieldValidator(message="", key="error.valid_upgrade_package_must_be_selected")
+	@ExpressionValidator(message="", key="error.valid_upgrade_package_must_be_selected", expression="upgradePackageAvailable")
 	public String getUpgradePackageId() {
 		return (upgradePackage != null) ? upgradePackage.getName() : null;
 	}
@@ -207,7 +207,11 @@ public class AccountUpgrade extends AbstractCrud {
 		SignUpPackageDetails targetPackage = SignUpPackageDetails.valueOf(signUpPackageId);
 		SignUpPackageLoader loader = getNonSecureLoaderFactory().createSignUpPackageLoader();
 		upgradePackage = loader.setSignUpPackageTarget(targetPackage).load();
-		
+	}
+	
+	
+	public void setPackageId(String signUpPackageId) {
+		setUpgradePackageId(signUpPackageId);
 	}
 
 	public SignUpPackage getUpgradePackage() {

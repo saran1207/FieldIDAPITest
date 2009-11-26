@@ -109,12 +109,12 @@ public class SignUpPackage {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		
-		SignUpPackage other = (SignUpPackage) obj;
-				
-		return (signPackageDetails.equals(other.signPackageDetails));
+		if (obj instanceof SignUpPackage) {
+			SignUpPackage other = (SignUpPackage) obj;
+					
+			return (getSignPackageDetails().equals(other.getSignPackageDetails()));
+		}
+		return false;
 	}
 
 	public boolean hasContract(ContractPricing currentContract) {

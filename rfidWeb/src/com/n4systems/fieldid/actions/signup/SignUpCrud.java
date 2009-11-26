@@ -183,6 +183,10 @@ public class SignUpCrud extends AbstractCrud {
 		loader.setSignUpPackageTarget(targetPackage);
 		signUpRequest.setSignUpPackage(loader.load());
 	}
+	
+	public void setPackageId(String signUpPackageId) {
+		setSignUpPackageId(signUpPackageId);
+	}
 
 	@VisitorFieldValidator(message = "")
 	public SignUpRequestDecorator getSignUp() {
