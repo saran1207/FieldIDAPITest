@@ -38,6 +38,7 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformat
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
+import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -58,6 +59,7 @@ public interface DataService {
 	
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
+	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException;		
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
 	public RequestResponse createInspectionImage(RequestInformation requestInformation, InspectionImageServiceDTO inspectionImageServiceDTO ) throws ServiceException, ProductException, InspectionException;
 	

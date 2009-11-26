@@ -124,6 +124,7 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformat
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
+import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -600,6 +601,9 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
+	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {						
+		return null;
+	}
 	
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
 		try {
