@@ -103,6 +103,7 @@ import com.n4systems.webservice.dto.MobileUpdateInfo;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.dto.PaginatedUpdateRequestInfo;
 import com.n4systems.webservice.dto.ProductListResponse;
+import com.n4systems.webservice.dto.ProductLookupable;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupListResponse;
 import com.n4systems.webservice.dto.ProductTypeListResponse;
@@ -125,6 +126,7 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
+import com.n4systems.webservice.dto.limitedproductupdate.ProductLookupInformation;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -602,7 +604,27 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {						
+		ProductLookupInformation lookupInformation = request.getProductLookupInformation();
+		
+		Product product = lookupProduct(lookupInformation, request.getTenantId());
+		
 		return null;
+	}
+	
+	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
+		ProductManager productManager = ServiceLocator.getProductManager();
+
+		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
+
+		Product product = null;
+		
+		if (productLookupableDto.isCreatedOnMobile()) {
+			product = productManager.findProductByGUID(productLookupableDto.getMobileGuid(), filter);
+		} else {
+			product = productManager.findProductAllFields(productLookupableDto.getId(), filter);
+		}
+		
+		return product;
 	}
 	
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
@@ -611,17 +633,8 @@ public class DataServiceImpl implements DataService {
 			response.setStatus(ResponseStatus.OK);
 
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			ProductManager productManager = ServiceLocator.getProductManager();
-			
-			Product existingProduct;
-			SecurityFilter filter = new TenantOnlySecurityFilter( requestInformation.getTenantId() );
-			
-			if( productDTO.isCreatedOnMobile() ) {
-				existingProduct = productManager.findProductByGUID( productDTO.getMobileGuid(), filter );
-			} else {
-				existingProduct = productManager.findProductAllFields( productDTO.getId(), filter );
-				
-			}
+
+			Product existingProduct = lookupProduct(productDTO, requestInformation.getTenantId());
 			
 			if( existingProduct == null ) {
 				logger.error( "can not load product to edit" );

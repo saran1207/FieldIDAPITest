@@ -2,6 +2,7 @@ package com.n4systems.webservice.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import static com.n4systems.webservice.dto.MobileDTOHelper.*;
 
 public abstract class AbstractInspectionServiceDTO extends AbstractBaseServiceDTO {
 	

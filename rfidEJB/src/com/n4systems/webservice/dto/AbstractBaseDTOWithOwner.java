@@ -1,5 +1,7 @@
 package com.n4systems.webservice.dto;
 
+import static com.n4systems.webservice.dto.MobileDTOHelper.*;
+
 public abstract class AbstractBaseDTOWithOwner extends AbstractBaseServiceDTO implements DTOHasOwners {
 
 	private long ownerId;

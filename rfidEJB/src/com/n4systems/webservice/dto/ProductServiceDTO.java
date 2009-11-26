@@ -1,10 +1,12 @@
 package com.n4systems.webservice.dto;
 
+import static com.n4systems.webservice.dto.MobileDTOHelper.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductServiceDTO extends AbstractBaseDTOWithOwner {
+public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements ProductLookupable {
 
 	private String serialNumber;
 	private String rfidNumber;

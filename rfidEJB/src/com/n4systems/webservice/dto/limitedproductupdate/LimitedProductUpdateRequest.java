@@ -1,6 +1,8 @@
 package com.n4systems.webservice.dto.limitedproductupdate;
 
-public class LimitedProductUpdateRequest {
+import com.n4systems.webservice.dto.RequestInformation;
+
+public class LimitedProductUpdateRequest extends RequestInformation {
 	
 	private ProductLookupInformation productLookupInformation = new ProductLookupInformation();
 	private String location;

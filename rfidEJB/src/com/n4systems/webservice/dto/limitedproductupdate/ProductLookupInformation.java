@@ -1,28 +1,28 @@
 package com.n4systems.webservice.dto.limitedproductupdate;
 
-public class ProductLookupInformation {
-	private String productMobileGuid;
-	private long productId;
+import com.n4systems.webservice.dto.MobileDTOHelper;
+import com.n4systems.webservice.dto.ProductLookupable;
+
+public class ProductLookupInformation implements ProductLookupable {
+	private String mobileGuid;
+	private Long id;
 	private String serialNumber;
 	private String rfidNumber;
 
-	public ProductLookupInformation() {
+	public String getMobileGuid() {
+		return mobileGuid;
 	}
 
-	public String getProductMobileGuid() {
-		return productMobileGuid;
+	public void setMobileGuid(String mobileGuid) {
+		this.mobileGuid = mobileGuid;
 	}
 
-	public void setProductMobileGuid(String productMobileGuid) {
-		this.productMobileGuid = productMobileGuid;
+	public Long getId() {
+		return id;
 	}
 
-	public long getProductId() {
-		return productId;
-	}
-
-	public void setProductId(long productId) {
-		this.productId = productId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getSerialNumber() {
@@ -39,5 +39,9 @@ public class ProductLookupInformation {
 
 	public void setRfidNumber(String rfidNumber) {
 		this.rfidNumber = rfidNumber;
+	}
+	
+	public boolean isCreatedOnMobile() {
+		return MobileDTOHelper.isValidServerId(id);
 	}
 }

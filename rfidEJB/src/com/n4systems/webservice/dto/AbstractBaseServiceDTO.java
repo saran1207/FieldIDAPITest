@@ -1,6 +1,5 @@
 package com.n4systems.webservice.dto;
 
-import com.n4systems.util.GUIDHelper;
 
 public abstract class AbstractBaseServiceDTO {
 
@@ -28,14 +27,7 @@ public abstract class AbstractBaseServiceDTO {
 	}
 	
 	public boolean isCreatedOnMobile() {
-		return !isValidServerId( id );
+		return !MobileDTOHelper.isValidServerId( id );
 	}
 	
-	protected boolean isValidServerId( Long id ) {
-		return ( id != null && id > 0 );
-	}
-	
-	protected boolean isNullGUID( String guid ) {
-		return GUIDHelper.isNullGUID( guid );
-	}
 }
