@@ -2,7 +2,9 @@
 	<@n4.includeStyle type="page" href="signUp"/>
 </head>
 <title><@s.text name="title.sign_up_for_an_account"/></title>
-
+<#macro price package>
+	${package.defaultPricePerUserPerMonth?string.currency}
+</#macro>
 <div id="mainContent" class="fullScreen">
 
 	<h1><@s.text name="title.sign_up_for_an_account"/></h1>

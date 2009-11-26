@@ -1,5 +1,5 @@
-<#macro columnClass package>
-	<#if package.current>class="currentPackage"<#elseif package.preferred>class="preferred"</#if>
+<#macro price package>
+	${currentPackageFilter.getUpgradeContractForPackage(package).pricePerUserPerMonth?string.currency}
 </#macro>
 <title>Upgrade Account</title>
 <head>

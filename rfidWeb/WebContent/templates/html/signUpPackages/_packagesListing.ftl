@@ -20,8 +20,9 @@
 		<tr id="priceRow" class="nonFeatureSection">
 			<td class="description"><@s.text name="label.price"/></td>
 			<#list packages as package>
+			
 				<td <@columnClass package/>>
-					<@s.text name="label.per_user_per_month"><@s.param>${package.defaultPricePerUserPerMonth?string.currency}</@s.param></@s.text> 
+					<@s.text name="label.per_user_per_month"><@s.param><@price package/></@s.param></@s.text> 
 				</td>
 			</#list>
 		</tr>
