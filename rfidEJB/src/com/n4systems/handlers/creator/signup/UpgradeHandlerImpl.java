@@ -11,6 +11,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
+import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.DataUnit;
 
 public class UpgradeHandlerImpl implements UpgradeHandler {
@@ -26,18 +27,24 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	}
 
 
-	public boolean upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException {
-		if (confirmUpgrade(upgradeRequest)) {
-			enableFeatures(upgradeRequest.getUpgradePackage(), transaction);
-			adjustLimits(upgradeRequest.getUpgradePackage());
-			saveOrg(transaction);
-			return true;
+	
+	@Override
+	public UpgradeResponse upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException, UpgradeCompletionException {
+		UpgradeResponse upgradeResponse = confirmUpgrade(upgradeRequest);
+		if (upgradeResponse != null) {
+			try {
+				enableFeatures(upgradeRequest.getUpgradePackage(), transaction);
+				adjustLimits(upgradeRequest.getUpgradePackage());
+				saveOrg(transaction);
+			} catch (Exception e) {
+				throw new UpgradeCompletionException(upgradeResponse, "failed to apply upgrade to local account for external tenant id = " + upgradeRequest.getTenantExternalId());
+			}
 		}
-		return false;
+		return upgradeResponse; 
 	}
 
 
-	private boolean confirmUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException {
+	private UpgradeResponse confirmUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException {
 		return subscriptionAgent.upgrade(upgradeRequest);
 	}
 
@@ -93,9 +100,5 @@ public class UpgradeHandlerImpl implements UpgradeHandler {
 	public UpgradeCost priceForUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException {
 		return subscriptionAgent.costToUpgradeTo(upgradeRequest);
 	}
-
-
-	
-	
 
 }

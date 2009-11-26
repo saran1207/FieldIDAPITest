@@ -26,6 +26,7 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitchTestDoub
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
+import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.test.helpers.FluentHashSet;
@@ -212,7 +213,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		
 		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
 		
-		assertFalse(sut.upgradeTo(upgradeRequest, mockTransaction));
+		assertNull(sut.upgradeTo(upgradeRequest, mockTransaction));
 		
 		assertTrue(primaryOrg.getExtendedFeatures().isEmpty());
 		assertEquals(new Long(0), primaryOrg.getLimits().getAssets());
@@ -257,6 +258,37 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	}
 	
 	
+	
+	@Test
+	public void should_get_an_upgrade_response() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		PrimaryOrg primaryOrg = aPrimaryOrg().build();
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		
+		
+		
+		UpgradeResponse actualResponse = sut.upgradeTo(upgradeRequest, mockTransaction);
+		
+		assertNotNull(actualResponse);
+		
+		verify(subscriptionAgent);
+	}
+	
+	
+	
+	@Test(expected=UpgradeCompletionException.class)
+	public void should_respond_with_a_failed_to_apply_upgrade_if_upgrade_was_successful_but_changes_were_not_saved() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		PrimaryOrg primaryOrg = aPrimaryOrg().build();
+		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		UpgradeHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, failingOrgSaver(primaryOrg), subscriptionAgent);
+		
+		sut.upgradeTo(upgradeRequest, mockTransaction);
+	}
+	
 	private SubscriptionAgent createSubscriptionAgentForUpgrade(UpgradeCost upgradeCost) throws CommunicationException {
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
 		expect(subscriptionAgent.costToUpgradeTo((UpgradeSubscription)anyObject())).andReturn(upgradeCost);
@@ -274,7 +306,8 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 
 	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws CommunicationException {
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
-		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andReturn(upgradeResult);
+		UpgradeResponse upgradeResponse = upgradeResult ? new UpgradeResponse(new UpgradeCost(1L, 1L, ""), 1L) : null;
+		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andReturn(upgradeResponse);
 		replay(subscriptionAgent);
 		return subscriptionAgent;
 	}
@@ -282,6 +315,13 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 	private OrgSaver successfulOrgSaver(PrimaryOrg primaryOrg) {
 		OrgSaver orgSaver = createMock(OrgSaver.class);
 		expect(orgSaver.update(mockTransaction, primaryOrg)).andReturn(primaryOrg);
+		replay(orgSaver);
+		return orgSaver;
+	}
+	
+	private OrgSaver failingOrgSaver(PrimaryOrg primaryOrg) {
+		OrgSaver orgSaver = createMock(OrgSaver.class);
+		expect(orgSaver.update(mockTransaction, primaryOrg)).andThrow(new RuntimeException("something failed while saving"));
 		replay(orgSaver);
 		return orgSaver;
 	}

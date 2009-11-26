@@ -18,6 +18,7 @@ import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
+import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.subscription.ValidatePromoCodeResponse;
 
@@ -134,7 +135,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 					reader.read(buffer);
 					readContractId += buffer[0];
 				}
-				contractId = Long.valueOf(readContractId);
+				contractId = Long.valueOf(readContractId.trim());
 				
 			} catch (Exception e) {			
 			} finally {
@@ -152,9 +153,9 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	@Override
-	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId());
-		return true;
+		return new UpgradeResponse(costToUpgradeTo(upgradeSubscription), upgradeSubscription.getContractExternalId());
 	}
 
 	@Override
@@ -166,9 +167,5 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		return new UpgradeCost(1000F, 4000F, "JAN. 18, 2009");
 	}
-
-	
-	
-	
 
 }

@@ -3,14 +3,19 @@ package com.n4systems.fieldid.actions.signup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
@@ -22,16 +27,23 @@ import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.UpgradeCost;
+import com.n4systems.subscription.UpgradeResponse;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.mail.MailMessage;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class AccountUpgrade extends AbstractCrud {
+	private static final Logger logger = Logger.getLogger(AccountUpgrade.class);
+	
 	
 	private List<DecoratedSignUpPackage> availablePackagesForUpdate;
 	private SignUpPackage upgradePackage;
 	private AccountHelper accountHelper;
-	
+	private UpgradeCost upgradeCost;
+	private UpgradeResponse upgradeResponse;
 	
 	public AccountUpgrade(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -61,15 +73,20 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	
 	public String doAdd() {
+		UpgradeRequest upgradeRequest = createUpgradeRequest();
+			
+		try {
+			upgradeCost = getUpgradeHandler().priceForUpgrade(upgradeRequest);
+		} catch (CommunicationException e) {
+			upgradeCost = null;
+		}
+	
 		return SUCCESS;
-		
 	}
 
 	public String doCreate() {
 		String result = upgradeAccount();
-		
 		updateCachedValues();
-		
 		return result;
 	}
 
@@ -82,23 +99,43 @@ public class AccountUpgrade extends AbstractCrud {
 			upgradeAccount(transaction);
 			result = handleUpgradeSuccess(transaction, "message.upgrade_successful");
 		} catch (CommunicationException e) {
-			result = handleUpgradeError(transaction, "error.communicating_with_billing_provider");
+			result = handleUpgradeError(transaction, "error.could_not_contact_billing_provider", e);
+		} catch (UpgradeCompletionException e) {
+			result = handleUpgradeError(transaction, "error.applying_upgrade_to_account", e);
+			sendNotificationOfIncompleteUpgrade(getPrimaryOrg(), e);
 		} catch (Exception e) {
-			result = handleUpgradeError(transaction, "error.could_not_upgrade");
+			result = handleUpgradeError(transaction, "error.could_not_upgrade", e);
 		} 
 		return result;
 	}
 
 
+	private void sendNotificationOfIncompleteUpgrade(PrimaryOrg primaryOrg, UpgradeCompletionException e) {
+		MailMessage message = new MailMessage();
+		
+		message.getToAddresses().add(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
+		message.setSubject("FAILED TO APPLY UPGRADE to " + getPrimaryOrg().getName());
+		message.setBody("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing contract " + e.getResponse().getContractId());
+		
+		try {
+			new MailManagerImpl().sendMessage(message);
+		} catch (Exception e1) {
+			logger.error("failed to send message about failure", e1);
+		}
+	}
+
+
 	private String handleUpgradeSuccess(Transaction transaction, String successMessage) {
 		addActionMessageText(successMessage);
+		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName());
 		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
 		return SUCCESS;
 	}
 
 
-	private String handleUpgradeError(Transaction transaction, String errorMessage) {
+	private String handleUpgradeError(Transaction transaction, String errorMessage, Exception e) {
 		com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
+		logger.error("upgrade failed", e);
 		addFlashErrorText(errorMessage);
 		return ERROR;
 	}
@@ -110,11 +147,14 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 
 
-	private void upgradeAccount(Transaction transaction) throws CommunicationException {
+	private void upgradeAccount(Transaction transaction) throws CommunicationException, UpgradeCompletionException {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		
-		if (!getUpgradeHandler().upgradeTo(upgradeRequest, transaction)) {
-			throw new RuntimeException();
+		upgradeResponse = getUpgradeHandler().upgradeTo(upgradeRequest, transaction);
+		
+		
+		if (upgradeResponse == null) {
+			throw new ProcessFailureException("upgrading the account was unsuccessful");
 		}
 	}
 
@@ -168,22 +208,25 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	
 	public UpgradeCost getUpgradeCost() {
-		UpgradeRequest upgradeRequest = createUpgradeRequest();
-		
-		
-		try {
-			return getUpgradeHandler().priceForUpgrade(upgradeRequest);
-		} catch (CommunicationException e) {
-			return null;
-		}
+		return upgradeCost;
 	}
 
+	
 
 	private UpgradeHandlerImpl getUpgradeHandler() {
 		return new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
 	}
 
 
+	
+	/**
+	 * these decorator classes add the is current method the sign up packages. which allows the view to render the 
+	 * selection of products correctly.
+	 * They have been placed here since this is the only context that they are needed in.
+	 * 
+	 * @author aaitken
+	 *
+	 */
 	public abstract class DecoratedSignUpPackage extends SignUpPackage {
 		public DecoratedSignUpPackage(SignUpPackage signPackage) {
 			super(signPackage.getSignPackageDetails(), signPackage.getPaymentOptions());
@@ -212,5 +255,8 @@ public class AccountUpgrade extends AbstractCrud {
 			return false;
 		}
 		
+	}
+	public UpgradeResponse getUpgradeResponse() {
+		return upgradeResponse;
 	}
 }

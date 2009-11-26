@@ -15,6 +15,7 @@ import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
+import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.subscription.UpgradeSubscription;
 import com.n4systems.subscription.ValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.client.PricingDetailsClient;
@@ -131,7 +132,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	
 	
 	@Override
-	public boolean upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		upgradeClient.setUpgradeSubscription(upgradeSubscription);
 		
@@ -144,13 +145,11 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		}
 		
 		
-		return response != null ? response.getResult().equals("OK") : false;
+		return response != null && response.getResult().equals("OK") ? new UpgradeResponse(null, null) : null;
 	}
 
 	@Override
 	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
-		
-		
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
 		detailsClient.setTenantExternalId(tenantExternalId);
 				
