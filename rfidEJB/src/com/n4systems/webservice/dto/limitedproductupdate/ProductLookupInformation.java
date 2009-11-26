@@ -42,6 +42,6 @@ public class ProductLookupInformation implements ProductLookupable {
 	}
 	
 	public boolean isCreatedOnMobile() {
-		return MobileDTOHelper.isValidServerId(id);
+		return !MobileDTOHelper.isValidServerId(id);
 	}
 }
