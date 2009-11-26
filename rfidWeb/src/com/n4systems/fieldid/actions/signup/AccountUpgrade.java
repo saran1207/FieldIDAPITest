@@ -10,6 +10,7 @@ import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
@@ -31,6 +32,7 @@ import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
+import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 
@@ -57,7 +59,12 @@ public class AccountUpgrade extends AbstractCrud {
 	protected void loadMemberFields(Long uniqueId) {
 	}
 	
-	
+	private void testRequiredEntities() {
+		if (upgradePackage == null) { 
+			addActionErrorText("error.");
+			throw new MissingEntityException();
+		}
+	}
 
 	@Override
 	protected void postInit() {
@@ -73,6 +80,7 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	
 	public String doAdd() {
+		testRequiredEntities();
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 			
 		try {
@@ -85,6 +93,7 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 
 	public String doCreate() {
+		testRequiredEntities();
 		String result = upgradeAccount();
 		updateCachedValues();
 		return result;
@@ -179,18 +188,17 @@ public class AccountUpgrade extends AbstractCrud {
 			
 			List<SignUpPackage> allSignUpPackages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
 			
-			
 			availablePackagesForUpdate.add(new CurrentSignUpPackage(currentPackageFilter().getCurrentPackage(allSignUpPackages)));
 			for (SignUpPackage upgradePackage : currentPackageFilter().reduceToAvailablePackages(allSignUpPackages)) {
 				availablePackagesForUpdate.add(new UpgradablePackage(upgradePackage));
 			}
-			
 		}
 		return availablePackagesForUpdate;
 	}
 	
 	
 	@RequiredFieldValidator(message="", key="error.vaild_upgrade_package_must_be_selected")
+	@ExpressionValidator(message="", key="error.vaild_upgrade_package_must_be_selected", expression="upgradePackageAvailable")
 	public String getUpgradePackageId() {
 		return (upgradePackage != null) ? upgradePackage.getName() : null;
 	}
@@ -218,6 +226,15 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 
 
+	public UpgradeResponse getUpgradeResponse() {
+		return upgradeResponse;
+	}
+	
+	
+	public boolean isUpgradePackageAvailable() {
+		return (!upgradePackage.getName().equalsIgnoreCase(currentPackageFilter().getPackageName()) &&
+				getPackages().contains(upgradePackage));
+	}
 	
 	/**
 	 * these decorator classes add the is current method the sign up packages. which allows the view to render the 
@@ -246,6 +263,7 @@ public class AccountUpgrade extends AbstractCrud {
 		}
 		
 	}
+	
 	public class UpgradablePackage extends DecoratedSignUpPackage {
 		public UpgradablePackage(SignUpPackage signPackage) {
 			super(signPackage);
@@ -256,7 +274,5 @@ public class AccountUpgrade extends AbstractCrud {
 		}
 		
 	}
-	public UpgradeResponse getUpgradeResponse() {
-		return upgradeResponse;
-	}
+	
 }
