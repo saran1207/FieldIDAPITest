@@ -181,7 +181,6 @@ public class RestfulTest {
 		upgradeSubscription.setTenantExternalId(6490L);
 		upgradeSubscription.setContractExternalId(143L);
 		upgradeSubscription.setNewUsers(0);
-		upgradeSubscription.setShowPriceOnly(true);
 		upgradeClient.setUpgradeSubscription(upgradeSubscription);
 		
 		UpgradeSubscriptionResponse upgradeResponse = null;

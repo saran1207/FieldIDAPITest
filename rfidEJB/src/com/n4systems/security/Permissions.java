@@ -98,6 +98,8 @@ public class Permissions {
 			return EditInspection;
 		} else if (safeName.equals("managejobs")) {
 			return ManageJobs;
+		} else if (safeName.equals("accesswebstore")) {
+			return AccessWebStore;
 		} else {
 			throw new InvalidPermission("Unknown permission name [" + permissionName + "]");
 		}

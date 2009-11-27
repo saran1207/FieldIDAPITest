@@ -136,6 +136,8 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		upgradeClient.setUpgradeSubscription(upgradeSubscription);
 		
+		
+		
 		UpgradeSubscriptionResponse response = null;
 		
 		try {

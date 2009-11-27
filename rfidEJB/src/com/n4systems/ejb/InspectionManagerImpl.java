@@ -593,14 +593,6 @@ public class InspectionManagerImpl implements InspectionManager {
 	}
 	
 	
-	private Inspection attachUploadedFile(Inspection inspection, SubInspection subInspection, FileAttachment uploadedFile) throws FileAttachmentException {
-
-		List<FileAttachment> uploadedFiles = new ArrayList<FileAttachment>(); 
-		uploadedFiles.add(uploadedFile);
-		
-		return  attachUploadedFiles(inspection, subInspection, uploadedFiles);
-		
-	}
 	
 
 	private void setProofTestData(Inspection inspection, FileDataContainer fileData) {

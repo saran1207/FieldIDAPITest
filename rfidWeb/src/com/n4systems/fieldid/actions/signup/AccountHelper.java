@@ -27,7 +27,7 @@ public class AccountHelper {
 			try {
 				currentPackageFilter = UpgradePackageFilter.createUpgradePackageFilter(getCurrentContact());
 			} catch (Exception e) {
-				return null;
+				return UpgradePackageFilter.createNullUpgradePackageFilter();
 			}
 		}	
 		

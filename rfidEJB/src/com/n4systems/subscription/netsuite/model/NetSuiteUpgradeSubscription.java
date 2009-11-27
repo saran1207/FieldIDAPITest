@@ -11,12 +11,12 @@ public class NetSuiteUpgradeSubscription implements UpgradeSubscription {
 	private Long contractExternalId;
 	private Integer newUsers = 0;
 	private Integer storageIncrement = 0;
-	private boolean showPriceOnly;
 	
 	private Subscription subscription;
 	private boolean usingCreditCard;
 	private CreditCard creditCard;
 	private String purchaseOrderNumber;
+	private boolean updatedBillingInformation;
 	
 	public Long getTenantExternalId() {
 		return tenantExternalId;
@@ -42,12 +42,6 @@ public class NetSuiteUpgradeSubscription implements UpgradeSubscription {
 	public void setStorageIncrement(Integer storageIncrement) {
 		this.storageIncrement = storageIncrement;
 	}
-	public boolean isShowPriceOnly() {
-		return showPriceOnly;
-	}
-	public void setShowPriceOnly(boolean showPriceOnly) {
-		this.showPriceOnly = showPriceOnly;
-	}
 	public Subscription getSubscription() {
 		return subscription;
 	}
@@ -71,5 +65,13 @@ public class NetSuiteUpgradeSubscription implements UpgradeSubscription {
 	}
 	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
 		this.purchaseOrderNumber = purchaseOrderNumber;
+	}
+	
+	public boolean isUpdatedBillingInformation() {
+		return updatedBillingInformation;
+	}
+	
+	public void setUpdatedBillingInformation(boolean updatedBillingInformation) {
+		this.updatedBillingInformation = updatedBillingInformation;
 	}
 }

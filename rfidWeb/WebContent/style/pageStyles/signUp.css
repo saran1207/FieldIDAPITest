@@ -91,4 +91,35 @@ h1 {
 	padding: 0.5em;
 	font-size: 2em;
 }
+
+
+#upgradeAccount {
+	padding-left:5px;
+}
+
+#upgradeAccount p {
+	font-size: 1.2em;
+	padding: 10px 0;
+	width: 800px;
+}
 	
+#upgradeAccount h2 {
+	font-size:1.5em;
+	padding-top:15px;
+}
+
+#charges {
+	padding: 5px 0;
+}
+
+#charges li {
+	font-size : 1.2em;
+	padding: 5px 0;
+}
+
+#charges span {
+	font-weight: bold;
+}
+h3 {
+	font-size: 1.5em;
+}

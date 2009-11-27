@@ -21,11 +21,11 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 	}
 
 	protected void addUpgradePriceOnlyFlag() {
-		String showPriceFlag = "T"; 
+		String donotUpgradeRespondWithPriceOnly = "F"; 
 		if (overrideShowPriceFlag()) {
-			showPriceFlag = "F";
+			donotUpgradeRespondWithPriceOnly = "T";
 		}
-		addRequestParameter("showpriceonly", showPriceFlag);  
+		addRequestParameter("showpriceonly", donotUpgradeRespondWithPriceOnly);  
 	}
 
 	private boolean overrideShowPriceFlag() {
@@ -46,15 +46,17 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 		if (subscription != null) {
 			addRequestParameter("months", subscription.getMonths().toString());
 			addRequestParameter("frequency", subscription.getFrequency().getCode());
-			addRequestParameter("prefercc", upgradeSubscription.isUsingCreditCard() ? "T" : "F");			
-			if (upgradeSubscription.isUsingCreditCard()) {
-				CreditCard creditCard = upgradeSubscription.getCreditCard();
-				addRequestParameter("ccnumber", creditCard.getName());
-				addRequestParameter("cctype", creditCard.getType().getCode());
-				addRequestParameter("ccexp", creditCard.getExpiry());
-				addRequestParameter("ccname", creditCard.getName());
-			} else {
-				addRequestParameter("ponumber", upgradeSubscription.getPurchaseOrderNumber());
+			if (upgradeSubscription.isUpdatedBillingInformation()) {
+				addRequestParameter("prefercc", upgradeSubscription.isUsingCreditCard() ? "T" : "F");			
+				if (upgradeSubscription.isUsingCreditCard()) {
+					CreditCard creditCard = upgradeSubscription.getCreditCard();
+					addRequestParameter("ccnumber", creditCard.getName());
+					addRequestParameter("cctype", creditCard.getType().getCode());
+					addRequestParameter("ccexp", creditCard.getExpiry());
+					addRequestParameter("ccname", creditCard.getName());
+				} else {
+					addRequestParameter("ponumber", upgradeSubscription.getPurchaseOrderNumber());
+				}
 			}
 		}
 	}

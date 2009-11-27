@@ -16,6 +16,11 @@ public abstract class UpgradePackageFilter {
 	}
 	
 	
+	public static UpgradePackageFilter createNullUpgradePackageFilter() {
+		return new LegacyUpgradePackageFilter();
+	}
+	
+	
 	public abstract List<SignUpPackage> reduceToAvailablePackages(List<SignUpPackage> allFullPackages);
 
 	public abstract String getPackageName();

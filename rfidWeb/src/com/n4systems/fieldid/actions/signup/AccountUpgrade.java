@@ -16,7 +16,6 @@ import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
@@ -46,6 +45,8 @@ public class AccountUpgrade extends AbstractCrud {
 	private AccountHelper accountHelper;
 	private UpgradeCost upgradeCost;
 	private UpgradeResponse upgradeResponse;
+	
+	private String purchaseOrderNumber;
 	
 	public AccountUpgrade(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -170,7 +171,6 @@ public class AccountUpgrade extends AbstractCrud {
 		
 		upgradeResponse = getUpgradeHandler().upgradeTo(upgradeRequest, transaction);
 		
-		
 		if (upgradeResponse == null) {
 			throw new ProcessFailureException("upgrading the account was unsuccessful");
 		}
@@ -179,10 +179,18 @@ public class AccountUpgrade extends AbstractCrud {
 
 	private UpgradeRequest createUpgradeRequest() {
 		ContractPricing upgradeContract = upgradeContract();
+		
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
+		
 		upgradeRequest.setUpgradePackage(upgradeContract.getSignUpPackage());
 		upgradeRequest.setContractExternalId(upgradeContract.getExternalId());
 		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
+		upgradeRequest.setPurchaseOrderNumber(purchaseOrderNumber);
+		upgradeRequest.setUsingCreditCard(false);
+		upgradeRequest.setUpdatedBillingInformation(true);
+		upgradeRequest.setFrequency(upgradeContract.getPaymentOption().getFrequency());
+		upgradeRequest.setMonths(upgradeContract.getPaymentOption().getTerm());
+		
 		return upgradeRequest;
 	}
 
@@ -286,6 +294,15 @@ public class AccountUpgrade extends AbstractCrud {
 			return false;
 		}
 		
+	}
+
+	public String getPurchaseOrderNumber() {
+		return purchaseOrderNumber;
+	}
+
+
+	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+		this.purchaseOrderNumber = purchaseOrderNumber;
 	}
 	
 }

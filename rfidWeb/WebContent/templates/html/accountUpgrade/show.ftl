@@ -1,5 +1,4 @@
-<title>Account Upgraded</title>
-${action.setPageType('account_settings', 'show')!}
+${action.setPageType('account_settings', 'upgrade')!}
 
 <div id="oldPackage">
 	${action.currentPackageFilter().packageName?html}

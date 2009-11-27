@@ -18,5 +18,7 @@ public interface UpgradeSubscription {
 	public boolean isUsingCreditCard();
 
 	public String getPurchaseOrderNumber();
+	
+	public boolean isUpdatedBillingInformation();
 
 }

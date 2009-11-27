@@ -1,13 +1,14 @@
 <#macro price package>
 	${currentPackageFilter.getUpgradeContractForPackage(package).pricePerUserPerMonth?string.currency}
 </#macro>
-<title>Upgrade Account</title>
+
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
 </head>
-${action.setPageType('account_settings', 'show')!}
-<#assign currentPackageFilter=action.currentPackageFilter()/>
+${action.setPageType('account_settings', 'upgrade')!}
 
+
+<#assign currentPackageFilter=action.currentPackageFilter()/>
 <#include "/templates/html/common/_formErrors.ftl"/>
 <#assign purchaseAction="accountUpgrade"/>
 <#assign purchaseLabel="label.upgrade"/>
