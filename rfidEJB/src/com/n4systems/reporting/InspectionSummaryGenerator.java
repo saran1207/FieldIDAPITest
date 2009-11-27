@@ -31,7 +31,6 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.persistence.EntityManagerTransactionWrapper;
 import com.n4systems.util.ReportMap;
 import com.n4systems.util.ServiceLocator;
 
@@ -122,7 +121,7 @@ public class InspectionSummaryGenerator {
 		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 
 		if (reportDefiner.getProductType() != null) {
-			ProductType productType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getProductType()).load(new EntityManagerTransactionWrapper(persistenceManager.getEntityManager()));
+			ProductType productType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getProductType()).load();
 			reportMap.put("productType", productType.getName());
 		}
 
