@@ -31,6 +31,8 @@ public abstract class AbstractNetsuiteClient<K> {
 	@SuppressWarnings("unchecked")
 	private Map<String, Class> classMap = new HashMap<String, Class>();
 
+	protected final String TESTING_FLAG_PROPERTY = "netsuite.testing";
+
 	protected abstract void addRequestParameters();
 	
 	protected AbstractNetsuiteClient(Class<K> returnClass, String taskName) {

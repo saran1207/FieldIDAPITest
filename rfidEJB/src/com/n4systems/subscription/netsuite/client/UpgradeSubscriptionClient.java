@@ -21,7 +21,15 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 	}
 
 	protected void addUpgradePriceOnlyFlag() {
-		addRequestParameter("showpriceonly", "T"); //FIXME this should be "F"
+		String showPriceFlag = "T"; 
+		if (overrideShowPriceFlag()) {
+			showPriceFlag = "F";
+		}
+		addRequestParameter("showpriceonly", showPriceFlag);  
+	}
+
+	private boolean overrideShowPriceFlag() {
+		return System.getProperty(TESTING_FLAG_PROPERTY) == null || System.getProperty(TESTING_FLAG_PROPERTY).equalsIgnoreCase("T");
 	}
 
 	private void addUpgradeRequestParameters() {
@@ -31,7 +39,6 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 		}
 		addRequestParameter("newusers", upgradeSubscription.getNewUsers().toString());
 		addRequestParameter("storageinc", upgradeSubscription.getStorageIncrement().toString());
-		
 	}
 
 	private void addSubscriptionRequestParameters(Subscription subscription) {

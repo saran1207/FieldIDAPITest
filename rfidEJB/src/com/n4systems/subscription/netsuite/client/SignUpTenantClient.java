@@ -6,7 +6,6 @@ import com.n4systems.subscription.Subscription;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
 
 public class SignUpTenantClient extends AbstractNetsuiteClient<NetsuiteSignUpTenantResponse> {
-	private final String TESTING_FLAG_PROPERTY = "netsuite.testing";
 	private final String testingFlag;
 	
 	private Company company;
