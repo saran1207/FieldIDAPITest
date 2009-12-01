@@ -13,7 +13,7 @@ public class RobertsSerialNumberConverter {
 			return null;
 		}
 
-		Pattern serialPattern = Pattern.compile("^(.*)\\s*(0*)(\\d+)\\s*to\\s*(\\d+)$", Pattern.CASE_INSENSITIVE);
+		Pattern serialPattern = Pattern.compile("^(.*?)\\s*(0*)(\\d+)\\s*to\\s*(\\d+)$", Pattern.CASE_INSENSITIVE);
 		Matcher serialMatcher = serialPattern.matcher(serialNumberLine.trim());
 		
 		if (!serialMatcher.matches()) {
@@ -29,7 +29,7 @@ public class RobertsSerialNumberConverter {
 		long low = (firstNum <= secondNum) ? firstNum : secondNum;
 		long high = (low == firstNum) ? secondNum : firstNum;
 		
-		String format = generateFormatString(prefix, zeroPadds);
+		String format = generateFormatString(prefix, zeroPadds, serialMatcher.group(3));
 		
 		StringBuilder serialCSV = new StringBuilder();
 		serialCSV.append(String.format(format, low));
@@ -42,8 +42,13 @@ public class RobertsSerialNumberConverter {
 		return serialCSV.toString();
 	}
 	
-	private String generateFormatString(String prefix, String zeroPadds) {
-		StringBuilder format = new StringBuilder(prefix).append('%').append(zeroPadds).append('d');
+	private static String generateFormatString(String prefix, String zeroPadds, String first) {
+		String zeroPadFormat = "";
+		if (zeroPadds.length() > 0) {
+			zeroPadFormat = "0" + (zeroPadds.length() + first.length());
+		}
+ 		
+		StringBuilder format = new StringBuilder(prefix).append('%').append(zeroPadFormat).append('d');
 		return format.toString();
 	}
 	

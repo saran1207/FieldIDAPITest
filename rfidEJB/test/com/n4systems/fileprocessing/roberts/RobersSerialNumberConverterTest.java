@@ -67,13 +67,18 @@ public class RobersSerialNumberConverterTest {
 	
 	@Test
 	public void convert_simple_range_with_spaces() {
-		assertEquals("sn 1,sn 2,sn 3,sn 4,sn 5", serialConverter.toCSV("sn 1 to 5 "));
+		assertEquals("sn1,sn2,sn3,sn4,sn5", serialConverter.toCSV("sn 1 to 5 "));
 		assertEquals("sn1,sn2,sn3,sn4,sn5", serialConverter.toCSV("sn1 to 5 "));
-		assertEquals("sn 01,sn 02,sn 03,sn 04,sn 05", serialConverter.toCSV("sn 01 to 5 "));
+		assertEquals("sn01,sn02,sn03,sn04,sn05", serialConverter.toCSV("sn 01 to 5 "));
 	}
 	
 	@Test
 	public void convert_range_with_number_in_middle() {
 		assertEquals("sn2fds1,sn2fds2,sn2fds3,sn2fds4,sn2fds5", serialConverter.toCSV("sn2fds1to5"));
+	}
+	
+	@Test
+	public void convert_number_only_range() {
+		assertEquals("3301,3302,3303,3304,3305,3306,3307,3308", serialConverter.toCSV("3301 to 3308"));
 	}
 }
