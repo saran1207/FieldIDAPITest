@@ -2,7 +2,7 @@
 Welcome to Field ID
 ++++++++++++++++++++++++++++++++++++++++++
 
-Thank-you for joining Field ID. We are happy to provide you the details of your newly created Field ID account. You can sign in securely using the following information.
+Thank you for joining Field ID. We are happy to provide you the details of your newly created Field ID account. You can sign in securely using the following information.
 
 Your Account Details
 ------------------------------------------

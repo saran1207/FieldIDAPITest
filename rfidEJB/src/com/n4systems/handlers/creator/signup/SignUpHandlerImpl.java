@@ -140,7 +140,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	private MailMessage createWelcomeMessage(AccountPlaceHolder placeHolder, String portalUrl) {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage("Welcome to Field ID", "welcomeMessage");
 	
-		
+		invitationMessage.setSubjectPrefix("");
 		invitationMessage.getToAddresses().add(placeHolder.getAdminUser().getEmailAddress());
 		invitationMessage.getBccAddresses().add("sales@n4systems.com");
 		invitationMessage.getTemplateMap().put("companyId", placeHolder.getTenant().getName());
