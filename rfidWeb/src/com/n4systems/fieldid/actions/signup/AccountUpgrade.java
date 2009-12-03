@@ -11,6 +11,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.signup.view.model.CreditCardDecorator;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
@@ -26,6 +27,8 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.CurrentSubscription;
+import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.ConfigContext;
@@ -48,6 +51,16 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	private String purchaseOrderNumber;
 	
+	private PaymentOption paymentOption;
+	private boolean phoneSupport;
+	
+	private boolean usingCreditCard = true;
+	
+	private List<SignUpPackage> allSignUpPackages;
+	
+	
+	private CreditCardDecorator creditCard = new CreditCardDecorator();
+
 	public AccountUpgrade(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -56,13 +69,14 @@ public class AccountUpgrade extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 	}
+	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 	}
 	
 	private void testRequiredEntities() {
 		if (upgradePackage == null) { 
-			addActionErrorText("error.");
+			addActionErrorText("error.could_not_find_an_upgrade_package");
 			throw new MissingEntityException();
 		}
 	}
@@ -80,7 +94,7 @@ public class AccountUpgrade extends AbstractCrud {
 	}
 	
 	
-	public String doAdd() {
+	public String doShowCost() {
 		testRequiredEntities();
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 			
@@ -93,6 +107,26 @@ public class AccountUpgrade extends AbstractCrud {
 			addActionErrorText("error.could_not_contact_billing_provider");
 			return ERROR;
 		}
+		return SUCCESS;
+	}
+	
+	public String doAdd() {
+		testRequiredEntities();
+		UpgradeRequest upgradeRequest = createUpgradeRequest();
+		upgradeRequest.setUpdatedBillingInformation(false);
+		try {
+			upgradeCost = getUpgradeHandler().priceForUpgrade(upgradeRequest);
+		} catch (CommunicationException e) {
+			upgradeCost = null;
+		}
+		if (upgradeRequest == null) {
+			addActionErrorText("error.could_not_contact_billing_provider");
+			return ERROR;
+		}
+		if (isFreeAccount()) {
+			setPaymentOption(PaymentOption.preferredOption().name());
+		}
+		
 		return SUCCESS;
 	}
 
@@ -139,6 +173,9 @@ public class AccountUpgrade extends AbstractCrud {
 
 
 	private ContractPricing upgradeContract() {
+		if (paymentOption != null) {
+			return upgradePackage.getContract(paymentOption);
+		}
 		return accountHelper.currentPackageFilter().getUpgradeContractForPackage(upgradePackage);
 	}
 
@@ -186,12 +223,37 @@ public class AccountUpgrade extends AbstractCrud {
 		upgradeRequest.setContractExternalId(upgradeContract.getExternalId());
 		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
 		upgradeRequest.setPurchaseOrderNumber(purchaseOrderNumber);
-		upgradeRequest.setUsingCreditCard(false);
-		upgradeRequest.setUpdatedBillingInformation(true);
+		upgradeRequest.setUsingCreditCard(usingCreditCard);
+		upgradeRequest.setUpdatedBillingInformation(accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation());
 		upgradeRequest.setFrequency(upgradeContract.getPaymentOption().getFrequency());
 		upgradeRequest.setMonths(upgradeContract.getPaymentOption().getTerm());
+		upgradeRequest.setPurchasingPhoneSupport(getPhoneSupport());
 		
 		return upgradeRequest;
+	}
+
+
+	private boolean getPhoneSupport() {
+		if (isFreeAccount()) {
+			return isPurchasingPhoneSupport();
+		}
+		
+		return accountCurrentlyHasPhoneSupport();
+	}
+
+
+	private boolean accountCurrentlyHasPhoneSupport() {
+		try {
+			return accountHelper.getCurrentSubscription().isPhonesupport();
+		} catch (CommunicationException e) {
+			return false;
+		}
+	}
+
+	
+
+	public boolean isFreeAccount() {
+		return currentPackageFilter().getCurrentPackage(getAllSignUpPackages()).isFree();
 	}
 
 
@@ -203,14 +265,20 @@ public class AccountUpgrade extends AbstractCrud {
 		if (availablePackagesForUpdate == null) {
 			availablePackagesForUpdate = new ArrayList<DecoratedSignUpPackage>();
 			
-			List<SignUpPackage> allSignUpPackages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
-			
-			availablePackagesForUpdate.add(new CurrentSignUpPackage(currentPackageFilter().getCurrentPackage(allSignUpPackages)));
+			availablePackagesForUpdate.add(new CurrentSignUpPackage(currentPackageFilter().getCurrentPackage(getAllSignUpPackages())));
 			for (SignUpPackage upgradePackage : currentPackageFilter().reduceToAvailablePackages(allSignUpPackages)) {
 				availablePackagesForUpdate.add(new UpgradablePackage(upgradePackage));
 			}
 		}
 		return availablePackagesForUpdate;
+	}
+
+
+	private List<SignUpPackage> getAllSignUpPackages() {
+		if (allSignUpPackages == null) {
+			allSignUpPackages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
+		}
+		return allSignUpPackages;
 	}
 	
 	
@@ -257,6 +325,63 @@ public class AccountUpgrade extends AbstractCrud {
 				getPackages().contains(upgradePackage));
 	}
 	
+	
+	public String getPurchaseOrderNumber() {
+		return purchaseOrderNumber;
+	}
+
+
+	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+		this.purchaseOrderNumber = purchaseOrderNumber;
+	}
+	
+	
+	public String getPaymentOption() {
+		return paymentOption != null ? paymentOption.name() : null;
+	}
+
+
+	public void setPaymentOption(String paymentOption) {
+		this.paymentOption = PaymentOption.valueOf(paymentOption);
+	}
+	
+	public CreditCardDecorator getCreditCard() {
+		return creditCard;
+	}
+
+
+	public void setCreditCard(CreditCardDecorator creditCard) {
+		this.creditCard = creditCard;
+	}
+
+
+	public boolean isPurchasingPhoneSupport() {
+		return phoneSupport;
+	}
+
+
+	public void setPurchasingPhoneSupport(boolean phoneSupport) {
+		this.phoneSupport = phoneSupport;
+	}
+	
+	public CurrentSubscription getCurrentSubscription() {
+		try {
+			return accountHelper.getCurrentSubscription();
+		} catch (CommunicationException e) {
+			//FIXME  this shouldn't be like this.
+			return null;
+		}
+	}
+	
+	public boolean isUsingCreditCard() {
+		return usingCreditCard;
+	}
+
+
+	public void setUsingCreditCard(boolean usingCreditCard) {
+		this.usingCreditCard = usingCreditCard;
+	}
+	
 	/**
 	 * these decorator classes add the is current method the sign up packages. which allows the view to render the 
 	 * selection of products correctly.
@@ -296,13 +421,7 @@ public class AccountUpgrade extends AbstractCrud {
 		
 	}
 
-	public String getPurchaseOrderNumber() {
-		return purchaseOrderNumber;
-	}
+	
 
-
-	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
-		this.purchaseOrderNumber = purchaseOrderNumber;
-	}
 	
 }

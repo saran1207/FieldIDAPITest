@@ -28,4 +28,8 @@ public enum PaymentOption {
 	public boolean isDefault() {
 		return this == DEFAULT_OPTION;
 	}
+
+	public static PaymentOption preferredOption() {
+		return DEFAULT_OPTION;
+	}
 }

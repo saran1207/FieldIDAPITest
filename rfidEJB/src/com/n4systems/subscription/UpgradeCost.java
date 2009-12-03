@@ -6,6 +6,10 @@ public class UpgradeCost {
 	private final float nextPayment;
 	private final String nextPaymentDate;
 	
+	public static UpgradeCost nullUpgradeCost() {
+		return new UpgradeCost(0F, 0F, "");
+	}
+	
 	public UpgradeCost(float immediateCharge, float nextPayment, String nextPaymentDate) {
 		this.immediateCharge = immediateCharge;
 		this.nextPayment = nextPayment;

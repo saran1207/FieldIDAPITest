@@ -59,6 +59,7 @@ public class RestfulTest {
 		tenant.setAdminEmail("dev@n4systems.com");
 		tenant.setId(500L);
 
+
 		String response = "";
 		try {
 			response = tenantSaver.setTenant(tenant).setNetsuiteRecordId(3790L).execute();
@@ -187,12 +188,13 @@ public class RestfulTest {
 		
 		try {
 			upgradeResponse = upgradeClient.execute();
-			System.out.println("Upgrade cost: "+upgradeResponse.getUpgradesubscription().getUpgrade_cost());
-			System.out.println("Next payment: "+upgradeResponse.getUpgradesubscription().getNext_payment());
-			System.out.println("Was ok?"+upgradeResponse.getResult().equals("OK"));
+			System.out.println("Upgrade cost: " + upgradeResponse.getUpgradesubscription().getUpgrade_cost());
+			System.out.println("Next payment: " + upgradeResponse.getUpgradesubscription().getNext_payment());
+			System.out.println("Was ok?" + upgradeResponse.requestRespondedWithSuccess());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		
 		/*
 		PricingDetailsClient pricingClient = new PricingDetailsClient();
@@ -221,6 +223,9 @@ public class RestfulTest {
 		subscription.setPromoCode("");
 		
 		return subscription;
+		
+		
+		
 	}
 	
 	private static NetsuiteClient populateTestClient() {

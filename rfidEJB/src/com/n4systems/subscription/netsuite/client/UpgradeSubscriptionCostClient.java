@@ -1,5 +1,6 @@
 package com.n4systems.subscription.netsuite.client;
 
+
 public class UpgradeSubscriptionCostClient extends UpgradeSubscriptionClient {
 
 	public UpgradeSubscriptionCostClient() {
@@ -11,6 +12,9 @@ public class UpgradeSubscriptionCostClient extends UpgradeSubscriptionClient {
 		addRequestParameter("showpriceonly", "T");
 	}
 	
+	@Override
+	protected void applyBillingInformation() {
+	}
 	
 
 }

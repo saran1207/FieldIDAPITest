@@ -449,6 +449,8 @@
 			<result name="success" type="freemarker">/templates/ajax/remoteOrg/found.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/remoteOrg/not_found.ftl</result>
 		</action>
-		
+		<action name="upgradePriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
+			<result name="success" type="freemarker">/templates/ajax/accountUpgrade/showCost.ftl</result>
+		</action>
 	</package>
 </struts>

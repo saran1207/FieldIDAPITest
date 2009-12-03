@@ -8,6 +8,7 @@ import com.n4systems.subscription.BillingInfoField;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.ContractPrice;
+import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.PriceCheckResponse;
 import com.n4systems.subscription.Response;
@@ -30,6 +31,8 @@ import com.n4systems.subscription.netsuite.model.GetPricingDetailsResponse;
 import com.n4systems.subscription.netsuite.model.GetSubscriptionDetailsResponse;
 import com.n4systems.subscription.netsuite.model.NetSuiteValidatePromoCodeResponse;
 import com.n4systems.subscription.netsuite.model.NetsuiteSignUpTenantResponse;
+import com.n4systems.subscription.netsuite.model.NetsuiteSubscriptionDetails;
+import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionPaymentDetails;
 import com.n4systems.subscription.netsuite.model.UpgradeSubscriptionResponse;
 
 public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
@@ -46,7 +49,6 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		productDetailsClient = new ProductDetailsClient();
 	}
 	
-	@Override
 	public SignUpTenantResponse buy(Subscription subscription, Company company,Person person) throws CommunicationException, BillingInfoException {
 		signUpTenantClient.setSubscription(subscription);
 		signUpTenantClient.setCompany(company);
@@ -61,7 +63,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		}
 				
 		BillingInfoField problemField = BillingInfoField.UNKOWN;
-		if (response.getResult().equals("NOTOK")) {
+		if (!response.requestRespondedWithSuccess()) {
 			if (response.getDetails() != null) {
 				if (response.getDetails().contains("(email)")) {
 					problemField = BillingInfoField.EMAIL; 
@@ -76,7 +78,6 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		return response;
 	}
 
-	@Override
 	public ValidatePromoCodeResponse validatePromoCode(String code)	throws CommunicationException {
 		validatePromoCodeClient.setCode(code);
 		
@@ -91,7 +92,6 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		return response;
 	}
 
-	@Override
 	public PriceCheckResponse priceCheck(Subscription subscription)	throws CommunicationException {
 		pricingDetailsClient.setSubscription(subscription);
 		
@@ -106,13 +106,11 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		return response;
 	}
 
-	@Override
 	public List<ContractPrice> retrieveContractPrices()	throws CommunicationException {
 		NetSuiteContractPriceHandler contractPriceHandler = new NetSuiteContractPriceHandler(productDetailsClient, pricingDetailsClient);
 		return contractPriceHandler.retrieveContractPrices();
 	}
 
-	@Override
 	public Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException {
 		UploadNoteClient uploadNoteClient = new UploadNoteClient();
 		uploadNoteClient.setTenantId(tenantExternalId);
@@ -131,12 +129,9 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
 	
 	
-	@Override
 	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		upgradeClient.setUpgradeSubscription(upgradeSubscription);
-		
-		
 		
 		UpgradeSubscriptionResponse response = null;
 		
@@ -147,11 +142,11 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		}
 		
 		
-		return response != null && response.getResult().equals("OK") ? new UpgradeResponse(createUpgradeCost(response), upgradeSubscription.getContractExternalId()) : null;
+		return response != null && response.requestRespondedWithSuccess() ? new UpgradeResponse(createUpgradeCost(response), upgradeSubscription.getContractExternalId()) : null;
 	}
 
-	@Override
-	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
+	
+	public CurrentSubscription currentSubscriptionFor(Long tenantExternalId) throws CommunicationException {
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
 		detailsClient.setTenantExternalId(tenantExternalId);
 				
@@ -159,15 +154,18 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		try {
 			response = detailsClient.execute();
 		} catch (IOException e) {
-			throw new CommunicationException();
+			throw new CommunicationException("could not get response", e);
 		}
 		
-		Long contractId = response.getSubscription() != null ? response.getSubscription().getContractId() : null;
+		if (!response.requestRespondedWithSuccess()) {
+			throw new CommunicationException("NOTOK repsonse from netsuite, reason :  " + response.getDetails());
+		}
 		
-		return contractId;
+		
+		NetsuiteSubscriptionDetails subscription = response.getSubscription();
+		return new CurrentSubscription(subscription.getContractId(), subscription.getPhoneSupportAsBoolean(),  subscription.getCconfile(), subscription.getPayviacc());
 	}
 
-	@Override
 	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		UpgradeSubscriptionClient upgradeClient = createUpgradeCostSubscriptionClient(upgradeSubscription);
 		
@@ -178,7 +176,6 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		} catch (IOException e) {
 			throw new CommunicationException();
 		}
-		
 		
 		return createUpgradeCost(response);
 	}
@@ -191,10 +188,11 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	private UpgradeCost createUpgradeCost(UpgradeSubscriptionResponse response) {
-		if (response.getUpgradesubscription() == null ) {
-			return new UpgradeCost(0F, 0F, response.getNext_payment_date());
+		UpgradeSubscriptionPaymentDetails upgradeSubscription = response.getUpgradesubscription();
+		if (upgradeSubscription == null ) {
+			return UpgradeCost.nullUpgradeCost();
 		}
-		return new UpgradeCost(response.getUpgradesubscription().getUpgrade_cost(), response.getUpgradesubscription().getNext_payment(), response.getNext_payment_date());
+		return new UpgradeCost(upgradeSubscription.getUpgrade_cost(), upgradeSubscription.getNext_payment(), upgradeSubscription.getNext_payment_date());
 	}
 	
 }

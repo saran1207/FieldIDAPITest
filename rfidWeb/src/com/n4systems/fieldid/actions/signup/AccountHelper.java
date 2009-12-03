@@ -6,6 +6,7 @@ import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageListLoader;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.subscription.CommunicationException;
+import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.SubscriptionAgent;
 
 public class AccountHelper {
@@ -14,6 +15,7 @@ public class AccountHelper {
 	private UpgradePackageFilter currentPackageFilter;
 	private PrimaryOrg primaryOrg;
 	private SignUpPackageListLoader packageLoader;
+	private CurrentSubscription currentSubscription;
 	
 	public AccountHelper(SubscriptionAgent subscriptionAgent, PrimaryOrg primaryOrg, SignUpPackageListLoader packageLoader) {
 		this.subscriptionAgent = subscriptionAgent;
@@ -36,7 +38,7 @@ public class AccountHelper {
 
 
 	private ContractPricing getCurrentContact() throws CommunicationException {
-		Long contractId = subscriptionAgent.contractIdFor(primaryOrg.getExternalId());
+		Long contractId = getCurrentSubscription().getContractId();
 		for (SignUpPackage signUpPackage : packageLoader.load()) {
 			for (ContractPricing contract : signUpPackage.getPaymentOptions()) {
 				if (contract.getExternalId().equals(contractId)) {
@@ -46,6 +48,14 @@ public class AccountHelper {
 			
 		}
 		return ContractPricing.getLegacyContractPricing();
+	}
+
+
+	public CurrentSubscription getCurrentSubscription() throws CommunicationException {
+		if (currentSubscription == null) {
+			currentSubscription = subscriptionAgent.currentSubscriptionFor(primaryOrg.getExternalId());
+		}
+		return currentSubscription;
 	}
 	
 }

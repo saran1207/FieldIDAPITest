@@ -28,4 +28,5 @@ public class LegacyUpgradePackageFilter extends UpgradePackageFilter {
 		return null;
 	}
 
+
 }

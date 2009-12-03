@@ -16,10 +16,9 @@ public abstract class SubscriptionAgent {
 	
 	public abstract Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException;
 	
-	
 	public abstract UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException;
 	
-	public abstract Long contractIdFor(Long tenantExternalId) throws CommunicationException;
+	public abstract CurrentSubscription currentSubscriptionFor(Long tenantExternalId) throws CommunicationException;
 	
 	public abstract UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException;
 		

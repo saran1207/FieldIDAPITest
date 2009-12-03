@@ -25,6 +25,6 @@ public class NetSuiteValidatePromoCodeResponse extends BaseResponse implements c
 	}
 
 	public boolean isValid() {
-		return getResult().equals("OK");
+		return requestRespondedWithSuccess();
 	}
 }

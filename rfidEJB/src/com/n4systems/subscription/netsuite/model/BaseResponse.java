@@ -30,5 +30,9 @@ public class BaseResponse implements Response {
 
 	public void setDetails(String details) {
 		this.details = details;
-	}	
+	}
+	
+	public boolean requestRespondedWithSuccess() {
+		return result.equals("OK");
+	}
 }

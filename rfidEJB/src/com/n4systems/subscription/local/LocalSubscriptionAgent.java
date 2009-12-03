@@ -10,6 +10,7 @@ import java.util.List;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.ContractPrice;
+import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.Person;
 import com.n4systems.subscription.PriceCheckResponse;
@@ -27,15 +28,14 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	private static final String packageExtension = ".package";
 	private static String tempDirectory = "/tmp";
 	
-	@Override
 	public SignUpTenantResponse buy(Subscription subscription, Company company, Person client) {
 		LocalSignUpTenantResponse signUpResponse = new LocalSignUpTenantResponse();
 		
-		writePackageInfo(signUpResponse.getTenant().getExternalId(), subscription.getContractExternalId()); 
+		writePackageInfo(signUpResponse.getTenant().getExternalId(), subscription.getContractExternalId(), subscription.isPurchasingPhoneSupport(), company.isUsingCreditCard(), company.isUsingCreditCard()); 
 		return signUpResponse;
 	}
 
-	private void writePackageInfo(Long externalId, Long contractId) {
+	private void writePackageInfo(Long externalId, Long contractId, boolean phoneSupport, boolean payViaCC, boolean ccOnFile) {
 		File tenantFile = currentContractFile(externalId);
 		
 		if (tenantFile.exists()) {
@@ -44,7 +44,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		FileWriter fileWriter = null;
 		try {
 			fileWriter = new FileWriter(tenantFile);
-			fileWriter.write(contractId.toString());
+			fileWriter.write(contractId.toString() + "," + phoneSupport + "," + payViaCC + "," + ccOnFile);
 			fileWriter.close();
 		} catch (IOException e) {}
 		finally {
@@ -58,13 +58,11 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	
-	@Override
 	public ValidatePromoCodeResponse validatePromoCode(String code)	throws CommunicationException {
 		return new LocalValidatePromoCodeResponse();
 	}
 
 	
-	@Override
 	public PriceCheckResponse priceCheck(Subscription subscription)	throws CommunicationException {
 		if (subscription.getFrequency() == null || subscription.getMonths() == null || 
 				subscription.getContractExternalId() == null || subscription.getUsers() < 1) {
@@ -76,7 +74,6 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		return priceCheckResponse;
 	}
 
-	@Override
 	public List<ContractPrice> retrieveContractPrices()	throws CommunicationException {
 		List<ContractPrice> contractPrices = new ArrayList<ContractPrice>();
 		
@@ -114,16 +111,15 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		return localContractPrice;
 	}
 
-	@Override
 	public Response attachNote(Long tenantExternalId, String title, String note) throws CommunicationException {
 		return new LocalResponse();
 	}
 	
 
 
-	private Long findContractFromFile(Long tenantExternalId) {
+	private CurrentSubscription findContractFromFile(Long tenantExternalId) {
 		File tenantFile = currentContractFile(tenantExternalId);
-		Long contractId = null;
+		CurrentSubscription result = null;
 		
 		if (tenantFile.exists()) {
 			FileReader reader = null;
@@ -135,16 +131,27 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 					reader.read(buffer);
 					readContractId += buffer[0];
 				}
-				contractId = Long.valueOf(readContractId.trim());
-				
-			} catch (Exception e) {			
+			} catch (Exception e) {		
+				return null;
 			} finally {
 				if (reader != null)
 					try { reader.close(); } catch (IOException e) {}
 			}
+			result = parseCurrentSubscription(readContractId);
 			
 		}
-		return contractId;
+		return result;
+	}
+
+	private CurrentSubscription parseCurrentSubscription(String readContractId) {
+		CurrentSubscription result;
+		String[] values = readContractId.split(",");
+		Long contractId = Long.valueOf(values[0].trim());
+		boolean phoneSupport = Boolean.valueOf(values[1].trim());
+		boolean payViaCC = Boolean.valueOf(values[2].trim());
+		boolean ccOnRecord = Boolean.valueOf(values[3].trim());
+		result = new CurrentSubscription(contractId, phoneSupport, ccOnRecord, payViaCC);
+		return result;
 	}
 
 	private File currentContractFile(Long tenantExternalId) {
@@ -152,18 +159,16 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		return tenantFile;
 	}
 
-	@Override
 	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
-		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId());
+		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId(), upgradeSubscription.getSubscription().isPurchasingPhoneSupport(), upgradeSubscription.isUpdatedBillingInformation() && upgradeSubscription.isUsingCreditCard(), upgradeSubscription.isUpdatedBillingInformation() && upgradeSubscription.isUsingCreditCard());
 		return new UpgradeResponse(costToUpgradeTo(upgradeSubscription), upgradeSubscription.getContractExternalId());
 	}
 
-	@Override
-	public Long contractIdFor(Long tenantExternalId) throws CommunicationException {
+	
+	public CurrentSubscription currentSubscriptionFor(Long tenantExternalId) throws CommunicationException {
 		return findContractFromFile(tenantExternalId);
 	}
 
-	@Override
 	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
 		return new UpgradeCost(1000F, 4000F, "JAN. 18, 2009");
 	}

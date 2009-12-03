@@ -14,6 +14,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageListLoader;
+import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.test.helpers.FluentArrayList;
 
@@ -27,13 +28,15 @@ public class AccountHelperTest {
 	public void should_request_accounts_current_package_from_subscription_agent() throws Exception {
 		PrimaryOrg primaryOrg = aPrimaryOrg().build(); 
 		List<SignUpPackage> packages = new FluentArrayList<SignUpPackage>(createSignUpPackageWithSimpleContract(SignUpPackageDetails.Free, SOME_CONTRACT_PRICE_ID).build());
+		CurrentSubscription currentSubscription = new CurrentSubscription(SOME_CONTRACT_PRICE_ID, false, false, false);
+		
 		
 		SignUpPackageListLoader packageLoader = createMock(SignUpPackageListLoader.class);
 		expect(packageLoader.load()).andReturn(packages);
 		replay(packageLoader);
 		
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
-		expect(subscriptionAgent.contractIdFor(anyLong())).andReturn(SOME_CONTRACT_PRICE_ID);
+		expect(subscriptionAgent.currentSubscriptionFor(anyLong())).andReturn(currentSubscription);
 		replay(subscriptionAgent);
 		
 		
@@ -52,9 +55,10 @@ public class AccountHelperTest {
 	@Test
 	public void should_request_accounts_current_package_from_subscription_agent_only_once() throws Exception {
 		PrimaryOrg primaryOrg = aPrimaryOrg().build(); 
+		CurrentSubscription currentSubscription = new CurrentSubscription(SOME_CONTRACT_PRICE_ID, false, false, false);
 		
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
-		expect(subscriptionAgent.contractIdFor(anyLong())).andReturn(SOME_CONTRACT_PRICE_ID);
+		expect(subscriptionAgent.currentSubscriptionFor(anyLong())).andReturn(currentSubscription);
 		expectLastCall().once();
 		replay(subscriptionAgent);
 		

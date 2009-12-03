@@ -148,7 +148,7 @@ public abstract class AbstractNetsuiteClient<K> {
 			
 			response = getConnectionResponse();
 			
-			logger.debug("Response in JSON was: "+response);
+			logger.debug("Response in JSON was: " + response);
 			
 		} finally {
 			if (connection != null) {

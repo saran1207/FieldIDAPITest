@@ -13,6 +13,9 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 	private String storage;
 	private String phonesupport;
 	private String fieldid;
+	private Boolean payviacc;
+	private Boolean cconfile;
+	private Long contractlength;
 	
 	public void setTenantid(Long tenantid) {
 		this.tenantid = tenantid;
@@ -65,6 +68,9 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 	public String getPhoneSupport() {
 		return phonesupport;
 	}
+	public boolean getPhoneSupportAsBoolean() {
+		return  (phonesupport != null && phonesupport.equalsIgnoreCase("yes"));
+	}
 
 	public String getStartDate() {
 		return startdate;
@@ -84,5 +90,29 @@ public class NetsuiteSubscriptionDetails implements SubscriptionDetails {
 
 	public void setFieldid(String fieldid) {
 		this.fieldid = fieldid;
+	}
+
+	public Boolean getPayviacc() {
+		return payviacc;
+	}
+
+	public void setPayviacc(Boolean payviacc) {
+		this.payviacc = payviacc;
+	}
+
+	public Boolean getCconfile() {
+		return cconfile;
+	}
+
+	public void setCconfile(Boolean cconfile) {
+		this.cconfile = cconfile;
+	}
+
+	public Long getContractlength() {
+		return contractlength;
+	}
+
+	public void setContractlength(Long contractlength) {
+		this.contractlength = contractlength;
 	}
 }

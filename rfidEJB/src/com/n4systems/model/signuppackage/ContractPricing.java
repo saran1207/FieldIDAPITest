@@ -54,5 +54,16 @@ public class ContractPricing extends AbstractEntity implements Saveable, Compara
 		return null;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "ContractPricing [externalId=" + externalId + ", paymentOption="
+				+ paymentOption + ", pricePerUserPerMonth="
+				+ pricePerUserPerMonth + ", signUpPackage=" + signUpPackage
+				+ "]";
+	}
+	
+	
+	
 		
 }
