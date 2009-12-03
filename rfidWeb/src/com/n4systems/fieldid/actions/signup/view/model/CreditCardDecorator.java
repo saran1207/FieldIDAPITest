@@ -101,4 +101,8 @@ public class CreditCardDecorator extends CreditCard {
 		delegateCard.setExpiryYear(expiryYear);
 	}
 
+	public CreditCard getDelegateCard() {
+		return delegateCard;
+	}
+
 }

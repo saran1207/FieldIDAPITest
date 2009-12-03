@@ -149,8 +149,9 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	public CurrentSubscription currentSubscriptionFor(Long tenantExternalId) throws CommunicationException {
 		SubscriptionDetailsClient detailsClient = new SubscriptionDetailsClient();
 		detailsClient.setTenantExternalId(tenantExternalId);
-				
+		
 		GetSubscriptionDetailsResponse response = null;
+		
 		try {
 			response = detailsClient.execute();
 		} catch (IOException e) {
@@ -167,11 +168,12 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
-		UpgradeSubscriptionClient upgradeClient = createUpgradeCostSubscriptionClient(upgradeSubscription);
+		
 		
 		UpgradeSubscriptionResponse response = null;
 		
 		try {
+			UpgradeSubscriptionClient upgradeClient = createUpgradeCostSubscriptionClient(upgradeSubscription);
 			response = upgradeClient.execute();
 		} catch (IOException e) {
 			throw new CommunicationException();

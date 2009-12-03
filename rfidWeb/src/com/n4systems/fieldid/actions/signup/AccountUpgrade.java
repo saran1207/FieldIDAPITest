@@ -211,6 +211,7 @@ public class AccountUpgrade extends AbstractCrud {
 		if (upgradeResponse == null) {
 			throw new ProcessFailureException("upgrading the account was unsuccessful");
 		}
+		upgradeCost = upgradeResponse.getCost();
 	}
 
 
@@ -222,12 +223,17 @@ public class AccountUpgrade extends AbstractCrud {
 		upgradeRequest.setUpgradePackage(upgradeContract.getSignUpPackage());
 		upgradeRequest.setContractExternalId(upgradeContract.getExternalId());
 		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
-		upgradeRequest.setPurchaseOrderNumber(purchaseOrderNumber);
-		upgradeRequest.setUsingCreditCard(usingCreditCard);
-		upgradeRequest.setUpdatedBillingInformation(accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation());
+		
+		
 		upgradeRequest.setFrequency(upgradeContract.getPaymentOption().getFrequency());
 		upgradeRequest.setMonths(upgradeContract.getPaymentOption().getTerm());
 		upgradeRequest.setPurchasingPhoneSupport(getPhoneSupport());
+		
+		
+		upgradeRequest.setUpdatedBillingInformation(accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation());
+		upgradeRequest.setUsingCreditCard(usingCreditCard);
+		upgradeRequest.setPurchaseOrderNumber(purchaseOrderNumber);
+		upgradeRequest.setCreditCard(creditCard.getDelegateCard());
 		
 		return upgradeRequest;
 	}

@@ -56,7 +56,7 @@ public class UpgradeSubscriptionClient extends AbstractNetsuiteClient<UpgradeSub
 			addRequestParameter("prefercc", upgradeSubscription.isUsingCreditCard() ? "T" : "F");			
 			if (upgradeSubscription.isUsingCreditCard()) {
 				CreditCard creditCard = upgradeSubscription.getCreditCard();
-				addRequestParameter("ccnumber", creditCard.getName());
+				addRequestParameter("ccnumber", creditCard.getNumber());
 				addRequestParameter("cctype", creditCard.getType().getCode());
 				addRequestParameter("ccexp", creditCard.getExpiry());
 				addRequestParameter("ccname", creditCard.getName());

@@ -1,24 +1,23 @@
+<head>
+	<@n4.includeStyle type="page" href="signUp"/>
+</head>
 ${action.setPageType('account_settings', 'upgrade')!}
 
-<div id="oldPackage">
-	${action.currentPackageFilter().packageName?html}
-</div>
-
-<div id="newPackage">
-	<div id="upgradePackage">
-		${upgradePackage.name?html}
-	</div>
+<div id="upgradeAccount" class="fullForm">
+	<h2 class="clean">
+		<@s.text name="label.upgraded_from_x_to_y">
+			<@s.param>${upgradePackage.name?html}</@s.param>
+		</@s.text>
+	</h2>
+	
+	<p>
+		<@s.text name="label.upgrade_complete"/>
+	</p>
 
 	
-	<div id="immediateChargeAmount">
-		${upgradeResponse.cost.immediateCharge?string.currency}
-	</div>
-	<div id="nextPayment">
-		<span id="nextPaymentAmount">${upgradeResponse.cost.nextPayment?string.currency}</span>
-		<span id="nextPaymentDate">${upgradeResponse.cost.nextPaymentDate}</span>
-	</div>
+	<#include "_charges.ftl"/>
 	
-	<div class="formActions">
+	<div class="actions">
 		<a href="<@s.url action="systemSettingsEdit"/>"><@s.text name="label.back_to"/> <@s.text name="label.system_settings"/></a>
 	</div>
 </div>

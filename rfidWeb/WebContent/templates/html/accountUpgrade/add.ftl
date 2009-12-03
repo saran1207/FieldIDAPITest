@@ -88,34 +88,18 @@ ${action.setPageType('account_settings', 'upgrade')!}
 			</div>
 			
 			<div class="infoSection">
-			<h3><@s.text name="label.add_on_phone_support"/></h3>
-			<div class="infoBlock ">
-				<div class="infoSet">
-					<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> (30%) <span><@s.checkbox name="purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/></span></label>
+				<h3><@s.text name="label.add_on_phone_support"/></h3>
+				<div class="infoBlock ">
+					<div class="infoSet">
+						<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> (30%) <span><@s.checkbox name="purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/></span></label>
+					</div>
+				
 				</div>
-			
 			</div>
-		</div>
 		
 		</#if>
 	
-		<h3><@s.text name="label.charges"/></h3>
-		<ul id="charges">
-			<li>
-				<@s.text name="label.you_will_be_charged_this_immediately"/>
-				<span id="immediateChargeAmount">${upgradeCost.immediateCharge?string.currency}</span>
-			</li>
-		
-			<li>
-				<@s.text name="label.you_will_be_charged_this_at_your_next_billing_cycle"/>
-				<span id="nextPaymentAmount">${upgradeCost.nextPayment?string.currency}</span>
-			</li>
-			<li>
-				<@s.text name="label.your_next_billing_date_is"/>
-				<span id="nextPaymentDate">${upgradeCost.nextPaymentDate}</span>
-			</li>
-		</ul>
-		
+		<#include "_charges.ftl"/>
 		
 	
 		<#if currentSubscription.upgradeRequiresBillingInformation>
