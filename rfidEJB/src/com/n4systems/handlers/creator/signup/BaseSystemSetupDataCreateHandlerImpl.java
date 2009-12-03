@@ -1,5 +1,7 @@
 package com.n4systems.handlers.creator.signup;
 
+import rfid.ejb.entity.ProductStatusBean;
+
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.ProductType;
@@ -9,30 +11,31 @@ import com.n4systems.model.Status;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
+import com.n4systems.model.productstatus.ProductStatusSaver;
 import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.persistence.Transaction;
 
 public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupDataCreateHandler {
-
-
+	private static final String[] DEFAULT_PRODUCT_STATUS_NAMES = {"In Service", "Out of Service", "In for Repair", "In need of Repair", "Destroyed"};
+	
 	private final TagOptionSaver tagSaver;
 	private final ProductTypeSaver productTypeSaver;
 	private final InspectionTypeGroupSaver inspectionTypeGroupSaver;
 	private final StateSetSaver stateSetSaver;
+	private final ProductStatusSaver productStatusSaver;
 	
 	private Tenant tenant;
 
-	
-	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, ProductTypeSaver productTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver) {
+	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, ProductTypeSaver productTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver, ProductStatusSaver productStatusSaver) {
 		super();
 		this.tagSaver = tagSaver;
 		this.productTypeSaver = productTypeSaver;
 		this.inspectionTypeGroupSaver = inspectionTypeGroupSaver;
 		this.stateSetSaver = stateSetSaver;
+		this.productStatusSaver = productStatusSaver;
 	}
-	
 	
 	public void create(Transaction transaction) {
 		if (invalidTenant()) {
@@ -43,12 +46,27 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		createDefaultProductType(transaction);
 		createDefaultInspectionTypeGroups(transaction);
 		createDefaultStateSets(transaction);
+		createDefaultProductStatuses(transaction);
 	}
 
 	private boolean invalidTenant() {
 		return tenant == null || tenant.isNew();
 	}
-
+	
+	private void createDefaultProductStatuses(Transaction transaction) {
+		for (String psName: DEFAULT_PRODUCT_STATUS_NAMES) {
+			createProductStatus(transaction, psName);
+		}
+	}
+	
+	public void createProductStatus(Transaction transaction, String name) {
+		ProductStatusBean pStatus = new ProductStatusBean();
+		pStatus.setTenant(tenant);
+		pStatus.setName(name);
+		
+		productStatusSaver.save(transaction, pStatus);
+	}
+	
 	private void createDefaultTagOptions(Transaction transaction) {
 		TagOption tagOption = new TagOption();
 		tagOption.setTenant(tenant);
@@ -66,24 +84,6 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 
 	private void createDefaultInspectionTypeGroups(Transaction transaction) {
 		inspectionTypeGroupSaver.save(transaction, createVisualInspection());
-		inspectionTypeGroupSaver.save(transaction, createProofTest());
-		inspectionTypeGroupSaver.save(transaction, createRepair());
-	}
-
-	private InspectionTypeGroup createRepair() {
-		InspectionTypeGroup repair = new InspectionTypeGroup();
-		repair.setName("Repair");
-		repair.setReportTitle("Repair");
-		repair.setTenant(tenant);
-		return repair;
-	}
-
-	private InspectionTypeGroup createProofTest() {
-		InspectionTypeGroup prooftest = new InspectionTypeGroup();
-		prooftest.setName("Proof Test");
-		prooftest.setReportTitle("Proof Test");
-		prooftest.setTenant(tenant);
-		return prooftest;
 	}
 
 	private InspectionTypeGroup createVisualInspection() {

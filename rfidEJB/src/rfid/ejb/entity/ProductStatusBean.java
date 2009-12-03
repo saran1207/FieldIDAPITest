@@ -3,11 +3,12 @@ package rfid.ejb.entity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 
 @Entity
 @Table(name = "ProductStatus")
-public class ProductStatusBean extends LegacyBeanTenantWithCreateModifyDate {
+public class ProductStatusBean extends LegacyBeanTenantWithCreateModifyDate implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
