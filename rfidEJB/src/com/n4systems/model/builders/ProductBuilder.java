@@ -1,11 +1,15 @@
 package com.n4systems.model.builders;
 
 import static com.n4systems.model.builders.ProductTypeBuilder.*;
+import static com.n4systems.model.builders.SubProductBuilder.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 
 public class ProductBuilder extends BaseBuilder<Product>{
@@ -15,6 +19,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 
 	private String serialNumber;
 	private Date modified;
+	private List<SubProduct> subProducts = new ArrayList<SubProduct>();
 	
 	public static ProductBuilder aProduct() {
 		return new ProductBuilder(TenantBuilder.n4(), aProductType().build());
@@ -44,10 +49,25 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		return this;
 	}
 	
+	public ProductBuilder withOneSubProduct() {
+		subProducts = new ArrayList<SubProduct>();
+		subProducts.add(aSubProduct().build());
+		return this;
+	}
+	
+	public ProductBuilder withTwoSubProducts() {
+		subProducts = new ArrayList<SubProduct>();
+		subProducts.add(aSubProduct().build());
+		subProducts.add(aSubProduct().build());
+		return this;
+	}
+	
 	@Override
 	public Product build() {
 		Product product = generate();
 		product.setId(id);
+		populateMasterProductInSubProducts(product);
+		product.setSubProducts(subProducts);
 		return product;
 	}
 	
@@ -57,9 +77,18 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		product.setType(type);
 		product.setSerialNumber(serialNumber);
 		product.setModified(modified);
+		
 		return product;
 	}
-
+	
+	private void populateMasterProductInSubProducts(Product product) {
+		if (subProducts != null) {
+			for (SubProduct subProduct : subProducts) {
+				subProduct.setMasterProduct(product);
+			}
+		}
+	}
+	
 	
 	
 }

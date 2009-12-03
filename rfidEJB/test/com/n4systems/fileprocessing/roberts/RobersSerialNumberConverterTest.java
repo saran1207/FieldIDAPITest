@@ -81,4 +81,9 @@ public class RobersSerialNumberConverterTest {
 	public void convert_number_only_range() {
 		assertEquals("3301,3302,3303,3304,3305,3306,3307,3308", serialConverter.toCSV("3301 to 3308"));
 	}
+	
+	@Test
+	public void convert_long_number_with_prefix() {
+		assertEquals("MR1168,MR1169,MR1170,MR1171,MR1172,MR1173", serialConverter.toCSV("MR1168 to MR1173"));
+	}
 }

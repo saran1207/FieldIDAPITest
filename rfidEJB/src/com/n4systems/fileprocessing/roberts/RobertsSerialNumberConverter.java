@@ -13,7 +13,7 @@ public class RobertsSerialNumberConverter {
 			return null;
 		}
 
-		Pattern serialPattern = Pattern.compile("^(.*?)\\s*(0*)(\\d+)\\s*to\\s*(\\d+)$", Pattern.CASE_INSENSITIVE);
+		Pattern serialPattern = Pattern.compile("^(.*?)\\s*(0*)(\\d+)\\s*to.*?(\\d+)$", Pattern.CASE_INSENSITIVE);
 		Matcher serialMatcher = serialPattern.matcher(serialNumberLine.trim());
 		
 		if (!serialMatcher.matches()) {

@@ -61,6 +61,7 @@ import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.product.ProductSaver;
+import com.n4systems.model.product.ProductSubProductsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
@@ -1147,7 +1148,8 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
 			SmartSearchLoader smartSearchLoader = new SmartSearchLoader(securityFilter);
-			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader);
+			ProductSubProductsLoader subProductLoader = new ProductSubProductsLoader(securityFilter);
+			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader, subProductLoader);
 			
 			List<Product> products = realTimeProductLookupHandler
 										.setSearchText(requestInformation.getSearchText())
