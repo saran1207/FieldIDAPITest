@@ -457,4 +457,12 @@ public class DateHelper {
 	public static String getFormattedCurrentDateTime(UserBean user) {
 		return format(new Date(), new DateTimeDefiner(user));
 	}
+	
+	public static int getThisYear() {
+		return getTodayCalendar().get(Calendar.YEAR);
+	}
+	
+	public static int getThisMonth() {
+		return getTodayCalendar().get(Calendar.MONTH);
+	}
 }

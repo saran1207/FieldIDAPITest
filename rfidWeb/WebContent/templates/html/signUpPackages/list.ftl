@@ -5,6 +5,9 @@
 <#macro price package>
 	${package.defaultPricePerUserPerMonth?string.currency}
 </#macro>
+<#macro columnClass package>
+	<#if package.preferred>class="preferred"</#if>
+</#macro>
 <div id="mainContent" class="fullScreen">
 
 	<h1><@s.text name="title.sign_up_for_an_account"/></h1>

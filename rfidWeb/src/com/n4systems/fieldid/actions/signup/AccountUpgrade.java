@@ -34,8 +34,11 @@ import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
@@ -93,25 +96,21 @@ public class AccountUpgrade extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	
+	@SkipValidation
 	public String doShowCost() {
 		testRequiredEntities();
-		UpgradeRequest upgradeRequest = createUpgradeRequest();
-			
-		try {
-			upgradeCost = getUpgradeHandler().priceForUpgrade(upgradeRequest);
-		} catch (CommunicationException e) {
-			upgradeCost = null;
-		}
-		if (upgradeRequest == null) {
+		
+		findUpgradeCost();
+		if (upgradeCost == null) {
 			addActionErrorText("error.could_not_contact_billing_provider");
 			return ERROR;
 		}
+		
 		return SUCCESS;
 	}
-	
-	public String doAdd() {
-		testRequiredEntities();
+
+
+	private void findUpgradeCost() {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		upgradeRequest.setUpdatedBillingInformation(false);
 		try {
@@ -119,7 +118,14 @@ public class AccountUpgrade extends AbstractCrud {
 		} catch (CommunicationException e) {
 			upgradeCost = null;
 		}
-		if (upgradeRequest == null) {
+	}
+	
+	@SkipValidation
+	public String doAdd() {
+		testRequiredEntities();
+		
+		findUpgradeCost();
+		if (upgradeCost == null) {
 			addActionErrorText("error.could_not_contact_billing_provider");
 			return ERROR;
 		}
@@ -311,6 +317,9 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	
 	public UpgradeCost getUpgradeCost() {
+		if (upgradeCost == null) {
+			findUpgradeCost();
+		}
 		return upgradeCost;
 	}
 
@@ -331,11 +340,17 @@ public class AccountUpgrade extends AbstractCrud {
 				getPackages().contains(upgradePackage));
 	}
 	
-	
+	@FieldExpressionValidator(message="", key="error.po_number_is_required", expression="pONumberCorrectlyEntered")
 	public String getPurchaseOrderNumber() {
 		return purchaseOrderNumber;
 	}
 
+	public boolean isPONumberCorrectlyEntered() {
+		if (accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation() && !usingCreditCard) {
+			return (purchaseOrderNumber != null && !purchaseOrderNumber.trim().isEmpty());
+		}
+		return true;
+	}
 
 	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
 		this.purchaseOrderNumber = purchaseOrderNumber;
@@ -351,11 +366,18 @@ public class AccountUpgrade extends AbstractCrud {
 		this.paymentOption = PaymentOption.valueOf(paymentOption);
 	}
 	
+
+	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "aNeedToCheckCreditCard == true") })
 	public CreditCardDecorator getCreditCard() {
 		return creditCard;
 	}
 
 
+	public boolean isANeedToCheckCreditCard() {
+		return (isUsingCreditCard() && accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation());
+	}
+	
+	
 	public void setCreditCard(CreditCardDecorator creditCard) {
 		this.creditCard = creditCard;
 	}
@@ -374,7 +396,6 @@ public class AccountUpgrade extends AbstractCrud {
 		try {
 			return accountHelper.getCurrentSubscription();
 		} catch (CommunicationException e) {
-			//FIXME  this shouldn't be like this.
 			return null;
 		}
 	}

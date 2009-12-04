@@ -1,16 +1,27 @@
-<#macro columnClass package>
-	<#if package.current?exists && package.current>class="currentPackage"<#elseif package.preferred>class="preferred"</#if>
-</#macro>
+
 
 <table id="packages">
 	<thead>
+		<tr id="headerRow">
+			<th></th>
+			<#assign upgradeListed=false/>
+			<#list packages as package>
+				
+				<th class="header <#if package.current?exists><#if package.current>currentPackage<#else>upgradePackage</#if></#if>">
+					<#if package.current?exists && package.current>
+						<@s.text name="label.current_package"/>
+					<#elseif package.current?exists && !upgradeListed>
+						<#assign upgradeListed=true/>
+						<@s.text name="label.upgrade"/>
+					</#if>
+				</th>
+			</#list>
+		</tr>
+		
 		<tr>
 			<th></th>
 			<#list packages as package>
 				<th id="package_${package.name}" <@columnClass package/>>
-					<#if package.current?exists && package.current>
-						<@s.text name="label.your_current_package"/><br/>
-					</#if>
 					${package.name?html}
 				</th>
 			</#list>

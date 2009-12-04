@@ -285,7 +285,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return signUpRequest.getPurchaseOrderNumber();
 	}
 	
-	@FieldExpressionValidator(message="", key="error.ponumberrequired", expression="(purchaseOrderNumberValid == true)", fieldName="numberOfUsers")	
+	@FieldExpressionValidator(message="", key="error.ponumberrequired", expression="(purchaseOrderNumberValid == true)")	
 	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
 		signUpRequest.setPurchaseOrderNumber(purchaseOrderNumber);
 	}	

@@ -14,7 +14,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 		<@s.text name="label.upgrade_complete"/>
 	</p>
 
-	
+	<#assign charge_label="label.you_have_been_charged"/>
 	<#include "_charges.ftl"/>
 	
 	<div class="actions">

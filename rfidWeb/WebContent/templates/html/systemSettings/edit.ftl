@@ -47,31 +47,7 @@ ${action.setPageType('account_settings', 'list')!}
 			<label  for="companyID"><@s.text name="label.companyid"/></label>
 			<span class="fieldHolder">${sessionUser.tenant.name?html}</span>			
 		</div>
-		<div class="infoSet">
-			<label ><@s.text name="label.company_name"/></label>
-			<span class="fieldHolder">${sessionUser.tenant.displayName?html}</span>
-		</div>
-		<div class="infoSet">
-			<label><@s.text name="label.login_url"/></label>
-			<span class="fieldHolder">${loginUrl?html}</span>
-		</div>
 		
-		
-		
-		<div class="infoSet">
-			<label >
-				<@s.text name="label.embedded_login_snipit"/>
-				<a href="javascript:void(0);" id="whatsThis_reportTitle_button" >?</a>
-				<div id="whatsThis_embededLoginCode" class="hidden" style="border :1px solid black"><@s.text name="whatsthis.embedded_login_code"/></div>
-				<script type="text/javascript">
-					$("whatsThis_reportTitle_button").observe( 'click', function(event) { showQuickView('whatsThis_embededLoginCode', event); } );
-				</script>
-			</label>
-			<span class="fieldHolder">
-				<#assign snipit><iframe src="${embeddedLoginUrl}" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="300" ></iframe></#assign>
-				${snipit?html}
-			</span>
-		</div>
 		<div class="infoSet">
 			<label><@s.text name="label.your_current_package"/></label>
 			<span class="fieldHolder">
@@ -110,6 +86,31 @@ ${action.setPageType('account_settings', 'list')!}
 				</div>
 				<div style="float:left; margin:5px;">${limits.assetsUsed} <@s.text name="label.of"/> <#if limits.assetsUnlimited><@s.text name="label.unlimited"/><#else>${limits.assetsMax}</#if></div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="pageSection crudForm largeForm">
+	<h2><@s.text name="label.login_options"/></h2>
+	<div class="sectionContent">
+		<div class="infoSet">
+			<label><@s.text name="label.login_url"/></label>
+			<span class="fieldHolder">${loginUrl?html}</span>
+		</div>
+		
+		<div class="infoSet">
+			<label>
+				<@s.text name="label.embedded_login_snipit"/>
+				<a href="javascript:void(0);" id="whatsThis_reportTitle_button" >?</a>
+				<div id="whatsThis_embededLoginCode" class="hidden" style="border :1px solid black"><@s.text name="whatsthis.embedded_login_code"/></div>
+				<script type="text/javascript">
+					$("whatsThis_reportTitle_button").observe( 'click', function(event) { showQuickView('whatsThis_embededLoginCode', event); } );
+				</script>
+			</label>
+			<span class="fieldHolder">
+				<#assign snipit><iframe src="${embeddedLoginUrl}" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="300" ></iframe></#assign>
+				${snipit?html}
+			</span>
 		</div>
 	</div>
 </div>

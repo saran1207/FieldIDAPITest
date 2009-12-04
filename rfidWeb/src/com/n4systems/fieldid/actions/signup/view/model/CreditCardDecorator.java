@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.CreditCardType;
+import com.n4systems.util.DateHelper;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
@@ -87,8 +89,21 @@ public class CreditCardDecorator extends CreditCard {
 		return delegateCard.getExpiryMonth();
 	}
 
+	@FieldExpressionValidator(message="", key="error.expiry_in_past", expression="expiryValid")
 	public int getExpiryYear() {
 		return delegateCard.getExpiryYear();
+	}
+	
+	
+	public boolean isExpiryValid() {
+		int thisMonth = DateHelper.getThisMonth();
+		int thisYear = DateHelper.getThisYear();
+
+		if (thisYear < getExpiryYear()) {
+			return true;
+		}
+		
+		return (thisMonth <= getExpiryMonth() && thisYear == getExpiryYear());
 	}
 
 	

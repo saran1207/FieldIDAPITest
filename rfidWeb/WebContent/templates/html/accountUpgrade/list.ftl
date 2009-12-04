@@ -1,5 +1,16 @@
+<#assign foundPreferred=false>
+<#assign preferredPackage=false>
 <#macro price package>
 	${currentPackageFilter.getUpgradeContractForPackage(package).pricePerUserPerMonth?string.currency}
+</#macro>
+
+<#macro columnClass package>
+	
+	<#if !package.current && (!foundPreferred || perferredPackage=package)>
+		<#assign foundPreferred=true/>
+		<#assign perferredPackage=package/>
+		class="preferred"
+	</#if>
 </#macro>
 
 <head>

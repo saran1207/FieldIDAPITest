@@ -23,6 +23,11 @@ public class ContractPricing extends AbstractEntity implements Saveable, Compara
 	@Enumerated(EnumType.STRING)
 	private SignUpPackageDetails signUpPackage;
 
+	
+	public static ContractPricing getLegacyContractPricing() {
+		return null;
+	}
+	
 	public Long getExternalId() {
 		return externalId;
 	}
@@ -50,9 +55,6 @@ public class ContractPricing extends AbstractEntity implements Saveable, Compara
 	public int compareTo(ContractPricing o) {
 		return paymentOption.compareTo(o.getPaymentOption());
 	}
-	public static ContractPricing getLegacyContractPricing() {
-		return null;
-	}
 	
 	
 	@Override
@@ -62,8 +64,5 @@ public class ContractPricing extends AbstractEntity implements Saveable, Compara
 				+ pricePerUserPerMonth + ", signUpPackage=" + signUpPackage
 				+ "]";
 	}
-	
-	
-	
-		
+
 }

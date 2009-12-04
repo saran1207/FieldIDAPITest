@@ -6,6 +6,7 @@ import java.util.List;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
+import com.n4systems.subscription.PaymentOption;
 
 public class SignUpPackageBuilder extends BaseBuilder<SignUpPackage> {
 
@@ -22,6 +23,7 @@ public class SignUpPackageBuilder extends BaseBuilder<SignUpPackage> {
 		ContractPricing contract = new ContractPricing();
 		contract.setExternalId(contractId);
 		contract.setSignUpPackage(signUpPackageDetail);
+		contract.setPaymentOption(PaymentOption.MONTH_TO_MONTH);
 		return new SignUpPackageBuilder(signUpPackageDetail, contract);
 	}
 	

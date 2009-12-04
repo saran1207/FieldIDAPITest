@@ -48,6 +48,10 @@
 				} else {
 					enablePO();
 				}
+				$('upgradeAccount').observe('submit', function(event) { 
+						var form = Event.element(event);
+						$$("#" + form.id + " input[type='submit']").invoke('disable');
+					});
 			});
 	</@n4.includeScript>
 </head>
@@ -55,20 +59,18 @@
 ${action.setPageType('account_settings', 'upgrade')!}
 <#if upgradeCost?exists>
 	<@s.form action="accountUpgradeComplete" id="upgradeAccount" cssClass="fullForm" theme="fieldid">
-	
-		<h2 class="clean">
+		<#include "/templates/html/common/_formErrors.ftl"/>
+		<h3 class="clean">
 			<@s.text name="label.upgrading_from_x_to_y">
 				<@s.param>${action.currentPackageFilter().packageName?html}</@s.param>
 				<@s.param>${upgradePackage.name?html}</@s.param>
 			</@s.text>
-		</h2>
+		</h3>
 		
 		<p>
 			<@s.text name="label.upgrade_information"/>
 		</p>
 		
-	
-		<#include "/templates/html/common/_formErrors.ftl"/>
 		<@s.hidden name="upgradePackageId" cssClass="changesPrice"/>
 		
 		<#if freeAccount >
@@ -98,12 +100,12 @@ ${action.setPageType('account_settings', 'upgrade')!}
 			</div>
 		
 		</#if>
-	
+		<#assign charge_label="label.you_will_be_charged_this_immediately"/>
 		<#include "_charges.ftl"/>
 		
-	
+		<h3><@s.text name="label.billing_information"/></h3>
 		<#if currentSubscription.upgradeRequiresBillingInformation>
-			<h3><@s.text name="label.billing_information"/></h3>
+			
 			<@s.hidden name="usingCreditCard" id="usingCreditCard" />
 			<div id="billing_information">
 				<div class="infoSection" id="creditCardInformation">
@@ -146,9 +148,14 @@ ${action.setPageType('account_settings', 'upgrade')!}
 					</div>
 				</div>
 			</div>
+		<#else>
+			<p>
+				<@s.text name="label.your_credit_card_on_file_will_be_used"/>
+			</p>
 		</#if>
 		
 		<div class="actions">
+			<p id="purchaseWarning"><strong><@s.text name="label.purchase_warning"/></strong></p>
 			<@s.submit key="label.please_upgrade_my_account"/>
 			<@s.text name="label.or"/>
 			<a href="<@s.url action="accountUpgrades"/>"><@s.text name="label.do_not_upgrade_my_account"/></a>
@@ -158,6 +165,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 
 <#else>
 	<div class="error">
+	boo
 		<@s.text name="error.could_not_contact_billing_provider"/>
 	</div>
 </#if>

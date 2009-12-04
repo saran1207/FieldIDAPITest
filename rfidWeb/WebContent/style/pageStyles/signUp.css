@@ -22,13 +22,26 @@ h1 {
 }
 
 #packages .nonFeatureSection {
-	background-color: #ddd;
+	background-color: #F3F3F3;
 }
 
 
 
 #packages th {
 	font-size: 1.2em;
+}
+#packages th.upgradePackage,#packages th.currentPackage { 
+	color:white;
+	text-align:left;
+	border:2px solid white;
+	
+}
+#packages th.currentPackage {
+	background:#8B8B8B;
+}
+
+#packages th.upgradePackage {
+	background:#016903;
 }
 
 #packages #priceRow {
@@ -60,7 +73,7 @@ h1 {
 	border: 2px solid black;
 	font-size:1.5em;
 	font-weight: bold;
-	background-color: #EEE;
+	background-color: #F2FECD;
 }		
 #packages thead .preferred {
 	border-bottom: none;
@@ -69,6 +82,7 @@ h1 {
 #packages tbody .preferred {
 	border-top:none;
 	border-bottom: 1px solid #fff;
+	
 }
 
 
@@ -103,14 +117,12 @@ h1 {
 	width: 800px;
 }
 	
-#upgradeAccount h2 {
+#upgradeAccount h3 {
 	font-size:1.5em;
-	padding-top:15px;
+	padding:15px 0 5px 0;
 }
 
-#charges {
-	padding: 5px 0;
-}
+
 
 #charges li {
 	font-size : 1.2em;
@@ -120,6 +132,5 @@ h1 {
 #charges span {
 	font-weight: bold;
 }
-h3 {
-	font-size: 1.5em;
-}
+
+

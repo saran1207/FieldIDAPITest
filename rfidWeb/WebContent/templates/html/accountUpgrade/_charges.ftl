@@ -1,7 +1,7 @@
 <h3><@s.text name="label.charges"/></h3>
 <ul id="charges">
 	<li>
-		<@s.text name="label.you_have_been_charged"/>
+		<@s.text name="${charge_label}"/>
 		<span id="immediateChargeAmount">${upgradeCost.immediateCharge?string.currency}</span>
 	</li>
 
