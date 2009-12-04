@@ -11,6 +11,7 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
@@ -135,5 +136,8 @@ public class ProductMergeAction extends AbstractCrud {
 	public Long getLocalInspectionCount() {
 		return getAllInspectionHelper().getLocalInspectionCount();
 	}
-
+	
+	public boolean isLinked() {
+		return ProductLinkedHelper.isLinked(losingProduct, getLoaderFactory());
+	}
 }

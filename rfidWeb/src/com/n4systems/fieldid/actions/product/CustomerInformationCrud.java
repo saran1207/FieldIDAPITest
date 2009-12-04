@@ -11,6 +11,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
@@ -18,7 +19,6 @@ import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
@@ -140,18 +140,6 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	
 	public boolean isLinked() {
-		if (product == null) {
-			return false;
-		} else if (product.isLinked()) {
-			return true;
-		}
-		
-		// this checks if there are any products linked to this product
-		HasLinkedProductsLoader hasLinkedLoader = getLoaderFactory().createHasLinkedProductsLoader();
-		hasLinkedLoader.setNetworkId(product.getNetworkId());
-		hasLinkedLoader.setProductId(product.getId());
-		
-		boolean hasLinked = hasLinkedLoader.load();
-		return hasLinked;
+		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
 	}
 }

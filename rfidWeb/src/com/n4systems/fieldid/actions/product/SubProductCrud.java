@@ -15,6 +15,7 @@ import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
+import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -24,7 +25,6 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
-import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.security.Permissions;
 
@@ -358,19 +358,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 	}
 
 	public boolean isLinked() {
-		if (product == null) {
-			return false;
-		} else if (product.isLinked()) {
-			return true;
-		}
-		
-		// this checks if there are any products linked to this product
-		HasLinkedProductsLoader hasLinkedLoader = getLoaderFactory().createHasLinkedProductsLoader();
-		hasLinkedLoader.setNetworkId(product.getNetworkId());
-		hasLinkedLoader.setProductId(product.getId());
-		
-		boolean hasLinked = hasLinkedLoader.load();
-		return hasLinked;
+		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
 	}
 	
 }

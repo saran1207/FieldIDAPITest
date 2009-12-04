@@ -12,13 +12,13 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
-import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.InspectionScheduleServiceImpl;
@@ -274,18 +274,6 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	}
 
 	public boolean isLinked() {
-		if (product == null) {
-			return false;
-		} else if (product.isLinked()) {
-			return true;
-		}
-		
-		// this checks if there are any products linked to this product
-		HasLinkedProductsLoader hasLinkedLoader = getLoaderFactory().createHasLinkedProductsLoader();
-		hasLinkedLoader.setNetworkId(product.getNetworkId());
-		hasLinkedLoader.setProductId(product.getId());
-		
-		boolean hasLinked = hasLinkedLoader.load();
-		return hasLinked;
+		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
 	}
 }

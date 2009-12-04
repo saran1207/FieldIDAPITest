@@ -35,6 +35,7 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
+import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -48,7 +49,6 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
-import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.UserListableLoader;
@@ -995,18 +995,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 	
 	public boolean isLinked() {
-		if (product == null) {
-			return false;
-		} else if (product.isLinked()) {
-			return true;
-		}
-		
-		// this checks if there are any products linked to this product
-		HasLinkedProductsLoader hasLinkedLoader = getLoaderFactory().createHasLinkedProductsLoader();
-		hasLinkedLoader.setNetworkId(product.getNetworkId());
-		hasLinkedLoader.setProductId(product.getId());
-		
-		boolean hasLinked = hasLinkedLoader.load();
-		return hasLinked;
+		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
 	}
 }
