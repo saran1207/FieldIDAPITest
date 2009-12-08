@@ -60,7 +60,7 @@ public class TenantLimit implements Serializable {
 	}
 	
 	public boolean isDiskSpaceUnlimited() {
-		return (getDiskSpaceInBytes() == UNLIMITED);
+		return isUnlimited(getDiskSpaceInBytes());
 	}
 
 	public void setDiskSpaceInBytes(Long diskSpace) {
@@ -80,7 +80,7 @@ public class TenantLimit implements Serializable {
 	}
 	
 	public boolean isUsersUnlimited() {
-		return (getUsers() == UNLIMITED);
+		return isUnlimited(getUsers());
 	}
 	
 	public void setUsersUnlimited() {
@@ -96,7 +96,7 @@ public class TenantLimit implements Serializable {
 	}
 	
 	public boolean isAssetsUnlimited() {
-		return (getAssets() == UNLIMITED);
+		return isUnlimited(getAssets());
 	}
 	
 	public void setAssetsUnlimited() {
@@ -112,7 +112,7 @@ public class TenantLimit implements Serializable {
 	}
 
 	public boolean isSecondaryOrgsUnlimited() {
-		return (getSecondaryOrgs() == UNLIMITED);
+		return isUnlimited(getSecondaryOrgs());
 	}
 	
 	public void setSecondaryOrgsUnlimited() {
@@ -186,6 +186,10 @@ public class TenantLimit implements Serializable {
 		return "users = [" + users + "] assets = [" + assets + "] diskspace = [" + diskSpace + "]";
 	}
 
+	
+	public static boolean isUnlimited(Long limit) {
+		return (limit != null && limit == UNLIMITED);
+	}
 	
 
 	

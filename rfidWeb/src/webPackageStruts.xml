@@ -1909,5 +1909,19 @@
 			<result name="success" type="freemarker">/templates/html/accountUpgrade/show.ftl</result>
 		</action>
 		
+		<action name="increaseStaff" method="add" class="com.n4systems.fieldid.actions.signup.IncreaseStaffCrud">
+			<result name="success" type="freemarker">/templates/html/increaseStaff/add.ftl</result>
+			<result name="limitExceeded" type="freemarker">/templates/html/increaseStaff/limitExceeded.ftl</result>
+			<result name="legacy" type="freemarker">/templates/html/increaseStaff/legacy.ftl</result>
+			<result name="input" type="redirectAction">systemSettingsEdit</result>
+			<result name="error" type="redirectAction">systemSettingsEdit</result>
+		</action>
+
+		<action name="increaseStaffComplete" method="create" class="com.n4systems.fieldid.actions.signup.IncreaseStaffCrud">
+			<result name="input" type="freemarker">/templates/html/increaseStaff/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/increaseStaff/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/increaseStaff/show.ftl</result>
+		</action>
+		
 	</package>
 </struts>

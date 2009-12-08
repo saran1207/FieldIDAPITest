@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.n4systems.model.builders.ContractPricingBuilder;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.test.helpers.FluentArrayList;
 
@@ -117,7 +118,11 @@ public class UpgradePackageFilterTest {
 
 	@Test
 	public void should_retrun_current_sign_up_package() throws Exception {
-		ContractPricing currentContract = createContract(SignUpPackageDetails.Free, 10L, PaymentOption.ONE_YEAR_UP_FRONT);
+		ContractPricing currentContract = ContractPricingBuilder.aContractPricing()
+			.withExternalId(10L)
+			.withPackage(SignUpPackageDetails.Free)
+			.withPaymentOption(PaymentOption.TWO_YEARS_UP_FRONT).build();
+
 		
 		SignUpPackage currentPackage = createSignUpPackage(SignUpPackageDetails.Free).withContracts(currentContract).build();
 		
@@ -128,11 +133,30 @@ public class UpgradePackageFilterTest {
 		assertEquals(currentPackage, actualCurrentPackage);
 	}
 	
+	
+	@Test
+	public void should_find_per_user_price_of_current_package_to_be_100() {
+		
+		ContractPricing currentContract = ContractPricingBuilder.aContractPricing()
+																.withPackage(SignUpPackageDetails.Free)
+																.withPricePerUserPerMonth(100F)
+																.build();
+			
+		SignUpPackage currentPackage = createSignUpPackage(SignUpPackageDetails.Free).withContracts(currentContract).build();
+			
+			
+		UpgradePackageFilter sut = UpgradePackageFilter.createUpgradePackageFilter(currentContract);
+		sut.getCurrentPackage(new FluentArrayList<SignUpPackage>(currentPackage));
+		
+		assertEquals(100F, sut.getCurrentCostPerUserPerMonth(), 0.001);
+	}
+	
 	private ContractPricing createContract(SignUpPackageDetails signUpPackage, long contractId, PaymentOption paymentOption) {
 		ContractPricing currentContract = new ContractPricing();
 		currentContract.setSignUpPackage(signUpPackage);
 		currentContract.setExternalId(contractId);
 		currentContract.setPaymentOption(paymentOption);
+		currentContract.setPricePerUserPerMonth(100.00F);
 		return currentContract;
 		
 	}

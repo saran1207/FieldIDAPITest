@@ -192,7 +192,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 	private UpgradeCost createUpgradeCost(UpgradeSubscriptionResponse response) {
 		UpgradeSubscriptionPaymentDetails upgradeSubscription = response.getUpgradesubscription();
 		if (upgradeSubscription == null ) {
-			return UpgradeCost.nullUpgradeCost();
+			return new UpgradeCost(response.getUpgrade_cost(), response.getNext_payment(), response.getNext_payment_date());
 		}
 		return new UpgradeCost(upgradeSubscription.getUpgrade_cost(), upgradeSubscription.getNext_payment(), upgradeSubscription.getNext_payment_date());
 	}

@@ -57,7 +57,7 @@ public class UpgradeRequest implements UpgradeSubscription, Subscription {
 		this.storageIncrement = storageIncrement;
 	}
 	public Subscription getSubscription() {
-		return this;
+		return this; 
 	}
 	
 	public boolean isUsingCreditCard() {

@@ -26,14 +26,12 @@ h1 {
 }
 
 
-
 #packages th {
 	font-size: 1.2em;
 }
 #packages th.upgradePackage,#packages th.currentPackage { 
 	color:white;
 	text-align:left;
-	border:2px solid white;
 	
 }
 #packages th.currentPackage {
@@ -70,7 +68,7 @@ h1 {
 }
 
 #packages .preferred {
-	border: 2px solid black;
+	border: 2px solid #000;
 	font-size:1.5em;
 	font-weight: bold;
 	background-color: #F2FECD;
@@ -81,7 +79,7 @@ h1 {
 
 #packages tbody .preferred {
 	border-top:none;
-	border-bottom: 1px solid #fff;
+	border-bottom: 1px solid #ddd;
 	
 }
 
@@ -133,4 +131,36 @@ h1 {
 	font-weight: bold;
 }
 
+
+.transactionComplete { 
+	background-position:right;
+	background-repeat:no-repeat;
+	background-image:url(../../images/checkMark.jpg)
+}
+
+#additionalStaff  {
+	width: 2em;
+}	
+
+#incrementResource {
+	width:600px;	
+	font-size:1.3em
+}
+#incrementResource td {
+	padding:5px;
+	text-align:center;
+}
+#incrementResource th {
+	padding:5px;
+	text-align:left;
+
+}
+
+td.messageCol {
+	width:250px
+}
+
+#totalStaff {
+	border-top:1px solid black;
+}
 

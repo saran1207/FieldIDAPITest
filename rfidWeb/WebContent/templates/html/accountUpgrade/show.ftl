@@ -3,7 +3,7 @@
 </head>
 ${action.setPageType('account_settings', 'upgrade')!}
 
-<div id="upgradeAccount" class="fullForm">
+<div id="upgradeAccount" class="fullForm transactionComplete">
 	<h2 class="clean">
 		<@s.text name="label.upgraded_from_x_to_y">
 			<@s.param>${upgradePackage.name?html}</@s.param>

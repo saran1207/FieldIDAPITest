@@ -16,6 +16,7 @@ img {
 
 .inputError {
 	background-color: #FFEBEB;
+	color: #FF0000;
 }
 
 .clearBoth {

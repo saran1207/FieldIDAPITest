@@ -20,6 +20,10 @@ public abstract class UpgradePackageFilter {
 		return new LegacyUpgradePackageFilter();
 	}
 	
+	public boolean isLegacy() {
+		return false;
+	}
+	
 	
 	public abstract List<SignUpPackage> reduceToAvailablePackages(List<SignUpPackage> allFullPackages);
 
@@ -30,5 +34,10 @@ public abstract class UpgradePackageFilter {
 	public abstract ContractPricing getUpgradeContractForPackage(SignUpPackage upgradePackage);
 
 	public abstract SignUpPackage getCurrentPackage(List<SignUpPackage> allFullPackages);
+
+	public abstract ContractPricing getCurrentContract();
+
+	public abstract Float getCurrentCostPerUserPerMonth();
+		
 	
 }

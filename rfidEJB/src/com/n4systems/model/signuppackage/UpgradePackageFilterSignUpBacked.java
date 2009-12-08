@@ -52,6 +52,18 @@ public class UpgradePackageFilterSignUpBacked extends UpgradePackageFilter {
 		}
 		return null;
 	}
+	
+	public ContractPricing getCurrentContract() {
+		return currentContract;
+	}
+
+	@Override
+	public Float getCurrentCostPerUserPerMonth() {
+		return currentContract.getPricePerUserPerMonth();
+	}
+	
+	
+	
 
 	
 }

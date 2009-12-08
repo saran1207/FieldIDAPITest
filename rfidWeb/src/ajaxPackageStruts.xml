@@ -452,5 +452,9 @@
 		<action name="upgradePriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
 			<result name="success" type="freemarker">/templates/ajax/accountUpgrade/showCost.ftl</result>
 		</action>
+		
+		<action name="increaseStaffPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.IncreaseStaffCrud">
+			<result name="success" type="freemarker">/templates/ajax/accountUpgrade/showCost.ftl</result>
+		</action>
 	</package>
 </struts>
