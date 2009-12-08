@@ -4,7 +4,7 @@ import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.parents.AbstractEntity;
 
 abstract public class AbstractEntityCleaner<T extends AbstractEntity> implements Cleaner<T> {
-
+	
 	public AbstractEntityCleaner() {}
 	
 	public void clean(T obj) {

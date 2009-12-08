@@ -10,6 +10,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class FilteredIdLoader<T extends AbstractEntity> extends SecurityFilteredLoader<T> {
 	private final Class<T> clazz;
 	private Long id;
+	private String[] postFetchFields = new String[0];
 	
 	public FilteredIdLoader(SecurityFilter filter, Class<T> clazz) {
 		super(filter);
@@ -21,11 +22,19 @@ public class FilteredIdLoader<T extends AbstractEntity> extends SecurityFiltered
 		return this;
 	}
 
+	public FilteredIdLoader<T> setPostFetchFields(String...fields) {
+		this.postFetchFields = fields;
+		return this;
+	}
+	
 	@Override
 	public T load(EntityManager em, SecurityFilter filter) {
 		gaurd();
+		
 		QueryBuilder<T> builder = new QueryBuilder<T>(clazz, filter);
 		builder.addSimpleWhere("id", id);
+		builder.addPostFetchPaths(postFetchFields);
+		
 		T entity = builder.getSingleResult(em);
 		return entity;
 	}
@@ -34,6 +43,5 @@ public class FilteredIdLoader<T extends AbstractEntity> extends SecurityFiltered
 		if (id == null) {
 			throw new InvalidArgumentException("you must specify an id to load.");
 		}
-	}
-	
+	}	 
 }

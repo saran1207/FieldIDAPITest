@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.jboss.logging.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -20,6 +20,7 @@ import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.inspectiontype.InspectionTypeCopier;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -32,6 +33,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
@@ -180,6 +182,24 @@ public class InspectionTypeCrud extends AbstractCrud {
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+	
+	public String doCopy() {
+		try {
+			InspectionTypeCopier typeCopier = createInspectionTypeCopier();
+			InspectionType newType = typeCopier.copy(getUniqueID());
+			
+			addFlashMessageText(getText("message.inspection_type_copied", new String[] {newType.getName()}));
+		} catch(Exception e) {
+			logger.error(getLogLinePrefix() + "failed coping inspection type", e);
+			addFlashErrorText("error.unable_to_copy_inspection_type");
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	protected InspectionTypeCopier createInspectionTypeCopier() {
+		return new InspectionTypeCopier(getTenant());
 	}
 
 	private void archiveInspection(Transaction transaction) {

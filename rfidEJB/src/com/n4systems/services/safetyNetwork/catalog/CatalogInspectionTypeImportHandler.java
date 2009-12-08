@@ -11,7 +11,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.utils.CleanInspectionTypeFactory;
+import com.n4systems.model.inspectiontype.InspectionTypeCleaner;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -43,7 +43,8 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	private void importInspectionType(Long originalId) throws ImportFailureException {
 		InspectionType importedInspectionType = importCatalog.getPublishedInspectionType(originalId);
 		try {
-			importedInspectionType = new CleanInspectionTypeFactory(importedInspectionType, tenant).clean();
+			InspectionTypeCleaner typeCleaner = new InspectionTypeCleaner(tenant);
+			typeCleaner.clean(importedInspectionType);
 			importedInspectionType.setGroup(importedGroupMapping.get(importedInspectionType.getGroup().getId()));
 			importedInspectionType.setName(createUniqueInspectionTypeName(importedInspectionType.getName()));
 			mapStateSets(importedInspectionType);

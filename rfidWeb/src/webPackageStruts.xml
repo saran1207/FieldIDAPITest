@@ -806,6 +806,14 @@
 			<result name="success" type="freemarker">/templates/html/inspectionType/add.ftl</result>
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 		</action>
+		
+		<action name="inspectionTypeCopy" method="copy"
+			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
+			<result name="input" type="redirectAction">inspectionTypes</result>
+			<result name="success" type="redirectAction">inspectionTypes</result>
+			<result name="error" type="redirectAction">inspectionTypes</result>
+		</action>
+		
 		<action name="inspectionTypeCreate" method="create"
 			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
 

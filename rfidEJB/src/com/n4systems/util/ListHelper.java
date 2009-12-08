@@ -106,4 +106,11 @@ public class ListHelper {
 		
 		return masterList;
 	}
+	
+	public static <T extends Collection<M>, K extends Collection<M>, M> K copy(T src, K dst) {
+		for (M o: src) {
+			dst.add(o);
+		}
+		return dst;
+	}
 }

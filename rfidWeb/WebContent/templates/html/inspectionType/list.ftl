@@ -18,6 +18,7 @@ ${action.setPageType('inspection_type', 'list')!}
 				<td>${inspectionType.group.name}</td>
 				<td>
 					<a href="<@s.url action="inspectionTypeEdit" uniqueID="${inspectionType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
+					<a href="<@s.url action="inspectionTypeCopy" uniqueID="${inspectionType.id}" />"><@s.text name="label.copy" /></a>
 				</td>
 			</tr>
 		</#list>

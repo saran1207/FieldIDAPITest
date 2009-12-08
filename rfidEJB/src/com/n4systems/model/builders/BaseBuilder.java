@@ -18,16 +18,13 @@ public abstract class BaseBuilder<K> {
 	public abstract K build();
 	
 	
-	private static Long generateNewId() {
+	protected static Long generateNewId() {
 		return Math.abs(new Random().nextLong());
 	}
 	
-	
-	public static void injectField( Object target, String fieldName, Object dep ) throws Exception {
+	public static void injectField(Object target, String fieldName, Object dep) throws Exception {
 	     Field field = target.getClass().getDeclaredField(fieldName);
 	     field.setAccessible(true);
 	     field.set(target, dep);       
 	}
-
-	
 }

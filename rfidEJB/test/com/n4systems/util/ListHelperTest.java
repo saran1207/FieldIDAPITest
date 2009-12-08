@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -98,4 +100,42 @@ public class ListHelperTest {
 		assertTrue(ListHelper.splitList(new ArrayList<Integer>(), 1).isEmpty());
 	}
 	
+	@Test
+	public void test_copy_handles_empty() {
+		List<Long> src = new ArrayList<Long>();
+		List<Long> dst = ListHelper.copy(src, new ArrayList<Long>());
+		
+		assertEquals(src, dst);
+		assertNotSame(src, dst);
+	}
+	
+	@Test
+	public void test_copy_handles_lists() {
+		List<Integer> src = Arrays.asList(1, 3, 100, 4242, -39);
+		List<Integer> dst = ListHelper.copy(src, new ArrayList<Integer>());
+		
+		assertEquals(src, dst);
+		assertNotSame(src, dst);
+	}
+	
+	@Test
+	public void test_copy_handles_sets() {
+		Set<Integer> src = new HashSet<Integer>(Arrays.asList(1, 3, 100, 4242, -39));
+		Set<Integer> dst = ListHelper.copy(src, new HashSet<Integer>());
+		
+		assertEquals(src, dst);
+		assertNotSame(src, dst);
+	}
+	
+	@Test
+	public void test_copy_handles_hetrogenous_collections() {
+		List<Integer> src = Arrays.asList(1, 3, 100, 4242, -39);
+		Set<Integer> dst = ListHelper.copy(src, new HashSet<Integer>());
+		
+		assertEquals(src.size(), dst.size());
+		
+		for (Integer i: src) {
+			assertTrue(dst.contains(i));
+		}
+	}
 }
