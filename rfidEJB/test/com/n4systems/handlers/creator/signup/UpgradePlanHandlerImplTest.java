@@ -23,6 +23,7 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactoryTestDouble;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitchTestDouble;
+import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
@@ -32,7 +33,7 @@ import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.DataUnit;
 
-public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
+public class UpgradePlanHandlerImplTest extends TestUsesTransactionBase {
 
 	
 	private UpgradeRequest upgradeRequest = new UpgradeRequest();
@@ -226,14 +227,30 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
 		upgradeRequest.setUpgradePackage(upgradePackage);
 		
-		PrimaryOrg primaryOrg = aPrimaryOrg().build();
-		
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
 		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andThrow(new CommunicationException());
 		replay(subscriptionAgent);
 		
 		
-		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(null, null, subscriptionAgent);
+		
+		sut.upgradeTo(upgradeRequest, mockTransaction);
+		
+	}
+	
+	@Test(expected=BillingInfoException.class)
+	public void should_not_upgrade_primary_org_when_there_is_a_billing_information_error() throws Exception {
+		SignUpPackageDetails upgradePackage = SignUpPackageDetails.Plus;
+		upgradeRequest.setUpgradePackage(upgradePackage);
+		
+		
+		
+		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
+		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andThrow(new BillingInfoException());
+		replay(subscriptionAgent);
+		
+		
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(null, null, subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -296,15 +313,15 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		return subscriptionAgent;
 	}
 	
-	private SubscriptionAgent subScriptionAgentForSuccessfulUpgrade() throws CommunicationException {
+	private SubscriptionAgent subScriptionAgentForSuccessfulUpgrade() throws Exception {
 		return createSubscriptionAgentForUpgrade(true);
 	}
 	
-	private SubscriptionAgent subScriptionAgentForFailingUpgrade() throws CommunicationException {
+	private SubscriptionAgent subScriptionAgentForFailingUpgrade() throws Exception {
 		return createSubscriptionAgentForUpgrade(false);
 	}
 
-	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws CommunicationException {
+	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws Exception {
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
 		UpgradeResponse upgradeResponse = upgradeResult ? new UpgradeResponse(new UpgradeCost(1L, 1L, ""), 1L) : null;
 		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andReturn(upgradeResponse);

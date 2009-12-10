@@ -11,7 +11,6 @@ import org.junit.Test;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
@@ -131,13 +130,13 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		new IncreaseEmployeeLimitHandlerImpl(null, null, null).upgradeTo(upgradeRequest, null);
  	}
 	
-	private SubscriptionAgent subScriptionAgentForSuccessfulUpgrade() throws CommunicationException {
+	private SubscriptionAgent subScriptionAgentForSuccessfulUpgrade() throws Exception {
 		return createSubscriptionAgentForUpgrade(true);
 	}
 	
 
 
-	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws CommunicationException {
+	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws Exception {
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
 		UpgradeResponse upgradeResponse = upgradeResult ? new UpgradeResponse(new UpgradeCost(1L, 1L, ""), 1L) : null;
 		expect(subscriptionAgent.upgrade((UpgradeSubscription)anyObject())).andReturn(upgradeResponse);
@@ -145,7 +144,7 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		return subscriptionAgent;
 	}
 	
-	private SubscriptionAgent createSubscriptionAgentForUpgrade(UpgradeCost upgradeCost) throws CommunicationException {
+	private SubscriptionAgent createSubscriptionAgentForUpgrade(UpgradeCost upgradeCost) throws Exception {
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);
 		expect(subscriptionAgent.costToUpgradeTo((UpgradeSubscription)anyObject())).andReturn(upgradeCost);
 		replay(subscriptionAgent);

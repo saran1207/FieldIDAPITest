@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.actions.signup;
 
+import org.apache.log4j.Logger;
+
+import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.signup.view.model.CreditCardDecorator;
@@ -8,12 +11,15 @@ import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.mail.MailMessage;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
 public abstract class AbstractUpgradeCrud extends AbstractCrud {
-
+	private static Logger logger = Logger.getLogger(AbstractUpgradeCrud.class);
 	protected AccountHelper accountHelper;
 	protected UpgradeCost upgradeCost;
 	protected UpgradeResponse upgradeResponse;
@@ -110,4 +116,20 @@ public abstract class AbstractUpgradeCrud extends AbstractCrud {
 		upgradeRequest.setPurchaseOrderNumber(purchaseOrderNumber);
 		upgradeRequest.setCreditCard(creditCard.getDelegateCard());
 	}
+
+	protected void sendNotificationOfIncompleteUpgrade() {
+		MailMessage message = new MailMessage();
+		
+		message.getToAddresses().add(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
+		message.setSubject("FAILED TO APPLY UPGRADE to " + getPrimaryOrg().getName());
+		message.setBody("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing " + getWhatWasBeingBought());
+		
+		try {
+			new MailManagerImpl().sendMessage(message);
+		} catch (Exception e) {
+			logger.error("failed to send message about failure", e);
+		}
+	}
+
+	protected abstract String getWhatWasBeingBought();
 }

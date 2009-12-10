@@ -8,6 +8,7 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
@@ -29,7 +30,7 @@ public class UpgradePlanHandlerImpl implements UpgradeAccountHandler {
 
 	
 	@Override
-	public UpgradeResponse upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException, UpgradeCompletionException {
+	public UpgradeResponse upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException, UpgradeCompletionException, BillingInfoException {
 		UpgradeResponse upgradeResponse = confirmUpgrade(upgradeRequest);
 		if (upgradeResponse != null) {
 			try {
@@ -44,7 +45,7 @@ public class UpgradePlanHandlerImpl implements UpgradeAccountHandler {
 	}
 
 
-	private UpgradeResponse confirmUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException {
+	private UpgradeResponse confirmUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException, BillingInfoException {
 		return subscriptionAgent.upgrade(upgradeRequest);
 	}
 

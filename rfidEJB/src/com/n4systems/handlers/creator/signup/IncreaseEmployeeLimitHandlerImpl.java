@@ -4,6 +4,7 @@ package com.n4systems.handlers.creator.signup;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
@@ -35,12 +36,15 @@ public class IncreaseEmployeeLimitHandlerImpl implements UpgradeAccountHandler {
 
 
 	@Override
-	public UpgradeResponse upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException {
+	public UpgradeResponse upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException, UpgradeCompletionException, BillingInfoException {
 		gaurd(upgradeRequest);
-		
 		UpgradeResponse upradeResponse = subscriptionAgent.upgrade(upgradeRequest);
 		
-		applyEmployeeIncrease(upgradeRequest, transaction);
+		try {
+			applyEmployeeIncrease(upgradeRequest, transaction);
+		} catch (Exception e) {
+			throw new UpgradeCompletionException(upradeResponse, "Could not increase the number of users.", e);
+		}
 		
 		return upradeResponse;
 	}

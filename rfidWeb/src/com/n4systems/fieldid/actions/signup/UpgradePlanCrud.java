@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
@@ -15,6 +14,7 @@ import com.n4systems.handlers.creator.signup.UpgradeAccountHandler;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradePlanHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
+import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
@@ -25,19 +25,17 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
+import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.UpgradeResponse;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.mail.MailMessage;
 import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class UpgradePlanCrud extends AbstractUpgradeCrud {
-	private static final Logger logger = Logger.getLogger(UpgradePlanCrud.class);
+	static final Logger logger = Logger.getLogger(UpgradePlanCrud.class);
 	
 	
 	private List<DecoratedSignUpPackage> availablePackagesForUpdate;
@@ -128,6 +126,10 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 		try {
 			upgradeAccount(transaction);
 			result = handleUpgradeSuccess(transaction, "message.upgrade_successful");
+		} catch (BillingValidationException e) {
+			addFieldError("creditCard", getText("error.credit_card_information_is_incorrect"));
+			logger.debug("billing information incorrect", e);
+			result = INPUT;
 		} catch (CommunicationException e) {
 			result = handleUpgradeError(transaction, "error.could_not_contact_billing_provider", e);
 		} catch (UpgradeCompletionException e) {
@@ -144,22 +146,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 		return new UpgradePlanHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
 	}
 
-	private void sendNotificationOfIncompleteUpgrade() {
-		MailMessage message = new MailMessage();
-		
-		message.getToAddresses().add(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
-		message.setSubject("FAILED TO APPLY UPGRADE to " + getPrimaryOrg().getName());
-		message.setBody("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing contract " + upgradeContract());
-		
-		try {
-			new MailManagerImpl().sendMessage(message);
-		} catch (Exception e) {
-			logger.error("failed to send message about failure", e);
-		}
-	}
-
-
-	private ContractPricing upgradeContract() {
+	ContractPricing upgradeContract() {
 		if (paymentOption != null) {
 			return upgradePackage.getContract(paymentOption);
 		}
@@ -190,7 +177,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 	}
 
 
-	private void upgradeAccount(Transaction transaction) throws CommunicationException, UpgradeCompletionException {
+	private void upgradeAccount(Transaction transaction) throws CommunicationException, UpgradeCompletionException, BillingInfoException {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		
 		upgradeResponse = getUpgradeHandler().upgradeTo(upgradeRequest, transaction);
@@ -354,6 +341,14 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 			return false;
 		}
 		
+	}
+
+	
+	
+	@Override
+	protected String getWhatWasBeingBought() {
+		
+		return "contract " + upgradeContract();
 	}
 
 	

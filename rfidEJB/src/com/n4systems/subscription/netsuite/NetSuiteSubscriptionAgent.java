@@ -62,6 +62,12 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 			throw new CommunicationException();
 		}
 				
+		checkForBillingInforationProblem(response);
+		
+		return response;
+	}
+
+	private void checkForBillingInforationProblem(NetsuiteSignUpTenantResponse response) throws BillingInfoException {
 		BillingInfoField problemField = BillingInfoField.UNKOWN;
 		if (!response.requestRespondedWithSuccess()) {
 			if (response.getDetails() != null) {
@@ -74,8 +80,6 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 			
 			throw new BillingInfoException(problemField);
 		}
-		
-		return response;
 	}
 
 	public ValidatePromoCodeResponse validatePromoCode(String code)	throws CommunicationException {
@@ -129,7 +133,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 
 	
 	
-	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException, BillingInfoException {
 		UpgradeSubscriptionClient upgradeClient = new UpgradeSubscriptionClient();
 		upgradeClient.setUpgradeSubscription(upgradeSubscription);
 		
@@ -141,6 +145,7 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 			throw new CommunicationException();
 		}
 		
+		//checkForBillingInforationProblem(response);
 		
 		return response != null && response.requestRespondedWithSuccess() ? new UpgradeResponse(createUpgradeCost(response), upgradeSubscription.getContractExternalId()) : null;
 	}
@@ -178,6 +183,8 @@ public class NetSuiteSubscriptionAgent extends SubscriptionAgent {
 		} catch (IOException e) {
 			throw new CommunicationException();
 		}
+		
+		
 		
 		return createUpgradeCost(response);
 	}

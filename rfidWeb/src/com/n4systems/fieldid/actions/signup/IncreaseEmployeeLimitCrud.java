@@ -11,6 +11,7 @@ import com.n4systems.handlers.creator.signup.IncreaseEmployeeLimitHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeAccountHandler;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
+import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
@@ -19,6 +20,7 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
+import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
@@ -99,9 +101,8 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 	}
 	
 	public String doCreate() {
-		String result = upgradeAccount();
-	
 		
+		String result = upgradeAccount();
 		TenantCache.getInstance().reloadPrimaryOrg(getTenantId());
 		TenantLimitService.getInstance().updateAll();
 		return result;
@@ -116,11 +117,14 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 		try {
 			upgradeAccount(transaction);
 			result = handleUpgradeSuccess(transaction, "message.upgrade_successful");
+		} catch (BillingValidationException e) {
+			addFieldError("creditCard", getText("error.credit_card_information_is_incorrect"));
+			logger.debug("billing information incorrect", e);
+			result = INPUT;
 		} catch (CommunicationException e) {
 			result = handleUpgradeError(transaction, "error.could_not_contact_billing_provider", e);
 		} catch (UpgradeCompletionException e) {
 			result = handleUpgradeError(transaction, "error.applying_upgrade_to_account", e);
-			
 		} catch (Exception e) {
 			result = handleUpgradeError(transaction, "error.could_not_upgrade", e);
 		} 
@@ -144,7 +148,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 		return ERROR;
 	}
 
-	private void upgradeAccount(Transaction transaction) throws CommunicationException, UpgradeCompletionException {
+	private void upgradeAccount(Transaction transaction) throws CommunicationException, UpgradeCompletionException, BillingInfoException {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		
 		UpgradeResponse upgradeResponse = getUpgradeHandler().upgradeTo(upgradeRequest, transaction);
@@ -216,6 +220,11 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 	
 	public UpgradePackageFilter getUpgradeFilter() {
 		return accountHelper.currentPackageFilter();
+	}
+
+	@Override
+	protected String getWhatWasBeingBought() {
+		return " employee limit increase of " + additionalEmployee;
 	}
 
 	

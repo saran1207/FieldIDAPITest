@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
 import com.n4systems.subscription.ContractPrice;
@@ -159,7 +160,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 		return tenantFile;
 	}
 
-	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException, BillingInfoException {
 		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId(), upgradeSubscription.getSubscription().isPurchasingPhoneSupport(), upgradeSubscription.isUpdatedBillingInformation() && upgradeSubscription.isUsingCreditCard(), upgradeSubscription.isUpdatedBillingInformation() && upgradeSubscription.isUsingCreditCard());
 		return new UpgradeResponse(costToUpgradeTo(upgradeSubscription), upgradeSubscription.getContractExternalId());
 	}
