@@ -18,13 +18,14 @@ public class ProductsByNetworkId extends ListLoader<Product> {
 
 	private Long networkId;
 	private Long excludeProductId;
+	private boolean bypassSecurityEnhancement = false;
 	
 	public ProductsByNetworkId(SecurityFilter filter) {
 		super(filter);
 	}
 	
 	@Override
-	protected List<Product> load(EntityManager em, SecurityFilter filter) {
+	public List<Product> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("networkId", networkId));
 		
@@ -35,6 +36,10 @@ public class ProductsByNetworkId extends ListLoader<Product> {
 		builder.addPostFetchPaths("infoOptions");
 		
 		List<Product> unsecuredProducts = builder.getResultList(em);
+		
+		if (bypassSecurityEnhancement) {
+			return unsecuredProducts;
+		}
 		
 		PersistenceManager.setSessionReadOnly(em);
 		
@@ -53,4 +58,8 @@ public class ProductsByNetworkId extends ListLoader<Product> {
 		return this;
 	}
 	
+	public ProductsByNetworkId bypassSecurityEnhancement() {
+		bypassSecurityEnhancement = true;
+		return this;
+	}
 }

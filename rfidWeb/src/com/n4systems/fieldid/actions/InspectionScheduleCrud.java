@@ -185,10 +185,14 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		return product;
 	}
 
-	public void setProductId(Long product) {
-		if (this.product == null || !this.product.getId().equals(product)) {
-			this.product = persistenceManager.find(Product.class, product, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
-			this.product = new FindSubProducts(persistenceManager, this.product).fillInSubProducts();
+	public void setProductId(Long id) {
+		if (product == null || !product.getId().equals(id)) {
+			if (!isInVendorContext()) {
+				product = persistenceManager.find(Product.class, id, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
+				product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
+			} else {
+				product = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(id).load();
+			}
 		}
 	}
 

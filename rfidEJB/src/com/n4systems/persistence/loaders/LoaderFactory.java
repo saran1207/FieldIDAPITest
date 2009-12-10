@@ -38,9 +38,11 @@ import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
 import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
@@ -213,16 +215,24 @@ public class LoaderFactory {
 		return new ProductTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 	
+	public SafetyNetworkInspectionLoader createSafetyNetworkAssignedProductInspectionLoader() {
+		return new SafetyNetworkAssignedProductInspectionLoader(filter);
+	}
+	
 	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
 	
-	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader() {
-		return new SafetyNetworkInspectionLoader(filter);
+	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(boolean forAssignedProduct) {
+		return (forAssignedProduct) ? createSafetyNetworkAssignedProductInspectionLoader() : createSafetyNetworkRegisteredProductInspectionLoader();
 	}
 	
 	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
 		return new SafetyNetworkProductLoader(filter);
+	}
+	
+	public SafetyNetworkInspectionLoader createSafetyNetworkRegisteredProductInspectionLoader() {
+		return new SafetyNetworkRegisteredProductInspectionLoader(filter);
 	}
 	
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {

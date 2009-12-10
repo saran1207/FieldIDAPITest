@@ -140,19 +140,26 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		if (allowNetworkResults) {
-			inspection = getLoaderFactory().createSafetyNetworkInspectionLoader().setId(uniqueId).load();
-		} else {
-			inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
-		}
-		
-		if (inspection != null && !inspection.isActive()) {
-			inspection = null;
-		}
-
-		if (inspection != null) {
-			inspectionGroup = inspection.getGroup();
-			inspectionScheduleOnInspection = (inspection.getSchedule() != null);
+		try {
+			if (allowNetworkResults) {
+				
+				// if we're in a vendor context we need to look inspections for assigned products rather than registered products
+				inspection = getLoaderFactory().createSafetyNetworkInspectionLoader(isInVendorContext()).setId(uniqueId).load();
+				
+			} else {
+				inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
+			}
+			
+			if (inspection != null && !inspection.isActive()) {
+				inspection = null;
+			}
+	
+			if (inspection != null) {
+				inspectionGroup = inspection.getGroup();
+				inspectionScheduleOnInspection = (inspection.getSchedule() != null);
+			}
+		} catch(RuntimeException e) {
+			logger.error("Failed to load inspection", e);
 		}
 	}
 	

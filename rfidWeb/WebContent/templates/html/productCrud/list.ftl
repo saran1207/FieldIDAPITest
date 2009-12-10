@@ -1,6 +1,11 @@
 ${action.setPageType('product', 'list')!}
 
-<#assign actionTarget="product"/>
+<#if !inVendorContext>
+	<#assign actionTarget="product"/>
+<#else>
+	<#assign actionTarget="productTraceability"/>
+</#if>
+
 <#include "../inspectionGroup/_productList.ftl"/>
 
 
@@ -9,7 +14,12 @@ $$('.productLink').each(function(element) {
 		element.observe('click', goToAssetListener);
 	});
 function goToAssetListener(event) {
-	var url = '<@s.url action="product"/>';
+	<#if !inVendorContext>
+		var url = '<@s.url action="product"/>';
+	<#else>
+		var url = '<@s.url action="productTraceability"/>';
+	</#if>
+	
 	
 	event.stop();
 	redirect( url + "?uniqueID=" + Event.element( event ).getAttribute( 'productId' ) );

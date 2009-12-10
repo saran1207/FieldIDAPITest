@@ -4,8 +4,9 @@
 	
 </head>
 
-<#include "_addForm.ftl"/>
-
+<#if !inVendorContext>
+	<#include "_addForm.ftl"/>
+</#if>
 
 <table class="list" id="scheduleList" <#if inspectionSchedules?exists && inspectionSchedules.isEmpty() >style="display:none"</#if>>
 	<tr>
@@ -19,9 +20,10 @@
 	</tbody>
 </table>
 
-
-<script type="text/javascript" >
-	editScheduleUrl =  '<@s.url action="inspectionScheduleEdit" namespace="/ajax" />';
-	cancelScheduleUrl = '<@s.url action="inspectionScheduleShow" namespace="/ajax"/>';
-	removeScheduleUrl = '<@s.url action="inspectionScheduleDelete" namespace="/ajax"/>';
-</script>
+<#if !inVendorContext>
+	<script type="text/javascript" >
+		editScheduleUrl =  '<@s.url action="inspectionScheduleEdit" namespace="/ajax" />';
+		cancelScheduleUrl = '<@s.url action="inspectionScheduleShow" namespace="/ajax"/>';
+		removeScheduleUrl = '<@s.url action="inspectionScheduleDelete" namespace="/ajax"/>';
+	</script>
+</#if>

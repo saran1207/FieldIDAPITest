@@ -395,6 +395,10 @@
 				<param name="actionName">product</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
+			<result name="oneFoundVendorContext" type="redirectAction">
+				<param name="actionName">productTraceability</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
 		</action>
 
 		<action name="productInspections" method="inspections"

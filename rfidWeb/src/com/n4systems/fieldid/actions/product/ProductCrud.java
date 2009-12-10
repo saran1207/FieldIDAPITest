@@ -158,7 +158,18 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		try {
+			if (!isInVendorContext()) {
+				product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+			} else {
+				product = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
+			}
+			
+			System.out.println(product.getClass().getName());
+		} catch(Exception e) {
+			logger.error("Unable to load product", e);
+		}
+		
 	}
 	
 	@Override
@@ -233,23 +244,32 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public String doList() {
 		// if no search param came just show the form.
 		if (search != null && search.length() > 0) {
+			
 			try {
-				products = productManager.findProductByIdentifiers(getSecurityFilter(), search, productType);
-
-				// remove the product given. ( this is for product merging, you
-				// don't want to merge the product with itself.)
-
-				if (excludeId != null) {
-					Product excludeProduct = new Product();
-					excludeProduct.setId(excludeId);
-					products.remove(excludeProduct);
+				
+				if (!isInVendorContext()) {
+					products = productManager.findProductByIdentifiers(getSecurityFilter(), search, productType);
+					
+					// remove the product given. ( this is for product merging, you
+					// don't want to merge the product with itself.)
+					if (excludeId != null) {
+						Product excludeProduct = new Product();
+						excludeProduct.setId(excludeId);
+						products.remove(excludeProduct);
+					}
+					
+				} else {
+					products = getLoaderFactory().createSafetyNetworkSmartSearchLoader().setVendorOrgId(getVendorContext()).setSearchText(search).load();
 				}
+
 				// if there is only one forward. directly to the group view
 				// screen.
 				if (products.size() == 1) {
 					product = products.get(0);
 					uniqueID = product.getId();
-					return "oneFound";
+					
+					// if we're in a vendor context we go to the tracebility tab instead
+					return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
 				}
 			} catch (Exception e) {
 				logger.error("Failed to look up Products", e);
@@ -310,8 +330,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	public String doShow() {
 		testExistingProduct();
-		setProductTypeId(product.getType().getId());
-		// persistenceManager.reattchAndFetch( product, "projects" );
 
 		loadAttachments();
 		return SUCCESS;
@@ -344,7 +362,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 		
 		ProductsByNetworkId loader = getLoaderFactory().createProductsByNetworkId();
 		loader.setNetworkId(product.getNetworkId());
-		loader.setExcludeProductId(product.getId());
+		
+		if (!isInVendorContext()) {
+			// in a vendor context, we show the product since they don't get the "show" tab right now
+			loader.setExcludeProductId(product.getId());
+		}
 		
 		linkedProducts = loader.load();
 		

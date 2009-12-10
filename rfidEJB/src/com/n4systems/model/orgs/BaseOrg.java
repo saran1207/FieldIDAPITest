@@ -182,20 +182,25 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	
 	abstract public BaseOrg getParent();
 	
-	public boolean allowsAccessFor(BaseOrg child) {
+	public boolean canAccess(BaseOrg child) {
 		if (child == null) {
 			return false;
 		}
 		
-		// this is a special case check since secondary orgs can see information from the primary
-		if (child.isSecondary() && isPrimary() && child.getPrimaryOrg().equals(this)) {
+		// any org can see itself
+		if (child.equals(this)) {
 			return true;
 		}
 		
 		if (isPrimary()) {
 			return (child.getPrimaryOrg().equals(this));
 		} else if (isSecondary()) {
-			return (child.getSecondaryOrg() != null && child.getSecondaryOrg().equals(this));
+			// this is a special case since secondary orgs can see information from the primary
+			if (child.isPrimary() && getPrimaryOrg().equals(child)) {
+				return true;
+			} else {
+				return (child.getSecondaryOrg() != null && child.getSecondaryOrg().equals(this));
+			}
 		} else if (isCustomer()) {
 			return (child.getCustomerOrg() != null && child.getCustomerOrg().equals(this));
 		} else if (isDivision()) {

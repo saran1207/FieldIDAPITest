@@ -114,7 +114,7 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	public Product findProductAllFields(Long id, SecurityFilter filter) {
-		Product product =  findProduct(id, filter, "infoOptions", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
+		Product product =  findProduct(id, filter, "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
 		product = fillInSubProductsOnProduct(product);
 		
 		// load linked products all the way up the chain

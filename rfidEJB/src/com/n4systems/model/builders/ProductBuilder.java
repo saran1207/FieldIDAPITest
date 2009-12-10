@@ -11,32 +11,40 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 
 public class ProductBuilder extends BaseBuilder<Product>{
 
-	private final Tenant tenantOrganization;
+	private final Tenant tenant;
+	private final BaseOrg owner;
 	private final ProductType type;
 
 	private String serialNumber;
 	private Date modified;
+	
 	private List<SubProduct> subProducts = new ArrayList<SubProduct>();
 	
 	public static ProductBuilder aProduct() {
-		return new ProductBuilder(TenantBuilder.n4(), aProductType().build());
+		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build());
 	}
 	
-	public ProductBuilder(Tenant tenantOrganization, ProductType type) {
+	public ProductBuilder(Tenant tenantOrganization, BaseOrg owner, ProductType type) {
 		super();
+		this.tenant = tenantOrganization;
+		this.owner = owner;
 		this.type = type;
-		this.tenantOrganization = tenantOrganization;
 	}
 	
 	public ProductBuilder ofType(ProductType type) {
-		return new ProductBuilder(tenantOrganization, type);
+		return new ProductBuilder(tenant, owner, type);
 	}
 	
-	public ProductBuilder forTenant(Tenant tenantOrganization) {
-		return new ProductBuilder(tenantOrganization, type);
+	public ProductBuilder forTenant(Tenant tenant) {
+		return new ProductBuilder(tenant, owner, type);
+	}
+	
+	public ProductBuilder withOwner(BaseOrg owner) {
+		return new ProductBuilder(tenant, owner, type);
 	}
 	
 	public ProductBuilder withSerialNumber(String serialNumber) {
@@ -73,7 +81,8 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	
 	public Product generate() {
 		Product product = new Product();
-		product.setTenant(tenantOrganization);
+		product.setTenant(tenant);
+		product.setOwner(owner);
 		product.setType(type);
 		product.setSerialNumber(serialNumber);
 		product.setModified(modified);

@@ -67,7 +67,7 @@ ${action.setPageType('inspection', 'list')!}
 						
 					</td>
 					<td>
-						<#if Session.sessionUser.hasAccess("createinspection") >
+						<#if Session.sessionUser.hasAccess("createinspection") && !inVendorContext>
 							<div class="inspectionTypes"><a href="javascript:void(0);" id="${inspectionGroup.id}" onmouseover="positionDropdown(this);"><@s.text name="label.addinspection"/></a><br/>
 								<ul id="${inspectionGroup.id}_list">
 									<#include "_inspectionSelect.ftl" />
