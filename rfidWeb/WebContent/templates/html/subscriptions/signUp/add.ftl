@@ -1,7 +1,8 @@
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
 	<@n4.includeScript src="signUp"/>
-	<@n4.includeScript src="timezone.js" />
+	<@n4.includeScript src="timezone" />
+	<@n4.includeScript src="billingInformation"/>
 	<@n4.includeScript>
 		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
 		pricingUrl = '<@s.url namespace="/public/ajax" action="signUpPackagePrice"/>';

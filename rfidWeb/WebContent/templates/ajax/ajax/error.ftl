@@ -3,6 +3,10 @@ var errors =  '';
 <#list action.actionErrors as error >
 	errors += '${error!} ' + "\n";
 </#list>
-alert( errors );
+<#list action.fieldErrors?values as errorField >
+	errors += '${errorField!} ' + "\n";
+</#list>
 
-<@s.fielderror/>
+
+alert(errors);
+

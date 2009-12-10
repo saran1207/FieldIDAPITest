@@ -9,12 +9,10 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.actions.signup.view.model.CreditCardDecorator;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.handlers.creator.signup.UpgradeAccountHandler;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
-import com.n4systems.handlers.creator.signup.UpgradePlanHandler;
 import com.n4systems.handlers.creator.signup.UpgradePlanHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
@@ -28,43 +26,28 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.CommunicationException;
-import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.PaymentOption;
-import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
-public class UpgradePlanCrud extends AbstractCrud {
+public class UpgradePlanCrud extends AbstractUpgradeCrud {
 	private static final Logger logger = Logger.getLogger(UpgradePlanCrud.class);
 	
 	
 	private List<DecoratedSignUpPackage> availablePackagesForUpdate;
 	private SignUpPackage upgradePackage;
-	private AccountHelper accountHelper;
-	private UpgradeCost upgradeCost;
-	private UpgradeResponse upgradeResponse;
-	
-	private String purchaseOrderNumber;
-	
 	private PaymentOption paymentOption;
 	private boolean phoneSupport;
-	
-	private boolean usingCreditCard = true;
 	
 	private List<SignUpPackage> allSignUpPackages;
 	
 	
-	private CreditCardDecorator creditCard = new CreditCardDecorator();
-
 	public UpgradePlanCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -79,18 +62,11 @@ public class UpgradePlanCrud extends AbstractCrud {
 	}
 	
 	private void testRequiredEntities() {
-		if (upgradePackage == null) { 
-			addActionErrorText("error.could_not_find_an_upgrade_package");
+		if (upgradePackage == null || !isUpgradePackageAvailable()) { 
+			addActionErrorText("error.valid_upgrade_package_must_be_selected");
 			throw new MissingEntityException();
 		}
 	}
-
-	@Override
-	protected void postInit() {
-		super.postInit();
-		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
-	}
-
 
 	@SkipValidation
 	public String doList() {
@@ -111,7 +87,7 @@ public class UpgradePlanCrud extends AbstractCrud {
 	}
 
 
-	private void findUpgradeCost() {
+	protected void findUpgradeCost() {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		upgradeRequest.setUpdatedBillingInformation(false);
 		try {
@@ -163,6 +139,10 @@ public class UpgradePlanCrud extends AbstractCrud {
 		return result;
 	}
 
+	
+	protected UpgradeAccountHandler getUpgradeHandler() {
+		return new UpgradePlanHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
+	}
 
 	private void sendNotificationOfIncompleteUpgrade() {
 		MailMessage message = new MailMessage();
@@ -222,28 +202,18 @@ public class UpgradePlanCrud extends AbstractCrud {
 	}
 
 
-	private UpgradeRequest createUpgradeRequest() {
+	protected void setUpgradeInformation(UpgradeRequest upgradeRequest) {
 		ContractPricing upgradeContract = upgradeContract();
-		
-		UpgradeRequest upgradeRequest = new UpgradeRequest();
-		
 		upgradeRequest.setUpgradePackage(upgradeContract.getSignUpPackage());
 		upgradeRequest.setContractExternalId(upgradeContract.getExternalId());
-		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
-		
 		
 		upgradeRequest.setFrequency(upgradeContract.getPaymentOption().getFrequency());
 		upgradeRequest.setMonths(upgradeContract.getPaymentOption().getTerm());
 		upgradeRequest.setPurchasingPhoneSupport(getPhoneSupport());
-		
-		
-		upgradeRequest.setUpdatedBillingInformation(accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation());
-		upgradeRequest.setUsingCreditCard(usingCreditCard);
-		upgradeRequest.setPurchaseOrderNumber(purchaseOrderNumber);
-		upgradeRequest.setCreditCard(creditCard.getDelegateCard());
-		
-		return upgradeRequest;
 	}
+
+
+	
 
 
 	private boolean getPhoneSupport() {
@@ -317,46 +287,14 @@ public class UpgradePlanCrud extends AbstractCrud {
 	}
 	
 	
-	public UpgradeCost getUpgradeCost() {
-		if (upgradeCost == null) {
-			findUpgradeCost();
-		}
-		return upgradeCost;
-	}
-
-	
-
-	private UpgradePlanHandler getUpgradeHandler() {
-		return new UpgradePlanHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
-	}
-
-
 	public UpgradeResponse getUpgradeResponse() {
 		return upgradeResponse;
 	}
 	
 	
 	public boolean isUpgradePackageAvailable() {
-		return (!upgradePackage.getName().equalsIgnoreCase(currentPackageFilter().getPackageName()) &&
-				getPackages().contains(upgradePackage));
+		return getPackages().contains(upgradePackage);
 	}
-	
-	@FieldExpressionValidator(message="", key="error.po_number_is_required", expression="pONumberCorrectlyEntered")
-	public String getPurchaseOrderNumber() {
-		return purchaseOrderNumber;
-	}
-
-	public boolean isPONumberCorrectlyEntered() {
-		if (accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation() && !usingCreditCard) {
-			return (purchaseOrderNumber != null && !purchaseOrderNumber.trim().isEmpty());
-		}
-		return true;
-	}
-
-	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
-		this.purchaseOrderNumber = purchaseOrderNumber;
-	}
-	
 	
 	public String getPaymentOption() {
 		return paymentOption != null ? paymentOption.name() : null;
@@ -368,22 +306,6 @@ public class UpgradePlanCrud extends AbstractCrud {
 	}
 	
 
-	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "aNeedToCheckCreditCard == true") })
-	public CreditCardDecorator getCreditCard() {
-		return creditCard;
-	}
-
-
-	public boolean isANeedToCheckCreditCard() {
-		return (isUsingCreditCard() && accountHelper.getCurrentSubscription().isUpgradeRequiresBillingInformation());
-	}
-	
-	
-	public void setCreditCard(CreditCardDecorator creditCard) {
-		this.creditCard = creditCard;
-	}
-
-
 	public boolean isPurchasingPhoneSupport() {
 		return phoneSupport;
 	}
@@ -393,23 +315,8 @@ public class UpgradePlanCrud extends AbstractCrud {
 		this.phoneSupport = phoneSupport;
 	}
 	
-	public CurrentSubscription getCurrentSubscription() {
-		try {
-			return accountHelper.getCurrentSubscription();
-		} catch (CommunicationException e) {
-			return null;
-		}
-	}
 	
-	public boolean isUsingCreditCard() {
-		return usingCreditCard;
-	}
 
-
-	public void setUsingCreditCard(boolean usingCreditCard) {
-		this.usingCreditCard = usingCreditCard;
-	}
-	
 	/**
 	 * these decorator classes add the is current method the sign up packages. which allows the view to render the 
 	 * selection of products correctly.

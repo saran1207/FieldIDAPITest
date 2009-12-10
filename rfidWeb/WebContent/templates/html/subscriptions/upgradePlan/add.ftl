@@ -10,44 +10,13 @@
 			getResponse("<@s.url action="upgradePlanPriceCheck" namespace="/ajax"/>", "get", options);
 		}
 		
-		function payPurchaseOrderClick(event) {
-			event.stop();
-			enablePO();
-		}
 		
-		function payCreditCardClick(event) {
-			event.stop();
-			enableCC();
-		}
-		
-		function enableCC() {
-			$("usingCreditCard").value = "true";
-			$$(".payCC").invoke("enable");
-			$$(".payPO").invoke("disable");
-		}
-		
-		function enablePO() {
-			$("usingCreditCard").value = "false";
-			$$(".payPO").invoke("enable");
-			$$(".payCC").invoke("disable");
-		}
 		
 		document.observe("dom:loaded", function() {
 				$$(".changesPrice").each(function(element) {
 						element.observe('change', updatePrice);
 					});
-				$$("#payPurchaseOrder").each(function(element) {
-					element.observe("click", payPurchaseOrderClick);
-				});
-				$$("#payCreditCard").each(function(element) {
-					element.observe("click", payCreditCardClick);
-				});
 				
-				if($("usingCreditCard").getValue() == "true") {
-					enableCC();
-				} else {
-					enablePO();
-				}
 				$('upgradeAccount').observe('submit', function(event) { 
 						var form = Event.element(event);
 						$$("#" + form.id + " input[type='submit']").invoke('disable');
@@ -103,56 +72,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 		<#assign charge_label="label.you_will_be_charged_this_immediately"/>
 		<#include "_charges.ftl"/>
 		
-		<h3><@s.text name="label.billing_information"/></h3>
-		<#if currentSubscription.upgradeRequiresBillingInformation>
-			
-			<@s.hidden name="usingCreditCard" id="usingCreditCard" />
-			<div id="billing_information">
-				<div class="infoSection" id="creditCardInformation">
-					<div class="multiColumn">
-						<div class="infoBlock" >
-							<a href="#" id="payCreditCard"><@s.text name="label.pay_by_credit_card"/></a>
-							<div id="payByCC">
-								<div class="infoSet">
-									<label class="label" for="creditCard.type"><@s.text name="label.credit_card_type"/></label>
-									<@s.select name="creditCard.cCType" list="creditCard.creditCardTypes" listKey="name()" listValue="name()" cssClass="autoSize payCC"/>
-								</div>
-								
-								<div class="infoSet">
-									<label class="label" for="creditCard.name"><@s.text name="label.name_on_card" /></label>
-									<@s.textfield name="creditCard.name" cssClass="payCC" />
-								</div>
-								
-								<div class="infoSet">
-									<label class="label" for="creditCard.number"><@s.text name="label.credit_card_number" /></label>
-									<@s.textfield name="creditCard.number" cssClass="payCC" />
-								</div>
-								
-								<div class="infoSet">
-									<label class="label" for="creditCard.expiry"><@s.text name="label.expiry_date"/></label>
-									<span class="fieldHolder">
-										<@s.select name="creditCard.expiryMonth" list="creditCard.months" theme="fieldidSimple" cssClass="autoSize payCC"/> <@s.text name="label.date_seperator"/> <@s.select name="creditCard.expiryYear" list="creditCard.years" theme="fieldidSimple" cssClass="autoSize payCC"/>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="infoBlock">
-							<a href="#" id="payPurchaseOrder"><@s.text name="label.pay_by_purchase_order"/></a>
-							<div id="payByPO">
-								<div class="infoSet">
-									<label class="label" for="po.number"><@s.text name="label.po_number"/></label>
-									<@s.textfield name="purchaseOrderNumber" cssClass="payPO" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		<#else>
-			<p>
-				<@s.text name="label.your_credit_card_on_file_will_be_used"/>
-			</p>
-		</#if>
+		<#include "../common/_billing_information.ftl"/>
 		
 		<div class="actions">
 			<p id="purchaseWarning"><strong><@s.text name="label.purchase_warning"/></strong></p>
@@ -165,7 +85,6 @@ ${action.setPageType('account_settings', 'upgrade')!}
 
 <#else>
 	<div class="error">
-	boo
 		<@s.text name="error.could_not_contact_billing_provider"/>
 	</div>
 </#if>

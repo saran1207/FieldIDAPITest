@@ -7,9 +7,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.handlers.creator.signup.IncreaseEmployeeLimitHandler;
 import com.n4systems.handlers.creator.signup.IncreaseEmployeeLimitHandlerImpl;
+import com.n4systems.handlers.creator.signup.UpgradeAccountHandler;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
@@ -26,11 +25,9 @@ import com.n4systems.subscription.UpgradeResponse;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.IntRangeFieldValidator;
 
-public class IncreaseEmployeeLimitCrud extends AbstractCrud {
+public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 	private static Logger logger = Logger.getLogger(IncreaseEmployeeLimitCrud.class);
 	
-	private UpgradeCost upgradeCost;
-	private AccountHelper accountHelper;
 	private List<SignUpPackage> allSignUpPackages;
 	private SignUpPackage currentPackage;
 	
@@ -48,11 +45,6 @@ public class IncreaseEmployeeLimitCrud extends AbstractCrud {
 	protected void loadMemberFields(Long uniqueId) {
 	}
 	
-	@Override
-	protected void postInit() {
-		super.postInit();
-		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
-	}
 
 	@SkipValidation
 	public String doAdd() {
@@ -66,43 +58,37 @@ public class IncreaseEmployeeLimitCrud extends AbstractCrud {
 		
 		additionalEmployee = 1;
 		
-		findUpgradeCost();
+		
 		return SUCCESS;
 	}
 	
-	private void findUpgradeCost() {
+	protected void findUpgradeCost() {
 		UpgradeRequest upgradeRequest = createUpgradeRequest();
 		upgradeRequest.setUpdatedBillingInformation(false);
 		try {
 			upgradeCost = getUpgradeHandler().priceForUpgrade(upgradeRequest);
 		} catch (CommunicationException e) {
-			upgradeCost = null;
+			upgradeCost = UpgradeCost.nullUpgradeCost();
+		} catch (Exception e) {
+			upgradeCost = UpgradeCost.nullUpgradeCost();
 		}
 	}
 
-	private IncreaseEmployeeLimitHandler getUpgradeHandler() {
+	private UpgradeAccountHandler getUpgradeHandler() {
 		return new IncreaseEmployeeLimitHandlerImpl(getPrimaryOrg(), getCreateHandlerFactory().getSubscriptionAgent(), new OrgSaver());
 	}
 
 	
-	private UpgradeRequest createUpgradeRequest() {
-		UpgradeRequest upgradeRequest = new UpgradeRequest();
-		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
-		upgradeRequest.setNewUsers(additionalEmployee);
-		
-		upgradeRequest.setUpgradePackage(getUpgradeFilter().getCurrentContract().getSignUpPackage());
+	
+
+	protected void setUpgradeInformation(UpgradeRequest upgradeRequest) {
 		upgradeRequest.setContractExternalId(getUpgradeFilter().getCurrentContract().getExternalId());
-		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
-		
 		
 		upgradeRequest.setFrequency(getUpgradeFilter().getCurrentContract().getPaymentOption().getFrequency());
 		upgradeRequest.setMonths(getUpgradeFilter().getCurrentContract().getPaymentOption().getTerm());
 		upgradeRequest.setPurchasingPhoneSupport(accountHelper.getCurrentSubscription().isPhonesupport());
 		
-		upgradeRequest.setUpdatedBillingInformation(false);
-		
-		
-		return upgradeRequest;
+		upgradeRequest.setNewUsers(additionalEmployee);
 	}
 	
 	
@@ -140,6 +126,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractCrud {
 		} 
 		return result;
 	}
+	
 	
 	
 	private String handleUpgradeSuccess(Transaction transaction, String successMessage) {
@@ -206,9 +193,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractCrud {
 		return getSignUpDetails().getUsers();
 	}
 
-	public UpgradeCost getUpgradeCost() {
-		return upgradeCost;
-	}
+	
 	
 	
 	private List<SignUpPackage> getAllSignUpPackages() {
@@ -232,5 +217,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractCrud {
 	public UpgradePackageFilter getUpgradeFilter() {
 		return accountHelper.currentPackageFilter();
 	}
+
+	
 	
 }

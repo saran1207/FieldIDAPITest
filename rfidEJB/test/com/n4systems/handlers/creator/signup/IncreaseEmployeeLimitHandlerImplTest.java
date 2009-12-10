@@ -35,7 +35,7 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		SubscriptionAgent subscriptionAgent = createSubscriptionAgentForUpgrade(new UpgradeCost(300.0F, 4000.0F, "DEC. 10 2009"));
 		
 		
-		IncreaseEmployeeLimitHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, null);
+		UpgradeAccountHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, null);
 		
 		UpgradeCost expectedCost = new UpgradeCost(300.0F, 4000.0F, "DEC. 10 2009");
 		
@@ -60,7 +60,7 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		
 		
-		IncreaseEmployeeLimitHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, successfulOrgSaver(primaryOrg));
+		UpgradeAccountHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, successfulOrgSaver(primaryOrg));
 		
 		sut.upgradeTo(validUpgradeRequest(), mockTransaction);
 		
@@ -76,7 +76,7 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		OrgSaver saver = successfulOrgSaver(primaryOrg);
 		
 		
-		IncreaseEmployeeLimitHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, saver);
+		UpgradeAccountHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, saver);
 		
 		sut.upgradeTo(validUpgradeRequest(), mockTransaction);
 		assertEquals(new Long(initialUserLimit + 1L), primaryOrg.getLimits().getUsers());
@@ -88,7 +88,7 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		OrgSaver saver = successfulOrgSaver(primaryOrg);
 		
-		IncreaseEmployeeLimitHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, saver);
+		UpgradeAccountHandler sut = new IncreaseEmployeeLimitHandlerImpl(primaryOrg, subscriptionAgent, saver);
 		
 		sut.upgradeTo(validUpgradeRequest(), mockTransaction);
 		
@@ -135,9 +135,7 @@ public class IncreaseEmployeeLimitHandlerImplTest  extends TestUsesTransactionBa
 		return createSubscriptionAgentForUpgrade(true);
 	}
 	
-	private SubscriptionAgent subScriptionAgentForFailingUpgrade() throws CommunicationException {
-		return createSubscriptionAgentForUpgrade(false);
-	}
+
 
 	private SubscriptionAgent createSubscriptionAgentForUpgrade(boolean upgradeResult) throws CommunicationException {
 		SubscriptionAgent subscriptionAgent = createMock(SubscriptionAgent.class);

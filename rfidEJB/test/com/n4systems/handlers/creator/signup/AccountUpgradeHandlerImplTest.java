@@ -50,7 +50,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		upgradeRequest.setUpgradePackage(upgradePackage);
 		
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		HashSet<ExtendedFeature> expectedFeatures = new FluentHashSet<ExtendedFeature>(upgradePackage.getExtendedFeatures());
 		
@@ -71,7 +71,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		upgradeRequest.setUpgradePackage(upgradePackage);
 		
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		HashSet<ExtendedFeature> expectedFeatures = new FluentHashSet<ExtendedFeature>(upgradePackage.getExtendedFeatures())
 				.stickOn(currentExtendedFeatureNotIncludedInPackage);
@@ -113,7 +113,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		OrgSaver orgSaver = successfulOrgSaver(primaryOrg);
 		
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, orgSaver, subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, orgSaver, subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -128,7 +128,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withAssetLimit(25L).build();
 		
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -147,7 +147,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -162,7 +162,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withAssetLimit(TenantLimit.UNLIMITED).build();
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		upgradeRequest.setUpgradePackage(upgradePackage);
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -179,7 +179,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withDiskSpaceLimit(5L, DataUnit.MEBIBYTES).build();
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		upgradeRequest.setUpgradePackage(upgradePackage);
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -196,7 +196,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().build();
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		upgradeRequest.setUpgradePackage(upgradePackage);
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -211,7 +211,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().withNoExtendedFeatures().withAssetLimit(0L).withDiskSpaceLimit(0L, DataUnit.BYTES).build();
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForFailingUpgrade();
 		
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
 		
 		assertNull(sut.upgradeTo(upgradeRequest, mockTransaction));
 		
@@ -233,7 +233,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		replay(subscriptionAgent);
 		
 		
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 		
@@ -250,7 +250,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		
 		upgradeRequest.setUpgradePackage(upgradePackage);
 		
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, null, subscriptionAgent);
 		
 		UpgradeCost expectedCost = new UpgradeCost(300.0F, 4000.0F, "DEC. 10 2009");
 		
@@ -265,7 +265,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().build();
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		upgradeRequest.setUpgradePackage(upgradePackage);
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, successfulOrgSaver(primaryOrg), subscriptionAgent);
 		
 		
 		
@@ -284,7 +284,7 @@ public class AccountUpgradeHandlerImplTest extends TestUsesTransactionBase {
 		PrimaryOrg primaryOrg = aPrimaryOrg().build();
 		SubscriptionAgent subscriptionAgent = subScriptionAgentForSuccessfulUpgrade();
 		upgradeRequest.setUpgradePackage(upgradePackage);
-		UpgradePlanHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, failingOrgSaver(primaryOrg), subscriptionAgent);
+		UpgradeAccountHandler sut = new UpgradeHandlerImplTenatSwitchOverride(primaryOrg, failingOrgSaver(primaryOrg), subscriptionAgent);
 		
 		sut.upgradeTo(upgradeRequest, mockTransaction);
 	}

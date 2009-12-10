@@ -63,7 +63,7 @@
 
 ${action.setPageType('account_settings', 'increase_employee')!}
 
-<@s.form action="increaseEmployeeLimitComplete" id="upgradeAccount" cssClass="fullForm fluidSets" theme="fieldid">
+<@s.form action="increaseEmployeeLimitComplete" id="upgradeAccount" cssClass="fullForm" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	
 	<h3 class="clean">
@@ -83,17 +83,17 @@ ${action.setPageType('account_settings', 'increase_employee')!}
 		<tr>
 			<th><@s.text name="label.additional_employee"/></th>
 			<td>+<@s.textfield name="additionalEmployee" theme="fieldidSimple" id="additionalEmployee" cssClass="changesPrice"/></td>
-			<td class="messageCol errorMessage" id="additionalEmployeeError" style="display:none">(<@s.text name="error.must_be_a_number_greater_than_1"/>)</td>	
+			<td class="messageCol errorMessage" id="additionalEmployeeError" style="display:none">(<@s.text name="error.must_be_a_number_greater_than_0"/>)</td>	
 		</tr>
 		<tr>
 			<th><@s.text name="label.employee_limit_after_purchase"/></td>
 			<td id="totalEmployee">${limits.employeeUsersMax + additionalEmployee?default(1)}</td>
-			<td class="messageCol errorMessage" id="limitError"  style="display:none">(<@s.text name="error.limited_user_accounts"><@s.param>${employeeLimit!}</@s.param></@s.text>)</td>	
+			<td class="messageCol errorMessage" id="limitError"  style="display:none">(<@s.text name="error.limited_employee_accounts"><@s.param>${employeeLimit!}</@s.param></@s.text>)</td>	
 		</tr>
 	</table>	
 	<#assign charge_label="label.you_will_be_charged_this_immediately"/>
 	<#include "../upgradePlan/_charges.ftl"/>
-		
+	<#include "../common/_billing_information.ftl"/>
 	
 	<div class="actions">
 		<p id="purchaseWarning"><strong><@s.text name="label.purchase_warning"/></strong></p>

@@ -5,10 +5,8 @@ import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
 
-public interface UpgradePlanHandler {
-
+public interface UpgradeAccountHandler {
 	public UpgradeCost priceForUpgrade(UpgradeRequest upgradeRequest) throws CommunicationException;
 
 	public UpgradeResponse upgradeTo(UpgradeRequest upgradeRequest, Transaction transaction) throws CommunicationException, UpgradeCompletionException;
-
 }

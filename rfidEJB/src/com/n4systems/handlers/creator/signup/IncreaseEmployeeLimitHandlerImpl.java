@@ -9,7 +9,7 @@ import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
 
-public class IncreaseEmployeeLimitHandlerImpl implements IncreaseEmployeeLimitHandler {
+public class IncreaseEmployeeLimitHandlerImpl implements UpgradeAccountHandler {
 
 	
 	private final PrimaryOrg primaryOrg;

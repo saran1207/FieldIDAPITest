@@ -14,7 +14,7 @@ import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.DataUnit;
 
-public class UpgradePlanHandlerImpl implements UpgradePlanHandler {
+public class UpgradePlanHandlerImpl implements UpgradeAccountHandler {
 
 	private final PrimaryOrg primaryOrg;
 	private final OrgSaver orgSaver;
