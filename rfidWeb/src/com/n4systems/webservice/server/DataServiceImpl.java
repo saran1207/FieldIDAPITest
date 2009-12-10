@@ -1139,7 +1139,7 @@ public class DataServiceImpl implements DataService {
 			return response;
 		} catch (Exception e) {
 			logger.error( "failed while processing inspections", e );
-			throw new ServiceException();
+			throw new ServiceException(e);
 		}		
 	}
 	
@@ -1255,7 +1255,7 @@ public class DataServiceImpl implements DataService {
 			return response;
 		} catch (Exception e) {
 			logger.error( "failed while processing products", e );
-			throw new ServiceException();			
+			throw new ServiceException(e);			
 		}
 	}
 	
