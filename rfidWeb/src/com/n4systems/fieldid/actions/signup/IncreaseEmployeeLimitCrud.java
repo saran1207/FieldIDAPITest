@@ -2,32 +2,41 @@ package com.n4systems.fieldid.actions.signup;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
+import com.n4systems.handlers.creator.signup.IncreaseEmployeeLimitHandler;
+import com.n4systems.handlers.creator.signup.IncreaseEmployeeLimitHandlerImpl;
+import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.services.TenantCache;
+import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.UpgradeCost;
+import com.n4systems.subscription.UpgradeResponse;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.IntRangeFieldValidator;
 
-public class IncreaseStaffCrud extends AbstractCrud {
-
+public class IncreaseEmployeeLimitCrud extends AbstractCrud {
+	private static Logger logger = Logger.getLogger(IncreaseEmployeeLimitCrud.class);
+	
 	private UpgradeCost upgradeCost;
 	private AccountHelper accountHelper;
 	private List<SignUpPackage> allSignUpPackages;
 	private SignUpPackage currentPackage;
 	
-	private Integer additionalStaff = 0;
+	private Integer additionalEmployee = 0;
 	
-	public IncreaseStaffCrud(PersistenceManager persistenceManager) {
+	public IncreaseEmployeeLimitCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 
@@ -48,14 +57,14 @@ public class IncreaseStaffCrud extends AbstractCrud {
 	@SkipValidation
 	public String doAdd() {
 		if (accountHelper.currentPackageFilter().isLegacy()) {
-			return "legacy";
+			return ERROR;
 		}
 		
 		if (packageHasUserLimit() && accountHasReachedUserLimit()) {
 			return "limitExceeded";
 		}
 		
-		additionalStaff = 1;
+		additionalEmployee = 1;
 		
 		findUpgradeCost();
 		return SUCCESS;
@@ -71,17 +80,15 @@ public class IncreaseStaffCrud extends AbstractCrud {
 		}
 	}
 
-	private UpgradeHandlerImpl getUpgradeHandler() {
-		return new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
+	private IncreaseEmployeeLimitHandler getUpgradeHandler() {
+		return new IncreaseEmployeeLimitHandlerImpl(getPrimaryOrg(), getCreateHandlerFactory().getSubscriptionAgent(), new OrgSaver());
 	}
 
 	
 	private UpgradeRequest createUpgradeRequest() {
-
-		
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 		upgradeRequest.setTenantExternalId(getPrimaryOrg().getExternalId());
-		upgradeRequest.setNewUsers(additionalStaff);
+		upgradeRequest.setNewUsers(additionalEmployee);
 		
 		upgradeRequest.setUpgradePackage(getUpgradeFilter().getCurrentContract().getSignUpPackage());
 		upgradeRequest.setContractExternalId(getUpgradeFilter().getCurrentContract().getExternalId());
@@ -106,12 +113,60 @@ public class IncreaseStaffCrud extends AbstractCrud {
 	}
 	
 	public String doCreate() {
+		String result = upgradeAccount();
+	
 		
+		TenantCache.getInstance().reloadPrimaryOrg(getTenantId());
+		TenantLimitService.getInstance().updateAll();
+		return result;
+	}
+
+	
+	
+	private String upgradeAccount() {
+		String result;
+		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
-		
+		try {
+			upgradeAccount(transaction);
+			result = handleUpgradeSuccess(transaction, "message.upgrade_successful");
+		} catch (CommunicationException e) {
+			result = handleUpgradeError(transaction, "error.could_not_contact_billing_provider", e);
+		} catch (UpgradeCompletionException e) {
+			result = handleUpgradeError(transaction, "error.applying_upgrade_to_account", e);
+			
+		} catch (Exception e) {
+			result = handleUpgradeError(transaction, "error.could_not_upgrade", e);
+		} 
+		return result;
+	}
+	
+	
+	private String handleUpgradeSuccess(Transaction transaction, String successMessage) {
+		addActionMessageText(successMessage);
+		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName());
+		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
 		return SUCCESS;
 	}
 
+
+	private String handleUpgradeError(Transaction transaction, String errorMessage, Exception e) {
+		com.n4systems.persistence.PersistenceManager.rollbackTransaction(transaction);
+		logger.error("upgrade failed", e);
+		addFlashErrorText(errorMessage);
+		return ERROR;
+	}
+
+	private void upgradeAccount(Transaction transaction) throws CommunicationException, UpgradeCompletionException {
+		UpgradeRequest upgradeRequest = createUpgradeRequest();
+		
+		UpgradeResponse upgradeResponse = getUpgradeHandler().upgradeTo(upgradeRequest, transaction);
+		
+		if (upgradeResponse == null) {
+			throw new ProcessFailureException("upgrading the account was unsuccessful");
+		}
+		upgradeCost = upgradeResponse.getCost();
+	}
 	private SignUpPackage getCurrentPackage() {
 		if (currentPackage == null) {
 			currentPackage = accountHelper.currentPackageFilter().getCurrentPackage(getAllSignUpPackages());
@@ -131,21 +186,21 @@ public class IncreaseStaffCrud extends AbstractCrud {
 		return getCurrentPackage().getSignPackageDetails();
 	}
 	
-	public boolean isUnderStaffLimitReached() {
-		Long limit = getStaffLimit();
+	public boolean isUnderEmployeePlanLimit() {
+		Long limit = getEmployeeLimit();
 		if (limit == null) {
 			return true; 
 		}
 
-		return (staffTotal() <= limit);
+		return (employeeTotal() <= limit);
 	}
 
-	private long staffTotal() {
-		return getLimits().getEmployeeUsersMax() + additionalStaff;
+	private long employeeTotal() {
+		return getLimits().getEmployeeUsersMax() + additionalEmployee;
 	}
 	
-	public Long getStaffLimit() {
-		if (!TenantLimit.isUnlimited(getSignUpDetails().getUsers())) {
+	public Long getEmployeeLimit() {
+		if (TenantLimit.isUnlimited(getSignUpDetails().getUsers())) {
 			return null;
 		}
 		return getSignUpDetails().getUsers();
@@ -164,14 +219,14 @@ public class IncreaseStaffCrud extends AbstractCrud {
 	}
 
 	
-	public Integer getAdditionalStaff() {
-		return additionalStaff;
+	public Integer getAdditionalEmployee() {
+		return additionalEmployee;
 	}
 
-	@IntRangeFieldValidator(message="", key="error.number_of_additional_staff_accounts_must_be_greater_than_zero", min="1")
-	@FieldExpressionValidator(message="", key="error.you_may_only_x_have_staff_accounts_on_this_play", expression="staffLimit")
-	public void setAdditionalStaff(Integer additionalStaff) {
-		this.additionalStaff = additionalStaff;
+	@IntRangeFieldValidator(message="", key="error.number_of_additional_employee_accounts_must_be_greater_than_zero", min="1")
+	@FieldExpressionValidator(message="", key="error.you_may_only_x_have_employee_accounts_on_this_play", expression="underEmployeePlanLimit")
+	public void setAdditionalEmployee(Integer additionalEmployee) {
+		this.additionalEmployee = additionalEmployee;
 	}
 	
 	public UpgradePackageFilter getUpgradeFilter() {

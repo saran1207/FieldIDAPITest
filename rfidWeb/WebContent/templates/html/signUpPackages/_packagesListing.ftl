@@ -9,7 +9,7 @@
 				
 				<th class="header <#if package.current?exists><#if package.current>currentPackage<#else>upgradePackage</#if></#if>">
 					<#if package.current?exists && package.current>
-						<@s.text name="label.current_package"/>
+						<@s.text name="label.current_plan"/>
 					<#elseif package.current?exists && !upgradeListed>
 						<#assign upgradeListed=true/>
 						<@s.text name="label.upgrade"/>

@@ -14,13 +14,13 @@ import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
 import com.n4systems.util.DataUnit;
 
-public class UpgradeHandlerImpl implements UpgradeHandler {
+public class UpgradePlanHandlerImpl implements UpgradePlanHandler {
 
 	private final PrimaryOrg primaryOrg;
 	private final OrgSaver orgSaver;
 	private final SubscriptionAgent subscriptionAgent;
 	
-	public UpgradeHandlerImpl(PrimaryOrg primaryOrg, OrgSaver orgSaver, SubscriptionAgent subscriptionAgent) {
+	public UpgradePlanHandlerImpl(PrimaryOrg primaryOrg, OrgSaver orgSaver, SubscriptionAgent subscriptionAgent) {
 		this.primaryOrg = primaryOrg;
 		this.orgSaver = orgSaver;
 		this.subscriptionAgent = subscriptionAgent;

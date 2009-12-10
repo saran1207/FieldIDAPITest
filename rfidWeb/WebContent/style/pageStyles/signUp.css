@@ -138,7 +138,7 @@ h1 {
 	background-image:url(../../images/checkMark.jpg)
 }
 
-#additionalStaff  {
+#additionalEmployee  {
 	width: 2em;
 }	
 
@@ -160,7 +160,7 @@ td.messageCol {
 	width:250px
 }
 
-#totalStaff {
+#totalEmployee {
 	border-top:1px solid black;
 }
 

@@ -7,7 +7,7 @@
 			$$(".changesPrice").each(function(element) {
 					options[element.name] = form[element.name];
 				}); 
-			getResponse("<@s.url action="upgradePriceCheck" namespace="/ajax"/>", "get", options);
+			getResponse("<@s.url action="upgradePlanPriceCheck" namespace="/ajax"/>", "get", options);
 		}
 		
 		function payPurchaseOrderClick(event) {
@@ -58,7 +58,7 @@
 
 ${action.setPageType('account_settings', 'upgrade')!}
 <#if upgradeCost?exists>
-	<@s.form action="accountUpgradeComplete" id="upgradeAccount" cssClass="fullForm" theme="fieldid">
+	<@s.form action="upgradePlanComplete" id="upgradeAccount" cssClass="fullForm" theme="fieldid">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<h3 class="clean">
 			<@s.text name="label.upgrading_from_x_to_y">
@@ -156,9 +156,9 @@ ${action.setPageType('account_settings', 'upgrade')!}
 		
 		<div class="actions">
 			<p id="purchaseWarning"><strong><@s.text name="label.purchase_warning"/></strong></p>
-			<@s.submit key="label.please_upgrade_my_account"/>
+			<@s.submit key="label.please_upgrade_my_plan"/>
 			<@s.text name="label.or"/>
-			<a href="<@s.url action="accountUpgrades"/>"><@s.text name="label.do_not_upgrade_my_account"/></a>
+			<a href="<@s.url action="accountUpgrades"/>"><@s.text name="label.do_not_upgrade_my_plan"/></a>
 		</div>
 	
 	</@s.form>

@@ -21,7 +21,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 
 <#assign currentPackageFilter=action.currentPackageFilter()/>
 <#include "/templates/html/common/_formErrors.ftl"/>
-<#assign purchaseAction="accountUpgrade"/>
+<#assign purchaseAction="upgradePlan"/>
 <#assign purchaseLabel="label.upgrade"/>
 <#include "../signUpPackages/_packagesListing.ftl"/>
 

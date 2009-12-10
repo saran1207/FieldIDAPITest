@@ -14,7 +14,8 @@ import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.signup.view.model.CreditCardDecorator;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
-import com.n4systems.handlers.creator.signup.UpgradeHandlerImpl;
+import com.n4systems.handlers.creator.signup.UpgradePlanHandler;
+import com.n4systems.handlers.creator.signup.UpgradePlanHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.ContractPricing;
@@ -42,8 +43,8 @@ import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
-public class AccountUpgrade extends AbstractCrud {
-	private static final Logger logger = Logger.getLogger(AccountUpgrade.class);
+public class UpgradePlanCrud extends AbstractCrud {
+	private static final Logger logger = Logger.getLogger(UpgradePlanCrud.class);
 	
 	
 	private List<DecoratedSignUpPackage> availablePackagesForUpdate;
@@ -64,7 +65,7 @@ public class AccountUpgrade extends AbstractCrud {
 	
 	private CreditCardDecorator creditCard = new CreditCardDecorator();
 
-	public AccountUpgrade(PersistenceManager persistenceManager) {
+	public UpgradePlanCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 
@@ -325,8 +326,8 @@ public class AccountUpgrade extends AbstractCrud {
 
 	
 
-	private UpgradeHandlerImpl getUpgradeHandler() {
-		return new UpgradeHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
+	private UpgradePlanHandler getUpgradeHandler() {
+		return new UpgradePlanHandlerImpl(getPrimaryOrg(), new OrgSaver(), getCreateHandlerFactory().getSubscriptionAgent());
 	}
 
 

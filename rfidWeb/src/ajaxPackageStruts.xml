@@ -449,12 +449,12 @@
 			<result name="success" type="freemarker">/templates/ajax/remoteOrg/found.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/remoteOrg/not_found.ftl</result>
 		</action>
-		<action name="upgradePriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
-			<result name="success" type="freemarker">/templates/ajax/accountUpgrade/showCost.ftl</result>
+		<action name="upgradePlanPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+			<result name="success" type="freemarker">/templates/ajax/upgradePlan/showCost.ftl</result>
 		</action>
 		
-		<action name="increaseStaffPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.IncreaseStaffCrud">
-			<result name="success" type="freemarker">/templates/ajax/accountUpgrade/showCost.ftl</result>
+		<action name="increaseEmployeeLimitPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.signup.IncreaseEmployeeLimitCrud">
+			<result name="success" type="freemarker">/templates/ajax/upgradePlan/showCost.ftl</result>
 		</action>
 	</package>
 </struts>

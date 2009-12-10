@@ -3,11 +3,13 @@
 	<li>
 		<@s.text name="${charge_label}"/>
 		<span id="immediateChargeAmount">${upgradeCost.immediateCharge?string.currency}</span>
+		<@s.text name="label.plus_applicable_taxes"/>
 	</li>
 
 	<li>
 		<@s.text name="label.you_will_be_charged_this_at_your_next_billing_cycle"/>
 		<span id="nextPaymentAmount">${upgradeCost.nextPayment?string.currency}</span>
+		<@s.text name="label.plus_applicable_taxes"/>
 	</li>
 	<li>
 		<@s.text name="label.your_next_billing_date_is"/>

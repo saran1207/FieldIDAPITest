@@ -25,8 +25,6 @@ public class UpgradeRequest implements UpgradeSubscription, Subscription {
 	
 	private String promoCode;
 	
-	private Integer users;
-	
 	private boolean purchasingPhoneSupport;
 	
 	private boolean updatedBillingInformation;
@@ -109,17 +107,14 @@ public class UpgradeRequest implements UpgradeSubscription, Subscription {
 	public void setPromoCode(String promoCode) {
 		this.promoCode = promoCode;
 	}
-	public Integer getUsers() {
-		return users;
-	}
-	public void setUsers(Integer users) {
-		this.users = users;
-	}
 	public boolean isPurchasingPhoneSupport() {
 		return purchasingPhoneSupport;
 	}
 	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
 		this.purchasingPhoneSupport = purchasingPhoneSupport;
+	}
+	public Integer getUsers() {
+		return null;
 	}
 	
 	

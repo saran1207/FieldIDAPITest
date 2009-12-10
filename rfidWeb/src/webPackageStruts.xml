@@ -1893,34 +1893,33 @@
 		</action>
 		
 
-		<action name="accountUpgrades" method="list" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
-			<result name="success" type="freemarker">/templates/html/accountUpgrade/list.ftl</result>
+		<action name="upgradePlans" method="list" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+			<result name="success" type="freemarker">/templates/html/upgradePlan/list.ftl</result>
 		</action>
 		
-		<action name="accountUpgrade" method="add" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
-			<result name="success" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/accountUpgrade/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/accountUpgrade/list.ftl</result>
+		<action name="upgradePlan" method="add" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+			<result name="success" type="freemarker">/templates/html/upgradePlan/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/upgradePlan/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/upgradePlan/list.ftl</result>
 		</action>
 
-		<action name="accountUpgradeComplete" method="create" class="com.n4systems.fieldid.actions.signup.AccountUpgrade">
-			<result name="input" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/accountUpgrade/add.ftl</result>
-			<result name="success" type="freemarker">/templates/html/accountUpgrade/show.ftl</result>
+		<action name="upgradePlanComplete" method="create" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+			<result name="input" type="freemarker">/templates/html/upgradePlan/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/upgradePlan/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/upgradePlan/show.ftl</result>
 		</action>
 		
-		<action name="increaseStaff" method="add" class="com.n4systems.fieldid.actions.signup.IncreaseStaffCrud">
-			<result name="success" type="freemarker">/templates/html/increaseStaff/add.ftl</result>
-			<result name="limitExceeded" type="freemarker">/templates/html/increaseStaff/limitExceeded.ftl</result>
-			<result name="legacy" type="freemarker">/templates/html/increaseStaff/legacy.ftl</result>
+		<action name="increaseEmployeeLimit" method="add" class="com.n4systems.fieldid.actions.signup.IncreaseEmployeeLimitCrud">
+			<result name="success" type="freemarker">/templates/html/increaseEmployeeLimit/add.ftl</result>
+			<result name="limitExceeded" type="freemarker">/templates/html/increaseEmployeeLimit/limitExceeded.ftl</result>
 			<result name="input" type="redirectAction">systemSettingsEdit</result>
 			<result name="error" type="redirectAction">systemSettingsEdit</result>
 		</action>
 
-		<action name="increaseStaffComplete" method="create" class="com.n4systems.fieldid.actions.signup.IncreaseStaffCrud">
-			<result name="input" type="freemarker">/templates/html/increaseStaff/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/increaseStaff/add.ftl</result>
-			<result name="success" type="freemarker">/templates/html/increaseStaff/show.ftl</result>
+		<action name="increaseEmployeeLimitComplete" method="create" class="com.n4systems.fieldid.actions.signup.IncreaseEmployeeLimitCrud">
+			<result name="input" type="freemarker">/templates/html/increaseEmployeeLimit/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/increaseEmployeeLimit/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/increaseEmployeeLimit/show.ftl</result>
 		</action>
 		
 	</package>

@@ -14,6 +14,10 @@
 			padding:0;
 			padding-right:1em;
 		}
+		
+		#currentPlan {
+			margin-right:10px;
+		}
 	</style>
 	<script type="text/javascript">
 		function imageFileUploaded( fileName, directory ){
@@ -40,7 +44,7 @@
 
 ${action.setPageType('account_settings', 'list')!}
 
-<div class="pageSection crudForm largeForm">
+<div class="pageSection  largeForm">
 	<h2><@s.text name="label.about_your_system"/></h2>
 	<div class="sectionContent">
 		<div class="infoSet">
@@ -49,11 +53,11 @@ ${action.setPageType('account_settings', 'list')!}
 		</div>
 		
 		<div class="infoSet">
-			<label><@s.text name="label.your_current_package"/></label>
+			<label><@s.text name="label.your_current_plan"/></label>
 			<span class="fieldHolder">
-				${(action.currentPackageFilter().packageName?html)!}  
+				<strong id="currentPlan">${(action.currentPackageFilter().packageName?html)!}</strong>   
 				<#if userSecurityGuard.allowedAccessWebStore && action.currentPackageFilter().upgradable>
-					<a href="<@s.url action="accountUpgrades"/>"><@s.text name="label.upgrade_my_account"/></a>
+					 <a href="<@s.url action="upgradePlans"/>"><@s.text name="label.upgrade_my_plan"/></a>
 				</#if>
 			</span>
 		</div>
@@ -68,15 +72,15 @@ ${action.setPageType('account_settings', 'list')!}
 			</div>
 		</div>
 		<div class="infoSet">
-			<label><@s.text name="label.staff_accounts"/></label>
+			<label><@s.text name="label.employee_accounts"/></label>
 			<div class="fieldHolder" style="float:left; padding: 5px 0;">
 				
 				<div style="width:300px; float:left;">
 					<@n4.percentbar progress="${limits.employeeUsersUsed}" total="${limits.employeeUsersMax}"/>
 				</div>
 				<div style="float:left; margin:5px;">${limits.employeeUsersUsed} <@s.text name="label.of"/> <#if limits.employeeUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.employeeUsersMax}</#if></div>
-				<#if userSecurityGuard.allowedAccessWebStore && !limits.employeeUsersUnlimited>
-					<div style="float:left; margin:5px;"><a href="<@s.url action="increaseStaff"/>"><@s.text name="label.i_want_more_staff_accounts"/></a></div>
+				<#if userSecurityGuard.allowedAccessWebStore && !action.currentPackageFilter().legacy && !limits.employeeUsersUnlimited>
+					<div style="float:left; margin:5px;"><a href="<@s.url action="increaseEmployeeLimit"/>"><@s.text name="label.i_want_more_employee_accounts"/></a></div>
 				</#if>
 				
 			</div>

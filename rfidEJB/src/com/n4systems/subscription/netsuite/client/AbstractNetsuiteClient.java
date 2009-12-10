@@ -160,7 +160,7 @@ public abstract class AbstractNetsuiteClient<K> {
 		return serializeJson(response);
 	}
 	
-	private K serializeJson(String jsonResponse) {
+	protected K serializeJson(String jsonResponse) {
 		Gson gson = new Gson();
 		
 		K convertedObject = gson.fromJson(jsonResponse, returnClass);
