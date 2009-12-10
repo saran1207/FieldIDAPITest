@@ -14,21 +14,21 @@
 		
 		
 		<action name="signUpPackages" method="list" class="com.n4systems.fieldid.actions.signup.SignUpPackageAction">
-			<result name="success" type="freemarker">/templates/html/signUpPackages/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/signUpPackages/list.ftl</result>
-			<result name="input" type="freemarker">/templates/html/signUpPackages/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUpPackages/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subscriptions/signUpPackages/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUpPackages/list.ftl</result>
 		</action>
 
 		<action name="signUpAdd" method="add" class="com.n4systems.fieldid.actions.signup.SignUpCrud">
 			<result name="missing" type="redirectAction">signUpPackages</result>
-			<result name="success" type="freemarker">/templates/html/signUp/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/signUp/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
 		</action>
 
 		<action name="signUpCreate" method="create"	class="com.n4systems.fieldid.actions.signup.SignUpCrud">
 			<result name="missing" type="redirectAction">signUpPackages</result>
-			<result name="input" type="freemarker">/templates/html/signUp/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/signUp/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
 			<result name="serious_error" type="redirectAction">
 				<param name="actionName">signUpComplete</param>
 			</result>
@@ -39,8 +39,8 @@
 		
 		<action name="signUpComplete" method="show" class="com.n4systems.fieldid.actions.signup.SignUpCrud">
 			<result name="missing" type="redirectAction">signUpPackages</result>
-			<result name="success" type="freemarker">/templates/html/signUp/show.ftl</result>
-			<result name="input" type="freemarker">/templates/html/signUp/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/show.ftl</result>
 		</action>
 		
 	</package>

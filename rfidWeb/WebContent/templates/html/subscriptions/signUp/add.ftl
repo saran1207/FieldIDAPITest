@@ -15,7 +15,7 @@
 
 <@s.form action="signUpCreate" theme="fieldid" id="mainContent" cssClass="fullForm">
 	<h1><@s.text name="title.create_your_account"/>  <@s.text name="label.with_package"/> ${signUp.signUpPackage.name?html}  <@s.text name="label.per_user_per_month"><@s.param>${signUp.signUpPackage.defaultPricePerUserPerMonth?string.currency}</@s.param></@s.text></h1>
-	<#include "../common/_formErrors.ftl"/>
+	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<@s.hidden name="usingCreditCard" id="usingCreditCard" />
 	<div class="infoSection multiColumn">

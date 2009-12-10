@@ -44,7 +44,7 @@
 
 ${action.setPageType('account_settings', 'list')!}
 
-<div class="pageSection  largeForm">
+<div class="pageSection crudForm largeForm">
 	<h2><@s.text name="label.about_your_system"/></h2>
 	<div class="sectionContent">
 		<div class="infoSet">
