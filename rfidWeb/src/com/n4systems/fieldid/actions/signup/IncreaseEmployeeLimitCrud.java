@@ -179,7 +179,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 		return getSignUpDetails().getUsers() <= getLimits().getEmployeeUsersMax();
 	}
 
-	private SignUpPackageDetails getSignUpDetails() {
+	public SignUpPackageDetails getSignUpDetails() {
 		return getCurrentPackage().getSignPackageDetails();
 	}
 	

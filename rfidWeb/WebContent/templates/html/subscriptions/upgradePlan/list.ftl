@@ -23,7 +23,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 <#include "/templates/html/common/_formErrors.ftl"/>
 <#assign purchaseAction="upgradePlan"/>
 <#assign purchaseLabel="label.upgrade"/>
-<#include "../signUpPackages/_packagesListing.ftl"/>
+<#include "../common/_packagesListing.ftl"/>
 
 <div>
 	<@s.text name="label.back_to"/> <a href="<@s.url action="systemSettingsEdit"/>"><@s.text name="label.system_settings"/></a>

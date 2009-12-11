@@ -164,3 +164,10 @@ td.messageCol {
 	border-top:1px solid black;
 }
 
+input[type="radio"] {
+	margin-right: 5px;
+}
+
+#upgradePlan {
+	font-size:1.2em;
+}

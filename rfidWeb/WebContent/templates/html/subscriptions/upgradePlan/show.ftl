@@ -15,7 +15,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 	</p>
 
 	<#assign charge_label="label.you_have_been_charged"/>
-	<#include "_charges.ftl"/>
+	<#include "../common/_charges.ftl"/>
 	
 	<div class="actions">
 		<a href="<@s.url action="systemSettingsEdit"/>"><@s.text name="label.back_to"/> <@s.text name="label.system_settings"/></a>

@@ -14,9 +14,9 @@
 		
 		
 		<action name="signUpPackages" method="list" class="com.n4systems.fieldid.actions.signup.SignUpPackageAction">
-			<result name="success" type="freemarker">/templates/html/subscriptions/signUpPackages/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/subscriptions/signUpPackages/list.ftl</result>
-			<result name="input" type="freemarker">/templates/html/subscriptions/signUpPackages/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
 		</action>
 
 		<action name="signUpAdd" method="add" class="com.n4systems.fieldid.actions.signup.SignUpCrud">

@@ -1,5 +1,11 @@
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
+	<@n4.includeScript src="signUp"/>
+	<@n4.includeScript>
+		pricingUrl = '<@s.url action="increaseEmployeeLimitPriceCheck" namespace="/ajax"/>';
+		pricingFormId = 'upgradeAccount';
+		updatingMessage = '<@s.text name="label.updating_cost"/>';
+	</@n4.includeScript>
 	<@n4.includeScript>
 		var employeeLimit = ${employeeLimit!"0"};
 		function updateTotal() {
@@ -34,29 +40,9 @@
 			totalEmployeeContainer.update(total);
 		}
 		
-		
-		
-		function updatePrice() {
-			var form = $('upgradeAccount').serialize(true);
-			var options = new Object();
-			$$(".changesPrice").each(function(element) {
-					options[element.name] = form[element.name];
-				}); 
-			$$('#charges span').invoke('update', "<@s.text name="label.updating_cost"/>");
-			getResponse("<@s.url action="increaseEmployeeLimitPriceCheck" namespace="/ajax"/>", "get", options);
-		}
-		
-		
-		
 		document.observe("dom:loaded", function() {
 				$('additionalEmployee').observe('keyup', updateTotal);
-				$$(".changesPrice").each(function(element) {
-						element.observe('change', updatePrice);
-					});
-				$('upgradeAccount').observe('submit', function(event) { 
-						var form = Event.element(event);
-						$$("#" + form.id + " input[type='submit']").invoke('disable');
-					});
+				
 			});
 	</@n4.includeScript>
 </head>
@@ -92,7 +78,7 @@ ${action.setPageType('account_settings', 'increase_employee')!}
 		</tr>
 	</table>	
 	<#assign charge_label="label.you_will_be_charged_this_immediately"/>
-	<#include "../upgradePlan/_charges.ftl"/>
+	<#include "../common/_charges.ftl"/>
 	<#include "../common/_billing_information.ftl"/>
 	
 	<div class="actions">

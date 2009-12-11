@@ -3,11 +3,12 @@ function updatePriceClick(event) {
 	event.stop();
 	updatePrice(event);
 }
-
+var pricingFormId = 'mainContent';
+var updatingMessage = "updating cost";
 function updatePrice() {
 	var elementNames = new Hash();
 
-	var form = $('mainContent').serialize(true);
+	var form = $(pricingFormId).serialize(true);
 	
 	var parameters = new Object();
 	
@@ -15,8 +16,9 @@ function updatePrice() {
 		parameters[element.name] = form[element.name];
 	});
 
-	
+	$$('#charges span').invoke('update', updatingMessage);
 	getResponse(pricingUrl, "get", parameters);
+	
 }
 
 function setsCountry(event) {
@@ -51,5 +53,8 @@ Element.extend(document).observe("dom:loaded",
 		$$("#promoCode").each(function(element) {
 			element.observe("change", validatePromoCode);
 		});
-		
+		$('upgradeAccount').observe('submit', function(event) { 
+			var form = Event.element(event);
+			$$("#" + form.id + " input[type='submit']").invoke('disable');
+		});
 	});

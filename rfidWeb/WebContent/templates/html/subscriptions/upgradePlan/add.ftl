@@ -1,27 +1,10 @@
 <head>
 	<@n4.includeStyle type="page" href="signUp"/>
+	<@n4.includeScript src="signUp"/>
 	<@n4.includeScript>
-		function updatePrice() {
-			var form = $('upgradeAccount').serialize(true);
-			var options = new Object();
-			$$(".changesPrice").each(function(element) {
-					options[element.name] = form[element.name];
-				}); 
-			getResponse("<@s.url action="upgradePlanPriceCheck" namespace="/ajax"/>", "get", options);
-		}
-		
-		
-		
-		document.observe("dom:loaded", function() {
-				$$(".changesPrice").each(function(element) {
-						element.observe('change', updatePrice);
-					});
-				
-				$('upgradeAccount').observe('submit', function(event) { 
-						var form = Event.element(event);
-						$$("#" + form.id + " input[type='submit']").invoke('disable');
-					});
-			});
+		pricingUrl = '<@s.url action="upgradePlanPriceCheck" namespace="/ajax"/>';
+		pricingFormId = 'upgradeAccount';
+		updatingMessage = '<@s.text name="label.updating_cost"/>';
 	</@n4.includeScript>
 </head>
 
@@ -70,7 +53,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 		
 		</#if>
 		<#assign charge_label="label.you_will_be_charged_this_immediately"/>
-		<#include "_charges.ftl"/>
+		<#include "../common/_charges.ftl"/>
 		
 		<#include "../common/_billing_information.ftl"/>
 		
