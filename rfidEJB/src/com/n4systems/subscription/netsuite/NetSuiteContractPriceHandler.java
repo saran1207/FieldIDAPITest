@@ -17,7 +17,7 @@ import com.n4systems.subscription.netsuite.model.NetSuiteProductInformation;
 import com.n4systems.subscription.netsuite.model.NetsuiteSubscription;
 
 public class NetSuiteContractPriceHandler {
-
+	
 	private final ProductDetailsClient productDetailsClient;
 	private final PricingDetailsClient pricingDetailsClient;
 	

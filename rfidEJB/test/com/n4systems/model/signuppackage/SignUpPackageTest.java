@@ -18,7 +18,7 @@ public class SignUpPackageTest {
 		contractToFind.setPaymentOption(PaymentOption.ONE_YEAR_UP_FRONT);
 		
 		ContractPricing otherContract = new ContractPricing();
-		otherContract.setPaymentOption(PaymentOption.MONTH_TO_MONTH);
+		otherContract.setPaymentOption(PaymentOption.TWO_YEARS_UP_FRONT);
 		
 		SignUpPackage signUpPackage = SignUpPackageBuilder.createSignUpPackage(SignUpPackageDetails.Enterprise).withContracts(otherContract, contractToFind).build();
 		
@@ -35,6 +35,6 @@ public class SignUpPackageTest {
 		
 		SignUpPackage signUpPackage = SignUpPackageBuilder.createSignUpPackage(SignUpPackageDetails.Enterprise).withContracts(contractToFind).build();
 		
-		signUpPackage.getContract(PaymentOption.MONTH_TO_MONTH);
+		signUpPackage.getContract(PaymentOption.TWO_YEARS_UP_FRONT);
 	}
 }

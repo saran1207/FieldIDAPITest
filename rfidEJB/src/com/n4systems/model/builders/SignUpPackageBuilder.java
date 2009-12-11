@@ -23,7 +23,7 @@ public class SignUpPackageBuilder extends BaseBuilder<SignUpPackage> {
 		ContractPricing contract = new ContractPricing();
 		contract.setExternalId(contractId);
 		contract.setSignUpPackage(signUpPackageDetail);
-		contract.setPaymentOption(PaymentOption.MONTH_TO_MONTH);
+		contract.setPaymentOption(PaymentOption.DEFAULT_OPTION);
 		return new SignUpPackageBuilder(signUpPackageDetail, contract);
 	}
 	

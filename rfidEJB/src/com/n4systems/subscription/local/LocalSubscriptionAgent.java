@@ -78,23 +78,18 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	public List<ContractPrice> retrieveContractPrices()	throws CommunicationException {
 		List<ContractPrice> contractPrices = new ArrayList<ContractPrice>();
 		
-		contractPrices.add(populateContractPrice(134L, "FIDFREE", PaymentOption.MONTH_TO_MONTH, 0F));
 		contractPrices.add(populateContractPrice(134L, "FIDFREE", PaymentOption.ONE_YEAR_UP_FRONT, 0F));
 		contractPrices.add(populateContractPrice(134L, "FIDFREE", PaymentOption.TWO_YEARS_UP_FRONT, 0F));
 		
-		contractPrices.add(populateContractPrice(146L, "FIDBASIC", PaymentOption.MONTH_TO_MONTH, 40F));
 		contractPrices.add(populateContractPrice(146L, "FIDBASIC", PaymentOption.ONE_YEAR_UP_FRONT, 40F));
 		contractPrices.add(populateContractPrice(157L, "FIDBASIC", PaymentOption.TWO_YEARS_UP_FRONT, 40F));
 
-		contractPrices.add(populateContractPrice(143L, "FIDPLUS", PaymentOption.MONTH_TO_MONTH, 100F));
 		contractPrices.add(populateContractPrice(143L, "FIDPLUS", PaymentOption.ONE_YEAR_UP_FRONT, 100F));
 		contractPrices.add(populateContractPrice(159L, "FIDPLUS", PaymentOption.TWO_YEARS_UP_FRONT, 100F));
 
-		contractPrices.add(populateContractPrice(149L, "FIDENTERPRISE", PaymentOption.MONTH_TO_MONTH, 175F));
 		contractPrices.add(populateContractPrice(149L, "FIDENTERPRISE", PaymentOption.ONE_YEAR_UP_FRONT, 175F));
 		contractPrices.add(populateContractPrice(158L, "FIDENTERPRISE", PaymentOption.TWO_YEARS_UP_FRONT, 175F));
 
-		contractPrices.add(populateContractPrice(151L, "FIDUNLIMITED", PaymentOption.MONTH_TO_MONTH, 225F));
 		contractPrices.add(populateContractPrice(151L, "FIDUNLIMITED", PaymentOption.ONE_YEAR_UP_FRONT, 225.5F));
 		contractPrices.add(populateContractPrice(160L, "FIDUNLIMITED", PaymentOption.TWO_YEARS_UP_FRONT, 202.1F));
 
@@ -171,6 +166,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	public UpgradeCost costToUpgradeTo(UpgradeSubscription upgradeSubscription) throws CommunicationException {
+		
 		return new UpgradeCost(1000F, 4000F, "JAN. 18, 2009");
 	}
 
