@@ -7,6 +7,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.signup.IncreaseEmployeeLimitHandlerImpl;
 import com.n4systems.handlers.creator.signup.UpgradeAccountHandler;
 import com.n4systems.handlers.creator.signup.UpgradeCompletionException;
@@ -17,16 +18,20 @@ import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
+import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.IntRangeFieldValidator;
-
+@UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 	private static Logger logger = Logger.getLogger(IncreaseEmployeeLimitCrud.class);
 	
@@ -137,6 +142,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 		addActionMessageText(successMessage);
 		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName());
 		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
+		sendUpgradeCompleteEmail();
 		return SUCCESS;
 	}
 
@@ -227,6 +233,14 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 		return " employee limit increase of " + additionalEmployee;
 	}
 
+	protected MailMessage createUpgradeMessage() {
+		TemplateMailMessage invitationMessage = new TemplateMailMessage("Your Field ID Account Has Been Upgraded", "increaseEmployeeUpgrade");
+		String emailAddress = new AdminUserListLoader(getSecurityFilter()).load().get(0).getEmailAddress();
+		invitationMessage.getToAddresses().add(emailAddress);
+		invitationMessage.getBccAddresses().add("sales@n4systems.com");
+		
+		return invitationMessage;
+	}
 	
 	
 }

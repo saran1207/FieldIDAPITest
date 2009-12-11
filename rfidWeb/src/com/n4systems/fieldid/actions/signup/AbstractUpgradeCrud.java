@@ -132,4 +132,18 @@ public abstract class AbstractUpgradeCrud extends AbstractCrud {
 	}
 
 	protected abstract String getWhatWasBeingBought();
+
+	protected void sendUpgradeCompleteEmail() {
+		try {
+			
+			MailMessage message = createUpgradeMessage();
+			
+			new MailManagerImpl().sendMessage(message);
+		} catch (Exception e) {
+			logger.warn("could not send welcome email", e);
+		}
+		
+	}
+
+	protected abstract MailMessage createUpgradeMessage();
 }

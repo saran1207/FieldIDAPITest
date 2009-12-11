@@ -21,6 +21,7 @@ import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
+import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
@@ -29,6 +30,8 @@ import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.UpgradeResponse;
+import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -158,6 +161,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 		addActionMessageText(successMessage);
 		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName());
 		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
+		sendUpgradeCompleteEmail();
 		return SUCCESS;
 	}
 
@@ -302,7 +306,21 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 		this.phoneSupport = phoneSupport;
 	}
 	
+	@Override
+	protected String getWhatWasBeingBought() {
+		return "contract " + upgradeContract();
+	}
 	
+	protected MailMessage createUpgradeMessage() {
+		TemplateMailMessage invitationMessage = new TemplateMailMessage("Your Field ID Account Has Been Upgraded", "planUpgrade");
+		String emailAddress = new AdminUserListLoader(getSecurityFilter()).load().get(0).getEmailAddress();
+		invitationMessage.getToAddresses().add(emailAddress);
+		invitationMessage.getBccAddresses().add("sales@n4systems.com");
+		
+		
+		
+		return invitationMessage;
+	}
 
 	/**
 	 * these decorator classes add the is current method the sign up packages. which allows the view to render the 
@@ -345,11 +363,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 
 	
 	
-	@Override
-	protected String getWhatWasBeingBought() {
-		
-		return "contract " + upgradeContract();
-	}
+	
 
 	
 
