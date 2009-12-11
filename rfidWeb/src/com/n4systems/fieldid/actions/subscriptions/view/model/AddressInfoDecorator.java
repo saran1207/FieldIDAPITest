@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.signup.view.model;
+package com.n4systems.fieldid.actions.subscriptions.view.model;
 
 import com.n4systems.subscription.AddressInfo;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;

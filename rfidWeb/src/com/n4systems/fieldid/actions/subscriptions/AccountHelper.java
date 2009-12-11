@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.signup;
+package com.n4systems.fieldid.actions.subscriptions;
 
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.ContractPricing;

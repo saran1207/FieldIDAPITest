@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.signup;
+package com.n4systems.fieldid.actions.subscriptions;
 
 import org.apache.log4j.Logger;
 

@@ -1,5 +1,6 @@
-package com.n4systems.fieldid.actions.signup;
+package com.n4systems.fieldid.actions.subscriptions;
 
+import java.util.List;
 import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
@@ -9,7 +10,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.fieldid.actions.signup.view.model.SignUpRequestDecorator;
+import com.n4systems.fieldid.actions.subscriptions.view.model.SignUpRequestDecorator;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
 import com.n4systems.handlers.creator.signup.exceptions.PromoCodeValidationException;
@@ -37,6 +38,7 @@ public class SignUpCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
 
 	private SignUpRequestDecorator signUpRequest = new SignUpRequestDecorator();
+	private List<SignUpPackage> packages;
 	public SignUpCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -65,6 +67,11 @@ public class SignUpCrud extends AbstractCrud {
 			addFlashErrorText("error.no_sign_up_package");
 			throw new MissingEntityException("you must select a package");
 		}
+	}
+	
+	@SkipValidation
+	public String doList() {
+		return SUCCESS;
 	}
 
 	@SkipValidation
@@ -217,5 +224,13 @@ public class SignUpCrud extends AbstractCrud {
 		}
 		return 0L;
 		
+	}
+	
+	
+	public List<SignUpPackage> getPackages() {
+		if (packages == null) {
+			packages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
+		}
+		return packages;
 	}
 }

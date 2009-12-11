@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.signup;
+package com.n4systems.fieldid.actions.subscriptions;
 
 import java.util.List;
 
@@ -140,7 +140,7 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 	
 	private String handleUpgradeSuccess(Transaction transaction, String successMessage) {
 		addActionMessageText(successMessage);
-		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName());
+		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName() + " employee limit increased by " + additionalEmployee + " by user " + getSessionUserId());
 		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
 		sendUpgradeCompleteEmail();
 		return SUCCESS;

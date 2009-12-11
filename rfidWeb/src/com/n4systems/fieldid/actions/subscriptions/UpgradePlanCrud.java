@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.signup;
+package com.n4systems.fieldid.actions.subscriptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +159,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 
 	private String handleUpgradeSuccess(Transaction transaction, String successMessage) {
 		addActionMessageText(successMessage);
-		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName());
+		logger.info("upgrade complete for tenant " + getPrimaryOrg().getName() + " to plan " + upgradePackage.getName() + " by user " + getSessionUserId());
 		com.n4systems.persistence.PersistenceManager.finishTransaction(transaction);
 		sendUpgradeCompleteEmail();
 		return SUCCESS;

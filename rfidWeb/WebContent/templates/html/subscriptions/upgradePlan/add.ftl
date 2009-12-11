@@ -61,7 +61,7 @@ ${action.setPageType('account_settings', 'upgrade')!}
 			<p id="purchaseWarning"><strong><@s.text name="label.purchase_warning"/></strong></p>
 			<@s.submit key="label.please_upgrade_my_plan"/>
 			<@s.text name="label.or"/>
-			<a href="<@s.url action="accountUpgrades"/>"><@s.text name="label.do_not_upgrade_my_plan"/></a>
+			<a href="<@s.url action="systemSettingsEdit"/>"><@s.text name="label.do_not_upgrade_my_plan"/></a>
 		</div>
 	
 	</@s.form>

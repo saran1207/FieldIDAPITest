@@ -1,10 +1,10 @@
-package com.n4systems.fieldid.actions.signup;
+package com.n4systems.fieldid.actions.subscriptions;
 
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.signup.view.model.SignUpRequestDecorator;
+import com.n4systems.fieldid.actions.subscriptions.view.model.SignUpRequestDecorator;
 import com.n4systems.subscription.CommunicationException;
 
 public class ValidPromoCodeCrud extends AbstractCrud {

@@ -1897,30 +1897,30 @@
 		</action>
 		
 
-		<action name="upgradePlans" method="list" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+		<action name="upgradePlans" method="list" class="com.n4systems.fieldid.actions.subscriptions.UpgradePlanCrud">
 			<result name="success" type="freemarker">/templates/html/subscriptions/upgradePlan/list.ftl</result>
 		</action>
 		
-		<action name="upgradePlan" method="add" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+		<action name="upgradePlan" method="add" class="com.n4systems.fieldid.actions.subscriptions.UpgradePlanCrud">
 			<result name="success" type="freemarker">/templates/html/subscriptions/upgradePlan/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/subscriptions/upgradePlan/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subscriptions/upgradePlan/list.ftl</result>
 		</action>
 
-		<action name="upgradePlanComplete" method="create" class="com.n4systems.fieldid.actions.signup.UpgradePlanCrud">
+		<action name="upgradePlanComplete" method="create" class="com.n4systems.fieldid.actions.subscriptions.UpgradePlanCrud">
 			<result name="input" type="freemarker">/templates/html/subscriptions/upgradePlan/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subscriptions/upgradePlan/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/subscriptions/upgradePlan/show.ftl</result>
 		</action>
 		
-		<action name="increaseEmployeeLimit" method="add" class="com.n4systems.fieldid.actions.signup.IncreaseEmployeeLimitCrud">
+		<action name="increaseEmployeeLimit" method="add" class="com.n4systems.fieldid.actions.subscriptions.IncreaseEmployeeLimitCrud">
 			<result name="success" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/add.ftl</result>
 			<result name="limitExceeded" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/limitExceeded.ftl</result>
 			<result name="input" type="redirectAction">systemSettingsEdit</result>
 			<result name="error" type="redirectAction">systemSettingsEdit</result>
 		</action>
 
-		<action name="increaseEmployeeLimitComplete" method="create" class="com.n4systems.fieldid.actions.signup.IncreaseEmployeeLimitCrud">
+		<action name="increaseEmployeeLimitComplete" method="create" class="com.n4systems.fieldid.actions.subscriptions.IncreaseEmployeeLimitCrud">
 			<result name="input" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/show.ftl</result>

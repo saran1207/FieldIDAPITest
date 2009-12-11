@@ -156,7 +156,7 @@ public class LocalSubscriptionAgent extends SubscriptionAgent {
 	}
 
 	public UpgradeResponse upgrade(UpgradeSubscription upgradeSubscription) throws CommunicationException, BillingInfoException {
-		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId(), upgradeSubscription.getSubscription().isPurchasingPhoneSupport(), upgradeSubscription.isUpdatedBillingInformation() && upgradeSubscription.isUsingCreditCard(), upgradeSubscription.isUpdatedBillingInformation() && upgradeSubscription.isUsingCreditCard());
+		writePackageInfo(upgradeSubscription.getTenantExternalId(), upgradeSubscription.getContractExternalId(), upgradeSubscription.getSubscription().isPurchasingPhoneSupport(), !upgradeSubscription.isUpdatedBillingInformation() || upgradeSubscription.isUsingCreditCard(), !upgradeSubscription.isUpdatedBillingInformation() || upgradeSubscription.isUsingCreditCard());
 		return new UpgradeResponse(costToUpgradeTo(upgradeSubscription), upgradeSubscription.getContractExternalId());
 	}
 

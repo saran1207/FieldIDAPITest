@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.n4systems.fieldid.actions.subscriptions.view.model.CreditCardDecorator;
 import com.n4systems.util.DateHelper;
 
 public class CreditCardDecoratorTest {

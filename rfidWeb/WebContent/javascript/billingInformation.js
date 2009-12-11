@@ -20,6 +20,18 @@ function enablePO() {
 	$$(".payCC").invoke("disable");
 }
 
+function selectPerferredPayementMethod() {
+	var usingCC=$("usingCreditCard");
+
+	if (usingCC != null) {
+		if(usingCC.getValue() == "true") {
+			enableCC();
+		} else {
+			enablePO();
+		}
+	}
+}
+
 document.observe("dom:loaded", function() {
 		$$("#payPurchaseOrder").each(function(element) {
 			element.observe("click", payPurchaseOrderClick);
@@ -28,9 +40,5 @@ document.observe("dom:loaded", function() {
 			element.observe("click", payCreditCardClick);
 		});
 		
-		if($("usingCreditCard").getValue() == "true") {
-			enableCC();
-		} else {
-			enablePO();
-		}
+		selectPreferredPaymentMethod();
 	});

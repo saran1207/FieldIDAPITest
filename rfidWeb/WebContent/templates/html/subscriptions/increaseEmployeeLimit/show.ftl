@@ -4,9 +4,9 @@
 ${action.setPageType('account_settings', 'increase_employee')!}
 
 <div id="upgradeAccount" class="fullForm transactionComplete">
-	<h2 class="clean">
+	<h3 class="clean">
 		<@s.text name="label.employee_limit_increased_to"><@s.param>${limits.employeeUsersMax}</@s.param></@s.text>
-	</h2>
+	</h3>
 	
 	<p>
 		<@s.text name="label.employee_limit_increased"/>

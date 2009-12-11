@@ -13,9 +13,13 @@ public class LocalSignUpTenantResponse implements SignUpTenantResponse {
 
 	public ExternalIdResponse getClient() {
 		if (clientExternalIdResponse == null)
-			clientExternalIdResponse = new LocalExternalIdResponse(new Random().nextLong());
+			clientExternalIdResponse = new LocalExternalIdResponse(randomPositiveLong());
 		
 		return clientExternalIdResponse;
+	}
+
+	private long randomPositiveLong() {
+		return Math.abs(new Random().nextLong());
 	}
 
 	public Subscription getSubscription() {
@@ -24,7 +28,7 @@ public class LocalSignUpTenantResponse implements SignUpTenantResponse {
 
 	public ExternalIdResponse getTenant() {
 		if (tenantExternalIdResponse == null)
-			tenantExternalIdResponse = new LocalExternalIdResponse(new Random().nextLong());
+			tenantExternalIdResponse = new LocalExternalIdResponse(randomPositiveLong());
 		
 		return tenantExternalIdResponse;
 	}
