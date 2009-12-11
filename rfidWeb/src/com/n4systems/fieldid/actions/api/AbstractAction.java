@@ -461,4 +461,20 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	public boolean isInVendorContext() {
 		return (getVendorContext() != null);
 	}
+	
+	public String getCurrentVendorContextName() {
+		if (!isInVendorContext()) {
+			return getSessionUserOwner().getInternalOrg().getName();
+		}
+		
+		Long contextId = getVendorContext();
+		String name = null;
+		for (ListingPair vendor: getVendorContextList()) {
+			if (contextId.equals(vendor.getId())) {
+				name = vendor.getName();
+				break;
+			}
+		}
+		return name;
+	}
 }

@@ -1,16 +1,5 @@
 <div id="pageHeader">
 	<div id="pageActions" style="float:none;">
-		<#if !sessionUser.customerUser && !vendorContextList.empty>
-			<div class="vendorContext">
-				<span><@s.text name="label.vendor_context"/>: </span>
-				<div>
-				<@s.form id="vendorContextForm" action="home" theme="simple">
-					<@s.select id="vendorContext" name="vendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${sessionUserOwner.name}" onchange="$('vendorContextForm').submit();"/>
-				</@s.form>
-				</div>
-			</div>
-		</#if>
-		
 		<ul class="listOfLinks">				
 			<li class="first">
 				<@s.text name="label.welcome"/>, ${sessionUser.userID} 

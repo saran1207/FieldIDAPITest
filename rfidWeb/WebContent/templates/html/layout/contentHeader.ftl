@@ -25,7 +25,24 @@
 			<@s.submit name="load" key="label.load" id="smartSearchButton"/>
 		</@s.form>
 		
+
 	</div>
+	<#if !sessionUser.customerUser && !vendorContextList.empty>
+		<div class="vendorContext">
+			<span><@s.text name="label.vendor_context"/>: </span>
+			<div class="switchContainer">
+				<div id="vendorContextNameLink">
+					<a href="" onclick="$('vendorContextSwitch').show(); $('vendorContextNameLink').hide(); return false;" >${currentVendorContextName}</a>
+				</div>
+				<div id="vendorContextSwitch" style="display: none;">
+				<@s.form id="vendorContextForm" action="home" theme="simple">
+					<@s.select id="vendorContext" name="vendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${sessionUserOwner.name}" onchange="$('vendorContextForm').submit();"/>
+				</@s.form>
+				</div>
+			</div>
+		</div>
+	</#if>
+	
 	<#include "_options.ftl"/>
 </div>
 

@@ -99,7 +99,7 @@ h2 a {
 
 #contentHeader h1 {
 	float: left;
-	padding: 10px 15px 10px 0;
+	padding: 10px 15px 0px 0;
 	text-align: left;
 }
 
@@ -487,20 +487,21 @@ td.formAction {
 }
 
 .vendorContext {
-	float: left;
-	margin: 10px 0 15px;
+	float: right;
 }
 
 .vendorContext span {
 	float: left;
-	margin-top: 3px;
-	margin-right: 5px;
+	margin: 5px;
 }
 
-.vendorContext div {
+.vendorContext .switchContainer {
 	float: left;
-	padding: 0;
-	margin: 0;
+	padding: 2px 50px 2px 0;
+}
+
+.vendorContext .switchContainer #vendorContextNameLink {
+	margin-top: 2px;
 }
 
 .listOfLinks {
@@ -1523,7 +1524,6 @@ h3.inline {
 
 #smartSearch {
 	float: right;
-	padding-bottom: 3px;
 }
 
 #smartSearch label {
