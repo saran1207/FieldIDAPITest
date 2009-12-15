@@ -74,6 +74,7 @@ public class InspectionSummaryGenerator {
 
 				ReportMap<Object> inspectionMap = new ReportMap<Object>();
 				inspectionMap.put("date", inspection.getDate());
+				inspectionMap.put("referenceNumber", inspection.getProduct().getCustomerRefNumber());
 				inspectionMap.put("productType", inspection.getProduct().getType().getName());
 				inspectionMap.put("serialNumber", inspection.getProduct().getSerialNumber());
 				inspectionMap.put("description", inspection.getProduct().getDescription());
