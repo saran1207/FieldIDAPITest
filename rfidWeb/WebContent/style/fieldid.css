@@ -486,23 +486,18 @@ td.formAction {
 	font-weight: bold;
 }
 
-.vendorContext {
-	float: right;
+#vendorContextForm {
+	text-align:right;
+	float:right;
+	clear:both;
+	margin:5px 0;
+	margin-right:40px;
 }
 
-.vendorContext span {
-	float: left;
-	margin: 5px;
+#vendorContextForm span {
+	margin: 0 5px;
 }
 
-.vendorContext .switchContainer {
-	float: left;
-	padding: 2px 50px 2px 0;
-}
-
-.vendorContext .switchContainer #vendorContextNameLink {
-	margin-top: 2px;
-}
 
 .listOfLinks {
 	margin-top: 10px;
