@@ -23,7 +23,7 @@ ${action.setPageType('my_account', 'downloads')!}
 				<td>${download.name}</td>
 				<td><@s.text name="${download.state.label}"/></td>
 				<td>
-					<#if download.state.ready>
+					<#if download.state.willExpire>
 						${action.getExpiresText(download.created)}
 					</#if>
 				</td>

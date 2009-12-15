@@ -1,17 +1,19 @@
 package com.n4systems.model.downloadlink;
 
 public enum DownloadState {
-	REQUESTED	("label.requested",		false), 
-	INPROGRESS	("label.inprogress",	false),
-	COMPLETED	("label.completed",		true),
-	FAILED		("label.failed",		false);
+	REQUESTED	("label.requested",		false, 	false), 
+	INPROGRESS	("label.inprogress",	false, 	false),
+	COMPLETED	("label.completed",		true, 	true),
+	FAILED		("label.failed",		false, 	true);
 	
 	private final String label;
 	private final boolean ready;
+	private final boolean willExpire;
 	
-	DownloadState(String label, boolean ready) {
+	DownloadState(String label, boolean ready, boolean willExpire) {
 		this.label = label;
 		this.ready = ready;
+		this.willExpire = willExpire;
 	}
 	
 	public String getLabel() {
@@ -20,5 +22,9 @@ public enum DownloadState {
 	
 	public boolean isReady() {
 		return ready;
+	}
+
+	public boolean isWillExpire() {
+		return willExpire;
 	}
 }
