@@ -83,14 +83,17 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		Transaction transaction = PersistenceManager.startTransaction();
 		
 		try {
-			
 			if (primaryOrg.getId() != null) {
 				processExtendedFeatures(transaction);
 			}
 			
 			orgSaver.update(transaction, primaryOrg);
 			
+			
 			PersistenceManager.finishTransaction(transaction);
+			
+			TenantCache.getInstance().reloadPrimaryOrg(primaryOrg.getTenant().getId());
+			
 			
 		} catch (Exception e) {
 			PersistenceManager.rollbackTransaction(transaction);
