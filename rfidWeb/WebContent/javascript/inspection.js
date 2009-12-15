@@ -260,9 +260,9 @@ function jumpToSection( id ) {
 	
 	if( this.currentSectionId == id ) { return; }
 	
-	if( id >= this.sectionCount ) { id = 0 }
+	if( id >= this.sectionCount ) { id = 0; }
 	
-	if( id < 0 ) { return; }
+	if( id < 0 ) { id = this.sectionCount - 1; }
 	
 	var currentSection = $( 'section_' + this.identifier + "_" + this.currentSectionId );
 	var nextSection = $( 'section_' + this.identifier + "_" + id );
