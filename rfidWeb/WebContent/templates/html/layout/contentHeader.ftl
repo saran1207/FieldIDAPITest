@@ -34,9 +34,8 @@
 							<a href="" onclick="$('vendorContextSwitch').show(); $('vendorContextNameLink').hide(); return false;" >${currentVendorContextName}</a>
 						</span>
 						<span id="vendorContextSwitch" style="display: none;">
-						
 							<@s.select id="vendorContext" name="vendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${sessionUserOwner.name}" onchange="$('vendorContextForm').submit();"/>
-						
+							<a href="#" id="cancelVendorSwitch" onclick="$('vendorContextSwitch').hide(); $('vendorContextNameLink').show(); return false;"><img src="<@s.url value="/images/x.gif"/>" alt="x"/><a>
 						</span>
 					</span>
 				</@s.form>
