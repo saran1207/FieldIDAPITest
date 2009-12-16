@@ -26,7 +26,6 @@
 			<interceptor name="safetyNetworkAware" class="com.n4systems.fieldid.security.SafetyNetworkAwareInterceptor"/>
 			<interceptor name="eulaRequired" class="com.n4systems.fieldid.utils.EULAInterceptor"/>
 			
-			
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
 				<interceptor-ref name="missingEntity" />
@@ -77,7 +76,10 @@
 
 		<global-results>
 			<result name="login" type="redirectAction">login</result>
-			<result name="require_eula" type="redirectAction">eulaAcceptanceAdd</result>
+			<result name="require_eula" type="redirectAction">
+				<param name="actionName">eulaAcceptanceAdd</param>
+            	<param name="namespace">/</param>
+			</result>
 			<result name="tenant_missing" type="redirectAction">
 				<param name="actionName">chooseCompany</param>
             	<param name="namespace">/</param>
@@ -144,6 +146,7 @@
 		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
 		
 		<action name="currentEula" method="show" class="com.n4systems.fieldid.actions.eula.CurrentEulaAction" >
+			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/currentEula/show.ftl</result>
 		</action>
 		
