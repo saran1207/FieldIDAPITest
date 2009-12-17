@@ -29,6 +29,7 @@
 		removeSubProductUrl = '<@s.url action="removeSubProduct" namespace="/ajax"/>';
 		labelFormWarning = '<@s.text name="warning.finish_label_editing"/>';
 		reorderProductsUrl = '<@s.url action="productConfigurationUpdateOrder" namespace="/ajax"/>';
+		productIdentifer = 'uniqueID';
 	</script>
 	
 </head>

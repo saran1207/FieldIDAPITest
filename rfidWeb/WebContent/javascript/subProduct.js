@@ -81,10 +81,11 @@ function submitSearchForm(event) {
 }
 
 var removeSubProductUrl = "";
+var productIdentifer = 'productId';
 function removeSubProduct( subProductId ) {
 	var params = new Object();
 	params.subProductId =  subProductId;
-	params.uniqueID = $('productId').getValue();
+	params.uniqueID = $(productIdentifer).getValue();
 	getResponse( removeSubProductUrl, "post", params );
 }
 
