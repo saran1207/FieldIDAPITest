@@ -10,7 +10,7 @@
 
 ${action.setPageType('account_settings', 'upgrade')!}
 <#if upgradeCost?exists>
-	<@s.form action="upgradePlanComplete" id="upgradeAccount" cssClass="fullForm" theme="fieldid">
+	<@s.form action="upgradePlanComplete" id="upgradeAccount" cssClass="paymentForm fullForm" theme="fieldid">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<h3 class="clean">
 			<@s.text name="label.upgrading_from_x_to_y">

@@ -20,16 +20,17 @@ function enablePO() {
 	$$(".payCC").invoke("disable");
 }
 
-function selectPerferredPayementMethod() {
-	var usingCC=$("usingCreditCard");
-
+function selectPreferredPaymentMethod() {
+	
+	var usingCC = $("usingCreditCard");
+	
 	if (usingCC != null) {
 		if(usingCC.getValue() == "true") {
 			enableCC();
 		} else {
 			enablePO();
 		}
-	}
+	}	
 }
 
 document.observe("dom:loaded", function() {

@@ -53,8 +53,10 @@ Element.extend(document).observe("dom:loaded",
 		$$("#promoCode").each(function(element) {
 			element.observe("change", validatePromoCode);
 		});
-		$('upgradeAccount').observe('submit', function(event) { 
-			var form = Event.element(event);
-			$$("#" + form.id + " input[type='submit']").invoke('disable');
+		$$('.paymentForm').each( function(element) {
+				element.observe('submit', function(event) { 
+						var form = Event.element(event);
+						$$("#" + form.id + " input[type='submit']").invoke('disable');
+				});
 		});
 	});
