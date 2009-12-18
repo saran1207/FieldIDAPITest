@@ -165,7 +165,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 				product = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
 			}
 			
-			System.out.println(product.getClass().getName());
 		} catch(Exception e) {
 			logger.error("Unable to load product", e);
 		}
