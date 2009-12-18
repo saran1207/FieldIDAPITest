@@ -1,3 +1,8 @@
+String.prototype.trim = function() {
+    a = this.replace(/^\s+/, '');
+    return a.replace(/\s+$/, '');
+};
+
 function clearForm(form, reset) {
 	var inputs = form.getElementsByTagName("input");
 	var selects = form.getElementsByTagName("select");

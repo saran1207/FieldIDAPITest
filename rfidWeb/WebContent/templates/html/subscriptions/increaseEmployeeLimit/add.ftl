@@ -22,7 +22,9 @@
 			
 			var currentEmployee = parseInt($('currentEmployee').innerHTML);
 			var increment = additionalEmployee.getValue();
-			
+			if (increment != null) {
+				additionalEmployee.value = increment.trim();
+			}
 			var total = currentEmployee;
 			
 			if (increment == null || isNaN(parseInt(increment))  || increment < 1) {
@@ -78,9 +80,10 @@ ${action.setPageType('account_settings', 'increase_employee')!}
 		</tr>
 	</table>	
 	<#assign charge_label="label.you_will_be_charged_this_immediately"/>
+	<#assign showUpdateButton=true/>
 	<#include "../common/_charges.ftl"/>
 	
-	<
+	
 	<#include "../common/_billing_information.ftl"/>
 	
 	<div class="actions">

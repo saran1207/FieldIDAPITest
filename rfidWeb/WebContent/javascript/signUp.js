@@ -59,4 +59,6 @@ Element.extend(document).observe("dom:loaded",
 						$$("#" + form.id + " input[type='submit']").invoke('disable');
 				});
 		});
+		
+		
 	});

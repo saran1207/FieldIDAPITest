@@ -49,7 +49,9 @@
 </div>
 
 <script type="text/javascript">
-	$('searchText').observe('focus', clearDescription);
-	$('searchText').observe('blur', replaceDescription);
-	$('smartSearch').observe('submit', submitSmartSearch);
+	document.observe("dom:loaded", function() {
+		$('searchText').observe('focus', clearDescription);
+		$('searchText').observe('blur', replaceDescription);
+		$('smartSearch').observe('submit', submitSmartSearch);
+	});
 </script>

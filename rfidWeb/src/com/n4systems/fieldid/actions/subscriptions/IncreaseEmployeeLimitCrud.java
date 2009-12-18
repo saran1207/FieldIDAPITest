@@ -31,6 +31,7 @@ import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.IntRangeFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 	private static Logger logger = Logger.getLogger(IncreaseEmployeeLimitCrud.class);
@@ -218,8 +219,9 @@ public class IncreaseEmployeeLimitCrud extends AbstractUpgradeCrud {
 		return additionalEmployee;
 	}
 
+	@RequiredFieldValidator(message="", key="error.number_of_additional_employee_accounts_must_be_greater_than_zero")
 	@IntRangeFieldValidator(message="", key="error.number_of_additional_employee_accounts_must_be_greater_than_zero", min="1")
-	@FieldExpressionValidator(message="", key="error.you_may_only_x_have_employee_accounts_on_this_play", expression="underEmployeePlanLimit")
+	@FieldExpressionValidator(message="", key="error.limited_employee_accounts", expression="underEmployeePlanLimit")
 	public void setAdditionalEmployee(Integer additionalEmployee) {
 		this.additionalEmployee = additionalEmployee;
 	}

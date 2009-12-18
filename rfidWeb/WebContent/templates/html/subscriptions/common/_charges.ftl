@@ -1,4 +1,9 @@
-<h3><@s.text name="label.charges"/></h3>
+<h3><@s.text name="label.charges"/> 
+	<#if showUpdateButton?exists && showUpdateButton>
+		<@s.reset cssClass="updatePrice" key="label.update_price"/>
+	</#if>
+
+</h3>
 <ul id="charges">
 	<li>
 		<@s.text name="${charge_label}"/>
