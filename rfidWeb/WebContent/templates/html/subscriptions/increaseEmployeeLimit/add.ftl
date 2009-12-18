@@ -49,7 +49,7 @@
 
 ${action.setPageType('account_settings', 'increase_employee')!}
 
-<@s.form action="increaseEmployeeLimitComplete" id="upgradeAccount" cssClass="fullForm" theme="fieldid">
+<@s.form action="increaseEmployeeLimitComplete" id="upgradeAccount" cssClass="paymentForm fullForm" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	
 	<h3 class="clean">
@@ -79,6 +79,8 @@ ${action.setPageType('account_settings', 'increase_employee')!}
 	</table>	
 	<#assign charge_label="label.you_will_be_charged_this_immediately"/>
 	<#include "../common/_charges.ftl"/>
+	
+	<
 	<#include "../common/_billing_information.ftl"/>
 	
 	<div class="actions">
