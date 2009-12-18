@@ -2,7 +2,7 @@
 Your Employee Limit Has Been Increased
 ++++++++++++++++++++++++++++++++++++++++++
  
-Thank-you for increasing the number of Employees in your FieldID account.
+Thank you for increasing the number of Employees in your FieldID account.
  
 Your account will immediately reflect the increase. 
 

@@ -2,7 +2,7 @@
 Your Plan Has Been Upgraded
 ++++++++++++++++++++++++++++++++++++++++++
  
-Thank-you for upgrading your Field ID accont to the Plus Plan.
+Thank you for upgrading your Field ID accont to the Plus Plan.
  
 Your account will immediately reflect any changes to features, users and disk space.
 
