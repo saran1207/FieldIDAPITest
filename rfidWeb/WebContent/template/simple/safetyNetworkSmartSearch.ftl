@@ -37,8 +37,7 @@
 </div>
 
 <script type="text/javascript">
-	
-	 <#assign snSmartSearch>
+	<#assign snSmartSearch>
     	<div id="networkSmartSearchContainer"style="display: none;">
 			<@s.form action="safetyNetworkSmartSearch" id="snSmartSearch" name="snSmartSearch" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
 				<label class="label" for="smartSearchVendors"><@s.text name="label.vendor"/></label>
@@ -55,19 +54,18 @@
 		</div>
 	</#assign>
 	snSmartSearch = '${snSmartSearch?js_string}';
-	
-	
 	<#-- if were on edit and there's already a linked product, we need to go directly to show linked product info -->
 	<#if parameters.linkedProduct_editMode >
-		
-		var product = new Object();
-	
-		product.id = ${parameters.linkedProduct_Id};
-		product.serialNumber = "${(parameters.linkedProduct_SerialNumber)?default("")}";
-		product.rfidNumber = "${(parameters.linkedProduct_RfidNumber)?default("")}";
-		product.owner = "${(parameters.linkedProduct_OwnerName)?default("")}";
-		product.type = "${(parameters.linkedProduct_TypeName)?default("")}";
-	
-		updateLinkedProductInfo(product);
-	</#if>
+		document.observe("dom:loaded", function() {
+				var product = new Object();
+			
+				product.id = ${parameters.linkedProduct_Id};
+				product.serialNumber = "${(parameters.linkedProduct_SerialNumber)?default("")}";
+				product.rfidNumber = "${(parameters.linkedProduct_RfidNumber)?default("")}";
+				product.owner = "${(parameters.linkedProduct_OwnerName)?default("")}";
+				product.type = "${(parameters.linkedProduct_TypeName)?default("")}";
+			
+				updateLinkedProductInfo(product);
+			});
+		</#if>
 </script>
