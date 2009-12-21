@@ -569,11 +569,10 @@ public class Reporting extends TestCase {
 	 * @throws Exception
 	 */
 	public void exportToExcel() throws Exception {
-		String message = "Your report has been scheduled and will be emailed to you shortly.";
 		Link export = ie.link(exportToExcelFinder);
 		assertTrue("Could not find the export to Excel link", export.exists());
 		export.click();
-		misc.clickLightboxOKbutton(message);
+		misc.clickLightboxCloseThisMessageButton();
 	}
 
 	/**
@@ -762,24 +761,21 @@ public class Reporting extends TestCase {
 		Link thisReport = ie.link(printThisReportFinder);
 		assertTrue("Could not find the link for Print->This Report", thisReport.exists());
 		thisReport.click();
-		String message = "Your report has been scheduled and will be emailed to you shortly.";
-		misc.clickLightboxOKbutton(message);
+		misc.clickLightboxCloseThisMessageButton();
 	}
 
 	public void printAllPDFReports() throws Exception {
 		Link report = ie.link(printAllPDFReportsFinder);
 		assertTrue("Could not find the link for Print->All PDF Reports", report.exists());
 		report.click();
-		String message = "Your report has been scheduled and will be emailed to you shortly.";
-		misc.clickLightboxOKbutton(message);
+		misc.clickLightboxCloseThisMessageButton();
 	}
 
 	public void printAllObservationReports() throws Exception {
 		Link report = ie.link(printAllObservationReportsFinder);
 		assertTrue("Could not find the link for Print->All Observation Reports", report.exists());
 		report.click();
-		String message = "Your report has been scheduled and will be emailed to you shortly.";
-		misc.clickLightboxOKbutton(message);
+		misc.clickLightboxCloseThisMessageButton();
 	}
 	
 	public void printWarningOver1000Reports() throws Exception {
@@ -1003,7 +999,7 @@ public class Reporting extends TestCase {
 		String result = temp.getInspectionBook();
 		assertNotNull(result);
 		assertNotNull(book);
-		assertTrue("Inspection Book: got '" + result + "', expected '" + book + "'", result.equals(book));
+		assertTrue("Inspection Book: got '" + result + "', expected '" + book + "'", book.contains(book));
 		assertTrue("Select Display Columns header is wrong.", getSelectDisplayColumnsHeader().equals("Select Display Columns"));
 		assertTrue("Total number of inspections was not greater than zero.", getTotalNumberOfInspections() > 0);
 		printAllObservationReports();

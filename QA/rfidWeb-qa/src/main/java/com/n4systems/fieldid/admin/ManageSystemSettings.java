@@ -73,7 +73,7 @@ public class ManageSystemSettings extends TestCase {
 		gotoManageSystemSettings();
 		getEmbeddedLoginCode();
 		getCompanyID();
-		getCompanyName();
+//		getCompanyName();	// moved to Manage Organizations
 		String url = getWebSiteAddress();
 		setWebSiteAddress(url);
 		saveChangesToSystemSettings();
@@ -88,9 +88,9 @@ public class ManageSystemSettings extends TestCase {
 	}
 
 	public String getCompanyName() throws Exception {
-		Span companyName = ie.span(companyNameFinder);
-		assertTrue("Could not find the company name", companyName.exists());
-		return companyName.text();
+		ManageOrganizations mos = new ManageOrganizations(ie);
+		String companyName = mos.getPrimaryOrganizationName();
+		return companyName;
 	}
 	
 	public void cancelChangesToSystemSettings() throws Exception {

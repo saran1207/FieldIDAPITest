@@ -1,21 +1,30 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import watij.runtime.ie.IE;
+import java.util.Random;
+
 
 public class test {
 	
+	static Random r = new Random();
+
 	public static void main(String[] args) throws Exception {
-		IE ie = new IE();
-		String url = "http://www.google.com/";
-		ie.start(url);
-		Thread.sleep(2000);
-		Runtime r = Runtime.getRuntime();
-		Process p = r.exec("tasklist /FI \"IMAGENAME eq iexplore.exe\" /NH /FO CSV");
-		BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-		if(err.readLine() == null) {
-			System.err.println("kill");
-			r.exec("taskkill /f /im iexplore.exe /t");
+		for(int i = 0; i < 10; i++) {
+			System.out.println(getRandomString(16));
 		}
-		ie.close();
+	}
+	
+	public static int getRandomInteger(int limit) throws Exception {
+		return r.nextInt(limit);
+	}
+
+	public static String getRandomString(int length) throws Exception {
+		String s = "";
+		int range = 'z' - 'a';
+		for(int i = 0; i < length; i++) {
+			int c = getRandomInteger(range) + 'a';
+			if(i == 0) {
+				c = Character.toUpperCase(c);
+			}
+			s += (char)c;
+		}
+		return s;
 	}
 }

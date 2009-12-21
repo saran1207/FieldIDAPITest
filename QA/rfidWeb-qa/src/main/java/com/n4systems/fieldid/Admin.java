@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.n4systems.fieldid.admin.ManageOrganizations;
 import com.n4systems.fieldid.admin.ManageSystemSettings;
 import com.n4systems.fieldid.admin.ManageYourSafetyNetwork;
 
@@ -108,8 +109,9 @@ public class Admin extends TestCase {
 	 */
 	public String getCompanyName() throws Exception {
 		gotoAdministration();
-		mss.gotoManageSystemSettings();
-		return mss.getCompanyName();
+		ManageOrganizations mos = new ManageOrganizations(ie);
+		mos.gotoManageOrganizations();
+		return mos.getPrimaryOrganizationName();
 	}
 	
 	/**
