@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class EmbeddedLogin extends TestCase {
 
-	protected String embeddedLoginURL = "https://www.team.n4systems.com/static/html/embedded.html";
+	protected String embeddedLoginURL = "https://www.team.n4systems.net/static/html/embedded.html";
 	protected String userID = "n4systems";
 	protected String passwd = "makemore$";
 	
