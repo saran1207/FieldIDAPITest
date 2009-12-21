@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.testcase;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerUser;
 import com.n4systems.fieldid.datatypes.EmployeeUser;

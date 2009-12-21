@@ -86,6 +86,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			
 			// Create Customer, Divisons and Customer Users under Primary Org
 			primaryCustomer = createCustomer(primaryOrg);
+//			mcs.setAddCustomerFilter(primaryCustomer.getCustomerName());
+//			mcs.gotoAddCustomerFilter(jobsites);
+//			mcs.gotoCustomer(primaryCustomer);
 			primaryDivision = createDivision();
 			Owner owner = new Owner(primaryOrg, primaryCustomer.getCustomerName(), "");
 			primaryCustomerUser = createCustomerUser(owner, jobsites);
@@ -95,6 +98,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			
 			// Create second set of Customer, Divisons and Customer Users under Primary Org
 			primaryCustomer2 = createCustomer(primaryOrg);
+//			mcs.setAddCustomerFilter(primaryCustomer2.getCustomerName());
+//			mcs.gotoAddCustomerFilter(jobsites);
+//			mcs.gotoCustomer(primaryCustomer2);
 			primaryDivision2 = createDivision();
 			owner = new Owner(primaryOrg, primaryCustomer2.getCustomerName(), "");
 			primaryCustomerUser2 = createCustomerUser(owner, jobsites);
@@ -104,6 +110,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			
 			// Create Customer, Divisons and Customer Users under Secondary Org
 			secondaryCustomer = createCustomer(secondaryOrg);
+//			mcs.setAddCustomerFilter(secondaryCustomer.getCustomerName());
+//			mcs.gotoAddCustomerFilter(jobsites);
+//			mcs.gotoCustomer(secondaryCustomer);
 			secondaryDivision = createDivision();
 			owner = new Owner(secondaryOrg, secondaryCustomer.getCustomerName(), "");
 			secondaryCustomerUser = createCustomerUser(owner, jobsites);
@@ -113,6 +122,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 			// Create second set of Customer, Divisons and Customer Users under Secondary Org
 			secondaryCustomer2 = createCustomer(secondaryOrg);
+//			mcs.setAddCustomerFilter(secondaryCustomer2.getCustomerName());
+//			mcs.gotoAddCustomerFilter(jobsites);
+//			mcs.gotoCustomer(secondaryCustomer2);
 			secondaryDivision2 = createDivision();
 			owner = new Owner(secondaryOrg, secondaryCustomer2.getCustomerName(), "");
 			secondaryCustomerUser2 = createCustomerUser(owner, jobsites);

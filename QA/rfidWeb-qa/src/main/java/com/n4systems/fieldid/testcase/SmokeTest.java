@@ -73,7 +73,7 @@ public class SmokeTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		helper.setBaseURL("http://team.n4systems.com/fieldid/");
+		helper.setBaseURL("http://team.n4systems.net/fieldid/");
 
 		// create a new directory for each test run but not for each test case
 		if (!initialized) {
