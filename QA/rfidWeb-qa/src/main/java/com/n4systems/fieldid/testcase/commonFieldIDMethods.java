@@ -1147,7 +1147,7 @@ public class commonFieldIDMethods {
 
 	/**
 	 * Get the base URL to Field ID as defined in the properties file. This is
-	 * typically https://team.n4systems.com/fieldid/ or
+	 * typically https://team.n4systems.net/fieldid/ or
 	 * https://192.168.2.44/fieldid/ but it can also be localhost or
 	 * https://www.fieldid.com/
 	 * 
@@ -1166,7 +1166,7 @@ public class commonFieldIDMethods {
 	 * Set the value for the base URL in memory. All subsequent calls to
 	 * getBaseURL will return the new value.
 	 * 
-	 * This is typically https://team.n4systems.com/fieldid/ or
+	 * This is typically https://team.n4systems.net/fieldid/ or
 	 * https://192.168.2.44/fieldid/ but it can also be localhost or
 	 * https://www.fieldid.com/
 	 * 
@@ -1203,7 +1203,7 @@ public class commonFieldIDMethods {
 	/**
 	 * Get the company branded URL as defined in the properties file. This
 	 * method uses the getTenant method to build the branded URL. Typically this
-	 * is https://team.n4systems.com/fieldid/login/tenant
+	 * is https://team.n4systems.net/fieldid/login/tenant
 	 * 
 	 * @return a typical login URL
 	 */
