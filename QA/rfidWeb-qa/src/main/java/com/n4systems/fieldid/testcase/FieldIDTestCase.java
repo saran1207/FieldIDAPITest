@@ -54,7 +54,7 @@ public abstract class FieldIDTestCase extends TestCase {
 	protected ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 	protected static String timestamp = null;
 	protected static boolean once = true;
-	protected String loginURL = "https://n4.team.n4systems.com/fieldid/";	// default to staging
+	protected String loginURL = "https://n4.team.n4systems.net/fieldid/";	// default to staging
 	protected Properties prop;
 	protected InputStream in;
 	protected String propertyFile;
