@@ -77,7 +77,7 @@ public class AutoAttributeImporterAction extends AbstractAdminAction {
 	public List<DualListView> loadTenantView() {
 		QueryBuilder<Listable<Long>> tenantBuilder = new QueryBuilder<Listable<Long>>(Tenant.class, new OpenSecurityFilter());
 		tenantBuilder.setSimpleSelect();
-		tenantBuilder.setOrder("displayName");
+		tenantBuilder.setOrder("name");
 		
 		QueryBuilder<Listable<Long>> typeBuilder = new QueryBuilder<Listable<Long>>(ProductType.class, new OpenSecurityFilter());
 		typeBuilder.setSimpleSelect();
