@@ -74,6 +74,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 			commentTemplate.setTenant(getTenant());
 			persistenceManager.saveAny(commentTemplate);
 		} else {
+			persistenceManager.updateAny(commentTemplate);
 		}
 		
 		addActionMessage("Data has been updated.");
