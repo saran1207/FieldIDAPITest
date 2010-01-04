@@ -2,7 +2,9 @@ package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.AddressInfoBuilder;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.Transaction;
@@ -49,9 +51,22 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		primaryOrg.setExternalUserName(accountInfo.getEmail());
 		primaryOrg.setExternalPassword(generateExternalPassword());
 		
+		primaryOrg.setAddressInfo(convertToAddressInfo());
+		
 		return primaryOrg;
 	}
 	
+	private AddressInfo convertToAddressInfo() {
+		com.n4systems.subscription.AddressInfo inputAddress = accountInfo.getBillingAddress();
+		return AddressInfoBuilder.anAddress()
+				.streetAddress(inputAddress.getAddressLine1() + " " + inputAddress.getAddressLine2())
+				.city(inputAddress.getCity())
+				.state(inputAddress.getState())
+				.country(inputAddress.getCountry())
+				.zip(inputAddress.getPostal())
+				.phone1(accountInfo.getPhone()).build();
+	}
+
 	private String generateExternalPassword() {
 		// Can be a maximum of 16 characters
 		return EncryptionUtility.getSHA1HexHash(accountInfo.getCompanyName()+accountInfo.getEmail()).substring(0,15);

@@ -2,6 +2,7 @@ package com.n4systems.handlers.creator.signup;
 
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.subscription.AddressInfo;
 import com.n4systems.util.timezone.Region;
 
 public class AccountCreationInformationStub implements AccountCreationInformation {
@@ -23,6 +24,10 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 	
 	private SignUpPackage signUpPackage;
 	private String fullTimeZone;
+	
+	private AddressInfo billingAddress = new AddressInfo();
+	
+	private String phone;
 	
 	public String getCompanyName() {
 		return companyName;
@@ -129,6 +134,22 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 
 	public void setPromoCode(String promoCode) {
 		this.promoCode = promoCode;
+	}
+
+	public AddressInfo getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(AddressInfo billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }

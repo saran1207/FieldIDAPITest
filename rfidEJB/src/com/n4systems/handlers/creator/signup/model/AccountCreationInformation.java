@@ -1,6 +1,7 @@
 package com.n4systems.handlers.creator.signup.model;
 
 import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.subscription.AddressInfo;
 
 
 public interface AccountCreationInformation {
@@ -27,4 +28,8 @@ public interface AccountCreationInformation {
 	public SignUpPackage getSignUpPackage();
 	
 	public Integer getNumberOfUsers();
+	
+	public AddressInfo getBillingAddress();
+	
+	public String getPhone();
 }
