@@ -48,7 +48,7 @@ public class Permissions {
 		String label = null;
 		switch (permission) {
 			case Tag:
-				label = "label.tag_permission";
+				label = "label.identify_permission";
 				break;
 			case ManageSystemConfig:
 				label = "label.managesystemconfig_permission";;
@@ -57,7 +57,7 @@ public class Permissions {
 				label = "label.managesystemusers_permission";;
 				break;
 			case ManageEndUsers:
-				label = "label.manageendusers_permission";;
+				label = "label.managecustomers_permission";;
 				break;
 			case CreateInspection:
 				label = "label.createinspection_permission";;
