@@ -27,10 +27,8 @@ public class ManageOrganizations extends TestCase {
 	private Finder manageOrganizationsLinkFinder;
 	private Finder manageOrganizationsPageContentHeaderFinder;
 	private Finder backToAdministrationLinkFinder;
-	private Finder organizationNamesFinder;
 	private Finder addOrganizationLinkFinder;
 	private Finder addOrganizationNameFinder;
-	private Finder addOrganizationAdminEmailFinder;
 	private Finder addOrganizationNameOnCertFinder;
 	private Finder addOrganizationStreetAddressFinder;
 	private Finder addOrganizationCityFinder;
@@ -44,7 +42,6 @@ public class ManageOrganizations extends TestCase {
 	private Finder organizationTableRowsFinder;
 	private Finder manageOrganizationsPageForContentHeaderFinder;
 	private Finder editOrganizationNameFinder;
-	private Finder editOrganizationAdminEmailFinder;
 	private Finder editOrganizationNameOnCertFinder;
 	private Finder editOrganizationStreetAddressFinder;
 	private Finder editOrganizationCityFinder;
@@ -85,10 +82,10 @@ public class ManageOrganizations extends TestCase {
 			manageOrganizationsLinkFinder = text(p.getProperty("link", "NOT SET"));
 			manageOrganizationsPageContentHeaderFinder = xpath(p.getProperty("contentheader", "NOT SET"));
 			backToAdministrationLinkFinder = xpath(p.getProperty("backtoadministrationlink", "NOT SET"));
-			organizationNamesFinder = xpath(p.getProperty("organizationnamecells", "NOT SET"));
+//			organizationNamesFinder = xpath(p.getProperty("organizationnamecells", "NOT SET"));
 			addOrganizationLinkFinder = xpath(p.getProperty("addorganizationlink", "NOT SET"));
 			addOrganizationNameFinder = id(p.getProperty("addorganizationname", "NOT SET"));
-			addOrganizationAdminEmailFinder = xpath(p.getProperty("addorganizationadminemail", "NOT SET"));
+//			addOrganizationAdminEmailFinder = xpath(p.getProperty("addorganizationadminemail", "NOT SET"));
 			addOrganizationNameOnCertFinder = id(p.getProperty("addorganizationnameoncert", "NOT SET"));
 			addOrganizationStreetAddressFinder = id(p.getProperty("addorganizationstreetaddress", "NOT SET"));
 			addOrganizationCityFinder = id(p.getProperty("addorganizationcity", "NOT SET"));
@@ -102,7 +99,7 @@ public class ManageOrganizations extends TestCase {
 			organizationTableRowsFinder = xpath(p.getProperty("organizationtablerows", "NOT SET"));
 			manageOrganizationsPageForContentHeaderFinder = xpath(p.getProperty("editorganizationpagecontentheader", "NOT SET"));
 			editOrganizationNameFinder = id(p.getProperty("editorganizationname", "NOT SET"));
-			editOrganizationAdminEmailFinder = id(p.getProperty("editorganizationadminemail", "NOT SET"));
+//			editOrganizationAdminEmailFinder = id(p.getProperty("editorganizationadminemail", "NOT SET"));
 			editOrganizationNameOnCertFinder = id(p.getProperty("editorganizationnameoncert", "NOT SET"));
 			editOrganizationStreetAddressFinder = id(p.getProperty("editorganizationstreetaddress", "NOT SET"));
 			editOrganizationCityFinder = id(p.getProperty("editorganizationcity", "NOT SET"));

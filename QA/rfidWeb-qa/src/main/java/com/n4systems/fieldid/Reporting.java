@@ -483,23 +483,6 @@ public class Reporting extends TestCase {
 	}
 
 	/**
-	 * Helper method to set the customer and wait for the javascript to
-	 * update the division information.
-	 * 
-	 * @param c
-	 * @throws Exception
-	 */
-	private void setCustomer(String c) throws Exception {
-		SelectList customer = ie.selectList(reportingSearchCriteriaCustomerFinder);
-		assertTrue("Could not find the Customer select list", customer.exists());
-		Option o = customer.option(text(c));
-		assertTrue("Could not find the Customer '" + c + "'", o.exists());
-		o.select();
-		customer.fireEvent("onchange");
-		misc.waitForJavascript();
-	}
-
-	/**
 	 * Once the search criteria and display columns have been set, call this
 	 * method to get the results.
 	 * 

@@ -55,7 +55,6 @@ public class ManageCustomers extends TestCase {
 	private Finder customerNameAndIDLinkFinder;
 	private Finder backToAdministrationLinkFinder;
 	private Finder addCustomerUserLinkFinder;
-	private Finder manageUsersPageContentHeaderFinder;
 	private Finder addCustomerUserUserIDFinder;
 	private Finder addCustomerUserEmailFinder;
 	private Finder addCustomerUserFirstNameFinder;
@@ -64,12 +63,9 @@ public class ManageCustomers extends TestCase {
 	private Finder addCustomerUserInitialsFinder;
 	private Finder addCustomerUserSecurityRFIDFinder;
 	private Finder addCustomerUserTimeZoneFinder;
-	private Finder addCustomerUserDivisionFinder;
 	private Finder addCustomerUserPasswordFinder;
 	private Finder addCustomerUserVerifyPasswordFinder;
-	private Finder addCustomerUserPermissionsTableFinder;
 	private Finder addCustomerUserSaveButtonFinder;
-	private Finder manageUserPageContentHeaderFinder;
 	private Finder customerDivisionsLinkFinder;
 	private Finder customerUsersLinkFinder;
 	private Finder manageCustomerDivisionFinder;
@@ -86,8 +82,6 @@ public class ManageCustomers extends TestCase {
 	private Finder editCustomerUserPositionFinder;
 	private Finder editCustomerUserInitialsFinder;
 	private Finder editCustomerUserTimeZoneFinder;
-	private Finder editCustomerUserDivisionFinder;
-	private Finder editCustomerUserPermissionsTableFinder;
 	private Finder editCustomerUserSaveButtonFinder;
 	private Finder divisionContainerFinder;
 	private Finder manageCustomerAddDivisionFinder;
@@ -157,8 +151,8 @@ public class ManageCustomers extends TestCase {
 			customerNameAndIDLinkFinder = xpath(p.getProperty("managecustomernameandidlinks", "NOT SET"));
 			backToAdministrationLinkFinder = xpath(p.getProperty("backtoadministrationlink", "NOT SET"));
 			addCustomerUserLinkFinder = xpath(p.getProperty("addcustomeruserlink", "NOT SET"));
-			manageUsersPageContentHeaderFinder = xpath(p.getProperty("manageuserspageheader", "NOT SET"));
-			manageUserPageContentHeaderFinder = xpath(p.getProperty("manageuserpageheader", "NOT SET"));
+//			manageUsersPageContentHeaderFinder = xpath(p.getProperty("manageuserspageheader", "NOT SET"));
+//			manageUserPageContentHeaderFinder = xpath(p.getProperty("manageuserpageheader", "NOT SET"));
 			addCustomerUserUserIDFinder = xpath(p.getProperty("addcustomeruseruserid", "NOT SET"));
 			addCustomerUserEmailFinder = xpath(p.getProperty("addcustomeruseremail", "NOT SET"));
 			addCustomerUserFirstNameFinder = xpath(p.getProperty("addcustomeruserfirstname", "NOT SET"));
@@ -168,10 +162,10 @@ public class ManageCustomers extends TestCase {
 			addCustomerUserSecurityRFIDFinder = xpath(p.getProperty("addcustomeruserrfid", "NOT SET"));
 			addCustomerUserCountryFinder = xpath(p.getProperty("addcustomerusercountry", "NOT SET"));
 			addCustomerUserTimeZoneFinder = xpath(p.getProperty("addcustomerusertimezone", "NOT SET"));
-			addCustomerUserDivisionFinder = xpath(p.getProperty("addcustomeruserdivision", "NOT SET"));
+//			addCustomerUserDivisionFinder = xpath(p.getProperty("addcustomeruserdivision", "NOT SET"));
 			addCustomerUserPasswordFinder = xpath(p.getProperty("addcustomeruserpassword", "NOT SET"));
 			addCustomerUserVerifyPasswordFinder = xpath(p.getProperty("addcustomeruserverify", "NOT SET"));
-			addCustomerUserPermissionsTableFinder = xpath(p.getProperty("addcustomeruserpermissionstable", "NOT SET"));
+//			addCustomerUserPermissionsTableFinder = xpath(p.getProperty("addcustomeruserpermissionstable", "NOT SET"));
 			addCustomerUserSaveButtonFinder = xpath(p.getProperty("addcustomerusersavebutton", "NOT SET"));
 			customerDivisionsLinkFinder = xpath(p.getProperty("managecustomerdivisionslink", "NOT SET"));
 			customerUsersLinkFinder = xpath(p.getProperty("managecustomeruserslink", "NOT SET"));
@@ -190,8 +184,8 @@ public class ManageCustomers extends TestCase {
 			editCustomerUserInitialsFinder = xpath(p.getProperty("editcustomeruserinitials", "NOT SET"));
 			editCustomerUserCountryFinder = xpath(p.getProperty("editcustomerusercountry", "NOT SET"));
 			editCustomerUserTimeZoneFinder = xpath(p.getProperty("editcustomerusertimezone", "NOT SET"));
-			editCustomerUserDivisionFinder = xpath(p.getProperty("editcustomeruserdivision", "NOT SET"));
-			editCustomerUserPermissionsTableFinder = xpath(p.getProperty("editcustomeruserpermissiontable", "NOT SET"));
+//			editCustomerUserDivisionFinder = xpath(p.getProperty("editcustomeruserdivision", "NOT SET"));
+//			editCustomerUserPermissionsTableFinder = xpath(p.getProperty("editcustomeruserpermissiontable", "NOT SET"));
 			editCustomerUserSaveButtonFinder = xpath(p.getProperty("editcustomerusersavebutton", "NOT SET"));
 			divisionContainerFinder = xpath(p.getProperty("divisioncontainer", "NOT SET"));
 			manageCustomerAddDivisionFinder = xpath(p.getProperty("adddivisionlink", "NOT SET"));
@@ -717,11 +711,6 @@ public class ManageCustomers extends TestCase {
 		checkManageCustomerPageContentHeader(jobsites);
 	}
 	
-	private void checkManageUsersPageContentHeader() throws Exception {
-		HtmlElement header = ie.htmlElement(manageUsersPageContentHeaderFinder);
-		assertTrue("Could not find the title to Manage Users page", header.exists());
-	}
-
 	/**
 	 * Assumes you are on the Manage Customer page.
 	 * 
@@ -926,12 +915,6 @@ public class ManageCustomers extends TestCase {
 		checkManageCustomerPageContentHeader(jobsites);
 	}
 
-	private void checkManageUserPageContentHeader(String userID) throws Exception {
-		HtmlElement header = ie.htmlElement(manageUserPageContentHeaderFinder);
-		assertTrue("Could not find the title to Manage User page", header.exists());
-		assertTrue("Could not find the User ID in the header", header.text().contains(userID));
-	}
-	
 	public void gotoAddCustomerDivision(boolean jobsites) throws Exception {
 		Link add = ie.link(manageCustomerAddDivisionFinder);
 		assertTrue("Could not find the link to add a division", add.exists());

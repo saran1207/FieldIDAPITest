@@ -310,7 +310,6 @@ public class Validate extends FieldIDTestCase {
 		String userid = prop.getProperty("userid", "NOT SET");
 		String password = prop.getProperty("password", "NOT SET");
 		String serialtext = prop.getProperty("serialtext", "NOT SET");
-		String customer = prop.getProperty("customer", "NOT SET");
 		String orgUnit = prop.getProperty("orgunit", "NOT SET");
 
 		try {

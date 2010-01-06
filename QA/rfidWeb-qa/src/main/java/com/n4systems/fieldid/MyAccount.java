@@ -769,13 +769,6 @@ public class MyAccount extends TestCase {
 		checkSecurityRfidNumberField();
 	}
 
-	private void gotoChangePassword() throws Exception {
-		Link l = ie.link(changePasswordFinder);
-		assertTrue("Could not find the link to Change Password", l.exists());
-		l.click();
-		checkMyAccountChangePasswordContent();
-	}
-
 	public void checkMyAccountChangePasswordContent() throws Exception {
 		checkMyAccountContentHeader();
 		Link l = ie.link(changePasswordFinder);
@@ -892,8 +885,6 @@ public class MyAccount extends TestCase {
 
 	public List<String> getSharedByUserNames(String sharedReport) throws Exception {
 		List<String> results = new ArrayList<String>();
-		TableRow tr = findSavedReportRow(sharedReport);
-		TableCell td = tr.cell(1);	// assumes Shared By is column 1, indexed 0
 		// TODO: once bug is fixed, parse the cell and add names to results
 		return results;
 	}

@@ -1946,6 +1946,7 @@ public class Assets extends TestCase {
 		gotoProductSearchResults();
 		
 		List<String> orderNumbers = getProductSearchResultsColumn("Order Number");
+		orderNumbers.clear();
 		// sort the columns once, we'll be on the last page and order numbers will be on page 1
 		// the getProductSearchResultsSerialNumbers will return the last page only if we are on last page
 		serialNumbers = getProductSearchResultsSerialNumbers(column);

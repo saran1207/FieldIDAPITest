@@ -565,11 +565,8 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String today = misc.getDateString();
 		Product p = new Product(today);
 		
-		String organization;
 		Owner owner = new Owner(this.organization, customerName);
 		p.setOwner(owner);
-//		p.setCustomer(customerName);
-//		p.setDivision(division);
 		p.setReferenceNumber(userid + "-ref");
 		p.setPurchaseOrder(userid + "-po");
 		p.setLocation(userid + "-location");

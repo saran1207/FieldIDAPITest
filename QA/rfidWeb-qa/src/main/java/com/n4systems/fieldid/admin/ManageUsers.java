@@ -18,7 +18,6 @@ import com.n4systems.fieldid.datatypes.Organization;
 import com.n4systems.fieldid.datatypes.Owner;
 import com.n4systems.fieldid.datatypes.SystemUser;
 
-import watij.BaseHtmlFinder;
 import watij.elements.*;
 import watij.finders.Finder;
 import watij.runtime.ie.IE;
@@ -80,7 +79,6 @@ public class ManageUsers extends TestCase {
 	private Finder addEmployeeUserInitialsFinder;
 	private Finder addEmployeeUserSecurityRFIDNumberFinder;
 	private Finder addEmployeeUserTimeZoneFinder;
-	private Finder addEmployeeUserOrgUnitFinder;
 	private Finder addEmployeeUserPasswordFinder;
 	private Finder addEmployeeUserVerifyPasswordFinder;
 	private Finder addEmployeeUserAllOffButtonFinder;
@@ -166,7 +164,7 @@ public class ManageUsers extends TestCase {
 			addEmployeeUserInitialsFinder = xpath(p.getProperty("addemployeeinitials", "NOT SET"));
 			addEmployeeUserSecurityRFIDNumberFinder = xpath(p.getProperty("addemployeerfid", "NOT SET"));
 			addEmployeeUserTimeZoneFinder = xpath(p.getProperty("addemployeetimezone", "NOT SET"));		
-			addEmployeeUserOrgUnitFinder = xpath(p.getProperty("addemployeeorgunit", "NOT SET"));
+//			addEmployeeUserOrgUnitFinder = xpath(p.getProperty("addemployeeorgunit", "NOT SET"));
 			addEmployeeUserPasswordFinder = xpath(p.getProperty("addemployeepassword", "NOT SET"));
 			addEmployeeUserVerifyPasswordFinder = xpath(p.getProperty("addemployeeverifypassword", "NOT SET"));
 			addEmployeeUserAllOffButtonFinder = xpath(p.getProperty("addemployeealloffbutton", "NOT SET"));
@@ -550,10 +548,6 @@ public class ManageUsers extends TestCase {
 		assertTrue("Could not find the Submit button", submit.exists());
 		submit.click();
 		FieldIDMisc.startMonitor();
-	}
-
-	private void checkEditUserCustomerPermissions() throws Exception {
-		checkAddUserCustomerPermissions();
 	}
 
 	public void addEmployeeUser(EmployeeUser u) throws Exception {

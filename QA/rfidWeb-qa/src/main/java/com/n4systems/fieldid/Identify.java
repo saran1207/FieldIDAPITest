@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import com.n4systems.fieldid.datatypes.Owner;
 import com.n4systems.fieldid.datatypes.Product;
-
 import watij.elements.*;
 import watij.finders.Finder;
 import watij.runtime.ie.IE;
@@ -561,8 +558,6 @@ public class Identify extends TestCase {
 		
 		boolean jobsiteset = (p.getJobSite() != null);
 		boolean assignedtoset = (p.getAssignedTo() != null);
-		boolean customerset = (p.getCustomer() != null);
-		boolean divisionset = (p.getDivision() != null);
 		boolean ordernumberset = (p.getOrderNumber() != null);
 
 		TextField serialNumber = ie.textField(addProductSerialNumberFinder);
