@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fileprocessing.FileProcessorFactory;
 import com.n4systems.model.Inspection;
 import com.n4systems.tools.FileDataContainer;
@@ -48,13 +47,13 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 		List<ProofTestStatusBundle> statusList = new ArrayList<ProofTestStatusBundle>();
 		
 		for(ProofTestBundle bundle: bundles) {
-			prcessBundle(authUser, user, statusList, bundle);
+			processBundle(authUser, user, statusList, bundle);
 		}
 		
 		return statusList;
 	}
 
-	private void prcessBundle(AuthBundle authUser, UserBean user, List<ProofTestStatusBundle> statusList, ProofTestBundle bundle) {
+	private void processBundle(AuthBundle authUser, UserBean user, List<ProofTestStatusBundle> statusList, ProofTestBundle bundle) {
 		try {
 			
 			logger.info("Processing Inspection File [" + bundle.getFileName() + "] for tenant [" + authUser.getTenantName() + "] user [" + authUser.getUserName() + "]");
@@ -69,7 +68,11 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 			
 			applyProcessingResults(statusList, inspectionMap, bundle);
 		} catch (Exception e) {
-			logger.error("Failure during processing of file: " + bundle.getFileName(), e);
+			if (e instanceof NoSerialNumbersException) {
+				logger.warn("No Serail number in file: " + bundle.getFileName());
+			} else {
+				logger.error("Failure during processing of file: " + bundle.getFileName(), e);
+			}
 			statusList.add(new ProofTestStatusBundle(bundle.getFileName(), WebServiceStatus.FAILED, "Unable to process file"));
 		}
 	}
@@ -87,13 +90,13 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 	 * This functionality really only exists for CG's use and is not a standard of any proof test type.
 	 * For simplicity, we're going to assume there was only one product serial in the file and thus only have a single entry in our inspectionMap
 	 */
-	private void applyProcessingResults(List<ProofTestStatusBundle> statusListCollector, Map<String, Inspection> inspectionMap, ProofTestBundle bundle) throws FileProcessingException {
+	protected void applyProcessingResults(List<ProofTestStatusBundle> statusListCollector, Map<String, Inspection> inspectionMap, ProofTestBundle bundle) throws NoSerialNumbersException {
 		String serial;
 		String message;
 		WebServiceStatus status;
 		
 		if (inspectionMap.isEmpty()) {
-			throw new FileProcessingException("File had no serail numbers defined.");
+			throw new NoSerialNumbersException("File had no serail numbers defined.");
 		}
 		
 		serial = getSerialNumber(inspectionMap);
