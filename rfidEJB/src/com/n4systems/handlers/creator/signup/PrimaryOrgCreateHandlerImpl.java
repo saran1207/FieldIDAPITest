@@ -4,7 +4,6 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.builders.AddressInfoBuilder;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.Transaction;
@@ -58,13 +57,16 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	
 	private AddressInfo convertToAddressInfo() {
 		com.n4systems.subscription.AddressInfo inputAddress = accountInfo.getBillingAddress();
-		return AddressInfoBuilder.anAddress()
-				.streetAddress(inputAddress.getAddressLine1() + " " + inputAddress.getAddressLine2())
-				.city(inputAddress.getCity())
-				.state(inputAddress.getState())
-				.country(inputAddress.getCountry())
-				.zip(inputAddress.getPostal())
-				.phone1(accountInfo.getPhone()).build();
+		
+		AddressInfo address = new AddressInfo();
+		address.setStreetAddress(inputAddress.getAddressLine1(), inputAddress.getAddressLine2());
+		address.setCity(inputAddress.getCity());
+		address.setState(inputAddress.getState());
+		address.setCountry(inputAddress.getCountry());
+		address.setZip(inputAddress.getPostal());
+		address.setPhone1(accountInfo.getPhone());
+		
+		return address;
 	}
 
 	private String generateExternalPassword() {

@@ -23,6 +23,7 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
+import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -93,6 +94,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 			PersistenceManager.finishTransaction(transaction);
 			
 			TenantCache.getInstance().reloadPrimaryOrg(primaryOrg.getTenant().getId());
+			TenantLimitService.getInstance().updateAll();
 			
 			
 		} catch (Exception e) {

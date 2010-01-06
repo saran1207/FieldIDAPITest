@@ -179,20 +179,17 @@ public class TenantLimit implements Serializable {
 		return currentLimit >= newLimit;
 	}
 	
-	
-	
-	@Override
-	public String toString() {
-		return "users = [" + users + "] assets = [" + assets + "] diskspace = [" + diskSpace + "]";
+	public boolean isSecondaryOrgsLimitGreaterThan(long secondaryOrgLimit) {
+		return isCurrentLimitGreaterThan(secondaryOrgLimit, secondaryOrgs);
 	}
-
+	
 	
 	public static boolean isUnlimited(Long limit) {
 		return (limit != null && limit == UNLIMITED);
 	}
-	
 
-	
-	
-	
+	@Override
+	public String toString() {
+		return "TenantLimit [assets=" + assets + ", diskSpace=" + diskSpace + ", secondaryOrgs=" + secondaryOrgs + ", users=" + users + "]";
+	}
 }

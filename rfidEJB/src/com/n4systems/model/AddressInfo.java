@@ -47,6 +47,10 @@ public class AddressInfo extends AbstractEntity {
 		this.streetAddress = address;
 	}
 	
+	public void setStreetAddress(String addressLine1, String addressLine2) {
+		setStreetAddress(addressLine1 + " " + addressLine2);
+	}
+	
 	public String getCity() {
 		return city;
 	}

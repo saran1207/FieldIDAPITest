@@ -87,7 +87,7 @@ public class LimitResolverTest extends TestUsesTransactionBase {
 	public void should_set_limits_to_the_addition_of_the_package_and_promo_code() {
 		// fixture setup
 		PromoCode promoCode = new PromoCode();
-		promoCode.setLimitAdjuster(new LimitAdjuster(10L, 20L));
+		promoCode.setLimitAdjuster(new LimitAdjuster(10L, 0L, 20L));
 		PromoCodeByCodeLoader mockPromoByCodeLoader = createMockPromoCodeLoader(promoCode, PROMO_CODE_THAT_EXISTS);
 		
 		long totalDiskSpace = DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getDiskSpaceInMB(), DataUnit.BYTES) + 20L;

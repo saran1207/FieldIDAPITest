@@ -4,6 +4,7 @@
 	<@s.textfield name="promoCode.code" value="%{promoCode.code}" label="Code" />
 	<@s.textfield name="diskSpaceMB" label="Max Disk Space (MB) (-1 for Unlimited)" />
 	<@s.textfield name="promoCode.limitAdjuster.assets" label="Max Assets (-1 for Unlimited)" />	
+	<@s.textfield name="promoCode.limitAdjuster.secondaryOrgs" label="Max Secondary Org (-1 for Unlimited)" />
 	<@s.iterator  value="availableExtendedFeatures" >
 		<@s.checkbox name="extendedFeatures['%{name}']" >
 			<@s.param name="label"><@s.property value="name"/></@s.param>

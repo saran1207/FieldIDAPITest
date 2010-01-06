@@ -13,21 +13,27 @@ public class LimitAdjuster {
 	
 	@Column(name="asset_limit", nullable = false)
 	private Long assets;
+	
+	@Column(name="secondary_org_limit", nullable = false)
+	private Long secondaryOrgs;
 
 	
 	public LimitAdjuster() {
-		this(0L, 0L);
+		this(0L, 0L, 0L);
 	}
 
-	public LimitAdjuster(Long assets, Long diskSpaceInBytes) {
-		this(assets, diskSpaceInBytes, DataUnit.BYTES);
+	public LimitAdjuster(Long assets, Long secondaryOrgs, Long diskSpaceInBytes) {
+		this(assets, secondaryOrgs, diskSpaceInBytes, DataUnit.BYTES);
 		
 	}
 	
-	public LimitAdjuster(Long assets, Long diskSpaceInOtherUnit, DataUnit diskSpaceUnit) {
+	public LimitAdjuster(Long assets, Long secondaryOrgs, Long diskSpaceInOtherUnit, DataUnit diskSpaceUnit) {
 		super();
-		setDiskSpace(diskSpaceInOtherUnit, diskSpaceUnit);
 		this.assets = assets;
+		this.secondaryOrgs = secondaryOrgs;
+		
+		setDiskSpace(diskSpaceInOtherUnit, diskSpaceUnit);
+	
 	}
 	
 	public Long getDiskSpaceInBytes() {
@@ -73,6 +79,19 @@ public class LimitAdjuster {
 	public TenantLimit adjustLimits(TenantLimit tenantLimit) {
 		tenantLimit.addAssets(assets);
 		tenantLimit.addDiskSpace(diskSpaceInBytes);
+		tenantLimit.addSecondaryOrgs(secondaryOrgs);
 		return tenantLimit;
+	}
+
+	public Long getSecondaryOrgs() {
+		return secondaryOrgs;
+	}
+
+	public void setSecondaryOrgs(Long secondaryOrgs) {
+		this.secondaryOrgs = secondaryOrgs;
+	}
+	
+	public boolean isSecondaryOrgsUnlimited() {
+		return secondaryOrgs.equals(TenantLimit.UNLIMITED);
 	}
 }

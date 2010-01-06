@@ -68,6 +68,7 @@ public class UpgradePlanHandlerImpl implements UpgradeAccountHandler {
 		
 		adjustAssetLimit(upgradePackage, currentLimits);
 		adjustDiskSpaceLimit(upgradePackage, currentLimits);
+		adjustSecondaryOrgLimit(upgradePackage, currentLimits);
 	}
 
 	
@@ -85,6 +86,13 @@ public class UpgradePlanHandlerImpl implements UpgradeAccountHandler {
 		if (!currentLimits.isAssetLimitGreaterThan(upgradeAssetLimit))
 			currentLimits.setAssets(upgradeAssetLimit);
 	}
+	
+	private void adjustSecondaryOrgLimit(SignUpPackageDetails upgradePackage, TenantLimit currentLimits) {
+		Long upgradeSecondaryOrgLimit = upgradePackage.getSecondaryOrgs();
+		if (!currentLimits.isSecondaryOrgsLimitGreaterThan(upgradeSecondaryOrgLimit))
+			currentLimits.setSecondaryOrgs(upgradeSecondaryOrgLimit);
+	}
+
 
 
 	private void saveOrg(Transaction transaction) {
