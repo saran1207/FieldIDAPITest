@@ -190,8 +190,14 @@ public class ImportManagerImpl implements ImportManager {
 		
 		ProductType type = persistenceManager.find(ProductType.class, productTypeId);
 		
-		if(type == null) {
+		
+		
+		if (type == null) {
 			throw new FileImportException("Could not find ProductType with id [" + productTypeId + "]");
+		}
+		
+		if (type.getAutoAttributeCriteria() != null) {
+			throw new FileImportException("Product Type already has auto attributes. you must remove them before importing new ones.");
 		}
 		
 		logger.debug("Using ProductType [" + type.getName() + "]");
