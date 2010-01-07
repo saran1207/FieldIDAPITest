@@ -37,7 +37,7 @@
 			<result name="success" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
 		</action>
 
-		<action name="productCreate" method="save" class="com.n4systems.fieldid.actions.product.ProductCrud">
+		<action name="productCreate" method="create" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="input" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
 			<result name="saved" type="freemarker">/templates/ajax/productCrud/created.ftl</result>

@@ -235,8 +235,8 @@
 		</action>
 
 		<action name="searchResults" method="search" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
-			<result name="input" type="redirect-action">search</result>
-			<result name="error" type="redirect-action">search</result>
+			<result name="input" type="redirectAction">search</result>
+			<result name="error" type="redirectAction">search</result>
 			<result name="success" type="freemarker">/templates/html/search/list.ftl</result>
 		</action>
 
@@ -260,8 +260,8 @@
 		</action>
 
 		<action name="reportResults" method="search" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
-			<result name="input" type="redirect-action">report</result>
-			<result name="error" type="redirect-action">report</result>
+			<result name="input" type="redirectAction">report</result>
+			<result name="error" type="redirectAction">report</result>
 			<result name="success" type="freemarker">/templates/html/report/list.ftl</result>
 		</action>
 
@@ -296,23 +296,23 @@
 
 		<action name="autoAttributeCriteriaOpen" method="open"
 			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
-			<result name="new" type="redirect-action">
+			<result name="new" type="redirectAction">
 				<param name="actionName">autoAttributeCriteriaEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="found" type="redirect-action">
+			<result name="found" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionList</param>
 				<param name="criteriaId">${autoAttributeCriteria.id}</param>
 			</result>
-			<result name="error" type="redirect-action">autoAttributeCriteriaList</result>
+			<result name="error" type="redirectAction">autoAttributeCriteriaList</result>
 		</action>
 
 		<action name="autoAttributeCriteriaEdit" method="edit"
 			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
-			<result name="error" type="redirect-action">autoAttributeCriteriaList</result>
+			<result name="error" type="redirectAction">autoAttributeCriteriaList</result>
 			<result name="success" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
-			<result name="saved" type="redirect-action">
+			<result name="saved" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionList</param>
 				<param name="criteriaId">${autoAttributeCriteria.id}</param>
 			</result>
@@ -322,10 +322,10 @@
 		<action name="autoAttributeCriteriaRemove" method="remove"
 			class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">autoAttributeCriteriaList</param>
 			</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">autoAttributeCriteriaList</param>
 			</result>
 
@@ -355,17 +355,17 @@
 
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionList</param>
 				<param name="criteriaId">${autoAttributeCriteria.id}</param>
 
 			</result>
-			<result name="saved" type="redirect-action">
+			<result name="saved" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionEdit</param>
 				<param name="criteriaId">${autoAttributeCriteria.id}</param>
 				<param name="uniqueID">${autoAttributeDefinition.id}</param>
 			</result>
-			<result name="saveandadd" type="redirect-action">
+			<result name="saveandadd" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionEdit</param>
 				<param name="criteriaId">${autoAttributeCriteria.id}</param>
 
@@ -376,11 +376,11 @@
 		<action name="autoAttributeDefinitionRemove" method="remove"
 			class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
 
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionList</param>
 				<param name="criteriaId">${criteriaId}</param>
 			</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionList</param>
 				<param name="criteriaId">${criteriaId}</param>
 			</result>
@@ -432,7 +432,7 @@
 			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
 		</action>
 
-		<action name="productCreate" method="save" class="com.n4systems.fieldid.actions.product.ProductCrud">
+		<action name="productCreate" method="create" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
 			<result name="saved" type="redirectAction">
@@ -485,24 +485,22 @@
 			</result>
 		</action>
 
-		<action name="productUpdate" method="save" class="com.n4systems.fieldid.actions.product.ProductCrud">
+		<action name="productUpdate" method="update" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="input" type="freemarker">templates/html/productCrud/edit.ftl</result>
 			<result name="success" type="freemarker">templates/html/productCrud/edit.ftl</result>
-			<result name="saved" type="redirect-action">
+			<result name="saved" type="redirectAction">
 				<param name="actionName">product</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="savedWithCustomerOrder" type="redirect-action">
-				<param name="actionName">searchOrder</param>
-				<param name="tagOptionId">${tagOptionId}</param>
-				<param name="orderNumber">${customerOrder.orderNumber}</param>
+			<result name="saveinspect" type="redirectAction">
+				<param name="actionName">inspectionGroups</param>
+				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
 
 
-		<action name="subProductConfiguration" method="show"
-			class="com.n4systems.fieldid.actions.product.SubProductCrud">
+		<action name="subProductConfiguration" method="show" class="com.n4systems.fieldid.actions.product.SubProductCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/subProductCrud/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/subProductCrud/show.ftl</result>
@@ -531,20 +529,20 @@
 		</action>
 
 		<action name="userRequestView" method="show" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
-			<result name="error" type="redirect-action">userRequestList</result>
+			<result name="error" type="redirectAction">userRequestList</result>
 			<result name="success" type="freemarker">/templates/html/userRequest/show.ftl</result>
 		</action>
 
 		<action name="userRequestDeny" method="deny" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
-			<result name="error" type="redirect-action">userRequestList</result>
+			<result name="error" type="redirectAction">userRequestList</result>
 			<result name="input" type="freemarker">templates/html/userRequest/deny.ftl</result>
-			<result name="success" type="redirect-action">userRequestList</result>
+			<result name="success" type="redirectAction">userRequestList</result>
 		</action>
 
 		<action name="userRequestAccept" method="acceptRequest" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
-			<result name="error" type="redirect-action">userRequestList</result>
+			<result name="error" type="redirectAction">userRequestList</result>
 			<result name="input" type="freemarker">templates/html/userRequest/accept.ftl</result>
-			<result name="success" type="redirect-action">userRequestList</result>
+			<result name="success" type="redirectAction">userRequestList</result>
 		</action>
 
 
@@ -555,7 +553,7 @@
 		<action name="addCustomerUser" method="add" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -567,13 +565,13 @@
 
 		<action name="customerUserCreate" method="create" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 				<param name="userType">${userType}</param>
 			</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">customerUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
@@ -587,7 +585,7 @@
 		<action name="addEmployeeUser" method="add" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">userlist</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -600,7 +598,7 @@
 		<action name="employeeUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -613,7 +611,7 @@
 		<action name="employeeUserCreate" method="create" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="freemarker">templates/html/employee/add.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
@@ -625,7 +623,7 @@
 		<action name="employeeUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="error" type="freemarker">templates/html/employee/edit.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
@@ -638,7 +636,7 @@
 		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
-			<result name="error" type="redirect-action">
+			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
@@ -648,7 +646,7 @@
 
 		<action name="customerUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">customerUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="customer">${customer}</param>
@@ -723,29 +721,29 @@
 		</action>
 
 		<action name="massUpdateProducts" method="edit" class="com.n4systems.fieldid.actions.ProductMassUpdate">
-			<result name="error" type="redirect-action">search</result>
+			<result name="error" type="redirectAction">search</result>
 			<result name="success" type="freemarker">/templates/html/massUpdate/product/form.ftl</result>
 		</action>
 
 		<action name="massUpdateProductsSave" method="save" class="com.n4systems.fieldid.actions.ProductMassUpdate">
-			<result name="error" type="redirect-action">search</result>
+			<result name="error" type="redirectAction">search</result>
 			<result name="input" type="freemarker">/templates/html/massUpdate/product/form.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">searchResults</param>
 				<param name="searchId">${searchId}</param>
 			</result>
 		</action>
 
 		<action name="massUpdateInspections" method="edit" class="com.n4systems.fieldid.actions.InspectionMassUpdate">
-			<result name="error" type="redirect-action">report</result>
+			<result name="error" type="redirectAction">report</result>
 			<result name="success" type="freemarker">/templates/html/massUpdate/inspection/form.ftl</result>
 		</action>
 
 		<action name="massUpdateInspectionsSave" method="save"
 			class="com.n4systems.fieldid.actions.InspectionMassUpdate">
-			<result name="error" type="redirect-action">search</result>
+			<result name="error" type="redirectAction">search</result>
 			<result name="input" type="freemarker">/templates/html/massUpdate/inspection/form.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">reportResults</param>
 				<param name="searchId">${searchId}</param>
 			</result>
@@ -753,15 +751,15 @@
 
 		<action name="massUpdateInspectionSchedule" method="edit"
 			class="com.n4systems.fieldid.actions.InspectionScheduleMassUpdate">
-			<result name="error" type="redirect-action">schedule</result>
+			<result name="error" type="redirectAction">schedule</result>
 			<result name="success" type="freemarker">/templates/html/massUpdate/inspectionSchedule/form.ftl</result>
 		</action>
 
 		<action name="massUpdateInspectionScheduleSave" method="save"
 			class="com.n4systems.fieldid.actions.InspectionScheduleMassUpdate">
-			<result name="error" type="redirect-action">schedule</result>
+			<result name="error" type="redirectAction">schedule</result>
 			<result name="input" type="freemarker">/templates/html/massUpdate/inspectionSchedule/form.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">scheduleResults</param>
 				<param name="searchId">${searchId}</param>
 			</result>
@@ -772,7 +770,7 @@
 		</action>
 
 		<action name="assignToJob" method="save" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
-			<result name="error" type="redirect-action">schedule</result>
+			<result name="error" type="redirectAction">schedule</result>
 			<result name="input" type="freemarker">/templates/html/assignToJob/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">scheduleResults</param>
@@ -786,7 +784,7 @@
 		</action>
 
 		<action name="assignInspectionsToJob" method="saveInspections" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
-			<result name="error" type="redirect-action">report</result>
+			<result name="error" type="redirectAction">report</result>
 			<result name="input" type="freemarker">/templates/html/assignToJob/formInspections.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">reportResults</param>
@@ -822,11 +820,11 @@
 			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
 
 			<result name="input" type="freemarker">/templates/html/inspectionType/add.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">inspectionType</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="createInspectionForm" type="redirect-action">
+			<result name="createInspectionForm" type="redirectAction">
 				<param name="actionName">inspectionTypeForm</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
@@ -842,7 +840,7 @@
 		<action name="inspectionTypeUpdate" method="update"
 			class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
 			<result name="input" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
-			<result name="success" type="redirect-action">
+			<result name="success" type="redirectAction">
 				<param name="actionName">inspectionType</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
@@ -1146,7 +1144,7 @@
 
 		<action name="summaryReport" method="show"
 			class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
-			<result name="error" type="redirect-action">report</result>
+			<result name="error" type="redirectAction">report</result>
 			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
 		</action>
 

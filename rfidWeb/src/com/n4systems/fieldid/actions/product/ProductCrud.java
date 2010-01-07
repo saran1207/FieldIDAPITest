@@ -373,49 +373,28 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
-	public String doSave() {
-		testProduct();
+	public String doCreate() {
+		testExistingProduct();
 
-		product.setTenant(getTenant());
-		product.setIdentified(convertDate(identified));
+		
 
 		try {
-			convertInputsToInfoOptions();
-			convertInputsToExtensionValues();
-			processOrderMasters();
 			
-			if (product.isNew()) {
-				// we only set identified by on save
-				product.setIdentifiedBy(fetchCurrentUser());
-				
-				ProductSaveService saver = getProductSaveService();
-				saver.setUploadedAttachments(getUploadedFiles());
-				saver.setProduct(product);
+			prepareProductToBeSaved();
+			
+			
+			// we only set identified by on save
+			product.setIdentifiedBy(fetchCurrentUser());
+			
+			ProductSaveService saver = getProductSaveService();
+			saver.setUploadedAttachments(getUploadedFiles());
+			saver.setProduct(product);
 
-				product = saver.create();
+			product = saver.create();
 
-				uniqueID = product.getId();
-				addFlashMessageText("message.productcreated");
-			} else {
-				// on edit, we need to know if the product type has changed
-				ProductType oldType = productTypeManager.findProductTypeForProduct(product.getId());
+			uniqueID = product.getId();
+			addFlashMessageText("message.productcreated");
 
-				// if the new product type is not equal to the old then the type
-				// has changed
-				if (!product.getType().equals(oldType)) {
-					inspectionScheduleManager.removeAllSchedulesFor(product);
-				}
-
-				ProductSaveService saver = getProductSaveService();
-				saver.setUploadedAttachments(getUploadedFiles());
-				saver.setExistingAttachments(getAttachments());
-				saver.setProduct(product);
-
-				product = saver.update();
-
-				addFlashMessageText("message.productupdated");
-
-			}
 
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
@@ -444,6 +423,56 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		if (lineItem != null) {
 			return "savedWithOrder";
+		}
+
+		return "saved";
+	}
+
+	private void prepareProductToBeSaved() {
+		product.setTenant(getTenant());
+		product.setIdentified(convertDate(identified));
+		
+		convertInputsToInfoOptions();
+		convertInputsToExtensionValues();
+		processOrderMasters();
+	}
+	
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	public String doUpdate() {
+		testProduct();
+
+		
+		try {
+			prepareProductToBeSaved();
+			
+		
+			// on edit, we need to know if the product type has changed
+			ProductType oldType = productTypeManager.findProductTypeForProduct(product.getId());
+
+			// if the new product type is not equal to the old then the type
+			// has changed
+			if (!product.getType().equals(oldType)) {
+				inspectionScheduleManager.removeAllSchedulesFor(product);
+			}
+
+			ProductSaveService saver = getProductSaveService();
+			saver.setUploadedAttachments(getUploadedFiles());
+			saver.setExistingAttachments(getAttachments());
+			saver.setProduct(product);
+
+			product = saver.update();
+
+			addFlashMessageText("message.productupdated");
+
+		} catch (Exception e) {
+			addActionErrorText("error.productsave");
+			logger.error("failed to save Product", e);
+			return INPUT;
+		}
+
+		if (saveAndInspect != null) {
+			getSession().put("productSerialId", uniqueID);
+			return "saveinspect";
 		}
 
 		return "saved";
@@ -484,7 +513,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	private void testExistingProduct() {
 		testProduct();
-		if (product.getId() == null) {
+		if (product.isNew()) {
 			addActionErrorText("error.noproduct");
 			throw new MissingEntityException();
 		}
@@ -773,6 +802,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.productExtentionValues = productExtentionValues;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Collection<ProductSerialExtensionBean> getExtentions() {
 		if (extentions == null) {
 			extentions = legacyProductSerialManager.getProductSerialExtensions(getTenantId());
