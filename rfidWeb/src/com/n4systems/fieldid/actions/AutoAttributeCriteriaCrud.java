@@ -75,56 +75,66 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 			return SUCCESS;
 		}
 
-		Collection<InfoFieldBean> infoFields = productType.getInfoFields();
+		
+		List<InfoOptionBean> infoOptionValues = prepareInputOptions(productType.getInfoFields());
+		
+		AutoAttributeDefinition definition = attributeManager.findTemplateToApply(productType, infoOptionValues);
 
-		List<InfoOptionBean> infoOptionValues = new ArrayList<InfoOptionBean>();
-
-		if (infoFields != null) {
-			for (InfoFieldBean infoField : infoFields) {
-				Long optionValueId = null;
-				if (infoField.getFieldType().equals(InfoFieldBean.TEXTFIELD_FIELD_TYPE)) {
-				} else {
-					String optionValueIdString = null;
-					for (ListingPair input : lookUpInputs) {
-						if (input.getId().equals(infoField.getUniqueID())) {
-							optionValueIdString = input.getName();
-							break;
-						}
-					}
-					if (!(optionValueIdString == null || optionValueIdString.length() == 0)
-							&& !(optionValueIdString.startsWith("!"))) {
-						optionValueId = Long.parseLong(optionValueIdString);
-						InfoOptionBean infoOptionBean = new InfoOptionBean();
-						infoOptionBean.setUniqueID(optionValueId);
-						infoOptionValues.add(infoOptionBean);
-					}
-				}
-			}
-			
-			AutoAttributeDefinition definition = attributeManager.findTemplateToApply(productType, infoOptionValues);
-
-			if (definition == null) {
-				autoAttributeCriteria = null;
-				return SUCCESS;
-			}
-
-			if (definition != null) {
-				for (InfoOptionBean infoOptionBean : definition.getOutputs()) {
-					if (infoOptionBean.getInfoField().hasStaticInfoOption()) {
-						lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
-								infoOptionBean.getUniqueID().toString()));
-					} else {
-						lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
-								infoOptionBean.getName()));
-					}
-				}
-			}
+		if (isDefinitionFound(definition)) {
+			prepareDefinitionOutputs(definition);
+		} else {
+			autoAttributeCriteria = null;
 		}
-
+		
+		
 		return SUCCESS;
 	}
 
-	@SkipValidation
+	private void prepareDefinitionOutputs(AutoAttributeDefinition definition) {
+		for (InfoOptionBean infoOptionBean : definition.getSanitizedOutputs()) {
+			if (infoOptionBean.getInfoField().hasStaticInfoOption()) {
+				lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
+						infoOptionBean.getUniqueID().toString()));
+			} else {
+				lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
+						infoOptionBean.getName()));
+			}
+			
+		}
+	}
+
+	private boolean isDefinitionFound(AutoAttributeDefinition definition) {
+		return definition != null;
+	}
+
+	private List<InfoOptionBean> prepareInputOptions(Collection<InfoFieldBean> infoFields) {
+		List<InfoOptionBean> infoOptionValues = new ArrayList<InfoOptionBean>();
+		for (InfoFieldBean infoField : infoFields) {
+			Long optionValueId = null;
+			if (infoField.getFieldType().equals(InfoFieldBean.TEXTFIELD_FIELD_TYPE)) {
+			} else {
+				String optionValueIdString = null;
+				for (ListingPair input : lookUpInputs) {
+					if (input.getId().equals(infoField.getUniqueID())) {
+						optionValueIdString = input.getName();
+						break;
+					}
+				}
+				if (!(optionValueIdString == null || optionValueIdString.length() == 0)
+						&& !(optionValueIdString.startsWith("!"))) {
+					optionValueId = Long.parseLong(optionValueIdString);
+					InfoOptionBean infoOptionBean = new InfoOptionBean();
+					infoOptionBean.setUniqueID(optionValueId);
+					infoOptionValues.add(infoOptionBean);
+				}
+			}
+		}
+		return infoOptionValues;
+	}
+
+	
+
+		@SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}

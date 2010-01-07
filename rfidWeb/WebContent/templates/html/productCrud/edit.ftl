@@ -13,7 +13,6 @@ ${action.setPageType('product', 'edit')!}
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="product"  uniqueID="${product.id}"/>"><@s.text name="label.cancel"/></a>
 		
-		<@s.url id="merge" action="productMergeAdd" uniqueID="${product.id}"/>
 		 | 
 		<a href="<@s.url action="productMergeAdd" uniqueID="${product.id}"/>"><@s.text name="label.merge"/></a>
 		

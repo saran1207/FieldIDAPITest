@@ -224,7 +224,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 		if (infoField == null)
 			return false;
 		if (getUniqueID() == null)
-			return false;
+			return this == infoField;
 
 		return getUniqueID().equals(infoField.getUniqueID());
 	}

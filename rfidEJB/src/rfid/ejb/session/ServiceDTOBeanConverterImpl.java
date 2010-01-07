@@ -920,7 +920,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			serviceDefinition.getInputInfoOptions().add(infoOption.getUniqueID());
 		}
 		
-		for (InfoOptionBean infoOption : definition.getOutputs()) {
+		for (InfoOptionBean infoOption : definition.getSanitizedOutputs()) {
 			serviceDefinition.getOutputInfoOptions().add(convert(infoOption, infoOption.getInfoField().getUniqueID()));
 		}
 		

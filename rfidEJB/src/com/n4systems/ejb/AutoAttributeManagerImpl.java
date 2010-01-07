@@ -95,7 +95,7 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 
 			AutoAttributeDefinition definition = null;
 			if (definitionId != null) {
-				String[] fetches = { "outputs" };
+				String[] fetches = { "outputs", "criteria.outputs" };
 				definition = persistenceManager.find(AutoAttributeDefinition.class, definitionId, fetches);
 				return definition;
 			}

@@ -16,6 +16,14 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFAULT_WEIGHT = 0L;
 	
+	public static InfoOptionBean createBlankInfoOption(InfoFieldBean infoField) {
+		InfoOptionBean result = new InfoOptionBean();
+		result.setInfoField(infoField);
+		result.setName("");
+		result.setUniqueID(0L);
+		return result;
+	}
+
 	@Column( nullable=false )
 	private String name;
 

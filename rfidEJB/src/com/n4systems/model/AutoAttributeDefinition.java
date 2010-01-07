@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
@@ -63,6 +64,30 @@ public class AutoAttributeDefinition extends EntityWithTenant {
 	}
 	public void setCriteria(AutoAttributeCriteria criteria) {
 		this.criteria = criteria;
+	}
+	
+	
+	public List<InfoOptionBean> getSanitizedOutputs() {
+		List<InfoOptionBean> sanatizedOutputs = new ArrayList<InfoOptionBean>();
+		for (InfoFieldBean field : criteria.getOutputs()) {
+			sanatizedOutputs.add(getDefinintionOutputFor(field));
+		}
+		return sanatizedOutputs;
+	}
+	
+	private InfoOptionBean getDefinintionOutputFor(InfoFieldBean infoField) {
+		InfoOptionBean result = findOutputOptionFor(infoField);
+		
+		return (result != null) ? result : InfoOptionBean.createBlankInfoOption(infoField);
+	}
+	
+	private InfoOptionBean findOutputOptionFor(InfoFieldBean infoField) {
+		for (InfoOptionBean infoOption : outputs) {
+			if (infoOption.getInfoField().equals(infoField)) {
+				return infoOption;
+			}
+		}
+		return null;
 	}
 	
 	
