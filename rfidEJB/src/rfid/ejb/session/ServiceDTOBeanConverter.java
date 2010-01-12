@@ -23,6 +23,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -74,4 +75,6 @@ public interface ServiceDTOBeanConverter {
 	public DivisionOrgServiceDTO convert(DivisionOrg divisionOrg);
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg);
 	public VendorServiceDTO convert(OrgConnection orgConnections);
+	public BaseOrg convert(long ownerId, long tenantId);
+	
 }

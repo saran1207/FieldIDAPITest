@@ -1122,5 +1122,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		return vendorDTO;
 	}
+	
+	public BaseOrg convert(long ownerId, long tenantId) {
+		BaseOrg owner = null;
+		owner = persistenceManager.find(BaseOrg.class, ownerId, new TenantOnlySecurityFilter(tenantId));
+		
+		return owner;
+	}
 
 }
