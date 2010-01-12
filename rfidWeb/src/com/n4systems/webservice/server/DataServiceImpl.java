@@ -49,6 +49,7 @@ import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -127,6 +128,7 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformat
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
+import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.ProductLookupInformation;
 import com.n4systems.webservice.exceptions.InspectionException;
@@ -624,6 +626,32 @@ public class DataServiceImpl implements DataService {
 		
 		return new RequestResponse();
 	}
+	
+	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {						
+		
+		try {
+			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
+			
+			Product product = lookupProduct(lookupInformation, request.getTenantId());
+			
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			product.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
+			
+			product.setLocation(request.getLocation());
+			product.setCustomerRefNumber(request.getCustomerRefNumber());
+			product.setPurchaseOrder(request.getPurchaseOrder());
+			
+			ProductSaver saver = new ProductSaver();
+			saver.update(product);
+			
+		} catch (Exception e) {
+			logger.error("Exception occured while doing product update by customer");
+			throw new ServiceException();
+		}
+		
+		return new RequestResponse();
+	}
+	
 	
 	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
 		ProductManager productManager = ServiceLocator.getProductManager();
