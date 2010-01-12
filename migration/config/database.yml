@@ -22,10 +22,10 @@ staging:
   encoding: utf8
  
 production:
-  adapter: jdbcpostgresql
+  adapter: jdbcmysql
   database: fieldid
   host: localhost
-  username: fieldid-sys
-  password: fieldid#9
+  username: fieldid
+  password: qwertyNfour^
   encoding: utf8
   
