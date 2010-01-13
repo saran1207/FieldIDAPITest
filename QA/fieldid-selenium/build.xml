@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fieldid-web-automation" default="testcases" basedir=".">
+	<target name="testcases">
+		<tstamp/>
+		<property name="outputdir" value="tmp/rawtestoutput"/>
+		<property name="classdir" value="bin"/>
+		<property name="reportdir" value="test-reports/${DSTAMP}-${TSTAMP}"/>
+		<mkdir dir="${outputdir}"/>
+		<mkdir dir="${reportdir}"/>
+		<junit printsummary="true" failureproperty="junit.failure">
+			<classpath path="classes:${classdir}:lib/junit-4.5.jar:lib/log4j-1.2.15.jar:lib/selenium-java-client-driver.jar:lib/selenium-server.jar"/>
+			<batchtest todir="${outputdir}">
+				<fileset dir="${classdir}">
+					<include name="**/testcase/*.class"/>
+				</fileset>
+				<formatter type="xml"/>
+			</batchtest>
+			<sysproperty key="fieldid-browser" value="*firefox"/>
+		</junit>
+		<junitreport>
+			<fileset dir="${outputdir}"/>
+			<report todir="${reportdir}"/>
+		</junitreport>
+		<fail if="junit.failure" message="Test case(s) failed. See ${reportdir}."/>
+	</target>
+</project>
