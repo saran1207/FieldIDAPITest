@@ -44,6 +44,7 @@ import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
 
+@SuppressWarnings("deprecation")
 public interface DataService {
 
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws ServiceException;

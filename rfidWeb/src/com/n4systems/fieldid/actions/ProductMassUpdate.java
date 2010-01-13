@@ -165,6 +165,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		product.setPurchaseOrder(purcahseOrder);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Collection<ProductStatusBean> getProductStatuses() {
 		return productSerialManager.getAllProductStatus(getTenantId());
 	}

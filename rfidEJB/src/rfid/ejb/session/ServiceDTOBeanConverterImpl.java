@@ -642,6 +642,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return productTypeScheduleServiceDTO;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public ProductTypeServiceDTO convert_new( ProductType productType ) {
 		
 		ProductTypeServiceDTO productTypeDTO = new ProductTypeServiceDTO();

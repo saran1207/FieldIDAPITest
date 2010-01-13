@@ -125,6 +125,10 @@ public abstract class TenantContextInitializer {
 		securityGuard = new SessionSecurityGuard(tenant);
 		rememberSecurityGuard(securityGuard);
 		
+		tenantLanguageLoad(tenant);
+	}
+
+	private void tenantLanguageLoad(Tenant tenant) {
 		new TenantLanguageSessionHelper(tenant).populateSession(getSession());
 	}
 

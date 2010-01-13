@@ -85,7 +85,7 @@ public class ProductStatusCrud extends AbstractCrud {
 		addActionMessage("Product Status has be removed");
 		return SUCCESS;
 	}
-
+	@SuppressWarnings("deprecation")
 	public Collection<ProductStatusBean> getProductStatuses() {
 		if( productStatuses == null ) {
 			productStatuses = productSerialManager.getAllProductStatus( getTenantId() );

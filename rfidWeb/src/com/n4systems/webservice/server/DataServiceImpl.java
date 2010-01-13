@@ -49,7 +49,6 @@ import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -128,15 +127,16 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformat
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
-import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.ProductLookupInformation;
+import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
 import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
 
+@SuppressWarnings("deprecation")
 public class DataServiceImpl implements DataService {
 
 	private static Logger logger = Logger.getLogger(DataServiceImpl.class);

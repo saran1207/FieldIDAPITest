@@ -29,4 +29,8 @@ module MigrationHelpers
   def create_foreign_keys_for_abstract_entity(table)
     add_foreign_key(table, :users,  :source_column => :modifiedby, :foreign_column => :uniqueid)
   end
+  
+  def add_time_hash_to(args) 
+    {:created => Time.new, :modified => Time.new}.merge(args)
+  end
 end

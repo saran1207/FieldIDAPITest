@@ -15,6 +15,7 @@ import com.n4systems.model.Project;
 import com.n4systems.util.ReportCriteria;
 import com.n4systems.util.SearchCriteria;
 
+@SuppressWarnings("deprecation")
 @Local
 public interface MassUpdateManager {
 

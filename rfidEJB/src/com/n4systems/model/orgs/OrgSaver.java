@@ -81,7 +81,7 @@ public class OrgSaver extends Saver<BaseOrg> {
 	// with the new field values :(
 	protected void updateLinkedFields(EntityManager em, InternalOrg org) {
 		for (ExternalOrg linkedOrg: loadLinkedOrgs(em, org)) {
-			// we'll update the fields by touching our linked org.  The updated fields will be copyied 
+			// we'll update the fields by touching our linked org.  The updated fields will be copied 
 			// via a premerge method before the update happens.  This way the copy logic stays with the ExternalOrg class.
 			linkedOrg.touch();
 			update(em, linkedOrg);

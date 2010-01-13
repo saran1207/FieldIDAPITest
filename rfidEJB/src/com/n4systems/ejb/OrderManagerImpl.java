@@ -41,7 +41,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
-
+@SuppressWarnings("deprecation")
 @Interceptors({TimingInterceptor.class})
 @Stateless 
 public class OrderManagerImpl implements OrderManager {

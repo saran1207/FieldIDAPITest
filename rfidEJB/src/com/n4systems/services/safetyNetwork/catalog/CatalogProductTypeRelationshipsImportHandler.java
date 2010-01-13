@@ -42,7 +42,7 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 			importProductTypeRelationships(importCatalog.getPublishedProductType(productTypeId, "inspectionTypes" , "schedules"));
 		}
 	}
-	
+	@SuppressWarnings("deprecation")
 	public void importProductTypeRelationships(ProductType originalProductType) throws ImportFailureException {
 		ProductType importedProductType = importedProductTypeMapping.get(originalProductType.getId());
 		try {

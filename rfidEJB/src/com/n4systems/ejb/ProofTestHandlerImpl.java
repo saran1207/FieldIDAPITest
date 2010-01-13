@@ -44,6 +44,7 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.FuzzyResolver;
 import com.n4systems.util.StringUtils;
 
+@SuppressWarnings("deprecation")
 @Interceptors({TimingInterceptor.class})
 @Stateless
 public class ProofTestHandlerImpl implements ProofTestHandler {

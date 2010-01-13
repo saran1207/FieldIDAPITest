@@ -3,8 +3,6 @@ package com.n4systems.fieldid.actions.api;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.activation.FileTypeMap;
 
@@ -68,53 +66,6 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 		return byteArray;
 	}
 	
-	
-	/**
-	 * used for the on radio button list
-	 * 
-	 * @return  a map with just a true key
-	 */
-	@SuppressWarnings("unchecked")
-	public Map getOn(){
-		return getOn("");
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Map getOn(String label){
-		Map<Boolean, String> onOff = new HashMap<Boolean, String>();
-		onOff.put(true, label);
-		return onOff;
-	}
-	
-	/**
-	 * used for the off radio button list
-	 * 
-	 * @return  a map with just a false key
-	 */
-	@SuppressWarnings("unchecked")
-	public Map getOff(){
-		return getOff("");
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Map getOff(String label){
-		Map<Boolean, String> onOff = new HashMap<Boolean, String>();
-		onOff.put(false, label);
-		return onOff;
-	}
-	
-	
-	/**
-	 * used for the off radio button list
-	 * 
-	 * @return  a map with just a false key
-	 */
-	@SuppressWarnings("unchecked")
-	public Map getSingleMapElement(Long id){
-		Map<Long, String> singleElementMap = new HashMap<Long, String>();
-		singleElementMap.put(id, "");
-		return singleElementMap;
-	}
 	
 	/**
 	 * Tests if the filename has a content type starting with <code>'image/'</code>. The

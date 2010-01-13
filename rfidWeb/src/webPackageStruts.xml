@@ -1169,6 +1169,7 @@
 		</action>
 
 		<action name="home" class="com.n4systems.fieldid.actions.HomeAction">
+			<interceptor-ref name="homeStack" />
 			<result name="success" type="freemarker">/templates/html/home/show.ftl</result>
 		</action>
 
@@ -1924,5 +1925,29 @@
 			<result name="success" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/show.ftl</result>
 		</action>
 		
+		<action name="setupWizard" method="show" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
+			<result name="success" type="freemarker">/templates/html/setupWizard/show.ftl</result>
+		</action>
+		<action name="setupWizardComplete" method="completed" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
+			<result name="success" type="freemarker">/templates/html/setupWizard/completed.ftl</result>
+		</action>
+		
+		<action name="setupWizardStep1" method="step1" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
+			<result name="success" type="freemarker">/templates/html/setupWizard/step1.ftl</result>
+		</action>
+		<action name="setupWizardStep1Complete" method="step1Complete" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
+			<result name="input" type="freemarker">/templates/html/setupWizard/step1.ftl</result>
+			<result name="error" type="freemarker">/templates/html/setupWizard/step1.ftl</result>
+			<result name="success" type="redirectAction">setupWizardStep2</result>
+		</action>
+		
+		<action name="setupWizardStep2" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="success" type="freemarker">/templates/html/setupWizard/step2.ftl</result>
+		</action>
+		<action name="setupWizardStep2Complete" method="update" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/setupWizard/step2.ftl</result>
+			<result name="error" type="freemarker">/templates/html/setupWizard/step2.ftl</result>
+			<result name="success" type="redirectAction">setupWizardComplete</result>
+		</action>
 	</package>
 </struts>

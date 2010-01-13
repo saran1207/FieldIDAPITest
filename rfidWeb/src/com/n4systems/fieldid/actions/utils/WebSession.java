@@ -18,6 +18,9 @@ import rfid.web.helper.SessionUser;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
+import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
+import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
+import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
@@ -31,7 +34,9 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
 	private static final String KEY_SIGNUP = "signUp";
 	private static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
+	private static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
 	private static final String VENDOR_CONTEXT = "vendor_context";
+	
 	
 	private final HttpSession session;
 	
@@ -331,6 +336,16 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 			}
 		}
 		return values;
+	}
+
+	public SeenItRegistry getSeenItRegistry() {
+		SeenItRegistry seenItRegistry = (SeenItRegistry)get(KEY_SEEN_IT_REGISTRY);
+		if (seenItRegistry == null) { 
+			seenItRegistry = new SeenItRegistryImpl(new SeenItRegistryDatabaseDataSource(getSessionUser().getId()));
+			put(KEY_SEEN_IT_REGISTRY, seenItRegistry);
+		}
+		
+		return seenItRegistry;
 	}
 
 

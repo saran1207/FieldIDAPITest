@@ -12,6 +12,9 @@
 			<#if securityGuard.brandingEnabled && primaryOrg.webSite?exists >
 				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
 			</#if>
+			<#if sessionUser.admin>
+				<li><a href="<@s.url action="setupWizard"/>"><@s.text name="label.setup_wizard"/></li>
+			</#if>
 		</ul>
 	</div>
 	

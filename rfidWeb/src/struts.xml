@@ -25,6 +25,7 @@
 			<interceptor name="forceNonBranded" class="com.n4systems.fieldid.utils.NonBrandedInterceptor"/>
 			<interceptor name="safetyNetworkAware" class="com.n4systems.fieldid.security.SafetyNetworkAwareInterceptor"/>
 			<interceptor name="eulaRequired" class="com.n4systems.fieldid.utils.EULAInterceptor"/>
+			<interceptor name="setupWizard" class="com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor"/>
 			
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
@@ -69,6 +70,11 @@
 				<interceptor-ref name="flashScope" />
 				<interceptor-ref name="brandedPublicStack" />
 			</interceptor-stack>
+			
+			<interceptor-stack name="homeStack">
+				<interceptor-ref name="flashSecureStack"/>
+				<interceptor-ref name="setupWizard"/>
+			</interceptor-stack>
 
 		</interceptors>
 
@@ -91,6 +97,10 @@
 				<param name="location">${redirectUrl}</param>
 			</result>
 			
+			<result name="startSetupWizard" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">setupWizard</param>
+			</result>
 		</global-results>
 
 		

@@ -44,7 +44,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	@PersistenceContext (unitName="rfidEM")
 	protected EntityManager em;
 	
-	
+	@SuppressWarnings("deprecation")
 	public List<InspectionSchedule> autoSchedule(Product product) {
 		List<InspectionSchedule> schedules = new ArrayList<InspectionSchedule>();  
 		

@@ -42,6 +42,7 @@ import com.n4systems.util.persistence.SimpleSelect;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
+@SuppressWarnings("deprecation")
 @Interceptors( { TimingInterceptor.class })
 @Stateless
 public class MassUpdateManagerImpl implements MassUpdateManager {
