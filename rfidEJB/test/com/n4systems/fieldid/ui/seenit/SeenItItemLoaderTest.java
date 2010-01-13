@@ -11,6 +11,7 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.testutils.DummyEntityManager;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.TestingTransaction;
 
 
 public class SeenItItemLoaderTest {

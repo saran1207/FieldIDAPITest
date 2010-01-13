@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.n4systems.fieldid.ui.seenit;
+package com.n4systems.util.persistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -9,7 +9,7 @@ import javax.persistence.EntityTransaction;
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.persistence.Transaction;
 
-class TestingTransaction implements Transaction {
+public class TestingTransaction implements Transaction {
 	public EntityManager entityManager;
 	public EntityTransaction entityTransaction;
 	
