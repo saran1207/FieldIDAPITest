@@ -97,7 +97,10 @@ public class InspectionFormCrud extends AbstractCrud {
 			criteria.setStates( persistenceManager.find( StateSet.class, criteria.getStates().getId(), getTenantId() ) );
 			
 			ListHelper.clearNulls(criteria.getRecommendations());
+			ListHelper.removeMarkedEntries("--deleted--", criteria.getRecommendations());
+			
 			ListHelper.clearNulls(criteria.getDeficiencies());
+			ListHelper.removeMarkedEntries("--deleted--", criteria.getDeficiencies());
 		}
 	}
 	

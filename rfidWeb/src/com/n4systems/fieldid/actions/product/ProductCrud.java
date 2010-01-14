@@ -374,7 +374,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doCreate() {
-		testExistingProduct();
+		testProduct();
 
 		
 

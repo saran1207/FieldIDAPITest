@@ -31,11 +31,19 @@ function addObservation(type, section, criteria) {
 }
 
 function retireRecommendation(sectionIndex, criteriaIndex, recommendationIndex) {
-	fadeAndRemove('recommendation_' + sectionIndex + '_' + criteriaIndex + '_' + recommendationIndex);
+	var id = 'recommendation_' + sectionIndex + '_' + criteriaIndex + '_' + recommendationIndex;
+	retireObservation(id);
+	
+}
+function retireObservation(id) {
+	fade(id);
+	var element = $$("#" + id + " input").first()
+	element.value = "--deleted--"  + element.getValue();
 }
 
 function retireDeficiency(sectionIndex, criteriaIndex, deficiencyIndex ) {
-	fadeAndRemove('deficiency_' + sectionIndex + '_' + criteriaIndex + '_' + deficiencyIndex);
+	var id = 'deficiency_' + sectionIndex + '_' + criteriaIndex + '_' + deficiencyIndex;
+	retireObservation(id);
 }
 
 function fadeAndRemove(elementId) {
@@ -44,6 +52,10 @@ function fadeAndRemove(elementId) {
 			$(elementId).remove(); 
 		}
 	});
+}
+
+function fade(elementId) {
+	Effect.Fade(elementId);
 }
 
 

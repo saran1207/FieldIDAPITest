@@ -5,6 +5,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 import rfid.ejb.entity.UserBean;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -72,4 +73,21 @@ public class ListHelper {
 		}
 		return n;
 	}
+
+	public static void removeMarkedEntries(String deletePrefixMarker, List<String> list) {
+		List<String> entriesToRemove = new ArrayList<String>();
+		
+		for (String entry : list) {
+			if (entry != null && entry.startsWith(deletePrefixMarker)) {
+				entriesToRemove.add(entry);
+			}
+		}
+		
+		list.removeAll(entriesToRemove);
+	}
+	
+	
+	
+	
+	
 }
