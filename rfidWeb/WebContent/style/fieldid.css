@@ -184,83 +184,76 @@ h2 a {
 }
 
 #menuHome {
-	background-image: url(../images/menu/home.jpg);
+	background-image: url(../images/menu/home.png);
 }
 
 #menuHome:hover {
-	background-image: url(../images/menu/home_hot.jpg);
+	background-image: url(../images/menu/home_hot.png);
 }
 
 #menuIdentify {
-	background-image: url(../images/menu/identify.jpg);
+	background-image: url(../images/menu/identify.png);
 }
 
 #menuIdentify:hover {
-	background-image: url(../images/menu/identify_hot.jpg);
+	background-image: url(../images/menu/identify_hot.png);
 }
 
 #menuInspect {
-	background-image: url(../images/menu/inspect.jpg);
+	background-image: url(../images/menu/inspect.png);
 }
 
 #menuInspect:hover {
-	background-image: url(../images/menu/inspect_hot.jpg);
+	background-image: url(../images/menu/inspect_hot.png);
 }
 
 #menuAssets {
-	background-image: url(../images/menu/search.jpg);
+	background-image: url(../images/menu/assets.png);
 }
 
 #menuAssets:hover {
-	background-image: url(../images/menu/search_hot.jpg);
+	background-image: url(../images/menu/assets_hot.png);
 }
 
 #menuReport {
-	background-image: url(../images/menu/reporting.jpg);
+	background-image: url(../images/menu/reporting.png);
 }
 
 #menuReport:hover {
-	background-image: url(../images/menu/reporting_hot.jpg);
+	background-image: url(../images/menu/reporting_hot.png);
 }
 
 #menuSchedule {
-	background-image: url(../images/menu/schedule.jpg);
+	background-image: url(../images/menu/schedule.png);
 }
 
 #menuSchedule:hover {
-	background-image: url(../images/menu/schedule_hot.jpg);
+	background-image: url(../images/menu/schedule_hot.png);
 }
 
 #menuAdministration {
-	background-image: url(../images/menu/administration.jpg);
+	background-image: url(../images/menu/administration.png);
 }
 
 #menuAdministration:hover {
-	background-image: url(../images/menu/administration_hot.jpg);
+	background-image: url(../images/menu/administration_hot.png);
 }
 
-#menuCompliance {
-	background-image: url(../images/menu/compliance.jpg);
-}
-
-#menuCompliance:hover {
-	background-image: url(../images/menu/compliance_hot.jpg);
-}
 
 #menuProject {
-	background-image: url(../images/menu/project.jpg);
+	background-image: url(../images/menu/project.png);
 }
 
 #menuProject:hover {
-	background-image: url(../images/menu/project_hot.jpg);
+	background-image: url(../images/menu/project_hot.png);
 }
 
 #menuSafetyNetwork {
-	background-image: url(../images/menu/safety_network.jpg);
+	background-image: url(../images/menu/safety_network.png);
 }
 
 #menuSafetyNetwork:hover {
-	background-image: url(../images/menu/safety_network_hot.jpg);
+	background-image: url(../images/menu/safety_network_hot.png);
 }
 
 .errorMessage,.error {
