@@ -1,23 +1,23 @@
-<title><@s.text name="label.quick_setup_wizard"/> - step 1 of 2</title>
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>2</@s.param></@s.text></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 <div id="setupWizardStep1" class="setupWizardContent">
-	<h2 class="clean">Your Company Profile</h2>
-	<span class="weak">Tell us which one of these applies to your company</span>
+	<h2 class="clean"><@s.text name="label.your_company_profile"/></h2>
+	<span class="weak"><@s.text name="label.tell_us_what_applies_to_you"/></span>
 	
 	<@s.form action="quickSetupWizardStep1Complete" cssClass="fullForm fluentSets  prominent" theme="fieldid">	
 		
 		<div class="infoSet">
 			<span class="fieldHolder">
 				<@s.radio name="turnOnJobSites" list="off"/>
-				<label class="description"> - I am a distributor or manufacturer something for various customers</label>
+				<label class="description"> - <@s.text name="label.im_a_distributor_or_manufacturer"/></label>
 			</span>
 		</div>
 		<div class="infoSet">
 			<span class="fieldHolder">
 				<@s.radio name="turnOnJobSites" list="on" />
-				<label class="description"> - I am an end user and manage multiple job sites where equipment is assigned to my employees</label>
+				<label class="description"> - <@s.text name="label.im_an_end_user_or_manage_job_sites"/></label>
 			</span>
 		</div>
 		

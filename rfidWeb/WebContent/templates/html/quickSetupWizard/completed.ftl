@@ -1,15 +1,15 @@
-<title><@s.text name="label.quick_setup_wizard"/> - Done</title>
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.done"/></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 <div id="setupWizardComplete" class="setupWizardContent">
-	<h2 class="clean">Your Done!</h2>
-	<span>Now that you're done with the initial system setup here are some suggested next steps.</span>
+	<h2 class="clean"><@s.text name="label.your_done"/></h2>
+	<span><@s.text name="label.now_that_your_done_the_wizard_here_are_some_suggested_next_steps"/></span>
 	
 	<ul>
 		<li id="setupMobile">
-			<a href="/fieldid_help/Installing_Field_ID_Mobile.html">Setup your mobile computers</a><br/>
-			<span>Download and install Field ID software for your mobile devices</span>
+			<a href="/fieldid_help/Installing_Field_ID_Mobile.html"><@s.text name="label.setup_your_mobile_computers"/></a><br/>
+			<span><@s.text name="label.setup_your_mobile_computers.description"/></span>
 		</li>
 		<#if sessionUser.hasAccess("tag") == true >
 			<li id="identifyAssets">
@@ -21,25 +21,25 @@
 					<@s.url id="identifyUrl" action="productAdd" />
 				</#if>
 				
-				<a href="${identifyUrl}">Identify your first asset</a><br/>
-				<span>Identification is the first step in the traceability process</span>
+				<a href="${identifyUrl}"><@s.text name="label.identify_your_first_asset"/></a><br/>
+				<span><@s.text name="label.identify_your_first_asset.description"/></span>
 			</li>
 		</#if>
 		<li id="furtherAccountSetup">
-			<a href="<@s.url action="administration"/>">Further customize your account setup</a><br/>
-			<span>Control everything from event checklists to employee accounts</span>
+			<a href="<@s.url action="administration"/>"><@s.text name="label.further_customize_your_account_setup"/></a><br/>
+			<span><@s.text name="label.further_customize_your_account_setup.description"/></span>
 		</li>
 		<li id="visitHelp">
-			<a href="/fieldid_help/index.html">Visit the help documentation</a><br/>
-			<span>Getting Started to advanced customization is all covered here</span>
+			<a href="/fieldid_help/index.html"><@s.text name="label.visit_help_docs"/></a><br/>
+			<span><@s.text name="label.visit_help_docs.description"/></span>
 		</li>
 		<li id="watchIntroductionVideo">
-			<a href="<@s.url action="instructionalVideos"/>">Watch the introduction video</a><br/>
-			<span>In under 8 minutes get a quick overview of Field ID</span>
+			<a href="<@s.url action="instructionalVideos"/>"><@s.text name="label.watch_intro_video"/></a><br/>
+			<span><@s.text name="label.watch_intro_video.description"/></span>
 		</li>
 		<li id="needMoreHelp">
-			<span>Need more help? Our support team is ready for your questions</span><br/>
-			<span>Email us at: <a href="mailto:support@fieldid.com">support@fieldid.com</a> or <a href="http://n4systems.helpserve.com/">submit a support ticket</a></span>
+			<span><@s.text name="label.need_more_help"/></span><br/>
+			<span><@s.text name="label.email_us_at"/>: <a href="mailto:support@fieldid.com">support@fieldid.com</a> or <a href="http://n4systems.helpserve.com/"><@s.text name="label.submit_a_support_ticket"/></a></span>
 		</li>
 	</ul>
 	

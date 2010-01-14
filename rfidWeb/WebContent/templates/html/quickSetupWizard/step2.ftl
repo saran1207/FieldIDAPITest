@@ -1,10 +1,10 @@
-<title><@s.text name="label.quick_setup_wizard"/> - step 2 of 2</title>
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>2</@s.param><@s.param>2</@s.param></@s.text></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 <div id="setupWizardStep2" class="setupWizardContent">
-	<h2 class="clean">System Settings</h2>
-	<span class="weak">Setup your preferred date format <#if securityGuard.brandingEnabled>and company branding</#if></span>
+	<h2 class="clean"><@s.text name="label.system_settings"/></h2>
+	<span class="weak"><@s.text name="label.setup_perferred_date_format"/> <#if securityGuard.brandingEnabled><@s.text name="label.and_company_branding"/></#if></span>
 	<@s.form action="quickSetupWizardStep2Complete" cssClass="fullForm  borderedSets" theme="fieldid">	
 		<#include "../common/_formErrors.ftl"/>
 		<div class="prominent">

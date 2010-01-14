@@ -3,23 +3,25 @@
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 <div id="setupWizardStart" class="setupWizardContent">
-	<h2 class="clean">Welcome To Field ID!</h2>
-	<span class="weak">Thank you for signing up for Field ID.</span>
+	<h2 class="clean"><@s.text name="label.welcome_to_field_id"/></h2>
+	<span class="weak"><@s.text name="label.thank_you_for_signing_up"/></span>
 	
 	
 	<p>
-		Since this is your first time using Field ID we recommend starting with the Quick Setup Wizard.<br/>
-		This will only take 5 minutes and will help you configure:
+		<@s.text name="label.we_recommend_starting_with_the_wizard"/><br/>
+		<@s.text name="label.this_will_take_you_5_minutes_and_will_help_you_configure"/>:
 	</p>
 	<div class="prominent">
 		<ul>
-			<li id="companyProfile">Your Company Profile</li>
-			<li id="systemSettings">Your System Setting</li>
+			<li id="companyProfile"><@s.text name="label.your_company_profile"/></li>
+			<li id="systemSettings"><@s.text name="label.your_system_settings"/></li>
 		</ul>
 		
 		<div >
-			<button id="startButton" onclick="redirect('<@s.url action="quickSetupWizardStep1"/>'); return false;">I'm Ready - Lets Go!</button>  <@s.text name="label.or"/> <a href="<@s.url action="home" namespace="/"/>" cssClass="cancel">No Thanks</a><br/>
-			<span class="very-weak">(You can run the wizard at a later time by clicking the link on your dashboard)</span>
+			<button id="startButton" onclick="redirect('<@s.url action="quickSetupWizardStep1"/>'); return false;"><@s.text name="label.im_ready_lets_go"/></button>  
+			<@s.text name="label.or"/> 
+			<a href="<@s.url action="home" namespace="/"/>" cssClass="cancel"><@s.text name="label.no_thanks"/></a><br/>
+			<span class="very-weak">(<@s.text name="label.you_can_run_the_wizard_again"/>)</span>
 		</div>
 	</div>
 	
