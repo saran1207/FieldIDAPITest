@@ -29,6 +29,7 @@ public class ManageOrganizations extends Assert {
 	private String editOrganizationCompanyZipCodeTextFieldLocator = "xpath=//INPUT[@id='organizationUpdate_addressInfo_zip']";
 	private String editOrganizationCompanyPhoneNumberTextFieldLocator = "xpath=//INPUT[@id='organizationUpdate_addressInfo_phone1']";
 	private String editOrganizationCompanyFaxNumberTextFieldLocator = "xpath=//INPUT[@id='organizationUpdate_addressInfo_fax1']";
+	private String addOrganizationLinkLocator = "xpath=//LI[contains(@class,'add')]/A[contains(text(),'Add')]";
 	
 	public ManageOrganizations(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -98,7 +99,14 @@ public class ManageOrganizations extends Assert {
 	}
 	
 	public void gotoAddSecondaryOrganization() {
-		fail("Not implemented yet");
+		misc.info("Click link to add an organizational unit");
+		if(selenium.isElementPresent(addOrganizationLinkLocator)) {
+			selenium.click(addOrganizationLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+			misc.checkForErrorMessages(null);
+		} else {
+			fail("Could not find the link to add an organization");
+		}
 	}
 	
 	public void gotoViewAll() {

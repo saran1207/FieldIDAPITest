@@ -34,6 +34,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * initCompany	fieldid						fieldid-companyid	the tenant to start fieldid with
 	 * domain		team.n4systems.net			fieldid-domain		the domain, i.e. the computer running fieldid on
 	 * contextRoot	/fieldid/					fieldid-context		the context root for the fieldid application
+	 * actionDelay	null						fieldid-delay		the number of milliseconds to delay between selenium actions
 	 * 
 	 * The host and port are pretty straight forward. If I run Selenium RC on localhost
 	 * listening on port 4444 then host = "localhost" and port = 4444. You can override
@@ -83,6 +84,21 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * 
 	 * 		protocol + "://" + initCompany + "." + domain + contextRoot;
 	 * 
+	 * The fieldid-delay property should normally not be used. If you set
+	 * this to a numeric value, it will cause selenium to delay, by the
+	 * equivalent number of milliseconds, between each action. This property
+	 * was designed to slow down the play back, in case you wanted to watch
+	 * what was happening as it happened. Can be used for GUI testing. You
+	 * set this to 2000, run the test suite and watch the browser for any GUI
+	 * issues. You can set it to a higher amount but I have found 2 seconds
+	 * between selenium actions is usually fast enough that you won't get
+	 * bored but slow enough you can see what it is doing. Remember that some
+	 * pages will have 3 or more selenium calls, so a 2 second delay might
+	 * mean you are sitting on one page for 6 to 10 seconds. Obviously the
+	 * more there is on the page for the code to 'view' and validate, the
+	 * slow things will be BUT it probably means there is more on the page
+	 * for you to check visually as well.
+	 * 
 	 * Additional things to know about FieldIDTestCase:
 	 * 
 	 * If the class extending FieldIDTestCase is called Foo then this
@@ -127,6 +143,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String initCompany = System.getProperty("fieldid-companyid", "fieldid");
 	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
+	private String actionDelay = System.getProperty("fieldid-delay", null);
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
     protected Selenium selenium;
@@ -142,8 +159,21 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		loadingProperties();
 		log.info("-=-=-=-=-=-=-=-=-=-=- Start Test Case -=-=-=-=-=-=-=-=-=-=-");
 		createWebBrowser();
+		setWebBrowserSpeed();
 		createMiscClasses();
 		misc.createTimestampDirectory(snapshots);
+	}
+
+	/**
+	 * Uses the selenium.setSpeed(milliseconds) to slow the system down
+	 * if the actionDelay variable is set. This variable is set via the
+	 * property fieldid-delay. If this property is not set there will be
+	 * no delay.
+	 */
+	private void setWebBrowserSpeed() {
+		if(actionDelay != null) {
+			selenium.setSpeed(actionDelay);
+		}
 	}
 
 	@After

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.n4systems.fieldid.selenium.datatypes.Customer;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
@@ -26,6 +27,24 @@ public class ManageCustomers extends Assert {
 	private String filterButtonLocator = "xpath=//INPUT[@value='Filter']";
 	private String numberOfRowsOnCustomerTableXpath = "//DIV[@id='pageContent']/TABLE[@class='list']/TBODY/TR[position() > 1]/TD[2]";
 	private String customerTableLocator = "xpath=//DIV[@id='pageContent']/TABLE[@class='list']";
+	private String addCustomerLinkLocator = "xpath=//LI[contains(@class,'add')]/A[contains(text(),'Add')]";
+	private String addCustomerCustomerIDTextFieldLocator = "xpath=//INPUT[@id='customerEdit_customerId']";
+	private String addCustomerCustomerNameTextFieldLocator = "xpath=//INPUT[@id='customerEdit_customerName']";
+	private String addCustomerOrgUnitSelectListLocator = "xpath=//SELECT[@id='customerEdit_parentOrgId']";
+	private String addCustomerContactNameTextFieldLocator = "xpath=//INPUT[@id='customerEdit_contactName']";
+	private String addCustomerContactEmailTextFieldLocator = "xpath=//INPUT[@id='customerEdit_accountManagerEmail']";
+	private String addCustomerStreetAddressTextFieldLocator = "xpath=//INPUT[@id='customerEdit_accountManagerEmail']";
+	private String addCustomerCityTextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_city']";
+	private String addCustomerStateProvinceTextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_state']";
+	private String addCustomerZipTextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_state']";
+	private String addCustomerCountryTextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_state']";
+	private String addCustomerPhone1TextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_phone1']";
+	private String addCustomerPhone2TextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_phone2']";
+	private String addCustomerFaxTextFieldLocator = "xpath=//INPUT[@id='customerEdit_addressInfo_fax1']";
+	private String addCustomerSaveButtonLocator = "xpath=//INPUT[@id='customerEdit_label_save']";
+	private String addCustomerCancelLinkLocator = "xpath=//A[contains(text(),'Cancel')]";
+	private String divisionLinkLocator = "xpath=//A[contains(text(),'Divisions')]";
+	private String addDivisionLinkLocator = "xpath=//A[contains(text(),'Add Division')]";
 	
 	public ManageCustomers(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -207,5 +226,81 @@ public class ManageCustomers extends Assert {
 		}
 		
 		return result;
+	}
+
+	public void gotoAddCustomer() {
+		misc.info("click Add to add a new customer");
+		if(selenium.isElementPresent(addCustomerLinkLocator)) {
+			selenium.click(addCustomerLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+			verifyAddCustomerPage();
+		} else {
+			fail("Could not find the link to add a customer");
+		}
+	}
+
+	private void verifyAddCustomerPage() {
+		assertTrue("Could not find the Customer ID text field", selenium.isElementPresent(addCustomerCustomerIDTextFieldLocator));
+		assertTrue("Could not find the Customer Name text field", selenium.isElementPresent(addCustomerCustomerNameTextFieldLocator));
+		assertTrue("Could not find the Organizational Unit select list", selenium.isElementPresent(addCustomerOrgUnitSelectListLocator));
+		assertTrue("Could not find the Contact Name text field", selenium.isElementPresent(addCustomerContactNameTextFieldLocator));
+		assertTrue("Could not find the Contact Email text field", selenium.isElementPresent(addCustomerContactEmailTextFieldLocator));
+		assertTrue("Could not find the Street Address text field", selenium.isElementPresent(addCustomerStreetAddressTextFieldLocator));
+		assertTrue("Could not find the City text field", selenium.isElementPresent(addCustomerCityTextFieldLocator));
+		assertTrue("Could not find the State/Province text field", selenium.isElementPresent(addCustomerStateProvinceTextFieldLocator));
+		assertTrue("Could not find the Zip text field", selenium.isElementPresent(addCustomerZipTextFieldLocator));
+		assertTrue("Could not find the Country text field", selenium.isElementPresent(addCustomerCountryTextFieldLocator));
+		assertTrue("Could not find the Phone 1 text field", selenium.isElementPresent(addCustomerPhone1TextFieldLocator));
+		assertTrue("Could not find the Phone 2 text field", selenium.isElementPresent(addCustomerPhone2TextFieldLocator));
+		assertTrue("Could not find the Fax text field", selenium.isElementPresent(addCustomerFaxTextFieldLocator));
+		assertTrue("Could not find the Save button", selenium.isElementPresent(addCustomerSaveButtonLocator));
+		assertTrue("Could not find the Cancel link", selenium.isElementPresent(addCustomerCancelLinkLocator));
+	}
+
+	public void setAddCustomer(Customer c) {
+		verifyAddCustomerPage();
+		if(c.getCustomerID() != null)	selenium.type(addCustomerCustomerIDTextFieldLocator, c.getCustomerID());
+		if(c.getCustomerName() != null)	selenium.type(addCustomerCustomerNameTextFieldLocator, c.getCustomerName());
+		if(c.getOrganizationalUnit() != null)	selenium.type(addCustomerOrgUnitSelectListLocator, c.getOrganizationalUnit());
+		if(c.getContactName() != null)	selenium.type(addCustomerContactNameTextFieldLocator, c.getContactName());
+		if(c.getContactEmail() != null)	selenium.type(addCustomerContactEmailTextFieldLocator, c.getContactEmail());
+		if(c.getStreetAddress() != null)	selenium.type(addCustomerStreetAddressTextFieldLocator, c.getStreetAddress());
+		if(c.getCity() != null)	selenium.type(addCustomerCityTextFieldLocator, c.getCity());
+		if(c.getState() != null)	selenium.type(addCustomerStateProvinceTextFieldLocator, c.getState());
+		if(c.getZipCode() != null)	selenium.type(addCustomerZipTextFieldLocator, c.getZipCode());
+		if(c.getCountry() != null)	selenium.type(addCustomerCountryTextFieldLocator, c.getCountry());
+		if(c.getPhone1() != null)	selenium.type(addCustomerPhone1TextFieldLocator, c.getPhone1());
+		if(c.getPhone2() != null)	selenium.type(addCustomerPhone2TextFieldLocator, c.getPhone2());
+		if(c.getFax() != null)	selenium.type(addCustomerFaxTextFieldLocator, c.getFax());
+	}
+
+	public void gotoSaveCustomer() {
+		misc.info("Click the Save button");
+		if(selenium.isElementPresent(addCustomerSaveButtonLocator)) {
+			selenium.click(addCustomerSaveButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the Save button");
+		}
+	}
+
+	public void gotoDivisions() {
+		misc.info("Click the link to Divisions");
+		if(selenium.isElementPresent(divisionLinkLocator)) {
+			selenium.click(divisionLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the link to Divisions");
+		}
+	}
+
+	public void gotoAddDivision() {
+		misc.info("Click the link to add a division");
+		if(selenium.isElementPresent(addDivisionLinkLocator)) {
+			selenium.click(addDivisionLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the link to add a division");
+		}
 	}
 }
