@@ -13,7 +13,7 @@
 				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
 			</#if>
 			<#if sessionUser.admin>
-				<li><a href="<@s.url action="quickSetupWizard"/>"><@s.text name="label.quick_setup_wizard"/></li>
+				<li><a href="<@s.url action="quickSetupWizard"/>"><@s.text name="label.quick_setup_wizard"/></a></li>
 			</#if>
 		</ul>
 	</div>
