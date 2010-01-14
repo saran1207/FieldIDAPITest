@@ -1283,4 +1283,22 @@ public class Misc extends Assert {
 		} catch (Exception e) {
 		}
 	}
+
+	/**
+	 * A wrapper to Thread.sleep(millis) so we don't have to wrap it in a try/catch block.
+	 * 
+	 * @param millis
+	 */
+	public void sleep(long millis) {
+		try { Thread.sleep(millis); } catch (InterruptedException e) { }
+	}
+
+	/**
+	 * A wrapper to Thread.sleep(millis, nanos) so we don't have to wrap it in a try/catch block.
+	 * 
+	 * @param millis
+	 */
+	public void sleep(long millis, int nanos) {
+		try { Thread.sleep(millis, nanos); } catch (InterruptedException e) { }
+	}
 }
