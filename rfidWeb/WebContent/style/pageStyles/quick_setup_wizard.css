@@ -1,0 +1,80 @@
+h2 {
+	font-size: 2em;
+}
+
+.setupWizardContent {
+	width:680px;
+	float:right;
+	margin:20px 0px;
+	padding-left: 70px;
+}
+
+
+#setupWizardComplete {
+	background: no-repeat url(../../images/small-check.png);
+}
+
+#setupWizardStep1 {
+	background: no-repeat url(../../images/company_profile.png);
+}
+
+#setupWizardStep2 {
+	background: no-repeat url(../../images/system_settings.png);
+}
+
+#setupWizardStep1 form, #setupWizardStep2 form {
+	padding-top:10px;
+}
+
+#setupWizardComplete ul li {
+	margin:10px 0;
+	padding-left:35px;
+	min-height:36px;
+} 
+
+#setupMobile {
+	background: no-repeat url(../../images/mobile_software.png);
+}
+
+#identifyAssets {
+	background: no-repeat url(../../images/identify.png);
+}
+
+#furtherAccountSetup {
+	background: no-repeat url(../../images/administration.png);
+}
+
+#visitHelp {
+	background: no-repeat url(../../images/help-documentation.png);
+}
+#watchIntroductionVideo {
+	background: no-repeat url(../../images/intro-video.png);
+}
+#needMoreHelp {
+	border-top:1px solid #999;
+	background: no-repeat url(../../images/contact-support.png);
+}
+
+#setupWizardStart ul li {
+	margin:10px 0;
+	padding-left:55px;
+	line-height:50px;
+	
+} 
+
+#companyProfile {
+	background: no-repeat url(../../images/company_profile.png);
+}
+
+#systemSettings {
+	background: no-repeat url(../../images/system_settings.png);
+}
+
+#startButton {
+	font-size:1.5em;
+	
+}
+
+#setupWizardStart p {
+	margin-top:10px
+}

@@ -1,7 +1,7 @@
 <title><@s.text name="title.instrunctionalvideos"/></title>
 
 
-
+<#include "_watchIntroVideo.ftl"/>
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="instructionalVideos.action" />
 	<#include '../common/_pagination.ftl' />

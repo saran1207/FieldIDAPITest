@@ -3,6 +3,8 @@ package com.n4systems.fieldid.actions;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -17,6 +19,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 
@@ -140,6 +143,17 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String getDateFormat() {
 		return primaryOrg.getDateFormat();
 	}
+	
+	public List<StringListingPair> getDateFormats() {
+		List<StringListingPair> dateFormats = new ArrayList<StringListingPair>();
+		dateFormats.add(new StringListingPair("MM/dd/yy", "MM/dd/yy (12/31/99)"));
+		dateFormats.add(new StringListingPair("dd/MM/yy", "dd/MM/yy (31/12/99)"));
+		dateFormats.add(new StringListingPair("MM/dd/yyyy", "MM/dd/yyyy (12/31/1999)"));
+		dateFormats.add(new StringListingPair("dd/MM/yyyy", "dd/MM/yyyy (31/12/1999)"));
+		dateFormats.add(new StringListingPair("yyyy-MM-dd", "yyyy-MM-dd (1999-12-31)"));
+		
+		return dateFormats;
+	}
 
 	@FieldExpressionValidator(message="", key="error.date_format_not_valid", expression="(validDateFormat == true)", fieldName="dateFormat")
 	public void setDateFormat(String dateFormat) {
@@ -160,4 +174,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public UpgradePackageFilter currentPackageFilter() {
 		return accountHelper.currentPackageFilter();
 	}
+	
+	
 }

@@ -36,7 +36,7 @@
 		
 			<#if sessionUser.hasAccess("tag") == true >
 				<#if securityGuard.integrationEnabled>
-					<@s.url id="identifyUrl" value="identify.action"/>
+					<@s.url id="identifyUrl" action="identify"/>
 					
 				<#else>
 					<@s.url id="identifyUrl" action="productAdd" />

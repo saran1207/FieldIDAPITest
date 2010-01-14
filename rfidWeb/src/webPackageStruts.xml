@@ -1925,29 +1925,29 @@
 			<result name="success" type="freemarker">/templates/html/subscriptions/increaseEmployeeLimit/show.ftl</result>
 		</action>
 		
-		<action name="setupWizard" method="show" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
-			<result name="success" type="freemarker">/templates/html/setupWizard/show.ftl</result>
+		<action name="quickSetupWizard" method="show" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardAction">
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/show.ftl</result>
 		</action>
-		<action name="setupWizardComplete" method="completed" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
-			<result name="success" type="freemarker">/templates/html/setupWizard/completed.ftl</result>
-		</action>
-		
-		<action name="setupWizardStep1" method="step1" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
-			<result name="success" type="freemarker">/templates/html/setupWizard/step1.ftl</result>
-		</action>
-		<action name="setupWizardStep1Complete" method="step1Complete" class="com.n4systems.fieldid.actions.setupwizard.SetupWizardAction">
-			<result name="input" type="freemarker">/templates/html/setupWizard/step1.ftl</result>
-			<result name="error" type="freemarker">/templates/html/setupWizard/step1.ftl</result>
-			<result name="success" type="redirectAction">setupWizardStep2</result>
+		<action name="quickSetupWizardComplete" method="completed" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardAction">
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/completed.ftl</result>
 		</action>
 		
-		<action name="setupWizardStep2" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
-			<result name="success" type="freemarker">/templates/html/setupWizard/step2.ftl</result>
+		<action name="quickSetupWizardStep1" method="step1" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardAction">
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step1.ftl</result>
 		</action>
-		<action name="setupWizardStep2Complete" method="update" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
-			<result name="input" type="freemarker">/templates/html/setupWizard/step2.ftl</result>
-			<result name="error" type="freemarker">/templates/html/setupWizard/step2.ftl</result>
-			<result name="success" type="redirectAction">setupWizardComplete</result>
+		<action name="quickSetupWizardStep1Complete" method="step1Complete" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardAction">
+			<result name="input" type="freemarker">/templates/html/quickSetupWizard/step1.ftl</result>
+			<result name="error" type="freemarker">/templates/html/quickSetupWizard/step1.ftl</result>
+			<result name="success" type="redirectAction">quickSetupWizardStep2</result>
+		</action>
+		
+		<action name="quickSetupWizardStep2" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
+		</action>
+		<action name="quickSetupWizardStep2Complete" method="update" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
+			<result name="error" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
+			<result name="success" type="redirectAction">quickSetupWizardComplete</result>
 		</action>
 	</package>
 </struts>

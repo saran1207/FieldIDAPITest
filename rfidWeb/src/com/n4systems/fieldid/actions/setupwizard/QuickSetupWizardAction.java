@@ -16,13 +16,13 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
-public class SetupWizardAction extends AbstractAction {
+public class QuickSetupWizardAction extends AbstractAction {
 
 	private boolean turnOnJobSites;
 	private PersistenceProvider persistenceProvider;
 	
 	
-	public SetupWizardAction(PersistenceManager persistenceManager) {
+	public QuickSetupWizardAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 	
@@ -47,8 +47,10 @@ public class SetupWizardAction extends AbstractAction {
 			clearCachedValues();
 		} catch (Exception e) {
 			persistenceProvider().rollbackTransaction(transaction);
+			addActionErrorText("error.could_not_setup_your_company_profile");
 			return ERROR;
 		}
+		addFlashMessageText("message.company_profile_setup");
 		return SUCCESS;
 	}
 	

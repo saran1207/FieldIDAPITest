@@ -13,7 +13,7 @@
 				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
 			</#if>
 			<#if sessionUser.admin>
-				<li><a href="<@s.url action="setupWizard"/>"><@s.text name="label.setup_wizard"/></li>
+				<li><a href="<@s.url action="quickSetupWizard"/>"><@s.text name="label.quick_setup_wizard"/></li>
 			</#if>
 		</ul>
 	</div>
@@ -69,9 +69,7 @@
 	</div>
 	<div id="helpVideos" class="dashboardSection">
 		<h3 ><@s.text name="label.instructionalvidoes"/> <span class="moreLink"><a href="<@s.url action="instructionalVideos"/>"><@s.text name="label.more"/></a></span></h3>
-		<div id="introVideo" class="highlightBlock">
-			<@s.text name="label.new_to_fieldid"/> <a href="http://www.n4systems.com/qwe__wqe/training/intro/overview.html" id="showVideo" rel='iframe' title='<@s.text name="label.intro_video"/> ::  :: width: 700, height: 570' class='lightview'><@s.text name="label.watch"/></a> <@s.text name="label.the_intro_video_now"/>
-		</div>
+		<#include "../instructionalVideos/_watchIntroVideo.ftl"/>
 		<ul class="informationList">
 			<#list summary as video >
 				<li>${video.name?html} - <a href="${video.url}" target="_blank"><@s.text name="label.watchnow"/></a></li>
