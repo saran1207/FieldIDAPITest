@@ -127,12 +127,15 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformat
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
+import com.n4systems.webservice.dto.hello.HelloRequest;
+import com.n4systems.webservice.dto.hello.HelloResponse;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.ProductLookupInformation;
 import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
+import com.n4systems.webservice.server.handlers.HelloHandler;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
 import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
 
@@ -142,6 +145,16 @@ public class DataServiceImpl implements DataService {
 	private static Logger logger = Logger.getLogger(DataServiceImpl.class);
 
 	private static int OLD_FIRST_PAGE = 1;
+	
+	public HelloResponse hello(HelloRequest helloRequest) throws ServiceException {
+		try {
+			HelloHandler helloHandler = new HelloHandler();
+			return helloHandler.sayHello(helloRequest);
+		} catch (Exception e) {
+			logger.error("exception occured while saying hello", e);
+			throw new ServiceException();
+		}
+	}
 	
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws ServiceException {
 		

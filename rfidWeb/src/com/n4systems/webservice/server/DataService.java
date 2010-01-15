@@ -38,6 +38,8 @@ import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformat
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
 import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
+import com.n4systems.webservice.dto.hello.HelloRequest;
+import com.n4systems.webservice.dto.hello.HelloResponse;
 import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
@@ -47,6 +49,7 @@ import com.n4systems.webservice.exceptions.ServiceException;
 @SuppressWarnings("deprecation")
 public interface DataService {
 
+	public HelloResponse hello(HelloRequest helloRequest) throws ServiceException;
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws ServiceException;
 	public List<TransactionLogServiceDTO> getRecentTransactions(RequestInformation requestInformation, Long lastRevision) throws ServiceException;
 	public InspectionTypeListResponse getAllInspectionTypes(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
