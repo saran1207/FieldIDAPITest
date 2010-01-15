@@ -10,7 +10,7 @@ import com.n4systems.model.parents.AbstractEntity;
 public class AddressInfo extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	
-	private String streetAddress;
+	private String streetAddress = "";
 	private String city;
 	private String state;
 	private String country;
@@ -44,11 +44,12 @@ public class AddressInfo extends AbstractEntity {
 	}
 	
 	public void setStreetAddress(String address) {
-		this.streetAddress = address;
+		this.streetAddress = (address != null) ? address : "";
+		this.streetAddress = streetAddress.trim();
 	}
 	
 	public void setStreetAddress(String addressLine1, String addressLine2) {
-		setStreetAddress(addressLine1 + " " + addressLine2);
+		setStreetAddress(((addressLine1 != null) ? addressLine1 : "") + " " + ((addressLine2 != null) ? addressLine2 : ""));
 	}
 	
 	public String getCity() {
