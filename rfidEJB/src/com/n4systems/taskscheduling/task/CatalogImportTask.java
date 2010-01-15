@@ -99,7 +99,7 @@ public class CatalogImportTask implements Runnable {
 			body += "Could not set up the relationships to inspection types for product type " + summary.getProductTypeRelationshipsImportSummary().getFailedImporting();
 		}
 		 
-		return body + "</p><p>The rest of import has been undone.  You can attempt the import again, if the problem persists contact FieldID support by sending an email to support@n4systems.com</p>";
+		return body + "</p><p>The rest of import has been undone.  You can attempt the import again, if the problem persists contact FieldID support by sending an email to support@fieldid.com</p>";
 	}
 
 	private String successBody() {

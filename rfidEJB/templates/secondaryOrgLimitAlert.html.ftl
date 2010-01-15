@@ -4,4 +4,4 @@ You currently have created ${limit.getUsed()} of your total allocated ${limit.ge
 <p>
 You now have ${limit.getAvailable()} organizations left.
 <p>
-If you wish to increase you organizations limit, please contact <a href="mailto:sales@n4systems.com">sales@n4systems.com</a>
+If you wish to increase you organizations limit, please contact <a href="mailto:sales@fieldid.com">sales@fieldid.com</a>

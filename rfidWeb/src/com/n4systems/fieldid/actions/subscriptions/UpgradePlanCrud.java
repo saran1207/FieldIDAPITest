@@ -315,7 +315,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage("Your Field ID Account Has Been Upgraded", "planUpgrade");
 		String emailAddress = new AdminUserListLoader(getSecurityFilter()).load().get(0).getEmailAddress();
 		invitationMessage.getToAddresses().add(emailAddress);
-		invitationMessage.getBccAddresses().add("sales@n4systems.com");
+		invitationMessage.getBccAddresses().add("sales@fieldid.com");
 		
 		
 		

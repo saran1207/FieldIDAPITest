@@ -142,7 +142,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	
 		invitationMessage.setSubjectPrefix("");
 		invitationMessage.getToAddresses().add(placeHolder.getAdminUser().getEmailAddress());
-		invitationMessage.getBccAddresses().add("sales@n4systems.com");
+		invitationMessage.getBccAddresses().add("sales@fieldid.com");
 		invitationMessage.getTemplateMap().put("companyId", placeHolder.getTenant().getName());
 		invitationMessage.getTemplateMap().put("portalUrl", portalUrl);
 		invitationMessage.getTemplateMap().put("username", placeHolder.getAdminUser().getUserID());

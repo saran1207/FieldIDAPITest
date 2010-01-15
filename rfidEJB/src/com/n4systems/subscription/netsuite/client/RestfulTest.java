@@ -56,7 +56,7 @@ public class RestfulTest {
 		addressInfo.setZip("M5T 1X4");
 		
 		tenant.setAddressInfo(addressInfo);
-		tenant.setAdminEmail("dev@n4systems.com");
+		tenant.setAdminEmail("dev@fieldid.com");
 		tenant.setId(500L);
 
 
@@ -73,7 +73,7 @@ public class RestfulTest {
 		
 		String response = "";
 		try {
-			response = clientSaver.setFirstName("N4").setLastName("TEST").setEmail("n4test@n4systems.com")
+			response = clientSaver.setFirstName("N4").setLastName("TEST").setEmail("n4test@fieldid.com")
 				.setPhoneNumber("416-599-6464").setFieldId(0).setTenantId(0).setPrimary(true)
 				.Save();
 		} catch (IOException e) {

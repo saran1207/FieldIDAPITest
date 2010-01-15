@@ -88,7 +88,7 @@ public class ArchiveProductTypeTask implements Runnable {
 			body = "<p>All related parts of the product type  "
 					+ getProductTypeName()
 					+ " could not be removed.  "
-					+ "Please contact FieldId Support by sending an email to <a href=\"mailto:support@n4systems.com\">support@n4systems.com</a> or calling (416)-599-6466.</p>"
+					+ "Please contact FieldId Support by sending an email to <a href=\"mailto:support@fieldid.com\">support@fieldid.com</a> or calling (416)-599-6466.</p>"
 					+ "<p>Summary of failures.</p>" + "<ul>";
 			if (autoAttributeDeleteFailed) {
 				body += "<li>Auto Attributes could not be correctly removed.</li>";
