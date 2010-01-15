@@ -10,7 +10,6 @@ import com.n4systems.fieldid.lang.TenantLanguageSessionHelper;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.n4systems.fieldid.permissions.SessionSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.ConfigContext;
@@ -30,35 +29,29 @@ public abstract class TenantContextInitializer {
 		return this;
 	}
 
-	public void init(String tenantName) throws NoValidTenantSelectedException, IncorrectTenantDomain, UnbrandedDomainException {
+	public void init(String tenantName) throws NoValidTenantSelectedException, UnbrandedDomainException {
 		setBrandedCompanyId(tenantName);
 		init();
 	}
 
-	public void init() throws NoValidTenantSelectedException, IncorrectTenantDomain, UnbrandedDomainException {
+	public void init() throws NoValidTenantSelectedException, UnbrandedDomainException {
 		unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		
 		try {
+			if (!companySpecifiedInURI()) {
+				throw new UnbrandedDomainException();
+			}
 			findCurrentTenant();
 			loadSecurityGuard();
 		} catch (NoValidTenantSelectedException e) {
 			forgetSecurityGuard();
-			if (!companySpecifiedInURI()) {
-				throw new UnbrandedDomainException();
-			} else if (storedCookieForTenant()) {
-				throw new IncorrectTenantDomain();
-			} else {
-				throw e;
-			}
+			throw e;
 		}
 	}
 	public void destroyContext() {
 		forgetSecurityGuard();
 	}
 
-	private boolean storedCookieForTenant() {
-		return !companySpecifiedInURI() && CookieFactory.findCookieValue("companyID", getRequest()) != null;
-	}
 
 	public void refreshSecurityGaurd() throws NoValidTenantSelectedException {
 		if (getSecurityGuard() == null) {

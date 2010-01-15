@@ -6,7 +6,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
-import com.n4systems.fieldid.actions.helpers.IncorrectTenantDomain;
 import com.n4systems.fieldid.actions.helpers.TenantContextInitializer;
 import com.n4systems.fieldid.actions.helpers.UnbrandedDomainException;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
@@ -30,10 +29,7 @@ public class SelectTenantAction extends AbstractAction {
 	public String doCreate() {
 		try {
 			loadCompany();
-			
-			// assuming loadCopmany was sucessful, we need to redirect them to the branded url
 			setRedirectUrl(getLoginUrl());
-			
 			return REDIRECT_TO_URL;
 		} catch (Exception e) {
 			logger.debug(getLogLinePrefix() + "Error loading the tenant company", e);
@@ -43,7 +39,7 @@ public class SelectTenantAction extends AbstractAction {
 		return INPUT;
 	}
 
-	private void loadCompany() throws NoValidTenantSelectedException, IncorrectTenantDomain, UnbrandedDomainException {
+	private void loadCompany() throws NoValidTenantSelectedException, UnbrandedDomainException {
 		TenantContextInitializer intializer = new AbstractActionTenantContextInitializer(this);
 		intializer.forceTenantReload().init(companyID);
 	}
