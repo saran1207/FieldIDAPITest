@@ -166,7 +166,7 @@ h2 a {
 
 #pageNavigation ul li {
 	text-align: center;
-	margin: 0px 8px;
+	margin: 0px 10px;
 	float: left;
 }
 
@@ -178,7 +178,7 @@ h2 a {
 #pageNavigation ul li a {
 	display: block;
 	padding-top: 50px;
-	min-width: 48px;
+	min-width: 40px;
 	background-position: top center;
 	background-repeat: no-repeat;
 }

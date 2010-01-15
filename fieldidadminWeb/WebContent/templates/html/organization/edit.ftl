@@ -13,15 +13,21 @@
 	<@s.textfield name="users" label="User limit (-1 for unlimited)" />
 	<@s.textfield name="secondaryOrgs" label="Secondary Orgs limit (-1 for unlimited)" />
 
+	
 	<@s.label name="extendedFeaturesLabel" label="Extended features (if you change any, add a note below)" />
+	
 	<@s.iterator  value="availableExtendedFeatures" >
 		<@s.checkbox name="extendedFeatures['%{name}']" >
 			<@s.param name="label"><@s.property value="name"/></@s.param>
 		</@s.checkbox> 
 	</@s.iterator>	
 	
+	<@s.label label="Extras" />
+	<@s.checkbox name="primaryOrg.plansAndPricingAvailable" label="Show Plans and pricing when Partner Center enabled" labelposition="left" />
+	
+	
 	<@s.submit />
-	<@s.submit value="Cancel" name="redirect-action:organizations" />
+	<@s.submit value="Cancel" name="redirectAction:organizations" />
 </@s.form>
 <pre>
 Serial Number Format Options.

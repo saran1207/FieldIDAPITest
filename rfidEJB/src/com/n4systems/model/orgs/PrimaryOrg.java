@@ -68,6 +68,8 @@ public class PrimaryOrg extends InternalOrg {
 	@Column(name="autoaccept", nullable=false)
 	private boolean autoAcceptConnections;
 	
+	@Column(nullable=false)
+	private boolean plansAndPricingAvailable;
 
 	public PrimaryOrg() {}
 	
@@ -210,5 +212,13 @@ public class PrimaryOrg extends InternalOrg {
 	public PrimaryOrg enhance(SecurityLevel level) {
 		PrimaryOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		return enhanced;
+	}
+
+	public boolean isPlansAndPricingAvailable() {
+		return plansAndPricingAvailable;
+	}
+
+	public void setPlansAndPricingAvailable(boolean plansAndPricingAvailable) {
+		this.plansAndPricingAvailable = plansAndPricingAvailable;
 	}
 }

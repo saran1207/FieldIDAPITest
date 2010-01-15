@@ -22,4 +22,6 @@ public interface SystemSecurityGuard {
 	public boolean isAllowIntegrationEnabled();
 	public boolean isJobSitesEnabled();
 	public boolean isUnlimitedLinkedAssetsEnabled();
+	
+	public boolean isPlansAndPricingAvailable();
 }

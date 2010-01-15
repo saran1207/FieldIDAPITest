@@ -13,16 +13,18 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 	private final PrimaryOrg primaryOrg;
 	
 	public SessionSecurityGuard(Tenant tenant) {
+		this(tenant, TenantCache.getInstance().findPrimaryOrg(tenant.getId()));
+	}
+	
+	public SessionSecurityGuard(Tenant tenant, PrimaryOrg primaryOrg) {
 		if (tenant == null) {
 			throw new InvalidArgumentException("Tenant cannot be null");
 		}
-		this.tenant = tenant;
-		
-		primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenant.getId());
-		
 		if (primaryOrg == null) {
 			throw new InvalidArgumentException("Could not find PrimaryOrg for Tenant: " + tenant.toString());
 		}
+		this.tenant = tenant;
+		this.primaryOrg = primaryOrg;
 	}
 	
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature) {
@@ -88,4 +90,15 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 	public boolean isUnlimitedLinkedAssetsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);
 	}
+
+	public boolean isPlansAndPricingAvailable() {
+		if (!isPartnerCenterEnabled() || primaryOrg.isPlansAndPricingAvailable()) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
 }

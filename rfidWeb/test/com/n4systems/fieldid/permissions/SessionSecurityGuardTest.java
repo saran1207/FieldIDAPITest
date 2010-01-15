@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.permissions;
 
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
@@ -8,12 +9,10 @@ import static org.junit.Assert.*;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-
-
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.TenantCache;
 
@@ -67,6 +66,46 @@ public class SessionSecurityGuardTest extends SecurityGuardTestCase{
 			return null;
 		}
 	}
+	
+	
+
+	@Test
+	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_not_have_the_partner_center() throws Exception {
+		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withNoExtendedFeatures().build();
+		
+		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		
+		assertTrue(sut.isPlansAndPricingAvailable());
+	}
+	
+	@Test
+	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_not_have_the_partner_center_and_plans_and_pricing_not_available() throws Exception {
+		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withNoExtendedFeatures().withPlansAndPricingNotAvailable().build();
+		
+		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		
+		assertTrue(sut.isPlansAndPricingAvailable());
+	}
+	
+	@Test
+	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_has_the_partner_center_and_plans_and_pricing_available_set_to_true() throws Exception {
+		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withExtendedFeatures(ExtendedFeature.PartnerCenter).withPlansAndPricingAvailable().build();
+		
+		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		
+		assertTrue(sut.isPlansAndPricingAvailable());
+	}
+	
+	
+	@Test
+	public void should_show_that_plans_and_pricing_is_not_available_when_the_primary_org_does_has_the_partner_center() throws Exception {
+		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withExtendedFeatures(ExtendedFeature.PartnerCenter).build();
+		
+		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		
+		assertTrue(!sut.isPlansAndPricingAvailable());
+	}
+	
 	
 
 }

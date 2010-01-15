@@ -24,13 +24,14 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 	private final Long diskSpaceInBytes;
 	private final Long externalId;
 	private final Long employeeLimit;
+	private final boolean plansAndPricingAvailable;
 	
 	
 	public static PrimaryOrgBuilder aPrimaryOrg() {
-		return new PrimaryOrgBuilder("first_primary_org", null, aTenant().build(), new HashSet<ExtendedFeature>(), 0L, 0L, 0L, new Random().nextLong());
+		return new PrimaryOrgBuilder("first_primary_org", null, aTenant().build(), new HashSet<ExtendedFeature>(), 0L, 0L, 0L, new Random().nextLong(), false);
 	}
 	
-	private PrimaryOrgBuilder(String name, Long id, Tenant tenant, Set<ExtendedFeature> features, Long employeeLimit, Long assetLimit, Long diskSpaceInBytes, Long externalId) {
+	private PrimaryOrgBuilder(String name, Long id, Tenant tenant, Set<ExtendedFeature> features, Long employeeLimit, Long assetLimit, Long diskSpaceInBytes, Long externalId, boolean plansAndPricingAvailable) {
 		super(id);
 		this.name = name;
 		this.features = features;
@@ -39,37 +40,45 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 		this.diskSpaceInBytes = 0L;
 		this.externalId = externalId;
 		this.employeeLimit = employeeLimit;
+		this.plansAndPricingAvailable = plansAndPricingAvailable;
 	}
 	
 	public PrimaryOrgBuilder withName(String name) {
-		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
 	
 	public PrimaryOrgBuilder withExtendedFeatures(ExtendedFeature...extendedFeatures) {
-		return new PrimaryOrgBuilder(name, id, tenant, new HashSet<ExtendedFeature>(Arrays.asList(extendedFeatures)), employeeLimit, assetLimit, diskSpaceInBytes, externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, new HashSet<ExtendedFeature>(Arrays.asList(extendedFeatures)), employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
 	public PrimaryOrgBuilder withNoExtendedFeatures() {
-		return new PrimaryOrgBuilder(name, id, tenant, new HashSet<ExtendedFeature>(), employeeLimit, assetLimit, diskSpaceInBytes, externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, new HashSet<ExtendedFeature>(), employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
 
 	
 	public PrimaryOrgBuilder onTenant(Tenant tenant) {
-		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
 	
 	public PrimaryOrgBuilder withAssetLimit(long assetLimit) {
-		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
 	
 	public PrimaryOrgBuilder withDiskSpaceLimit(long diskSpace, DataUnit unit) {
 		BigDecimal diskSpaceInBytes = DataUnit.convert(new BigDecimal(diskSpace), unit, DataUnit.BYTES);
-		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes.longValue(), externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes.longValue(), externalId, plansAndPricingAvailable);
 	}
 	
 	public PrimaryOrgBuilder withEmployeeLimit(long employeeLimit) {
-		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId);
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
 	
+	public PrimaryOrgBuilder withPlansAndPricingAvailable() {
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, true);
+	}
+	
+	public PrimaryOrgBuilder withPlansAndPricingNotAvailable() {
+		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, false);
+	}
 	
 	@Override
 	public PrimaryOrg build() {
@@ -81,6 +90,7 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 		primaryOrg.setTenant(tenant);
 		
 		primaryOrg.setExternalId(externalId);
+		primaryOrg.setPlansAndPricingAvailable(plansAndPricingAvailable);
 		
 		primaryOrg.setLimits(new TenantLimit(diskSpaceInBytes, assetLimit, employeeLimit, 0));
 		return primaryOrg;
