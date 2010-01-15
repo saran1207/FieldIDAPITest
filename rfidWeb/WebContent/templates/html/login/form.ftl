@@ -44,7 +44,6 @@
 	
 	<ul id="otherActions">
   		<li><label class="label"><@s.text name="label.help"/>:</label> <span><a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a></span></li>
-  		<li><label class="label">${securityGuard.tenantName?html}</label> <span><a href="<@s.url action="chooseCompany"/>"><@s.text name="label.is_not_the_company_i_want"/></a></span></li>
 	</ul>
 
 </div>
