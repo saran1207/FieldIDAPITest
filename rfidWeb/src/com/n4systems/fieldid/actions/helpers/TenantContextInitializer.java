@@ -38,9 +38,6 @@ public abstract class TenantContextInitializer {
 		unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		
 		try {
-			if (!companySpecifiedInURI()) {
-				throw new UnbrandedDomainException();
-			}
 			findCurrentTenant();
 			loadSecurityGuard();
 		} catch (NoValidTenantSelectedException e) {
@@ -90,11 +87,13 @@ public abstract class TenantContextInitializer {
 		return tenant;
 	}
 
-	private void findCurrentTenant() {
+	private void findCurrentTenant() throws UnbrandedDomainException {
 		if (brandedCompanyId == null) {
 			if (companySpecifiedInURI()) {
 				setBrandedCompanyId(getCompanyNameInURI());
-			} 
+			} else {
+				throw new UnbrandedDomainException();
+			}
 		}
 	}
 
