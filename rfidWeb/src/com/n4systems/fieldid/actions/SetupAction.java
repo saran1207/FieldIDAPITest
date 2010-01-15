@@ -4,9 +4,9 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
 
-public class AdministrationAction extends SimpleAction {
+public class SetupAction extends SimpleAction {
 
-	public AdministrationAction(PersistenceManager persistenceManager) {
+	public SetupAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 

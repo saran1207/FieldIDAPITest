@@ -7,8 +7,8 @@
 	    
 	    
 		<div class="backToLink">
-			<#if navOptions.onAdmin>
-				<a href="<@s.url action="administration"/>">&#171; <@s.text name="label.back_to_administration"/></a>
+			<#if navOptions.onSetup>
+				<a href="<@s.url action="setup"/>">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
 			<#if navOptions.returnToReport && reportActive>
 				<a href="<@s.url action="returnToReport"/>">&#171; <@s.text name="label.return_to_report"/></a>

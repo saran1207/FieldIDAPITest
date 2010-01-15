@@ -1,8 +1,8 @@
-<title><@s.text name="label.administration" /></title>
+<title><@s.text name="label.setup" /></title>
 <head>
-	<@n4.includeStyle type="page" href="administration" />
+	<@n4.includeStyle type="page" href="setup" />
  </head>  
-   <div class="viewSection administration">
+   <div class="viewSection setup">
 		<h2 id="systemAccess"><@s.text name="label.systemaccessandsetup" /></h2>
 		
 		<#if sessionUser.hasAccess("managesystemconfig") == true >
@@ -42,7 +42,7 @@
 	</div>
 	
 	<#if sessionUser.hasAccess("managesystemconfig") == true >
-		<div class="viewSection administration">
+		<div class="viewSection setup">
 			<h2 id="yourProductSetup"><@s.text name="label.yourproductsetup" /></h2>
 				<p>
 					<label><a href="productTypes.action" ><@s.text name="title.manage_product_types.plural" /></a></label>
@@ -82,7 +82,7 @@
 	</#if>
 	
 	<#if sessionUser.hasAccess("managesystemconfig") == true >
-		<div class="viewSection administration">
+		<div class="viewSection setup">
 			<h2 id="notificationAndTemplates"><@s.text name="label.autocomplete_templates" /></h2>
 			<p>
 				<label><a href="autoAttributeCriteriaList.action" ><@s.text name="title.auto_attribute_wizard.plural" /></a></label>
@@ -97,7 +97,7 @@
 	</#if>
 	
 	<#if sessionUser.hasAccess("managesystemconfig") == true >
-		<div class="viewSection administration">
+		<div class="viewSection setup">
 			<h2 id="dataSync"><@s.text name="label.datasync" /></h2>
 			<p>
 				<label><a href="<@s.url action="dataLog"/>" class="blue"><@s.text name="title.data_log" /></a></label>

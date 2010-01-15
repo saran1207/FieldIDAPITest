@@ -69,9 +69,9 @@
 					<a href="<@s.url action="jobs"/>" class="speedLink" id="menuProject"><@s.text name="speed.projects"/></a>
 				</li>
 			</#if>
-			<#if sessionUser.hasAdministrationAccess()>
+			<#if sessionUser.hasSetupAccess()>
 				<li>
-					<a href="<@s.url action="administration"/>" class="speedLink" id="menuAdministration"><@s.text name="label.administration" /> </a>
+					<a href="<@s.url action="setup"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
 				</li>
 			</#if>
 			

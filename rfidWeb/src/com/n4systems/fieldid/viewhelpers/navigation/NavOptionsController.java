@@ -23,7 +23,7 @@ public class NavOptionsController {
 	private NavOption currentActionOption;
 	private SessionUser user;
 	private SystemSecurityGuard securityGuard;
-	private boolean onAdmin = false;
+	private boolean onSetup = false;
 	private boolean returnToReport = false;
 	
 	private String title = "";
@@ -64,7 +64,7 @@ public class NavOptionsController {
 
 			p.load(propertyFile);
 			HierarchicalProperties commonProps = p.getProperties("common");
-			onAdmin = commonProps.getBoolean("onAdmin");
+			onSetup = commonProps.getBoolean("onSetup");
 			onSafetyNetwork = commonProps.getBoolean("onSafetyNetwork");
 			returnToReport = commonProps.getBoolean("returnToReport");
 			title =  commonProps.getString("title");
@@ -160,8 +160,8 @@ public class NavOptionsController {
 		return (entityLoaded() || (currentActionOption != null && currentActionOption.isUseEntityTitle()));
 	}
 
-	public boolean isOnAdmin() {
-		return onAdmin;
+	public boolean isOnSetup() {
+		return onSetup;
 	}
 
 	public boolean isReturnToReport() {

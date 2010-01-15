@@ -236,7 +236,7 @@ public class SessionUser implements DateTimeDefinition {
 		return securityFilter;
 	}
 	
-	public boolean hasAdministrationAccess() {
+	public boolean hasSetupAccess() {
 		return (!isCustomerUser() && (hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig")));
 	}
 	

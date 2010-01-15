@@ -231,12 +231,12 @@ h2 a {
 	background-image: url(../images/menu/schedule_hot.png);
 }
 
-#menuAdministration {
-	background-image: url(../images/menu/administration.png);
+#menuSetup {
+	background-image: url(../images/menu/setup.png);
 }
 
-#menuAdministration:hover {
-	background-image: url(../images/menu/administration_hot.png);
+#menuSetup:hover {
+	background-image: url(../images/menu/setup_hot.png);
 }
 
 

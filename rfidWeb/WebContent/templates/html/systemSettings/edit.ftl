@@ -94,6 +94,6 @@ ${action.setPageType('account_settings', 'list')!}
 		
 		<#include "_settings.ftl"/>
 		<div class="formAction">
-			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="administration"/>"><@s.text name="label.cancel"/></a>
+			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="setup"/>"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
