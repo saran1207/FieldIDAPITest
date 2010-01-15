@@ -5,6 +5,7 @@ import com.n4systems.fieldid.actions.helpers.ActionInvocationTexentContextInitia
 import com.n4systems.fieldid.actions.helpers.FieldIdURI;
 import com.n4systems.fieldid.actions.helpers.IncorrectTenantDomain;
 import com.n4systems.fieldid.actions.helpers.TenantContextInitializer;
+import com.n4systems.fieldid.actions.helpers.UnbrandedDomainException;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -22,6 +23,8 @@ public class RequiredTenantInterceptor extends AbstractInterceptor {
 		} catch (NoValidTenantSelectedException e) {
 			invocationWrapper.getAction().addFlashErrorText("error.cannot_find_company_id");
 			return "tenant_missing";
+		} catch (UnbrandedDomainException e) {
+			return "chooseTenant";
 		} catch (IncorrectTenantDomain e) {
 			// extract url and correct to the proper tenant domain.
 			
@@ -33,8 +36,7 @@ public class RequiredTenantInterceptor extends AbstractInterceptor {
 			return AbstractAction.REDIRECT_TO_URL;
 		}
 		
-		String invoke = invocation.invoke();
-		return invoke;
+		return invocation.invoke();
 		
 	}
 

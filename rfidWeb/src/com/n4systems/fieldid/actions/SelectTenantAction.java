@@ -8,6 +8,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
 import com.n4systems.fieldid.actions.helpers.IncorrectTenantDomain;
 import com.n4systems.fieldid.actions.helpers.TenantContextInitializer;
+import com.n4systems.fieldid.actions.helpers.UnbrandedDomainException;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
@@ -42,7 +43,7 @@ public class SelectTenantAction extends AbstractAction {
 		return INPUT;
 	}
 
-	private void loadCompany() throws NoValidTenantSelectedException, IncorrectTenantDomain {
+	private void loadCompany() throws NoValidTenantSelectedException, IncorrectTenantDomain, UnbrandedDomainException {
 		TenantContextInitializer intializer = new AbstractActionTenantContextInitializer(this);
 		intializer.forceTenantReload().init(companyID);
 	}

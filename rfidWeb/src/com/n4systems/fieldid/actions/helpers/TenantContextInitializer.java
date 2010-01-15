@@ -30,12 +30,12 @@ public abstract class TenantContextInitializer {
 		return this;
 	}
 
-	public void init(String tenantName) throws NoValidTenantSelectedException, IncorrectTenantDomain {
+	public void init(String tenantName) throws NoValidTenantSelectedException, IncorrectTenantDomain, UnbrandedDomainException {
 		setBrandedCompanyId(tenantName);
 		init();
 	}
 
-	public void init() throws NoValidTenantSelectedException, IncorrectTenantDomain {
+	public void init() throws NoValidTenantSelectedException, IncorrectTenantDomain, UnbrandedDomainException {
 		unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		
 		try {
@@ -43,7 +43,9 @@ public abstract class TenantContextInitializer {
 			loadSecurityGuard();
 		} catch (NoValidTenantSelectedException e) {
 			forgetSecurityGuard();
-			if (storedCookieForTenant()) {
+			if (!companySpecifiedInURI()) {
+				throw new UnbrandedDomainException();
+			} else if (storedCookieForTenant()) {
 				throw new IncorrectTenantDomain();
 			} else {
 				throw e;

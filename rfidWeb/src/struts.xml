@@ -101,6 +101,11 @@
 				<param name="namespace">/</param>
 				<param name="actionName">quickSetupWizard</param>
 			</result>
+			
+			<result name="chooseTenant" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">chooseCompany</param>
+			</result>
 		</global-results>
 
 		

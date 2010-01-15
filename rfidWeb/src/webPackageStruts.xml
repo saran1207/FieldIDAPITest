@@ -9,6 +9,7 @@
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
+			
 		</global-results>
 
 		<action name="administration" class="com.n4systems.fieldid.actions.AdministrationAction">
