@@ -1,10 +1,13 @@
 package rfid.ejb.session;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.createNiceMock;
+import static org.easymock.classextension.EasyMock.replay;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,8 +82,10 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 	
 	@Test
 	public void test_convert_productServiceDTO_to_existing_product_confirm_non_optional_fields() {
+		
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Calendar cal = Calendar.getInstance();
-		cal.set(2008, 2, 18);  // 02/18/08
+		//cal.set(2008, 2, 18);  // 02/18/08
 		Date identifiedDate = new PlainDate(cal.getTime());
 		
 		Product product = new Product();
@@ -96,7 +101,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		ProductServiceDTO serviceDTO = new ProductServiceDTO();
 		populateServiceDTO(serviceDTO);
 		serviceDTO.setMobileGuid("1111-111-11111-1111111");
-		serviceDTO.setIdentified("11/06/08 06:30:01 am");
+		serviceDTO.setIdentified(dateFormat.format(identifiedDate));
 		
 		test_product_non_optional_fields(product, serviceDTO);
 		assertEquals("0000-000-00000-0000123", product.getMobileGUID());
@@ -214,6 +219,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		productServiceDTO.setPurchaseOrder( "0987654321" );
 		productServiceDTO.setRfidNumber( "af331fe3058901abae3319933" );
 		productServiceDTO.setSerialNumber( "testserial" );
+
 	}
 
 	
@@ -289,6 +295,7 @@ public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
 		assertEquals( identifiedDate, product.getIdentified() );
 		assertEquals( productServiceDTO.getMobileGuid(), product.getMobileGUID() );
 	}
+	
 	private void assertAssignedValuesWereCopiedToProduct( ProductServiceDTO productServiceDTO, Product product, ProductType foundProductType,
 			Tenant foundTenant, PrimaryOrg primaryOrg ) {
 		assertEquals( foundTenant, product.getTenant() );
