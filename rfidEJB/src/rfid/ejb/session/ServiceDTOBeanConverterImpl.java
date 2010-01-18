@@ -288,8 +288,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return productDTO;
 	}
 	
-	
-	
 	public Product convert( ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId ) {
 		
 		Tenant tenantOrganization = TenantCache.getInstance().findTenant(tenantId); 
@@ -344,12 +342,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetProduct.setInfoOptions(infoOptions);
 		}
 		
-		if (targetProduct.isNew()) {
+		if (convertStringToDate(productServiceDTO.getIdentified()) != null ) {
+			targetProduct.setIdentified( convertStringToDate(productServiceDTO.getIdentified()) );
+		}
 		
-			if (convertStringToDate(productServiceDTO.getIdentified()) != null ) {
-				targetProduct.setIdentified( convertStringToDate(productServiceDTO.getIdentified()) );
-			}
-			
+		if (targetProduct.isNew()) {
 			targetProduct.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
 		
