@@ -72,11 +72,16 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	@JoinColumn(name = "r_unitofmeasure")
 	private UnitOfMeasure unitOfMeasure;
 
-	@OneToMany(mappedBy = "infoField", targetEntity = InfoOptionBean.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "infoField", targetEntity = InfoOptionBean.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@OrderBy( "weight" )
 	@Where(clause="staticData = 1")
 	private Set<InfoOptionBean> unfilteredInfoOptions;
+	
 
+	@SuppressWarnings("unused")
+	@OneToMany(mappedBy = "infoField", targetEntity=InfoOptionBean.class, fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
+	private Set<InfoOptionBean> allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet;
+	
 	@Transient
 	private List<InfoOptionBean> comboBoxInfoOptions;
 
