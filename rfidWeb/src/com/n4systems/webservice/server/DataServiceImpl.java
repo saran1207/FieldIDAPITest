@@ -23,6 +23,7 @@ import rfid.util.PopulatorLogger;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.FindProductFailure;
@@ -688,6 +689,7 @@ public class DataServiceImpl implements DataService {
 			response.setStatus(ResponseStatus.OK);
 
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			OrderManager orderManager = ServiceLocator.getOrderManager();
 
 			Product existingProduct = lookupProduct(productDTO, requestInformation.getTenantId());
 			
@@ -702,6 +704,16 @@ public class DataServiceImpl implements DataService {
 			productDTO.setIdentifiedById(0);
 		
 			Product product = converter.convert(productDTO, existingProduct, requestInformation.getTenantId());
+
+			//updating order number if it is different value
+			if (product.getShopOrder() != null &&
+					productDTO.getOrderNumber().trim().length() > 0 &&
+					!product.getShopOrder().getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim()) ) {
+				product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
+			} else if (product.getShopOrder() == null &&
+					productDTO.getOrderNumber().trim().length() > 0 ) {
+				product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
+			}
 			
 			// on edit, the identified by user is populated with the modified user
 			ServiceLocator.getProductSerialManager().update(product, product.getModifiedBy());
@@ -866,8 +878,14 @@ public class DataServiceImpl implements DataService {
 		
 		Product product = new Product();
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+		OrderManager orderManager = ServiceLocator.getOrderManager();
 		
 		product = converter.convert( productDTO, product, tenantId );
+		
+		if (productDTO.getOrderNumber() != null &&
+				productDTO.getOrderNumber().trim().length() > 0) {
+			product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), tenantId));
+		}
 		
 		return product;
 	}
