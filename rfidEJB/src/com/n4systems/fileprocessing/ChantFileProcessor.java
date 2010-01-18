@@ -170,15 +170,25 @@ public class ChantFileProcessor extends FileProcessor {
 		
 		Date inspectionDate = null;
 		try {
-			//the date string is *almost* in ISO8601 format except that the offset is -04:00 rather then -0400 or GMT-04:00.
-			// this removes the last ':' to put it into 'Z' format
-			inspectionDate = inputFormatter.parse(dateString.replaceFirst("\\.\\d+(-\\d+):(\\d+)$", "$1$2"));
+			String replacedDate = correctTimeZoneAndMillisecondFormatting(dateString);
+			inspectionDate = inputFormatter.parse(replacedDate);
 		} catch(Exception e) {
 			// we must fail if a valid inspection date cannot be found
 			throw new FileProcessingException("Unable to parse inspection date", e);
 		}
 		
 		return inspectionDate;
+	}
+
+	protected String correctTimeZoneAndMillisecondFormatting(String dateString) {
+		
+		//the date string is *almost* in ISO8601 format except that the offset is -04:00 rather then -0400 or GMT-04:00.
+		// this removes the last ':' to put it into 'Z' format
+		String replacedDate = dateString.replaceFirst("([-+]\\d+):(\\d+)$", "$1$2");
+		
+		
+		replacedDate = replacedDate.replaceFirst("\\.\\d([-+])", "$1");
+		return replacedDate;
 	}
 	
 	/*
