@@ -2,14 +2,14 @@
 ${action.setPageType('inspection_type', 'inspection_form')!}
 <head>
 	<@n4.includeStyle type="page" href="inspectionForm" />
-	<script type="text/javascript" src="<@s.url value="/javascript/inspectionForm.js" />" ></script>
+	<@n4.includeScript src="inspectionForm" />
 
-	<script type="text/javascript" >
+	<@n4.includeScript>
 		addCriteriaUrl = '<@s.url action="criteriaAdd" namespace="/ajax"  uniqueID="${uniqueID}"/>';
 		addSectionUrl = '<@s.url action="sectionAdd" namespace="/ajax" uniqueID="${uniqueID}"/>';
 		addObservationUrl = '<@s.url action="observationAdd" namespace="/ajax" uniqueID="${uniqueID}"/>';
 		
-		inspectionFormChangedMessage = '<@s.text name="warning.inspectionformnotsaved"/>';
+		inspectionFormChangedMessage = '${action.getText("warning.inspectionformnotsaved")?js_string}';
 		<#list criteriaSections as section >
 			<#if section?exists >
 				sectionIndexes[${section_index}] = new Array();
@@ -25,7 +25,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		<#if !actionErrors.isEmpty() || !fieldErrors.isEmpty() >
 			changeToForm();
 		</#if>
-	</script>
+	</@n4.includeScript>
 </head>
 
 
@@ -35,9 +35,9 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 	<@s.form name="inspectionTypeForm" action="inspectionTypeFormSave" theme="simple" >
 		<@s.hidden name="uniqueID" />
 		<div id="sectionContainer">
-		<#list criteriaSections as section >
-			<#include "_sectionForm.ftl" />
-		</#list>
+			<#list criteriaSections as section >
+				<#include "_sectionForm.ftl" />
+			</#list>
 		</div>
 		<div class="formAction">
 			<button onclick="addSection(); changeToForm(); return false;" ><@s.text name="label.addsection"/></button>
@@ -67,12 +67,12 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 </div>
 
 
-<div id="buttonGroupLists" class="viewSection"/>
-	<h2><@s.text name="label.yourbuttongroups"/> <a href="<@s.url action="buttonGroups" includeParams="none" inspectionTypeId="${uniqueID}"/>" onclick="return hasFormChanged();"><@s.text name="label.manage"/></a></h2>
+<div id="buttonGroupLists" class="viewSection">
+	<h2><@s.text name="label.yourbuttongroups"/> <a href="<@s.url action="buttonGroups" inspectionTypeId="${uniqueID}"/>" onclick="return hasFormChanged();"><@s.text name="label.manage"/></a></h2>
 	<table class="simpleTable">
 		<tr>
 			<th><@s.text name="label.name"/></th>
-			<th><@s.text name="label.buttonsandlabels"/></th>
+			<th>${action.getText("label.buttonsandlabels")?html}</th>
 		</tr>
 		<#if stateSets?size gt 0 >
 			<#list stateSets as stateSet >

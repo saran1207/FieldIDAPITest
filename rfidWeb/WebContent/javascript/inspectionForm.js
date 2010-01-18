@@ -35,15 +35,17 @@ function retireRecommendation(sectionIndex, criteriaIndex, recommendationIndex) 
 	retireObservation(id);
 	
 }
-function retireObservation(id) {
-	fade(id);
-	var element = $$("#" + id + " input").first()
-	element.value = "--deleted--"  + element.getValue();
-}
+
 
 function retireDeficiency(sectionIndex, criteriaIndex, deficiencyIndex ) {
 	var id = 'deficiency_' + sectionIndex + '_' + criteriaIndex + '_' + deficiencyIndex;
 	retireObservation(id);
+}
+
+function retireObservation(id) {
+	fade(id);
+	var element = $$("#" + id + " input").first();
+	element.value = "--deleted--"  + element.getValue();
 }
 
 function fadeAndRemove(elementId) {

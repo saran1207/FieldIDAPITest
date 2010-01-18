@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/buttonGroup.js"/>" ></script>
 	<script type="text/javascript">
 		undoButtonGroupUrl = '<@s.url action="buttonGroupEdit" namespace="/ajax"/>';
-		changesWarning = '<@s.text name="warning.buttongroupsnotsave"/>'; 
+		changesWarning = "<@s.text name="warning.buttongroupsnotsave"/>"; 
 	</script>
 	<script type="text/javascript">
 		maxNumberOfImages = ${ maxNumberOfImages!0};
