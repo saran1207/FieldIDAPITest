@@ -61,10 +61,10 @@
 	<div id="releaseNotes" class="dashboardSection">
 		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes-${action.getText('app.majorversion')}.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
 		<ul class="informationList">
-			<li>Filter by Asset Type Group on Search, Reporting and Schedule</li>
-			<li>New Downloads Section under My Account</li>
-			<li>Find and Inspect assets on Field ID Mobile using Real-Time Mode</li>
-			<li>View Last Inspection on Field ID Mobile</li>
+			<li>Copy Inspection Types</li>
+			<li>Search for Assets over the Safety Network</li>
+			<li>Mass Update Location on the handheld</li>
+			<li>Smart Search on the Home Screen on the handheld</li>
 		</ul>
 	</div>
 	<div id="helpVideos" class="dashboardSection">

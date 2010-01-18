@@ -10,7 +10,7 @@ class InspectionCompletor
   end
   
   def process
-    InspectionType.find(:all, :conditions => { :r_tenant => @tenant.id }, :order => :id).each do |inspectionType|
+    InspectionType.find(:all, :conditions => { :tenant_id => @tenant.id }, :order => :id).each do |inspectionType|
       complete_all_inspection_of_type inspectionType
     end
     
@@ -46,7 +46,7 @@ class InspectionCompletor
           raise Exception.new("criteria does not have the correct button group! [" + criteria.displaytext + "]  [" + inspectionType.name + "] + [" + @button_group.name + "] [" +criteria.states.id.to_s + "] [" + @button_group.id.to_s + "]" )
         end
         filled_in_result = CriteriaResult.new
-        filled_in_result.r_tenant = @tenant.id
+        filled_in_result.tenant_id = @tenant.id
         filled_in_result.state_id = @skip_state.id
         filled_in_result.criteria_id = criteria.id
         filled_in_result.inspection_id = inspection.id

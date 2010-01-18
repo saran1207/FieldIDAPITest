@@ -1,14 +1,16 @@
-old:
-  adapter: jdbcpostgresql
-  database: fieldid
-  host: localhost
-  username: fieldid-sys
-  password: fieldid#9 
-  encoding: utf8
+
 
 development:
   adapter: jdbcmysql
   database: fieldid
+  host: localhost
+  username: root
+  encoding: utf8
+
+
+development_branch:
+  adapter: jdbcmysql
+  database: fieldid_branch
   host: localhost
   username: root
   encoding: utf8

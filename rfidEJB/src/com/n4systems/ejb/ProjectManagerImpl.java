@@ -17,6 +17,7 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.security.ManualSecurityFilter;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.tools.Page;
@@ -82,8 +83,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 	
 	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
-		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
-		filter.setTargets("p.tenant.id", "schedule.product.owner", null, null);
+		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "schedule");
 		String countQueryStr = "SELECT count( schedule ) FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project and " + filter.produceWhereClause();
 		
 		if (statuses != null && !statuses.isEmpty()) {
@@ -98,10 +98,16 @@ public class ProjectManagerImpl implements ProjectManager {
 		return countQuery;
 		
 	}
+
+	private ManualSecurityFilter createManualSecurityFilter(SecurityFilter userFilter, String scheduleTablePrefix) {
+		SecurityDefiner securityDefiner = InspectionSchedule.createSecurityDefiner();
+		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
+		filter.setTargets(scheduleTablePrefix + "." + securityDefiner.getTenantPath(), scheduleTablePrefix + "." + securityDefiner.getOwnerPath(), null, scheduleTablePrefix + "." + securityDefiner.getStatePath());
+		return filter;
+	}
 	
 	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
-		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
-		filter.setTargets("p.tenant.id", "schedule.product.owner", null, null);
+		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "schedule");
 		String queryStr = "SELECT schedule FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {
 			queryStr += " AND schedule.status IN (:statuses) ";
