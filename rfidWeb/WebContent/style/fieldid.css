@@ -177,83 +177,59 @@ h2 a {
 
 #pageNavigation ul li a {
 	display: block;
-	padding-top: 50px;
+	padding-top: 45px;
 	min-width: 40px;
-	background-position: top center;
+	background-position:top center; 
 	background-repeat: no-repeat;
+	
+}
+#pageNavigation ul li a:hover {
+	background-position: center -70px;
 }
 
 #menuHome {
 	background-image: url(../images/menu/home.png);
 }
 
-#menuHome:hover {
-	background-image: url(../images/menu/home_hot.png);
-}
+
 
 #menuIdentify {
 	background-image: url(../images/menu/identify.png);
 }
 
-#menuIdentify:hover {
-	background-image: url(../images/menu/identify_hot.png);
-}
 
 #menuInspect {
 	background-image: url(../images/menu/inspect.png);
 }
 
-#menuInspect:hover {
-	background-image: url(../images/menu/inspect_hot.png);
-}
 
 #menuAssets {
 	background-image: url(../images/menu/assets.png);
-}
-
-#menuAssets:hover {
-	background-image: url(../images/menu/assets_hot.png);
 }
 
 #menuReport {
 	background-image: url(../images/menu/reporting.png);
 }
 
-#menuReport:hover {
-	background-image: url(../images/menu/reporting_hot.png);
-}
 
 #menuSchedule {
 	background-image: url(../images/menu/schedule.png);
 }
 
-#menuSchedule:hover {
-	background-image: url(../images/menu/schedule_hot.png);
-}
 
 #menuSetup {
 	background-image: url(../images/menu/setup.png);
 }
 
-#menuSetup:hover {
-	background-image: url(../images/menu/setup_hot.png);
-}
 
 
 #menuProject {
 	background-image: url(../images/menu/project.png);
 }
 
-#menuProject:hover {
-	background-image: url(../images/menu/project_hot.png);
-}
 
 #menuSafetyNetwork {
 	background-image: url(../images/menu/safety_network.png);
-}
-
-#menuSafetyNetwork:hover {
-	background-image: url(../images/menu/safety_network_hot.png);
 }
 
 .errorMessage,.error {

@@ -1,11 +1,7 @@
-.complianceMessage {
-	height: expression(this . scrollHeight <   120 ?   "120px" :   "auto");
-}
-
 
 #pageNavigation ul li a {
 	
-	width: expression(this . scrollWidth <   48 ?   "48px" :   "auto");
+	width: expression(this . scrollWidth <   40 ?   "40px" :   "auto");
 }
 
 * {
