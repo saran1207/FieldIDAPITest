@@ -49,7 +49,6 @@ public class WEB_1465 extends FieldIDTestCase {
 			identify.gotoAdd();
 		}
 		Product p = new Product();
-		p.setProductType("atest");
 		p = identify.setAddAssetForm(p, true);
 		identify.gotoSaveAddAssetForm();
 		// smart search for the asset we just created
