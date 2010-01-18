@@ -3,7 +3,6 @@ package com.n4systems.fieldid.selenium.testcase;
 import org.junit.*;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.assets.ProductSearch;
 import com.n4systems.fieldid.selenium.identify.Identify;
 import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Login;
@@ -49,9 +48,10 @@ public class WEB_1465 extends FieldIDTestCase {
 		if(!identify.isAdd()) {
 			identify.gotoAdd();
 		}
-		Product p = identify.setAddAssetForm(new Product(), true);
-		// fill in the form
-		// click the save button
+		Product p = new Product();
+		p.setProductType("atest");
+		p = identify.setAddAssetForm(p, true);
+		identify.gotoSaveAddAssetForm();
 		// smart search for the asset we just created
 		// go to the edit view
 		fail("not yet implemented");
