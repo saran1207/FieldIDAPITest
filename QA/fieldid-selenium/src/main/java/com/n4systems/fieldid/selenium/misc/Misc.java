@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,11 +13,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import org.apache.log4j.Logger;
-
 import org.junit.Assert;
-
+import org.w3c.dom.*;
+import org.w3c.tidy.Tidy;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.thoughtworks.selenium.Selenium;
 
@@ -1181,7 +1182,7 @@ public class Misc extends Assert {
 			secondsLeft--;
 		} while(loading && secondsLeft > 0);
 		
-		if(secondsLeft > 0) {
+		if(secondsLeft == 0) {
 			fail("Timeout before the Owner dialog finished loading");
 		}
 	}
@@ -1300,5 +1301,13 @@ public class Misc extends Assert {
 	 */
 	public void sleep(long millis, int nanos) {
 		try { Thread.sleep(millis, nanos); } catch (InterruptedException e) { }
+	}
+
+	public Owner getOwner() {
+		Owner result = new Owner();
+		result.setOrganization(selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator));
+		result.setCustomer(selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator));
+		result.setDivision(selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator));
+		return result;
 	}
 }

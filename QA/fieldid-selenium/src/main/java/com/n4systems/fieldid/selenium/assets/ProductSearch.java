@@ -53,6 +53,7 @@ public class ProductSearch extends Assert {
 	private String purchaseOrderDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_purchaseorder']";
 	private String productAttributesDynamicColumnLocator = "xpath=//DIV[@id='product_search_product_info_options']";
 	private String productAttributesDynamicCheckBoxXpath = "//INPUT[@type='checkbox' and contains(@id,'chk_product_search_infooption_')]";
+	private String runButtonLocator = "xpath=//INPUT[@id='reportForm_label_Run']";
 
 	public ProductSearch(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -244,6 +245,16 @@ public class ProductSearch extends Assert {
 	public List<String> getDynamicProductAttributeDisplayColumns() {
 		List<String> result = search.getAttributesDisplayColumns(productAttributesDynamicColumnLocator, productAttributesDynamicCheckBoxXpath);
 		return result;
+	}
+
+	public void gotoRunProductSearch() {
+		misc.info("Click Run buttom");
+		if(selenium.isElementPresent(runButtonLocator)) {
+			selenium.click(runButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the Run button for Product Search");
+		}
 	}
 }
 

@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="fieldid-web-automation" default="testcases" basedir=".">
+<project name="fieldid-web-automation" default="run-tests" basedir=".">
+
+	<property name="workspace" value="C:/workspace/Backup/Scratch"/>
+	<property name="outputdir" value="tmp/rawtestoutput"/>
+	<property name="classdir" value="bin"/>
+	<property name="server-host" value="localhost"/>
+	<property name="server-port" value="4444"/>
+
+	<target name="run-tests">
+		<parallel>
+			<antcall target="start-server"></antcall>
+			<sequential>
+				<waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
+					<http url="http://${server-host}:${server-port}/selenium-server/driver/?cmd=testComplete" />
+				</waitfor>
+				<antcall target="testcases"></antcall>
+				<antcall target="stop-server"></antcall>
+			</sequential>
+		</parallel>
+	</target>
+
 	<target name="testcases">
 		<tstamp/>
-		<property name="outputdir" value="tmp/rawtestoutput"/>
-		<property name="classdir" value="bin"/>
 		<property name="reportdir" value="test-reports/${DSTAMP}-${TSTAMP}"/>
 		<mkdir dir="${outputdir}"/>
 		<mkdir dir="${reportdir}"/>
@@ -22,5 +40,19 @@
 			<report todir="${reportdir}"/>
 		</junitreport>
 		<fail if="junit.failure" message="Test case(s) failed. See ${reportdir}."/>
+	</target>
+
+	<target name="start-server">
+		<java jar="lib/selenium-server.jar" fork="true" spawn="true">
+			<arg line="-firefoxProfileTemplate ${workspace}/firefox"/>
+		</java>
+	</target>
+
+	<target name="stop-server">
+		<get taskname="selenium-shutdown"
+			src="http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer"
+			dest="result.txt" ignoreerrors="true"
+		/>
+		<echo taskname="selenium-shutdown" message="Errors during shutdown are expected"/>
 	</target>
 </project>

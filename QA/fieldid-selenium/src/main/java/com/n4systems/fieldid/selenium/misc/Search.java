@@ -81,7 +81,7 @@ public class Search extends Assert {
 		boolean updating = true;
 		int secondsLeft = maxSeconds;
 		do {
-			try { Thread.sleep(1000); } catch(Exception e) { }
+			misc.sleep(1000);
 			updating = selenium.isElementPresent(availableColumnsUpdatingLocator);
 			secondsLeft--;
 		} while(updating && secondsLeft > 0);
