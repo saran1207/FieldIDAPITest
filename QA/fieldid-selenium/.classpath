@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-java-client-driver-sources.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-java-client-driver.jar" sourcepath="C:/workspace/trunk/fieldid-selenium/lib/selenium-java-client-driver-sources.jar"/>
+	<classpathentry kind="lib" path="C:/workspace/trunk/fieldid-selenium/lib/jtidy.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
