@@ -40,7 +40,7 @@ public class DownloadLinkTest {
 		link.setId(123L);
 		link.setUser(user);
 		
-		assertEquals("./000123.dl", link.getFile(false).getPath());
+		assertEquals("." + File.separator + "000123.dl", link.getFile(false).getPath());
 	}
 	
 	@SuppressWarnings("serial")
