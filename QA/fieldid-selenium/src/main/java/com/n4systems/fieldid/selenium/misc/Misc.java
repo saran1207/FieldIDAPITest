@@ -78,6 +78,8 @@ public class Misc extends Assert {
 	private String chooseOwnerSelectButtonLocator = "xpath=//INPUT[@id='selectOrg']";
 	private String chooseOwnerCancelButtonLocator = "xpath=//INPUT[@id='cancelOrgSelect']";
 	private String orgBrowserLoadingImageLocator = "xpath=//DIV[@id='orgBrowserLoading' and not(contains(@style,'display: none'))]";
+	private String smartSearchTextFieldLocator = "xpath=//INPUT[@id='searchText']";
+	private String smartSearchLoadButtonLocator = "xpath=//INPUT[@id='smartSearchButton']";
 	
 	public Misc(Selenium selenium, Logger log) {
 		this.selenium = selenium;
@@ -1303,11 +1305,51 @@ public class Misc extends Assert {
 		try { Thread.sleep(millis, nanos); } catch (InterruptedException e) { }
 	}
 
+	/**
+	 * Gets the Owner information from the Choose Owner dialog. It assumes
+	 * you have used the gotoChooseOwner() to open the dialog. It then gets
+	 * the organization, customer and division information and returns it
+	 * as an Owner object.
+	 * 
+	 * @return
+	 */
 	public Owner getOwner() {
 		Owner result = new Owner();
-		result.setOrganization(selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator));
-		result.setCustomer(selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator));
-		result.setDivision(selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator));
+		String organization = selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator);
+		result.setOrganization(organization.trim());
+		String customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
+		String customer = customerOrganization.replace(" (" + organization + ")", "");
+		result.setCustomer(customer.trim());
+		String divisionCustomerOrganization = selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator);
+		String division = divisionCustomerOrganization.replace(", " + customerOrganization, "");
+		result.setDivision(division.trim());
 		return result;
+	}
+
+	/**
+	 * Enters text into the Find text field but does not click the Load button.
+	 * 
+	 * @param s
+	 */
+	public void setSmartSearch(String s) {
+		info("Enter '" + s + "' into the Smart Search (Find:) text field");
+		if(selenium.isElementPresent(smartSearchTextFieldLocator)) {
+			selenium.type(smartSearchTextFieldLocator, s);
+		} else {
+			fail("Could not find the Smart Search (Find:) text field");
+		}
+	}
+
+	/**
+	 * Click the Load button on the Find text field.
+	 */
+	public void gotoSmartSearch() {
+		info("Click the Load button on Smart Search");
+		if(selenium.isElementPresent(smartSearchLoadButtonLocator)) {
+			selenium.click(smartSearchLoadButtonLocator);
+			waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the Load button for the Smart Search (Find:) text field");
+		}
 	}
 }

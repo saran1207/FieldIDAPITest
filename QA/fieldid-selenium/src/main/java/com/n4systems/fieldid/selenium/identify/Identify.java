@@ -240,7 +240,7 @@ public class Identify extends Assert {
 				selenium.click(anchor);
 				waitForUnitOfMeasureDialogToOpen(id);
 				Random r = new Random();
-				String value = Integer.toString(Math.abs(r.nextInt(100)));
+				String value = Integer.toString(Math.abs((r.nextInt(100)+1)));
 				String unitOfMeasureIDPrefix = "unitOfMeasureId_";
 				String typeOfUnitOfMeasureSelectListLocator = "//SELECT[contains(@id,'" + unitOfMeasureIDPrefix + id + "')]";
 				String typeOfUnitOfMeasure = selenium.getSelectedValue(typeOfUnitOfMeasureSelectListLocator);

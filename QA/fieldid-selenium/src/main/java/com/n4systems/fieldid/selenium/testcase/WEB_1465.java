@@ -6,6 +6,7 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.identify.Identify;
 import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.assets.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 
 public class WEB_1465 extends FieldIDTestCase {
@@ -13,6 +14,7 @@ public class WEB_1465 extends FieldIDTestCase {
 	Login login;
 	Choose choose;
 	Identify identify;
+	Asset asset;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -20,6 +22,7 @@ public class WEB_1465 extends FieldIDTestCase {
 		login = new Login(selenium, misc);
 		choose = new Choose(selenium, misc);
 		identify = new Identify(selenium, misc);
+		asset = new Asset(selenium, misc);
 	}
 
 	@Test
@@ -51,9 +54,13 @@ public class WEB_1465 extends FieldIDTestCase {
 		Product p = new Product();
 		p = identify.setAddAssetForm(p, true);
 		identify.gotoSaveAddAssetForm();
-		// smart search for the asset we just created
-		// go to the edit view
-		fail("not yet implemented");
+		String serialNumber = p.getSerialNumber();
+		misc.setSmartSearch(serialNumber);
+		misc.gotoSmartSearch();
+		asset.verifyAssetViewPage(serialNumber);
+		asset.verifyAssetViewPageDynamicContents(p);
+		asset.gotoEdit();
+		asset.verifyAssetEditPage(serialNumber);
 	}
 
 	private void loginAcceptingEULAIfNecessary(String username, String password) {
