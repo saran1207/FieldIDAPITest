@@ -99,7 +99,7 @@ public class Login extends TestCase {
 			n4systemsURL = p.getProperty("n4systemsurl", "NOT SET");
 			loginForgotMyPasswordFinder = xpath(p.getProperty("forgotpassword", "NOT SET"));
 			forgotPasswordContentHeaderFinder = xpath(p.getProperty("forgotpasswordcontentheader", "NOT SET"));
-			forgotPasswordSendButtonFinder = id(p.getProperty("sendPassword_hbutton_send", "NOT SET"));
+			forgotPasswordSendButtonFinder = id(p.getProperty("forgotpasswordsendbutton", "NOT SET"));
 			forgotPasswordLoginFinder = xpath(p.getProperty("forgotpasswordlogin", "NOT SET"));
 			forgotPasswordUserNameFinder = id(p.getProperty("forgotpasswordusername", "NOT SET"));
 			forgotPasswordLoginButtonFinder = xpath(p.getProperty("forgotpasswordloginbutton", "NOT SET"));

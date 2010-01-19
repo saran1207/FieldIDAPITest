@@ -21,8 +21,8 @@ public class WEB_665 extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		helper.setBaseURL("https://www.fieldid.com/fieldid/");
-//		helper.setBaseURL("https://localhost.localdomain/fieldid/");
+//		helper.setBaseURL("https://www.fieldid.com/fieldid/");
+		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
 		if (!initialized) {
 			initialized = true;

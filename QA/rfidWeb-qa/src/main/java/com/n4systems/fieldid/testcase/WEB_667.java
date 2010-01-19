@@ -19,7 +19,8 @@ public class WEB_667 extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		helper.setBaseURL("https://www.fieldid.com/fieldid/");
+		helper.setBaseURL("https://www.team.n4systems.net/fieldid/");
+//		helper.setBaseURL("https://www.fieldid.com/fieldid/");
 		helper.setEndUser(false);
 	}
 	
