@@ -28,6 +28,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 	
 	public String doShow() {
 		getSession().getSeenItRegistry().iHaveSeen(SeenItItem.SetupWizard);
+		getSession().clearQuickSetupWizardImports();
 		return SUCCESS;
 	}
 	

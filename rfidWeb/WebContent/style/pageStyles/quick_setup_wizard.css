@@ -22,6 +22,10 @@ h2 {
 	background: no-repeat url(../../images/system_settings.png);
 }
 
+#setupWizardStep3, #steps { 
+	background: no-repeat url(../../images/catalog.png);
+}
+
 #setupWizardStep1 form, #setupWizardStep2 form {
 	padding-top:10px;
 }
@@ -30,6 +34,7 @@ h2 {
 	margin:10px 0;
 	padding-left:35px;
 	min-height:36px;
+	
 } 
 
 #setupMobile {
@@ -59,22 +64,40 @@ h2 {
 	margin:10px 0;
 	padding-left:55px;
 	line-height:50px;
+	background-repeat: no-repeat;
 	
 } 
 
 #companyProfile {
-	background: no-repeat url(../../images/company_profile.png);
+	background-image: url(../../images/company_profile.png);
 }
 
 #systemSettings {
-	background: no-repeat url(../../images/system_settings.png);
+	background-image:  url(../../images/system_settings.png);
 }
 
+#importCatalogs {
+	background-image:  url(../../images/catalog.png);
+}
 #startButton {
 	font-size:1.5em;
 	
 }
 
-#setupWizardStart p {
+.setupWizardContent p {
 	margin-top:10px
+}
+
+#safetyNetworkConnections {
+	margin-top: 10px;
+	
+}
+#safetyNetworkConnections td {
+	padding:10px 8px;
+	border-top:1px solid #999;
+}
+
+.actions {
+	border-top-color:#999;
+	margin:0;
 }

@@ -2,7 +2,7 @@
 	<div id="pageFooter">
 		<div>
 			<p>
-				<a href="<@s.url action="editPassword"/>" ><@s.text name="label.changepassword" /></a> |
+				<a href="<@s.url action="editPassword" namespace="/"/>" ><@s.text name="label.changepassword" /></a> |
 				<a href="http://n4systems.helpserve.com/" target="_blank" ><@s.text name="label.support"/></a>  
 			</p>
 			<p>

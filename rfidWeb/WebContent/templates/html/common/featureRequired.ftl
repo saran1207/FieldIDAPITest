@@ -13,7 +13,7 @@
 	<@s.text name="label.purchase_feature">
 		<@s.param>${action.getText(requiredFeature.label)}</@s.param>
 	</@s.text>
-	<@s.url id="homeUrl" action="home"/>
+	<@s.url id="homeUrl" action="home"  namespace="/"/>
 	
 	
 </div>

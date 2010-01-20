@@ -36,6 +36,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
 	private static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
 	private static final String VENDOR_CONTEXT = "vendor_context";
+	private static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
 	
 	
 	private final HttpSession session;
@@ -346,6 +347,20 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 		}
 		
 		return seenItRegistry;
+	}
+	
+	
+	public Set<Long> getQuickSetupWizardImports() {
+		Set<Long> imports = (Set<Long>)get(KEY_QUICK_SETUP_WIZARD_IMPORTS);
+		if (imports == null) {
+			imports = new HashSet<Long>();
+			put(KEY_QUICK_SETUP_WIZARD_IMPORTS, imports);
+		}
+		return imports;
+	}
+	
+	public void clearQuickSetupWizardImports() {
+		remove(KEY_QUICK_SETUP_WIZARD_IMPORTS);
 	}
 
 

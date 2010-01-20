@@ -1,4 +1,4 @@
-<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>2</@s.param></@s.text></title>
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
@@ -6,7 +6,7 @@
 	<h2 class="clean"><@s.text name="label.your_company_profile"/></h2>
 	<span class="weak"><@s.text name="label.tell_us_what_applies_to_you"/></span>
 	
-	<@s.form action="quickSetupWizardStep1Complete" cssClass="fullForm fluentSets  prominent" theme="fieldid">	
+	<@s.form action="step1Complete" cssClass="fullForm fluentSets  prominent" theme="fieldid">	
 		
 		<div class="infoSet">
 			<span class="fieldHolder">
@@ -25,7 +25,7 @@
 		<div class="actions">
 			<@s.submit key="label.next" />
 			<@s.text name="label.or"/>
-			<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
+			<a href="<@s.url action="home" namespace="/"/>"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </div>

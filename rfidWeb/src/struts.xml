@@ -98,8 +98,8 @@
 			</result>
 			
 			<result name="startSetupWizard" type="redirectAction">
-				<param name="namespace">/</param>
-				<param name="actionName">quickSetupWizard</param>
+				<param name="namespace">/quickStartWizard</param>
+				<param name="actionName">startWizard</param>
 			</result>
 		</global-results>
 	</package>
@@ -117,7 +117,9 @@
 	
 	<include file="ajaxPackageStruts.xml"/>
 	<include file="aHtmlPackageStruts.xml"/>
-	
+	<include file="quickSetup2WizardPackage.xml"/>
+	<include file="inspectionPackage.xml"/>
+	<include file="quickSetupWizardPackage.xml"/>
 	
 	
 	<package name="files" extends="default" namespace="/file">

@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.viewhelpers;
 
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+
 public class BaseActionHelper {
 
 	
@@ -17,5 +20,11 @@ public class BaseActionHelper {
 			return trimmedString + TRAILING_CHARACTERS_TO_SHOW_MORE_WORDS_EXIST;
 		}
 		return string;
+	}
+	
+	
+	public String configEntry(String entryName) {
+		ConfigEntry configEntry = ConfigEntry.valueOf(entryName);
+		return ConfigContext.getCurrentContext().getString(configEntry);
 	}
 }

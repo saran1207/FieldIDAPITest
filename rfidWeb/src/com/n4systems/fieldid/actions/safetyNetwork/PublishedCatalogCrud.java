@@ -67,6 +67,7 @@ public class PublishedCatalogCrud extends AbstractCrud {
 	}
 	
 	public String doShow() {
+		testPreconditions();
 		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, getSecurityFilter());
 		try { 
 			linkedCatalogAccess = safetyNetwork.getCatalogAccess(linkedTenant);
@@ -96,6 +97,14 @@ public class PublishedCatalogCrud extends AbstractCrud {
 		}
 		
 		return SUCCESS;
+	}
+
+	private void testPreconditions() {
+		if (linkedTenant == null ) {
+			addFlashErrorText("error.you_must_select_a_linked_company_to_import_a_catalog_from");
+			throw new MissingEntityException("linked company required");
+		}
+		
 	}
 
 	private Set<Long> covertSelectedIdsToSet(Map<String,Boolean> idSet) {

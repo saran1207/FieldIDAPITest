@@ -5,6 +5,6 @@
 	<strong><@s.text name="label.please_note"/>:</strong> <@s.text name="warning.catalog_import"/>
 </p>
 <div class="stepAction"/>
-	<@s.url id="doneUrl" action="connections" namespace="/" />
-	<@s.submit theme="fieldid" key="label.return_to_safety_network" onclick="return redirect('${doneUrl}');"/>
+	
+	<@s.submit theme="fieldid" key="label.return_to_safety_network" onclick="return redirect(yourDoneUrl);"/>
 </div>
