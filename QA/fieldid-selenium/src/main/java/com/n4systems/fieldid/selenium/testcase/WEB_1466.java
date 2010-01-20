@@ -7,13 +7,11 @@ import org.junit.*;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.Admin;
 import com.n4systems.fieldid.selenium.administration.ManageUsers;
-import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Login;
 
 public class WEB_1466 extends FieldIDTestCase {
 
 	Login login;
-	Choose choose;
 	Admin admin;
 	ManageUsers mus;
 	
@@ -21,7 +19,6 @@ public class WEB_1466 extends FieldIDTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		choose = new Choose(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mus = new ManageUsers(selenium, misc);
 	}
@@ -33,7 +30,7 @@ public class WEB_1466 extends FieldIDTestCase {
 		String companyID = getStringProperty("company1");
 
 		try {
-				setCompany(companyID);
+			setCompany(companyID);
 				loginAcceptingEULAIfNecessary(username, password);
 				gotoAddEmployee();
 				verifyTagProductsHasChangedToIdentifyAssets();
@@ -201,13 +198,6 @@ public class WEB_1466 extends FieldIDTestCase {
 			misc.scrollToBottomOfEULA();
 			misc.gotoAcceptEULA();
 		}
-	}
-
-	private void setCompany(String companyID) {
-		misc.info("Changing to company '" + companyID);
-		login.gotoIsNotTheCompanyIWant();
-		choose.setCompanyID(companyID);
-		choose.gotoFindSignInPage();
 	}
 
 	@After

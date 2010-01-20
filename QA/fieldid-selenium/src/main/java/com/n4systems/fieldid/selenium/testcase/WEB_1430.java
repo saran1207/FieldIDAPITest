@@ -1,21 +1,17 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Login;
 
 public class WEB_1430 extends FieldIDTestCase {
 
 	Login login;
-	Choose choose;
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		choose = new Choose(selenium, misc);
 		// TODO: SQL code to update all users to have the same, known password
 	}
 
@@ -47,13 +43,6 @@ public class WEB_1430 extends FieldIDTestCase {
 			misc.scrollToBottomOfEULA();
 			misc.gotoAcceptEULA();
 		}
-	}
-
-	private void setCompany(String companyID) {
-		misc.info("Changing to company '" + companyID);
-		login.gotoIsNotTheCompanyIWant();
-		choose.setCompanyID(companyID);
-		choose.gotoFindSignInPage();
 	}
 
 	@After

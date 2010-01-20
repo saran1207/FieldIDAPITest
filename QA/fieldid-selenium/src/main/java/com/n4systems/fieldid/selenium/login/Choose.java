@@ -4,6 +4,11 @@ import org.junit.Assert;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
+/**
+ * @deprecated
+ * @author dgrainge
+ *
+ */
 public class Choose extends Assert {
 
 	private Selenium selenium;

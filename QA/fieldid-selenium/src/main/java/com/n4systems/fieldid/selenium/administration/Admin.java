@@ -9,7 +9,7 @@ public class Admin extends Assert {
 	Misc misc;
 	
 	// Locators
-	private String administrationPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Administration')]";
+	private String administrationPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Setup')]";
 	private String manageOrganizationsLinkLocator = "xpath=//A[contains(text(),'Manage Organizations')]";
 	private String manageCustomersLinkLocator = "xpath=//A[contains(text(),'Manage Customers')]";
 	private String manageUsersLinkLocator = "xpath=//A[contains(text(),'Manage Users')]";

@@ -101,7 +101,7 @@ public class WEB_1469 extends FieldIDTestCase {
 		String tenantID = tenantName.toLowerCase();
 
 		if(!login.isPlansAndPricingAvailable()) {
-			login.gotoIsNotTheCompanyIWant();
+			setCompany("msa");
 		}
 		login.gotoPlansAndPricing();
 		String packageName = "Unlimited";

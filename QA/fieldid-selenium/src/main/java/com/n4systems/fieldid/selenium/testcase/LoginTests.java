@@ -2,7 +2,6 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.*;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Forgot;
 import com.n4systems.fieldid.selenium.login.Login;
 
@@ -10,14 +9,12 @@ public class LoginTests extends FieldIDTestCase {
 
 	Login login;
 	Forgot forgot;
-	Choose choose;
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
 		forgot = new Forgot(selenium, misc);
-		choose = new Choose(selenium, misc);
 	}
 	
 	@Test
@@ -31,6 +28,7 @@ public class LoginTests extends FieldIDTestCase {
 		}
 	}
 	
+	@Ignore("No longer have a choose company option")
 	@Test
 	public void shouldBeAbleToChangeTheCompanyIDToAValidCompanyAndLogIn() throws Exception {
 		// this has to be a valid company ID
@@ -97,12 +95,6 @@ public class LoginTests extends FieldIDTestCase {
 		}
 	}
 	
-	private void setCompany(String companyID) {
-		login.gotoIsNotTheCompanyIWant();
-		choose.setCompanyID(companyID);
-		choose.gotoFindSignInPage();
-	}
-
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();

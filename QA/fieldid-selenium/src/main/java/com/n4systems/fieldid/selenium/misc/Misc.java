@@ -38,7 +38,7 @@ public class Misc extends Assert {
 	private String reportingIconLocator = "xpath=//A[@id='menuReport']";
 	private String scheduleIconLocator = "xpath=//A[@id='menuSchedule']";
 	private String safetyNetworkIconLocator = "xpath=//A[@id='menuSafetyNetwork']";
-	private String adminIconLocator = "xpath=//A[@id='menuAdministration']";
+	private String adminIconLocator = "xpath=//A[@id='menuSetup']";
 	private String projectsIconLocator = "xpath=//A[@id='menuProject']";
 	private String n4systemWindowLocator = "title=N4 Systems | Safety Through Innovation";
 	private String thawteAboutSSLCertificatesLinkLocator = "xpath=//DIV[@id='sslCert']/A[contains(text(),'ABOUT SSL CERTIFICATES')]";

@@ -4,7 +4,6 @@ import org.junit.*;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.identify.Identify;
-import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Login;
 import com.n4systems.fieldid.selenium.assets.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Product;
@@ -12,7 +11,6 @@ import com.n4systems.fieldid.selenium.datatypes.Product;
 public class WEB_1465 extends FieldIDTestCase {
 
 	Login login;
-	Choose choose;
 	Identify identify;
 	Asset asset;
 	
@@ -20,7 +18,6 @@ public class WEB_1465 extends FieldIDTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		choose = new Choose(selenium, misc);
 		identify = new Identify(selenium, misc);
 		asset = new Asset(selenium, misc);
 	}
@@ -72,13 +69,6 @@ public class WEB_1465 extends FieldIDTestCase {
 			misc.gotoAcceptEULA();
 		}
 		login.verifySignedIn();
-	}
-
-	private void setCompany(String companyID) {
-		misc.info("Changing to company '" + companyID);
-		login.gotoIsNotTheCompanyIWant();
-		choose.setCompanyID(companyID);
-		choose.gotoFindSignInPage();
 	}
 
 	@After

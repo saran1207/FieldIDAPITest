@@ -78,7 +78,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * The rest the of variables are for building the URL for opening the
 	 * browser. The default will be:
 	 * 
-	 * 		http://fieldid.team.n4systems.net/fieldid/
+	 * 		http://n4.team.n4systems.net/fieldid/
 	 * 
 	 * the general format is:
 	 * 
@@ -140,14 +140,13 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");
-	private String initCompany = System.getProperty("fieldid-companyid", "fieldid");
+	private String initCompany = System.getProperty("fieldid-companyid", "n4");
 	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
     protected Selenium selenium;
-	private String url = protocol + "://" + initCompany + "." + domain;
 	protected Misc misc;
 	static Logger log = Logger.getLogger(FieldIDTestCase.class.getName());
 	protected Properties p;
@@ -475,6 +474,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * capture or someone wants to watch the automation run.
 	 */
 	private void createWebBrowser() {
+		String url = protocol + "://" + initCompany + "." + domain;
 		log.debug("[setUp]: Selenium Host: " + host);
 		log.debug("[setUp]: Selenium Port: " + port);
 		log.debug("[setUp]: Browser: " + browser);
@@ -504,5 +504,45 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 */
 	public String getFieldIDDomain() {
 		return domain;
+	}
+
+	/**
+	 * Get the protocol we are currently using. This is typically
+	 * https but can be http as well.
+	 * 
+	 * @return
+	 */
+	public String getFieldIDProtocol() {
+		return protocol;
+	}
+
+	/**
+	 * Get the context root of the Field ID application. This is typically
+	 * /fieldid/ but it can be /fieldidadmin/ or we might change the name
+	 * entirely.
+	 * 
+	 * @return
+	 */
+	public String getFieldIDContextRoot() {
+		return contextRoot;
+	}
+
+	/**
+	 * The test suite will start up with whatever the System property
+	 * fieldid-companyid is set to. If it is not set it will default to
+	 * n4. If you need to change the company, use this method. This is
+	 * helpful in situations were you need to log in and out as different
+	 * tenants.
+	 * 
+	 * NOTE: if you need a tenant who is guaranteed to have a link to
+	 * Plans and Pricing, use "msa".
+	 * 
+	 * @param companyID
+	 */
+	public void setCompany(String companyID) {
+		misc.info("Changing to company '" + companyID);
+		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
+		selenium.open(url);
+		selenium.waitForPageToLoad(Misc.defaultTimeout);
 	}
 }

@@ -7,13 +7,11 @@ import com.n4systems.fieldid.selenium.administration.Admin;
 import com.n4systems.fieldid.selenium.administration.ManageCustomers;
 import com.n4systems.fieldid.selenium.administration.ManageOrganizations;
 import com.n4systems.fieldid.selenium.datatypes.Customer;
-import com.n4systems.fieldid.selenium.login.Choose;
 import com.n4systems.fieldid.selenium.login.Login;
 
 public class WEB_1482 extends FieldIDTestCase {
 
 	Login login;
-	Choose choose;
 	Admin admin;
 	ManageOrganizations mos;
 	ManageCustomers mcs;
@@ -22,7 +20,6 @@ public class WEB_1482 extends FieldIDTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		choose = new Choose(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mos = new ManageOrganizations(selenium, misc);
 		mcs = new ManageCustomers(selenium, misc);
@@ -30,8 +27,8 @@ public class WEB_1482 extends FieldIDTestCase {
 
 	@Test
 	public void addCustomerShouldHaveStateSlashProvince() throws Exception {
-		String password = getStringProperty("password");
 		String companyID = getStringProperty("company");
+		String password = getStringProperty("password");
 		String username = getStringProperty("userid");
 
 		try {
@@ -46,8 +43,8 @@ public class WEB_1482 extends FieldIDTestCase {
 	
 	@Test
 	public void addDivisionShouldHaveStateSlashProvince() throws Exception {
-		String password = getStringProperty("password");
 		String companyID = getStringProperty("company");
+		String password = getStringProperty("password");
 		String username = getStringProperty("userid");
 
 		try {
@@ -62,8 +59,8 @@ public class WEB_1482 extends FieldIDTestCase {
 	
 	@Test
 	public void addOrganizationalUnitShouldHaveStateSlashProvince() throws Exception {
-		String password = getStringProperty("password");
 		String companyID = getStringProperty("company");
+		String password = getStringProperty("password");
 		String username = getStringProperty("userid");
 
 		try {
@@ -78,8 +75,8 @@ public class WEB_1482 extends FieldIDTestCase {
 	
 	@Test
 	public void editPrimaryOrganizationalUnitShouldHaveStateSlashProvince() throws Exception {
-		String password = getStringProperty("password");
 		String companyID = getStringProperty("company");
+		String password = getStringProperty("password");
 		String username = getStringProperty("userid");
 
 		try {
@@ -136,13 +133,6 @@ public class WEB_1482 extends FieldIDTestCase {
 			misc.gotoAcceptEULA();
 		}
 		login.verifySignedIn();
-	}
-
-	private void setCompany(String companyID) {
-		misc.info("Changing to company '" + companyID);
-		login.gotoIsNotTheCompanyIWant();
-		choose.setCompanyID(companyID);
-		choose.gotoFindSignInPage();
 	}
 
 	@After

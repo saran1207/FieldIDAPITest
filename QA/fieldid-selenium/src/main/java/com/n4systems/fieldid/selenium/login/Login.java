@@ -230,6 +230,7 @@ public class Login extends Assert {
 	
 	/**
 	 * Clicks on the link to change the company id.
+	 * @deprecated
 	 */
 	public void gotoIsNotTheCompanyIWant() {
 		misc.info("Click link to change company ID.");
@@ -409,8 +410,6 @@ public class Login extends Assert {
 			String errors = misc.convertListToString(errorMessages);
 			fail("There were errors on the last action\n" + errors);
 		}
-		misc.info("Verify a Company ID exists near the bottom.");
-		assertTrue(selenium.isElementPresent(companyNameLocator));
 		misc.info("Verify a text box for User Name exists.");
 		assertTrue(selenium.isElementPresent(userNameLocator));
 		misc.info("Verify a text box for Password exists.");
@@ -423,7 +422,5 @@ public class Login extends Assert {
 		assertTrue(selenium.isElementPresent(rememberMySignInInformationLocator));
 		misc.info("Verify a link to I forgot my password exists.");
 		assertTrue(selenium.isElementPresent(forgotMyPasswordLinkLocator));
-		misc.info("Verify a link to is not the company I want exists.");
-		assertTrue(selenium.isElementPresent(isNotTheCompanyIWantLinkLocator));
 	}
 }
