@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,8 +13,6 @@ import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.w3c.dom.*;
-import org.w3c.tidy.Tidy;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.thoughtworks.selenium.Selenium;
 

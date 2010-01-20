@@ -51,7 +51,6 @@ public class Identify extends Assert {
 	private String identifyAddPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productCreate_publishedState']";
 	private String identifyAddCommentsTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 	private String productTypeAttributesUpdatingLocator = "xpath=//SPAN[id='productTypeIndicator' and not(contains(@style,'visibility: hidden'))]";
-	private String identifyAddRequiredProductAttributeTextFieldXpath = "//INPUT[contains(@class,'attribute') and contains(@class,'requiredField') and not(contains(@class,'unitOfMeasure'))]";
 	private CharSequence classStringIdentifyingRequiredFields = "requiredField";
 	private String classStringIdentifyingUnitOfMeasureFields = "unitOfMeasure";
 
