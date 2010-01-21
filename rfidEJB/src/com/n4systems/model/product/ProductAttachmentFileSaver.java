@@ -39,11 +39,11 @@ public class ProductAttachmentFileSaver extends FileSaver<ProductAttachment> {
 	}
 
 	private File copyFile() throws IOException {
-		File attachmentDirectory = PathHandler.getAttachmentFile(attachment);
+		File attachmentFile = PathHandler.getProductAttachmentFile(attachment);
 		File tmpDirectory = PathHandler.getTempRoot();
 
 		File tmpFile = new File(tmpDirectory, attachment.getFileName());
-		FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+		FileUtils.copyFileToDirectory(tmpFile, attachmentFile.getParentFile());
 		return tmpFile;
 	}
 

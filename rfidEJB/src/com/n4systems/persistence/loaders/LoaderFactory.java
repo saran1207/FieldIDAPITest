@@ -6,6 +6,7 @@ import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
+import com.n4systems.model.fileattachment.FileAttachmentLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
@@ -29,6 +30,7 @@ import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.productstatus.ProductStatusListLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
+import com.n4systems.model.producttype.ProductTypeByAttachmentLoader;
 import com.n4systems.model.producttype.ProductTypeListableLoader;
 import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
@@ -39,9 +41,13 @@ import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkProductTypeLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -139,6 +145,10 @@ public class LoaderFactory {
 		return new ExternalOrgCodeExistsLoader<T>(filter, orgClass);
 	}
 
+	public FileAttachmentLoader createFileAttachmentLoader() {
+		return new FileAttachmentLoader(filter);
+	}
+	
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
 		return new FilteredIdLoader<T>(filter, clazz);
 	}
@@ -146,7 +156,7 @@ public class LoaderFactory {
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
 		return new FilteredListableLoader(filter, clazz);
 	}
-	
+
 	public HasLinkedProductsLoader createHasLinkedProductsLoader() {
 		return new HasLinkedProductsLoader(filter);
 	}
@@ -174,7 +184,7 @@ public class LoaderFactory {
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
 	}
-
+	
 	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
 		return new PaginatedConnectionListLoader(filter);
 	}
@@ -207,6 +217,10 @@ public class LoaderFactory {
 		return new ProductStatusListLoader(filter);
 	}
 	
+	public ProductTypeByAttachmentLoader createProductTypeByAttachmentLoader() {
+		return new ProductTypeByAttachmentLoader();
+	}
+	
 	public ProductTypeListableLoader createProductTypeListableLoader() {
 		return new ProductTypeListableLoader(filter);
 	}
@@ -219,6 +233,10 @@ public class LoaderFactory {
 		return new SafetyNetworkAssignedProductInspectionLoader(filter);
 	}
 	
+	public SafetyNetworkAttachmentLoader createSafetyNetworkAttachmentLoader() {
+		return new SafetyNetworkAttachmentLoader();
+	}
+	
 	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
@@ -227,22 +245,34 @@ public class LoaderFactory {
 		return (forAssignedProduct) ? createSafetyNetworkAssignedProductInspectionLoader() : createSafetyNetworkRegisteredProductInspectionLoader();
 	}
 	
+	public SafetyNetworkProductAttachmentListLoader createSafetyNetworkProductAttachmentListLoader() {
+		return new SafetyNetworkProductAttachmentListLoader();
+	}
+	
+	public SafetyNetworkProductAttachmentLoader createSafetyNetworkProductAttachmentLoader() {
+		return new SafetyNetworkProductAttachmentLoader();
+	}
+	
 	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
 		return new SafetyNetworkProductLoader(filter);
+	}
+	
+	public SafetyNetworkProductTypeLoader createSafetyNetworkProductTypeLoader() {
+		return new SafetyNetworkProductTypeLoader();
 	}
 	
 	public SafetyNetworkInspectionLoader createSafetyNetworkRegisteredProductInspectionLoader() {
 		return new SafetyNetworkRegisteredProductInspectionLoader(filter);
 	}
-	
+
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
 		return new SafetyNetworkSmartSearchLoader(filter);
 	}
-	
+
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
 		return new SecondaryOrgByNameLoader(filter);
 	}
-	
+
 	public SecondaryOrgListableLoader createSecondaryOrgListableLoader() {
 		return new SecondaryOrgListableLoader(filter);
 	}
@@ -262,11 +292,11 @@ public class LoaderFactory {
 	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}
-
+	
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
-
+	
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
@@ -282,7 +312,7 @@ public class LoaderFactory {
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

@@ -75,7 +75,8 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 	 * @return			<code>true</code> if content type starts with <code>'image/'</code>.
 	 */
 	public boolean isImage(String fileName) {
-		return FileTypeMap.getDefaultFileTypeMap().getContentType(fileName).startsWith("image/");
+		String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
+		return contentType.startsWith("image/");
 	}
 	
 	public Integer getCurrentPage() {

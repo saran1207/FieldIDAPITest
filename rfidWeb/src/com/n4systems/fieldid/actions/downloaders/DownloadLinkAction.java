@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -19,15 +17,12 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 
-public class DownloadLinkAction extends AbstractAction {
+public class DownloadLinkAction extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DownloadLinkAction.class);
 	
 	private Long fileId;
-	private String contentType;
-	private String fileName;
-	private String fileSize;
-	private InputStream fileStream;
+	private DownloadLink downloadLink;
 	private List<DownloadLink> downloads;
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
@@ -37,37 +32,51 @@ public class DownloadLinkAction extends AbstractAction {
 	public static String buildDownloadUrl(AbstractAction action) {
 		return action.createActionURI("showDownloads.action?fileId=").toString();
 	}
-	
-	public String doDownload() {
+
+	@Override
+	protected boolean initializeDownload() {
 		if (fileId == null) {
-			return ERROR;
+			return false;
 		}
 		
-		FilteredIdLoader<DownloadLink> linkLoader = getLoaderFactory().createFilteredIdLoader(DownloadLink.class);
-		linkLoader.setId(fileId);
-		
-		DownloadLink downloadLink = linkLoader.load();
+		downloadLink = loadDownloadLink();
 		
 		if (downloadLink == null) {
 			logger.warn(String.format("Download requested for non-existant, expired or unloadable link [%d]", fileId));
 			addFlashErrorText("error.download_failed");
-			return ERROR;
+			return false;
 		}
 		
-		contentType = downloadLink.getContentType().getMimeType();
-		fileName = downloadLink.prepareFileName();
-		fileSize = String.valueOf(downloadLink.getFile().length());
+		return true;
+	}
+
+	@Override
+	protected String onFileNotFoundException(FileNotFoundException e) {
+		logger.warn(String.format("Could not open file [%s], requested by download [%s]", getFile(), downloadLink));
+		addFlashErrorText("error.download_failed");
+		return ERROR;
+	}
+	
+	@Override
+	public String getFileName() {
+		return downloadLink.prepareFileName();
+	}
+	
+	@Override
+	public String getContentType() {
+		return downloadLink.getContentType().getMimeType();
+	}
+	
+	@Override
+	public File getFile() {
+		return downloadLink.getFile();
+	}
+	
+	protected DownloadLink loadDownloadLink() {
+		FilteredIdLoader<DownloadLink> linkLoader = getLoaderFactory().createFilteredIdLoader(DownloadLink.class);
+		linkLoader.setId(fileId);
 		
-		File file = downloadLink.getFile();
-		try {
-			fileStream = new FileInputStream(file);
-		} catch(FileNotFoundException e) {
-			logger.warn(String.format("Could not open file [%s], requested by download [%s]", file, downloadLink));
-			addFlashErrorText("error.download_failed");
-			return ERROR;
-		}		
-		
-		return SUCCESS;
+		return linkLoader.load();
 	}
 	
 	public String doShow() {
@@ -80,22 +89,6 @@ public class DownloadLinkAction extends AbstractAction {
 	
 	public Long getFileId() {
 		return fileId;
-	}
-	
-	public String getContentType() {
-		return contentType;
-	}
-	
-	public String getFileName() {
-		return fileName;
-	}
-	
-	public String getFileSize() {
-		return fileSize;
-	}
-
-	public InputStream getFileStream() {
-		return fileStream;
 	}
 	
 	public List<DownloadLink> getDownloads() {
@@ -138,4 +131,5 @@ public class DownloadLinkAction extends AbstractAction {
 		}
 		return expiresText;
 	}
+
 }

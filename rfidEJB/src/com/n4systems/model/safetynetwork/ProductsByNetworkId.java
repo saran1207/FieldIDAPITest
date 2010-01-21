@@ -28,6 +28,7 @@ public class ProductsByNetworkId extends ListLoader<Product> {
 	public List<Product> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("networkId", networkId));
+		builder.addPostFetchPaths(Product.POST_FETCH_ALL_PATHS);
 		
 		if (excludeProductId != null) {
 			builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", excludeProductId));

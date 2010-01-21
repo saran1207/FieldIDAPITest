@@ -124,6 +124,12 @@
 	
 	<package name="files" extends="default" namespace="/file">
 		<global-results>
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="inputName">fileStream</param>
+				<param name="contentLength">${fileSize}</param>
+				<param name="contentDisposition">inline; filename="${fileName}"</param>
+			</result>
 			<result name="missing" type="httpheader">
 				<param name="error">404</param>
 			</result>
@@ -140,10 +146,15 @@
 		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
 		<action name="downloadInspectionCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadInspectionCert" />
 		<action name="downloadProductTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeAttachedFile" />
-		<action name="downloadProductTypeImage" method="downloadImage" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeAttachedFile" />
+		<action name="downloadProductTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductTypeAttachedFile" />
+		<action name="downloadProductTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeImage" />
+		<action name="downloadProductTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductTypeImage" />
 		<action name="downloadCertLogo" method="downloadCertLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
 		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
+		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
+		<action name="downloadProductAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductAttachmentFile" />
+		
 		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
 		</action>
@@ -152,9 +163,7 @@
 		</action>
 		<action name="downloadTenantLogo" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" >
 			<interceptor-ref name="publicStack" />
-		</action>		
-		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
-		
+		</action>				
 		<action name="currentEula" method="show" class="com.n4systems.fieldid.actions.eula.CurrentEulaAction" >
 			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/currentEula/show.ftl</result>

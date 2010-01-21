@@ -3,7 +3,9 @@ package com.n4systems.fieldid.actions.product;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -50,6 +52,7 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
+import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
@@ -132,8 +135,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private ProductTypeLister productTypes;
 	private ProductSaveService productSaverService;
 	private Long excludeId;
+	
 	private List<Product> linkedProducts;
-
+	private Map<Long, List<ProductAttachment>> linkedProductAttachments;
+	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
 			User userManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
@@ -368,6 +373,16 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 		
 		linkedProducts = loader.load();
+		
+		// let's populate our product attachment map
+		SafetyNetworkProductAttachmentListLoader attachmentLoader = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader();
+		attachmentLoader.setNetworkId(product.getNetworkId());
+		
+		linkedProductAttachments = new HashMap<Long, List<ProductAttachment>>();
+		for (Product linkedProd: linkedProducts) {
+			attachmentLoader.setProductId(linkedProd.getId());
+			linkedProductAttachments.put(linkedProd.getId(), attachmentLoader.load());
+		}
 		
 		return SUCCESS;
 	}
@@ -997,6 +1012,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return productSaverService;
 	}
 
+	public List<ProductAttachment> getLinkedProductAttachments(Long linkedProductId) {
+		return linkedProductAttachments.get(linkedProductId);
+	}
+	
 	public List<ProductAttachment> getProductAttachments() {
 		if (productAttachments == null) {
 			productAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(product).load();

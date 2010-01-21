@@ -1,92 +1,60 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
-import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
-import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.reporting.PathHandler;
 
-public class DownloadProductAttachmentFile extends DownloadAction {
-
+public class DownloadProductAttachmentFile extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 
-	private Product product;
-
+	protected Long attachmentID;
+	private ProductAttachment attachment;
+	
 	public DownloadProductAttachmentFile(PersistenceManager persistenceManager) {
 		super(persistenceManager);
+	}
+	
+	protected ProductAttachment loadProductAttachment() {
+		return getLoaderFactory().createFilteredIdLoader(ProductAttachment.class).setId(attachmentID).load();
+	}
+	
+	@Override
+	protected boolean initializeDownload() {
+		attachment = loadProductAttachment();
 
+		if (attachment == null) {
+			addActionError(getText("error.no_product_attached_file"));
+			setFailActionResult(MISSING);
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override
-	public String doDownload() {
-		loadProduct();
-		ProductAttachment attachment = loadAttachment();
-		File attachedFile = findFile(attachment);
-		
-		return streamFile(attachedFile);
+	protected String onFileNotFoundException(FileNotFoundException e) {
+		addActionError(getText("error.no_product_attached_file", attachment.getFileName()));
+		return MISSING;
 	}
 
-	private String streamFile(File attachedFile) {
-		// stream the file back to the browser
-		fileSize = new Long(attachedFile.length()).intValue();
-		InputStream input = null;
-		boolean failure = false;
-		try {
-			input = new FileInputStream(attachedFile);
-			return sendFile(input);
-		} catch (IOException e) {
-			failure = true;
-		} finally {
-
-		}
-
-		return (failure) ? ERROR : null;
+	@Override
+	public File getFile() {
+		return PathHandler.getProductAttachmentFile(attachment);
 	}
 
-	private File findFile(ProductAttachment attachment) {
-		File fileDirectory = PathHandler.getAttachmentFile(attachment);
-		File attachedFile = new File(fileDirectory.getAbsolutePath(), attachment.getFileName());
-
-		if (!attachedFile.exists()) {
-			addActionError(getText("error.no_product_attached_file", fileName));
-			throw new MissingEntityException("file does not exist on the file system. " + fileName);
-		}
-		return attachedFile;
+	@Override
+	public String getFileName() {
+		return attachment.getFileName();
 	}
 
-	private ProductAttachment loadAttachment() {
-		ProductAttachment attachment = null;
-
-		ProductAttachmentListLoader loader = getLoaderFactory().createProductAttachmentListLoader();
-		loader.setProduct(product);
-
-		for (ProductAttachment attach : loader.load()) {
-			if (attach.getId().equals(attachmentID)) {
-				attachment = attach;
-				break;
-			}
-		}
-		// we did not find the attachment
-		if (attachment == null) {
-			addActionError(getText("error.no_product_attached_file", fileName));
-			throw new MissingEntityException("attachment is not attached to the loaded product.");
-		}
-		return attachment;
+	public void setAttachmentID(Long attachmentID) {
+		this.attachmentID = attachmentID;
 	}
-
-	private void loadProduct() {
-		product = persistenceManager.find(Product.class, uniqueID, getSecurityFilter());
-
-		if (product == null) {
-			addActionError(getText("error.noproduct"));
-			throw new MissingEntityException("product could not be loaded.");
-		}
-	}
+	
+	// required by common/_attachedFilesList.ftl but not used here
+	public void setUniqueID(Long uniqueID) {}
 
 }

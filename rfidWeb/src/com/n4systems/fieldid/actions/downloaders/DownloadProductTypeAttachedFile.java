@@ -1,115 +1,65 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProductType;
 import com.n4systems.reporting.PathHandler;
 
-public class DownloadProductTypeAttachedFile extends DownloadAction {
+public class DownloadProductTypeAttachedFile extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 	
-	private ProductType productType;
+	protected Long productTypeId;
+	protected Long attachmentID;
+	private FileAttachment attachment;
 	
 	public DownloadProductTypeAttachedFile(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
+	
+	protected FileAttachment loadFileAttachment() {
+		return getLoaderFactory().createFileAttachmentLoader().setId(attachmentID).load();
+	}
 
-	public String doDownload() {
-		
-		// load the product type
-		productType =   getLoaderFactory().createProductTypeLoader().setId(uniqueID).setPostFetchFields("attachments").load();
-		
-		if( productType == null ) {
-			addActionErrorText("error.noproducttype");
-			return MISSING;
-		} 
-		
-		FileAttachment attachment = null;
-		
-		// make sure our attachment is actually attached to this producttype
-		for(FileAttachment attach: productType.getAttachments()) {
-			if(attach.getId().equals(attachmentID)) {
-				attachment = attach;
-				break;
-			}
-		}
-		
-		// we did not find the attachment
+	@Override
+	protected boolean initializeDownload() {
+		attachment = loadFileAttachment();
+
 		if(attachment == null) {
-			addActionError(getText("error.noproducttypeattachedfile", fileName));
-			return MISSING;
+			addActionError(getText("error.noproducttypeattachedfile"));
+			setFailActionResult(MISSING);
+			return false;
 		}
-		
-		// construct a file path to our attachment
-		File productTypeDirectory = PathHandler.getProductTypeAttachmentFile(productType);
-		File attachedFile = new File(productTypeDirectory.getAbsolutePath(), attachment.getFileName());
-		
-		// make sure the file actually exists
-		if( !attachedFile.exists() ) {
-			addActionError( getText( "error.noproducttypeattachedfile", fileName ) );
-			return MISSING;
-		}
-		
-		// stream the file back to the browser
-		fileSize = new Long( attachedFile.length() ).intValue();
-		InputStream input = null;
-		boolean failure = false;
-		try {
-			input = new FileInputStream( attachedFile );
-			return sendFile( input );
-		} catch( IOException e ) {
-			failure = true;
-		} finally {
-			
-		}
-		
-		return (failure) ? ERROR : null;
+
+		return true;
+	}
+
+	@Override
+	protected String onFileNotFoundException(FileNotFoundException e) {
+		addActionError(getText("error.noproducttypeattachedfile"));
+		return MISSING;
 	}
 	
-	public String doDownloadImage() {
-		productType =  getLoaderFactory().createProductTypeLoader().setId(uniqueID).load();
-		
-		if( productType == null ) {
-			addActionError( getText( "error.noproducttype" ) );
-			return MISSING;
-		} 
-		
-		if( productType.getImageName() == null ) {
-			addActionError( getText( "error.noproductimage") );
-			return MISSING;
-		}
-		
-		
-		File productTypeDirectory = PathHandler.getProductTypeImageFile( productType );
-		File imageFile = new File( productTypeDirectory.getAbsolutePath() + '/' + productType.getImageName() );
-		
-		fileName = productType.getImageName();
-		
-		if( !imageFile.exists() ) {
-			addActionError( getText( "error.noproductimage" ) );
-			return MISSING;
-		}
-		
-		fileSize = new Long( imageFile.length() ).intValue();
-		InputStream input = null;
-		boolean failure = false;
-		try {
-			input = new FileInputStream( imageFile );
-			return sendFile( input );
-		} catch( IOException e ) {
-		} finally {
-			failure = true;
-		}
-		
-		return (failure) ? ERROR : null;
+	@Override
+	public File getFile() {
+		return PathHandler.getProductTypeAttachmentFile(attachment, productTypeId);
 	}
 	
-
+	@Override
+	public String getFileName() {
+		return attachment.getFileName();
+	}
 	
-
+	public void setAttachmentID(Long attachmentID) {
+		this.attachmentID = attachmentID;
+	}
+	
+	public void setUniqueID(Long uniqueID) {
+		productTypeId = uniqueID;
+	}
+	
+	// Required by the common/_attachedFilesList.ftl but not needed here
+	public void setFileName() {}
+	
 }

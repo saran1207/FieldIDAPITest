@@ -8,12 +8,17 @@ import com.n4systems.model.Product;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name = "productattachments")
 public class ProductAttachment extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 
+	public static SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner(SecurityDefiner.DEFAULT_TENANT_PATH, "product." + SecurityDefiner.DEFAULT_OWNER_PATH, null, null);
+	}
+	
 	@ManyToOne
 	private Product product;
 	private Note note = new Note();

@@ -70,8 +70,7 @@ public class ProductAttachmentSaver extends ModifiedBySaver<ProductAttachment> {
 	
 	//TODO move to a file Deleter.
 	private void deleteFile(ProductAttachment attachment) {
-		File attachmentDirectory = PathHandler.getAttachmentFile(attachment);
-		File attachedFile = new File(attachmentDirectory, attachment.getFileName());
+		File attachedFile = PathHandler.getProductAttachmentFile(attachment);
 		
 		if (attachedFile.exists()) {
 			attachedFile.delete();

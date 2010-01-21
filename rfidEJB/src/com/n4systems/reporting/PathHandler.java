@@ -336,8 +336,12 @@ public class PathHandler {
 		return subInspection.getId().toString();
 	}
 	
+	private static String getProductTypePath(Long productTypeId) {
+		return productTypeId.toString();
+	}
+	
 	private static String getProductTypePath(ProductType productType) {
-		return mergePaths(productType.getId().toString());
+		return getProductTypePath(productType.getId());
 	}
 	
 	private static String getAttachmentPath(Inspection inspection) {
@@ -348,8 +352,8 @@ public class PathHandler {
 		return note.getId().toString();
 	}
 	
-	private static String getNotePath(ProductAttachment note) {
-		return note.getId().toString();
+	private static String getProductAttachmentPath(ProductAttachment note) {
+		return mergePaths(note.getId().toString(), note.getFileName());
 	}
 
 	public static File getInspectionAttachmentFile(Inspection inspection, SubInspection subInspection, FileAttachment attachment) {
@@ -384,8 +388,8 @@ public class PathHandler {
 		return absolutize(getJobAttachmentBasePath(tenant));
 	}
 	
-	public static File getAttachmentFile(ProductAttachment note) {
-		return absolutize(mergePaths(getProductAttachmentBasePath(note.getTenant()), getProductPath(note.getProduct()), getNotePath(note)));
+	public static File getProductAttachmentFile(ProductAttachment attachment) {
+		return absolutize(mergePaths(getProductAttachmentBasePath(attachment.getTenant()), getProductPath(attachment.getProduct()), getProductAttachmentPath(attachment)));
 	}
 	
 	public static File getProductAttachmentBaseFile(Tenant tenant) {
@@ -438,6 +442,10 @@ public class PathHandler {
 	
 	public static File getCommonConfigPath() {
 		return absolutize(COMMON_CONFIG_BASE);
+	}
+	
+	public static File getProductTypeAttachmentFile(FileAttachment attachment, Long productTypeId) {
+		return absolutize(mergePaths(getProductTypeAttachmentBasePath(attachment.getTenant()), getProductTypePath(productTypeId), attachment.getFileName()));
 	}
 	
 	public static File getProductTypeAttachmentFile(ProductType productType) {

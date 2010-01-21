@@ -216,35 +216,51 @@ Ajax.Responders.register( {
 	}
 });
 
-function openSection(idToOpen, openLinkId, closeLinkId) {
-	$(openLinkId).hide();
-	$(closeLinkId).show();
+function openSection(idToOpen, openLinkId, closeLinkId, afterEvent) {
+	var openLink = $(openLinkId);
 	var closeLink = $(closeLinkId);
-	eval("var callBack = function() {$('" + closeLinkId + "').onclick = $('"
-			+ closeLinkId + "').suspendedOnClick };");
+	
+	openLink.hide();
+	closeLink.show();
+	
 	closeLink.suspendedOnClick = closeLink.onclick
 	closeLink.onclick = null;
+	
 	Effect.BlindDown(idToOpen, {
 		duration : 0.75,
-		afterFinish : callBack
+		afterFinish : function(effect) {
+			closeLink.onclick = closeLink.suspendedOnClick;
+			
+			if (afterEvent) {
+				afterEvent(this);
+			}
+		}
 	});
+	
 	return false;
 }
 
-function closeSection(idToClose, closeLinkId, openLinkId) {
-	$(openLinkId).show();
-	$(closeLinkId).hide();
-
+function closeSection(idToClose, closeLinkId, openLinkId, afterEvent) {
 	var openLink = $(openLinkId);
-	eval("var callBack = function() { $('" + openLinkId + "').onclick = $('"
-			+ openLinkId + "').suspendedOnClick }; ");
-	openLink.suspendedOnClick = openLink.onclick
+	var closeLink = $(closeLinkId);
+	
+	openLink.show();
+	closeLink.hide();
+	
+	openLink.suspendedOnClick = openLink.onclick;
 	openLink.onclick = null;
-
+	
 	Effect.BlindUp(idToClose, {
 		duration : 0.75,
-		afterFinish : callBack
+		afterFinish : function(effect) {
+			openLink.onclick = openLink.suspendedOnClick;
+			
+			if (afterEvent) {
+				afterEvent(this);
+			}
+		}
 	});
+	
 	return false;
 }
 

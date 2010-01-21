@@ -18,7 +18,7 @@ public class ProductPathTest {
 	
 	
 	@Test 
-	public void should_get_product_attachment_directory() {
+	public void should_get_product_attachment_file() {
 		Product product = aProduct().build();
 		product.setCreated(DateHelper.string2Date("yyyy-MM-dd h:mm a", "2009-06-01 12:01 pm"));
 		product.setId(2L);
@@ -26,9 +26,9 @@ public class ProductPathTest {
 		attachment.setId(1L);
 		attachment.setProduct(product);
 		attachment.setTenant(product.getTenant());
+		attachment.setFileName("test.file");
 		
-		
-		assertEquals(new File("/var/fieldid/private/products/attachments/" + product.getTenant().getName() + "/09/06/2/1"), PathHandler.getAttachmentFile(attachment));	
+		assertEquals(new File("/var/fieldid/private/products/attachments/" + product.getTenant().getName() + "/09/06/2/1/test.file"), PathHandler.getProductAttachmentFile(attachment));	
 	}
 	
 }

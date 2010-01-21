@@ -42,6 +42,7 @@ import com.n4systems.model.utils.PlainDate;
 @Table(name = "products")
 public class Product extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Product> {
 	private static final long serialVersionUID = 1L;
+	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 	
 	@Column(name="network_id", nullable=true)
 	private Long networkId;
