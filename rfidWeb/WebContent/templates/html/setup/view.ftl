@@ -44,35 +44,29 @@
 	<#if sessionUser.hasAccess("managesystemconfig") == true >
 		<div class="viewSection setup">
 			<h2 id="yourProductSetup"><@s.text name="label.yourproductsetup" /></h2>
-				<p>
-					<label><a href="productTypes.action" ><@s.text name="title.manage_product_types.plural" /></a></label>
-					<span>Manage all of your products and their attributes.</span>
-				</p>
-				<p>
-					<label><a href="productTypeGroups.action" ><@s.text name="title.manage_product_type_groups.plural" /></a></label>
-					<span>Manage all of your product type groups.</span>
-				</p>
-				<#if securityGuard.integrationEnabled>
-					<p>
-						<label><a href="productCodeMappingList.action" ><@s.text name="title.manage_product_code_mappings.plural" /></a></label>
-						<span>Manage and map product information from your accounting or ERP system into Field ID.</span>
-					</p>
-				</#if>
-			
 			<p>
-				<label><a href="productStatusList.action" ><@s.text name="title.manage_product_statuses.plural" /></a></label>
-				<span>Create product statuses that let you identify the state of a product.</span>
+				<label><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></label>
+				<span >Create and manage event type groups to allow you to group inspection types and pick the certificate for those inspection types.</span>
 			</p>
+			
 			<p>
 				<label><a href="inspectionTypes.action" ><@s.text name="title.manage_inspection_types.plural" /></a></label>
 				<span>Create inspection types to allow you to do different types of inspections.</span>
 			</p>
-			<#if sessionUser.hasAccess("managesystemconfig") == true >
-				<p>
-					<label><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></label>
-					<span >Create and manage event type groups to allow you to group inspection types and pick the certificate for those inspection types.</span>
-				</p>
-			</#if>
+		
+			<p>
+				<label><a href="productTypeGroups.action" ><@s.text name="title.manage_product_type_groups.plural" /></a></label>
+				<span>Manage all of your product type groups.</span>
+			</p>
+			<p>
+				<label><a href="productTypes.action" ><@s.text name="title.manage_product_types.plural" /></a></label>
+				<span>Manage all of your products and their attributes.</span>
+			</p>
+				
+			<p>
+				<label><a href="productStatusList.action" ><@s.text name="title.manage_product_statuses.plural" /></a></label>
+				<span>Create product statuses that let you identify the state of a product.</span>
+			</p>
 			
 			<p>
 				<label><a href="inspectionBooks.action" ><@s.text name="title.manage_inspection_books.plural" /></a></label>
@@ -92,7 +86,12 @@
 				<label><a href="commentTemplateList.action" ><@s.text name="title.manage_comment_templates.plural" /></a></label>
 				<span>Speed up the entry of comments by creating frequently used templates.</span>
 			</p>
-			
+			<#if securityGuard.integrationEnabled>
+				<p>
+					<label><a href="productCodeMappingList.action" ><@s.text name="title.manage_product_code_mappings.plural" /></a></label>
+					<span>Manage and map product information from your accounting or ERP system into Field ID.</span>
+				</p>
+			</#if>
 		</div>
 	</#if>
 	
