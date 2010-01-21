@@ -71,6 +71,7 @@ public class InfoOptionInput {
 		if( field.hasStaticInfoOption() && !uniqueIDString.startsWith( COMBOBOX_DYNAMIC_VALUE_MARKER ) ) {
 			for (InfoOptionBean infoOptionBean : field.getUnfilteredInfoOptions() ) {
 				Long infoOptionId = Long.parseLong( uniqueIDString );
+				
 				if( infoOptionBean.getUniqueID().equals( infoOptionId ) ) {
 					return infoOptionBean;
 				}
