@@ -11,6 +11,7 @@ public class ProductTypeServiceDTO extends AbstractBaseServiceDTO {
 	private List<ProductTypeScheduleServiceDTO> schedules = new ArrayList<ProductTypeScheduleServiceDTO>();
 	private List<Long> subTypes = new ArrayList<Long>();
 	private long groupId;
+	private boolean master;
 
 	public String getName() {
 		return name;
@@ -58,5 +59,13 @@ public class ProductTypeServiceDTO extends AbstractBaseServiceDTO {
 
 	public void setGroupId(long groupId) {
 		this.groupId = groupId;
+	}
+
+	public boolean isMaster() {
+		return master;
+	}
+
+	public void setMaster(boolean master) {
+		this.master = master;
 	}
 }

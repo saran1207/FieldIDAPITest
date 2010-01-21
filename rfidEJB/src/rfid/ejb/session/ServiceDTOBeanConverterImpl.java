@@ -666,6 +666,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		
 		productTypeDTO.setGroupId(productType.getGroup() != null ? productType.getGroup().getId() : NULL_ID);
+		productTypeDTO.setMaster(productType.isMaster());
 		
 		return productTypeDTO;
 	}
