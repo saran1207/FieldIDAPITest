@@ -56,7 +56,7 @@
 				<a href="<@s.url action="report" namespace="/"/>" class="speedLink" id="menuReport"><@s.text name="speed.reporting" /></a>
 			</li>
 			<li>
-				<a href="<@s.url action="schedule" namespace="/"/>" class="speedLink" id="menuSchedule"><@s.text name="speed.schedule" /></a>
+				<a href="<@s.url action="schedule" namespace="/"/>" class="speedLink" id="menuSchedule"><@s.text name="speed.schedules" /></a>
 			</li>
 			
 			<#if userSecurityGuard.allowedManageSafetyNetwork>
