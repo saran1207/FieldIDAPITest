@@ -1,11 +1,15 @@
 
 
-#linkedProductContainer .leftColumn {
-	width: 300px;
+#linkedProductContainer {
+	padding:10px 20px 10px 70px;
+	background-color: #fdf1d8;
+	border: 1px solid #fce1a9;
+	background-image:url(../../images/safety_network_company_registered.png);
+	background-repeat: no-repeat;
+	background-position:  center left;
 }
 
-#linkedProductContainer .rightColumn {
-}
+
 #networkSmartSearchContainer { 
 	border: 2px solid #999;
 	background-color:#fff;
@@ -13,7 +17,3 @@
 	max-width:500px;
 }
 
-#unregisterSubmit {
-	margin: 0px 0px 15px 20px;
-	display: block;
-}

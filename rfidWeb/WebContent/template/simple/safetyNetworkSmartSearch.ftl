@@ -8,31 +8,25 @@
 		</div>
 		
 		<div id="linkedProductContainer"  style="display: none;">
-			<h4 class="productInfoTitle"><@s.text name="label.linkedproductinfo"/></h4>
-			<div class="leftColumn" style="float: left;">
-				<div  >
-					<label for="linkedProductSerial"><@s.text name="label.serialnumber"/>: </label>
-					<span id="linkedProductSerial"></span>
-				</div>
-				<div  >
-					<label  for="linkedProductRfid"><@s.text name="label.rfidnumber"/>: </label>
-					<span id="linkedProductRfid"></span>
-				</div>
+			<h4 class="productInfoTitle">
+				<@s.text name="label.registered_against"/> <span id="linkedProductType"></span> <@s.text name="label.from"/> <span id="linkedProductOwner"></span>
+			</h4>
+			<div  >
+				<label for="linkedProductSerial"><@s.text name="label.serialnumber"/>: </label>
+				<span id="linkedProductSerial"></span>
 			</div>
-			<div class="rightColumn">
-				<div  >
-					<label for="linkedProductOwner"><@s.text name="label.vendor"/>: </label>
-					<span id="linkedProductOwner"></span>
-				</div>
-				<div  >
-					<label  for="linkedProductType"><@s.text name="label.producttype"/>: </label>
-					<span id="linkedProductType"></span>
-				</div>
+			<div  >
+				<label  for="linkedProductRfid"><@s.text name="label.rfidnumber"/>: </label>
+				<span id="linkedProductRfid"></span>
 			</div>
+		
 			<a href="#" id="unregisterSubmit"><@s.text name="label.unregister" /></a>
 		</div>
 	<#else>
-		<@s.text name="label.no_vendors_in_your_safety_network" />
+		<div id="registerOverNetworkLinkContainer" >
+			<@s.text name="label.no_vendors_in_your_safety_network" />
+		</div>
+		
 	</#if>
 </div>
 

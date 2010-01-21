@@ -7,7 +7,7 @@ ${action.setPageType('inspection', 'list')!}
 <#include "_inspectionSearchForm.ftl" />
 
 
-<div class="formAction container" style="width:400; float:right; clear:both; ">
+<div class="formAction container" style="text-align:right;">
 	<#if Session.sessionUser.hasAccess("createinspection") >
 		<span class="inspectionTypes inspectionTypesRelative" ><a href="javascript:void(0);" id="startNewInspection" onmouseover="positionDropdown(this);"><@s.text name="label.newinspection"/></a>
 			<ul id="startNewInspection_list">

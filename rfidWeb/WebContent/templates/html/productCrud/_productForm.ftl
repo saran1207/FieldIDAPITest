@@ -28,7 +28,7 @@
 
 <#include "../common/_formErrors.ftl"/>
 <@s.hidden name="uniqueID" id="uniqueID"/>
-
+<#include "_safetyNetworkRegistration.ftl"/>
 <#include "_productSerialAndRfidForm.ftl"/>
 
 <#include "_productConfigForm.ftl"/>
