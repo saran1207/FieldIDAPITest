@@ -1,4 +1,4 @@
-<#if uniqueId?exists >
+<#if uniqueId?exists && uniqueId lt 0 >
 	<#assign id=-1 * uniqueId />
 </#if>
 <#assign html>
