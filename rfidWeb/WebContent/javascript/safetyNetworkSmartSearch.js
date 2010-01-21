@@ -36,6 +36,11 @@ function submitSearch(event) {
 }
 
 function updateLinkedProductInfo(product) {
+	populateLinkedProductInfo(product);
+	pushRegisteredProductInformationToLocalProduct(product);
+}
+	
+function populateLinkedProductInfo(product) {
 	$('linkedProductId').setValue(product.id);
 	$('linkedProductSerial').update(product.serialNumber);
 	$('linkedProductRfid').update(product.rfidNumber);
@@ -54,8 +59,17 @@ function updateLinkedProductFromMultipleResults(event) {
 	product.rfidNumber = result.getAttribute("rfidNumber");
 	product.owner = result.getAttribute("owner");
 	product.type = result.getAttribute("productType");
-	
+	product.referenceNumber = result.getAttribute('referenceNumber');
 	updateLinkedProductInfo(product);
+}
+
+
+function pushRegisteredProductInformationToLocalProduct(product) {
+	if ($('uniqueID') != null && $('uniqueID').getValue() == "") {
+		$("serialNumberText").value = product.serialNumber;
+		$("rfidNumber").value = product.rfidNumber;
+		$("customerRefNumber").value = product.referenceNumber;
+	}
 }
 
 var snSmartSearch = "";

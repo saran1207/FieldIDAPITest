@@ -1,13 +1,13 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/product.js" />" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/productRfidHandler.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
+	<@n4.includeScript src="commentTemplates.js" />
+	<@n4.includeScript src="product.js" />
+	<@n4.includeScript src="updateAttributes.js"/>
+	<@n4.includeScript src="productRfidHandler.js"/>
+	<@n4.includeScript src="generateSerialNumber.js"/>
+	<@n4.includeScript src="lockSubmitButtons.js"/>
 	<@n4.includeStyle type="page" href="product"/>
-	<script type="text/javascript" src="<@s.url value="javascript/safetyNetworkSmartSearch.js" encode='false' />"></script>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/featureStyles/safetyNetworkSmartSearch.css"/>" />
+	<@n4.includeScript src="safetyNetworkSmartSearch.js" />
+	<@n4.includeStyle href="safetyNetworkSmartSearch.css" type="feature"/>
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/ajax"/>';
@@ -17,13 +17,8 @@
 	    originalProductType = ${productTypeId!0};
 	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
 	    checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax"/>';
-	    
-	    
-	   
 	</script>
 	<#include "/templates/html/common/_calendar.ftl"/>	
-	
-	
 </head>
 
 <#include "../common/_formErrors.ftl"/>

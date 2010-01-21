@@ -15,7 +15,9 @@
 					serialNumber="${product.serialNumber?default('')?html}"
 					rfidNumber="${product.rfidNumber?default('')?html}"
 					owner="${product.owner.internalOrg.name?html}"
-					productType="${product.type.name?html}"><@s.text name="label.select"/></button>
+					productType="${product.type.name?html}"
+					referenceNumber="${product.customerRefNumber?default('')?html}"
+					><@s.text name="label.select"/></button>
 			</td>
 			<td>${product.serialNumber?html}</td>
 			<td>${(product.rfidNumber?html)!} </td>

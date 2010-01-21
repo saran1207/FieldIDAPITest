@@ -69,6 +69,7 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 				addParameter("linkedProduct_RfidNumber", linkedProduct.getRfidNumber());
 				addParameter("linkedProduct_OwnerName", linkedProduct.getOwner().getDisplayName());
 				addParameter("linkedProduct_TypeName", linkedProduct.getType().getDisplayName());
+				addParameter("linkedProduct_ReferenceNumber", linkedProduct.getCustomerRefNumber());
 			}
 		}
 		

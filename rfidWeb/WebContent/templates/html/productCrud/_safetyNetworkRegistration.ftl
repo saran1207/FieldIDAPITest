@@ -2,7 +2,7 @@
 <div class="infoSet" id="safetyNetworkRegistration">
 	<label for="linkedProduct" class="label"><@s.text name="label.register_product"/></label>
 	<div style="float:left">
-		<@n4.safetyNetworkSmartSearch name="linkedProduct" blockId="safetyNetworkRegistration" theme="fieldidSimple"/>
+		<@n4.safetyNetworkSmartSearch name="linkedProduct" theme="fieldidSimple"/>
 	</div>
 </div>	
 	

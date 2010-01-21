@@ -54,12 +54,13 @@
 				var product = new Object();
 			
 				product.id = ${parameters.linkedProduct_Id};
-				product.serialNumber = "${(parameters.linkedProduct_SerialNumber)?default("")}";
-				product.rfidNumber = "${(parameters.linkedProduct_RfidNumber)?default("")}";
-				product.owner = "${(parameters.linkedProduct_OwnerName)?default("")}";
-				product.type = "${(parameters.linkedProduct_TypeName)?default("")}";
-			
-				updateLinkedProductInfo(product);
+				product.serialNumber = "${(parameters.linkedProduct_SerialNumber)?default("")?js_string}";
+				product.rfidNumber = "${(parameters.linkedProduct_RfidNumber)?default("")?js_string}";
+				product.owner = "${(parameters.linkedProduct_OwnerName)?default("")?js_string}";
+				product.type = "${(parameters.linkedProduct_TypeName)?default("")?js_string}";
+				product.referenceNumber = "${(parameters.linkedProduct_ReferenceNumber)?default("")?js_string}";
+				populateLinkedProductInfo(product);
+				
 			});
 		</#if>
 </script>
