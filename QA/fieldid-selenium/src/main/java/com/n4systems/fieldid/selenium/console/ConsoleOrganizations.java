@@ -16,6 +16,12 @@ public class ConsoleOrganizations extends Assert {
 	private String organizationsTableXpath = "//DIV[@id='content']/TABLE";
 	private String numberOfTenantsXpath = organizationsTableXpath + "/TBODY/TR";
 	private String totalTenantsTextLocator = "xpath=//DIV[@id='content']";
+	private String tenantIDColumn = "2";
+	private String editTenantColumn = "3";
+	private String partnerCenterCheckBoxLocator = "xpath=//INPUT[contains(@id,'PartnerCenter')]";
+	private String submitButtonLocator = "xpath=//INPUT[@id='organizationUpdate_0']";
+	private String cancelButtonLocator = "xpath=//INPUT[@id='organizationUpdate_redirectAction:organizations']";
+	private String showPlansAndPricingCheckBoxLocator = "xpath=//INPUT[@id='organizationUpdate_primaryOrg_plansAndPricingAvailable']";
 
 	public ConsoleOrganizations(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -48,8 +54,17 @@ public class ConsoleOrganizations extends Assert {
 		return result;
 	}
 	
-	public void gotoEditTenant(String tenant) {
-		fail("Not implemented yet");
+	public void gotoEditTenant(String tenantID) {
+		misc.info("Click the link to edit '" + tenantID + "'");
+		String editLinkLocator = "xpath=" + organizationsTableXpath + 
+			"/TBODY/TR/TD[position()=" + tenantIDColumn + " and contains(text(),'" + tenantID +
+			"')]/../TD[" + editTenantColumn + "]/A[contains(text(),'Edit')]";
+		if(selenium.isElementPresent(editLinkLocator)) {
+			selenium.click(editLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the link to Edit '" + tenantID + "'");
+		}
 	}
 	
 	public void gotoCreateSuperUser() {
@@ -67,15 +82,53 @@ public class ConsoleOrganizations extends Assert {
 	}
 	
 	public void gotoSubmitTenantInformation() {
-		fail("Not implemented yet");
+		misc.info("Click the Submit button");
+		if(selenium.isElementPresent(submitButtonLocator)) {
+			selenium.click(submitButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the Submit button");
+		}
 	}
 	
 	public void gotoCancelTenantInformation() {
-		fail("Not implemented yet");
+		misc.info("Click the Cancel button");
+		if(selenium.isElementPresent(cancelButtonLocator)) {
+			selenium.click(cancelButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the Cancel button");
+		}
 	}
 	
 	public void gotoCreateSuperUser(String defaultUserName, String defaultassword) {
 		fail("Not implemented yet");
+	}
+
+	public void setPartnerCenter(boolean partnerCenter) {
+		misc.info("Set PartnerCenter to " + partnerCenter);
+		if(selenium.isElementPresent(partnerCenterCheckBoxLocator)) {
+			if(partnerCenter) {
+				selenium.check(partnerCenterCheckBoxLocator);
+			} else {
+				selenium.uncheck(partnerCenterCheckBoxLocator);
+			}
+		} else {
+			fail("Could not find the check box for PartnerCenter");
+		}
+	}
+
+	public void setShowPlansAndPricing(boolean showPlansAndPricing) {
+		misc.info("Set Show Plans and pricing when Partner Center enabled to " + showPlansAndPricing);
+		if(selenium.isElementPresent(showPlansAndPricingCheckBoxLocator)) {
+			if(showPlansAndPricing) {
+				selenium.check(showPlansAndPricingCheckBoxLocator);
+			} else {
+				selenium.uncheck(showPlansAndPricingCheckBoxLocator);
+			}
+		} else {
+			fail("Could not find the check box for Set Show Plans and pricing when Partner Center enabled");
+		}
 	}
 }
 

@@ -87,5 +87,13 @@ public class ConsoleLogin extends Assert {
 		assertFalse(selenium.isElementPresent(userNameTextFieldLocator));
 		assertFalse(selenium.isElementPresent(passwordTextFieldLocator));
 	}
+
+	public void gotoAdminConsoleAndLogin() {
+		gotoAdminConsole();
+		setUserName("n4systems");
+		setPassword("makesome$");
+		gotoLogin();
+		verifyLogin();
+	}
 }
 
