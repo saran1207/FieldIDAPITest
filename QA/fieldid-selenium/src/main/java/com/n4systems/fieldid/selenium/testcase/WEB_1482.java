@@ -33,7 +33,7 @@ public class WEB_1482 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			gotoAddCustomer();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -49,7 +49,7 @@ public class WEB_1482 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			gotoAddDivision();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -65,7 +65,7 @@ public class WEB_1482 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			gotoAddOrganization();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -81,7 +81,7 @@ public class WEB_1482 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			gotoEditPrimaryOrganization();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -122,17 +122,6 @@ public class WEB_1482 extends FieldIDTestCase {
 		misc.gotoAdministration();
 		admin.gotoManageCustomers();
 		mcs.gotoAddCustomer();
-	}
-
-	private void loginAcceptingEULAIfNecessary(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.gotoSignIn();
-		if(misc.isEULA()) {
-			misc.scrollToBottomOfEULA();
-			misc.gotoAcceptEULA();
-		}
-		login.verifySignedIn();
 	}
 
 	@After

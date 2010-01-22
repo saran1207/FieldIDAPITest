@@ -39,6 +39,7 @@ public class WEB_1498 extends FieldIDTestCase {
 		String password = "makemore$";
 
 		try {
+			@SuppressWarnings("unused")
 			CreateTenant t = createANewUnlimitedTenant(username, password);
 			returnToLogin();
 			logIntoNewTenant(username, password);

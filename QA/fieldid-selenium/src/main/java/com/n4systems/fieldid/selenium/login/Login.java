@@ -423,4 +423,15 @@ public class Login extends Assert {
 		misc.info("Verify a link to I forgot my password exists.");
 		assertTrue(selenium.isElementPresent(forgotMyPasswordLinkLocator));
 	}
+
+	public void loginAcceptingEULAIfNecessary(String username, String password) {
+		setUserName(username);
+		setPassword(password);
+		gotoSignIn();
+		if(misc.isEULA()) {
+			misc.scrollToBottomOfEULA();
+			misc.gotoAcceptEULA();
+		}
+		verifySignedIn();
+	}
 }

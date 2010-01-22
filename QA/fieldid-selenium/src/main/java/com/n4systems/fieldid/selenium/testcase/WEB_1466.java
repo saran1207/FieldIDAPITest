@@ -31,7 +31,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoAddEmployee();
 				verifyTagProductsHasChangedToIdentifyAssets();
 		} catch(Exception e) {
@@ -47,7 +47,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoEditEmployee();
 				verifyTagProductsHasChangedToIdentifyAssets();
 		} catch(Exception e) {
@@ -63,7 +63,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoAddEmployee();
 				verifyTagProductsHasChangedToIdentifyAssets();
 		} catch(Exception e) {
@@ -79,7 +79,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoEditEmployee();
 				verifyTagProductsHasChangedToIdentifyAssets();
 		} catch(Exception e) {
@@ -95,7 +95,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoAddEmployee();
 				verifyManageEndUsersHasChangedToManageCustomers();
 		} catch(Exception e) {
@@ -111,7 +111,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoEditEmployee();
 				verifyManageEndUsersHasChangedToManageCustomers();
 		} catch(Exception e) {
@@ -127,7 +127,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoAddEmployee();
 				verifyManageEndUsersHasChangedToManageJobSites();
 		} catch(Exception e) {
@@ -143,7 +143,7 @@ public class WEB_1466 extends FieldIDTestCase {
 
 		try {
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				gotoEditEmployee();
 				verifyManageEndUsersHasChangedToManageJobSites();
 		} catch(Exception e) {
@@ -188,16 +188,6 @@ public class WEB_1466 extends FieldIDTestCase {
 	private void verifyTagProductsHasChangedToIdentifyAssets() {
 		List<String> permissions = mus.getListOfPermissionsFromAddEmployeeUser();
 		assertTrue(permissions.contains("Identify Assets"));
-	}
-
-	private void loginAcceptingEULAIfNecessary(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.gotoSignIn();
-		if(misc.isEULA()) {
-			misc.scrollToBottomOfEULA();
-			misc.gotoAcceptEULA();
-		}
 	}
 
 	@After

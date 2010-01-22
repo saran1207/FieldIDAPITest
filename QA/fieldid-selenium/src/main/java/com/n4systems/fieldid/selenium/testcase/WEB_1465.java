@@ -33,7 +33,7 @@ public class WEB_1465 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			Product p = gotoEditAnAsset();
 			verifyEditAnAssetHasASaveAndInspectButtonWhichWorks(p.getSerialNumber());
 		} catch(Exception e) {
@@ -62,17 +62,6 @@ public class WEB_1465 extends FieldIDTestCase {
 		asset.gotoEdit();
 		asset.verifyAssetEditPage(serialNumber);
 		return p;
-	}
-
-	private void loginAcceptingEULAIfNecessary(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.gotoSignIn();
-		if(misc.isEULA()) {
-			misc.scrollToBottomOfEULA();
-			misc.gotoAcceptEULA();
-		}
-		login.verifySignedIn();
 	}
 
 	@After

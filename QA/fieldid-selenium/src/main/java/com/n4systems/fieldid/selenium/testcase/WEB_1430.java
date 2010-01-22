@@ -26,7 +26,7 @@ public class WEB_1430 extends FieldIDTestCase {
 				String companyID = getStringProperty("company" + i);
 				String username = getStringProperty("userid" + i);
 				setCompany(companyID);
-				loginAcceptingEULAIfNecessary(username, password);
+				login.loginAcceptingEULAIfNecessary(username, password);
 				login.verifySignedIn();
 				misc.gotoSignOut();
 			}
@@ -35,16 +35,6 @@ public class WEB_1430 extends FieldIDTestCase {
 		}
 	}
 	
-	private void loginAcceptingEULAIfNecessary(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.gotoSignIn();
-		if(misc.isEULA()) {
-			misc.scrollToBottomOfEULA();
-			misc.gotoAcceptEULA();
-		}
-	}
-
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();

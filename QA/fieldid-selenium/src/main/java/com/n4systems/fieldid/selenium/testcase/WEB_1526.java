@@ -48,7 +48,7 @@ public class WEB_1526 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			ProductType productType = createAProductTypeWithAttributes();
 			verifyEditProductTypeHasDeleteAttribute(productType);
 		} catch(Exception e) {
@@ -96,7 +96,7 @@ public class WEB_1526 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			ProductType productType = createAProductTypeWithAttributes();
 			useProductTypeInProductCodeMapping(productType);
 			verifyEditProductTypeHasRetireAttribute(productType);
@@ -150,7 +150,7 @@ public class WEB_1526 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			// identify a product
 			// go to manage product type and retire an attribute
 			// edit the product
@@ -168,7 +168,7 @@ public class WEB_1526 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			// create a product type with select box attributes
 			// save it
 			// use the product type in an auto attribute
@@ -187,7 +187,7 @@ public class WEB_1526 extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			loginAcceptingEULAIfNecessary(username, password);
+			login.loginAcceptingEULAIfNecessary(username, password);
 			// create a product type with select box attributes
 			// save it
 			// use the product type to create a product
@@ -198,17 +198,6 @@ public class WEB_1526 extends FieldIDTestCase {
 		}
 	}
 	
-	private void loginAcceptingEULAIfNecessary(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.gotoSignIn();
-		if(misc.isEULA()) {
-			misc.scrollToBottomOfEULA();
-			misc.gotoAcceptEULA();
-		}
-		login.verifySignedIn();
-	}
-
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
