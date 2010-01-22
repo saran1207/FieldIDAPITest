@@ -4,6 +4,7 @@ import org.junit.*;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.identify.Identify;
+import com.n4systems.fieldid.selenium.inspect.Inspect;
 import com.n4systems.fieldid.selenium.login.Login;
 import com.n4systems.fieldid.selenium.assets.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Product;
@@ -13,6 +14,7 @@ public class WEB_1465 extends FieldIDTestCase {
 	Login login;
 	Identify identify;
 	Asset asset;
+	Inspect inspect;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -20,6 +22,7 @@ public class WEB_1465 extends FieldIDTestCase {
 		login = new Login(selenium, misc);
 		identify = new Identify(selenium, misc);
 		asset = new Asset(selenium, misc);
+		inspect = new Inspect(selenium, misc);
 	}
 
 	@Test
@@ -31,19 +34,19 @@ public class WEB_1465 extends FieldIDTestCase {
 		try {
 			setCompany(companyID);
 			loginAcceptingEULAIfNecessary(username, password);
-			gotoEditAnAsset();
-			verifyEditAnAssetHasASaveAndInspectButtonWhichWorks();
+			Product p = gotoEditAnAsset();
+			verifyEditAnAssetHasASaveAndInspectButtonWhichWorks(p.getSerialNumber());
 		} catch(Exception e) {
 			throw e;
 		}
 	}
 	
-	private void verifyEditAnAssetHasASaveAndInspectButtonWhichWorks() {
-		// TODO Auto-generated method stub
-		fail("not yet implemented");
+	private void verifyEditAnAssetHasASaveAndInspectButtonWhichWorks(String serialNumber) {
+		asset.gotoSaveAndInspect();
+		inspect.verifyInspectPage(serialNumber);
 	}
 
-	private void gotoEditAnAsset() {
+	private Product gotoEditAnAsset() {
 		misc.gotoIdentify();
 		if(!identify.isAdd()) {
 			identify.gotoAdd();
@@ -58,6 +61,7 @@ public class WEB_1465 extends FieldIDTestCase {
 		asset.verifyAssetViewPageDynamicContents(p);
 		asset.gotoEdit();
 		asset.verifyAssetEditPage(serialNumber);
+		return p;
 	}
 
 	private void loginAcceptingEULAIfNecessary(String username, String password) {
