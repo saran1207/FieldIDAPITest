@@ -9,33 +9,47 @@
 	<script src="javascripts/scriptaculous.js" type="text/javascript"></script>
 	${head!}
 </head>
-<body >
-<div id="header">
-<h1>Administration Console</h1>
-</div>
-<ul id="nav">
-<li><a href="organizations.action">Organizations</a></li>
-<li><a href="eulas.action">EULA</a></li>
-<li><a href="instructionalVideos.action">Instructional Videos</a></li>
-<li><a href="findProductOptionList.action">Find Product Option</a></li>
-<li><a href="unitOfMeasureList.action">Unit of Measures</a></li>
-<li><a href="orderMappingList.action">Order Mappings</a></li>
-<li><a href="importerList.action">Importer</a></li>
-<li><a href="mailTest.action">Mail</a></li>
-<li><a href="configCrud.action">Configuration</a></li>
-<li><a href="certSelection.action">Certs</a></li>
-<li><a href="taskCrud.action">Tasks</a></li>
-<li><a href="changeAdminPass.action">Change System Pass</a></li>
-<li><a href="promoCodes.action">Promo Codes</a></li>
-</ul>
-<div id="container">
-<div id="content">
-	${body}
-</div>
-<div id="footer">
-<p>Copyright&copy; 2009 N4 Systems <br />
-|&nbsp;XHTML template by <a href="http://www.karenblundell.com" target="blank">arwen54</a>&nbsp;|&nbsp;<a href="http://validator.w3.org/check?uri=referer" target="_blank">Valid XHTML</a>&nbsp;|&nbsp;<a href="http://jigsaw.w3.org/css-validator/" target="_blank">Valid CSS</a>&nbsp;|</p>
-</div>
-</div>
+<body>
+	<div id="header">
+		<h1>Field ID Admin Console</h1>
+	</div>
+	
+	<div id="nav">
+		<label for="navSelect">Action: </label>
+		<select id="navSelect" onchange="window.location = this.options[this.selectedIndex].value;">
+			<option value="organizations.action">Organizations</option>
+			<option value="eulas.action">EULA</option>
+			<option value="instructionalVideos.action">Instructional Videos</option>
+			<option value="findProductOptionList.action">Find Product Option</option>
+			<option value="unitOfMeasureList.action">Unit of Measures</option>
+			<option value="orderMappingList.action">Order Mappings</option>
+			<option value="importerList.action">Importer</option>
+			<option value="mailTest.action">Mail</option>
+			<option value="configCrud.action">Configuration</option>
+			<option value="certSelection.action">Certs</option>
+			<option value="taskCrud.action">Tasks</option>
+			<option value="changeAdminPass.action">Change System Pass</option>
+			<option value="promoCodes.action">Promo Codes</option>
+			<option value="cacheShow.action">Cache Control</option>
+		</select>
+	</div>
+	
+	<script type="text/javascript">
+		var currentUrl = window.location.href;
+		var navSelect = $('navSelect');
+		for (var i = 0; i < navSelect.length; i++) {
+			if (currentUrl.indexOf(navSelect.options[i].value) != -1) {
+				navSelect.selectedIndex = i;
+				break;
+			}	
+		}
+	</script>
+	
+	<div id="container">
+		<div id="content">
+			${body}
+		</div>
+	</div>
+	
 </body>
 </html>

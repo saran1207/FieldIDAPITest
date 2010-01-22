@@ -159,6 +159,12 @@ public class TenantCache {
 		}
 	}
 	
+	public void clearAll() {
+		tenantIdMap.clear();
+		tenantNameMap.clear();
+		primaryOrgMap.clear();
+	}
+	
 	/**
 	 * Reloads all PrimaryOrgs from the database
 	 */

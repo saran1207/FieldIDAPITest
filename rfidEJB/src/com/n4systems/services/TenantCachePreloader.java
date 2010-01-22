@@ -14,6 +14,9 @@ public class TenantCachePreloader implements Initializer {
 	}
 
 	public void uninitialize() {
+		logger.info("Clearing Tenant Cache ... ");
+		TenantCache.getInstance().clearAll();
+		logger.info("Complete");
 	}
 
 }

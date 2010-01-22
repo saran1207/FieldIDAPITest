@@ -1,5 +1,5 @@
 body {
-	background: #FFF url('/fieldidadmin/images/back8.jpg') no-repeat top left fixed;
+	background: #FFF url('/fieldidadmin/images/jboss.jpg') no-repeat -50px 100px fixed;
 	margin: 0 0 20px 0;
 	padding: 0;
 	font-family: Verdana, sans-serif;
@@ -27,50 +27,24 @@ body {
 }
 
 #nav {
-	position: absolute;
-	top: 85px;
-	left: 10%;
-	width: auto;
-	padding: 0;
+	background: transparent url('/fieldidadmin/images/trans8.png') repeat;
+	border-bottom: 1px solid;
 	margin: 0 auto;
-	font: bold 11px Verdana, sans-serif;
-	height: 25px;
-	
-	
+	width: 80%
 }
 
-#nav li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: inline;
+#nav label {
+	padding-left: 10px;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
-#nav li a {
-	padding: 3px;
-	margin: 0;
-	border: 1px solid #B78E96;
-	border-bottom: none;
-	background: transparent url(/fieldidadmin/images/trans6.gif) repeat;
-	text-decoration: none;
-	
-}
-
-#nav li a:link { color: #000; }
-#nav li a:visited { color: #000; }
-
-#nav li a:hover {
-	color: #fff;
-	background: transparent url(/fieldidadmin/images/trans7.gif) repeat;
-}
-
-#nav li a#current {
-	background: transparent url(/fieldidadmin/images/trans7.gif) repeat;
-	border-bottom: 1px solid #999;
+#nav select {
+	font-size: 1.2em;
 }
 
 #container {
-	background: transparent url('/fieldidadmin/images/trans5.gif') repeat;
+	background: transparent url('/fieldidadmin/images/trans8.png') repeat;
 	width: 80%;
 	margin: 0 auto;
 	padding: 0;
@@ -130,8 +104,8 @@ h2 {
 }
 
 .list td {
-	background-color: #eeb1ee;
+	background-color: #e8e8e8;
 }
 .list th {
-	background-color: #cc90cc;
+	background-color: #e0e0e0;
 }

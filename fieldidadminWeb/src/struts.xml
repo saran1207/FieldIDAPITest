@@ -321,6 +321,22 @@
 			<result name="input" type="redirectAction">promoCodes</result>
 			<result name="success" type="redirectAction">promoCodes</result>
 		</action>
+		
+		<action name="cacheShow" method="show" class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/templates/html/cacheControl/show.ftl</result>
+		</action>
+		
+		<action name="reloadTenantCache" method="reloadTenantCache" class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/templates/html/cacheControl/show.ftl</result>
+		</action>
+		
+		<action name="reloadSetupDataLastModDatesCache" method="reloadSetupDataLastModDatesCache" class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/templates/html/cacheControl/show.ftl</result>
+		</action>
+		
+		<action name="reloadSafetyNetworkConnectionCache" method="reloadSafetyNetworkConnectionCachae" class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/templates/html/cacheControl/show.ftl</result>
+		</action>
 	</package>
 	
 	
