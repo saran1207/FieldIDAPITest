@@ -11,6 +11,7 @@ import com.n4systems.util.HostNameParser;
 
 public class FieldIdURI {
 
+	private static String PROTOCOL = "https://";
 	private final ActionInvocationWrapper invocation;
 	private final String tenantName;
 
@@ -38,14 +39,14 @@ public class FieldIdURI {
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		String newHostname = hostParser.replaceFirstSubDomain(unbrandedSubDomain);
 		
-		return "https://" + newHostname + "/fieldid";
+		return PROTOCOL + newHostname + "/fieldid";
 	}
 	
 	public String baseBrandedUrl() {
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		String newHostname = hostParser.replaceFirstSubDomain(tenantName);
 		
-		return "https://" + newHostname + "/fieldid";
+		return PROTOCOL + newHostname + "/fieldid";
 	}
 	
 	
