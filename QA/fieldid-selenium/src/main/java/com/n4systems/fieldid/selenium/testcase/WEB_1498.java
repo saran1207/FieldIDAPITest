@@ -1,8 +1,11 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import org.junit.*;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.Admin;
 import com.n4systems.fieldid.selenium.administration.ManageOrganizations;
@@ -33,21 +36,19 @@ public class WEB_1498 extends FieldIDTestCase {
 		mos = new ManageOrganizations(selenium, misc);
 	}
 	
+	
 	@Test
 	public void newlyCreatedUnlimitedTenantShouldBeAbleToCreateSecondaryOrganizations() throws Exception {
 		String username = "darrell";
 		String password = "makemore$";
 
-		try {
-			@SuppressWarnings("unused")
-			CreateTenant t = createANewUnlimitedTenant(username, password);
-			returnToLogin();
-			logIntoNewTenant(username, password);
-			String orgName = addASecondaryOrganization();
-			verifySecondaryOrganizationWasAddedOkay(orgName);
-		} catch(Exception e) {
-			throw e;
-		}
+		
+		createANewUnlimitedTenant(username, password);
+		returnToLogin();
+		logIntoNewTenant(username, password);
+		String orgName = addASecondaryOrganization();
+		verifySecondaryOrganizationWasAddedOkay(orgName);
+	
 	}
 
 	private void verifySecondaryOrganizationWasAddedOkay(String orgName) {
