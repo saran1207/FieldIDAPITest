@@ -21,14 +21,13 @@ public class Asset extends Assert {
 	private String identifiedLabelLocator = "xpath=//LABEL[contains(text(),'Identified')]";
 	private String identifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Identified By')]";
 	private String modifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Modified By')]";
-	private String customerInformationHeaderLocator = "xpath=//H2[contains(text(),'Customer Information')]";
+	private String customerInformationHeaderLocator = "xpath=//H2[contains(text(),'Customer Information') or contains(text(),'Site Information')]";
 	private String organizationLabelLocator = "xpath=//LABEL[contains(text(),'Organization')]";
-	private String customerNameLabelLocator = "xpath=//LABEL[contains(text(),'Customer Name')]";
+	private String customerNameLabelLocator = "xpath=//LABEL[contains(text(),'Customer Name') or contains(text(),'Job Site Name')]";
 	private String divisionLabelLocator = "xpath=//LABEL[contains(text(),'Division')]";
 	private String locationLabelLocator = "xpath=//LABEL[contains(text(),'Location')]";
 	private String referenceNumberLabelLocator = "xpath=//LABEL[contains(text(),'Reference Number')]";
 	private String purchaseOrderLabelLocator = "xpath=//LABEL[contains(text(),'Purchase Order')]";
-	private String productTypeAttributesHeaderLocator = "xpath=//H2[contains(text(),'Attributes')]";
 	private String lastInspectionHeaderLocator = "xpath=//H2[contains(text(),'Last Inspection')]";
 	private String manageInspectionsLinkLocator = "xpath=//A[@id='manageInspections']";
 	private String editAssetSerialNumberTextFieldLocator = "xpath=//INPUT[@id='serialNumberText']";
@@ -167,7 +166,6 @@ public class Asset extends Assert {
 		assertTrue(selenium.isElementPresent(locationLabelLocator));
 		assertTrue(selenium.isElementPresent(referenceNumberLabelLocator));
 		assertTrue(selenium.isElementPresent(purchaseOrderLabelLocator));
-		assertTrue(selenium.isElementPresent(productTypeAttributesHeaderLocator));
 		assertTrue(selenium.isElementPresent(lastInspectionHeaderLocator));
 		assertTrue(selenium.isElementPresent(manageInspectionsLinkLocator));
 	}
@@ -212,6 +210,15 @@ public class Asset extends Assert {
 		assertTrue(selenium.isElementPresent(editAssetCancelLinkLocator));
 		assertTrue(selenium.isElementPresent(editAssetMergeLinkLocator));
 		assertTrue(selenium.isElementPresent(editAssetDeleteLinkLocator));
+	}
+
+	public void gotoSaveAndInspect() {
+		if(selenium.isElementPresent(editAssetSaveAndInspectButtonLocator)) {
+			selenium.click(editAssetSaveAndInspectButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not locate the Save And Inspect button");
+		}
 	}
 }
 

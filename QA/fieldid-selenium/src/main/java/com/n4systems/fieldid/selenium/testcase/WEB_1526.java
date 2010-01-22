@@ -143,6 +143,24 @@ public class WEB_1526 extends FieldIDTestCase {
 	}
 
 	@Test
+	public void productWithRetiredAttributesCanBeEdited() throws Exception {
+		String companyID = getStringProperty("company");
+		String password = getStringProperty("password");
+		String username = getStringProperty("userid");
+
+		try {
+			setCompany(companyID);
+			loginAcceptingEULAIfNecessary(username, password);
+			// identify a product
+			// go to manage product type and retire an attribute
+			// edit the product
+			// verify it saved okay
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInAutoAttribute() throws Exception {
 		String companyID = getStringProperty("company");
 		String password = getStringProperty("password");
