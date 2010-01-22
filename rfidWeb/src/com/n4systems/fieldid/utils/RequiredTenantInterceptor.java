@@ -19,7 +19,6 @@ public class RequiredTenantInterceptor extends AbstractInterceptor {
 			selectedTenant.init();
 			return invocation.invoke();
 		} catch (NoValidTenantSelectedException e) {
-			invocationWrapper.getAction().addFlashErrorText("error.cannot_find_company_id");
 			return "tenant_missing";
 		} catch (UnbrandedDomainException e) {
 			return "tenant_missing";

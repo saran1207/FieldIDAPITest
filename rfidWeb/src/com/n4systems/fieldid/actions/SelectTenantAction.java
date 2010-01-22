@@ -16,6 +16,7 @@ public class SelectTenantAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger(SelectTenantAction.class);
 	
 	private String companyID;
+	private boolean tenantNotFound = false;
 	
 	public SelectTenantAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -23,6 +24,9 @@ public class SelectTenantAction extends AbstractAction {
 	
 	@SkipValidation
 	public String doAdd() {
+		if (tenantNotFound) { 
+			addActionErrorText("error.cannot_find_company_id");
+		}
 		return SUCCESS;
 	}
 	
@@ -52,6 +56,17 @@ public class SelectTenantAction extends AbstractAction {
 	public void setCompanyID(String companyID) {
 		this.companyID = companyID;
 	}
+
+	public boolean isTenantNotFound() {
+		return tenantNotFound;
+	}
+
+	public void setTenantNotFound(boolean tenantNotFound) {
+		this.tenantNotFound = tenantNotFound;
+	}
+	
+	
+	
 
 		
 }

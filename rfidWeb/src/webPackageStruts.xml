@@ -1182,6 +1182,7 @@
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>
 		
+		
 		<action name="signInToCompany" method="create" class="com.n4systems.fieldid.actions.SelectTenantAction">
 			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>

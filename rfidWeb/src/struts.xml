@@ -87,8 +87,9 @@
             	<param name="namespace">/</param>
 			</result>
 			<result name="tenant_missing" type="redirectAction">
-				<param name="actionName">chooseCompany</param>
+				<param name="actionName">signInToCompany</param>
             	<param name="namespace">/</param>
+				<param name="tenantNotFound">true</param>
 			</result>
 			<result name="feature_required" type="freemarker">/templates/html/common/featureRequired.ftl</result>
 			<result name="user_permission_required" type="freemarker">/templates/html/common/userPermissionRequired.ftl</result>
