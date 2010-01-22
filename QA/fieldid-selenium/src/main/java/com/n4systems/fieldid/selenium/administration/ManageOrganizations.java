@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.administration;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.datatypes.PrimaryOrganization;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
@@ -29,7 +30,21 @@ public class ManageOrganizations extends Assert {
 	private String editOrganizationCompanyZipCodeTextFieldLocator = "xpath=//INPUT[@id='organizationUpdate_addressInfo_zip']";
 	private String editOrganizationCompanyPhoneNumberTextFieldLocator = "xpath=//INPUT[@id='organizationUpdate_addressInfo_phone1']";
 	private String editOrganizationCompanyFaxNumberTextFieldLocator = "xpath=//INPUT[@id='organizationUpdate_addressInfo_fax1']";
+	private String addOrganizationNameTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_displayName']";
+	private String addOrganizationNameOnCertTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_certificateName']";
+	private String addOrganizationCountryTextFieldLocator = "xpath=//SELECT[@id='organizationCreate_countryId']";
+	private String addOrganizationTimeZoneTextFieldLocator = "xpath=//SELECT[@id='tzlist']";
+	private String addOrganizationCompanyStreetAddressTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_streetAddress']";
+	private String addOrganizationCompanyCityTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_city']";
+	private String addOrganizationCompanyStateTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_state']";
+	private String addOrganizationCompanyCountryTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_country']";
+	private String addOrganizationCompanyZipCodeTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_zip']";
+	private String addOrganizationCompanyPhoneNumberTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_phone1']";
+	private String addOrganizationCompanyFaxNumberTextFieldLocator = "xpath=//INPUT[@id='organizationCreate_addressInfo_fax1']";
 	private String addOrganizationLinkLocator = "xpath=//LI[contains(@class,'add')]/A[contains(text(),'Add')]";
+	private String addOrganizationSaveButtonLocator = "xpath=//INPUT[@id='organizationCreate_label_save']";
+	private String addOrganizationCancelButtonLocator = "xpath=//INPUT[@value='Cancel']";
+	private String limitWarningMessageLocator = "xpath=//DIV[contains(@class,'limitWarning')]";
 	
 	public ManageOrganizations(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -152,5 +167,111 @@ public class ManageOrganizations extends Assert {
 			p.setCompanyFaxNumber(selenium.getValue(editOrganizationCompanyFaxNumberTextFieldLocator));
 		}
 		return p;
+	}
+
+	public void setSecondaryOrganization(Organization o) {
+		verifyAddSecondaryOrganizationForm();
+		if(o.getName() != null) {
+			selenium.type(addOrganizationNameTextFieldLocator, o.getName());
+		}
+		if(o.getNameOnCert() != null) {
+			selenium.type(addOrganizationNameOnCertTextFieldLocator, o.getNameOnCert());
+		}
+		if(o.getCountry() != null) {
+			selenium.select(addOrganizationCountryTextFieldLocator, o.getCountry());
+			misc.WaitForTimeZoneToUpdate();
+		}
+		if(o.getTimeZone() != null) {
+			selenium.select(addOrganizationTimeZoneTextFieldLocator, o.getTimeZone());
+		}
+		if(o.getCompanyStreetAddress() != null) {
+			selenium.type(addOrganizationCompanyStreetAddressTextFieldLocator, o.getCompanyStreetAddress());
+		}
+		if(o.getCompanyCity() != null) {
+			selenium.type(addOrganizationCompanyCityTextFieldLocator, o.getCompanyCity());
+		}
+		if(o.getCompanyState() != null) {
+			selenium.type(addOrganizationCompanyStateTextFieldLocator, o.getCompanyState());
+		}
+		if(o.getCompanyCountry() != null) {
+			selenium.type(addOrganizationCompanyCountryTextFieldLocator, o.getCompanyCountry());
+		}
+		if(o.getCompanyZipCode() != null) {
+			selenium.type(addOrganizationCompanyZipCodeTextFieldLocator, o.getCompanyZipCode());
+		}
+		if(o.getCompanyPhoneNumber() != null) {
+			selenium.type(addOrganizationCompanyPhoneNumberTextFieldLocator, o.getCompanyPhoneNumber());
+		}
+		if(o.getCompanyFaxNumber() != null) {
+			selenium.type(addOrganizationCompanyFaxNumberTextFieldLocator, o.getCompanyFaxNumber());
+		}
+	}
+	
+	private void verifyAddSecondaryOrganizationForm() {
+		assertTrue(selenium.isElementPresent(addOrganizationNameTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationNameOnCertTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCountryTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationTimeZoneTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyStreetAddressTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyCityTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyStateTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyCountryTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyZipCodeTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyPhoneNumberTextFieldLocator));
+		assertTrue(selenium.isElementPresent(addOrganizationCompanyFaxNumberTextFieldLocator));
+	}
+
+	public void gotoSaveAddSecondaryOrganization() {
+		misc.info("Click the Save button");
+		if(selenium.isElementPresent(addOrganizationSaveButtonLocator)) {
+			selenium.click(addOrganizationSaveButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		}
+	}
+
+	public void gotoCancelAddSecondaryOrganization() {
+		misc.info("Click the Cancel button");
+		if(selenium.isElementPresent(addOrganizationCancelButtonLocator)) {
+			selenium.click(addOrganizationCancelButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		}
+	}
+
+	public String getLimitWarningMessage() {
+		String result = null;
+		if(selenium.isElementPresent(limitWarningMessageLocator)) {
+			result = selenium.getText(limitWarningMessageLocator);
+		}
+		return result;
+	}
+
+	/**
+	 * If you just created a tenant then try to add a secondary
+	 * organization it will fail because the tenant settings
+	 * have not been fully configured. This method will check
+	 * to see if there is a limit of 0 on adding a secondary
+	 * organization. It will wait for up to 5 minutes. If it
+	 * does not change after 5 minutes we assume it really is
+	 * supposed to be zero secondary organizations.
+	 * 
+	 * Call this method when you are on the page for adding secondary
+	 * organizations, i.e. after gotoAddSecondaryOrganization().
+	 */
+	public void waitForTenantSettingsToBeCreated() {
+		long timeout = 5 * 60 * 1000;	// minutes * seconds * milliseconds
+		long refreshRate = 10 * 1000;	// seconds * milliseconds
+		long elapsedSeconds = 0;
+		String limitMsg = getLimitWarningMessage();
+
+		while(elapsedSeconds < timeout && limitMsg != null) {
+			misc.sleep(refreshRate);
+			selenium.refresh();
+			misc.waitForPageToLoadAndCheckForOopsPage();
+			limitMsg = getLimitWarningMessage();
+			elapsedSeconds += refreshRate;
+		}
+		if(limitMsg != null) {
+			fail("Waited " + timeout/1000 + " seconds for Secondary Org limits to update but they never updated.");
+		}
 	}
 }
