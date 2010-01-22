@@ -24,6 +24,7 @@ public class Admin extends Assert {
 	private String autoAttributeWizardLinkLocator = "xpath=//A[contains(text(),'Auto Attribute Wizard')]";
 	private String manageCommentTemplatesLinkLocator = "xpath=//A[contains(text(),'Manage Comment Templates')]";
 	private String dataLogLinkLocator = "xpath=//A[contains(text(),'Data Log')]";
+	private String manageProductCodeMappingsLinkLocator = "xpath=//A[contains(text(),'Manage Product Code Mappings')]";
 
 	public Admin(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -412,5 +413,18 @@ public class Admin extends Assert {
 			fail("Could not find the header for 'Administration'.");
 		}
 	}
-}
 
+	/**
+	 * Clicks the link to Manage Product Code Mappings. Need to call verify from
+	 * ManageProductCodeMappings class to confirm we arrived properly.
+	 */
+	public void gotoManageProductCodeMappings() {
+		misc.info("Click link to go to Manage Product Code Mappings");
+		if(selenium.isElementPresent(manageProductCodeMappingsLinkLocator)) {
+			selenium.click(manageProductCodeMappingsLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the link to Manage Product Code Mappings");
+		}
+	}
+}

@@ -203,7 +203,7 @@ public class Identify extends Assert {
 		misc.sleep(3000);
 	}
 
-	private void setRequiredProductAttributes() {
+	public void setRequiredProductAttributes() {
 		String source = selenium.getHtmlSource();
 		List<String> requiredSelectListsIDs = getRequiredSelectListIDs(source);
 		setRequiredSelectLists(requiredSelectListsIDs);
@@ -231,23 +231,39 @@ public class Identify extends Assert {
 		Iterator<String> i = requiredTextFieldIDs.iterator();
 		while(i.hasNext()) {
 			String id = i.next();
-			String locator = "xpath=//INPUT[contains(@class,'" + classStringIdentifyingRequiredFields
-				+ "') and contains(@class,'" + classStringIdentifyingUnitOfMeasureFields 
-				+ "') and @id='" + id + "']";
-			if(selenium.isElementPresent(locator)) {
-				String anchor = locator + "/../../SPAN[@class='action']/A[contains(@id,'" + id + "')]";
-				selenium.click(anchor);
-				waitForUnitOfMeasureDialogToOpen(id);
-				Random r = new Random();
-				String value = Integer.toString(Math.abs((r.nextInt(100)+1)));
-				String unitOfMeasureIDPrefix = "unitOfMeasureId_";
-				String typeOfUnitOfMeasureSelectListLocator = "//SELECT[contains(@id,'" + unitOfMeasureIDPrefix + id + "')]";
-				String typeOfUnitOfMeasure = selenium.getSelectedValue(typeOfUnitOfMeasureSelectListLocator);
-				String unitOfMeasureInputLocator = "//INPUT[@id='" + typeOfUnitOfMeasure + "_" + id + "']";
-				selenium.type(unitOfMeasureInputLocator, value);
-				String submitButton = "//INPUT[contains(@id,'" + id + "') and @value='Submit' and @type='submit']";
-				selenium.click(submitButton);
-			}
+			Random r = new Random();
+			String value = Integer.toString(Math.abs((r.nextInt(100)+1)));
+			setUnitOfMeasure(id, value);
+		}
+	}
+	
+	/**
+	 * Given the id attribute of the Unit Of Measure INPUT tag,
+	 * this will open the input dialog and fill in the dialog
+	 * with the given value.
+	 * 
+	 * If does not change the unit of measure but uses the
+	 * default value.
+	 * 
+	 * For unit of measures which have more than one input,
+	 * this will fill in the first value only.
+	 * 
+	 * @param id
+	 * @param value
+	 */
+	public void setUnitOfMeasure(String id, String value) {
+		String locator = "xpath=//INPUT[contains(@class,'" + classStringIdentifyingUnitOfMeasureFields + "') and @id='" + id + "']";
+		if(selenium.isElementPresent(locator)) {
+			String anchor = locator + "/../../SPAN[@class='action']/A[contains(@id,'" + id + "')]";
+			selenium.click(anchor);
+			waitForUnitOfMeasureDialogToOpen(id);
+			String unitOfMeasureIDPrefix = "unitOfMeasureId_";
+			String typeOfUnitOfMeasureSelectListLocator = "//SELECT[contains(@id,'" + unitOfMeasureIDPrefix + id + "')]";
+			String typeOfUnitOfMeasure = selenium.getSelectedValue(typeOfUnitOfMeasureSelectListLocator);
+			String unitOfMeasureInputLocator = "//INPUT[@id='" + typeOfUnitOfMeasure + "_" + id + "']";
+			selenium.type(unitOfMeasureInputLocator, value);
+			String submitButton = "//INPUT[contains(@id,'" + id + "') and @value='Submit' and @type='submit']";
+			selenium.click(submitButton);
 		}
 	}
 
