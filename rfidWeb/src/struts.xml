@@ -87,7 +87,7 @@
             	<param name="namespace">/</param>
 			</result>
 			<result name="tenant_missing" type="redirectAction">
-				<param name="actionName">signInToCompany</param>
+				<param name="actionName">chooseCompany</param>
             	<param name="namespace">/</param>
 				<param name="tenantNotFound">true</param>
 			</result>
