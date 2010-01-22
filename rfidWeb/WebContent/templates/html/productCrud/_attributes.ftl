@@ -28,7 +28,7 @@
 			<#assign requiredClass=''/>
 		</#if>
 		
-		<@s.if test="${prefix}InfoOptions[${stat.index}].uniqueID == null" >
+		<@s.if test="${prefix}InfoOptions[${stat.index}].name == null" >
 			<#assign infoOptionIsNull=true>
 		</@s.if>
 		<@s.else>
