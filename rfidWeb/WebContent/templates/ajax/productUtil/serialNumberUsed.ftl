@@ -1,5 +1,9 @@
-<#if uniqueId?exists && uniqueId lt 0 >
-	<#assign id=-1 * uniqueId />
+<#if uniqueId?exists> 
+	<#if uniqueId lt 0 >
+		<#assign id=-1 * uniqueId />
+	<#else>
+		<#assign id=uniqueId />
+	</#if>
 </#if>
 <#assign html>
 	<span class="warning"><@s.text name="label.serial_number_in_use"/></span>
