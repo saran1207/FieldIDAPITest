@@ -4,6 +4,7 @@ package com.n4systems.fieldid.selenium.testcase.nonloggedin;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.misc.Misc;
 
 public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 
@@ -16,6 +17,19 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 		
 		assertTrue("must be on the choose company page", selenium.isTextPresent("Choose A Company"));
 		assertTrue("No error messages should be present", !selenium.isVisible("css=#error"));
+		selenium.getLocation();
+	}
+	
+	
+	@Test
+	public void should_forward_to_choose_company_page_from_root_of_www_domain() throws Exception {
+		String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot();
+		selenium.open(url);
+		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		
+		assertTrue("must be on the choose company page", selenium.isTextPresent("Choose A Company"));
+		assertEquals("regexp:" + (url + "chooseCompany.action").replaceAll("\\/", "\\\\/").replaceAll("\\.", "\\\\."), selenium.getLocation());
+		
 		selenium.getLocation();
 	}
 	
