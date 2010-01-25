@@ -6,9 +6,9 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class AutoAttributeWizard extends Assert {
+public class AutoAttributeWizard {
 	Selenium selenium;
 	Misc misc;
 	private String autoAttributeWizardPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Auto Attribute Wizard')]";

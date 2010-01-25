@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.selenium.assets;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-public class ProductSearchResults extends Assert {
+public class ProductSearchResults {
 	Selenium selenium;
 	Misc misc;
 	

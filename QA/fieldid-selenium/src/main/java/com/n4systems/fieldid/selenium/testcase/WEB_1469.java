@@ -43,7 +43,6 @@ public class WEB_1469 extends FieldIDTestCase {
 			logIntoNewTenant(username, password);
 			PrimaryOrganization p = getPrimaryOrganization();
 			verifyEquals(t, p);
-			
 		} catch(Exception e) {
 			throw e;
 		}
@@ -105,9 +104,6 @@ public class WEB_1469 extends FieldIDTestCase {
 		}
 		login.gotoPlansAndPricing();
 		String packageName = "Unlimited";
-		sup.gotoSignUpNow(packageName);
-		create.verifyCreateAccountPage(packageName);
-		create.gotoChooseAnotherPackage();
 		sup.gotoSignUpNow(packageName);
 		create.verifyCreateAccountPage(packageName);
 

@@ -9,7 +9,7 @@ import com.n4systems.fieldid.selenium.datatypes.Customer;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
 /**
  * Note: For Manage Job Sites, it is really Manage Customers with a label
@@ -19,7 +19,7 @@ import org.junit.Assert;
  * @author dgrainge
  *
  */
-public class ManageCustomers extends Assert {
+public class ManageCustomers {
 	Selenium selenium;
 	Misc misc;
 	private String manageCustomersPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Customers')]";

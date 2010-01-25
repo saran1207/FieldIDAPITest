@@ -12,11 +12,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.thoughtworks.selenium.Selenium;
 
-public class Misc extends Assert {
+public class Misc {
 
 	public static final String defaultTimeout = "30000";
 	// Current timeout for session is 30 minutes. This is set to 31 minutes

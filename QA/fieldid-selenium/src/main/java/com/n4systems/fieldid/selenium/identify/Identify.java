@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -21,7 +21,7 @@ import com.n4systems.fieldid.selenium.datatypes.SafetyNetworkRegistration;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-public class Identify extends Assert {
+public class Identify {
 
 	private Selenium selenium;
 	private Misc misc;

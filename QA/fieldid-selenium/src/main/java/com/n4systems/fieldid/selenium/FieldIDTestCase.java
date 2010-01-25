@@ -354,12 +354,12 @@ public class FieldIDTestCase extends SeleneseTestBase {
         stb.verifyTrue(b);
     }
 
-    /** Like JUnit's Assert.assertEquals, but knows how to compare string arrays */
+    /** Like JUnit's assertEquals, but knows how to compare string arrays */
     public static void assertEquals(Object s1, Object s2) {
         SeleneseTestBase.assertEquals(s1, s2);
     }
     
-    /** Like JUnit's Assert.assertEquals, but handles "regexp:" strings like HTML Selenese */
+    /** Like JUnit's assertEquals, but handles "regexp:" strings like HTML Selenese */
     public static void assertEquals(String s1, String s2) {
         SeleneseTestBase.assertEquals(s1, s2);
     }
@@ -398,7 +398,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
     	}
     }
     
-    /** Like JUnit's Assert.assertEquals, but joins the string array with commas, and 
+    /** Like JUnit's assertEquals, but joins the string array with commas, and 
      * handles "regexp:" strings like HTML Selenese
      */
     public static void assertEquals(String s1, String[] s2) {
@@ -540,7 +540,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * @param companyID
 	 */
 	public void setCompany(String companyID) {
-		misc.info("Changing to company '" + companyID);
+		misc.info("Changing to company '" + companyID + "'");
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
 		selenium.waitForPageToLoad(Misc.defaultTimeout);

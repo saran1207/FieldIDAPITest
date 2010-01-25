@@ -1,11 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
-
 import org.junit.*;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.Admin;
 import com.n4systems.fieldid.selenium.administration.ManageOrganizations;

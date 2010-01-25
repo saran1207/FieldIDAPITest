@@ -2,9 +2,9 @@ package com.n4systems.fieldid.selenium.administration;
 
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class Admin extends Assert {
+public class Admin {
 	Selenium selenium;
 	Misc misc;
 	

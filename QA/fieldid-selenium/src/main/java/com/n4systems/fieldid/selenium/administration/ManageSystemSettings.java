@@ -3,9 +3,9 @@ package com.n4systems.fieldid.selenium.administration;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class ManageSystemSettings extends Assert {
+public class ManageSystemSettings {
 	Selenium selenium;
 	Misc misc;
 	private String manageSystemSettingsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage System Settings')]";

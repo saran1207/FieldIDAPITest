@@ -8,9 +8,9 @@ import com.n4systems.fieldid.selenium.datatypes.ProductSelectDisplayColumns;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.n4systems.fieldid.selenium.misc.Search;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class ProductSearch extends Assert {
+public class ProductSearch {
 	Selenium selenium;
 	Misc misc;
 	Search search;

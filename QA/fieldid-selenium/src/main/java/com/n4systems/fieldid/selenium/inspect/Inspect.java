@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.selenium.inspect;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-public class Inspect extends Assert {
+public class Inspect {
 	Selenium selenium;
 	Misc misc;
 	

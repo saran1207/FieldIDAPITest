@@ -2,9 +2,9 @@ package com.n4systems.fieldid.selenium.console;
 
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class ConsoleLogin extends Assert {
+public class ConsoleLogin {
 	Selenium selenium;
 	Misc misc;
 	

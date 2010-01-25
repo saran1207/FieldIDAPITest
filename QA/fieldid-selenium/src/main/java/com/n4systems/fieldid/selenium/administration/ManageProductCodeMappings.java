@@ -14,9 +14,9 @@ import com.n4systems.fieldid.selenium.identify.Identify;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class ManageProductCodeMappings extends Assert {
+public class ManageProductCodeMappings {
 	Selenium selenium;
 	Misc misc;
 	Identify identify;

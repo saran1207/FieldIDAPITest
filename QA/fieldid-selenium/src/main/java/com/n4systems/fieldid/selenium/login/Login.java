@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.selenium.login;
 
 import java.util.List;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-public class Login extends Assert {
+public class Login {
 	Selenium selenium;
 	Misc misc;
 	

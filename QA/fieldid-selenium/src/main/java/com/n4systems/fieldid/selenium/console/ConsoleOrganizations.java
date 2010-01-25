@@ -6,9 +6,9 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.ConsoleTenant;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class ConsoleOrganizations extends Assert {
+public class ConsoleOrganizations {
 	Selenium selenium;
 	Misc misc;
 	

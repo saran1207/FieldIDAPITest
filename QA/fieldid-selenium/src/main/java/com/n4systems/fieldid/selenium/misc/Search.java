@@ -3,10 +3,10 @@ package com.n4systems.fieldid.selenium.misc;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import com.thoughtworks.selenium.Selenium;
 
-public class Search extends Assert {
+public class Search {
 	Selenium selenium;
 	Misc misc;
 

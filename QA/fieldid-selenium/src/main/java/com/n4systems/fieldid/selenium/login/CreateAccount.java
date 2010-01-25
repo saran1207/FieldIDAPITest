@@ -2,12 +2,12 @@ package com.n4systems.fieldid.selenium.login;
 
 import java.util.List;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-public class CreateAccount extends Assert {
+public class CreateAccount {
 	Selenium selenium;
 	Misc misc;
 	
@@ -109,7 +109,10 @@ public class CreateAccount extends Assert {
 		if(t.getCompanyCountry() != null)		selenium.select(companyCountrySelectListLocator, t.getCompanyCountry());
 		if(t.getCompanyZipCode() != null)		selenium.type(companyZipCodeTextFieldLocator, t.getCompanyZipCode());
 		if(t.getCompanyPhoneNumber() != null)	selenium.type(companyPhoneNumberTextFieldLocator, t.getCompanyPhoneNumber());
-		if(t.getSiteAddress() != null)			selenium.type(siteAddressTextFieldLocator, t.getSiteAddress());
+		if(t.getSiteAddress() != null) {
+			misc.info("Tenant set to '" + t.getSiteAddress() + "'");
+			selenium.type(siteAddressTextFieldLocator, t.getSiteAddress());
+		}
 		if(t.getPromoCode() != null)			selenium.type(promoCodeTextFieldLocator, t.getPromoCode());
 		
 		// For Free accounts these should all be null and not get set
@@ -236,6 +239,7 @@ public class CreateAccount extends Assert {
 	}
 
 	public void gotoCreateMyAccount() {
+		misc.info("Click Create Account button to create the new tenant");
 		if(selenium.isElementPresent(createMyAccountButtonLocator)) {
 			selenium.click(createMyAccountButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

@@ -8,9 +8,9 @@ import com.n4systems.fieldid.selenium.datatypes.PrimaryOrganization;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 
-public class ManageOrganizations extends Assert {
+public class ManageOrganizations {
 	Selenium selenium;
 	Misc misc;
 	private String manageOrganizationsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Organizations')]";
