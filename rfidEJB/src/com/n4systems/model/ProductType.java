@@ -151,7 +151,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.warnings = safetyLocationPath;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getWarnings() {
 		return warnings;
 	}
@@ -160,13 +160,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.cautionUrl = externalURL;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getCautionUrl() {
 		return cautionUrl;
 	}
 	
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getCautions() {
 		return getCautionUrl();
 	}
@@ -180,7 +180,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.instructions = instructions;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getInstructions() {
 		return instructions;
 	}
@@ -408,7 +408,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return returnDate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Set<FileAttachment> getAttachments() {
 		return attachments;
 	}
@@ -417,7 +417,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.attachments = attachments;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getImageName() {
 		return imageName;
 	}
@@ -426,7 +426,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.imageName = imageName;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public boolean hasImage() {
 		return (imageName != null);
 	}

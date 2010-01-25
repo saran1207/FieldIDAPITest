@@ -352,8 +352,8 @@ public class PathHandler {
 		return note.getId().toString();
 	}
 	
-	private static String getProductAttachmentPath(ProductAttachment note) {
-		return mergePaths(note.getId().toString(), note.getFileName());
+	private static String getProductAttachmentPath(ProductAttachment pAttachment) {
+		return pAttachment.getId().toString();
 	}
 
 	public static File getInspectionAttachmentFile(Inspection inspection, SubInspection subInspection, FileAttachment attachment) {
@@ -388,8 +388,12 @@ public class PathHandler {
 		return absolutize(getJobAttachmentBasePath(tenant));
 	}
 	
-	public static File getProductAttachmentFile(ProductAttachment attachment) {
+	public static File getProductAttachmentDir(ProductAttachment attachment) {
 		return absolutize(mergePaths(getProductAttachmentBasePath(attachment.getTenant()), getProductPath(attachment.getProduct()), getProductAttachmentPath(attachment)));
+	}
+	
+	public static File getProductAttachmentFile(ProductAttachment attachment) {
+		return new File(getProductAttachmentDir(attachment), attachment.getFileName());
 	}
 	
 	public static File getProductAttachmentBaseFile(Tenant tenant) {
