@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.selenium.console;
 
+import static org.junit.Assert.*;
+
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
-import static org.junit.Assert.*;
 
 public class ConsoleLogin {
 	Selenium selenium;
 	Misc misc;
+	
 	
 	// Locators
 	private String adminConsoleURL = "/fieldidadmin/";
@@ -28,7 +30,7 @@ public class ConsoleLogin {
 	 * 
 	 */
 	public void gotoAdminConsole() {
-		selenium.open(adminConsoleURL);
+		gotoPage("");
 	}
 	
 	/**
@@ -88,12 +90,19 @@ public class ConsoleLogin {
 		assertFalse(selenium.isElementPresent(passwordTextFieldLocator));
 	}
 
-	public void gotoAdminConsoleAndLogin() {
+	public ConsoleLogin gotoAdminConsoleAndLogin() {
 		gotoAdminConsole();
 		setUserName("n4systems");
 		setPassword("makesome$");
 		gotoLogin();
 		verifyLogin();
+		return this;
+	}
+
+	public ConsoleLogin gotoPage(String pageUrl) {
+		selenium.open(adminConsoleURL + pageUrl);
+		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		return this;
 	}
 }
 

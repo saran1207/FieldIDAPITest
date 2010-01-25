@@ -144,6 +144,9 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
+	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
+
+
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
     protected Selenium selenium;
@@ -544,5 +547,10 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
+	}
+	
+	
+	public String getSupportFileLocation() {
+		return supportFileLocation;
 	}
 }

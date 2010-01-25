@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.selenium.login;
 
 import static org.junit.Assert.*;
+
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
+
 
 public class Choose {
 
