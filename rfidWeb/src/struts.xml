@@ -99,7 +99,7 @@
 			</result>
 			
 			<result name="startSetupWizard" type="redirectAction">
-				<param name="namespace">/quickStartWizard</param>
+				<param name="namespace">/quickSetupWizard</param>
 				<param name="actionName">startWizard</param>
 			</result>
 		</global-results>
