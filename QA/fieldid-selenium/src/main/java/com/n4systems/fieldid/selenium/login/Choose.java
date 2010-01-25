@@ -4,11 +4,6 @@ import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
-/**
- * @deprecated
- * @author dgrainge
- *
- */
 public class Choose {
 
 	private Selenium selenium;
