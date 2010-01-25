@@ -19,7 +19,9 @@ public class Choose {
 	}
 
 	/**
-	 * This sets the Company ID field.
+	 * This sets the Company ID field. If the company is set to www
+	 * Field ID should automatically forward you to the Choose A Company
+	 * page. 
 	 * 
 	 * @param s
 	 */
