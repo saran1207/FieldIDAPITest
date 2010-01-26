@@ -86,7 +86,7 @@
 			
 			<div class="infoSet infoBlock">
 				<label class="label" for="country"><@s.text name="label.country"/></label>
-				<@s.select name="address.country" list="countries" listKey="id" listValue="displayName" cssClass="country" />
+				<@s.select name="address.country" list="address.countries" listKey="id" listValue="displayName" cssClass="country" />
 			</div>
 			<div class="infoSet infoBlock">
 				<label class="label" for="postal"><@s.text name="label.zip_code"/></label>

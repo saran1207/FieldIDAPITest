@@ -1,6 +1,10 @@
 package com.n4systems.fieldid.actions.subscriptions.view.model;
 
+import java.util.SortedSet;
+
+import com.n4systems.model.api.Listable;
 import com.n4systems.subscription.AddressInfo;
+import com.n4systems.util.timezone.TimeZoneSelectionHelper;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class AddressInfoDecorator extends AddressInfo {
@@ -60,6 +64,19 @@ public class AddressInfoDecorator extends AddressInfo {
 	@RequiredStringValidator(message="", key="error.country_required")
 	public void setCountry(String country) {
 		delegateAddress.setCountry(country);
+		delegateAddress.setCountryFullName(findFullName(country));
+	}
+
+	private String findFullName(String country) {
+		if (country == null || country.trim().isEmpty()) {
+			return null;
+		}
+		for (Listable<String> countryEntry : getCountries()) {
+			if (countryEntry.getId().equalsIgnoreCase(country.trim()) ) {
+				return countryEntry.getDisplayName();
+			}
+		}
+		return null;
 	}
 
 	@RequiredStringValidator(message="", key="error.zip_code_required")
@@ -74,5 +91,9 @@ public class AddressInfoDecorator extends AddressInfo {
 
 	public AddressInfo getDelegateAddress() {
 		return delegateAddress;
+	}
+	
+	public SortedSet<? extends Listable<String>> getCountries() {
+		return TimeZoneSelectionHelper.getCountries();
 	}
 }

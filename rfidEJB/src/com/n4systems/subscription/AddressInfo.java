@@ -6,6 +6,7 @@ public class AddressInfo {
 	private String city;
 	private String state;
 	private String country;
+	private String countryFullName;
 	private String postal;
 
 	public String getAddressLine1() {
@@ -38,12 +39,22 @@ public class AddressInfo {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	
+	public String getCountryFullName() {
+		return countryFullName;
+	}
+	public void setCountryFullName(String countryFullName) {
+		this.countryFullName = countryFullName;
+	}
+	
+	
 	public String getPostal() {
 		return postal;
 	}
 	public void setPostal(String postal) {
 		this.postal = postal;
 	}
+	
 	
 	
 	

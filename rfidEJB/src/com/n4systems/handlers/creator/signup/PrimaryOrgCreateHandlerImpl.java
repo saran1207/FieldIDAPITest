@@ -62,7 +62,7 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		address.setStreetAddress(inputAddress.getAddressLine1(), inputAddress.getAddressLine2());
 		address.setCity(inputAddress.getCity());
 		address.setState(inputAddress.getState());
-		address.setCountry(inputAddress.getCountry());
+		address.setCountry(inputAddress.getCountryFullName());
 		address.setZip(inputAddress.getPostal());
 		address.setPhone1(accountInfo.getPhone());
 		

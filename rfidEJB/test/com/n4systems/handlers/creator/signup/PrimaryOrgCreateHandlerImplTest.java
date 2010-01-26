@@ -54,7 +54,8 @@ public class PrimaryOrgCreateHandlerImplTest extends TestUsesTransactionBase {
 		address.setAddressLine2("street Address2");
 		address.setCity("city");
 		address.setState("state");
-		address.setCountry("country");
+		address.setCountry("country short name");
+		address.setCountryFullName("country full name");
 		address.setPostal("zip");
 		accountInfo.setBillingAddress(address);
 		accountInfo.setPhone("phone1");
@@ -78,7 +79,7 @@ public class PrimaryOrgCreateHandlerImplTest extends TestUsesTransactionBase {
 												.streetAddress("street Address1" + " " + "street Address2")
 												.city("city")
 												.state("state")
-												.country("country")
+												.country("country full name")
 												.zip("zip")
 												.phone1("phone1").build();
 		
