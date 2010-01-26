@@ -192,6 +192,7 @@ public class CreateAccount {
 	
 	public void selectPayByCreditCard() {
 		misc.info("Click the Pay by Credit Card link");
+		fail("Do not use credit card until Shaun clears up problems with billing company");
 		if(selenium.isElementPresent(payByCreditCardLinkLocator)) {
 			selenium.click(payByCreditCardLinkLocator);
 		} else {

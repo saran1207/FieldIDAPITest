@@ -128,12 +128,14 @@ public class WEB_1469 extends FieldIDTestCase {
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
 		t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
-		t.setPaymentType(CreateTenant.payByCreditCard);
-		t.setCreditCardType(CreateTenant.creditCardTypeVISA);
-		t.setNameOnCard("John Q. Public");
-		t.setCardNumber("1111111111111111");
-		t.setexpiryMonth("12");
-		t.setexpiryYear("2011");
+		t.setPaymentType(CreateTenant.payByPurchaseOrder);
+		t.setpurchaseOrderNumber("88888");
+//		t.setPaymentType(CreateTenant.payByCreditCard);
+//		t.setCreditCardType(CreateTenant.creditCardTypeVISA);
+//		t.setNameOnCard("John Q. Public");
+//		t.setCardNumber("1111111111111111");
+//		t.setexpiryMonth("12");
+//		t.setexpiryYear("2011");
 		create.setCreateYourAccountForm(t);
 		create.gotoCreateMyAccount();
 		
