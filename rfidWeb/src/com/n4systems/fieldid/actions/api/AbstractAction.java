@@ -454,6 +454,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		getSession().setVendorContext(vendorContext);
 	}
 	
+	
+	
 	public Long getVendorContext() {
 		return getSession().getVendorContext();
 	}

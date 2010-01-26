@@ -43,7 +43,6 @@ public class ChantFileProcessorTest {
 
 		@Override
 		protected String correctTimeZoneAndMillisecondFormatting(String dateString) {
-			// TODO Auto-generated method stub
 			return super.correctTimeZoneAndMillisecondFormatting(dateString);
 		}
 		

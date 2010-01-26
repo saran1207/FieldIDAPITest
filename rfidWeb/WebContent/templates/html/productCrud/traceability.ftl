@@ -1,4 +1,13 @@
 ${action.setPageType('product', 'traceability')!}
+<#if inVendorContext>
+	<div id="registrationMessage">
+		<#if hasRegisteredProduct>
+			<span id="alreadyRegisteredMessage">you have registered this asset already you may view it in your regular context.</span>
+		<#else>
+			<a id="copyAsset" href="<@s.url action="productAdd" vendorContext="" linkedProduct="${linkedProducts[0].id}"/>">copy and register now</a>
+		</#if>
+	</div>
+</#if>
 <div class="viewSection">
 <#list linkedProducts as linkedProduct>
 	<#assign tenant=linkedProduct.tenant />

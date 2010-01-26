@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions.product;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +50,6 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
-import com.n4systems.model.safetynetwork.ProductsByNetworkId;
-import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
@@ -88,7 +85,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// form inputs
 	private List<InfoOptionInput> productInfoOptions;
 	private List<ProductExtensionValueInput> productExtentionValues;
-	private Product product;
+	protected Product product;
 	private AddProductHistoryBean addProductHistory;
 	private String search;
 	private String identified;
@@ -136,8 +133,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private ProductSaveService productSaverService;
 	private Long excludeId;
 	
-	private List<Product> linkedProducts;
-	private Map<Long, List<ProductAttachment>> linkedProductAttachments;
+	protected List<Product> linkedProducts;
+	protected Map<Long, List<ProductAttachment>> linkedProductAttachments;
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
@@ -361,31 +358,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 	
-	@SkipValidation
-	public String doTraceability() {
-		
-		ProductsByNetworkId loader = getLoaderFactory().createProductsByNetworkId();
-		loader.setNetworkId(product.getNetworkId());
-		
-		if (!isInVendorContext()) {
-			// in a vendor context, we show the product since they don't get the "show" tab right now
-			loader.setExcludeProductId(product.getId());
-		}
-		
-		linkedProducts = loader.load();
-		
-		// let's populate our product attachment map
-		SafetyNetworkProductAttachmentListLoader attachmentLoader = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader();
-		attachmentLoader.setNetworkId(product.getNetworkId());
-		
-		linkedProductAttachments = new HashMap<Long, List<ProductAttachment>>();
-		for (Product linkedProd: linkedProducts) {
-			attachmentLoader.setProductId(linkedProd.getId());
-			linkedProductAttachments.put(linkedProd.getId(), attachmentLoader.load());
-		}
-		
-		return SUCCESS;
-	}
+	
 
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doCreate() {
@@ -519,14 +492,14 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 
-	private void testProduct() {
+	protected void testProduct() {
 		if (product == null) {
 			addActionErrorText("error.noproduct");
 			throw new MissingEntityException();
 		}
 	}
 
-	private void testExistingProduct() {
+	protected void testExistingProduct() {
 		testProduct();
 		if (product.isNew()) {
 			addActionErrorText("error.noproduct");

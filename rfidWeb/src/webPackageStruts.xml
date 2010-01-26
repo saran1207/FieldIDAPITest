@@ -415,7 +415,7 @@
 
 		</action>
 		
-		<action name="productTraceability" method="traceability" class="com.n4systems.fieldid.actions.product.ProductCrud">
+		<action name="productTraceability" method="traceability" class="com.n4systems.fieldid.actions.product.TracabilityCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productCrud/traceability.ftl</result>		
 		</action>

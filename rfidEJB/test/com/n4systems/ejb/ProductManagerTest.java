@@ -54,116 +54,7 @@ public class ProductManagerTest { //extends EJBTestCase {
 	public void tearDown() throws Exception {
 	}
 
-	// FIXME: These test need to be refactored
-//	@SuppressWarnings("unchecked")
-//	@Test public void test_archive_regular_product() {
-//		expect(mockPersitenceManager.reattach(product)).andReturn(product);
-//		expect(mockPersitenceManager.findAll((QueryBuilder)anyObject())).andReturn(new ArrayList<SubProduct>());
-//		expect(mockPersitenceManager.update(product, testUser)).andReturn(product);
-//		
-//		ProductRemovalSummary summary = mockSummary(true);
-//		
-//		mockFindParentProduct(null, summary);
-//		setUpArchiveInspection();
-//		prepareSchedules();
-//		replay(mockEntityManager);
-//		replay(mockPersitenceManager);
-//		productManager.setPersistenceManager(mockPersitenceManager);
-//
-//		Product savedProduct = null;
-//		try {
-//			savedProduct = productManager.archive(product, testUser);
-//		} catch (UsedOnMasterInspectionException e) {
-//			fail("this should not have had an used on master instpection exception");
-//		}
-//
-//		assertTrue("product not archived", savedProduct.isArchived());
-//		assertNotNull(savedProduct.getArchivedSerialNumber());
-//
-//		verify(mockPersitenceManager);
-//		EasyMock.verify(summary);
-//		verifyArchiveInspections();
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Test public void test_archive_master_product() {
-//		List<SubProduct> subProducts = new ArrayList<SubProduct>();
-//		subProducts.add(new SubProduct("subProduct", new Product(), product));
-//		
-//		expect(mockPersitenceManager.reattach(product)).andReturn(product);
-//		expect(mockPersitenceManager.findAll((QueryBuilder)anyObject())).andReturn(subProducts);
-//		mockPersitenceManager.delete((SubProduct)anyObject());
-//		expect(mockPersitenceManager.update(product, testUser)).andReturn(product);
-//		
-//		ProductRemovalSummary summary = mockSummary(true);
-//		
-//		mockFindParentProduct(null, summary);
-//		setUpArchiveInspection();
-//		prepareSchedules();
-//		replay(mockEntityManager);
-//		replay(mockPersitenceManager);
-//		productManager.setPersistenceManager(mockPersitenceManager);
-//
-//		
-//
-//		Product savedProduct = null;
-//		try {
-//			savedProduct = productManager.archive(product, testUser);
-//		} catch (UsedOnMasterInspectionException e) {
-//			fail("this should not have had an used on master instpection exception");
-//		}
-//
-//		assertTrue("product not archived", savedProduct.isArchived());
-//		assertEquals(MY_GOOD_SERIAL_NUMBER, savedProduct.getArchivedSerialNumber());
-//		assertEquals(0, savedProduct.getSubProducts().size());
-//
-//		verify(mockPersitenceManager);
-//		EasyMock.verify(summary);
-//		verifyArchiveInspections();
-//		
-//		
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Test public void test_archive_sub_product() {
-//		
-//		Product master = new Product();
-//		List<SubProduct> subProducts = new ArrayList<SubProduct>();
-//		subProducts.add(new SubProduct("subProduct", product, master));
-//		master.setSubProducts(subProducts);
-//		master.setId(100L);
-//		
-//		
-//		expect(mockPersitenceManager.reattach(product)).andReturn(product);
-//		expect(mockPersitenceManager.findAll((QueryBuilder)anyObject())).andReturn(new ArrayList<SubProduct>());
-//		expect(mockPersitenceManager.update(master, testUser)).andReturn(master);
-//		expect(mockPersitenceManager.update(product, testUser)).andReturn(product);
-//		mockPersitenceManager.delete(new SubProduct(product, master));
-//		
-//		ProductRemovalSummary summary = mockSummary(true);
-//		
-//		mockFindParentProduct(master, summary);
-//		setUpArchiveInspection();
-//		prepareSchedules();
-//		replay(mockEntityManager);
-//		replay(mockPersitenceManager);
-//		productManager.setPersistenceManager(mockPersitenceManager);
-//
-//		Product savedProduct = null;
-//		try {
-//			savedProduct = productManager.archive(product, testUser);
-//		} catch (UsedOnMasterInspectionException e) {
-//			fail("this should not have had an used on master instpection exception");
-//		}
-//
-//		assertTrue("product not archived", savedProduct.isArchived());
-//		assertEquals(MY_GOOD_SERIAL_NUMBER, savedProduct.getArchivedSerialNumber());
-//		assertEquals(0, savedProduct.getSubProducts().size());
-//
-//		verify(mockPersitenceManager);
-//		EasyMock.verify(summary);
-//		verifyArchiveInspections();
-//	}
+
 	
 	@SuppressWarnings("unchecked")
 	@Test public void test_archive_sub_product_used_on_master_inspection() {
@@ -203,18 +94,7 @@ public class ProductManagerTest { //extends EJBTestCase {
 	}
 
 	
-	/*private void prepareSchedules() {
-		Query mockUpdateScheduleQuery = createMock(Query.class);
-		expect(mockUpdateScheduleQuery.executeUpdate()).andReturn(0);
-		expect(mockUpdateScheduleQuery.setParameter((String)anyObject(), (String)anyObject())).andReturn(mockUpdateScheduleQuery);
-		expectLastCall().atLeastOnce();
-		replay(mockUpdateScheduleQuery);
-		
-		expect(mockEntityManager.createQuery("UPDATE " + InspectionSchedule.class.getName() 
-				+ " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
-				+ " WHERE product = :product AND state = :activeState ")).andReturn(mockUpdateScheduleQuery);
-		
-	}*/
+	
 	
 	private void mockFindParentProduct(Product parentProduct, ProductRemovalSummary summary) {
 		try {
