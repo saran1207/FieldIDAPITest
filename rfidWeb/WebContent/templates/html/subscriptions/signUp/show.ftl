@@ -61,7 +61,7 @@
 			
 			<div class="infoSet infoBlock">
 				<label class="label" for="country"><@s.text name="label.country"/></label>
-				<span class="fieldHolder">${address.country}</span>
+				<span class="fieldHolder">${address.countryFullName}</span>
 				
 			</div>
 			<div class="infoSet infoBlock">
