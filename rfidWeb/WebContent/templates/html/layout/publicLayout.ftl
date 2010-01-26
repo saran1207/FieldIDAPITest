@@ -7,9 +7,7 @@
 		
 		<div id="page">
 			<div id="pageHeader">
-				<div id="systemLogo">
-					<img width="215" height="61" src="<@s.url value="/images/FieldIDLogo.jpg"/>"/>
-				</div>
+				<#include "_systemLogo.ftl"/>
 				<#include "_notificationArea.ftl"/>
 			</div>
 						

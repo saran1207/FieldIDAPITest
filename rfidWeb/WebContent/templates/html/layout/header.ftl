@@ -24,9 +24,7 @@
   		</ul>
   	</div> 
 
-	<div id="companyLogo">
-		<img width="215" height="61" src="<@s.url action="downloadTenantLogo"  namespace="/file" uniqueID="${tenant.id}" />"/>
-	</div>
+	<#include "_companyLogo.ftl"/>
 	
 	<div id="pageNavigation">
 		<ul>

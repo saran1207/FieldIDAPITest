@@ -8,13 +8,9 @@
 		<div id="page">
 			<div id="pageHeader">
 				<#if securityGuard?exists>	
-					<div id="companyLogo">
-						<img width="215" height="61" src="<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${securityGuard.tenantId!}" />"/>
-					</div>
+					<#include "_companyLogo.ftl"/>
 				<#else>
-					<div id="systemLogo">
-						<img width="215" height="61" src="<@s.url value="/images/FieldIDLogo.jpg"/>"/>
-					</div>
+					<#include "_systemLogo.ftl"/>
 				</#if>
 				
 				<#include "_notificationArea.ftl"/>
