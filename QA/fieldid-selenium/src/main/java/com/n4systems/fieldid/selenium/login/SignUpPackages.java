@@ -13,7 +13,7 @@ public class SignUpPackages {
 	
 	// Locators
 	private String headerText = "Sign Up For A Field ID Account";
-	private String signUpForPackageHeaderLocator = "xpath=//DIV[@id='mainContent']/H1[contains(text(),'" + headerText + ")]";
+	private String signUpForPackageHeaderLocator = "xpath=//DIV[@id='mainContent']/H1[contains(text(),'" + headerText + "')]";
 	private String signUpPackagesTableXpath = "//TABLE[@id='packages']";
 	private String numberOfSignUpPackagesXpath = signUpPackagesTableXpath + "/THEAD/TR[2]/TH[contains(@id,'package_')]";
 	private String returnToSignInLinkLocator = "xpath=//A[contains(text(),'Return to Sign In')]";

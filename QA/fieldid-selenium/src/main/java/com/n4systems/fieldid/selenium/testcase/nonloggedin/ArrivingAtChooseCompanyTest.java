@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase.nonloggedin;
 
 
+import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,12 +23,16 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 	
 	@Test
 	public void should_not_show_warning_message_when_a_user_just_arrives_at_the_main_choose_company_page() throws Exception {
-		setCompany("www");
-		selenium.open("/fieldid/chooseCompany.action");
+		gotoChooseCompanyPage();
 		
 		choosePage.verifyChooseCompany();
 		assertTrue("No error messages should be present", !selenium.isVisible("css=#error"));
 		
+	}
+
+	private void gotoChooseCompanyPage() {
+		setCompany("www");
+		selenium.open("/fieldid/chooseCompany.action");
 	}
 	
 	
@@ -49,5 +55,12 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 
 		
 		assertTrue("error messages should be present", selenium.isVisible("css=#error"));
+	}
+	
+	@Test
+	public void should_display_the_system_logo_not_a_branded_logo() throws Exception {
+		gotoChooseCompanyPage();
+		
+		assertSystemLogoIsUsed(selenium);
 	}
 }
