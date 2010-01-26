@@ -26,15 +26,16 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * 
 	 * variable		default						define				comment
 	 * --------		-------						------				-------
-	 * host			localhost					selenium-server		the computer running the selenium remote control (RC) server
-	 * port			4444						selenium-port		the port the selenium remote control server is listening on
-	 * snapshots	C:\\selenium-snapshots\\	selenium-snapshots	the root location for screen captures to be stored. 
-	 * browser		*firefox					fieldid-browser		the selenium string for which browser to run the test case with
-	 * protocol		http						fieldid-protocol	either 'http' or 'https' for which ever protocol to run fieldid with
-	 * initCompany	fieldid						fieldid-companyid	the tenant to start fieldid with
-	 * domain		team.n4systems.net			fieldid-domain		the domain, i.e. the computer running fieldid on
-	 * contextRoot	/fieldid/					fieldid-context		the context root for the fieldid application
-	 * actionDelay	null						fieldid-delay		the number of milliseconds to delay between selenium actions
+	 * host					localhost					selenium-server		the computer running the selenium remote control (RC) server
+	 * port					4444						selenium-port		the port the selenium remote control server is listening on
+	 * snapshots			C:\\selenium-snapshots\\	selenium-snapshots	the root location for screen captures to be stored. 
+	 * browser				*firefox					fieldid-browser		the selenium string for which browser to run the test case with
+	 * protocol				http						fieldid-protocol	either 'http' or 'https' for which ever protocol to run fieldid with
+	 * initCompany			fieldid						fieldid-companyid	the tenant to start fieldid with
+	 * domain				team.n4systems.net			fieldid-domain		the domain, i.e. the computer running fieldid on
+	 * contextRoot			/fieldid/					fieldid-context		the context root for the fieldid application
+	 * actionDelay			null						fieldid-delay		the number of milliseconds to delay between selenium actions
+	 * log4jConfig			log4j.xml					fieldid-log4j		the log4j configuration file to be used
 	 * 
 	 * The host and port are pretty straight forward. If I run Selenium RC on localhost
 	 * listening on port 4444 then host = "localhost" and port = 4444. You can override
@@ -144,9 +145,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
+	private String log4jConfig = System.getProperty("fieldid-log4j", "log4j.xml");
 	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
-
-
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
     protected Selenium selenium;
@@ -496,7 +496,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * Configure the log4j logger using an XML file.
 	 */
 	private void initializeLogger() {
-		DOMConfigurator.configure("log4j.xml");
+		DOMConfigurator.configure(log4jConfig);
 	}
 	
 	/**
