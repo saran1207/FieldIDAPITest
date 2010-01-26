@@ -3,7 +3,7 @@ body {
 	background-color: #fff;
 }
 
-.brandedContainer {
+.brandedContainer, .publicContainer {
 	border: 6px solid #bbb;
 }
 

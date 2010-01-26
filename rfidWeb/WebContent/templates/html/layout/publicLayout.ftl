@@ -7,21 +7,17 @@
 		
 		<div id="page">
 			<div id="pageHeader">
-				<div id="companyLogo">
+				<div id="systemLogo">
 					<img width="215" height="61" src="<@s.url value="/images/FieldIDLogo.jpg"/>"/>
 				</div>
-			</div>
-			<div id="contentHeader">
 				<#include "_notificationArea.ftl"/>
-				<h1>${title}</h1>
-				<#include "_options.ftl"/>
-		    </div>
-			
-			<div id="pageContent">
+			</div>
+						
+			<div id="pageContent" class="publicContainer public">
 				${body}
 			</div>
 			
-			<#include "publicFooter.ftl"/>
+			<#include "brandedPublicFooter.ftl"/>
 		</div>
 		
 		<#include "googleAnalytics.ftl">

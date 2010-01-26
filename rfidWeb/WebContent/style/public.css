@@ -22,7 +22,7 @@ a, a:hover, a:visited, a:active {
 	background-image: none;
 	padding: 30px 0 10px 0;
 }
-#companyLogo {
+#companyLogo, #systemLogo {
 	padding:11px 0 0 10px;
 }
 

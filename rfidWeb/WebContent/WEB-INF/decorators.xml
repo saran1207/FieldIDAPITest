@@ -45,10 +45,11 @@
         <pattern>*resetPassword*.action</pattern>
         <pattern>*login.action*</pattern>
         <pattern>*logIntoSystem.action*</pattern>
-        <pattern>*public/*.action*</pattern>
     </decorator>
     
-    
+	<decorator name="publicLayout" page="publicLayout.ftl">
+		<pattern>*public/*.action*</pattern>
+	</decorator>    
     
     <decorator name="layout" page="layout.ftl">     	
         <pattern>*.action</pattern>
