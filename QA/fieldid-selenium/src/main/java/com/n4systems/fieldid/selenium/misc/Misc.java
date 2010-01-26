@@ -18,7 +18,7 @@ import com.thoughtworks.selenium.Selenium;
 
 public class Misc {
 
-	public static final String defaultTimeout = "30000";
+	public static final String defaultTimeout = "60000";
 	// Current timeout for session is 30 minutes. This is set to 31 minutes
 	// just to be safe. That is, session will timeout in 30 minutes but it
 	// might take the javascript another minute to detect the session has
