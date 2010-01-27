@@ -19,6 +19,9 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class SafetyNetworkSmartSearchComponent extends UIBean {
 	public static final String TEMPLATE = "safetyNetworkSmartSearch";
 	
+	private Boolean refreshRegistration = false;
+	
+	
 	public SafetyNetworkSmartSearchComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
 	}
@@ -75,6 +78,9 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		
 		addParameter("linkedProduct_editMode", editMode);
 		addParameter("vendorList", getVendorList());
+		
+		addParameter("refreshRegistration", refreshRegistration);
+		
 	}
 
 	public List<ListingPair> getVendorList() {
@@ -90,5 +96,13 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 	
 	public Product loadLinkedProduct(Long linkedProductId) {
 		return getLoaderFactory().createSafetyNetworkProductLoader().setProductId(linkedProductId).load();
+	}
+
+	public Boolean getRefreshRegistration() {
+		return refreshRegistration;
+	}
+
+	public void setRefreshRegistration(Boolean refreshRegistration) {
+		this.refreshRegistration = refreshRegistration;
 	}
 }

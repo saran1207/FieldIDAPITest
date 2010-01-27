@@ -59,7 +59,11 @@
 				product.owner = "${(parameters.linkedProduct_OwnerName)?default("")?js_string}";
 				product.type = "${(parameters.linkedProduct_TypeName)?default("")?js_string}";
 				product.referenceNumber = "${(parameters.linkedProduct_ReferenceNumber)?default("")?js_string}";
-				populateLinkedProductInfo(product);
+				<#if parameters.refreshRegistration>
+					updateLinkedProductInfo(product);
+				<#else>
+					populateLinkedProductInfo(product);
+				</#if>
 				
 			});
 		</#if>

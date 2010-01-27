@@ -91,6 +91,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private String identified;
 	private LineItem lineItem;
 	private OwnerPicker ownerPicker;
+	
+	private boolean refreshRegirstation = false;
 
 	/**
 	 * Set only when coming from searchOrder.action, when attached a customer
@@ -186,6 +188,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	private void applyDefaults() {
+		refreshRegirstation = true;
+		
 		product.setIdentified(DateHelper.getToday());
 
 		loadAddProductHistory();
@@ -1033,6 +1037,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 	}
 	
+	
+	
 	public List<Product> getLinkedProducts() {
 		return linkedProducts;
 	}
@@ -1040,4 +1046,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public boolean isLinked() {
 		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
 	}
+
+	public boolean isRefreshRegistration() {
+		return refreshRegirstation;
+	}
+
+	
+	
 }

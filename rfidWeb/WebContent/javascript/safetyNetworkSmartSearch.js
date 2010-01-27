@@ -26,13 +26,13 @@ function showLinkedProductInfo() {
 	$$('#networkSmartSearchContainer').invoke("hide");
 }
 
-var ajaxUpdatingImage = ""
+var ajaxUpdatingImage = "";
 function submitSearch(event) {
 	event.stop();
 	$('snSmartSearchResults').update(ajaxUpdatingImage);
 	
 	
-	$('snSmartSearch').request(getStandardCallbacks())
+	$('snSmartSearch').request(getStandardCallbacks());
 }
 
 function updateLinkedProductInfo(product) {
@@ -71,6 +71,7 @@ function pushRegisteredProductInformationToLocalProduct(product) {
 		$("customerRefNumber").value = product.referenceNumber;
 	}
 }
+
 
 var snSmartSearch = "";
 document.observe(
