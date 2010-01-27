@@ -1,10 +1,25 @@
 ${action.setPageType('product', 'traceability')!}
+<head>
+	<@n4.includeStyle href="safetyNetworkSmartSearch" type="feature"/>
+	
+	
+</head>
 <#if inVendorContext>
 	<div id="registrationMessage">
 		<#if hasRegisteredProduct>
-			<span id="alreadyRegisteredMessage">you have registered this asset already you may view it in your regular context.</span>
-		<#else>
-			<a id="copyAsset" href="<@s.url action="productAdd" vendorContext="" linkedProduct="${linkedProducts[0].id}"/>">copy and register now</a>
+			<div id="alreadyRegisteredMessage">
+				<h2 class="clean"><@s.text name="label.you_have_already_registered_this_asset"/></h2>
+				<span class="weak"><@s.text name="instruction.you_can_locate_this_product_in_default_context_by_searching"/></span>
+			</div>
+		<#elseif sessionUser.hasAccess('tag') >
+			<div id="registerThisAssetMessage">
+				<h2 class="clean"><@s.text name="label.copy_and_register_this_asset_into_your_account"/></h2>
+				<span class="weak"><@s.text name="instruction.registering_this_asset_will_allow_you_to_do"/></span>
+			</div>
+			<div id="registerThisAction">
+				<@s.url id="registerUrl" action="productAdd" vendorContext="" linkedProduct="${linkedProducts[0].id}"/>
+				<@s.submit key="label.copy_and_register_now" id="copyAsset" onclick="return redirect('${registerUrl}');" theme="simple"/>
+			</div>
 		</#if>
 	</div>
 </#if>
