@@ -11,9 +11,9 @@ import org.junit.Test;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.taskscheduling.task.ReferralProcessorTask;
-import com.n4systems.testutils.BaseTest;
+import com.n4systems.testutils.UsesDummyPersistenceManager;
 
-public class SignupReferralHandlerImplTest extends BaseTest {
+public class SignupReferralHandlerImplTest extends UsesDummyPersistenceManager {
 	
 	@Test
 	public void process_referral_does_nothing_on_null_referral_code() {

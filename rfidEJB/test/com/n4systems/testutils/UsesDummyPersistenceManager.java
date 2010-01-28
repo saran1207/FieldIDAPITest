@@ -5,7 +5,7 @@ import org.junit.Before;
 
 import com.n4systems.persistence.PersistenceManagerTestController;
 
-public abstract class BaseTest {
+public abstract class UsesDummyPersistenceManager {
 
 	@Before
 	public void preTest() {

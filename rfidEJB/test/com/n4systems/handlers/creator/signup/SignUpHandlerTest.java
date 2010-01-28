@@ -29,11 +29,11 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
-import com.n4systems.testutils.BaseTest;
+import com.n4systems.testutils.UsesDummyPersistenceManager;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.util.mail.MailMessage;
 
-public class SignUpHandlerTest extends BaseTest {
+public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 
 	protected Transaction mockTransaction;
 	
