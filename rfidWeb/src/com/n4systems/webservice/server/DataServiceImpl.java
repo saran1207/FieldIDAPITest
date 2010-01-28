@@ -623,10 +623,17 @@ public class DataServiceImpl implements DataService {
 	
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {						
 		
+		User userManager = ServiceLocator.getUser();
+		
 		try {
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
+			
+			if (request.modifiedByIdExists()) {
+				UserBean userBean = userManager.findUserBean(request.getModifiedById());
+				product.setModifiedBy(userBean);
+			} 
 			
 			product.setLocation(request.getLocation());
 			
