@@ -651,12 +651,18 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {						
 		
 		try {
+			User userManager = ServiceLocator.getUser();
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			product.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
+			
+			if (request.modifiedByIdExists()) {
+				UserBean userBean = userManager.findUserBean(request.getModifiedById());
+				product.setModifiedBy(userBean);
+			} 
 			
 			product.setLocation(request.getLocation());
 			product.setCustomerRefNumber(request.getCustomerRefNumber());
