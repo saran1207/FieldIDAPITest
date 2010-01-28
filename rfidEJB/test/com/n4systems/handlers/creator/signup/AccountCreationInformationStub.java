@@ -1,7 +1,11 @@
 package com.n4systems.handlers.creator.signup;
 
+import java.util.ArrayList;
+
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
+import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.util.timezone.Region;
 
@@ -28,6 +32,14 @@ public class AccountCreationInformationStub implements AccountCreationInformatio
 	private AddressInfo billingAddress = new AddressInfo();
 	
 	private String phone;
+	
+	public AccountCreationInformationStub() {
+	}
+	
+	public AccountCreationInformationStub(SignUpPackageDetails signUpPackage) {
+		this.signUpPackage = new SignUpPackage(signUpPackage, new ArrayList<ContractPricing>());
+	}
+	
 	
 	public String getCompanyName() {
 		return companyName;

@@ -479,7 +479,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	
 	public String getCurrentVendorContextName() {
 		if (getVendorContext() == null) {
-			return getSessionUserOwner().getInternalOrg().getName();
+			return "label.my_company";
 		}
 		
 		Long contextId = getVendorContext();

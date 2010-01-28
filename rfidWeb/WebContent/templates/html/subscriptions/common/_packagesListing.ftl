@@ -194,7 +194,7 @@
 			<#list packages as package>
 				<td <@columnClass package/>>
 					<#if !package.current?exists || !package.current>
-						<a href="<@s.url action="${purchaseAction}" refCode="${refCode}" packageId="${package.name}"/>"><@s.text name="${purchaseLabel}"/></a>
+						<a href="<@s.url action="${purchaseAction}" refCode="${refCode!}" packageId="${package.name}"/>"><@s.text name="${purchaseLabel}"/></a>
 					</#if>
 				</td>
 			</#list>

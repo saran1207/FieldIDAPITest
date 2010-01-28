@@ -25,7 +25,7 @@
 					<span><@s.text name="label.vendor_context"/>: </span>
 					<span class="switchContainer">
 						<span id="vendorContextNameLink">
-							<a href="" onclick="$('vendorContextSwitch').show(); $('vendorContextNameLink').hide(); return false;">${currentVendorContextName}</a>
+							<a href="" onclick="$('vendorContextSwitch').show(); $('vendorContextNameLink').hide(); return false;"><@s.text name="${currentVendorContextName}"/></a>
 						</span>
 						<span id="vendorContextSwitch" style="display: none;">
 							<@s.select id="vendorContext" name="vendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${action.getText('label.my_company')}" onchange="$('vendorContextForm').submit();"/>

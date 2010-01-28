@@ -16,6 +16,8 @@ import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.SignUpTenantResponse;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 
 public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler {
 
@@ -45,12 +47,29 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	public void finalizeSignUp(Transaction transaction) {
 		guards();
 		
+		linkTenants(transaction);
+		applyChangesToPlaceHolders(transaction);
+	}
+
+
+	private void applyChangesToPlaceHolders(Transaction transaction) {
 		processExtendedFeatures(transaction);
 		processLimits(transaction);
 		applyExternalIds();
-		
+		setDefaultVendorContext();
 		saveChanges(transaction);
-		linkTenants(transaction);
+	}
+
+
+	private void setDefaultVendorContext() {
+		if (!getConfigContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID).equals(referrerOrg.getId())) {
+			getPrimaryOrg().setDefaultVendorContext(referrerOrg.getId());
+		}
+	}
+
+
+	private ConfigContext getConfigContext() {
+		return ConfigContext.getCurrentContext();
 	}
 
 
