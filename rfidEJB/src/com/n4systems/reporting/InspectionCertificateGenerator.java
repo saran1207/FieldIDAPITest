@@ -97,6 +97,8 @@ public class InspectionCertificateGenerator {
 			}
 
 			JRDataSource jrDataSource = new JRMapCollectionDataSource(inspectionResultMaps);
+			reportMap.put("allInspections", jrDataSource);
+			
 			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 		
 		} catch (Exception e) {
