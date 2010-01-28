@@ -138,4 +138,19 @@ public class ListHelperTest {
 			assertTrue(dst.contains(i));
 		}
 	}
+	
+	@Test
+	public void is_null_or_empty_handles_null() {
+		assertTrue(ListHelper.isNullOrEmpty(null));
+		
+		List<String> list = new ArrayList<String>();
+		list.add("assada");
+		
+		assertFalse(ListHelper.isNullOrEmpty(list));
+	}
+	
+	@Test
+	public void is_null_or_empty_handles_empty() {
+		assertTrue(ListHelper.isNullOrEmpty(new HashSet<String>()));
+	}
 }

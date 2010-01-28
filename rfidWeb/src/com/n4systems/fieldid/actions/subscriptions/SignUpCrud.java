@@ -33,12 +33,13 @@ import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 public class SignUpCrud extends AbstractCrud {
-
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
 
 	private SignUpRequestDecorator signUpRequest = new SignUpRequestDecorator();
 	private List<SignUpPackage> packages;
+	private String refCode;
+	
 	public SignUpCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -154,10 +155,9 @@ public class SignUpCrud extends AbstractCrud {
 	
 
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
-		
 		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
 		
-		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()));
+		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()), refCode);
 	}
 
 	public SortedSet<? extends Listable<String>> getCountries() {
@@ -226,11 +226,19 @@ public class SignUpCrud extends AbstractCrud {
 		
 	}
 	
-	
 	public List<SignUpPackage> getPackages() {
 		if (packages == null) {
 			packages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
 		}
 		return packages;
 	}
+
+	public String getRefCode() {
+		return refCode;
+	}
+
+	public void setRefCode(String refCode) {
+		this.refCode = refCode;
+	}
+	
 }

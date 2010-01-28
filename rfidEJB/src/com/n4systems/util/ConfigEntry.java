@@ -67,7 +67,8 @@ public enum ConfigEntry {
 	SUBSCRIPTION_AGENT							(	"com.n4systems.subscription.netsuite.NetSuiteSubscriptionAgent"),
 	HOUSE_ACCOUNT_NAME							(	"fieldid"				),
 	HOUSE_ACCOUNT_PRIMARY_ORG_ID				(	"15511550"				),
-	DOWNLOAD_TTL_DAYS							(	"2"						);
+	DOWNLOAD_TTL_DAYS							(	"2"						),
+	SIGNUP_PATH									(	"/signup"						);
 	
 	
 	private String defaultValue;

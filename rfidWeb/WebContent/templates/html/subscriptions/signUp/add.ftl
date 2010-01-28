@@ -19,6 +19,7 @@
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<@s.hidden name="usingCreditCard" id="usingCreditCard" />
+	<@s.hidden name="refCode" id="refCode" />
 	<div class="infoSection multiColumn">
 		<h2><@s.text name="label.about_you"/></h2>
 		<div class="infoBlock">

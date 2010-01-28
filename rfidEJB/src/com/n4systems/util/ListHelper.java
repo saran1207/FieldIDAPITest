@@ -113,4 +113,8 @@ public class ListHelper {
 		}
 		return dst;
 	}
+	
+	public static boolean isNullOrEmpty(Collection<?> c) {
+		return (c == null) ? true : c.isEmpty();
+	}
 }

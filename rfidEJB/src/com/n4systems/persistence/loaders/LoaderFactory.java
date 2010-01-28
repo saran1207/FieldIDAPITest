@@ -58,6 +58,7 @@ import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.signup.SignupReferralListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
@@ -281,14 +282,18 @@ public class LoaderFactory {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}
 	
+	public SignupReferralListLoader createSignupReferralListLoader() {
+		return new SignupReferralListLoader(filter);
+	}
+	
 	public SmartSearchLoader createSmartSearchListLoader() {
 		return new SmartSearchLoader(filter);
 	}
-	
+
 	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
-
+	
 	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}

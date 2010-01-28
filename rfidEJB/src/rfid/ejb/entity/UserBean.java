@@ -26,12 +26,14 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.EncryptionUtility;
+import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
 public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Listable<Long>, HasOwner, Saveable, SecurityEnhanced<UserBean> {
 	private static final long serialVersionUID = 1L;
+	public static final int REFERRAL_KEY_LENGTH = 10;
 	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(UserBean.class);
@@ -47,7 +49,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	private String hashPassword;
 	private String position;
 	private String initials;
-	
+	private String referralKey;
 	private String resetPasswordKey;
 	private String hashSecurityCardNumber;
 	
@@ -70,6 +72,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	@PrePersist
     protected void prePersist() {
 		trimNames();
+		generateReferralKeyIfNull();
 		super.prePersist();
     }
     
@@ -77,12 +80,19 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	protected void preMerge() {
 		super.preMerge();
 		trimNames();
+		generateReferralKeyIfNull();
     }
 	
 	private void trimNames() {
 		this.userID = (userID != null) ? userID.trim() : null;
 		this.firstName = (firstName != null) ? firstName.trim() : null;
 		this.lastName = (lastName != null) ? lastName.trim() : null;
+	}
+	
+	private void generateReferralKeyIfNull() {
+		if (referralKey == null) {
+			referralKey = RandomString.getString(REFERRAL_KEY_LENGTH);
+		}
 	}
 	
 	public String getModifiedBy() {
@@ -221,6 +231,14 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		this.initials = initials;
 	}
 	
+	public String getReferralKey() {
+		return referralKey;
+	}
+
+	public void setReferralKey(String referralKey) {
+		this.referralKey = referralKey;
+	}
+
 	public void createResetPasswordKey() {
 		resetPasswordKey = EncryptionUtility.getSHA1HexHash( emailAddress + System.currentTimeMillis() );
 	}

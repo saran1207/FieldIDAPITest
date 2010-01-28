@@ -1,15 +1,15 @@
 package com.n4systems.taskscheduling;
 
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.properties.HierarchicalProperties;
-import com.n4systems.util.properties.HirarchicalPropertiesLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
 import org.jboss.logging.Logger;
+
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.properties.HierarchicalProperties;
+import com.n4systems.util.properties.HirarchicalPropertiesLoader;
 
 /**
  * 
@@ -21,7 +21,7 @@ public class TaskExecutor implements Executor {
 	private static TaskExecutor self;
 	
 	/** @return The singleton instance of this TaskExecutor */
-	public static TaskExecutor getInstance() {
+	public static Executor getInstance() {
 		if (self == null) {
 			self = new TaskExecutor();
 		}

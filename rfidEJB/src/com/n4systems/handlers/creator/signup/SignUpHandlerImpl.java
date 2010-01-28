@@ -24,39 +24,47 @@ import com.n4systems.util.mail.TemplateMailMessage;
 
 public class SignUpHandlerImpl implements SignUpHandler {
 	private static final Logger logger = Logger.getLogger(SignUpHandlerImpl.class);
-	
-	
+		
 	private final BaseSystemStructureCreateHandler baseSystemCreator;
 	private final SubscriptionAgent subscriptionAgent;
 	private final AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler;
 	private final SignUpFinalizationHandler signUpFinalizationHandler;
+	private final SignupReferralHandler signUpReferralHandler;
 	private final MailManager mailManager;
-	
-	
+
 	private PersistenceProvider persistenceProvider;
-	private AccountPlaceHolder placeHolder;
-	private SignUpTenantResponse subscriptionApproval;
+	protected AccountPlaceHolder placeHolder;
+	private SignUpTenantResponse subscriptionApproval;	
 	
-	
-	public SignUpHandlerImpl(AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler, BaseSystemStructureCreateHandler baseSystemCreator, SubscriptionAgent subscriptionAgent, SignUpFinalizationHandler signUpFinalizationHandler, MailManager mailManager) {
+	public SignUpHandlerImpl(AccountPlaceHolderCreateHandler accountPlaceHolderCreateHandler, BaseSystemStructureCreateHandler baseSystemCreator, SubscriptionAgent subscriptionAgent, SignUpFinalizationHandler signUpFinalizationHandler, SignupReferralHandler signUpReferralHandler, MailManager mailManager) {
 		super();
 		this.accountPlaceHolderCreateHandler = accountPlaceHolderCreateHandler;
 		this.baseSystemCreator = baseSystemCreator;
 		this.subscriptionAgent = subscriptionAgent;
 		this.signUpFinalizationHandler = signUpFinalizationHandler;
+		this.signUpReferralHandler = signUpReferralHandler;
 		this.mailManager = mailManager;
 	}
-
 	
-	public void signUp(SignUpRequest signUp, PrimaryOrg referrerOrg, String portalUrl) throws SignUpCompletionException, SignUpSoftFailureException {
+	public void signUp(SignUpRequest signUp, PrimaryOrg referrerOrg, String portalUrl, String referralCode) throws SignUpCompletionException, SignUpSoftFailureException {
 		guard();
 		holdNamesForSignUp(signUp);
 		confirmSubscription(signUp);
 		activateAccount(signUp, referrerOrg, portalUrl);
+		processReferral(referrerOrg, referralCode);
 	}
 
+	private void processReferral(PrimaryOrg referrerOrg, String referralCode) {
+		try {
+			signUpReferralHandler.processReferral(referrerOrg.getTenant(), placeHolder.getTenant(), referralCode);
+		} catch(Exception e) {
+			// nothing should ever come out of the referral handler, but we 
+			// don't want to fail the whole process if it does.  Just log it and move on
+			logger.error("Failed to process signup referral", e);
+		}
+	}
 
-	private void activateAccount(SignUpRequest signUp, PrimaryOrg referrerOrg, String portalUrl) throws SignUpCompletionException {
+	protected void activateAccount(SignUpRequest signUp, PrimaryOrg referrerOrg, String portalUrl) throws SignUpCompletionException {
 		Transaction transaction = persistenceProvider.startTransaction();
 		try {
 			finalizeAccount(signUp, referrerOrg, placeHolder, transaction, subscriptionApproval, portalUrl);
@@ -68,8 +76,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		}
 	}
 
-
-	private void confirmSubscription(SignUpRequest signUp) {
+	protected void confirmSubscription(SignUpRequest signUp) {
 		try {
 			subscriptionApproval = subscriptionAgent.buy(signUp, signUp, signUp);
 		} catch (Exception e) {
@@ -77,8 +84,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		}
 	}
 
-
-	private void holdNamesForSignUp(SignUpRequest signUp) {
+	protected void holdNamesForSignUp(SignUpRequest signUp) {
 		Transaction transaction = persistenceProvider.startTransaction();
 		try { 
 			placeHolder = createPlaceHolder(signUp, transaction);
@@ -90,8 +96,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		}
 	}
 
-
-	private void guard() {
+	protected void guard() {
 		if (persistenceProvider == null) {
 			throw new InvalidArgumentException("You must give a persistence provider");
 		}
@@ -101,7 +106,6 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		undoAccountPlaceHolder(placeHolder);
 		convertExecption(e);
 	}
-
 
 	private void convertExecption(Exception e) {
 		if (CommunicationException.class.isAssignableFrom(e.getClass())) {
@@ -126,7 +130,6 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		sendWelcomeEmail(placeHolder, portalUrl);
 	}
 
-
 	private void sendWelcomeEmail(AccountPlaceHolder placeHolder, String portalUrl) {
 		try {
 			MailMessage message = createWelcomeMessage(placeHolder, portalUrl);
@@ -135,7 +138,6 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			logger.warn("could not send welcome email", e);
 		}
 	}
-
 
 	private MailMessage createWelcomeMessage(AccountPlaceHolder placeHolder, String portalUrl) {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage("Welcome to Field ID", "welcomeMessage");
@@ -147,10 +149,8 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		invitationMessage.getTemplateMap().put("portalUrl", portalUrl);
 		invitationMessage.getTemplateMap().put("username", placeHolder.getAdminUser().getUserID());
 		
-		
 		return invitationMessage;
 	}
-
 
 	private AccountPlaceHolder createPlaceHolder(SignUpRequest signUp, Transaction transaction) {
 		AccountPlaceHolder placeHolder = null;
@@ -166,7 +166,6 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	private AccountPlaceHolder createAccountPlaceHolder(SignUpRequest signUp, Transaction transaction) {
 		return accountPlaceHolderCreateHandler.forAccountInfo(signUp).createWithUndoInformation(transaction);
 	}
-
 	
 	private void undoAccountPlaceHolder(AccountPlaceHolder placeHolder) {
 		Transaction transaction = persistenceProvider.startTransaction();
@@ -178,16 +177,10 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			throw new SignUpSoftFailureException("failed to destory account place holder", e);
 		}
 	}
-	
-	
-	
-	
 
 	public SignUpHandler withPersistenceProvider(PersistenceProvider persistenceProvider) {
 		this.persistenceProvider = persistenceProvider;
 		return this;
 	}
-	
-	
 	
 }

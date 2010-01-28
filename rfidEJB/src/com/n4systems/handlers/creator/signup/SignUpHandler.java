@@ -8,7 +8,7 @@ import com.n4systems.persistence.PersistenceProvider;
 
 public interface SignUpHandler {
 
-	public void signUp(SignUpRequest signUpRequest, PrimaryOrg referrerOrg, String portalUrl) throws SignUpCompletionException, SignUpSoftFailureException;
+	public void signUp(SignUpRequest signUpRequest, PrimaryOrg referrerOrg, String portalUrl, String referralCode) throws SignUpCompletionException, SignUpSoftFailureException;
 	
 	public SignUpHandler withPersistenceProvider(PersistenceProvider persistenceProvider);
 

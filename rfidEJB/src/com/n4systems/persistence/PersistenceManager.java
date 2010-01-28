@@ -33,8 +33,12 @@ public class PersistenceManager {
 		}
 		return entityManagerFactory;
 	}
+	
+	protected static void overrideEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+		PersistenceManager.entityManagerFactory = entityManagerFactory;
+	}
 
-	private static EntityManager getEntityManager() {
+	protected static EntityManager getEntityManager() {
 		logger.debug("Creating EntityManager");
 		EntityManager createEntityManager = getEntityManagerFactory().createEntityManager();
 		return createEntityManager;

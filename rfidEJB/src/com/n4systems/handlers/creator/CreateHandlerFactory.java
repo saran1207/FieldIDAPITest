@@ -16,6 +16,8 @@ import com.n4systems.handlers.creator.signup.SignUpFinalizationHandler;
 import com.n4systems.handlers.creator.signup.SignUpFinalizationHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignUpHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
+import com.n4systems.handlers.creator.signup.SignupReferralHandler;
+import com.n4systems.handlers.creator.signup.SignupReferralHandlerImpl;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.productstatus.ProductStatusSaver;
@@ -36,12 +38,9 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 
 public class CreateHandlerFactory {
-
-	
-	
 	
 	public SignUpHandler getSignUpHandler() {
-		return new SignUpHandlerImpl(getAccountPlaceHolderCreateHandler(), getBaseSystemStructureCreateHandler(), getSubscriptionAgent(), getSignUpFinalizationHandler(), ServiceLocator.getMailManager());
+		return new SignUpHandlerImpl(getAccountPlaceHolderCreateHandler(), getBaseSystemStructureCreateHandler(), getSubscriptionAgent(), getSignUpFinalizationHandler(), getReferralHandler(), ServiceLocator.getMailManager());
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {
@@ -76,5 +75,9 @@ public class CreateHandlerFactory {
 
 	public SubscriptionAgent getSubscriptionAgent() {
 		return SubscriptionAgentFactory.createSubscriptionFactory(ConfigContext.getCurrentContext().getString(ConfigEntry.SUBSCRIPTION_AGENT));
+	}
+	
+	public SignupReferralHandler getReferralHandler() {
+		return new SignupReferralHandlerImpl();
 	}
 }

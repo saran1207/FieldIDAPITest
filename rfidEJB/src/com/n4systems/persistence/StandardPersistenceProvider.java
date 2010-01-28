@@ -1,5 +1,7 @@
 package com.n4systems.persistence;
 
+/** @deprecated Use FieldIdTransactionManager */
+@Deprecated
 public class StandardPersistenceProvider implements PersistenceProvider {
 
 	public void finishTransaction(Transaction transaction) {

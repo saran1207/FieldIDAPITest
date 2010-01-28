@@ -100,6 +100,8 @@ public class Permissions {
 			return ManageJobs;
 		} else if (safeName.equals("accesswebstore")) {
 			return AccessWebStore;
+		} else if (safeName.equals("managesafetynetwork")) {
+			return ManageSafetyNetwork;
 		} else {
 			throw new InvalidPermission("Unknown permission name [" + permissionName + "]");
 		}
