@@ -66,6 +66,8 @@ public class AddressInfoDecorator extends AddressInfo {
 		delegateAddress.setCountry(country);
 		delegateAddress.setCountryFullName(findFullName(country));
 	}
+	
+	
 
 	private String findFullName(String country) {
 		if (country == null || country.trim().isEmpty()) {
@@ -77,6 +79,11 @@ public class AddressInfoDecorator extends AddressInfo {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public String getCountryFullName() {
+		return delegateAddress.getCountryFullName();
 	}
 
 	@RequiredStringValidator(message="", key="error.zip_code_required")
@@ -96,4 +103,6 @@ public class AddressInfoDecorator extends AddressInfo {
 	public SortedSet<? extends Listable<String>> getCountries() {
 		return TimeZoneSelectionHelper.getCountries();
 	}
+
+	
 }
