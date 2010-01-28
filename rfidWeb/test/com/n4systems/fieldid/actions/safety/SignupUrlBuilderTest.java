@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.safetynetwork;
+package com.n4systems.fieldid.actions.safety;
 
 import static org.junit.Assert.*;
 
