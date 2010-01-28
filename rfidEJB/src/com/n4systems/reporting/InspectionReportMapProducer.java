@@ -45,12 +45,20 @@ public class InspectionReportMapProducer extends ReportMapProducer {
 
 	private void addAbstractInspectionValues() {
 		reportMap.put("type", inspection.getType().getName());
-		reportMap.put("results", new JRBeanCollectionDataSource(createCriteriaViews()));
+		
 		reportMap.put("comments", inspection.getComments());
 		reportMap.put("eventTypeDescription", inspection.getType().getName());
 		reportMap.put("eventInfoOptionMap", eventInfoOptions());
-		reportMap.put("observations", new JRBeanCollectionDataSource(createObservationViews()));
+		
 		reportMap.put("product", new ProductReportMapProducer(inspection.getProduct(), dateTimeDefinition).produceMap());
+		
+		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
+		reportMap.put("resultsBeanList", createCriteriaViews);
+		reportMap.put("results", new JRBeanCollectionDataSource(createCriteriaViews));
+		
+		List<ObservationView> createObservationViews = createObservationViews();
+		reportMap.put("observationsBeanList", createObservationViews);
+		reportMap.put("observations", new JRBeanCollectionDataSource(createObservationViews));
 	}
 
 	

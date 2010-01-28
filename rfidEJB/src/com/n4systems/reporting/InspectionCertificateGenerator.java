@@ -70,7 +70,7 @@ public class InspectionCertificateGenerator {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-		
+		System.out.println(jasperFile.getParent() + "/");
 		baseInspectionMapBuilder.addParams(reportMap, inspection, transaction);
 		
 		return reportMap;
@@ -97,7 +97,10 @@ public class InspectionCertificateGenerator {
 			}
 
 			JRDataSource jrDataSource = new JRMapCollectionDataSource(inspectionResultMaps);
-			reportMap.put("allInspections", jrDataSource);
+			
+			reportMap.put("allInspections", inspectionResultMaps);
+			
+			
 			
 			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 		

@@ -38,6 +38,7 @@ public class ProductReportMapProducer extends ReportMapProducer {
 		reportMap.put("currentProductStatus", productStatusName());
 		reportMap.put("infoOptionMap", produceInfoOptionMap());
 		reportMap.put("lastInspectionDate", formatDate(product.getLastInspectionDate(), true));
+		reportMap.put("infoOptionBeanList", product.getOrderedInfoOptionList());
 		reportMap.put("infoOptionDataSource", new JRBeanCollectionDataSource(product.getOrderedInfoOptionList()));
 	}
 
