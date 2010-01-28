@@ -28,8 +28,15 @@
 			</label>
 			<@s.select name="dateFormat" list="dateFormats" listKey="id" listValue="name"/>
 		</div>
+		<#if !vendorContextList.empty>
+			<div class="infoSet">
+				<label class="label" for="defaultVendorContext">
+					<@s.text name="label.default_vendor_context" />
+				</label>
+				<@s.select name="defaultVendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${action.getText('label.my_company')}"/>
+			</div>
+		</#if>
 <#if securityGuard.brandingEnabled>
-		
 		<div class="infoSet">
 			<label class="label" for="systemLogo" ><@s.text name="label.system_logo"/></label>
 			<span class="fieldHolder">

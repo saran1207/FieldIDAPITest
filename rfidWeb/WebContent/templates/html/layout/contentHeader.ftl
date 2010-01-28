@@ -19,13 +19,7 @@
 		</div>
 	    
 	    <div id="smartSearch">
-			<@s.form method="post" action="productInformation" namespace="/" id="smartSearch" theme="fieldid" >
-				<label for="search"><@s.text name="label.find"/>:</label>
-				<@s.textfield name="search" id="searchText" value="${action.getText('label.smart_search_search_types')}" cssClass="description"/>
-				<@s.submit name="load" key="label.load" id="smartSearchButton"/>
-				
-				
-			</@s.form>
+			
 			<#if !sessionUser.customerUser && !vendorContextList.empty>
 				<@s.form id="vendorContextForm" action="home" namespace="/" theme="simple">
 					<span><@s.text name="label.vendor_context"/>: </span>
@@ -34,12 +28,20 @@
 							<a href="" onclick="$('vendorContextSwitch').show(); $('vendorContextNameLink').hide(); return false;">${currentVendorContextName}</a>
 						</span>
 						<span id="vendorContextSwitch" style="display: none;">
-							<@s.select id="vendorContext" name="vendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${sessionUserOwner.name}" onchange="$('vendorContextForm').submit();"/>
+							<@s.select id="vendorContext" name="vendorContext" list="vendorContextList" listKey="id" listValue="name" headerKey="" headerValue="${action.getText('label.my_company')}" onchange="$('vendorContextForm').submit();"/>
 							<a href="#" id="cancelVendorSwitch" onclick="$('vendorContextSwitch').hide(); $('vendorContextNameLink').show(); return false;"><img src="<@s.url value="/images/x.gif"/>" alt="x"/></a>
 						</span>
 					</span>
 				</@s.form>
 			</#if>
+			<@s.form method="post" action="productInformation" namespace="/" id="smartSearch" theme="fieldid" >
+				<label for="search"><@s.text name="label.find"/>:</label>
+				<@s.hidden name="useContext" value="true"/>
+				<@s.textfield name="search" id="searchText" value="${action.getText('label.smart_search_search_types')}" cssClass="description"/>
+				<@s.submit name="load" key="label.load" id="smartSearchButton"/>
+				
+				
+			</@s.form>
 		</div>
 
 	</div>

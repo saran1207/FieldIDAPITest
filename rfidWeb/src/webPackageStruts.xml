@@ -399,6 +399,7 @@
 			<result name="oneFoundVendorContext" type="redirectAction">
 				<param name="actionName">productTraceability</param>
 				<param name="uniqueID">${uniqueID}</param>
+				<param name="useContext">true</param>
 			</result>
 		</action>
 

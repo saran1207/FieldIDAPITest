@@ -70,6 +70,8 @@ public class PrimaryOrg extends InternalOrg {
 	
 	@Column(nullable=false)
 	private boolean plansAndPricingAvailable;
+	
+	private Long defaultVendorContext;
 
 	public PrimaryOrg() {}
 	
@@ -220,5 +222,13 @@ public class PrimaryOrg extends InternalOrg {
 
 	public void setPlansAndPricingAvailable(boolean plansAndPricingAvailable) {
 		this.plansAndPricingAvailable = plansAndPricingAvailable;
+	}
+
+	public Long getDefaultVendorContext() {
+		return defaultVendorContext;
+	}
+
+	public void setDefaultVendorContext(Long defaultVendorContext) {
+		this.defaultVendorContext = defaultVendorContext;
 	}
 }

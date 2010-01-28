@@ -12,9 +12,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
-import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.reporting.PathHandler;
@@ -30,6 +28,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private AccountHelper accountHelper; 
 	
 	private PrimaryOrg primaryOrg;
+	private String webSite;
 	private File uploadedImage;
 	private String imageDirectory;
 	private boolean removeImage = false;
@@ -42,6 +41,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		primaryOrg = getPrimaryOrg();
+		webSite = primaryOrg.getWebSite();
 	}
 
 	@Override
@@ -65,12 +65,17 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	@ExtendedFeatureFilter(requiredFeature = ExtendedFeature.Branding)
+	
 	public String doUpdate() {
-
 		try {
+			
+			if (getSecurityGuard().isBrandingEnabled()) {
+				processLogo();
+				primaryOrg.setWebSite(webSite);
+			}
+			
 			persistenceManager.update(primaryOrg, fetchCurrentUser());
-			processLogo();
+			
 			refreshSessionUser();
 			addFlashMessageText("message.system_settings_updated");
 		} catch (Exception e) {
@@ -96,15 +101,15 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	public String getWebSite() {
-		return primaryOrg.getWebSite();
+		return webSite;
 	}
 
 	@UrlValidator(key = "error.web_site_must_be_a_url", message = "")
 	public void setWebSite(String webSite) {
 		if (webSite == null || webSite.trim().length() == 0) {
-			primaryOrg.setWebSite(null);
+			this.webSite = null;
 		} else {
-			primaryOrg.setWebSite(webSite);
+			this.webSite = webSite;
 		}
 	}
 
@@ -160,6 +165,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 		primaryOrg.setDateFormat(dateFormat);
 	}
 	
+	
+	
+	
 	public boolean isValidDateFormat() {
 		try {
 			@SuppressWarnings("unused")
@@ -173,6 +181,18 @@ public class SystemSettingsCrud extends AbstractCrud {
 	
 	public UpgradePackageFilter currentPackageFilter() {
 		return accountHelper.currentPackageFilter();
+	}
+
+	public Long getDefaultVendorContext() {
+		return primaryOrg.getDefaultVendorContext();
+	}
+
+	public void setDefaultVendorContext(Long defaultVendorContext) {
+		if (defaultVendorContext == null || defaultVendorContext.equals(getPrimaryOrg().getId())) {
+			primaryOrg.setDefaultVendorContext(null);
+		} else {
+			primaryOrg.setDefaultVendorContext(defaultVendorContext);
+		}
 	}
 	
 	

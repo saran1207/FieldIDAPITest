@@ -74,6 +74,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
 	private CreateHandlerFactory createHandlerFactory;
 	private DownloadCoordinator downloadCoordinator;
+	private boolean useContext = false;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -461,11 +462,23 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	}
 	
 	public boolean isInVendorContext() {
-		return (getVendorContext() != null);
+		return (getVendorContext() != null && useContext );
+	}
+	
+	public boolean isUseContext() {
+		return useContext;
+	}
+
+	public void setUseContext(boolean useContext) {
+		this.useContext = useContext;
+	}
+	
+	public String getUseContextString() {
+		return Boolean.toString(useContext);
 	}
 	
 	public String getCurrentVendorContextName() {
-		if (!isInVendorContext()) {
+		if (getVendorContext() == null) {
 			return getSessionUserOwner().getInternalOrg().getName();
 		}
 		
@@ -525,4 +538,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		singleElementMap.put(id, "");
 		return singleElementMap;
 	}
+
+	
 }

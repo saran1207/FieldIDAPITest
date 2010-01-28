@@ -20,6 +20,7 @@
 #registrationMessage {
 	overflow:hidden;
 	width:700px;
+	margin-left:0;
 }
 #registerThisAssetMessage, #registerThisAction, #alreadyRegisteredMessage {
 	padding: 10px 10px; 
