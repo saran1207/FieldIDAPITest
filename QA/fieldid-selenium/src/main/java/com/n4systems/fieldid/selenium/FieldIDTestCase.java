@@ -484,6 +484,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		log.debug("[setUp]: Base URL: " + url);
 		selenium = new DefaultSelenium(host, port, browser, url);
 		selenium.start();
+		selenium.setTimeout(Misc.defaultTimeout);
 		log.debug("[setUp]: Open " + contextRoot);
 		log.info("Open web browser '" + browser + "' to '" + url + contextRoot + "'");
 		selenium.open(contextRoot);
