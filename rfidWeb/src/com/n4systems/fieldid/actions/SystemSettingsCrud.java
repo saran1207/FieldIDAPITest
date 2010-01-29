@@ -17,6 +17,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
@@ -27,7 +28,12 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	private AccountHelper accountHelper; 
 	
+	
 	private PrimaryOrg primaryOrg;
+	
+	private String dateFormat;
+	private Long defaultVendorContext;
+	
 	private String webSite;
 	private File uploadedImage;
 	private String imageDirectory;
@@ -41,7 +47,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		primaryOrg = getPrimaryOrg();
-		webSite = primaryOrg.getWebSite();
+		
 	}
 
 	@Override
@@ -58,6 +64,11 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doEdit() {
+		dateFormat = primaryOrg.getDateFormat();
+		defaultVendorContext = primaryOrg.getDefaultVendorContext();
+		
+		webSite = primaryOrg.getWebSite();
+		
 		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
 		if (privateLogoPath.exists()) {
 			imageDirectory = privateLogoPath.getName();
@@ -73,6 +84,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 				processLogo();
 				primaryOrg.setWebSite(webSite);
 			}
+			
+			primaryOrg.setDateFormat(dateFormat);
+			primaryOrg.setDefaultVendorContext(defaultVendorContext);
 			
 			persistenceManager.update(primaryOrg, fetchCurrentUser());
 			
@@ -146,7 +160,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	public String getDateFormat() {
-		return primaryOrg.getDateFormat();
+		return dateFormat;
 	}
 	
 	public List<StringListingPair> getDateFormats() {
@@ -162,7 +176,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	@FieldExpressionValidator(message="", key="error.date_format_not_valid", expression="(validDateFormat == true)", fieldName="dateFormat")
 	public void setDateFormat(String dateFormat) {
-		primaryOrg.setDateFormat(dateFormat);
+		this.dateFormat = dateFormat;
 	}
 	
 	
@@ -184,15 +198,29 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	public Long getDefaultVendorContext() {
-		return primaryOrg.getDefaultVendorContext();
+		return defaultVendorContext;
 	}
 
+	@FieldExpressionValidator(message="", key="error.selected_company_is_not_one_of_your_vendors", expression="(validVendor == true)")
 	public void setDefaultVendorContext(Long defaultVendorContext) {
 		if (defaultVendorContext == null || defaultVendorContext.equals(getPrimaryOrg().getId())) {
-			primaryOrg.setDefaultVendorContext(null);
+			this.defaultVendorContext = null;
 		} else {
-			primaryOrg.setDefaultVendorContext(defaultVendorContext);
+			this.defaultVendorContext = defaultVendorContext;
 		}
+	}
+	
+	public boolean isValidVendor() {
+		if (defaultVendorContext == null) {
+			return true;
+		}
+		
+		for (ListingPair vendor : getVendorContextList()) {
+			if (vendor.getId().equals(defaultVendorContext)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	

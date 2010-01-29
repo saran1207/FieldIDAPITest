@@ -18,7 +18,7 @@
 			</#if>
 		</div>
 	    
-	    <div id="smartSearch">
+	    <div id="smartSearchContainer">
 			
 			<#if !sessionUser.customerUser && !vendorContextList.empty>
 				<@s.form id="vendorContextForm" action="home" namespace="/" theme="simple">

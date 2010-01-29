@@ -457,10 +457,12 @@ td.formAction {
 }
 
 #vendorContextForm {
-	text-align:right;
+	float:right;
+	clear:both;
 	margin:5px 0;
 	margin-right:40px;
 }
+
 
 #vendorContextForm span {
 	margin: 0 5px;
@@ -1485,9 +1487,15 @@ h3.inline {
 	color: #333;
 }
 
-#smartSearch {
-	float: right;
+#smartSearchContainer {
+	float:right;
 }
+
+#smartSearch {
+	clear:both;
+	float:right;
+}
+
 
 #smartSearch label {
 	font-size: 1.2em;
