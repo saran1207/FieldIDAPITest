@@ -42,7 +42,7 @@ public class SendInvitationAction extends AbstractAction {
 	
 	public String doSend() {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "invitation");
-		
+		invitationMessage.setSubjectPrefix("");
 		invitationMessage.getToAddresses().add(email);
 		invitationMessage.getTemplateMap().put("customMessage", body);
 		invitationMessage.getTemplateMap().put("senderName", getInternalOrg().getName());

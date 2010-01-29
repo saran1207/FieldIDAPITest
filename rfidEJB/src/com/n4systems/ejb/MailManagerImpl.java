@@ -50,8 +50,12 @@ public class MailManagerImpl implements MailManager {
 	
 	private void fillOutMessage(MailMessage mailMessage) {
 		mailMessage.setFromAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_FROM_ADDR));
-		mailMessage.setSubjectPrefix(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_SUBJECT_PREFIX));
 		mailMessage.setReplyTo(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_REPLY_TO));
+		
+		// only set the subject prefix if not already set
+		if (mailMessage.getSubjectPrefix() == null) {
+			mailMessage.setSubjectPrefix(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_SUBJECT_PREFIX));
+		}
 		
 		if(mailMessage.getContentType().isHtml()) {
 			mailMessage.setBodyHeader(ConfigContext.getCurrentContext().getString(ConfigEntry.MAIL_BODY_HTML_HEADER));
