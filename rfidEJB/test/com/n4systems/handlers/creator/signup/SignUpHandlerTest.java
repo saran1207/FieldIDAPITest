@@ -24,13 +24,13 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.FieldIdTransaction;
-import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SubscriptionAgent;
-import com.n4systems.testutils.UsesDummyPersistenceManager;
 import com.n4systems.testutils.DummyTransaction;
+import com.n4systems.testutils.UsesDummyPersistenceManager;
 import com.n4systems.util.mail.MailMessage;
 
 public class SignUpHandlerTest extends UsesDummyPersistenceManager {
@@ -43,9 +43,9 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		replay(mockTransaction);
 	}
 	
-	private void successfulTransaction(PersistenceProvider mockPersistenceProvider) {
-		expect(mockPersistenceProvider.startTransaction()).andReturn(mockTransaction);
-		mockPersistenceProvider.finishTransaction(mockTransaction);
+	private void successfulTransaction(TransactionManager mockTransactionManager) {
+		expect(mockTransactionManager.startTransaction()).andReturn(mockTransaction);
+		mockTransactionManager.finishTransaction(mockTransaction);
 	}
 	
 	@Test(expected=InvalidArgumentException.class)
@@ -57,12 +57,12 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_successfully_sign_account_up() throws Exception {
 		
-		PersistenceProvider mockPersistenceProvider = createMock(PersistenceProvider.class);
+		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
 		
-		successfulTransaction(mockPersistenceProvider);
-		successfulTransaction(mockPersistenceProvider);
+		successfulTransaction(mockTransactionManager);
+		successfulTransaction(mockTransactionManager);
 		
-		replay(mockPersistenceProvider);
+		replay(mockTransactionManager);
 		
 		
 		SignUpRequest signUpRequest = new SignUpRequest();
@@ -92,11 +92,11 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		replay(mailManager);
 		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockSystemStructureHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler, null, mailManager);
-		sut.withPersistenceProvider(mockPersistenceProvider);
+		sut.withTransactionManager(mockTransactionManager);
 
 		sut.signUp(signUpRequest, referrerOrg, null, null);
 		
-		verify(mockPersistenceProvider);
+		verify(mockTransactionManager);
 		verify(mockAccountPlaceHolderCreateHandler);
 		verify(mockSubscriptionAgent);
 		verify(mockSystemStructureHandler);
@@ -138,9 +138,9 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_rollback_and_rethrow_exception_sign_when_tenant_can_not_be_created() {
 		
-		PersistenceProvider mockPersistenceProvider = createMock(PersistenceProvider.class);
-		rollbackTransaction(mockPersistenceProvider);
-		replay(mockPersistenceProvider);
+		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
+		rollbackTransaction(mockTransactionManager);
+		replay(mockTransactionManager);
 		
 		RuntimeException fakeConstraintException = new RuntimeException("constraint violation,  tenant_name already used");
 
@@ -154,7 +154,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		
 		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, null, null, null, null);
-		sut.withPersistenceProvider(mockPersistenceProvider);
+		sut.withTransactionManager(mockTransactionManager);
 		
 		boolean exceptionCaught = false;
 		
@@ -167,26 +167,26 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		}
 		
 		assertTrue(exceptionCaught);
-		verify(mockPersistenceProvider);
+		verify(mockTransactionManager);
 		verify(mockAccountPlaceHolderCreateHandler);
 	}
 
-	private void rollbackTransaction(PersistenceProvider mockPersistenceProvider) {
-		expect(mockPersistenceProvider.startTransaction()).andReturn(mockTransaction);
-		mockPersistenceProvider.rollbackTransaction(mockTransaction);
+	private void rollbackTransaction(TransactionManager mockTransactionManager) {
+		expect(mockTransactionManager.startTransaction()).andReturn(mockTransaction);
+		mockTransactionManager.rollbackTransaction(mockTransaction);
 	}
 	
 	
 	@Test
 	public void should_destory_the_tenant_and_primary_org_on_communication_failure_from_subscription_agent() {
 		
-		PersistenceProvider mockPersistenceProvider = createMock(PersistenceProvider.class);
+		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
 		
-		successfulTransaction(mockPersistenceProvider);
+		successfulTransaction(mockTransactionManager);
 		
-		successfulTransaction(mockPersistenceProvider);
+		successfulTransaction(mockTransactionManager);
 		
-		replay(mockPersistenceProvider);
+		replay(mockTransactionManager);
 		
 		
 		SignUpRequest signUpRequest = new SignUpRequest();
@@ -203,7 +203,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		
 		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null, null, null);
-		sut.withPersistenceProvider(mockPersistenceProvider);
+		sut.withTransactionManager(mockTransactionManager);
 		
 		boolean exceptionCaught = false;
 		
@@ -216,7 +216,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		}
 		
 		assertTrue(exceptionCaught);
-		verify(mockPersistenceProvider);
+		verify(mockTransactionManager);
 		verify(mockSubscriptionAgent);
 		verify(mockAccountPlaceHolderCreateHandler);
 	}
@@ -239,12 +239,12 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_destory_the_tenant_and_primary_org_on_billing_failure_from_subscription_agent() {
 		
-		PersistenceProvider mockPersistenceProvider = createMock(PersistenceProvider.class);
+		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
 		
-		successfulTransaction(mockPersistenceProvider);
-		successfulTransaction(mockPersistenceProvider);
+		successfulTransaction(mockTransactionManager);
+		successfulTransaction(mockTransactionManager);
 		
-		replay(mockPersistenceProvider);
+		replay(mockTransactionManager);
 		
 		
 		SignUpRequest signUpRequest = new SignUpRequest();
@@ -261,7 +261,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		
 		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, null, mockSubscriptionAgent, null, null, null);
-		sut.withPersistenceProvider(mockPersistenceProvider);
+		sut.withTransactionManager(mockTransactionManager);
 		
 		boolean exceptionCaught = false;
 		
@@ -274,7 +274,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		}
 		
 		assertTrue(exceptionCaught);
-		verify(mockPersistenceProvider);
+		verify(mockTransactionManager);
 		verify(mockSubscriptionAgent);
 		verify(mockAccountPlaceHolderCreateHandler);
 	}
@@ -284,12 +284,12 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_throw_sign_up_completion_exception_after_any_exception_in_sign_up_completion() {
 	
-		PersistenceProvider mockPersistenceProvider = createMock(PersistenceProvider.class);
+		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
 		
-		successfulTransaction(mockPersistenceProvider);
-		rollbackTransaction(mockPersistenceProvider);
+		successfulTransaction(mockTransactionManager);
+		rollbackTransaction(mockTransactionManager);
 		
-		replay(mockPersistenceProvider);
+		replay(mockTransactionManager);
 		
 		
 		SignUpRequest signUpRequest = new SignUpRequest();
@@ -316,7 +316,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		replay(mockSignUpFinalizationHandler);
 		
 		SignUpHandler sut = new SignUpHandlerImpl(mockAccountPlaceHolderCreateHandler, mockBaseSystemStructureCreateHandler, mockSubscriptionAgent, mockSignUpFinalizationHandler, null, null);
-		sut.withPersistenceProvider(mockPersistenceProvider);
+		sut.withTransactionManager(mockTransactionManager);
 		
 		boolean exceptionCaught = false;
 		
@@ -327,7 +327,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		}
 		
 		assertTrue(exceptionCaught);
-		verify(mockPersistenceProvider);
+		verify(mockTransactionManager);
 		verify(mockSubscriptionAgent);
 		verify(mockBaseSystemStructureCreateHandler);
 		verify(mockSignUpFinalizationHandler);
@@ -357,7 +357,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		referralHandler.processReferral(eq(refferralOrg.getTenant()), eq(referredTenant), eq(refCode));
 		replay(referralHandler);
 		
-		signupHandler.withPersistenceProvider(new PersistenceProvider() {
+		signupHandler.withTransactionManager(new TransactionManager() {
 			@Override
 			public void finishTransaction(Transaction transaction) {}
 			@Override

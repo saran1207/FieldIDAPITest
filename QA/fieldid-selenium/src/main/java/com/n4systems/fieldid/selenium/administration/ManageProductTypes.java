@@ -569,7 +569,6 @@ public class ManageProductTypes {
 	}
 
 	private void verifyAttributeWasRetired(String name) {
-		// TODO Auto-generated method stub
 		
 	}
 

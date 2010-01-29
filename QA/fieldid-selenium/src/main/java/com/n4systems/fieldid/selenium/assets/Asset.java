@@ -12,6 +12,7 @@ public class Asset {
 	// Locators
 	private String assetHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset - ')]";
 	private String assetEditTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[not(contains(@class,'selected'))]/A[contains(text(),'Edit')]";
+	private String assetTraceablityLinkLocator = "xpath=//A[contains(text(),'Traceability')]";
 	private String productSummaryHeaderLocator = "xpath=//H2[contains(text(),'Product Summary')]";
 	private String serialNumberLabelLocator = "xpath=//LABEL[contains(text(),'Serial Number')]";
 	private String rfidNumberLabelLocator = "xpath=//LABEL[contains(text(),'RFID Number')]";
@@ -178,6 +179,13 @@ public class Asset {
 		} else {
 			fail("Could not find the Edit tab for the current asset");
 		}
+	}
+	
+	public void gotoTraceability() {
+		misc.info("Click the Traceability tab");
+		selenium.click(assetTraceablityLinkLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
+		
 	}
 
 	public void verifyAssetEditPage(String serialNumber) {

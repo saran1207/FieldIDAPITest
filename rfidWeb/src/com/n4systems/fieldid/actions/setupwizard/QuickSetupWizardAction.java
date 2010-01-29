@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.setupwizard;
 
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -9,9 +10,9 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.ui.seenit.SeenItItem;
-import com.n4systems.persistence.PersistenceProvider;
-import com.n4systems.persistence.StandardPersistenceProvider;
+import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 
@@ -19,7 +20,7 @@ import com.n4systems.services.TenantCache;
 public class QuickSetupWizardAction extends AbstractAction {
 
 	private boolean turnOnJobSites;
-	private PersistenceProvider persistenceProvider;
+	private TransactionManager transactionManager;
 	
 	
 	public QuickSetupWizardAction(PersistenceManager persistenceManager) {
@@ -38,16 +39,16 @@ public class QuickSetupWizardAction extends AbstractAction {
 	}
 	
 	public String doStep1Complete() {
-		Transaction transaction = persistenceProvider().startTransaction();
+		Transaction transaction = transactionManager().startTransaction();
 		
 		try {
 			updateFeatures(transaction);
 			
-			persistenceProvider().finishTransaction(transaction);
+			transactionManager().finishTransaction(transaction);
 			
 			clearCachedValues();
 		} catch (Exception e) {
-			persistenceProvider().rollbackTransaction(transaction);
+			transactionManager().rollbackTransaction(transaction);
 			addActionErrorText("error.could_not_setup_your_company_profile");
 			return ERROR;
 		}
@@ -60,11 +61,11 @@ public class QuickSetupWizardAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
-	private PersistenceProvider persistenceProvider() {
-		if (persistenceProvider == null) {
-			persistenceProvider = new StandardPersistenceProvider();
+	private TransactionManager transactionManager() {
+		if (transactionManager == null) {
+			transactionManager = new FieldIdTransactionManager();
 		}
-		return persistenceProvider;
+		return transactionManager;
 	}
 
 

@@ -13,8 +13,8 @@ import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.persistence.PersistenceProvider;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SignUpTenantResponse;
@@ -32,7 +32,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	private final SignupReferralHandler signUpReferralHandler;
 	private final MailManager mailManager;
 
-	private PersistenceProvider persistenceProvider;
+	private TransactionManager transactionManager;
 	protected AccountPlaceHolder placeHolder;
 	private SignUpTenantResponse subscriptionApproval;	
 	
@@ -65,13 +65,13 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	}
 
 	protected void activateAccount(SignUpRequest signUp, PrimaryOrg referrerOrg, String portalUrl) throws SignUpCompletionException {
-		Transaction transaction = persistenceProvider.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			finalizeAccount(signUp, referrerOrg, placeHolder, transaction, subscriptionApproval, portalUrl);
 			
-			persistenceProvider.finishTransaction(transaction);
+			transactionManager.finishTransaction(transaction);
 		} catch (RuntimeException e) {
-			persistenceProvider.rollbackTransaction(transaction);
+			transactionManager.rollbackTransaction(transaction);
 			throw new SignUpCompletionException("The final step of activating the account has failed. The subscription information been entered.", e);
 		}
 	}
@@ -85,19 +85,19 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	}
 
 	protected void holdNamesForSignUp(SignUpRequest signUp) {
-		Transaction transaction = persistenceProvider.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try { 
 			placeHolder = createPlaceHolder(signUp, transaction);
 			
-			persistenceProvider.finishTransaction(transaction);
+			transactionManager.finishTransaction(transaction);
 		} catch (RuntimeException e) {
-			persistenceProvider.rollbackTransaction(transaction);
+			transactionManager.rollbackTransaction(transaction);
 			throw new TenantNameUsedException("tenant name could not be saved", e);
 		}
 	}
 
 	protected void guard() {
-		if (persistenceProvider == null) {
+		if (transactionManager == null) {
 			throw new InvalidArgumentException("You must give a persistence provider");
 		}
 	}
@@ -168,18 +168,18 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	}
 	
 	private void undoAccountPlaceHolder(AccountPlaceHolder placeHolder) {
-		Transaction transaction = persistenceProvider.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			accountPlaceHolderCreateHandler.undo(transaction, placeHolder);
-			persistenceProvider.finishTransaction(transaction);
+			transactionManager.finishTransaction(transaction);
 		} catch (Exception e) {
-			persistenceProvider.rollbackTransaction(transaction);
+			transactionManager.rollbackTransaction(transaction);
 			throw new SignUpSoftFailureException("failed to destory account place holder", e);
 		}
 	}
 
-	public SignUpHandler withPersistenceProvider(PersistenceProvider persistenceProvider) {
-		this.persistenceProvider = persistenceProvider;
+	public SignUpHandler withTransactionManager(TransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
 		return this;
 	}
 	

@@ -21,8 +21,8 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
-import com.n4systems.persistence.PersistenceProvider;
-import com.n4systems.persistence.StandardPersistenceProvider;
+import com.n4systems.persistence.FieldIdTransactionManager;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PriceCheckResponse;
@@ -155,9 +155,9 @@ public class SignUpCrud extends AbstractCrud {
 	
 
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
-		PersistenceProvider persistenceProvider = new StandardPersistenceProvider();
+		TransactionManager transactionManager = new FieldIdTransactionManager();
 		
-		getCreateHandlerFactory().getSignUpHandler().withPersistenceProvider(persistenceProvider).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()), refCode);
+		getCreateHandlerFactory().getSignUpHandler().withTransactionManager(transactionManager).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()), refCode);
 	}
 
 	public SortedSet<? extends Listable<String>> getCountries() {
