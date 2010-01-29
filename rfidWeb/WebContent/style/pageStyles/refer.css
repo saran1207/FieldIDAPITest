@@ -9,7 +9,8 @@
 
 #referralInstructions {
 	float: left;
-	width: 600px;
+	width: 595px;
+	padding-right:5px;
 }
 
 #referralLinkBox {
@@ -19,8 +20,8 @@
 	height: 210px;
 }
 
-#referralLinkBox h2 {
-	text-align: inherit;
+#referralLinkBox h3 {
+	text-align: center;
 	font-size: 1.4em;
 	padding-top: 40px;
 }
@@ -32,43 +33,37 @@
 	border: 2px solid;
 }
 
-#referralLinkBox span {
-	padding-top: 10px;
-	display: block;
-}
 
 #referralMainText {
-	display: block;
 	padding: 5px 20px 0 0;
 }
 
 .referralStep {
-	padding: 20px 10px 0;
-	overflow: hidden;
+	padding-left: 40px;
+	margin-top:10px;
+	
 }
 
-#referralInstructions img {
-	float: left;
-	padding-top: 10px;
+.referralStep h3, .referralStep h4 {
+	padding-top:5px;
 }
-
+.referralStep h3 {
+	font-size: 1.4em;
+	padding-bottom: padding-bottom:5px;
+}
 .referralStep h4 {
-	font-size: 1.2em;
+	font-size:1.2em;
+}
+.referralSubStep {
+	margin-bottom:5px;
+	
 }
 
-.referralStep span {
-	display: block;
+#referralStep1 {
+	background:no-repeat url(../../images/mail-send.png);
+	
 }
-
-.referralStep .referralSubStep {
-	padding-top: 5px;
-}
-
-.referralStep .referralSubStep .subStepTitle {
-	font-weight: bold;
-	padding-top: 5px;
-}
-
-.referralStep .referralSubStep span {
-	padding: 2px 10px 0 0;
+#referralStep2 {
+	background:no-repeat url(../../images/mail-receive.png);
+	
 }

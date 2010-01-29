@@ -7,39 +7,36 @@ ${action.setPageType('my_account', 'refer')!}
 
 <div id="referralsTop">
 	<div id="referralInstructions">
-		<span id="referralMainText"><@s.text name="label.referral_text"/></span>
+		<p><@s.text name="label.referral_text"/></p>
 		
-		<img src="images/mail-send.png" />
-		<div class="referralStep">
-			<h4><@s.text name="label.referral_step1.title"/></h4>
-			<div class="referralSubStep">	
-				<span class="subStepTitle"><@s.text name="label.referral_step1_1.title"/></span>
-				<span>
+		<div id="referralStep1" class="referralStep">
+			<h3 ><@s.text name="label.referral_step1.title"/></h3>
+			<div class="referralSubStep">
+				<h4 ><@s.text name="label.referral_step1_1.title"/></h4>
+				<p>
 					<@s.url id="inviteUrl" action="invite"/>
 					<@s.text name="label.referral_step1_1.desc">
 						<@s.param>${inviteUrl}</@s.param>
 					</@s.text>
-				</span>
+				</p>
 			</div>
 		
 			<div class="referralSubStep">
-				<span class="subStepTitle"><@s.text name="label.referral_step1_2.title"/></span>
-				<span><@s.text name="label.referral_step1_2.desc"/></span>
+				<h4 ><@s.text name="label.referral_step1_2.title"/></h4>
+				<p><@s.text name="label.referral_step1_2.desc"/></p>
 			</div>
 		</div>
 		
-		<img src="images/mail-receive.png" />
-		<div class="referralStep">
-			<h4><@s.text name="label.referral_step2.title"/></h4>
-			<div class="referralSubStep">
-				<span><@s.text name="label.referral_step2.desc"/></span>
-			</div>
+		<div id="referralStep2"  class="referralStep">
+			<h3 ><@s.text name="label.referral_step2.title"/></h3>
+			<p><@s.text name="label.referral_step2.desc"/></p>
+			
 		</div>
 	</div>
 	
 	<div id="referralLinkBox">
-		<h2><@s.text name="label.your_referral_link"/></h2>
-		<p onClick="this.select();">${referralUrl}</p>
+		<h3><@s.text name="label.your_referral_link"/></h3>
+		<p>${referralUrl}</p>
 		<span><@s.text name="label.your_referral_link.desc"/></span>
 	</div>
 </div>
