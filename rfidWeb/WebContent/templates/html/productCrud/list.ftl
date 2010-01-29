@@ -15,14 +15,14 @@ $$('.productLink').each(function(element) {
 	});
 function goToAssetListener(event) {
 	<#if !inVendorContext>
-		var url = '<@s.url action="product"/>';
+		var url = '<@s.url action="product" />' + "?uniqueID=" + Event.element( event ).getAttribute( 'productId' );
 	<#else>
-		var url = '<@s.url action="productTraceability"/>';
+		var url = '<@s.url action="productTraceability" useContext="true"/>' + "&uniqueID=" + Event.element( event ).getAttribute( 'productId' );
 	</#if>
 	
 	
 	event.stop();
-	redirect( url + "?uniqueID=" + Event.element( event ).getAttribute( 'productId' ) );
+	redirect(url);
 }
 				
 				
