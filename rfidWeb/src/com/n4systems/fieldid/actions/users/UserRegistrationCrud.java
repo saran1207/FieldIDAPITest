@@ -176,6 +176,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		userAccount.setPosition(position);
 	}
 
+	@RequiredStringValidator(type=ValidatorType.FIELD, message="", key="error.timezonerequired")
 	public String getTimeZone() {
 		return region.getId();
 	}
