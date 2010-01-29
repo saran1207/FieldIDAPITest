@@ -10,18 +10,31 @@
 	</@n4.includeScript>
 </head>
 
-<title><@s.text name="title.create_your_account"/></title>
+<title><@s.text name="title.you_have_selected_the"/> ${signUp.signUpPackage.name?html} <@s.text name="label.plan"/></title>
 
 
 
 <@s.form action="signUpCreate" theme="fieldid" id="mainContent" cssClass="paymentForm fullForm">
-	<h1><@s.text name="title.create_your_account"/>  <@s.text name="label.with_package"/> ${signUp.signUpPackage.name?html}  <@s.text name="label.per_user_per_month"><@s.param>${signUp.signUpPackage.defaultPricePerUserPerMonth?string.currency}</@s.param></@s.text></h1>
+	<div id="planSelectedTitle">
+		
+		<h1>
+			<@s.text name="title.you_have_selected_the"/> 
+			<span id="planSelected">${signUp.signUpPackage.name?html}</span> 
+			<@s.text name="label.plan"/>
+			<span class="very-weak">			 
+				 <@s.text name="label.per_user_per_month"><@s.param>${signUp.signUpPackage.defaultPricePerUserPerMonth?string.currency}</@s.param></@s.text>
+			</span>
+		</h1>
+		<div>
+			<@s.text name="label.all_plans_include_free_trial"/>
+		</div>
+	</div>
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="signUpPackageId" cssClass="changesPrice"/>
 	<@s.hidden name="usingCreditCard" id="usingCreditCard" />
 	<@s.hidden name="refCode" id="refCode" />
 	<div class="infoSection multiColumn">
-		<h2><@s.text name="label.about_you"/></h2>
+		<h2><@s.text name="label.your_login_information_and_details"/></h2>
 		<div class="infoBlock">
 			<div class="infoSet">
 				<label class="label" for="firstName"><@s.text name="label.first_name"/></label>
@@ -64,7 +77,6 @@
 		
 	</div>
 	
-	<hr/>
 	<div class="infoSection">
 		<h2><@s.text name="label.company_info"/></h2>
 		<div class="multiColumn">
@@ -99,33 +111,35 @@
 			</div>
 		</div>
 	</div>
-	<hr/>
+
 	<div class="infoSection infoBlock">
-		<h2><@s.text name="label.site_address"/></h2>
+		<h2><@s.text name="label.what_do_you_want_your_field_id_address_to_be"/></h2>
 		<div class="infoSet">
-			<label class="label" for="tenantName"><@s.text name="label.site_address"/></label>
+			<span class="weak"><@s.text name="instructions.site_address"/></span>
 			<span class="fieldHolder">
 				<label>http://</label><span class="shortField"><@s.textfield theme="fieldidSimple" name="signUp.tenantName"/></span><label>.fieldid.com</label>
 			</span>
 		</div>
 	</div>
-	<hr/>
 	<#if !signUp.signUpPackage.free>
 		<div class="infoSection">
-			<h2><@s.text name="label.users_and_options"/></h2>
+			<h2><@s.text name="label.number_of_users_and_other_options"/></h2>
 			<div class="infoBlock ">
 				<div class="infoSet">
-					<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
-					<span class="fieldHolder shortField"><@s.textfield name="signUp.numberOfUsers" theme="simple" cssClass="changesPrice"/></span>
+					<label class="label" for="numberOfUsers"><@s.text name="label.number_of_employee_users"/></label>
+					<span class="fieldHolder shortField">
+						<@s.textfield name="signUp.numberOfUsers" theme="simple" cssClass="changesPrice"/>
+					</span>
+					
 				</div>
 				
 				<div class="infoSet">
-					<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> (30%) <span><@s.checkbox name="signUp.purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/></span></label>
+					<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/></span></label>
+					<span class="weak"><@s.text name="instruction.phone_support_charge"/></span>
 				</div>
 			
 			</div>
 		</div>
-		<hr/>
 	</#if>
 	<div class="infoSection">
 		<h2><@s.text name="label.promo_code"/></h2>
@@ -141,7 +155,6 @@
 	
 	
 	<#if !signUp.signUpPackage.free>
-		<hr/>
 		<div class="infoSection">
 			<h2><@s.text name="label.payment_options"/></h2>
 			<div class="infoBlock ">
@@ -158,8 +171,7 @@
 			</div>
 		</div>
 		
-		<hr/>
-		<div class="infoSection">
+		<div class="infoSection" id ="totalPriceSection">
 			<div class="infoBlock">
 				<@s.text name="label.total_amount_payable"/> <span id="totalPrice">${price?string.currency}</span> <@s.text name="label.plus_applicable_taxes"/> 
 				
@@ -167,7 +179,6 @@
 			</div>
 		</div>
 		
-		<hr />
 		<div class="infoSection" id="creditCardInformation">
 			
 			<div class="multiColumn">
@@ -215,3 +226,20 @@
 		<@s.submit key="label.create_my_account"/> <@s.text name="label.or"/> <a href="<@s.url action="signUpPackages"/>"><@s.text name="label.choose_another_package"/></a> 
 	</div>
 </@s.form>
+
+<div id="secondaryContent">
+	<h3><@s.text name="label.need_help_have_question"/></h3>
+	<p><@s.text name="label.email"/>: <a href="mailto:sales@fieldid.com">sales@fieldid.com</a></p>
+	<p><@s.text name="label.phone"/>: 416-599-6464</p>
+	<p><@s.text name="label.toll_free"/>: 1-800-99-N4SYS (6479)</p>
+	
+	<h3><@s.text name="label.how_is_phone_support_charged"/></h3>
+	<p class="weak"><@s.text name="description.how_is_phone_support_charged"/></p>
+	
+	<h3><@s.text name="label.what_is_the_account_on_the_left"/></h3>
+	<p class="weak"><@s.text name="description.what_is_the_account_on_the_left"/></p>
+	
+	<h3><@s.text name="label.what_if_i_need_to_purchase_rfid_tags"/></h3>
+	<p class="weak"><@s.text name="description.what_if_i_need_to_purchase_rfid_tags"/></p>
+	
+</div>

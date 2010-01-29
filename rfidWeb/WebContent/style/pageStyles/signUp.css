@@ -9,10 +9,7 @@
 #mainContent.fullScreen {
 	width:858px;
 }
-h1 {
-	text-align:center;
-	font-size: 2em;
-}
+
 #packages {
 	margin: 10px 0;
 	width:100%;
@@ -94,7 +91,11 @@ h1 {
 
 .favouredChoice {
 	font-size: 1.2em;
+	padding:5px 0;
 }
+
+
+
 
 #signIndButton {
 	margin: 0 auto;
@@ -168,6 +169,37 @@ input[type="radio"] {
 	margin-right: 5px;
 }
 
+#totalPriceSection {
+	border-top: 1px solid #999;
+	padding:5px 0;
+	margin-bottom:5px;
+}
+
 #upgradePlan {
 	font-size:1.2em;
+}
+
+h2, #totalPriceSection {
+	border-bottom:1px solid #999;
+	padding-bottom:5px;
+	margin-top:10px;
+}
+
+
+#secondaryContent h3 {
+	margin-top:15px;
+}
+
+#secondaryContent p {
+	margin:5px 0;
+}
+
+#planSelectedTitle {
+	padding:10px;
+	background-color: #fdf1d8;
+	border: 1px solid #fce1a9;
+} 
+
+.fullScreen h1 {
+	text-align:center;
 }

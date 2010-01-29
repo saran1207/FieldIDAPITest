@@ -8,7 +8,7 @@
 	<h1><@s.text name="title.account_created"/></h1>
 
 	<div class="infoSection multiColumn">
-		<h2><@s.text name="label.about_you"/></h2>
+		<h2><@s.text name="label.your_login_information_and_details"/></h2>
 		<div class="infoBlock">
 			<div class="infoSet">
 				<label class="label" for="firstName"><@s.text name="label.first_name"/></label>
@@ -38,7 +38,7 @@
 		
 	</div>
 	
-	<hr/>
+	
 	<div class="infoSection">
 		<h2><@s.text name="label.company_info"/></h2>
 		<div class="multiColumn">
@@ -74,15 +74,15 @@
 			</div>
 		</div>
 	</div>
-	<hr/>
+	
 	
 	
 	<#if !signUp.signUpPackage.free>
 		<div class="infoSection">
-			<h2><@s.text name="label.users_and_options"/></h2>
+			<h2><@s.text name="label.number_of_users_and_other_options"/></h2>
 			<div class="infoBlock ">
 				<div class="infoSet">
-					<label class="label" for="numberOfUsers"><@s.text name="label.number_of_users"/></label>
+					<label class="label" for="numberOfUsers"><@s.text name="label.number_of_employee_users"/></label>
 					<span class="fieldHolder">
 						${signUp.numberOfUsers}
 					</span>
@@ -98,7 +98,7 @@
 			</div>
 		</div>
 		
-		<hr/>
+		
 
 		<div class="infoSection">
 			<h2><@s.text name="label.payment_options"/></h2>
@@ -112,13 +112,13 @@
 			</div>
 		</div>
 		
-		<hr/>
-		<div class="infoSection">
+		
+		<div class="infoSection" id="totalPriceSection">
 			<div class="infoBlock">
 				<@s.text name="label.total_amount_payable"/> <span id="totalPrice">${price?string.currency}</span> <@s.text name="label.plus_applicable_taxes"/>
 			</div>
 		</div>
-		<hr />
+		
 	
 	</#if>
 	<div id="signIndButton">
