@@ -1,6 +1,6 @@
 package com.n4systems.persistence;
 
-public class MultipleUseTransactionManager implements TransactionManager {
+public class FieldIDMultiTransactionManager implements MultiTransactionManager {
 
 	@Override
 	public void finishTransaction(Transaction transaction) {

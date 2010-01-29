@@ -24,6 +24,7 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.FieldIdTransaction;
+import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.subscription.BillingInfoException;
@@ -57,7 +58,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_successfully_sign_account_up() throws Exception {
 		
-		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
+		MultiTransactionManager mockTransactionManager = createMock(MultiTransactionManager.class);
 		
 		successfulTransaction(mockTransactionManager);
 		successfulTransaction(mockTransactionManager);
@@ -138,7 +139,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_rollback_and_rethrow_exception_sign_when_tenant_can_not_be_created() {
 		
-		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
+		MultiTransactionManager mockTransactionManager = createMock(MultiTransactionManager.class);
 		rollbackTransaction(mockTransactionManager);
 		replay(mockTransactionManager);
 		
@@ -180,7 +181,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_destory_the_tenant_and_primary_org_on_communication_failure_from_subscription_agent() {
 		
-		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
+		MultiTransactionManager mockTransactionManager = createMock(MultiTransactionManager.class);
 		
 		successfulTransaction(mockTransactionManager);
 		
@@ -239,7 +240,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_destory_the_tenant_and_primary_org_on_billing_failure_from_subscription_agent() {
 		
-		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
+		MultiTransactionManager mockTransactionManager = createMock(MultiTransactionManager.class);
 		
 		successfulTransaction(mockTransactionManager);
 		successfulTransaction(mockTransactionManager);
@@ -284,7 +285,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 	@Test
 	public void should_throw_sign_up_completion_exception_after_any_exception_in_sign_up_completion() {
 	
-		TransactionManager mockTransactionManager = createMock(TransactionManager.class);
+		MultiTransactionManager mockTransactionManager = createMock(MultiTransactionManager.class);
 		
 		successfulTransaction(mockTransactionManager);
 		rollbackTransaction(mockTransactionManager);
@@ -357,7 +358,7 @@ public class SignUpHandlerTest extends UsesDummyPersistenceManager {
 		referralHandler.processReferral(eq(refferralOrg.getTenant()), eq(referredTenant), eq(refCode));
 		replay(referralHandler);
 		
-		signupHandler.withTransactionManager(new TransactionManager() {
+		signupHandler.withTransactionManager(new MultiTransactionManager() {
 			@Override
 			public void finishTransaction(Transaction transaction) {}
 			@Override

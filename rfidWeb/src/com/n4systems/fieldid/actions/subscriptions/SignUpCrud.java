@@ -21,8 +21,8 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
-import com.n4systems.persistence.MultipleUseTransactionManager;
-import com.n4systems.persistence.TransactionManager;
+import com.n4systems.persistence.FieldIDMultiTransactionManager;
+import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PriceCheckResponse;
@@ -155,7 +155,7 @@ public class SignUpCrud extends AbstractCrud {
 	
 
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
-		TransactionManager transactionManager = new MultipleUseTransactionManager();
+		MultiTransactionManager transactionManager = new FieldIDMultiTransactionManager();
 		
 		getCreateHandlerFactory().getSignUpHandler().withTransactionManager(transactionManager).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()), refCode);
 	}

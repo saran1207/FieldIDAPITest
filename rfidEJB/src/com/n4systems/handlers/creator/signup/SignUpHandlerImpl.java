@@ -13,6 +13,7 @@ import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.subscription.BillingInfoException;
@@ -178,7 +179,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		}
 	}
 
-	public SignUpHandler withTransactionManager(TransactionManager transactionManager) {
+	public SignUpHandler withTransactionManager(MultiTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 		return this;
 	}
