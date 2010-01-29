@@ -20,9 +20,9 @@ import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
 
-public class TracabilityCrud extends ProductCrud {
+public class TraceabilityCrud extends ProductCrud {
 
-	public TracabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, User userManager,
+	public TraceabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, User userManager,
 			ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(productTypeManager, legacyProductSerialManager, persistenceManager, userManager, productCodeMappingManager, productManager, orderManager, projectManager, inspectionScheduleManager);
 	}
@@ -65,4 +65,8 @@ public class TracabilityCrud extends ProductCrud {
 		return false;
 	}
 
+	
+	public Long getContextProductId() {
+		return isInVendorContext() ? product.getId() : null;
+	}
 }

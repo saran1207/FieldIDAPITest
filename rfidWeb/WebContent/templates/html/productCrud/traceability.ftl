@@ -17,7 +17,7 @@ ${action.setPageType('product', 'traceability')!}
 				<span class="weak"><@s.text name="instruction.registering_this_asset_will_allow_you_to_do"/></span>
 			</div>
 			<div id="registerThisAction">
-				<@s.url id="registerUrl" action="productAdd" linkedProduct="${linkedProducts[0].id}"/>
+				<@s.url id="registerUrl" action="productAdd" linkedProduct="${contextProductId}"/>
 				<@s.submit key="label.copy_and_register_now" id="copyAsset" onclick="return redirect('${registerUrl}');" theme="simple"/>
 			</div>
 		</#if>
