@@ -23,7 +23,7 @@ public class SignupReferral extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("referralTenant", null, "referralUser", null);
+		return new SecurityDefiner("referralTenant.id", null, "referralUser.uniqueID", null);
 	}
 	
 	@Column(name="signupdate", nullable = false)
