@@ -61,10 +61,10 @@
 	<div id="releaseNotes" class="dashboardSection">
 		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes-${action.getText('app.majorversion')}.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
 		<ul class="informationList">
-			<li>Copy Inspection Types</li>
-			<li>Search for Assets over the Safety Network</li>
-			<li>Mass Update Location on the handheld</li>
-			<li>Smart Search on the Home Screen on the handheld</li>
+			<li>Safety Network Enhancements</li>
+			<li>New Icons on web and handheld</li>
+			<li>View Previous Inspection on handheld</li>
+			<li>Improved data syncing on handheld</li>
 		</ul>
 	</div>
 	<div id="helpVideos" class="dashboardSection">
