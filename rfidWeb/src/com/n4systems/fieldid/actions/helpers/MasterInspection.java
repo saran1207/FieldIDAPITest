@@ -259,13 +259,21 @@ public class MasterInspection {
 	}
 
 	public void cleanSubInspectionsForNonValidSubProducts(Product upToDateProduct) {
-		List<SubInspection> subInspectionsToClear = new ArrayList<SubInspection>();
+		List<SubInspection> subInspectionsToKeep = new ArrayList<SubInspection>();
+		
+		/*
+		 * this checks that each sub inspection is for a product that is still
+		 * attached to our updated master product.   
+		 */
 		for (SubInspection subInspection : subInspections) {
-			if (!upToDateProduct.getSubProducts().contains(subInspection.getProduct())) {
-				subInspectionsToClear.add(subInspection);
+			for (SubProduct subProduct: upToDateProduct.getSubProducts()) {
+				if (subProduct.getProduct().equals(subInspection.getProduct())) {
+					subInspectionsToKeep.add(subInspection);
+					break;
+				}
 			}
 		}
-		subInspections.removeAll(subInspectionsToClear);
+		subInspections.retainAll(subInspectionsToKeep);
 	}
 
 	public Map<SubInspection, List<FileAttachment>> getSubInspectionUploadedFiles() {
