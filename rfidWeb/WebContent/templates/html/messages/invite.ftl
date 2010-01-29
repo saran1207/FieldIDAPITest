@@ -1,4 +1,4 @@
-${action.setPageType('inbox', 'invite')!}
+${action.setPageType('safety_network_connections', 'invite')!}
 
 <head>
 	<@n4.includeStyle href="invite" type="page"/>
