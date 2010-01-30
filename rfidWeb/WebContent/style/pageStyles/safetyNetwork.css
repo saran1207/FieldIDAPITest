@@ -76,6 +76,24 @@
 	background: no-repeat url(../../images/privacy-small.png);
 }
 
+#manage_connections_heading {
+	min-height: 20px;
+	padding: 5px 0 0 35px;
+	background: no-repeat url(../../images/connections-small.png);
+}
+
+#manage_catalog_heading {
+	min-height: 27px;
+	padding: 5px 0 0 38px;
+	background: no-repeat url(../../images/manage_catalog-small.png);
+}
+
+#inbox_heading {
+	min-height: 27px;
+	padding: 5px 0 0 38px;
+	background: no-repeat url(../../images/inbox-small.png);
+}
+
 .infoSet {
 	min-height: 40px;
 	padding-top: 10px;
@@ -109,4 +127,17 @@
 .infoSet .check label {
 	overflow: hidden;
 	padding-left: 10px;
+}
+
+#messageInput .infoField .inline {
+	display: inline;
+}
+
+#messageInput .infoField .field_tip {
+	color: #444;
+	padding-left: 10px;
+}
+
+#body_desc_text {
+	width: 400px;
 }

@@ -1,10 +1,11 @@
 <head>
+	<@n4.includeStyle href="safetyNetwork" type="page"/>
 	<@n4.includeStyle type="page" href="publishedCatalog"/>
 	<@n4.includeStyle href="steps"/>
-	
 </head>
-<title><@s.text name="label.import_catalog"/></title>
+<title><@s.text name="label.manage_catalog"/></title>
 ${action.setPageType('catalog', 'catalog')!}
+<h2 id="manage_catalog_heading" class="clean"><@s.text name="label.manage_catalog"/></h2>
 <div id="steps">
 	<div class="step">
 		<h2><@s.text name="label.what_do_you_want_to_publish"/></h2>

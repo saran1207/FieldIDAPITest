@@ -1,10 +1,12 @@
 ${action.setPageType('inbox', 'list')!}
 
 <head>
+	<@n4.includeStyle href="safetyNetwork" type="page"/>
 	<@n4.includeStyle href="messages" type="page"/>
 </head>
 	
 <#if  page.hasResults() && page.validPage() >
+	<h2 id="inbox_heading" class="clean"><@s.text name="label.inbox"/></h2>
 	<#assign currentAction="messages" />
 	<#include '../common/_pagination.ftl' />
 	<table class="list">

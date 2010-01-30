@@ -1,10 +1,8 @@
 ${action.setPageType('safety_network_connections', 'list')!}
-
 <head>
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 </head>
-
-
+<h2 id="manage_connections_heading" class="clean"><@s.text name="label.manage_connections"/></h2>
 <table class="list" id="safetyNetworkConnections">
 	<tr>
 		<th></th>
