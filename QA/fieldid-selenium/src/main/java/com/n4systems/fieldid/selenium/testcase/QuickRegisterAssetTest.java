@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.assets.Asset;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
+@Ignore
 public class QuickRegisterAssetTest extends LoggedInTest {
 
 	private static final String VENDOR_CONTEXT_SELECTOR = "css=#vendorContextNameLink a";

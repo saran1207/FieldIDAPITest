@@ -61,7 +61,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 	protected void sendFailureNotification(MailManager mailManager, DownloadLink downloadLink, Exception cause) throws MessagingException {
 		// if the failure was caused by an empty report, we send a message.  Otherwise the failure is silent to the end user
 		if (cause instanceof EmptyReportException) {
-			mailManager.sendMessage(new MailMessage(downloadLink, "We're sorry, your report did not conain any printable inspections."));
+			mailManager.sendMessage(new MailMessage(downloadLink, "We're sorry, your report did not contain any printable inspections."));
 		}
 	}
 

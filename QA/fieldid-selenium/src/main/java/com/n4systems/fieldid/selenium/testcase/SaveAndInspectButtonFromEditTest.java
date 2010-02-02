@@ -9,7 +9,13 @@ import com.n4systems.fieldid.selenium.login.Login;
 import com.n4systems.fieldid.selenium.assets.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 
-public class WEB_1465 extends FieldIDTestCase {
+/**
+ * WEB-1465
+ * 
+ * @author dgrainge
+ *
+ */
+public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 
 	Login login;
 	Identify identify;

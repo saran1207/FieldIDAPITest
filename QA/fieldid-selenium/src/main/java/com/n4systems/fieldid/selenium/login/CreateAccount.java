@@ -12,8 +12,8 @@ public class CreateAccount {
 	Misc misc;
 	
 	// Locators
-	private String headerText = "Create Your Account";
-	private String createAccountHeaderLocator = "xpath=//FORM[@id='mainContent']/H1[contains(text(),'" + headerText + "')]";
+	private String headerText = "You Have Selected the";
+	private String createAccountHeaderLocator = "css=h1:contains('" + headerText + "')";
 	private String firstNameTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_firstName']";
 	private String lastNameTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_lastName']";
 	private String emailTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_email']";
@@ -82,7 +82,7 @@ public class CreateAccount {
 	public void verifyCreateAccountPage(String packageName) {
 		misc.info("Confirm we arrived at the Create Account page");
 		assertTrue("Could not find '" + headerText + "'", selenium.isElementPresent(createAccountHeaderLocator));
-		assertTrue("Could not find '" + packageName + "' in the header", selenium.isElementPresent("xpath=//H1[contains(text(),'" + packageName + "')]"));
+		assertTrue("Could not find '" + packageName + "' in the header", selenium.isElementPresent("css=#planSelected:contains('" + packageName + "')"));
 		boolean notfree = !packageName.equals("Free");
 		verifyCreateAccountForm(notfree);
 	}
@@ -149,7 +149,7 @@ public class CreateAccount {
 		}
 		
 		String paymentType = t.getPaymentType();
-		if(paymentType.equals(CreateTenant.payByCreditCard)) {
+		if(paymentType.equals(CreateTenant.PAY_BY_CREDIT_CARD)) {
 			selectPayByCreditCard();
 			String cardType = t.getCreditCardType();
 			if(cardType != null) {

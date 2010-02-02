@@ -9,7 +9,13 @@ import com.n4systems.fieldid.selenium.administration.Admin;
 import com.n4systems.fieldid.selenium.administration.ManageUsers;
 import com.n4systems.fieldid.selenium.login.Login;
 
-public class WEB_1466 extends FieldIDTestCase {
+/**
+ * WEB-1466
+ * 
+ * @author dgrainge
+ *
+ */
+public class RelabelEmployeePermissionsTest extends FieldIDTestCase {
 
 	Login login;
 	Admin admin;

@@ -9,7 +9,13 @@ import com.n4systems.fieldid.selenium.administration.ManageOrganizations;
 import com.n4systems.fieldid.selenium.datatypes.Customer;
 import com.n4systems.fieldid.selenium.login.Login;
 
-public class WEB_1482 extends FieldIDTestCase {
+/**
+ * WEB-1482
+ * 
+ * @author dgrainge
+ *
+ */
+public class ChangeStateToStateSlashProvinceTest extends FieldIDTestCase {
 
 	Login login;
 	Admin admin;

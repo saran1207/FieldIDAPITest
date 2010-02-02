@@ -34,7 +34,7 @@ public class CreateTenant {
 	public final static int numUsersFreeAccountFlag = -1;
 
 	// Users and Options (defaults to Free account)
-	int numberOfUsers = CreateTenant.numUsersFreeAccountFlag;
+	int numberOfUsers = numUsersFreeAccountFlag;
 	boolean phoneSupport = false;
 	
 	// Payment Options
@@ -47,18 +47,46 @@ public class CreateTenant {
 	public final static String creditCardTypeMC = "MasterCard";
 	public final static String creditCardTypeAMEX = "AMEX";
 	
-	// types of payment types
-	public final static String payByCreditCard = "Credit Card";
-	public final static String payByPurchaseOrder = "Purchase Order";
-	public final static String payByFreeAccount = "Free Account";
 	
-	String paymentType = CreateTenant.payByFreeAccount;
+	// types of payment types
+	public final static String PAY_BY_CREDIT_CARD = "Credit Card";
+	public final static String payByPurchaseOrder = "Purchase Order";
+	public final static String PAY_BY_FREE_ACCOUNT = "Free Account";
+	
+	String paymentType = PAY_BY_FREE_ACCOUNT;
 	String cardType;
 	String nameOnCard;
 	String cardNumber;
 	String expiryMonth;
 	String expiryYear;
 	String purchaseOrderNumber;
+	
+	
+	
+	public CreateTenant(String username, String password, String tenantName, String tenantID) {
+		
+		this.setFirstName("Darrell");
+		this.setLastName("Grainger");
+		this.setEmail("darrell.grainger@fieldid.com");
+		this.setCountry("Canada");
+		this.setTimeZone("Ontario - Toronto");
+		this.setCompanyAddress("179 John Street");
+		this.setCompanyCity("Toronto");
+		this.setCompanyState("Ontario");
+		this.setCompanyCountry("Canada");
+		this.setCompanyZipCode("M5T 1X4");
+		this.setCompanyPhoneNumber("(416) 599-6464");
+		this.setNumberOfUsers(1);
+		this.setPhoneSupport(false);
+		this.setUserName(username);
+		this.setPassword(password);
+		this.setPassword2(password);
+		this.setCompanyName(tenantName);
+		this.setSiteAddress(tenantID);
+	}
+	
+	
+	
 
 	public void setFirstName(String s) {
 		this.firstName = s;
@@ -104,8 +132,8 @@ public class CreateTenant {
 		this.companyCity = s;
 	}
 	
-	public void setCompanyState(String s) {
-		this.companyState = s;
+	public void setCompanyState(String companyState) {
+		this.companyState = companyState;
 	}
 	
 	public void setCompanyCountry(String s) {

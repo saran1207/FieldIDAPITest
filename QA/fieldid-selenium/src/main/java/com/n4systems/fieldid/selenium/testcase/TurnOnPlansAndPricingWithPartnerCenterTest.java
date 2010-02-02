@@ -13,7 +13,13 @@ import com.n4systems.fieldid.selenium.login.Login;
 import com.n4systems.fieldid.selenium.login.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.SignUpPackages;
 
-public class WEB_1378 extends FieldIDTestCase {
+/**
+ * WEB-1378
+ * 
+ * @author dgrainge
+ *
+ */
+public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase {
 
 	Login login;
 	ConsoleLogin console;
@@ -117,35 +123,15 @@ public class WEB_1378 extends FieldIDTestCase {
 		sup.gotoSignUpNow(packageName);
 		create.verifyCreateAccountPage(packageName);
 
-		CreateTenant t = new CreateTenant();
-		t.setFirstName("Darrell");
-		t.setLastName("Grainger");
-		t.setEmail("darrell.grainger@fieldid.com");
-		t.setCountry("Canada");
-		t.setTimeZone("Ontario - Toronto");
-		t.setUserName(username);
-		t.setPassword(password);
-		t.setPassword2(password);
-		t.setCompanyName(tenantName);
-		t.setCompanyAddress("179 John Street");
-		t.setCompanyCity("Toronto");
-		t.setCompanyState("Ontario");
-		t.setCompanyCountry("Canada");
-		t.setCompanyZipCode("M5T 1X4");
-		t.setCompanyPhoneNumber("(416) 599-6464");
-		t.setSiteAddress(tenantID);
+		CreateTenant t = new CreateTenant(username, password, tenantName, tenantID);
+		
 		t.setNumberOfUsers(2);
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
 		t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
 		t.setPaymentType(CreateTenant.payByPurchaseOrder);
 		t.setpurchaseOrderNumber("88888");
-//		t.setPaymentType(CreateTenant.payByCreditCard);
-//		t.setCreditCardType(CreateTenant.creditCardTypeVISA);
-//		t.setNameOnCard("John Q. Public");
-//		t.setCardNumber("1111111111111111");
-//		t.setexpiryMonth("12");
-//		t.setexpiryYear("2011");
+
 		create.setCreateYourAccountForm(t);
 		create.gotoCreateMyAccount();
 		

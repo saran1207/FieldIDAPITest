@@ -22,7 +22,13 @@ import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
 import com.n4systems.fieldid.selenium.identify.Identify;
 import com.n4systems.fieldid.selenium.login.Login;
 
-public class WEB_1526 extends FieldIDTestCase {
+/**
+ * WEB-1526
+ * 
+ * @author dgrainge
+ *
+ */
+public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends FieldIDTestCase {
 
 	Login login;
 	Identify identify;

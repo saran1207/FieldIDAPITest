@@ -7,10 +7,10 @@ class AddReferralToUser < ActiveRecord::Migration
   	Tenant.transaction do
   		rs = com.n4systems.util.RandomString.new(10)
 
-		User.find_each do |user|
-			user.referralkey = rs.next()
-			user.save
-		end
+  		User.find_each do |user|
+  			user.referralkey = rs.next()
+  			user.save
+  		end
 
   		change_column(:users, :referralkey, :string, {:limit => 10, :null => false})
   	end

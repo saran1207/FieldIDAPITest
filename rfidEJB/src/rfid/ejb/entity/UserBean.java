@@ -26,7 +26,6 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.EncryptionUtility;
-import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
 
 @Entity
@@ -91,7 +90,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	
 	private void generateReferralKeyIfNull() {
 		if (referralKey == null) {
-			referralKey = RandomString.getString(REFERRAL_KEY_LENGTH);
+			referralKey = "";//RandomString.getString(REFERRAL_KEY_LENGTH);
 		}
 	}
 	

@@ -27,7 +27,10 @@ ${action.setPageType('user', 'change_password')!}
 	</p>
 	
 	<div class="formAction">
-		<@s.url id="cancelUrl" action="userEdit" uniqueID="${uniqueID}"/>
+		
+		 
+	
+		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${uniqueID}"/>
 		<@s.reset key="label.cancel" onclick="redirect('${cancelUrl}'); return false;"/>
 		<@s.submit key="hbutton.save"/>
 	</div>

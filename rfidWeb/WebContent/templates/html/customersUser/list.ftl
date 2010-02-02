@@ -3,7 +3,7 @@ ${action.setPageType('customer', 'users')!}
 <#include "_secondaryNav.ftl"/>
 
 <#if  page.hasResults() && page.validPage() >
-	<#assign currentAction="customerUsers.action" />
+	<#assign currentAction="customersUsers.action" />
 	<#include '../common/_pagination.ftl' />
 	<#assign userList=page.list />
 	<table class="list" id="userList">
