@@ -7,6 +7,7 @@
 	<@n4.includeScript>
 		var yourDoneUrl = '<@s.url action="step3" idImported="${uniqueID}"/>';
 		var yourCancelUrl = '<@s.url action="step3" />';
+		var importDoneName = '<@s.text name="label.next"/>';
 	</@n4.includeScript>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 	<style>

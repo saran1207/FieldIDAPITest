@@ -231,7 +231,7 @@
 	<h3><@s.text name="label.need_help_have_question"/></h3>
 	<p><@s.text name="label.email"/>: <a href="mailto:sales@fieldid.com">sales@fieldid.com</a></p>
 	<p><@s.text name="label.phone"/>: 416-599-6464</p>
-	<p><@s.text name="label.toll_free"/>: 1-800-99-N4SYS (6479)</p>
+	<p><@s.text name="label.toll_free"/>: 1-800-996-4797</p>
 	
 	<h3><@s.text name="label.how_is_phone_support_charged"/></h3>
 	<p class="weak"><@s.text name="description.how_is_phone_support_charged"/></p>

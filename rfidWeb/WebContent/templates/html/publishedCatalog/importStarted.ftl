@@ -6,5 +6,5 @@
 </p>
 <div class="stepAction"/>
 	
-	<@s.submit theme="fieldid" key="label.return_to_safety_network" onclick="return redirect(yourDoneUrl);"/>
+	<@s.submit theme="fieldid" key="label.return_to_safety_network" id="importDone" onclick="return redirect(yourDoneUrl);"/>
 </div>
