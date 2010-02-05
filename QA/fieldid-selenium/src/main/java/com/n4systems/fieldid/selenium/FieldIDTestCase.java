@@ -554,4 +554,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	public String getSupportFileLocation() {
 		return supportFileLocation;
 	}
+	
+	protected void waitForAjax() throws InterruptedException {
+        selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", Misc.defaultTimeout);
+	}
 }

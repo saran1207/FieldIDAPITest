@@ -28,6 +28,11 @@ public class Login {
 		this.misc = misc;
 	}
 	
+	
+	public void gotoSignInPage() {
+		selenium.open("/fieldid/login.action");
+	}
+	
 	/**
 	 * Gets the tenant id from the login page. This assumes the tenant id is
 	 * located on the page as:

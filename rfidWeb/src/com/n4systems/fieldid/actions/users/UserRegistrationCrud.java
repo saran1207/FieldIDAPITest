@@ -233,6 +233,14 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	public boolean duplicateValueExists(String formValue) {
 		return !userManager.userIdIsUnique(getTenantId(), formValue);
 	}
+
+	public String getCity() {
+		return userRequest.getCity();
+	}
+
+	public void setCity(String city) {
+		userRequest.setCity(city);
+	}
 	
 	
 

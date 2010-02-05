@@ -37,6 +37,10 @@
 				</div>
 				
 				<div class="infoSet">
+					<label class="label" for="city"><@s.text name="label.city"/></label>
+					<@s.textfield  name="city"  />
+				</div>
+				<div class="infoSet">
 					<label class="label"><@s.text name="label.country"/></label>
 					<@s.select name="countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone"/>
 				</div>

@@ -26,6 +26,11 @@
 		<span class="fieldHolder">${userRequest.userAccount.position!}</span>  
 	</div>
 	<div class="infoSet">
+		<label class="label"><@s.text name="label.city"/></label> 
+		<span class="fieldHolder">${userRequest.city!}</span>  
+	</div>
+	
+	<div class="infoSet">
 		<label class="label "><@s.text name="label.timezone"/></label> 
 		<span class="fieldHolder">${userRequest.userAccount.timeZoneID}</span>  
 	</div>

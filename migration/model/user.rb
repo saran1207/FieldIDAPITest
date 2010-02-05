@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   belongs_to  :tenant,              :foreign_key => 'tenant_id',       :class_name => 'Tenant'
   
   belongs_to :owner,                :foreign_key => 'owner_id',         :class_name => 'BaseOrg'
+  
+  
 
   def id
     uniqueid

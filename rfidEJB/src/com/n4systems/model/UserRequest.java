@@ -18,6 +18,7 @@ public class UserRequest extends EntityWithTenant {
 	
 	private String companyName;
 	private String phoneNumber; 
+	private String city;
     
     @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "r_useraccount")
@@ -55,6 +56,14 @@ public class UserRequest extends EntityWithTenant {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
     
     
