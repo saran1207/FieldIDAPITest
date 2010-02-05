@@ -6,12 +6,12 @@ import java.util.List;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.SearchPerformer;
+import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ExcelBuilder;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -26,34 +26,32 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 	private static final long serialVersionUID = 1L;
 	private static final int PAGE_SIZE = 256;
 	
-	private final PersistenceManager persistenceManager;
 	private SearchDefiner<TableView> searchDefiner;
 	private List<String> columnTitles = new ArrayList<String>();
 	private ExcelOutputHandler[] cellHandlers;
 	
 	private int page = 0;
 	
-	public ExcelReportExportTask(DownloadLink downloadLink, String downloadUrl, PersistenceManager persistenceManager) {
-		super(downloadLink, downloadUrl, "excelReportDownload");
-		this.persistenceManager = persistenceManager;
-	}
-	
 	public ExcelReportExportTask(DownloadLink downloadLink, String downloadUrl) {
-		this(downloadLink, downloadUrl, ServiceLocator.getPersistenceManager());
+		super(downloadLink, downloadUrl, "excelReportDownload");
 	}
+
 	
 	@Override
 	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
 		SecurityFilter filter = user.getSecurityFilter();
 		
 		DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);
-
-		int totalPages = persistenceManager.countPages(this, filter, getPageSize());
+		SearchPerformer performSearch = new SearchPerformerWithReadOnlyTransactionManagement();
+		
+		int totalPages = performSearch.countPages(this, filter, getPageSize());
 		
 		// we'll initalize the table view with one 1 row .. this will resize dynamically as we append tables
 		TableView masterTable = new TableView(0, getColumnTitles().size());
 		do {
-			masterTable.append(persistenceManager.search(this, filter));
+			
+			
+			masterTable.append(performSearch.search(this, filter).getPageResults());
 			page++;
 			
 		} while(page <= totalPages);
@@ -86,7 +84,6 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 		return PAGE_SIZE;
 	}
 
-	public void setTotalResults(int totalResults) {}
 
 	public Class<?> getSearchClass() {
 		return searchDefiner.getSearchClass();

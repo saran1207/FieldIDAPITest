@@ -18,9 +18,11 @@ import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.search.BaseSearchDefiner;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
@@ -56,7 +58,9 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		}
 		
 		try {
-			List<Long> scheduleIds = persistenceManager.idSearch(scheduleCriteria, scheduleCriteria.getSecurityFilter());
+			BaseSearchDefiner searchDefiner = scheduleCriteria;
+			SecurityFilter securityFilter = scheduleCriteria.getSecurityFilter();
+			List<Long> scheduleIds = getSearchIds(searchDefiner, securityFilter);
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
@@ -74,8 +78,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		return INPUT;
 		
 	}
-	
-	
+
 	@SkipValidation
 	public String doEditInspections() {
 		if (!findReportCriteria()) {
@@ -92,7 +95,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		}
 		
 		try {
-			List<Long> inspectionIds = persistenceManager.idSearch(reportCriteria, reportCriteria.getSecurityFilter());
+			List<Long> inspectionIds = getSearchIds(reportCriteria, reportCriteria.getSecurityFilter());
 			List<Long> scheduleIds = massUpdateManager.createSchedulesForInspections(inspectionIds, getSessionUserId());
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();

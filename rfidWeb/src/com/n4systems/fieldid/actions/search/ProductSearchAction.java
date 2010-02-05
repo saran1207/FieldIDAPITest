@@ -8,6 +8,7 @@ import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -18,6 +19,7 @@ import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 import com.opensymphony.xwork2.Preparable;
 
 public class ProductSearchAction extends CustomizableSearchAction<ProductSearchContainer> implements Preparable {
@@ -75,7 +77,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		String reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> productIds = persistenceManager.idSearch(this, getSecurityFilter());
+			List<Long> productIds = getSearchIds();
 			
 			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), productIds);
 		} catch(Exception e) {
@@ -85,6 +87,10 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		}
 		
 		return SUCCESS;
+	}
+
+	private List<Long> getSearchIds() {
+		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(this), getSecurityFilter());
 	}
 	
 	@SkipValidation

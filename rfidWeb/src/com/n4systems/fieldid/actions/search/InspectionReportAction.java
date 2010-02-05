@@ -10,6 +10,7 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
@@ -121,7 +122,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		return returnValue;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public String doPrintAllCerts() {
 		if (!isSearchIdValid()) {
 			addFlashError(getText("error.reportexpired"));
@@ -130,7 +131,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> inspectionIds = persistenceManager.idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
+			List<Long> inspectionIds = getSearchIds();
 	
 			getDownloadCoordinator().generateAllInspectionCertificates(reportName, getDownloadLinkUrl(), reportType, inspectionIds);
 		} catch(RuntimeException e) {
@@ -140,6 +141,11 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		}
 		
 		return SUCCESS;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Long> getSearchIds() {
+		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
 	}
 	
 	public String doPrint() {

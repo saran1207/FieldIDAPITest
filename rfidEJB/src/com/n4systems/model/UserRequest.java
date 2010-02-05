@@ -17,7 +17,7 @@ public class UserRequest extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
 	private String companyName;
-	private String phoneNumber;
+	private String phoneNumber; 
     
     @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "r_useraccount")

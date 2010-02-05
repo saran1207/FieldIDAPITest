@@ -18,6 +18,7 @@ public class TenantUniqueAvailableNameLoader extends NonFilteredUniqueValueAvail
 		if (isIdGiven()) {
 			countQuery.addWhere(Comparator.NE, "id", "id", getId());
 		}
+		
 		return countQuery.getSingleResult(em) == 0;
 	}
 

@@ -11,7 +11,9 @@ import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
 
+import com.n4systems.ejb.PageHolder;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
@@ -106,8 +108,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		String status = SUCCESS;
 		try {
 			if(isSearchIdValid()) {
-
-				resultsTable = persistenceManager.search(this, getContainer().getSecurityFilter());
+				resultsTable = getSearchResults();
 				
 			} else {
 				addFlashErrorText("error.searchexpired");
@@ -120,6 +121,16 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		}
 
 		return status;
+	}
+
+	private TableView getSearchResults() {
+		PageHolder<TableView> searchResults = new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutableSearchDefiner<TableView>(this), getContainer().getSecurityFilter());
+		setTotalResults(searchResults.getTotalsResults());
+		return searchResults.getPageResults();
+	}
+
+	private ImmutableSearchDefiner<TableView> immutableSearchDefiner() {
+		return new ImmutableSearchDefiner<TableView>(this);
 	}
 
 	protected ExcelOutputHandler[] prepareExcelHandlers() {
@@ -142,7 +153,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		String reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
-			getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), new ImmutableSearchDefiner<TableView>(this), buildExcelColumnTitles(), prepareExcelHandlers());
+			getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), immutableSearchDefiner(), buildExcelColumnTitles(), prepareExcelHandlers());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute ExcelExportTask", e);
 			addActionError(getText("error.cannotschedule"));

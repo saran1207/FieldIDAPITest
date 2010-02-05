@@ -49,7 +49,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 		}
 
 		try {
-			Set<Long> scheduleIds = ListHelper.toSet(persistenceManager.idSearch(criteria, criteria.getSecurityFilter()));
+			Set<Long> scheduleIds = ListHelper.toSet(getSearchIds(criteria, criteria.getSecurityFilter()));
 			
 			Long results;
 			String messageKey;

@@ -21,6 +21,7 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
@@ -33,6 +34,7 @@ import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ReportMap;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 
 public class InspectionSummaryGenerator {
 	private static final String n4LogoFileName = "n4_logo.gif";
@@ -60,7 +62,7 @@ public class InspectionSummaryGenerator {
 			throw new ReportException("Could not access Jasper File " + jasperFile);
 		}
 
-		List<Long> inspectionIds = persistenceManager.idSearch(reportDefiner, user.getSecurityFilter());
+		List<Long> inspectionIds = getSearchIds(reportDefiner, user);
 
 		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
 		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();
@@ -106,6 +108,10 @@ public class InspectionSummaryGenerator {
 		}
 
 		return jasperPrint;
+	}
+
+	private List<Long> getSearchIds(ReportDefiner reportDefiner, UserBean user) {
+		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(reportDefiner), user.getSecurityFilter());
 	}
 
 	// XXX - document me

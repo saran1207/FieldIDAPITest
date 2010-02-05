@@ -97,7 +97,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 			
 			product.setIdentified(convertDate(identified));
 			
-			List<Long> ids = persistenceManager.idSearch(criteria, criteria.getSecurityFilter());
+			List<Long> ids = getSearchIds(criteria, criteria.getSecurityFilter());
 			
 			Long results = massUpdateManager.updateProducts(ids, product, select, getSessionUser().getUniqueID() );
 			List<String> messageArgs = new ArrayList<String>();

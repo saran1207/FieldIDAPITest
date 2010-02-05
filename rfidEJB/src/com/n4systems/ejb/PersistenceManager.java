@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Local;
-import javax.mail.search.SearchTerm;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
@@ -29,10 +27,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.search.BaseSearchDefiner;
-import com.n4systems.util.persistence.search.ResultTransformer;
-import com.n4systems.util.persistence.search.SearchDefiner;
-import com.n4systems.util.persistence.search.SortTerm;
 
 @Local
 public interface PersistenceManager {
@@ -161,49 +155,6 @@ public interface PersistenceManager {
 
 	public <E extends Collection<T>, T> E reattchAndFetch(E entities, String... fetchFields);
 
-	/**
-	 * Constructs a Query from a QueryBuilder, injecting the EntityManager.  Note this method will not
-	 * survive serialization (eg RMI).
-	 * @see QueryBuilder#createQuery(EntityManager)
-	 * @param builder	A QueryBuilder
-	 * @return			A prepared Query from this QueryBuilder
-	 * @throws InvalidQueryException	Propagates {@link QueryBuilder#createQuery(EntityManager)} exceptions.
-	 */
-	public Query prepare(QueryBuilder<?> builder) throws InvalidQueryException;
-
-	/**
-	 * Returns a count of the number of pages
-	 * @param definer	The search definition
-	 * @param filter	SecurityFilter to use in search
-	 * @return			number of pages
-	 */
-	public int countPages(BaseSearchDefiner definer, SecurityFilter filter, long pageSize);
-	
-	/**
-	 * Returns a list of entity id's as defined by the {@link BaseSearchDefiner}.  Note that although
-	 * the BaseSearchDefiner does not enforce the search class ({@link BaseSearchDefiner#getSearchClass()}) to be
-	 * a subclass of {@link BaseEntity}, <code>"id"</code> is still assumed to be the identity field.  This means 
-	 * that legacy entities will fail handed to this method.
-	 * @param definer	The search definition
-	 * @param filter	SecurityFilter to use in search
-	 * @return			A list of Long entity ids.
-	 */
-	public List<Long> idSearch(BaseSearchDefiner definer, SecurityFilter filter);
-	
-	/**
-	 * Performs a search as defined by the {@link SearchDefiner}.  Constructs a query based on the {@link SearchTerm}s and
-	 * applies {@link SecurityFilter} rules.  Sets the total number of results back onto the definer ({@link SearchDefiner#setTotalResults(int)}).
-	 * Applies {@link SortTerm}s, and runs the query paginated by definer's {@link SearchDefiner#getPage()} and {@link SearchDefiner#getPageSize()}.
-	 * Finally the returned entities are passed to the {@link ResultTransformer#transform(List)} of the definder's {@link SearchDefiner#getTransformer()}.
-	 * @see SearchDefiner
-	 * @see ResultTransformer
-	 * @param definer	The search definition
-	 * @param filter	SecurityFilter to use in search
-	 * @return			The paginated entity data as returned from {@link ResultTransformer#transform(List)}
-	 */
-	public <K> K search(SearchDefiner<K> definer, SecurityFilter filter);
-
-	
 	public <T> List<T> passThroughFindAll(String query, Map<String,Object> parameters) ;
 	public <T> T passThroughFind(String queryStr, Map<String,Object> parameters);
 	public int executeUpdate(String updateStmt, Map<String,Object> parameters);

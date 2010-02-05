@@ -7,10 +7,12 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.AggregateReportManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.util.AggregateReport;
+import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 
 
 public class AggregateReportAction extends AbstractAction {
@@ -49,7 +51,7 @@ public class AggregateReportAction extends AbstractAction {
 			return ERROR;
 		}
 		try {
-			List<Long> inspectionIds = persistenceManager.idSearch(criteria, criteria.getSecurityFilter());
+			List<Long> inspectionIds = getSearchIds();
 			report = aggregateReportManager.createAggregateReport(inspectionIds);
 		} catch (Exception e) {
 			logger.error("could not produce aggregate report", e);
@@ -58,6 +60,10 @@ public class AggregateReportAction extends AbstractAction {
 		}
 		
 		return SUCCESS;
+	}
+
+	private List<Long> getSearchIds() {
+		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(criteria), criteria.getSecurityFilter());
 	}
 	
 	public String getSearchId() {
