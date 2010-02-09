@@ -10,7 +10,6 @@ Class-Path: APP-INF/lib/antlr-2.7.6.jar
  APP-INF/lib/easymock.jar 
  APP-INF/lib/easymockclassextension.jar 
  APP-INF/lib/ejb3-persistence.jar 
- APP-INF/lib/ejb3unit-1.2.jar 
  APP-INF/lib/hibernate-3.3.1.GA.jar 
  APP-INF/lib/hibernate-annotations-3.4.0.GA.jar 
  APP-INF/lib/hibernate-commons-annotations.jar 

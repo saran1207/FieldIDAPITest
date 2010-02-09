@@ -70,7 +70,7 @@ public class InspectionCertificateGenerator {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-		System.out.println(jasperFile.getParent() + "/");
+		
 		baseInspectionMapBuilder.addParams(reportMap, inspection, transaction);
 		
 		return reportMap;
@@ -108,6 +108,7 @@ public class InspectionCertificateGenerator {
 			throw new ReportException("Failed to generate report", e);
 		}
 
+		
 		return jasperPrint;
 	}
 

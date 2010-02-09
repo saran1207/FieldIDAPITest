@@ -1,53 +1,65 @@
 package com.n4systems.reporting;
 
+import java.io.File;
+
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.Product;
+import com.n4systems.model.ProductType;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.ReportMap;
 
 public class ProductReportMapProducer extends ReportMapProducer {
 
 	private final Product product;
-	private ReportMap<Object> reportMap = new ReportMap<Object>();
-	
 	public ProductReportMapProducer(Product product, DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
 		this.product = product;
 	}
 
+	
+	
 	@Override
-	public ReportMap<Object> produceMap() {
+	protected void addParameters() {
 		addProductParams();
 		addProductTypeParams();
-		return reportMap;
 	}
 
 	private void addProductParams() {
-		reportMap.put("productDesc", product.getDescription());
-		reportMap.put("rfidNumber", product.getRfidNumber());
-		reportMap.put("serialNumber", product.getSerialNumber());
-		reportMap.put("reelId", product.getSerialNumber());
-		reportMap.put("poNumber", product.getPurchaseOrder());
-		reportMap.put("customerRefNumber", product.getCustomerRefNumber());
-		reportMap.put("dateOfIssue", formatDate(product.getCreated(), false));
-		reportMap.put("productComment", product.getComments());
-		reportMap.put("productLocation", product.getLocation());
-		reportMap.put("productIdentified", formatDate(product.getIdentified(),false));
-		reportMap.put("currentProductStatus", productStatusName());
-		reportMap.put("infoOptionMap", produceInfoOptionMap());
-		reportMap.put("lastInspectionDate", formatDate(product.getLastInspectionDate(), true));
-		reportMap.put("infoOptionBeanList", product.getOrderedInfoOptionList());
-		reportMap.put("infoOptionDataSource", new JRBeanCollectionDataSource(product.getOrderedInfoOptionList()));
+		add("productDesc", product.getDescription());
+		add("rfidNumber", product.getRfidNumber());
+		add("serialNumber", product.getSerialNumber());
+		add("reelId", product.getSerialNumber());
+		add("poNumber", product.getPurchaseOrder());
+		add("customerRefNumber", product.getCustomerRefNumber());
+		add("dateOfIssue", formatDate(product.getCreated(), false));
+		add("productComment", product.getComments());
+		add("productLocation", product.getLocation());
+		add("productIdentified", formatDate(product.getIdentified(),false));
+		add("currentProductStatus", productStatusName());
+		add("infoOptionMap", produceInfoOptionMap());
+		add("lastInspectionDate", formatDate(product.getLastInspectionDate(), true));
+		add("infoOptionBeanList", product.getOrderedInfoOptionList());
+		add("infoOptionDataSource", new JRBeanCollectionDataSource(product.getOrderedInfoOptionList()));
 	}
 
 	private void addProductTypeParams() {
-		reportMap.put("typeName", product.getType().getName());
-		reportMap.put("warning", product.getType().getWarnings());
-		reportMap.put("certificateText", product.getType().getManufactureCertificateText());
+		ProductType productType = product.getType();
 		
+		add("typeName", productType.getName());
+		add("warning", productType.getWarnings());
+		add("productWarning", productType.getWarnings());
+		add("certificateText", productType.getManufactureCertificateText());
+		add("productInstructions", productType.getInstructions());
+		
+		add("productImage", imagePath(productType));
 	}
+
+	private File imagePath(ProductType productType) {
+		return (productType.hasImage()) ? new File(PathHandler.getProductTypeImageFile(productType), productType.getImageName()) : null;
+	}
+	
 	private ReportMap<String> produceInfoOptionMap() {
 		ReportMap<String> infoOptions = new ReportMap<String>(product.getOrderedInfoOptionList().size());
 		for (InfoOptionBean option : product.getOrderedInfoOptionList()) {
@@ -59,8 +71,13 @@ public class ProductReportMapProducer extends ReportMapProducer {
 	private String productStatusName() {
 		return (product.getProductStatus() != null) ? product.getProductStatus().getName() : null;
 	}
-	
-	
+
+
+
 	
 
+
+
+	
+	
 }

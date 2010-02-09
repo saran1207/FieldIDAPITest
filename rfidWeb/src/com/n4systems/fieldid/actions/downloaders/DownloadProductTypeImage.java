@@ -25,7 +25,7 @@ public class DownloadProductTypeImage extends AbstractDownloadAction {
 	protected boolean initializeDownload() {
 		productType = loadProductType();
 		
-		if(productType == null || productType.getImageName() == null) {
+		if(productType == null || !productType.hasImage()) {
 			addActionError(getText("error.noproducttype"));
 			setFailActionResult(MISSING);
 			return false;

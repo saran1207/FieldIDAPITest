@@ -11,13 +11,21 @@ import com.n4systems.util.ReportMap;
 public abstract class ReportMapProducer {
 
 	protected final DateTimeDefinition dateTimeDefinition;
+	private ReportMap<Object> reportMap = new ReportMap<Object>();
 
 	public ReportMapProducer(DateTimeDefinition dateTimeDefinition) {
 		super();
 		this.dateTimeDefinition = dateTimeDefinition;
 	}
 	
-	public abstract ReportMap<Object> produceMap();
+	public ReportMap<Object> produceMap() {
+		addParameters();
+		return reportMap;
+	}
+	
+	protected abstract void addParameters();
+	
+	
 	
 	protected String normalizeString(String str) {
 		return str.toLowerCase().replaceAll("\\s", "");
@@ -40,5 +48,9 @@ public abstract class ReportMapProducer {
 		}
 		return new FieldidDateFormatter(date, dateTimeDefinition, true, showTime).format();
 		
+	}
+
+	protected void add(String key, Object value) {
+		reportMap.put(key, value);
 	}
 }

@@ -28,7 +28,7 @@ public class InspectionReportMapProducerTest {
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", "bob");
 		expectedReportMap.put("type", "test");
-		InspectionReportMapProducer sut = new InspectionReportMapProducer(targetInspection, d);
+		ReportMapProducer sut = new InspectionReportMapProducer(targetInspection, d);
 		ReportMap<Object> actualReportMap = sut.produceMap();
 		
 		Asserts.assertConatainsExpectedValues(expectedReportMap, actualReportMap);
@@ -44,7 +44,7 @@ public class InspectionReportMapProducerTest {
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
-		InspectionReportMapProducer sut = new InspectionReportMapProducer(targetInspection, d);
+		ReportMapProducer sut = new InspectionReportMapProducer(targetInspection, d);
 		ReportMap<Object> actualReportMap = sut.produceMap();
 		
 		Asserts.assertConatainsExpectedValues(expectedReportMap, actualReportMap);

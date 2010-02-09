@@ -24,14 +24,12 @@ import com.n4systems.util.ReportMap;
 public class InspectionReportMapProducer extends ReportMapProducer {
 	
 	private final AbstractInspection inspection;
-	private ReportMap<Object> reportMap = new ReportMap<Object>();
-	
 	public InspectionReportMapProducer(AbstractInspection inspection, DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
 		this.inspection = inspection;
 	}
 	
-	public ReportMap<Object> produceMap() {
+	protected void addParameters() {
 		if (inspection instanceof SubInspection) {
 			addSubInspectionValues();
 		} else {
@@ -40,45 +38,44 @@ public class InspectionReportMapProducer extends ReportMapProducer {
 		
 		addAbstractInspectionValues();
 		
-		return reportMap;
 	}
 
 	private void addAbstractInspectionValues() {
-		reportMap.put("type", inspection.getType().getName());
+		add("type", inspection.getType().getName());
 		
-		reportMap.put("comments", inspection.getComments());
-		reportMap.put("eventTypeDescription", inspection.getType().getName());
-		reportMap.put("eventInfoOptionMap", eventInfoOptions());
+		add("comments", inspection.getComments());
+		add("eventTypeDescription", inspection.getType().getName());
+		add("eventInfoOptionMap", eventInfoOptions());
 		
-		reportMap.put("product", new ProductReportMapProducer(inspection.getProduct(), dateTimeDefinition).produceMap());
+		add("product", new ProductReportMapProducer(inspection.getProduct(), dateTimeDefinition).produceMap());
 		
 		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
-		reportMap.put("resultsBeanList", createCriteriaViews);
-		reportMap.put("results", new JRBeanCollectionDataSource(createCriteriaViews));
+		add("resultsBeanList", createCriteriaViews);
+		add("results", new JRBeanCollectionDataSource(createCriteriaViews));
 		
 		List<ObservationView> createObservationViews = createObservationViews();
-		reportMap.put("observationsBeanList", createObservationViews);
-		reportMap.put("observations", new JRBeanCollectionDataSource(createObservationViews));
+		add("observationsBeanList", createObservationViews);
+		add("observations", new JRBeanCollectionDataSource(createObservationViews));
 	}
 
 	
 
 	private void addInspectionValues() {
 		Inspection inspection = (Inspection) this.inspection;
-		reportMap.put("productLabel", null);
-		reportMap.put("inspectionDate", formatDate(inspection.getDate(), true));
-		reportMap.put("inspectionDate_date", DateHelper.convertToUserTimeZone(inspection.getDate(), dateTimeDefinition.getTimeZone()));
-		reportMap.put("location", inspection.getLocation());
-		reportMap.put("inspectionBook", (inspection.getBook() != null) ? inspection.getBook().getName() : null);
-		reportMap.put("inspectionResult", inspection.getStatus().getDisplayName());
-		reportMap.put("proofTestInfo", addProofTestInfoParams(inspection));
+		add("productLabel", null);
+		add("inspectionDate", formatDate(inspection.getDate(), true));
+		add("inspectionDate_date", DateHelper.convertToUserTimeZone(inspection.getDate(), dateTimeDefinition.getTimeZone()));
+		add("location", inspection.getLocation());
+		add("inspectionBook", (inspection.getBook() != null) ? inspection.getBook().getName() : null);
+		add("inspectionResult", inspection.getStatus().getDisplayName());
+		add("proofTestInfo", addProofTestInfoParams(inspection));
 		
 		
 	}
 
 	private void addSubInspectionValues() {
 		SubInspection subInspection = (SubInspection) inspection;
-		reportMap.put("productLabel", subInspection.getName());
+		add("productLabel", subInspection.getName());
 	}
 	
 	
@@ -94,7 +91,7 @@ public class InspectionReportMapProducer extends ReportMapProducer {
 	 * Creates a list of ObservationViews to be used by the JasperEngine.
 	 * Includes all sub inspections if there are any
 	 * 
-	 * @param inspection
+	 * @param inspections
 	 *            An inspection
 	 * @return A flattened view of observations
 	 */
