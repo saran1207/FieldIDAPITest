@@ -14,7 +14,7 @@
 	<import file="../fieldid/build-common.xml" />
 
 	<target name="build-deps">
-		<ant dir="${certificateData.home}" inheritAll="false" target="build"/>
+		<ant dir="${certificateData.home}" inheritAll="false"/>
 		<ant dir="${fieldidWeb.home}" inheritAll="false" />
 		<ant dir="${fieldidAdmin.home}" inheritAll="false" />
 	</target>
