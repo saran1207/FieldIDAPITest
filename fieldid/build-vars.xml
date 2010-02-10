@@ -20,7 +20,7 @@
 	<property name="fieldidEjb" value="rfidEJB.jar" />
 	<property name="fieldidWeb" value="rfidWeb.war" />
 	<property name="fieldidAdmin" value="fieldidadminWeb.war" />
-	<property name="certifcateData" value="certifcateData.jar" />
+	<property name="certificateData" value="certificateData.jar" />
 	<property name="testUtils" value="testUtils.jar" />
 
 	<property name="src" location="src" />

@@ -3,7 +3,7 @@
 	<import file="../fieldid/build-vars.xml" />
 	<description>FieldID CertData Project</description>
 
-	<property name="proj" value="${certifcateData}" />
+	<property name="proj" value="${certificateData}" />
 
 	<import file="../fieldid/build-common.xml" />
 	
