@@ -313,5 +313,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		
 		return enhanced;
 	}
+
+	
 	
 }

@@ -165,4 +165,14 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
     	this.formVersion = formVersion;
     }
 	
+	public Set<FileAttachment> getImageAttachments() {
+		Set<FileAttachment> imageAttachments = new HashSet<FileAttachment>();
+		for (FileAttachment fileAttachment : attachments) {
+			if (fileAttachment.isImage()) {
+				imageAttachments.add(fileAttachment);
+			}
+		}
+		return imageAttachments;
+	}
+	
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fieldid-certdata" default="default">
+	<import file="../fieldid/build-vars.xml" />
+	<description>FieldID CertData Project</description>
+
+	<property name="proj" value="${certifcateData}" />
+
+	<import file="../fieldid/build-common.xml" />
+	
+	<target name="default" depends="clean, package-jar" />
+	
+	
+	
+	<target name="test" depends="" >
+	</target>
+	
+	
+</project>

@@ -37,5 +37,10 @@ public class FluentHashSet<E> extends HashSet<E> {
 		this.addAll(Arrays.asList(objs));
 		return this;
 	}
+	
+	public FluentHashSet<E> stickOn(Collection<E> objs) {
+		this.addAll(objs);
+		return this;
+	}
 
 }

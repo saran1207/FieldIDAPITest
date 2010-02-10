@@ -22,13 +22,14 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_sub_inspetion_map_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
+		Inspection masterInspection = anInspection().build();
 		SubInspection targetInspection = aSubInspection("bob").withType(inspectionType).build();
 		DateTimeDefiner d = new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault());
 		
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", "bob");
 		expectedReportMap.put("type", "test");
-		ReportMapProducer sut = new InspectionReportMapProducer(targetInspection, d);
+		ReportMapProducer sut = new SubInspectionReportMapProducer(targetInspection, masterInspection, d);
 		ReportMap<Object> actualReportMap = sut.produceMap();
 		
 		Asserts.assertConatainsExpectedValues(expectedReportMap, actualReportMap);

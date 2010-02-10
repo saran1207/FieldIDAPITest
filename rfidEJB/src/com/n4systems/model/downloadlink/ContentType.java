@@ -6,6 +6,7 @@ public enum ContentType {
 	EXCEL	("xls", "application/vnd.ms-excel"),
 	CSV		("csv", "application/vnd.ms-excel");
 	
+	
 	private final String extension;
 	private final String mimeType;
 	

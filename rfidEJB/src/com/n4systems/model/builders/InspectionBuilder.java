@@ -5,10 +5,12 @@ import static com.n4systems.model.builders.ProductBuilder.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
@@ -18,39 +20,42 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	private final InspectionType inspectionType;
 	private final Product product;
 	private final List<SubInspection> subInspections;
+	private final Set<FileAttachment> attachments;
 	
-	private Date inspectionDate;
+	private final Date inspectionDate;
 	
 		
 	public static InspectionBuilder anInspection() {
-		return new InspectionBuilder(anInspectionType().build(), aProduct().build(), new ArrayList<SubInspection>());
+		return new InspectionBuilder(anInspectionType().build(), aProduct().build(), new ArrayList<SubInspection>(), new Date(), new HashSet<FileAttachment>());
 	}
 	
-	public InspectionBuilder(InspectionType type, Product product, List<SubInspection> subInspections) {
+	public InspectionBuilder(InspectionType type, Product product, List<SubInspection> subInspections, Date inspectionDate, Set<FileAttachment> attachements) {
 		this.inspectionType = type;
 		this.product = product;
 		this.subInspections = subInspections;
+		this.attachments = attachements;
+		this.inspectionDate = inspectionDate;
 	}
 	
 	public InspectionBuilder ofType(InspectionType type) {
-		return new InspectionBuilder(type, product, subInspections);
+		return new InspectionBuilder(type, product, subInspections, inspectionDate, attachments);
 	}
 	
 	public InspectionBuilder on(Product product) {
-		return new InspectionBuilder(inspectionType, product, subInspections);
+		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments);
 	}
 	
 	public InspectionBuilder withSubInspections(List<SubInspection> subInspections) {
-		return new InspectionBuilder(inspectionType, product, subInspections);
+		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments);
 	}
 	
-	public InspectionBuilder withScheduleSet(InspectionSchedule schedule) {
-		return new InspectionBuilder(inspectionType, product, subInspections);
-	}
-	
+
 	public InspectionBuilder withInspectionDate(Date inspectionDate) {
-		this.inspectionDate = inspectionDate;
-		return this;
+		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments);
+	}
+	
+	public InspectionBuilder withAttachment(Set<FileAttachment> attachments) {
+		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments);
 	}
 	
 	@Override
@@ -61,6 +66,7 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 		inspection.setProduct(product);
 		inspection.setSubInspections(subInspections);
 		inspection.setDate(inspectionDate);
+		inspection.setAttachments(attachments);
 		
 		return inspection;
 	}

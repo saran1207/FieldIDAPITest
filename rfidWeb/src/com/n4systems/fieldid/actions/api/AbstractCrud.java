@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.activation.FileTypeMap;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.opensymphony.xwork2.Preparable;
 
@@ -67,17 +65,7 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 	}
 	
 	
-	/**
-	 * Tests if the filename has a content type starting with <code>'image/'</code>. The
-	 * content type is queried from {@link FileTypeMap#getContentType(String)}.
-	 * 
-	 * @param fileName	String file name, including extension.
-	 * @return			<code>true</code> if content type starts with <code>'image/'</code>.
-	 */
-	public boolean isImage(String fileName) {
-		String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
-		return contentType.startsWith("image/");
-	}
+	
 	
 	public Integer getCurrentPage() {
 		if (currentPage == null) {

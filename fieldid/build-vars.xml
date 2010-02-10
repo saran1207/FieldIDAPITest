@@ -14,11 +14,13 @@
 	<property name="fieldidWeb.home" location="${build.home}/rfidWeb" />
 	<property name="fieldidAdmin.home" location="${build.home}/fieldidadminWeb" />
 	<property name="testUtils.home" location="${build.home}/TestUtils" />
+	<property name="certifcateData.home" location="${build.home}/certificateData"/>
 
 	<property name="fieldidEar" value="fieldid.ear" />
 	<property name="fieldidEjb" value="rfidEJB.jar" />
 	<property name="fieldidWeb" value="rfidWeb.war" />
 	<property name="fieldidAdmin" value="fieldidadminWeb.war" />
+	<property name="certifcateData" value="certifcateData.jar" />
 	<property name="testUtils" value="testUtils.jar" />
 
 	<property name="src" location="src" />

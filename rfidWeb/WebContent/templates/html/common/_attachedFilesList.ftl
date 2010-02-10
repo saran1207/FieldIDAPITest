@@ -8,7 +8,7 @@
 				<#noescape>
 				<label id="attached_${attachedFile_index}_label">
 					<@s.url id="attachment_url" action="${downloadAction!'downloadAttachedFile'}" namespace="/file" uniqueID="${attachmentID!uniqueID}" fileName="${attachedFile.fileName}" attachmentID="${attachedFile.id}" />
-					<#if action.isImage(attachedFile.fileName)>
+					<#if attachedFile.image>
 						<a href="${attachment_url}" target="_blank">
 							<img width="150" src="${attachment_url}" alt="${attachedFile.fileName}"/>
 						</a>

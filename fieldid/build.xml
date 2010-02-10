@@ -14,6 +14,7 @@
 	<import file="../fieldid/build-common.xml" />
 
 	<target name="build-deps">
+		<ant dir="${certifcateData.home}" inheritAll="false" target="build"/>
 		<ant dir="${fieldidWeb.home}" inheritAll="false" />
 		<ant dir="${fieldidAdmin.home}" inheritAll="false" />
 	</target>
@@ -27,6 +28,7 @@
 
 	<target name="default" depends="set-build-number, clean, init-dirs, build-deps, test-deps">
 		<ear destfile="${buildfile.path}" appxml="${ear_home.ear_content}/META-INF/application.xml" level="9">
+			<fileset file="${certifcateData.home}/dist/${certifcateData}" />
 			<fileset file="${fieldidEjb.home}/dist/${fieldidEjb}" />
 			<fileset file="${fieldidWeb.home}/dist/${fieldidWeb}" />
 			<fileset file="${fieldidAdmin.home}/dist/${fieldidAdmin}" />

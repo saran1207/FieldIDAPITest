@@ -93,7 +93,7 @@ public class InspectionCertificateGenerator {
 			inspectionResultMaps.add(inspectionReportMap);
 			
 			for (SubInspection subInspection : inspection.getSubInspections()) {
-				inspectionResultMaps.add(new InspectionReportMapProducer(subInspection, dateDefiner).produceMap());
+				inspectionResultMaps.add(new SubInspectionReportMapProducer(subInspection, inspection, dateDefiner).produceMap());
 			}
 
 			JRDataSource jrDataSource = new JRMapCollectionDataSource(inspectionResultMaps);
