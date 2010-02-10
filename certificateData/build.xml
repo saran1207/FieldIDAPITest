@@ -7,8 +7,16 @@
 
 	<import file="../fieldid/build-common.xml" />
 	
-	<target name="default" depends="clean, package-jar" />
+	<target name="default" depends="clean, compile-jar" />
 	
+	
+	<target name="compile-jar" depends="init-dirs">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}"/>
+						
+		<jar jarfile="${dist}/${certificateData}" basedir="${build}" level="9"/>
+			
+		
+	</target>
 	
 	
 	<target name="test" depends="" >
