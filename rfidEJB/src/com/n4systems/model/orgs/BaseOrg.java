@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.NetworkEntity;
@@ -20,11 +21,12 @@ import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.utils.GlobalID;
 
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg> {
+public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable  {
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
 	public static final String CUSTOMER_ID_FILTER_PATH = "customerOrg.id";
@@ -56,18 +58,23 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	@JoinColumn(name="division_id")
 	private DivisionOrg divisionOrg;
 	
+	@Column(name="global_id", nullable=false, unique=true)
+	private String globalId;
+	
 	public BaseOrg() {}
 	
 	@Override
 	protected void onCreate() {
 		super.onCreate();
 		setSecurityFields();
+		generateGlobalId();
 	}
 
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
 		setSecurityFields();
+		generateGlobalId();
 	}
 
 	private void setSecurityFields() {
@@ -76,6 +83,12 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		divisionOrg = getDivisionOrg();
 	}
 
+	protected void generateGlobalId() {
+		if (globalId == null) {
+			globalId = GlobalID.getId();
+		}
+	}
+	
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
 	public String getDisplayName() {
 		return name;
@@ -99,6 +112,16 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		this.addressInfo = addressInfo;
 	}
 
+	@Override
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
+	}
+	
+	@Override
+	public String getGlobalId() {
+		return globalId;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%s (%d) [%s]", name, id, String.valueOf(getTenant()));

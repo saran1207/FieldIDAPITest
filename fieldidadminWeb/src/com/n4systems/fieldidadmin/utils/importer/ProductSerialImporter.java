@@ -29,9 +29,9 @@ import com.n4systems.model.orgs.FindOrCreateDivisionOrgHandler;
 import com.n4systems.model.orgs.FindOrCreateExternalOrgHandler;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.persistence.loaders.DivisionOrgByCustomerListLoader;
 import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.util.ServiceLocator;
 

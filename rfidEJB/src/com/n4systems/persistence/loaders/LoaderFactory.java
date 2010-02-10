@@ -1,5 +1,6 @@
 package com.n4systems.persistence.loaders;
 
+import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
@@ -22,6 +23,8 @@ import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
+import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
@@ -126,6 +129,10 @@ public class LoaderFactory {
 		return new CustomerOrgConnectionsListLoader(filter);
 	}
 
+	public CustomerOrgListLoader createCustomerOrgListLoader() {
+		return new CustomerOrgListLoader(filter);
+	}
+
 	public CustomerOrgPaginatedLoader createCustomerOrgPaginatedLoader() {
 		return new CustomerOrgPaginatedLoader(filter);
 	}
@@ -142,18 +149,22 @@ public class LoaderFactory {
 		return new DownloadLinkListLoader(filter);
 	}
 
+	public <T extends Exportable>  GlobalIdLoader<T> createGlobalIdLoader(Class<T> clazz) {
+		return new GlobalIdLoader<T>(filter, clazz);
+	}
+	
 	public <T extends ExternalOrg> ExternalOrgCodeExistsLoader<T> createExternalOrgCodeExistsLoader(Class<T> orgClass) {
 		return new ExternalOrgCodeExistsLoader<T>(filter, orgClass);
 	}
-
+	
 	public FileAttachmentLoader createFileAttachmentLoader() {
 		return new FileAttachmentLoader(filter);
 	}
-	
+
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
 		return new FilteredIdLoader<T>(filter, clazz);
 	}
-	
+
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
 		return new FilteredListableLoader(filter, clazz);
 	}
@@ -177,11 +188,11 @@ public class LoaderFactory {
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
 		return new InternalOrgListableLoader(filter);
 	}
-
+	
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
 	}
-
+	
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
 	}
@@ -257,11 +268,11 @@ public class LoaderFactory {
 	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
 		return new SafetyNetworkProductLoader(filter);
 	}
-	
+
 	public SafetyNetworkProductTypeLoader createSafetyNetworkProductTypeLoader() {
 		return new SafetyNetworkProductTypeLoader();
 	}
-	
+
 	public SafetyNetworkInspectionLoader createSafetyNetworkRegisteredProductInspectionLoader() {
 		return new SafetyNetworkRegisteredProductInspectionLoader(filter);
 	}
@@ -269,11 +280,11 @@ public class LoaderFactory {
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
 		return new SafetyNetworkSmartSearchLoader(filter);
 	}
-
+	
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
 		return new SecondaryOrgByNameLoader(filter);
 	}
-
+	
 	public SecondaryOrgListableLoader createSecondaryOrgListableLoader() {
 		return new SecondaryOrgListableLoader(filter);
 	}
@@ -281,7 +292,7 @@ public class LoaderFactory {
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}
-	
+
 	public SignupReferralListLoader createSignupReferralListLoader() {
 		return new SignupReferralListLoader(filter);
 	}
@@ -289,7 +300,7 @@ public class LoaderFactory {
 	public SmartSearchLoader createSmartSearchListLoader() {
 		return new SmartSearchLoader(filter);
 	}
-
+	
 	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}

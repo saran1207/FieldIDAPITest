@@ -1,9 +1,11 @@
 package com.n4systems.util.reflection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -525,6 +527,29 @@ public class Reflector {
 		}
 		
 		return searchField;
+	}
+	
+	/**
+	 * Recurses a Classes super chain, collecting up all available fields but returning only 
+	 * fields with the given annotation present.  Fields from child classes will appear before super classes.
+	 * @param clazz			Starting class to find fields from
+	 * @param annotation	Class of the field annotation to look for.
+	 * @return				An array of fields
+	 */
+	public static Field[] findAllFieldsWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotation) {
+		Field[] allFields = findAllFields(clazz, new Field[0]);
+		Field[] annotatedFields = new Field[allFields.length];
+		
+		int i = 0;
+		for (Field field: allFields) {
+			if (field.isAnnotationPresent(annotation)) {
+				annotatedFields[i] = field;
+				i++;
+			}
+		}
+		
+		// resize the final array
+		return Arrays.copyOf(annotatedFields, i);
 	}
 	
 	/**
