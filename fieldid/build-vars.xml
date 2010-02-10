@@ -40,6 +40,7 @@
 	<property name="ear_home.test_lib" location="${ear_home}/${ear_home.test_lib_path}" />
 	
 	<property name="testUtils_lib" location="${testUtils.home}/dist"/>
+	<property name="certificateData_lib" location="${certificateData.home}/dist"/>
 
 	<property name="jboss_home" value="${env.JBOSS_HOME}" />
 	<property name="jboss_home.client" value="${jboss_home}/client" />

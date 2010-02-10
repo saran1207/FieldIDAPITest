@@ -54,6 +54,7 @@
 		<path id="classpath.deps">
 			<!-- This is a total hackjob -->
 			<fileset file="${fieldidEjb.home}/dist/${fieldidEjb}" />
+			
 		</path>
 	</target>
 
@@ -61,6 +62,7 @@
 		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.jboss" />
+			<classpath refid="certificateData_lib"/>
 		</javac>
 	</target>
 

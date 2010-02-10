@@ -18,6 +18,7 @@
 		</copy>
 		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}">
 			<classpath refid="classpath.deps" />
+			<classpath refid="certificateData_lib"/>
 			<classpath path="${build}"/>
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.jboss" />
@@ -30,6 +31,7 @@
 		
 		<junit haltonfailure="true" >
 			<classpath refid="classpath.deps" />
+			<classpath refid="certificateData_lib"/>
 			<classpath path="${build}"/>
 			<classpath path="${build.test}"/>
 			<classpath refid="classpath.jboss" />
