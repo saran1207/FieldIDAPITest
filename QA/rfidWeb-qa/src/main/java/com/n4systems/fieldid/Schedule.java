@@ -29,8 +29,6 @@ public class Schedule extends TestCase {
 	IE ie = null;
 	Properties p;
 	InputStream in;
-	Assets assets = null;
-	FieldIDMisc misc = null;
 	String propertyFile = "schedule.properties";
 	Finder scheduleFinder;
 	Finder scheduleContentHeaderFinder;
@@ -70,8 +68,6 @@ public class Schedule extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
-			assets = new Assets(ie);
-			misc = new FieldIDMisc(ie);
 			scheduleResultsInspectNowLinksFinder = xpath(p.getProperty("scheduleresultsinspectnowlinks", "NOT SET"));
 			scheduleMassUpdateContentHeaderFinder = xpath(p.getProperty("massupdatecontentheader", "NOT SET"));
 			massUpdateInstructionsFinder = xpath(p.getProperty("massupdateinstructions", "NOT SET"));
@@ -126,6 +122,7 @@ public class Schedule extends TestCase {
 	}
 
 	public String getSelectDisplayColumnsHeader() throws Exception {
+		Assets assets = new Assets(ie);
 		return assets.getSelectDisplayColumnsHeader();
 	}
 
@@ -142,10 +139,12 @@ public class Schedule extends TestCase {
 	}
 
 	public void expandScheduleSearchResultsSearchCriteria() throws Exception {
+		Assets assets = new Assets(ie);
 		assets.expandProductSearchResultsSearchCriteria();
 	}
 	
 	public void expandProductSearchSelectColumns() throws Exception {
+		Assets assets = new Assets(ie);
 		assets.expandProductSearchSelectColumns();
 	}
 	
@@ -238,6 +237,7 @@ public class Schedule extends TestCase {
 		Link export = ie.link(exportToExcelFinder);
 		assertTrue("Could not find the export to Excel link", export.exists());
 		export.click();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.clickLightboxOKbutton(message);
 	}
 
@@ -282,6 +282,7 @@ public class Schedule extends TestCase {
 	public void gotoSaveMassUpdate() throws Exception {
 		Button save = ie.button(massUpdateSaveButtonFinder);
 		assertTrue("Could not find the save button for mass update", save.exists());
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.createThreadToCloseAreYouSureDialog();
 		save.click();
 		misc.checkForErrorMessagesOnCurrentPage();

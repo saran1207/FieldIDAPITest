@@ -228,15 +228,16 @@ public class Misc {
 	 */
 	public List<String> getErrorMessages() {	// gets class="errorMessage"
 		List<String> result = new ArrayList<String>();
+		String iterableErrorMessageLocator = errorMessageLocator;
 		if(selenium.isElementPresent(errorMessageLocator)) {
 			Number n = selenium.getXpathCount(errorMessageXpathCount);
 			int maxIndex = n.intValue();
 			for(int i = 1; i <= maxIndex; i++) {
-				String s = selenium.getText(errorMessageLocator);
+				String s = selenium.getText(iterableErrorMessageLocator);
 				result.add(s);
 				String oldIndex = String.valueOf(i);
 				String newIndex = String.valueOf(i+1);
-				errorMessageLocator = errorMessageLocator.replace(oldIndex, newIndex);
+				iterableErrorMessageLocator = iterableErrorMessageLocator.replace(oldIndex, newIndex);
 			}
 		}
 		return result;
@@ -270,16 +271,18 @@ public class Misc {
 	 */
 	public List<String> getActionMessages() {	// gets class="actionMessage"
 		List<String> result = new ArrayList<String>();
+		String iterableActionMessageLocator = actionMessageLocator;
 		if(selenium.isElementPresent(actionMessageLocator)) {
 			Number n = selenium.getXpathCount(actionMessageXpathCount);
 			int maxIndex = n.intValue();
 			for(int i = 1; i <= maxIndex; i++) {
-				String s = selenium.getText(actionMessageLocator);
+				String s = selenium.getText(iterableActionMessageLocator);
 				result.add(s);
 				String oldIndex = String.valueOf(i);
 				String newIndex = String.valueOf(i+1);
-				actionMessageLocator = actionMessageLocator.replace(oldIndex, newIndex);
+				iterableActionMessageLocator = iterableActionMessageLocator.replace(oldIndex, newIndex);
 			}
+			
 		}
 		return result;
 	}
@@ -1347,5 +1350,13 @@ public class Misc {
 		} else {
 			fail("Could not find the Load button for the Smart Search (Find:) text field");
 		}
+	}
+
+	/**
+	 * This is an alias for gotoAdministation().
+	 * 
+	 */
+	public void gotoSetup() {
+		this.gotoAdministration();
 	}
 }

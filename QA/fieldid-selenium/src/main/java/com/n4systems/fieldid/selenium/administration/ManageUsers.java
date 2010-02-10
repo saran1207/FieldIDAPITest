@@ -3,6 +3,8 @@ package com.n4systems.fieldid.selenium.administration;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
+import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
@@ -11,13 +13,18 @@ import static org.junit.Assert.*;
 public class ManageUsers {
 	Selenium selenium;
 	Misc misc;
+
+	public final static String UserTypeAll = "All";
+	public final static String UserTypeCustomer = "Customer";
+	public final static String UserTypeEmployee = "Employee";
+	
 	private String manageUsersPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Users')]";
 	private String addEmployeeUserLinkLocator = "xpath=//A[contains(text(),'Add Employee User')]";
 	private String addEmployeeUserUserIDTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_userId']";
 	private String addEmployeeUserEmailAddressTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_emailAddress']";
 	private String addEmployeeUserSecurityRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_securityRfidNumber']";
 	private String addEmployeeUserPasswordTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_passwordEntry_password']";
-	private String addEmployeeUserVerifyPassworduserIDTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_passwordEntry_passwordVerify']";
+	private String addEmployeeUserVerifyPasswordTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_passwordEntry_passwordVerify']";
 	private String addEmployeeUserFirstNameTextFieldLocator = "xpath=//INPUT[@id='firstname']";
 	private String addEmployeeUserLastNameTextFieldLocator = "xpath=//INPUT[@id='lastname']";
 	private String addEmployeeUserInitialsTextFieldLocator = "xpath=//INPUT[@id='initials']";
@@ -52,6 +59,22 @@ public class ManageUsers {
 	private String filterSearchButtonLocator = "xpath=//INPUT[@id='userList_search']";
 	private String userListTableXpath = "//TABLE[@id='userList']";
 	private String numberOfUserIDsXpath = userListTableXpath + "/TBODY/TR/TD/A";
+	private String addCustomerUserLinkLocator = "xpath=//A[contains(text(),'Add Customer User')]";
+	private String addCustomerUserUserIDTextFieldLocator = "xpath=//INPUT[@id='customerUserCreate_userId']";
+	private String addCustomerUserEmailAddressTextFieldLocator = "xpath=//INPUT[@id='customerUserCreate_emailAddress']";
+	private String addCustomerUserSecurityRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='customerUserCreate_securityRfidNumber']";
+	private String addCustomerPasswordTextFieldLocator = "xpath=//INPUT[@id='customerUserCreate_passwordEntry_password']";
+	private String addCustomerVerifyPasswordTextFieldLocator = "xpath=//INPUT[@id='customerUserCreate_passwordEntry_passwordVerify']";
+	private String addCustomerFirstNameTextFieldLocator = "xpath=//INPUT[@id='firstname']";
+	private String addCustomerLastNameTextFieldLocator = "xpath=//INPUT[@id='lastname']";
+	private String addCustomerInitialsTextFieldLocator = "xpath=//INPUT[@id='initials']";
+	private String addCustomerPositionTextFieldLocator = "xpath=//INPUT[@id='customerUserCreate_position']";
+	private String addCustomerCountrySelectListLocator = "xpath=//SELECT[@id='customerUserCreate_countryId']";
+	private String addCustomerTimeZoneSelectListLocator = "xpath=//SELECT[@id='tzlist']";
+	private String addCustomerUserSaveButtonLocator = "xpath=//INPUT[@id='customerUserCreate_save']";
+	private String addCustomerUserCancelLinkLocator = "xpath=//A[contains(text(),'Cancel')]";
+	private String manageUsersViewAllLinkLocator = "xpath=//A[contains(text(),'View All')]";
+	private String filterNameTextFieldLocator = "xpath=//INPUT[@id='nameFilter']";
 	
 	public ManageUsers(Selenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -81,7 +104,7 @@ public class ManageUsers {
 		assertTrue("Could not find the text field for Email Address", selenium.isElementPresent(addEmployeeUserEmailAddressTextFieldLocator));
 		assertTrue("Could not find the text field for Security RFID Number", selenium.isElementPresent(addEmployeeUserSecurityRFIDNumberTextFieldLocator));
 		assertTrue("Could not find the text field for Password", selenium.isElementPresent(addEmployeeUserPasswordTextFieldLocator));
-		assertTrue("Could not find the text field for Verify Password", selenium.isElementPresent(addEmployeeUserVerifyPassworduserIDTextFieldLocator));
+		assertTrue("Could not find the text field for Verify Password", selenium.isElementPresent(addEmployeeUserVerifyPasswordTextFieldLocator));
 		assertTrue("Could not find the text field for First Name", selenium.isElementPresent(addEmployeeUserFirstNameTextFieldLocator));
 		assertTrue("Could not find the text field for Last Name", selenium.isElementPresent(addEmployeeUserLastNameTextFieldLocator));
 		assertTrue("Could not find the text field for Initials", selenium.isElementPresent(addEmployeeUserInitialsTextFieldLocator));
@@ -191,6 +214,210 @@ public class ManageUsers {
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
 			fail("Could not find a link to edit user '" + userID + "'");
+		}
+	}
+
+	/**
+	 * Click the "All On" button in the Permissions section.
+	 */
+	public void setPermissionsAllOn() {
+		misc.info("Click All On button for permissions");
+		selenium.click(addEmployeeUserAllOnButtonLocator);
+	}
+
+	public void setAddEmployeeUser(EmployeeUser employeeUser) {
+		assertNotNull(employeeUser);
+		misc.info("fill in the Employee User information");
+		verifyAddEmployeeUserPage();
+		if(employeeUser.getUserid() != null) {
+			selenium.type(addEmployeeUserUserIDTextFieldLocator, employeeUser.getUserid());
+		}
+		if(employeeUser.getEmail() != null) {
+			selenium.type(addEmployeeUserEmailAddressTextFieldLocator, employeeUser.getEmail());
+		}
+		if(employeeUser.getSecurityRFIDNumber() != null) {
+			selenium.type(addEmployeeUserSecurityRFIDNumberTextFieldLocator, employeeUser.getSecurityRFIDNumber());
+		}
+		if(employeeUser.getPassword() != null) {
+			selenium.type(addEmployeeUserPasswordTextFieldLocator, employeeUser.getPassword());
+		}
+		if(employeeUser.getVerifyPassword() != null) {
+			selenium.type(addEmployeeUserVerifyPasswordTextFieldLocator, employeeUser.getVerifyPassword());
+		}
+		if(employeeUser.getOwner() != null) {
+			misc.gotoChooseOwner();
+			misc.setOwner(employeeUser.getOwner());
+			misc.gotoSelectOwner();
+		}
+		if(employeeUser.getFirstName() != null) {
+			selenium.type(addEmployeeUserFirstNameTextFieldLocator, employeeUser.getFirstName());
+		}
+		if(employeeUser.getLastName() != null) {
+			selenium.type(addEmployeeUserLastNameTextFieldLocator, employeeUser.getLastName());
+		}
+		if(employeeUser.getInitials() != null) {
+			selenium.type(addEmployeeUserInitialsTextFieldLocator, employeeUser.getInitials());
+		}
+		if(employeeUser.getPosition() != null) {
+			selenium.type(addEmployeeUserPositionTextFieldLocator, employeeUser.getPosition());
+		}
+		if(employeeUser.getCountry() != null) {
+			if(misc.isOptionPresent(addEmployeeUserCountrySelectListLocator, employeeUser.getCountry())) {
+				selenium.select(addEmployeeUserCountrySelectListLocator, employeeUser.getCountry());
+				misc.WaitForTimeZoneToUpdate();
+			} else {
+				fail("The country '" + employeeUser.getCountry() + "' does not exist on the select list");
+			}
+		}
+		if(employeeUser.getTimeZone() != null) {
+			if(misc.isOptionPresent(addEmployeeUserTimeZoneSelectListLocator, employeeUser.getTimeZone())) {
+				selenium.select(addEmployeeUserTimeZoneSelectListLocator, employeeUser.getTimeZone());
+			} else {
+				fail("The time zone '" + employeeUser.getTimeZone() + "' does not exist on the select list");
+			}
+		}
+		if(employeeUser.getPermissions() != null && employeeUser.getPermissions().size() > 0) {
+			setPermissionsAllOff();
+			setPermissionsAddEmployeeUser(employeeUser.getPermissions());
+		}
+	}
+
+	public void setPermissionsAddEmployeeUser(List<String> permissions) {
+		misc.info("Turning on permissions for the current add employee user");
+		verifyPermissions();
+		String permissionTableLocator = "xpath=" + permissionTableXpath;
+		for(String permission : permissions) {
+			String permissionOnButtonLocator = permissionTableLocator + "/TBODY/TR/TD[contains(text(),'" + permission + "')]/../TD/INPUT[@value='true']";
+			selenium.check(permissionOnButtonLocator);
+		}
+	}
+
+	/**
+	 * Click the "All Off" button in the Permissions section.
+	 */
+	public void setPermissionsAllOff() {
+		misc.info("Click All Off button for permissions");
+		selenium.click(addEmployeeUserAllOffButtonLocator);
+	}
+
+	public void gotoSaveEmployeeUser() {
+		misc.info("Click the Save button on add employee user");
+		selenium.click(addEmployeeUserSaveButtonLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
+	}
+
+	public void gotoAddCustomerUser() {
+		misc.info("Click Add Customer User");
+		if(selenium.isElementPresent(addCustomerUserLinkLocator)) {
+			selenium.click(addCustomerUserLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the link to add customer user");
+		}
+	}
+
+	public void setAddCustomerUser(CustomerUser cu) {
+		assertNotNull(cu);
+		misc.info("fill in the Customer User information");
+		verifyAddCustomerUserPage();
+		if(cu.getUserid() != null) {
+			selenium.type(addCustomerUserUserIDTextFieldLocator, cu.getUserid());
+		}
+		if(cu.getEmail() != null) {
+			selenium.type(addCustomerUserEmailAddressTextFieldLocator, cu.getEmail());
+		}
+		if(cu.getSecurityRFIDNumber() != null) {
+			selenium.type(addCustomerUserSecurityRFIDNumberTextFieldLocator, cu.getSecurityRFIDNumber());
+		}
+		if(cu.getPassword() != null) {
+			selenium.type(addCustomerPasswordTextFieldLocator, cu.getPassword());
+		}
+		if(cu.getVerifyPassword() != null) {
+			selenium.type(addCustomerVerifyPasswordTextFieldLocator, cu.getVerifyPassword());
+		}
+		if(cu.getOwner() != null) {
+			misc.gotoChooseOwner();
+			misc.setOwner(cu.getOwner());
+			misc.gotoSelectOwner();
+		}
+		if(cu.getFirstName() != null) {
+			selenium.type(addCustomerFirstNameTextFieldLocator, cu.getFirstName());
+		}
+		if(cu.getLastName() != null) {
+			selenium.type(addCustomerLastNameTextFieldLocator, cu.getLastName());
+		}
+		if(cu.getInitials() != null) {
+			selenium.type(addCustomerInitialsTextFieldLocator, cu.getInitials());
+		}
+		if(cu.getPosition() != null) {
+			selenium.type(addCustomerPositionTextFieldLocator, cu.getPosition());
+		}
+		if(cu.getCountry() != null) {
+			if(misc.isOptionPresent(addCustomerCountrySelectListLocator, cu.getCountry())) {
+				selenium.select(addCustomerCountrySelectListLocator, cu.getCountry());
+				misc.WaitForTimeZoneToUpdate();
+			} else {
+				fail("The country '" + cu.getCountry() + "' does not exist on the select list");
+			}
+		}
+		if(cu.getTimeZone() != null) {
+			if(misc.isOptionPresent(addCustomerTimeZoneSelectListLocator, cu.getTimeZone())) {
+				selenium.select(addCustomerTimeZoneSelectListLocator, cu.getTimeZone());
+			} else {
+				fail("The time zone '" + cu.getTimeZone() + "' does not exist on the select list");
+			}
+		}
+	}
+
+	private void verifyAddCustomerUserPage() {
+		assertTrue("Could not find the text field for User ID", selenium.isElementPresent(addCustomerUserUserIDTextFieldLocator));
+		assertTrue("Could not find the text field for Email Address", selenium.isElementPresent(addCustomerUserEmailAddressTextFieldLocator));
+		assertTrue("Could not find the text field for Security RFID Number", selenium.isElementPresent(addCustomerUserSecurityRFIDNumberTextFieldLocator));
+		assertTrue("Could not find the text field for Password", selenium.isElementPresent(addCustomerPasswordTextFieldLocator));
+		assertTrue("Could not find the text field for Verify Password", selenium.isElementPresent(addCustomerVerifyPasswordTextFieldLocator));
+		assertTrue("Could not find the text field for First Name", selenium.isElementPresent(addCustomerFirstNameTextFieldLocator));
+		assertTrue("Could not find the text field for Last Name", selenium.isElementPresent(addCustomerLastNameTextFieldLocator));
+		assertTrue("Could not find the text field for Initials", selenium.isElementPresent(addCustomerInitialsTextFieldLocator));
+		assertTrue("Could not find the text field for Position", selenium.isElementPresent(addCustomerPositionTextFieldLocator));
+		assertTrue("Could not find the select list for Country", selenium.isElementPresent(addCustomerCountrySelectListLocator));
+		assertTrue("Could not find the select list for Time Zone", selenium.isElementPresent(addCustomerTimeZoneSelectListLocator));
+		assertTrue("Could not find the Save button", selenium.isElementPresent(addCustomerUserSaveButtonLocator));
+		assertTrue("Could not find the Cancel link", selenium.isElementPresent(addCustomerUserCancelLinkLocator));
+	}
+
+	public void gotoSaveCustomerUser() {
+		misc.info("Click the Save button on add customer user");
+		selenium.click(addCustomerUserSaveButtonLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
+	}
+
+	public void gotoViewAll() {
+		misc.info("Click the link to 'View All'");
+		if(selenium.isElementPresent(manageUsersViewAllLinkLocator)) {
+			selenium.click(manageUsersViewAllLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not locate the link 'View All'");
+		}
+	}
+
+	public void setNameFilter(String userid) {
+		assertNotNull(userid);
+		misc.info("Set the Name on the filter to '" + userid + "'");
+		if(selenium.isElementPresent(filterNameTextFieldLocator)) {
+			selenium.type(filterNameTextFieldLocator, userid);
+		} else {
+			fail("Could not find the Name text field for the Filter");
+		}
+	}
+
+	public void gotoSearchFilter() {
+		misc.info("Click the Search button");
+		if(selenium.isElementPresent(filterSearchButtonLocator)) {
+			selenium.click(filterSearchButtonLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the Search button");
 		}
 	}
 }

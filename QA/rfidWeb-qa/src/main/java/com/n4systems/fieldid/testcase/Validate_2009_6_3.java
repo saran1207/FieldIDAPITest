@@ -2,6 +2,13 @@ package com.n4systems.fieldid.testcase;
 
 import java.util.List;
 
+import com.n4systems.fieldid.Admin;
+import com.n4systems.fieldid.Assets;
+import com.n4systems.fieldid.Home;
+import com.n4systems.fieldid.Identify;
+import com.n4systems.fieldid.Inspect;
+import com.n4systems.fieldid.admin.ManageInspectionTypes;
+import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.datatypes.ButtonGroup;
 import com.n4systems.fieldid.datatypes.Criteria;
 import com.n4systems.fieldid.datatypes.InspectionForm;
@@ -51,6 +58,7 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 						
 			// try to add the sub product to the master product a second time
 			String subProductSerialNumber = sub.getSerialNumber();
+			Assets assets = new Assets(ie);
 			assets.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
 			
 			// confirm the second attempt fails
@@ -70,7 +78,9 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 	
 	private void cleanup() throws Exception {
 		// delete the sub product type
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoManageProductTypes();
 		mpts.gotoEditProductType(subProductType);
 		mpts.deleteProductType(subProductType);
@@ -86,13 +96,16 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 		// add the sub product to the master product
 		String masterSerialNumber = master.getSerialNumber();
 		String subProductSerialNumber = sub.getSerialNumber();
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(masterSerialNumber);
+		Assets assets = new Assets(ie);
 		assets.gotoProductConfiguration(masterSerialNumber);
 		assets.addSubProductToMasterProduct(subProductType, subProductSerialNumber);
 	}
 
 	private void createProducts() throws Exception {
 		// create a sub product
+		Identify identify = new Identify(ie);
 		identify.gotoAddProduct();
 		sub = new Product(misc.getDateString());
 		sub.setProductType(subProductType);
@@ -109,7 +122,9 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 	private void createMasterInspectionType() throws Exception {
 		InspectionType it;
 		// create a master inspection type
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 		mits.gotoManageInspectionTypes();
 		
 		// if the inspection type already exists, just return
@@ -141,7 +156,9 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 		ProductType npt;
 		
 		// create a sub product type
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoManageProductTypes();
 		mpts.gotoAddProductType();
 		npt = new ProductType(subProductType);
@@ -177,6 +194,7 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 			configureProducts();
 			
 			// inspect the master product
+			Inspect inspect = new Inspect(ie);
 			inspect.gotoInspect();
 			String serialNumber = master.getSerialNumber();
 			inspect.loadAssetViaSmartSearch(serialNumber);
@@ -184,7 +202,9 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 			String label = "";
 			inspect.deleteSubProductDuringMasterInspection(subProductType, label);
 			// confirm the removal went okay
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(serialNumber);
+			Assets assets = new Assets(ie);
 			List<String> subProducts = assets.getSubProducts();
 			assertFalse("The master product still has a sub-product", subProducts.contains(subProductType));
 		} catch (Exception e) {

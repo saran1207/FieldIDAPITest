@@ -1,6 +1,11 @@
 package com.n4systems.fieldid.testcase;
 
 import java.util.List;
+
+import com.n4systems.fieldid.Admin;
+import com.n4systems.fieldid.admin.ManageCustomers;
+import com.n4systems.fieldid.admin.ManageOrganizations;
+import com.n4systems.fieldid.admin.ManageUsers;
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerUser;
 import com.n4systems.fieldid.datatypes.EmployeeUser;
@@ -59,7 +64,9 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			login.setPassword(password);
 			login.login();
 
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageOrganizations mos = new ManageOrganizations(ie);
 			mos.gotoManageOrganizations();
 			String primaryOrganizationName = mos.getPrimaryOrganizationName();
 			List<String> secondaryOrganizations = mos.getSecondaryOrganizationNames();
@@ -71,6 +78,7 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 				secondaryOrganizations.add(o.getName());
 			}
 			admin.gotoAdministration();
+			ManageCustomers mcs = new ManageCustomers(ie);
 			mcs.gotoManageCustomers(false);
 			mcs.gotoAddCustomer(false);
 			
@@ -87,6 +95,7 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			mcs.addCustomer(secondaryCustomer, false);
 			
 			admin.gotoAdministration();
+			ManageUsers mus = new ManageUsers(ie);
 			mus.gotoManageUsers();
 			mus.gotoAddEmployeeUser();
 			String secondaryOrganizationEmployeeID = misc.getRandomString(15);
@@ -553,7 +562,9 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageUsers mus = new ManageUsers(ie);
 			mus.gotoManageUsers();
 			mus.gotoAddCustomerUser();
 			CustomerUser cu = new CustomerUser(null, null, null, null, null);
@@ -582,7 +593,9 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			login.login();
 			
 			// Go to Manage Organizations
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageOrganizations mos = new ManageOrganizations(ie);
 			mos.gotoManageOrganizations();
 
 			// Set the country and time zone for primary organization
@@ -603,6 +616,7 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 
 			// Go to Manage Users
 			admin.gotoAdministration();
+			ManageUsers mus = new ManageUsers(ie);
 			mus.gotoManageUsers();
 			
 			// goto add a system user

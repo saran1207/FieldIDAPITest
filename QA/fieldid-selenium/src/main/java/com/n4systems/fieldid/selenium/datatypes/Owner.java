@@ -23,6 +23,14 @@ public class Owner {
 	public Owner() {
 	}
 
+	public String toString() {
+		StringBuffer s = new StringBuffer();
+		s.append("\n        Organization: " + (organization != null ? organization : "{default}"));
+		s.append("\n            Customer: " + (customer != null ? customer : "{default}"));
+		s.append("\n            Division: " + (division != null ? division : "{default}"));
+		return s.toString();
+	}
+
 	public String getOrganization() {
 		return this.organization;
 	}

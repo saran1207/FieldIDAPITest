@@ -749,31 +749,32 @@ public class Identify extends TestCase {
 	private void handleRequiredFieldsOnAddProduct(TextField comments) throws Exception {
 		// handle text fields, select lists and combo boxes
 		misc.waitForJavascript();	// seems to be a timing problem here so I'm adding a little more sleep
-		Labels requiredFields = ie.labels(addProductRequiredInputFieldsFinder);
+		Labels requiredFields = ie.labels(addProductRequiredInputFieldsFinder );
 		int numberOfRequiredFields = requiredFields.length();
 		for(int i = 0; i < numberOfRequiredFields; i++) {
 			Label requiredField = requiredFields.get(i);
 			String inputID;
 			if(requiredField.exists()) {
-				IEHtmlElement field = (IEHtmlElement) requiredField.htmlElement(xpath("../SPAN/*"));
-				assertTrue("Could not find a required product type attribute input field", field.exists());
-				inputID = field.id();
-				String tag = field.tag();
-				if(tag.equals("INPUT")) {			// text field
-					TextField t = ie.textField(id(inputID));
-					assertNotNull(t);
-					assertTrue("Could not find a required product type attribute text field", t.exists());
-					if(t.value().equals("")) {
-						setTextFieldRandomly(t);
+				IEHtmlElement field = (IEHtmlElement) requiredField.htmlElement(xpath("../SPAN[contains(@class,'fieldHolder')]/*"));
+				if(field.exists()) {	// not a unit of measure
+					inputID = field.id();
+					String tag = field.tag();
+					if(tag.equals("INPUT")) {			// text field
+						TextField t = ie.textField(id(inputID));
+						assertNotNull(t);
+						assertTrue("Could not find a required product type attribute text field", t.exists());
+						if(t.value().equals("")) {
+							setTextFieldRandomly(t);
+						}
+					} else if(tag.equals("SELECT")) {	// combo box or select list
+						SelectList sl = ie.selectList(id(inputID));
+						assertNotNull(sl);
+						assertTrue("Could not find a required product type attribute select list", sl.exists());
+						setSelectListRandomly(sl);
+						comments.focus();	// move focus away. helps if combo box
+					} else {
+						fail("Unexpected required input. Update automation.");
 					}
-				} else if(tag.equals("SELECT")) {	// combo box or select list
-					SelectList sl = ie.selectList(id(inputID));
-					assertNotNull(sl);
-					assertTrue("Could not find a required product type attribute select list", sl.exists());
-					setSelectListRandomly(sl);
-					comments.focus();	// move focus away. helps if combo box
-				} else {
-					fail("Unexpected required input. Update automation.");
 				}
 			}
 		}
@@ -785,7 +786,7 @@ public class Identify extends TestCase {
 			Label requiredField = requiredFields.get(i);
 			String inputID;
 			if(requiredField.exists()) {
-				IEHtmlElement field = (IEHtmlElement) requiredField.htmlElement(xpath("../SPAN/*"));
+				IEHtmlElement field = (IEHtmlElement) requiredField.htmlElement(xpath("../DIV[contains(@class,'fieldHolder')]/SPAN[contains(@class,'unitOfMeasure')]/INPUT"));
 				assertTrue("Could not find a required product type attribute input field", field.exists());
 				inputID = field.id();
 				String tag = field.tag();

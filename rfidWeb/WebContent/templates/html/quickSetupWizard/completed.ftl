@@ -3,7 +3,7 @@
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 <div id="setupWizardComplete" class="setupWizardContent">
-	<h2 class="clean"><@s.text name="label.your_done"/></h2>
+	<h2 class="clean"><@s.text name="label.you_are_done"/></h2>
 	<p><@s.text name="label.now_that_your_done_the_wizard_here_are_some_suggested_next_steps"/></p>
 	
 	<ul>

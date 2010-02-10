@@ -11,6 +11,13 @@ public class SignUpPackages {
 	Selenium selenium;
 	Misc misc;
 	
+	// Package types
+	public final static String packageTypeFree = "Free";
+	public final static String packageTypeBasic = "Basic";
+	public final static String packageTypePlus = "Plus";
+	public final static String packageTypeEnterprise = "Enterprise";
+	public final static String packageTypeUnlimited = "Unlimited";
+
 	// Locators
 	private String headerText = "Sign Up For A Field ID Account";
 	private String signUpForPackageHeaderLocator = "xpath=//DIV[@id='mainContent']/H1[contains(text(),'" + headerText + "')]";

@@ -5,6 +5,13 @@ import java.util.List;
 
 import watij.elements.Link;
 
+import com.n4systems.fieldid.Admin;
+import com.n4systems.fieldid.Assets;
+import com.n4systems.fieldid.Home;
+import com.n4systems.fieldid.Identify;
+import com.n4systems.fieldid.Inspect;
+import com.n4systems.fieldid.admin.ManageInspectionTypes;
+import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.datatypes.InspectionType;
 import com.n4systems.fieldid.datatypes.Product;
 import com.n4systems.fieldid.datatypes.ProductAttribute;
@@ -30,7 +37,9 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageProductTypes mpts = new ManageProductTypes(ie);
 			mpts.gotoManageProductTypes();
 			mpts.gotoAddProductType();
 			String name = "WEB-1095-" + misc.getRandomString(10);
@@ -57,6 +66,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Identify identify = new Identify(ie);
 			identify.gotoIdentify();
 			identify.gotoAddMultipleAssets();
 			identify.handleRequiredFieldsOnAddProduct();
@@ -80,6 +90,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Identify identify = new Identify(ie);
 			identify.gotoIdentify();
 			identify.gotoAddProduct();
 			String identified = misc.getDateString();
@@ -87,7 +98,9 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			identify.setProduct(p, true);
 			String serialNumber = p.getSerialNumber();
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(serialNumber);
+			Assets assets = new Assets(ie);
 			assets.gotoEditProduct(serialNumber);
 			assets.deleteProduct(serialNumber, "0", null, "0", "0");
 			assets.confirmDeleteProduct();
@@ -113,7 +126,9 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			String attributeValue = "web-1113-passed";
 			String productTypeName = "web-1113-prod";
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 			mits.gotoManageInspectionTypes();
 			List<String> inspectionAttributes = new ArrayList<String>();
 			inspectionAttributes.add(attributeName);
@@ -124,6 +139,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 				mits.addInspectionType(it);
 			}
 			admin.gotoAdministration();
+			ManageProductTypes mpts = new ManageProductTypes(ie);
 			mpts.gotoManageProductTypes();
 			ProductType npt = new ProductType(productTypeName);
 			if(!mpts.isProductType(productTypeName)) {
@@ -136,6 +152,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			mpts.gotoInspectionTypes(productTypeName);
 			mpts.setInspectionType(inspectionTypeName);
 			mpts.saveInspectionTypes(productTypeName);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			String identified = misc.getDateString();
 			Product p = new Product(identified);
@@ -143,8 +160,11 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 			identify.setProduct(p, true);
 			identify.addProductSaveAndInspect();
 			String serialNumber = p.getSerialNumber();
+			Inspect inspect = new Inspect(ie);
 			inspect.gotoSaveStandardInspection(serialNumber);
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(serialNumber);
+			Assets assets = new Assets(ie);
 			assets.gotoManageInspections(serialNumber);
 			List<Link> inspections = inspect.getInspectionsFromManageInspections(inspectionTypeName);
 			assertTrue("Could not find any inspections", inspections.size() > 0);

@@ -290,13 +290,9 @@ public class Login extends TestCase {
 	public void setCompany(String company) throws Exception {
 		assertNotNull(company);
 		assertFalse(company.equals(""));
-		gotoChooseCompany();
-		TextField companyIDTextField = ie.textField(loginCompanyIDFinder);
-		assertTrue("Could not find the Company ID text field on Choose A Company page", companyIDTextField.exists());
-		companyIDTextField.set(company);
-		Button chooseContinueButton = ie.button(chooseCompanyContinueButtonFinder);
-		assertTrue("Could not find the Find Sign In Page button on Choose A Company page", chooseContinueButton.exists());
-		chooseContinueButton.click();
+		String url = ie.url();
+		url = url.replaceFirst("//[^\\.]*", "//" + company);
+		ie.goTo(url);
 	}
 
 	/**

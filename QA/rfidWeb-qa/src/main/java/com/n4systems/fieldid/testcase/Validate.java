@@ -2,6 +2,21 @@ package com.n4systems.fieldid.testcase;
 
 import java.util.List;
 
+import com.n4systems.fieldid.Admin;
+import com.n4systems.fieldid.Assets;
+import com.n4systems.fieldid.Home;
+import com.n4systems.fieldid.Identify;
+import com.n4systems.fieldid.Jobs;
+import com.n4systems.fieldid.MyAccount;
+import com.n4systems.fieldid.Reporting;
+import com.n4systems.fieldid.admin.ManageCustomers;
+import com.n4systems.fieldid.admin.ManageEventTypeGroups;
+import com.n4systems.fieldid.admin.ManageInspectionTypes;
+import com.n4systems.fieldid.admin.ManageOrganizations;
+import com.n4systems.fieldid.admin.ManageProductTypes;
+import com.n4systems.fieldid.admin.ManageSystemSettings;
+import com.n4systems.fieldid.admin.ManageUsers;
+import com.n4systems.fieldid.admin.ManageYourSafetyNetwork;
 import com.n4systems.fieldid.datatypes.EmployeeUser;
 import com.n4systems.fieldid.datatypes.Owner;
 
@@ -37,6 +52,7 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -57,7 +73,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageOrganizations mos = new ManageOrganizations(ie);
 			mos.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -78,7 +96,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageCustomers mcs = new ManageCustomers(ie);
 			mcs.validate(false);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -99,12 +119,15 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageCustomers mcs = new ManageCustomers(ie);
 			mcs.gotoManageCustomers(false);
 			List<String> customers = mcs.getCustomerNamesFromCurrentPage();
 			assertTrue("There should be at least one customer to test Manage Users", customers.size() > 0);
 			int index = misc.getRandomInteger(customers.size());
 			admin.gotoAdministration();
+			ManageUsers mus = new ManageUsers(ie);
 			mus.validate(customers.get(index));
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -127,7 +150,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageSystemSettings mss = new ManageSystemSettings(ie);
 			mss.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -148,7 +173,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageProductTypes mpts = new ManageProductTypes(ie);
 			mpts.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -175,7 +202,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 			mits.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -196,7 +225,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
 			metgs.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -229,7 +260,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(linkedUserid);
 			login.setPassword(linkedPassword);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+ 			ManageYourSafetyNetwork mysn = new ManageYourSafetyNetwork(ie);
 			mysn.gotoManageYourSafetyNetwork();
 //			String FIDAC = mysn.getFIDAC();
 			misc.logout();
@@ -272,6 +305,7 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Home home = new Home(ie);
 			home.validate(jobs, newFeaturesPDF);	// second parameter is true of new features PDF ready.
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -293,6 +327,7 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Identify identify = new Identify(ie);
 			identify.validate(orderNumber);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -318,6 +353,7 @@ public class Validate extends FieldIDTestCase {
 			login.setPassword(password);
 			login.login();
 			Owner owner = new Owner(orgUnit);
+			Assets assets = new Assets(ie);
 			assets.validate(serialtext, owner);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -338,6 +374,7 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Reporting reporting = new Reporting(ie);
 			reporting.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -365,7 +402,9 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(n4systems);
 			login.setPassword(n4password);
 			login.login();
+			Admin admin = new Admin(ie);
 			admin.gotoAdministration();
+			ManageUsers mus = new ManageUsers(ie);
 			mus.gotoManageUsers();
 			mus.setListUsersNameFilter(userid);
 			mus.gotoListUsersSearch();
@@ -387,6 +426,7 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			Jobs jobs = new Jobs(ie);
 			jobs.validate(u);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
@@ -407,6 +447,7 @@ public class Validate extends FieldIDTestCase {
 			login.setUserName(userid);
 			login.setPassword(password);
 			login.login();
+			MyAccount myAccount = new MyAccount(ie);
 			myAccount.validate();
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");

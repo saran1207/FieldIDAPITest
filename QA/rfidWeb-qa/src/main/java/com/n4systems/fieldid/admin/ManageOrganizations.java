@@ -19,8 +19,6 @@ import junit.framework.TestCase;
 
 public class ManageOrganizations extends TestCase {
 	IE ie = null;
-	Admin admin = null;
-	FieldIDMisc misc = null;
 	Properties p;
 	InputStream in;
 	String propertyFile = "manageorganizations.properties";
@@ -65,8 +63,6 @@ public class ManageOrganizations extends TestCase {
 	public ManageOrganizations(IE ie) {
 		this.ie = ie;
 		try {
-			admin = new Admin(ie);
-			misc = new FieldIDMisc(ie);
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
@@ -135,6 +131,7 @@ public class ManageOrganizations extends TestCase {
 		Link l = ie.link(backToAdministrationLinkFinder);
 		assertTrue("Could not find the link to go back to Administration", l.exists());
 		l.click();
+		Admin admin = new Admin(ie);
 		admin.checkAdminPageContentHeader();
 	}
 	
@@ -179,6 +176,7 @@ public class ManageOrganizations extends TestCase {
 		Link l = ie.link(addOrganizationLinkFinder);
 		assertTrue("Could not find a link to add an organization", l.exists());
 		l.click();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 		this.checkManageOrganizationsPageContentHeader();
 	}
@@ -203,6 +201,7 @@ public class ManageOrganizations extends TestCase {
 			Option ctzo = countryTimeZone.option(text("/" + ctz + "/"));
 			assertTrue("Could not find the Country '" + ctz + "' in the list of Countries (relating to Time Zone", ctzo.exists());
 			ctzo.select();
+			FieldIDMisc misc = new FieldIDMisc(ie);
 			misc.waitForJavascript();
 		}
 
@@ -293,6 +292,7 @@ public class ManageOrganizations extends TestCase {
 			Option ctzo = countryTimeZone.option(text("/" + ctz + "/"));
 			assertTrue("Could not find the Country '" + ctz + "' in the list of Countries (relating to Time Zone", ctzo.exists());
 			ctzo.select();
+			FieldIDMisc misc = new FieldIDMisc(ie);
 			misc.waitForJavascript();
 		}
 
@@ -411,6 +411,7 @@ public class ManageOrganizations extends TestCase {
 		assertTrue("Could not find the Save button on Add Organization", save.exists());
 		save.click();
 		checkManageOrganizationsPageContentHeader();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 	
@@ -419,6 +420,7 @@ public class ManageOrganizations extends TestCase {
 		assertTrue("Could not find the Cancel button on Add Organization", cancel.exists());
 		cancel.click();
 		checkManageOrganizationsPageContentHeader();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 	
@@ -434,6 +436,7 @@ public class ManageOrganizations extends TestCase {
 		gotoEditPrimaryOrganization();
 		gotoViewAll();
 		gotoAddOrganizationalUnit();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		String random = misc.getRandomString();
 		String name = "validate-" + random;
 		Organization o = new Organization(name);
@@ -492,6 +495,7 @@ public class ManageOrganizations extends TestCase {
 		assertTrue("Could not find the Cancel button on Edit Organization", cancel.exists());
 		cancel.click();
 		checkManageOrganizationsPageContentHeader();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 
@@ -597,6 +601,7 @@ public class ManageOrganizations extends TestCase {
 		assertTrue("Could not find the Save button on Edit Organization", save.exists());
 		save.click();
 		checkManageOrganizationsPageContentHeader();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 	}
 
@@ -605,6 +610,7 @@ public class ManageOrganizations extends TestCase {
 
 		Link next;
 		boolean more;
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		do {
 			next = ie.link(text("Next>"));
 			more = next.exists();

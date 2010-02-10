@@ -7,7 +7,17 @@ import java.util.List;
 
 import watij.elements.Link;
 
+import com.n4systems.fieldid.Admin;
+import com.n4systems.fieldid.Assets;
 import com.n4systems.fieldid.FieldIDMisc;
+import com.n4systems.fieldid.Home;
+import com.n4systems.fieldid.Identify;
+import com.n4systems.fieldid.Inspect;
+import com.n4systems.fieldid.Reporting;
+import com.n4systems.fieldid.Schedule;
+import com.n4systems.fieldid.admin.ManageCustomers;
+import com.n4systems.fieldid.admin.ManageInspectionTypes;
+import com.n4systems.fieldid.admin.ManageProductTypes;
 import com.n4systems.fieldid.datatypes.ButtonGroup;
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerDivision;
@@ -162,6 +172,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginAdminUser();
 		try {
+			Home home = new Home(ie);
 			home.validateHomePage(jobs);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -187,21 +198,22 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	private void helperAssetsSearch() throws Exception {
-			assets.gotoAssets();
-			assets.expandProductSearchSelectColumns();
-			ProductSearchSelectColumns c = new ProductSearchSelectColumns();
-			c.setAllOn();
-			assets.setProductSearchColumns(c);
-			assets.gotoProductSearchResults();
-			List<String> customers = assets.getProductSearchResultsColumn("Customer Name");
-			Iterator<String> i = customers.iterator();
-			while(i.hasNext()) {
-				String cus = i.next();
-				assertEquals(customer.getCustomerName(), cus);
-			}
-			assets.printAllManufacturerCertificates();
-			assets.exportToExcel();
-			assertFalse("Mass Update is available to end users", assets.isMassUpdate());
+		Assets assets = new Assets(ie);
+		assets.gotoAssets();
+		assets.expandProductSearchSelectColumns();
+		ProductSearchSelectColumns c = new ProductSearchSelectColumns();
+		c.setAllOn();
+		assets.setProductSearchColumns(c);
+		assets.gotoProductSearchResults();
+		List<String> customers = assets.getProductSearchResultsColumn("Customer Name");
+		Iterator<String> i = customers.iterator();
+		while(i.hasNext()) {
+			String cus = i.next();
+			assertEquals(customer.getCustomerName(), cus);
+		}
+		assets.printAllManufacturerCertificates();
+		assets.exportToExcel();
+		assertFalse("Mass Update is available to end users", assets.isMassUpdate());
 	}
 	
 	public void testCreateAssetsSearch() throws Exception {
@@ -331,7 +343,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	private void helperPrintingACertificate(String serialNumber) throws Exception {
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(serialNumber);
+		Assets assets = new Assets(ie);
 		assets.downloadManufactureCertificate();
 	}
 	
@@ -406,7 +420,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	private void helperEditingAProduct(String serialNumber, boolean divisional) throws Exception {
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(serialNumber);
+		Assets assets = new Assets(ie);
 		assets.gotoEditProduct(serialNumber);
 		assets.checkEndUserEditProduct(divisional);
 		assets.saveCustomerProduct(serialNumber);
@@ -444,6 +460,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginEditorUser();
 		try {
+			Inspect inspect = new Inspect(ie);
 			inspect.gotoInspect();
 			inspect.loadAssetViaSmartSearch(editorMasterProductSerialNumber);
 			assertFalse("The ability to start a new inspection exists for a user without permission", inspect.isStartNewInspectionAvailable());
@@ -479,6 +496,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginNeitherUser();
 		try {
+			Inspect inspect = new Inspect(ie);
 			inspect.gotoInspect();
 			inspect.loadAssetViaSmartSearch(neitherMasterProductSerialNumber);
 			assertFalse("The ability to start a new inspection exists for a user without permission", inspect.isStartNewInspectionAvailable());
@@ -497,8 +515,11 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	private void helperInspectingAProduct(String serialNumber, String inspectionType, boolean master) throws Exception {
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(serialNumber);
+		Assets assets = new Assets(ie);
 		assets.gotoInspectionGroups(serialNumber);
+		Inspect inspect = new Inspect(ie);
 		inspect.gotoStartNewInspection(inspectionType, true);
 		Inspection inspection = new Inspection();
 		inspect.gotoStartMasterInspection(inspectionType);
@@ -508,7 +529,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	private void configureProducts() throws Exception {
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(adminMasterProductSerialNumber);
+		Assets assets = new Assets(ie);
 		assets.gotoProductConfiguration(adminMasterProductSerialNumber);
 		assets.addSubProductToMasterProduct(subProductType, adminSubProductSerialNumber);
 		
@@ -530,6 +553,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	private void createProducts() throws Exception {
+		Identify identify = new Identify(ie);
 		identify.gotoAddProduct();
 		adminSubProductSerialNumber = createMasterSubProduct(adminUser, null, subProductType);
 		adminMasterProductSerialNumber = createMasterSubProduct(adminUser, null, masterProductType);
@@ -571,6 +595,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		p.setPurchaseOrder(userid + "-po");
 		p.setLocation(userid + "-location");
 		p.setProductType(productType);
+		Identify identify = new Identify(ie);
 		identify.setProduct(p, true);
 		identify.addProductSave();
 		return p.getSerialNumber();
@@ -583,6 +608,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void createInspectionTypesAndProductTypes() throws Exception {
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
 		createInspectionTypes();
 		createProductTypes();
@@ -603,12 +629,14 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	private void addMasterInspectionTypeToMasterProductType() throws Exception {
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoInspectionTypes(masterProductType);
 		mpts.setInspectionType(masterInspectionType);
 		mpts.saveInspectionTypes(masterProductType);
 	}
 
 	private void addSubProductToMasterProductType() throws Exception {
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoSubComponents(masterProductType);
 		List<String> subcomponents = mpts.getSubComponents();
 		if(!subcomponents.contains(subProductType)) {
@@ -626,7 +654,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 		npt.setHasManufacturerCertificate(true);
 		npt.setManufacturerCertificateText("Master Product Type Manufacturer Certificate Text");
 
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoManageProductTypes();
 		if(!mpts.isProductType(masterProductType)) {
 			mpts.gotoAddProductType();
@@ -639,6 +669,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	private void addSubInspectionTypeToSubProductType() throws Exception {
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoInspectionTypes(subProductType);
 		mpts.setInspectionType(subInspectionType);
 		mpts.saveInspectionTypes(subProductType);
@@ -652,7 +683,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 		npt.setHasManufacturerCertificate(true);
 		npt.setManufacturerCertificateText("Sub Product Type Manufacturer Certificate Text");
 
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageProductTypes mpts = new ManageProductTypes(ie);
 		mpts.gotoManageProductTypes();
 		if(!mpts.isProductType(subProductType)) {
 			mpts.gotoAddProductType();
@@ -670,6 +703,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void createInspectionTypes() throws Exception {
+		ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 		mits.gotoManageInspectionTypes();
 		createMasterInspectonType();
 		addMasterInspectionForm();
@@ -677,6 +711,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 
 	private void createSubProductInspectionType() throws Exception {
+		ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 		mits.gotoViewAll();
 		List<String> its = mits.getStandardInspectionTypes();
 		if(its.size() > 0) {
@@ -700,6 +735,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 
 	private void addMasterInspectionForm() throws Exception {
 		FieldIDMisc.stopMonitor();
+		ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 		mits.gotoInspectionForm(masterInspectionType);
 		masterInspectionForm = mits.getInspectionForm();
 		if(masterInspectionForm == null) {
@@ -754,6 +790,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		proofTestTypes.add(InspectionType.wirop);
 		proofTestTypes.add(InspectionType.other);
 		it.setProofTestTypes(proofTestTypes);
+		ManageInspectionTypes mits = new ManageInspectionTypes(ie);
 		if(!mits.isInspectionType(masterInspectionType)) {
 			mits.gotoAddInspectionType();
 			mits.addInspectionType(it);
@@ -781,7 +818,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void createCustomer() throws Exception {
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageCustomers mcs = new ManageCustomers(ie);
 		mcs.gotoManageCustomers(false);
 		mcs.setAddCustomerFilter(customer.getCustomerName());
 		mcs.gotoAddCustomerFilter(false);
@@ -802,6 +841,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void createDivisions() throws Exception {
+		ManageCustomers mcs = new ManageCustomers(ie);
 		mcs.gotoCustomerDivisions(false);
 		CustomerDivision d = new CustomerDivision(null,null);
 		if(!mcs.isCustomerDivision(createDivision)) {
@@ -847,7 +887,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void createUsers() throws Exception {
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageCustomers mcs = new ManageCustomers(ie);
 		mcs.gotoManageCustomers(false);
 		mcs.setAddCustomerFilter(customer.getCustomerName());
 		mcs.gotoAddCustomerFilter(false);
@@ -922,6 +964,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 * @throws Exception
 	 */
 	private void addUser(CustomerUser u, boolean jobsites) throws Exception {
+		ManageCustomers mcs = new ManageCustomers(ie);
 		 if(!mcs.isUser(u.getUserID())) {
 			mcs.gotoAddUser();
 			mcs.addCustomerUser(u, jobsites);
@@ -1002,6 +1045,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	private void helperReportingSearch(String division, boolean massUpdate) throws Exception {
+		Reporting reporting = new Reporting(ie);
 		reporting.gotoReporting();
 		reporting.expandReportSelectColumns();
 		ReportSearchSelectColumns r = new ReportSearchSelectColumns();
@@ -1083,6 +1127,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginCreateUser();
 		try {
+			Inspect inspect = new Inspect(ie);
 			inspect.gotoInspect();
 			inspect.loadAssetViaSmartSearch(createMasterProductSerialNumber);
 			assertFalse("I can edit an inspection with a user without Edit permission", inspect.isInspectionEditable());
@@ -1099,6 +1144,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginNeitherUser();
 		try {
+			Inspect inspect = new Inspect(ie);
 			inspect.gotoInspect();
 			inspect.loadAssetViaSmartSearch(neitherMasterProductSerialNumber);
 			assertFalse("I can edit an inspection with a user without Edit permission", inspect.isInspectionEditable());
@@ -1112,8 +1158,11 @@ public class SmokeTestEx extends FieldIDTestCase {
 	}
 	
 	private void helperEditInspection(String serialNumber, String inspectionType, boolean master) throws Exception {
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(serialNumber);
+		Assets assets = new Assets(ie);
 		assets.gotoInspectionGroups(serialNumber);
+		Inspect inspect = new Inspect(ie);
 		List<Link> inspections = inspect.getInspectionsFromManageInspections(inspectionType);
 		assertTrue("Could not find an inspection of type '" + inspectionType + "' to edit.", inspections.size() > 0);
 		Link inspection = inspections.get(0);
@@ -1144,11 +1193,14 @@ public class SmokeTestEx extends FieldIDTestCase {
 	
 	private void helperAddASchedule(String serialNumber, String inspectionType) throws Exception {
 		String scheduleDate = misc.getDateStringNextMonth();
+		Home home = new Home(ie);
 		home.gotoProductInformationViaSmartSearch(serialNumber);
+		Assets assets = new Assets(ie);
 		assets.gotoInspectionSchedule(serialNumber);
 		assets.addScheduleFor(scheduleDate, inspectionType, null);
 		scheduleDate = misc.getDateStringLastMonth();
 		assets.addScheduleFor(scheduleDate, inspectionType, null);
+		Schedule schedule = new Schedule(ie);
 		schedule.gotoSchedule();
 		schedule.gotoScheduleSearchResults();
 	}
@@ -1185,7 +1237,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginEditorUser();
 		try {
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(editorMasterProductSerialNumber);
+			Assets assets = new Assets(ie);
 			assertFalse("I can get to Edit Schedules on a user without Create permission", assets.isSchedulesAvailable());
 			misc.logout();
 			loginAdminUser();
@@ -1203,7 +1257,9 @@ public class SmokeTestEx extends FieldIDTestCase {
 		String method = getName();
 		loginNeitherUser();
 		try {
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(neitherMasterProductSerialNumber);
+			Assets assets = new Assets(ie);
 			assertFalse("I can get to Edit Schedules on a user without Create permission", assets.isSchedulesAvailable());
 			misc.logout();
 			loginAdminUser();
@@ -1296,6 +1352,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	 */
 	private void helperViewingScheduleSearchResults(String inspectionType, String serialNumber, boolean create) throws Exception {
 		String nextInspectionDate = misc.getDateString();
+		Schedule schedule = new Schedule(ie);
 		schedule.gotoSchedule();
 		ScheduleSearchCriteria s = new ScheduleSearchCriteria();
 		s.setEventTypeGroup(masterInspectionEventTypeGroup);

@@ -29,7 +29,7 @@ public class FieldIDMisc extends TestCase {
 	IE ie = null;
 	public static Refresh monitor = null;
 	private static boolean enabled = true;
-	static long hack = 2000;	// wait 5 seconds for Javascript actions to complete
+	static long hack = 5000;	// wait 5 seconds for Javascript actions to complete
 	static long lightBoxHack = 10000;
 	static long lightBoxHackLoops = 60; // will loop 60 times, 1 second each loop or less
 	public static long dayInMilliseconds = 86400000;	// used for scheduling inspections

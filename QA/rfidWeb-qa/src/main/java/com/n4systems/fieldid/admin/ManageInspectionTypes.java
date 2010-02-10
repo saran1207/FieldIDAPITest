@@ -25,8 +25,6 @@ import junit.framework.TestCase;
 public class ManageInspectionTypes extends TestCase {
 
 	IE ie = null;
-	FieldIDMisc misc;
-	ManageEventTypeGroups metgs;
 	Properties p;
 	InputStream in;
 	String propertyFile = "manageinspectiontypes.properties";
@@ -74,7 +72,6 @@ public class ManageInspectionTypes extends TestCase {
 	public ManageInspectionTypes(IE ie) {
 		this.ie = ie;
 		try {
-			misc = new FieldIDMisc(ie);
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
@@ -181,6 +178,7 @@ public class ManageInspectionTypes extends TestCase {
 		Button save = ie.button(addInspectionTypeSaveButtonFinder);
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 		FieldIDMisc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
@@ -190,6 +188,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertNotNull(inspectionAttributes);
 		Button addAttribute = ie.button(addInspectionAddAttributeButtonFinder);
 		assertTrue("Could not find the Add Attribute button on Add Inspection Type", addAttribute.exists());
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		for(int i = 0; i < inspectionAttributes.size(); i++) {
 			addAttribute.click();
 			misc.waitForJavascript();
@@ -311,6 +310,7 @@ public class ManageInspectionTypes extends TestCase {
 		Button save = ie.button(editInspectionTypeSaveButtonFinder);
 		assertTrue("Could not find the Save button", save.exists());
 		save.click();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 		FieldIDMisc.startMonitor();
 		checkInspectionTypePageContentHeader(it.getName());
@@ -368,8 +368,7 @@ public class ManageInspectionTypes extends TestCase {
 	}
 	
 	public void gotoEventTypeGroupInspectionTypeInformation() throws Exception {
-		if(metgs == null)
-			metgs = new ManageEventTypeGroups(ie);
+		ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
 		Link group = getLinkToGroup();
 		String groupName = group.text();
 		group.click();
@@ -482,6 +481,7 @@ public class ManageInspectionTypes extends TestCase {
 	
 	public void validate() throws Exception {
 		gotoManageInspectionTypes();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.gotoBackToAdministration();
 		ManageEventTypeGroups metgs = new ManageEventTypeGroups(ie);
 		metgs.gotoManageEventTypeGroups();
@@ -620,6 +620,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertNotNull(form);
 		FieldIDMisc.stopMonitor();
 		int sections = form.getNumberOfSections();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		for(int i = 0; i < sections; i++) {
 			Section s = form.getSection(i);
 			assertNotNull(s);
@@ -699,6 +700,7 @@ public class ManageInspectionTypes extends TestCase {
 		assertTrue("Could not find the Save button for Inspection Form", save.exists());
 		save.click();
 		ie.waitUntilReady();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 		String msg = misc.getSuccessMessageOnCurrentPage();
 		String expected = "";

@@ -25,10 +25,8 @@ public class CreateTenant {
 	
 	// Promo Code
 	String promoCode;
-
 	
 	// All class variables below this point do not apply to Free accounts
-	
 	
 	// negative users is a flag for Free account
 	public final static int numUsersFreeAccountFlag = -1;
@@ -61,8 +59,6 @@ public class CreateTenant {
 	String expiryYear;
 	String purchaseOrderNumber;
 	
-	
-	
 	public CreateTenant(String username, String password, String tenantName, String tenantID) {
 		
 		this.setFirstName("Darrell");
@@ -85,8 +81,39 @@ public class CreateTenant {
 		this.setSiteAddress(tenantID);
 	}
 	
-	
-	
+	public String toString() {
+		StringBuffer s = new StringBuffer();
+		
+		s.append("\n           First Name: " + firstName);
+		s.append("\n            Last Name: " + lastName);
+		s.append("\n        Email Address: " + email);
+		s.append("\n              Country: " + country);
+		s.append("\n            Time Zone: " + timeZone);
+		s.append("\n            User Name: " + userName);
+		s.append("\n             Password: " + password);
+		s.append("\n            Password2: " + password2);
+		s.append("\n         Company Name: " + companyName);
+		s.append("\n      Company Address: " + companyAddress);
+		s.append("\n         Company City: " + companyCity);
+		s.append("\n        Company State: " + companyState);
+		s.append("\n      Company Country: " + companyCountry);
+		s.append("\n     Company Zip Code: " + companyZipCode);
+		s.append("\n Company Phone Number: " + companyPhoneNumber);
+		s.append("\n         Site Address: " + siteAddress);
+		s.append("\n           Promo Code: " + promoCode);
+		s.append("\n      Number Of Users: " + numberOfUsers);
+		s.append("\n        Phone Support: " + phoneSupport);
+		s.append("\n      Payment Options: " + paymentOptions);
+		s.append("\n         Payment Type: " + paymentType);
+		s.append("\n            Card Type: " + cardType);
+		s.append("\n         Name On Card: " + nameOnCard);
+		s.append("\n          Card Number: " + cardNumber);
+		s.append("\n         Expiry Month: " + expiryMonth);
+		s.append("\n          Expiry Year: " + expiryYear);
+		s.append("\nPurchase Order Number: " + purchaseOrderNumber);
+		
+		return s.toString();
+	}
 
 	public void setFirstName(String s) {
 		this.firstName = s;

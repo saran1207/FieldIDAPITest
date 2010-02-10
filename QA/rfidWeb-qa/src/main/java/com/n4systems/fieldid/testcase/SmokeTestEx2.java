@@ -1,6 +1,14 @@
 package com.n4systems.fieldid.testcase;
 
 import java.util.List;
+
+import com.n4systems.fieldid.Admin;
+import com.n4systems.fieldid.Assets;
+import com.n4systems.fieldid.Home;
+import com.n4systems.fieldid.Identify;
+import com.n4systems.fieldid.admin.ManageCustomers;
+import com.n4systems.fieldid.admin.ManageOrganizations;
+import com.n4systems.fieldid.admin.ManageUsers;
 import com.n4systems.fieldid.datatypes.Customer;
 import com.n4systems.fieldid.datatypes.CustomerDivision;
 import com.n4systems.fieldid.datatypes.CustomerUser;
@@ -92,6 +100,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			primaryDivision = createDivision();
 			Owner owner = new Owner(primaryOrg, primaryCustomer.getCustomerName(), "");
 			primaryCustomerUser = createCustomerUser(owner, jobsites);
+			ManageCustomers mcs = new ManageCustomers(ie);
 			mcs.gotoCustomerDivisions(jobsites);
 			owner.setDivision(primaryDivision.getDivisionName());
 			primaryDivisionUser = createCustomerUser(owner, jobsites);
@@ -135,7 +144,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw e;
 		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
+//			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
 			throw err;
 		}
 	}
@@ -145,6 +154,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -163,7 +173,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setPublished(false);
 			primaryEmployeeAssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -179,6 +191,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -196,7 +209,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			secondaryEmployeeAssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -212,6 +227,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -229,7 +245,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			primaryCustomerAssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -245,6 +263,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -262,7 +281,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			secondaryCustomerAssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -278,6 +299,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -295,7 +317,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			primaryDivisionAssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -311,6 +335,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -328,7 +353,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			secondaryDivisionAssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -344,6 +371,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -361,7 +389,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			primaryCustomer2AssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -377,6 +407,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -394,7 +425,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			secondaryCustomer2AssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -410,6 +443,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -427,7 +461,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			primaryDivision2AssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -443,6 +479,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 
 		try {
 			loginUser(primaryEmployeeUser.getUserID(), password);
+			Identify identify = new Identify(ie);
 			identify.gotoAddProduct();
 			List<String> productStatuses = identify.getProductStatusFromAddAsset();
 			Product p = new Product(misc.getDateString());
@@ -460,7 +497,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 			p.setComments(s);
 			secondaryDivision2AssetSerialNumber = identify.setProduct(p, true);
 			identify.addProductSave();
+			Home home = new Home(ie);
 			home.gotoProductInformationViaSmartSearch(p.getSerialNumber());
+			Assets assets = new Assets(ie);
 			assets.validateAsset(p);
 		} catch (Exception e) {
 			misc.myWindowCapture(timestamp + "/FAILURE-" + method + ".png");
@@ -569,6 +608,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 	}
 	
 	private CustomerUser createCustomerUser(Owner owner, boolean jobsites) throws Exception {
+		ManageCustomers mcs = new ManageCustomers(ie);
 		mcs.gotoUsers(jobsites);
 		mcs.gotoAddCustomerUser(jobsites);
 
@@ -597,6 +637,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 		division.setPhone1("416-599-6464");
 		division.setPhone2("800-99-N4SYS");
 		division.setFax("416-599-6463");
+		ManageCustomers mcs = new ManageCustomers(ie);
 		mcs.gotoCustomerDivisions(jobsites);
 		mcs.gotoAddCustomerDivision(jobsites);
 		mcs.setCustomerDivision(division);
@@ -605,7 +646,9 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 	}
 
 	private Customer createCustomer(String orgUnit) throws Exception {
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageCustomers mcs = new ManageCustomers(ie);
 		mcs.gotoManageCustomers(jobsites);
 		mcs.gotoAddCustomer(jobsites);
 		String id = misc.getRandomString();
@@ -636,6 +679,7 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 	 */
 	private String getSecondaryOrganization() throws Exception {
 		String org = null;
+		ManageOrganizations mos = new ManageOrganizations(ie);
 		List<String> secondaryOrgs = mos.getSecondaryOrganizationNames();
 		int n = secondaryOrgs.size();
 		if(n < 1) {
@@ -662,14 +706,18 @@ public class SmokeTestEx2 extends FieldIDTestCase {
 	 */
 	private String getPrimaryOrganization() throws Exception {
 		String org = null;
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageOrganizations mos = new ManageOrganizations(ie);
 		mos.gotoManageOrganizations();
 		org = mos.getPrimaryOrganizationName();
 		return org;
 	}
 
 	private EmployeeUser createEmployeeUser(String orgUnit) throws Exception {
+		Admin admin = new Admin(ie);
 		admin.gotoAdministration();
+		ManageUsers mus = new ManageUsers(ie);
 		mus.gotoManageUsers();
 		mus.gotoAddEmployeeUser();
 		String firstName = "Smoke";

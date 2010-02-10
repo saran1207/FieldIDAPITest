@@ -26,7 +26,6 @@ public class ManageProductTypes extends TestCase {
 	IE ie = null;
 	Properties p;
 	InputStream in;
-	FieldIDMisc misc;
 	String propertyFile = "manageproducttypes.properties";
 	Finder manageProductTypesFinder;
 	Finder manageProductTypesContentHeader;
@@ -65,7 +64,6 @@ public class ManageProductTypes extends TestCase {
 			in = new FileInputStream(propertyFile);
 			p = new Properties();
 			p.load(in);
-			misc = new FieldIDMisc(ie);
 			manageProductTypesFinder = xpath(p.getProperty("manageproducttype", "NOT SET"));
 			manageProductTypesContentHeader = xpath(p.getProperty("listproducttypecontentheader", "NOT SET"));
 			addProductTypeFinder = xpath(p.getProperty("addproducttype", "NOT SET"));
@@ -323,6 +321,7 @@ public class ManageProductTypes extends TestCase {
 		Button save = ie.button(addProductTypeSaveButtonFinder);
 		assertTrue("Could not find the button to save", save.exists());
 		save.click();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage();
 		checkViewProductTypePageContentHeader(name);
 	}
@@ -442,6 +441,7 @@ public class ManageProductTypes extends TestCase {
 		List<String> productTypeNames = getProductTypeNames();
 		assertTrue(productTypeNames.size() > 0);	// there should always be at least one product type, e.g. '*'
 		gotoAddProductType();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		String name = "validate-" + misc.getRandomInteger();
 		ProductType npt = new ProductType(name);
 		npt.setCautionsURL("http://www.fieldid.com/fieldid/");
@@ -542,6 +542,7 @@ public class ManageProductTypes extends TestCase {
 		Button b = ie.button(saveInspectionTypesFinder);
 		assertTrue("Could not find the button to save Inspection Types for '" + productType + "'", b.exists());
 		b.click();
+		FieldIDMisc misc = new FieldIDMisc(ie);
 		misc.checkForErrorMessagesOnCurrentPage(); 
 		checkManageProductTypePageContentHeader(productType);
 	}

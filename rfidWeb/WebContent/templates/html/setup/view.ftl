@@ -8,7 +8,7 @@
 		<#if sessionUser.hasAccess("managesystemconfig") == true >
 			<p>
 				<label><a href="<@s.url action="organizations"/>" ><@s.text name="title.manage_organizational_units.plural" /></a></label>
-				<span >Create and manage departments and divsions within your company.</span>
+				<span >Create and manage departments and divisions within your company.</span>
 			</p>
 		</#if>
 		<#if sessionUser.hasAccess("manageendusers") == true >
