@@ -63,7 +63,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		selenium.type("registerUserCreate_emailAddress", "dev@fieldid.com");
 		selenium.type("registerUserCreate_city", "Toronto");
 		selenium.select("countryId", "value=CA");
-		waitForAjax();
+		selenium.waitForAjax(Misc.defaultTimeout);
 		selenium.select("tzlist", "label=Ontario - Toronto");
 		selenium.type("registerUserCreate_position", "some position");
 		selenium.type("registerUserCreate_phoneNumber", "647-202-2789");

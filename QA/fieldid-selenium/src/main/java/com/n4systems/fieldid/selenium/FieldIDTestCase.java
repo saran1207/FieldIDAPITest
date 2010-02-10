@@ -13,6 +13,9 @@ import java.util.Set;
 import org.apache.log4j.*;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.*;
+
+import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.*;
 
@@ -149,7 +152,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
-    protected Selenium selenium;
+    protected FieldIdSelenium selenium;
 	protected Misc misc;
 	static Logger log = Logger.getLogger(FieldIDTestCase.class.getName());
 	protected Properties p;
@@ -482,7 +485,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		log.debug("[setUp]: Selenium Port: " + port);
 		log.debug("[setUp]: Browser: " + browser);
 		log.debug("[setUp]: Base URL: " + url);
-		selenium = new DefaultSelenium(host, port, browser, url);
+		selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
 		selenium.start();
 		selenium.setTimeout(Misc.defaultTimeout);
 		log.debug("[setUp]: Open " + contextRoot);
@@ -555,7 +558,5 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		return supportFileLocation;
 	}
 	
-	protected void waitForAjax() throws InterruptedException {
-        selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", Misc.defaultTimeout);
-	}
+	
 }
