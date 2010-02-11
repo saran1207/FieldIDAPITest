@@ -11,7 +11,7 @@
   </module>
   
   <module>
-    <java>certificateData</java>
+    <java>certificateData.jar</java>
   </module>
   <module id="WebModule_1247497201592">
     <web>
