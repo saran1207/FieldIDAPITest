@@ -10,7 +10,7 @@ require 'active_record'
 
 puts RUBY_PLATFORM
 if RUBY_PLATFORM =~ /java/
-  gem 'activerecord-jdbcmysql-adapter', "= 0.9.0"
+  gem 'activerecord-jdbcmysql-adapter', "= 0.9.2"
   require 'active_record/connection_adapters/jdbcmysql_adapter'
 else
   raise "you must use jruby from now on.  There are too many environment issues."
