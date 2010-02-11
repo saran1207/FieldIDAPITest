@@ -9,6 +9,10 @@
   <module>
     <ejb>rfidEJB.jar</ejb>
   </module>
+  
+  <module>
+    <java>certificateData</java>
+  </module>
   <module id="WebModule_1247497201592">
     <web>
       <web-uri>fieldidadminWeb.war</web-uri>
