@@ -46,7 +46,7 @@ public class InspectionScheduleSuggestionTest {
 	
 	@Test public void should_suggests_no_schedule_when_schedules_are_more_than_30_days_away() {
 		List<InspectionSchedule> schedules = new ArrayList<InspectionSchedule>();
-		schedules.add(createSchedule(DateHelper.addDaysToDate(DateHelper.getToday(),31L), 1L));
+		schedules.add(createSchedule(DateHelper.addDaysToDate(DateHelper.getToday(),32L), 1L));
 		schedules.add(createSchedule(DateHelper.addDaysToDate(DateHelper.getToday(),-41L), 2L));
 		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
 		assertEquals(InspectionScheduleSuggestion.NO_SCHEDULE, suggestion.getSuggestedScheduleId());
