@@ -16,6 +16,7 @@ public class ValidationResult {
 
 	private final boolean passed;
 	private final String message;
+	private int row;
 	
 	public ValidationResult(boolean passed, String message) {
 		this.passed = passed;
@@ -33,4 +34,13 @@ public class ValidationResult {
 	public String getMessage() {
 		return message;
 	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
+	}
+	
 }

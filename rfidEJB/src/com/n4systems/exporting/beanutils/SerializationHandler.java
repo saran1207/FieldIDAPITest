@@ -1,7 +1,6 @@
 package com.n4systems.exporting.beanutils;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -47,15 +46,6 @@ public abstract class SerializationHandler {
 			throw new MarshalingException(msg, e);
 		}
 	}
-	
-	/**
-	 * Returns the titles for the columns supported by this handler
-	 * @param field			The field for this handler
-	 * @param exportField	The ExportField annotation on this field
-	 * @param bean			The bean to get the titles from
-	 * @return				A list of String column titles
-	 */
-	public abstract List<String> getTitles(Object bean);
 	
 	/**
 	 * Converts one or more values from a single field into a Map of field title to value.

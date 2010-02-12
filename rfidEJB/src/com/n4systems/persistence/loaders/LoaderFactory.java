@@ -17,7 +17,6 @@ import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.ExternalOrg;
-import com.n4systems.model.orgs.ExternalOrgCodeExistsLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
@@ -25,6 +24,7 @@ import com.n4systems.model.orgs.SecondaryOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
+import com.n4systems.model.orgs.external.ExternalOrgCodeExistsLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
@@ -153,8 +153,8 @@ public class LoaderFactory {
 		return new GlobalIdLoader<T>(filter, clazz);
 	}
 	
-	public <T extends ExternalOrg> ExternalOrgCodeExistsLoader<T> createExternalOrgCodeExistsLoader(Class<T> orgClass) {
-		return new ExternalOrgCodeExistsLoader<T>(filter, orgClass);
+	public ExternalOrgCodeExistsLoader createExternalOrgCodeExistsLoader(Class<? extends ExternalOrg> orgClass) {
+		return new ExternalOrgCodeExistsLoader(filter, orgClass);
 	}
 	
 	public FileAttachmentLoader createFileAttachmentLoader() {

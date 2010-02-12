@@ -51,6 +51,13 @@ public class StringUtils {
 	}
 	
 	/**
+	 * @return If value is null returns an empty string otherwise returns value.toString()
+	 */
+	public static String stringOrEmpty(Object value) {
+		return (value == null) ? new String() : value.toString();
+	}
+	
+	/**
 	 * @return true iff str is non-null and has non-zero length after trimming.  false otherwise.
 	 */
 	public static boolean isNotEmpty(String str) {

@@ -9,23 +9,29 @@ import org.apache.commons.beanutils.BeanUtils;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.validators.FieldValidator;
 import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.reflection.Reflector;
 
-public class ViewValidator<V extends ExternalModelView> {
+public class ViewValidator<V extends ExternalModelView> implements Validator<V> {
 	private final ValidatorFactory validatorFactory;
+	private final SecurityFilter filter;
 	
-	public ViewValidator() {
-		this(new CachedValidatorFactory());
+	public ViewValidator(SecurityFilter filter) {
+		this(filter, new CachedValidatorFactory());
 	}
 	
-	public ViewValidator(ValidatorFactory validatorFactory) {
+	public ViewValidator(SecurityFilter filter, ValidatorFactory validatorFactory) {
+		this.filter = filter;
 		this.validatorFactory = validatorFactory;
 	}
 	
-	/**
-	 * Returns a list of ValidationResults in failure state.  If all validations passed, this list will be empty.
-	 */
+	@Override
 	public List<ValidationResult> validate(V view) {
+		return validate(view, 0);
+	}
+	
+	@Override
+	public List<ValidationResult> validate(V view, int row) {
 		List<ValidationResult> failedResults = new ArrayList<ValidationResult>();
 		
 		ValidationResult failedResult;
@@ -35,6 +41,7 @@ public class ViewValidator<V extends ExternalModelView> {
 			
 			// the validation may have passed in which case failedResult will be null
 			if (failedResult != null) {
+				failedResult.setRow(row);
 				failedResults.add(failedResult);
 			}
 		}
@@ -61,7 +68,7 @@ public class ViewValidator<V extends ExternalModelView> {
 			validator = validatorFactory.create(validatorClass);
 			
 			fieldValue = getFieldValue(view, field);
-			result = validator.validate(fieldValue, view, exportField.title());
+			result = validator.validate(fieldValue, view, exportField.title(), filter);
 			
 			// any failure will stop us from running the rest of the validators
 			// see javadocs at the top of this method

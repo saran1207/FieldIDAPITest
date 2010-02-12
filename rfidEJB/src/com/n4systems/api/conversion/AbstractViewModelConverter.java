@@ -1,10 +1,6 @@
 package com.n4systems.api.conversion;
 
-import java.util.List;
-
 import com.n4systems.api.model.ExternalModelView;
-import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.security.SecurityFilter;
@@ -16,20 +12,16 @@ public abstract class AbstractViewModelConverter<M extends Exportable, V extends
 	private final GlobalIdLoader<M> externalIdLoader;
 	private final Class<M> modelClass;
 	private final Class<V> viewClass;
-	private final ViewValidator<V> viewValidator;
-	
-	private boolean lastValidatePassed = false;
 	
 	public AbstractViewModelConverter(SecurityFilter filter, Class<M> modelClass, Class<V> viewClass) {
-		this(new GlobalIdLoader<M>(filter, modelClass), filter, modelClass, viewClass, new ViewValidator<V>());
+		this(new GlobalIdLoader<M>(filter, modelClass), filter, modelClass, viewClass);
 	}
 
-	public AbstractViewModelConverter(GlobalIdLoader<M> externalIdLoader, SecurityFilter filter, Class<M> modelClass, Class<V> viewClass, ViewValidator<V> viewValidator) {
+	public AbstractViewModelConverter(GlobalIdLoader<M> externalIdLoader, SecurityFilter filter, Class<M> modelClass, Class<V> viewClass) {
 		this.filter = filter;
 		this.externalIdLoader = externalIdLoader;
 		this.modelClass = modelClass;
 		this.viewClass = viewClass;
-		this.viewValidator =  viewValidator;
 	}
 	
 	@Override
@@ -41,25 +33,10 @@ public abstract class AbstractViewModelConverter<M extends Exportable, V extends
 	
 	@Override
 	public M toModel(V view) throws ConversionException {
-		// you MUST call validate before toModel, and the result MUST have been a pass
-		if (!lastValidatePassed) {
-			throw new IllegalStateException("toModel() called before validate() or last validation failed");
-		}
-		
 		boolean edit = !view.isNew();
 		M model = (edit) ? loadModel(view.getGlobalId()) : createModelBean();
 		copyProperties(view, model, edit);
 		return model;
-	}
-	
-	@Override
-	public List<ValidationResult> validate(V view) {
-		List<ValidationResult> failedResults = viewValidator.validate(view);
-		
-		// if we got an empty list back from our view validator, then we consider this view as passed.
-		lastValidatePassed = failedResults.isEmpty();
-		
-		return failedResults;
 	}
 	
 	private M loadModel(String externalId) throws ConversionException {

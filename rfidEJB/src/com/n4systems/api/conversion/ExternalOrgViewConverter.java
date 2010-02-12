@@ -1,7 +1,6 @@
 package com.n4systems.api.conversion;
 
 import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.orgs.ExternalOrg;
@@ -14,8 +13,8 @@ public abstract class ExternalOrgViewConverter<M extends ExternalOrg> extends Ab
 		super(filter, modelClass, FullExternalOrgView.class);
 	}
 
-	public ExternalOrgViewConverter(GlobalIdLoader<M> externalIdLoader, SecurityFilter filter, Class<M> modelClass, ViewValidator<FullExternalOrgView> viewValidator) {
-		super(externalIdLoader, filter, modelClass, FullExternalOrgView.class, viewValidator);
+	public ExternalOrgViewConverter(GlobalIdLoader<M> externalIdLoader, SecurityFilter filter, Class<M> modelClass) {
+		super(externalIdLoader, filter, modelClass, FullExternalOrgView.class);
 	}
 
 	@Override

@@ -1,32 +1,27 @@
 package com.n4systems.exporting;
 
-import java.io.Writer;
-
 import com.n4systems.api.conversion.CustomerOrgViewConverter;
 import com.n4systems.api.conversion.DivisionOrgViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
-import com.n4systems.exporting.io.CsvMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.ListLoader;
 
-public class CustomerCSVExporter implements Exporter {
-	private final Writer writer;
+public class CustomerExporter implements Exporter {
 	private final ExportMapMarshaler<FullExternalOrgView> marshaler;
-	private final CustomerOrgListLoader customerLoader;
+	private final ListLoader<CustomerOrg> customerLoader;
 	private final CustomerOrgViewConverter customerConverter;
 	private final DivisionOrgByCustomerListLoader divisionList;
 	private final DivisionOrgViewConverter divisionConverter;
 	
-	public CustomerCSVExporter(Writer writer, SecurityFilter filter) {
+	public CustomerExporter(ListLoader<CustomerOrg> customerLoader, SecurityFilter filter) {
 		this (
-				writer,
+				customerLoader,
 				new ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class),
-				new CustomerOrgListLoader(filter),
 				new CustomerOrgViewConverter(filter),
 				new DivisionOrgByCustomerListLoader(filter),
 				new DivisionOrgViewConverter(filter)
@@ -34,37 +29,28 @@ public class CustomerCSVExporter implements Exporter {
 	}
 	
 	// TODO: this guy has too many dependencies.  We need to find a way to cut this down.
-	protected CustomerCSVExporter(
-			Writer writer, 
-			ExportMapMarshaler<FullExternalOrgView> marshaler, 
-			CustomerOrgListLoader customerLoader, 
+	protected CustomerExporter(
+			ListLoader<CustomerOrg> customerLoader, 
+			ExportMapMarshaler<FullExternalOrgView> marshaler,
 			CustomerOrgViewConverter customerConverter, 
 			DivisionOrgByCustomerListLoader divisionList, 
 			DivisionOrgViewConverter divisionConverter
 		) {
-		
-		this.writer = writer;
-		this.marshaler = marshaler;
+
 		this.customerLoader = customerLoader;
+		this.marshaler = marshaler;
 		this.customerConverter = customerConverter;
 		this.divisionList = divisionList;
 		this.divisionConverter = divisionConverter;
 	}
 
-	public void export() throws ExportException {
-		MapWriter mapWriter = null;
+	public void export(MapWriter mapWriter) throws ExportException {
 		FullExternalOrgView export;
 		
-		for (CustomerOrg customer: customerLoader.withoutLinkedOrgs().load()) {
+		for (CustomerOrg customer: customerLoader.load()) {
 			
 			try {
 				export = customerConverter.toView(customer);
-				
-				if (mapWriter == null) {
-					// we can't get our titles until we've converted the first view since
-					// the view object is required to create them
-					mapWriter = new CsvMapWriter(writer, marshaler.getTitles(export));
-				}
 				
 				mapWriter.write(marshaler.toBeanMap(export));
 				

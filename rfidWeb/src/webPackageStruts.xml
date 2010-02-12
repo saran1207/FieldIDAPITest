@@ -168,6 +168,9 @@
 			</result>
 		</action>
 
+		<action name="customerImportExport" method="showImportExport" class="com.n4systems.fieldid.actions.CustomerCrud">
+			<result name="success" type="freemarker">/templates/html/customerCrud/importExport.ftl</result>
+		</action>
 
 		<action name="productStatusEdit" method="loadEdit"
 			class="com.n4systems.fieldid.actions.product.ProductStatusCrud">

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.CollectionFactory;
 
 /**
@@ -568,19 +569,10 @@ public class Reflector {
 	 * @return			An array of fields
 	 */
 	protected static Field[] findAllFields(Class<?> clazz, Field[] fields) {
-		Field[] decFields = clazz.getDeclaredFields();
-		Field[] newFields;
-		
-		if(decFields.length > 0) {
-			// if our class has declared fields, create a new array containing our current fields as well as the new ones.
-			newFields = new Field[fields.length + decFields.length];
-			System.arraycopy(fields, 0, newFields, 0, fields.length);
-			System.arraycopy(decFields, 0, newFields, fields.length, decFields.length);
-		} else {
-			newFields = decFields;
-		}
+		// combine the array of fields from child classes and the current class
+		Field[] allFields = ArrayUtils.combine(fields, clazz.getDeclaredFields());
 		
 		// if the next super class is Object, then return our field array, otherwise recurse into that super class
-		return (clazz.getSuperclass().equals(Object.class)) ? newFields : findAllFields(clazz.getSuperclass(), newFields);
+		return (clazz.getSuperclass().equals(Object.class)) ? allFields : findAllFields(clazz.getSuperclass(), allFields);
 	}
 }

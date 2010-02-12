@@ -1,27 +1,32 @@
 package com.n4systems.api.model;
 
+import com.n4systems.api.validation.validators.EmailValidator;
+import com.n4systems.api.validation.validators.ExternalOrgCodeUniqueValidator;
+import com.n4systems.api.validation.validators.ExternalOrgGlobalIdValidator;
+import com.n4systems.api.validation.validators.ExternalOrgTypeValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
+import com.n4systems.api.validation.validators.ParentOrgResolutionValidator;
 import com.n4systems.exporting.beanutils.ExportField;
 
 public class FullExternalOrgView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 	
-	@ExportField(title = "Type", order = 0, validators = {NotNullValidator.class})
+	@ExportField(title = "Type", order = 0, validators = {NotNullValidator.class, ExternalOrgTypeValidator.class})
 	private String type;
 
 	@ExportField(title="Name", order = 100, validators = {NotNullValidator.class})
 	private String name;
 
-	@ExportField(title="Code", order = 150)
+	@ExportField(title="Code", order = 150, validators = {NotNullValidator.class, ExternalOrgCodeUniqueValidator.class})
 	private String code;
 
-	@ExportField(title="Organization", order = 200, validators = {NotNullValidator.class})
+	@ExportField(title="Organization", order = 200, validators = {ParentOrgResolutionValidator.class})
 	private String parentOrg;
 	
 	@ExportField(title="Contact Name", order = 225)
 	private String contactName;
 	
-	@ExportField(title="Contact Email", order = 275)
+	@ExportField(title="Contact Email", order = 275, validators = {EmailValidator.class})
 	private String contactEmail;
 	
 	@ExportField(title="Address", order = 300)
@@ -48,6 +53,9 @@ public class FullExternalOrgView extends ExternalModelView {
 	@ExportField(title="Fax", order = 1000)
 	private String fax1;
 	
+	@ExportField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
+	private String globalId;
+	
 	public FullExternalOrgView() {}
 	
 	public String getType() {
@@ -59,11 +67,11 @@ public class FullExternalOrgView extends ExternalModelView {
 	}
 	
 	public boolean isCustomer() {
-		return type.equals("C");
+		return (type != null && type.equals("C"));
 	}
 
 	public boolean isDivision() {
-		return type.equals("D");
+		return (type != null && type.equals("D"));
 	}
 
 	public void setTypeToCustomer() {
@@ -176,6 +184,16 @@ public class FullExternalOrgView extends ExternalModelView {
 
 	public void setFax1(String fax1) {
 		this.fax1 = fax1;
+	}
+
+	@Override
+	public String getGlobalId() {
+		return globalId;
+	}
+
+	@Override
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
 	}
 
 }

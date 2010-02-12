@@ -2,17 +2,18 @@ package com.n4systems.api.validation.validators;
 
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
+import com.n4systems.model.security.SecurityFilter;
 
 public class NotNullValidator implements FieldValidator {
 
 	public NotNullValidator() {}
 	
 	@Override
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName) {		
-		if (fieldValue == null) {
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter) {		
+		if (fieldValue != null) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail("%s must not be empty", fieldName);
+			return ValidationResult.fail(NotNullValidatorFail, fieldName);
 		}
 	}
 

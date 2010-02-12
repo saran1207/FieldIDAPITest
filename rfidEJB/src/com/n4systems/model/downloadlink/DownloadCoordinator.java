@@ -5,10 +5,12 @@ import java.util.concurrent.Executor;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
 import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
 import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
@@ -103,4 +105,15 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
+	private CustomerExportTask createCustomerExportTask(DownloadLink link, String downloadUrl, SecurityFilter filter) {
+		CustomerExportTask task = new CustomerExportTask(link, downloadUrl, filter);
+		return task;
+	}
+	
+	public void generateCustomerExport(String name, String downloadUrl, ContentType type, SecurityFilter filter) {
+		DownloadLink link = createDownloadLink(name, type);
+		CustomerExportTask task = createCustomerExportTask(link, downloadUrl, filter);
+		
+		executor.execute(task);
+	}
 }

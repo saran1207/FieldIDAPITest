@@ -2,9 +2,9 @@
 	<h2 class="modalHeader"><@s.text name="label.messagetitle" /></h2>
 	<div id="modalBox_message">
 		<#if actionErrors.isEmpty() >
-			<p><@s.text name="message.reportbeinggenerated" /></p>
+			<p><@s.text name="message.downloadbeinggenerated" /></p>
 			<p><@s.text name="message.emailpending" /></p>
-			<p><@s.text name="message.seereportstatus" /></p>
+			<p><@s.text name="message.seedownloadstatus" /></p>
 		<#else>
 			<#list actionErrors as error >
 				${error}<br/>

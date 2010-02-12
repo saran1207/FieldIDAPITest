@@ -7,18 +7,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.util.reflection.beans.NonEmptyChild;
 import com.n4systems.util.reflection.beans.ReflectionTestBeanA;
 import com.n4systems.util.reflection.beans.ReflectionTestBeanB;
 import com.n4systems.util.reflection.beans.ReflectionTestBeanC;
+import com.n4systems.util.reflection.beans.ReflectorTestAnno;
 import com.n4systems.util.reflection.builders.ReflectionTestBeanABuilder;
 
 public class ReflectorTest {
@@ -376,5 +380,28 @@ public class ReflectorTest {
 		assertEquals("myMethod", exposedReflector._parseMethodNameFromMethod("myMethod()"));
 		assertEquals("myMethod", exposedReflector._parseMethodNameFromMethod("myMethod(args, 123)"));
 		assertEquals("myMethod", exposedReflector._parseMethodNameFromMethod("myMethod(args, 123)[23]"));
+	}
+	
+	@Test
+	public void test_find_all_fields_with_annotation() {
+		Field[] fields = Reflector.findAllFieldsWithAnnotation(ReflectionTestBeanA.class, ReflectorTestAnno.class);
+		
+		Set<String> fieldNames = new HashSet<String>();
+		for (Field field: fields) {
+			fieldNames.add(field.getName());
+		}
+	
+		assertEquals(3, fieldNames.size());
+		assertTrue(fieldNames.containsAll(Arrays.asList("name", "beanBArray", "beanMap")));
+	}
+	
+	@Test
+	public void test_find_all_fields_allows_parent_class_to_have_no_fields() {
+
+		
+		Field[] fields = Reflector.findAllFields(NonEmptyChild.class);
+		
+		assertEquals(1, fields.length);
+		assertEquals("field", fields[0].getName());
 	}
 }

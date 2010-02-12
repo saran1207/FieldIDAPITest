@@ -1,8 +1,6 @@
 package com.n4systems.exporting.beanutils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ExportMapMarshaler<T> {
@@ -32,22 +30,10 @@ public class ExportMapMarshaler<T> {
 		}
 	}
 	
-	public String[] getTitles(T bean) throws MarshalingException {
-		initHandlers(beanClass, handlerFactory);
-		
-		List<String> titles = new ArrayList<String>();
-		
-		for (SerializationHandler handler: handlers) {
-			titles.addAll(handler.getTitles(bean));
-		}
-		
-		return titles.toArray(new String[titles.size()]);
-	}
-	
 	public Map<String, String> toBeanMap(T bean) throws MarshalingException {
 		initHandlers(beanClass, handlerFactory);
 		
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new LinkedHashMap<String, String>();
 		
 		for (SerializationHandler handler: handlers) {
 			map.putAll(handler.marshal(bean));

@@ -1,36 +1,28 @@
 package com.n4systems.exporting.io;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CsvMapReader extends BufferedReader implements MapReader {
+import com.n4systems.util.MapUtils;
+
+public class CsvMapReader implements MapReader {
 	private static final String DEFAULT_FIELD_SEP = ",";
 	private static final String DEFAULT_QUOTE_CHAR = "\"";
 	
 	private final String fieldSep;
 	private final String quoteChar;
 
+	private BufferedReader reader;
 	private int parseIndex;
 	private String[] titles;
-	private boolean titleLineRead = false;
 	private int currentRow = 0;
-	
-	/**
-	 * Convenience constructor opening a buffered FileWriter as the underlying stream and using
-	 * the default quotation and separation characters.
-	 */
-	public CsvMapReader(File file) throws IOException {
-		this(new FileReader(file), DEFAULT_FIELD_SEP, DEFAULT_QUOTE_CHAR);
-	}
 	
 	/**
 	 * Creates an ArrayReader using a the default separator and quotation character.
@@ -38,7 +30,7 @@ public class CsvMapReader extends BufferedReader implements MapReader {
 	 * @see #DEFAULT_QUOTE_CHAR
 	 * @see #ArrayReader(Writer, String, String)
 	 */
-	public CsvMapReader(Reader in) {
+	public CsvMapReader(InputStream in) {
 		this(in, DEFAULT_FIELD_SEP, DEFAULT_QUOTE_CHAR);
 	}
 
@@ -48,12 +40,13 @@ public class CsvMapReader extends BufferedReader implements MapReader {
 	 * @param fieldSep		Separator to use between fields.  May be null for no separation	
 	 * @param quoteChar		Character to use to quote fields.  May be null for no quoting
 	 */
-	public CsvMapReader(Reader in, String fieldSep, String quoteChar) {
-		super(in);
+	public CsvMapReader(InputStream in, String fieldSep, String quoteChar) {
+		this.reader = new BufferedReader(new InputStreamReader(in));
 		this.fieldSep = (fieldSep != null) ? fieldSep : "";
 		this.quoteChar = (quoteChar != null) ? quoteChar : "";
 	}
 	
+	@Override
 	public String[] getTitles() throws IOException, ParseException {
 		if (!readTitleLine()) {
 			return null;
@@ -62,33 +55,6 @@ public class CsvMapReader extends BufferedReader implements MapReader {
 	}
 	
 	@Override
-	public String readLine() throws IOException {
-		currentRow++;
-		return super.readLine();
-	}
-	
-	/**
-	 * Reads and parses the title line.  Returns false if read failed.
-	 */
-	private boolean readTitleLine() throws IOException, ParseException {
-		if (titleLineRead) {
-			return true;
-		}
-		
-		String line = readLine();
-		if (line == null) {
-			return false;
-		}
-		
-		titles = parseLine(line);
-		titleLineRead = true;
-		return true;
-	}
-	
-	/**
-	 * Reads a single row returning a map of titles to their values.  
-	 * @return
-	 */
 	public Map<String, String> readMap() throws IOException, ParseException {
 		if (!readTitleLine()) {
 			return null;
@@ -103,20 +69,49 @@ public class CsvMapReader extends BufferedReader implements MapReader {
 		return row;
 	}
 	
-	private Map<String, String> constructMap(String line) throws ParseException {
-		// use a linked hash map so that the iteration order is the same as in the file
-		Map<String, String> row = new LinkedHashMap<String, String>();
+	@Override
+	public int getCurrentRow() {
+		return currentRow;
+	}
+	
+	@Override
+	public void close() throws IOException {
+		if (reader != null) {
+			reader.close();
+			reader = null;
+		}
+	}
+	
+	public String readLine() throws IOException {
+		String nextLine = reader.readLine();
 		
-		String value;
-		String[] parsedLine = parseLine(line);
-		for (int i = 0; i < titles.length; i++) {
-			// If this line had less columns then the title line,
-			// the rest of the values will go in as null
-			value = (i < parsedLine.length) ? parsedLine[i] : null;
-			
-			row.put(titles[i], value);
+		if (nextLine != null) {
+			currentRow++;
 		}
 		
+		return nextLine;
+	}
+	
+	/**
+	 * Reads and parses the title line.  Returns false if read failed.
+	 */
+	private boolean readTitleLine() throws IOException, ParseException {
+		if (titles != null) {
+			return true;
+		}
+		
+		String line = readLine();
+		if (line == null) {
+			return false;
+		}
+		
+		titles = parseLine(line);
+		return true;
+	}
+	
+	private Map<String, String> constructMap(String line) throws ParseException {
+		// map the titles to the line values
+		Map<String, String> row = MapUtils.combineArrays(titles, parseLine(line));		
 		return row;
 	}
 	
@@ -170,11 +165,6 @@ public class CsvMapReader extends BufferedReader implements MapReader {
 		
 		parseIndex = endAt + endChar.length() + fieldSep.length();
 		return line.substring(startAt, endAt);
-	}
-
-	@Override
-	public int getCurrentRow() {
-		return currentRow;
 	}
 }
 

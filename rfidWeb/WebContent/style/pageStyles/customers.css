@@ -1,0 +1,50 @@
+#leftBox {
+	float: left;
+	overflow: hidden;
+	width: 550px;
+}
+
+#leftBox p {
+	padding-top: 10px;
+}
+
+#leftBox div {
+	padding: 6px 0 0 35px;
+	margin: 20px 5px 20px 0;
+}
+
+#leftBox div h3 {
+	font-size: 1.3em;
+}
+
+#leftBox div a {
+	padding-top: 3px;
+	display: block;
+}
+
+#rightBox {
+	overflow: hidden;
+	width: 400px;
+	border: 1px solid;
+	margin-top: 10px;
+	padding: 10px;
+	min-height: 200px;
+	background: #FFF2D7 none repeat scroll 0 0;
+}
+
+#rightBox h3 {
+	text-align: center;
+	font-size: 1.3em;
+}
+
+.largeText {
+	font-size: 1.5em;
+}
+
+#importBox {
+	background:no-repeat url(../../images/green-arrow-right.png);
+}
+
+#exportBox {
+	background:no-repeat url(../../images/green-arrow-left.png);
+}

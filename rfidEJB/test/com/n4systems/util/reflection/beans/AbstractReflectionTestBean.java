@@ -2,6 +2,8 @@ package com.n4systems.util.reflection.beans;
 
 public abstract class AbstractReflectionTestBean {
 	private Long id;
+	
+	@ReflectorTestAnno
 	private String name;
 	
 	public AbstractReflectionTestBean() {}

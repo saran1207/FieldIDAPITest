@@ -10,9 +10,12 @@ import java.util.Set;
 public class ReflectionTestBeanA extends AbstractReflectionTestBean {
 	private ReflectionTestBeanB beanB;
 	private List<ReflectionTestBeanB> beanBList = new ArrayList<ReflectionTestBeanB>();
+	@ReflectorTestAnno
 	private ReflectionTestBeanB[] beanBArray;
 	private Set<ReflectionTestBeanB> beanBSet = new HashSet<ReflectionTestBeanB>();
 	private Map<String, String> simpleMap = new HashMap<String, String>();
+	
+	@ReflectorTestAnno
 	private Map<String, ReflectionTestBeanB> beanMap = new HashMap<String, ReflectionTestBeanB>();
 	private boolean boolValue = true;
 

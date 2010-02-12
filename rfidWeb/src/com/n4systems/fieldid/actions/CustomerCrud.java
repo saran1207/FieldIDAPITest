@@ -15,6 +15,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
@@ -46,6 +47,7 @@ public class CustomerCrud extends AbstractCrud {
 	private String listFilter;
 	private Pager<UserBean> userList;
 	private List<ListingPair> internalOrgList;
+	private String exportType; 
 	
 	public CustomerCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -71,8 +73,6 @@ public class CustomerCrud extends AbstractCrud {
 			customer.setContact(new Contact());
 		}
 	}
-
-	
 
 	@SkipValidation
 	public String doList() {
@@ -142,8 +142,26 @@ public class CustomerCrud extends AbstractCrud {
 		
 		return SUCCESS;
 	}
-
-
+	
+	@SkipValidation
+	public String doShowImportExport() {
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doExport() {
+		try {
+			ContentType contentType = ContentType.valueOf(exportType.toUpperCase());
+			
+			getDownloadCoordinator().generateCustomerExport(getText("label.customer_export_file"), getDownloadLinkUrl(), contentType, getSecurityFilter());
+		} catch (RuntimeException e) {
+			logger.error("Unable to execute customer export", e);
+			addFlashMessage(getText("error.customer_export_failed"));
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
 	public Pager<CustomerOrg> getPage() {
 		if (customerPage == null) {
 			CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
@@ -232,6 +250,13 @@ public class CustomerCrud extends AbstractCrud {
 	public CustomerOrg getCustomer() {
 		return customer;
 	}
-	
+
+	public String getExportType() {
+		return exportType;
+	}
+
+	public void setExportType(String exportType) {
+		this.exportType = exportType;
+	}
 	
 }

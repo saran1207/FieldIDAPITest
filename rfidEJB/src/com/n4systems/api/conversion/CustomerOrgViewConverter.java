@@ -1,7 +1,6 @@
 package com.n4systems.api.conversion;
 
 import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
@@ -16,8 +15,8 @@ public class CustomerOrgViewConverter extends ExternalOrgViewConverter<CustomerO
 		orgLoader = new InternalOrgByNameLoader(filter);
 	}
 
-	public CustomerOrgViewConverter(GlobalIdLoader<CustomerOrg> externalIdLoader, SecurityFilter filter, ViewValidator<FullExternalOrgView> viewValidator) {
-		super(externalIdLoader, filter, CustomerOrg.class, viewValidator);
+	public CustomerOrgViewConverter(GlobalIdLoader<CustomerOrg> externalIdLoader, SecurityFilter filter) {
+		super(externalIdLoader, filter, CustomerOrg.class);
 		orgLoader = new InternalOrgByNameLoader(filter);
 	}
 

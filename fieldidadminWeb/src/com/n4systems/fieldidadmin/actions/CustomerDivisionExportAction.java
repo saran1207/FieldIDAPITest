@@ -3,26 +3,24 @@ package com.n4systems.fieldidadmin.actions;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.CustomerOrgViewConverter;
-import com.n4systems.api.conversion.DivisionOrgViewConverter;
-import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.exporting.CustomerCSVExporter;
+import com.n4systems.api.validation.ValidationResult;
+import com.n4systems.exporting.CustomerExporter;
+import com.n4systems.exporting.CustomerImporter;
 import com.n4systems.exporting.ExportException;
 import com.n4systems.exporting.Exporter;
-import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
-import com.n4systems.exporting.io.CsvMapReader;
+import com.n4systems.exporting.io.CsvMapWriter;
+import com.n4systems.exporting.io.ExcelMapReader;
+import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.downloadlink.ContentType;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.TenantCache;
@@ -41,35 +39,19 @@ public class CustomerDivisionExportAction extends AbstractAdminAction {
 		return SUCCESS;
 	}
 	
-	public String doImport() {
+	public String doImport() throws FileNotFoundException {
 		try {
 			SecurityFilter filter = new TenantOnlySecurityFilter(tenant.getId());
-			
-			OrgSaver orgSaver = new OrgSaver();
-			CustomerOrgViewConverter customerConverter = new CustomerOrgViewConverter(filter);
-			DivisionOrgViewConverter divisionConverter = new DivisionOrgViewConverter(filter);
-			
-			CsvMapReader mapReader = new CsvMapReader(importFile);
 
-			ExportMapUnmarshaler<FullExternalOrgView> unmarshaler = new ExportMapUnmarshaler<FullExternalOrgView>(FullExternalOrgView.class, mapReader.getTitles());
+			MapReader mapReader = new ExcelMapReader(new FileInputStream(importFile));
 			
-			CustomerOrg customer;
-			DivisionOrg division;
-			FullExternalOrgView orgView;
-			Map<String, String> row;
-			while ((row = mapReader.readMap()) != null) {
-				orgView = unmarshaler.toBean(row);
-				
-				if (orgView.isCustomer()) {
-					customer = customerConverter.toModel(orgView);
-					customer = (CustomerOrg)orgSaver.saveOrUpdate(customer);
-					divisionConverter.setParentCustomer(customer);
-				} else if (orgView.isDivision()) {
-					division = divisionConverter.toModel(orgView);
-					orgSaver.saveOrUpdate(division);
-				} else {
-					throw new ConversionException("Organization was neighter a Customer or Division");
+			CustomerImporter importer = new CustomerImporter(mapReader, filter);
+
+			if (!importer.validateAndImport()) {
+				for (ValidationResult result: importer.getFailedValidationResults()) {
+					addActionError(String.format("Row %d: %s", result.getRow(), result.getMessage()));
 				}
+				return ERROR;
 			}
 			
 		} catch (Exception e) {
@@ -86,10 +68,11 @@ public class CustomerDivisionExportAction extends AbstractAdminAction {
 	
 	public String doExport() {
 		try {
+			SecurityFilter filter = new TenantOnlySecurityFilter(tenant.getId());
 			ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-
-			Exporter exporter = new CustomerCSVExporter(new OutputStreamWriter(byteOut), new TenantOnlySecurityFilter(tenant.getId()));
-			exporter.export();
+			
+			Exporter exporter = new CustomerExporter(new CustomerOrgListLoader(filter), filter);
+			exporter.export(new CsvMapWriter(byteOut));
 			
 			byte[] output = byteOut.toByteArray();
 			
@@ -114,10 +97,6 @@ public class CustomerDivisionExportAction extends AbstractAdminAction {
 
 	public void setTenantId(Long tenantId) {
 		this.tenant = TenantCache.getInstance().findTenant(tenantId);
-	}
-	
-	public File getUpload() {
-		return importFile;
 	}
 	
 	public void setUpload(File importFile) {

@@ -2,7 +2,6 @@ package com.n4systems.exporting.beanutils;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import com.n4systems.util.StringUtils;
@@ -27,11 +26,6 @@ public class SimpleSerializationHandler extends SerializationHandler {
 		String cleanString = (value != null) ? StringUtils.clean(value) : null;
 		
 		setFieldValue(bean, cleanString);
-	}
-	
-	@Override
-	public List<String> getTitles(Object bean) {
-		return Collections.singletonList(getExportField().title());
 	}
 
 	@Override

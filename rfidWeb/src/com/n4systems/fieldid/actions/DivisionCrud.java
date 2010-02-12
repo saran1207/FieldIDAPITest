@@ -178,7 +178,7 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 	}
 	
 	public boolean duplicateValueExists(String formValue) {
-		return getLoaderFactory().createExternalOrgCodeExistsLoader(DivisionOrg.class).setParentOrg(customer).setCode(formValue).setFilterOutId(uniqueID).load();
+		return getLoaderFactory().createExternalOrgCodeExistsLoader(DivisionOrg.class).setCode(formValue).setFilterOutId(uniqueID).load();
 	}
 
 	public Pager<DivisionOrg> getPage() {

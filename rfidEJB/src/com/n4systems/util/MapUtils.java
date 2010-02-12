@@ -62,4 +62,33 @@ public class MapUtils {
 			map.put(entry, entry);
 		}
 	}
+	
+	/**
+	 * Maps and array of keys to an array of values.  Values without a corresponding
+	 * key index will be ignored.  Keys without a corresponding value index will be
+	 * mapped as null.  The map returned will of type LinkedHashMap to ensure the same iteration
+	 * order as the keys array.
+	 */
+	public static <K, V, k extends K, v extends V> Map<K, V> combineArrays(k[] keys, v[] values) {
+		Map<K, V> map = new LinkedHashMap<K, V>();
+		
+		combineArrays(map, keys, values);
+		
+		return map;
+	}
+	
+	/**
+	 * Maps and array of keys to an array of values.  Values without a corresponding
+	 * key index will be ignored.  Keys without a corresponding value index will be
+	 * mapped as null.
+	 */
+	public static <K, V, k extends K, v extends V> void combineArrays(Map<K, V> map, k[] keys, v[] values) {
+		v value;
+		for (int i = 0; i < keys.length; i++) {
+			// if we have less values than keys, the remaining values will go in null
+			value = (i < values.length) ? values[i] : null;
+			
+			map.put(keys[i], value);
+		}
+	}
 }

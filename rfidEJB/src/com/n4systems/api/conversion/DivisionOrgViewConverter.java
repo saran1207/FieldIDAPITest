@@ -1,7 +1,6 @@
 package com.n4systems.api.conversion;
 
 import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -14,8 +13,8 @@ public class DivisionOrgViewConverter extends ExternalOrgViewConverter<DivisionO
 		super(filter, DivisionOrg.class);
 	}
 
-	public DivisionOrgViewConverter(GlobalIdLoader<DivisionOrg> externalIdLoader, SecurityFilter filter, ViewValidator<FullExternalOrgView> viewValidator) {
-		super(externalIdLoader, filter, DivisionOrg.class, viewValidator);
+	public DivisionOrgViewConverter(GlobalIdLoader<DivisionOrg> externalIdLoader, SecurityFilter filter) {
+		super(externalIdLoader, filter, DivisionOrg.class);
 	}
 
 	@Override
