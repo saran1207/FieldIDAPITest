@@ -4,10 +4,11 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class FilteredIdLoader<T extends AbstractEntity> extends SecurityFilteredLoader<T> {
+public class FilteredIdLoader<T extends AbstractEntity> extends SecurityFilteredLoader<T> implements IdLoader<FilteredIdLoader<T>> {
 	private final Class<T> clazz;
 	private Long id;
 	private String[] postFetchFields = new String[0];

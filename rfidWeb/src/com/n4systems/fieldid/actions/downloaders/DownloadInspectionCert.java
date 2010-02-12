@@ -53,7 +53,7 @@ public class DownloadInspectionCert extends DownloadAction {
 			InspectionCertificateGenerator certGen = new InspectionCertificateGenerator(new DateTimeDefiner(getUser()));
 			JasperPrint p = certGen.generate(reportType, inspection, transaction);
 			
-			byte[] pdf = CertificatePrinter.printToPDF(p);
+			byte[] pdf = new CertificatePrinter().printToPDF(p);
 			
 			fileName = constructReportFileName(inspection);
 

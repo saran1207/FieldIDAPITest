@@ -20,9 +20,6 @@
 	<script type="text/javascript">
 		var printAllPDFs = $$(".printAllPDFs");
 		printAllPDFs.each(function(element, index) { element.addClassName("disabled"); element.removeClassName("lightview"); element.writeAttribute('title'); element.observe('click', function(event) { Event.stop(event); showQuickView('warning_printAllPDFs', event); } ); } );
-		
-		if ($("print_list") != null) { $("print_list").hide(); }
-		
 	</script>
 </#if>
 
@@ -34,6 +31,9 @@
 		summaryReports.each(function(element, index) { element.addClassName("disabled"); element.removeClassName("lightview"); element.writeAttribute('title'); element.observe('click', function(event) { Event.stop(event);  showQuickView('warning_summaryReport', event); } ); } );
 	</script>	
 </#if>
+
+
+
 
 
 <#if maxSizeForAssigningInspectionsToJobs lt totalResults>

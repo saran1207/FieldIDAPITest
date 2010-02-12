@@ -1,7 +1,7 @@
 package com.n4systems.taskscheduling.task;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -15,6 +15,7 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.persistence.utils.LazyLoadingList;
 import com.n4systems.reporting.ProductCertificateReportGenerator;
 import com.n4systems.util.mail.MailMessage;
 
@@ -42,7 +43,7 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 						
 			List<Product> products = loadProducts(user, transaction);
 			
-			certGen.generate(products, downloadFile, downloadName, user, transaction);
+			certGen.generate(products, new FileOutputStream(downloadFile), downloadName, user, transaction);
 				
 			PersistenceManager.finishTransaction(transaction);
 		} catch (Exception e) {
@@ -60,15 +61,7 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 	}
 	
 	private List<Product> loadProducts(UserBean user, Transaction transaction) {
-		List<Product> products = new ArrayList<Product>();
-		
-		Product product;
-		for (Long productId: productIdList) {
-			product = productLoader.setId(productId).load(transaction);
-			products.add(product);
-		}
-		
-		return products;
+		return new LazyLoadingList<Product>(productIdList, productLoader, transaction);
 	}
 
 	public void setProductIdList(List<Long> productIdList) {

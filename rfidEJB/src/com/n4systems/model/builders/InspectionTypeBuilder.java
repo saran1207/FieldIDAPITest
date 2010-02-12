@@ -1,16 +1,19 @@
 package com.n4systems.model.builders;
 
 import com.n4systems.model.InspectionType;
+import com.n4systems.model.InspectionTypeGroup;
 
 public class InspectionTypeBuilder extends EntityWithTenantBuilder<InspectionType> {
 	private final String name;
-	private String description;
-	private boolean printable;
-	private boolean retired = false;
-	private boolean master = false;
-	private long formVersion;
+	private final String description;
+	private final boolean printable;
+	private final boolean retired;
+	private final boolean master;
+	private final long formVersion;
+	private final InspectionTypeGroup group;
 	
-	public InspectionTypeBuilder(String name, String description, boolean printable, boolean retired, boolean master, long formVersion) {
+	
+	public InspectionTypeBuilder(String name, String description, boolean printable, boolean retired, boolean master, long formVersion, InspectionTypeGroup group) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -18,34 +21,39 @@ public class InspectionTypeBuilder extends EntityWithTenantBuilder<InspectionTyp
 		this.retired = retired;
 		this.master = master;
 		this.formVersion = formVersion;
+		this.group = group;
 	}
 	
 	public static InspectionTypeBuilder anInspectionType() {
-		return new InspectionTypeBuilder("some Name", "some description", true, false, false, InspectionType.DEFAULT_FORM_VERSION);
+		return new InspectionTypeBuilder("some Name", "some description", true, false, false, InspectionType.DEFAULT_FORM_VERSION, new InspectionTypeGroup());
 	}
 	
 	public InspectionTypeBuilder named(String name) {
-		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion);
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
 	}
 	
 	public InspectionTypeBuilder withDescription(String description) {
-		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion);
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
 	}
 	
 	public InspectionTypeBuilder withPrintable(boolean printable) {
-		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion);
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
 	}
 	
 	public InspectionTypeBuilder withRetired(boolean retired) {
-		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion);
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
 	}
 	
 	public InspectionTypeBuilder withMaster(boolean master) {
-		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion);
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
 	}
 	
 	public InspectionTypeBuilder withFormVersion(long formVersion) {
-		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion);
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
+	}
+	
+	public InspectionTypeBuilder withGroup(InspectionTypeGroup group) {
+		return new InspectionTypeBuilder(name, description, printable, retired, master, formVersion, group);
 	}
 	
 	@Override
@@ -57,6 +65,7 @@ public class InspectionTypeBuilder extends EntityWithTenantBuilder<InspectionTyp
 		type.setRetired(retired);
 		type.setMaster(master);
 		type.setFormVersion(formVersion);
+		type.setGroup(group);
 		return type;
 	}
 

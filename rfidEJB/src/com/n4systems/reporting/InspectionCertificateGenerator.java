@@ -51,9 +51,7 @@ public class InspectionCertificateGenerator {
 	public JasperPrint generate(InspectionReportType type, Inspection inspection, Transaction transaction) throws NonPrintableEventType, ReportException {
 		JasperPrint jPrint = null;
 		
-		if (!inspection.isPrintableForReportType(type)) {
-			throw new NonPrintableEventType(String.format("Inspection [%s] was not printable or did not have a PrintOut for InspectionReportType [%s]", inspection.getId(), type.getDisplayName()));
-		}
+		guard(type, inspection);
 		
 		PrintOut printOutToPrint = inspection.getType().getGroup().getPrintOutForReportType(type);
 		
@@ -64,6 +62,12 @@ public class InspectionCertificateGenerator {
 		}
 	
 		return jPrint;
+	}
+
+	private void guard(InspectionReportType type, Inspection inspection) throws NonPrintableEventType {
+		if (!inspection.isPrintableForReportType(type)) {
+			throw new NonPrintableEventType(String.format("Inspection [%s] was not printable or did not have a PrintOut for InspectionReportType [%s]", inspection.getId(), type.getDisplayName()));
+		}
 	}
 	
 	private ReportMap<Object> createMainReportMap(Inspection inspection, File jasperFile, Transaction transaction) {

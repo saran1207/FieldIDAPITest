@@ -51,12 +51,12 @@ ${reportActions}
 	
 			<div id="print_link" class="print printRelative" style="display: inline;" onmouseover="repositionPrintList('print_list', 'print_link');" >
 				<ul id="print_list">
-					<li><a href='${printReport}'			class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.printreport" /></a></li>
-					<li><a href="${printAllInspectionUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.printallpdfreports"/></a></li>
-					<li><a href="${printAllobservationUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.printallobservationcertificate"/></a></li>
+					<li><a href='${printReport}'			class='lightview summaryReport' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printreport" /></a></li>
+					<li><a href="${printAllInspectionUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallpdfreports"/></a></li>
+					<li><a href="${printAllobservationUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallobservationcertificate"/></a></li>
 				</ul>
 				
-				<a href="javascript:void(0);" class="printAllPDFs" ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.print"/></a>
+				<a href="javascript:void(0);" class="pdfPrinting" ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.print"/></a>
 			</div>
 			|
 			<a href='<@s.url action="reportResults" namespace="/aHtml" searchId="${searchId}" />' class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a>

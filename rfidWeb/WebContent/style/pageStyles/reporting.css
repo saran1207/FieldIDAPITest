@@ -18,12 +18,21 @@
 	color:#cccccc;
 }
 
+.print ul li a.disabled {
+	color: #999;
+	text-decoration: none;
+}
+
 .print ul li:hover {
 	background: #1b5ccd;
 }
 
 .print ul li:hover a, .print ul li:hover {
 	color:#fff;
+}
+
+.print ul li:hover a.disabled {
+	color:#999;
 }
 
 .print:hover ul {

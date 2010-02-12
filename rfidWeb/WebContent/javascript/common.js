@@ -322,6 +322,7 @@ function showQuickView(elementId, event) {
 		event.clickid = elementId
 	}
 
+	hideAnyOpenQuickViewBoxes();
 	var quickViewBox = $(elementId);
 	quickViewBox.removeClassName("hidden");
 	quickViewBox.addClassName("quickView");
@@ -330,7 +331,7 @@ function showQuickView(elementId, event) {
 	quickViewBox.absolutize();
 	quickViewBox.show();
 
-	var position = button.positionedOffset();
+	var position = button.cumulativeOffset();
 
 	quickViewBox.setStyle( {
 		top : position['top'] + "px",
@@ -369,12 +370,22 @@ function showQuickView(elementId, event) {
 	Element.extend(document).observe('click', quickViewBox.bfx);
 }
 
+function hideAnyOpenQuickViewBoxes() {
+	$$('.quickView').each( function(element) {
+			hideQuickViewElement(element);
+		});
+}
+
 function hideQuickView(elementId) {
-	var quickViewBox = $(elementId);
+	hideQuickViewElement($(elementId));
+	
+}
+
+function hideQuickViewElement(quickViewBox) {
 	quickViewBox.hide();
 	quickViewBox.addClassName("hidden");
 	quickViewBox.removeClassName("quickView");
-	Element.extend(document).stopObserving('click', $(elementId).bfx);
+	Element.extend(document).stopObserving('click', quickViewBox.bfx);
 }
 
 function alertErrors(errors) {

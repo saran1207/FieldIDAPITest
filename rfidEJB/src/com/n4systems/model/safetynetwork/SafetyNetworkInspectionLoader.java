@@ -11,7 +11,7 @@ import com.n4systems.persistence.loaders.NonSecureIdLoader;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.persistence.utils.PostFetcher;
 
-abstract public class SafetyNetworkInspectionLoader extends SecurityFilteredLoader<Inspection> {
+abstract public class SafetyNetworkInspectionLoader extends SecurityFilteredLoader<Inspection> implements IdLoader<SafetyNetworkInspectionLoader> {
 	private final NonSecureIdLoader<Inspection> inspectionLoader;
 	
 	public SafetyNetworkInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Inspection> inspectionLoader) {
@@ -22,6 +22,8 @@ abstract public class SafetyNetworkInspectionLoader extends SecurityFilteredLoad
 	public SafetyNetworkInspectionLoader(SecurityFilter filter) {
 		this(filter, new NonSecureIdLoader<Inspection>(Inspection.class));
 	}
+
+	
 
 	abstract protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection);
 	

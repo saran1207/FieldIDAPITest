@@ -25,7 +25,7 @@ public class PrintInspectionSummaryReportTask extends DownloadTask {
 
 	@Override
 	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
-		CertificatePrinter.printToPDF(reportGen.generate(reportDefiner, user), downloadFile);			
+		new CertificatePrinter().printToPDF(reportGen.generate(reportDefiner, user), downloadFile);			
 	}
 
 	public void setReportDefiner(ReportDefiner reportDefiner) {

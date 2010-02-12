@@ -72,7 +72,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 		try {
 			
 			JasperPrint p = certGen.generate(product, fetchCurrentUser());
-			byte[] pdf = CertificatePrinter.printToPDF(p);
+			byte[] pdf = new CertificatePrinter().printToPDF(p);
 			
 			fileName = "certificate-" + product.getSerialNumber() + ".pdf";
 			sendFile(new ByteArrayInputStream(pdf));

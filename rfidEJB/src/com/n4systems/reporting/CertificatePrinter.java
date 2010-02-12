@@ -19,14 +19,16 @@ import com.n4systems.exceptions.ReportException;
 
 public class CertificatePrinter {
 	
-	private static JRPdfExporter getPdfExporter() {
+	
+	
+	private  JRPdfExporter getPdfExporter() {
 		JRPdfExporter exporter = new JRPdfExporter();
 		exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 
 		return exporter;
 	}
 	
-	public static void printToPDF(List<JasperPrint> printList, OutputStream outputStream) throws ReportException {
+	public  void printToPDF(List<JasperPrint> printList, OutputStream outputStream) throws ReportException {
 		JRPdfExporter exporter = getPdfExporter();
 		exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, printList);
 		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
@@ -38,13 +40,13 @@ public class CertificatePrinter {
 		}
 	}
 
-	public static byte[] printToPDF(List<JasperPrint> printList) throws ReportException {
+	public  byte[] printToPDF(List<JasperPrint> printList) throws ReportException {
 		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 		printToPDF(printList, byteBuffer);
 		return byteBuffer.toByteArray();
 	}
 
-	public static void printToPDF(JasperPrint jasperPrint, OutputStream outputStream) throws ReportException {
+	public  void printToPDF(JasperPrint jasperPrint, OutputStream outputStream) throws ReportException {
 		JRPdfExporter exporter = getPdfExporter();
 		exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
@@ -56,7 +58,7 @@ public class CertificatePrinter {
 		}
 	}
 	
-	public static void printToPDF(JasperPrint jasperPrint, File file) throws ReportException {
+	public  void printToPDF(JasperPrint jasperPrint, File file) throws ReportException {
 		OutputStream fileOut = null;
 		try {
 			fileOut = new BufferedOutputStream(new FileOutputStream(file));
@@ -68,7 +70,7 @@ public class CertificatePrinter {
 		}
 	}
 
-	public static byte[] printToPDF(JasperPrint jasperPrint) throws ReportException {
+	public byte[] printToPDF(JasperPrint jasperPrint) throws ReportException {
 		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 		printToPDF(jasperPrint, byteBuffer);
 		return byteBuffer.toByteArray();

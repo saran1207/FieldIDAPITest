@@ -1,8 +1,9 @@
 package com.n4systems.taskscheduling.task;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -20,6 +21,7 @@ import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectio
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.utils.LazyLoadingList;
 import com.n4systems.reporting.InspectionCertificateReportGenerator;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.mail.MailMessage;
@@ -65,22 +67,16 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 		}
 	}
 
-	private void generateReport(UserBean user, File downloadFile, String downloadName, Transaction transaction) throws UnsupportedEncodingException, NonPrintableEventType, ReportException {
+	private void generateReport(UserBean user, File downloadFile, String downloadName, Transaction transaction) throws IOException, UnsupportedEncodingException, NonPrintableEventType, ReportException {
 		List<Inspection> inspections = loadInspections(user, transaction);
-			
-		reportGen.generate(reportType, inspections, downloadFile, user, downloadName, transaction);
+		
+		reportGen.generate(reportType, inspections, new FileOutputStream(downloadFile), user, downloadName, transaction);
 	}
 
-	private List<Inspection> loadInspections(UserBean user, Transaction transaction) {
-		List<Inspection> inspections = new ArrayList<Inspection>();
+	
 
-		Inspection inspection;
-		for (Long inspectionId: inspectionIds) {
-			inspection = inspectionLoader.setId(inspectionId).load(transaction);
-			inspections.add(inspection);
-		}
-		
-		return inspections;
+	private List<Inspection> loadInspections(UserBean user, Transaction transaction) {
+		return new LazyLoadingList<Inspection>(inspectionIds, inspectionLoader, transaction);
 	}
 
 	public void setInspectionIds(List<Long> inspectionIds) {
