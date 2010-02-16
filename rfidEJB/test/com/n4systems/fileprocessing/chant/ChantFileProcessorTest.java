@@ -36,6 +36,10 @@ public class ChantFileProcessorTest {
 		assertEquals("2008-06-25T08:45:42+0400", sut.correctTimeZoneAndMillisecondFormatting("2008-06-25T08:45:42.5+04:00"));
 		
 		assertEquals("2008-06-25T08:45:42+0400", sut.correctTimeZoneAndMillisecondFormatting("2008-06-25T08:45:42+04:00"));
+		
+		assertEquals("2010-01-25T09:13:09-0500", sut.correctTimeZoneAndMillisecondFormatting("2010-01-25T09:13:09.75-05:00"));
+		
+		assertEquals("2010-01-25T09:07:36-0500", sut.correctTimeZoneAndMillisecondFormatting("2010-01-25T09:07:36.671875-05:00"));
 	}
 	
 	

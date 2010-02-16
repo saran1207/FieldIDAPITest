@@ -187,7 +187,7 @@ public class ChantFileProcessor extends FileProcessor {
 		String replacedDate = dateString.replaceFirst("([-+]\\d+):(\\d+)$", "$1$2");
 		
 		
-		replacedDate = replacedDate.replaceFirst("\\.\\d([-+])", "$1");
+		replacedDate = replacedDate.replaceFirst("\\.\\d+([-+])", "$1");
 		return replacedDate;
 	}
 	
