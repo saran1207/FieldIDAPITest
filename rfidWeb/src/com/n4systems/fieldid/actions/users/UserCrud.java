@@ -446,7 +446,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	
-	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "user.new == false") })
+	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "user.isNew() == true") })
 	public PasswordEntry getPasswordEntry() {
 		return passwordEntry;
 	}
