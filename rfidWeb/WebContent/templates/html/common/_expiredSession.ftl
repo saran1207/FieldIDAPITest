@@ -1,5 +1,5 @@
 <#include "/templates/html/common/_lightView.ftl" />
-<script type="text/javascript" src="<@s.url value="/javascript/sessionTimeout.js" />"></script>
+<@n4.includeScript src="sessionTimeout" />
 <script type="text/javascript">
 	sessionTestUrl = "<@s.url action="testSession" namespace="/ajax"/>";
 	loginUrl = "<@s.url action="login" namespace="/ajax"/>";
