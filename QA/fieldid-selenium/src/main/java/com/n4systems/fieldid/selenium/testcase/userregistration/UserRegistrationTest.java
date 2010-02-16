@@ -5,7 +5,7 @@ import java.util.Date;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 public class UserRegistrationTest extends FieldIDTestCase {
