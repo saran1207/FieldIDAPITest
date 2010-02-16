@@ -42,8 +42,8 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 			transaction = PersistenceManager.startTransaction();
 						
 			List<Product> products = loadProducts(user, transaction);
-			
-			certGen.generate(products, new FileOutputStream(downloadFile), downloadName, user, transaction);
+			certGen.setUser(user);
+			certGen.generate(products, new FileOutputStream(downloadFile), downloadName, transaction);
 				
 			PersistenceManager.finishTransaction(transaction);
 		} catch (Exception e) {

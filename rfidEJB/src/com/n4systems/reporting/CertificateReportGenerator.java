@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import net.sf.jasperreports.engine.JasperPrint;
@@ -13,6 +14,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ConfigContext;
@@ -26,25 +28,25 @@ public abstract class CertificateReportGenerator<T> {
 	
 	protected List<T> certObjects;
 	private Iterator<T> certIterator;
+	protected String packageName;
+	protected Transaction transaction;
 
 	public CertificateReportGenerator() {
 		super();
 	}
 
 	
-	protected abstract void createReports(Transaction transaction) throws IOException;
-	protected abstract void generateReportPage(OutputStream reportOut, List<T> inspections, Transaction transaction);
-	
-	protected int reportsPerOutputFile() {
+
+	private int reportsPerOutputFile() {
 		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
 	}
 
-	protected String createPageFileName(String packageName, int page) {
+	private String createPageFileName(String packageName, int page) {
 		// note any /'s get replaced with _'s so we don't create directories within the zip file
 		return String.format("%s - %d.%s", packageName.replace('/', '_'), page, PDF_EXT);
 	}
 
-	protected void generateReports(OutputStream outputFile, Transaction transaction) throws ReportException {
+	private void generateReports(OutputStream outputFile, Transaction transaction) throws ReportException {
 		try {
 			zipOut = createOutputStream(outputFile);
 			createReports(transaction);
@@ -60,7 +62,7 @@ public abstract class CertificateReportGenerator<T> {
 	}
 
 
-	protected Iterator<T> certIterator() {
+	private Iterator<T> certIterator() {
 		if (certIterator == null) {
 			certIterator = certObjects.iterator();
 		}
@@ -68,7 +70,7 @@ public abstract class CertificateReportGenerator<T> {
 	}
 
 
-	protected List<T> getNextCertGroup() {
+	private List<T> getNextCertGroup() {
 		List<T> certGroup = new ArrayList<T>();
 		while(certGroup.size() < reportsPerOutputFile() && certIterator().hasNext()) {
 			T nextInspection = certIterator().next();
@@ -81,20 +83,73 @@ public abstract class CertificateReportGenerator<T> {
 	}
 
 
-	protected abstract boolean isPrintable(T certObject);
 
 
-	protected void printCerts(OutputStream reportOut, List<JasperPrint> page) {
+
+	private void printCerts(OutputStream reportOut, List<JasperPrint> page) {
 		try {
 			new CertificatePrinter().printToPDF(page, reportOut);
 		} catch(Exception e) {
 			getLogger().warn("Failed to print report page, Moving on to next page.", e);
 		}
 	}
-
+	
+	private List<JasperPrint> createCerts(List<T> inspections) {
+		List<JasperPrint> page = new ArrayList<JasperPrint>();
+		
+		for (T inspection: inspections) {
+			try {
+				JasperPrint cert = singleCert(inspection);
+				page.add(cert);
+			} catch (Exception e) {
+				logCertError(inspection, e);
+			}
+		}
+		return page;
+	}
+	
+	protected abstract boolean isPrintable(T certObject);
 
 	protected abstract Logger getLogger();
+	protected abstract void guard();
+	protected abstract JasperPrint singleCert(T inspection) throws ReportException;
+	protected abstract void logCertError(T product, Exception e);
+
+	public void generate(List<T> products, OutputStream outputFile, String packageName, Transaction transaction)
+			throws ReportException, EmptyReportException {
+			if (products.isEmpty()) {
+				throw new EmptyReportException("Report contained no printable certificates");
+			}
+			// first filter out any non printable products, then we subdivide the list into groups corresponding to each pdf file that will be created
+			this.packageName = packageName;
+			
+			this.certObjects = products;
+			this.transaction = transaction;
+			guard();
+			
+			generateReports(outputFile, transaction);
+		}
+
+
+	
+	private void generateReportPage(OutputStream reportOut, List<T> products, Transaction transaction) {
+		List<JasperPrint> page = createCerts(products);
 		
+		printCerts(reportOut, page);
+	}
+
+
+	
+	private void createReports(Transaction transaction) throws IOException {
+		int pageNumber = 1;
+		List<T> inspectionPage = null;
+		while ((inspectionPage = getNextCertGroup()) != null && !inspectionPage.isEmpty()) {
+			zipOut.putNextEntry(new ZipEntry(createPageFileName(packageName, pageNumber)));
+			generateReportPage(zipOut, inspectionPage, transaction);
+			pageNumber++;
+		}
+	}
+	
 	
 	
 	

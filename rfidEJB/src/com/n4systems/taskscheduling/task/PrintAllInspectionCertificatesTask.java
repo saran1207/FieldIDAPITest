@@ -69,8 +69,9 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 
 	private void generateReport(UserBean user, File downloadFile, String downloadName, Transaction transaction) throws IOException, UnsupportedEncodingException, NonPrintableEventType, ReportException {
 		List<Inspection> inspections = loadInspections(user, transaction);
+		reportGen.setType(reportType);
 		
-		reportGen.generate(reportType, inspections, new FileOutputStream(downloadFile), user, downloadName, transaction);
+		reportGen.generate(inspections, new FileOutputStream(downloadFile), downloadName, transaction);
 	}
 
 	

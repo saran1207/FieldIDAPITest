@@ -1,8 +1,10 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
+import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 import org.apache.commons.io.output.NullOutputStream;
 import org.junit.Assert;
@@ -14,6 +16,7 @@ import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.builders.InspectionTypeBuilder;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.FluentArrayList;
 public class InspectionCertificateReportGeneratorTest {
 
@@ -29,8 +32,9 @@ public class InspectionCertificateReportGeneratorTest {
 		
 		InspectionCertificateReportGenerator sut = new InspectionCertificateReportGenerator(certGenerator);
 		
-		
-		sut.generate(InspectionReportType.INSPECTION_CERT, new FluentArrayList<Inspection>(printableInspection), new NullOutputStream(), null, "packageName", null);
+		sut.setType(InspectionReportType.INSPECTION_CERT);
+		Transaction transaction = null;
+		sut.generate(new FluentArrayList<Inspection>(printableInspection), new NullOutputStream(), "packageName", transaction);
 		
 		verify(certGenerator);
 	}
