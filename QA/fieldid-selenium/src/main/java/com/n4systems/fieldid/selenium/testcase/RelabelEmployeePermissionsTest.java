@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.List;
-
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.Admin;
-import com.n4systems.fieldid.selenium.administration.ManageUsers;
-import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.administration.page.Admin;
+import com.n4systems.fieldid.selenium.administration.page.ManageUsers;
+import com.n4systems.fieldid.selenium.login.page.Login;
 
 /**
  * WEB-1466

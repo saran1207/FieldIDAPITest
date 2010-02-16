@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.Forgot;
-import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.login.page.Forgot;
+import com.n4systems.fieldid.selenium.login.page.Login;
 
 public class LoginTests extends FieldIDTestCase {
 
@@ -84,15 +87,13 @@ public class LoginTests extends FieldIDTestCase {
 	public void shouldBeAbleToLogIntoFieldID() throws Exception {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
+		String company = getStringProperty("companyid");
 
-		try {
-			login.setUserName(username);
-			login.setPassword(password);
-			login.gotoSignIn();
-			login.verifySignedIn();
-		} catch(Exception e) {
-			throw e;
-		}
+		setCompany(company);
+		login.setUserName(username);
+		login.setPassword(password);
+		login.gotoSignIn();
+		login.verifySignedIn();
 	}
 	
 	@After

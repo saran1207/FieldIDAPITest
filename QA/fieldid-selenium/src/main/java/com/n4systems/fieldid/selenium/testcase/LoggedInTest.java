@@ -2,9 +2,8 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.After;
 import org.junit.Before;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.login.page.Login;
 
 public abstract class LoggedInTest extends FieldIDTestCase {
 

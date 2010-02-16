@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.selenium.misc;
 
+import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
-import com.thoughtworks.selenium.Selenium;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class Search {
-	Selenium selenium;
+	FieldIdSelenium selenium;
 	Misc misc;
 
 	// Locators
@@ -22,7 +21,7 @@ public class Search {
 	private String resultTableXpath = "//TABLE[@id='resultsTable']";
 	private String numberOfColumnsXpath = resultTableXpath + "/TBODY/TR/TH";
 
-	public Search(Selenium selenium, Misc misc) {
+	public Search(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

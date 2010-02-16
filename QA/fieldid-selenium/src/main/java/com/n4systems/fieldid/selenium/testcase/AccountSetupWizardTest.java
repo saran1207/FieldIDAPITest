@@ -1,17 +1,19 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.Admin;
-import com.n4systems.fieldid.selenium.administration.ManageSystemSettings;
+import com.n4systems.fieldid.selenium.administration.page.Admin;
+import com.n4systems.fieldid.selenium.administration.page.ManageSystemSettings;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.datatypes.SystemSettings;
-import com.n4systems.fieldid.selenium.home.Home;
-import com.n4systems.fieldid.selenium.home.QuickSetupWizard;
-import com.n4systems.fieldid.selenium.login.CreateAccount;
-import com.n4systems.fieldid.selenium.login.Login;
-import com.n4systems.fieldid.selenium.login.SignUpComplete;
-import com.n4systems.fieldid.selenium.login.SignUpPackages;
+import com.n4systems.fieldid.selenium.home.page.Home;
+import com.n4systems.fieldid.selenium.home.page.QuickSetupWizard;
+import com.n4systems.fieldid.selenium.login.page.CreateAccount;
+import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
+import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 import com.n4systems.fieldid.selenium.misc.CreateTenants;
 
 /**
@@ -57,7 +59,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	public void no_referral_basic_admin_logs_in_accepts_all_defaults_for_setup_wizard() {
 		CreateTenant t = createARandomNewBasicTenant("fieldid");
 		login.loginAcceptingEULAIfNecessary(t.getUserName(), t.getPassword());
-		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks();
+		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(false);
 		assertDefaultSettingsConfiguredProperly(defaults);
 	}
 	
@@ -66,7 +68,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		String referrer = "msa";
 		CreateTenant t = createARandomNewBasicTenant(referrer);
 		login.loginAcceptingEULAIfNecessary(t.getUserName(), t.getPassword());
-		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks();
+		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(true);
 		assertDefaultSettingsConfiguredProperly(defaults);
 		assertDefaultVendorIsMSA(defaults);
 	}
@@ -92,27 +94,32 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	private void assertDefaultSettingsConfiguredProperly(SystemSettings expected) {
 		misc.gotoAdministration();
 		admin.gotoManageSystemSettings();
-		SystemSettings ss = mss.getSystemSettings();
+		boolean hasVendors = (expected.getDefaultVendorContext() != null);
+		SystemSettings ss = mss.getSystemSettings(hasVendors);
 		verifyTrue(expected.getPreferredDateFormat().equals(ss.getPreferredDateFormat()));
-		verifyTrue(expected.getDefaultVendorContext().equals(ss.getDefaultVendorContext()));
+		if(hasVendors) {
+			verifyTrue(expected.getDefaultVendorContext().equals(ss.getDefaultVendorContext()));
+		}
 		if(expected.getWebSiteAddress() != null) {
 			verifyTrue(expected.getWebSiteAddress().equals(ss.getWebSiteAddress()));
 		} else
 			verifyTrue(ss.getWebSiteAddress() == null);
 	}
 
-	private SystemSettings acceptDefaultSettingsForSetupWizardWorks() {
+	private SystemSettings acceptDefaultSettingsForSetupWizardWorks(boolean referrer) {
 		SystemSettings ss = new SystemSettings();
 		qsw.gotoImReadyLetsGo();
 		qsw.verifyQuickSetupWizardStep1PageHeader();
 		qsw.gotoQuickSetupWizardStep2();
 		qsw.verifyCompanyProfileSetup();
 		qsw.verifyQuickSetupWizardStep2PageHeader();
-		qsw.verifyQuickSetupWizardSystemSettingsPage();
+		qsw.verifyQuickSetupWizardSystemSettingsPage(referrer);
 		String pdf = qsw.getPreferredDateFormat();
 		ss.setPreferredDateFormat(pdf);
-		String dvc = qsw.getDefaultVendorContext();
-		ss.setDefaultVendorContext(dvc);
+		if(referrer) {
+			String dvc = qsw.getDefaultVendorContext();
+			ss.setDefaultVendorContext(dvc);
+		}
 		String wsa = qsw.getWebSiteAddress();
 		ss.setWebSiteAddress(wsa);
 		qsw.gotoQuickSetupWizardStep3();

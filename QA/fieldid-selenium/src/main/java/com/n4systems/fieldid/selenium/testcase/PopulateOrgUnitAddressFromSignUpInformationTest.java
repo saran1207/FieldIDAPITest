@@ -1,16 +1,18 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.Admin;
-import com.n4systems.fieldid.selenium.administration.ManageOrganizations;
+import com.n4systems.fieldid.selenium.administration.page.Admin;
+import com.n4systems.fieldid.selenium.administration.page.ManageOrganizations;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.datatypes.PrimaryOrganization;
-import com.n4systems.fieldid.selenium.login.CreateAccount;
-import com.n4systems.fieldid.selenium.login.Login;
-import com.n4systems.fieldid.selenium.login.SignUpComplete;
-import com.n4systems.fieldid.selenium.login.SignUpPackages;
+import com.n4systems.fieldid.selenium.login.page.CreateAccount;
+import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
+import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 
 /**
  * WEB-1469

@@ -3,9 +3,8 @@ package com.n4systems.fieldid.selenium.testcase.admintool;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.console.ConsoleLogin;
+import com.n4systems.fieldid.selenium.console.page.ConsoleLogin;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 public class AutoAttributeImporterTest extends FieldIDTestCase {

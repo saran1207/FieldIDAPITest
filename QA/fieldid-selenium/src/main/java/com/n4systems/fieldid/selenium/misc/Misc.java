@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.selenium.misc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,9 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
-import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.thoughtworks.selenium.Selenium;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class Misc {
 
@@ -25,7 +27,7 @@ public class Misc {
 	// timed out and display the lightbox.
 	public static final int sessionTimeoutLightBoxTimeout = 31 * 60;
 	private static String snapshots = null;
-	private Selenium selenium;
+	private FieldIdSelenium selenium;
 	private Logger log;
 	private Search search;
 	
@@ -77,7 +79,7 @@ public class Misc {
 	private String smartSearchTextFieldLocator = "xpath=//INPUT[@id='searchText']";
 	private String smartSearchLoadButtonLocator = "xpath=//INPUT[@id='smartSearchButton']";
 	
-	public Misc(Selenium selenium, Logger log) {
+	public Misc(FieldIdSelenium selenium, Logger log) {
 		this.selenium = selenium;
 		this.log = log;
 		search = new Search(selenium, this);
@@ -1358,5 +1360,16 @@ public class Misc {
 	 */
 	public void gotoSetup() {
 		this.gotoAdministration();
+	}
+
+	public void clickGenerateSerialNumber() {
+		selenium.click("//A[text()='generate']");
+	}
+
+	public boolean isJavascriptError() {
+		boolean b = true;
+		// TODO: once Selenium has some way to detect Javascript errors implement this
+		// SEE: http://jira.openqa.org/browse/SEL-613
+		return b;
 	}
 }

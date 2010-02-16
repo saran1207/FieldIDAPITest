@@ -3,15 +3,13 @@ package com.n4systems.fieldid.selenium.testcase;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.Admin;
-import com.n4systems.fieldid.selenium.administration.ManageProductCodeMappings;
-import com.n4systems.fieldid.selenium.administration.ManageProductTypes;
+import com.n4systems.fieldid.selenium.administration.page.Admin;
+import com.n4systems.fieldid.selenium.administration.page.ManageProductCodeMappings;
+import com.n4systems.fieldid.selenium.administration.page.ManageProductTypes;
 import com.n4systems.fieldid.selenium.datatypes.Attribute;
 import com.n4systems.fieldid.selenium.datatypes.ComboBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.ProductCodeMapping;
@@ -19,8 +17,8 @@ import com.n4systems.fieldid.selenium.datatypes.ProductType;
 import com.n4systems.fieldid.selenium.datatypes.SelectBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
-import com.n4systems.fieldid.selenium.identify.Identify;
-import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.login.page.Login;
 
 /**
  * WEB-1526
@@ -62,7 +60,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		}
 	}
 	
-	private void verifyEditProductTypeHasDeleteAttribute(ProductType pt) {
+	private void verifyEditProductTypeHasDeleteAttribute(ProductType pt) throws InterruptedException {
 		// we assume create product type left us on the View tab of that product type
 		mpts.gotoEditProductType();
 		mpts.deleteProductTypeAttributes(pt.getAttributes());
@@ -111,7 +109,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		}
 	}
 	
-	private void verifyEditProductTypeHasRetireAttribute(ProductType pt) {
+	private void verifyEditProductTypeHasRetireAttribute(ProductType pt) throws InterruptedException {
 		misc.gotoAdministration();
 		admin.gotoManageProductTypes();
 		mpts.gotoEditProductType(pt.getName());

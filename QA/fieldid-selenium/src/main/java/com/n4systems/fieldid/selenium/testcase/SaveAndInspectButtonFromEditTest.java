@@ -1,13 +1,14 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.identify.Identify;
-import com.n4systems.fieldid.selenium.inspect.Inspect;
-import com.n4systems.fieldid.selenium.login.Login;
-import com.n4systems.fieldid.selenium.assets.Asset;
+import com.n4systems.fieldid.selenium.assets.page.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Product;
+import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.inspect.page.Inspect;
+import com.n4systems.fieldid.selenium.login.page.Login;
 
 /**
  * WEB-1465
@@ -52,7 +53,7 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 		inspect.verifyInspectPage(serialNumber);
 	}
 
-	private Product gotoEditAnAsset() {
+	private Product gotoEditAnAsset() throws InterruptedException {
 		misc.gotoIdentify();
 		if(!identify.isAdd()) {
 			identify.gotoAdd();

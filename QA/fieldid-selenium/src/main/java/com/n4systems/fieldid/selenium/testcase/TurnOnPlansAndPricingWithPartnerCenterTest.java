@@ -3,15 +3,14 @@ package com.n4systems.fieldid.selenium.testcase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.console.ConsoleLogin;
-import com.n4systems.fieldid.selenium.console.ConsoleOrganizations;
+import com.n4systems.fieldid.selenium.console.page.ConsoleLogin;
+import com.n4systems.fieldid.selenium.console.page.ConsoleOrganizations;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
-import com.n4systems.fieldid.selenium.login.CreateAccount;
-import com.n4systems.fieldid.selenium.login.Login;
-import com.n4systems.fieldid.selenium.login.SignUpComplete;
-import com.n4systems.fieldid.selenium.login.SignUpPackages;
+import com.n4systems.fieldid.selenium.login.page.CreateAccount;
+import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
+import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 
 /**
  * WEB-1378

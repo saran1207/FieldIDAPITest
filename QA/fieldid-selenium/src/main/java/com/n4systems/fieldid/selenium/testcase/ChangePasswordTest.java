@@ -2,43 +2,45 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 @RunWith(value = Parameterized.class)
 public class ChangePasswordTest extends LoggedInTest {
 
 	
-	private String userName;
 	private String editUserFormId;
 
-	public ChangePasswordTest(String editUserFormId, String userName) {
+	public ChangePasswordTest(String editUserFormId) {
 		super("n4systems", "makemore$");
-		this.userName = userName;
 		this.editUserFormId = editUserFormId;
 	}
 	
-	
-
 	@Parameters
 	public static Collection<String[]> data() {
 		Collection<String[]> data = new ArrayList<String[]>();
-		data.add(new String[]{"#employeeUserUpdate", "aaitken"});
-		data.add(new String[]{"#customerUserUpdate", "user1"});
+		data.add(new String[]{"#employeeUserUpdate"});
+		data.add(new String[]{"#customerUserUpdate"});
 		return data;
 	}
 	
 
 	@Test
 	public void should_cancel_back_to_edit_page_of_user() throws Exception {
-		
-		selenium.open("/fieldid/userList.action");
-		selenium.click("link=" + userName);
+
+		// user the search filter to change from employee/customer
+		if(editUserFormId.contains("employee")) {
+			selenium.open("/fieldid/userList.action?currentPage=1&listFilter=&userType=EMPLOYEES&search=Search");
+		} else {
+			selenium.open("/fieldid/userList.action?currentPage=1&listFilter=&userType=CUSTOMERS&search=Search");
+		}
+		// click on the first user in the table. assumes there is at least one employee and one customer
+		String locator = "xpath=//table[@id='userList']/tbody/tr[3]/td[1]/a";
+		String userName = selenium.getText(locator);
+		selenium.click(locator);
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
 		selenium.click("link=Change Password");
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
@@ -49,10 +51,4 @@ public class ChangePasswordTest extends LoggedInTest {
 		assertTrue("should be on the user edit page", selenium.isElementPresent("css=" + editUserFormId));
 		assertEquals(userName, selenium.getValue("css=input[name='userId']"));
 	}
-
-
-
-
-	
-	
 }

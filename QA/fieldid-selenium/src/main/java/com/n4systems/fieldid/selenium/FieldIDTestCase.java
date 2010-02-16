@@ -9,15 +9,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Before;
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
-import com.thoughtworks.selenium.*;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
 public class FieldIDTestCase extends SeleneseTestBase {
 
@@ -145,7 +145,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");
 	private String initCompany = System.getProperty("fieldid-companyid", "n4");
-	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
+	private String domain = System.getProperty("fieldid-domain", "team.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
 	private String log4jConfig = System.getProperty("fieldid-log4j", "log4j.xml");

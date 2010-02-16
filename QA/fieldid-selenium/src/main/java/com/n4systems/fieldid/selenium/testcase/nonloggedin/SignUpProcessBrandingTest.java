@@ -1,13 +1,11 @@
 package com.n4systems.fieldid.selenium.testcase.nonloggedin;
 
-import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.*;
-
+import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.assertSystemLogoIsUsed;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.CreateAccount;
-import com.n4systems.fieldid.selenium.login.SignUpPackages;
+import com.n4systems.fieldid.selenium.login.page.CreateAccount;
+import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 
 public class SignUpProcessBrandingTest extends FieldIDTestCase {
 	private SignUpPackages signUpPackagePage;

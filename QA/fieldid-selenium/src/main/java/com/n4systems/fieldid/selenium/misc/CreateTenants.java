@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.selenium.misc;
 
+import static org.junit.Assert.assertNotNull;
 import java.util.Random;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
-import com.n4systems.fieldid.selenium.login.CreateAccount;
-import com.n4systems.fieldid.selenium.login.Login;
-import com.n4systems.fieldid.selenium.login.SignUpComplete;
-import com.n4systems.fieldid.selenium.login.SignUpPackages;
-import com.thoughtworks.selenium.Selenium;
-import static org.junit.Assert.*;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.login.page.CreateAccount;
+import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
+import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 
 public class CreateTenants {
 
@@ -15,11 +15,11 @@ public class CreateTenants {
 	private SignUpPackages sup;
 	private CreateAccount create;
 	private SignUpComplete complete;
-	private Selenium selenium;
+	private FieldIdSelenium selenium;
 	private Misc misc;
 	private Random r;
 
-	public CreateTenants(Selenium selenium, Misc misc) {
+	public CreateTenants(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 		this.r = new Random();

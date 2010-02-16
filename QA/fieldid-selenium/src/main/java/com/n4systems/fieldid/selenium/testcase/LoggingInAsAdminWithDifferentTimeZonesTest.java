@@ -2,16 +2,14 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.Login;
+import com.n4systems.fieldid.selenium.login.page.Login;
 
 /**
  * WEB-1430
@@ -64,7 +62,6 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		data.add(new String[]{"halo", "tsmith"});
 		data.add(new String[]{"harriman", "ashley"});
 		data.add(new String[]{"hesco", "ed"});
-		data.add(new String[]{"hydrobrampton", "pwiggins"});
 		data.add(new String[]{"illinois", "kcarver"});
 		data.add(new String[]{"jcrenfroe", "jseibert"});
 		data.add(new String[]{"lcrane", "lance"});

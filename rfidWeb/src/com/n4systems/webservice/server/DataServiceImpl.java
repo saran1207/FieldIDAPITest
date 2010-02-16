@@ -719,13 +719,14 @@ public class DataServiceImpl implements DataService {
 			Product product = converter.convert(productDTO, existingProduct, requestInformation.getTenantId());
 
 			//updating order number if it is different value
-			if (product.getShopOrder() != null &&
-					productDTO.getOrderNumber().trim().length() > 0 &&
-					!product.getShopOrder().getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim()) ) {
-				product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
-			} else if (product.getShopOrder() == null &&
-					productDTO.getOrderNumber().trim().length() > 0 ) {
-				product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
+			if (productDTO.getOrderNumber() != null && productDTO.getOrderNumber().trim().length() > 0)
+			{
+				if (product.getShopOrder() != null && 
+						!product.getShopOrder().getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim()) ) {
+					product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
+				} else if (product.getShopOrder() == null) {
+					product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
+				}
 			}
 			
 			// on edit, the identified by user is populated with the modified user
