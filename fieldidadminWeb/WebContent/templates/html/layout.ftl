@@ -31,7 +31,6 @@
 			<option value="changeAdminPass.action">Change System Pass</option>
 			<option value="promoCodes.action">Promo Codes</option>
 			<option value="cacheShow.action">Cache Control</option>
-			<option value="customerExport.action">Export Test</option>
 		</select>
 	</div>
 	

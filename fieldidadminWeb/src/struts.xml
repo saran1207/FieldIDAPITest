@@ -337,26 +337,6 @@
 		<action name="reloadSafetyNetworkConnectionCache" method="reloadSafetyNetworkConnectionCachae" class="com.n4systems.fieldidadmin.actions.CacheControlAction">
 			<result name="success" type="freemarker">/templates/html/cacheControl/show.ftl</result>
 		</action>
-		
-		<action name="customerExport" method="show" class="com.n4systems.fieldidadmin.actions.CustomerDivisionExportAction">
-			<result name="success" type="freemarker">/templates/html/customerExportTest/show.ftl</result>
-		</action>
-		
-		<action name="exportAll" method="export" class="com.n4systems.fieldidadmin.actions.CustomerDivisionExportAction">
-			<result name="success" type="stream">
-				<param name="contentType">${contentType}</param>
-				<param name="inputName">fileStream</param>
-				<param name="contentLength">${fileSize}</param>
-				<param name="contentDisposition">inline; filename="${outFileName}"</param>
-			</result>
-			<result name="error" type="freemarker">/templates/html/customerExportTest/show.ftl</result>
-		</action>
-		
-		<action name="importAll" method="import" class="com.n4systems.fieldidadmin.actions.CustomerDivisionExportAction">
-			<result name="success" type="freemarker">/templates/html/customerExportTest/show.ftl</result>
-			<result name="error" type="freemarker">/templates/html/customerExportTest/show.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customerExportTest/show.ftl</result>
-		</action>
 	</package>
 	
 	

@@ -160,7 +160,7 @@ public class CsvMapReader implements MapReader {
 		 *  The second can happen if the quote string is the only string in this field /eg ,",
 		 */
 		if (endAt == -1 || startAt > endAt) {
-			throw new ParseException("No ending delimeter [" + line.substring(parseIndex) + "]", parseIndex);
+			throw new ParseException("No ending delimeter [" + line.substring(parseIndex) + "]", currentRow);
 		} 
 		
 		parseIndex = endAt + endChar.length() + fieldSep.length();

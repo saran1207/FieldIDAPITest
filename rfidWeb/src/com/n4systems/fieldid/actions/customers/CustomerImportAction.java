@@ -7,10 +7,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.api.validation.ValidationFailedException;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.CustomerImporter;
+import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapReaderFactory;
@@ -55,7 +55,6 @@ public class CustomerImportAction extends AbstractAction {
 		}
 		
 		String status = runImport();
-		
 		return status;
 	}
 
@@ -64,24 +63,28 @@ public class CustomerImportAction extends AbstractAction {
 		try {
 			MapReader mapReader = mapReaderFactory.createMapReader(new FileInputStream(importDoc), importDocContentType);
 			
-			CustomerImporter importer = new CustomerImporter(mapReader, getSecurityFilter());
+			Importer importer = new CustomerImporter(mapReader, getSecurityFilter());
 			
-			int orgsImported = importer.validateAndImport();
+			failedValidationResults = importer.readAndValidate();
+			
+			if (!failedValidationResults.isEmpty()) {
+				addActionError(getText("label.validation_failed"));
+				status = INPUT;
+			}
+
+			int orgsImported = importer.runImport();
 			
 			addActionMessage(getText("label.import_success", ArrayUtils.newArray(String.valueOf(orgsImported))));
-		
+			
 		} catch (InvalidTitleException e) {
 			addActionError(getText("error.bad_file_format", ArrayUtils.newArray(e.getTitle())));
-			status = INPUT;			
-		} catch (ValidationFailedException e) {
-			failedValidationResults = e.getFailedValidationResults();
-			addActionError(getText("label.validation_failed"));
-			status = INPUT;
+			status = INPUT;	
 		} catch (Exception e) {
 			logger.error(String.format("Import Customers failed for User [%s]", getUser().toString()), e);
 			addActionError(getText("error.import_failed"));
 			status = ERROR;
 		}
+		
 		return status;
 	}
 

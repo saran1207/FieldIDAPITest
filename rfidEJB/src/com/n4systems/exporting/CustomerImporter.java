@@ -10,12 +10,10 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.CustomerOrgViewConverter;
 import com.n4systems.api.conversion.DivisionOrgViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.api.validation.ValidationFailedException;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
-import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.orgs.BaseOrg;
@@ -29,7 +27,6 @@ import com.n4systems.persistence.TransactionManager;
 import com.n4systems.persistence.savers.Saver;
 
 public class CustomerImporter implements Importer {
-	private static final int TITLE_ROW = 1;
 	private static final int FIRST_DATA_ROW = 2;
 	
 	private final MapReader mapReader;
@@ -40,7 +37,8 @@ public class CustomerImporter implements Importer {
 	private final DivisionOrgViewConverter divisionConverter;
 
 	private List<FullExternalOrgView> orgViews;
-	private List<ValidationResult> failedValidationResults;
+	private int currentRow;
+	private int totalRows;
 	
 	public CustomerImporter(MapReader mapReader, SecurityFilter filter) {
 		 this(mapReader, new FieldIdTransactionManager(), new OrgSaver(), new ViewValidator<FullExternalOrgView>(filter), new CustomerOrgViewConverter(filter), new DivisionOrgViewConverter(filter));
@@ -55,13 +53,27 @@ public class CustomerImporter implements Importer {
 		this.divisionConverter = divisionConverter;
 	}
 
-
 	@Override
-	public int validateAndImport() throws ImportException, ValidationFailedException, InvalidTitleException {
-		readAllRows();		
-		validateViews();
-
-		int currentRow = FIRST_DATA_ROW;
+	public List<ValidationResult> readAndValidate() throws IOException, ParseException, MarshalingException {
+		if (orgViews == null) {
+			readAllRows();
+		}
+		
+		List<ValidationResult> failedValidationResults = new ArrayList<ValidationResult>();
+		for (int i = 0; i < orgViews.size(); i++) {
+			failedValidationResults.addAll(viewValidator.validate(orgViews.get(i), i + FIRST_DATA_ROW));
+		}
+		
+		return failedValidationResults;
+	}
+	
+	@Override
+	public int runImport() throws ImportException {
+		if (orgViews == null) {
+			throw new IllegalStateException("runImport() called before validate()");
+		}
+		
+		currentRow = FIRST_DATA_ROW;
 		Transaction transaction = null;
 		try {
 			transaction = transactionManager.startTransaction();
@@ -77,8 +89,11 @@ public class CustomerImporter implements Importer {
 
 				currentRow++;
 			}
-		} catch (ConversionException e) {
+			
 			transactionManager.finishTransaction(transaction);
+			
+		} catch (ConversionException e) {
+			transactionManager.rollbackTransaction(transaction);
 			throw new ImportException("View failed model conversion", e, currentRow);
 		} catch (Exception e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -104,46 +119,24 @@ public class CustomerImporter implements Importer {
 		orgSaver.saveOrUpdate(transaction, division);
 	}
 	
-	private void validateViews() throws ImportException, ValidationFailedException {
-		failedValidationResults = new ArrayList<ValidationResult>();
-		
-		int currentRow = FIRST_DATA_ROW;
-		for (FullExternalOrgView view: orgViews) {
-			failedValidationResults.addAll(viewValidator.validate(view, currentRow));
-			currentRow++;
-		}
-		
-		if (!failedValidationResults.isEmpty()) {
-			throw new ValidationFailedException(failedValidationResults);
-		}
-	}
-	
-	private void readAllRows() throws ImportException, InvalidTitleException {
+	private void readAllRows() throws IOException, ParseException, MarshalingException {
 		orgViews = new ArrayList<FullExternalOrgView>();
-
-		int currentRow = TITLE_ROW;
-		try {
-			ExportMapUnmarshaler<FullExternalOrgView> unmarshaler = new ExportMapUnmarshaler<FullExternalOrgView>(FullExternalOrgView.class, mapReader.getTitles());
-			currentRow++;
-			
-			FullExternalOrgView orgView;
-			Map<String, String> row;
-			while ((row = mapReader.readMap()) != null) {
-				orgView = unmarshaler.toBean(row);
-				
-				orgViews.add(orgView);
-				currentRow++;
-			}
 		
-		} catch (InvalidTitleException e) {
-			throw e;
-		} catch (IOException e) {
-			throw new ImportException("Unable to read from stream", e, currentRow);
-		} catch (ParseException e) {
-			throw new ImportException("Unable to parse row", e, currentRow);
-		} catch (MarshalingException e) {
-			throw new ImportException("Unable to convert csv to view", e, currentRow);
+		ExportMapUnmarshaler<FullExternalOrgView> unmarshaler = new ExportMapUnmarshaler<FullExternalOrgView>(FullExternalOrgView.class, mapReader.getTitles());
+
+		Map<String, String> row;
+		while ((row = mapReader.readMap()) != null) {
+			orgViews.add(unmarshaler.toBean(row));
 		}
 	}
-	
+
+	@Override
+	public int getCurrentRow() {
+		return currentRow;
+	}
+
+	@Override
+	public int getTotalRows() {
+		return totalRows;
+	}
 }
