@@ -45,7 +45,7 @@ public class ExportMapUnmarshaler<T> {
 				// we should check if no handler was registered for this title.  That that case
 				// we need to throw something
 				if (!titleHandlerMap.containsKey(title)) {
-					throw new MarshalingException("No handler responded for field [" + title + "]");
+					throw new InvalidTitleException(title);
 				}
 			}
 		} catch (InstantiationException e) {

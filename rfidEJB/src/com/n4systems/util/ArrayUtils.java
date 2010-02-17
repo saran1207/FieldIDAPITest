@@ -98,6 +98,9 @@ public class ArrayUtils {
 		return (T[])combineAny((Object[])arrays);
 	}
 	
+	/**
+	 * @return True if value is contained in array.  False otherwise.
+	 */
 	public static <T> boolean contains(T value, T...array) {
 		boolean contains = false;
 		for (T arrayValue: array) {
@@ -107,5 +110,13 @@ public class ArrayUtils {
 			}
 		}
 		return contains;
+	}
+	
+	/**
+	 * This is equivalent to <code>new T[] {value1, value2 ...}</code>
+	 * @return An array of the values
+	 */
+	public static <T> T[] newArray(T...values) {
+		return values;
 	}
 }

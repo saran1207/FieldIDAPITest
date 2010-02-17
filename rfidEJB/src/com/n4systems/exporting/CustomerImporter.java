@@ -15,6 +15,7 @@ import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
+import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.orgs.BaseOrg;
@@ -56,7 +57,7 @@ public class CustomerImporter implements Importer {
 
 
 	@Override
-	public int validateAndImport() throws ImportException, ValidationFailedException {
+	public int validateAndImport() throws ImportException, ValidationFailedException, InvalidTitleException {
 		readAllRows();		
 		validateViews();
 
@@ -117,7 +118,7 @@ public class CustomerImporter implements Importer {
 		}
 	}
 	
-	private void readAllRows() throws ImportException {
+	private void readAllRows() throws ImportException, InvalidTitleException {
 		orgViews = new ArrayList<FullExternalOrgView>();
 
 		int currentRow = TITLE_ROW;
@@ -133,7 +134,9 @@ public class CustomerImporter implements Importer {
 				orgViews.add(orgView);
 				currentRow++;
 			}
-			
+		
+		} catch (InvalidTitleException e) {
+			throw e;
 		} catch (IOException e) {
 			throw new ImportException("Unable to read from stream", e, currentRow);
 		} catch (ParseException e) {

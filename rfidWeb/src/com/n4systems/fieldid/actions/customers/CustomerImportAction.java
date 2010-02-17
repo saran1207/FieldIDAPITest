@@ -11,11 +11,13 @@ import com.n4systems.api.validation.ValidationFailedException;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.CustomerImporter;
+import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapReaderFactory;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.ArrayUtils;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
 @SuppressWarnings("serial")
@@ -66,8 +68,11 @@ public class CustomerImportAction extends AbstractAction {
 			
 			int orgsImported = importer.validateAndImport();
 			
-			addActionMessage(getText("label.import_success", new String[] { String.valueOf(orgsImported) }));
-			
+			addActionMessage(getText("label.import_success", ArrayUtils.newArray(String.valueOf(orgsImported))));
+		
+		} catch (InvalidTitleException e) {
+			addActionError(getText("error.bad_file_format", ArrayUtils.newArray(e.getTitle())));
+			status = INPUT;			
 		} catch (ValidationFailedException e) {
 			failedValidationResults = e.getFailedValidationResults();
 			addActionError(getText("label.validation_failed"));
