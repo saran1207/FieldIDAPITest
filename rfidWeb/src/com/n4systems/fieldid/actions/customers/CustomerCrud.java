@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions;
+package com.n4systems.fieldid.actions.customers;
 
 import java.util.List;
 

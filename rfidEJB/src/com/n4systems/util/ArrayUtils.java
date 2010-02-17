@@ -97,4 +97,15 @@ public class ArrayUtils {
 	public static <T> T[] combine(T[] ... arrays) {
 		return (T[])combineAny((Object[])arrays);
 	}
+	
+	public static <T> boolean contains(T value, T...array) {
+		boolean contains = false;
+		for (T arrayValue: array) {
+			if (arrayValue.equals(value)) {
+				contains = true;
+				break;
+			}
+		}
+		return contains;
+	}
 }

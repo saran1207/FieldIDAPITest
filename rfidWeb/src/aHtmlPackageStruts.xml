@@ -31,7 +31,7 @@
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 
-		<action name="customerExport" method="export" class="com.n4systems.fieldid.actions.CustomerCrud">
+		<action name="customerExport" method="export" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>

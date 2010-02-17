@@ -18,8 +18,12 @@ public class ExcelMapReader implements MapReader {
 	private String[] titles;
 	private int currentRow = -1;
 	
-	public ExcelMapReader(InputStream in) throws BiffException, IOException {
-		workbook = Workbook.getWorkbook(in);
+	public ExcelMapReader(InputStream in) throws IOException {
+		try {
+			workbook = Workbook.getWorkbook(in);
+		} catch (BiffException e) {
+			throw new IOException(e);
+		}
 		sheet = workbook.getSheet(0);
 	}
 	

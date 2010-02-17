@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.n4systems.api.validation.ValidationFailedException;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.CustomerExporter;
 import com.n4systems.exporting.CustomerImporter;
@@ -47,13 +48,12 @@ public class CustomerDivisionExportAction extends AbstractAdminAction {
 			
 			CustomerImporter importer = new CustomerImporter(mapReader, filter);
 
-			if (!importer.validateAndImport()) {
-				for (ValidationResult result: importer.getFailedValidationResults()) {
-					addActionError(String.format("Row %d: %s", result.getRow(), result.getMessage()));
-				}
-				return ERROR;
+			importer.validateAndImport();
+		} catch (ValidationFailedException e) {
+			for (ValidationResult result: e.getFailedValidationResults()) {
+				addActionError(String.format("Row %d: %s", result.getRow(), result.getMessage()));
 			}
-			
+			return ERROR;
 		} catch (Exception e) {
 			logger.error("Import customer/divions failed", e);
 			addActionError("Oh-o, it failed.  Check the logs");

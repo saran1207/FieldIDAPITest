@@ -1,11 +1,13 @@
 package com.n4systems.exporting;
 
-import java.util.List;
-
-import com.n4systems.api.validation.ValidationResult;
+import com.n4systems.api.validation.ValidationFailedException;
 
 
 public interface Importer {
-	public boolean validateAndImport() throws ImportException;
-	public List<ValidationResult> getFailedValidationResults();
+	/**
+	 * Validates and Imports all rows.  Returns a count of the number of imported organizations.
+	 * Throws ValidationFailedException if validation failed.  The ValidationFailedException will
+	 * contain a list of failed validation results
+	 */
+	public int validateAndImport() throws ImportException, ValidationFailedException;
 }

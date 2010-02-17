@@ -10,6 +10,7 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.CustomerOrgViewConverter;
 import com.n4systems.api.conversion.DivisionOrgViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
+import com.n4systems.api.validation.ValidationFailedException;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
@@ -29,7 +30,7 @@ import com.n4systems.persistence.savers.Saver;
 public class CustomerImporter implements Importer {
 	private static final int TITLE_ROW = 1;
 	private static final int FIRST_DATA_ROW = 2;
-
+	
 	private final MapReader mapReader;
 	private final TransactionManager transactionManager;
 	private final Saver<BaseOrg> orgSaver;
@@ -53,16 +54,11 @@ public class CustomerImporter implements Importer {
 		this.divisionConverter = divisionConverter;
 	}
 
-	/**
-	 * Validates and Imports all rows.  Returns false if the validation step failed.
-	 */
+
 	@Override
-	public boolean validateAndImport() throws ImportException {
-		readAllRows();
-		
-		if (!allViewPassed()) {
-			return false;
-		}
+	public int validateAndImport() throws ImportException, ValidationFailedException {
+		readAllRows();		
+		validateViews();
 
 		int currentRow = FIRST_DATA_ROW;
 		Transaction transaction = null;
@@ -77,7 +73,7 @@ public class CustomerImporter implements Importer {
 				} else if (view.isDivision()) {
 					importDivision(transaction, view);
 				}
-				
+
 				currentRow++;
 			}
 		} catch (ConversionException e) {
@@ -88,7 +84,7 @@ public class CustomerImporter implements Importer {
 			throw new ImportException("Failed import of model", e, currentRow);
 		}
 		
-		return true;
+		return currentRow - FIRST_DATA_ROW;
 	}
 
 	private void importCustomer(Transaction transaction, FullExternalOrgView view) throws ConversionException {
@@ -107,12 +103,7 @@ public class CustomerImporter implements Importer {
 		orgSaver.saveOrUpdate(transaction, division);
 	}
 	
-	@Override
-	public List<ValidationResult> getFailedValidationResults() {
-		return failedValidationResults;
-	}
-	
-	private boolean allViewPassed() throws ImportException {
+	private void validateViews() throws ImportException, ValidationFailedException {
 		failedValidationResults = new ArrayList<ValidationResult>();
 		
 		int currentRow = FIRST_DATA_ROW;
@@ -121,7 +112,9 @@ public class CustomerImporter implements Importer {
 			currentRow++;
 		}
 		
-		return failedValidationResults.isEmpty();
+		if (!failedValidationResults.isEmpty()) {
+			throw new ValidationFailedException(failedValidationResults);
+		}
 	}
 	
 	private void readAllRows() throws ImportException {

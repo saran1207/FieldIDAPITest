@@ -48,3 +48,43 @@
 #exportBox {
 	background:no-repeat url(../../images/green-arrow-left.png);
 }
+
+.faq {
+	padding-top: 10px;
+}
+
+.faq span {
+	display: block;
+	padding-top: 5px;
+}
+
+#uploadForm {
+	padding: 10px;
+}
+
+#uploadForm label {
+	float: left;
+	padding-right: 10px;
+	font-size: 1.1em;
+}
+
+#uploadForm .fieldHolder {
+	display: inline;
+}
+
+#uploadForm input[type="submit"] {
+	margin-left: 10px;
+	width: 70px;
+}
+
+.sectionTitle {
+	font-size: 1.3em;
+}
+
+#backToLink {
+	padding-left: 5px;
+}
+
+#or {
+	padding-left: 5px;
+}

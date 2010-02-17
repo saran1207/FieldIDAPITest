@@ -8,6 +8,10 @@ import java.util.UUID;
 public class TempFile extends File {
 	private static final long serialVersionUID = 1L;
 
+	public TempFile() {
+		this("test_" + UUID.randomUUID().toString().substring(25), true, false, true);
+	}
+	
 	public TempFile(boolean withRandomData) {
 		this("test_" + UUID.randomUUID().toString().substring(25), true, withRandomData, true);
 	}

@@ -18,10 +18,10 @@ import com.n4systems.util.mail.TemplateMailMessage;
 public abstract class DownloadTask implements Runnable {
 	protected Logger logger = Logger.getLogger(DownloadTask.class); 
 	
-	private final String templateName;
-	private final String downloadUrl;
-	private final DownloadLinkSaver linkSaver;
-	private final MailManager mailManager;
+	protected final String templateName;
+	protected final String downloadUrl;
+	protected final DownloadLinkSaver linkSaver;
+	protected final MailManager mailManager;
 	protected final DownloadLink downloadLink;
 	
 	public DownloadTask(DownloadLink downloadLink, String downloadUrl, String templateName, DownloadLinkSaver linkSaver, MailManager mailManager) {
