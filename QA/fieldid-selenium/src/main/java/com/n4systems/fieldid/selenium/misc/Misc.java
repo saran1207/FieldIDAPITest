@@ -942,6 +942,16 @@ public class Misc {
 	public void forceSessionTimeout(String domain) {
 		selenium.deleteCookie("JSESSIONID", "path=/,domain=" + domain + ",recurse=true");
 		selenium.runScript("testSession();");
+		int timeSlice = 5;	// seconds
+		int maxSeconds = 720;
+		int currentSeconds = 0;
+		do {
+			if(isSessionExpired())
+				return;
+			sleep(timeSlice);
+			currentSeconds += timeSlice;
+		} while(currentSeconds < maxSeconds);
+		fail("Session Expired lightbox never appeared. Waited " + maxSeconds + " seconds after forcing a timeout");
 	}
 
 	/**
@@ -1371,5 +1381,12 @@ public class Misc {
 		// TODO: once Selenium has some way to detect Javascript errors implement this
 		// SEE: http://jira.openqa.org/browse/SEL-613
 		return b;
+	}
+
+	public boolean isSessionExpired() {
+		boolean result = false;
+		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
+		result = selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
+		return result;
 	}
 }

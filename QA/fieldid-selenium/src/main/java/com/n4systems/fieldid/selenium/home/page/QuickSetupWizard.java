@@ -35,6 +35,7 @@ public class QuickSetupWizard {
 	private String visitTheHelpDocumentationLinkLocator = "xpath=//A[contains(text(),'Visit the help documentation')]";
 	private String watchTheIntroductionVideoLinkLocator = "xpath=//A[contains(text(),'Watch the introduction video')]";
 	private String previewSystemLogoImageLocator = "xpath=//IMG[@id='previewImage')]";
+	private String quickSetupWizardLinkLocator = "xpath=//A[contains(text(),'Quick Setup Wizard')]";
 	
 	public QuickSetupWizard(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -192,5 +193,15 @@ public class QuickSetupWizard {
 			result = selenium.getValue(webSiteAddressTextFieldLocator);
 		}
 		return result;
+	}
+
+	public void gotoQuickSetupWizard() {
+		misc.info("Click the link to go to the Quick Setup Wizard");
+		if(selenium.isElementPresent(quickSetupWizardLinkLocator)) {
+			selenium.click(quickSetupWizardLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+		} else {
+			fail("Could not find the link to run the Quick Setup Wizard");
+		}
 	}
 }
