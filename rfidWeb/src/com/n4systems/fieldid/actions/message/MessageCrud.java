@@ -12,7 +12,6 @@ import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigContext;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class MessageCrud extends AbstractPaginatedCrud<Message> {
@@ -109,7 +108,7 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
-			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(ConfigContext.getCurrentContext());
+			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext());
 			processor.setActor(getUser()).setNonSecureLoaderFactory(getNonSecureLoaderFactory());
 			
 			processor.process(message.getCommand(), transaction);

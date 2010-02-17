@@ -11,7 +11,6 @@ import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.UpgradeCost;
 import com.n4systems.subscription.UpgradeResponse;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -120,7 +119,7 @@ public abstract class AbstractUpgradeCrud extends AbstractCrud {
 	protected void sendNotificationOfIncompleteUpgrade() {
 		MailMessage message = new MailMessage();
 		
-		message.getToAddresses().add(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
+		message.getToAddresses().add(getConfigContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
 		message.setSubject("FAILED TO APPLY UPGRADE to " + getPrimaryOrg().getName());
 		message.setBody("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing " + getWhatWasBeingBought());
 		

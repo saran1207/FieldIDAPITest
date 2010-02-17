@@ -17,7 +17,6 @@ import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -184,7 +183,7 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 	public Pager<DivisionOrg> getPage() {
 		if (page == null) {
 			DivisionOrgPaginatedLoader loader = getLoaderFactory().createDivisionOrgPaginatedLoader();
-			loader.setPage(getCurrentPage()).setPageSize(ConfigContext.getCurrentContext().getInteger(ConfigEntry.WEB_PAGINATION_PAGE_SIZE));
+			loader.setPage(getCurrentPage()).setPageSize(getConfigContext().getInteger(ConfigEntry.WEB_PAGINATION_PAGE_SIZE));
 			loader.setCustomerFilter(customer);
 			page = loader.load();
 		}

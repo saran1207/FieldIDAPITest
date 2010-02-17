@@ -10,7 +10,6 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -117,7 +116,7 @@ public class UploadFileAction extends AbstractAction {
 			} 
 		}
 		
-		return ConfigContext.getCurrentContext().getLong(fileSizeLimit);
+		return getConfigContext().getLong(fileSizeLimit);
 	}
 
 	public String getTypeOfUpload() {

@@ -29,7 +29,6 @@ import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoade
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -201,7 +200,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		if (getLimits().isAssetsMaxed()) {
 			result = 0;
 		} else {
-			Integer configMax = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
+			Integer configMax = getConfigContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
 			Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
 
 			result = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;

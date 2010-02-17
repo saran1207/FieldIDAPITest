@@ -22,7 +22,6 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryFilter;
@@ -399,23 +398,23 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	
 	
 	public Integer getMaxSizeForExcelExport() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, getTenantId());
 	}
 	
 	public Integer getMaxSizeForPDFPrintOuts() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, getTenantId());
 	}
 	
 	public Integer getMaxSizeForSummaryReport() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_SUMMARY_REPORT, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_SUMMARY_REPORT, getTenantId());
 	}
 	
 	public Integer getMaxSizeForMassUpdate() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, getTenantId());
 	}
 	
 	public Integer getMaxSizeForAssigningInspectionsToJobs() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId());
 	}
 
 }

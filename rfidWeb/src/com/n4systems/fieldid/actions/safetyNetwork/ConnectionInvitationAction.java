@@ -8,26 +8,27 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.message.MessageDecorator;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.handlers.creator.safetynetwork.ConnectionInvitationHandlerImpl;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
-import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageCommandSaver;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
-import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
+import com.n4systems.util.uri.ActionURLBuilder;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
@@ -54,8 +55,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 	private InternalOrg remoteOrg;
 	private ConnectionType connectionType = ConnectionType.VENDOR;
 	
-	private MessageDecorator message = new MessageDecorator(new Message());
-	
+	private String personalizedBody;
 	
 	public ConnectionInvitationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -69,11 +69,9 @@ public class ConnectionInvitationAction extends AbstractAction {
 	@SkipValidation
 	public String doAdd() {
 		localOrg = getInternalOrg();
-		message.setSubject(getText("label.invite_connection_subject.default"));
 		
-		List<String> getTextArgs = new ArrayList<String>();
-		getTextArgs.add(getSessionUser().getName());
-		message.setBody(getText("label.invite_connection_body.default", getTextArgs));
+		
+		personalizedBody = getDefautMessageBody();
 		
 		return SUCCESS;
 	}
@@ -86,6 +84,8 @@ public class ConnectionInvitationAction extends AbstractAction {
 			CreateSafetyNetworkConnectionMessageCommand command = createCommand(transaction);
 			
 			String feedbackMessage;
+			
+			
 			if (remoteOrg.getPrimaryOrg().isAutoAcceptConnections()) {
 				feedbackMessage = "message.invitation_accepted";
 				autoAcceptConnection(command, transaction);
@@ -107,21 +107,28 @@ public class ConnectionInvitationAction extends AbstractAction {
 	}
 
 	private void autoAcceptConnection(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
-		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(ConfigContext.getCurrentContext());
+		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext());
 		processor.setNonSecureLoaderFactory(getNonSecureLoaderFactory());
 		processor.setActor(getUser());
 		processor.process(command, transaction);
 	}
 
 	private void sendInvitationMessage(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
-		Message realMessage = message.realMessage();
-			
-		realMessage.setSender(localOrg);
-		realMessage.setReceiver(remoteOrg);
-			
-		realMessage.setCommand(command);
-			
-		new MessageSaver().save(transaction, realMessage);
+		ConnectionInvitationHandlerImpl connectionCreator = new ConnectionInvitationHandlerImpl(new MessageSaver(), 
+				ServiceLocator.getMailManager(), 
+				getDefautMessageBody(), getDefaultMessageSubject(), new AdminUserListLoader(new TenantOnlySecurityFilter(remoteOrg.getTenant())), new ActionURLBuilder(getBaseURI(), getConfigContext()));
+		
+		connectionCreator.withCommand(command).from(localOrg).to(remoteOrg).personalizeBody(personalizedBody);
+		
+		connectionCreator.create(transaction);
+	}
+
+	public String getDefaultMessageSubject() {
+		return getText("label.invite_connection_subject.default");
+	}
+
+	private String getDefautMessageBody() {
+		return getText("label.invite_connection_body.default", new String[]{getSessionUser().getName()});
 	}
 
 	private CreateSafetyNetworkConnectionMessageCommand createCommand(Transaction transaction) {
@@ -220,11 +227,16 @@ public class ConnectionInvitationAction extends AbstractAction {
 			remoteTenant = TenantCache.getInstance().findTenant(id);
 		}
 	}
+
+	public String getPersonalizedBody() {
+		return personalizedBody;
+	}
+
+	@RequiredStringValidator(message="", key="error.body_is_required")
+	public void setPersonalizedBody(String personalizedBody) {
+		this.personalizedBody = personalizedBody;
+	}
 	
 
-	@VisitorFieldValidator(message="")
-	public MessageDecorator getMessage() {
-		return message;
-	}
 
 }

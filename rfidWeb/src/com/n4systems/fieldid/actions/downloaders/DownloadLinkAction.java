@@ -13,7 +13,6 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.staticdownloads.StaticDownload;
 import com.n4systems.model.staticdownloads.StaticDownloadCache;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 
@@ -103,7 +102,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	}
 	
 	public String getExpiresText(Date created) {
-		Integer expireTTL = ConfigContext.getCurrentContext().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
+		Integer expireTTL = getConfigContext().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
 
 		// add the TTL and truncate back to midnight
 		Date expiresOn = DateHelper.truncate(DateHelper.addDaysToDate(created, expireTTL.longValue()), DateHelper.DAY);

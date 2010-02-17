@@ -30,7 +30,6 @@ import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
-import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.downloadlink.DownloadCoordinator;
 import com.n4systems.model.orgs.BaseOrg;
@@ -234,6 +233,18 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		return  DateHelper.isDateValid(format, date);
 	}
 	
+	public String formatDateTime(Date date) {
+		return formatAnyDate(date, true, true);
+	}
+	
+	public String formatDate(Date date, boolean convertTimeZone) {
+		return formatAnyDate(date, convertTimeZone, false);
+	}
+	
+	protected String formatAnyDate(Date date, boolean convertTimeZone, boolean showTime) {
+		return new FieldidDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
+	}
+	
 	public Collection<FindProductOptionManufactureBean> getSearchOptions() {
 		if( searchOptions == null ) {
 			try {
@@ -247,7 +258,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	
 	public boolean isDevMode() {
 		String serverName = getServletRequest().getServerName();
-		String systemDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_DOMAIN);
+		String systemDomain = getConfigContext().getString(ConfigEntry.SYSTEM_DOMAIN);
 		return !(serverName.toLowerCase().endsWith(systemDomain));
 	}
 	
@@ -298,17 +309,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		return encodedMap;
 	}
 	
-	public String formatDateTime(Date date) {
-		return formatAnyDate(date, true, true);
-	}
-	
-	public String formatDate(Date date, boolean convertTimeZone) {
-		return formatAnyDate(date, convertTimeZone, false);
-	}
-	
-	protected String formatAnyDate(Date date, boolean convertTimeZone, boolean showTime) {
-		return new FieldidDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
-	}
+
 	
 	protected UserBean fetchCurrentUser() {
 		if (getSessionUserId() == null) {
@@ -381,6 +382,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	
 	public URI getBaseURI() {
 		// creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
+		
 		return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
 	}
 	
@@ -423,12 +425,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		return createHandlerFactory;
 	}
 	
-	public Long idOrNull(BaseEntity entity) {
-		return (entity != null) ? entity.getId() : null; 
-	}
+	
 	
 	public String getHouseAccountName() {
-		return ConfigContext.getCurrentContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME);
+		return getConfigContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME);
 	}
 	
 	
@@ -537,6 +537,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		Map<Long, String> singleElementMap = new HashMap<Long, String>();
 		singleElementMap.put(id, "");
 		return singleElementMap;
+	}
+
+	protected ConfigContext getConfigContext() {
+		return ConfigContext.getCurrentContext();
 	}
 
 	

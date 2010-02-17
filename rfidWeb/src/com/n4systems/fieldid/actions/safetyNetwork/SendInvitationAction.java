@@ -8,12 +8,12 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.utils.UrlBuilder;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.uri.SignupUrlBuilder;
+import com.n4systems.util.uri.UrlBuilder;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
@@ -71,7 +71,7 @@ public class SendInvitationAction extends AbstractAction {
 	}
 	
 	protected UrlBuilder createSignupUrlBuilder() {
-		return new SignupUrlBuilder(getBaseURI(), getUser(), ConfigContext.getCurrentContext().getString(ConfigEntry.SIGNUP_PATH));
+		return new SignupUrlBuilder(getBaseURI(), getConfigContext(), getUser(), getConfigContext().getString(ConfigEntry.SIGNUP_PATH));
 	}
 
 	public String getEmail() {

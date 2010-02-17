@@ -6,8 +6,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.services.TenantCache;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.uri.SignupUrlBuilder;
 
 public class ReferCrud extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public class ReferCrud extends AbstractAction {
 	}
 	
 	public String getReferralUrl() {
-		String signupPath = ConfigContext.getCurrentContext().getString(ConfigEntry.SIGNUP_PATH);
-		return new SignupUrlBuilder(getBaseURI(), getUser(), signupPath).build();
+		String signupPath = getConfigContext().getString(ConfigEntry.SIGNUP_PATH);
+		return new SignupUrlBuilder(getBaseURI(), getConfigContext(), getUser(), signupPath).build();
 	}
 	
 	public String getCompanyName(Long id) {

@@ -18,7 +18,6 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -57,7 +56,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	protected void initMemberFields() {
 		userAccount = new UserBean();
 		userRequest = new UserRequest();
-		String defaultZoneId = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
+		String defaultZoneId = getConfigContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
 		country = CountryList.getInstance().getCountryByFullName(defaultZoneId);
 		region = CountryList.getInstance().getRegionByFullId(defaultZoneId);
 	}

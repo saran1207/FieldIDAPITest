@@ -16,11 +16,11 @@
 	</div>
 	<div class="infoField">
 		<label for="subject" class="label"><@s.text name="label.subject"/></label>
-		<@s.textfield name="message.subject"/>
+		<span class="fieldHolder" id="subject">${defaultMessageSubject?html}</span>
 	</div>
 	<div class="infoField">
 		<label for="body" class="label"><@s.text name="label.body"/></label>
-		<@s.textarea name="message.body"/>
+		<@s.textarea name="personalizedBody"/>
 	</div>
 	<div class="actions">
 		<@s.submit key="label.sendinvitation" id="send"/>

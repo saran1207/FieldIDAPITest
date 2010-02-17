@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.viewhelpers.PaginatedDisplay;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
 public class AbstractPaginatedAction extends AbstractAction implements PaginatedDisplay {
@@ -19,7 +18,7 @@ public class AbstractPaginatedAction extends AbstractAction implements Paginated
 	
 	public AbstractPaginatedAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		pageSize = ConfigContext.getCurrentContext().getInteger(ConfigEntry.WEB_PAGINATION_PAGE_SIZE);
+		pageSize = getConfigContext().getInteger(ConfigEntry.WEB_PAGINATION_PAGE_SIZE);
 	}
 
 	public int getPageSize() {

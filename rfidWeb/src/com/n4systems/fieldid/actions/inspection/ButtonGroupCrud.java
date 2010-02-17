@@ -14,7 +14,6 @@ import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -169,7 +168,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 
 	public Long getMaxNumberOfImages() {
 		if( maxNumberOfImages == null ) {
-			maxNumberOfImages = ConfigContext.getCurrentContext().getLong(ConfigEntry.WEB_TOTAL_INSPECTION_BUTTONS);
+			maxNumberOfImages = getConfigContext().getLong(ConfigEntry.WEB_TOTAL_INSPECTION_BUTTONS);
 		}
 		return maxNumberOfImages;
 	}

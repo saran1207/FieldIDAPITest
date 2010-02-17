@@ -26,7 +26,6 @@ import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.CatalogImportTask;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListingPair;
 
@@ -215,6 +214,6 @@ public class PublishedCatalogCrud extends AbstractCrud {
 	}
 	
 	public int getEstimatedImportTime() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.ESTIMATED_CATALOG_IMPORT_TIME_IN_MINUTES);
+		return getConfigContext().getInteger(ConfigEntry.ESTIMATED_CATALOG_IMPORT_TIME_IN_MINUTES);
 	}
 }

@@ -6,7 +6,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Tenant;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
@@ -24,7 +23,7 @@ public class RemoteOrgAction extends AbstractAction {
 		tenant = TenantCache.getInstance().findTenant(getName().trim());
 		
 		if (tenant != null) {
-			if (tenant.getName().equalsIgnoreCase(ConfigContext.getCurrentContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME))) {
+			if (tenant.getName().equalsIgnoreCase(getConfigContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME))) {
 				return ERROR;
 			}
 			
