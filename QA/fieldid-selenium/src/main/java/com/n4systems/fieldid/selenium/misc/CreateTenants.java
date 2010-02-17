@@ -15,12 +15,10 @@ public class CreateTenants {
 	private SignUpPackages sup;
 	private CreateAccount create;
 	private SignUpComplete complete;
-	private FieldIdSelenium selenium;
 	private Misc misc;
 	private Random r;
 
 	public CreateTenants(FieldIdSelenium selenium, Misc misc) {
-		this.selenium = selenium;
 		this.misc = misc;
 		this.r = new Random();
 		login = new Login(selenium, misc);
