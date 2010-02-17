@@ -1,4 +1,4 @@
-<title><@s.text name="title.productsearch"/> <@s.text name="title.results"/></title>
+<title><@s.text name="title.assetsearch"/> <@s.text name="title.results"/></title>
 
 <#assign listPage=true/>
 <#include '_form.ftl' >

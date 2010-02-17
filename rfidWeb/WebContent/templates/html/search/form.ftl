@@ -1,5 +1,5 @@
 <title>
-	<@s.text name="title.productsearch" />	
+	<@s.text name="title.assetsearch" />	
 </title>
 
 <#include "_form.ftl"/>

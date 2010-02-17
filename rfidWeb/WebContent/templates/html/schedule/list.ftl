@@ -1,4 +1,4 @@
-<title><@s.text name="title.inspectionschedule"/> <@s.text name="title.results"/></title>
+<title><@s.text name="title.schedulesearch"/> <@s.text name="title.results"/></title>
 
 <#assign listPage=true/>
 <#include '_form.ftl' >

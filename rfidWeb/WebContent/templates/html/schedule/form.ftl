@@ -1,5 +1,5 @@
 <title>
-	<@s.text name="title.inspectionschedule" />	
+	<@s.text name="title.schedulesearch" />	
 </title>
 
 	
