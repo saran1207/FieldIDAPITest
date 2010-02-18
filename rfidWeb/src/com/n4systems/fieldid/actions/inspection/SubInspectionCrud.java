@@ -190,7 +190,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		UserBean modifiedBy = fetchCurrentUser();
 
 		SubInspection subInspection = masterInspectionHelper.createSubInspectionFromInspection(inspection);
-		subInspection.setInfoOptionMap(decodeMapKeys(subInspection.getInfoOptionMap()));
+		subInspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 
 		if (!masterInspectionHelper.getInspection().isNew()) {
 			updateAttachmentList(inspection, modifiedBy);
