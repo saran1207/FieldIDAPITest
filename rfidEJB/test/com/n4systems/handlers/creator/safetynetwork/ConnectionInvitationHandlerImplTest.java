@@ -41,7 +41,7 @@ import com.n4systems.util.uri.ActionURLBuilder;
 public class ConnectionInvitationHandlerImplTest {
 
 	
-	private static final String BASE_URI = "https://fielid.com/";
+	private static final String BASE_URI = "https://n4.fielid.com/";
 	private PrimaryOrg remoteOrg;
 	private PrimaryOrg localOrg;
 
@@ -278,7 +278,9 @@ public class ConnectionInvitationHandlerImplTest {
 		
 		assertEquals(localOrg.getName(), template.getTemplateMap().get("company_name"));
 		assertEquals("a personalized message", template.getTemplateMap().get("message"));
-		assertEquals(BASE_URI + "message.action?uniqueID=" + capturedMessage.getValue().getId(), template.getTemplateMap().get("messageUrl"));
+		
+		String domainAdjustedBaseUri = BASE_URI.replaceAll("n4", remoteOrg.getTenant().getName());
+		assertEquals(domainAdjustedBaseUri + "message.action?uniqueID=" + capturedMessage.getValue().getId(), template.getTemplateMap().get("messageUrl"));
 	}
 	
 	
@@ -327,7 +329,6 @@ public class ConnectionInvitationHandlerImplTest {
 		replay(adminLoader);
 		return adminLoader;
 	}
-
 	
 	
 

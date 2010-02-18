@@ -1,5 +1,6 @@
 package com.n4systems.util.uri;
 
+import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;
@@ -7,6 +8,7 @@ import java.net.URI;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
@@ -81,4 +83,14 @@ public class BaseUrlBuilderTest {
 		BaseUrlBuilder sut = new SuppliedPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext, "somefile.action?query=string");
 		assertEquals("https://somedomain.com/fieldid/somefile.action?query=string", sut.build());
 	}
+	
+	@Test
+	public void should_force_sub_domain_change_when_supplied_with_a_company_target() throws Exception {
+		Tenant tenant =  aTenant().named("alternate-tenant").build();
+		BaseUrlBuilder sut = new SuppliedPathBaseUrlBuilder(URI.create("https://company.somedomain.com/fieldid/"), configContext, "somefile.action");
+		sut.setCompany(tenant);
+		assertEquals("https://alternate-tenant.somedomain.com/fieldid/somefile.action", sut.build());
+	}
+	
+	
 }

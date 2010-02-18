@@ -60,7 +60,10 @@ public class ConnectionInvitationHandlerImpl implements ConnectionInvitationHand
 		notificationMessage.getToAddresses().add(adminLoader.load(transaction).get(0).getEmailAddress());
 		notificationMessage.getTemplateMap().put("company_name", localOrg.getName());
 		notificationMessage.getTemplateMap().put("message", personalizedBody);
-		notificationMessage.getTemplateMap().put("messageUrl", urlBuilder.setAction("message").setEntity(message).build());
+		notificationMessage.getTemplateMap().put("messageUrl", urlBuilder.setAction("message")
+																		.setEntity(message)
+																		.setCompany(remoteOrg.getTenant())
+																		.build());
 		return notificationMessage;
 	}
 
