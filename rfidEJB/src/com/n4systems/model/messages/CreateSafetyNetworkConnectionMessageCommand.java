@@ -23,6 +23,7 @@ public class CreateSafetyNetworkConnectionMessageCommand extends MessageCommand 
 	public void setCustomerOrgId(Long customerOrgId) {
 		getParamaters().put("customerOrgId", customerOrgId.toString());
 	}
+
 	
 	
 	

@@ -1,5 +1,6 @@
-require 'composite_primary_keys'
+require "message_command_parameter"
 class MessageCommand < ActiveRecord::Base
   set_table_name :messagecommands
-  set_primary_keys :messagecommands_id, :mapkey
+  
+  has_many :parameters, :foreign_key => :messagecommands_id, :class_name => "MessageCommandParameter"
 end

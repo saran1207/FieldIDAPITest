@@ -19,6 +19,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
+import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
@@ -81,21 +82,10 @@ public class ConnectionInvitationAction extends AbstractAction {
 		try {
 			transaction = PersistenceManager.startTransaction();
 			
-			CreateSafetyNetworkConnectionMessageCommand command = createCommand(transaction);
-			
-			String feedbackMessage;
-			
-			
-			if (remoteOrg.getPrimaryOrg().isAutoAcceptConnections()) {
-				feedbackMessage = "message.invitation_accepted";
-				autoAcceptConnection(command, transaction);
-			} else {
-				feedbackMessage = "message.invitation_sent";
-				sendInvitationMessage(command, transaction);
-			}
+			invite(transaction);
 			
 			PersistenceManager.finishTransaction(transaction);
-			addFlashMessageText(feedbackMessage);
+			addFlashMessageText("message.invitation_sent");
 		} catch(Exception e) {
 			PersistenceManager.rollbackTransaction(transaction);
 			logger.error("Failed while sending OrgConnection request", e);
@@ -106,8 +96,18 @@ public class ConnectionInvitationAction extends AbstractAction {
 		return SUCCESS;
 	}
 
+	private void invite(Transaction transaction) {
+		CreateSafetyNetworkConnectionMessageCommand command = createCommand(transaction);
+		if (remoteOrg.getPrimaryOrg().isAutoAcceptConnections()) {
+			autoAcceptConnection(command, transaction);
+		} else {
+			
+			sendInvitationMessage(command, transaction);
+		}
+	}
+
 	private void autoAcceptConnection(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
-		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext());
+		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext(), new EmailNotifier(ServiceLocator.getMailManager()));
 		processor.setNonSecureLoaderFactory(getNonSecureLoaderFactory());
 		processor.setActor(getUser());
 		processor.process(command, transaction);
@@ -144,7 +144,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 				command.setVendorOrgId(remoteOrg.getId());
 				break;
 		}
-		
+		command.setCreatedBy(fetchCurrentUser());
 		
 		new MessageCommandSaver().save(transaction, command);
 		return command;

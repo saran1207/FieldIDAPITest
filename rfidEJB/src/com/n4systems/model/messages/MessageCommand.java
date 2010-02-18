@@ -9,9 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CollectionOfElements;
+
+import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.parents.AbstractEntity;
 
@@ -37,6 +41,9 @@ public abstract class MessageCommand extends AbstractEntity {
 	
 	private boolean processed = false;
 	
+	@ManyToOne()
+	@JoinColumn(name = "createdBy", nullable = false)
+	private UserBean createdBy;
 	
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	private Map<String,String> paramaters = new HashMap<String, String>();
@@ -54,6 +61,16 @@ public abstract class MessageCommand extends AbstractEntity {
 
 	public void setProcessed(boolean processed) {
 		this.processed = processed;
+	}
+
+
+	public void setCreatedBy(UserBean createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+	public UserBean getCreatedBy() {
+		return createdBy;
 	}
 	
 }
