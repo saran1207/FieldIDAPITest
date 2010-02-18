@@ -18,6 +18,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.NullNotifier;
+import com.n4systems.notifiers.TestSingleNotifier;
 import com.n4systems.notifiers.notifications.ConnectionInvitationAcceptedNotification;
 import com.n4systems.notifiers.notifications.Notification;
 import com.n4systems.persistence.Transaction;
@@ -221,18 +222,6 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		expect(mockOrgConnectionExistsLoader.load((Transaction) anyObject())).andReturn(response);
 		replay(mockOrgConnectionExistsLoader);
 		return mockOrgConnectionExistsLoader;
-	}
-
-	private class TestSingleNotifier implements Notifier {
-
-		public Notification notification;
-
-		@Override
-		public boolean success(Notification notification) {
-			this.notification = notification;
-			return true;
-		}
-		
 	}
 	
 }

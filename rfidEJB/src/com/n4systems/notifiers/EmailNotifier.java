@@ -25,7 +25,7 @@ public class EmailNotifier implements Notifier {
 
 	private MailMessage createMessage(Notification notification) {
 		TemplateMailMessage mailMessage = new TemplateMailMessage();
-		
+		mailMessage.getToAddresses().add(notification.getTo().getEmailAddress());
 		mailMessage.setTemplatePath(notification.notificationName());
 		mailMessage.setSubject(notification.subject());
 		mailMessage.getTemplateMap().put("notification", notification);

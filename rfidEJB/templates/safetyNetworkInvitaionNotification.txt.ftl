@@ -1,6 +1,6 @@
-${company_name} has requested to add you as a connection on Field ID.
+${notification.companyName} has requested to add you as a connection on Field ID.
 
-${message!}
+${notification.message!}
 
 To view this request follow the link.
-${messageUrl!}
+${notification.messageUrl!}

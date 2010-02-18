@@ -38,6 +38,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.util.ConfigContext;
@@ -543,5 +544,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 		return ConfigContext.getCurrentContext();
 	}
 
+	
+	protected Notifier getDefaultNotifier() {
+		return ServiceLocator.getDefaultNotifier();
+	}
 	
 }

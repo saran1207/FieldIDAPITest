@@ -19,14 +19,12 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
-import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.uri.ActionURLBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -107,7 +105,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 	}
 
 	private void autoAcceptConnection(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
-		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext(), new EmailNotifier(ServiceLocator.getMailManager()));
+		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext(), getDefaultNotifier());
 		processor.setNonSecureLoaderFactory(getNonSecureLoaderFactory());
 		processor.setActor(getUser());
 		processor.process(command, transaction);
@@ -115,8 +113,8 @@ public class ConnectionInvitationAction extends AbstractAction {
 
 	private void sendInvitationMessage(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
 		ConnectionInvitationHandlerImpl connectionCreator = new ConnectionInvitationHandlerImpl(new MessageSaver(), 
-				ServiceLocator.getMailManager(), 
-				getDefautMessageBody(), getDefaultMessageSubject(), new AdminUserListLoader(new TenantOnlySecurityFilter(remoteOrg.getTenant())), new ActionURLBuilder(getBaseURI(), getConfigContext()));
+				getDefaultNotifier(), 
+				getDefaultMessageSubject(), new AdminUserListLoader(new TenantOnlySecurityFilter(remoteOrg.getTenant())), new ActionURLBuilder(getBaseURI(), getConfigContext()));
 		
 		connectionCreator.withCommand(command).from(localOrg).to(remoteOrg).personalizeBody(personalizedBody);
 		

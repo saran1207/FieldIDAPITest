@@ -1,4 +1,4 @@
-package com.n4systems.commandprocessors;
+package com.n4systems.notifiers.notifications;
 
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.junit.Assert.*;
@@ -9,7 +9,7 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.notifiers.notifications.Notification;
 
-public class CreateSafetyNetworkConnectionCommandProcessorTestTest {
+public class NotificationEqualsTest {
 
 	private final class NotificationExtension extends Notification {
 		private String subject = "some_subject";;

@@ -42,6 +42,8 @@ import com.n4systems.ejb.ProductManagerImpl;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.ProofTestHandlerImpl;
 import com.n4systems.exceptions.EJBLookupException;
+import com.n4systems.notifiers.EmailNotifier;
+import com.n4systems.notifiers.Notifier;
 
 public class ServiceLocator {
 	private static final String APP_PREFIX = "fieldid/";
@@ -217,5 +219,9 @@ public class ServiceLocator {
 	
 	public static final OrderManager getOrderManager() {
 		return get(OrderManager.class, OrderManagerImpl.class, orderManager);
+	}
+
+	public static Notifier getDefaultNotifier() {
+		return new EmailNotifier(getMailManager());
 	}
 }

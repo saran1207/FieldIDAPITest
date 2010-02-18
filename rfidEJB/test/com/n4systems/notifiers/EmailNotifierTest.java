@@ -1,5 +1,6 @@
 package com.n4systems.notifiers;
 
+import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import com.n4systems.ejb.MailManager;
 import com.n4systems.ejb.MailManagerTestDouble;
 import com.n4systems.notifiers.notifications.Notification;
+import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
 
@@ -19,6 +21,12 @@ public class EmailNotifierTest {
 
 	
 	private final class TestNotification extends Notification {
+		
+		public TestNotification() {
+			super();
+			this.notifiyUser(anEmployee().build());
+		}
+
 		@Override
 		public String notificationName() {
 			return "some_notification_name";
@@ -53,6 +61,22 @@ public class EmailNotifierTest {
 		
 		assertEquals("some_notification_name", message.getTemplatePath());
 	}
+	
+	
+	@Test
+	public void should_send_email_to_the_user_in_the_notification() throws Exception {
+		MailManagerTestDouble mailManager = new MailManagerTestDouble();
+		
+		EmailNotifier sut = new EmailNotifier(mailManager);
+		TestNotification notification = new TestNotification();
+		notification.notifiyUser(anEmployee().withEmailAddress("me@me.com").build());
+		sut.success(notification);
+		
+		TemplateMailMessage message = (TemplateMailMessage)mailManager.message;
+		
+		assertEquals(new FluentHashSet<String>("me@me.com"), message.getToAddresses());
+	}
+	
 	
 	@Test
 	public void should_send_a_template_email_with_the_subject_from_the_notification() throws Exception {
@@ -102,6 +126,8 @@ public class EmailNotifierTest {
 		
 		assertFalse(sut.success(new TestNotification()));
 	}
+	
+	
 	
 	
 	
