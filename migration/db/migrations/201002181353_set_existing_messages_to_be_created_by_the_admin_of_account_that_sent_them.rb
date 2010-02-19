@@ -10,6 +10,7 @@ class SetExistingMessagesToBeCreatedByTheAdminOfAccountThatSentThem < ActiveReco
         unless message.command.processed
           tenant_id = findSendingOrgOfMessage(message)
           admin = User.find(:first, :conditions => {:tenant_id => tenant_id, :admin => true})
+          raise Exception.new("null admin for tenant : " + tenant_id.to_s) unless !admin.nil?
           message.command.createdby = admin.id
           message.command.save
           
