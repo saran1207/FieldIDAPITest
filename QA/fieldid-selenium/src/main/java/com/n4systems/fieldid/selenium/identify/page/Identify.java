@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.selenium.identify.page;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -53,6 +51,11 @@ public class Identify {
 	private String productTypeAttributesUpdatingLocator = "xpath=//SPAN[id='productTypeIndicator' and not(contains(@style,'visibility: hidden'))]";
 	private CharSequence classStringIdentifyingRequiredFields = "requiredField";
 	private String classStringIdentifyingUnitOfMeasureFields = "unitOfMeasure";
+	private String registerThisAssetOverTheSafetyNetworkLinkLocator = "xpath=//A[@id='showSmartSearchLink']";
+	private String registerAssetVendorSelectListLocator = "xpath=//select[@id='snSmartSearchVendors']";
+	private String registerAssetSerialRFIDReferenceNumberTextFieldLocator = "xpath=//input[@id='snSmartSearchText']";
+	private String registerAssetLoadButtonLocator = "xpath=//input[@id='snSmartSearchSubmit']";
+	private String couldNotFindAnyPublishedAssetTextLocator = "xpath=//div[@id='snSmartSearchResults']";
 
 	public Identify(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -85,18 +88,42 @@ public class Identify {
 		assertTrue("Could not find the button for Save And Schedule on Assets Add", selenium.isElementPresent(identifyAddSaveAndScheduleButtonLocator));
 	}
 	
+	/**
+	 * Returns true if there is a link to Add With Order.
+	 * If you are on the Add With Order page, this will
+	 * return false.
+	 * 
+	 * @return
+	 */
 	public boolean isAddWithOrder() {
 		return selenium.isElementPresent(addWithOrderSelectedLocator);
 	}
 	
+	/**
+	 * Returns true if there is a link to Add.
+	 * If you are on the Add page, this will
+	 * return false.
+	 * 
+	 * @return
+	 */
 	public boolean isAdd() {
 		return selenium.isElementPresent(addSelectedLocator);
 	}
 	
+	/**
+	 * Returns true if there is a link to Multi Add.
+	 * If you are on the Multi Add page, this will
+	 * return false.
+	 * 
+	 * @return
+	 */
 	public boolean isMultiAdd() {
 		return selenium.isElementPresent(addMultiSelectedLocator);
 	}
 
+	/**
+	 * Click the Add tab to go to the Add page.
+	 */
 	public void gotoAdd() {
 		misc.info("Click the 'Add' link to add a single asset");
 		if(selenium.isElementPresent(addLinkLocator)) {
@@ -221,7 +248,7 @@ public class Identify {
 				+ "') and not(contains(@class,'" 
 				+ classStringIdentifyingUnitOfMeasureFields + "')) and @id='" 
 				+ id + "']";
-			if(selenium.isElementPresent(locator)) {
+			if(selenium.isElementPresent(locator) && selenium.getValue(locator).equals("")) {
 				String value = misc.getRandomString(8);
 				selenium.type(locator, value);
 			}
@@ -243,11 +270,13 @@ public class Identify {
 	 * this will open the input dialog and fill in the dialog
 	 * with the given value.
 	 * 
-	 * If does not change the unit of measure but uses the
-	 * default value.
+	 * It does not change the unit of measure type but uses the
+	 * default type.
 	 * 
 	 * For unit of measures which have more than one input,
 	 * this will fill in the first value only.
+	 * 
+	 * If the field already has a value this will not change it.
 	 * 
 	 * @param id
 	 * @param value
@@ -262,7 +291,9 @@ public class Identify {
 			String typeOfUnitOfMeasureSelectListLocator = "//SELECT[contains(@id,'" + unitOfMeasureIDPrefix + id + "')]";
 			String typeOfUnitOfMeasure = selenium.getSelectedValue(typeOfUnitOfMeasureSelectListLocator);
 			String unitOfMeasureInputLocator = "//INPUT[@id='" + typeOfUnitOfMeasure + "_" + id + "']";
-			selenium.type(unitOfMeasureInputLocator, value);
+			if(selenium.getValue(unitOfMeasureInputLocator).equals("")) {
+				selenium.type(unitOfMeasureInputLocator, value);
+			}
 			String submitButton = "//INPUT[contains(@id,'" + id + "') and @value='Submit' and @type='submit']";
 			selenium.click(submitButton);
 		}
@@ -333,9 +364,24 @@ public class Identify {
 		return result;
 	}
 
-	public void setRegisterThisAssetOverTheSafetyNetwork(SafetyNetworkRegistration registration) {
-		// TODO what if there is no link to register products over safety network?
-		
+	public void setRegisterThisAssetOverTheSafetyNetwork(SafetyNetworkRegistration registration) throws InterruptedException {
+		if(selenium.isElementPresent(registerThisAssetOverTheSafetyNetworkLinkLocator)) {
+			selenium.click(registerThisAssetOverTheSafetyNetworkLinkLocator);
+			misc.sleep(2000);
+			String vendor = registration.getVendor();
+			if(misc.isOptionPresent(registerAssetVendorSelectListLocator, vendor)) {
+				selenium.select(registerAssetVendorSelectListLocator, vendor);
+			} else {
+				fail("Could not find the vendor '" + vendor + "' on the list of vendors");
+			}
+			String asset = registration.getAssetNumber();
+			selenium.type(registerAssetSerialRFIDReferenceNumberTextFieldLocator, asset);
+			selenium.click(registerAssetLoadButtonLocator);
+			selenium.waitForAjax(Misc.defaultTimeout);
+			assertFalse("Could not find vendor '" + vendor + "', asset '" + asset + "'", selenium.isElementPresent(couldNotFindAnyPublishedAssetTextLocator));
+		} else {
+			fail("Could not find a link to register the asset over the safety network");
+		}
 	}
 
 	public Product getAddAssetForm() {
@@ -367,5 +413,10 @@ public class Identify {
 		} else {
 			fail("Could not find the Save button on Add Assets");
 		}
+	}
+
+	public void gotoSaveAddAndInspectAssetForm() {
+		// TODO Auto-generated method stub
+		
 	}
 }

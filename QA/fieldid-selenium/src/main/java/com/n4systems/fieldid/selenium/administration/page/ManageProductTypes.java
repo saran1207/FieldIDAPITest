@@ -46,7 +46,8 @@ public class ManageProductTypes {
 	private String editProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Edit')]";
 	private String inspectionTypesProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Inspection Types')]";;
 	private String inspectionFrequenciesProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Inspection Frequencies')]";;
-	private String subComponentsProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Sub-Components')]";;
+	private String subComponentsProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Sub-Components')]";
+	private String inspectionTypeTableXpath = "//form[@id='productTypeEventTypesSave']/table";
 	
 	public ManageProductTypes(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -651,5 +652,24 @@ public class ManageProductTypes {
 
 	public void retireProductTypeAttributes(List<Attribute> attributes) throws InterruptedException {
 		deleteRetireProductTypeAttributeHelper(attributes, false);
+	}
+
+	public List<String> getInspectionTypes() {
+		List<String> result = new ArrayList<String>();
+		int row = 2;
+		int column = 1;
+		String checkboxXpath = inspectionTypeTableXpath + "/tbody/tr/td/input[contains(@id,'selectType_')]";
+		Number n = selenium.getXpathCount(checkboxXpath);
+		int num = n.intValue();
+		String checkboxLocator = "xpath=" + inspectionTypeTableXpath + "/tbody/tr[" + row + "]/td[" + column + "]/input[contains(@id,'selectType_')]";
+		for(int i = 0; i < num; i++) {
+			if(selenium.isChecked(checkboxLocator)) {
+				String inspectionTypeNameLocator = checkboxLocator + "/../../TD[contains(@class,'name')]";
+				String s = selenium.getText(inspectionTypeNameLocator);
+				result.add(s);
+			}
+			checkboxLocator = checkboxLocator.replaceFirst("tr\\[" + (row+i), "tr[" + (row+i+1));
+		}
+		return result;
 	}
 }
