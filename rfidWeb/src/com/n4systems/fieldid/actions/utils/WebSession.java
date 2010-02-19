@@ -37,7 +37,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
 	private static final String VENDOR_CONTEXT = "vendor_context";
 	private static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
-	
+	private static final String IMPORT_TASK_ID = "import_task_id";
 	
 	private final HttpSession session;
 	
@@ -146,6 +146,18 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	
 	public Long getVendorContext() {
 		return get(VENDOR_CONTEXT, Long.class);
+	}
+	
+	public void setImportTaskId(String id) {
+		put(IMPORT_TASK_ID, id);
+	}
+	
+	public String getImportTaskId() {
+		return get(IMPORT_TASK_ID, String.class);
+	}
+	
+	public void clearImportTaskId() {
+		remove(IMPORT_TASK_ID);
 	}
 	
 	@Override

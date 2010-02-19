@@ -72,13 +72,14 @@ public class CustomerImporter implements Importer {
 		if (orgViews == null) {
 			throw new IllegalStateException("runImport() called before validate()");
 		}
-		
-		currentRow = FIRST_DATA_ROW;
+		totalRows = orgViews.size();
+		currentRow = 0;
 		Transaction transaction = null;
 		try {
 			transaction = transactionManager.startTransaction();
 						
 			for (FullExternalOrgView view: orgViews) {
+				currentRow++;
 				
 				// validation should have caught if the view is neither a customer/division
 				if (view.isCustomer()) {
@@ -86,8 +87,6 @@ public class CustomerImporter implements Importer {
 				} else if (view.isDivision()) {
 					importDivision(transaction, view);
 				}
-
-				currentRow++;
 			}
 			
 			transactionManager.finishTransaction(transaction);
@@ -98,9 +97,15 @@ public class CustomerImporter implements Importer {
 		} catch (Exception e) {
 			transactionManager.rollbackTransaction(transaction);
 			throw new ImportException("Failed import of model", e, currentRow);
+		} finally {
+			// clean up resources since this object could be holding a lot of them
+			orgViews = null;
+			
+			try { mapReader.close(); } catch (IOException e) {}
+			
 		}
 		
-		return currentRow - FIRST_DATA_ROW;
+		return currentRow;
 	}
 
 	private void importCustomer(Transaction transaction, FullExternalOrgView view) throws ConversionException {

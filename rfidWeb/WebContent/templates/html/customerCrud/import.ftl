@@ -1,5 +1,6 @@
 <head>
 	<@n4.includeStyle type="page" href="customers"/>
+	<script language="javascript" src="javascript/customerImport.js"> </script>
 </head>
 ${action.setPageType('customer', 'import_export')!}
 <h2 class="sectionTitle"><@s.text name="label.import_customers" /></h2>
@@ -28,4 +29,16 @@ ${action.setPageType('customer', 'import_export')!}
 		</tr>
 		</#list>
 	</table>
+</#if>
+
+
+<#if task??>
+	<@s.url id="updateUrl" namespace="/ajax" action="customerImportStatus" />
+
+	<div id="importStatus"></div>
+
+	<script type="text/javascript">
+		updateUrl = '${updateUrl}';
+		getResponse(updateUrl, "get");
+	</script>
 </#if>

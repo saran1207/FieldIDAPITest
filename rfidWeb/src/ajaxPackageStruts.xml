@@ -456,5 +456,9 @@
 		<action name="increaseEmployeeLimitPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.subscriptions.IncreaseEmployeeLimitCrud">
 			<result name="success" type="freemarker">/templates/ajax/subscriptions/upgradePlan/showCost.ftl</result>
 		</action>
+		
+		<action name="customerImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
+			<result name="success" type="freemarker">/templates/ajax/customerImport/status.ftl</result>
+		</action>
 	</package>
 </struts>
