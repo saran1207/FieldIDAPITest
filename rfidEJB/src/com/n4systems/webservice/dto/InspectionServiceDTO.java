@@ -23,6 +23,7 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private long inspectionScheduleId;
 	private List<SubInspectionServiceDTO> subInspections = new ArrayList<SubInspectionServiceDTO>();
 	private List<SubProductMapServiceDTO> newSubProducts;
+	private List<SubProductMapServiceDTO> detachSubProducts;
 	private long orgId;
 	private long customerId;
 	private long divisionId;
@@ -211,4 +212,13 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	public void setOrgId(long orgId) {
 		this.orgId = orgId;
 	}	
+	public List<SubProductMapServiceDTO> getDetachSubProducts() {
+		return detachSubProducts;
+	}
+	public void setDetachSubProducts(List<SubProductMapServiceDTO> detachSubProducts) {
+		this.detachSubProducts = detachSubProducts;
+	}
+	
+	
+	
 }
