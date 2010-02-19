@@ -29,6 +29,7 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.FindProductFailure;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
+import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -967,15 +968,10 @@ public class DataServiceImpl implements DataService {
 				
 				// lets look up or create all newly attached sub products and attach to product
 				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product);
-				if (subProducts.size() > 0) {
-					/*
-					 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
-					 * has special handling code to persist it anyway.  and yes it does suck ...  
-					 */
-					product.getSubProducts().addAll(subProductNotAlreadyAdded(product, subProducts));
-					productManager.update(product, product.getModifiedBy());
-				}
-								
+				updateSubProducts(productManager, tenantId, product,
+						inspectionServiceDTO, subProducts);
+				
+				
 				// we also need to get the product for any sub-inspections
 				if (inspectionServiceDTO.getSubInspections() != null) {
 					Product subProduct = null;
@@ -1038,6 +1034,15 @@ public class DataServiceImpl implements DataService {
 			throw new ServiceException("Problem processing inspections");
 		}
 	}
+
+	private void updateSubProducts(LegacyProductSerial productManager,
+			Long tenantId, Product product,
+			InspectionServiceDTO inspectionServiceDTO,
+			List<SubProduct> subProducts) throws SubProductUniquenessException {
+		
+		new UpdateSubProducts(productManager, tenantId, product, inspectionServiceDTO, subProducts).run();
+		
+	}
 	
 	public RequestResponse createInspectionImage(RequestInformation requestInformation, InspectionImageServiceDTO inspectionImageServiceDTO ) throws ServiceException, InspectionException {
 		RequestResponse response = new RequestResponse();
@@ -1087,17 +1092,7 @@ public class DataServiceImpl implements DataService {
 		return response;
 	}
 	
-	private List<SubProduct> subProductNotAlreadyAdded(Product masterProduct, List<SubProduct> subProducts) {
-		List<SubProduct> notAddedSubProducts = new ArrayList<SubProduct>();
-		
-		for (SubProduct subProduct : subProducts) {
-			if (!masterProduct.getSubProducts().contains(subProduct)) {
-				notAddedSubProducts.add(subProduct);
-			}
-		}
-		
-		return notAddedSubProducts;
-	}
+	
 	
 	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct) throws Exception {
 		
