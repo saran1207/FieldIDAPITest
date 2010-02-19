@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.Attachment;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
@@ -12,7 +13,7 @@ import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name = "productattachments")
-public class ProductAttachment extends EntityWithTenant implements Saveable {
+public class ProductAttachment extends EntityWithTenant implements Saveable, Attachment {
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
@@ -48,27 +49,34 @@ public class ProductAttachment extends EntityWithTenant implements Saveable {
 		this.note = note;
 	}
 
-	public String getComments() {
-		return getComment();
-	}
+	
 
-	public String getComment() {
-		return note.getComment();
+	public String getComments() {
+		return note.getComments();
 	}
 
 	public String getFileName() {
 		return note.getFileName();
 	}
 
-	public void setComment(String comment) {
-		note.setComment(comment);
+	public void setComments(String comment) {
+		note.setComments(comment);
 	}
 
-	public void setComments(String comment) {
-		setComment(comment);
-	}
 
 	public void setFileName(String fileName) {
 		note.setFileName(fileName);
 	}
+	
+
+	public boolean isImage() {
+		return note.isImage();
+	}
+
+	@Override
+	public boolean hasAttachedFile() {
+		return note.hasAttachedFile();
+	}
+
+	
 }

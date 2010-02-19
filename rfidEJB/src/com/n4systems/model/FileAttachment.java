@@ -11,7 +11,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "fileattachments")
-public class FileAttachment extends EntityWithTenant {
+public class FileAttachment extends EntityWithTenant implements Attachment {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(length=255)

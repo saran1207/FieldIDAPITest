@@ -34,7 +34,7 @@ public class WebStoreSSOAction extends AbstractAction {
 		
 		try {
 			redirectUrl = STORE_URL + "&externalAuthKey="+URLEncoder.encode(externalAuthKey,"UTF-8");
-			redirectUrl += "&baseDomain="+URLEncoder.encode(getBaseBrandedUrl(getTenant().getName()),"UTF-8");
+			redirectUrl += "&baseDomain="+URLEncoder.encode(createActionURI(getTenant(), ""),"UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			logger.error("Problem generating web store url",e);
 		}

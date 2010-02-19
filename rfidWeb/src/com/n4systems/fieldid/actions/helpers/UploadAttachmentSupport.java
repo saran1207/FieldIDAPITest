@@ -90,7 +90,7 @@ abstract public class UploadAttachmentSupport extends AbstractCrud {
 		Map<Long, String> updatedAttachments = new HashMap<Long, String>();
 		for(ProductAttachment attachment: attachments) {
 			// null out empty comments
-			comment = (attachment.getNote().getComment() != null && attachment.getNote().getComment().trim().length() > 0) ? attachment.getNote().getComment().trim() : null;
+			comment = (attachment.getNote().getComments() != null && attachment.getNote().getComments().trim().length() > 0) ? attachment.getNote().getComments().trim() : null;
 			updatedAttachments.put(attachment.getId(), comment);
 		}
 		

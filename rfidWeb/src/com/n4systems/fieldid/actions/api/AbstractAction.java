@@ -45,10 +45,10 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
-import com.n4systems.util.HostNameParser;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.uri.ActionURLBuilder;
 
 import freemarker.template.utility.StringUtil;
 
@@ -359,36 +359,37 @@ abstract public class AbstractAction extends ExtendedTextProviderAction {
 	}
 	
 	public String getBaseBrandedUrl(String tenantName) {
-		return baseBrandedUrlFor(tenantName) + "fieldid/" ;
+		Tenant tenant = new Tenant();
+		tenant.setName(tenantName);
+		return createActionURI(tenant, "");
 	}
 
-	public String baseBrandedUrlFor(String tenantName) {
-		HostNameParser hostParser = HostNameParser.create(getBaseURI());
-		String newHostname = hostParser.replaceFirstSubDomain(tenantName);
-		
-		return "https://" + newHostname + "/";
-	}
-	
 	public String getLoginUrl() {
-		return getLoginUrlForTenant(getTenant().getName());
+		return getLoginUrlForTenant(getTenant());
 	}
-	
 	public String getLoginUrlForTenant(String tenantName) {
-		return getBaseBrandedUrl(tenantName) + "login.action" ;
+		Tenant tenant = new Tenant();
+		tenant.setName(tenantName);
+		return getLoginUrlForTenant(tenant);
+	}
+	public String getLoginUrlForTenant(Tenant tenant) {
+		return createActionURI(tenant, "login.action");
 	}
 	
 	public String getEmbeddedLoginUrl() {
-		return getBaseBrandedUrl(getTenant().getName()) + "embedded/login.action";
+		return createActionURI(getTenant(), "embedded/login.action");
 	}
 	
 	public URI getBaseURI() {
 		// creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
-		
 		return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
 	}
 	
-	public URI createActionURI(String action) {
-		return getBaseURI().resolve(action);
+	public String createActionURI(String action) {
+		return new ActionURLBuilder(getBaseURI(), getConfigContext()).setAction(action).build();
+	}
+	public String createActionURI(Tenant tenant, String action) {
+		return new ActionURLBuilder(getBaseURI(), getConfigContext()).setAction(action).setCompany(tenant).build();
 	}
 	
 	public TenantLimitProxy getLimits() {

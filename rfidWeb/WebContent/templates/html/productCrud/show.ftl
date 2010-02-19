@@ -20,7 +20,6 @@ ${action.setPageType('product', 'show')!}
 	<div class="viewSection smallViewSection" >
 		<h2><@s.text name="label.productsummary"/></h2>
 		<p>
-			
 			<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
 			<span class="fieldValue">${product.serialNumber}</span>
 		</p>
