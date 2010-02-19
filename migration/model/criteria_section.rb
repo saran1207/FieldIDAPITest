@@ -2,6 +2,7 @@ require "inspection_type_criteria_section"
 require "inspection_type"
 require "criteria_section_criteria"
 require "criteria"
+require "tenant"
 class CriteriaSection < ActiveRecord::Base
   set_table_name :criteriasections
   

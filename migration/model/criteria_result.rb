@@ -2,6 +2,7 @@ require "user"
 require "state"
 require "criteria"
 require "inspection"
+require "tenant"
 
 class CriteriaResult < ActiveRecord::Base
   set_table_name :criteriaresults

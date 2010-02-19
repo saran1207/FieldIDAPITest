@@ -1,5 +1,5 @@
 require "user"
-
+require "tenant"
 class FileAttachment < ActiveRecord::Base
 	set_table_name :fileattachments
   

@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
     findName = displayName.downcase
     findName.gsub!(' ', '')
     
-    user = User.find(:first, :conditions => ["tenant_id = :tenantId and (lower(trim(userid)) = :name or lower(trim(lastname)) || ',' || lower(trim(firstname)) = :name or lower(trim(firstname)) || lower(trim(lastname)) = :name)", {:tenantId => tenant.id, :name => findName}])
+    user = User.find(:first, :conditions => ["tenant_id = :tenantId and (lower(trim(userid)) = :name or lower(trim(lastname)) || ',' || lower(trim(firstname)) = :name or lower(trim(firstname)) || lower(trim(lastname)) = :name)", {:tenant_id => tenant.id, :name => findName}])
     
     if !user.nil?
       puts "Found User: " + user.displayString
