@@ -1,6 +1,7 @@
 package com.n4systems.model.api;
 
 import javax.activation.FileTypeMap;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import com.n4systems.model.Attachment;
@@ -11,6 +12,7 @@ public class Note implements Attachment {
 	private static final long serialVersionUID = 1L;
 	
 	private String fileName;
+	@Column(name="comment")
 	private String comments;
 	
 	public Note() {
