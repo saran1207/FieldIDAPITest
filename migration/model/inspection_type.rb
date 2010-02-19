@@ -1,4 +1,4 @@
-require "organization"
+require "tenant"
 require "inspection_type_group"
 require "inspection_type_supported_proof_test"
 require "inspection_type_info_field_name"
