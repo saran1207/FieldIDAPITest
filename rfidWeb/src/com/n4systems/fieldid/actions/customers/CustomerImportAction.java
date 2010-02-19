@@ -14,7 +14,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.CustomerImporter;
-import com.n4systems.exporting.ImportTask;
 import com.n4systems.exporting.ImportTaskRegistry;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.beanutils.InvalidTitleException;
@@ -25,6 +24,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.ImportTask;
 import com.n4systems.util.ArrayUtils;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
@@ -37,7 +37,7 @@ public class CustomerImportAction extends AbstractAction {
 	private final MapReaderFactory mapReaderFactory;
 	private File importDoc;
     private String importDocContentType;
-	private List<ValidationResult> failedValidationResults;
+	private List<ValidationResult> failedValidationResults; 
 	
 	public CustomerImportAction(PersistenceManager persistenceManager) {
 		this(persistenceManager, new MapReaderFactory(), TaskExecutor.getInstance(), new ImportTaskRegistry());
@@ -107,7 +107,7 @@ public class CustomerImportAction extends AbstractAction {
 	}
 
 	private void executeImportTask(Importer importer) {
-		ImportTask task = new ImportTask(importer);		
+		ImportTask task = new ImportTask(importer, getUser());		
 		
 		executor.execute(task);
 		

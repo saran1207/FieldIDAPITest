@@ -1,12 +1,22 @@
-package com.n4systems.exporting;
+package com.n4systems.taskscheduling.task;
 
 
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.UserBean;
+
+import com.n4systems.exporting.Importer;
+import com.n4systems.notifiers.EmailNotifier;
+import com.n4systems.notifiers.Notifier;
+import com.n4systems.notifiers.notifications.CustomerImportFailureNotification;
+import com.n4systems.notifiers.notifications.CustomerImportSuccessNotification;
+import com.n4systems.notifiers.notifications.Notification;
+
 
 public class ImportTask implements Runnable {
+	private static final Notification failureNotification = new CustomerImportFailureNotification();
 	private Logger logger = Logger.getLogger(ImportTask.class);
 	
 	public enum Status { 
@@ -26,25 +36,41 @@ public class ImportTask implements Runnable {
 	private final String id;
 	private Status status = Status.PENDING;
 	private Importer importer;
-
-	public ImportTask(Importer importer) {
+	private final Notifier notifier;
+	private final UserBean user;
+	
+	public ImportTask(Importer importer, UserBean user, Notifier notifier) {
 		this.id = UUID.randomUUID().toString();
 		this.importer = importer;
+		this.user = user;
+		this.notifier = notifier;
+	}
+	
+	public ImportTask(Importer importer, UserBean user) {
+		this(importer, user, new EmailNotifier());
 	}
 	
 	@Override
 	public void run() {
 		setStatus(Status.RUNNING);
 		try {
-			
-			importer.runImport();
+			int totalImported = importer.runImport();
 			
 			setStatus(Status.SUCCESSFUL);
+			notifier.success(createSuccessNotification(totalImported));
 			
 		} catch (Exception e) {
-			setStatus(Status.FAILED);
 			logger.error("Failed import", e);
+			
+			setStatus(Status.FAILED);
+			notifier.success(failureNotification);
 		}
+	}
+	
+	private Notification createSuccessNotification(int totalImported) {
+		Notification note = new CustomerImportSuccessNotification(totalImported);
+		note.notifiyUser(user);
+		return note;
 	}
 
 	public String getId() {
