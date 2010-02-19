@@ -1,4 +1,4 @@
-require 'organization'
+require 'tenant'
 
 class ProductCodeMapping < ActiveRecord::Base
   set_table_name :productcodemapping

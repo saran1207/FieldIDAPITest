@@ -1,4 +1,3 @@
-require "organization"
 require "user"
 require "state"
 require "criteria"

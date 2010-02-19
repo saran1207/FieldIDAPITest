@@ -1,4 +1,4 @@
-require "organization"
+
 require "inspection_type"
 require "inspection_info_option"
 require "product"

@@ -1,4 +1,4 @@
-require "organization"
+require "tenant"
 require "criteria"
 require "state_set_state"
 require "state"

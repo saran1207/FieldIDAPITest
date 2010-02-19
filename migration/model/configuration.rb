@@ -1,10 +1,10 @@
-require 'organization'
+require 'tenant'
 require 'user'
 
 class Configuration < ActiveRecord::Base
   set_table_name :configurations
   
-  belongs_to  :tenant,      :foreign_key => 'tenantId',   :class_name => 'Organization'
+  belongs_to  :tenant,      :foreign_key => 'tenant_id',   :class_name => 'Tenant'
   belongs_to  :modifiedBy,  :foreign_key => 'modifiedby', :class_name => 'User'
   
   

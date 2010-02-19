@@ -1,4 +1,4 @@
-require "organization"
+require "tenant"
 
 class TagOption < ActiveRecord::Base
   set_table_name :tagoptions

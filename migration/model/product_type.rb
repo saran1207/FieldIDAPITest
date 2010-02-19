@@ -1,4 +1,4 @@
-require 'organization'
+require 'tenant'
 require 'product_type_inspection_type'
 require 'product_type_attachment'
 require "product_type_file_attachment"

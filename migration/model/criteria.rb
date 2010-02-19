@@ -1,4 +1,3 @@
-require "organization"
 require "criteria_section_criteria"
 require "criteria_section"
 require "state_set"

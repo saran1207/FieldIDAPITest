@@ -1,4 +1,4 @@
-require "organization"
+require "tenant"
 require "state_set_state"
 require "state_set"
 require "legacy_button_state_mapping"

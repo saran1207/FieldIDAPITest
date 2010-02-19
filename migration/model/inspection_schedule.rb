@@ -1,4 +1,4 @@
-require "organization"
+require "tenant"
 require "user"
 require "product"
 require "inspection_type"

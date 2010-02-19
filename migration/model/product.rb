@@ -1,7 +1,5 @@
-require 'organization'
+require 'tenant'
 require 'product_type'
-require "customer"
-require "division"
 require "info_option"
 require "productserial_infooption"
 require "sub_product"
@@ -10,10 +8,7 @@ class Product < ActiveRecord::Base
   set_table_name :products
   
   belongs_to  :tenant,        :foreign_key => 'tenant_id',              :class_name => 'Tenant'
-  belongs_to  :organization,  :foreign_key => 'organization_id',        :class_name => 'Organization'
   belongs_to  :productinfo,   :foreign_key => 'type_id',                :class_name => 'ProductType'
-  belongs_to  :owner,         :foreign_key => 'owner_id',               :class_name => 'Customer'
-  belongs_to  :division,      :foreign_key => 'division_id',            :class_name => 'Division'
   has_many    :infoOptionsFK, :foreign_key => 'r_productserial',        :class_name => 'ProductserialInfooption'
   has_many    :infoOptions,                                             :class_name => 'InfoOption',				:through => :infoOptionsFK
   belongs_to  :identifiedBy,  :foreign_key => 'identifiedby_uniqueid',  :class_name => 'User'

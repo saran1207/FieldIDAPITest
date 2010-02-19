@@ -1,6 +1,4 @@
-require "organization"
-require "customer"
-require "division"
+require "tenant"
 
 class OrderMaster < ActiveRecord::Base
   set_table_name :ordermaster
@@ -8,8 +6,6 @@ class OrderMaster < ActiveRecord::Base
   
   belongs_to  :tenant,      :foreign_key => 'tenant_id',     :class_name => 'Tenant'
   belongs_to  :modifiedBy,  :foreign_key => 'modifiedby',   :class_name => 'User'
-  belongs_to  :customer,    :foreign_key => 'r_enduser',    :class_name => 'Customer'
-  belongs_to  :division,    :foreign_key => 'r_division',   :class_name => 'Division'
   
   def isUsingItemName
     if itemName.size > 0

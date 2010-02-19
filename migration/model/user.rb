@@ -1,6 +1,5 @@
-require "organization"
-require "customer"
-require "division"
+require "tenant"
+require "base_org"
 require "permission_action"
 require "permissions"
 

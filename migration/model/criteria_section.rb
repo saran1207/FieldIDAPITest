@@ -1,4 +1,3 @@
-require "organization"
 require "inspection_type_criteria_section"
 require "inspection_type"
 require "criteria_section_criteria"
