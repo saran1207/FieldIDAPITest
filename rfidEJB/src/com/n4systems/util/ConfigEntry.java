@@ -9,7 +9,7 @@ public enum ConfigEntry {
 	MAIL_FROM_ADDR								(	"\"FieldID\" <noreply@fieldid.com>"),
 	MAIL_REPLY_TO								(	""						),
 	MAIL_HOST									(	"localhost"				),
-	MAIL_SUBJECT_PREFIX							(	"FieldID: "				),
+	MAIL_SUBJECT_PREFIX							(	""				),
 	MAIL_BODY_PLAIN_HEADER						(	""						),
 	MAIL_BODY_PLAIN_FOOTER						(	"\n\n---\nThe Field ID Team\n\nsupport@fieldid.com \n179 John Street, Suite 101\n" +
 													"Toronto, Ontario, Canada \nM5T1X4 \n\n----\nThis e-mail address as it is not a valid return address and is not monitored - for questions please email support@fieldid.com\n----"),
