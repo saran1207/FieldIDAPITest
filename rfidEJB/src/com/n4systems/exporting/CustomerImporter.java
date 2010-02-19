@@ -27,7 +27,7 @@ import com.n4systems.persistence.TransactionManager;
 import com.n4systems.persistence.savers.Saver;
 
 public class CustomerImporter implements Importer {
-	private static final int FIRST_DATA_ROW = 2;
+	protected static final int FIRST_DATA_ROW = 2;
 	
 	private final MapReader mapReader;
 	private final TransactionManager transactionManager;
@@ -56,14 +56,16 @@ public class CustomerImporter implements Importer {
 	@Override
 	public List<ValidationResult> readAndValidate() throws IOException, ParseException, MarshalingException {
 		if (orgViews == null) {
-			readAllRows();
-		}
-		
+			orgViews = readAllRows();
+		} 
+		return validateRows();
+	}
+
+	protected List<ValidationResult> validateRows() {
 		List<ValidationResult> failedValidationResults = new ArrayList<ValidationResult>();
 		for (int i = 0; i < orgViews.size(); i++) {
 			failedValidationResults.addAll(viewValidator.validate(orgViews.get(i), i + FIRST_DATA_ROW));
 		}
-		
 		return failedValidationResults;
 	}
 	
@@ -101,7 +103,9 @@ public class CustomerImporter implements Importer {
 			// clean up resources since this object could be holding a lot of them
 			orgViews = null;
 			
-			try { mapReader.close(); } catch (IOException e) {}
+			if (mapReader != null) {
+				try { mapReader.close(); } catch (IOException e) {}
+			}
 			
 		}
 		
@@ -124,15 +128,21 @@ public class CustomerImporter implements Importer {
 		orgSaver.saveOrUpdate(transaction, division);
 	}
 	
-	private void readAllRows() throws IOException, ParseException, MarshalingException {
-		orgViews = new ArrayList<FullExternalOrgView>();
+	protected List<FullExternalOrgView> readAllRows() throws IOException, ParseException, MarshalingException {
+		List<FullExternalOrgView> views = new ArrayList<FullExternalOrgView>();
 		
-		ExportMapUnmarshaler<FullExternalOrgView> unmarshaler = new ExportMapUnmarshaler<FullExternalOrgView>(FullExternalOrgView.class, mapReader.getTitles());
+		ExportMapUnmarshaler<FullExternalOrgView> unmarshaler = createMapUnmarshaler();
 
 		Map<String, String> row;
 		while ((row = mapReader.readMap()) != null) {
-			orgViews.add(unmarshaler.toBean(row));
+			views.add(unmarshaler.toBean(row));
 		}
+		
+		return views;
+	}
+
+	protected ExportMapUnmarshaler<FullExternalOrgView> createMapUnmarshaler() throws IOException, ParseException {
+		return new ExportMapUnmarshaler<FullExternalOrgView>(FullExternalOrgView.class, mapReader.getTitles());
 	}
 
 	@Override

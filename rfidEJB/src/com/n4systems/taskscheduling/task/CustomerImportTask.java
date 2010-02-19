@@ -15,9 +15,9 @@ import com.n4systems.notifiers.notifications.CustomerImportSuccessNotification;
 import com.n4systems.notifiers.notifications.Notification;
 
 
-public class ImportTask implements Runnable {
+public class CustomerImportTask implements Runnable {
 	private static final Notification failureNotification = new CustomerImportFailureNotification();
-	private Logger logger = Logger.getLogger(ImportTask.class);
+	private Logger logger = Logger.getLogger(CustomerImportTask.class);
 	
 	public enum Status { 
 		PENDING("label.pending"), RUNNING("label.running"), SUCCESSFUL("label.successful"), FAILED("error.import_failed");
@@ -39,14 +39,14 @@ public class ImportTask implements Runnable {
 	private final Notifier notifier;
 	private final UserBean user;
 	
-	public ImportTask(Importer importer, UserBean user, Notifier notifier) {
+	public CustomerImportTask(Importer importer, UserBean user, Notifier notifier) {
 		this.id = UUID.randomUUID().toString();
 		this.importer = importer;
 		this.user = user;
 		this.notifier = notifier;
 	}
 	
-	public ImportTask(Importer importer, UserBean user) {
+	public CustomerImportTask(Importer importer, UserBean user) {
 		this(importer, user, new EmailNotifier());
 	}
 	

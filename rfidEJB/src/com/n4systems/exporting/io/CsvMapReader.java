@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Writer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -31,17 +32,27 @@ public class CsvMapReader implements MapReader {
 	 * @see #ArrayReader(Writer, String, String)
 	 */
 	public CsvMapReader(InputStream in) {
-		this(in, DEFAULT_FIELD_SEP, DEFAULT_QUOTE_CHAR);
+		this(new InputStreamReader(in));
 	}
 
+	/**
+	 * Creates an ArrayReader using a the default separator and quotation character.
+	 * @see #DEFAULT_FIELD_SEP
+	 * @see #DEFAULT_QUOTE_CHAR
+	 * @see #ArrayReader(Writer, String, String)
+	 */
+	public CsvMapReader(Reader in) {
+		this(new BufferedReader(in), DEFAULT_FIELD_SEP, DEFAULT_QUOTE_CHAR);
+	}
+	
 	/**
 	 * Creates an ArrayReader with a custom field separator and quotation character.
 	 * @param in			The underlying stream
 	 * @param fieldSep		Separator to use between fields.  May be null for no separation	
 	 * @param quoteChar		Character to use to quote fields.  May be null for no quoting
 	 */
-	public CsvMapReader(InputStream in, String fieldSep, String quoteChar) {
-		this.reader = new BufferedReader(new InputStreamReader(in));
+	public CsvMapReader(BufferedReader in, String fieldSep, String quoteChar) {
+		this.reader = in;
 		this.fieldSep = (fieldSep != null) ? fieldSep : "";
 		this.quoteChar = (quoteChar != null) ? quoteChar : "";
 	}

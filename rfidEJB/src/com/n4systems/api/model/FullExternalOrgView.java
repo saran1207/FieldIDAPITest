@@ -11,6 +11,18 @@ import com.n4systems.exporting.beanutils.ExportField;
 public class FullExternalOrgView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 	
+	public static FullExternalOrgView newCustomer() {
+		FullExternalOrgView view = new FullExternalOrgView();
+		view.setTypeToCustomer();
+		return view;
+	}
+	
+	public static FullExternalOrgView newDivision() {
+		FullExternalOrgView view = new FullExternalOrgView();
+		view.setTypeToDivision();
+		return view;
+	}
+	
 	@ExportField(title = "Type", order = 0, validators = {NotNullValidator.class, ExternalOrgTypeValidator.class})
 	private String type;
 

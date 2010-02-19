@@ -1,0 +1,74 @@
+package com.n4systems.exporting.beanutils;
+
+import static org.junit.Assert.*;
+
+import java.util.Map;
+
+import org.junit.Test;
+public class SimpleSerializationHandlerTest {
+	
+	private TestExportBean bean = new TestExportBean("mytype", null, 42);
+	
+	@Test
+	public void test_get_string_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("type"));
+		
+		Map<String, String> values = testHandler.marshal(bean);
+		
+		assertEquals(1, values.size());
+		assertEquals("mytype", values.get("Type"));
+	}
+	
+	@Test
+	public void test_get_null_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("name"));
+		
+		Map<String, String> values = testHandler.marshal(bean);
+		
+		assertEquals(1, values.size());
+		assertEquals("", values.get("Name"));
+	}
+	
+	@Test
+	public void test_get_int_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("age"));
+		
+		Map<String, String> values = testHandler.marshal(bean);
+		
+		assertEquals(1, values.size());
+		assertEquals("42", values.get("Age"));
+	}
+	
+	@Test
+	public void test_set_string_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("type"));
+		
+		TestExportBean test = new TestExportBean();
+		
+		testHandler.unmarshal(test, "asdasdasd");
+		
+		assertEquals("asdasdasd", test.getType());
+	}
+	
+	@Test
+	public void test_set_null_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("name"));
+		
+		TestExportBean test = new TestExportBean();
+		
+		testHandler.unmarshal(test, "");
+		
+		assertNull(test.getName());
+	}
+	
+	@Test
+	public void test_set_int_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("age"));
+		
+		TestExportBean test = new TestExportBean();
+		
+		testHandler.unmarshal(test, "99");
+		
+		assertEquals(99, test.getAge().intValue());
+	}
+}

@@ -39,4 +39,15 @@ public class ExportMapMarshalerTest {
 		verify(serialHandlers[1]);
 		verify(handlerFactory);
 	}
+	
+	@Test
+	public void test_full_conversion() throws MarshalingException, InstantiationException {
+		ExportMapMarshaler<TestExportBean> marshaler = new  ExportMapMarshaler<TestExportBean>(TestExportBean.class);
+		
+		Map<String, String> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42));
+		
+		assertEquals("mytype", beanMap.get("Type"));
+		assertEquals("", beanMap.get("Name"));
+		assertEquals("42", beanMap.get("Age"));
+	}
 }

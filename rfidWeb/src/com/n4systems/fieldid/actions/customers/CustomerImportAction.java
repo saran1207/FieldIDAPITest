@@ -24,7 +24,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.ImportTask;
+import com.n4systems.taskscheduling.task.CustomerImportTask;
 import com.n4systems.util.ArrayUtils;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
@@ -82,6 +82,7 @@ public class CustomerImportAction extends AbstractAction {
 				addActionError(getText("error.import_already_running"));
 				return ERROR;
 			} else {
+				taskRegistry.remove(getImportTaskId());
 				getSession().clearImportTaskId();
 			}
 			
@@ -107,7 +108,7 @@ public class CustomerImportAction extends AbstractAction {
 	}
 
 	private void executeImportTask(Importer importer) {
-		ImportTask task = new ImportTask(importer, getUser());		
+		CustomerImportTask task = new CustomerImportTask(importer, getUser());		
 		
 		executor.execute(task);
 		
@@ -156,7 +157,7 @@ public class CustomerImportAction extends AbstractAction {
 		return getSession().getImportTaskId();
 	}
 	
-	public ImportTask getTask() {
+	public CustomerImportTask getTask() {
 		return taskRegistry.get(getImportTaskId());
 	}
 }

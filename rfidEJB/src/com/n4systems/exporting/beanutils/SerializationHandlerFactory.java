@@ -22,7 +22,7 @@ public class SerializationHandlerFactory {
 		for (int i = 0; i < sortedFields.length; i++) {
 			handlers[i] = createSerializationHandler(sortedFields[i]);
 		}
-		
+
 		return handlers;
 	}
 	
