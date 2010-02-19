@@ -37,7 +37,7 @@ public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProces
 	private void sendNotfication(CreateSafetyNetworkConnectionMessageCommand command, OrgConnection orgConnection) {
 		ConnectionInvitationAcceptedNotification notification = new ConnectionInvitationAcceptedNotification();
 		notification.notifiyUser(command.getCreatedBy());
-		InternalOrg org = (actor.getTenant().equals(orgConnection.getVendor().getTenant())) ? orgConnection.getVendor() : orgConnection.getCustomer();
+		InternalOrg org = (command.getCreatedBy().getTenant().equals(orgConnection.getVendor().getTenant())) ? orgConnection.getCustomer() : orgConnection.getVendor();
 		notification.setAcceptingCompanyName(org.getDisplayName());
 		notifier.success(notification);
 	}
