@@ -157,7 +157,7 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		
 		
 		Notifier notifier = EasyMock.createMock(Notifier.class);
-		expect(notifier.success((Notification) anyObject())).andReturn(true);
+		expect(notifier.notify((Notification) anyObject())).andReturn(true);
 		replay(notifier);
 		
 		CreateSafetyNetworkConnectionCommandProcessor sut = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext(), notifier);

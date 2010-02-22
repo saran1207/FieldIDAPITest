@@ -11,7 +11,7 @@ public class TestSingleNotifier implements Notifier {
 	public Notification notification;
 
 	@Override
-	public boolean success(Notification notification) {
+	public boolean notify(Notification notification) {
 		this.notification = notification;
 		return true;
 	}

@@ -57,13 +57,13 @@ public class CustomerImportTask implements Runnable {
 			int totalImported = importer.runImport();
 			
 			setStatus(Status.SUCCESSFUL);
-			notifier.success(createSuccessNotification(totalImported));
+			notifier.notify(createSuccessNotification(totalImported));
 			
 		} catch (Exception e) {
 			logger.error("Failed import", e);
 			
 			setStatus(Status.FAILED);
-			notifier.success(failureNotification);
+			notifier.notify(failureNotification);
 		}
 	}
 	

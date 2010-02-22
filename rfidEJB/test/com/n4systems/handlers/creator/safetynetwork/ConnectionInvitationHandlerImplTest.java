@@ -149,7 +149,7 @@ public class ConnectionInvitationHandlerImplTest {
 		
 		Notifier notifier = new Notifier() {
 			@Override
-			public boolean success(Notification notification) {
+			public boolean notify(Notification notification) {
 				return false;
 			}
 		};

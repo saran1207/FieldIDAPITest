@@ -34,18 +34,17 @@ public class UpdateSubProducts {
 	}
 	
 	public void run() throws SubProductUniquenessException {
-		if (subProducts.size() > 0) {
+		if (!subProducts.isEmpty()) {
 			/*
 			 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
 			 * has special handling code to persist it anyway.  and yes it does suck ...  
 			 */
 			product.getSubProducts().addAll(subProductNotAlreadyAdded(product, subProducts));
 		}
-		if (inspectionServiceDTO.getDetachSubProducts().size() > 0)
-			product.getSubProducts().removeAll(detachExistingSubProduct(tenantId, inspectionServiceDTO.getDetachSubProducts(), product) );
-		
-		if (subProducts.size() > 0 ||
-			inspectionServiceDTO.getDetachSubProducts().size() > 0) {
+//		if (inspectionServiceDTO.getDetachSubProducts().size() > 0)
+//			product.getSubProducts().removeAll(detachExistingSubProduct(tenantId, inspectionServiceDTO.getDetachSubProducts(), product) );
+//		
+		if (!subProducts.isEmpty() || !inspectionServiceDTO.getDetachSubProducts().isEmpty()) {
 			productManager.update(product, product.getModifiedBy());
 		}
 	}

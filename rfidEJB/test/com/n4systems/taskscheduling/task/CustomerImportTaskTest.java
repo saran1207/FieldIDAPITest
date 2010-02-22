@@ -32,7 +32,7 @@ public class CustomerImportTaskTest {
 		CustomerImportTask task = new CustomerImportTask(importer, user, notifier);
 		
 		expect(importer.runImport()).andReturn(5);
-		expect(notifier.success((Notification)anyObject())).andReturn(true);
+		expect(notifier.notify((Notification)anyObject())).andReturn(true);
 				
 		replay(importer);
 		replay(notifier);

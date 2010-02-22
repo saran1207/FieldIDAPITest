@@ -39,7 +39,7 @@ public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProces
 		notification.notifiyUser(command.getCreatedBy());
 		InternalOrg org = (command.getCreatedBy().getTenant().equals(orgConnection.getVendor().getTenant())) ? orgConnection.getCustomer() : orgConnection.getVendor();
 		notification.setAcceptingCompanyName(org.getDisplayName());
-		notifier.success(notification);
+		notifier.notify(notification);
 	}
 
 

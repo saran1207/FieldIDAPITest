@@ -22,8 +22,8 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private long jobSiteId;
 	private long inspectionScheduleId;
 	private List<SubInspectionServiceDTO> subInspections = new ArrayList<SubInspectionServiceDTO>();
-	private List<SubProductMapServiceDTO> newSubProducts;
-	private List<SubProductMapServiceDTO> detachSubProducts;
+	private List<SubProductMapServiceDTO> newSubProducts = new ArrayList<SubProductMapServiceDTO>();
+	private List<SubProductMapServiceDTO> detachSubProducts = new ArrayList<SubProductMapServiceDTO>();
 	private long orgId;
 	private long customerId;
 	private long divisionId;

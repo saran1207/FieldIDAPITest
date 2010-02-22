@@ -14,5 +14,5 @@ import com.n4systems.notifiers.notifications.Notification;
  */
 public interface Notifier {
 
-	public boolean success(Notification notification);
+	public boolean notify(Notification notification);
 }

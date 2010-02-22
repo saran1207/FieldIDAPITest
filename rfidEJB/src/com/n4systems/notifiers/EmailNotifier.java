@@ -20,7 +20,7 @@ public class EmailNotifier implements Notifier {
 		this(new MailManagerImpl());
 	}
 
-	public boolean success(Notification notification) {
+	public boolean notify(Notification notification) {
 		try {
 			mailManager.sendMessage(createMessage(notification));
 			return true;

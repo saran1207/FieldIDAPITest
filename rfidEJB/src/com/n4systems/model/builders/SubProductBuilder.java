@@ -24,6 +24,10 @@ public class SubProductBuilder extends BaseBuilder<SubProduct> {
 		return new SubProductBuilder(product, masterProduct);
 	}
 	
+	public SubProductBuilder containingProduct(Product product) {
+		return new SubProductBuilder(product, masterProduct);
+	}
+	
 	@Override
 	public SubProduct build() {
 		SubProduct subProduct = new SubProduct();

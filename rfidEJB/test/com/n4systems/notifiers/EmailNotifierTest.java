@@ -45,7 +45,7 @@ public class EmailNotifierTest {
 		
 		EmailNotifier sut = new EmailNotifier(mailManager);
 		
-		sut.success(new TestNotification());
+		sut.notify(new TestNotification());
 		
 		assertNotNull(mailManager.message);
 	}
@@ -55,7 +55,7 @@ public class EmailNotifierTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		
 		EmailNotifier sut = new EmailNotifier(mailManager);
-		sut.success(new TestNotification());
+		sut.notify(new TestNotification());
 		
 		TemplateMailMessage message = (TemplateMailMessage)mailManager.message;
 		
@@ -70,7 +70,7 @@ public class EmailNotifierTest {
 		EmailNotifier sut = new EmailNotifier(mailManager);
 		TestNotification notification = new TestNotification();
 		notification.notifiyUser(anEmployee().withEmailAddress("me@me.com").build());
-		sut.success(notification);
+		sut.notify(notification);
 		
 		TemplateMailMessage message = (TemplateMailMessage)mailManager.message;
 		
@@ -83,7 +83,7 @@ public class EmailNotifierTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		
 		EmailNotifier sut = new EmailNotifier(mailManager);
-		sut.success(new TestNotification());
+		sut.notify(new TestNotification());
 		
 		TemplateMailMessage message = (TemplateMailMessage)mailManager.message;
 		
@@ -97,7 +97,7 @@ public class EmailNotifierTest {
 		
 		EmailNotifier sut = new EmailNotifier(mailManager);
 		TestNotification notification = new TestNotification();
-		sut.success(notification);
+		sut.notify(notification);
 		
 		TemplateMailMessage message = (TemplateMailMessage)mailManager.message;
 		
@@ -111,7 +111,7 @@ public class EmailNotifierTest {
 		
 		EmailNotifier sut = new EmailNotifier(mailManager);
 		
-		assertTrue(sut.success(new TestNotification()));
+		assertTrue(sut.notify(new TestNotification()));
 		
 	}
 	
@@ -124,7 +124,7 @@ public class EmailNotifierTest {
 		
 		EmailNotifier sut = new EmailNotifier(mailManager);
 		
-		assertFalse(sut.success(new TestNotification()));
+		assertFalse(sut.notify(new TestNotification()));
 	}
 	
 	

@@ -80,7 +80,7 @@ public class ConnectionInvitationHandlerImpl implements ConnectionInvitationHand
 	
 	
 	private void sendNotification(Transaction transaction, Message message) {
-		notificationSent = notifier.success(createNotification(transaction, message));
+		notificationSent = notifier.notify(createNotification(transaction, message));
 	}
 
 	private Notification createNotification(Transaction transaction, Message message) {
