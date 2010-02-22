@@ -260,9 +260,10 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 				InfoFieldBean infoField = infoFields.get(input.getInfoFieldIndex().intValue()).getInfoField();
 				if (infoField != null) {
 					if (input.getUniqueID() == null) {
-						if (!input.isDeleted()) {
+						if (!input.isDeleted() && infoField.hasStaticInfoOption()) {
 							// TODO move this create infooption into the
 							// infooptioninput
+							
 							InfoOptionBean addedInfoOption = new InfoOptionBean();
 							addedInfoOption.setName(input.getName().trim());
 							addedInfoOption.setWeight(input.getWeight());
