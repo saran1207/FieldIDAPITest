@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import rfid.ejb.session.LegacyProductSerial;
 
-import com.lowagie.text.pdf.PdfSigGenericPKCS.VeriSign;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
@@ -38,7 +37,6 @@ public class UpdateSubProductsTest {
 		Product masterProduct = aProduct().build();
 		
 		LegacyProductSerial productManager = successfulProductManager(masterProduct);
-		
 		
 		SubProduct subProduct = SubProductBuilder.aSubProduct().build();
 		
