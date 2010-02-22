@@ -16,7 +16,10 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 		delegateSelenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
 	
-	
+	public void waitForElementToBePresent(String locator, String timeout) throws InterruptedException {
+		delegateSelenium.waitForCondition("var value = selenium.isElementPresent( '" + locator + "'); value == true", timeout);
+	}
+
 	
 	
 	
@@ -631,6 +634,8 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 		delegateSelenium.windowMaximize();
 	}
 
+
+	
 	
 	
 	

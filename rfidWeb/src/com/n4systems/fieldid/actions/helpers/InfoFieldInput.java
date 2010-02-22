@@ -161,5 +161,13 @@ public class InfoFieldInput {
 	public void setDefaultUnitOfMeasure( Long defaultUnitOfMeasure ) {
 		this.defaultUnitOfMeasure = defaultUnitOfMeasure;
 	}
+
+	public boolean hasStaticOptions() {
+		
+		InfoFieldBean infoFieldBean = new InfoFieldBean();
+		setInfoFieldFieldType(infoFieldBean);
+		
+		return infoFieldBean.hasStaticInfoOption();
+	}
 	
 }

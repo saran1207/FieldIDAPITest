@@ -15,20 +15,17 @@ public class InfoOptionValidator extends FieldValidatorSupport {
 	public void validate(Object object) throws ValidationException {
 		
 		String fieldName = getFieldName();
-				
 		Collection<InfoOptionInput> infoOptions = (Collection<InfoOptionInput>)this.getFieldValue(fieldName, object);
 		List<InfoFieldInput> infoFields = (List<InfoFieldInput>)this.getFieldValue("infoFields", object);
-		if( infoOptions != null ) {
-			for (InfoOptionInput infoOption : infoOptions) {
-				// only validate if the info field hasn't been deleted.
-				if( !infoFields.get( infoOption.getInfoFieldIndex().intValue() ).isDeleted() ) {
-					if( infoOption.getName() != null && infoOption.getName().trim().equals("") && !infoOption.isDeleted() ) {
-						addFieldError(fieldName, object);
-						return;
-					}
-				}
-			}
-		}
+		
+		validateInfoOptions(object, fieldName, infoOptions, infoFields);
 	}
 
+	private void validateInfoOptions(Object object, String fieldName, Collection<InfoOptionInput> infoOptions, List<InfoFieldInput> infoFields) {
+		InfoOptionValidation infoOptionValidation = new InfoOptionValidation(infoOptions, infoFields);
+		if (!infoOptionValidation.isValid()) {
+			addFieldError(fieldName, object);
+		}
+		
+	}
 }

@@ -146,7 +146,7 @@
 		<#else>
 			<input type="button" value="<@s.text name="label.cancel" />" onclick="return redirect('<@s.url action="productTypes"/>');" />
 		</#if>
-		<@s.submit key="label.save" onclick="formSubmit();" />
+		<@s.submit key="label.save" onclick="formSubmit();" id="save"/>
 		
 	</div>
 	

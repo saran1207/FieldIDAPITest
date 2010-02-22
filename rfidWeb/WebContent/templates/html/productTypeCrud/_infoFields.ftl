@@ -24,8 +24,8 @@
 				<@s.hidden name="infoFields[${stat.index}].weight" />
 				<@s.hidden name="infoFields[${stat.index}].deleted" />
 				<@s.hidden name="infoFields[${stat.index}].retired" />
-				<div class="infoFieldCol"><@s.textfield   name="infoFields[${stat.index}].name" size="30" disabled="${infoField.retired ? string}"/> </div>
-				<div class="infoFieldCol selectBoxCol"><@s.select list="infoFieldTypes" listKey="name" listValue="label" name="infoFields[${stat.index}].fieldType" onchange="changeFieldType(this)" disabled="${infoField.retired ? string}" /></div>
+				<div class="infoFieldCol"><@s.textfield   name="infoFields[${stat.index}].name" size="30" disabled="${infoField.retired ? string}" cssClass="name"/> </div>
+				<div class="infoFieldCol selectBoxCol"><@s.select list="infoFieldTypes" listKey="name" listValue="label" name="infoFields[${stat.index}].fieldType" onchange="changeFieldType(this)" disabled="${infoField.retired ? string}" cssClass="fieldType" /></div>
 				<div class="infoFieldCol selectBoxCol"><@s.select list="unitsOfMeasure" listKey="id" listValue="name"  name="infoFields[${stat.index}].defaultUnitOfMeasure" disabled="${infoField.retired ? string}" /></div> 
 				<div class="infoFieldCol checkboxCol"><@s.checkbox name="infoFields[${stat.index}].required" disabled="${infoField.retired ? string}"/></div>
 				
@@ -59,7 +59,7 @@
 					</@s.iterator>
 					</#if>
 					</div>
-					<input type="button" name="add"  onclick="createOption('infoOptions_${stat.index}', 'field_${stat.index}'); " value="<@s.text name="hbutton.add" />"/> <input type="button" name="undo"  onclick="undoOptionDeletes(this)" value="<@s.text name="label.undodeletes" />"/>
+					<input type="button" name="add" class="addOption" onclick="createOption('infoOptions_${stat.index}', 'field_${stat.index}'); " value="<@s.text name="hbutton.add" />"/> <input type="button" name="undo"  onclick="undoOptionDeletes(this)" value="<@s.text name="label.undodeletes" />"/>
 					
 				</div>
 				
@@ -69,7 +69,7 @@
 		
 	</div>
 	<div>
-		<input type="button" name="add"  onclick="createField(); " value="<@s.text name="hbutton.add" />"/> <input type="button" name="undo"  onclick="undoDeletes()" value="<@s.text name="label.undodeletes" />"/>
+		<input type="button" name="add" id="addInfoField" onclick="createField(); " value="<@s.text name="hbutton.add" />"/> <input type="button" name="undo"  onclick="undoDeletes()" value="<@s.text name="label.undodeletes" />"/>
 	</div>
 </div>
 <div style="display:none" >
@@ -77,8 +77,8 @@
 		<@s.hidden name="infouniqueID" />
 		<@s.hidden name="infoweight" />
 		<@s.hidden name="infodeleted" />
-		<div class="infoFieldCol"><@s.textfield name="infoname" size="30"/></div>
-		<div class="infoFieldCol selectBoxCol"><@s.select list="infoFieldTypes" listKey="name" listValue="label" name="infofieldType" onchange="changeFieldType(this)" /></div>
+		<div class="infoFieldCol"><@s.textfield name="infoname" size="30" cssClass="name"/></div>
+		<div class="infoFieldCol selectBoxCol"><@s.select list="infoFieldTypes" listKey="name" listValue="label" cssClass="fieldType" name="infofieldType" onchange="changeFieldType(this)" /></div>
 		<div class="infoFieldCol selectBoxCol"><@s.select list="unitsOfMeasure" listKey="id" listValue="name"  name="infodefaultUnitOfMeasure" cssStyle="display:none"/></div>
 		<div class="infoFieldCol checkboxCol"><@s.checkbox name="inforequired"/></div>
 		
@@ -93,7 +93,7 @@
 			<div id="infoOptions_" class="infoOptions"> 
 			
 			</div>
-			<input type="button" name="add"  onclick="createOption( 'infoOptions_' + findFieldIndex( this.parentNode.parentNode.id ), 'field_' + findFieldIndex( this.parentNode.parentNode.id ) ); " value="<@s.text name="hbutton.add" />"/> <input type="button" name="undo"  onclick="undoOptionDeletes(this)" value="<@s.text name="label.undodeletes" />"/>
+			<input type="button" name="add" class="addOption" onclick="createOption( 'infoOptions_' + findFieldIndex( this.parentNode.parentNode.id ), 'field_' + findFieldIndex( this.parentNode.parentNode.id ) ); " value="<@s.text name="hbutton.add" />"/> <input type="button" name="undo"  onclick="undoOptionDeletes(this)" value="<@s.text name="label.undodeletes" />"/>
 					
 		</div>
 	</div>

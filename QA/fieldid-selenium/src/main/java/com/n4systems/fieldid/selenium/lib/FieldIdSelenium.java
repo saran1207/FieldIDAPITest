@@ -8,4 +8,5 @@ public interface FieldIdSelenium extends Selenium {
 	public void waitForAjax(String timeout) throws InterruptedException;
 
 	
+	public void waitForElementToBePresent(String locator, String timeout) throws InterruptedException;
 }

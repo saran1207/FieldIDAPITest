@@ -129,6 +129,10 @@ public class InfoOptionInput {
 		return infoFieldIndex;
 	}
 
+	public void setInfoFieldIndex(Integer infoFieldIndex) {
+		this.infoFieldIndex = infoFieldIndex.longValue();
+	}
+	
 	public void setInfoFieldIndex(Long infoFieldIndex) {
 		this.infoFieldIndex = infoFieldIndex;
 	}
