@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import rfid.ejb.session.LegacyProductSerial;
 
+import com.lowagie.text.pdf.PdfSigGenericPKCS.VeriSign;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
@@ -70,7 +71,23 @@ public class UpdateSubProductsTest {
 	
 	
 	
-	
+	@Test
+	public void should_persist_changes_to_the_master_product_when_new_sub_products_are_added() throws Exception {
+		Product masterProduct = aProduct().build();
+		
+		LegacyProductSerial productManager = createMock(LegacyProductSerial.class);
+		expect(productManager.update(masterProduct, masterProduct.getModifiedBy())).andReturn(masterProduct);
+		replay(productManager);
+		
+		
+		SubProduct subProduct = SubProductBuilder.aSubProduct().build();
+		
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterProduct, new InspectionServiceDTO(), new FluentArrayList<SubProduct>(subProduct));
+		
+		sut.run();
+		
+		verify(productManager);
+	}
 
 
 	private LegacyProductSerial successfulProductManager(Product masterProduct) throws SubProductUniquenessException {
