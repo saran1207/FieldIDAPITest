@@ -51,6 +51,7 @@ import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
+import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -62,6 +63,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.product.ProductByMobileGuidLoader;
 import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.product.ProductSubProductsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
@@ -72,7 +74,9 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.tools.Pager;
@@ -131,6 +135,7 @@ import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.dto.hello.HelloRequest;
 import com.n4systems.webservice.dto.hello.HelloResponse;
+import com.n4systems.webservice.dto.inspectionschedule.InspectionScheduleRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.ProductLookupInformation;
 import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
@@ -674,6 +679,43 @@ public class DataServiceImpl implements DataService {
 			
 		} catch (Exception e) {
 			logger.error("Exception occured while doing product update by customer");
+			throw new ServiceException();
+		}
+		
+		return new RequestResponse();
+	}
+	
+	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {						
+
+		Product product = null;
+		
+		try {
+			
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			
+			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService());
+
+			//1. load product
+			if ( request.getScheduleService().isProductCreatedOnMobile()) {
+				ProductByMobileGuidLoader productLoader = new ProductByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId()));
+				product = productLoader.setMobileGuid(request.getScheduleService().getProductMobileGuid()).load();
+			} else {
+				FilteredIdLoader<Product> productLoader = new FilteredIdLoader<Product>(new TenantOnlySecurityFilter(request.getTenantId()), Product.class);
+				product = productLoader.setId(request.getScheduleService().getProductId()).load();
+			}
+			inspectionSchedule.setProduct(product);
+			
+			//2. load inspection type
+			FilteredIdLoader<InspectionType> inspectionTypeLoader = new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class);
+			InspectionType inspectionType = inspectionTypeLoader.setId(request.getScheduleService().getInspectionTypeId()).load();
+			inspectionSchedule.setInspectionType(inspectionType);
+			
+			//3. persist inspection schedule
+			InspectionScheduleSaver saver = new InspectionScheduleSaver();
+			saver.saveOrUpdate(inspectionSchedule);
+			
+		} catch (Exception e) {
+			logger.error("Exception occured while saving inspection schedule");
 			throw new ServiceException();
 		}
 		

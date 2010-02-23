@@ -69,6 +69,7 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
@@ -1066,6 +1067,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		scheduleService.setCompleted(inspectionSchedule.getStatus() == InspectionSchedule.ScheduleStatus.COMPLETED);		
 		
 		return scheduleService;
+	}
+	
+	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
+		
+		InspectionSchedule inspectionSchedule = new InspectionSchedule();
+		
+		inspectionSchedule.setNextDate( AbstractBaseServiceDTO.stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
+		
+		return inspectionSchedule;
+		
 	}
 	
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates) {

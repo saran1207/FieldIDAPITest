@@ -40,6 +40,7 @@ import com.n4systems.webservice.dto.findproduct.FindProductRequestInformation;
 import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.dto.hello.HelloRequest;
 import com.n4systems.webservice.dto.hello.HelloResponse;
+import com.n4systems.webservice.dto.inspectionschedule.InspectionScheduleRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
@@ -87,4 +88,8 @@ public interface DataService {
 	public RequestResponse createUser(RequestInformation requestInformation, UserServiceDTO customerDTO) throws ServiceException;
 	public RequestResponse createCustomer(RequestInformation requestInformation, CustomerOrgCreateServiceDTO customer) throws ServiceException;
 	/* Used Only by Techlink Importer */
+	
+	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
+	
+
 }

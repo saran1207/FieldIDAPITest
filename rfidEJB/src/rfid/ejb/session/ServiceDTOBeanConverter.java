@@ -33,6 +33,7 @@ import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookServiceDTO;
+import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
@@ -76,5 +77,6 @@ public interface ServiceDTOBeanConverter {
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg);
 	public VendorServiceDTO convert(OrgConnection orgConnections);
 	public BaseOrg convert(long ownerId, long tenantId);
+	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO);
 	
 }
