@@ -15,7 +15,7 @@ public class CustomerExporter implements Exporter {
 	private final ExportMapMarshaler<FullExternalOrgView> marshaler;
 	private final ListLoader<CustomerOrg> customerLoader;
 	private final CustomerOrgViewConverter customerConverter;
-	private final DivisionOrgByCustomerListLoader divisionList;
+	private final DivisionOrgByCustomerListLoader divisionLoader;
 	private final DivisionOrgViewConverter divisionConverter;
 	
 	public CustomerExporter(ListLoader<CustomerOrg> customerLoader, SecurityFilter filter) {
@@ -40,7 +40,7 @@ public class CustomerExporter implements Exporter {
 		this.customerLoader = customerLoader;
 		this.marshaler = marshaler;
 		this.customerConverter = customerConverter;
-		this.divisionList = divisionList;
+		this.divisionLoader = divisionList;
 		this.divisionConverter = divisionConverter;
 	}
 
@@ -67,7 +67,7 @@ public class CustomerExporter implements Exporter {
 	
 	private void exportDivisions(MapWriter mapWriter, CustomerOrg customer) throws ExportException {
 		FullExternalOrgView export;
-		for (DivisionOrg division: divisionList.setCustomer(customer).load()) {
+		for (DivisionOrg division: divisionLoader.setCustomer(customer).load()) {
 			
 			try {
 				export = divisionConverter.toView(division);

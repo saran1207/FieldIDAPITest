@@ -133,9 +133,18 @@ public class PathHandler {
 	 * @return					A File object for this directory
 	 */
 	public static File getTempDir() {
-		File tempDir = parentize(getTempRoot(), getTempFileName());
+		File tempDir = getTempFile();
 		tempDir.mkdirs();
 		return tempDir;
+	}
+	
+	/**
+	 * Constructs temp File with a random name
+	 * @see #getTempDir()
+	 * @return				A File object for this file
+	 */
+	public static File getTempFile() {
+		return parentize(getTempRoot(), getTempFileName());
 	}
 	
 	/**

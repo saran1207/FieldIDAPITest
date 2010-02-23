@@ -155,6 +155,7 @@
 		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
 		<action name="downloadProductAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductAttachmentFile" />
+		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
 		
 		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>

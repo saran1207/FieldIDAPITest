@@ -6,6 +6,7 @@ ${action.setPageType('customer', 'import_export')!}
 
 <@s.url id="exportExcel" action="customerExport" namespace="/aHtml" exportType="excel" />
 <@s.url id="exportCsv" action="customerExport" namespace="/aHtml" exportType="csv" />
+<@s.url id="exportExample" action="downloadExampleCustomerExport" namespace="/file" />
 
 <@s.url id="importUrl" action="showImportCustomers"/>
 
@@ -15,7 +16,7 @@ ${action.setPageType('customer', 'import_export')!}
 	<div id="importBox">
 		<h3><@s.text name="label.import_customers" /></h3>
 		<a href='${importUrl}'><@s.text name="label.upload_excel_or_csv" /></a>
-		<a href=''><@s.text name="label.download_customer_excel_template" /></a>
+		<a href='${exportExample}'><@s.text name="label.download_customer_excel_template" /></a>
 	</div>
 	
 	<div id="exportBox">
