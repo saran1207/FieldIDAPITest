@@ -44,6 +44,7 @@ public class ManageCustomers {
 	private String addCustomerCancelLinkLocator = "xpath=//A[contains(text(),'Cancel')]";
 	private String divisionLinkLocator = "xpath=//A[contains(text(),'Divisions')]";
 	private String addDivisionLinkLocator = "xpath=//A[contains(text(),'Add Division')]";
+	private String importExportCustomerLinkLocator = "xpath=//LI[contains(@class,'add')]/A[contains(text(),'Import/Export')]";
 	
 	public ManageCustomers(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -235,6 +236,17 @@ public class ManageCustomers {
 			verifyAddCustomerPage();
 		} else {
 			fail("Could not find the link to add a customer");
+		}
+	}
+
+	public void gotoImportExport() {
+		misc.info("click Import/Export to import/export customer/division information");
+		if(selenium.isElementPresent(importExportCustomerLinkLocator)) {
+			selenium.click(importExportCustomerLinkLocator);
+			misc.waitForPageToLoadAndCheckForOopsPage();
+			verifyAddCustomerPage();
+		} else {
+			fail("Could not find the link to import/export customers/divisions");
 		}
 	}
 
