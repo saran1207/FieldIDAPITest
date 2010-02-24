@@ -265,10 +265,7 @@
 			<result name="oneFound" type="freemarker">/templates/ajax/projectAttachProduct/oneFound.ftl</result>
 		</action>
 
-		<action name="generateSerialNumber" method="generateSerialNumber"
-			class="com.n4systems.fieldid.actions.product.ProductUtilAction">
-			<result name="success" type="freemarker">/templates/ajax/productUtil/generateSerialNumber.ftl</result>
-		</action>
+		
 		
 		<action name="checkSerialNumber" method="checkSerialNumber" class="com.n4systems.fieldid.actions.product.ProductUtilAction">
 			<result name="available" type="freemarker">/templates/ajax/productUtil/serialNumberAvailable.ftl</result>

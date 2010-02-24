@@ -4,12 +4,7 @@ function changeComments( commentSelect ) {
 		var commentTemplateId = commentSelect.options[ commentSelect.selectedIndex ].value;
 		var url = changeCommentUrl + '?uniqueID='+ commentTemplateId;
 
-		new Ajax.Request(url, {
-			method: 'get',
-			onSuccess: function(transport) {
-				updateComments(transport.responseText);
-			}
-		});		
+		getResponse(url, "get");
 	} 
 }
 

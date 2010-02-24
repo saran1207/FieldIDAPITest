@@ -416,7 +416,6 @@ public class Identify {
 	}
 
 	public void gotoSaveAddAndInspectAssetForm() {
-		// TODO Auto-generated method stub
 		
 	}
 }

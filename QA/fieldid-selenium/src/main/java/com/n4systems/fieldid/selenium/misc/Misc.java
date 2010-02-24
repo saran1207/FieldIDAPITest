@@ -28,6 +28,7 @@ public class Misc {
 	public static final int sessionTimeoutLightBoxTimeout = 31 * 60;
 	//javascript functions should complete dom updates in under a second (this is not for ajax that can take longer.)
 	public static final String JS_TIMEOUT = "1000";
+	public static final String AJAX_TIMEOUT = "2000";
 	private static String snapshots = null;
 	private FieldIdSelenium selenium;
 	private Logger log;

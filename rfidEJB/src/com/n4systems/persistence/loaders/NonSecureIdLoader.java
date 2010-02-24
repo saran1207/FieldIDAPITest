@@ -3,10 +3,11 @@ package com.n4systems.persistence.loaders;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class NonSecureIdLoader<T extends BaseEntity> extends Loader<T> {
+public class NonSecureIdLoader<T extends BaseEntity> extends Loader<T> implements IdLoader<NonSecureIdLoader<T>> {
 
 	private final Class<T> clazz;
 	private Long id;

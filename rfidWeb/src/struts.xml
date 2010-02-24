@@ -26,6 +26,7 @@
 			<interceptor name="safetyNetworkAware" class="com.n4systems.fieldid.security.SafetyNetworkAwareInterceptor"/>
 			<interceptor name="eulaRequired" class="com.n4systems.fieldid.utils.EULAInterceptor"/>
 			<interceptor name="setupWizard" class="com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor"/>
+			<interceptor name="concurrentSession" class="com.n4systems.fieldid.utils.ConcurrentSessionInterceptor"/>
 			
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
@@ -41,6 +42,7 @@
 			<interceptor-stack name="loggedInStack">
 				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="login" />
+				<interceptor-ref name="concurrentSession"/>
 				<interceptor-ref name="security" />
 				<interceptor-ref name="safetyNetworkAware"/>
 				<interceptor-ref name="publicStack" />

@@ -51,5 +51,9 @@
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="input" type="freemarker">/templates/aHtml/report/expired.ftl</result>
 		</action>
+		
+		<action name="generateSerialNumber" method="generateSerialNumber" class="com.n4systems.fieldid.actions.product.ProductUtilAction">
+			<result name="success" type="freemarker">/templates/aHtml/productUtil/generateSerialNumber.ftl</result>
+		</action>
 	</package>
 </struts>

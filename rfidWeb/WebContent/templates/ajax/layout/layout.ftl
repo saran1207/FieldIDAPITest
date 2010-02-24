@@ -1,1 +1,3 @@
-<#include "/templates/common/nocacheHeaders.ftl">${body}
+<#include "/templates/common/nocacheHeaders.ftl">
+<#include "../common/sessionKickOut.ftl"/>
+${body}

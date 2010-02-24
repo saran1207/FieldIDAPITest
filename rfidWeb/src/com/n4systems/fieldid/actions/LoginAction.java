@@ -12,6 +12,8 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.UrlArchive;
+import com.n4systems.model.activesession.ActiveSession;
+import com.n4systems.model.activesession.ActiveSessionSaver;
 
 public class LoginAction extends AbstractAction {
 
@@ -77,6 +79,8 @@ public class LoginAction extends AbstractAction {
 			if (loginUser != null) {
 				logUserIn(loginUser);
 				
+				
+				
 				if (previousUrl != null) {
 					return "redirect";
 				}
@@ -114,6 +118,7 @@ public class LoginAction extends AbstractAction {
 		return SUCCESS;
 	}
 
+
 	private void clearSession() {
 		// grab SecuirtyGuard
 		SystemSecurityGuard securityGuard = getSecurityGuard();
@@ -146,7 +151,12 @@ public class LoginAction extends AbstractAction {
 		loadSessionUser(loginUser.getUniqueID());
 		loadEULAInformation();
 		rememberMe();
+		registerActiveSession(loginUser, getSession().getId());
 		logger.info(getLogLinePrefix() + "Login: " + userName + " of " + getSecurityGuard().getTenantName());
+	}
+
+	private void registerActiveSession(UserBean loginUser, String sessionId) {
+		new ActiveSessionSaver().save(new ActiveSession(loginUser, sessionId));
 	}
 
 	private void loadEULAInformation() {

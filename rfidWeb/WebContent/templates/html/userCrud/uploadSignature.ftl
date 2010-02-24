@@ -24,7 +24,7 @@
 					<div style="float:right; width: 300px"><@s.text name="label.signatureslookbest"/></div>
 					<div  >
 						<span id="imagePreview" >
-							<img src="<@s.url includeParams="none" uniqueID="${uniqueID}" action="userSignature" />" width="203" height="43" alt="<@s.text name="label.nosignature"/>" />
+							<img src="<@s.url uniqueID="${uniqueID}" action="userSignature" />" width="203" height="43" alt="<@s.text name="label.nosignature"/>" />
 						</span>
 						
 						<div class="message" id="message">
@@ -37,29 +37,6 @@
 				<div>
 			
 		</@s.form>
-		<script type="text/javascript">
-	function removeImage( url ) {
-		$('removeSpinner').style.display = "inline";
-		new Ajax.Request(url, {
-			method: 'get',
-			onSuccess: function(transport) {
-				$('removeSpinner').style.display = "none";
-				removeImageCallBack(transport.responseText);
-			}
-		});		
 		
-	}
-	
-	function removeImageCallBack( response ) {
-		var jsonObject = JSON.parse( response );
-		if( jsonObject.response == "success" ) {
-			$('imagePreview').innerHTML = "";
-		} else {
-			$('removeErrorMessage').innerHTML = '<@s.text name="error.failedtoremoveimage"/>';
-		}
-		
-	
-	}
-</script>
 	</body>
 </html>

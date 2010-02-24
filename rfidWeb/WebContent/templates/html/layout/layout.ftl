@@ -10,6 +10,9 @@
 		
 	</head>
 	<body id="fieldidBody">
+		<div id="systemNotices">
+			<#include "../common/sessionKickOut.ftl"/>
+		</div>
 		<div id="page">
 			<#include "header.ftl"/>
 			<#include "contentHeader.ftl"/>

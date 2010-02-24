@@ -9,10 +9,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.After;
 import org.junit.Before;
+
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
@@ -163,7 +165,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		initializeLogger();
 		loadingProperties();
 		log.info("-=-=-=-=-=-=-=-=-=-=- Start Test Case -=-=-=-=-=-=-=-=-=-=-");
-		createWebBrowser();
+		selenium = createWebBrowser();
 		setWebBrowserSpeed();
 		createMiscClasses();
 		misc.createTimestampDirectory(snapshots);
@@ -183,13 +185,17 @@ public class FieldIDTestCase extends SeleneseTestBase {
 
 	@After
 	public void tearDown() throws Exception {
+		shutDownSelenium(selenium);
+		log.info("-=-=-=-=-=-=-=-=-=-=-= End Test Case =-=-=-=-=-=-=-=-=-=-=-");
+        stb.tearDown();
+	}
+
+	protected void shutDownSelenium(FieldIdSelenium selenium) {
 		log.debug("[tearDown]: selenium.close()");
 		selenium.close();
 		log.debug("[tearDown]: selenium.stop()");
 		selenium.stop();
 		log.debug("[tearDown]: super.tearDown()");
-		log.info("-=-=-=-=-=-=-=-=-=-=-= End Test Case =-=-=-=-=-=-=-=-=-=-=-");
-        stb.tearDown();
 	}
 	
 	/**
@@ -479,13 +485,14 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * have this method maximize the window in case we want to do a screen
 	 * capture or someone wants to watch the automation run.
 	 */
-	private void createWebBrowser() {
+	protected FieldIdSelenium createWebBrowser() {
 		String url = protocol + "://" + initCompany + "." + domain;
 		log.debug("[setUp]: Selenium Host: " + host);
 		log.debug("[setUp]: Selenium Port: " + port);
 		log.debug("[setUp]: Browser: " + browser);
 		log.debug("[setUp]: Base URL: " + url);
-		selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
+		FieldIdSelenium selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
+		
 		selenium.start();
 		selenium.setTimeout(Misc.defaultTimeout);
 		log.debug("[setUp]: Open " + contextRoot);
@@ -494,6 +501,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
 		log.debug("[setUp]: Maximizing browser window");
 		selenium.windowMaximize();
+		
+		return selenium;
 	}
 
 	/**

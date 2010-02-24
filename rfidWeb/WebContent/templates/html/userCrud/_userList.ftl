@@ -23,7 +23,7 @@
 			<td>${user.emailAddress?html! } </td>
 			<td>
 				<#if user.uniqueID != Session.sessionUser.uniqueID && !user.admin >
-					<div><a href="javascript:void(0);" onclick="deleteUser( '<@s.url action="${user.employee?string('employeeUserDelete', 'customerUserDelete')}" namespace="/ajax" uniqueID="${(user.uniqueID)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
+					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'customerUserDelete')}" namespace="/ajax" uniqueID="${(user.uniqueID)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
 				</#if>
 			</td>
 		</tr>
@@ -32,30 +32,24 @@
 
 <script type="text/javascript" >
 	
-	function deleteUser( url, message ) {
-		if( confirm( message ) ) {
-			new Ajax.Request( url, { 
-				method: "get", 
-				onComplete: function( transport ) { 
-					deleteUserCallback( transport.responseText ); 
-				} 
-			} );
+	function deleteUser(url, message) {
+		if (confirm(message)) {
+			getResponse(url); 
 		}	
 	}
 	
-	function deleteUserCallback( response ) {
-		var jsonObject = JSON.parse( response );
+	function deleteUserCallback(jsonObject) {
 		
-		if( jsonObject.status == 0 ) {
-			if( jsonObject.uniqueID != null ) {
-				var userRow = $( 'user_' + jsonObject.uniqueID );
-				if( userRow != null ) {
-					userRow.parentNode.removeChild( userRow );
+		if(jsonObject.status == 0) {
+			if(jsonObject.uniqueID != null) {
+				var userRow = $('user_' + jsonObject.uniqueID);
+				if(userRow != null) {
+					userRow.parentNode.removeChild(userRow);
 				}
 			}
 		}
 		
-		updateMessages( jsonObject.messages, jsonObject.errors );
+		updateMessages(jsonObject.messages, jsonObject.errors);
 	}
 	
 

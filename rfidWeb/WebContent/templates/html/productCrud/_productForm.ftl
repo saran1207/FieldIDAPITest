@@ -10,7 +10,7 @@
 	<@n4.includeStyle href="safetyNetworkSmartSearch.css" type="feature"/>
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
-		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/ajax"/>';
+		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/aHtml"/>';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"/>';
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    productTypeChangeWarning = '<@s.text name="warning.producttypechange"/>';

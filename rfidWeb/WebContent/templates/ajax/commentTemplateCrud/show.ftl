@@ -1,1 +1,1 @@
-${comment!}
+updateComments(${json.toJson(comment)});

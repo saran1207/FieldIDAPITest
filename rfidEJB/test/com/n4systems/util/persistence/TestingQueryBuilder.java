@@ -41,16 +41,19 @@ public class TestingQueryBuilder<E> extends QueryBuilder<E> {
 	}
 	
 	
-	public void setPagedResults(Pager<E> pagedResults) {
+	public TestingQueryBuilder<E> setPagedResults(Pager<E> pagedResults) {
 		this.pagedResults = pagedResults;
+		return this;
 	}
 
-	public void setListResults(List<E> listResults) {
+	public TestingQueryBuilder<E> setListResults(List<E> listResults) {
 		this.listResults = listResults;
+		return this;
 	}
 
-	public void setSingleResult(E singleResult) {
+	public TestingQueryBuilder<E> setSingleResult(E singleResult) {
 		this.singleResult = singleResult;
+		return this;
 	}
 
 }

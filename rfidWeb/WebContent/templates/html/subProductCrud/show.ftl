@@ -22,7 +22,7 @@
 		addProductUrl = '<@s.url action="productAdd" namespace="/ajax"/>';
 		createProductUrl = "<@s.url action="productCreate" namespace="/ajax" />";	
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
-		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/ajax"  />';
+		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/aHtml"  />';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"  />';
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';		
 		checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';

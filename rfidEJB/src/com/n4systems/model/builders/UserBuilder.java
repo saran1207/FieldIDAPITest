@@ -12,13 +12,18 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 	private final String userId;
 	private final boolean administratorAccess;
 	private final String emailAddress;
+	private final boolean systemAccess;
 	
 	public static UserBuilder aUser() {
 		return anEmployee();
 	}
 	
 	public static UserBuilder anEmployee() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some name", "user_id", false, "user@example.com");
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some name", "user_id", false, "user@example.com", false);
+	}
+	
+	public static UserBuilder aSystemUser() {
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some name", "user_id", false, "user@example.com", true);
 	}
 	
 	public static UserBuilder anAdminUser() {
@@ -27,36 +32,37 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 	
 	
 	public static UserBuilder aCustomerUser() {
-		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some name", "user_id", false, "user@example.com");
+		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some name", "user_id", false, "user@example.com", false);
 	}
 	
-	private UserBuilder(BaseOrg owner, String firstName, String userId, boolean administratorAccess, String emailAddress) {
+	private UserBuilder(BaseOrg owner, String firstName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess) {
 		super();
 		this.owner = owner;
 		this.firstName = firstName;
 		this.userId = userId;
 		this.administratorAccess = administratorAccess;
 		this.emailAddress = emailAddress;
+		this.systemAccess = systemAccess;
 	}
 	
 	public UserBuilder withOwner(BaseOrg baseOrg) {
-		return new UserBuilder(baseOrg, firstName, userId, administratorAccess, emailAddress);
+		return new UserBuilder(baseOrg, firstName, userId, administratorAccess, emailAddress, false);
 	}
 	
 	public UserBuilder withFirstName(String firstName) {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress);
+		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false);
 	}
 	
 	public UserBuilder withUserId(String userId) {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress);
+		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false);
 	}
 	
 	public UserBuilder withAdministratorAccess() {
-		return new UserBuilder(owner, firstName, userId, true, emailAddress);
+		return new UserBuilder(owner, firstName, userId, true, emailAddress, false);
 	}
 	
 	public UserBuilder withEmailAddress(String emailAddress) {
-		return  new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress);
+		return  new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false);
 	}
 	
 	@Override
@@ -71,6 +77,10 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 		user.setAdmin(administratorAccess);
 		if (administratorAccess) {
 			user.setPermissions(Permissions.ADMIN);
+		}
+		user.setSystem(systemAccess);
+		if (systemAccess) {
+			user.setPermissions(Permissions.SYSTEM);
 		}
 		user.setEmailAddress(emailAddress);
 		return user;

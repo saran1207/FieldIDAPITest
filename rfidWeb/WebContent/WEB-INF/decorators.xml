@@ -30,7 +30,7 @@
 		<pattern>*public/ajax/*.action*</pattern>
 		
 	</decorator>
-	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
+	<decorator name="aHtmlLayout" page="/templates/ahtml/layout/layout.ftl">
 		<pattern>*aHtml/*.action*</pattern>
 	</decorator>
 	

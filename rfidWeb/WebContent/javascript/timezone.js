@@ -8,10 +8,7 @@ function countryChanged(event) {
 		var countryId = countrySelect.getValue();
 		var url =  countryChangeUrl + '?countryId='+ countryId;
 
-		new Ajax.Request(url, {
-			method: 'get',
-			onSuccess: function( transport ) { contentResponse( transport.responseText ); } } );		
-
+		getResponse(url, "get");
 	} else {
 		updateTimezoneList( null ); 
 	}

@@ -6,6 +6,19 @@ pre {
  word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
+em {
+	text-decoration: underline;
+}
+
+#systemNotices {
+	background-color:#FFE7B3;	
+	border-bottom:1px solid #CCCCCC;
+}
+
+.systemNotice {
+	margin-top:0;
+	padding:10px 5px;
+}
 
 .strong {
 	font-weight:bold;
