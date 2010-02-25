@@ -16,6 +16,7 @@ public interface FieldValidator {
 	public static final String ExternalOrgTypeValidatorFail = "%s must be either 'C' or 'D'";
 	public static final String NotNullValidatorFail = "%s must not be blank";
 	public static final String ParentOrgResolutionValidatorFail = "Could not find an %s named '%s'";
+	public static final String ProductTypeExistsValidatorFail = "Could not find a Product Type named '%s'";
 
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter);
 }

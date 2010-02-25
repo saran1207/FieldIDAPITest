@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.n4systems.model.api.Exportable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 /**
@@ -25,7 +26,7 @@ import com.n4systems.model.parents.EntityWithTenant;
  */
 @Entity
 @Table( name="autoattributedefinition")
-public class AutoAttributeDefinition extends EntityWithTenant {
+public class AutoAttributeDefinition extends EntityWithTenant implements Exportable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -90,5 +91,13 @@ public class AutoAttributeDefinition extends EntityWithTenant {
 		return null;
 	}
 	
+	@Override
+	public String getGlobalId() {
+		// Auto Attributes are exportable but are never edited
+		return null;
+	}
+	
+	@Override
+	public void setGlobalId(String globalId) {}
 	
 }

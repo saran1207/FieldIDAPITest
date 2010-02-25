@@ -1892,5 +1892,9 @@
 			<result name="error" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 		</action>
+		
+		<action name="autoAttributeImportExport" method="showImportExport" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/importExport.ftl</result>
+		</action>
 	</package>
 </struts>

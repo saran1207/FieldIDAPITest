@@ -27,9 +27,9 @@ public class AutoAttributeDefinitionTest {
 	
 	@Before
 	public void setup() {
-		infoField1 = anInfoField().withName("field 1").build();
-		infoField2 = anInfoField().withName("field 2").build();
-		infoField3 = anInfoField().withName("field 3").build();
+		infoField1 = aTextField().withName("field 1").build();
+		infoField2 = aTextField().withName("field 2").build();
+		infoField3 = aTextField().withName("field 3").build();
 	
 		criteria = new AutoAttributeCriteria();
 		criteria.getOutputs().add(infoField1);

@@ -17,8 +17,9 @@ public class AddressInfoBuilder extends BaseBuilder<AddressInfo> {
 		return new AddressInfoBuilder("", "", "", "", "", "", "", "");
 	}
 	
-	
-	
+	public static AddressInfoBuilder anAddressWithTestData() {
+		return new AddressInfoBuilder("100 Some St", "Toronto", "Ontario", "Canada", "M5V 2N3", "1-800-123-4567", "416-614-4141", "555-555-5555");
+	}
 	
 	public AddressInfoBuilder(String streetAddress, String city, String state, String country, String zip, String phone1, String phone2, String fax1) {
 		super();
@@ -39,28 +40,30 @@ public class AddressInfoBuilder extends BaseBuilder<AddressInfo> {
 	public AddressInfoBuilder city(String city) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
+	
 	public AddressInfoBuilder state(String state) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
+	
 	public AddressInfoBuilder country(String country) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
+	
 	public AddressInfoBuilder zip(String zip) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
+	
 	public AddressInfoBuilder phone1(String phone1) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
+	
 	public AddressInfoBuilder phone2(String phone2) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
+	
 	public AddressInfoBuilder fax1(String fax1) {
 		return new AddressInfoBuilder(streetAddress, city, state, country, zip, phone1, phone2, fax1);
 	}
-	
-
-
-
 
 	@Override
 	public AddressInfo build() {

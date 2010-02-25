@@ -64,7 +64,7 @@ public class ExportMapUnmarshaler<T> {
 			value = row.get(title);
 			handler = titleHandlerMap.get(title);
 			
-			handler.unmarshal(bean, value);
+			handler.unmarshal(bean, title, value);
 		}
 		
 		return bean;

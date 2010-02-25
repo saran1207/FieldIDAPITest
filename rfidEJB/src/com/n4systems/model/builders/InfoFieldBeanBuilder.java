@@ -7,7 +7,7 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 	private final String name;
 	private final String type;
 	
-	public static InfoFieldBeanBuilder anInfoField() {
+	public static InfoFieldBeanBuilder aTextField() {
 		return new InfoFieldBeanBuilder("some field", InfoFieldBean.TEXTFIELD_FIELD_TYPE);
 	}
 	

@@ -11,8 +11,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.n4systems.api.conversion.CustomerOrgViewConverter;
-import com.n4systems.api.conversion.DivisionOrgViewConverter;
+import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.io.MapWriter;
@@ -29,9 +28,9 @@ public class CustomerExporterTest {
 	public void test_export() throws Exception {
 		ExportMapMarshaler<FullExternalOrgView> marshaler = createMock(ExportMapMarshaler.class);
 		ListLoader<CustomerOrg> customerLoader = createMock(ListLoader.class);
-		CustomerOrgViewConverter customerConverter = createMock(CustomerOrgViewConverter.class);
+		ModelToViewConverter<CustomerOrg, FullExternalOrgView> customerConverter = createMock(ModelToViewConverter.class);
 		DivisionOrgByCustomerListLoader divisionLoader = createMock(DivisionOrgByCustomerListLoader.class);
-		DivisionOrgViewConverter divisionConverter = createMock(DivisionOrgViewConverter.class);
+		ModelToViewConverter<DivisionOrg, FullExternalOrgView> divisionConverter = createMock(ModelToViewConverter.class);
 		
 		MapWriter writer = createMock(MapWriter.class);
 		
@@ -43,7 +42,7 @@ public class CustomerExporterTest {
 		FullExternalOrgView[] views = { new FullExternalOrgView(), new FullExternalOrgView() };
 		Map[] beanMaps = { new HashMap<String, String>(), new HashMap<String, String>() };
 		
-		CustomerExporter exporter = new CustomerExporter(customerLoader, marshaler, customerConverter, divisionLoader, divisionConverter);
+		CustomerExporter exporter = new CustomerExporter(customerLoader, divisionLoader, marshaler, customerConverter, divisionConverter);
 		
 		expect(customerLoader.load()).andReturn(customers);
 		

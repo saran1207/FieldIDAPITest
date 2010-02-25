@@ -36,6 +36,11 @@
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 
+		<action name="autoAttributeExport" method="export" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+		
 		<action name="searchPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>

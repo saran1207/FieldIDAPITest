@@ -1,7 +1,8 @@
 package com.n4systems.exporting;
 
-import com.n4systems.api.conversion.CustomerOrgViewConverter;
-import com.n4systems.api.conversion.DivisionOrgViewConverter;
+import com.n4systems.api.conversion.ModelToViewConverter;
+import com.n4systems.api.conversion.orgs.CustomerOrgToViewConverter;
+import com.n4systems.api.conversion.orgs.DivisionOrgToViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.io.MapWriter;
@@ -12,35 +13,35 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 
 public class CustomerExporter implements Exporter {
-	private final ExportMapMarshaler<FullExternalOrgView> marshaler;
 	private final ListLoader<CustomerOrg> customerLoader;
-	private final CustomerOrgViewConverter customerConverter;
 	private final DivisionOrgByCustomerListLoader divisionLoader;
-	private final DivisionOrgViewConverter divisionConverter;
+	private final ExportMapMarshaler<FullExternalOrgView> marshaler;
+	private final ModelToViewConverter<CustomerOrg, FullExternalOrgView> customerConverter;
+	private final ModelToViewConverter<DivisionOrg, FullExternalOrgView> divisionConverter;
 	
 	public CustomerExporter(ListLoader<CustomerOrg> customerLoader, SecurityFilter filter) {
 		this (
 				customerLoader,
-				new ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class),
-				new CustomerOrgViewConverter(filter),
 				new DivisionOrgByCustomerListLoader(filter),
-				new DivisionOrgViewConverter(filter)
+				new ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class),
+				new CustomerOrgToViewConverter(),
+				new DivisionOrgToViewConverter()
 			);
 	}
 	
 	// TODO: this guy has too many dependencies.  We need to find a way to cut this down.
 	protected CustomerExporter(
-			ListLoader<CustomerOrg> customerLoader, 
+			ListLoader<CustomerOrg> customerLoader,
+			DivisionOrgByCustomerListLoader divisionLoader,
 			ExportMapMarshaler<FullExternalOrgView> marshaler,
-			CustomerOrgViewConverter customerConverter, 
-			DivisionOrgByCustomerListLoader divisionList, 
-			DivisionOrgViewConverter divisionConverter
+			ModelToViewConverter<CustomerOrg, FullExternalOrgView> customerConverter, 
+			ModelToViewConverter<DivisionOrg, FullExternalOrgView> divisionConverter
 		) {
 
 		this.customerLoader = customerLoader;
+		this.divisionLoader = divisionLoader;
 		this.marshaler = marshaler;
 		this.customerConverter = customerConverter;
-		this.divisionLoader = divisionList;
 		this.divisionConverter = divisionConverter;
 	}
 

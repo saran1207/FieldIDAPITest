@@ -22,7 +22,7 @@ public class DummySerializationHandler extends SerializationHandler {
 	}
 
 	@Override
-	public void unmarshal(Object bean, String value) throws MarshalingException {
+	public void unmarshal(Object bean, String title, String value) throws MarshalingException {
 		
 	}
 

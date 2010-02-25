@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.CustomerOrgViewConverter;
-import com.n4systems.api.conversion.DivisionOrgViewConverter;
+import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
+import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
@@ -131,8 +131,8 @@ public class CustomerImporterTest {
 		
 		TransactionManager transManager = createMock(TransactionManager.class);
 		Saver<BaseOrg> orgSaver = createMock(Saver.class);
-		CustomerOrgViewConverter custConverter = createMock(CustomerOrgViewConverter.class);
-		DivisionOrgViewConverter divConverter = createMock(DivisionOrgViewConverter.class);
+		CustomerOrgToModelConverter custConverter = createMock(CustomerOrgToModelConverter.class);
+		DivisionOrgToModelConverter divConverter = createMock(DivisionOrgToModelConverter.class);
 		
 		CustomerImporter importer = new CustomerImporter(null, transManager, orgSaver, null, custConverter, divConverter) {
 			@Override

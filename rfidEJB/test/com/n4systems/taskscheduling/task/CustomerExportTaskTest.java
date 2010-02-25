@@ -28,7 +28,7 @@ public class CustomerExportTaskTest {
 		
 		MapWriter writer = new CsvMapWriter(new ByteArrayOutputStream());
 		
-		CustomerExportTask task = new CustomerExportTask(link, null, null, null, exporter, writerFactory);
+		CustomerExportTask task = new CustomerExportTask(link, null, null, null, writerFactory, exporter);
 		
 		expect(writerFactory.create((OutputStream)anyObject(), (ContentType)anyObject())).andReturn(writer);
 		

@@ -22,7 +22,7 @@ public class SimpleSerializationHandler extends SerializationHandler {
 	}
 	
 	@Override
-	public void unmarshal(Object bean, String value) throws MarshalingException {
+	public void unmarshal(Object bean, String title, String value) throws MarshalingException {
 		String cleanString = (value != null) ? StringUtils.clean(value) : null;
 		
 		setFieldValue(bean, cleanString);

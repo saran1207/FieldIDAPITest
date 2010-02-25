@@ -45,7 +45,7 @@ public class SimpleSerializationHandlerTest {
 		
 		TestExportBean test = new TestExportBean();
 		
-		testHandler.unmarshal(test, "asdasdasd");
+		testHandler.unmarshal(test, "", "asdasdasd");
 		
 		assertEquals("asdasdasd", test.getType());
 	}
@@ -56,7 +56,7 @@ public class SimpleSerializationHandlerTest {
 		
 		TestExportBean test = new TestExportBean();
 		
-		testHandler.unmarshal(test, "");
+		testHandler.unmarshal(test, "", "");
 		
 		assertNull(test.getName());
 	}
@@ -67,7 +67,7 @@ public class SimpleSerializationHandlerTest {
 		
 		TestExportBean test = new TestExportBean();
 		
-		testHandler.unmarshal(test, "99");
+		testHandler.unmarshal(test, "", "99");
 		
 		assertEquals(99, test.getAge().intValue());
 	}

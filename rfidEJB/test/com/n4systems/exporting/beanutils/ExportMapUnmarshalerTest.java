@@ -30,7 +30,7 @@ public class ExportMapUnmarshalerTest {
 		for (String title: titles) {
 			expect(serialHandler[0].handlesField(title)).andReturn(true);
 			
-			serialHandler[0].unmarshal(anyObject(), (String)anyObject());
+			serialHandler[0].unmarshal(anyObject(), (String)anyObject(), (String)anyObject());
 		}
 		
 		replay(handlerFactory);

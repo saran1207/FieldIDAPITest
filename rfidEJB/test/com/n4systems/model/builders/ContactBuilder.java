@@ -1,21 +1,32 @@
 package com.n4systems.model.builders;
 
 import com.n4systems.model.Contact;
-import com.n4systems.testutils.TestHelper;
 
 public class ContactBuilder extends BaseBuilder<Contact> {
-
-	public ContactBuilder() {
+	private String name;
+	private String email;
+	
+	protected ContactBuilder(String name, String email) {
 		super();
+		this.name = name;
+		this.email = email;
 	}
 	
 	public static ContactBuilder aContact() {
-		return new ContactBuilder();
+		return new ContactBuilder("Joe Blow", "jblow@example.com");
+	}
+	
+	public ContactBuilder withName(String name) {
+		return new ContactBuilder(name, email);
+	}
+	
+	public ContactBuilder withEmail(String email) {
+		return new ContactBuilder(name, email);
 	}
 	
 	@Override
 	public Contact build() {
-		return new Contact(TestHelper.randomString(), TestHelper.randomString());
+		return new Contact(name, email);
 	}
 
 }

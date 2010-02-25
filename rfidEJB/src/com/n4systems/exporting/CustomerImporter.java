@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.CustomerOrgViewConverter;
-import com.n4systems.api.conversion.DivisionOrgViewConverter;
+import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
+import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
@@ -33,18 +33,18 @@ public class CustomerImporter implements Importer {
 	private final TransactionManager transactionManager;
 	private final Saver<BaseOrg> orgSaver;
 	private final Validator<FullExternalOrgView> viewValidator; 
-	private final CustomerOrgViewConverter customerConverter;
-	private final DivisionOrgViewConverter divisionConverter;
+	private final CustomerOrgToModelConverter customerConverter;
+	private final DivisionOrgToModelConverter divisionConverter;
 
 	private List<FullExternalOrgView> orgViews;
 	private int currentRow;
 	private int totalRows;
 	
 	public CustomerImporter(MapReader mapReader, SecurityFilter filter) {
-		 this(mapReader, new FieldIdTransactionManager(), new OrgSaver(), new ViewValidator<FullExternalOrgView>(filter), new CustomerOrgViewConverter(filter), new DivisionOrgViewConverter(filter));
+		 this(mapReader, new FieldIdTransactionManager(), new OrgSaver(), new ViewValidator<FullExternalOrgView>(filter), new CustomerOrgToModelConverter(filter), new DivisionOrgToModelConverter(filter));
 	}
 	
-	protected CustomerImporter(MapReader mapReader, TransactionManager transactionManager, Saver<BaseOrg> orgSaver, Validator<FullExternalOrgView> viewValidator, CustomerOrgViewConverter customerConverter, DivisionOrgViewConverter divisionConverter) {
+	protected CustomerImporter(MapReader mapReader, TransactionManager transactionManager, Saver<BaseOrg> orgSaver, Validator<FullExternalOrgView> viewValidator, CustomerOrgToModelConverter customerConverter, DivisionOrgToModelConverter divisionConverter) {
 		this.mapReader = mapReader;
 		this.transactionManager = transactionManager;
 		this.orgSaver = orgSaver;

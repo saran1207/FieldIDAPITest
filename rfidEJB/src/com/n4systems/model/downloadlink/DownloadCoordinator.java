@@ -5,11 +5,14 @@ import java.util.concurrent.Executor;
 
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
 import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.DownloadTaskFactory;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
@@ -76,6 +79,13 @@ public class DownloadCoordinator {
 	public void generateCustomerExport(String name, String downloadUrl, ContentType type, SecurityFilter filter) {
 		DownloadLink link = createDownloadLink(name, type);
 		CustomerExportTask task = taskFactory.createCustomerExportTask(link, downloadUrl, filter);
+		
+		executor.execute(task);
+	}
+	
+	public void generateAutoAttributeExport(String name, String downloadUrl, ContentType type, ListLoader<AutoAttributeDefinition> attribLoader) {
+		DownloadLink link = createDownloadLink(name, type);
+		AutoAttributeExportTask task = taskFactory.createAutoAttributeExportTask(link, downloadUrl, attribLoader);
 		
 		executor.execute(task);
 	}

@@ -1,26 +1,22 @@
-package com.n4systems.api.conversion;
+package com.n4systems.api.conversion.orgs;
 
+import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
 
-public class DivisionOrgViewConverter extends ExternalOrgViewConverter<DivisionOrg> {
+public class DivisionOrgToModelConverter extends ExternalOrgToModelConverter<DivisionOrg> {
+	
 	private CustomerOrg parentCustomer;
 	
-	public DivisionOrgViewConverter(SecurityFilter filter) {
-		super(filter, DivisionOrg.class);
+	public DivisionOrgToModelConverter(SecurityFilter filter) {
+		this(new GlobalIdLoader<DivisionOrg>(filter, DivisionOrg.class));
 	}
-
-	public DivisionOrgViewConverter(GlobalIdLoader<DivisionOrg> externalIdLoader, SecurityFilter filter) {
-		super(externalIdLoader, filter, DivisionOrg.class);
-	}
-
-	@Override
-	public void copyProperties(DivisionOrg from, FullExternalOrgView to) throws ConversionException {
-		super.copyProperties(from, to);
-		to.setTypeToDivision();
+	
+	public DivisionOrgToModelConverter(GlobalIdLoader<DivisionOrg> externalIdLoader) {
+		super(externalIdLoader);
 	}
 
 	@Override
@@ -33,10 +29,16 @@ public class DivisionOrgViewConverter extends ExternalOrgViewConverter<DivisionO
 				throw new ConversionException("No parent Customer set for Division [" + from.getName() + "]");
 			}
 			
+			to.setTenant(parentCustomer.getTenant());
 			to.setParent(parentCustomer);
 		}
 	}
 
+	@Override
+	protected DivisionOrg createModelBean() {
+		return new DivisionOrg();
+	}
+	
 	public void setParentCustomer(CustomerOrg parentCustomer) {
 		this.parentCustomer = parentCustomer;
 	}

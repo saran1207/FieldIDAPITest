@@ -60,10 +60,11 @@ public abstract class SerializationHandler {
 	 * Sets the field value back onto the bean.
 	 * @param field	The field for this value
 	 * @param bean	The Object to set the value onto
+	 * @param title	The field title
 	 * @param value	The value to set
 	 * @throws MarshalingException On any problem setting the value
 	 */
-	public abstract void unmarshal(Object bean, String value) throws MarshalingException;
+	public abstract void unmarshal(Object bean, String title, String value) throws MarshalingException;
 	
 	/**
 	 * If the field title represents a field which is owned by this handler.

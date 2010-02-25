@@ -2,8 +2,10 @@ package com.n4systems.taskscheduling.task;
 
 import java.util.List;
 
+import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -47,6 +49,11 @@ public class DownloadTaskFactory {
 	
 	public CustomerExportTask createCustomerExportTask(DownloadLink link, String downloadUrl, SecurityFilter filter) {
 		CustomerExportTask task = new CustomerExportTask(link, downloadUrl, filter);
+		return task;
+	}
+	
+	public AutoAttributeExportTask createAutoAttributeExportTask(DownloadLink link, String downloadUrl, ListLoader<AutoAttributeDefinition> attribLoader) {
+		AutoAttributeExportTask task = new AutoAttributeExportTask(link, downloadUrl, attribLoader);
 		return task;
 	}
 }

@@ -16,6 +16,20 @@ public class DownloadTaskFactoryTest {
 		
 		CustomerExportTask task = dtf.createCustomerExportTask(link, "url", new OpenSecurityFilter());
 		
+		assertNotNull(task);
+		assertSame(link, task.downloadLink);
+		assertEquals("url", task.downloadUrl);
+	}
+	
+	@Test
+	public void test_create_auto_attribute_export_task() {
+		DownloadTaskFactory dtf = new DownloadTaskFactory();
+		
+		DownloadLink link = new DownloadLink();
+		
+		AutoAttributeExportTask task = dtf.createAutoAttributeExportTask(link, "url", null);
+		
+		assertNotNull(task);
 		assertSame(link, task.downloadLink);
 		assertEquals("url", task.downloadUrl);
 	}

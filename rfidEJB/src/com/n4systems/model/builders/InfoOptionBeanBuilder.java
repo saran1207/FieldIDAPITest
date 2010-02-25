@@ -20,7 +20,7 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 	}
 	
 	private static InfoOptionBeanBuilder anInfoOption(boolean dynamicOption) {
-		return new InfoOptionBeanBuilder(dynamicOption, "some option", InfoFieldBeanBuilder.anInfoField().build());
+		return new InfoOptionBeanBuilder(dynamicOption, "some option", InfoFieldBeanBuilder.aTextField().build());
 	}
 	
 	private InfoOptionBeanBuilder(boolean dynamicOption, String name, InfoFieldBean field) {
