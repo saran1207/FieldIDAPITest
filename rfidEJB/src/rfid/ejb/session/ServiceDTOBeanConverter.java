@@ -77,6 +77,6 @@ public interface ServiceDTOBeanConverter {
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg);
 	public VendorServiceDTO convert(OrgConnection orgConnections);
 	public BaseOrg convert(long ownerId, long tenantId);
-	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO);
+	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
 	
 }

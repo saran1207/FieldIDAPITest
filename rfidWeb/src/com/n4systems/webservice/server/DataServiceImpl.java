@@ -689,7 +689,7 @@ public class DataServiceImpl implements DataService {
 		try {
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService());
+			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
 			new InspectionScheduleCreateHandler(new ProductByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())), 
 					new FilteredIdLoader<Product>(new TenantOnlySecurityFilter(request.getTenantId()), Product.class),

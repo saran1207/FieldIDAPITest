@@ -1068,11 +1068,15 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return scheduleService;
 	}
 	
-	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
+	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
+		
+		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 		
 		InspectionSchedule inspectionSchedule = new InspectionSchedule();
 		
 		inspectionSchedule.setNextDate( AbstractBaseServiceDTO.stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
+		inspectionSchedule.setTenant(tenant);
+		
 		
 		return inspectionSchedule;
 		
