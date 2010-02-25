@@ -16,20 +16,23 @@ import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 
 public class UpdateSubProducts {
 
-	private final LegacyProductSerial productManager;
+	private final LegacyProductSerial legacyProductSerial;
 	private final Long tenantId;
 	private final Product product;
 	private final InspectionServiceDTO inspectionServiceDTO;
 	private final List<SubProduct> subProducts;
+	private final ProductManager productManager;
 
-	public UpdateSubProducts(LegacyProductSerial productManager, Long tenantId,
+	public UpdateSubProducts(LegacyProductSerial legacyProductSerial, Long tenantId,
 			Product product, InspectionServiceDTO inspectionServiceDTO,
-			List<SubProduct> subProducts) {
-				this.productManager = productManager;
+			List<SubProduct> subProducts,
+			ProductManager productManager) {
+				this.legacyProductSerial = legacyProductSerial;
 				this.tenantId = tenantId;
 				this.product = product;
 				this.inspectionServiceDTO = inspectionServiceDTO;
 				this.subProducts = subProducts;
+				this.productManager = productManager;
 	
 	}
 	
@@ -46,7 +49,7 @@ public class UpdateSubProducts {
 		
 		if (subProducts.size() > 0 ||
 			inspectionServiceDTO.getDetachSubProducts().size() > 0) {
-			productManager.update(product, product.getModifiedBy());
+			legacyProductSerial.update(product, product.getModifiedBy());
 		}
 	}
 
@@ -66,8 +69,6 @@ public class UpdateSubProducts {
 	private List<SubProduct> detachExistingSubProduct(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct) {
 		
 		List<SubProduct> detachingSubProducts = new ArrayList<SubProduct>();
-		
-		ProductManager productManager = ServiceLocator.getProductManager();
 		
 		for (SubProductMapServiceDTO subProductDTO : subProductMaps) {
 			Product product = productManager.findProduct(subProductDTO.getSubProductId(), new TenantOnlySecurityFilter( tenantId ) );
