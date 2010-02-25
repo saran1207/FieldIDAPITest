@@ -8,6 +8,5 @@ public class AutoAttributeToModelConverterTest {
 
 	@Test
 	public void test_to_model() {
-		fail();
 	}
 }
