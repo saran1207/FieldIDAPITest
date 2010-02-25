@@ -1,5 +1,9 @@
 package com.n4systems.model.builders;
 
+import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static com.n4systems.model.builders.InspectionTypeBuilder.anInspectionType;
+import static com.n4systems.model.builders.ProductBuilder.aProduct;
+
 import java.util.Date;
 
 import com.n4systems.exceptions.ProcessFailureException;
@@ -16,13 +20,17 @@ public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
 	private final Inspection inspection;
 	
 	public static InspectionScheduleBuilder aScheduledInspectionSchedule() {
-		return new InspectionScheduleBuilder(null,null,new Date(), null);
+		return new InspectionScheduleBuilder(aProduct().build(),anInspectionType().build(),new Date(), null);
 	}
 	
 	public static InspectionScheduleBuilder aCompletedInspectionSchedule() {
-		return new InspectionScheduleBuilder(null,null,new Date(), null);
+		InspectionType inspectionType = anInspectionType().build();
+		Product product = aProduct().build();
+		Inspection inspection = anInspection().ofType(inspectionType).on(product).build();
+		return new InspectionScheduleBuilder(product,inspectionType,new Date(), inspection);
 	}
-	
+
+
 	public InspectionScheduleBuilder(Product product, InspectionType inspectionType, Date nextDate, Inspection inspection) {
 		super();
 		this.product = product;

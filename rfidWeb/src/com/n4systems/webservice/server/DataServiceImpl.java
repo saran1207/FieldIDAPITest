@@ -686,33 +686,17 @@ public class DataServiceImpl implements DataService {
 	
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {						
 
-		Product product = null;
-		
 		try {
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			
 			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService());
 
-			//1. load product
-			if ( request.getScheduleService().isProductCreatedOnMobile()) {
-				ProductByMobileGuidLoader productLoader = new ProductByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId()));
-				product = productLoader.setMobileGuid(request.getScheduleService().getProductMobileGuid()).load();
-			} else {
-				FilteredIdLoader<Product> productLoader = new FilteredIdLoader<Product>(new TenantOnlySecurityFilter(request.getTenantId()), Product.class);
-				product = productLoader.setId(request.getScheduleService().getProductId()).load();
-			}
-			inspectionSchedule.setProduct(product);
-			
-			//2. load inspection type
-			FilteredIdLoader<InspectionType> inspectionTypeLoader = new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class);
-			InspectionType inspectionType = inspectionTypeLoader.setId(request.getScheduleService().getInspectionTypeId()).load();
-			inspectionSchedule.setInspectionType(inspectionType);
-			
-			//3. persist inspection schedule
-			InspectionScheduleSaver saver = new InspectionScheduleSaver();
-			saver.saveOrUpdate(inspectionSchedule);
-			
+			new InspectionScheduleCreateHandler(new ProductByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())), 
+					new FilteredIdLoader<Product>(new TenantOnlySecurityFilter(request.getTenantId()), Product.class),
+					new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class),
+					new InspectionScheduleSaver()).createNewInspectionSchedule(inspectionSchedule, request.getScheduleService());
+
+				
 		} catch (Exception e) {
 			logger.error("Exception occured while saving inspection schedule");
 			throw new ServiceException();
@@ -720,6 +704,7 @@ public class DataServiceImpl implements DataService {
 		
 		return new RequestResponse();
 	}
+
 	
 	
 	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
@@ -1081,7 +1066,7 @@ public class DataServiceImpl implements DataService {
 			InspectionServiceDTO inspectionServiceDTO,
 			List<SubProduct> subProducts) throws SubProductUniquenessException {
 		
-		new UpdateSubProducts(productManager, tenantId, product, inspectionServiceDTO, subProducts).run();
+		new UpdateSubProducts(productManager, tenantId, product, inspectionServiceDTO, subProducts, ServiceLocator.getProductManager()).run();
 		
 	}
 	
