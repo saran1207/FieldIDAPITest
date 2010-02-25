@@ -67,11 +67,11 @@ public class SessionBumpTest extends FieldIDTestCase {
 		secondSession.open("/fieldid/home.action");
 		secondSession.waitForPageToLoad(Misc.defaultTimeout);
 		
-		secondSession.open("/fieldid/search.action");
-		secondSession.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.open("/fieldid/search.action");
+		selenium.waitForPageToLoad(Misc.defaultTimeout);
 		
-		secondSession.open("/fieldid/reporting.action");
-		secondSession.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.open("/fieldid/report.action");
+		selenium.waitForPageToLoad(Misc.defaultTimeout);
 		
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
 	}
