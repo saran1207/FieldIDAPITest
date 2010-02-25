@@ -13,6 +13,7 @@ em {
 #systemNotices {
 	background-color:#FFE7B3;	
 	border-bottom:1px solid #CCCCCC;
+	zoom:0;
 }
 
 .systemNotice {
