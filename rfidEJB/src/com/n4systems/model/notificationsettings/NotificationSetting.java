@@ -37,13 +37,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@Enumerated(EnumType.STRING)
 	private SimpleFrequency frequency = SimpleFrequency.DAILY;
 	
-	@Column(name="periodstart", nullable=false)
-	@Enumerated(EnumType.STRING)
-	private RelativeTime periodStart = RelativeTime.TODAY;
 	
-	@Column(name="periodend", nullable=false)
-	@Enumerated(EnumType.STRING)
-	private RelativeTime periodEnd = RelativeTime.NEXT_WEEK;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
@@ -63,6 +57,10 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	@IndexColumn(name="orderidx")
 	private List<Long> inspectionTypes = new ArrayList<Long>();
+	
+	private OverdueEventReport overdueReport = new OverdueEventReport();
+
+	private UpcomingEventReport upcommingReport = new UpcomingEventReport();
 
 	public NotificationSetting() {}
 	
@@ -87,21 +85,15 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     }
 
 	public RelativeTime getPeriodStart() {
-    	return periodStart;
+    	return upcommingReport.getPeriodStart();
     }
 
-	public void setPeriodStart(RelativeTime periodStart) {
-    	this.periodStart = periodStart;
-    }
-
+	
 	public RelativeTime getPeriodEnd() {
-    	return periodEnd;
+    	return upcommingReport.getPeriodEnd();
     }
 
-	public void setPeriodEnd(RelativeTime periodEnd) {
-    	this.periodEnd = periodEnd;
-    }
-
+	
 	public UserBean getUser() {
     	return user;
     }
@@ -133,4 +125,20 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	public void setInspectionTypes(List<Long> inspectionTypes) {
     	this.inspectionTypes = inspectionTypes;
     }
+
+	public boolean isIncludeOverdue() {
+		return overdueReport.includeOverdue;
+	}
+
+	public void setIncludeOverdue(boolean includeOverdue) {
+		this.overdueReport.includeOverdue = includeOverdue;
+	}
+
+	public UpcomingEventReport getUpcommingReport() {
+		return upcommingReport;
+	}
+
+	public void setUpcommingReport(UpcomingEventReport upcommingReport) {
+		this.upcommingReport = upcommingReport;
+	}
 }

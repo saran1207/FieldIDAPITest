@@ -25,7 +25,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -92,7 +92,7 @@ public class UserRequestCrud extends AbstractCrud {
 	}
 
 	private void createNewAccountEmail() {
-		MailMessage message = new MailMessage();
+		TemplateMailMessage message = new TemplateMailMessage();
 		message.setSubject("Your Field ID Account Information");
 		String loginUrl =  getBaseURI().resolve("").toString() + "login/"+  userRequest.getUserAccount().getTenant().getName();
 		
@@ -111,7 +111,7 @@ public class UserRequestCrud extends AbstractCrud {
 					"<a href=\"http://www.twitter.com/fieldid\">http://www.twitter.com/fieldid</a><br/>" +
 					"<a href=\"http://www.twitter.com/n4systems\">http://www.twitter.com/n4systems</a><br/>";
 
-		message.setBody(body);
+		message.setEmailConent(body);
 		message.getToAddresses().add( userRequest.getUserAccount().getEmailAddress() );
 		try {
 			ServiceLocator.getMailManager().sendMessage(message);

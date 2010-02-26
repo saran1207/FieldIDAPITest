@@ -10,7 +10,6 @@ import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 

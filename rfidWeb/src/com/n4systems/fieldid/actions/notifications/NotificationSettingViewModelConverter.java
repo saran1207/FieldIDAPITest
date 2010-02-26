@@ -8,6 +8,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.model.notificationsettings.UpcomingEventReport;
 
 public class NotificationSettingViewModelConverter {
 	
@@ -30,8 +31,10 @@ public class NotificationSettingViewModelConverter {
 		view.setName(model.getName());
 		view.setOwner(model.getOwner());
 		view.setFrequency(model.getFrequency().getId());
-		view.setPeriodStart(model.getPeriodStart().getId());
-		view.setPeriodEnd(model.getPeriodEnd().getId());
+		view.setPeriodStart(model.getUpcommingReport().getPeriodStart().getId());
+		view.setPeriodEnd(model.getUpcommingReport().getPeriodEnd().getId());
+		view.setIncludeOverdue(model.isIncludeOverdue());
+		view.setIncludeUpcoming(model.getUpcommingReport().isIncludeUpcoming());
 		
 		// we'll need the created date to carry through on edit
 		if (model.getCreated() != null) {
@@ -64,8 +67,9 @@ public class NotificationSettingViewModelConverter {
 		model.setOwner(view.getOwner());
 		
 		model.setFrequency(SimpleFrequency.valueOf(view.getFrequency()));
-		model.setPeriodStart(RelativeTime.valueOf(view.getPeriodStart()));
-		model.setPeriodEnd(RelativeTime.valueOf(view.getPeriodEnd()));
+		model.setUpcommingReport(new UpcomingEventReport(RelativeTime.valueOf(view.getPeriodStart()), RelativeTime.valueOf(view.getPeriodEnd()), view.getIncludeUpcoming()));
+		model.setIncludeOverdue(view.getIncludeOverdue());
+		
 		
 		if (view.getCreatedTimeStamp() != null) {
 			model.setCreated(new Date(view.getCreatedTimeStamp()));

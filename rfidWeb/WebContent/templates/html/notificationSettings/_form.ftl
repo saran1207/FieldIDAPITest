@@ -47,14 +47,26 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		</@s.select>
 	</div>
 	
+	
+	
+	<div class="infoSet fullInfoSet">
+		<label for="view.includeUpcoming"><@s.text name="label.include_upcoming"/></label>
+		<span class="infoField"><@s.checkbox name="view.includeUpcoming"  theme="fieldidSimple" onchange="$$('.tiedToUpcoming').each(function(element) { element.highlight() });" /></span>
+	</div>
+	
 	<div class="infoSet">
 		<label for="view.periodStart"><@s.text name="label.events_starting"/></label>
-		<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName" />
+		<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName" cssClass="tiedToUpcoming" />
 	</div>
 	
 	<div class="infoSet">
 		<label for="view.periodEnd"><@s.text name="label.for_the_next"/></label>
-		<@s.select list="periodEndList" name="view.periodEnd" listKey="id" listValue="displayName" />
+		<@s.select list="periodEndList" name="view.periodEnd" listKey="id" listValue="displayName" cssClass="tiedToUpcoming"/>
+	</div>
+	
+	<div class="infoSet fullInfoSet">
+		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
+		<span class="infoField"><@s.checkbox name="view.includeOverdue"  theme="fieldidSimple" /></span>
 	</div>
 	
 	<div id="emailAddresses" class="infoSet fullInfoSet">

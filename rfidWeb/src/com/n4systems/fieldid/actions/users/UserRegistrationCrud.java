@@ -20,7 +20,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
@@ -90,9 +90,9 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 			return ERROR;
 		}
 
-		MailMessage message = new MailMessage();
+		TemplateMailMessage message = new TemplateMailMessage();
 		message.setSubject("Customer Account Request");
-		message.setBody(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList.action"), getTenant().getName()));
+		message.setEmailConent(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList.action"), getTenant().getName()));
 		
 		AdminUserListLoader userLoader = new AdminUserListLoader(new TenantOnlySecurityFilter(getTenant()));
 		for (UserBean user: userLoader.load()) {

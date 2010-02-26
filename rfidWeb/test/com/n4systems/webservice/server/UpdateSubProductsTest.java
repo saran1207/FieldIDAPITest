@@ -21,7 +21,6 @@ import com.n4systems.model.builders.SubProductBuilder;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
-import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 
 

@@ -1,14 +1,13 @@
 package com.n4systems.test.helpers;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-public class Asserts {
+import org.junit.Assert;
+
+public class Asserts extends Assert {
 	public static void assertInRange(Date expected, Date actual, long deltaInMilliSeconds) {
 		assertInRange("value is not inside the range", expected, actual, deltaInMilliSeconds);
 	}
@@ -31,7 +30,7 @@ public class Asserts {
 		}
 	}
 	
-	public static void assertSetsEquals(HashSet<?> expected, Set<?> actual) {
+	public static void assertSetsEquals(Set<?> expected, Set<?> actual) {
 		if (actual == null) {
 			fail("actual set is null and shouldn't be");
 		}
@@ -41,4 +40,13 @@ public class Asserts {
 		
 		assertTrue("expected set is " + expected.toString() + " and the actual set is " + actual.toString(), expected.containsAll(actual));
 	}
+	
+	public static void assertNotEquals(Object expected, Object actual) {
+		assertNotEquals("was expecting [" + expected + "] but got [" + actual + "]", expected, actual);
+	}
+	
+	public static void assertNotEquals(String message, Object expected, Object actual) {
+		assertFalse(message, expected.equals(actual));
+	}
+	
 }

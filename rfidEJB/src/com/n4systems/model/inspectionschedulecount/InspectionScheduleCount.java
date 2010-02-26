@@ -69,4 +69,6 @@ public class InspectionScheduleCount implements Comparable<InspectionScheduleCou
 		return comp;
 	}
 	
+	
+	
 }

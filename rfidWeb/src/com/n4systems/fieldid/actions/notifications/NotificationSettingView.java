@@ -6,10 +6,12 @@ import java.util.List;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
+import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @Validation
+
 public class NotificationSettingView implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -18,12 +20,15 @@ public class NotificationSettingView implements Serializable {
 	private Long createdTimeStamp;
 	private String name;
 	private String frequency;
+	private Boolean includeUpcoming = true;
 	private String periodStart;
 	private String periodEnd;
 	private Long productTypeId;
 	private Long inspectionTypeId;
+	private Boolean includeOverdue = false;
 	private List<String> addresses = new ArrayList<String>();
 
+	
 	public NotificationSettingView() {}
 
 	public Long getId() {
@@ -115,4 +120,30 @@ public class NotificationSettingView implements Serializable {
 	public void setAddresses(List<String> addresses) {
     	this.addresses = addresses;
     }
+
+	public Boolean getIncludeOverdue() {
+		return includeOverdue;
+	}
+
+	public void setIncludeOverdue(Boolean includeOverdue) {
+		this.includeOverdue = includeOverdue;
+	}
+
+	public void setIncludeUpcoming(Boolean includeUpcoming) {
+		this.includeUpcoming = includeUpcoming;
+	}
+
+	public Boolean getIncludeUpcoming() {
+		return includeUpcoming;
+	}
+	
+	
+	public boolean isReportSelected() {
+		return includeUpcoming || includeOverdue;
+	}
+	
+	@ExpressionValidator(message="", key="error.you_must_select_at_least_one_type_of_report", expression="reportSelected == true")
+	public void setReportSelected(boolean empty) {
+		
+	}
 }

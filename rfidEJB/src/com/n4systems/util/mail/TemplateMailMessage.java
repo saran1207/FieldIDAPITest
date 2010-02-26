@@ -42,6 +42,11 @@ public class TemplateMailMessage extends MailMessage {
 	public void setTemplateMap(Map<String, Object> templateMap) {
 		this.templateMap = templateMap;
 	}
+	
+	public void setEmailConent(String bodyContent) {
+		templateMap.put("content", bodyContent);
+		templateName = "injectBody";
+	}
 
 	@Override
 	public String getBody() throws MessagingException {
