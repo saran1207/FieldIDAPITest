@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public abstract class ClockTest {
+public abstract class ClockTestAbstract {
 
 	protected Clock sut;
 	

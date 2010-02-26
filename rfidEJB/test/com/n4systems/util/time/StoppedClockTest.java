@@ -7,7 +7,7 @@ import java.util.Date;
 import org.junit.Test;
 
 
-public class StoppedClockTest extends ClockTest {
+public class StoppedClockTest extends ClockTestAbstract {
 
 	
 	@Test
