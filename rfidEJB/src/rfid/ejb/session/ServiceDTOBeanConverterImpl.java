@@ -1073,7 +1073,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 		
 		InspectionSchedule inspectionSchedule = new InspectionSchedule();
-		
+
+		inspectionSchedule.setMobileGUID(inspectionScheduleServiceDTO.getMobileGuid());
 		inspectionSchedule.setNextDate( AbstractBaseServiceDTO.stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
 		inspectionSchedule.setTenant(tenant);
 		

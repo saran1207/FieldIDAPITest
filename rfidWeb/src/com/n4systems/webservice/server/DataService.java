@@ -90,6 +90,8 @@ public interface DataService {
 	/* Used Only by Techlink Importer */
 	
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
+	public RequestResponse updateInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	
-
+	
+	
 }

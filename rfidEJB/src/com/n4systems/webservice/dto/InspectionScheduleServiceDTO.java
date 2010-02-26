@@ -8,6 +8,7 @@ public class InspectionScheduleServiceDTO extends AbstractBaseServiceDTO {
 	private long inspectionTypeId;
 	private long jobId;
 	private boolean completed;
+	private String mobileGuid;
 
 	public String getNextDate() {
 		return nextDate;
@@ -48,5 +49,13 @@ public class InspectionScheduleServiceDTO extends AbstractBaseServiceDTO {
 	public boolean isProductCreatedOnMobile() {
 		return !MobileDTOHelper.isValidServerId(productId);
 	}
+	public String getMobileGuid() {
+		return mobileGuid;
+	}
+	public void setMobileGuid(String mobileGuid) {
+		this.mobileGuid = mobileGuid;
+	}
+	
+	
 	
 }

@@ -51,6 +51,7 @@ import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
+import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
@@ -705,6 +706,23 @@ public class DataServiceImpl implements DataService {
 		return new RequestResponse();
 	}
 
+	public RequestResponse updateInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
+	
+		try {
+
+			new InspectionScheduleUpdateHandler(new InspectionScheduleByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
+					new FilteredIdLoader<InspectionSchedule>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionSchedule.class),
+					new InspectionScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
+			
+		} catch (Exception e) {
+			logger.error("Exception occured while updating inspection schedule");
+			throw new ServiceException();
+		}
+		
+		return new RequestResponse();
+		
+	}
+	
 	
 	
 	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {

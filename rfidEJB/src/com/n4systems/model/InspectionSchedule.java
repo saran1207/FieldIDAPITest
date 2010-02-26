@@ -91,6 +91,8 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 
 	@ManyToOne()
 	private Project project;
+	
+	private String mobileGUID;
 
 	public InspectionSchedule() {
 	}
@@ -292,5 +294,13 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		enhanced.inspection = enhance(inspection, level);
 		return enhanced;
 	}
+	
+	public String getMobileGUID() {
+		return mobileGUID;
+	}
+	public void setMobileGUID(String mobileGUID) {
+		this.mobileGUID = mobileGUID;
+	}
+	
 
 }
