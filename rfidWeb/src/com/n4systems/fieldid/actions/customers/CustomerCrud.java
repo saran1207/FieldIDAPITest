@@ -153,10 +153,10 @@ public class CustomerCrud extends AbstractCrud {
 		try {
 			ContentType contentType = ContentType.valueOf(exportType.toUpperCase());
 			
-			getDownloadCoordinator().generateCustomerExport(getText("label.customer_export_file"), getDownloadLinkUrl(), contentType, getSecurityFilter());
+			getDownloadCoordinator().generateCustomerExport(getText("label.export_file"), getDownloadLinkUrl(), contentType, getSecurityFilter());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute customer export", e);
-			addFlashMessage(getText("error.customer_export_failed"));
+			addFlashMessage(getText("error.export_failed"));
 			return ERROR;
 		}
 		return SUCCESS;

@@ -3,7 +3,11 @@ package com.n4systems.fieldid.viewhelpers.navigation;
 import java.util.Map;
 
 public class NavOption {
-
+	public static final String TYPE_ADD = "add";
+	public static final String TYPE_ENTITY = "entity";
+	public static final String TYPE_LIST = "list";
+	public static final String TYPE_ENTITYRIGHT = "entityRight";
+	
 	private String label;
 	private String name;
 	private String action;
@@ -14,8 +18,7 @@ public class NavOption {
 	private Integer order;
 	private boolean useEntityTitle;
 	private Map<String,String> urlParams;
-	
-	
+		
 	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView, boolean useEntityTitle) {
 		super();
 		this.label = label;
@@ -29,42 +32,32 @@ public class NavOption {
 		this.urlParams = urlParams;
 		this.useEntityTitle = useEntityTitle;
 	}
-
-	
-	
 	
 	public String getLabel() {
 		return label;
 	}
 
-	
-
 	public String getName() {
 		return name;
 	}
-
 
 	public String getAction() {
 		return action;
 	}
 
-
 	public String getPermissionRequired() {
 		return permissionRequired;
 	}
-
 
 	public String getExtendedFeatureRequired() {
 		return extendedFeatureRequired;
 	}
 
-
 	public String getType() {
 		return type;
 	}
 	
-	public Map<String,String> getUrlParams() {
-		
+	public Map<String,String> getUrlParams() {		
 		return urlParams;
 	}
 
@@ -72,7 +65,6 @@ public class NavOption {
 		return order;
 	}
 
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof NavOption) {
@@ -86,15 +78,19 @@ public class NavOption {
 		return name.hashCode();
 	}
 
-
 	public String getConditionalView() {
 		return (conditionalView != null) ? conditionalView : "true";
 	}
 
-
-
-
 	public boolean isUseEntityTitle() {
 		return useEntityTitle;
+	}
+	
+	public boolean isEntity() {
+		return type.equals(TYPE_ENTITY) || type.equals(TYPE_ENTITYRIGHT);
+	}
+	
+	public boolean isRightJustified() {
+		return type.equals(TYPE_ADD) || type.equals(TYPE_ENTITYRIGHT);
 	}
 }

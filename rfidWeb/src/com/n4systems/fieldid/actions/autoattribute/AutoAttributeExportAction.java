@@ -11,6 +11,7 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.ArrayUtils;
 
 @SuppressWarnings("serial")
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
@@ -34,11 +35,10 @@ public class AutoAttributeExportAction extends AbstractAction {
 		try {
 			ContentType contentType = ContentType.valueOf(exportType.toUpperCase());
 			
-//			AutoAttributeDefinitionListLoader autoAttribLoader = getLoaderFactory().createAutoAttributeDefinitionListLoader().setCriteriaId(criteriaId);
-			
 			ListLoader<AutoAttributeDefinition> attribLoader = getLoaderFactory().createPassthruListLoader(autoAttributeCriteria.getDefinitions());
 			
-			getDownloadCoordinator().generateAutoAttributeExport(getText("label.export_file"), getDownloadLinkUrl(), contentType, attribLoader);
+			String exportName = autoAttributeCriteria.getProductType().getName();
+			getDownloadCoordinator().generateAutoAttributeExport(getText("label.export_file", ArrayUtils.newArray(exportName)), getDownloadLinkUrl(), contentType, attribLoader);
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute auto attribute export", e);
 			addFlashMessage(getText("error.export_failed"));
@@ -47,6 +47,11 @@ public class AutoAttributeExportAction extends AbstractAction {
 		return SUCCESS;
 	}
 
+	@SkipValidation
+	public String doDownloadExample() {
+		return SUCCESS;
+	}
+	
 	public String getExportType() {
 		return exportType;
 	}
@@ -69,7 +74,7 @@ public class AutoAttributeExportAction extends AbstractAction {
 
 	public void setCriteriaId(Long criteriaId) {
 		if (autoAttributeCriteria == null || !autoAttributeCriteria.getId().equals(criteriaId)) {
-			autoAttributeCriteria = getLoaderFactory().createFilteredIdLoader(AutoAttributeCriteria.class).setId(criteriaId).setPostFetchFields("definitions").load();
+			autoAttributeCriteria = getLoaderFactory().createFilteredIdLoader(AutoAttributeCriteria.class).setId(criteriaId).setPostFetchFields("inputs", "outputs", "productType.name", "definitions.outputs").load();
 		}
 	}
 

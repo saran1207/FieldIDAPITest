@@ -150,7 +150,7 @@ public class NavOptionsController {
 	}
 
 	public boolean entityLoaded() {
-		if (currentActionOption != null && currentActionOption.getType().equals("entity")) {
+		if (currentActionOption != null && currentActionOption.isEntity()) {
 			return true;
 		}
 		return false;

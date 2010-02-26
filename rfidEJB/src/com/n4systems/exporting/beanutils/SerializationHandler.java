@@ -4,10 +4,12 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 
 public abstract class SerializationHandler {
 	private final Field field;
 	private final ExportField exportField;
+	private final PropertyUtilsBean propertyUtils = new PropertyUtilsBean();
 	
 	public SerializationHandler(Field field) {
 		this.field = field;
@@ -24,7 +26,8 @@ public abstract class SerializationHandler {
 
 	protected Object getFieldValue(Object bean) throws MarshalingException {
 		try {
-			return BeanUtils.getProperty(bean, getField().getName());
+			Object property = propertyUtils.getProperty(bean, getField().getName());
+			return property;
 		} catch (Exception e) {
 			String msg = String.format("Failed getting field [%s] on class [%s]", 
 					getField().getName(), 

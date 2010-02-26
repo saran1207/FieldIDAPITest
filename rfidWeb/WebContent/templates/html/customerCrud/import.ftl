@@ -3,14 +3,14 @@
 	<script language="javascript" src="javascript/customerImport.js"> </script>
 </head>
 ${action.setPageType('customer', 'import_export')!}
-<h2 class="sectionTitle"><@s.text name="label.import_customers" /></h2>
+<h2 class="sectionTitle"><@s.text name="label.import" /></h2>
 
 <#include "../common/_formErrors.ftl"/>
 <@s.form id="uploadForm" action="importCustomers" cssClass="fullForm fluentSets" theme="fieldid" method="POST" enctype="multipart/form-data">	
 	<label class="label" for="importDoc"><@s.text name="label.import_file" />:</label>
 	<@s.file id="importDoc" name="importDoc" size="30" />
 	
-	<@s.submit key="label.import" />
+	<@s.submit key="hbutton.import" />
 	<span id="or"><@s.text name="label.or" /></span>
 	<a id="backToLink" href="<@s.url action="customerImportExport"/>"><@s.text name="label.cancel" /></a>
 </@s.form>

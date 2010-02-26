@@ -1,8 +1,8 @@
 <ul class="options <#if navOptions.filteredOptions.empty> emptyOptions</#if>">
 	<#list navOptions.filteredOptions as option>
-		<#if option.type != 'entity' || navOptions.entityLoaded() >
+		<#if !option.entity || navOptions.entityLoaded() >
 			<#if option.conditionalView?eval >
-				<li class="<#if option.type == "add">add</#if> <#if option.name == navOptions.currentAction>selected</#if>">
+				<li class="<#if option.rightJustified >add</#if> <#if option.name == navOptions.currentAction>selected</#if>">
 					<#if option.name != navOptions.currentAction>
 						<@s.url id="url" action="${option.action}">
 							<#list option.urlParams?keys as param>
