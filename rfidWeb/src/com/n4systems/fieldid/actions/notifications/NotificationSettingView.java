@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
-import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
@@ -137,13 +137,10 @@ public class NotificationSettingView implements Serializable {
 		return includeUpcoming;
 	}
 	
-	
+	@FieldExpressionValidator(message="", key="error.you_must_select_at_least_one_type_of_report", expression="reportSelected == true")
 	public boolean isReportSelected() {
 		return includeUpcoming || includeOverdue;
 	}
 	
-	@ExpressionValidator(message="", key="error.you_must_select_at_least_one_type_of_report", expression="reportSelected == true")
-	public void setReportSelected(boolean empty) {
-		
-	}
+	
 }

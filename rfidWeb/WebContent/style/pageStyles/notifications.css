@@ -39,3 +39,8 @@ form.largeForm {
 	width: 830px;
 }	
 
+.notificationContentOptions {
+	border-left: 10px solid #D0DAFA;
+	margin-left:20px;
+	overflow:hidden;
+}

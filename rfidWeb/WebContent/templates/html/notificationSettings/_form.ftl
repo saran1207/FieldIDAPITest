@@ -4,9 +4,11 @@
 	
 </head>
 ${action.setPageType('my_account', 'notification_settings')!}
-<h2><@s.text name="label.notification"/></h2>
 
 <#include "/templates/html/common/_formErrors.ftl" />
+<h2><@s.text name="label.notification"/></h2>
+
+
 <#include "/templates/html/common/_orgPicker.ftl"/>
 
 <@s.hidden name="uniqueID"/>
@@ -15,14 +17,51 @@ ${action.setPageType('my_account', 'notification_settings')!}
 <div class="sectionContent">
 	<div class="infoSet fullInfoSet">
 		<label for="view.name"><@s.text name="label.name"/></label>
-		<@s.textfield name="view.name">
-			<#if (action.fieldErrors['view.name'])?exists> 
-				<@s.param name="cssClass">inputError</@s.param>
-				<@s.param name="title">${action.fieldErrors['view.name']}</@s.param>
-			</#if>  
-		</@s.textfield>
+		<@s.textfield name="view.name"/>
 	</div>
-	
+	<div class="infoSet fullInfoSet">
+		<label for="view.frequency"><@s.text name="label.i_want_to_get_it"/></label>
+		<@s.select name="view.frequency" emptyOption="false">
+			<@s.iterator id="group" value="frequencyGroups">
+				<@s.optgroup label="${group.groupName}" list="%{frequencies}" listKey="id" listValue="displayName" />
+			</@s.iterator>
+		</@s.select>
+	</div>
+</div>
+
+
+<h2><@s.text name="label.notification_content"/> (<@s.text name="instruction.you_must_select_atleast_one_peice_of_content"/>)</h2>
+<#if (action.fieldErrors['view.reportSelected'])?exists> 
+	<div class="formErrors" >
+		<@s.fielderror >
+		     <@s.param>view.reportSelected</@s.param>
+		</@s.fielderror>
+	</div>
+</#if>
+<div class="sectionContent">
+	<div class="infoSet fullInfoSet">
+		<label for="view.includeUpcoming"><@s.text name="label.include_upcoming"/></label>
+		<span class="infoField"><@s.checkbox name="view.includeUpcoming"  theme="fieldidSimple" id="includeUpcoming" /></span>
+	</div>
+	<div class="tiedToUpcoming notificationContentOptions">
+		<div class="infoSet fullInfoSet">
+			<label for="view.periodStart"><@s.text name="label.events_starting"/></label>
+			<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName"  />
+		</div>
+		
+		<div class="infoSet fullInfoSet">
+			<label for="view.periodEnd"><@s.text name="label.for_the_next"/></label>
+			<@s.select list="periodEndList" name="view.periodEnd" listKey="id" listValue="displayName" />
+		</div>
+	</div>	
+	<div class="infoSet fullInfoSet">
+		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
+		<span class="infoField"><@s.checkbox name="view.includeOverdue"  theme="fieldidSimple" /></span>
+	</div>
+</div>
+
+<h2><@s.text name="label.filters"/></h2>
+<div class="sectionContent">	
 	<div class="infoSet fullInfoSet">
 		<label for="owner"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="owner"/>
@@ -38,37 +77,13 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		<@s.select name="view.inspectionTypeId" list="inspectionTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_inspection_types')}" />
 	</div>
 	
-	<div class="infoSet fullInfoSet">
-		<label for="view.frequency"><@s.text name="label.frequency"/></label>
-		<@s.select name="view.frequency" emptyOption="false">
-			<@s.iterator id="group" value="frequencyGroups">
-				<@s.optgroup label="${group.groupName}" list="%{frequencies}" listKey="id" listValue="displayName" />
-			</@s.iterator>
-		</@s.select>
-	</div>
+	
+</div>
 	
 	
-	
-	<div class="infoSet fullInfoSet">
-		<label for="view.includeUpcoming"><@s.text name="label.include_upcoming"/></label>
-		<span class="infoField"><@s.checkbox name="view.includeUpcoming"  theme="fieldidSimple" onchange="$$('.tiedToUpcoming').each(function(element) { element.highlight() });" /></span>
-	</div>
-	
-	<div class="infoSet">
-		<label for="view.periodStart"><@s.text name="label.events_starting"/></label>
-		<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName" cssClass="tiedToUpcoming" />
-	</div>
-	
-	<div class="infoSet">
-		<label for="view.periodEnd"><@s.text name="label.for_the_next"/></label>
-		<@s.select list="periodEndList" name="view.periodEnd" listKey="id" listValue="displayName" cssClass="tiedToUpcoming"/>
-	</div>
-	
-	<div class="infoSet fullInfoSet">
-		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
-		<span class="infoField"><@s.checkbox name="view.includeOverdue"  theme="fieldidSimple" /></span>
-	</div>
-	
+
+<h2><@s.text name="label.who_should_get_the_notification"/></h2>
+<div class="sectionContent">	
 	<div id="emailAddresses" class="infoSet fullInfoSet">
 		<label><@s.text name="label.emailaddresses"/></label>	
 		<div id="addressList">
@@ -92,7 +107,6 @@ ${action.setPageType('my_account', 'notification_settings')!}
 			</div>
 		</div>
 	</div>
-		
 	<div class="formAction" >
 		<@s.url id="cancelUrl" action="notificationSettings"/>
 		<@s.reset key="label.cancel" onclick="return redirect('${cancelUrl}');" />
@@ -102,4 +116,18 @@ ${action.setPageType('my_account', 'notification_settings')!}
 <script type="text/javascript">
 	retireImageSrc = "<@s.url value="/images/retire.gif" />";
 	addressCount = ${view.addresses.size()};
+	
+	function updateUpcomingOptions(element) {
+		if ($('includeUpcoming').checked) {
+			element.show();
+		} else {
+			element.hide();
+		}
+	}
+	
+	$$('.tiedToUpcoming').each(updateUpcomingOptions);
+	$('includeUpcoming').observe('change', function(event) {
+			$$('.tiedToUpcoming').each(updateUpcomingOptions);
+		});
+	
 </script>
