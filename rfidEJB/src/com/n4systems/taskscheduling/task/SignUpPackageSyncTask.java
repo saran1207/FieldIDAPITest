@@ -13,10 +13,15 @@ import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.taskscheduling.ScheduledTask;
 
 public class SignUpPackageSyncTask extends ScheduledTask {
-
+	private final SaverFactory saverFactory;
+	
 	public SignUpPackageSyncTask() {
+		this(new SaverFactory());
+	}
+	
+	public SignUpPackageSyncTask(SaverFactory saverFactory) {
 	    super(5 * 60, TimeUnit.SECONDS);
-	    
+	    this.saverFactory = saverFactory;
 	}
 
 	@Override
@@ -34,7 +39,7 @@ public class SignUpPackageSyncTask extends ScheduledTask {
 	
 	private void syncContractsWithSignUpPackages(List<ContractPrice> contractPrices) {
 		SignUpPackageSyncHandler signupPackageSyncHandler = new SignUpPackageSyncHandler(getNonSecureLoaderFactory().createContractPricingByNsRecordIdLoader(), 
-				SaverFactory.createContractPricingSaver());
+				saverFactory.createContractPricingSaver());
 		
 		signupPackageSyncHandler.setContractPrices(contractPrices);
 		signupPackageSyncHandler.sync();

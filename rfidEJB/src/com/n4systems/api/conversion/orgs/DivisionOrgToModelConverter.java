@@ -4,16 +4,10 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
 
 public class DivisionOrgToModelConverter extends ExternalOrgToModelConverter<DivisionOrg> {
-	
 	private CustomerOrg parentCustomer;
-	
-	public DivisionOrgToModelConverter(SecurityFilter filter) {
-		this(new GlobalIdLoader<DivisionOrg>(filter, DivisionOrg.class));
-	}
 	
 	public DivisionOrgToModelConverter(GlobalIdLoader<DivisionOrg> externalIdLoader) {
 		super(externalIdLoader);

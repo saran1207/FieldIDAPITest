@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Test;
 
-import com.n4systems.taskscheduling.task.CustomerImportTask;
+import com.n4systems.taskscheduling.task.ImportTask;
 
 public class ImportTaskRegistryTest {
 	private ImportTaskRegistry registry = new ImportTaskRegistry();
@@ -17,7 +17,7 @@ public class ImportTaskRegistryTest {
 	
 	@Test
 	public void register_get_return_task() {
-		CustomerImportTask task = new CustomerImportTask(null, null, null);
+		ImportTask task = new ImportTask(null, null, null, null, null);
 		
 		registry.register(task);
 		
@@ -26,7 +26,7 @@ public class ImportTaskRegistryTest {
 	
 	@Test
 	public void remove_removes_task() {
-		CustomerImportTask task = new CustomerImportTask(null, null, null);
+		ImportTask task = new ImportTask(null, null, null, null, null);
 		registry.register(task);
 		registry.remove(task.getId());
 		
@@ -35,12 +35,12 @@ public class ImportTaskRegistryTest {
 	
 	@Test
 	public void clear_removes_all_tasks() {
-		CustomerImportTask task = new CustomerImportTask(null, null, null);
+		ImportTask task = new ImportTask(null, null, null, null, null);
 		registry.register(task);
 		
 		String id1 = task.getId();
 		
-		task = new CustomerImportTask(null, null, null);
+		task = new ImportTask(null, null, null, null, null);
 		registry.register(task);
 		
 		String id2 = task.getId();
@@ -53,7 +53,7 @@ public class ImportTaskRegistryTest {
 	
 	@Test
 	public void registry_is_statically_backed() {
-		CustomerImportTask task = new CustomerImportTask(null, null, null);
+		ImportTask task = new ImportTask(null, null, null, null, null);
 		registry.register(task);
 		
 		ImportTaskRegistry registry2 = new ImportTaskRegistry();

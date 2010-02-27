@@ -20,7 +20,6 @@ import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
@@ -30,7 +29,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.TransactionManager;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.testutils.DummyTransaction;
 
@@ -50,19 +48,19 @@ public class CustomerImporterTest {
 	
 	@Test(expected=IllegalStateException.class)
 	public void run_import_throws_exception_if_validate_not_called_first() throws ImportException {
-		CustomerImporter importer = new CustomerImporter(null, null, null, null, null, null);
+		CustomerImporter importer = new CustomerImporter(null, null, null, null, null);
 		
-		importer.runImport();
+		importer.runImport(null);
 	}
 
 	@Test
 	public void test_read_and_validate() throws IOException, ParseException, MarshalingException {
 		MapReader reader = createMock(MapReader.class);
-		ViewValidator<FullExternalOrgView> validator = createMock(ViewValidator.class);
+		ViewValidator validator = createMock(ViewValidator.class);
 		
 		final ExportMapUnmarshaler<FullExternalOrgView> unmarshaler = createMock(ExportMapUnmarshaler.class);
 		
-		CustomerImporter importer = new CustomerImporter(reader, null, null, validator, null, null) {
+		CustomerImporter importer = new CustomerImporter(reader, validator, null, null, null) {
 			@Override
 			protected ExportMapUnmarshaler<FullExternalOrgView> createMapUnmarshaler() throws IOException, ParseException {
 				return unmarshaler;
@@ -94,13 +92,13 @@ public class CustomerImporterTest {
 	
 	@Test
 	public void read_and_validate_reads_once() throws IOException, ParseException, MarshalingException {
-		Validator<FullExternalOrgView> validator = createMock(Validator.class);
+		ViewValidator validator = createMock(ViewValidator.class);
 		
 		final AtomicInteger readCount = new AtomicInteger();
 		
-		CustomerImporter importer = new CustomerImporter(null, null, null, validator, null, null) {
+		CustomerImporter importer = new CustomerImporter(null, validator, null, null, null) {
 			@Override
-			protected List<FullExternalOrgView> readAllRows() throws IOException, ParseException, MarshalingException {
+			protected List<FullExternalOrgView> readAllViews() throws IOException, ParseException, MarshalingException {
 				readCount.incrementAndGet();
 				return Arrays.asList(orgViews);
 			}
@@ -129,24 +127,21 @@ public class CustomerImporterTest {
 		CustomerOrg cust = OrgBuilder.aCustomerOrg().buildCustomer();
 		DivisionOrg div = OrgBuilder.aDivisionOrg().buildDivision();
 		
-		TransactionManager transManager = createMock(TransactionManager.class);
 		Saver<BaseOrg> orgSaver = createMock(Saver.class);
 		CustomerOrgToModelConverter custConverter = createMock(CustomerOrgToModelConverter.class);
 		DivisionOrgToModelConverter divConverter = createMock(DivisionOrgToModelConverter.class);
 		
-		CustomerImporter importer = new CustomerImporter(null, transManager, orgSaver, null, custConverter, divConverter) {
+		CustomerImporter importer = new CustomerImporter(null, null, orgSaver, custConverter, divConverter) {
 			@Override
-			protected List<ValidationResult> validateRows() {
+			protected List<ValidationResult> validateAllViews() {
 				return Collections.EMPTY_LIST;
 			}
 
 			@Override
-			protected List<FullExternalOrgView> readAllRows() throws IOException, ParseException, MarshalingException {
+			protected List<FullExternalOrgView> readAllViews() throws IOException, ParseException, MarshalingException {
 				return Arrays.asList(orgViews);
 			}
 		};
-		
-		expect(transManager.startTransaction()).andReturn(trans);
 		
 		expect(custConverter.toModel(orgViews[0])).andReturn(cust);
 		expect(orgSaver.saveOrUpdate(trans, cust)).andReturn(cust);
@@ -155,20 +150,16 @@ public class CustomerImporterTest {
 		expect(divConverter.toModel(orgViews[1])).andReturn(div);
 		expect(orgSaver.saveOrUpdate(trans, div)).andReturn(div);
 			
-		transManager.finishTransaction(trans);
-		
-		replay(transManager);
 		replay(orgSaver);
 		replay(custConverter);
 		replay(divConverter);
 		
 		importer.readAndValidate();
 		
-		int total = importer.runImport();
+		int total = importer.runImport(trans);
 		
 		assertEquals(2, total);
 		
-		verify(transManager);
 		verify(orgSaver);
 		verify(custConverter);
 		verify(divConverter);

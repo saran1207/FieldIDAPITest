@@ -3,18 +3,18 @@ package com.n4systems.exporting;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.n4systems.taskscheduling.task.CustomerImportTask;
+import com.n4systems.taskscheduling.task.ImportTask;
 
 public class ImportTaskRegistry {
-	private static final Map<String, CustomerImportTask> taskMap = new HashMap<String, CustomerImportTask>();
+	private static final Map<String, ImportTask> taskMap = new HashMap<String, ImportTask>();
 	
 	public ImportTaskRegistry() {}
 	
-	public void register(CustomerImportTask task) {
+	public void register(ImportTask task) {
 		taskMap.put(task.getId(), task);
 	}
 	
-	public CustomerImportTask get(String taskId) {
+	public ImportTask get(String taskId) {
 		return taskMap.get(taskId);
 	}
 	

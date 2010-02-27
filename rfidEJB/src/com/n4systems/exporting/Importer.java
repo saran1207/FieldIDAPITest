@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.persistence.Transaction;
 
 
 public interface Importer {
@@ -21,7 +22,7 @@ public interface Importer {
 	 * Throws ValidationFailedException if validation failed.  The ValidationFailedException will
 	 * contain a list of failed validation results
 	 */
-	public int runImport() throws ImportException;
+	public int runImport(Transaction transaction) throws ImportException;
 	
 	/**
 	 * @return Returns the total number of rows to import

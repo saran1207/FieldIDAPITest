@@ -1,15 +1,16 @@
 package com.n4systems.notifiers.notifications;
 
-public class CustomerImportFailureNotification extends Notification {
+import rfid.ejb.entity.UserBean;
+
+public class CustomerImportFailureNotification extends ImportFailureNotification {
+
+	public CustomerImportFailureNotification(UserBean notifiyUser) {
+		super(notifiyUser);
+	}
 
 	@Override
 	public String notificationName() {
 		return "customerImportFailed";
-	}
-
-	@Override
-	public String subject() {
-		return "Customer Import Failed";
 	}
 
 }

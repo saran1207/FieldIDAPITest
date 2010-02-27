@@ -1,10 +1,11 @@
 package com.n4systems.notifiers.notifications;
 
-public class CustomerImportSuccessNotification extends Notification {
-	private final int totalImported;
+import rfid.ejb.entity.UserBean;
+
+public class CustomerImportSuccessNotification extends ImportSuccessNotification {
 	
-	public CustomerImportSuccessNotification(int totalImported) {
-		this.totalImported = totalImported;
+	public CustomerImportSuccessNotification(UserBean notifyUser) {
+		super(notifyUser);
 	}
 	
 	@Override
@@ -12,13 +13,4 @@ public class CustomerImportSuccessNotification extends Notification {
 		return "customerImportSuccess";
 	}
 
-	@Override
-	public String subject() {
-		return "Customer Import Successful";
-	}
-
-	public int getTotalImported() {
-		return totalImported;
-	}
-	
 }

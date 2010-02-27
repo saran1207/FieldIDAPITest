@@ -455,7 +455,12 @@
 		</action>
 		
 		<action name="customerImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
-			<result name="success" type="freemarker">/templates/ajax/customerImport/status.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
+		
+		<action name="autoAttributeImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
+		</action>
+		
 	</package>
 </struts>

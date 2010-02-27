@@ -1893,8 +1893,19 @@
 			<result name="success" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 		</action>
 		
-		<action name="autoAttributeImportExport" method="showImportExport" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+		<action name="autoAttributeImportExport" method="show" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/importExport.ftl</result>
+		</action>
+		
+		<action name="showImportAutoAttributes" method="show" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
+		</action>
+
+		<action name="importAutoAttributes" method="import" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
+			<result name="missing" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
+			<result name="error" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
+			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
 		</action>
 	</package>
 </struts>

@@ -1,7 +1,6 @@
 package com.n4systems.api.conversion.autoattribute;
 
 import java.util.List;
-import java.util.Map;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -23,6 +22,7 @@ public class AutoAttributeToModelConverter implements ViewToModelConverter<AutoA
 	public AutoAttributeDefinition toModel(AutoAttributeView view) throws ConversionException {
 		AutoAttributeDefinition model = new AutoAttributeDefinition();
 		
+		model.setTenant(criteria.getTenant());
 		model.setCriteria(criteria);
 		setupInputs(model, view, criteria);
 		setupOutputs(model, view, criteria);
@@ -31,52 +31,56 @@ public class AutoAttributeToModelConverter implements ViewToModelConverter<AutoA
 	}
 
 	private void setupOutputs(AutoAttributeDefinition model, AutoAttributeView view, AutoAttributeCriteria criteria) throws ConversionException {
-		InfoFieldBean field;
+		String optionValue;
 		InfoOptionBean option;
-		for (Map.Entry<String, String> outputEntry: view.getOutputs().entrySet()) {
-			if (outputEntry.getValue() == null) {
-				// output options can be blank
+		for (InfoFieldBean field: criteria.getOutputs()) {
+			optionValue = view.getOutputs().get(field.getName());
+			
+			// output options may be null
+			if (optionValue == null) {
 				continue;
 			}
 			
-			field = findInfoFieldByName(outputEntry.getKey(), criteria.getOutputs());
-			
-			// try to resolve it first, then we'll create one if it's not found.  We do it this way to 
-			// make sure the combo box static options resolve first
-			option = findInfoOptionByName(outputEntry.getValue(), field.getInfoOptions());
+			// try to resolve a static option first, then we'll create a dynamic one if it's not found.  
+			// We do it this way to make sure the combo box static options resolve first
+			option = findInfoOptionByName(optionValue, field.getInfoOptions());
 			
 			if (option == null) {
 				if (!field.acceptsDyanmicInfoOption()) {
-					throw new ConversionException(String.format("Could not resolve static option [%s] on info field [%d]", outputEntry.getValue(), field.getUniqueID()));
+					// if we're not allowed to add dynamic options, and we couldn't resolve one, than it's an error
+					throw new ConversionException(String.format("Static option [%s] not found for field [%d]", optionValue, field.getUniqueID()));
 				} else {
 					option = new InfoOptionBean();
 					option.setInfoField(field);
-					option.setName(outputEntry.getValue());
+					option.setName(optionValue);
 					option.setStaticData(false);
 				}
-				
-				model.getOutputs().add(option);
 			}
+			
+			model.getOutputs().add(option);
 		}
 	}
 
-	private void setupInputs(AutoAttributeDefinition model, AutoAttributeView view, AutoAttributeCriteria criteria) {
-		InfoFieldBean field;
+	private void setupInputs(AutoAttributeDefinition model, AutoAttributeView view, AutoAttributeCriteria criteria) throws ConversionException {
+		String optionValue;
 		InfoOptionBean option;
-		for (Map.Entry<String, String> inputEntry: view.getInputs().entrySet()) {
-			field = findInfoFieldByName(inputEntry.getKey(), criteria.getInputs());
-			option = findInfoOptionByName(inputEntry.getValue(), field.getInfoOptions());
+		for (InfoFieldBean field: criteria.getInputs()) {
+			optionValue = view.getInputs().get(field.getName());
+			
+			// we must have a value for every input
+			if (optionValue == null) {
+				throw new ConversionException("No Value found for input InfoField [" + field.getName() + "]");
+			}
+			
+			option = findInfoOptionByName(optionValue, field.getInfoOptions());
+			
+			// we must also have a valid option
+			if (option == null) {
+				throw new ConversionException("No InfoOption found for input InfoField [" + field.getName() + "] and value [" + optionValue + "]");
+			}
+			
 			model.getInputs().add(option);
 		}
-	}
-
-	private InfoFieldBean findInfoFieldByName(String name, List<InfoFieldBean> fields) {
-		for (InfoFieldBean field: fields) {
-			if (name.equals(field.getName())) {
-				return field;
-			}
-		}
-		return null;
 	}
 	
 	private InfoOptionBean findInfoOptionByName(String name, List<InfoOptionBean> options) {
@@ -86,6 +90,10 @@ public class AutoAttributeToModelConverter implements ViewToModelConverter<AutoA
 			}
 		}
 		return null;
+	}
+
+	public AutoAttributeCriteria getCriteria() {
+		return criteria;
 	}
 
 }

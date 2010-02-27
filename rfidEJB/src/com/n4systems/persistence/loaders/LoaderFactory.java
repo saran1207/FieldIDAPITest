@@ -28,6 +28,7 @@ import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.external.ExternalOrgCodeExistsLoader;
+import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
@@ -192,6 +193,10 @@ public class LoaderFactory {
 		return new InspectionTypeListableLoader(filter);
 	}
 
+	public InternalOrgByNameLoader createInternalOrgByNameLoader() {
+		return new InternalOrgByNameLoader(filter);
+	}
+
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
 		return new InternalOrgListableLoader(filter);
 	}
@@ -339,7 +344,7 @@ public class LoaderFactory {
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

@@ -1,36 +1,50 @@
 package com.n4systems.fieldid.actions.autoattribute;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.exporting.Importer;
+import com.n4systems.exporting.io.MapReader;
+import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.notifiers.notifications.AutoAttributeImportFailureNotification;
+import com.n4systems.notifiers.notifications.AutoAttributeImportSuccessNotification;
+import com.n4systems.notifiers.notifications.ImportFailureNotification;
+import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 
 @SuppressWarnings("serial")
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
-public class AutoAttributeExportAction extends AbstractAction {
+public class AutoAttributeExportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(AutoAttributeExportAction.class);
 	
 	private String exportType; 
 	private AutoAttributeCriteria autoAttributeCriteria;
-
+    
 	public AutoAttributeExportAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
-	
-	@SkipValidation
-	public String doShowImportExport() {
-		return SUCCESS;
+
+	@Override
+	protected Importer createImporter(MapReader reader) {
+		return getImporterFactory().createAutoAttributeImporter(reader, autoAttributeCriteria);
+	}
+
+	@Override
+	protected ImportSuccessNotification createSuccessNotification() {
+		return new AutoAttributeImportSuccessNotification(getUser());
+	}
+
+	@Override
+	protected ImportFailureNotification createFailureNotification() {
+		return new AutoAttributeImportFailureNotification(getUser());
 	}
 	
-	@SkipValidation
 	public String doExport() {
 		try {
 			ContentType contentType = ContentType.valueOf(exportType.toUpperCase());
@@ -47,7 +61,6 @@ public class AutoAttributeExportAction extends AbstractAction {
 		return SUCCESS;
 	}
 
-	@SkipValidation
 	public String doDownloadExample() {
 		return SUCCESS;
 	}

@@ -5,15 +5,10 @@ import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
 
 public class CustomerOrgToModelConverter extends ExternalOrgToModelConverter<CustomerOrg> {
 	private final InternalOrgByNameLoader orgLoader;
-	
-	public CustomerOrgToModelConverter(SecurityFilter filter) {
-		this(new GlobalIdLoader<CustomerOrg>(filter, CustomerOrg.class), new InternalOrgByNameLoader(filter));
-	}
 	
 	public CustomerOrgToModelConverter(GlobalIdLoader<CustomerOrg> externalIdLoader, InternalOrgByNameLoader orgLoader) {
 		super(externalIdLoader);
