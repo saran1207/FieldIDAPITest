@@ -1389,7 +1389,7 @@
 
 		<action name="eventTypeGroupDelete" method="delete" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/delete.ftl</result>
-			<result name="error" type="redirectAction">eventTypeGroups</result>
+			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/delete.ftl</result>
 			<result name="success" type="redirectAction">eventTypeGroups</result>
 		</action>
 

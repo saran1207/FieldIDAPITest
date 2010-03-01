@@ -16,51 +16,49 @@ public class FlashScopeInterceptor extends AbstractInterceptor implements Struts
 
 	public static final String FLASH_MESSAGES = "flashScope_Messages";
 	public static final String FLASH_ERRORS = "flashScope_Errors";
-	
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-		final ActionContext context = invocation.getInvocationContext ();
-		
+		final ActionContext context = invocation.getInvocationContext();
+
 		Map session = context.getSession();
-		Collection<String> errors = (Collection<String>)session.get( FLASH_ERRORS );
-		Collection<String> messages = (Collection<String>)session.get( FLASH_MESSAGES );
-		
-		session.remove( FLASH_ERRORS );
-		session.remove( FLASH_MESSAGES );
-		
+		Collection<String> errors = (Collection<String>) session.get(FLASH_ERRORS);
+		Collection<String> messages = (Collection<String>) session.get(FLASH_MESSAGES);
+
+		session.remove(FLASH_ERRORS);
+		session.remove(FLASH_MESSAGES);
+
 		Object action = invocation.getAction();
-		        
+
 		if (action instanceof ValidationAware) {
-			
+
 			ValidationAware validationAwareAction = (ValidationAware) action;
-			if( errors != null ) {
-				validationAwareAction.setActionErrors( errors );
+			if (errors != null) {
+				validationAwareAction.setActionErrors(errors);
 			}
-			
-			if( messages != null ) {
-				validationAwareAction.setActionMessages( messages );
+
+			if (messages != null) {
+				validationAwareAction.setActionMessages(messages);
 			}
-			
+
 		}
-		
+
 		String actionResponse = invocation.invoke();
-		
-		if ( action instanceof AbstractAction ) {
-			AbstractAction abstractAction = (AbstractAction)action; 
+
+		if (action instanceof AbstractAction) {
+			AbstractAction abstractAction = (AbstractAction) action;
 			errors = abstractAction.getFlashErrors();
 			messages = abstractAction.getFlashMessages();
-			
-			abstractAction.getActionMessages().addAll( messages );
-			abstractAction.getActionErrors().addAll( errors );
-			
-			session.put( FLASH_ERRORS, errors );
-			session.put( FLASH_MESSAGES, messages );
+
+			abstractAction.getActionMessages().addAll(messages);
+			abstractAction.getActionErrors().addAll(errors);
+
+			session.put(FLASH_ERRORS, errors);
+			session.put(FLASH_MESSAGES, messages);
 		}
-		
-		
-		return actionResponse; 
+
+		return actionResponse;
 	}
 
 }
