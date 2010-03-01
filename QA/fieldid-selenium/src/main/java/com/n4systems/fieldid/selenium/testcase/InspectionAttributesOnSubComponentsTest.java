@@ -41,7 +41,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		String masterInspectionType = getMasterInspectionType();
 		String masterProductType = getMasterProductType(masterInspectionType);
 		addInspectionAttributeIfNecessary(masterInspectionType);
-		String serialNumber = identifyAMasterProductToInspection(masterProductType);
+		identifyAMasterProductToInspection(masterProductType);
 		// save and inspect
 	}
 	
