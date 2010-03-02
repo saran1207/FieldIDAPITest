@@ -23,6 +23,8 @@
 		<pattern>*ajax/inspection.action*</pattern>
 		<pattern>*ajax/linkedInspection.action*</pattern>
 		<pattern>*ajax/introVideo.action*</pattern>
+		<pattern>*ajax/login.action*</pattern>
+		<pattern>*ajax/createSession.action*</pattern>
 	</decorator>
 	
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
