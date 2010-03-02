@@ -7,7 +7,7 @@ import com.n4systems.util.ArrayUtils;
 
 public class MapReaderFactory {
 	private static final String[] CSV_CONTENT_TYPES = {
-		"text/csv"
+		"text/csv", "text/plain"
 	};	
 	
 	private static final String[] EXCEL_CONTENT_TYPES = {

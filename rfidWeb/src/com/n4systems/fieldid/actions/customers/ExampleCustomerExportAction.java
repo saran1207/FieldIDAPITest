@@ -13,6 +13,7 @@ import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
 
 @SuppressWarnings("serial")
@@ -89,9 +90,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 			logger.error("Failed generating example customer export", e);
 			return false;
 		} finally {
-			if (writer != null) {
-				try { writer.close(); } catch (Exception e) {}
-			}
+			StreamUtils.close(writer);
 		}
 		
 		return true;

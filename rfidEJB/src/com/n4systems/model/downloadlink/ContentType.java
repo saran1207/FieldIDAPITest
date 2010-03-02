@@ -4,7 +4,7 @@ public enum ContentType {
 	ZIP		("zip", "application/zip"), 
 	PDF		("pdf", "application/pdf"), 
 	EXCEL	("xls", "application/vnd.ms-excel"),
-	CSV		("csv", "application/vnd.ms-excel");
+	CSV		("csv", "text/csv");
 	
 	
 	private final String extension;

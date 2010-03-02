@@ -1,15 +1,27 @@
 package com.n4systems.fieldid.actions.autoattribute;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exporting.AutoAttributeExporter;
 import com.n4systems.exporting.Importer;
+import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
+import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.AutoAttributeImportFailureNotification;
 import com.n4systems.notifiers.notifications.AutoAttributeImportSuccessNotification;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
@@ -26,6 +38,9 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 	private String exportType; 
 	private AutoAttributeCriteria autoAttributeCriteria;
     
+	private InputStream exampleExportFileStream;
+	private String exampleExportFileSize;
+	
 	public AutoAttributeExportAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -51,8 +66,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 			
 			ListLoader<AutoAttributeDefinition> attribLoader = getLoaderFactory().createPassthruListLoader(autoAttributeCriteria.getDefinitions());
 			
-			String exportName = autoAttributeCriteria.getProductType().getName();
-			getDownloadCoordinator().generateAutoAttributeExport(getText("label.export_file", ArrayUtils.newArray(exportName)), getDownloadLinkUrl(), contentType, attribLoader);
+			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), contentType, attribLoader);
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute auto attribute export", e);
 			addFlashMessage(getText("error.export_failed"));
@@ -61,7 +75,55 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 		return SUCCESS;
 	}
 
+	private String getExportFileName() {
+		String exportName = autoAttributeCriteria.getProductType().getName();
+		return getText("label.export_file", ArrayUtils.newArray(exportName));
+	}
+	
+	public AutoAttributeDefinition createExampleDefinition() {
+		AutoAttributeDefinition def = new AutoAttributeDefinition();
+		def.setCriteria(autoAttributeCriteria);
+		
+		InfoOptionBean option;
+		for (InfoFieldBean field: autoAttributeCriteria.getInputs()) {
+			option = new InfoOptionBean();
+			option.setInfoField(field);
+			option.setName("");
+			option.setStaticData(false);
+			def.getInputs().add(option);
+		}
+		
+		for (InfoFieldBean input: autoAttributeCriteria.getOutputs()) {
+			option = new InfoOptionBean();
+			option.setInfoField(input);
+			option.setName("");
+			option.setStaticData(false);
+			def.getOutputs().add(option);
+		}
+		
+		return def;
+	}
+	
 	public String doDownloadExample() {
+		AutoAttributeExporter exporter = new AutoAttributeExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleDefinition())));
+		
+		MapWriter writer = null;
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		try {
+			writer = new ExcelMapWriter(byteOut);
+			exporter.export(writer);
+			
+		} catch (Exception e) {
+			logger.error("Failed generating example auto-attribute export", e);
+			return ERROR;
+		} finally {
+			StreamUtils.close(writer);
+		}
+		
+		byte[] bytes = byteOut.toByteArray();
+		exampleExportFileSize = String.valueOf(bytes.length);
+		exampleExportFileStream = new ByteArrayInputStream(bytes);
+		
 		return SUCCESS;
 	}
 	
@@ -91,4 +153,23 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 		}
 	}
 
+	/*
+	 * Example export file download params
+	 */
+	
+	public String getFileName() {
+		return ContentType.EXCEL.prepareFileName(getExportFileName());
+	}
+	
+	public String getFileSize() {
+		return exampleExportFileSize;
+	}
+
+	public String getContentType() {
+		return ContentType.EXCEL.getMimeType();
+	}
+	
+	public InputStream getFileStream() {
+		return exampleExportFileStream;
+	}
 }
