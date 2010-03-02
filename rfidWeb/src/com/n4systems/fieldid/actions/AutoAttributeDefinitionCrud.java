@@ -111,12 +111,12 @@ private static final long serialVersionUID = 1L;
 		try {
 			autoAttributeDefinition = autoAttributeManager.saveDefinition( autoAttributeDefinition );
 		} catch (Exception e) {
-			addActionError( "Could not save the auto attribute definition." );
+			addActionErrorText("error.definition_save_failed");
 			return INPUT;
 		}
 		
 		uniqueID = autoAttributeDefinition.getId();
-		addFlashMessage("Definition saved!" );
+		addFlashMessageText("message.definition_saved");
 		if( saveandadd != null ) {
 			setSavedInputs();
 			return "saveandadd";
@@ -141,11 +141,11 @@ private static final long serialVersionUID = 1L;
 		try {
 			autoAttributeManager.removeDefinition( autoAttributeDefinition );
 		} catch (Exception e) {
-			addFlashError( "Could not remove auto attribute definition." );
+			addActionErrorText("error.remove_definition_failed");
 			return ERROR;
 		}
 		
-		addFlashMessage( "Definition removeded!" );
+		addFlashMessageText("message.definition_removed");
 		
 		return SUCCESS;
 	}
