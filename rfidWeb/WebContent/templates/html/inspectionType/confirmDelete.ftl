@@ -51,6 +51,6 @@ ${action.setPageType('inspection_type', 'edit')!}
 		<#if archiveSummary.canBeRemoved()>
 			<@s.submit key="label.delete"/> <@s.text name="label.or"/> 
 		</#if>
-		<a href="<@s.url action="inspectionDelete" uniqueID="uniqueID"/>" ><@s.text name="label.cancel"/></a>
+		<a href="<@s.url action="inspectionTypeEdit" uniqueID="${uniqueID}"/>" ><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>
