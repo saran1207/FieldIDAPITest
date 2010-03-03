@@ -13,6 +13,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
@@ -23,6 +24,16 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 
 public class InspectionScheduleUpdateHandlerTest {
+
+	private final class InspectionScheduleSaverExtension extends
+			InspectionScheduleSaver {
+
+		@Override
+		public void remove(InspectionSchedule entity)
+				throws EntityStillReferencedException {
+		}
+		
+	}
 
 	private InspectionScheduleSaver saver;
 	private InspectionScheduleByMobileGuidLoader inspectionScheduleByMobileGuidLoader;
@@ -120,7 +131,6 @@ public class InspectionScheduleUpdateHandlerTest {
 		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
-		
 		verify(saver);
 		
 	}
@@ -140,6 +150,36 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 	}
 	
+	@Test
+	public void remove_when_schedule_is_not_completed() throws Exception {
+	
+		buildInspectionScheduleServiceDTO(1L, new Date());
+		
+		createFilteredInspectionScheduleLoaderMock();
+		createInspectionScheduleByMobileGuidLoaderMock();
+		createSaverRemoveMock();
+		
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
+		
+		sut.removeInspectionSchedule(inspectionScheduleServiceDTO);
+		verify(saver);
+		
+	}
+	
+	@Test
+	public void do_not_remove_when_schedule_is_completed() throws Exception {
+	
+		buildInspectionScheduleServiceDTO(1L, new Date());
+		inspectionSchedule.completed(inspection);
+		
+		createFilteredInspectionScheduleLoaderMock();
+		createInspectionScheduleByMobileGuidLoaderMock();
+		
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, null);
+		
+		sut.removeInspectionSchedule(inspectionScheduleServiceDTO);
+		
+	}
 	
 	@SuppressWarnings("unchecked")
 	private void createFilteredInspectionScheduleLoaderMock() {
@@ -166,6 +206,12 @@ public class InspectionScheduleUpdateHandlerTest {
 	private void createSaverMock() {
 		saver = createMock(InspectionScheduleSaver.class);
 		expect(saver.saveOrUpdate(inspectionSchedule)).andReturn(inspectionSchedule);
+		replay(saver);
+	}
+
+	private void createSaverRemoveMock() throws Exception {
+		saver = createMock(InspectionScheduleSaver.class);
+		saver.remove(inspectionSchedule);
 		replay(saver);
 	}
 

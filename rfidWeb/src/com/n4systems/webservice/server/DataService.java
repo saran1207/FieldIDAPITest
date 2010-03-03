@@ -91,6 +91,7 @@ public interface DataService {
 	
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	public RequestResponse updateInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
+	public RequestResponse removeInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	
 	
 	

@@ -1,16 +1,21 @@
 package com.n4systems.webservice.server;
 
+import org.apache.log4j.Logger;
+
+import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
 
 public class InspectionScheduleUpdateHandler {
 	
+	private static Logger logger = Logger.getLogger(InspectionScheduleUpdateHandler.class);
 	private InspectionScheduleByMobileGuidLoader inspectionScheduleByMobileGuidLoader;
 	private FilteredIdLoader<InspectionSchedule> filteredInspectionScheduleLoader;
 	private InspectionScheduleSaver saver;
@@ -37,6 +42,16 @@ public class InspectionScheduleUpdateHandler {
 	
 	}
 
+	public void removeInspectionSchedule(InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
+		
+		InspectionSchedule inspectionSchedule = loadExistingInspectionSchedule(inspectionScheduleServiceDTO);
+		
+		if (inspectionSchedule != null)
+			removeInspectionSchedule(inspectionScheduleServiceDTO, inspectionSchedule);
+	
+	}
+
+	
 	private InspectionSchedule loadExistingInspectionSchedule(
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
@@ -63,6 +78,20 @@ public class InspectionScheduleUpdateHandler {
 		}
 	}
 
+	private void removeInspectionSchedule(InspectionScheduleServiceDTO inspectionScheduleServiceDTO,
+			InspectionSchedule inspectionSchedule) {
+		
+		try {
+			//remove only when it is not completed
+			if (inspectionSchedule.getStatus() != ScheduleStatus.COMPLETED) {
+				saver.remove(inspectionSchedule);
+			}
+		} catch (EntityStillReferencedException e) {
+			logger.error("Could not delete inspection schedule", e);
+			
+		}
+	}
+	
 	
 
 }

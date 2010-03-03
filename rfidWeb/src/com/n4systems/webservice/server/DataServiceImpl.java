@@ -723,6 +723,23 @@ public class DataServiceImpl implements DataService {
 		
 	}
 	
+	public RequestResponse removeInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
+		
+		try {
+
+			new InspectionScheduleUpdateHandler(new InspectionScheduleByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
+					new FilteredIdLoader<InspectionSchedule>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionSchedule.class),
+					new InspectionScheduleSaver()).removeInspectionSchedule(request.getScheduleService());
+			
+		} catch (Exception e) {
+			logger.error("Exception occured while removing inspection schedule");
+			throw new ServiceException();
+		}
+		
+		return new RequestResponse();
+		
+	}
+	
 	
 	
 	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
