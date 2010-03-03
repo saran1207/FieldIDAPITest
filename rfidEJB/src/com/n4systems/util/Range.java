@@ -57,7 +57,23 @@ public class Range<T extends Comparable<T>> {
 		Range<?> other = (Range<?>) obj;
 		return (beginning.equals(other.beginning) && ending.equals(other.ending)) ;
 	}
+
+
+	public boolean contains(T value) {
+		int compareToBeginning = value.compareTo(beginning);
+		int compareToEnding = value.compareTo(ending);
+		
+		return compareToBeginning >= 0 && compareToEnding <= 0;
+	}
 	
 	
+	public boolean overlap(Range<T> otherRange) {
+		return containsEither(otherRange) || otherRange.containsEither(this);
+	}
+
+
+	private boolean containsEither(Range<T> otherRange) {
+		return contains(otherRange.beginning) || contains(otherRange.ending);
+	}
 	
 }

@@ -1,6 +1,7 @@
 package com.n4systems.util;
 
 import static com.n4systems.test.helpers.Asserts.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -53,4 +54,28 @@ public class RangeTest {
 		
 		assertNotEquals(new Range<String>("asdf", "asdfa"), new Range<Integer>(2, 4));
 	}
+	
+	
+	
+	@Test
+	public void should_find_that_single_value_is_in_the_range() throws Exception {
+		assertTrue(new Range<Integer>(1, 10).contains(5));
+		assertTrue(new Range<Integer>(1, 10).contains(1));
+		assertTrue(new Range<Integer>(1, 10).contains(10));
+		assertTrue(new Range<Integer>(1, 1).contains(1));
+	}
+
+	@Test
+	public void should_find_that_single_value_is_outside_the_range() throws Exception {
+		assertFalse(new Range<Integer>(1, 10).contains(20));
+		assertFalse(new Range<Integer>(1, 10).contains(-20));
+		assertFalse(new Range<Integer>(1, 10).contains(0));
+		assertFalse(new Range<Integer>(1, 10).contains(11));
+		assertFalse(new Range<Integer>(1, 1).contains(0));
+	}
+	
+	
+	
+	
+	
 }

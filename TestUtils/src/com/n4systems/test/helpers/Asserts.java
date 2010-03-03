@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import org.junit.Assert;
 
-public class Asserts extends Assert {
+public class Asserts {
 	public static void assertInRange(Date expected, Date actual, long deltaInMilliSeconds) {
 		assertInRange("value is not inside the range", expected, actual, deltaInMilliSeconds);
 	}
@@ -20,25 +20,25 @@ public class Asserts extends Assert {
 		} else if (((expected.getTime() + deltaInMilliSeconds) >= actual.getTime()) && ((expected.getTime() - deltaInMilliSeconds) <= actual.getTime())) {
 			result = true;
 		}	
-		assertTrue(message, result);
+		Assert.assertTrue(message, result);
 	}
 	
 	public static void assertConatainsExpectedValues(Map<String,Object> expected, Map<String,Object> actual) {
 		for (Entry<String, Object> expectedEntry : expected.entrySet()) {
-			assertTrue(actual.containsKey(expectedEntry.getKey()));
-			assertEquals(expectedEntry.getValue(), actual.get(expectedEntry.getKey()));	
+			Assert.assertTrue(actual.containsKey(expectedEntry.getKey()));
+			Assert.assertEquals(expectedEntry.getValue(), actual.get(expectedEntry.getKey()));	
 		}
 	}
 	
 	public static void assertSetsEquals(Set<?> expected, Set<?> actual) {
 		if (actual == null) {
-			fail("actual set is null and shouldn't be");
+			Assert.fail("actual set is null and shouldn't be");
 		}
 		if (expected.size() != actual.size()) {
-			fail("sizes are different the expected set size is " + expected.toString() + " and the actual set is " + actual.toString());
+			Assert.fail("sizes are different the expected set size is " + expected.toString() + " and the actual set is " + actual.toString());
 		}
 		
-		assertTrue("expected set is " + expected.toString() + " and the actual set is " + actual.toString(), expected.containsAll(actual));
+		Assert.assertTrue("expected set is " + expected.toString() + " and the actual set is " + actual.toString(), expected.containsAll(actual));
 	}
 	
 	public static void assertNotEquals(Object expected, Object actual) {
@@ -46,7 +46,7 @@ public class Asserts extends Assert {
 	}
 	
 	public static void assertNotEquals(String message, Object expected, Object actual) {
-		assertFalse(message, expected.equals(actual));
+		Assert.assertFalse(message, expected.equals(actual));
 	}
 	
 }
