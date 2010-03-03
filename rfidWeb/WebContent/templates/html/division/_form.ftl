@@ -59,7 +59,7 @@
 		</div>
 	</div>
 	<div class="actions" >
-		<@s.submit key="label.save" /> <@s.text name="label.or"/> <a href="<@s.url action="divisions" includeParams="get"/>"><@s.text name="label.cancel"/></a>
+		<@s.submit key="label.save" /> <@s.text name="label.or"/> <a href="<@s.url action="divisions" customerId="${customerId}"/>"><@s.text name="label.cancel"/></a>
 	</div>
 
 	
