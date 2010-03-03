@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -21,6 +22,7 @@ import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
+import com.n4systems.model.Status;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
@@ -304,5 +306,9 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public boolean isLocalInspection(int rowId) {
 		Inspection inspection = (Inspection)getEntityForRow(rowId);
 		return inspection.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
+	}
+	
+	public List<Status> getStatuses() {
+		return Arrays.asList(Status.values());
 	}
 }

@@ -91,11 +91,15 @@
 			</div>
 			
 			<#if sessionUser.employeeUser>
-			<div class="container infoSet">
+			<div class="infoSet">
 				<label for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
 				<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
 			</div>
 			</#if>
+			<div class="infoSet">
+				<label for="criteria.status"><@s.text name="label.result"/></label>
+				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
+			</div>
 			
 			<div class="container">
 				<div class="infoSet">

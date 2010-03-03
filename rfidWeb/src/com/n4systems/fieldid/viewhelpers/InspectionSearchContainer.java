@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.model.Inspection;
+import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -35,6 +36,8 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private Date fromDate;
 	private Date toDate;
 	
+	private Status status = Status.PASS;
+	
 	public InspectionSearchContainer(SecurityFilter filter) {
 		super(Inspection.class, "id", filter, joinColumns);
 	}
@@ -54,6 +57,9 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
 		addSimpleTerm("inspector.uniqueID", inspectorId);
 		addSimpleTerm("schedule.project.id", jobId);
+		if (status != null) {
+			addSimpleTerm("status", status);
+		}
 		
 		
 		// when inspectionBookId is 0, we search for inspections not in a book
@@ -254,6 +260,18 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 
 	public void setIncludeNetworkResults(boolean includeNetworkResults) {
 		this.includeNetworkResults = includeNetworkResults;
+	}
+
+	public void setStatus(String status) {
+		try {
+			this.status = Status.valueOf(status);
+		} catch (Exception e) {
+			this.status = null;
+		}
+	}
+
+	public String getStatus() {
+		return status != null ? status.name() : null;
 	}
 	
 }
