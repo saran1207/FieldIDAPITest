@@ -8,7 +8,6 @@ import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -18,13 +17,12 @@ import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @Validation
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
-public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValidator {
+public class DivisionCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DivisionCrud.class);
 	
@@ -162,7 +160,6 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 	}
 
 	@RequiredStringValidator(message="", key="error.division_id_required")
-	@CustomValidator(type = "uniqueValue", message = "", key = "error.division_id_used")
 	public void setDivisionID(String divisionID) {
 		division.setCode(divisionID);
 	}
@@ -174,10 +171,6 @@ public class DivisionCrud extends AbstractCrud implements HasDuplicateValueValid
 	@RequiredStringValidator(message="", key="error.namerequired")
 	public void setName(String name) {
 		division.setName(name);
-	}
-	
-	public boolean duplicateValueExists(String formValue) {
-		return getLoaderFactory().createExternalOrgCodeExistsLoader(DivisionOrg.class).setCode(formValue).setFilterOutId(uniqueID).load();
 	}
 
 	public Pager<DivisionOrg> getPage() {

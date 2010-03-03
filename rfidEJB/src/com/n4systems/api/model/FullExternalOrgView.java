@@ -1,7 +1,6 @@
 package com.n4systems.api.model;
 
 import com.n4systems.api.validation.validators.EmailValidator;
-import com.n4systems.api.validation.validators.ExternalOrgCodeUniqueValidator;
 import com.n4systems.api.validation.validators.ExternalOrgGlobalIdValidator;
 import com.n4systems.api.validation.validators.ExternalOrgTypeValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
@@ -29,7 +28,7 @@ public class FullExternalOrgView extends ExternalModelView {
 	@ExportField(title="Name", order = 100, validators = {NotNullValidator.class})
 	private String name;
 
-	@ExportField(title="Code", order = 150, validators = {NotNullValidator.class, ExternalOrgCodeUniqueValidator.class})
+	@ExportField(title="Code", order = 150, validators = {NotNullValidator.class})
 	private String code;
 
 	@ExportField(title="Organization", order = 200, validators = {ParentOrgResolutionValidator.class})

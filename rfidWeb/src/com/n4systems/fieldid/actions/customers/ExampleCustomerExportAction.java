@@ -74,7 +74,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 
 	@Override
 	public String getFileName() {
-		return ContentType.EXCEL.prepareFileName(getText("label.customer_export_file"));
+		return ContentType.EXCEL.prepareFileName(getText("label.export_file"));
 	}
 
 	@Override
