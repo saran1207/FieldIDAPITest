@@ -545,4 +545,10 @@ public class PathHandler {
 	public static File getCommonConfigFile(String fileName) {
 		return absolutize(mergePaths(COMMON_CONFIG_BASE, fileName));
 	}
+
+	public static File getReleaseNotesPath() {
+		
+		return absolutize(mergePaths(COMMON_PATH_BASE, "releaseNotes.xml"));
+		
+	}
 }

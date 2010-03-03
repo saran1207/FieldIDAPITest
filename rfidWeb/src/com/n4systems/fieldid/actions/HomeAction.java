@@ -11,6 +11,10 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.InstructionalVideo;
 import com.n4systems.model.Project;
+import com.n4systems.model.ui.releasenotes.ReleaseNoteFileSystemRepository;
+import com.n4systems.model.ui.releasenotes.ReleaseNoteLoader;
+import com.n4systems.model.ui.releasenotes.ReleaseNotes;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.JobListService;
 import com.n4systems.tools.Pager;
 
@@ -21,9 +25,13 @@ public class HomeAction extends AbstractAction {
 	private JobListService jobListService;
 	private List<InstructionalVideo> summary;
 	private Pager<Project> myJobs;
+	
+	private ReleaseNotes currentReleaseNotes;
+	private ReleaseNoteLoader loader;
 
 	public HomeAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
+		loader = new ReleaseNoteFileSystemRepository(PathHandler.getReleaseNotesPath());
 		
 	}
 
@@ -52,4 +60,13 @@ public class HomeAction extends AbstractAction {
 		} 
 		return myJobs;
 	}
+
+	public ReleaseNotes getCurrentReleaseNotes() {
+		if (currentReleaseNotes == null) {
+			currentReleaseNotes = loader.load();
+		}
+		return currentReleaseNotes;
+	}
+	
+	
 }

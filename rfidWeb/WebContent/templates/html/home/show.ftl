@@ -59,13 +59,14 @@
 
 <div id="relaseInformation" class="dashboardBlock dashboardBoardBottom">
 	<div id="releaseNotes" class="dashboardSection">
-		<h3><@s.text name="label.newfeaturesin"/> <@s.text name="app.majorversion"/> <span class="moreLink"><a href="<@s.url value="/resources/fieldID_release_notes-${action.getText('app.majorversion')}.pdf"/>" target="_blank"><@s.text name="label.more"/></a></span></h3>
-		<ul class="informationList">
-			<li>Safety Network Enhancements</li>
-			<li>New Icons on web and handheld</li>
-			<li>View Previous Inspection on handheld</li>
-			<li>Improved data syncing on handheld</li>
-		</ul>
+		<h3>${currentReleaseNotes.title?html} <span class="moreLink"><a href="<@s.url value="${currentReleaseNotes.url}"/>" target="_blank"><@s.text name="label.more"/></a> </span></h3>
+		<#if !currentReleaseNotes.bullets.empty>
+			<ul class="informationList">
+				<#list currentReleaseNotes.bullets as bullet>
+					<li>${bullet?html}</li>
+				</#list>
+			</ul>
+		</#if>
 	</div>
 	<div id="helpVideos" class="dashboardSection">
 		<h3 ><@s.text name="label.instructionalvidoes"/> <span class="moreLink"><a href="<@s.url action="instructionalVideos"/>"><@s.text name="label.more"/></a></span></h3>

@@ -337,6 +337,19 @@
 		<action name="reloadSafetyNetworkConnectionCache" method="reloadSafetyNetworkConnectionCachae" class="com.n4systems.fieldidadmin.actions.CacheControlAction">
 			<result name="success" type="freemarker">/templates/html/cacheControl/show.ftl</result>
 		</action>
+		
+		<action name="releaseNotes" method="show" class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
+			<result name="success" type="freemarker">/templates/html/releaseNotes/show.ftl</result>
+		</action>
+		<action name="releaseNotesEdit" method="edit" class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud"> 
+			<result name="success" type="freemarker">/templates/html/releaseNotes/edit.ftl</result>
+		</action>
+		
+		<action name="releaseNotesUpdate" method="update" class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
+			<result name="input" type="freemarker">/templates/html/releaseNotes/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/releaseNotes/edit.ftl</result>
+			<result name="success" type="redirectAction">releaseNotes</result>
+		</action>
 	</package>
 	
 	

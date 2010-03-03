@@ -19,6 +19,7 @@
 		<select id="navSelect" onchange="window.location = this.options[this.selectedIndex].value;">
 			<option value="organizations.action">Organizations</option>
 			<option value="eulas.action">EULA</option>
+			<option value="releaseNotes.action">Release Notes</option>
 			<option value="instructionalVideos.action">Instructional Videos</option>
 			<option value="findProductOptionList.action">Find Product Option</option>
 			<option value="unitOfMeasureList.action">Unit of Measures</option>
