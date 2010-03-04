@@ -3,7 +3,14 @@ ${action.setPageType('event_type_group', 'edit')!}
 	<h2><@s.text name="label.reasonfornotdeleteing"/></h2>
 	<div class="sectionContent">
 		<div class="infoSet">
-			<label class="line"><@s.text name="label.cannothaveanyinspectiontypes"/></label>
+			
+			<label class="line">
+				<#if action.canBeDeleted(group)>
+					<@s.text name="label.has_archived_inspection_types_contact_support"/>
+				<#else>
+					<@s.text name="label.cannothaveanyinspectiontypes"/>
+				</#if>
+			</label>
 		</div>
 	</div>
 	<div class="formAction">
