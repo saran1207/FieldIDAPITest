@@ -1,4 +1,4 @@
-<div class="ajaxView">
+<div class="lightBoxView">
 	<h2 class="modalHeader"><@s.text name="label.messagetitle" /></h2>
 	<p id="modalBox_message" style="text-align:center">
 		<#list actionErrors as error >

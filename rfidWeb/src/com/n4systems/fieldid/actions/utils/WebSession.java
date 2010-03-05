@@ -375,12 +375,12 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 		remove(KEY_QUICK_SETUP_WIZARD_IMPORTS);
 	}
 
-	public void setSessionBooted() {
-		put("session_booted", true);
-	}
 
-	public boolean isSessionBooted() {
-		Boolean sessionBooted = (Boolean)get("session_booted");
-		return sessionBooted != null ? sessionBooted : false;
+	public void setUserAuthHolder(Long id) {
+		put("userAthHolder", id);
+	}
+	
+	public Long getUserAuthHolder() {
+		return (Long)get("userAthHolder");
 	}
 }

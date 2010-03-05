@@ -14,21 +14,21 @@
 	
 	<@s.form action="logIntoSystem" theme="fieldid" cssClass="minForm" id="signInForm">
 		<#include "/templates/html/common/_formErrors.ftl" />
-		<@s.hidden name="normalLogin" id="normalLogin"/>
+		<@s.hidden name="signIn.normalLogin" id="normalLogin"/>
 		<div id="normal_container" class="togglable">
 			<label class="label"><@s.text name="label.username"/></label>
-			<@s.textfield name="userName" id="userName"/>
+			<@s.textfield name="signIn.userName" id="userName"/>
 			
 			<label class="label"><@s.text name="label.password"/></label>
-			<@s.password name="password" id="password"/>
+			<@s.password name="signIn.password" id="password"/>
 		</div>
 		
 		<div id="secureRfid_container" class="togglable" style="display:none">
 			<label class="label"><@s.text name="label.securityrfidnumber"/></label>
-			<@s.password name="secureRfid" id="secureRfidNumber"/>
+			<@s.password name="signIn.secureRfid" id="secureRfidNumber"/>
 		</div>
 		<div class="oneLine">
-			<span class="fieldHolder"><@s.checkbox name="rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
+			<span class="fieldHolder"><@s.checkbox name="signIn.rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
 		</div>
 		
 		

@@ -65,6 +65,29 @@ function quickLoginSubmit( event ) {
 		
 }
 
+function kickOtherUserSubmit( event ) {
+	
+	Event.stop(event);
+	var form = $('kickSessionConfirm');
+	
+	Lightview.show({
+		href: form.action,
+		rel: 'ajax',
+		title: loginWindowTitle,
+		options: {
+			topclose: false,
+			width: 500,
+			height: 300,
+			ajax: {
+				evalScripts: true,
+				method: form.method,
+				parameters: form.serialize() 
+			}
+		}
+	});
+		
+}
+
 
 
 new PeriodicalExecuter(testSession, minutesToSeconds(sessionTimeOut) + twoSeconds);

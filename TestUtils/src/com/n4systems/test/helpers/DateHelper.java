@@ -18,4 +18,12 @@ public class DateHelper {
 		return calendar.getTime();
 	}
 	
+	
+	public static Date addMinutesToDate(Date date, int minutes) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MINUTE, minutes);
+		return calendar.getTime();
+	}
+	
 }

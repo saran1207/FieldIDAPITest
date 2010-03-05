@@ -19,7 +19,7 @@
 			}
 			
 			function uploadAnotherFile() { 
-				var iframe = '<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/ajax" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="20" ></iframe>';
+				var iframe = '<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="20" ></iframe>';
 
 				$( "proofTestUploadFile" ).hide();
 				$( "proofTestUpload" ).insert( { top: iframe } );
@@ -66,7 +66,7 @@
 			<label><@s.select id="proofTestType" name="proofTestType" list="inspectionType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>
 			<span id="proofTestUpload" <#if proofTestTypeEnum?exists && !proofTestTypeEnum.uploadable >style="display:none"</#if> >
 				<#if !proofTestDirectory?exists || proofTestDirectory.length() == 0  >
-					<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/ajax" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="20" ></iframe>
+					<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="20" ></iframe>
 				</#if>
 				<span id="proofTestUploadFile" <#if !proofTestDirectory?exists || proofTestDirectory.length()  == 0  >style="display:none;"</#if> >
 					<a href="uploadAgain"  onclick="uploadAnotherFile(); return false;"><@s.text name="label.uploaddifferentfile"/></a>

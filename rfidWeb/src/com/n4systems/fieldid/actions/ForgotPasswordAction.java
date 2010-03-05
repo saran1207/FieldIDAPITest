@@ -9,7 +9,7 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 
-public class ForgotPasswordAction extends LoginAction {
+public class ForgotPasswordAction extends SignInAction {
 
 	private static final Logger logger = Logger.getLogger(ForgotPasswordAction.class);
 	private static final long serialVersionUID = 1L;

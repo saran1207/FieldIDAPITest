@@ -56,6 +56,7 @@ public enum ConfigEntry {
 	
 	
 	// ones below here are never overridden by the tenant.
+	ACTIVE_SESSION_TIME_OUT						(	"30"				),
 	FIELDID_ADMINISTRATOR_EMAIL					(	"team@fieldid.com"	),
 	SYSTEM_USER_USERNAME						(	"n4systems"				),
 	SYSTEM_USER_PASSWORD						(	"2a3bb4bc2f0cf8f2c09cd8aef2824a901d186fe7"	),

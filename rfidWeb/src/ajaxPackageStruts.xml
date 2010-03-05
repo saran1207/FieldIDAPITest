@@ -16,6 +16,7 @@
 			<result name="feature_required" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="user_permission_required" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="tenant_missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="sessionBooted" type="freemarker">/templates/ajax/common/sessionKick.ftl</result>
 		</global-results>
 
 	
@@ -159,36 +160,9 @@
 			<result name="success" type="freemarker">/templates/ajax/observationsCrud/addObservation.ftl</result>
 		</action>
 
-		<action name="uploadForm" method="form"
-			class="com.n4systems.fieldid.actions.shared.UploadFileAction">
-			<result name="success" type="freemarker">/templates/ajax/uploadFile/form.ftl</result>
-		</action>
+		
 
-		<action name="uploadFile" method="upload"
-			class="com.n4systems.fieldid.actions.shared.UploadFileAction">
-			<result name="error" type="freemarker">/templates/ajax/uploadFile/form.ftl</result>
-			<result name="input" type="freemarker">/templates/ajax/uploadFile/form.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/uploadFile/uploaded.ftl</result>
-		</action>
-
-		<action name="uploadImageForm" method="form"
-			class="com.n4systems.fieldid.actions.shared.UploadFileAction">
-			<result name="success" type="freemarker">/templates/ajax/uploadFile/imageForm.ftl</result>
-		</action>
-
-		<action name="uploadImage" method="upload"
-			class="com.n4systems.fieldid.actions.shared.UploadFileAction">
-			<result name="error" type="freemarker">/templates/ajax/uploadFile/imageForm.ftl</result>
-			<result name="input" type="freemarker">/templates/ajax/uploadFile/imageForm.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/uploadFile/imageUploaded.ftl</result>
-		</action>
-
-		<action name="inspection" method="show"
-			class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/show.ftl</result>
-			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="login" type="redirectAction">logon</result>
-		</action>
+		
 
 		<action name="inspectionBookOpen" method="open"
 			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
@@ -299,23 +273,13 @@
 			<result name="success" type="freemarker">/templates/ajax/unitOfMeasure/select.ftl</result>
 		</action>
 		
-		<action name="testSession" method="test" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="testSession" method="test" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="noSession" type="freemarker">/templates/ajax/login/noSession.ftl</result>
 			<result name="loggedIn" type="freemarker">/templates/ajax/login/loggedIn.ftl</result>
 		</action>
 		
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
-			<interceptor-ref name="brandedPublicStack" />
-			<result name="success" type="freemarker">/templates/ajax/login/form.ftl</result>
-		</action>
 		
-		<action name="createSession" method="create" class="com.n4systems.fieldid.actions.LoginAction">
-			<interceptor-ref name="brandedPublicStack" />
-			<result name="input" type="freemarker">/templates/ajax/login/form.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/login/complete.ftl</result>
-			<result name="eula" type="freemarker">/templates/ajax/login/complete.ftl</result>
-		</action>
 		
 		<action name="jobEventDelete" method="delete"
 			class="com.n4systems.fieldid.actions.projects.ProjectEventCrud">

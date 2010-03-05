@@ -17,6 +17,11 @@ public class CookieFactory {
 
 	private static final String CONTEXT_ROOT = "/";
 
+	
+	private final HttpServletRequest request;
+	private final HttpServletResponse response;
+	
+	
 	/**
 	 * Constructs a Cookie for a given name, value, TTL (in seconds) and valid
 	 * context path.
@@ -32,7 +37,7 @@ public class CookieFactory {
 	 *            The context path which this cookie will be valid for
 	 * @return The constructed Cookie
 	 */
-	public static Cookie createCookie(String name, String value, int ttl, String path) {
+	private static Cookie createCookie(String name, String value, int ttl, String path) {
 		Cookie cookie = new Cookie(name, value);
 
 		cookie.setMaxAge(ttl);
@@ -111,13 +116,22 @@ public class CookieFactory {
 	}
 
 	
+	
+	public CookieFactory(HttpServletRequest request, HttpServletResponse response) {
+		super();
+		this.request = request;
+		this.response = response;
+	}
+
+	
+	
 	/**
 	 * Locates a cookie value of the given name returns null if it is not found.
 	 * @param name
 	 * @param request
 	 * @return
 	 */
-	public static String findCookieValue(String name, HttpServletRequest request) {
+	public String findCookieValue(String name) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
@@ -128,5 +142,12 @@ public class CookieFactory {
 		}
 		return null;
 	}
+	
+	public void addCookie(Cookie cookie) {
+		response.addCookie(cookie);
+	}
 
+	public void removeCookie(String cookieName) {
+		response.addCookie(CookieFactory.createDeleteCookie("loginTypeSecurityCard"));
+	}
 }

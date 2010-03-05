@@ -1,6 +1,7 @@
 package com.n4systems.model.activesession;
 
 import static com.n4systems.model.builders.UserBuilder.*;
+import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -11,7 +12,6 @@ import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
 
@@ -85,9 +85,17 @@ public class ActiveSessionSaverTest {
 	
 	
 
-	@Test(expected=NotImplementedException.class)
-	public void should_not_allow_updates_of_active_session() {
-		createQueryBuildOverridenActiveSessionSaver(null).update((EntityManager)null, (ActiveSession)null);
+	@Test()
+	public void should_update_active_session_by_loading_the_existing_one_and_updating_the_last_touch_time() {
+		EntityManager em = createMock(EntityManager.class);
+		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_1);
+		
+		expect(em.find(ActiveSession.class, user.getId())).andReturn(activeSession);
+		expect(em.merge(activeSession)).andReturn(activeSession);
+		replay(em);
+		
+		createQueryBuildOverridenActiveSessionSaver(null).update(em, new ActiveSession(user, A_SESSION_ID_2));
+		verify(em);
 	}
 
 	

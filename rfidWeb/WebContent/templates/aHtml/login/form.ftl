@@ -13,13 +13,13 @@
       <@s.actionerror />
   </div>
 </div>
-<@s.form action="createSession" namespace="/ajax" id="quickLoginForm" theme="fieldid" cssClass="easyForm">
+<@s.form action="createSession" namespace="/aHtml" id="quickLoginForm" theme="fieldid" cssClass="easyForm">
 	<#include "/templates/html/common/_formErrors.ftl" />
 	<@s.hidden name="companyID" id="companyID"/>
-	<@s.hidden name="userName" id="userName"/>
+	<@s.hidden name="signIn.userName" id="userName"/>
 	
 	<label class='label'><@s.text name="label.password"/></label>
-	<@s.password name="password" id="password"/>
+	<@s.password name="signIn.password" id="password"/>
 	<div class="formAction">
 		<@s.submit name="hbutton.login" id="loginButton"/>
 	</div>

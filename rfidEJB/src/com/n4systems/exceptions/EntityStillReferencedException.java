@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class EntityStillReferencedException extends Exception {
+public class EntityStillReferencedException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public EntityStillReferencedException() {

@@ -19,6 +19,7 @@ import com.n4systems.model.utils.PlainDate;
 @SuppressWarnings("serial")
 public class DateHelper {
 	public static final long millisPerDay = 86400000;
+	public static final long millisPerMinute = 60000;
 
 	/** Fields for truncate and increment methods */
 	public static final int MILLISECOND = 0;
@@ -201,15 +202,28 @@ public class DateHelper {
 	public static Long millisToDays(Long millis) {
 		return millis / millisPerDay;
 	}
+	
+	
+	public static Long millisToMinutes(Long millis) {
+		return millis / millisPerMinute;
+	}
 
 	public static Date addDaysToDate(Date date, Long days) {
 		return increment(date, DAY, days.intValue());
 	}
 
 	public static Long getDaysDelta(Date first, Date second) {
-		return millisToDays(second.getTime() - first.getTime());
+		return millisToDays(millisecondDifference(first, second));
 	}
 
+	private static long millisecondDifference(Date first, Date second) {
+		return second.getTime() - first.getTime();
+	}
+	
+	public static Long getMinutesDelta(Date first, Date second) {
+		return millisToMinutes(millisecondDifference(first, second));
+	}
+ 
 	public static Long getDaysFromToday(Date date) {
 		return getDaysDelta(getToday(), date);
 	}

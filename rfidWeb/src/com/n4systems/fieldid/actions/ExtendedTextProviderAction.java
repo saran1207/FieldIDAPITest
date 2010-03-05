@@ -17,7 +17,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.TextParseUtil;
 import com.opensymphony.xwork2.util.ValueStack;
 
-public abstract class ExtendedTextProviderAction extends ActionSupport {
+public abstract class ExtendedTextProviderAction extends ActionSupport implements WebAction {
 	private static final long serialVersionUID = 1L;
 
 	private WebSession session;

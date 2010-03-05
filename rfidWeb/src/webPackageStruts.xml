@@ -1099,22 +1099,33 @@
 			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
 		</action>
 
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="alreadyLoggedIn" type="redirectAction">home</result>
+			
 		</action>
-
-		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.LoginAction">
+		
+		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
-			<result name="input" type="freemarker">/templates/html/login/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="success" type="redirectAction">home</result>
 			<result name="redirect" type="redirect">
 				<param name="location">${previousUrl}</param>
 			</result>
 		</action>
 
-		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.SignInAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="input" type="freemarker">/templates/html/login/form.ftl</result>
+			<result name="success" type="redirectAction">home</result>
+			<result name="redirect" type="redirect">
+				<param name="location">${previousUrl}</param>
+			</result>
+			<result name="confirmKick" type="freemarker">/templates/html/login/confirmKick.ftl</result>
+		</action>
+
+		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="redirectAction">login</result>
 		</action>

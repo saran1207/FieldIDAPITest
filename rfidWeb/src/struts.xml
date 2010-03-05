@@ -83,6 +83,10 @@
 		<default-interceptor-ref name="flashSecureStack" />
 
 		<global-results>
+			<result name="sessionBooted" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">logout</param>
+			</result>
 			<result name="login" type="redirectAction">login</result>
 			<result name="require_eula" type="redirectAction">
 				<param name="actionName">eulaAcceptanceAdd</param>
@@ -108,7 +112,7 @@
 	</package>
 
 	<package name="embedded" extends="default" namespace="/embedded">
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction" >
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction" >
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/embedded.ftl</result>
 			<result name="alreadyLoggedIn" type="freemarker">/templates/html/login/embedded.ftl</result>
