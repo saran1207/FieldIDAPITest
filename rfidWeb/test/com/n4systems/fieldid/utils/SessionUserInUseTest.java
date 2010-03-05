@@ -19,8 +19,8 @@ import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.test.helpers.DateHelper;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.NonDataSourceBackedConfigContext;
 import com.n4systems.util.time.Clock;
 import com.n4systems.util.time.StoppedClock;
 import com.n4systems.util.time.SystemClock;
@@ -226,5 +226,18 @@ public class SessionUserInUseTest {
 			this.lastTouched = lastTouched;
 		}
 		
+	}
+
+	private class NonDataSourceBackedConfigContext extends ConfigContext {
+
+		
+		public NonDataSourceBackedConfigContext() {
+			super();
+			markDirty();
+		}
+		
+		protected void reloadConfigurations() {
+			configruations.clear();
+		}
 	}
 }
