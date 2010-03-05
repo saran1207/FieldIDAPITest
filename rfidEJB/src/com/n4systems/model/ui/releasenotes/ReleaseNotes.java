@@ -15,7 +15,7 @@ public class ReleaseNotes {
 	
 	@XStreamAlias("url")
    	@XStreamAsAttribute
-	private String url;
+	private String url = "#";
 	
 	@XStreamAlias("bullets")
 	private List<BulletPoint> bullets = new ArrayList<BulletPoint>();
