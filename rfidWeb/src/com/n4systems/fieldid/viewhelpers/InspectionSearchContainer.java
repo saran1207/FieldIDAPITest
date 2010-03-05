@@ -36,7 +36,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private Date fromDate;
 	private Date toDate;
 	
-	private Status status = Status.PASS;
+	private Status status;
 	
 	public InspectionSearchContainer(SecurityFilter filter) {
 		super(Inspection.class, "id", filter, joinColumns);
