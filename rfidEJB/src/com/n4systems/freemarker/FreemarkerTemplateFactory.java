@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.util.mail.MailMessage.ContentType;
+import com.n4systems.util.mail.MailMessage.MessageType;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
@@ -17,7 +17,7 @@ public class FreemarkerTemplateFactory {
 
 	private static Configuration config;
 	
-	private static final ContentType[] fileTypes = { ContentType.HTML, ContentType.PLAIN };
+	private static final MessageType[] fileTypes = { MessageType.HTML, MessageType.PLAIN };
 	private static final String templateExtention = "ftl";
 	
 	public static synchronized Configuration getConfig() throws IOException {
@@ -35,16 +35,16 @@ public class FreemarkerTemplateFactory {
 		return config;
 	}
 
-	public static Template getTemplate(String templatePath, ContentType contentType) throws IOException {
+	public static Template getTemplate(String templatePath, MessageType contentType) throws IOException {
 		return getConfig().getTemplate(fullTemplateName(templatePath, contentType));
 	}
 
-	private static String fullTemplateName(String templatePath, ContentType contentType) {
+	private static String fullTemplateName(String templatePath, MessageType contentType) {
 		return templatePath + "." + contentType.fileExtension() + "." + templateExtention;
 	}
 	
-	public static ContentType getTemplateType(String templateName) {
-		for (ContentType type : fileTypes) {
+	public static MessageType getTemplateType(String templateName) {
+		for (MessageType type : fileTypes) {
 			try {
 				if (getTemplate(templateName, type) != null) { 
 					return type;

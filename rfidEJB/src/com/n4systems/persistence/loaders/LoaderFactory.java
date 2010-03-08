@@ -15,6 +15,7 @@ import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
+import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
@@ -319,6 +320,10 @@ public class LoaderFactory {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}
 
+	public UnreadMessageCountLoader createUnreadMessageCountLoader() {
+		return new UnreadMessageCountLoader(filter);
+	}
+
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
@@ -334,7 +339,7 @@ public class LoaderFactory {
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}

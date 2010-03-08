@@ -17,7 +17,6 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.utils.LazyLoadingList;
 import com.n4systems.reporting.ProductCertificateReportGenerator;
-import com.n4systems.util.mail.MailMessage;
 
 public class PrintAllProductCertificatesTask extends DownloadTask {
 	private final ProductCertificateReportGenerator certGen;
@@ -56,7 +55,7 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 	protected void sendFailureNotification(MailManager mailManager, DownloadLink downloadLink, Exception cause) throws MessagingException {
 		// if the failure was caused by an empty report, we send a message.  Otherwise the failure is silent to the end user
 		if (cause instanceof EmptyReportException) {
-			mailManager.sendMessage(new MailMessage(downloadLink, "We're sorry, your report did not conain any Products with manufacturer certificates."));
+			mailManager.sendMessage(downloadLink.generateMailMessage("We're sorry, your report did not conain any Products with manufacturer certificates."));
 		}
 	}
 	

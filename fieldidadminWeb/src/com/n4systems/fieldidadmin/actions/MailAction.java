@@ -1,8 +1,15 @@
 package com.n4systems.fieldidadmin.actions;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+
 import com.n4systems.ejb.MailManagerImpl;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.mail.MailMessage;
-import com.n4systems.util.mail.MailMessage.ContentType;
+import com.n4systems.util.mail.MailMessage.MessageType;
 
 public class MailAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
@@ -20,14 +27,16 @@ public class MailAction extends AbstractAdminAction {
 	
 	public String doSend() {
 		try {
-			ContentType contentType = html ? MailMessage.ContentType.HTML : MailMessage.ContentType.PLAIN;
-			MailMessage message = new MailMessage(contentType, subject, body);
+			MessageType contentType = html ? MailMessage.MessageType.HTML : MailMessage.MessageType.PLAIN;
+			MailMessage message = new MailMessage(contentType, ConfigContext.getCurrentContext());
+			message.setSubject(subject);
+			message.setBody(body);
 			message.getToAddresses().add(toAddress);
 			
-			
-			
 			if(attachmentPath != null && attachmentPath.length() > 0) {
-				message.addAttachment(attachmentPath);
+				File attachment = new File(attachmentPath);
+				
+				message.getAttachments().put(attachment.getName(), getFileData(attachment));
 			}
 			new MailManagerImpl().sendMessage(message);
 			
@@ -41,6 +50,19 @@ public class MailAction extends AbstractAdminAction {
 		return SUCCESS;
 	}
 
+	private byte[] getFileData(File summaryFileOutput) {
+		byte[] data = null;
+		InputStream in = null;
+		try {
+			data = IOUtils.toByteArray(in);
+		} catch (IOException e) {
+			
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+		return data;
+	}
+	
 	public String getToAddress() {
 		return toAddress;
 	}

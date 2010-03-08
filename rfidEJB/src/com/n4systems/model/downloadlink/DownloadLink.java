@@ -17,6 +17,7 @@ import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.util.mail.MailMessage;
 
 @Entity
 @Table(name = "downloads")
@@ -120,5 +121,9 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 		if (!parentDir.isDirectory() && !parentDir.mkdirs()) {
 			throw new SecurityException("Could not create directory [" + parentDir.toString() + "]");
 		}
+	}
+	
+	public MailMessage generateMailMessage(String body) {
+		return new MailMessage(getName(), body, getUser().getEmailAddress());
 	}
 }

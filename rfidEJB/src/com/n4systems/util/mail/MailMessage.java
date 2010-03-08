@@ -1,11 +1,5 @@
 package com.n4systems.util.mail;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,22 +21,18 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.commons.io.IOUtils;
-
-import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.StringUtils;
 
 public class MailMessage implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	
-	private String subjectPrefix;
+	private final ConfigContext config;
+	private final MessageType contentType;
+	
 	private String subject;
-	private String bodyHeader;
 	private String body;
-	private String bodyFooter;
-	private String fromAddress;
-	private String replyTo;
-	private ContentType contentType = ContentType.HTML;
 	private Set<String> toAddresses = new HashSet<String>();
 	private Set<String> ccAddresses = new HashSet<String>();
 	private Set<String> bccAddresses = new HashSet<String>();
@@ -51,13 +41,13 @@ public class MailMessage implements Serializable {
 	// this is only used in compiling the message
 	transient private Message message;
 	
-	public enum ContentType {
+	public enum MessageType {
 		PLAIN("text/plain", "txt"), HTML("text/html", "html");
 		
 		private String contentTypeString;
 		private String fileExtension;
 		
-		ContentType(String contentTypeString, String fileExtension) {
+		MessageType(String contentTypeString, String fileExtension) {
 			this.contentTypeString = contentTypeString;
 			this.fileExtension = fileExtension;
 		}
@@ -75,35 +65,25 @@ public class MailMessage implements Serializable {
 		}
 	}
 	
-	public MailMessage() {}
+	public MailMessage(MessageType type, ConfigContext config) {
+		this.contentType = type;
+		this.config = config;
+	}
 	
-	public MailMessage(ContentType contentType, String subject, String body) {
-		setContentType(contentType);
+	public MailMessage(String subject, String body, String...toAddresses) {
+		this(MessageType.HTML, ConfigContext.getCurrentContext());
 		setSubject(subject);
 		setBody(body);
-	}
-	
-	public MailMessage(String subject, String body) {
-		this(ContentType.HTML, subject, body);
-	}
-	
-	public MailMessage(String subject, String body, String toAddress) {
-		this(subject, body);
-		getToAddresses().add(toAddress);
-	}
-	
-	public MailMessage(DownloadLink link, String body) {
-		this(link.getName(), body, link.getUser().getEmailAddress());
+
+		for (String toAddr: toAddresses) {
+			getToAddresses().add(toAddr);
+		}
 	}
 
-	public String getSubjectPrefix() {
-		return subjectPrefix;
+	public MessageType getContentType() {
+		return contentType;
 	}
-
-	public void setSubjectPrefix(String subjectPrefix) {
-		this.subjectPrefix = subjectPrefix;
-	}
-
+	
 	public String getSubject() {
 		return subject;
 	}
@@ -112,44 +92,20 @@ public class MailMessage implements Serializable {
 		this.subject = subject;
 	}
 
-	public String getBodyHeader() {
-		return bodyHeader;
-	}
-
-	public void setBodyHeader(String bodyHeader) {
-		this.bodyHeader = bodyHeader;
-	}
-
-	public String getBody() throws MessagingException {
+	public String getBody() {
 		return body;
 	}
 
 	public void setBody(String body) {
 		this.body = body;
 	}
-
-	public String getBodyFooter() {
-		return bodyFooter;
-	}
-
+	
 	public String getFromAddress() {
-		return fromAddress;
-	}
-
-	public void setFromAddress(String fromAddress) {
-		this.fromAddress = fromAddress;
+		return config.getString(ConfigEntry.MAIL_FROM_ADDR);
 	}
 	
-	public void setBodyFooter(String bodyFooter) {
-		this.bodyFooter = bodyFooter;
-	}
-
-	public ContentType getContentType() {
-		return contentType;
-	}
-
-	private void setContentType(ContentType contentType) {
-		this.contentType = contentType;
+	public String getReplyTo() {
+		return config.getString(ConfigEntry.MAIL_REPLY_TO);
 	}
 
 	public Set<String> getToAddresses() {
@@ -175,66 +131,37 @@ public class MailMessage implements Serializable {
 	public void setBccAddresses(Set<String> bccAddresses) {
 		this.bccAddresses = bccAddresses;
 	}
+	
+	public String getFullSubject() {
+		String fullSubject = config.getString(ConfigEntry.MAIL_SUBJECT_PREFIX) + getSubject();
+		return fullSubject;
+	}
 
-
-	public String getReplyTo() {
-		return replyTo;
-	}
-
-	public void setReplyTo(String replyTo) {
-		this.replyTo = replyTo;
-	}
-	
-	public void removeAllAttachments() {
-		attachments.clear();
-	}
-	
-	public void removeAttachment(String name) {
-		if(name != null) {
-			attachments.remove(name);
-		}
-	}
-	
-	public void addAttachment(String fileName, byte[] data) {
-		attachments.put(fileName, data);
-	}
-	
-	public void addAttachment(String filePath) throws FileNotFoundException, IOException {
-		addAttachment(new File(filePath));
-	}
-	
-	public void addAttachment(File file) throws FileNotFoundException, IOException {
-		InputStream is = null;
-		BufferedInputStream bIs = null;
+	public String getFullBody() {
+		boolean isHtml = getContentType().isHtml();
 		
-		// Integer max is 2GB .. very few mta/mda's or mail clients for that matter will support a size even close to this
-		// ... also anything larger would clog the interweb tubes :)
-		if(file.length() > Integer.MAX_VALUE) {
-			throw new IOException("File Attachment too large: length: [" + file.length() + "] bytes, max: [" + Integer.MAX_VALUE + "] bytes");
-		}
-		byte[] data = new byte[(int)file.length()];
+		ConfigEntry headerConfig = isHtml ? ConfigEntry.MAIL_BODY_HTML_HEADER : ConfigEntry.MAIL_BODY_PLAIN_HEADER;
+		ConfigEntry footerConfig = isHtml ? ConfigEntry.MAIL_BODY_HTML_FOOTER : ConfigEntry.MAIL_BODY_PLAIN_FOOTER;
 		
-		try {
-			is = new FileInputStream(file);
-			bIs = new BufferedInputStream(is);
-			
-			bIs.read(data);
-			
-		} finally {
-			IOUtils.closeQuietly(bIs);
-			IOUtils.closeQuietly(is);
-		}
+		String fullBody = config.getString(headerConfig) + getBody() + config.getString(footerConfig);
+		return fullBody;
+	}
 	
-		addAttachment(file.getName(), data);
+	public Map<String, byte[]> getAttachments() {
+		return attachments;
+	}
+	
+	public void setAttachments(Map<String, byte[]> attachments) {
+		this.attachments = attachments;
 	}
 	
 	public Message compileMessage(Session session) throws MessagingException {
 		message = new MimeMessage(session);
 		
 		message.setFrom(stringToAddress(getFromAddress()));
-		message.setSubject(getSubjectPrefix() + getSubject());
+		message.setSubject(getFullSubject());
 		
-		if(replyTo != null && replyTo.length() > 0) {
+		if (StringUtils.isNotEmpty(getReplyTo())) {
 			message.addHeader("Reply-To", getReplyTo());
 		}
 		
@@ -267,7 +194,7 @@ public class MailMessage implements Serializable {
 	
 	private BodyPart createMainMessageBodyPart() throws MessagingException {
 		MimeBodyPart part = new MimeBodyPart();
-		part.setContent(getBodyHeader() + getBody() + getBodyFooter(), getContentType().getContentTypeString());
+		part.setContent(getFullBody(), getContentType().getContentTypeString());
 		return part;
 	}
 	
@@ -283,27 +210,17 @@ public class MailMessage implements Serializable {
 	    return part;
 	}
 	
-	
-	
-
 	@Override
 	public String toString() {
-		try {
-			return "MailMessage: " 
-				+ "subjectPrefix [" + subjectPrefix
-				+ "] subject [" + subject
-				+ "] bodyHeader [" + bodyHeader
-				+ "] body [" + getBody() 
-				+ "] bodyFooter [" + bodyFooter
-				+ "] fromAddress [" + fromAddress
-				+ "] replyTo [" + replyTo
-				+ "] contentType [" + getContentType().toString()
-				+ "] toAddresses [" + toAddresses
-				+ "] ccAddresses [" + ccAddresses
-				+ "] bccAddresses [" + bccAddresses
-				+ "] attachments [" + attachments.keySet() + "]";
-		} catch (MessagingException e) {
-			throw new RuntimeException("could not produce message string", e);
-		}
+		return "MailMessage: " 
+			+ "fullSubject [" + getFullSubject()
+			+ "] fullBody [" + getFullBody()
+			+ "] fromAddress [" + getFromAddress()
+			+ "] replyTo [" + getReplyTo()
+			+ "] contentType [" + getContentType().toString()
+			+ "] toAddresses [" + getToAddresses()
+			+ "] ccAddresses [" + getCcAddresses()
+			+ "] bccAddresses [" + getBccAddresses()
+			+ "] attachments [" + attachments.keySet() + "]";
 	}
 }

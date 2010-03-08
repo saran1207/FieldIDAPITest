@@ -4,35 +4,35 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mail.MessagingException;
-
 import com.n4systems.freemarker.FreemarkerTemplateFactory;
+import com.n4systems.util.ConfigContext;
 
 import freemarker.template.Template;
 
 public class TemplateMailMessage extends MailMessage {
 	private static final long serialVersionUID = 1L;
 	
-	private String templateName;
+	private String templatePath;
 	private Map<String, Object> templateMap = new HashMap<String, Object>();
 
-	private ContentType templateType;
+	private MessageType templateType;
 	
 	public TemplateMailMessage() {
-		this(null, null);
+		super(MessageType.HTML, ConfigContext.getCurrentContext());
 	}
 	
 	public TemplateMailMessage(String subject, String templatePath) {
-		super(subject, null);
-		this.templateName = templatePath;
+		this();
+		setSubject(subject);
+		setTemplatePath(templatePath);
 	}
 	
 	public String getTemplatePath() {
-		return templateName;
+		return templatePath;
 	}
 
 	public void setTemplatePath(String templatePath) {
-		this.templateName = templatePath;
+		this.templatePath = templatePath;
 	}
 
 	public Map<String, Object> getTemplateMap() {
@@ -45,27 +45,27 @@ public class TemplateMailMessage extends MailMessage {
 	
 	public void setEmailConent(String bodyContent) {
 		templateMap.put("content", bodyContent);
-		templateName = "injectBody";
+		templatePath = "injectBody";
 	}
 
 	@Override
-	public String getBody() throws MessagingException {
+	public String getBody() {
 		StringWriter body = new StringWriter();
 		
 		try {
-			Template template = FreemarkerTemplateFactory.getTemplate(templateName, getContentType());
+			Template template = FreemarkerTemplateFactory.getTemplate(templatePath, getContentType());
 			template.process(templateMap, body);
 		} catch(Exception e) {
-			throw new MessagingException("Could not render template body", e);
+			throw new MailException("Could not render template body", e);
 		}
 		
 		return body.toString();
 	}
 
 	@Override
-	public ContentType getContentType() {
+	public MessageType getContentType() {
 		if (templateType == null) {
-			templateType = FreemarkerTemplateFactory.getTemplateType(templateName);
+			templateType = FreemarkerTemplateFactory.getTemplateType(templatePath);
 		}
 		return templateType;
 	}

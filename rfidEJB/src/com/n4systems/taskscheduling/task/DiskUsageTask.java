@@ -2,6 +2,7 @@ package com.n4systems.taskscheduling.task;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.mail.MessagingException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Tenant;
@@ -100,18 +102,29 @@ public class DiskUsageTask extends ScheduledTask {
 	}
 
 	private MailMessage createMessage(List<TenantDiskUsageCalculator> summaries) {
-		
 		String subject = "Disk Usage for " + DateHelper.date2String("yyyy-MM-dd", new Date());
 		String body = "<h1>Disk Usage Attached</h1>";
 		
-		MailMessage message = new MailMessage(subject, body, ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
+		MailMessage message = null;
 		try {
 			File summaryFileOutput = createSummaryFileOutput(summaries);
-			message.addAttachment(summaryFileOutput);
-		} catch (IOException e) {
-			//crap.
-		}
+			message = new MailMessage(subject, body, ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
+			message.getAttachments().put(summaryFileOutput.getName(), getFileData(summaryFileOutput));
+		} catch (IOException e) {}
+
+		
 		return message;
+	}
+	
+	private byte[] getFileData(File summaryFileOutput) throws IOException {
+		byte[] data = null;
+		InputStream in = null;
+		try {
+			data = IOUtils.toByteArray(in);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+		return data;
 	}
 
 }
