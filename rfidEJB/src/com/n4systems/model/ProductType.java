@@ -76,7 +76,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private Set<FileAttachment> attachments = new HashSet<FileAttachment>();
+	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<ProductType> subTypes = new HashSet<ProductType>();
@@ -409,11 +409,11 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 
 	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
-	public Set<FileAttachment> getAttachments() {
+	public List<FileAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments( Set<FileAttachment> attachments ) {
+	public void setAttachments( List<FileAttachment> attachments ) {
 		this.attachments = attachments;
 	}
 

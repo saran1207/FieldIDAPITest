@@ -5,9 +5,7 @@ import static com.n4systems.model.builders.ProductBuilder.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -20,17 +18,17 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	private final InspectionType inspectionType;
 	private final Product product;
 	private final List<SubInspection> subInspections;
-	private final Set<FileAttachment> attachments;
+	private final List<FileAttachment> attachments;
 	private final boolean printable;
 	
 	private final Date inspectionDate;
 	
 		
 	public static InspectionBuilder anInspection() {
-		return new InspectionBuilder(anInspectionType().build(), aProduct().build(), new ArrayList<SubInspection>(), new Date(), new HashSet<FileAttachment>(), true);
+		return new InspectionBuilder(anInspectionType().build(), aProduct().build(), new ArrayList<SubInspection>(), new Date(), new ArrayList<FileAttachment>(), true);
 	}
 	
-	private InspectionBuilder(InspectionType type, Product product, List<SubInspection> subInspections, Date inspectionDate, Set<FileAttachment> attachements, boolean printable) {
+	private InspectionBuilder(InspectionType type, Product product, List<SubInspection> subInspections, Date inspectionDate, List<FileAttachment> attachements, boolean printable) {
 		this.inspectionType = type;
 		this.product = product;
 		this.subInspections = subInspections;
@@ -56,7 +54,7 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments, printable);
 	}
 	
-	public InspectionBuilder withAttachment(Set<FileAttachment> attachments) {
+	public InspectionBuilder withAttachment(List<FileAttachment> attachments) {
 		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments, printable);
 	}
 	

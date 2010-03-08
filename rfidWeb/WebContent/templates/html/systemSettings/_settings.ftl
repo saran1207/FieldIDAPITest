@@ -1,7 +1,7 @@
 <head>
 	<@n4.includeScript src="logoUpload"/>
 	<@n4.includeScript>
-		uploadImageUrl = '<@s.url action="uploadImageForm" namespace="/aHtml"/>';
+		uploadImageUrl = '<@s.url action="uploadImageForm" namespace="/aHtml/iframe"/>';
 	</@n4.includeScript>
 	<style type="text/css">
 		#previewImage {
@@ -45,7 +45,7 @@
 				</span><br/>
 				<span id="imageUploadField"  >
 					<#if !imageDirectory?exists || imageDirectory.length() == 0  || removeImage >
-						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
+						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/iframe" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
 					</#if>
 					<span id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !imageDirectory?exists || imageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
 						

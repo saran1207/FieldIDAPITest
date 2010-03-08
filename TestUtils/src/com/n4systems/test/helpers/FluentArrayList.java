@@ -3,6 +3,7 @@ package com.n4systems.test.helpers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class FluentArrayList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,12 @@ public class FluentArrayList<E> extends ArrayList<E> {
 	}
 	
 	public FluentArrayList<E> stickOn(E...objs) {
-		this.addAll(Arrays.asList(objs));
+		this.stickOn(Arrays.asList(objs));
+		return this;
+	}
+	
+	public FluentArrayList<E> stickOn(List<E> objs) {
+		this.addAll(objs);
 		return this;
 	}
 	

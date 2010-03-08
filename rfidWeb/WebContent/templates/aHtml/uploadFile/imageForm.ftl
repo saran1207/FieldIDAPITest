@@ -5,7 +5,7 @@
 			}
 		</style>
 </head>	
-<@s.form method="POST" action="uploadImage" namespace="/ajax" theme="simple"  enctype="multipart/form-data" style="height:20px;">
+<@s.form method="POST" action="uploadImage" theme="simple"  enctype="multipart/form-data" style="height:20px;">
 	<@s.file name="upload" onchange="$('progress').show(); this.form.submit();" />
 	<@s.hidden name="frameId"/>
 	<@s.hidden name="frameCount"/>

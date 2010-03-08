@@ -93,8 +93,8 @@ public class CopyInspectionFactory {
 		newInspection.setFormVersion(originalInspection.getFormVersion());
 	}
 	
-	protected static Set<FileAttachment> copyFileAttachments( Set<FileAttachment> oldFileAttachments ) {
-		Set<FileAttachment> newFileAttachments = new HashSet<FileAttachment>();
+	protected static List<FileAttachment> copyFileAttachments( List<FileAttachment> oldFileAttachments ) {
+		List<FileAttachment> newFileAttachments = new ArrayList<FileAttachment>();
 		
 		for( FileAttachment oldFileAttachment : oldFileAttachments ) {
 			FileAttachment newFileAttachment = new FileAttachment();

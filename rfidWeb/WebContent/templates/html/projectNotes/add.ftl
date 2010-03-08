@@ -4,7 +4,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/fileUpload.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/projects.js"/>"></script>
 	<script type="text/javascript">
-		uploadUrl = '<@s.url action="uploadForm" namespace="/aHtml" />';
+		uploadUrl = '<@s.url action="uploadForm" namespace="/aHtml/iframe" />';
 		removeText = '<@s.text name="label.remove"/>';
 	</script>
 	

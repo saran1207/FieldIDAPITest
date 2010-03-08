@@ -109,4 +109,6 @@
 			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
 		</action>
 	</package>
+	
+	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />
 </struts>

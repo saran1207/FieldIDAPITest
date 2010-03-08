@@ -19,12 +19,15 @@
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
 		<pattern>*ajax/*.action*</pattern>
 		<pattern>*public/ajax/*.action*</pattern>
-		
 	</decorator>
+	
 	<decorator name="aHtmlLayout" page="/templates/aHtml/layout/layout.ftl">
 		<pattern>*aHtml/*.action*</pattern>
 	</decorator>
 	
+	<decorator name="aHtmlIframeLayout" page="/templates/aHtml/layout/htmlLayout.ftl">
+		<pattern>*aHtml/iframe/*.action*</pattern>
+	</decorator>
 	
 	<decorator name="brandedLayout" page="brandedPublicLayout.ftl">
 		<pattern>*eulaAcceptance*.action*</pattern>

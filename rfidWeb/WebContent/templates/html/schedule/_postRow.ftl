@@ -5,7 +5,7 @@
 <td>
 	<#if inspectionId != "0">
 		<#include "../inspectionCrud/_inspectionViewLightBoxOptions.ftl"/>
-		<a href='<@s.url action="inspection" namespace="/aHtml" uniqueID="${inspectionId}" productId="${productId}"/>'  ${inspectionLightViewOptions} >
+		<a href='<@s.url action="inspection" namespace="/aHtml/iframe" uniqueID="${inspectionId}" productId="${productId}"/>'  ${inspectionLightViewOptions} >
 			<@s.text name="label.viewinspection"/>
 		</a>
 	<#elseif sessionUser.hasAccess("createinspection") >

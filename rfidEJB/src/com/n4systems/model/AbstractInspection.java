@@ -1,7 +1,9 @@
 package com.n4systems.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +51,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private Set<FileAttachment> attachments = new HashSet<FileAttachment>();
+	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
 	@CollectionOfElements(fetch=FetchType.LAZY)
     private Map<String, String> infoOptionMap = new HashMap<String, String>();
@@ -130,11 +132,11 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	}
 
 	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
-	public Set<FileAttachment> getAttachments() {
+	public List<FileAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(Set<FileAttachment> attachments) {
+	public void setAttachments(List<FileAttachment> attachments) {
 		this.attachments = attachments;
 	}
 	
@@ -165,8 +167,8 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
     	this.formVersion = formVersion;
     }
 	
-	public Set<FileAttachment> getImageAttachments() {
-		Set<FileAttachment> imageAttachments = new HashSet<FileAttachment>();
+	public List<FileAttachment> getImageAttachments() {
+		List<FileAttachment> imageAttachments = new ArrayList<FileAttachment>();
 		for (FileAttachment fileAttachment : attachments) {
 			if (fileAttachment.isImage()) {
 				imageAttachments.add(fileAttachment);

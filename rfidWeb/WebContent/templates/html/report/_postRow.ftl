@@ -10,7 +10,7 @@
 </#if>
 <td>
 	<#include "../inspectionCrud/_inspectionViewLightBoxOptions.ftl"/>
-	<a href='<@s.url action="inspection" namespace="/aHtml" uniqueID="${entityId}"/>'  ${inspectionLightViewOptions} ><@s.text name="link.view" /></a>
+	<a href='<@s.url action="inspection" namespace="/aHtml/iframe" uniqueID="${entityId}"/>'  ${inspectionLightViewOptions} ><@s.text name="link.view" /></a>
 	<#if sessionUser.hasAccess("editinspection") && localInspection>
 		 | <a href='<@s.url action="selectInspectionEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
 	</#if>

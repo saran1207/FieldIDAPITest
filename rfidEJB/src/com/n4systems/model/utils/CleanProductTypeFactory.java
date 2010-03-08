@@ -42,7 +42,7 @@ public class CleanProductTypeFactory {
 		originalType.setModifiedBy(null);
 		originalType.setImageName(null);
 		originalType.setGroup(null);
-		originalType.setAttachments(new HashSet<FileAttachment>());
+		originalType.setAttachments(new ArrayList<FileAttachment>());
 		originalType.setSchedules(new HashSet<ProductTypeSchedule>());
 		originalType.setSubTypes(new HashSet<ProductType>());
 		originalType.setSchedules(new HashSet<ProductTypeSchedule>());

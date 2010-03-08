@@ -11,7 +11,7 @@
 		removeAssetUrl = "<@s.url action="jobAssetDelete" namespace="/ajax"/>";
 		removeNoteUrl = "<@s.url action="jobNoteDelete" namespace="/ajax"/>";
 		removeNoteWarning = '<@s.text name="warning.deleteprojectnote"/>';
-		uploadUrl = '<@s.url action="uploadForm" namespace="/aHtml" />';
+		uploadUrl = '<@s.url action="uploadForm" namespace="/aHtml/iframe" />';
 		removeText = '<@s.text name="label.remove"/>';
 	</script>
 	

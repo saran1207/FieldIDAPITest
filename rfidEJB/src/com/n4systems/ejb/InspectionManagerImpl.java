@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -280,13 +279,13 @@ public class InspectionManagerImpl implements InspectionManager {
 			// Pull the attachments off the inspection and send them in seperately so that they get processed properly
 			List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>();
 			fileAttachments.addAll(inspection.getAttachments());
-			inspection.setAttachments(new HashSet<FileAttachment>());
+			inspection.setAttachments(new ArrayList<FileAttachment>());
 			
 			// Pull off the sub inspection attachments and put them in a map for later use
-			Map<Product, Set<FileAttachment>> subInspectionAttachments = new HashMap<Product, Set<FileAttachment>>();
+			Map<Product, List<FileAttachment>> subInspectionAttachments = new HashMap<Product, List<FileAttachment>>();
 			for (SubInspection subInspection : inspection.getSubInspections()) {
 				subInspectionAttachments.put(subInspection.getProduct(), subInspection.getAttachments());
-				subInspection.setAttachments(new HashSet<FileAttachment>());
+				subInspection.setAttachments(new ArrayList<FileAttachment>());
 			}
 			
 			savedInspection = createInspection(inspection, nextInspectionDates.get(inspection), inspection.getModifiedBy().getId(), (FileDataContainer) null, fileAttachments);
