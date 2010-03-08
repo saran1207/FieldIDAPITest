@@ -41,13 +41,8 @@ public class SendInvitationAction extends AbstractAction {
 	}
 	
 	public String doSend() {
-		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "invitation");
-		invitationMessage.setSubjectPrefix("");
-		invitationMessage.getToAddresses().add(email);
-		invitationMessage.getTemplateMap().put("customMessage", body);
-		invitationMessage.getTemplateMap().put("senderName", getInternalOrg().getName());
-		invitationMessage.getTemplateMap().put("signupURL", createSignupUrlBuilder().build());
-				
+		TemplateMailMessage invitationMessage = buildInvitationMessage();
+		
 		boolean success = true;
 		
 		try {
@@ -70,10 +65,29 @@ public class SendInvitationAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
+	@SkipValidation
+	public String doExample() {
+		return SUCCESS;
+	}
+	
+	protected TemplateMailMessage buildInvitationMessage() {
+		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "invitation");
+		invitationMessage.getToAddresses().add(email);
+		invitationMessage.getTemplateMap().put("customMessage", body);
+		invitationMessage.getTemplateMap().put("senderName", getInternalOrg().getName());
+		invitationMessage.getTemplateMap().put("signupURL", createSignupUrlBuilder().build());
+		
+		return invitationMessage;
+	}
+	
 	protected UrlBuilder createSignupUrlBuilder() {
 		return new SignupUrlBuilder(getBaseURI(), getConfigContext(), getUser(), getConfigContext().getString(ConfigEntry.SIGNUP_PATH));
 	}
 
+	public String getMessageBody() {
+		return buildInvitationMessage().getBody();
+	}
+	
 	public String getEmail() {
 		return email;
 	}

@@ -1,10 +1,10 @@
 ${action.setPageType('safety_network_connections', 'invite')!}
-
 <head>
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
-	<@n4.includeStyle href="invite" type="page"/>
+	<script language="javascript" src="javascript/invite.js"> </script>
 </head>
-	
+
+
 <@s.form action="sendInvite" cssClass="fullForm contentBlock" theme="fieldid">
 
 <div id="messageInput">
@@ -13,7 +13,7 @@ ${action.setPageType('safety_network_connections', 'invite')!}
 	<#include "../common/_formErrors.ftl"/>
 	
 	<div class="infoField">
-		<label for="from" class="label inline"><@s.text name="label.from"/></label>
+		<label for="from" class="label inline"><@s.text name="label.from"/>: </label>
 		<span class="fieldHolder" id="sender"><span id="senderOrg">${sessionUser.owner.name?html}</span></span> 
 	</div>
 
@@ -30,7 +30,7 @@ ${action.setPageType('safety_network_connections', 'invite')!}
 	<div class="infoField">
 		<label for="body" class="label inline"><@s.text name="label.body"/>: </label><span class="field_tip"><@s.text name="label.optional"/></span>
 		<p id="body_desc_text"><@s.text name="label.body_desc"/></p>
-		<@s.textarea name="body"/>
+		<@s.textarea id="messageBody" name="body" onkeyup="updateExample();"/>
 	</div>
 	
 	<div class="actions">
@@ -38,6 +38,18 @@ ${action.setPageType('safety_network_connections', 'invite')!}
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="messages"/>"><@s.text name="label.cancel"/></a> 
 	</div>
-		
 </div>
+
+<div id="messageSample">
+	<h4><@s.text name="label.sample_title"/></h4>
+	<div class="sampleDesc"><@s.text name="label.sample_desc.1"/></div>
+	<div class="sampleDesc"><@s.text name="label.sample_desc.2"/></div>
+	<pre id="sampleMessage"></pre>
+</div>
+
 </@s.form>
+
+<script type="text/javascript">
+	updateUrl = '<@s.url namespace="/ajax" action="invitationExample" />';
+	updateExample();
+</script>

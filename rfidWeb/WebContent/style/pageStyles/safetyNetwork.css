@@ -147,3 +147,34 @@
 #body_desc_text {
 	width: 400px;
 }
+
+#messageInput {
+	float: left;
+	width: 500px
+}
+
+#messageSample {
+	background: #F8F8F8 none repeat scroll 0 0;
+	border: 1px solid;
+	overflow: hidden;
+	padding: 10px;
+	height: 330px;
+}
+
+#messageSample h4 {
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+#messageSample .sampleDesc {
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+#sampleMessage {
+	border: 2px solid #888888;
+	height: 230px;
+	overflow: auto;
+	padding: 5px;
+}

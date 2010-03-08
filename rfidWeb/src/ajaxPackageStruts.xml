@@ -425,6 +425,10 @@
 		<action name="autoAttributeImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
+				
+		<action name="invitationExample" method="example" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
+			<result name="success" type="freemarker">/templates/ajax/safetyNetwork/exampleMessage.ftl</result>
+		</action>
 		
 	</package>
 </struts>

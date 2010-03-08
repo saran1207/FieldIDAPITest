@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class NavOption {
 	public static final String TYPE_ADD = "add";
+	public static final String TYPE_ADDLEFT = "addLeft";
 	public static final String TYPE_ENTITY = "entity";
 	public static final String TYPE_LIST = "list";
 	public static final String TYPE_ENTITYRIGHT = "entityRight";

@@ -10,7 +10,7 @@
 		</li>
 		
 		<li id="inbox">
-			<h2 class="clean"><a href="<@s.url action="messages"/>"><@s.text name="label.inbox"/></a></h2>
+			<h2 class="clean"><a href="<@s.url action="messages"/>"><@s.text name="label.inbox"/> (${unreadMessageCount})</a></h2>
 			<p><a href="<@s.url action="messages"/>"><@s.text name="label.inbox.full"/></a></p>
 		</li>
 		

@@ -25,4 +25,8 @@ public class SafetyNetwork extends AbstractAction {
 	public String getVideoUrl() {
 		return getConfigContext().getString(ConfigEntry.SAFETY_NETWORK_VIDEO_URL);
 	}
+	
+	public Long getUnreadMessageCount() {
+		return getLoaderFactory().createUnreadMessageCountLoader().load();
+	}
 }
