@@ -13,7 +13,6 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
@@ -25,15 +24,6 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 public class InspectionScheduleUpdateHandlerTest {
 
-	private final class InspectionScheduleSaverExtension extends
-			InspectionScheduleSaver {
-
-		@Override
-		public void remove(InspectionSchedule entity)
-				throws EntityStillReferencedException {
-		}
-		
-	}
 
 	private InspectionScheduleSaver saver;
 	private InspectionScheduleByMobileGuidLoader inspectionScheduleByMobileGuidLoader;

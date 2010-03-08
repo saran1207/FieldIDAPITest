@@ -8,7 +8,6 @@ import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
