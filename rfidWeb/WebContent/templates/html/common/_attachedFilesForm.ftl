@@ -5,7 +5,7 @@
 			
 		removeText = '<@s.text name="label.remove"/>';
 		commentsText = '<@s.text name="label.comments"/>';
-		uploadUrl = '<@s.url action="uploadForm" namespace="/aHtml/iframe"/>';
+		uploadUrl = '<@s.url action="uploadForm" namespace="/aHtml/fileUploads"/>';
 		uploadWarning = "<@s.text name="warning.filesstilluploading"/>";
 		frameCount = ${(uploadedFiles?size)!0};
 		uploadFileLimit = ${fileUploadMax};

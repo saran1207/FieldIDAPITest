@@ -220,7 +220,6 @@
 		</action>
 
 		<action name="search" method="searchCriteria" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
-
 			<result name="input" type="freemarker">/templates/html/search/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/search/form.ftl</result>
 			<result name="success" type="redirectAction">
@@ -405,7 +404,6 @@
 		<action name="productAdd" method="add" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productCrud/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/productCrud/add.ftl</result>
 		</action>
 
 		<action name="productAddWithOrder" method="addWithOrder" class="com.n4systems.fieldid.actions.product.ProductCrud">
@@ -1123,6 +1121,11 @@
 				<param name="location">${previousUrl}</param>
 			</result>
 			<result name="confirmKick" type="freemarker">/templates/html/login/confirmKick.ftl</result>
+		</action>
+
+		<action name="booted" method="booted" class="com.n4systems.fieldid.actions.SignInAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="success" type="redirectAction">login</result>
 		</action>
 
 		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.SignInAction">

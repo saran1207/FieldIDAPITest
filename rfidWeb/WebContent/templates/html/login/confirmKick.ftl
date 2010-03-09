@@ -13,7 +13,7 @@
 	
 	<@s.form action="confirmKick" theme="fieldid" cssClass="minForm" id="signInConfirm">
 		<#include "/templates/html/common/_formErrors.ftl" />
-		<div>
+		<div class="instructions">
 			<@s.text name="instruction.someone_else_is_currently_signed_in_with_this_account"/>
 		</div>	
 		
@@ -25,4 +25,3 @@
 
 </div>
 
-<#include "../common/_secondary_content.ftl"/>

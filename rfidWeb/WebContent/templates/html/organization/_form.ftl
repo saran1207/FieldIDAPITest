@@ -20,7 +20,7 @@
 		function removeUploadImage() { 
 			$( "imageUploaded" ).hide();
 			$("removeImage").value = "true";
-			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/iframe" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
+			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
 			$( "imageUploadField" ).insert( { top: iframe } );
 			$("imageUploaded").removeClassName( "inputError" );
 			$("imageUploaded").title = "";
@@ -110,7 +110,7 @@
 			<span id="imageUploadField"  >
 				
 				<#if !certImageDirectory?exists || certImageDirectory.length() == 0  || removeImage >
-					<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/iframe" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
+					<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
 				</#if>
 				<span id="imageUploaded" <#if (action.fieldErrors['certImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !certImageDirectory?exists || certImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
 					<@s.url id="previewImage" uniqueID="${uniqueID!}" action="downloadCertLogo" namespace="/file" />

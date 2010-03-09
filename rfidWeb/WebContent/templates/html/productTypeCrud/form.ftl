@@ -43,7 +43,7 @@
 		function removeUploadImage() { 
 			$( "imageUploaded" ).hide();
 			$("removeImage").value = "true";
-			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/iframe" typeOfUpload="productTypeImage"/>" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
+			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="productTypeImage"/>" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
 			$( "imageUploadField" ).insert( { top: iframe } );
 			$("imageUploaded").removeClassName( "inputError" );
 			$("imageUploaded").title = "";
@@ -116,7 +116,7 @@
 		<label><@s.text name="label.uploadimage"/></label> 
 		<span id="imageUploadField"  >
 			<#if !productImageDirectory?exists || productImageDirectory.length() == 0  || removeImage >
-				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/iframe" typeOfUpload="productTypeImage"/>" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
+				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="productTypeImage"/>" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
 			</#if>
 			<span id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !productImageDirectory?exists || productImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
 				<@s.url id="previewImage" uniqueID="${uniqueID!}" action="viewProductTypeImage" />

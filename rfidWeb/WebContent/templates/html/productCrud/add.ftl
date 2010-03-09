@@ -21,19 +21,19 @@
 	</@s.text>
 	</div>
 <#else>
-	<@s.form action="productCreate" cssClass="fullForm fluidSets" theme="fieldid" >
+	<@s.form action="productCreate" cssClass="fullForm fluidSets" theme="fieldid" id="productCreate" >
 		<@s.hidden name="lineItemId" />
 		<@s.hidden name="tagOptionId" />
 		<#include "_productForm.ftl" />
 		
 		<div class="actions">
-			<@s.submit id="saveButton" name="save" key="hbutton.save" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>
+			<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
 			<#if Session.sessionUser.hasAccess("createinspection") >
-				| <@s.submit id="saveAndInspButton" name="saveAndInspect" key="hbutton.saveandinspect" onclick="checkDuplicateRfids('rfidNumber', this); return false;"/>
+				| <@s.submit id="saveAndInspButton" cssClass="save"  name="saveAndInspect" key="hbutton.saveandinspect" />
 			</#if>
-			| <@s.submit id="saveAndPrintButton" name="saveAndPrint" key="hbutton.saveandprint" onclick="checkDuplicateRfids('rfidNumber', this); return false;" />
+			| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
 			<#if Session.sessionUser.hasAccess("createinspection") >
-				| <@s.submit id="saveAndScheduleButton" name="saveAndSchedule" key="hbutton.saveandschedule" onclick="checkDuplicateRfids('rfidNumber', this); return false;" />
+				| <@s.submit id="saveAndScheduleButton" cssClass="save"  name="saveAndSchedule" key="hbutton.saveandschedule"  />
 			</#if>
 		</div>
 	</@s.form>
@@ -43,4 +43,13 @@
 	var buttons = new Array( 'saveButton', 'saveAndInspButton', 'saveAndPrintButton','saveAndScheduleButton');
 	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />' );
 	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandinspect" />', '<@s.text name="hbutton.saveandprint" />', '<@s.text name="hbutton.saveandschedule" />' );
+	
+	$$('#productCreate .save').each(function(element) {
+			element.observe('click', function(event) {
+				var element = Event.element(event);
+				event.stop();
+				checkDuplicateRfids('rfidNumber', element);
+			});
+		});
+	
 </script>

@@ -85,6 +85,20 @@
 			<result name="success" type="freemarker">/templates/aHtml/login/complete.ftl</result>
 		</action>
 		
+		
+		
+		<action name="showKick" class="com.n4systems.fieldid.actions.SimpleAction">
+			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
+		</action>
+	</package>
+	
+	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />
+	
+	<package name="fileUploadsHtml" extends="ajaxHTMLAction" namespace="/aHtml/fileUploads">
+		<global-results>
+			<result name="sessionBooted" type="freemarker">/templates/aHtml/common/fileUploadSessionKick.ftl</result>
+		</global-results>
+
 		<action name="uploadForm" method="form"	class="com.n4systems.fieldid.actions.shared.UploadFileAction">
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
 		</action>
@@ -104,11 +118,5 @@
 			<result name="input" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/imageUploaded.ftl</result>
 		</action>
-		
-		<action name="showKick" class="com.n4systems.fieldid.actions.SimpleAction">
-			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
-		</action>
 	</package>
-	
-	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />
 </struts>

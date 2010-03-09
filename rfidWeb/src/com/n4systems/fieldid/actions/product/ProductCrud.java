@@ -387,7 +387,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 			uniqueID = product.getId();
 			addFlashMessageText("message.productcreated");
 
-
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
 			logger.error("failed to save Product", e);

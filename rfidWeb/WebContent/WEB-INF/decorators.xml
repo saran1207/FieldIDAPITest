@@ -27,6 +27,7 @@
 	
 	<decorator name="aHtmlIframeLayout" page="/templates/aHtml/layout/htmlLayout.ftl">
 		<pattern>*aHtml/iframe/*.action*</pattern>
+		<pattern>*aHtml/fileUploads/*.action*</pattern>
 	</decorator>
 	
 	<decorator name="brandedLayout" page="brandedPublicLayout.ftl">

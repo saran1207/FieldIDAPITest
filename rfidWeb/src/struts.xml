@@ -85,7 +85,7 @@
 		<global-results>
 			<result name="sessionBooted" type="redirectAction">
 				<param name="namespace">/</param>
-				<param name="actionName">logout</param>
+				<param name="actionName">booted</param>
 			</result>
 			<result name="login" type="redirectAction">login</result>
 			<result name="require_eula" type="redirectAction">

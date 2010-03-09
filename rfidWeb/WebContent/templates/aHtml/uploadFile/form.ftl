@@ -7,7 +7,7 @@
 </head>	
 <#if frameId?exists >
 	
-	<@s.form method="POST" action="uploadFile" namespace="/aHtml/iframe" theme="simple"  enctype="multipart/form-data" style="height:20px;">
+	<@s.form method="POST" action="uploadFile" namespace="/aHtml/fileUploads" theme="simple"  enctype="multipart/form-data" style="height:20px;">
 		<@s.file name="upload" onchange="$('progress').show(); parent.startFileUpload(); this.form.submit(); parent.completedFileUpload();" />
 		<@s.hidden name="frameId"/>
 		<@s.hidden name="frameCount"/>

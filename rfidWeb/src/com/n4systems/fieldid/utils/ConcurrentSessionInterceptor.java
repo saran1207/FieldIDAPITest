@@ -24,8 +24,6 @@ public class ConcurrentSessionInterceptor extends AbstractInterceptor {
 			return "sessionBooted";
 		}
 			
-			
-		
 		return object.invoke();
 	}
 

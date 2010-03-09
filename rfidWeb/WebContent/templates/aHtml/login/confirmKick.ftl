@@ -4,13 +4,13 @@
 
 <@s.form action="confirmKick" theme="fieldid" cssClass="minForm" id="kickSessionConfirm">
 	<#include "/templates/html/common/_formErrors.ftl" />
-	<div>
+	<div class="instructions">
 		<@s.text name="instruction.someone_else_is_currently_signed_in_with_this_account"/>
 	</div>	
 	
 	
 	<div class="actions" > 
-		<@s.submit key="label.yes_kick_other_user" id="kickOtherUser"/> <@s.text name="label.or"/> <a href="#" onclick="Lightview.hide()" ><@s.text name="label.cancel_and_sign_in"/></a>
+		<@s.submit key="label.yes_kick_other_user" id="kickOtherUser"/> <@s.text name="label.or"/> <a href="#" onclick="closeLightBox()" ><@s.text name="label.cancel_and_sign_in"/></a>
 	</div>
 			
 </@s.form>

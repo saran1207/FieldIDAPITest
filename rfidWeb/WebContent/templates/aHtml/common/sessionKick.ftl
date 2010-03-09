@@ -1,12 +1,12 @@
 <div class="lightBoxView">
-	<h2 class="modalHeader"><@s.text name="label.messagetitle" /></h2>
+	<h2 class="modalHeader"><@s.text name="label.session_kicked" /></h2>
 	<p class="instructions">
-		<@s.text name="message.session_kicked"/>
+		<@s.text name="label.why_you_have_been_signed_out"/>
 	</p>
-	<p class="instructions">
-		<@s.text name="message.clicklogintologbackin"/>
-	</p>
-	<p style="text-align:center">
-		<a href="<@s.url action="login" namespace="/" />" target="_top"><@s.text name="label.sign_in"/></a>
+	<p class="lightBoxAction">
+		<button target="_top" onclick="promptForLogin(); return false" id="sessionKickedSignIn"><@s.text name="label.sign_back_in"/></button>
+		<@s.text name="label.or"/>
+		<a href="#" onclick="closeLightBox(); return false"><@s.text name="label.close"/></a>
 	</p>
 </div>
+

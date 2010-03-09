@@ -116,6 +116,14 @@ public class SignInAction extends AbstractAction {
 		return ERROR;
 	}
 
+	
+	@SkipValidation
+	public String doBooted() {
+		String result = doDelete();
+		addFlashErrorText("label.why_you_have_been_signed_out");
+		return result;
+	}
+	
 	@SkipValidation
 	public String doDelete() {
 		expireActiveSession();

@@ -2,6 +2,15 @@
 <html>
 	<head>
 		<#include "/templates/html/layout/head.ftl"/>
+		<@n4.includeScript>
+			function promptForLogin() {
+				parent.promptForLogin();
+			}
+			
+			function closeLightBox() {
+				parent.closeLightBox();
+			}
+		</@n4.includeScript>
 	</head>
 	<body>
 		${body}
