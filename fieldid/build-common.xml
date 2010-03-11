@@ -96,7 +96,7 @@
 			<classpath refid="classpath.webinf" />
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.jboss" />
-			<classpath path="${fieldidEjb.home}/${build.test}"/>
+			<classpath path="${fieldidEjb.home}/test/"/>
 			<classpath refid="classpath.tests"/>
 			
 		</javac>
