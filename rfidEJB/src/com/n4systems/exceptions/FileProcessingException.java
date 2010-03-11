@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class FileProcessingException extends Exception {
+public class FileProcessingException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public FileProcessingException() {

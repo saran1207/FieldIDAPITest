@@ -85,8 +85,6 @@
 			<result name="success" type="freemarker">/templates/aHtml/login/complete.ftl</result>
 		</action>
 		
-		
-		
 		<action name="showKick" class="com.n4systems.fieldid.actions.SimpleAction">
 			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
 		</action>

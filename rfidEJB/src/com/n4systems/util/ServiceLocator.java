@@ -32,7 +32,6 @@ import com.n4systems.ejb.InspectionManagerImpl;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.MailManager;
-import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.OrderManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
@@ -42,6 +41,7 @@ import com.n4systems.ejb.ProductManagerImpl;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.ProofTestHandlerImpl;
 import com.n4systems.exceptions.EJBLookupException;
+import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
 
@@ -103,7 +103,7 @@ public class ServiceLocator {
 	}
 
 	public static final MailManager getMailManager() {
-		return new MailManagerImpl();
+		return MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext());
 	}
 	
 	

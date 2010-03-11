@@ -1,15 +1,11 @@
 package com.n4systems.fieldid.actions.users;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -20,6 +16,7 @@ import rfid.web.helper.Constants;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.PasswordEntry;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
@@ -53,6 +50,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	protected User userManager;
 	
 	private PasswordEntry passwordEntry = new PasswordEntry();
+	private boolean assignPassword = true;
 	
 	protected Pager<UserBean> page;
 	private String listFilter;
@@ -60,7 +58,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private String securityCardNumber;
 	private Country country;
 	private Region region;
-	private File signature;
+	
+	private WelcomeMessage welcomeMessage = new WelcomeMessage();
+	private UploadedImage signature = new UploadedImage();
 
 	protected UserCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -127,7 +127,16 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	@SkipValidation
 	public String doEdit() {
 		testRequiredEntities(true);
+		loadCurrentSignature();
+
 		return SUCCESS;
+	}
+
+	private void loadCurrentSignature() {
+		File signatureImage = PathHandler.getSignatureImage(user);
+		if (signatureImage.exists()) {
+			signature.setImage(signatureImage);
+		}
 	}
 
 	public String doUpdate() {
@@ -142,7 +151,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		
 		try {
 			user.archiveUser();
-			userManager.updateUser(user);
+			userManager.updateUser(user); //TODO should use the saver like create and update do.
 		} catch (Exception e) {
 			addFlashErrorText("error.failedtodelete");
 			logger.error("failed to remove user ", e);
@@ -150,7 +159,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		}
 		addFlashMessageText("message.userdeleted");
 		return SUCCESS;
-	}
+	} 
 	
 	
 	
@@ -164,12 +173,15 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		user.setActive(true);
 		user.setSystem(false);
 
+		
+		
 		try {
 			if (user.getUniqueID() == null) {
 				user.assignPassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
 				new UserSaver().save(user);
 				uniqueID = user.getUniqueID();
+				sendWelcomeEmail();
 			} else {
 				new UserSaver().update(user);
 			}
@@ -178,104 +190,52 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			logger.error("failed to save user ", e);
 			return INPUT;
 		}
+		
+		
 
 		if (user.getId().equals(getSessionUserId())) {
 			refreshSessionUser();
 		}
-		addFlashMessageText("message.saved");
+		addFlashMessageText("message.user_saved");
+		processSignature();
 		return "saved";
+	}
+
+	private void processSignature() {
+		try {
+			signatureFileProcess();
+		} catch (Exception e) {
+			logger.error("Failed to upload signature", e);
+			addFlashErrorText("Error uploading image.");
+		}
+	
+	}
+
+	private void signatureFileProcess() throws Exception {
+		new FileSystemUserSignatureFileProcessor(PathHandler.getSignatureImage(user)).process(signature);
+	}
+
+	private void sendWelcomeEmail() {
+		if (welcomeMessage.isSendEmail()) {
+			if (welcomeMessage.isPersonalMessageProvided()) {
+				getWelcomeNotifier().sendPersonalizedWelcomeNotificationTo(user, welcomeMessage.getPersonalMessage());
+			} else {
+				getWelcomeNotifier().sendWelcomeNotificationTo(user);
+			}
+			addFlashMessageText("label.welcome_message_sent");
+		}
+		
+		
+	}
+
+	private UserWelcomeNotificationProducer getWelcomeNotifier() {
+		UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(getDefaultNotifier());
+		return userWelcomeNotificationProducer;
 	}
 
 	protected abstract int processPermissions();
 		
 
-
-	@SkipValidation
-	public String doUploadSignature() {
-		if (user == null) {
-			return ERROR;
-		}
-		// deal with the image file
-		if (signature != null && signature.exists()) {
-			try {
-				File userImagePath = PathHandler.getSignatureImage(user);
-
-				// delete the old image file if one exists
-				if (userImagePath.exists()) {
-					userImagePath.delete();
-				}
-
-				// create the parent directories if needed
-				if (!userImagePath.getParentFile().exists()) {
-					userImagePath.getParentFile().mkdirs();
-				}
-
-				// copy our temp image to the private location
-				FileUtils.copyFile(signature, userImagePath);
-
-				addActionMessage("Image uploaded");
-			} catch (Exception e) {
-				logger.error("Failed to upload signature", e);
-				addActionError("Error uploading image.");
-				return ERROR;
-			}
-		}
-
-		return SUCCESS;
-	}
-
-	@SkipValidation
-	public String doSignature() {
-		String status = null;
-
-		if (user != null) {
-			File signatureImage = PathHandler.getSignatureImage(user);
-			if (!signatureImage.exists()) {
-				return ERROR;
-			}
-
-			InputStream signatureIS = null;
-			try {
-				getServletResponse().setContentLength((int) signatureImage.length());
-
-				signatureIS = new FileInputStream(signatureImage);
-
-				IOUtils.copy(signatureIS, getServletResponse().getOutputStream());
-
-				IOUtils.closeQuietly(getServletResponse().getOutputStream());
-				getServletResponse().flushBuffer();
-
-			} catch (Exception e) {
-				logger.error("Failed to load signature", e);
-				status = ERROR;
-			} finally {
-				IOUtils.closeQuietly(signatureIS);
-			}
-
-		} else {
-			status = ERROR;
-		}
-
-		return status;
-	}
-
-	@SkipValidation
-	public String doRemoveSignature() {
-		if (user != null) {
-			try {
-				File signatureImage = PathHandler.getSignatureImage(user);
-				if (signatureImage.exists()) {
-					signatureImage.delete();
-				}
-
-				addActionMessage("Image removed");
-				return SUCCESS;
-			} catch (Exception e) {
-				logger.error("Failed to remove signature", e);
-			}
-		}
-		return ERROR;
-	}
 
 	
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.useridrequired")
@@ -392,13 +352,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return !userManager.userRfidIsUnique(getTenantId(), formValue, uniqueID);
 	}
 
-	public File getSignature() {
-		return signature;
-	}
-
-	public void setSignature(File signature) {
-		this.signature = signature;
-	}
+	
 
 	public List<StringListingPair> getUserTypes() {
 		ArrayList<StringListingPair> userTypes = new ArrayList<StringListingPair>();
@@ -446,11 +400,36 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	
-	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "user.isNew() == true") })
+	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "checkPasswords == true") })
 	public PasswordEntry getPasswordEntry() {
 		return passwordEntry;
 	}
 	
+	public boolean isCheckPasswords() {
+		return user.isNew() && assignPassword;
+	}
+	
 	public abstract boolean isEmployee();
+
+	public UploadedImage getSignature() {
+		return signature;
+	}
+
+	public void setSignature(UploadedImage signature) {
+		this.signature = signature;
+	}
+
+	public WelcomeMessage getWelcomeMessage() {
+		return welcomeMessage;
+	}
+
+	public boolean isAssignPassword() {
+		return assignPassword;
+	}
+
+	public void setAssignPassword(boolean assignPassword) {
+		this.assignPassword = assignPassword;
+	}
+	
 		
 }

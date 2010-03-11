@@ -372,4 +372,8 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		return enhanced;
 	}
 
+	public boolean isPasswordAssigned() {
+		return hashPassword != null;
+	}
+
 } 

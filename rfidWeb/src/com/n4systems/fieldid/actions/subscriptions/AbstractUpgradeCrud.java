@@ -2,11 +2,11 @@ package com.n4systems.fieldid.actions.subscriptions;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.view.model.CreditCardDecorator;
 import com.n4systems.handlers.creator.signup.UpgradeRequest;
+import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.CurrentSubscription;
 import com.n4systems.subscription.UpgradeCost;
@@ -125,7 +125,7 @@ public abstract class AbstractUpgradeCrud extends AbstractCrud {
 		message.setEmailConent("could not upgrade tenant " + getPrimaryOrg().getName() + " purchasing " + getWhatWasBeingBought());
 		
 		try {
-			new MailManagerImpl().sendMessage(message);
+			MailManagerFactory.defaultMailManager(getConfigContext()).sendMessage(message);
 		} catch (Exception e) {
 			logger.error("failed to send message about failure", e);
 		}
@@ -138,7 +138,7 @@ public abstract class AbstractUpgradeCrud extends AbstractCrud {
 			
 			MailMessage message = createUpgradeMessage();
 			
-			new MailManagerImpl().sendMessage(message);
+			MailManagerFactory.defaultMailManager(getConfigContext()).sendMessage(message);
 		} catch (Exception e) {
 			logger.warn("could not send welcome email", e);
 		}

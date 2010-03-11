@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.n4systems.exporting.Importer;
+import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
@@ -13,6 +14,7 @@ import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+import com.n4systems.util.ConfigContext;
 
 
 public class ImportTask extends TransactionalTask {
@@ -49,7 +51,7 @@ public class ImportTask extends TransactionalTask {
 	}
 	
 	public ImportTask(Importer importer, ImportSuccessNotification successNotification, ImportFailureNotification failueNotification) {
-		this(new FieldIdTransactionManager(), new EmailNotifier(), importer, successNotification, failueNotification);
+		this(new FieldIdTransactionManager(), new EmailNotifier(MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext())), importer, successNotification, failueNotification);
 	}
 
 	@Override

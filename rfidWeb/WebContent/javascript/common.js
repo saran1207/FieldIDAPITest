@@ -526,7 +526,13 @@ function isValueDefined(value, additionalUndefinedValue) {
 	return (value != undefined &&  value != null && value != additionalUndefinedValue);
 }
 
+function onDocumentLoad(functionToRun) {
+	document.observe("dom:loaded", functionToRun);
+}
 
-document.observe("dom:loaded", function() {
+
+
+
+onDocumentLoad(function() {
 		$$('.hide').invoke("hide");
 	});

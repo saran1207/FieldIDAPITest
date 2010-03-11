@@ -637,17 +637,7 @@
 		</action>
 
 
-		<action name="userSignature" method="signature" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
-			<result name="success"></result>
-			<result name="error" type="httpheader">
-				<param name="status">404</param>
-			</result>
-		</action>
-
-		<action name="userUploadSignature" method="uploadSignature" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
-			<result name="success" type="freemarker">/templates/html/userCrud/uploadSignature.ftl</result>
-			<result name="input" type="freemarker">/templates/html/userCrud/uploadSignature.ftl</result>
-		</action>
+	
 
 		<action name="schedule" method="searchCriteria" class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
 			<result name="input" type="freemarker">/templates/html/schedule/form.ftl</result>

@@ -1,0 +1,28 @@
+.permissions {
+	margin: 5px 0px;
+	width:250px;
+}
+
+.permissions th,.permissions td {
+	padding: 5px 5px 5px 0px;
+	empty-cells: show;
+}
+
+.permissions th {
+	font-weight: bold;
+}
+
+.permissions td {
+	border-top: 1px solid #999;
+}
+
+
+.radio {
+	width: 60px;
+	text-align:center;
+}
+
+.header {
+	background-color:#D0DAFD;
+	padding: 5px;
+}

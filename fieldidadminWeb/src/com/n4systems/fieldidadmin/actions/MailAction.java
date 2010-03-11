@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import com.n4systems.ejb.MailManagerImpl;
+import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.MailMessage.MessageType;
@@ -38,7 +38,7 @@ public class MailAction extends AbstractAdminAction {
 				
 				message.getAttachments().put(attachment.getName(), getFileData(attachment));
 			}
-			new MailManagerImpl().sendMessage(message);
+			MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext()).sendMessage(message);
 			
 		} catch(Exception e) {
 			addActionError("Send Failed: " + e.getMessage());

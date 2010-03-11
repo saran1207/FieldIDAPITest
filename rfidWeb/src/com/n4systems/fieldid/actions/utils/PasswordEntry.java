@@ -7,8 +7,8 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class PasswordEntry {
 
-	private String password;
-	private String passwordVerify;
+	private String password="";
+	private String passwordVerify="";
 	
 	
 	public String getPassword() {

@@ -12,6 +12,7 @@ import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -24,8 +25,6 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -92,30 +91,9 @@ public class UserRequestCrud extends AbstractCrud {
 	}
 
 	private void createNewAccountEmail() {
-		TemplateMailMessage message = new TemplateMailMessage();
-		message.setSubject("Your Field ID Account Information");
-		String loginUrl =  getBaseURI().resolve("").toString() + "login/"+  userRequest.getUserAccount().getTenant().getName();
 		
-		String body = "<h2>Thank you for requesting a Field ID Account.</h2>" +
-					"To access your account, go the following company login page:<br/><br/>" +
-					"<a href=\"" + loginUrl +"\">" + loginUrl + "</a><br/><br/>" +
-					"Login securely using the following information:<br/><br/>" +
-					"User name: " + userRequest.getUserAccount().getUserID() + "<br/><br/>" +
-					"If you forget your password you can reset it here from your company login page.<br/><br/>" + 
-					"<h2>Resources to help you with Field ID</h2>" + 
-					"The Field ID Help System:<br/>" +
-					"<a href=\"https://www.fieldid.com/fieldid_help/index.html\">https://www.fieldid.com/fieldid_help/index.html</a><br/><br/>" +
-					"For more information about Field ID:<br/>" +
-					"<a href=\"http://www.n4systems.com\">http://www.n4systems.com</a><br/><br/>" +
-					"Follow us on Twitter:<br/>" +
-					"<a href=\"http://www.twitter.com/fieldid\">http://www.twitter.com/fieldid</a><br/>" +
-					"<a href=\"http://www.twitter.com/n4systems\">http://www.twitter.com/n4systems</a><br/>";
-
-		message.setEmailConent(body);
-		message.getToAddresses().add( userRequest.getUserAccount().getEmailAddress() );
 		try {
-			ServiceLocator.getMailManager().sendMessage(message);
-			
+			new UserWelcomeNotificationProducer(getDefaultNotifier()).sendWelcomeNotificationTo(userRequest.getUserAccount());
 			logger.info(getLogLinePrefix() + " user request email sent for to user " + userRequest.getUserAccount().getUserID() + " for tenant " + userRequest.getTenant().getName());
 		} catch (Exception e) {
 			logger.warn(getLogLinePrefix() + "acceptance message failed to send. ", e);

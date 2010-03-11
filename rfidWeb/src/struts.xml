@@ -155,6 +155,7 @@
 		<action name="downloadProductTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeAttachedFile" />
 		<action name="downloadProductTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductTypeAttachedFile" />
 		<action name="downloadProductTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeImage" />
+		
 		<action name="downloadProductTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductTypeImage" />
 		<action name="downloadCertLogo" method="downloadCertLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
 		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
@@ -163,6 +164,7 @@
 		<action name="downloadProductAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductAttachmentFile" />
 		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
 		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
+		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
 		
 		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>

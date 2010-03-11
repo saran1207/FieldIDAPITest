@@ -192,7 +192,6 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 			productImage = new File(tmpDirectory.getAbsolutePath() + '/' + productImageDirectory);
 			productType.setImageName(productImage.getName());
 		}
-
 	}
 
 	// TODO: refactor to use the input info field to convert -- AA

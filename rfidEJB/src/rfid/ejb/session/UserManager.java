@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.MailManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
+import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -28,6 +28,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -354,7 +355,6 @@ public class UserManager implements User {
 	public void acceptRequest( UserRequest userRequest ) {
 		UserRequest request = em.find( UserRequest.class, userRequest.getId() );
 		userRequest.getUserAccount().setActive(true);
-		// send email to the user
 		
 		em.merge( userRequest.getUserAccount() );
 		em.remove(request);
@@ -391,7 +391,7 @@ public class UserManager implements User {
 		message.getToAddresses().add(user.getEmailAddress());
 		logger.info("Sending loginkey notification to [" + user.getEmailAddress() + "]");
 		
-		new MailManagerImpl().sendMessage(message);
+		MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext()).sendMessage(message);
 	}
 	
 	public UserBean findUserByResetKey( String tenantName, String userName, String resetPasswordKey ) {
