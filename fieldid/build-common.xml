@@ -96,7 +96,7 @@
 			<classpath refid="classpath.webinf" />
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.jboss" />
-			<classpath path="${fieldidEjb.home}/test/"/>
+			<classpath path="${fieldidEjb.home}/tests/"/>
 			<classpath refid="classpath.tests"/>
 			
 		</javac>
@@ -111,7 +111,7 @@
 			<classpath refid="classpath.webinf" />
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.jboss" />
-			<classpath path="${fieldidEjb.home}/${build.test}"/>
+			<classpath path="${fieldidEjb.home}/tests"/>
 			<classpath refid="classpath.tests"/>
 			<formatter type="brief" usefile="false"/>
 			<batchtest>
