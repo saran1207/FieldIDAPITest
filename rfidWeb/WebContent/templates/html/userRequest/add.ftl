@@ -3,7 +3,7 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
 	<script type="text/javascript">
-		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
 	</script>
 </head>
 <div id="mainContent">

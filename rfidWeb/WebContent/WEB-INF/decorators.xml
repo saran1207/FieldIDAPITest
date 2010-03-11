@@ -18,6 +18,8 @@
 	
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
 		<pattern>*ajax/*.action*</pattern>
+	</decorator>
+	<decorator name="publicAjaxLayout" page="/templates/ajax/layout/publicLayout.ftl">
 		<pattern>*public/ajax/*.action*</pattern>
 	</decorator>
 	

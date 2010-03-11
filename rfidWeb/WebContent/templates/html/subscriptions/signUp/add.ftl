@@ -4,7 +4,7 @@
 	<@n4.includeScript src="timezone" />
 	<@n4.includeScript src="billingInformation"/>
 	<@n4.includeScript>
-		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
 		pricingUrl = '<@s.url namespace="/public/ajax" action="signUpPackagePrice"/>';
 		validatePromoCodeUrl = '<@s.url namespace="/public/ajax" action="validPromoCode"/>';
 	</@n4.includeScript>

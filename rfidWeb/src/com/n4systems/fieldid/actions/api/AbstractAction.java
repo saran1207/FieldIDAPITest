@@ -381,11 +381,11 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getLoginUrlForTenant(tenant);
 	}
 	public String getLoginUrlForTenant(Tenant tenant) {
-		return createActionURI(tenant, "login.action");
+		return createActionURI(tenant, "login");
 	}
 	
 	public String getEmbeddedLoginUrl() {
-		return createActionURI(getTenant(), "embedded/login.action");
+		return createActionURI(getTenant(), "embedded/login");
 	}
 	
 	public URI getBaseURI() {

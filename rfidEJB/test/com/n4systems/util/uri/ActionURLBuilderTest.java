@@ -41,4 +41,20 @@ public class ActionURLBuilderTest {
 		sut.setEntity(product);
 		assertEquals("https://alex/productEdit.action", sut.build());
 	}
+	
+	@Test
+	public void should_just_create_a_folder_path_if_the_action_is_not_given() throws Exception {
+		ActionURLBuilder sut = new ActionURLBuilder(URI.create("https://alex/"), new NonDataSourceBackedConfigContext());
+		
+	
+		assertEquals("https://alex/", sut.build());
+	}
+	
+	@Test
+	public void should_just_create_a_folder_path_if_the_action_is_blank() throws Exception {
+		ActionURLBuilder sut = new ActionURLBuilder(URI.create("https://alex/"), new NonDataSourceBackedConfigContext());
+		sut.setAction("");
+	
+		assertEquals("https://alex/", sut.build());
+	}
 }

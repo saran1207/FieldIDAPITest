@@ -39,3 +39,11 @@
 	width:405px;
 	overflow:hidden;
 	}
+	
+#pageContent {
+	overflow: visible;
+}
+#pageFooter {
+	clear:both;
+}
+

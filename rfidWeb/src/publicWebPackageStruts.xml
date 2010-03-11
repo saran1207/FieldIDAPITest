@@ -60,5 +60,9 @@
 		<action name="validPromoCode" method="show" class="com.n4systems.fieldid.actions.subscriptions.ValidPromoCodeCrud">
 			<result name="success" type="freemarker">/templates/ajax/subscriptions/validPromoCode/show.ftl</result>
 		</action>
+		
+		<action name="getRegions" method="list" class="com.n4systems.fieldid.actions.user.RegionListAction">
+			<result name="success" type="freemarker">/templates/ajax/userCrud/regions.ftl</result>
+		</action>
 	</package>
 </struts>
