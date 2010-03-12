@@ -2,50 +2,41 @@ package com.n4systems.api.validation.validators;
 
 import java.util.Map;
 
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.api.model.AutoAttributeView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.infooption.InfoOptionMapConverter;
+import com.n4systems.model.infooption.MissingInfoOptionException;
+import com.n4systems.model.infooption.StaticOptionResolutionException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.StringUtils;
 
 
 public class AutoAttributeInputsValidator extends AutoAttributeValidator {
-
+	private final InfoOptionMapConverter converter;
+	
+	public AutoAttributeInputsValidator() {
+		this(new InfoOptionMapConverter());
+	}
+	
+	public AutoAttributeInputsValidator(InfoOptionMapConverter converter) {
+		this.converter = converter;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ValidationResult validate(Object fieldValue, AutoAttributeView view, String fieldName, SecurityFilter filter, AutoAttributeCriteria criteria) {
 		Map<String, String> infoOptionMap = (Map<String, String>)fieldValue;
 
-		boolean optionFound;
-		String optionName;
-		for (InfoFieldBean field: criteria.getInputs()) {
-			// we cannot be missing any input info fields
-			if (!infoOptionMap.containsKey(field.getName())) {
-				return ValidationResult.fail(InputInfoFieldNotFoundValidatorFail, field.getName());
-			}
-			
-			// make sure that we have a valid info option
-			optionFound = false;
-			optionName = infoOptionMap.get(field.getName());
-			
-			// can't hav blank input options
-			if (StringUtils.isEmpty(optionName)) {
-				return ValidationResult.fail(BlankInputOptionValidatorFail, field.getName());
-			}
-			
-			// make sure we have a matching option
-			for (InfoOptionBean option: field.getInfoOptions()) {			
-				if (option.getName().equals(optionName)) {
-					optionFound = true;
-					break;
-				}
-			}
-			
-			if (!optionFound) {
-				return ValidationResult.fail(StaticOptionNotFoundValidatorFail, optionName, field.getName());
+		try {
+			converter.convertAutoAttributeInputs(infoOptionMap, criteria);
+		} catch (MissingInfoOptionException e) {
+			return ValidationResult.fail(InputInfoFieldNotFoundValidatorFail, e.getInfoField().getName());
+		} catch (StaticOptionResolutionException e) {
+			if (StringUtils.isEmpty(e.getInfoOptionName())) {
+				return ValidationResult.fail(BlankInputOptionValidatorFail, e.getInfoField().getName());
+			} else {
+				return ValidationResult.fail(StaticOptionNotFoundValidatorFail, e.getInfoOptionName(), e.getInfoField().getName());
 			}
 		}
 		

@@ -21,7 +21,7 @@ public class CustomerOrgToModelConverter extends ExternalOrgToModelConverter<Cus
 		
 		// only modify the ownership information if it's an Add or if the parent org has changed
 		if (!isEdit || !from.getParentOrg().equals(to.getParent().getName())) {
-			InternalOrg parent = orgLoader.setName(from.getParentOrg()).load();
+			InternalOrg parent = orgLoader.setName(from.getParentOrg()).load(transaction);
 			if (parent == null) {
 				throw new ConversionException("Could not find Organization named [" + from.getParentOrg() + "]");
 			}

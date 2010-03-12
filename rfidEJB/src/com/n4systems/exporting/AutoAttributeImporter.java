@@ -25,7 +25,7 @@ public class AutoAttributeImporter extends AbstractImporter<AutoAttributeView> {
 
 	@Override
 	protected void importView(Transaction transaction, AutoAttributeView view) throws ConversionException {
-		AutoAttributeDefinition autoAttrib = converter.toModel(view);
+		AutoAttributeDefinition autoAttrib = converter.toModel(view, transaction);
 		
 		saver.save(transaction, autoAttrib);
 	}

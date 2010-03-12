@@ -36,7 +36,7 @@ public class CustomerImporter extends AbstractImporter<FullExternalOrgView> {
 	}
 
 	private void importCustomer(Transaction transaction, FullExternalOrgView view) throws ConversionException {
-		CustomerOrg customer = customerConverter.toModel(view);
+		CustomerOrg customer = customerConverter.toModel(view, transaction);
 		
 		customer = (CustomerOrg)orgSaver.saveOrUpdate(transaction, customer);
 		
@@ -46,7 +46,7 @@ public class CustomerImporter extends AbstractImporter<FullExternalOrgView> {
 	}
 	
 	private void importDivision(Transaction transaction, FullExternalOrgView view) throws ConversionException {
-		DivisionOrg division = divisionConverter.toModel(view);
+		DivisionOrg division = divisionConverter.toModel(view, transaction);
 		
 		orgSaver.saveOrUpdate(transaction, division);
 	}

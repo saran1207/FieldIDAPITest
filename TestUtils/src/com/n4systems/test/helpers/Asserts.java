@@ -1,5 +1,7 @@
 package com.n4systems.test.helpers;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -49,4 +51,35 @@ public class Asserts {
 		Assert.assertFalse(message, expected.equals(actual));
 	}
 	
+	public static void assertMethodReturnValuesEqual(Object expected, Object actual, String...methodNames) {
+		Class<?> expectedClass = expected.getClass();
+		Class<?> actualClass = actual.getClass();
+		
+		try {
+			Method expectedMethod, actualMethod;
+			for (String methodName: methodNames) {
+				expectedMethod = expectedClass.getMethod(methodName);
+				if (expectedMethod.getReturnType().equals(Void.TYPE)) {
+					Assert.fail("Method had void return type: " + expectedMethod.getName());
+				}
+				
+				actualMethod = actualClass.getMethod(methodName);
+				if (actualMethod.getReturnType().equals(Void.TYPE)) {
+					Assert.fail("Method had void return type: " + actualMethod.getName());
+				}
+				
+				Assert.assertEquals("Values for " + methodName + " were not equal", expectedMethod.invoke(expected), actualMethod.invoke(actual));
+			}
+		} catch(SecurityException e) {
+			Assert.fail("Access Denied to: " + e.getMessage());
+		} catch(NoSuchMethodException e) {
+			Assert.fail("Method does not exist: " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			Assert.fail("Method requires arguments: " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			Assert.fail("Access Denied to: " + e.getMessage());
+		} catch (InvocationTargetException e) {
+			Assert.fail("Method threw exception: " + e.getCause().getMessage());
+		}
+	}
 }

@@ -30,7 +30,7 @@ public class ParentOrgResolutionValidator implements FieldValidator {
 		if (orgExists) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail(ParentOrgResolutionValidatorFail, fieldName, orgView.getParentOrg());
+			return ValidationResult.fail(NamedFieldNotFoundValidatorFail, fieldName, orgView.getParentOrg());
 		}
 	}
 	

@@ -307,5 +307,10 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 		
 		return option;
 	}
+
+	@Override
+	public String toString() {
+		return "InfoFieldBean [fieldType=" + fieldType + ", name=" + name + ", uniqueId=" + getUniqueID() + "]";
+	}
 	
 }

@@ -9,8 +9,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class GlobalIdExistsLoader extends SecurityFilteredLoader<Boolean> {
-	private Class<? extends Exportable> entityClass;
-	private String globalId;
+	protected Class<? extends Exportable> entityClass;
+	protected String globalId;
 	
 	public GlobalIdExistsLoader(SecurityFilter filter, Class<? extends Exportable> entityClass) {
 		super(filter);

@@ -11,7 +11,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class InternalOrgWithNameExistsLoader extends SecurityFilteredLoader<Boolean> {
-	private String name;
+	protected String name;
 	
 	public InternalOrgWithNameExistsLoader(SecurityFilter filter) {
 		super(filter);

@@ -143,11 +143,11 @@ public class CustomerImporterTest {
 			}
 		};
 		
-		expect(custConverter.toModel(orgViews[0])).andReturn(cust);
+		expect(custConverter.toModel(orgViews[0], trans)).andReturn(cust);
 		expect(orgSaver.saveOrUpdate(trans, cust)).andReturn(cust);
 		divConverter.setParentCustomer(cust);
 		
-		expect(divConverter.toModel(orgViews[1])).andReturn(div);
+		expect(divConverter.toModel(orgViews[1], trans)).andReturn(div);
 		expect(orgSaver.saveOrUpdate(trans, div)).andReturn(div);
 			
 		replay(orgSaver);

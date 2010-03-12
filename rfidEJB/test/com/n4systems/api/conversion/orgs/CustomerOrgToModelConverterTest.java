@@ -14,13 +14,16 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
+import com.n4systems.testutils.DummyTransaction;
 
 public class CustomerOrgToModelConverterTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_to_model_add() throws ConversionException {
+		Transaction trans = new DummyTransaction();
 		GlobalIdLoader<CustomerOrg> globalIdLoader = createMock(GlobalIdLoader.class);
 		InternalOrgByNameLoader orgLoader = createMock(InternalOrgByNameLoader.class);
 		
@@ -31,12 +34,12 @@ public class CustomerOrgToModelConverterTest {
 		CustomerOrgToModelConverter converter = new CustomerOrgToModelConverter(globalIdLoader, orgLoader);
 		
 		expect(orgLoader.setName(view.getParentOrg())).andReturn(orgLoader);
-		expect(orgLoader.load()).andReturn(parentOrg);
+		expect(orgLoader.load(trans)).andReturn(parentOrg);
 		
 		replay(globalIdLoader);
 		replay(orgLoader);
 		
-		CustomerOrg model = converter.toModel(view);
+		CustomerOrg model = converter.toModel(view, trans);
 		
 		verifyModel(model, view, parentOrg);
 		
@@ -47,9 +50,9 @@ public class CustomerOrgToModelConverterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_to_model_edit_does_not_change_parent_org_if_same() throws ConversionException {
+		Transaction trans = new DummyTransaction();
 		GlobalIdLoader<CustomerOrg> globalIdLoader = createMock(GlobalIdLoader.class);
 		InternalOrgByNameLoader orgLoader = createMock(InternalOrgByNameLoader.class);
-		
 		
 		PrimaryOrg parentOrg = OrgBuilder.aPrimaryOrg().withName("my customer").buildPrimary();
 		CustomerOrg editOrg = OrgBuilder.aCustomerOrg().withParent(parentOrg).buildCustomer();
@@ -60,12 +63,12 @@ public class CustomerOrgToModelConverterTest {
 		CustomerOrgToModelConverter converter = new CustomerOrgToModelConverter(globalIdLoader, orgLoader);
 		
 		expect(globalIdLoader.setGlobalId(view.getGlobalId())).andReturn(globalIdLoader);
-		expect(globalIdLoader.load()).andReturn(editOrg);
+		expect(globalIdLoader.load(trans)).andReturn(editOrg);
 		
 		replay(globalIdLoader);
 		replay(orgLoader);
 		
-		CustomerOrg model = converter.toModel(view);
+		CustomerOrg model = converter.toModel(view, trans);
 		
 		verifyModel(model, view, editOrg.getPrimaryOrg());
 		
@@ -78,6 +81,7 @@ public class CustomerOrgToModelConverterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_to_model_edit_does_changes_parent_org_when_chagned() throws ConversionException {
+		Transaction trans = new DummyTransaction();
 		GlobalIdLoader<CustomerOrg> globalIdLoader = createMock(GlobalIdLoader.class);
 		InternalOrgByNameLoader orgLoader = createMock(InternalOrgByNameLoader.class);
 		
@@ -92,15 +96,15 @@ public class CustomerOrgToModelConverterTest {
 		CustomerOrgToModelConverter converter = new CustomerOrgToModelConverter(globalIdLoader, orgLoader);
 		
 		expect(globalIdLoader.setGlobalId(view.getGlobalId())).andReturn(globalIdLoader);
-		expect(globalIdLoader.load()).andReturn(editOrg);
+		expect(globalIdLoader.load(trans)).andReturn(editOrg);
 		
 		expect(orgLoader.setName(view.getParentOrg())).andReturn(orgLoader);
-		expect(orgLoader.load()).andReturn(newParent);
+		expect(orgLoader.load(trans)).andReturn(newParent);
 		
 		replay(globalIdLoader);
 		replay(orgLoader);
 		
-		CustomerOrg model = converter.toModel(view);
+		CustomerOrg model = converter.toModel(view, trans);
 		
 		verifyModel(model, view, newParent);
 		

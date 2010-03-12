@@ -21,6 +21,8 @@ import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
+import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.OrgWithNameExistsLoader;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
@@ -32,7 +34,9 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
 import com.n4systems.model.product.SmartSearchLoader;
+import com.n4systems.model.productstatus.ProductStatusByNameLoader;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
+import com.n4systems.model.productstatus.ProductStatusForNameExistsLoader;
 import com.n4systems.model.productstatus.ProductStatusListLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
@@ -204,6 +208,14 @@ public class LoaderFactory {
 		return new NotificationSettingByUserListLoader(filter);
 	}
 
+	public OrgByNameLoader createOrgByNameLoader() {
+		return new OrgByNameLoader(filter);
+	}
+
+	public OrgWithNameExistsLoader createOrgWithNameExistsLoader() {
+		return new OrgWithNameExistsLoader(filter);
+	}
+
 	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
 		return new PaginatedConnectionListLoader(filter);
 	}
@@ -232,8 +244,16 @@ public class LoaderFactory {
 		return new ProductSerialExtensionListLoader(filter);
 	}
 
+	public ProductStatusByNameLoader createProductStatusByNameLoader() {
+		return new ProductStatusByNameLoader(filter);
+	}
+
 	public ProductStatusFilteredLoader createProductStatusFilteredLoader() {
 		return new ProductStatusFilteredLoader(filter);
+	}
+
+	public ProductStatusForNameExistsLoader createProductStatusForNameExistsLoader() {
+		return new ProductStatusForNameExistsLoader(filter);
 	}
 
 	public ProductStatusListLoader createProductStatusListLoader() {

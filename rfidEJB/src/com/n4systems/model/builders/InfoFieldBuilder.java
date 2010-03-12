@@ -22,7 +22,10 @@ public class InfoFieldBuilder extends BaseLegacyBuilder<InfoFieldBean> {
 		this.infoFieldType = infoFieldType;
 	}
 
-
+	public InfoFieldBuilder withName(String name) {
+		return new InfoFieldBuilder(name, weight, infoFieldType);
+	}
+	
 	@Override
 	public InfoFieldBean build() {
 		InfoFieldBean infoField = new InfoFieldBean();

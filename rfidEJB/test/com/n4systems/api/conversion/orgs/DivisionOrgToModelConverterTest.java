@@ -12,7 +12,9 @@ import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
+import com.n4systems.testutils.DummyTransaction;
 
 public class DivisionOrgToModelConverterTest {
 	
@@ -21,7 +23,7 @@ public class DivisionOrgToModelConverterTest {
 	public void test_to_model_throws_exception_on_null_parent() throws ConversionException {
 		DivisionOrgToModelConverter converter = new DivisionOrgToModelConverter(createMock(GlobalIdLoader.class));
 		
-		converter.toModel(FullExternalOrgViewBuilder.aCustomerView().build());
+		converter.toModel(FullExternalOrgViewBuilder.aCustomerView().build(), new DummyTransaction());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -38,7 +40,7 @@ public class DivisionOrgToModelConverterTest {
 		replay(globalIdLoader);
 
 		converter.setParentCustomer(parent);
-		DivisionOrg model = converter.toModel(view);
+		DivisionOrg model = converter.toModel(view, new DummyTransaction());
 		
 		verifyModel(model, view, parent);
 		
@@ -48,6 +50,7 @@ public class DivisionOrgToModelConverterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_to_model_edit_does_not_change_parent_customer() throws ConversionException {
+		Transaction trans = new DummyTransaction();
 		GlobalIdLoader<DivisionOrg> globalIdLoader = createMock(GlobalIdLoader.class);
 		
 		CustomerOrg parent = OrgBuilder.aCustomerOrg().withName("old_name").buildCustomer();
@@ -59,12 +62,12 @@ public class DivisionOrgToModelConverterTest {
 		DivisionOrgToModelConverter converter = new DivisionOrgToModelConverter(globalIdLoader);
 		
 		expect(globalIdLoader.setGlobalId(view.getGlobalId())).andReturn(globalIdLoader);
-		expect(globalIdLoader.load()).andReturn(editModel);
+		expect(globalIdLoader.load(trans)).andReturn(editModel);
 		
 		replay(globalIdLoader);
 
 		converter.setParentCustomer(OrgBuilder.aCustomerOrg().buildCustomer());
-		DivisionOrg model = converter.toModel(view);
+		DivisionOrg model = converter.toModel(view, trans);
 		
 		verifyModel(model, view, parent);
 		

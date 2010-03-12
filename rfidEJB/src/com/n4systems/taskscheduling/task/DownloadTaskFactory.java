@@ -3,6 +3,7 @@ package com.n4systems.taskscheduling.task;
 import java.util.List;
 
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.Product;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -54,6 +55,11 @@ public class DownloadTaskFactory {
 	
 	public AutoAttributeExportTask createAutoAttributeExportTask(DownloadLink link, String downloadUrl, ListLoader<AutoAttributeDefinition> attribLoader) {
 		AutoAttributeExportTask task = new AutoAttributeExportTask(link, downloadUrl, attribLoader);
+		return task;
+	}
+	
+	public ProductExportTask createProductExportTask(DownloadLink link, String downloadUrl, ListLoader<Product> productLoader) {
+		ProductExportTask task = new ProductExportTask(link, downloadUrl, productLoader);
 		return task;
 	}
 }

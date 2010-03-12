@@ -13,15 +13,16 @@ public interface FieldValidator {
 	 * TODO: Move the FieldValidator messages out to a language file
 	 */
 	public static final String EmailValidatorFail = "%s '%s' is not a valid Email address";
-	public static final String ExternalOrgCodeUniqueValidatorFail = "%s '%s' already exists in the system";
 	public static final String ExternalOrgGlobalIdValidatorFail = "Could not find %s '%s'";
 	public static final String ExternalOrgTypeValidatorFail = "%s must be either 'C' or 'D'";
 	public static final String NotNullValidatorFail = "%s must not be blank";
-	public static final String ParentOrgResolutionValidatorFail = "Could not find an %s named '%s'";
+	public static final String NamedFieldNotFoundValidatorFail = "Could not find an %s named '%s'";
 	public static final String ProductTypeExistsValidatorFail = "Could not find a Product Type named '%s'";
 	public static final String InputInfoFieldNotFoundValidatorFail = "The input field '%1$s' could not be found.  Please add the column 'I:%1$s'.";
 	public static final String StaticOptionNotFoundValidatorFail = "The option '%s' could not be found for the field '%s'.";
 	public static final String BlankInputOptionValidatorFail = "The input field '%s' must not be blank.";
+	public static final String MissingRequiredProductAttributeValidatorFail = "The attribute '%s' is required.";
+	
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext);
 }
