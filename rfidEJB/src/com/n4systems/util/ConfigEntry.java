@@ -7,16 +7,16 @@ public enum ConfigEntry {
 	MAIL_MANAGER								( 	"com.n4systems.mail.SMTPMailManager" ),
 	MAIL_AUTH_USER								(	""						),
 	MAIL_AUTH_PASS								(	""						),
-	MAIL_FROM_ADDR								(	"\"FieldID\" <noreply@fieldid.com>"),
+	MAIL_FROM_ADDR								(	"\"Field ID\" <noreply@fieldid.com>"),
 	MAIL_REPLY_TO								(	""						),
 	MAIL_HOST									(	"localhost"				),
 	MAIL_SUBJECT_PREFIX							(	""				),
 	MAIL_BODY_PLAIN_HEADER						(	""						),
-	MAIL_BODY_PLAIN_FOOTER						(	"\n\n---\nThe Field ID Team\n\nsupport@fieldid.com \n179 John Street, Suite 101\n" +
-													"Toronto, Ontario, Canada \nM5T1X4 \n\n----\nThis e-mail address as it is not a valid return address and is not monitored - for questions please email support@fieldid.com\n----"),
+	MAIL_BODY_PLAIN_FOOTER						(	"\n\n---\nThe Field ID Team\n\n49 Fraser Street, Ground Floor\nToronto, Ontario, Canada, M6K1Y7\ncontact@fieldid.com" +
+													"\n\n----\nThis e-mail address is not a valid return address and is not monitored - for questions please email support@fieldid.com\n----"),
 	MAIL_BODY_HTML_HEADER						(	""						),
-	MAIL_BODY_HTML_FOOTER						(	"<br/><br/>---<br/>The Field ID Team<br/><br/>support@fieldid.com <br/>179 John Street, Suite 101<br/>" +
-													"Toronto, Ontario, Canada <br/>M5T1X4 <br/><br/><hr/>This e-mail address as it is not a valid return address and is not monitored - for questions please email support@fieldid.com</hr>"),
+	MAIL_BODY_HTML_FOOTER						(	"<br/><br/>---<br/>The Field ID Team<br/><br/>49 Fraser Street, Ground Floor<br/>" +
+													"Toronto, Ontario, Canada, M6K1Y7<br/>contact@fieldid.com<br/><hr/>This e-mail address is not a valid return address and is not monitored - for questions please email support@fieldid.com</hr>"),
 	GRAPHING_CHART_SIZE_X						(	"400"					),
 	GRAPHING_CHART_SIZE_Y						(	"200"					),
 	GRAPHING_CHART_PEAK_MARKERS					(	"false"					),

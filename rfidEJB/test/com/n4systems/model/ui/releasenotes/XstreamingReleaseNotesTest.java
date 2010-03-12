@@ -1,6 +1,6 @@
 package com.n4systems.model.ui.releasenotes;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

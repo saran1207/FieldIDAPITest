@@ -1,7 +1,10 @@
 package com.n4systems.mail;
 
 import static com.n4systems.model.builders.UserBuilder.*;
-import static junit.framework.Assert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +24,16 @@ public class SendWelcomeMessageTest {
 	
 	@Test
 	public void should_correctly_send_the_mail_message_to_the_log() throws Exception {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		
-		EmailNotifier emailNotifier = new EmailNotifier(new FileSystemLoggingMailManager());
+		
+		EmailNotifier emailNotifier = new EmailNotifier(new OutputStreamMailManager(outputStream));
 		
 		UserWelcomeEmail notification = new UserWelcomeEmail(aUser().build(), "loginUrl", "forgotPassword");
 		
 		assertTrue(emailNotifier.notify(notification));
+		
+		assertThat(outputStream.toString(), containsString("User name"));
 	}
 
 	

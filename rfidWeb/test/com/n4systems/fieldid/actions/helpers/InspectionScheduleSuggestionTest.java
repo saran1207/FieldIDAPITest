@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Date;
