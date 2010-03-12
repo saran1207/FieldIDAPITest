@@ -1,6 +1,7 @@
 package com.n4systems.util.uri;
 
 import static com.n4systems.model.builders.TenantBuilder.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;
@@ -92,5 +93,38 @@ public class BaseUrlBuilderTest {
 		assertEquals("https://alternate-tenant.somedomain.com/fieldid/somefile.action", sut.build());
 	}
 	
+	
+	@Test
+	public void should_add_parameters_to_path_when_given() throws Exception {
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		sut.addParameter("param1", 4);
+		assertThat(sut.build(), endsWith("?param1=4"));
+	}	
+	
+	
+	@Test
+	public void should_add_multiple_parameters_with_amps_between_them() throws Exception {
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		sut.addParameter("param1", 4).addParameter("param2", "hello").addParameter("param3", 'c');
+		
+		assertThat(sut.build(), endsWith("?param1=4&param2=hello&param3=c"));
+	}
+	
+	
+	@Test
+	public void should_url_escape_the_values_of_a_parameter() throws Exception {
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		sut.addParameter("param", "= &");
+		
+		assertThat(sut.build(), endsWith("?param=%3D+%26"));
+	}
+	
+	@Test
+	public void should_url_escape_the_name_of_a_parameter() throws Exception {
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		sut.addParameter("param 1", "somevalue");
+		
+		assertThat(sut.build(), endsWith("?param+1=somevalue"));
+	}
 	
 }

@@ -186,7 +186,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 				new UserSaver().update(user);
 			}
 		} catch (Exception e) {
-			addActionError(getText("error.failedtosave"));
+			addActionErrorText("error.saving_user");
 			logger.error("failed to save user ", e);
 			return INPUT;
 		}
@@ -206,7 +206,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			signatureFileProcess();
 		} catch (Exception e) {
 			logger.error("Failed to upload signature", e);
-			addFlashErrorText("Error uploading image.");
+			addFlashErrorText("error.uploading_signature");
 		}
 	
 	}
@@ -229,7 +229,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	private UserWelcomeNotificationProducer getWelcomeNotifier() {
-		UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(getDefaultNotifier());
+		UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder());
 		return userWelcomeNotificationProducer;
 	}
 

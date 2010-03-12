@@ -4,14 +4,19 @@ import rfid.ejb.entity.UserBean;
 
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.notifications.UserWelcomeEmail;
+import com.n4systems.util.uri.ActionURLBuilder;
 
 public class UserWelcomeNotificationProducer {
 
 	private final Notifier notifier;
+	private final String loginUrl;
+	private final String forgotPasswordUrl;
 
 	
-	public UserWelcomeNotificationProducer(Notifier notifier) {
+	public UserWelcomeNotificationProducer(Notifier notifier, ActionURLBuilder urlBuilder) {
 		this.notifier = notifier;
+		this.loginUrl = urlBuilder.setAction("login").build();
+		this.forgotPasswordUrl = urlBuilder.setAction("forgotPassword").build();
 	}
 
 	
@@ -21,7 +26,7 @@ public class UserWelcomeNotificationProducer {
 
 
 	private void sendNotification(UserBean user, String personalMessage) {
-		UserWelcomeEmail notification = new UserWelcomeEmail(user);
+		UserWelcomeEmail notification = new UserWelcomeEmail(user, loginUrl, forgotPasswordUrl);
 		notification.setPersonalMessage(personalMessage);
 		notifier.notify(notification );
 	}

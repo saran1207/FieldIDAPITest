@@ -24,7 +24,7 @@ public class SendWelcomeMessageTest {
 		
 		EmailNotifier emailNotifier = new EmailNotifier(new FileSystemLoggingMailManager());
 		
-		UserWelcomeEmail notification = new UserWelcomeEmail(aUser().build());
+		UserWelcomeEmail notification = new UserWelcomeEmail(aUser().build(), "loginUrl", "forgotPassword");
 		
 		assertTrue(emailNotifier.notify(notification));
 	}

@@ -8,12 +8,13 @@ import com.n4systems.util.StringUtils;
 
 public class ActionURLBuilder extends BaseUrlBuilder {
 	private String action;
-	
 	private BaseEntity entity;
+	
 	
 	public ActionURLBuilder(URI baseUri, ConfigContext configContext) {
 		super(baseUri, configContext);
 	}
+	
 
 	@Override
 	protected String path() {
@@ -26,7 +27,7 @@ public class ActionURLBuilder extends BaseUrlBuilder {
 	private String getActionPath() {
 		String path = action + ".action";
 		if (entity != null && !entity.isNew()) {
-			path += "?uniqueID=" + entity.getId();
+			addParameter("uniqueID", entity.getId());
 		}
 		return path;
 	}

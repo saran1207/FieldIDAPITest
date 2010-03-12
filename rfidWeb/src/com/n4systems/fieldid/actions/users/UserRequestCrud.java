@@ -93,7 +93,7 @@ public class UserRequestCrud extends AbstractCrud {
 	private void createNewAccountEmail() {
 		
 		try {
-			new UserWelcomeNotificationProducer(getDefaultNotifier()).sendWelcomeNotificationTo(userRequest.getUserAccount());
+			new UserWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder()).sendWelcomeNotificationTo(userRequest.getUserAccount());
 			logger.info(getLogLinePrefix() + " user request email sent for to user " + userRequest.getUserAccount().getUserID() + " for tenant " + userRequest.getTenant().getName());
 		} catch (Exception e) {
 			logger.warn(getLogLinePrefix() + "acceptance message failed to send. ", e);

@@ -394,10 +394,14 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 	
 	public String createActionURI(String action) {
-		return new ActionURLBuilder(getBaseURI(), getConfigContext()).setAction(action).build();
+		return createActionUrlBuilder().setAction(action).build();
+	}
+
+	protected ActionURLBuilder createActionUrlBuilder() {
+		return new ActionURLBuilder(getBaseURI(), getConfigContext());
 	}
 	public String createActionURI(Tenant tenant, String action) {
-		return new ActionURLBuilder(getBaseURI(), getConfigContext()).setAction(action).setCompany(tenant).build();
+		return createActionUrlBuilder().setAction(action).setCompany(tenant).build();
 	}
 	
 	public TenantLimitProxy getLimits() {

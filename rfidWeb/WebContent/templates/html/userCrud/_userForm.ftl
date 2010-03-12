@@ -64,8 +64,8 @@
 					</div>
 				</div>
 				<div id="imageUploaded" class="fieldHolder" <#if !signature.existingImage>style="display:none"</#if>  >
-					<span id="uploadedImage" <#if signature.existingImage && !signture.newImage> style="display:none"</#if>><@s.text name="label.image_uploaded"/></span>
-					<img id="imagePreview" <#if !signature.existingImage || signture.newImage> style="display:none"</#if> src="<@s.url action="downloadUserSignature" userId="${uniqueID!}" namespace="/file"/>" height="50" width="200" alt="<@s.text name="label.signature"/>"/>
+					<span id="uploadedImage" <#if signature.existingImage && !signature.newImage> style="display:none"</#if>><@s.text name="label.image_uploaded"/></span>
+					<img id="imagePreview" <#if !signature.existingImage || signature.newImage> style="display:none"</#if> src="<@s.url action="downloadUserSignature" userId="${uniqueID!}" namespace="/file"/>" height="50" width="200" alt="<@s.text name="label.signature"/>"/>
 					<@s.hidden name="signature.removeImage" id="removeImage"/> <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
 					<@s.hidden name="signature.newImage" id="newImage"/>
 					<@s.hidden name="signature.uploadDirectory" id="imageDirectory"/>

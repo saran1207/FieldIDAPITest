@@ -15,10 +15,16 @@ import com.n4systems.model.orgs.SecondaryOrg;
 
 public class UserWelcomeEmailTest {
 
+	private String signInUrl = "https://somedomain.com/fieldid/login.action";
+	private String forgotPassword = "https://somedomain.com/fieldid/forgotPassword.action";
+
+
+
+
 	@Test
 	public void should_respond_to_user_name_from_the_user_being_notified() throws Exception {
 		UserBean user = aUser().withUserId("alex").build();
-		UserWelcomeEmail sut = new UserWelcomeEmail(user);
+		UserWelcomeEmail sut = new UserWelcomeEmail(user, signInUrl, forgotPassword);
 		
 		assertEquals("alex", sut.getUserName());
 	}
@@ -30,7 +36,7 @@ public class UserWelcomeEmailTest {
 		SecondaryOrg secondaryOrg = aSecondaryOrg().withPrimaryOrg(primaryOrg).build();
 		UserBean user = aUser().withOwner(secondaryOrg).build();
 		
-		UserWelcomeEmail sut = new UserWelcomeEmail(user);
+		UserWelcomeEmail sut = new UserWelcomeEmail(user, signInUrl, forgotPassword);
 		
 		
 		assertEquals("Primary Org", sut.getTenantName());
@@ -40,30 +46,11 @@ public class UserWelcomeEmailTest {
 	public void should_have_the_teants_name_at_the_begining_of_the_subject() {
 		UserBean user = aUser().build();
 		
-		UserWelcomeEmail sut = new UserWelcomeEmail(user);
+		UserWelcomeEmail sut = new UserWelcomeEmail(user, signInUrl, null);
 		
 		assertTrue(sut.subject().startsWith(sut.getTenantName()));
 	}
 	
 	
-	
-	@Test
-	public void should_find_reset_password_should_be_sent_user_in_the_notification() throws Exception {
-		UserBean user = aUser().withResetPasswordKey().build();
-		
-		UserWelcomeEmail sut = new UserWelcomeEmail(user);
-		
-		assertTrue(sut.isResetPasswordSet());
-	}
-	
-	
-	@Test
-	public void should_find_reset_password_should_be_not_sent_user_in_the_notification() throws Exception {
-		UserBean user = aUser().withOutResetPasswordKey().build();
-		
-		UserWelcomeEmail sut = new UserWelcomeEmail(user);
-		
-		assertFalse(sut.isResetPasswordSet());
-	}
 	
 }

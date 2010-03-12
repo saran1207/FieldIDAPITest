@@ -7,9 +7,13 @@ public class UserWelcomeEmail extends Notification {
 	
 	
 	private String personalMessage;
+	private final String signInUrl;
+	private final String forgotPasswordUrl;
 
-	public UserWelcomeEmail(UserBean notifyUser) {
+	public UserWelcomeEmail(UserBean notifyUser, String signInUrl, String forgotPasswordLink) {
 		super();
+		this.signInUrl = signInUrl;
+		this.forgotPasswordUrl = forgotPasswordLink;
 		notifiyUser(notifyUser);
 	}
 
@@ -31,9 +35,6 @@ public class UserWelcomeEmail extends Notification {
 		return getTo().getOwner().getPrimaryOrg().getName();
 	}
 
-	public boolean isResetPasswordSet() {
-		return getTo().getResetPasswordKey() != null;
-	}
 
 	public boolean isPersonalized() {
 		return personalMessage != null;
@@ -45,5 +46,13 @@ public class UserWelcomeEmail extends Notification {
 
 	public void setPersonalMessage(String personalMessage) {
 		this.personalMessage = personalMessage;
+	}
+
+	public String getSignInUrl() {
+		return signInUrl;
+	}
+
+	public String getForgotPasswordUrl() {
+		return forgotPasswordUrl;
 	}
 }

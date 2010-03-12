@@ -1,8 +1,13 @@
 package com.n4systems.util.uri;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
@@ -12,9 +17,14 @@ import com.n4systems.util.HostNameParser;
 
 public abstract class BaseUrlBuilder implements UrlBuilder {
 
+	private static final String URL_ENCODING_CHARACTER_SET = "UTF-8";
 	private final URI baseUri;
 	private final ConfigContext configContext;
 	private Tenant tenant;
+	
+	private Map<String, Object> parameters = new HashMap<String, Object>();
+	
+	
 
 	public BaseUrlBuilder(URI baseUri, ConfigContext configContext) {
 		super();
@@ -28,9 +38,33 @@ public abstract class BaseUrlBuilder implements UrlBuilder {
 	
 	
 	private URI getURI() {
-		return getBaseUri().resolve(path());
+		return getBaseUri().resolve(path() + getQueryString());
 	}
 	
+	private String getQueryString()  {
+		if (parameters.isEmpty()) {
+			return "";
+		}
+		try {
+			return createQueryString();
+		} catch (UnsupportedEncodingException e) {
+			throw new InvalidArgumentException("UTF-8 encoding is not supported ", e);
+		}
+	}
+
+	private String createQueryString() throws UnsupportedEncodingException {
+		String queryString = "";
+		for (Entry<String, Object> entry : parameters.entrySet()) {
+			queryString += "&" + encodeParameter(entry.getKey()) + "=" + encodeParameter(entry.getValue().toString());
+		}
+		
+		return queryString.replaceFirst("&", "?");
+	}
+
+	private String encodeParameter(String urlString) throws UnsupportedEncodingException {
+		return URLEncoder.encode(urlString, URL_ENCODING_CHARACTER_SET);
+	}
+
 	public String build() {
 		try {
 			URL url = getURL();
@@ -86,6 +120,12 @@ public abstract class BaseUrlBuilder implements UrlBuilder {
 
 	public BaseUrlBuilder setCompany(Tenant tenant) {
 		this.tenant = tenant;
+		return this;
+	}
+	
+	
+	public BaseUrlBuilder addParameter(String paramName, Object paramValue) {
+		parameters.put(paramName, paramValue);
 		return this;
 	}
 }
