@@ -225,12 +225,7 @@
 			<result name="error" type="freemarker">/templates/ajax/identifyCrud/marryCustomerOrder.ftl</result>
 		</action>
 
-		<action name="products" method="list"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="error" type="freemarker">/templates/ajax/productCrud/list.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/productCrud/list.ftl</result>
-			<result name="oneFound" type="freemarker">/templates/ajax/productCrud/list.ftl</result>
-		</action>
+	
 		
 		<action name="jobFindAsset" method="list"
 			class="com.n4systems.fieldid.actions.product.ProductCrud">
@@ -257,10 +252,7 @@
 			<result name="success" type="freemarker">/templates/ajax/autoAttributes/show.ftl</result>
 		</action>
 
-		<action name="orders" method="list"
-			class="com.n4systems.fieldid.actions.integration.OrderUtilAction">
-			<result name="success" type="freemarker">/templates/html/orders/list.ftl</result>
-		</action>
+		
 
 		
 		<action name="unitOfMeasure" method="show"

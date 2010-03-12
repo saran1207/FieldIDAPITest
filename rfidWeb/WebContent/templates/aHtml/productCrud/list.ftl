@@ -1,4 +1,4 @@
-<#assign namespace="/ajax"/>
+<#assign namespace="/aHtml"/>
 <#assign productSearchAction="products"/>
 <#assign productFormId="subProductSearchForm">
 <#assign useOverRides=true/>

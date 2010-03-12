@@ -4,7 +4,7 @@
 	<script language="Javascript" src="javascript/marryOrder.js"></script>
 	<script language="javascript">
 	
-		ordersUrl = "<@s.url action="orders" namespace="/ajax"  />";
+		ordersUrl = "<@s.url action="orders" namespace="/aHtml"  />";
 		marryOrderUrl = "<@s.url action="marryOrder" namespace="/ajax"  />";
 		marryOrderTitle = '<@s.text name="label.connectorder" />';
 		
@@ -98,7 +98,7 @@ ${action.setPageType('product', 'show')!}
 				<label><@s.text name="label.onumber"/></label>
 				<span class="fieldValue" id="marriedOrderDiv">
 					<#if !product.shopOrder?exists >
-						<a href="<@s.url action="orders" namespace="/ajax" product="${uniqueID}"  />" class="lightview" title="<@s.text name="label.connectorder" /> :: :: scrolling:true, autosize: true, ajax: { onComplete: ajaxForm } "  rel='ajax'><@s.text name="label.connectorder" /></a>
+						<a href="<@s.url action="orders" namespace="/aHtml" product="${uniqueID}"  />" class="lightview" title="<@s.text name="label.connectorder" /> :: :: scrolling:true, autosize: true, ajax: { onComplete: ajaxForm } "  rel='ajax'><@s.text name="label.connectorder" /></a>
 					<#else>
 						${(product.shopOrder.order.orderNumber)!}
 					</#if>

@@ -88,6 +88,16 @@
 		<action name="showKick" class="com.n4systems.fieldid.actions.SimpleAction">
 			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
 		</action>
+		
+		<action name="products" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/aHtml/productCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/productCrud/list.ftl</result>
+			<result name="oneFound" type="freemarker">/templates/aHtml/productCrud/list.ftl</result>
+		</action>
+		
+		<action name="orders" method="list" class="com.n4systems.fieldid.actions.integration.OrderUtilAction">
+			<result name="success" type="freemarker">/templates/html/orders/list.ftl</result>
+		</action>
 	</package>
 	
 	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />
