@@ -122,6 +122,10 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
 
 	public String getUserID() {
 		return userID;

@@ -1,0 +1,1 @@
+$('sendWelcomeEmail').replace('<@s.text name="label.welcome_message_sent"/>');

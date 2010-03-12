@@ -6,4 +6,4 @@ ${action.setPageType('customer', 'users')!}
 <#assign backToList>
 	<a href="<@s.url action="customersUsers" currentPage="${currentPage!}" uniqueID="" includeParams="get"/>"><@s.text name="label.cancel" /></a>
 </#assign>
-<#include "../userCrud/_userForm.ftl">
+<#include "../userCrud/_userEditForm.ftl">

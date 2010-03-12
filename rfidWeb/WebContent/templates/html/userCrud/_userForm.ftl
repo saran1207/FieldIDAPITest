@@ -3,7 +3,7 @@
 	<@n4.includeScript src="timezone" />
 	<@n4.includeScript src="user" />
 	<@n4.includeScript>
-		countryChangeUrl = "<@s.url action="getRegions" namespace="/ajax" />";
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
 		signatureUploadUrl = "<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="userSignature"/>";
 	</@n4.includeScript>
 </head>
@@ -99,14 +99,6 @@
 				<div class="infoSet">
 					<label class="label" for="securityRfidNumber"><@s.text name="label.securityrfidnumber"/></label>
 					<@s.textfield key="label.securityrfidnumber" name="securityRfidNumber" />
-				</div>
-			
-			<#else>
-				<div class="infoSet">
-					<label class="label" for="passwordEntry.password"><@s.text name="label.password"/></label>
-					<span class="fieldHolder">
-						<@s.text name="label.go_to"/> <a href="<@s.url action="adminEditPassword" uniqueID="${uniqueID}"/>"><@s.text name="label.change_password_tab"/></a> <@s.text name="label.to_reset_password"/> 
-					</span>
 				</div>
 			</#if>
 			<#if !user.admin && employee>

@@ -418,5 +418,11 @@
 			<result name="success" type="freemarker">/templates/ajax/safetyNetwork/exampleMessage.ftl</result>
 		</action>
 		
+		
+		<action name="sendWelcomeEmail" method="create" class="com.n4systems.fieldid.actions.users.WelcomeEmailAction">
+			<result name="success" type="freemarker">/templates/ajax/userCrud/sendWelcomeEmail.ftl</result>
+		</action>
+		
+		
 	</package>
 </struts>

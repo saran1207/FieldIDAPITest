@@ -145,6 +145,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return SUCCESS;
 	}
 
+	
 	@SkipValidation
 	public String doDelete() {
 		testRequiredEntities(true);

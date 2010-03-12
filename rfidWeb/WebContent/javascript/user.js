@@ -87,6 +87,22 @@ function updatePasswordInputs() {
 	}
 }
 
+
+var sendingWelcomeEmailText = "";
+var sendWelcomeEmailUrl = "";
+
+onDocumentLoad(function() {
+	$$('#sendWelcomeEmail').each(
+		function(element) { 
+			element.observe('click', 
+				function(event) {
+					event.stop();
+					getResponse(sendWelcomeEmailUrl);
+					$('sendWelcomeEmail').replace('<span id="sendWelcomeEmail">' + sendingWelcomeEmailText + '</span>');
+				});
+		});
+});
+
 onDocumentLoad(function() { $$('.initialsInput').each(function(element) { element.observe("change", updateInitials); }); });
 onDocumentLoad(function() { $('initials').observe('dblclick', updateInitials()); });
 onDocumentLoad(updatePersonalMessage);
