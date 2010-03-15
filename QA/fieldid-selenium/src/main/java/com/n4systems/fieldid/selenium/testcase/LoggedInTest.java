@@ -6,7 +6,9 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
 public abstract class LoggedInTest extends FieldIDTestCase {
-
+	public static String SYSTEM_USER_PASSWORD = "Xk43g8!@";
+	
+	
 	private Login loginPage;
 	protected final String password;
 	protected final String username;

@@ -433,10 +433,12 @@ public class Login {
 		setUserName(username);
 		setPassword(password);
 		gotoSignIn();
-		if(misc.isEULA()) {
+		if (misc.isEULA()) {
 			misc.scrollToBottomOfEULA();
 			misc.gotoAcceptEULA();
 		}
+		
+		
 		verifySignedIn();
 	}
 }

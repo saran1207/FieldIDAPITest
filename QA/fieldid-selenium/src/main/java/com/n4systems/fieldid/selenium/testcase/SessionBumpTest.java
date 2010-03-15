@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.home.page.Home;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.Misc;
@@ -45,8 +46,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		secondSession.open("/fieldid/home.action");
 		secondSession.waitForPageToLoad(Misc.defaultTimeout);
 		
-		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
-		assertFalse("The a session kick out warning is being shown to the wrong user. ", secondSession.isElementPresent("sessionKickNotice"));
+		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("error"));
+		assertTrue(selenium.getText("error").contains("A username can only be used by one person at a time"));
+		new Home(secondSession, misc).assertHomePageHeader();
 	}
 	
 	
@@ -115,11 +117,6 @@ public class SessionBumpTest extends FieldIDTestCase {
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
 	
 	}
-	
-	
-	
-	
-	
 	
 	
 }
