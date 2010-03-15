@@ -21,7 +21,7 @@ public class AuthenticationAction extends AbstractAdminAction {
 	public String doCreate() {
 		
 		if (userSecurityManager.login(username, password)) {
-			getSession().put(Constants.SESSION_USER, "test");
+			getSession().put(Constants.SESSION_USER, "signed in");
 		}
 		
 		return SUCCESS;
