@@ -733,6 +733,7 @@ public class Assets extends TestCase {
 	 */
 	public List<String> getDivisionsOnSearchCriteria(String customer) throws Exception {
 		List<String> results = new ArrayList<String>();
+		misc.gotoChooseOwner();
 		setCustomer(customer);
 		SelectList division = ie.selectList(productSearchDivisionFinder);
 		assertTrue("Could not find the Division select list", division.exists());
@@ -750,6 +751,7 @@ public class Assets extends TestCase {
 		}
 		// Turn the refresh monitor back on
 		FieldIDMisc.startMonitor();
+		misc.cancelOwner();
 		return results;
 	}
 
@@ -1849,9 +1851,11 @@ public class Assets extends TestCase {
 		gotoProductSearchResults();
 		List<String> filteredCustomers = getProductSearchResultsColumn("Customer Name");
 		String customerName = filteredCustomers.get(0);
-		List<String> divisions = getDivisionsOnSearchCriteria(customerName);
-		prop.setCustomer(customerName);
-		prop.setDivision(divisions.get(0));
+		List<String> divisions = getDivisionsOnSearchCriteria("/" + customerName + "/");
+		Owner o = new Owner(null, customerName, divisions.get(0));
+		misc.gotoChooseOwner();
+		misc.setOwner(o);
+		misc.selectOwner();
 		gotoProductSearchResults();
 		if(getTotalNumberOfProducts() > 1000) {
 			fail("You need to set up so there are less than 1000 assets.");

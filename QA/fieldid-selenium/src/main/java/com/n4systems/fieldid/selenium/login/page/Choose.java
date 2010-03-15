@@ -53,7 +53,6 @@ public class Choose {
 	 * This verifies the elements on the page exist.
 	 */
 	public void verifyChooseCompany() {
-		misc.captureScreenshot("VerifyChooseCompany.png");
 		misc.info("Verify there is a Company ID text box.");
 		assertTrue(selenium.isElementPresent(companyIDLocator));
 		misc.info("Verify there is a Find Sign in Page button.");

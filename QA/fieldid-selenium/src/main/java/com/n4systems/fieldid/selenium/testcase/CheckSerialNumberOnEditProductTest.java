@@ -6,7 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.Asset;
-import com.n4systems.fieldid.selenium.assets.page.ProductSearch;
+import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.datatypes.ProductSelectDisplayColumns;
 import com.n4systems.fieldid.selenium.login.page.Login;
@@ -17,13 +17,13 @@ public class CheckSerialNumberOnEditProductTest extends FieldIDTestCase {
 	private String username;
 	private String password;
 	private Asset asset;
-	private ProductSearch ps;
+	private AssetSearch ps;
 
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		asset = new Asset(selenium, misc);
-		ps = new ProductSearch(selenium, misc);
+		ps = new AssetSearch(selenium, misc);
 		login = new Login(selenium, misc);
 		username = "n4systems";
 		password = "makemore$";

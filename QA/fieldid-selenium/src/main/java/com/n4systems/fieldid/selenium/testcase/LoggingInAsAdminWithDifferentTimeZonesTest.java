@@ -66,7 +66,7 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		data.add(new String[]{"jcrenfroe", "jseibert"});
 		data.add(new String[]{"lcrane", "lance"});
 		data.add(new String[]{"redflame", "rcooper"});
-		data.add(new String[]{"saturn", "dmaxwell"});
+		data.add(new String[]{"saturn", "wklassen"});
 		
 		return data;
 	}

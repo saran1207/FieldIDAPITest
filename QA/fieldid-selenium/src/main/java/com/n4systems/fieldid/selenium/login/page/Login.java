@@ -410,8 +410,7 @@ public class Login {
 	 */
 	public void verifyLoginPage() {
 		misc.info("Check for error messages on the page");
-		misc.captureScreenshot("VerifyLoginPage.png");
-		List<String> errorMessages = misc.getErrorMessages();
+		List<String> errorMessages = misc.getFormErrorMessages();
 		if(errorMessages.size() > 0) {
 			String errors = misc.convertListToString(errorMessages);
 			fail("There were errors on the last action\n" + errors);

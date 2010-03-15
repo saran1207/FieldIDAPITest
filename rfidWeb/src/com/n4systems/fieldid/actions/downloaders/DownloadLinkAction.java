@@ -29,7 +29,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	}
 
 	public static String buildDownloadUrl(AbstractAction action) {
-		return action.createActionURI("showDownloads.action?fileId=");
+		return action.createActionURI("showDownloads") + "?fileId=";
 	}
 
 	@Override

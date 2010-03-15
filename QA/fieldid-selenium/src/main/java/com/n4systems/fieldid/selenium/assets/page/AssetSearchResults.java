@@ -4,14 +4,14 @@ import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
-public class ProductSearchResults {
+public class AssetSearchResults {
 	FieldIdSelenium selenium;
 	Misc misc;
 	
 	// Locators
 	private String productSearchResultsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Product Search Results')]";
 
-	public ProductSearchResults(FieldIdSelenium selenium, Misc misc) {
+	public AssetSearchResults(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

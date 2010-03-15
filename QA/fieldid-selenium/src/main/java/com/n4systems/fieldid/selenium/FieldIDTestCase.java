@@ -29,8 +29,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	/** 
 	 * A test case will require the following:
 	 * 
-	 * variable		default						define				comment
-	 * --------		-------						------				-------
+	 * variable				default						define				comment
+	 * --------				-------						------				-------
 	 * host					localhost					selenium-server		the computer running the selenium remote control (RC) server
 	 * port					4444						selenium-port		the port the selenium remote control server is listening on
 	 * snapshots			C:\\selenium-snapshots\\	selenium-snapshots	the root location for screen captures to be stored. 
@@ -143,7 +143,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 */
 	private String host = System.getProperty("selenium-server", "localhost");
 	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
-	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
+//	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");
 	private String initCompany = System.getProperty("fieldid-companyid", "n4");
@@ -168,7 +168,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 		selenium = createWebBrowser();
 		setWebBrowserSpeed();
 		createMiscClasses();
-		misc.createTimestampDirectory(snapshots);
+		//misc.createTimestampDirectory(snapshots);
 	}
 
 	/**

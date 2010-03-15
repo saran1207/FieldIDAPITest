@@ -20,6 +20,7 @@ import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class Misc {
 
+	Random r = new Random(System.currentTimeMillis());
 	public static final String defaultTimeout = "60000";
 	// Current timeout for session is 30 minutes. This is set to 31 minutes
 	// just to be safe. That is, session will timeout in 30 minutes but it
@@ -51,8 +52,8 @@ public class Misc {
 	private String securedByThawteLinkLocator = "xpath=//DIV[@id='sslCert']/A[contains(@target,'THAWTE_Splash')]";
 	private String thawteSiteSealWindowLocator = "THAWTE_Splash";
 	private String signOutLinkLocator = "xpath=//A[contains(text(),'Sign Out')]";
-	private String errorMessageXpathCount = "//*[@class='errorMessage']";
-	private String errorMessageLocator = "xpath=//UL/LI[1]/*[@class='errorMessage']";
+	private String errorMessageXpathCount = "//*[@class='errorMessage' and not(contains(@style,'display: none'))]";
+	private String errorMessageLocator = "xpath=//UL/LI[1]/*[@class='errorMessage' and not(contains(@style,'display: none'))]";
 	private String fieldIDEndUserLicenseAgreementHeaderLocator = "xpath=//H1[contains(text(),'Field ID End User Licence Agreement')]";
 	private String eulaLegalTextLocator = "xpath=//FORM[@id='eulaForm']/DIV[@class='sectionContent']/DIV[@class='infoSet']/DIV[@id='eulaLegalText']/PRE";
 	private String acceptEULAButtonLocator = "xpath=//INPUT[@id='acceptEula']";
@@ -195,6 +196,14 @@ public class Misc {
 		return true;
 	}
 	
+	public String promptForUserInput(String timeout) {
+		String jsFunctionName = "promptUser()";
+		String jsFunction = "function " + jsFunctionName + " { var result = prompt(\"Input: \", \"\"); return result; }";
+		selenium.setTimeout(timeout);
+		selenium.addScript(jsFunction, "");
+		return selenium.getEval(jsFunctionName);
+	}
+	
 	/**
 	 * If present this will click the link "ABOUT SSL CERTIFICATES" on the
 	 * login page. This link is only present when the domain is *.fieldid.com.
@@ -216,8 +225,8 @@ public class Misc {
 	
 	/**
 	 * This message will return a List<String> object. If there were
-	 * any error messages on the page, the list will not be empty. If
-	 * the list is empty, no error messages were found.
+	 * any error messages on the FORM, the list will not be empty. If
+	 * the list is empty, no error messages were found on the FORM.
 	 * 
 	 * The error messages will be those which appear at the top of the
 	 * page. These are different from the error messages which occur
@@ -231,7 +240,7 @@ public class Misc {
 	 * 
 	 * @return a list of error messages or an empty list if no errors.
 	 */
-	public List<String> getErrorMessages() {	// gets class="errorMessage"
+	public List<String> getFormErrorMessages() {	// gets class="errorMessage"
 		List<String> result = new ArrayList<String>();
 		String iterableErrorMessageLocator = errorMessageLocator;
 		if(selenium.isElementPresent(errorMessageLocator)) {
@@ -681,7 +690,6 @@ public class Misc {
 	}
 	
 	private StringBuffer getRandomString(String validCharacters, int maxLength) {
-		Random r = new Random();
 		StringBuffer s = new StringBuffer(maxLength);
 		for(int i = 0; i < maxLength; i++) {
 			int n = r.nextInt(validCharacters.length());
@@ -919,18 +927,23 @@ public class Misc {
 	 * @param png
 	 */
 	public void checkForErrorMessages(String png) {
-		if(png != null) {
-			captureScreenshot(png + ".png");
-		}
-		
-		List<String> errors = getErrorMessages();
+
+		List<String> errors = getFormErrorMessages();
+		int otherErrors = getNonFormErrorMessages();
 		if(isOopsPage()) {
 			fail("Got the Oops page. Check the fieldid.log.");
 		} else if(errors.size() > 0) {
 			fail("There were errors on the page: " + convertListToString(errors));
+		} else if(otherErrors > 0) {
+			fail("There were non-form errors on the page");
 		}
 	}
 	
+	private int getNonFormErrorMessages() {
+		Number n = selenium.getXpathCount(errorMessageXpathCount);
+		return n.intValue();
+	}
+
 	/**
 	 * This will delete the session cookie then call the javascript to check
 	 * for a session timeout. The testSession() method is part of Field ID.
@@ -1330,13 +1343,20 @@ public class Misc {
 	public Owner getOwner() {
 		Owner result = new Owner();
 		String organization = selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator);
+		String customerOrganization = "";
 		result.setOrganization(organization.trim());
-		String customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
-		String customer = customerOrganization.replace(" (" + organization + ")", "");
-		result.setCustomer(customer.trim());
-		String divisionCustomerOrganization = selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator);
-		String division = divisionCustomerOrganization.replace(", " + customerOrganization, "");
-		result.setDivision(division.trim());
+		String[] s = selenium.getSelectOptions(selectOwnerCustomerSelectListLocator);
+		if(s.length > 0 && !s.equals("")) {
+			customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
+			String customer = customerOrganization.replace(" (" + organization + ")", "");
+			result.setCustomer(customer.trim());
+		}
+		s = selenium.getSelectOptions(selectOwnerDivisionSelectListLocator);
+		if(s.length > 0 && !s[0].equals("")) {
+			String divisionCustomerOrganization = selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator);
+			String division = divisionCustomerOrganization.replace(", " + customerOrganization, "");
+			result.setDivision(division.trim());
+		}
 		return result;
 	}
 
@@ -1391,5 +1411,15 @@ public class Misc {
 		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
 		result = selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
 		return result;
+	}
+
+	public int getRandomNumber(int low, int high) {
+		int result = r.nextInt((high-low+1)) + low;
+		return result;
+	}
+
+	public void checkForNonFormErrorMessages(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 }

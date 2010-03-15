@@ -63,7 +63,7 @@ public class ManageInspectionTypes extends TestCase {
 	private Finder supportedProofTestTypesFromEditInspectionTypeFinder;
 	private Finder viewAllLinkFinder;
 	private Finder manageInspectionTypePageContentHeaderFinder;
-	private Finder manageButtonGroupsImDoneButtonFinder;
+//	private Finder manageButtonGroupsImDoneButtonFinder;	hard coded to get around bug
 	private Finder viewInspectionTypeFinder;
 	private Finder inspectionFormSectionNameFinder;
 	private Finder addNewButtonGroupButtonFinder;
@@ -112,7 +112,7 @@ public class ManageInspectionTypes extends TestCase {
 			supportedProofTestTypesFromEditInspectionTypeFinder = xpath(p.getProperty("supportedprooftesttypeseditform", "NOT SET"));
 			viewAllLinkFinder = xpath(p.getProperty("viewalllink", "NOT SET"));
 			manageInspectionTypePageContentHeaderFinder = xpath(p.getProperty("manageinspectiontypecontentheader", "NOT SET"));
-			manageButtonGroupsImDoneButtonFinder = xpath(p.getProperty("managebuttongroupsimdonebutton", "NOT SET"));
+//			manageButtonGroupsImDoneButtonFinder = xpath(p.getProperty("managebuttongroupsimdonebutton", "NOT SET"));
 			viewInspectionTypeFinder = xpath(p.getProperty("viewinspectiontype", "NOT SET"));
 			inspectionFormSectionNameFinder = xpath(p.getProperty("inspectionformsectioncontainers", "NOT SET"));
 		} catch (FileNotFoundException e) {
@@ -570,7 +570,8 @@ public class ManageInspectionTypes extends TestCase {
 	}
 
 	public void gotoImDoneFromManageButtonGroups() throws Exception {
-		Button done = ie.button(manageButtonGroupsImDoneButtonFinder);
+//		Button done = ie.button(manageButtonGroupsImDoneButtonFinder);
+		Button done = ie.button(2);
 		assertTrue("Could not find the 'Im Done' button", done.exists());
 		done.click();
 		this.checkInspectionFormPageContentHeader();
@@ -638,7 +639,7 @@ public class ManageInspectionTypes extends TestCase {
 				Criteria c = s.getCriteria(j);
 				assertNotNull(c);
 				String criteriaName = c.getCriteriaName();
-				Finder inspectionFormAddCriteriaButtonFinder = xpath("//DIV[@id='criteriaSection_" + i + "']/H2[@class='criteriaSectionHead']/SPAN[@class='addCriteriaButton']/BUTTON[contains(text(),'Add Criteria')]");
+				Finder inspectionFormAddCriteriaButtonFinder = xpath("//DIV[@id='criteriaSection_" + i + "']/DIV[@class='criteriaSectionHead']/DIV[@class='addCriteriaButton']/BUTTON[contains(text(),'Add Criteria')]");
 				Button addCriteria = ie.button(inspectionFormAddCriteriaButtonFinder);
 				assertTrue("Could not find the Add Criteria button", addCriteria.exists());
 				addCriteria.click();

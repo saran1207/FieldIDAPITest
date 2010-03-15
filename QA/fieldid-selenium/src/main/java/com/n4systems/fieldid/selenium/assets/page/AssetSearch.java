@@ -10,13 +10,13 @@ import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.n4systems.fieldid.selenium.misc.Search;
 
-public class ProductSearch {
+public class AssetSearch {
 	FieldIdSelenium selenium;
 	Misc misc;
 	Search search;
 	
 	// Locators
-	private String productSearchPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Product Search')]";
+	private String productSearchPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset Search')]";
 	private String rfidNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_rfidNumber']";
 	private String serialNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_serialNumber']";
 	private String orderNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_orderNumber']";
@@ -56,7 +56,7 @@ public class ProductSearch {
 	private String runButtonLocator = "xpath=//INPUT[@id='reportForm_label_Run']";
 	private String productSearchResultTable = "xpath=//TABLE[@id='resultsTable']";
 
-	public ProductSearch(FieldIdSelenium selenium, Misc misc) {
+	public AssetSearch(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 		search = misc.getSearch();
@@ -64,9 +64,9 @@ public class ProductSearch {
 	
 	/**
 	 * Checks to see if there are any error messages on the page and checks
-	 * for the header "Product Search" on the page.
+	 * for the header "Asset Search" on the page.
 	 */
-	public void verifyAssetsPage() {
+	public void assertAssetsPage() {
 		misc.info("Verify going to Assets page went okay.");
 		misc.checkForErrorMessages("verifyAssetsPage");
 		if(!selenium.isElementPresent(productSearchPageHeaderLocator)) {

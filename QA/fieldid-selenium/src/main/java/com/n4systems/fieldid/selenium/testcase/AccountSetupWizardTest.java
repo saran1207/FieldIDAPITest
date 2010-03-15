@@ -80,7 +80,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	private void assertNoThanksWorks() {
 		qsw.verifyQuickSetupWizardPageHeader();
 		qsw.gotoNoThanks();
-		home.verifyHomePageHeader();
+		home.assertHomePageHeader();
 	}
 
 	private CreateTenant createARandomNewBasicTenant(String referrer) {

@@ -133,7 +133,7 @@ public class Schedule extends TestCase {
 		checkSchedulesearchResultsPageContentHeader();
 	}
 
-	private void checkSchedulesearchResultsPageContentHeader() throws Exception {
+	public void checkSchedulesearchResultsPageContentHeader() throws Exception {
 		HtmlElement scheduleSearchResultsContentHeader = ie.htmlElement(scheduleSearchResultsContentHeaderFinder);
 		assertTrue("Could not find Schedule Search Results page content header '" + p.getProperty("searchresultscontentheader", "NOT SET") + "'", scheduleSearchResultsContentHeader.exists());
 	}

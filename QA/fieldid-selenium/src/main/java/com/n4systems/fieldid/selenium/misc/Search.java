@@ -20,6 +20,7 @@ public class Search {
 	private String openSearchCriteriaLinkLocator = "xpath=//A[@id='expandSection_reportForm' and not(contains(@style,'display: none'))]";
 	private String resultTableXpath = "//TABLE[@id='resultsTable']";
 	private String numberOfColumnsXpath = resultTableXpath + "/TBODY/TR/TH";
+	private String numberOfRowsXpath = resultTableXpath + "/TBODY/TR/TD[1]";
 
 	public Search(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
@@ -92,6 +93,17 @@ public class Search {
 		} while(updating && secondsLeft > 0);
 	}
 
+	/**
+	 * This method will get a list of the attributes from the Select Display Columns
+	 * section. For example, if you are on the Schedules page and you select a
+	 * specific Product Type, the Product Attributes section of Select Display
+	 * Columns will update to the product attributes for the product type you
+	 * selected.
+	 * 
+	 * @param dynamicColumnLocator
+	 * @param dynamicCheckBoxXpath
+	 * @return
+	 */
 	public List<String> getAttributesDisplayColumns(String dynamicColumnLocator, String dynamicCheckBoxXpath) {
 		List<String> result = new ArrayList<String>();
 		if(selenium.isElementPresent(dynamicColumnLocator)) {
@@ -137,5 +149,23 @@ public class Search {
 			resultColumnHeaderLocator = resultColumnHeaderLocator.replaceFirst(".0." + i, ".0." + (i+1));
 		}
 		return result;
+	}
+
+	public List<String> getColumnDataCurrentPage(String columnHeaderString) {
+		List<String> results = new ArrayList<String>();
+		
+		String columnHeaderLocator = "xpath=" + numberOfColumnsXpath + "/A[contains(text(),'" + columnHeaderString + "')]/..";
+		Number n = selenium.getElementIndex(columnHeaderLocator);
+		int columnPosition = n.intValue();
+		n = selenium.getXpathCount(numberOfRowsXpath);
+		int numRows = n.intValue();
+		int currentRow = 1;
+		String cellLocator = "xpath=" + resultTableXpath + "." + currentRow + "." + columnPosition;
+		for(int row = 0; row < numRows; row++, currentRow += 2) {
+			String s = selenium.getTable(cellLocator);
+			results.add(s.trim());
+			cellLocator = cellLocator.replaceFirst("\\." + currentRow + "\\." + columnPosition, "." + (currentRow+2) + "." + columnPosition);
+		}
+		return results;
 	}
 }

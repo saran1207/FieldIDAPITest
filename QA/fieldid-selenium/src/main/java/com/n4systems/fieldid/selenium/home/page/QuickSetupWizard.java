@@ -84,7 +84,7 @@ public class QuickSetupWizard {
 
 	public void verifyCompanyProfileSetup() {
 		List<String> successMsgs = misc.getActionMessages();
-		List<String> errorMsgs = misc.getErrorMessages();
+		List<String> errorMsgs = misc.getFormErrorMessages();
 		assertTrue("Could not find the action message '" + companyProfileSetupMessage + "'", successMsgs.contains(companyProfileSetupMessage));
 		assertTrue("There were errors on the page: " + misc.convertListToString(errorMsgs), errorMsgs.size() == 0);
 	}
@@ -113,7 +113,7 @@ public class QuickSetupWizard {
 
 	public void verifySystemSettingsUpdated() {
 		List<String> successMsgs = misc.getActionMessages();
-		List<String> errorMsgs = misc.getErrorMessages();
+		List<String> errorMsgs = misc.getFormErrorMessages();
 		assertTrue("Could not find the action message '" + systemSettingsUpdatedMessage + "'", successMsgs.contains(systemSettingsUpdatedMessage));
 		assertTrue("There were errors on the page: " + misc.convertListToString(errorMsgs), errorMsgs.size() == 0);
 	}

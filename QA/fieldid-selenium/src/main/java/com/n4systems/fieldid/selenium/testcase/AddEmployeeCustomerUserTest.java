@@ -72,7 +72,7 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	private void assertUserWasAdded(SystemUser user) {
 		assertTrue(user != null);
 		List<String> success = misc.getActionMessages();
-		List<String> errors = misc.getErrorMessages();
+		List<String> errors = misc.getFormErrorMessages();
 		assertTrue("There were errors on the page: " + misc.convertListToString(errors), errors.size() == 0);
 		String successMessage = "Data Saved.";
 		assertTrue("Did not get the expected '" + successMessage + "'", success.contains(successMessage));

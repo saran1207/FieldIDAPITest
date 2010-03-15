@@ -60,7 +60,6 @@ public class Forgot {
 	 */
 	public void verifyResetPassword() {
 		misc.info("Verify static text indicating an email has been sent.");
-		misc.captureScreenshot("VerifyResetPassword.png");
 		assertTrue(selenium.isElementPresent(anEmailHasBeenSentLocator));
 		misc.info("Verify there is a button to return to Sign In");
 		assertTrue(selenium.isElementPresent(returnToSignInButtonLocator));
@@ -85,8 +84,7 @@ public class Forgot {
 	 */
 	public void verifyUserNameIsRequired() {
 		misc.info("Confirm error message '" + userNameIsRequiredErrorMessage + "' appears on page.");
-		misc.captureScreenshot("verifyUserNameIsRequired.png");
-		List<String> errors = misc.getErrorMessages();
+		List<String> errors = misc.getFormErrorMessages();
 		if(errors.size() == 0) {
 			fail("Was expecting the error message: '" + userNameIsRequiredErrorMessage  + "' but didn't get anything.");
 		}

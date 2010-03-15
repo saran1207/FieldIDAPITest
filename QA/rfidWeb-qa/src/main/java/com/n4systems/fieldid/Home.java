@@ -191,7 +191,7 @@ public class Home extends TestCase {
 		Link viewUpcomingInspections = checkGotoViewUpcomingInspections();
 		viewUpcomingInspections.click();
 		ie.waitUntilReady();
-		schedule.checkSchedulePageContentHeader();
+		schedule.checkSchedulesearchResultsPageContentHeader();
 	}
 	
 	private Link checkGotoViewUpcomingInspections() throws Exception {

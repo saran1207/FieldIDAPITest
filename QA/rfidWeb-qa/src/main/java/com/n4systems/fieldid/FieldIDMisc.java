@@ -65,7 +65,7 @@ public class FieldIDMisc extends TestCase {
 		lightBoxMessageFinder = xpath("//P[@id='modalBox_message']");
 		lightBoxMessageHeaderFinder = xpath("//DIV[@class='ajaxView']/H2[text()='Messages']");
 		errorMessageFinder = xpath("//DIV[@class='errorMessage']");
-		backToAdministationLinkFinder = xpath("//DIV[@id='contentTitle']/DIV[@class='backToLink']/A[contains(text(),'back to administration')]");
+		backToAdministationLinkFinder = xpath("//DIV[@id='contentTitle']/DIV[@class='backToLink']/A[contains(text(),'back to setup')]");
 		successMessageFinder = xpath("//DIV[@id='message']/UL/LI/SPAN[@class='actionMessage']");
 		contentTitleFinder = xpath("//DIV[@id='contentTitle']/H1");
 		assetsViewAllFinder = xpath("//DIV[@id='resultsTable']/TABLE/TBODY/TR/TD/BUTTON[contains(text(),'Select')]");
@@ -147,25 +147,27 @@ public class FieldIDMisc extends TestCase {
 	 */
 	public void setOwner(Owner o) throws Exception {
 		stopMonitor();
-		assertNotNull(o);
-		assertNotNull(o.getOrganization());
+//		assertNotNull(o);
+//		assertNotNull(o.getOrganization());
 		
-		SelectList org = getOrganizationSelectListFromChooseOwner();
-		String s = "/" + o.getOrganization() + "/";
-		Option o2 = org.option(text(s));
-		assertTrue("Could not find an Option matching '" + s + "'", o2.exists());
-		o2.select();
-		waitForJavascript();
+		if(o != null && o.getOrganization() != null) {
+			SelectList org = getOrganizationSelectListFromChooseOwner();
+			String s = "/" + o.getOrganization() + "/";
+			Option o2 = org.option(text(s));
+			assertTrue("Could not find an Option matching '" + s + "'", o2.exists());
+			o2.select();
+			waitForJavascript();
+		}
 		
 		SelectList customer = getCustomerSelectListFromChooseOwner();
-		if(o.getCustomer() != null) {
+		if(o != null && o.getCustomer() != null) {
 			String c = "/^" + o.getCustomer() + " /";
 			customer.option(text(c)).select();
 			waitForJavascript();
 		}
 		
 		SelectList division = getDivisionSelectListFromChooseOwner();
-		if(o.getDivision() != null) {
+		if(o != null && o.getDivision() != null) {
 			String d = "/^" + o.getDivision() + "/";
 			division.option(text(d)).select();
 			waitForJavascript();

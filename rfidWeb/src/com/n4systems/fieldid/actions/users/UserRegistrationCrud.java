@@ -92,7 +92,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 		TemplateMailMessage message = new TemplateMailMessage();
 		message.setSubject("Customer Account Request");
-		message.setEmailConent(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList.action"), getTenant().getName()));
+		message.setEmailConent(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList"), getTenant().getName()));
 		
 		AdminUserListLoader userLoader = new AdminUserListLoader(new TenantOnlySecurityFilter(getTenant()));
 		for (UserBean user: userLoader.load()) {

@@ -2,7 +2,6 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.login.page.Forgot;
@@ -31,7 +30,6 @@ public class LoginTests extends FieldIDTestCase {
 		}
 	}
 	
-	@Ignore("No longer have a choose company option")
 	@Test
 	public void shouldBeAbleToChangeTheCompanyIDToAValidCompanyAndLogIn() throws Exception {
 		// this has to be a valid company ID

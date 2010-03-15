@@ -762,12 +762,12 @@ public class Reporting extends TestCase {
 	}
 	
 	public void printWarningOver1000Reports() throws Exception {
-		String message = "You can only print out result list of 1000 or less. Please refine your results so that there are less than 1000.";
+		String message = "You can only print out result list of 10000 or less. Please refine your results so that there are less than 10000.";
 		Link print = ie.link(printWarningFinder);
-		assertTrue("Could not find link to Print with more than 1000 reports", print.exists());
+		assertTrue("Could not find link to Print with more than 10000 reports", print.exists());
 		print.click();
 		Div warning = ie.div(printWarningToolTipFinder);
-		assertTrue("Could not find the warning about more than 1000 reports.", warning.exists());
+		assertTrue("Could not find the warning about more than 10000 reports.", warning.exists());
 		String s = warning.text();
 		assertTrue("Tool tip warning does not contain the message '" + message + "'", s.contains(message));
 	}

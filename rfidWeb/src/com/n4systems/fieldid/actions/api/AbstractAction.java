@@ -400,6 +400,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	protected ActionURLBuilder createActionUrlBuilder() {
 		return new ActionURLBuilder(getBaseURI(), getConfigContext());
 	}
+	
 	public String createActionURI(Tenant tenant, String action) {
 		return createActionUrlBuilder().setAction(action).setCompany(tenant).build();
 	}
