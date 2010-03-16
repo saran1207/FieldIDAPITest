@@ -11,7 +11,7 @@ import org.junit.Test;
 public class ExportMapUnmarshalerTest {
 	private static final String[] titles = {"Type", "Name", "Age"};
 	
-	private static final Map<String, String> beanMap = new LinkedHashMap<String, String>();
+	private static final Map<String, Object> beanMap = new LinkedHashMap<String, Object>();
 	static {
 		beanMap.put("Type", "mytype");
 		beanMap.put("Age", "42");

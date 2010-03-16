@@ -12,8 +12,8 @@ import com.n4systems.persistence.loaders.ListLoader;
 public class AutoAttributeExportTask extends AbstractExportTask {
 	private static final String TEMPLATE_NAME = "autoAttributeExport";
 	
-	public AutoAttributeExportTask(DownloadLink downloadLink, String downloadUrl, ListLoader<AutoAttributeDefinition> attribLoader) {
-		super(downloadLink, downloadUrl, TEMPLATE_NAME, new AutoAttributeExporter(attribLoader));
+	public AutoAttributeExportTask(DownloadLink downloadLink, String downloadUrl, String dateFormat, ListLoader<AutoAttributeDefinition> attribLoader) {
+		super(downloadLink, downloadUrl, TEMPLATE_NAME, new AutoAttributeExporter(attribLoader), dateFormat);
 	}
 	
 	public AutoAttributeExportTask(DownloadLink downloadLink, String downloadUrl, DownloadLinkSaver linkSaver, MailManager mailManager, MapWriterFactory writerFactory, Exporter exporter) {

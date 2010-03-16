@@ -30,10 +30,10 @@ public class ExportMapMarshaler<T> {
 		}
 	}
 	
-	public Map<String, String> toBeanMap(T bean) throws MarshalingException {
+	public Map<String, Object> toBeanMap(T bean) throws MarshalingException {
 		initHandlers(beanClass, handlerFactory);
 		
-		Map<String, String> map = new LinkedHashMap<String, String>();
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		
 		for (SerializationHandler handler: handlers) {
 			map.putAll(handler.marshal(bean));

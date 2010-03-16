@@ -20,7 +20,7 @@ public class CsvMapReaderTest {
 	
 		MapReader reader = new CsvMapReader(new StringReader(csv));
 		
-		Map<String, String> row = reader.readMap();
+		Map<String, Object> row = reader.readMap();
 	
 		assertTrue(row instanceof LinkedHashMap);
 		assertEquals("val1", row.get("Field 1"));
@@ -43,7 +43,7 @@ public class CsvMapReaderTest {
 	
 		MapReader reader = new CsvMapReader(new StringReader(csv));
 		
-		Map<String, String> row = reader.readMap();
+		Map<String, Object> row = reader.readMap();
 		
 		assertEquals("val1\"bleh", row.get("Field 1"));
 		assertEquals("val2", row.get("Field 2"));

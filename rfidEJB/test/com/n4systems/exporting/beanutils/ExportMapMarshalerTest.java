@@ -22,14 +22,14 @@ public class ExportMapMarshalerTest {
 		ExportMapMarshaler<FullExternalOrgView> marshaler = new  ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class, handlerFactory);
 		
 		expect(handlerFactory.createSortedSerializationHandlers(FullExternalOrgView.class)).andReturn(serialHandlers);
-		expect(serialHandlers[0].marshal(orgView)).andReturn(Collections.singletonMap("keyone", "valone"));
-		expect(serialHandlers[1].marshal(orgView)).andReturn(Collections.singletonMap("keytwo", "valtwo"));
+		expect(serialHandlers[0].marshal(orgView)).andReturn(Collections.singletonMap("keyone", (Object)"valone"));
+		expect(serialHandlers[1].marshal(orgView)).andReturn(Collections.singletonMap("keytwo", (Object)"valtwo"));
 		
 		replay(serialHandlers[0]);
 		replay(serialHandlers[1]);
 		replay(handlerFactory);
 		
-		Map<String, String> beanMap = marshaler.toBeanMap(orgView);
+		Map<String, Object> beanMap = marshaler.toBeanMap(orgView);
 		
 		assertEquals(2, beanMap.size());
 		assertEquals("valone", beanMap.get("keyone"));
@@ -44,7 +44,7 @@ public class ExportMapMarshalerTest {
 	public void test_full_conversion() throws MarshalingException, InstantiationException {
 		ExportMapMarshaler<TestExportBean> marshaler = new  ExportMapMarshaler<TestExportBean>(TestExportBean.class);
 		
-		Map<String, String> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42));
+		Map<String, Object> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42));
 		
 		assertEquals("mytype", beanMap.get("Type"));
 		assertEquals("", beanMap.get("Name"));

@@ -2,10 +2,15 @@ package com.n4systems.api.validation.validators;
 
 import java.util.Map;
 
+import javax.persistence.NonUniqueResultException;
+
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.model.orgs.OrgWithNameExistsLoader;
+import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.util.StringUtils;
 
 public class OwnerExistsValidator implements FieldValidator {
 
@@ -15,17 +20,33 @@ public class OwnerExistsValidator implements FieldValidator {
 			return ValidationResult.pass();
 		}
 		
-		String orgName = (String)fieldValue;
-		OrgWithNameExistsLoader orgExistsLoader = createOrgExistsLoader(filter).setName(orgName);
+		String[] orgNames = (String[])fieldValue;
+		String organization = orgNames[OwnerSerializationHandler.OWNER_ORGANIZATION]; 
+		String customer = orgNames[OwnerSerializationHandler.OWNER_CUSTOMER];
+		String division = orgNames[OwnerSerializationHandler.OWNER_DIVISION];
 		
-		if (orgExistsLoader.load()) {
+		OrgByNameLoader orgExistsLoader = createOrgExistsLoader(filter);
+		orgExistsLoader.setOrganizationName(organization);
+		orgExistsLoader.setCustomerName(customer);
+		orgExistsLoader.setDivision(division);
+		
+		BaseOrg org = null;
+		try {
+			org = orgExistsLoader.load();
+		} catch (NonUniqueResultException e) {
+			
+		} catch (RuntimeException e) {
+			// ignore anything else
+		}
+		
+		if (org != null) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail(NamedFieldNotFoundValidatorFail, fieldName, orgName);
+			return ValidationResult.fail(OwnerResolutionValidatorFail, StringUtils.stringOrEmpty(organization), StringUtils.stringOrEmpty(customer), StringUtils.stringOrEmpty(division));
 		}
 	}
 
-	protected OrgWithNameExistsLoader createOrgExistsLoader(SecurityFilter filter) {
-		return new OrgWithNameExistsLoader(filter);
+	protected OrgByNameLoader createOrgExistsLoader(SecurityFilter filter) {
+		return new OrgByNameLoader(filter);
 	}
 }

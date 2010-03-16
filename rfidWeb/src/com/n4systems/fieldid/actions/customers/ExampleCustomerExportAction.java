@@ -83,7 +83,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 		
 		MapWriter writer = null;
 		try {
-			writer = new ExcelMapWriter(new FileOutputStream(exampleFile));
+			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat());
 			writer.write(marshaler.toBeanMap(createExampleCustomer()));
 			writer.write(marshaler.toBeanMap(createExampleDivision()));
 		} catch (Exception e) {

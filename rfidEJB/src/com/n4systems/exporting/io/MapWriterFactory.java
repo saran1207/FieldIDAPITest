@@ -6,13 +6,16 @@ import java.io.OutputStream;
 import com.n4systems.model.downloadlink.ContentType;
 
 public class MapWriterFactory {
+	private final String dateFormat;
 	
-	public MapWriterFactory() {}
+	public MapWriterFactory(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
 	
 	public MapWriter create(OutputStream out, ContentType type) throws IOException {
 		switch (type) {
 			case EXCEL:
-				return new ExcelMapWriter(out);
+				return new ExcelMapWriter(out, dateFormat);
 			case CSV:
 				return new CsvMapWriter(out);
 			default:

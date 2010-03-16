@@ -26,7 +26,7 @@ public class MapReaderFactoryTest {
 	private byte[] createExcelFile() throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
-		ExcelMapWriter writer = new ExcelMapWriter(out);
+		ExcelMapWriter writer = new ExcelMapWriter(out, "yyyy-MM-dd");
 		
 		Map<String, Object> inputMap = new LinkedHashMap<String, Object>();
 		inputMap.put("title1", "value1");

@@ -14,7 +14,7 @@ public interface MapReader extends Closeable {
 	/**
 	 * Reads a single row returning a map of headers to their values.
 	 */
-	public Map<String, String> readMap() throws IOException, ParseException;
+	public Map<String, Object> readMap() throws IOException, ParseException;
 	
 	/**
 	 * Returns the current row number starting at 1

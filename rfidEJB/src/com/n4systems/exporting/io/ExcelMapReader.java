@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.Map;
 
 import jxl.Cell;
+import jxl.DateCell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -39,34 +40,40 @@ public class ExcelMapReader implements MapReader {
 	@Override
 	public String[] getTitles() throws IOException, ParseException {
 		if (titles == null) {
-			titles = readNextRow();
+			Object[] titleRow = readNextRow();
+			titles = new String[titleRow.length];
+			
+			for (int i = 0; i < titleRow.length; i++) {
+				// these should always be strings, but we'll parse it this way for safety
+				titles[i] = String.valueOf(titleRow[i]);
+			}
 		}
 		return titles;
 	}
 
 	@Override
-	public Map<String, String> readMap() throws IOException, ParseException {
+	public Map<String, Object> readMap() throws IOException, ParseException {
 		// ensure titles have been read
 		if (getTitles() == null) {
 			return null;
 		}
 		
-		Map<String, String> rowMap = mapNextRow();
+		Map<String, Object> rowMap = mapNextRow();
 		return rowMap;
 	}
 	
-	private Map<String, String> mapNextRow() {
-		String[] row = readNextRow();
+	private Map<String, Object> mapNextRow() {
+		Object[] row = readNextRow();
 		if (row == null) {
 			return null;
 		}
 		
 		// map the titles to the row values
-		Map<String, String> rowMap = MapUtils.combineArrays(titles, row);
+		Map<String, Object> rowMap = MapUtils.combineArrays(titles, row);
 		return rowMap;
 	}
 	
-	private String[] readNextRow() {
+	private Object[] readNextRow() {
 		if (atLastRow()) {
 			return null;
 		}
@@ -74,10 +81,18 @@ public class ExcelMapReader implements MapReader {
 		currentRow++;
 		
 		Cell[] cells = sheet.getRow(currentRow);
-		String[] values = new String[cells.length];
+		Object[] values = new Object[cells.length];
 		
 		for (int i = 0; i < cells.length; i++) {
-			values[i] = cells[i].getContents();
+			if (cells[i] instanceof DateCell) {
+				values[i] = ((DateCell)cells[i]).getDate();
+			} else {
+				/*
+				 * For now, all other field types will come back as Strings.  At some point 
+				 * we will probably need to add handling for Number/Boolean types.
+				 */
+				values[i] = cells[i].getContents();
+			}
 		}
 		return values;
 	}

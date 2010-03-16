@@ -4,17 +4,17 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.n4systems.api.validation.validators.DateValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.ProductStatusExistsValidator;
 import com.n4systems.api.validation.validators.ProductViewAttributesValidator;
 import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
+import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 
 @SuppressWarnings("serial")
 public class ProductView extends ExternalModelView {
-
+	
 	@ExportField(title = "Serial Number", order = 100, validators = { NotNullValidator.class })
 	private String serialNumber;
 
@@ -24,8 +24,8 @@ public class ProductView extends ExternalModelView {
 	@ExportField(title = "Reference Number", order = 300)
 	private String customerRefNumber;
 
-	@ExportField(title = "Owner Name", order = 400, validators = { NotNullValidator.class, OwnerExistsValidator.class })
-	private String owner;
+	@ExportField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
+	private final String[] owners = new String[3];
 
 	@ExportField(title = "Location", order = 600)
 	private String location;
@@ -36,13 +36,13 @@ public class ProductView extends ExternalModelView {
 	@ExportField(title = "Purchase Order", order = 800)
 	private String purchaseOrder;
 
-	@ExportField(title = "Order Numberr", order = 900)
+	@ExportField(title = "Order Number", order = 900)
 	private String shopOrder;
 
 	@ExportField(title = "Comments", order = 1000)
 	private String comments;
 
-	@ExportField(title = "Identified", order = 1100, validators = { DateValidator.class })
+	@ExportField(title = "Identified", order = 1100)
 	private Date identified;
 
 	@ExportField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, ProductViewAttributesValidator.class })
@@ -74,14 +74,34 @@ public class ProductView extends ExternalModelView {
 		this.customerRefNumber = customerRefNumber;
 	}
 
-	public String getOwner() {
-		return owner;
+	public String[] getOwners() {
+		return owners;
 	}
-
-	public void setOwner(String owner) {
-		this.owner = owner;
+	
+	public void setOrganization(String organization) {
+		owners[OwnerSerializationHandler.OWNER_ORGANIZATION] = organization;
 	}
-
+	
+	public String getOrganization() {
+		return owners[OwnerSerializationHandler.OWNER_ORGANIZATION];
+	}
+	
+	public void setCustomer(String customer) {
+		owners[OwnerSerializationHandler.OWNER_CUSTOMER] = customer;
+	}
+	
+	public String getCustomer() {
+		return owners[OwnerSerializationHandler.OWNER_CUSTOMER];
+	}
+	
+	public void setDivision(String division) {
+		owners[OwnerSerializationHandler.OWNER_DIVISION] = division;
+	}
+	
+	public String getDivision() {
+		return owners[OwnerSerializationHandler.OWNER_DIVISION];
+	}
+	
 	public String getLocation() {
 		return location;
 	}
@@ -90,7 +110,7 @@ public class ProductView extends ExternalModelView {
 		this.location = location;
 	}
 
-	public String getProductStatus() {
+	public String getStatus() {
 		return status;
 	}
 

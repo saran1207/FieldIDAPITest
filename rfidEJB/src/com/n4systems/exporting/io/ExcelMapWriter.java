@@ -7,9 +7,11 @@ import java.util.Map;
 
 import jxl.CellView;
 import jxl.Workbook;
+import jxl.write.DateFormat;
 import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.WritableCell;
+import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -18,12 +20,14 @@ import jxl.write.biff.RowsExceededException;
 import com.n4systems.util.MapUtils;
 
 public class ExcelMapWriter implements MapWriter {
+	private final String dateFormat;
 	private WritableWorkbook workbook;
 	private WritableSheet sheet;
 	private String[] titles;
 	private int currentRow = 0;
 	
-	public ExcelMapWriter(OutputStream out) throws IOException {
+	public ExcelMapWriter(OutputStream out, String dateFormat) throws IOException {
+		this.dateFormat = dateFormat;
 		workbook = Workbook.createWorkbook(out);
 		sheet = workbook.createSheet("Sheet1", 0);
 	}
@@ -80,7 +84,7 @@ public class ExcelMapWriter implements MapWriter {
 		} else if (value instanceof Boolean) {
 			cell = new jxl.write.Boolean(col, row, (Boolean)value);
 		} else if (value instanceof Date) {
-			cell = new DateTime(col, row, (Date)value);			
+			cell = new DateTime(col, row, (Date)value, new WritableCellFormat(new DateFormat(dateFormat)), DateTime.GMT);			
 		} else if (value instanceof Number) {
 			cell = new jxl.write.Number(col, row, ((Number)value).doubleValue());
 		} else {

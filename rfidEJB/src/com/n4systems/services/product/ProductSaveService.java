@@ -36,8 +36,16 @@ public class ProductSaveService {
 	}
 
 	public Product create() {
+		return create(true);
+	}
+	
+	public Product createWithoutHistory() {
+		return create(false);
+	}
+	
+	private Product create(boolean withHistory) {
 		try {
-			createProduct();
+			createProduct(withHistory);
 			saveUploadedAttachments();
 			return product;
 		} catch (SubProductUniquenessException e) {
@@ -62,9 +70,14 @@ public class ProductSaveService {
 		uploadedAttachments = null;
 	}
 
-	private void createProduct() throws SubProductUniquenessException {
+	private void createProduct(boolean withHistory) throws SubProductUniquenessException {
 		saveRequirements();
-		product = productManager.createWithHistory(product, user);
+		
+		if (withHistory) {
+			product = productManager.createWithHistory(product, user);
+		} else {
+			product = productManager.create(product, user);
+		}
 	}
 
 	private void updateProduct() throws SubProductUniquenessException {

@@ -10,6 +10,7 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.ProductView;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
@@ -19,6 +20,7 @@ import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
 import com.n4systems.persistence.Transaction;
 
@@ -42,13 +44,15 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 	public Product toModel(ProductView view, Transaction transaction) throws ConversionException {
 		Product model = new Product();
 		
+		PrimaryOrg primaryOrg = identifiedBy.getOwner().getPrimaryOrg();
+		
 		if (view.getIdentified() != null) {
 			model.setIdentified(view.getIdentified());
 		} else {
 			model.setIdentified(new Date());
 		}
 		
-		model.setOwner(resolveOwner(view.getOwner(), transaction));
+		model.setOwner(resolveOwner(view, transaction));
 		model.setTenant(model.getOwner().getTenant());
 		model.setIdentifiedBy(identifiedBy);
 		model.setType(type);		
@@ -58,9 +62,13 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		model.setLocation(view.getLocation());
 		model.setPurchaseOrder(view.getPurchaseOrder());
 		model.setComments(view.getComments());		
-		model.setShopOrder(createShopOrder(view.getShopOrder(), model.getOwner().getTenant(), transaction));
-		model.setProductStatus(resolveProductStatus(view.getProductStatus(), transaction));
+		model.setProductStatus(resolveProductStatus(view.getStatus(), transaction));
 		model.setInfoOptions(new TreeSet<InfoOptionBean>());
+		
+		// the order number field is ignored for integration customers
+		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
+			model.setShopOrder(createShopOrder(view.getShopOrder(), model.getOwner().getTenant(), transaction));
+		}
 		
 		try {
 			// this could throw an exception if a select box info option could not be resolved.  It
@@ -74,15 +82,26 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 	}
 
 	private LineItem createShopOrder(String orderNumber, Tenant tenant, Transaction transaction) {
-		return (orderNumber != null) ? nonIntegrationOrderManager.createAndSave(orderNumber, tenant, transaction) : null;
+		/*
+		 * TODO: refactor to use the existing transaction once the legacy product manager gets off ejb
+		 * 
+		 * The problem here is that the ProductSaveService is running inside it's own transaction so if we use the 
+		 * existing transaction here, the non integration order will not have been committed by time the product
+		 * save service tries to look it up by id.
+		 */
+		return (orderNumber != null) ? nonIntegrationOrderManager.createAndSave(orderNumber, tenant) : null;
 	}
 	
 	private ProductStatusBean resolveProductStatus(String productStatus, Transaction transaction) {
 		return (productStatus != null) ? productStatusLoader.setName(productStatus).load(transaction) : null;
 	}
 
-	private BaseOrg resolveOwner(String name, Transaction transaction) {
-		return orgLoader.setName(name).load(transaction);
+	private BaseOrg resolveOwner(ProductView view, Transaction transaction) {
+		orgLoader.setOrganizationName(view.getOrganization());
+		orgLoader.setCustomerName(view.getCustomer());
+		orgLoader.setDivision(view.getDivision());
+		
+		return orgLoader.load(transaction);
 	}
 	
 	public void setType(ProductType type) {

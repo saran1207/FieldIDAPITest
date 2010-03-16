@@ -22,7 +22,6 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.OrgByNameLoader;
-import com.n4systems.model.orgs.OrgWithNameExistsLoader;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
@@ -210,10 +209,6 @@ public class LoaderFactory {
 
 	public OrgByNameLoader createOrgByNameLoader() {
 		return new OrgByNameLoader(filter);
-	}
-
-	public OrgWithNameExistsLoader createOrgWithNameExistsLoader() {
-		return new OrgWithNameExistsLoader(filter);
 	}
 
 	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {

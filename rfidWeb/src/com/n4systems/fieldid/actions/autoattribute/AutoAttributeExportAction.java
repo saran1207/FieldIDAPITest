@@ -66,7 +66,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 			
 			ListLoader<AutoAttributeDefinition> attribLoader = getLoaderFactory().createPassthruListLoader(autoAttributeCriteria.getDefinitions());
 			
-			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), contentType, attribLoader);
+			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), contentType, getPrimaryOrg().getDateFormat(), attribLoader);
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute auto attribute export", e);
 			addFlashMessage(getText("error.export_failed"));
@@ -110,7 +110,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			writer = new ExcelMapWriter(byteOut);
+			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat());
 			exporter.export(writer);
 			
 		} catch (Exception e) {

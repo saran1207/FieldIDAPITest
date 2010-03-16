@@ -12,8 +12,8 @@ import com.n4systems.persistence.loaders.ListLoader;
 public class ProductExportTask extends AbstractExportTask {
 	private static final String TEMPLATE_NAME = "productExport";
 
-	public ProductExportTask(DownloadLink downloadLink, String downloadUrl, ListLoader<Product> productLoader) {
-		super(downloadLink, downloadUrl, TEMPLATE_NAME, new ProductExporter(productLoader));
+	public ProductExportTask(DownloadLink downloadLink, String downloadUrl, String dateFormat, ListLoader<Product> productLoader) {
+		super(downloadLink, downloadUrl, TEMPLATE_NAME, new ProductExporter(productLoader), dateFormat);
 	}
 
 	public ProductExportTask(DownloadLink downloadLink, String downloadUrl, DownloadLinkSaver linkSaver, MailManager mailManager, MapWriterFactory writerFactory, Exporter exporter) {

@@ -41,7 +41,7 @@ public class DownloadCoordinatorTest {
 		replay(linkFactory);
 		replay(linkSaver);
 		
-		dc.generateCustomerExport("name", null, ContentType.EXCEL, null);
+		dc.generateCustomerExport("name", null, ContentType.EXCEL, null, null);
 		
 		verify(linkFactory);
 		verify(linkSaver);
@@ -57,14 +57,15 @@ public class DownloadCoordinatorTest {
 		DownloadCoordinator dc = new DownloadCoordinator(new UserBean(), createMock(Saver.class), executor, linkFactory, taskFactory);
 		
 		String url = "http://url";
+		String dateFormat = "yyyy-MM-dd";
 		
 		DownloadLink link = new DownloadLink();
 		SecurityFilter filter = new OpenSecurityFilter();
-		CustomerExportTask task = new CustomerExportTask(new DownloadLink(), url, new OpenSecurityFilter());
+		CustomerExportTask task = new CustomerExportTask(new DownloadLink(), url, dateFormat, new OpenSecurityFilter());
 		
 		expect(linkFactory.createDownloadLink((UserBean)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
-		expect(taskFactory.createCustomerExportTask(link, url, filter)).andReturn(task);
+		expect(taskFactory.createCustomerExportTask(link, url, dateFormat, filter)).andReturn(task);
 		
 		executor.execute(task);
 		
@@ -72,7 +73,7 @@ public class DownloadCoordinatorTest {
 		replay(taskFactory);
 		replay(executor);
 		
-		dc.generateCustomerExport(null, url, ContentType.EXCEL, filter);
+		dc.generateCustomerExport(null, url, ContentType.EXCEL, dateFormat, filter);
 		
 		verify(taskFactory);
 		verify(executor);
@@ -88,15 +89,16 @@ public class DownloadCoordinatorTest {
 		DownloadCoordinator dc = new DownloadCoordinator(new UserBean(), createMock(Saver.class), executor, linkFactory, taskFactory);
 		
 		String url = "http://url";
+		String dateFormat = "yyyy-MM-dd";
 		
 		DownloadLink link = new DownloadLink();
 		ListLoader<AutoAttributeDefinition> attribLoader = createMock(ListLoader.class);
 		
-		AutoAttributeExportTask task = new AutoAttributeExportTask(new DownloadLink(), url, attribLoader);
+		AutoAttributeExportTask task = new AutoAttributeExportTask(new DownloadLink(), url, dateFormat, attribLoader);
 		
 		expect(linkFactory.createDownloadLink((UserBean)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
-		expect(taskFactory.createAutoAttributeExportTask(link, url, attribLoader)).andReturn(task);
+		expect(taskFactory.createAutoAttributeExportTask(link, url, dateFormat, attribLoader)).andReturn(task);
 		
 		executor.execute(task);
 		
@@ -104,7 +106,7 @@ public class DownloadCoordinatorTest {
 		replay(taskFactory);
 		replay(executor);
 		
-		dc.generateAutoAttributeExport(null, url, ContentType.EXCEL, attribLoader);
+		dc.generateAutoAttributeExport(null, url, ContentType.EXCEL, dateFormat, attribLoader);
 		
 		verify(taskFactory);
 		verify(executor);

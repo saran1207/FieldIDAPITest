@@ -57,7 +57,7 @@ public abstract class SerializationHandler {
 	 * @param bean			The bean to get the value from 	
 	 * @return				Map of titles to values
 	 */
-	public abstract Map<String, String> marshal(Object bean) throws MarshalingException;
+	public abstract Map<String, Object> marshal(Object bean) throws MarshalingException;
 	
 	/**
 	 * Sets the field value back onto the bean.
@@ -67,7 +67,7 @@ public abstract class SerializationHandler {
 	 * @param value	The value to set
 	 * @throws MarshalingException On any problem setting the value
 	 */
-	public abstract void unmarshal(Object bean, String title, String value) throws MarshalingException;
+	public abstract void unmarshal(Object bean, String title, Object value) throws MarshalingException;
 	
 	/**
 	 * If the field title represents a field which is owned by this handler.

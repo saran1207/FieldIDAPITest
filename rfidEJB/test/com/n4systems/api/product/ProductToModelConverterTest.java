@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -22,6 +21,7 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.product.ProductToModelConverter;
 import com.n4systems.api.model.ProductView;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
@@ -30,6 +30,7 @@ import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.ProductTypeBuilder;
+import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.infooption.MissingInfoOptionException;
@@ -88,6 +89,7 @@ public class ProductToModelConverterTest {
 	public void to_model_uses_now_when_date_is_null() throws ConversionException {
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setType(type);
+		converter.setIdentifiedBy(createIdentifiedBy());
 		
 		ProductView view = createView(null, null);
 		view.setIdentified(null);
@@ -106,8 +108,11 @@ public class ProductToModelConverterTest {
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		ProductToModelConverter converter = new ProductToModelConverter(orgLoader, null, null, dummyOptionConverter);
 		converter.setType(type);
+		converter.setIdentifiedBy(createIdentifiedBy());
 		
-		expect(orgLoader.setName(view.getOwner())).andReturn(orgLoader);
+		expect(orgLoader.setOrganizationName(view.getOrganization())).andReturn(orgLoader);
+		expect(orgLoader.setCustomerName(view.getCustomer())).andReturn(orgLoader);
+		expect(orgLoader.setDivision(view.getDivision())).andReturn(orgLoader);
 		expect(orgLoader.load(trans)).andReturn(resolvedOrg);
 		replay(orgLoader);
 		
@@ -123,18 +128,33 @@ public class ProductToModelConverterTest {
 		ProductView view = createView("on1234", null);
 		LineItem line = new LineItem();
 		Tenant tenant = dummyOrgLoader.load(null).getTenant();
-		
-		Transaction trans = new DummyTransaction();
+
 		NonIntegrationOrderManager orgLoader = createMock(NonIntegrationOrderManager.class);
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter);
 		converter.setType(type);
+		converter.setIdentifiedBy(createIdentifiedBy());
 		
-		expect(orgLoader.createAndSave(view.getShopOrder(), tenant, trans)).andReturn(line);
+		expect(orgLoader.createAndSave(view.getShopOrder(), tenant)).andReturn(line);
 		replay(orgLoader);
 		
-		Product product = converter.toModel(view, trans);
+		Product product = converter.toModel(view, new DummyTransaction());
 		verify(orgLoader);
 		assertSame(line, product.getShopOrder());
+	}
+	
+	@Test
+	public void to_model_ignores_shop_order_for_integration_tenants() throws ConversionException {
+		UserBean identifiedBy = createIdentifiedBy();
+		identifiedBy.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
+		
+		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		converter.setIdentifiedBy(identifiedBy);
+		converter.setType(type);
+		
+		ProductView view = createView("12345", null);
+		Product model =  converter.toModel(view, null);
+		
+		assertNull(model.getShopOrder());
 	}
 	
 	@Test
@@ -146,8 +166,9 @@ public class ProductToModelConverterTest {
 		ProductStatusByNameLoader psLoader = createMock(ProductStatusByNameLoader.class);
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, psLoader, dummyOptionConverter);
 		converter.setType(type);
+		converter.setIdentifiedBy(createIdentifiedBy());
 		
-		expect(psLoader.setName(view.getProductStatus())).andReturn(psLoader);
+		expect(psLoader.setName(view.getStatus())).andReturn(psLoader);
 		expect(psLoader.load(trans)).andReturn(status);
 		replay(psLoader);
 		
@@ -158,7 +179,7 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_sets_identified_by_and_type() throws ConversionException {
-		UserBean identifiedBy = new UserBean();
+		UserBean identifiedBy = createIdentifiedBy();
 		
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(identifiedBy);
@@ -173,17 +194,11 @@ public class ProductToModelConverterTest {
 	@Test
 	public void to_model_copies_non_resolved_properties() throws ConversionException {
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		converter.setIdentifiedBy(createIdentifiedBy());
 		converter.setType(type);
 		
 		ProductView view = createView(null, null);
 		Product model =  converter.toModel(view, null);
-
-		model.setSerialNumber(view.getSerialNumber());
-		model.setRfidNumber(view.getRfidNumber());
-		model.setCustomerRefNumber(view.getCustomerRefNumber());
-		model.setLocation(view.getLocation());
-		model.setPurchaseOrder(view.getPurchaseOrder());
-		model.setComments(view.getComments());
 		
 		Asserts.assertMethodReturnValuesEqual(view, model, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getLocation", "getPurchaseOrder", "getComments", "getIdentified");
 	}
@@ -197,6 +212,7 @@ public class ProductToModelConverterTest {
 		
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, mapConverter);
 		converter.setType(type);
+		converter.setIdentifiedBy(createIdentifiedBy());
 		
 		expect(mapConverter.convertProductAttributes(view.getAttributes(), type)).andReturn(options);
 		replay(mapConverter);
@@ -208,9 +224,19 @@ public class ProductToModelConverterTest {
 		assertTrue(model.getInfoOptions().contains(options.get(0)));
 	}
 	
+	private UserBean createIdentifiedBy() {
+		UserBean user = UserBuilder.anEmployee().build();
+		
+		user.getOwner().getPrimaryOrg().setDateFormat("yyyy-MM-dd");
+		user.getOwner().getPrimaryOrg().getExtendedFeatures().remove(ExtendedFeature.Integration);
+		return user;
+	}
+	
 	private ProductView createView(String shopOrder, String status) {
 		ProductView view = new ProductView(); 
-		view.setOwner("My Org");
+		view.setOrganization("My Org");
+		view.setCustomer("My Customer");
+		view.setDivision("My Division");
 		view.setSerialNumber("sn1234");
 		view.setRfidNumber("rf1234");
 		view.setCustomerRefNumber("cr12345");
@@ -219,10 +245,8 @@ public class ProductToModelConverterTest {
 		view.setComments("comments 12312");
 		view.setShopOrder(shopOrder);
 		view.setStatus(status);
+		view.setIdentified(new PlainDate());
 
-		 // We want to make sure this date is not today
-		view.setIdentified(new PlainDate(new Date(System.currentTimeMillis() - (3600000 * 25))));
-		
 		view.getAttributes().put("combo", "cf-1");
 		view.getAttributes().put("select", "sl-2");
 		view.getAttributes().put("text", "dynamic");

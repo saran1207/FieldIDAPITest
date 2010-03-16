@@ -16,10 +16,10 @@ public class AbstractExportTask extends DownloadTask {
 	private final MapWriterFactory writerFactory;
 	private final Exporter exporter;
 	
-	public AbstractExportTask(DownloadLink downloadLink, String downloadUrl, String templateName, Exporter exporter) {
+	public AbstractExportTask(DownloadLink downloadLink, String downloadUrl, String templateName, Exporter exporter, String dateFormat) {
 		super(downloadLink, downloadUrl, templateName);
 		this.exporter = exporter;
-		this.writerFactory = new MapWriterFactory();	
+		this.writerFactory = new MapWriterFactory(dateFormat);
 	}
 	
 	public AbstractExportTask(DownloadLink downloadLink, String downloadUrl, String templateName, DownloadLinkSaver linkSaver, MailManager mailManager, MapWriterFactory writerFactory, Exporter exporter) {

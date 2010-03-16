@@ -53,12 +53,12 @@ public class ExportMapUnmarshaler<T> {
 		}
 	}
 	
-	public T toBean(Map<String, String> row) throws MarshalingException {
+	public T toBean(Map<String, Object> row) throws MarshalingException {
 		buildTitleFieldMap();
 		
 		T bean = newBean();
 		
-		String value;
+		Object value;
 		SerializationHandler handler;
 		for (String title: titleHandlerMap.keySet()) {
 			value = row.get(title);

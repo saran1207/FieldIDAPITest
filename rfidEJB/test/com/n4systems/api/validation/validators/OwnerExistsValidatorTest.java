@@ -1,10 +1,13 @@
 package com.n4systems.api.validation.validators;
 
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.n4systems.model.orgs.OrgWithNameExistsLoader;
+import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 public class OwnerExistsValidatorTest {
 
@@ -17,42 +20,48 @@ public class OwnerExistsValidatorTest {
 	
 	@Test
 	public void test_validation_passes_when_org_exists() {
-		final String orgName = "my org";
+		final String[] names = { "my org", "my customer", "my division" };
+		
+		final OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		
 		OwnerExistsValidator validator = new OwnerExistsValidator() {
 			@Override
-			protected OrgWithNameExistsLoader createOrgExistsLoader(SecurityFilter filter) {
-				return new OrgWithNameExistsLoader(filter) {
-					@Override
-					public Boolean load() {
-						assertEquals(orgName, name);
-						return true;
-					}
-				};
+			protected OrgByNameLoader createOrgExistsLoader(SecurityFilter filter) {
+				return orgLoader;
 			}
 		};
 		
-		assertTrue(validator.validate(orgName, null, null, null, null).isPassed());
+		expect(orgLoader.setOrganizationName(names[0])).andReturn(orgLoader);
+		expect(orgLoader.setCustomerName(names[1])).andReturn(orgLoader);
+		expect(orgLoader.setDivision(names[2])).andReturn(orgLoader);
+		expect(orgLoader.load()).andReturn(new PrimaryOrg());
+		replay(orgLoader);
+		
+		assertTrue(validator.validate(names, null, null, null, null).isPassed());
+		verify(orgLoader);
 	}
 	
 	@Test
 	public void test_validation_fails_when_org_does_not_exist() {
-		final String orgName = "my org";
+		final String[] names = { "my org", "my customer", "my division" };
+		
+		final OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		
 		OwnerExistsValidator validator = new OwnerExistsValidator() {
 			@Override
-			protected OrgWithNameExistsLoader createOrgExistsLoader(SecurityFilter filter) {
-				return new OrgWithNameExistsLoader(filter) {
-					@Override
-					public Boolean load() {
-						assertEquals(orgName, name);
-						return false;
-					}
-				};
+			protected OrgByNameLoader createOrgExistsLoader(SecurityFilter filter) {
+				return orgLoader;
 			}
 		};
 		
-		assertTrue(validator.validate(orgName, null, null, null, null).isFailed());
+		expect(orgLoader.setOrganizationName(names[0])).andReturn(orgLoader);
+		expect(orgLoader.setCustomerName(names[1])).andReturn(orgLoader);
+		expect(orgLoader.setDivision(names[2])).andReturn(orgLoader);
+		expect(orgLoader.load()).andReturn(null);
+		replay(orgLoader);
+		
+		assertTrue(validator.validate(names, null, null, null, null).isFailed());
+		verify(orgLoader);
 	}
 	
 }

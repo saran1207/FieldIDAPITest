@@ -125,7 +125,22 @@ public class ProductSaveServiceTest {
 		verify(mockProductManager);
 	}
 	
-	
+	@Test
+	public void save_without_history_does_not_create_history() throws SubProductUniquenessException {
+		Product product = aProduct().build();
+		
+		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
+		
+		expect(mockProductManager.create(product, user)).andReturn(product);
+		replay(mockProductManager);
+		
+		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
+		sut.setProduct(product);
+		
+		sut.createWithoutHistory();
+		
+		verify(mockProductManager);
+	}
 	
 	
 }

@@ -66,7 +66,7 @@ public class CsvMapReader implements MapReader {
 	}
 	
 	@Override
-	public Map<String, String> readMap() throws IOException, ParseException {
+	public Map<String, Object> readMap() throws IOException, ParseException {
 		if (!readTitleLine()) {
 			return null;
 		}
@@ -76,7 +76,7 @@ public class CsvMapReader implements MapReader {
 			return null;
 		}
 		
-		Map<String, String> row  = constructMap(line);
+		Map<String, Object> row  = constructMap(line);
 		return row;
 	}
 	
@@ -120,9 +120,9 @@ public class CsvMapReader implements MapReader {
 		return true;
 	}
 	
-	private Map<String, String> constructMap(String line) throws ParseException {
+	private Map<String, Object> constructMap(String line) throws ParseException {
 		// map the titles to the line values
-		Map<String, String> row = MapUtils.combineArrays(titles, parseLine(line));		
+		Map<String, Object> row = MapUtils.combineArrays(titles, parseLine(line));		
 		return row;
 	}
 	

@@ -2,6 +2,7 @@ package com.n4systems.api.product;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -13,6 +14,7 @@ import rfid.ejb.entity.ProductStatusBean;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.product.ProductToViewConverter;
 import com.n4systems.api.model.ProductView;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Product;
@@ -51,18 +53,23 @@ public class ProductToViewConverterTest {
 		model.getInfoOptions().add(optionBuilder.withName("Opt1").forField(fieldBuilder.withName("Field1").build()).build());
 		model.getInfoOptions().add(optionBuilder.withName("Opt2").forField(fieldBuilder.withName("Field2").build()).build());
 		
+		// ensure this is a non-integration tenant
+		model.getOwner().getPrimaryOrg().getExtendedFeatures().remove(ExtendedFeature.Integration);
+		
 		return model;
 	}
 	
 	@Test
-	public void test_to_view_copies_all_properties() throws ConversionException {
+	public void test_to_view_copies_all_properties() throws ConversionException, ParseException {
 		Product model = createProduct();
+		
+		model.getOwner().getPrimaryOrg().setDateFormat("yyyy-MM-dd");
 		
 		ProductView view = converter.toView(model);
 		
 		Asserts.assertMethodReturnValuesEqual(model, view, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getLocation", "getPurchaseOrder", "getComments", "getIdentified");
-		
-		assertEquals(model.getProductStatus().getName(), view.getProductStatus());
+
+		assertEquals(model.getProductStatus().getName(), view.getStatus());
 		assertEquals(model.getShopOrder().getOrder().getOrderNumber(), view.getShopOrder());
 		assertEquals(model.getInfoOptions().size(), view.getAttributes().size());
 		
@@ -81,13 +88,23 @@ public class ProductToViewConverterTest {
 			
 		ProductView view = converter.toView(model);
 		
-		assertNull(view.getProductStatus());
+		assertNull(view.getStatus());
 	}
 	
 	@Test
 	public void test_to_view_handles_null_shop_order() throws ConversionException {
 		Product model = createProduct();
 		model.setShopOrder(null);
+			
+		ProductView view = converter.toView(model);
+		
+		assertNull(view.getShopOrder());
+	}
+	
+	@Test
+	public void test_order_number_field_ignored_for_integration_customers()  throws ConversionException {
+		Product model = createProduct();
+		model.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 			
 		ProductView view = converter.toView(model);
 		

@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Tenant;
-import com.n4systems.persistence.Transaction;
-import com.n4systems.testutils.DummyTransaction;
 
 public class NonIntegrationOrderManagerTest {
 	private static final String testOrderNumber = "ON123";
@@ -17,8 +15,7 @@ public class NonIntegrationOrderManagerTest {
 	public void test_save_and_create() {
 		final Tenant tenant = new Tenant();
 		final LineItem line = new LineItem();
-		
-		Transaction trans = new DummyTransaction();
+
 		NonIntegrationLineItemSaver saver = createMock(NonIntegrationLineItemSaver.class);
 		
 		NonIntegrationOrderManager manager = new NonIntegrationOrderManager(saver) {
@@ -35,10 +32,10 @@ public class NonIntegrationOrderManagerTest {
 			}
 		};
 		
-		saver.save(trans, line);
+		saver.save(line);
 		replay(saver);
 		
-		LineItem createdLine = manager.createAndSave(testOrderNumber, tenant, trans);
+		LineItem createdLine = manager.createAndSave(testOrderNumber, tenant);
 		verify(saver);
 		
 		assertEquals(line, createdLine);

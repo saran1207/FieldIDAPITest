@@ -17,12 +17,12 @@ public class DummySerializationHandler extends SerializationHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, String> marshal(Object bean) throws MarshalingException {
+	public Map<String, Object> marshal(Object bean) throws MarshalingException {
 		return Collections.EMPTY_MAP;
 	}
 
 	@Override
-	public void unmarshal(Object bean, String title, String value) throws MarshalingException {
+	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
 		
 	}
 

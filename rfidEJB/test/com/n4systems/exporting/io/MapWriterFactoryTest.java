@@ -13,7 +13,7 @@ public class MapWriterFactoryTest {
 
 	@Test
 	public void create_creates_corect_type() throws IOException { 
-		MapWriterFactory factory = new MapWriterFactory();
+		MapWriterFactory factory = new MapWriterFactory("yyyy-MM-dd");
 		
 		MapWriter writer = factory.create(new ByteArrayOutputStream(), ContentType.CSV);
 		
@@ -26,7 +26,7 @@ public class MapWriterFactoryTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void create_throws_exception_on_bad_content_type() throws IOException { 
-		MapWriterFactory factory = new MapWriterFactory();
+		MapWriterFactory factory = new MapWriterFactory("yyyy-MM-dd");
 		
 		factory.create(new ByteArrayOutputStream(), ContentType.ZIP);
 	}

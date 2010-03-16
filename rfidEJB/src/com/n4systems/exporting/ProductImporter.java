@@ -27,7 +27,7 @@ public class ProductImporter extends AbstractImporter<ProductView> {
 	protected void importView(Transaction transaction, ProductView view) throws ConversionException {
 		Product product = converter.toModel(view, transaction);
 		saver.setProduct(product);
-		saver.create();
+		saver.createWithoutHistory();
 	}
 
 }

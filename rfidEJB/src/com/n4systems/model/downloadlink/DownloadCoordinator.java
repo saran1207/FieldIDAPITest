@@ -76,16 +76,16 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateCustomerExport(String name, String downloadUrl, ContentType type, SecurityFilter filter) {
+	public void generateCustomerExport(String name, String downloadUrl, ContentType type, String dateFormat, SecurityFilter filter) {
 		DownloadLink link = createDownloadLink(name, type);
-		CustomerExportTask task = taskFactory.createCustomerExportTask(link, downloadUrl, filter);
+		CustomerExportTask task = taskFactory.createCustomerExportTask(link, downloadUrl, dateFormat, filter);
 		
 		executor.execute(task);
 	}
 	
-	public void generateAutoAttributeExport(String name, String downloadUrl, ContentType type, ListLoader<AutoAttributeDefinition> attribLoader) {
+	public void generateAutoAttributeExport(String name, String downloadUrl, ContentType type,  String dateFormat, ListLoader<AutoAttributeDefinition> attribLoader) {
 		DownloadLink link = createDownloadLink(name, type);
-		AutoAttributeExportTask task = taskFactory.createAutoAttributeExportTask(link, downloadUrl, attribLoader);
+		AutoAttributeExportTask task = taskFactory.createAutoAttributeExportTask(link, downloadUrl, dateFormat, attribLoader);
 		
 		executor.execute(task);
 	}

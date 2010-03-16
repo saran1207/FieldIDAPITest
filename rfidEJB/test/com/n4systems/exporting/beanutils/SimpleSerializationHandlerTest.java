@@ -13,7 +13,7 @@ public class SimpleSerializationHandlerTest {
 	public void test_get_string_value() throws MarshalingException, SecurityException, NoSuchFieldException {
 		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("type"));
 		
-		Map<String, String> values = testHandler.marshal(bean);
+		Map<String, Object> values = testHandler.marshal(bean);
 		
 		assertEquals(1, values.size());
 		assertEquals("mytype", values.get("Type"));
@@ -23,7 +23,7 @@ public class SimpleSerializationHandlerTest {
 	public void test_get_null_value() throws MarshalingException, SecurityException, NoSuchFieldException {
 		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("name"));
 		
-		Map<String, String> values = testHandler.marshal(bean);
+		Map<String, Object> values = testHandler.marshal(bean);
 		
 		assertEquals(1, values.size());
 		assertEquals("", values.get("Name"));
@@ -33,7 +33,7 @@ public class SimpleSerializationHandlerTest {
 	public void test_get_int_value() throws MarshalingException, SecurityException, NoSuchFieldException {
 		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("age"));
 		
-		Map<String, String> values = testHandler.marshal(bean);
+		Map<String, Object> values = testHandler.marshal(bean);
 		
 		assertEquals(1, values.size());
 		assertEquals("42", values.get("Age"));

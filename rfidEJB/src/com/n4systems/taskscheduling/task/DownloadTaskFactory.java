@@ -14,7 +14,7 @@ import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 
 public class DownloadTaskFactory {
-
+	
 	public DownloadTaskFactory() {}
 
 	public ExcelReportExportTask createExcelTask(DownloadLink link, String downloadUrl, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers) {
@@ -48,18 +48,18 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public CustomerExportTask createCustomerExportTask(DownloadLink link, String downloadUrl, SecurityFilter filter) {
-		CustomerExportTask task = new CustomerExportTask(link, downloadUrl, filter);
+	public CustomerExportTask createCustomerExportTask(DownloadLink link, String downloadUrl, String dateFormat, SecurityFilter filter) {
+		CustomerExportTask task = new CustomerExportTask(link, downloadUrl, dateFormat, filter);
 		return task;
 	}
 	
-	public AutoAttributeExportTask createAutoAttributeExportTask(DownloadLink link, String downloadUrl, ListLoader<AutoAttributeDefinition> attribLoader) {
-		AutoAttributeExportTask task = new AutoAttributeExportTask(link, downloadUrl, attribLoader);
+	public AutoAttributeExportTask createAutoAttributeExportTask(DownloadLink link, String downloadUrl, String dateFormat, ListLoader<AutoAttributeDefinition> attribLoader) {
+		AutoAttributeExportTask task = new AutoAttributeExportTask(link, downloadUrl, dateFormat, attribLoader);
 		return task;
 	}
 	
-	public ProductExportTask createProductExportTask(DownloadLink link, String downloadUrl, ListLoader<Product> productLoader) {
-		ProductExportTask task = new ProductExportTask(link, downloadUrl, productLoader);
+	public ProductExportTask createProductExportTask(DownloadLink link, String downloadUrl, String dateFormat, ListLoader<Product> productLoader) {
+		ProductExportTask task = new ProductExportTask(link, downloadUrl, dateFormat, productLoader);
 		return task;
 	}
 }

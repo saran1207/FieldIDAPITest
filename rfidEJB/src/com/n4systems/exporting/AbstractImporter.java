@@ -87,7 +87,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 		List<V> views = new ArrayList<V>();
 		ExportMapUnmarshaler<V> unmarshaler = createMapUnmarshaler();
 
-		Map<String, String> row;
+		Map<String, Object> row;
 		while ((row = mapReader.readMap()) != null) {
 			views.add(unmarshaler.toBean(row));
 		}

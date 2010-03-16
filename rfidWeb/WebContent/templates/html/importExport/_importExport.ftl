@@ -13,11 +13,17 @@
 		<a href='${exportExample}'><@s.text name="label.download_excel_template" /></a>
 	</div>
 	
-	<div id="exportBox">
-		<h3><@s.text name="label.export" /></h3>
-		<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.excel_file" /></a>
-		<a href='${exportCsv}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.csv_file" /></a>
-	</div>
+	<#if exportExcel?exists||exportCsv?exists>
+		<div id="exportBox">
+			<h3><@s.text name="label.export" /></h3>
+			<#if exportExcel?exists>
+				<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.excel_file" /></a>
+			</#if>
+			<#if exportCsv?exists>
+				<a href='${exportCsv}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.csv_file" /></a>
+			</#if>
+		</div>
+	</#if>
 </div>
 
 <div id="rightBox">

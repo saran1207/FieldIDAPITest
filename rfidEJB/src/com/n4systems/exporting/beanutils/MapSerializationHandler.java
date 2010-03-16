@@ -17,8 +17,8 @@ public class MapSerializationHandler extends SerializationHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, String> marshal(Object bean) throws MarshalingException {
-		Map<String, String> outputMap = new LinkedHashMap<String, String>();
+	public Map<String, Object> marshal(Object bean) throws MarshalingException {
+		Map<String, Object> outputMap = new LinkedHashMap<String, Object>();
 		
 		// prepend the keys with our field title prefix
 		String prefix = getExportField().title();
@@ -33,13 +33,13 @@ public class MapSerializationHandler extends SerializationHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void unmarshal(Object bean, String title, String value) throws MarshalingException {
+	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
 		Map<String, String> mapFromBean = (Map<String, String>)getFieldValue(bean);
 		
 		// remove the title prefix from the field key
 		String fieldKey = title.substring(getExportField().title().length());
 		
-		mapFromBean.put(fieldKey, value);
+		mapFromBean.put(fieldKey, (String)value);
 	}
 
 }
