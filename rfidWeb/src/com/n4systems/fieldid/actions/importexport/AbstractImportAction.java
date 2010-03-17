@@ -18,8 +18,8 @@ import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.ImporterFactory;
 import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.exporting.io.ExcelMapReader;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.exporting.io.MapReaderFactory;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
@@ -30,22 +30,19 @@ import com.n4systems.util.ArrayUtils;
 @SuppressWarnings("serial")
 public abstract class AbstractImportAction extends AbstractAction {
 	private Logger logger = Logger.getLogger(AbstractImportAction.class);
-	
-	private final MapReaderFactory mapReaderFactory;
+
 	private final ImportTaskRegistry taskRegistry;
 	private final Executor executor;
 	
 	private File importDoc;
-    private String importDocContentType;
     private List<ValidationResult> failedValidationResults; 
     
     public AbstractImportAction(PersistenceManager persistenceManager) {
-		this(persistenceManager, new MapReaderFactory(), TaskExecutor.getInstance(), new ImportTaskRegistry());
+		this(persistenceManager, TaskExecutor.getInstance(), new ImportTaskRegistry());
 	}
 
-	public AbstractImportAction(PersistenceManager persistenceManager, MapReaderFactory mapReaderFactory, Executor executor, ImportTaskRegistry taskRegistry) {
+	public AbstractImportAction(PersistenceManager persistenceManager, Executor executor, ImportTaskRegistry taskRegistry) {
 		super(persistenceManager);
-		this.mapReaderFactory = mapReaderFactory;
 		this.executor = executor;
 		this.taskRegistry = taskRegistry;
 	}
@@ -68,11 +65,6 @@ public abstract class AbstractImportAction extends AbstractAction {
 	public String doImport() {
 		if (importDoc == null) {
 			addActionError(getText("error.file_required"));
-			return MISSING;
-		}
-		
-		if (!mapReaderFactory.isSupportedContentType(importDocContentType)) {
-			addActionError(getText("error.unsupported_content_type"));
 			return MISSING;
 		}
 		
@@ -125,7 +117,7 @@ public abstract class AbstractImportAction extends AbstractAction {
 	}
 	
 	private Importer createAndValidateImporter() throws IOException, FileNotFoundException, ParseException, MarshalingException {
-		MapReader mapReader = mapReaderFactory.createMapReader(new FileInputStream(importDoc), importDocContentType);
+		MapReader mapReader = new ExcelMapReader(new FileInputStream(importDoc));
 		
 		Importer importer = createImporter(mapReader);
 		
@@ -164,9 +156,5 @@ public abstract class AbstractImportAction extends AbstractAction {
 	
 	public void setImportDoc(File importDoc) {
 		this.importDoc = importDoc;
-	}
-
-	public void setImportDocContentType(String importDocContentType) {
-		this.importDocContentType = importDocContentType;
 	}
 }

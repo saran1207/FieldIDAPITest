@@ -45,6 +45,7 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
+import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -70,6 +71,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private Collection<String> flashErrors = new ArrayList<String>();
 	private Collection<FindProductOptionManufactureBean> searchOptions;
 	private LoaderFactory loaderFactory;
+	private SaverFactory saverFactory;
 	private Gson json;
 	private TenantLimitProxy limitProxy;
 	private UserBean user = null;
@@ -348,6 +350,13 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return loaderFactory;
 	}
 	
+	public SaverFactory getSaverFactory() {
+		if (saverFactory == null) {
+			saverFactory = new SaverFactory();
+		}
+		return saverFactory;
+	}
+	
 	public NonSecureLoaderFactory getNonSecureLoaderFactory() {
 		if (nonSecureLoaderFactory == null) {
 			nonSecureLoaderFactory = new NonSecureLoaderFactory();
@@ -453,7 +462,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 	public DownloadCoordinator getDownloadCoordinator() {
 		if (downloadCoordinator == null) {
-			downloadCoordinator = new DownloadCoordinator(getUser());
+			downloadCoordinator = new DownloadCoordinator(getUser(), getSaverFactory().createDownloadLinkSaver());
 		}
 		return downloadCoordinator;
 	}

@@ -2,12 +2,13 @@ package com.n4systems.exporting.beanutils;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Test;
 public class SimpleSerializationHandlerTest {
-	
-	private TestExportBean bean = new TestExportBean("mytype", null, 42);
+	private final Date testDate = new Date();
+	private TestExportBean bean = new TestExportBean("mytype", null, 42, testDate);
 	
 	@Test
 	public void test_get_string_value() throws MarshalingException, SecurityException, NoSuchFieldException {
@@ -70,5 +71,28 @@ public class SimpleSerializationHandlerTest {
 		testHandler.unmarshal(test, "", "99");
 		
 		assertEquals(99, test.getAge().intValue());
+	}
+	
+	@Test
+	public void test_set_date_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("date"));
+		
+		Date expected = new Date();
+		
+		TestExportBean test = new TestExportBean();
+		
+		testHandler.unmarshal(test, "", expected);
+		
+		assertEquals(expected, test.getDate());
+	}
+	
+	@Test
+	public void test_get_date_value() throws MarshalingException, SecurityException, NoSuchFieldException {
+		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("date"));
+		
+		Map<String, Object> values = testHandler.marshal(bean);
+		
+		assertEquals(1, values.size());
+		assertEquals(testDate, values.get("Date"));
 	}
 }

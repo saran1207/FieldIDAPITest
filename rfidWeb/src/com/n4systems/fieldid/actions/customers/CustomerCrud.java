@@ -15,12 +15,12 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
@@ -47,7 +47,6 @@ public class CustomerCrud extends AbstractCrud {
 	private String listFilter;
 	private Pager<UserBean> userList;
 	private List<ListingPair> internalOrgList;
-	private String exportType; 
 	
 	public CustomerCrud(User userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -151,15 +150,17 @@ public class CustomerCrud extends AbstractCrud {
 	@SkipValidation
 	public String doExport() {
 		try {
-			ContentType contentType = ContentType.valueOf(exportType.toUpperCase());
-			
-			getDownloadCoordinator().generateCustomerExport(getText("label.export_file"), getDownloadLinkUrl(), contentType, getPrimaryOrg().getDateFormat(), getSecurityFilter());
+			getDownloadCoordinator().generateCustomerExport(getText("label.export_file"), getDownloadLinkUrl(), createCustomerOrgListLoader(), getSecurityFilter());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute customer export", e);
 			addFlashMessage(getText("error.export_failed"));
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+	
+	protected CustomerOrgListLoader createCustomerOrgListLoader() {
+		return getLoaderFactory().createCustomerOrgListLoader().withoutLinkedOrgs();
 	}
 	
 	public Pager<CustomerOrg> getPage() {
@@ -249,14 +250,6 @@ public class CustomerCrud extends AbstractCrud {
 
 	public CustomerOrg getCustomer() {
 		return customer;
-	}
-
-	public String getExportType() {
-		return exportType;
-	}
-
-	public void setExportType(String exportType) {
-		this.exportType = exportType;
 	}
 	
 }

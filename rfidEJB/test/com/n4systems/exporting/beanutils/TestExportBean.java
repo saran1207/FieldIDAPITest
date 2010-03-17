@@ -1,5 +1,9 @@
 package com.n4systems.exporting.beanutils;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.n4systems.api.validation.validators.NotNullValidator;
 
 public class TestExportBean {
@@ -15,12 +19,19 @@ public class TestExportBean {
 	@ExportField(title="Other", order = 40, handler = DummySerializationHandler.class)
 	private Integer other;
 	
-	public TestExportBean() {}
+	@ExportField(title="Date", order = 45)
+	private Date date;	
 	
-	public TestExportBean(String type, String name, Integer age) {
+	@ExportField(title="M:", order = 50, handler = MapSerializationHandler.class)
+	private Map<String, String> map = new HashMap<String, String>();
+	
+	public TestExportBean() {}
+
+	public TestExportBean(String type, String name, Integer age, Date date) {
 		this.type = type;
 		this.name = name;
 		this.age = age;
+		this.date = date;
 	}
 	
 	public String getType() {
@@ -55,4 +66,19 @@ public class TestExportBean {
 		this.other = other;
 	}
 	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Map<String, String> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, String> map) {
+		this.map = map;
+	}
 }

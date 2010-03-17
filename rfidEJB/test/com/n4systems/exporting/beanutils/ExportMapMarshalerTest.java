@@ -4,6 +4,7 @@ import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class ExportMapMarshalerTest {
 	public void test_full_conversion() throws MarshalingException, InstantiationException {
 		ExportMapMarshaler<TestExportBean> marshaler = new  ExportMapMarshaler<TestExportBean>(TestExportBean.class);
 		
-		Map<String, Object> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42));
+		Map<String, Object> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42, new Date()));
 		
 		assertEquals("mytype", beanMap.get("Type"));
 		assertEquals("", beanMap.get("Name"));

@@ -12,6 +12,7 @@ import com.n4systems.ejb.MailManager;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
 
@@ -20,11 +21,11 @@ public abstract class DownloadTask implements Runnable {
 	
 	protected final String templateName;
 	protected final String downloadUrl;
-	protected final DownloadLinkSaver linkSaver;
+	protected final Saver<DownloadLink> linkSaver;
 	protected final MailManager mailManager;
 	protected final DownloadLink downloadLink;
 	
-	public DownloadTask(DownloadLink downloadLink, String downloadUrl, String templateName, DownloadLinkSaver linkSaver, MailManager mailManager) {
+	public DownloadTask(DownloadLink downloadLink, String downloadUrl, String templateName, Saver<DownloadLink> linkSaver, MailManager mailManager) {
 		this.downloadLink = downloadLink;
 		this.downloadUrl = downloadUrl;
 		this.templateName = templateName;

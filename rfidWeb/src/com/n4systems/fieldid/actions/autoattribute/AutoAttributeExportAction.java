@@ -35,7 +35,6 @@ import com.n4systems.util.ArrayUtils;
 public class AutoAttributeExportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(AutoAttributeExportAction.class);
 	
-	private String exportType; 
 	private AutoAttributeCriteria autoAttributeCriteria;
     
 	private InputStream exampleExportFileStream;
@@ -62,11 +61,9 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 	
 	public String doExport() {
 		try {
-			ContentType contentType = ContentType.valueOf(exportType.toUpperCase());
-			
 			ListLoader<AutoAttributeDefinition> attribLoader = getLoaderFactory().createPassthruListLoader(autoAttributeCriteria.getDefinitions());
 			
-			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), contentType, getPrimaryOrg().getDateFormat(), attribLoader);
+			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), attribLoader);
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute auto attribute export", e);
 			addFlashMessage(getText("error.export_failed"));
@@ -125,14 +122,6 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 		exampleExportFileStream = new ByteArrayInputStream(bytes);
 		
 		return SUCCESS;
-	}
-	
-	public String getExportType() {
-		return exportType;
-	}
-
-	public void setExportType(String exportType) {
-		this.exportType = exportType;
 	}
 
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
