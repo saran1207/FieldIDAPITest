@@ -116,17 +116,23 @@ public class CsvMapReader implements MapReader {
 			return false;
 		}
 		
-		titles = parseLine(line);
+		Object[] lineData = parseLine(line);
+		titles = new String[lineData.length];
+		
+		for (int i = 0; i < lineData.length; i++) {
+			titles[i] = String.valueOf(lineData[i]);
+		}
+		
 		return true;
 	}
 	
 	private Map<String, Object> constructMap(String line) throws ParseException {
 		// map the titles to the line values
-		Map<String, Object> row = MapUtils.combineArrays(titles, parseLine(line));		
+		Map<String, Object> row = MapUtils.combineArrays(titles, parseLine(line));
 		return row;
 	}
 	
-	private String[] parseLine(String line) throws ParseException {
+	private Object[] parseLine(String line) throws ParseException {
 		List<String> fields = new ArrayList<String>();
 		parseIndex = 0;
 		
