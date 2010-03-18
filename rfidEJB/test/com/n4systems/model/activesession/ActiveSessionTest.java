@@ -36,7 +36,7 @@ public class ActiveSessionTest {
 	}
 	
 	@Test
-	public void should_find_that_an_active_session_last_touched_is_equal_to_the_timeout_has_expired() throws Exception {
+	public void should_find_that_an_active_session_last_touched_is_equal_to_the_timeout_has_not_expired() throws Exception {
 		StoppedClock clock = new StoppedClock();
 		ActiveSession sut = new ActiveSession(UserBuilder.aUser().build(), SOME_SESSION_ID);
 		
