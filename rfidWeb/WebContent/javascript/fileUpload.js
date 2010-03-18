@@ -52,7 +52,7 @@ function addUploadFile(type) {
 	}
 	
 	var frameId = 'frame_'+ frameCount;
-	var iframe = '<iframe id="' + frameId +'" class="fileUpload" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
+	var iframe = '<iframe id="' + frameId +'" class="fileUpload" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
 	$('uploadedfiles').insert( { bottom: iframe } );
 	frameCount++;
 }

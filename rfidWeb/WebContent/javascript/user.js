@@ -61,7 +61,7 @@ function removeUploadImage() {
 }
 
 function insertImageUploadFrame() {
-	var iframe = '<iframe id="imageUpload" src="' + signatureUploadUrl + '" scrollbar="no" style="overflow:hidden;" frameborder="0" width="250" height="35" ></iframe>';
+	var iframe = '<iframe id="imageUpload" src="' + signatureUploadUrl + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="250" height="35" ></iframe>';
 	$("imageUploadField").insert( { top: iframe } );
 }
 

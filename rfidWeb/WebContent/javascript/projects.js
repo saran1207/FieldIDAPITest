@@ -109,7 +109,7 @@ function addUploadFile(limitReached, limitReachedHTML) {
 	if (limitReached) {
 		iframe = limitReachedHTML;
 	} else {
-		iframe = '<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
+		iframe = '<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
 	}
 	$('attachment').replace( iframe );
 }

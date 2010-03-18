@@ -82,7 +82,7 @@ ${action.setPageType('account_settings', 'list')!}
 				</script>
 			</label>
 			<span class="fieldHolder">
-				<#assign snipit><iframe src="${embeddedLoginUrl}" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="300" ></iframe></#assign>
+				<#assign snipit><iframe src="${embeddedLoginUrl}" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="300" ></iframe></#assign>
 				${snipit?html}
 			</span>
 		</div>

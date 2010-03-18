@@ -12,7 +12,7 @@ function imageFileUploaded( fileName, directory ){
 function removeUploadImage() { 
 	$( "imageUploaded" ).hide();
 	$("removeImage").value = "true";
-	var iframe = '<iframe id="imageUpload" src="' + uploadImageUrl + '" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
+	var iframe = '<iframe id="imageUpload" src="' + uploadImageUrl + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
 	$( "imageUploadField" ).insert( { top: iframe } );
 	$("imageUploaded").removeClassName( "inputError" );
 	$("imageUploaded").title = "";

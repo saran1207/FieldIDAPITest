@@ -1080,6 +1080,7 @@
 		<action name="multiProofTestUpload" method="upload" class="com.n4systems.fieldid.actions.inspection.MultiProofTestUpload">
 			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
+			<result name="sessionBooted" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 		</action>
 
 		<action name="summaryReport" method="show" class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
