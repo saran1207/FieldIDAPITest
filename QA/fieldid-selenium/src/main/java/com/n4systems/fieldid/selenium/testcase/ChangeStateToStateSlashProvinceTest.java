@@ -35,12 +35,10 @@ public class ChangeStateToStateSlashProvinceTest extends FieldIDTestCase {
 	@Test
 	public void addCustomerShouldHaveStateSlashProvince() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			gotoAddCustomer();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -51,12 +49,10 @@ public class ChangeStateToStateSlashProvinceTest extends FieldIDTestCase {
 	@Test
 	public void addDivisionShouldHaveStateSlashProvince() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			gotoAddDivision();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -67,12 +63,10 @@ public class ChangeStateToStateSlashProvinceTest extends FieldIDTestCase {
 	@Test
 	public void addOrganizationalUnitShouldHaveStateSlashProvince() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			gotoAddOrganization();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {
@@ -83,12 +77,10 @@ public class ChangeStateToStateSlashProvinceTest extends FieldIDTestCase {
 	@Test
 	public void editPrimaryOrganizationalUnitShouldHaveStateSlashProvince() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			gotoEditPrimaryOrganization();
 			verifyInputWithStateSlashProvince();
 		} catch(Exception e) {

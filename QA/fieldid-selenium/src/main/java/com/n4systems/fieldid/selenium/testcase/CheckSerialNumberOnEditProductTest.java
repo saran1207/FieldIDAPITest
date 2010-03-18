@@ -14,8 +14,6 @@ import com.n4systems.fieldid.selenium.login.page.Login;
 public class CheckSerialNumberOnEditProductTest extends FieldIDTestCase {
 
 	private Login login;
-	private String username;
-	private String password;
 	private Asset asset;
 	private AssetSearch ps;
 
@@ -25,14 +23,12 @@ public class CheckSerialNumberOnEditProductTest extends FieldIDTestCase {
 		asset = new Asset(selenium, misc);
 		ps = new AssetSearch(selenium, misc);
 		login = new Login(selenium, misc);
-		username = "n4systems";
-		password = "makemore$";
 	}
 	
 	@Ignore("Currently no way to detect javascript errors")
 	@Test
 	public void changing_serial_number_on_edit_product_should_have_no_javascript_errors() throws Exception {
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signInWithSystemAccount();
 		goToProductSearchResults();
 		goToEditProduct(0);
 		misc.clickGenerateSerialNumber();
@@ -56,7 +52,7 @@ public class CheckSerialNumberOnEditProductTest extends FieldIDTestCase {
 	@Ignore("Currently no way to detect javascript errors")
 	@Test
 	public void changing_serial_number_on_edit_product_to_existing_serial_number_should_have_no_javascript_errors() throws Exception {
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signInWithSystemAccount();
 		goToProductSearchResults();
 		String serialNumber = ps.getSerialNumberForAsset(0);
 		goToEditProduct(1);

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.referrer;
 
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
@@ -151,7 +152,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		selenium.open("/fieldid/login.action");
 		Login loginPage = new Login(selenium, misc);
 		
-		loginPage.loginAcceptingEULAIfNecessary("n4systems", "makemore$");
+		loginPage.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/refer.action");
 		selenium.waitForPageToLoad(Misc.defaultTimeout);

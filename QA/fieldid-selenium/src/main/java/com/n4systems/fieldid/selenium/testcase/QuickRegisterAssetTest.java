@@ -6,12 +6,12 @@ import com.n4systems.fieldid.selenium.assets.page.Asset;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 @Ignore
-public class QuickRegisterAssetTest extends LoggedInTest {
+public class QuickRegisterAssetTest extends LoggedInTestCase {
 
 	private static final String VENDOR_CONTEXT_SELECTOR = "css=#vendorContextNameLink a";
 	
 	public QuickRegisterAssetTest() {
-		super("n4systems", "makemore$");
+		super();
 	}
 	
 	

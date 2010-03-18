@@ -3,12 +3,12 @@ package com.n4systems.fieldid.selenium.testcase.menus;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.misc.Misc;
-import com.n4systems.fieldid.selenium.testcase.LoggedInTest;
+import com.n4systems.fieldid.selenium.testcase.LoggedInTestCase;
 
-public class ProductStatusMenuTest extends LoggedInTest {
+public class ProductStatusMenuTest extends LoggedInTestCase {
 
 	public ProductStatusMenuTest() {
-		super("n4systems", "makemore$");
+		super();
 	}
 
 	

@@ -50,7 +50,7 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		 * This is a list of tenants and the admin user for
 		 * that tenant. It assumes the password for these
 		 * users have been set to the password used in the
-		 * @Test below. Each tenant was selected because
+		 * Test below. Each tenant was selected because
 		 * their timezone is different from the others in
 		 * this list.
 		 */
@@ -80,7 +80,7 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		
 		
 		setCompany(companyName);
-		login.loginAcceptingEULAIfNecessary(userId, password);
+		login.signIn(userId, password);
 		login.verifySignedIn();
 		misc.gotoSignOut();
 		

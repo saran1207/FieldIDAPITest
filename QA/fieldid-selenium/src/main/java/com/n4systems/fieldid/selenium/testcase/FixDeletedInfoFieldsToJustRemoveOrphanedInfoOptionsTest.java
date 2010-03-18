@@ -47,12 +47,10 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	@Test
 	public void attributesCanBeDeletedFromUnusedProductType() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			ProductType productType = createAProductTypeWithAttributes();
 			verifyEditProductTypeHasDeleteAttribute(productType);
 		} catch(Exception e) {
@@ -95,12 +93,10 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInProductCodeMapping() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			ProductType productType = createAProductTypeWithAttributes();
 			useProductTypeInProductCodeMapping(productType);
 			verifyEditProductTypeHasRetireAttribute(productType);
@@ -149,57 +145,42 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	@Test
 	public void productWithRetiredAttributesCanBeEdited() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
-		try {
-			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
-			// identify a product
-			// go to manage product type and retire an attribute
-			// edit the product
-			// verify it saved okay
-		} catch(Exception e) {
-			throw e;
-		}
+		setCompany(companyID);
+		login.signInWithSystemAccount();
+		// identify a product
+		// go to manage product type and retire an attribute
+		// edit the product
+		// verify it saved okay
+		throw new RuntimeException("not Implmented");
 	}
 	
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInAutoAttribute() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
-		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			// create a product type with select box attributes
 			// save it
 			// use the product type in an auto attribute
 			// edit product type and retire the select box
 			// fail if I can 'Delete' the attribute
-		} catch(Exception e) {
-			throw e;
-		}
+			throw new RuntimeException("not Implmented");
 	}
 	
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInExistingProduct() throws Exception {
 		String companyID = getStringProperty("company");
-		String password = getStringProperty("password");
-		String username = getStringProperty("userid");
 
-		try {
-			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
-			// create a product type with select box attributes
-			// save it
-			// use the product type to create a product
-			// edit product type and retire the select box
-			// fail if I can 'Delete' the attribute
-		} catch(Exception e) {
-			throw e;
-		}
+		setCompany(companyID);
+		login.signInWithSystemAccount();
+		// create a product type with select box attributes
+		// save it
+		// use the product type to create a product
+		// edit product type and retire the select box
+		// fail if I can 'Delete' the attribute
+		throw new RuntimeException("not Implmented");
 	}
 	
 	@After

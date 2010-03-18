@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.misc.Misc;
 
-public class ProductTypeValidationTest extends LoggedInTest {
+public class ProductTypeValidationTest extends LoggedInTestCase {
 
 	public ProductTypeValidationTest() {
-		super("n4systems", "makemore$");
+		super();
 	}
 
 	@Test

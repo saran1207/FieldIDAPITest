@@ -26,14 +26,13 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		admin = new Admin(selenium, misc);
 		mus = new ManageUsers(selenium, misc);
 		String company = getStringProperty("company");
-		String username = getStringProperty("username");
-		String password = getStringProperty("password");
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signInWithSystemAccount();
 	}
 	
 	@Test
 	public void should_be_able_to_add_an_employee_user() throws Exception {
+		//TODO:  permissions need help
 		gotoAddAnEmployeeUser();
 		EmployeeUser eu = addAnEmployeeUser();
 		assertUserWasAdded(eu);
@@ -47,7 +46,7 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	}
 	
 	private CustomerUser addACustomerUser() {
-		String email = "darrell.grainger@fieldid.com";
+		String email = "selenium@fieldid.com";
 		String password = getStringProperty("customer-password");
 		Owner owner = new Owner();
 		String firstName = misc.getRandomString(10);
@@ -74,7 +73,7 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		List<String> success = misc.getActionMessages();
 		List<String> errors = misc.getFormErrorMessages();
 		assertTrue("There were errors on the page: " + misc.convertListToString(errors), errors.size() == 0);
-		String successMessage = "Data Saved.";
+		String successMessage = "User Saved";
 		assertTrue("Did not get the expected '" + successMessage + "'", success.contains(successMessage));
 		mus.gotoViewAll();
 		mus.setUserType(ManageUsers.UserTypeAll);
@@ -85,7 +84,7 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	}
 
 	private EmployeeUser addAnEmployeeUser() {
-		String email = "darrell.grainger@fieldid.com";
+		String email = "selenium@fieldid.com";
 		String password = getStringProperty("employee-password");
 		Owner owner = new Owner();
 		String firstName = misc.getRandomString(10);

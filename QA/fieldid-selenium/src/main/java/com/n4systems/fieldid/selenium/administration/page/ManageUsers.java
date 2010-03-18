@@ -53,7 +53,8 @@ public class ManageUsers {
 	private String addEmployeeUserAllOffButtonLocator = "xpath=//INPUT[@value='All Off']";
 	private String addEmployeeUserSaveButtonLocator = "xpath=//INPUT[@id='employeeUserCreate_save']";
 	private String addEmployeeUserCancelLinkLocator = "xpath=//A[contains(text(),'Cancel')]";
-	private String permissionTableXpath = "//DIV[@class='infoBlock']/TABLE[@class='list']";
+	private String permissionTableLocator = ".permissions";
+	private String permissionTableXpath = "//TABLE[contains(concat(' ',normalize-space(@class),' '),' permissions ')]";
 	private String numberOfEmployeePermissionsXpath = permissionTableXpath + "/TBODY/TR[not(@class='titleRow')]";
 	private String userTypeSelectListLocator = "xpath=//SELECT[@id='userType']";
 	private String filterSearchButtonLocator = "xpath=//INPUT[@id='userList_search']";
@@ -285,9 +286,9 @@ public class ManageUsers {
 	public void setPermissionsAddEmployeeUser(List<String> permissions) {
 		misc.info("Turning on permissions for the current add employee user");
 		verifyPermissions();
-		String permissionTableLocator = "xpath=" + permissionTableXpath;
+		String permissionTableLocator1 = "css=" + permissionTableLocator;
 		for(String permission : permissions) {
-			String permissionOnButtonLocator = permissionTableLocator + "/TBODY/TR/TD[contains(text(),'" + permission + "')]/../TD/INPUT[@value='true']";
+			String permissionOnButtonLocator = permissionTableLocator1 + " td:contains('" + permission + "') ~ td input[value='true']";
 			selenium.check(permissionOnButtonLocator);
 		}
 	}

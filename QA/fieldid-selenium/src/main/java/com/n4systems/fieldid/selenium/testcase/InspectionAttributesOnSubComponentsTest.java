@@ -33,7 +33,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signIn(username, password);
 	}
 	
 	@Test

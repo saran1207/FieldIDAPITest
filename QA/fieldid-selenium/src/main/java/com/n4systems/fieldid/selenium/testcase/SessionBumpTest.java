@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.testcase;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -29,16 +30,16 @@ public class SessionBumpTest extends FieldIDTestCase {
 		shutDownSelenium(secondSession);
 	}
 	
-	
+	@Ignore
 	@Test
 	public void should_warn_the_user_that_they_will_be_booted_next_release() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
 		
 		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
 		
-		loginSession1.loginAcceptingEULAIfNecessary("sricci", "makemore$");
+		loginSession1.signIn("sricci", "makemore$");
 		
-		loginSession2.loginAcceptingEULAIfNecessary("sricci", "makemore$");
+		loginSession2.signIn("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
@@ -52,16 +53,16 @@ public class SessionBumpTest extends FieldIDTestCase {
 	}
 	
 	
-	
+	@Ignore
 	@Test
 	public void should_warn_the_user_that_they_will_be_booted_next_release_on_every_request_after_it_happens() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
 		
 		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
 		
-		loginSession1.loginAcceptingEULAIfNecessary("sricci", "makemore$");
+		loginSession1.signIn("sricci", "makemore$");
 		
-		loginSession2.loginAcceptingEULAIfNecessary("sricci", "makemore$");
+		loginSession2.signIn("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
@@ -80,14 +81,17 @@ public class SessionBumpTest extends FieldIDTestCase {
 	
 	
 	@Test
-	public void should_not_have_give_warnings_to_system_account_sign_ins() throws Exception {
+	public void should_not_boot_out_multiple_system_account_sign_ins() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
+		Home home1 = new Home(selenium, misc);
 		
-		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
+		Misc misc2 = new Misc(secondSession, Logger.getRootLogger());
+		Login loginSession2 = new Login(secondSession, misc2);
+		Home home2 = new Home(secondSession, misc2);
 		
-		loginSession1.loginAcceptingEULAIfNecessary("n4systems", "makemore$");
+		loginSession1.signInWithSystemAccount();
 		
-		loginSession2.loginAcceptingEULAIfNecessary("n4systems", "makemore$");
+		loginSession2.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/home.action");
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
@@ -95,21 +99,23 @@ public class SessionBumpTest extends FieldIDTestCase {
 		secondSession.open("/fieldid/home.action");
 		secondSession.waitForPageToLoad(Misc.defaultTimeout);
 		
-		assertFalse("The a session kick out warning is being shown a system user.", selenium.isElementPresent("sessionKickNotice"));
-		assertFalse("The a session kick out warning is being shown a system user.", secondSession.isElementPresent("sessionKickNotice"));
+		
+		home1.assertHomePage();
+		home2.assertHomePage();
 	}
 	
 	@Test
+	@Ignore
 	public void should_find_that_an_ajax_request_by_kicked_out_user_will_place_the_warning_on_the_page() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
 		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
 		
-		loginSession1.loginAcceptingEULAIfNecessary("sricci", "makemore$");
+		loginSession1.signIn("sricci", "makemore$");
 		selenium.open("/fieldid/productAdd.action");
 		selenium.waitForPageToLoad(Misc.defaultTimeout);
 		
 		
-		loginSession2.loginAcceptingEULAIfNecessary("sricci", "makemore$");
+		loginSession2.signIn("sricci", "makemore$");
 		
 		selenium.click("css=.searchOwner");
 		selenium.waitForAjax(Misc.AJAX_TIMEOUT);

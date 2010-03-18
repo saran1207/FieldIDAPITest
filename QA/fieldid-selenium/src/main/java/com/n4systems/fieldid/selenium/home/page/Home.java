@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.selenium.home.page;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
@@ -23,9 +24,6 @@ public class Home {
 	private String viewUpcomingInspectionsLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View upcoming Inspections')]";
 	private String viewInspectionHistoryForProductLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View the Inspection History for a Product')]";
 	private String findAProductLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Find a Product')]";
-	private String releaseNotesLocator = "xpath=//div[@id='releaseNotes']";
-	private String newFeaturesInReleaseHeaderLocator = releaseNotesLocator + "/h3[contains(text(),'New Features in ')]";
-	private String newFeaturesMoreLinkLocator = newFeaturesInReleaseHeaderLocator + "/span/a[contains(text(),'more')]";
 	private String helpVideosLocator = "//div[@id='helpVideos']";
 	private String instructionalVideosHeaderLocator = helpVideosLocator + "/h3[contains(text(),'Instructional Videos')]";
 	private String instructionalVideosMoreLinkLocator = instructionalVideosHeaderLocator + "/span/a[contains(text(),'more')]";
@@ -78,7 +76,6 @@ public class Home {
 	public void assertHomePage() {
 		assertHomePageHeader();
 		assertGoToSection();
-		assertNewFeaturesSection();
 		assertInstructionalVideosSection();
 	}
 
@@ -88,10 +85,7 @@ public class Home {
 		assertTrue("Could not find the 'New to Field ID?' intro video link", selenium.isElementPresent(fieldIDIntroVideoLinkLocator));
 	}
 
-	public void assertNewFeaturesSection() {
-		assertTrue("Could not find the header for the 'New Features in ...' section", selenium.isElementPresent(newFeaturesInReleaseHeaderLocator));
-		assertTrue("Could not find a link to the PDF release notes", selenium.isElementPresent(newFeaturesMoreLinkLocator));
-	}
+	
 
 	public void assertGoToSection() {
 		assertTrue("Could not find the header for the 'Go To:' section", selenium.isElementPresent(gotoSectionHeaderLocator));

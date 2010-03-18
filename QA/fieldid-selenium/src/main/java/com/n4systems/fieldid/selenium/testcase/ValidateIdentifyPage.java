@@ -44,7 +44,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signIn(username, password);
 		misc.gotoIdentify();
 		assertWeAreOnAddWithOrderPage();
 	}
@@ -57,7 +57,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String orderNumber = getStringProperty("integrationordernumber");
 
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signIn(username, password);
 		String serialNumber = identifyAssetWithOrderNumber(orderNumber);
 		assertAssetIdentified(serialNumber);
 	}
@@ -69,7 +69,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("notintegrationcompanyid");
 
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signIn(username, password);
 		String serialNumber = identifyAssetNoIntegration();
 		assertAssetIdentified(serialNumber);
 	}
@@ -81,7 +81,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
+		login.signIn(username, password);
 		String serialNumber = identifySingleAssetIntegrationTenant();
 		assertAssetIdentified(serialNumber);
 	}
@@ -93,9 +93,9 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
-		int quantity = misc.getRandomNumber(2, 250);
-		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity);
+		login.signIn(username, password);
+		int quantity = misc.getRandomNumber(2, 10);
+		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);
 	}
 	
@@ -106,9 +106,9 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("notintegrationcompanyid");
 
 		setCompany(company);
-		login.loginAcceptingEULAIfNecessary(username, password);
-		int quantity = misc.getRandomNumber(2, 250);
-		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity);
+		login.signIn(username, password);
+		int quantity = misc.getRandomNumber(2, 10);
+		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);
 	}
 	
@@ -118,7 +118,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		}
 	}
 
-	private List<Identifier> identifyMultipleAssetsRange(int quantity) {
+	private List<Identifier> identifyMultipleAssetsRange(int quantity, String productType) {
 		Calendar now = new GregorianCalendar();
 		String prefix = String.format("%1$04d%2$02d%3$02d-", now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 		String start = "1";	// start must be a number
@@ -130,6 +130,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		List<String> productStatuses = identify.getProductStatusesFromMultiAddForm();
 		assertTrue("There were no product status options available", productStatuses.size() > 0);
 		product.setProductStatus(productStatuses.get(0));
+		product.setProductType(productType);
 		product.setPurchaseOrder("PO #888");
 		product.setComments("This asset created via Multi Add test automation.");
 		identify.setMultiAddStep1Form(product);

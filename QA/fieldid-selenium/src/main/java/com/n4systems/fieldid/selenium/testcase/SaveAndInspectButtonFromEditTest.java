@@ -34,13 +34,11 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 
 	@Test
 	public void editAssetShouldHaveASaveAndInspectButton() throws Exception {
-		String password = getStringProperty("password");
 		String companyID = getStringProperty("company");
-		String username = getStringProperty("userid");
 
 		try {
 			setCompany(companyID);
-			login.loginAcceptingEULAIfNecessary(username, password);
+			login.signInWithSystemAccount();
 			Product p = gotoEditAnAsset();
 			verifyEditAnAssetHasASaveAndInspectButtonWhichWorks(p.getSerialNumber());
 		} catch(Exception e) {

@@ -35,7 +35,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		Login loginPage = new Login(selenium, misc);
 		loginPage.gotoSignInPage();
 		
-		loginPage.loginAcceptingEULAIfNecessary("n4systems", "makemore$");
+		loginPage.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/setup.action");
 		selenium.click("link=Manage User Registrations");

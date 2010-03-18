@@ -6,10 +6,10 @@ import com.n4systems.fieldid.selenium.misc.Misc;
 import com.n4systems.fieldid.selenium.util.SeleniumJavaScriptInteraction;
 
 @Ignore
-public class ProuductRegistrationTest extends LoggedInTest {
+public class ProuductRegistrationTest extends LoggedInTestCase {
 
 	public ProuductRegistrationTest() {
-		super("n4systems", "makemore$");
+		super();
 	}
 	
 

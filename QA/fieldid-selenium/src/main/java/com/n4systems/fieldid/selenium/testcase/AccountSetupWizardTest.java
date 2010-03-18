@@ -51,14 +51,14 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	@Test
 	public void admin_logs_in_says_no_thanks_to_setup_wizard() {
 		CreateTenant t = createARandomNewBasicTenant("fieldid");
-		login.loginAcceptingEULAIfNecessary(t.getUserName(), t.getPassword());
+		login.signIn(t.getUserName(), t.getPassword());
 		assertNoThanksWorks();
 	}
 
 	@Test
 	public void no_referral_basic_admin_logs_in_accepts_all_defaults_for_setup_wizard() {
 		CreateTenant t = createARandomNewBasicTenant("fieldid");
-		login.loginAcceptingEULAIfNecessary(t.getUserName(), t.getPassword());
+		login.signIn(t.getUserName(), t.getPassword());
 		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(false);
 		assertDefaultSettingsConfiguredProperly(defaults);
 	}
@@ -67,7 +67,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	public void msa_referral_basic_admin_logs_in_accepts_all_defaults_for_setup_wizard() {
 		String referrer = "msa";
 		CreateTenant t = createARandomNewBasicTenant(referrer);
-		login.loginAcceptingEULAIfNecessary(t.getUserName(), t.getPassword());
+		login.signIn(t.getUserName(), t.getPassword());
 		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(true);
 		assertDefaultSettingsConfiguredProperly(defaults);
 		assertDefaultVendorIsMSA(defaults);

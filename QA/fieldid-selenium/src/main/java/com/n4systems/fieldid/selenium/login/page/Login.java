@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.testcase.LoggedInTestCase;
 
 public class Login {
 	FieldIdSelenium selenium;
@@ -21,7 +22,7 @@ public class Login {
 	private String signInWithSecurityRFIDNumberLinkLocator = "xpath=//A[contains(text(),'Sign in with Security RFID Number')]";
 	private String requestAnAccountLinkLocator = "xpath=//DIV[@id='requestAccountButton']/A";
 	private String planAndPricingLinkLocator = "xpath=//DIV[@id='plansPricingButton']/A";
-	private String rememberMySignInInformationLocator = "xpath=//INPUT[@id='signInForm_rememberMe']";
+	private String rememberMySignInInformationLocator = "css#signInForm_signIn_rememberMe";
 	private String signInWithUserNameLinkLocator = "xpath=//A[contains(text(),'Sign in with User Name')]";
 	private String forgotMyPasswordLinkLocator = "xpath=//UL[@id='otherActions']/LI/SPAN/A[contains(text(),'I forgot my password')]";
 	private String isNotTheCompanyIWantLinkLocator = "xpath=//UL[@id='otherActions']/LI/SPAN/A[contains(text(),'is not the company I want.')]";	
@@ -273,7 +274,6 @@ public class Login {
 	 * 
 	 */
 	public void verifySignedIn() {
-		misc.info("Verify login went okay.");
 		misc.checkForErrorMessages("VerifySignedIn");
 	}
 	
@@ -355,8 +355,8 @@ public class Login {
 	 * @throws Exception
 	 */
 	public void validate() throws Exception {
-		String username = "n4systems";
-		String password = "makemore$";
+		String username = LoggedInTestCase.SYSTEM_USER_NAME;
+		String password = LoggedInTestCase.SYSTEM_USER_PASSWORD;
 		String rfid = "DEADBEEFCAFEF00D";
 		boolean b;
 		
@@ -423,22 +423,38 @@ public class Login {
 		assertTrue(selenium.isElementPresent(signInButtonLocator));
 		misc.info("Verify a link to Sign in with Security RFID Number exists.");
 		assertTrue(selenium.isElementPresent(signInWithSecurityRFIDNumberLinkLocator));
-		misc.info("Verify a check box for remember my sign in information exists.");
-		assertTrue(selenium.isElementPresent(rememberMySignInInformationLocator));
 		misc.info("Verify a link to I forgot my password exists.");
 		assertTrue(selenium.isElementPresent(forgotMyPasswordLinkLocator));
 	}
 
-	public void loginAcceptingEULAIfNecessary(String username, String password) {
+	public void signIn(String username, String password) {
 		setUserName(username);
 		setPassword(password);
 		gotoSignIn();
+		
+		kickOtherSession();
+		
+		acceptEULA();
+		
+		
+		verifySignedIn();
+	}
+
+	private void kickOtherSession() {
+		if (selenium.isElementPresent("signInWithSecurityButton")) {
+			selenium.click("signInWithSecurityButton");
+			selenium.waitForPageToLoad(Misc.defaultTimeout);
+		}
+	}
+
+	private void acceptEULA() {
 		if (misc.isEULA()) {
 			misc.scrollToBottomOfEULA();
 			misc.gotoAcceptEULA();
 		}
-		
-		
-		verifySignedIn();
+	}
+	
+	public void signInWithSystemAccount() {
+		signIn(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
 	}
 }

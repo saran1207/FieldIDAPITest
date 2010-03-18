@@ -63,7 +63,7 @@ public class CreateTenant {
 		
 		this.setFirstName("Darrell");
 		this.setLastName("Grainger");
-		this.setEmail("darrell.grainger@fieldid.com");
+		this.setEmail("selenium@fieldid.com");
 		this.setCountry("Canada");
 		this.setTimeZone("Ontario - Toronto");
 		this.setCompanyAddress("179 John Street");

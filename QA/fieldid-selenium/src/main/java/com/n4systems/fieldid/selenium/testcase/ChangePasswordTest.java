@@ -9,13 +9,13 @@ import org.junit.runners.Parameterized.Parameters;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 @RunWith(value = Parameterized.class)
-public class ChangePasswordTest extends LoggedInTest {
+public class ChangePasswordTest extends LoggedInTestCase {
 
 	
 	private String editUserFormId;
 
 	public ChangePasswordTest(String editUserFormId) {
-		super("n4systems", "makemore$");
+		super();
 		this.editUserFormId = editUserFormId;
 	}
 	
