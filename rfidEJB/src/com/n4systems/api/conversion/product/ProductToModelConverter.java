@@ -64,6 +64,7 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		model.setComments(view.getComments());		
 		model.setProductStatus(resolveProductStatus(view.getStatus(), transaction));
 		model.setInfoOptions(new TreeSet<InfoOptionBean>());
+		model.setPublished(primaryOrg.isAutoPublish());
 		
 		// the order number field is ignored for integration customers
 		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {

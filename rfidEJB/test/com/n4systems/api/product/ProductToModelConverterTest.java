@@ -192,6 +192,34 @@ public class ProductToModelConverterTest {
 	}
 	
 	@Test
+	public void to_model_publishes_product_when_auto_publish_on() throws ConversionException {
+		UserBean identifiedBy = createIdentifiedBy();
+		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(true);
+		
+		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		converter.setIdentifiedBy(identifiedBy);
+		converter.setType(type);
+		
+		Product product = converter.toModel(createView(null, null), null);
+
+		assertTrue(product.isPublished());
+	}
+	
+	@Test
+	public void to_model_does_not_publish_product_when_auto_publish_off() throws ConversionException {
+		UserBean identifiedBy = createIdentifiedBy();
+		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(false);
+		
+		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		converter.setIdentifiedBy(identifiedBy);
+		converter.setType(type);
+		
+		Product product = converter.toModel(createView(null, null), null);
+
+		assertFalse(product.isPublished());
+	}
+	
+	@Test
 	public void to_model_copies_non_resolved_properties() throws ConversionException {
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(createIdentifiedBy());

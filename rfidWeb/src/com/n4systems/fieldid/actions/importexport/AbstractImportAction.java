@@ -18,6 +18,7 @@ import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.ImporterFactory;
 import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.exporting.io.EmptyDocumentException;
 import com.n4systems.exporting.io.ExcelMapReader;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -91,7 +92,9 @@ public abstract class AbstractImportAction extends AbstractAction {
 			}
 
 			executeImportTask(importer);
-			
+		} catch (EmptyDocumentException e) {
+			addActionError(getText("error.empty_import_document"));
+			return INPUT;
 		} catch (InvalidTitleException e) {
 			addActionError(getText("error.bad_file_format", ArrayUtils.newArray(e.getTitle())));
 			return INPUT;	

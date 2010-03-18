@@ -26,6 +26,11 @@ public class ExcelMapReader implements MapReader {
 			throw new IOException(e);
 		}
 		sheet = workbook.getSheet(0);
+		
+		// we need at least 2 rows.  One for titles, and one data row
+		if (sheet.getRows() < 2) {
+			throw new EmptyDocumentException();
+		}
 	}
 	
 	@Override
