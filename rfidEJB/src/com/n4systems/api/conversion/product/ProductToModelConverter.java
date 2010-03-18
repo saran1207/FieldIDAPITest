@@ -47,7 +47,11 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		PrimaryOrg primaryOrg = identifiedBy.getOwner().getPrimaryOrg();
 		
 		if (view.getIdentified() != null) {
-			model.setIdentified(view.getIdentified());
+			// this problem should never occur, the date validator will ensure it is actually a date instance
+			if (!(view.getIdentified() instanceof Date)) {
+				throw new ConversionException("ProductView field identified should have been instance of java.lang.Date but was " + view.getIdentified().getClass().getName());
+			}
+			model.setIdentified((Date)view.getIdentified());
 		} else {
 			model.setIdentified(new Date());
 		}

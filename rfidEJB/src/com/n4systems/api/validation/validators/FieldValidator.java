@@ -22,7 +22,7 @@ public interface FieldValidator {
 	public static final String StaticOptionNotFoundValidatorFail = "The option '%s' could not be found for the field '%s'.";
 	public static final String BlankInputOptionValidatorFail = "The input field '%s' must not be blank.";
 	public static final String MissingRequiredProductAttributeValidatorFail = "The attribute '%s' is required.";
-	public static final String InvalidDateValidatorFail = "The date '%s' in field '%s' is not valid.  Dates must be in the format '%s'.";
+	public static final String InvalidDateValidatorFail = "The date '%s' in field '%s' is not valid.  Please ensure the date is in the correct format.";
 	public static final String OwnerResolutionValidatorFail = "Could not resolve an owner for organization '%s', customer '%s' and division '%s'.";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext);

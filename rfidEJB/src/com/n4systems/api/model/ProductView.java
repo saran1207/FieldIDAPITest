@@ -1,9 +1,9 @@
 package com.n4systems.api.model;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.n4systems.api.validation.validators.DateValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.ProductStatusExistsValidator;
@@ -42,8 +42,11 @@ public class ProductView extends ExternalModelView {
 	@ExportField(title = "Comments", order = 1000)
 	private String comments;
 
-	@ExportField(title = "Identified", order = 1100)
-	private Date identified;
+	// this field is an object since it is hard to know exactly what is going to come back from excel
+	// if the date is formatted incorrectly, excel will return a String.  We let the date validator ensure we 
+	// actually have a date here.
+	@ExportField(title = "Identified", order = 1100, validators = { DateValidator.class })
+	private Object identified;
 
 	@ExportField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, ProductViewAttributesValidator.class })
 	private Map<String, String> attributes = new LinkedHashMap<String, String>();
@@ -142,11 +145,11 @@ public class ProductView extends ExternalModelView {
 		this.comments = comments;
 	}
 
-	public Date getIdentified() {
+	public Object getIdentified() {
 		return identified;
 	}
 
-	public void setIdentified(Date identified) {
+	public void setIdentified(Object identified) {
 		this.identified = identified;
 	}
 

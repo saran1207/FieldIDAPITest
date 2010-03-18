@@ -252,6 +252,18 @@ public class ProductToModelConverterTest {
 		assertTrue(model.getInfoOptions().contains(options.get(0)));
 	}
 	
+	@Test(expected=ConversionException.class)
+	public void to_model_throws_exception_when_identified_is_not_a_date() throws ConversionException {
+		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		converter.setIdentifiedBy(createIdentifiedBy());
+		converter.setType(type);
+		
+		ProductView view = createView(null, null);
+		view.setIdentified("bad date");
+		
+		converter.toModel(view, null);
+	}
+	
 	private UserBean createIdentifiedBy() {
 		UserBean user = UserBuilder.anEmployee().build();
 		
