@@ -1174,9 +1174,8 @@ public class DataServiceImpl implements DataService {
 				product = persistenceManager.find(Product.class, subProductDTO.getId());
 			}				
 			
-			// Create product 
 			if (product == null) {
-				product = createProduct(subProductDTO, tenantId);
+				continue;
 			}
 			
 			SubProduct subProduct = new SubProduct();
