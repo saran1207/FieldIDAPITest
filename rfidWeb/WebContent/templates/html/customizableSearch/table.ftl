@@ -50,7 +50,7 @@
 			
 			<#if postRowTemplate?exists ><#include "${postRowTemplate}" /></#if>
 		</tr>
-	<tr>
+	
 	</#list>
 </table>
 <#include '../common/_newpagination.ftl' />

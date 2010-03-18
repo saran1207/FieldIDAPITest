@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
@@ -25,8 +26,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class ProductTypeListerTest {
 
 	private static final String GROUP_1 = "group 1";
-	private FluentArrayList<ProductTypeGroup> groups;
-	private FluentArrayList<ProductType> types;
+	private List<ProductTypeGroup> groups;
+	private List<ProductType> types;
 	private ProductTypeLister sut;
 	
 	
@@ -34,12 +35,13 @@ public class ProductTypeListerTest {
 	public void setup() {
 		ProductTypeGroup group = createProductTypeGroup();
 		
-		groups = new FluentArrayList<ProductTypeGroup>(group);
+		groups = ImmutableList.of(group);;
 		
-		types = new FluentArrayList<ProductType>(
-				aProductType().named("type 1").withGroup(group).build(),
-				aProductType().named("type 2").build()
-				);
+		
+		
+		types = ImmutableList.of(aProductType().named("type 1").withGroup(group).build(),
+						aProductType().named("type 2").build()
+					);
 		
 		sut = new ProductTypeLister(persistenceManagerToLoadProductTypesAndGroups(), new OpenSecurityFilter());
 	}
@@ -56,7 +58,7 @@ public class ProductTypeListerTest {
 		PersistenceManager persistenceManager = createMock(PersistenceManager.class);
 		expect(persistenceManager.findAll((QueryBuilder<ProductTypeGroup>) anyObject())).andReturn(groups);
 		expect(persistenceManager.findAllLP(same(ProductType.class), (SecurityFilter)anyObject(), same("name"))).andReturn(ListHelper.longListableToListingPair(types));
-		expect(persistenceManager.findAllLP(same(ProductType.class), (SecurityFilter)anyObject(), same("group.name"))).andReturn(new FluentArrayList<ListingPair>(new ListingPair(types.first().getId(), GROUP_1)));
+		expect(persistenceManager.findAllLP(same(ProductType.class), (SecurityFilter)anyObject(), same("group.name"))).andReturn(ImmutableList.of(new ListingPair(types.get(0).getId(), GROUP_1)));
 		replay(persistenceManager);
 		return persistenceManager;
 	}
@@ -84,7 +86,7 @@ public class ProductTypeListerTest {
 	
 	@Test
 	public void should_find_product_types_for_group() throws Exception {
-		List<ListingPair> expectedTypes = ListHelper.longListableToListingPair(new FluentArrayList<ProductType>(types.first()));
+		List<ListingPair> expectedTypes = ListHelper.longListableToListingPair(types.subList(0, 1));
 	
 		List<ListingPair> actualTypes = sut.getGroupedProductTypes(GROUP_1);
 		
@@ -93,18 +95,18 @@ public class ProductTypeListerTest {
 	
 	@Test
 	public void should_find_product_types_for_group_by_id() throws Exception {
-		List<ListingPair> expectedTypes = ListHelper.longListableToListingPair(new FluentArrayList<ProductType>(types.first()));
+		List<ListingPair> expectedTypes = ListHelper.longListableToListingPair(types.subList(0, 1));
 		
-		List<ListingPair> actualTypes = sut.getGroupedProductTypesById(groups.first().getId());
+		List<ListingPair> actualTypes = sut.getGroupedProductTypesById(groups.get(0).getId());
 		
 		assertArrayEquals(expectedTypes.toArray(), actualTypes.toArray());
 	}
 	
 	@Test
 	public void should_find_product_types_for_all_group_by_id() throws Exception {
-		List<ListingPair> expectedTypes = ListHelper.longListableToListingPair(new FluentArrayList<ProductType>(types.first()));
+		List<ListingPair> expectedTypes = ListHelper.longListableToListingPair(types.subList(0, 1));
 		
-		List<ListingPair> actualTypes = sut.getGroupedProductTypesById(groups.first().getId());
+		List<ListingPair> actualTypes = sut.getGroupedProductTypesById(groups.get(0).getId());
 		
 		assertArrayEquals(expectedTypes.toArray(), actualTypes.toArray());
 	}
