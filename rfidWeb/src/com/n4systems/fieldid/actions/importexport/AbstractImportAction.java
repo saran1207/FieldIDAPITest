@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import jxl.read.biff.BiffException;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -99,8 +101,15 @@ public abstract class AbstractImportAction extends AbstractAction {
 			addActionError(getText("error.bad_file_format", ArrayUtils.newArray(e.getTitle())));
 			return INPUT;	
 		} catch (Exception e) {
-			logger.error(String.format("Import failed for User [%s]", getUser().toString()), e);
-			addActionError(getText("error.import_failed"));
+			// if the file is not an excel file, the exception that comes back will be a BifException contained inside an IOException
+			if (e.getCause() instanceof BiffException) {
+				logger.warn(String.format("Import failed for User [%s]", getUser().toString()), e.getCause());
+				addActionError(getText("error.unsupported_content_type"));
+			} else {
+				// we don't know exactly what happened here, log it and fail generically 
+				logger.error(String.format("Import failed for User [%s]", getUser().toString()), e);
+				addActionError(getText("error.import_failed"));
+			}
 			return ERROR;
 		}
 		
