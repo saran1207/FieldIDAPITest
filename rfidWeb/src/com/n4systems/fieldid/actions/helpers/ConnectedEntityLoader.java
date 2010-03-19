@@ -14,17 +14,15 @@ public class ConnectedEntityLoader {
 	
 	public <T extends EntityWithTenant> T getEntity(Class<T> clazz, Long id, T currentEntity, SecurityFilter filter) {
 		try {
-		if (id == null) {
-			return null;
-		} else if (currentEntity == null || !id.equals(currentEntity.getId())) {
-			
+			if (id == null) {
+				return null;
+			} else if (currentEntity == null || !id.equals(currentEntity.getId())) {
 				return persistenceManager.find(clazz, id, filter);
-			
-		} else {
-			return currentEntity;
-		}
+			} else {
+				return currentEntity;
+			}
+
 		} catch (Exception e) {
-			e.printStackTrace();// TODO: handle exception
 			return null;
 		}
 	}

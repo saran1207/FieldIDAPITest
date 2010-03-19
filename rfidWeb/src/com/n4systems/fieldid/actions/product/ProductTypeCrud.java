@@ -320,9 +320,6 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		
 	}
 
-	public String doViewImage() {
-		return SUCCESS;
-	}
 
 	@CustomValidator(type = "imageUploadContentType", message = "", key = "errors.filemustbeanimage")
 	public String getUploadedImageContentType() {

@@ -67,7 +67,7 @@ public abstract class AbstractImportAction extends AbstractAction {
 	@SkipValidation
 	public String doImport() {
 		if (importDoc == null) {
-			addActionError(getText("error.file_required"));
+			addActionErrorText("error.file_required");
 			return MISSING;
 		}
 		
@@ -79,7 +79,7 @@ public abstract class AbstractImportAction extends AbstractAction {
 		try {
 			// This case shouldn't happen since the form should not allow you to submit when one is already registered
 			if (isImportRunning()) {
-				addActionError(getText("error.import_already_running"));
+				addActionErrorText("error.import_already_running");
 				return ERROR;
 			} else {
 				taskRegistry.remove(getImportTaskId());
@@ -89,13 +89,13 @@ public abstract class AbstractImportAction extends AbstractAction {
 			Importer importer = createAndValidateImporter();
 			
 			if (!failedValidationResults.isEmpty()) {
-				addActionError(getText("label.validation_failed"));
+				addActionErrorText("label.validation_failed");
 				return INPUT;
 			}
 
 			executeImportTask(importer);
 		} catch (EmptyDocumentException e) {
-			addActionError(getText("error.empty_import_document"));
+			addActionErrorText("error.empty_import_document");
 			return INPUT;
 		} catch (InvalidTitleException e) {
 			addActionError(getText("error.bad_file_format", ArrayUtils.newArray(e.getTitle())));
@@ -104,11 +104,11 @@ public abstract class AbstractImportAction extends AbstractAction {
 			// if the file is not an excel file, the exception that comes back will be a BifException contained inside an IOException
 			if (e.getCause() instanceof BiffException) {
 				logger.warn(String.format("Import failed for User [%s]", getUser().toString()), e.getCause());
-				addActionError(getText("error.unsupported_content_type"));
+				addActionErrorText("error.unsupported_content_type");
 			} else {
 				// we don't know exactly what happened here, log it and fail generically 
 				logger.error(String.format("Import failed for User [%s]", getUser().toString()), e);
-				addActionError(getText("error.import_failed"));
+				addActionErrorText("error.import_failed");
 			}
 			return ERROR;
 		}

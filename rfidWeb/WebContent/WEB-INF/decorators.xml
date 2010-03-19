@@ -3,9 +3,6 @@
 	<excludes>
 		<pattern>*pushFile.action*</pattern>
 		<pattern>*excel/*.action*</pattern>
-		<pattern>*productTypeImageUpload.action*</pattern>
-		<pattern>*viewProductTypeImage.action*</pattern>
-		<pattern>*userUploadSignature.action*</pattern>
 		<pattern>*xml/*.action*</pattern>
 		<pattern>*file/*.action*</pattern>
 		

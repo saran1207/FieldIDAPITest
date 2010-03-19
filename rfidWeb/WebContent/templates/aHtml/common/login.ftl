@@ -1,5 +1,5 @@
 <div class="lightBoxView">
-	<h2 class="modalHeader"><@s.text name="label.messagetitle" /></h2>
+	<h2 class="modalHeader"><@s.text name="label.you_are_currently_signed_out" /></h2>
 	<p class="instructions">
 		<@s.text name="message.sessionexpired"/>
 	</p>

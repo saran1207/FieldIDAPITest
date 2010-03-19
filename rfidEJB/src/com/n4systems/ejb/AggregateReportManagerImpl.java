@@ -33,26 +33,20 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 				"GROUP BY inspection.product.type.name, " +
 				"inspection.type.group.name, inspection.type.group.id " +
 				"ORDER BY UPPER(inspection.product.type.name), UPPER(inspection.type.group.name) ";
-		try {
 		Query query = em.createQuery( groupByQuery );
 		query.setParameter( "inspections", inspectionIds );
 		
 		report.setInspectionTypeGroupsByProductTypes( query.getResultList() );
-		} catch (Throwable e) {
-			e.printStackTrace();// TODO: handle exception
-		}
+		
 		
 		String distinctProducts = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT product.id), product.type.name ) " +
 			" from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.product as product LEFT JOIN product.type" +
 			" WHERE inspection.id IN ( :inspections ) " +
 			" GROUP BY product.type.name  ";
-		try {
 		Query distinctProductQuery = em.createQuery( distinctProducts );
 		distinctProductQuery.setParameter( "inspections", inspectionIds );
-			report.setDistinctProductsByProductType( distinctProductQuery.getResultList() );
-		} catch (Throwable e) {
-			e.printStackTrace();// TODO: handle exception
-		}
+		report.setDistinctProductsByProductType( distinctProductQuery.getResultList() );
+		
 		return report;
 	}
 

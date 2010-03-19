@@ -18,16 +18,7 @@
 			<result name="input" type="freemarker">/templates/html/setup/view.ftl</result>
 		</action>
 
-		<action name="productTypeImage" method="productImage" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
-			<result name="success"></result>
-			<result name="error" type="httpheader">
-				<param name="status">404</param>
-			</result>
-		</action>
 
-		<action name="viewProductTypeImage" method="viewImage" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
-			<result name="success" type="freemarker">/templates/html/productTypeCrud/viewImage.ftl</result>
-		</action>
 
 		<action name="productTypes" method="list" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
 			<result name="success" type="freemarker">/templates/html/productTypeCrud/list.ftl</result>
