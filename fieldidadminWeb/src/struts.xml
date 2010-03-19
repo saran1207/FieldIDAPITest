@@ -137,12 +137,6 @@
 			<result name="error" type="freemarker">/templates/html/observations/show.ftl</result>
 		</action>
 		
-		<action name="importAutoAttributes" method="show" class="com.n4systems.fieldidadmin.actions.AutoAttributeImporterAction">
-			<result name="success" type="freemarker">/templates/html/autoattributes/show.ftl</result>
-			<result name="error" type="freemarker">/templates/html/autoattributes/show.ftl</result>
-		</action>
-		
-		
 		<action name="instructionalVideos" method="list" class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
 			<result name="success" type="freemarker">/templates/html/instructionalVideos/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/instructionalVideos/list.ftl</result>

@@ -20,7 +20,5 @@ public interface ImportManager {
 	public static final String OBS_TYPE_DEF = "D";
 	
 	public long importObservations(Long tenantId, File observationsFile) throws FileImportException;
-
-	public long importAutoAttributes(Long productTypeId, File autoAttributeFile) throws FileImportException;
 	
 }

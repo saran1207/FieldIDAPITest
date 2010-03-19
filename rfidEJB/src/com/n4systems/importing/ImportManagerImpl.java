@@ -2,7 +2,6 @@ package com.n4systems.importing;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
@@ -22,12 +21,9 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.interceptor.TimingInterceptor;
 import com.n4systems.exceptions.FileImportException;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.FuzzyResolver;
@@ -181,93 +177,4 @@ public class ImportManagerImpl implements ImportManager {
 		return observationsImported;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public long importAutoAttributes(Long productTypeId, File autoAttributeFile) throws FileImportException {
-		Reader fRead = null;
-		CSVReader csvRead = null;
-		
-		logger.info("Starting Auto-Attribute importer for [" + autoAttributeFile.getName() + "]");
-		
-		ProductType type = persistenceManager.find(ProductType.class, productTypeId);
-		
-		
-		
-		if (type == null) {
-			throw new FileImportException("Could not find ProductType with id [" + productTypeId + "]");
-		}
-		
-		if (type.getAutoAttributeCriteria() != null) {
-			throw new FileImportException("Product Type already has auto attributes. you must remove them before importing new ones.");
-		}
-		
-		logger.debug("Using ProductType [" + type.getName() + "]");
-		
-		/*
-		 * We'll start by loading the entire csv file into a list.  Since these files are 
-		 * per-product type, they generally should not exceed about 32KB.
-		 */
-		List<String[]> attribData;
-		try {
-		
-			fRead = new FileReader(autoAttributeFile);
-			csvRead = new CSVReader(fRead);
-			attribData = (List<String[]>)csvRead.readAll();
-		
-		} catch(IOException e) {
-			logger.error(e);
-			throw new FileImportException("Failed reading csv file [" + autoAttributeFile.getName() + "]", e);
-		} finally {
-			IOUtils.closeQuietly(fRead);
-		}
-		
-		logger.debug("File has " + attribData.size() + " lines");
-		
-		// we need at least 2 lines in the file.  The first is the header and at least one line of data.
-		if(attribData.size() < 2) {
-			throw new FileImportException("Auto-Attribute csv files must have a header line and at least one line of data");
-		}
-		
-		logger.debug("Creating parser");
-		// we'll use our AutoAttributeParser helper class to do all the heavy lifting
-		AutoAttributeParser aaParse = new AutoAttributeParser(attribData, type);
-		
-		// parse and create the criteria 
-		AutoAttributeCriteria criteria;
-		try {
-			logger.debug("Parsing AutoAttributeCriteria");
-			criteria = aaParse.getCriteria();
-		} catch(Exception e) {
-			logger.error(e);
-			// also need to roll back the transaction
-			context.setRollbackOnly();
-			throw new FileImportException("Unable to create AutoAttributeCriteria", e);
-		}
-		
-		logger.debug("Persisting AutoAttributeCriteria");
-		// lets persist the criteria now
-		persistenceManager.save(criteria);
-		
-		// parse and create our list of definitions
-		List<AutoAttributeDefinition> definitions;
-		try {
-			logger.debug("Parsing AutoAttributeDefinitions");
-			definitions = aaParse.getDefinitions(criteria);
-		} catch(Exception e) {
-			logger.error(e);
-			// also need to roll back the transaction
-			context.setRollbackOnly();
-			throw new FileImportException("Unable to create AutoAttributeDefinition", e);
-		}
-		
-		logger.debug("Persisting " + definitions.size() + " AutoAttributeDefinitions");
-		
-		// now we need to persist the definitions
-		for(AutoAttributeDefinition definition: definitions) {
-			persistenceManager.save(definition);
-		}
-		
-		logger.debug("Auto-Attribute importer complete");
-		
-		return definitions.size();
-	}
 }

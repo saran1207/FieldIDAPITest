@@ -1,7 +1,6 @@
 package com.n4systems.fieldidadmin.actions;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -13,13 +12,9 @@ import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 
-import com.n4systems.fieldidadmin.jobs.EndUserImporterJob;
 import com.n4systems.fieldidadmin.jobs.ImportAllJob;
 import com.n4systems.fieldidadmin.jobs.InspectionImporterJob;
-import com.n4systems.fieldidadmin.jobs.ProductSerialImporterJob;
-import com.n4systems.fieldidadmin.utils.importer.EndUserImporter;
 import com.n4systems.fieldidadmin.utils.importer.InspectionImporter;
-import com.n4systems.fieldidadmin.utils.importer.ProductSerialImporter;
 import com.n4systems.model.Tenant;
 
 public class ImporterAction extends AbstractAdminAction {
@@ -91,22 +86,6 @@ public class ImporterAction extends AbstractAdminAction {
 		tenants = persistenceManager.findAll(Tenant.class);
 	}
 	
-	public String listEndUserFiles() {
-		fillManufacturers();
-		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
-		importingFiles = EndUserImporter.filesAvailableForProcessing( man, defaultDirectory );
-		processingFiles = EndUserImporter.filesProcessing( man, defaultDirectory );
-		return SUCCESS;
-	}
-	
-	public String listProductSerialFiles() {
-		fillManufacturers();
-		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
-		importingFiles = ProductSerialImporter.filesAvailableForProcessing( man, defaultDirectory );
-		processingFiles = ProductSerialImporter.filesProcessing( man, defaultDirectory );
-		return SUCCESS;
-	}
-	
 	public String listInspectionFiles() {
 		fillManufacturers();
 		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
@@ -118,28 +97,10 @@ public class ImporterAction extends AbstractAdminAction {
 	public String listAllFiles() {
 		fillManufacturers();
 		Tenant man = persistenceManager.findByName(Tenant.class, tenantName);
-		importingFiles = new ArrayList<File>();
-		processingFiles = new ArrayList<File>();
-		importingFiles.addAll( EndUserImporter.filesAvailableForProcessing( man, defaultDirectory ) );
-		processingFiles.addAll( EndUserImporter.filesProcessing( man, defaultDirectory ) );
-		importingFiles.addAll( ProductSerialImporter.filesAvailableForProcessing( man, defaultDirectory ) );
-		processingFiles.addAll( ProductSerialImporter.filesProcessing( man, defaultDirectory ) );
-		importingFiles.addAll( InspectionImporter.filesAvailableForProcessing( man, defaultDirectory ) );
-		processingFiles.addAll( InspectionImporter.filesProcessing( man, defaultDirectory ) );
+		importingFiles = InspectionImporter.filesAvailableForProcessing(man, defaultDirectory);
+		processingFiles = InspectionImporter.filesProcessing(man, defaultDirectory );
 		
 		return SUCCESS;
-	}
-	
-	public String doImportEndUsers() {
-		JobDataMap map = new JobDataMap();
-		
-		map.put( "tenantName", tenantName);
-		map.put( "defaultDirectory", defaultDirectory);
-		map.put( "createMissingDivision", createMissingDivisions );
-		
-		schedule( "endUserImporter", EndUserImporterJob.class, map, "endUserImporter" );
-				
-		return listEndUserFiles();
 	}
 	
 	public String doImportAll() {
@@ -152,19 +113,6 @@ public class ImporterAction extends AbstractAdminAction {
 		schedule( "allDataImporter", ImportAllJob.class, map, "allDataImporter" );
 		
 		return listAllFiles();
-	}
-	
-	public String doImportProductSerials() {
-		
-		JobDataMap map = new JobDataMap();
-		
-		map.put( "tenantName", tenantName);
-		map.put( "defaultDirectory", defaultDirectory);
-		map.put( "createMissingDivision", createMissingDivisions );
-		
-		schedule( "productSerialImporter", ProductSerialImporterJob.class, map, "productSerialImporter" );
-		
-		return listProductSerialFiles();
 	}
 	
 
