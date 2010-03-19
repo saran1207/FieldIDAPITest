@@ -33,7 +33,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 	@SkipValidation
 	public String doEdit() {
 		if (!findCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 
@@ -44,7 +44,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 
 	public String doSave() {
 		if (!findCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 

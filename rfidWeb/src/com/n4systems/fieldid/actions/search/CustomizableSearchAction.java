@@ -146,7 +146,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	
 	public String doExport() {
 		if (!isSearchIdValid()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return INPUT;
 		}
 		String reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
@@ -155,7 +155,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 			getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), immutableSearchDefiner(), buildExcelColumnTitles(), prepareExcelHandlers());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute ExcelExportTask", e);
-			addActionError(getText("error.cannotschedule"));
+			addActionErrorText("error.cannotschedule");
 			return ERROR;
 		}
 		

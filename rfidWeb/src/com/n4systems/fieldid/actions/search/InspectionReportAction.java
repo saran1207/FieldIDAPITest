@@ -127,7 +127,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public String doPrintAllCerts() {
 		if (!isSearchIdValid()) {
-			addFlashError(getText("error.reportexpired"));
+			addFlashErrorText("error.reportexpired");
 			return INPUT;
 		}
 		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
@@ -138,7 +138,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			getDownloadCoordinator().generateAllInspectionCertificates(reportName, getDownloadLinkUrl(), reportType, inspectionIds);
 		} catch(RuntimeException e) {
 			logger.error("Failed to print all inspection certs", e);
-			addFlashError(getText("error.reportgeneration"));
+			addFlashErrorText("error.reportgeneration");
 			return ERROR;
 		}
 		
@@ -152,7 +152,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public String doPrint() {
 		if (!isSearchIdValid()) {
-			addFlashError(getText("error.reportexpired"));
+			addFlashErrorText("error.reportexpired");
 			return INPUT;
 		}
 		String reportName = String.format("Inspection Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
@@ -161,7 +161,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			getDownloadCoordinator().generateInspectionSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
 		} catch(RuntimeException e) {
 			logger.error("Failed to print inspection report summary", e);
-			addFlashError(getText("error.reportgeneration"));
+			addFlashErrorText("error.reportgeneration");
 			return ERROR;
 		}
 		

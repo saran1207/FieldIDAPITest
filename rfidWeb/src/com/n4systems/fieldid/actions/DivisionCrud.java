@@ -116,11 +116,11 @@ public class DivisionCrud extends AbstractCrud {
 			saver.remove(division);
 			addFlashMessageText("message.division_deleted");
 		} catch (EntityStillReferencedException e) {
-			addFlashError(getText("error.divisioninuse"));
+			addFlashErrorText("error.divisioninuse");
 			return ERROR;
 		} catch (Exception e) {
 			logger.error("Failed deleteing division", e);
-			addFlashError(getText("error.deleting_divsion"));
+			addFlashErrorText("error.deleting_divsion");
 			return ERROR;
 		}
 		

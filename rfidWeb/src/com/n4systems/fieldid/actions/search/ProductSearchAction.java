@@ -71,7 +71,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	
 	public String doPrintAllCerts() {
 		if (!isSearchIdValid()) {
-			addFlashError( getText( "error.searchexpired" ) );
+			addFlashErrorText( "error.searchexpired");
 			return INPUT;
 		}
 		String reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
@@ -82,7 +82,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), productIds);
 		} catch(Exception e) {
 			logger.error("Failed to print all manufacturer certs", e);
-			addFlashError(getText("error.reportgeneration"));
+			addFlashErrorText("error.reportgeneration");
 			return ERROR;
 		}
 		

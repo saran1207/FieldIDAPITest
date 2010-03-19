@@ -45,7 +45,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	@SkipValidation
 	public String doEdit() {
 		if (!findScheduleCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -53,7 +53,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	
 	public String doSave() {
 		if (!findScheduleCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		
@@ -82,7 +82,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	@SkipValidation
 	public String doEditInspections() {
 		if (!findReportCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -90,7 +90,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	
 	public String doSaveInspections() {
 		if (!findReportCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		

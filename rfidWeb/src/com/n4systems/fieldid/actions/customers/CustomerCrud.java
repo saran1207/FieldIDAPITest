@@ -115,11 +115,11 @@ public class CustomerCrud extends AbstractCrud {
 			saver.remove(customer);
 			addFlashMessage("Customer deleted successfully");
 		} catch (EntityStillReferencedException e) {
-			addFlashError(getText("error.customerinuse"));
+			addFlashErrorText("error.customerinuse");
 			return ERROR;
 		} catch (Exception e) {
 			logger.error("Failed deleteing customer", e);
-			addFlashError(getText("error.savingcustomer"));
+			addFlashErrorText("error.savingcustomer");
 			return ERROR;
 		}
 		

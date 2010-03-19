@@ -67,7 +67,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	@SkipValidation
 	public String doEdit(){
 		if( !findCriteria() ) {
-			addFlashError( getText( "error.reportexpired" ) );
+			addFlashErrorText( "error.reportexpired" );
 			return ERROR;
 		}
 		
@@ -77,7 +77,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	
 	public String doSave(){
 		if( !findCriteria() ) {
-			addFlashError( getText( "error.reportexpired" ) );
+			addFlashErrorText( "error.reportexpired" );
 			return ERROR;
 		}
 		

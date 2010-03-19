@@ -70,7 +70,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	@SkipValidation
 	public String doEdit() {
 		if (!findCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		
@@ -82,13 +82,13 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 
 	public String doSave() {
 		if (!findCriteria()) {
-			addFlashError(getText("error.searchexpired"));
+			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		
 		if (select.get("identified") != null && select.get("identified")) {
 			if (identified == null || identified.length() == 0) {
-				addFlashError(getText("error.identifiedrequired"));
+				addFlashErrorText("error.identifiedrequired");
 				return INPUT;
 			}
 		}

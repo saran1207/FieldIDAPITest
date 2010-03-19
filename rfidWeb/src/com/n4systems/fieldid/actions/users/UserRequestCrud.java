@@ -63,7 +63,7 @@ public class UserRequestCrud extends AbstractCrud {
 	@SkipValidation
 	public String doShow() {
 		if (userRequest == null) {
-			addFlashError(getText("error.unknownuserrequest"));
+			addFlashErrorText("error.unknownuserrequest");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -71,7 +71,7 @@ public class UserRequestCrud extends AbstractCrud {
 
 	public String doAcceptRequest() {
 		if (userRequest == null) {
-			addFlashError(getText("error.unknownuserrequest"));
+			addFlashErrorText("error.unknownuserrequest");
 			return ERROR;
 		}
 		// customer users have no permissions
@@ -81,7 +81,7 @@ public class UserRequestCrud extends AbstractCrud {
 			userManager.acceptRequest(userRequest);
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + "could not accept the user request ", e);
-			addActionError(getText("error.failedtosave"));
+			addActionErrorText("error.failedtosave");
 			return INPUT;
 		}
 		createNewAccountEmail();
@@ -103,7 +103,7 @@ public class UserRequestCrud extends AbstractCrud {
 	@SkipValidation
 	public String doDeny() {
 		if (userRequest == null) {
-			addFlashError(getText("error.unknownuserrequest"));
+			addFlashErrorText("error.unknownuserrequest");
 			return ERROR;
 		}
 		try {

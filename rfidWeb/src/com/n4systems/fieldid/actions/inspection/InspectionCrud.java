@@ -498,7 +498,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		try {
 			inspectionManager.retireInspection(inspection, getSessionUser().getUniqueID());
 		} catch (Exception e) {
-			addFlashError(getText("error.inspectiondeleting"));
+			addFlashErrorText("error.inspectiondeleting");
 			logger.error("inspection retire " + product.getSerialNumber(), e);
 			return ERROR;
 		}

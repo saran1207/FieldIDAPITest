@@ -229,7 +229,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			}
 
 			getSession().remove(SESSION_KEY);
-			addFlashMessage(getText("message.masterinspectionsaved"));
+			addFlashMessageText("message.masterinspectionsaved");
 			return SUCCESS;
 
 		} catch (ProcessingProofTestException e) {
