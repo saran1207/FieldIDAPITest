@@ -36,14 +36,22 @@ public class ActiveSessionTest {
 	}
 	
 	@Test
-	public void should_find_that_an_active_session_last_touched_is_equal_to_the_timeout_has_not_expired() throws Exception {
+	public void should_find_that_an_active_session_last_touched_is_equal_to_the_timeout_has_expired() throws Exception {
 		StoppedClock clock = new StoppedClock();
 		ActiveSession sut = new ActiveSession(UserBuilder.aUser().build(), SOME_SESSION_ID);
 		
 		sut.lastTouched = DateHelper.addMinutesToDate(clock.currentTime(), -TIMEOUT);
-		assertFalse(sut.isExpired(TIMEOUT, clock));
+		assertTrue(sut.isExpired(TIMEOUT, clock));
 	}
 	
+	@Test
+	public void should_find_that_an_active_session_last_touched_is_just_less_than_the_timeout_has_not_expired() throws Exception {
+		StoppedClock clock = new StoppedClock();
+		ActiveSession sut = new ActiveSession(UserBuilder.aUser().build(), SOME_SESSION_ID);
+		
+		sut.lastTouched = DateHelper.addMinutesToDate(clock.currentTime(), -(TIMEOUT - 1));
+		assertFalse(sut.isExpired(TIMEOUT, clock));
+	}
 	
 	
 	

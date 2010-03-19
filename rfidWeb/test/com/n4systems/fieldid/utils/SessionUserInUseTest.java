@@ -5,8 +5,6 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
-import java.util.Date;
-
 import org.easymock.IAnswer;
 import org.easymock.classextension.EasyMock;
 import org.junit.Test;
@@ -18,9 +16,7 @@ import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.loaders.Loader;
-import com.n4systems.test.helpers.DateHelper;
 import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.time.Clock;
 import com.n4systems.util.time.StoppedClock;
 import com.n4systems.util.time.SystemClock;
@@ -69,6 +65,39 @@ public class SessionUserInUseTest {
 			
 		assertTrue(sut.doesActiveSessionBelongTo(user.getId(), A_SESSION_ID_1));
 	}
+	
+	@Test 
+	public void should_find_that_the_session_does_not_belong_to_you_if_it_has_expired() {
+		NonDataSourceBackedConfigContext configContext = new NonDataSourceBackedConfigContext();
+		UserBean user = aUser().build();
+		
+		ActiveSession activeSession = createExpiredSession(user, A_SESSION_ID_1);
+		
+		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
+		
+		
+		SessionUserInUse sut = new SessionUserInUse(loader, configContext, defaultClock(), getSuccessfulSaver());
+			
+		assertFalse(sut.doesActiveSessionBelongTo(user.getId(), A_SESSION_ID_1));
+	}
+
+	
+	@Test 
+	public void should_find_for_a_system_user_that_the_session_does_not_belong_to_you_if_it_has_expired() throws Exception {
+		NonDataSourceBackedConfigContext configContext = new NonDataSourceBackedConfigContext();
+		UserBean systemUser = aSystemUser().build();
+		
+		ActiveSession activeSession = createExpiredSession(systemUser, A_SESSION_ID_1);
+		
+		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
+		
+		
+		SessionUserInUse sut = new SessionUserInUse(loader, configContext, defaultClock(), getSuccessfulSaver());
+			
+		assertFalse(sut.doesActiveSessionBelongTo(systemUser.getId(), A_SESSION_ID_1));
+	}
+
+	
 	
 	
 	@Test
@@ -191,9 +220,7 @@ public class SessionUserInUseTest {
 		UserBean user = aUser().build();
 		Clock clock = new StoppedClock();
 		
-		Integer timeout = Integer.valueOf(ConfigEntry.ACTIVE_SESSION_TIME_OUT.getDefaultValue());
-		
-		ActiveSession activeSession = new ActiveSessionTestDouble(user, A_SESSION_ID_2, DateHelper.addMinutesToDate(clock.currentTime(), timeout*-2));
+		ActiveSession activeSession = createExpiredSession(user, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
 		
@@ -204,7 +231,15 @@ public class SessionUserInUseTest {
 	
 	
 	
-	
+	private ActiveSession createExpiredSession(UserBean user, String sessionId) {
+		ActiveSession activeSession = new ActiveSession(user, sessionId) {
+			@Override
+			public boolean isExpired(int timeoutInMinutes, Clock clock) {
+				return true;
+			}
+		};
+		return activeSession;
+	}
 	
 	private SystemClock defaultClock() {
 		return new SystemClock();
@@ -212,22 +247,13 @@ public class SessionUserInUseTest {
 
 	private IdLoader<Loader<ActiveSession>> createActiveSessionLoader(ActiveSession activeSession) {
 		ActiveSessionLoader loader = createMock(ActiveSessionLoader.class);
-		expect(loader.setId(anyLong())).andReturn(loader);
-		expect(loader.load()).andReturn(activeSession);
+		expect(loader.setId(anyLong())).andReturn(loader).atLeastOnce();
+		expect(loader.load()).andReturn(activeSession).atLeastOnce();
 		replay(loader);
 		
 		return loader; 
 	}
 	
-	private class ActiveSessionTestDouble extends ActiveSession {
-
-		public ActiveSessionTestDouble(UserBean user, String sessionId, Date lastTouched) {
-			super(user, sessionId);
-			this.lastTouched = lastTouched;
-		}
-		
-	}
-
 	private class NonDataSourceBackedConfigContext extends ConfigContext {
 
 		

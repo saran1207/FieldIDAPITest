@@ -26,7 +26,7 @@ public class SessionUserInUse {
 	public boolean doesActiveSessionBelongTo(Long userIdentifier, String sessionId) {
 		ActiveSession activeSession = getActiveSession(userIdentifier);
 		
-		 if (activeSessionExists(activeSession) && activeSessionMatchSessionId(sessionId, activeSession)) {
+		 if (activeSessionExists(activeSession) && activeSessionHasNotExpired(activeSession) && activeSessionMatchSessionId(sessionId, activeSession)) {
 			saver.update(activeSession);
 			return true; 
 			 
@@ -52,6 +52,8 @@ public class SessionUserInUse {
 		
 		return activeSessionExists(activeSession) && activeSession.isForNonSystemUser() && activeSessionHasNotExpired(activeSession);
 	}
+	
+	
 
 	private boolean activeSessionHasNotExpired(ActiveSession activeSession) {
 		return !activeSession.isExpired(getSessionTimeout(), clock);

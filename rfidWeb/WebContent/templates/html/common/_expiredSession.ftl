@@ -6,5 +6,5 @@
 	loginWindowTitle = '<@s.text name="title.sessionexpired"/>';
 	loggedInUserName = '${(Session.sessionUser.userName)!}';
 	tenantName = '${(Session.sessionUser.tenant.name)!}';
-	sessionTimeout = ${currentSessionTimeout!30};
+	sessionTimeOut = ${currentSessionTimeout!30};
 </script>

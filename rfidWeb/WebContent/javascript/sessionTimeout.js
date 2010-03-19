@@ -8,7 +8,6 @@ var sessionTimeOut = 30;
 var twoSeconds = 2;
 
 function testSession() {
-	
 	if( $( 'lightview' ) == null ||  $( 'lightview' ).positionedOffset().left <= 0 ) { 
 		getResponseNonInteractive( sessionTestUrl, "get" );
 	}
@@ -85,10 +84,8 @@ function kickOtherUserSubmit( event ) {
 			}
 		}
 	});
-		
 }
 
 
-
-new PeriodicalExecuter(testSession, minutesToSeconds(sessionTimeOut) + twoSeconds);
+onDocumentLoad(function() { new PeriodicalExecuter(testSession, minutesToSeconds(sessionTimeOut) + twoSeconds); });
 

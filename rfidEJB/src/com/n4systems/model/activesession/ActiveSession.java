@@ -89,7 +89,7 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	}
 
 	public boolean isExpired(int timeoutInMinutes, Clock clock) {
-		return timeoutInMinutes < DateHelper.getMinutesDelta(lastTouched, clock.currentTime());
+		return timeoutInMinutes <= DateHelper.getMinutesDelta(lastTouched, clock.currentTime());
 	}
 	
 	public boolean isForSystemUser() {
