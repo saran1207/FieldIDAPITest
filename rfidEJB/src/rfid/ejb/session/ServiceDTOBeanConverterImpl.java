@@ -194,7 +194,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
 		inspectionDTO.setLocation( inspection.getLocation() );
-		inspectionDTO.setInspectorId( inspection.getInspector().getUniqueID() );
+		inspectionDTO.setPerformedById( inspection.getInspector().getUniqueID() );
 		inspectionDTO.setStatus( inspection.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
 		inspectionDTO.setUtcDate(inspection.getDate());
@@ -428,7 +428,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}		
 		
 		// Required object lookups		
-		UserBean inspector = (UserBean)em.find(UserBean.class, inspectionServiceDTO.getInspectorId());
+		UserBean inspector = (UserBean)em.find(UserBean.class, inspectionServiceDTO.getPerformedById());
 		inspection.setModifiedBy( inspector );		
 		inspection.setInspector( inspector );
 

@@ -11,7 +11,7 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private String location;	
 	private Date utcDate;
 	private boolean printable;
-	private long inspectorId;
+	private long performedById;
 	private long inspectionGroupId;
 	private long inspectionBookId;
 	private long ownerId;
@@ -62,14 +62,11 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	public void setPrintable(boolean printable) {
 		this.printable = printable;
 	}
-	public boolean inspectorExists() {
-		return isValidServerId( inspectorId );
-	}
 	public long getInspectorId() {
-		return inspectorId;
+		return performedById;
 	}
-	public void setInspectorId(long inspectorId) {
-		this.inspectorId = inspectorId;
+	public void setInspectorId(long performedById) {
+		this.performedById = performedById;
 	}
 	public boolean inspectionGroupExists() {
 		return isValidServerId( inspectionGroupId );
@@ -217,6 +214,12 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	}
 	public void setDetachSubProducts(List<SubProductMapServiceDTO> detachSubProducts) {
 		this.detachSubProducts = detachSubProducts;
+	}
+	public long getPerformedById() {
+		return performedById;
+	}
+	public void setPerformedById(long performedById) {
+		this.performedById = performedById;
 	}
 	
 	
