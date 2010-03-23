@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
@@ -24,7 +25,7 @@ import com.n4systems.fieldid.selenium.login.page.Login;
  * WEB-1526
  * 
  * @author dgrainge
- *
+ * 
  */
 public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends FieldIDTestCase {
 
@@ -33,7 +34,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	Admin admin;
 	ManageProductTypes mpts;
 	ManageProductCodeMappings mpcms;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -48,18 +49,15 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	public void attributesCanBeDeletedFromUnusedProductType() throws Exception {
 		String companyID = getStringProperty("company");
 
-		try {
-			setCompany(companyID);
-			login.signInWithSystemAccount();
-			ProductType productType = createAProductTypeWithAttributes();
-			verifyEditProductTypeHasDeleteAttribute(productType);
-		} catch(Exception e) {
-			throw e;
-		}
+		setCompany(companyID);
+		login.signInWithSystemAccount();
+		ProductType productType = createAProductTypeWithAttributes();
+		verifyEditProductTypeHasDeleteAttribute(productType);
 	}
-	
+
 	private void verifyEditProductTypeHasDeleteAttribute(ProductType pt) throws InterruptedException {
-		// we assume create product type left us on the View tab of that product type
+		// we assume create product type left us on the View tab of that product
+		// type
 		mpts.gotoEditProductType();
 		mpts.deleteProductTypeAttributes(pt.getAttributes());
 	}
@@ -94,17 +92,13 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	public void attributesCanOnlyBeRetiredIfUsedInProductCodeMapping() throws Exception {
 		String companyID = getStringProperty("company");
 
-		try {
-			setCompany(companyID);
-			login.signInWithSystemAccount();
-			ProductType productType = createAProductTypeWithAttributes();
-			useProductTypeInProductCodeMapping(productType);
-			verifyEditProductTypeHasRetireAttribute(productType);
-		} catch(Exception e) {
-			throw e;
-		}
+		setCompany(companyID);
+		login.signInWithSystemAccount();
+		ProductType productType = createAProductTypeWithAttributes();
+		useProductTypeInProductCodeMapping(productType);
+		verifyEditProductTypeHasRetireAttribute(productType);
 	}
-	
+
 	private void verifyEditProductTypeHasRetireAttribute(ProductType pt) throws InterruptedException {
 		misc.gotoAdministration();
 		admin.gotoManageProductTypes();
@@ -118,18 +112,18 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		mpcms.gotoAddProductCodeMapping();
 		mpcms.setProductTypeInProductCodeMapping(productType.getName());
 		String productCode = misc.getRandomString(3);
-		Map<Attribute,String> productAttributes = createRandomProductCodeMappings(productType.getAttributes());
+		Map<Attribute, String> productAttributes = createRandomProductCodeMappings(productType.getAttributes());
 		ProductCodeMapping pcm = new ProductCodeMapping(productCode, productType.getName(), productAttributes);
 		mpcms.setProductCodeMapping(pcm);
 		mpcms.gotoSaveProductCodeMapping();
 	}
 
 	private <T extends Attribute> Map<T, String> createRandomProductCodeMappings(List<T> attributes) {
-		Map<T,String> result = new HashMap<T,String>();
-		
-		for (T a: attributes) {
+		Map<T, String> result = new HashMap<T, String>();
+
+		for (T a : attributes) {
 			String value = null;
-			if(a instanceof SelectBoxAttribute || a instanceof ComboBoxAttribute) {
+			if (a instanceof SelectBoxAttribute || a instanceof ComboBoxAttribute) {
 				String id = mpcms.getInputIDForProductTypeSelectComboBoxAttributes(a.getName());
 				String locator = "xpath=//SELECT[@id='" + id + "']";
 				String[] options = selenium.getSelectOptions(locator);
@@ -142,6 +136,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		return result;
 	}
 
+	@Ignore
 	@Test
 	public void productWithRetiredAttributesCanBeEdited() throws Exception {
 		String companyID = getStringProperty("company");
@@ -154,21 +149,23 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		// verify it saved okay
 		throw new RuntimeException("not Implmented");
 	}
-	
+
+	@Ignore
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInAutoAttribute() throws Exception {
 		String companyID = getStringProperty("company");
 
-			setCompany(companyID);
-			login.signInWithSystemAccount();
-			// create a product type with select box attributes
-			// save it
-			// use the product type in an auto attribute
-			// edit product type and retire the select box
-			// fail if I can 'Delete' the attribute
-			throw new RuntimeException("not Implmented");
+		setCompany(companyID);
+		login.signInWithSystemAccount();
+		// create a product type with select box attributes
+		// save it
+		// use the product type in an auto attribute
+		// edit product type and retire the select box
+		// fail if I can 'Delete' the attribute
+		throw new RuntimeException("not Implmented");
 	}
-	
+
+	@Ignore
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInExistingProduct() throws Exception {
 		String companyID = getStringProperty("company");
@@ -182,7 +179,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		// fail if I can 'Delete' the attribute
 		throw new RuntimeException("not Implmented");
 	}
-	
+
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
