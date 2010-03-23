@@ -38,7 +38,7 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 	public void should_forward_to_choose_company_page_from_root_of_www_domain() throws Exception {
 		String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		choosePage.verifyChooseCompany();
 		assertEquals("regexp:" + (url + "chooseCompany.action").replaceAll("\\/", "\\\\/").replaceAll("\\.", "\\\\."), selenium.getLocation());

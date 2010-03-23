@@ -56,7 +56,6 @@ public class ManageCustomers {
 	 * current page has the header 'Manage Customers'.
 	 */
 	public void verifyManageCustomersPage() {
-		misc.info("Verify going to Manage Customers page went okay.");
 		misc.checkForErrorMessages("verifyManageCustomersPage");
 		if(!selenium.isElementPresent(manageCustomersPageHeaderLocator )) {
 			fail("Could not find the header for 'Manage Customers'.");
@@ -72,7 +71,6 @@ public class ManageCustomers {
 	 * @param s
 	 */
 	public void setFilterByName(String s) {
-		misc.info("Enter the string '" + s + "' into the Filter by Name field.");
 		if(selenium.isElementPresent(filterByNameTextFieldLocator)) {
 			selenium.type(filterByNameTextFieldLocator, s);
 		} else {
@@ -86,7 +84,6 @@ public class ManageCustomers {
 	 * methods to check for them.
 	 */
 	public void gotoFilterByName() {
-		misc.info("Click the Filter button.");
 		if(selenium.isElementPresent(filterButtonLocator)) {
 			selenium.click(filterButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -104,7 +101,6 @@ public class ManageCustomers {
 	 * @return list of Customer IDs
 	 */
 	public List<String> getCustomerIDs() {
-		misc.info("Create a list of all the Customer IDs");
 		List<String> result = new ArrayList<String>();
 		
 		boolean loopFlag = true;
@@ -156,7 +152,6 @@ public class ManageCustomers {
 	 * @return list of Customer Names
 	 */
 	public List<String> getCustomerNames() {
-		misc.info("Create a list of all the Customer Names");
 		List<String> result = new ArrayList<String>();
 		
 		boolean loopFlag = true;
@@ -197,7 +192,6 @@ public class ManageCustomers {
 	}
 
 	public Map<String, String> getCustomerIDAndOrganizationMap() {
-		misc.info("Create a map of all the Customer ID, Organizations");
 		Map<String, String> map = new TreeMap<String, String>();
 		
 		boolean loopFlag = true;
@@ -229,7 +223,6 @@ public class ManageCustomers {
 	}
 
 	public void gotoAddCustomer() {
-		misc.info("click Add to add a new customer");
 		if(selenium.isElementPresent(addCustomerLinkLocator)) {
 			selenium.click(addCustomerLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -240,7 +233,6 @@ public class ManageCustomers {
 	}
 
 	public void gotoImportExport() {
-		misc.info("click Import/Export to import/export customer/division information");
 		if(selenium.isElementPresent(importExportCustomerLinkLocator)) {
 			selenium.click(importExportCustomerLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -286,7 +278,6 @@ public class ManageCustomers {
 	}
 
 	public void gotoSaveCustomer() {
-		misc.info("Click the Save button");
 		if(selenium.isElementPresent(addCustomerSaveButtonLocator)) {
 			selenium.click(addCustomerSaveButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -296,7 +287,6 @@ public class ManageCustomers {
 	}
 
 	public void gotoDivisions() {
-		misc.info("Click the link to Divisions");
 		if(selenium.isElementPresent(divisionLinkLocator)) {
 			selenium.click(divisionLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -306,7 +296,6 @@ public class ManageCustomers {
 	}
 
 	public void gotoAddDivision() {
-		misc.info("Click the link to add a division");
 		if(selenium.isElementPresent(addDivisionLinkLocator)) {
 			selenium.click(addDivisionLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

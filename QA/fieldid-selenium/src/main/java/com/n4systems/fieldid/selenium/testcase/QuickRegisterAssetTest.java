@@ -55,7 +55,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		searchForSerialNumberInVendorContext("alex-share-2", contextToSwitchTo);
 		
 		selenium.click("copyAsset");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		assertTrue("linked product registration should be visible", selenium.isVisible("linkedProductContainer"));
 		assertEquals("alex-share-2", selenium.getText("linkedProductSerial"));
@@ -68,7 +68,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		searchForSerialNumberInVendorContext("alex-share-2", contextToSwitchTo);
 		
 		selenium.click("copyAsset");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		assertTrue("linked product registration should be visible", selenium.isVisible("linkedProductContainer"));
 		assertEquals("alex-share-2", selenium.getValue("serialNumberText"));

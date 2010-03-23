@@ -68,7 +68,6 @@ public class Login {
 	 * @param s the user name you want to put in text field
 	 */
 	public void setUserName(String s) {
-		misc.info("Set User Name on Login Page to '" + s + "'.");
 		if(selenium.isElementPresent(userNameLocator) && selenium.isVisible(userNameLocator)) {
 			selenium.type(userNameLocator, s);
 		} else {
@@ -88,7 +87,6 @@ public class Login {
 	 * @param s the password you want to put in text field
 	 */
 	public void setPassword(String s) {
-		misc.info("Set Password on Login Page to '" + s + "'.");
 		if(selenium.isElementPresent(passwordLocator) && selenium.isVisible(passwordLocator)) {
 			selenium.type(passwordLocator, s);
 		} else {
@@ -125,7 +123,6 @@ public class Login {
 	 * @param s the Security RFID you want to put in text field
 	 */
 	public void setSecurityRFIDNumber(String s) {
-		misc.info("Set Security RFId Number on Login Page to '" + s + "'.");
 		if(selenium.isElementPresent(securityRFIDNumberLocator )) {
 			selenium.type(securityRFIDNumberLocator, s);
 		} else {
@@ -140,7 +137,6 @@ public class Login {
 	 * @param b
 	 */
 	public void setRememberMySignInInformation(boolean b) {
-		misc.info("Set the 'remember my sign in information' to '" + b);
 		if(selenium.isElementPresent(rememberMySignInInformationLocator)) {
 			if(b)	selenium.check(rememberMySignInInformationLocator);
 			else	selenium.uncheck(rememberMySignInInformationLocator);
@@ -172,7 +168,6 @@ public class Login {
 	 * 
 	 */
 	public void clickSignInWithSecurityRFIDNumber() {
-		misc.info("Change to 'Sign in with Security RFID Number'.");
 		if(selenium.isElementPresent(signInWithSecurityRFIDNumberLinkLocator) && selenium.isVisible(signInWithSecurityRFIDNumberLinkLocator)) {
 			selenium.click(signInWithSecurityRFIDNumberLinkLocator);
 		} else {
@@ -186,7 +181,6 @@ public class Login {
 	 * 
 	 */
 	public void clickSignInWithUserName() {
-		misc.info("Change to 'Sign in with User Name'.");
 		if(selenium.isElementPresent(signInWithUserNameLinkLocator) && selenium.isVisible(signInWithUserNameLinkLocator)) {
 			selenium.click(signInWithUserNameLinkLocator);
 		} else {
@@ -199,7 +193,6 @@ public class Login {
 	 * doesn't, fail will be called.
 	 */
 	public void gotoRequestAnAccount() {
-		misc.info("Click Request an Account");
 		if(selenium.isElementPresent(requestAnAccountLinkLocator)) {
 			selenium.click(requestAnAccountLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -213,7 +206,6 @@ public class Login {
 	 * doesn't, fail will be called.
 	 */
 	public void gotoPlansAndPricing() {
-		misc.info("Click Plans and Pricing");
 		if(selenium.isElementPresent(planAndPricingLinkLocator)) {
 			selenium.click(planAndPricingLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -226,7 +218,6 @@ public class Login {
 	 * Clicks on the link to go to the reset password page.
 	 */
 	public void gotoIForgotMyPassword() {
-		misc.info("Click link to I forgot my password");
 		if(selenium.isElementPresent(forgotMyPasswordLinkLocator)) {
 			selenium.click(forgotMyPasswordLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -240,7 +231,6 @@ public class Login {
 	 * @deprecated
 	 */
 	public void gotoIsNotTheCompanyIWant() {
-		misc.info("Click link to change company ID.");
 		if(selenium.isElementPresent(isNotTheCompanyIWantLinkLocator)) {
 			selenium.click(isNotTheCompanyIWantLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -256,7 +246,6 @@ public class Login {
 	 * 
 	 */
 	public void gotoSignIn() {
-		misc.info("Click Sign In button on Login Page.");
 		if(selenium.isElementPresent(signInButtonLocator)) {
 			selenium.click(signInButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -286,7 +275,6 @@ public class Login {
 	 */
 	public void verifySignedInHomePage() {
 		verifySignedIn();
-		misc.info("Verify the Home icon exists.");
 		if (!misc.isHome()) {
 			fail("Could not find the Home icon.");
 		}
@@ -301,7 +289,6 @@ public class Login {
 	 */
 	public void verifySignedInWithEULA() {
 		verifySignedIn();
-		misc.info("Verify the EULA exists.");
 		if (!misc.isEULA()) {
 			fail("Could not find the EULA.");
 		}
@@ -409,21 +396,15 @@ public class Login {
 	 * Otherwise we assume everything is okay.
 	 */
 	public void verifyLoginPage() {
-		misc.info("Check for error messages on the page");
 		List<String> errorMessages = misc.getFormErrorMessages();
 		if(errorMessages.size() > 0) {
 			String errors = misc.convertListToString(errorMessages);
 			fail("There were errors on the last action\n" + errors);
 		}
-		misc.info("Verify a text box for User Name exists.");
 		assertTrue(selenium.isElementPresent(userNameLocator));
-		misc.info("Verify a text box for Password exists.");
 		assertTrue(selenium.isElementPresent(passwordLocator));
-		misc.info("Verify a Sign In button exists.");
 		assertTrue(selenium.isElementPresent(signInButtonLocator));
-		misc.info("Verify a link to Sign in with Security RFID Number exists.");
 		assertTrue(selenium.isElementPresent(signInWithSecurityRFIDNumberLinkLocator));
-		misc.info("Verify a link to I forgot my password exists.");
 		assertTrue(selenium.isElementPresent(forgotMyPasswordLinkLocator));
 	}
 
@@ -443,7 +424,7 @@ public class Login {
 	private void kickOtherSession() {
 		if (selenium.isElementPresent("signInWithSecurityButton")) {
 			selenium.click("signInWithSecurityButton");
-			selenium.waitForPageToLoad(Misc.defaultTimeout);
+			selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		}
 	}
 

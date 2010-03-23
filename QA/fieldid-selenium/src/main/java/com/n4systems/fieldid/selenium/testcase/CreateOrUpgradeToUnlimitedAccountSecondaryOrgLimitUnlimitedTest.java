@@ -17,7 +17,6 @@ import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 /**
  * WEB-1498
  * 
- * @author dgrainge
  *
  */
 public class CreateOrUpgradeToUnlimitedAccountSecondaryOrgLimitUnlimitedTest extends FieldIDTestCase {
@@ -118,7 +117,7 @@ public class CreateOrUpgradeToUnlimitedAccountSecondaryOrgLimitUnlimitedTest ext
 		t.setpurchaseOrderNumber("88888");
 
 		create.setCreateYourAccountForm(t);
-		create.gotoCreateMyAccount();
+		create.submitCreateYourAccountForm();
 		
 		return t;
 	}

@@ -32,7 +32,6 @@ public class ManageSystemSettings {
 	}
 
 	public void verifyManageSystemSettingsPage() {
-		misc.info("Verify going to Manage SystemSettings page went okay.");
 		misc.checkForErrorMessages("verifyManageSystemSettingsPage");
 		if(!selenium.isElementPresent(manageSystemSettingsPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage SystemSettings'.");

@@ -15,7 +15,6 @@ public class ManageEventTypeGroups {
 	}
 
 	public void verifyManageEventTypeGroupsPage() {
-		misc.info("Verify going to Manage Event Type Groups page went okay.");
 		misc.checkForErrorMessages("verifyManageEventTypeGroupsPage");
 		if(!selenium.isElementPresent(manageEventTypeGroupsPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Event Type Groups'.");

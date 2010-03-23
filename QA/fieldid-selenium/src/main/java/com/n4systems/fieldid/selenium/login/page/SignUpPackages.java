@@ -31,7 +31,6 @@ public class SignUpPackages {
 	}
 	
 	public void verifySignUpPackagePage() {
-		misc.info("Confirm we arrived at the Sign Up Package page");
 		assertTrue("Could not find '" + headerText + "'", selenium.isElementPresent(signUpForPackageHeaderLocator));
 	}
 	

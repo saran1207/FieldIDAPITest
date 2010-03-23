@@ -66,7 +66,6 @@ public class Asset {
 	 * @param serialNumber 
 	 */
 	public void verifyAssetViewPage(String serialNumber) {
-		misc.info("Verify going to Asset View page went okay.");
 		misc.checkForErrorMessages("verifyAssetViewPage");
 		verifyAssetPageHeader(serialNumber);
 		verifyAssetViewPageStaticContents();
@@ -175,7 +174,6 @@ public class Asset {
 	}
 
 	public void gotoEdit() {
-		misc.info("Click the Edit tab and go to Edit the current asset");
 		if(selenium.isElementPresent(assetEditTabLinkLocator)) {
 			selenium.click(assetEditTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -185,21 +183,18 @@ public class Asset {
 	}
 	
 	public void gotoTraceability() {
-		misc.info("Click the Traceability tab");
 		selenium.click(assetTraceablityLinkLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 		
 	}
 
 	public void verifyAssetEditPage(String serialNumber) {
-		misc.info("Verify going to Asset Edit page went okay.");
 		misc.checkForErrorMessages("verifyAssetEditPage");
 		verifyAssetPageHeader(serialNumber);
 		verifyAssetEditPageContents();
 	}
 
 	private void verifyAssetEditPageContents() {
-		misc.info("verify the contents of the Assets Edit page");
 		verifyAssetEditPageDynamicContents();
 	}
 

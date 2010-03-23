@@ -43,7 +43,6 @@ public class ManageInspectionTypes {
 	}
 
 	public void verifyManageInspectionTypesPage() {
-		misc.info("Verify going to Manage Inspection Types page went okay.");
 		misc.checkForErrorMessages("verifyManageInspectionTypesPage");
 		if(!selenium.isElementPresent(manageInspectionTypesPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Inspection Types'.");
@@ -160,7 +159,7 @@ public class ManageInspectionTypes {
 	public void clickAddAttributeButton() throws InterruptedException {
 		if(selenium.isElementPresent(editInspectionTypeAddAttributeButtonLocator)) {
 			selenium.click(editInspectionTypeAddAttributeButtonLocator);
-			selenium.waitForAjax(Misc.defaultTimeout);
+			selenium.waitForAjax(Misc.DEFAULT_TIMEOUT);
 		} else {
 			fail("Could not find the Add Attribute button");
 		}

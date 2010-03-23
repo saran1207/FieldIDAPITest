@@ -134,7 +134,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		
 		create.setCreateYourAccountForm(t);
-		create.gotoCreateMyAccount();
+		create.submitCreateYourAccountForm();
 		
 		return t;
 	}
@@ -155,7 +155,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		loginPage.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/refer.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 	
 	

@@ -41,9 +41,9 @@ public class ChangePasswordTest extends LoggedInTestCase {
 		String locator = "xpath=//table[@id='userList']/tbody/tr[3]/td[1]/a";
 		String userName = selenium.getText(locator);
 		selenium.click(locator);
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		selenium.click("link=Change Password");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		selenium.click("label.cancel");
 		misc.waitForPageToLoadAndCheckForOopsPage();

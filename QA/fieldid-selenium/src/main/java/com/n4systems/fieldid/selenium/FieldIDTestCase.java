@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.junit.After;
 import org.junit.Before;
 
@@ -150,21 +148,17 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String domain = System.getProperty("fieldid-domain", "team.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
-	private String log4jConfig = System.getProperty("fieldid-log4j", "log4j.xml");
 	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
     protected FieldIdSelenium selenium;
 	protected Misc misc;
-	static Logger log = Logger.getLogger(FieldIDTestCase.class.getName());
 	protected Properties p;
 	public static final String badProperty = "INVALID";
 	
 	@Before
 	public void setUp() throws Exception {
-		initializeLogger();
 		loadingProperties();
-		log.info("-=-=-=-=-=-=-=-=-=-=- Start Test Case -=-=-=-=-=-=-=-=-=-=-");
 		selenium = createWebBrowser();
 		setWebBrowserSpeed();
 		createMiscClasses();
@@ -186,16 +180,12 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	@After
 	public void tearDown() throws Exception {
 		shutDownSelenium(selenium);
-		log.info("-=-=-=-=-=-=-=-=-=-=-= End Test Case =-=-=-=-=-=-=-=-=-=-=-");
         stb.tearDown();
 	}
 
 	protected void shutDownSelenium(FieldIdSelenium selenium) {
-		log.debug("[tearDown]: selenium.close()");
 		selenium.close();
-		log.debug("[tearDown]: selenium.stop()");
 		selenium.stop();
-		log.debug("[tearDown]: super.tearDown()");
 	}
 	
 	/**
@@ -475,8 +465,7 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * and My Account links. 
 	 */
 	private void createMiscClasses() {
-		log.debug("[setUp]: Initializing Misc object");
-		misc = new Misc(selenium, log);
+		misc = new Misc(selenium);
 	}
 
 	/**
@@ -487,30 +476,17 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 */
 	protected FieldIdSelenium createWebBrowser() {
 		String url = protocol + "://" + initCompany + "." + domain;
-		log.debug("[setUp]: Selenium Host: " + host);
-		log.debug("[setUp]: Selenium Port: " + port);
-		log.debug("[setUp]: Browser: " + browser);
-		log.debug("[setUp]: Base URL: " + url);
 		FieldIdSelenium selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
 		
 		selenium.start();
-		selenium.setTimeout(Misc.defaultTimeout);
-		log.debug("[setUp]: Open " + contextRoot);
-		log.info("Open web browser '" + browser + "' to '" + url + contextRoot + "'");
+		selenium.setTimeout(Misc.DEFAULT_TIMEOUT);
 		selenium.open(contextRoot);
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
-		log.debug("[setUp]: Maximizing browser window");
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		selenium.windowMaximize();
 		
 		return selenium;
 	}
 
-	/**
-	 * Configure the log4j logger using an XML file.
-	 */
-	private void initializeLogger() {
-		DOMConfigurator.configure(log4jConfig);
-	}
 	
 	/**
 	 * Get the domain we are currently using. This is typically
@@ -556,10 +532,9 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	 * @param companyID
 	 */
 	public void setCompany(String companyID) {
-		misc.info("Changing to company '" + companyID + "'");
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 	
 	

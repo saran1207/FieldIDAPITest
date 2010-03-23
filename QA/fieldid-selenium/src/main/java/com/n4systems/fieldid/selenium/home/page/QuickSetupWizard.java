@@ -48,7 +48,6 @@ public class QuickSetupWizard {
 	}
 	
 	public void gotoNoThanks() {
-		misc.info("Click the No Thanks link");
 		if(selenium.isElementPresent(noThanksLinkLocator)) {
 			selenium.click(noThanksLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -58,7 +57,6 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoImReadyLetsGo() {
-		misc.info("Click the I'm Ready - Lets Go! button");
 		if(selenium.isElementPresent(readyLetsGoButtonLocator)) {
 			selenium.click(readyLetsGoButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -73,7 +71,6 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoQuickSetupWizardStep2() {
-		misc.info("Click the 'Next ->' button");
 		if(selenium.isElementPresent(step1CompleteButtonLocator)) {
 			selenium.click(step1CompleteButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -102,7 +99,6 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoQuickSetupWizardStep3() {
-		misc.info("Click the 'Next ->' button");
 		if(selenium.isElementPresent(step2CompleteButtonLocator)) {
 			selenium.click(step2CompleteButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -128,7 +124,6 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoSkipImport() {
-		misc.info("Click the 'Skip' link");
 		if(selenium.isElementPresent(step3CompleteLinkLocator)) {
 			selenium.click(step3CompleteLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -196,7 +191,6 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoQuickSetupWizard() {
-		misc.info("Click the link to go to the Quick Setup Wizard");
 		if(selenium.isElementPresent(quickSetupWizardLinkLocator)) {
 			selenium.click(quickSetupWizardLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

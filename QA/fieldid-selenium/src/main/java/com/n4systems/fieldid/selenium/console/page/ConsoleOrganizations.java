@@ -54,7 +54,6 @@ public class ConsoleOrganizations {
 	}
 	
 	public void gotoEditTenant(String tenantID) {
-		misc.info("Click the link to edit '" + tenantID + "'");
 		String editLinkLocator = "xpath=" + organizationsTableXpath + 
 			"/TBODY/TR/TD[position()=" + tenantIDColumn + " and contains(text(),'" + tenantID +
 			"')]/../TD[" + editTenantColumn + "]/A[contains(text(),'Edit')]";
@@ -81,7 +80,6 @@ public class ConsoleOrganizations {
 	}
 	
 	public void gotoSubmitTenantInformation() {
-		misc.info("Click the Submit button");
 		if(selenium.isElementPresent(submitButtonLocator)) {
 			selenium.click(submitButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -91,7 +89,6 @@ public class ConsoleOrganizations {
 	}
 	
 	public void gotoCancelTenantInformation() {
-		misc.info("Click the Cancel button");
 		if(selenium.isElementPresent(cancelButtonLocator)) {
 			selenium.click(cancelButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -105,7 +102,6 @@ public class ConsoleOrganizations {
 	}
 
 	public void setPartnerCenter(boolean partnerCenter) {
-		misc.info("Set PartnerCenter to " + partnerCenter);
 		if(selenium.isElementPresent(partnerCenterCheckBoxLocator)) {
 			if(partnerCenter) {
 				selenium.check(partnerCenterCheckBoxLocator);
@@ -118,7 +114,6 @@ public class ConsoleOrganizations {
 	}
 
 	public void setShowPlansAndPricing(boolean showPlansAndPricing) {
-		misc.info("Set Show Plans and pricing when Partner Center enabled to " + showPlansAndPricing);
 		if(selenium.isElementPresent(showPlansAndPricingCheckBoxLocator)) {
 			if(showPlansAndPricing) {
 				selenium.check(showPlansAndPricingCheckBoxLocator);

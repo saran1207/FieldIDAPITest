@@ -52,7 +52,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 
 	private void submitForm() {
 		selenium.click("css=#reportForm_label_Run");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 
 	private void verifyInspectionResultsAreCorrectOnThisPage() {
@@ -71,7 +71,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 
 	private void goToLastPage() {
 		selenium.click("link=Last");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 
 }

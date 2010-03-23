@@ -124,7 +124,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 		t.setpurchaseOrderNumber("88888");
 
 		create.setCreateYourAccountForm(t);
-		create.gotoCreateMyAccount();
+		create.submitCreateYourAccountForm();
 		
 		return t;
 	}

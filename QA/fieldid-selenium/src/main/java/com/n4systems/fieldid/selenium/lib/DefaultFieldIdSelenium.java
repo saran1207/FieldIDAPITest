@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium.lib;
 
+import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Selenium;
 
 public class DefaultFieldIdSelenium implements FieldIdSelenium {
@@ -12,15 +13,26 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 	}
 	
 	
-	public void waitForAjax(String timeout) throws InterruptedException {
+	
+
+	public void waitForAjax() {
+		waitForAjax(Misc.AJAX_TIMEOUT);
+	}
+
+	public void waitForAjax(String timeout)  {
 		delegateSelenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
-	
-	public void waitForElementToBePresent(String locator, String timeout) throws InterruptedException {
+
+	public void waitForElementToBePresent(String locator)  {
+		waitForElementToBePresent(locator, Misc.DEFAULT_TIMEOUT);
+	}
+	public void waitForElementToBePresent(String locator, String timeout)  {
 		delegateSelenium.waitForCondition("var value = selenium.isElementPresent( '" + locator + "'); value == true", timeout);
 	}
 
-	
+	public void waitForPageToLoad() {
+		delegateSelenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+	}
 	
 	
 	/**

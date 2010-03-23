@@ -364,6 +364,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return nonSecureLoaderFactory;
 	}
 	
+	
+	
 	protected RemovalHandlerFactory getRemovalHandlerFactory() {
 		if (rhFactory == null) {
 			rhFactory = new RemovalHandlerFactory(getLoaderFactory());

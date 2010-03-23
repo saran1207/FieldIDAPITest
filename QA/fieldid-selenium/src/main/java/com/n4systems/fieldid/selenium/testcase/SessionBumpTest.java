@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -35,17 +34,17 @@ public class SessionBumpTest extends FieldIDTestCase {
 	public void should_warn_the_user_that_they_will_be_booted_next_release() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
 		
-		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
+		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
 		
 		loginSession1.signIn("sricci", "makemore$");
 		
 		loginSession2.signIn("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(Misc.defaultTimeout);
+		secondSession.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("error"));
 		assertTrue(selenium.getText("error").contains("A username can only be used by one person at a time"));
@@ -58,23 +57,23 @@ public class SessionBumpTest extends FieldIDTestCase {
 	public void should_warn_the_user_that_they_will_be_booted_next_release_on_every_request_after_it_happens() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
 		
-		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
+		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
 		
 		loginSession1.signIn("sricci", "makemore$");
 		
 		loginSession2.signIn("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(Misc.defaultTimeout);
+		secondSession.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		selenium.open("/fieldid/search.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		selenium.open("/fieldid/report.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
 	}
@@ -85,7 +84,7 @@ public class SessionBumpTest extends FieldIDTestCase {
 		Login loginSession1 = new Login(selenium, misc);
 		Home home1 = new Home(selenium, misc);
 		
-		Misc misc2 = new Misc(secondSession, Logger.getRootLogger());
+		Misc misc2 = new Misc(secondSession);
 		Login loginSession2 = new Login(secondSession, misc2);
 		Home home2 = new Home(secondSession, misc2);
 		
@@ -94,10 +93,10 @@ public class SessionBumpTest extends FieldIDTestCase {
 		loginSession2.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(Misc.defaultTimeout);
+		secondSession.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		
 		home1.assertHomePage();
@@ -108,11 +107,11 @@ public class SessionBumpTest extends FieldIDTestCase {
 	@Ignore
 	public void should_find_that_an_ajax_request_by_kicked_out_user_will_place_the_warning_on_the_page() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
-		Login loginSession2 = new Login(secondSession, new Misc(secondSession, Logger.getRootLogger()));
+		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
 		
 		loginSession1.signIn("sricci", "makemore$");
 		selenium.open("/fieldid/productAdd.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		
 		loginSession2.signIn("sricci", "makemore$");

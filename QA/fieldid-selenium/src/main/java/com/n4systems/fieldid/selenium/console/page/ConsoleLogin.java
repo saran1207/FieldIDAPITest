@@ -39,7 +39,6 @@ public class ConsoleLogin {
 	 * @param username
 	 */
 	public void setUserName(String username) {
-		misc.info("Set the username to '" + username + "'");
 		if(selenium.isElementPresent(userNameTextFieldLocator)) {
 			selenium.type(userNameTextFieldLocator, username);
 		}
@@ -51,7 +50,6 @@ public class ConsoleLogin {
 	 * @param password
 	 */
 	public void setPassword(String password) {
-		misc.info("Set the password to '" + password + "'");
 		if(selenium.isElementPresent(passwordTextFieldLocator)) {
 			selenium.type(passwordTextFieldLocator, password);
 		}
@@ -61,7 +59,6 @@ public class ConsoleLogin {
 	 * Click the submit button on the Login page for Administration Console.
 	 */
 	public void gotoLogin() {
-		misc.info("Click the Submit button and log into the Administration Console");
 		if(selenium.isElementPresent(submitButtonLocator)) {
 			selenium.click(submitButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -73,7 +70,6 @@ public class ConsoleLogin {
 	 * you to the login page.
 	 */
 	public void gotoOrganizations() {
-		misc.info("Click the Organizations tab");
 		if(selenium.isElementPresent(organizationLinkLocator)) {
 			selenium.click(organizationLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -85,7 +81,6 @@ public class ConsoleLogin {
 	 * inputs for username and password are not present.
 	 */
 	public void verifyLogin() {
-		misc.info("Confirm we logged in okay. Should be at the list of tenants.");
 		assertFalse(selenium.isElementPresent(userNameTextFieldLocator));
 		assertFalse(selenium.isElementPresent(passwordTextFieldLocator));
 	}
@@ -101,7 +96,7 @@ public class ConsoleLogin {
 
 	public ConsoleLogin gotoPage(String pageUrl) {
 		selenium.open(adminConsoleURL + pageUrl);
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		return this;
 	}
 }

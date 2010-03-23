@@ -15,7 +15,6 @@ public class ManageInspectionBooks {
 	}
 
 	public void verifyManageInspectionBooksPage() {
-		misc.info("Verify going to Manage Inspection Books page went okay.");
 		misc.checkForErrorMessages("verifyManageInspectionBooksPage");
 		if(!selenium.isElementPresent(manageInspectionBooksPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Inspection Books'.");

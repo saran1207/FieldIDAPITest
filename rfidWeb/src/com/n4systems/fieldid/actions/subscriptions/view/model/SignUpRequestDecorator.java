@@ -30,7 +30,6 @@ import com.opensymphony.xwork2.validator.annotations.RegexFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class SignUpRequestDecorator implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
 	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
@@ -181,8 +180,8 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	}
 	
 
-	@RequiredStringValidator(type=ValidatorType.FIELD, message="", key="error.passwordrequired")
-	@StringLengthFieldValidator(type=ValidatorType.FIELD, message="", key="errors.passwordlength", minLength="5") 
+	@RequiredStringValidator(message="", key="error.passwordrequired")
+	@StringLengthFieldValidator(message="", key="errors.passwordlength", minLength="5") 
 	public void setPassword(String password) {
 		signUpRequest.setPassword(password);
 	}
@@ -202,12 +201,17 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		signUpRequest.setSignUpPackage(signUpPackageId);
 	}
 
-	@RequiredStringValidator(message="", key="error.tenant_name_required")
+	@RequiredStringValidator(message="", key="error.tenant_name_required", shortCircuit=true)
 	@StringLengthFieldValidator(message="", key="error.tenant_name_length", minLength="3", maxLength="255")
-	@RegexFieldValidator(expression="^[\\w][\\w\\-]*[\\w]$", message = "", key="error.tenant_name_format")
+	@FieldExpressionValidator(expression="validTenantName", message = "", key="error.tenant_name_format")
 	@CustomValidator(type="uniqueValue", message = "", key="error.name_already_used")
 	public void setTenantName(String tenantName) {
 		signUpRequest.setTenantName(tenantName);
+	}
+	
+	public boolean isValidTenantName() {
+		String regex = "^[A-Za-z0-9][A-Za-z0-9\\-]+[A-Za-z0-9]$";
+		return getTenantName().matches(regex);
 	}
 
 	

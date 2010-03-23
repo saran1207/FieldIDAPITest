@@ -36,12 +36,10 @@ public class SignUpComplete {
 	}
 	
 	public void verifySignUpPackagePage() {
-		misc.info("Confirm we arrived at the Sign Up Complete page");
 		assertTrue("Could not find '" + headerText + "'", selenium.isElementPresent(signUpCompleteHeaderLocator));
 	}
 
 	public void gotoSignInNow() {
-		misc.info("Click Sign In Now");
 		if(selenium.isElementPresent(signInNowLinkLocator)) {
 			selenium.click(signInNowLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

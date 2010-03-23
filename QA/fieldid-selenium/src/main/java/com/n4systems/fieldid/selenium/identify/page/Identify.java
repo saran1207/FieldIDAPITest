@@ -174,7 +174,6 @@ public class Identify {
 	 * Click the Add tab to go to the Add page.
 	 */
 	public void gotoAdd() {
-		misc.info("Click the 'Add' link to add a single asset");
 		if(selenium.isElementPresent(addLinkLocator)) {
 			selenium.click(addLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -253,7 +252,7 @@ public class Identify {
 		}
 		if(p.getProductType() != null) {
 			selenium.select(identifyAddProductTypeTextFieldLocator, p.getProductType());
-			waitForProductTypeAttributesToChange(Misc.defaultTimeout);
+			waitForProductTypeAttributesToChange(Misc.DEFAULT_TIMEOUT);
 		}
 		setRequiredProductAttributes();
 		
@@ -427,7 +426,7 @@ public class Identify {
 			String asset = registration.getAssetNumber();
 			selenium.type(registerAssetSerialRFIDReferenceNumberTextFieldLocator, asset);
 			selenium.click(registerAssetLoadButtonLocator);
-			selenium.waitForAjax(Misc.defaultTimeout);
+			selenium.waitForAjax(Misc.DEFAULT_TIMEOUT);
 			assertFalse("Could not find vendor '" + vendor + "', asset '" + asset + "'", selenium.isElementPresent(couldNotFindAnyPublishedAssetTextLocator));
 		} else {
 			fail("Could not find a link to register the asset over the safety network");
@@ -456,7 +455,6 @@ public class Identify {
 	}
 
 	public void gotoSaveAddAssetForm() {
-		misc.info("Click Save on Add Asset");
 		if(selenium.isElementPresent(identifyAddSaveButtonLocator)) {
 			selenium.click(identifyAddSaveButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -559,7 +557,6 @@ public class Identify {
 	}
 
 	public void gotoMultiAdd() {
-		misc.info("Click the 'Multi Add' link to add multiple assets");
 		if(selenium.isElementPresent(multiAddLinkLocator)) {
 			selenium.click(multiAddLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -602,7 +599,7 @@ public class Identify {
 		}
 		if(p.getProductType() != null) {
 			selenium.select(multiAddProductTypeSelectListLocator, p.getProductType());
-			waitForProductTypeAttributesToChange(Misc.defaultTimeout);
+			waitForProductTypeAttributesToChange(Misc.DEFAULT_TIMEOUT);
 		}
 		setRequiredProductAttributes();
 		if(p.getComments() != null) {

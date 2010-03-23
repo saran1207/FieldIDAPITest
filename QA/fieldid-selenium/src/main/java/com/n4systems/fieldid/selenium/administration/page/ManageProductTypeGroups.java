@@ -15,7 +15,6 @@ public class ManageProductTypeGroups {
 	}
 
 	public void verifyManageProductTypeGroupsPage() {
-		misc.info("Verify going to Manage Product Type Groups page went okay.");
 		misc.checkForErrorMessages("verifyManageProductTypeGroupsPage");
 		if(!selenium.isElementPresent(manageProductTypeGroupsPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Product Type Groups'.");

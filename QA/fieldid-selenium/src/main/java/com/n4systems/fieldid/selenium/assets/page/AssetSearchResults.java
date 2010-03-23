@@ -21,7 +21,6 @@ public class AssetSearchResults {
 	 * for the header "Product Search Results" on the page.
 	 */
 	public void verifyProductSearchResultsPage() {
-		misc.info("Verify Product Search went okay.");
 		misc.checkForErrorMessages("verifyAssetsPage");
 		if(!selenium.isElementPresent(productSearchResultsPageHeaderLocator)) {
 			fail("Could not find the header for 'Product Search'.");

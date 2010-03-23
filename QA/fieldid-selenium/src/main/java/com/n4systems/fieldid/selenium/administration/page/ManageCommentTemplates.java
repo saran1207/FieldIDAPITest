@@ -15,7 +15,6 @@ public class ManageCommentTemplates {
 	}
 
 	public void verifyManageCommentTemplatesPage() {
-		misc.info("Verify going to Manage Comment Templates page went okay.");
 		misc.checkForErrorMessages("verifyManageCommentTemplatesPage");
 		if(!selenium.isElementPresent(manageCommentTemplatesPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Comment Templates'.");

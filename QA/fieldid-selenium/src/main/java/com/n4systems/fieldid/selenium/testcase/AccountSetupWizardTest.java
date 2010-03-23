@@ -87,7 +87,6 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		setCompany(referrer);
 		String promoCode = "";	// no promo code
 		CreateTenant t = ct.createARandomNewTenant(SignUpPackages.packageTypeBasic, promoCode);
-		misc.info("Tenant created: " + t);
 		return t;
 	}
 

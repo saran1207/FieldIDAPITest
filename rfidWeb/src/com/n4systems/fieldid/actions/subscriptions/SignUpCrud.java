@@ -36,7 +36,7 @@ public class SignUpCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SignUpCrud.class);
 
-	private SignUpRequestDecorator signUpRequest = new SignUpRequestDecorator();
+	protected SignUpRequestDecorator signUpRequest = new SignUpRequestDecorator();
 	private List<SignUpPackage> packages;
 	private String refCode;
 	
@@ -199,6 +199,8 @@ public class SignUpCrud extends AbstractCrud {
 	public SignUpRequestDecorator getSignUp() {
 		return signUpRequest;
 	}
+	
+	
 	
 	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "aNeedToCheckCreditCard == true") })
 	public CreditCard getCreditCard() {

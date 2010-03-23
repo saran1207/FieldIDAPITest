@@ -63,7 +63,7 @@ public class CreateTenants {
 			t.setpurchaseOrderNumber(misc.getRandomString(5));
 		}
 		create.setCreateYourAccountForm(t);
-		create.gotoCreateMyAccount();
+		create.submitCreateYourAccountForm();
 		complete.gotoSignInNow();
 		
 		return t;

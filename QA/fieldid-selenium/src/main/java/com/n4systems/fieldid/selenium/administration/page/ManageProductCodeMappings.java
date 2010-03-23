@@ -36,7 +36,6 @@ public class ManageProductCodeMappings {
 	}
 
 	public void verifyManageProductCodeMappingsPage() {
-		misc.info("Verify going to Manage Product Code Mappings page went okay.");
 		misc.checkForErrorMessages("verifyManageProductCodeMappingsPage");
 		if(!selenium.isElementPresent(manageProductCodeMappingsPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Product Code Mappings'.");
@@ -44,7 +43,6 @@ public class ManageProductCodeMappings {
 	}
 
 	public void gotoAddProductCodeMapping() {
-		misc.info("Click Add to add a product code mapping");
 		if(selenium.isElementPresent(addProductCodeMappingLinkLocator)) {
 			selenium.click(addProductCodeMappingLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -63,7 +61,6 @@ public class ManageProductCodeMappings {
 	}
 
 	public void setProductCodeMapping(ProductCodeMapping pcm) {
-		misc.info("Fill in a Product Code Mapping");
 		assertNotNull(pcm);
 		verifyAddProductCodeMapping();
 		if(pcm.getProductCode() != null) {
@@ -148,7 +145,6 @@ public class ManageProductCodeMappings {
 	}
 
 	public void setProductTypeInProductCodeMapping(String name) {
-		misc.info("Set the Product Type to '" + name + "'");
 		if(selenium.isElementPresent(productTypeSelectListLocator)) {
 			if(misc.isOptionPresent(productTypeSelectListLocator, name)) {
 				selenium.select(productTypeSelectListLocator, name);
@@ -162,7 +158,6 @@ public class ManageProductCodeMappings {
 	}
 
 	public void gotoSaveProductCodeMapping() {
-		misc.info("Click Save");
 		if(selenium.isElementPresent(saveButtonLocator)) {
 			selenium.click(saveButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

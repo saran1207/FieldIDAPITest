@@ -15,7 +15,6 @@ public class ManageProductStatuses {
 	}
 
 	public void verifyManageProductStatusesPage() {
-		misc.info("Verify going to Manage Product Statuses page went okay.");
 		misc.checkForErrorMessages("verifyManageProductStatusesPage");
 		if(!selenium.isElementPresent(manageProductStatusesPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Product Statuses'.");

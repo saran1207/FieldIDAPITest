@@ -15,7 +15,6 @@ public class DataLog {
 	}
 
 	public void verifyDataLogPage() {
-		misc.info("Verify going to Data Log page went okay.");
 		misc.checkForErrorMessages("verifyDataLogPage");
 		if(!selenium.isElementPresent(dataLogPageHeaderLocator)) {
 			fail("Could not find the header for 'Data Log'.");

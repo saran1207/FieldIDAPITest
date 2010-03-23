@@ -25,7 +25,7 @@ public class ProuductRegistrationTest extends LoggedInTestCase {
 
 	private void goToProductAdd() {
 		selenium.open("/fieldid/productAdd.action");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class ProuductRegistrationTest extends LoggedInTestCase {
 		String invalidSerialNumber = "";
 		selenium.type("serialNumberText", invalidSerialNumber);
 		selenium.click("saveButton");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		assertEquals("", selenium.getValue("serialNumberText"));
 		
 	}
@@ -66,7 +66,7 @@ public class ProuductRegistrationTest extends LoggedInTestCase {
 		selenium.click("showSmartSearchLink");
 		selenium.type("snSmartSearchText", identifyingNumber);
 		selenium.click("snSmartSearchSubmit");
-		selenium.waitForCondition("!" + SeleniumJavaScriptInteraction.CURRENT_WINDOW_IN_JAVASCRIPT + "$('networkSmartSearchContainer').visible()", Misc.defaultTimeout);
+		selenium.waitForCondition("!" + SeleniumJavaScriptInteraction.CURRENT_WINDOW_IN_JAVASCRIPT + "$('networkSmartSearchContainer').visible()", Misc.DEFAULT_TIMEOUT);
 	}
 
 

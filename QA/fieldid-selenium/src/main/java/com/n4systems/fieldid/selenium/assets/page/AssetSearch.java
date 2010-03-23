@@ -67,7 +67,6 @@ public class AssetSearch {
 	 * for the header "Asset Search" on the page.
 	 */
 	public void assertAssetsPage() {
-		misc.info("Verify going to Assets page went okay.");
 		misc.checkForErrorMessages("verifyAssetsPage");
 		if(!selenium.isElementPresent(productSearchPageHeaderLocator)) {
 			fail("Could not find the header for 'Product Search'.");
@@ -75,7 +74,6 @@ public class AssetSearch {
 	}
 	
 	public void verifySearchCriteriaForm() {
-		misc.info("Verify all the correct fields are present in the Search Criteria form");
 		assertTrue(selenium.isElementPresent(rfidNumberTextFieldLocator));
 		assertTrue(selenium.isElementPresent(serialNumberTextFieldLocator));
 		assertTrue(selenium.isElementPresent(orderNumberTextFieldLocator));
@@ -176,7 +174,7 @@ public class AssetSearch {
 		if(asc.getProductTypeGroup() != null) {
 			if(misc.isOptionPresent(productTypeGroupSelectListLocator, asc.getProductTypeGroup())) {
 				selenium.select(productTypeGroupSelectListLocator, asc.getProductTypeGroup());
-				search.waitForDisplayColumnsToUpdate(Misc.defaultTimeout);
+				search.waitForDisplayColumnsToUpdate(Misc.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the product type group '" + asc.getProductTypeGroup() + "'");
 			}
@@ -185,7 +183,7 @@ public class AssetSearch {
 		if(asc.getProductType() != null) {
 			if(misc.isOptionPresent(productTypeSelectListLocator, asc.getProductType())) {
 				selenium.select(productTypeSelectListLocator, asc.getProductType());
-				search.waitForDisplayColumnsToUpdate(Misc.defaultTimeout);
+				search.waitForDisplayColumnsToUpdate(Misc.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the product type  '" + asc.getProductType() + "'");
 			}
@@ -249,7 +247,6 @@ public class AssetSearch {
 	}
 
 	public void gotoRunProductSearch() {
-		misc.info("Click Run buttom");
 		if(selenium.isElementPresent(runButtonLocator)) {
 			selenium.click(runButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

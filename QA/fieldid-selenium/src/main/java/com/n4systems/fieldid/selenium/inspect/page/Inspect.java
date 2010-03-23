@@ -24,7 +24,6 @@ public class Inspect {
 	 * @param serialNumber 
 	 */
 	public void verifyInspectPage(String serialNumber) {
-		misc.info("Verify going to Inspect page went okay.");
 		misc.checkForErrorMessages("verifyInspectPage");
 		verifyInspectPageHeader(serialNumber);
 	}

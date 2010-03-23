@@ -28,7 +28,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 
 	private void openRequestFromUser(String userId) {
 		selenium.click("css=#viewRequest_" + userId);
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 
 	private void goToUserRequests() {
@@ -63,7 +63,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		selenium.type("registerUserCreate_emailAddress", "dev@fieldid.com");
 		selenium.type("registerUserCreate_city", "Toronto");
 		selenium.select("countryId", "value=CA");
-		selenium.waitForAjax(Misc.defaultTimeout);
+		selenium.waitForAjax(Misc.DEFAULT_TIMEOUT);
 		selenium.select("tzlist", "label=Ontario - Toronto");
 		selenium.type("registerUserCreate_position", "some position");
 		selenium.type("registerUserCreate_phoneNumber", "647-202-2789");
@@ -73,6 +73,6 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		selenium.type("registerUserCreate_password", "makemore$");
 		selenium.type("registerUserCreate_passwordConfirmation", "makemore$");
 		selenium.click("registerUserCreate_save");
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 }

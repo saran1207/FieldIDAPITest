@@ -15,7 +15,6 @@ public class ManageUserRegistrations {
 	}
 
 	public void verifyManageUserRegistrationsPage() {
-		misc.info("Verify going to Manage User Registrations page went okay.");
 		misc.checkForErrorMessages("verifyManageUserRegistrationsPage");
 		if(!selenium.isElementPresent(manageUserRegistrationsPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage User Registrations'.");

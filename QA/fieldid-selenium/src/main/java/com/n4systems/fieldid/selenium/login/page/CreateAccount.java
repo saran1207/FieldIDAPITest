@@ -80,7 +80,6 @@ public class CreateAccount {
 	}
 	
 	public void verifyCreateAccountPage(String packageName) {
-		misc.info("Confirm we arrived at the Create Account page");
 		assertTrue("Could not find '" + headerText + "'", selenium.isElementPresent(createAccountHeaderLocator));
 		assertTrue("Could not find '" + packageName + "' in the header", selenium.isElementPresent("css=#planSelected:contains('" + packageName + "')"));
 		boolean notfree = !packageName.equals("Free");
@@ -89,7 +88,6 @@ public class CreateAccount {
 	
 	public void setCreateYourAccountForm(CreateTenant t) {
 		this.verifyCreateAccountForm(false);
-		misc.info("Fill in the account information.");
 		if(t.getFirstName() != null)			selenium.type(firstNameTextFieldLocator, t.getFirstName());
 		if(t.getLastName() != null)				selenium.type(lastNameTextFieldLocator, t.getLastName());
 		if(t.getEmail() != null)				selenium.type(emailTextFieldLocator, t.getEmail());
@@ -110,7 +108,6 @@ public class CreateAccount {
 		if(t.getCompanyZipCode() != null)		selenium.type(companyZipCodeTextFieldLocator, t.getCompanyZipCode());
 		if(t.getCompanyPhoneNumber() != null)	selenium.type(companyPhoneNumberTextFieldLocator, t.getCompanyPhoneNumber());
 		if(t.getSiteAddress() != null) {
-			misc.info("Tenant set to '" + t.getSiteAddress() + "'");
 			selenium.type(siteAddressTextFieldLocator, t.getSiteAddress());
 		}
 		if(t.getPromoCode() != null)			selenium.type(promoCodeTextFieldLocator, t.getPromoCode());
@@ -191,7 +188,6 @@ public class CreateAccount {
 	}
 	
 	public void selectPayByCreditCard() {
-		misc.info("Click the Pay by Credit Card link");
 		fail("Do not use credit card until Shaun clears up problems with billing company");
 		if(selenium.isElementPresent(payByCreditCardLinkLocator)) {
 			selenium.click(payByCreditCardLinkLocator);
@@ -201,7 +197,6 @@ public class CreateAccount {
 	}
 	
 	public void selectPayByPurchaseOrder() {
-		misc.info("Click the Pay by Purchase Order link");
 		if(selenium.isElementPresent(payByPurchaseOrderLinkLocator)) {
 			selenium.click(payByPurchaseOrderLinkLocator);
 		} else {
@@ -239,8 +234,7 @@ public class CreateAccount {
 		return result;
 	}
 
-	public void gotoCreateMyAccount() {
-		misc.info("Click Create Account button to create the new tenant");
+	public void submitCreateYourAccountForm() {
 		if(selenium.isElementPresent(createMyAccountButtonLocator)) {
 			selenium.click(createMyAccountButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

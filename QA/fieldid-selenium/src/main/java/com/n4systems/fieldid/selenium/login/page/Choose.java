@@ -28,7 +28,6 @@ public class Choose {
 	 * @param s
 	 */
 	public void setCompanyID(String s) {
-		misc.info("Set Company ID to '" + s + "'");
 		if(selenium.isElementPresent(companyIDLocator)) {
 			selenium.type(companyIDLocator, s);
 		} else {
@@ -40,7 +39,6 @@ public class Choose {
 	 * This clicks the Find Sign In Page button.s
 	 */
 	public void gotoFindSignInPage() {
-		misc.info("Click Find Sign In Page button");
 		if(selenium.isElementPresent(findSignInPageButtonLocator )) {
 			selenium.click(findSignInPageButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -53,9 +51,7 @@ public class Choose {
 	 * This verifies the elements on the page exist.
 	 */
 	public void verifyChooseCompany() {
-		misc.info("Verify there is a Company ID text box.");
 		assertTrue(selenium.isElementPresent(companyIDLocator));
-		misc.info("Verify there is a Find Sign in Page button.");
 		assertTrue(selenium.isElementPresent(findSignInPageButtonLocator));
 	}
 }

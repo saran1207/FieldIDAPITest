@@ -1,8 +1,7 @@
 package com.n4systems.fieldid.selenium.misc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,14 +13,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import org.apache.log4j.Logger;
+
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class Misc {
 
 	Random r = new Random(System.currentTimeMillis());
-	public static final String defaultTimeout = "60000";
+	public static final String DEFAULT_TIMEOUT = "60000";
 	// Current timeout for session is 30 minutes. This is set to 31 minutes
 	// just to be safe. That is, session will timeout in 30 minutes but it
 	// might take the javascript another minute to detect the session has
@@ -32,7 +31,6 @@ public class Misc {
 	public static final String AJAX_TIMEOUT = "2000";
 	private static String snapshots = null;
 	private FieldIdSelenium selenium;
-	private Logger log;
 	private Search search;
 	
 	// Locators
@@ -83,9 +81,8 @@ public class Misc {
 	private String smartSearchTextFieldLocator = "xpath=//INPUT[@id='searchText']";
 	private String smartSearchLoadButtonLocator = "xpath=//INPUT[@id='smartSearchButton']";
 	
-	public Misc(FieldIdSelenium selenium, Logger log) {
+	public Misc(FieldIdSelenium selenium) {
 		this.selenium = selenium;
-		this.log = log;
 		search = new Search(selenium, this);
 	}
 	
@@ -99,60 +96,13 @@ public class Misc {
 	 * found.
 	 */
 	public void waitForPageToLoadAndCheckForOopsPage() {
-		selenium.waitForPageToLoad(Misc.defaultTimeout);
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		if(isOopsPage()) {
 			fail("Got an Oops page. Check Field ID logs.");
 		}
 	}
 	
-	// a set of methods to mirror the log4j methods
-	public void debug(Object message) {
-		if(log.isDebugEnabled()) {
-			log.debug(message);
-		}
-	}
 	
-	public void debug(Object message, Throwable t) {
-		if(log.isDebugEnabled()) {
-			log.debug(message, t);
-		}
-	}
-	
-	public void info(Object message) {
-		if(log.isInfoEnabled()) {
-			log.info(message);
-		}
-	}
-	
-	public void info(Object message, Throwable t) {
-		if(log.isInfoEnabled()) {
-			log.info(message, t);
-		}
-	}
-	
-	public void warn(Object message) {
-		log.warn(message);
-	}
-	
-	public void warn(Object message, Throwable t) {
-		log.warn(message, t);
-	}
-	
-	public void error(Object message) {
-		log.error(message);
-	}
-	
-	public void error(Object message, Throwable t) {
-		log.error(message, t);
-	}
-	
-	public void fatal(Object message) {
-		log.fatal(message);
-	}
-	
-	public void fatal(Object message, Throwable t) {
-		log.fatal(message, t);
-	}
 	
 	/**
 	 * Select the link on the Login page for the N4 System Inc. web page.
@@ -186,7 +136,7 @@ public class Misc {
 	
 	private boolean confirmPopupWindow(String locator) {
 		try {
-			selenium.waitForPopUp("", defaultTimeout);
+			selenium.waitForPopUp("", DEFAULT_TIMEOUT);
 			selenium.selectWindow(locator);
 			selenium.close();
 			selenium.selectWindow("");
@@ -311,7 +261,6 @@ public class Misc {
 	 * @param locator
 	 */
 	private void gotoHelper(String text, String locator) {
-		info("Click '" + text + "'");
 		if(selenium.isElementPresent(locator)) {
 			selenium.click(locator);
 		} else {
@@ -440,7 +389,6 @@ public class Misc {
 	 * @param s
 	 */
 	public void gotoFind(String s) {
-		info("Click Load button on Find:");
 		if(selenium.isElementPresent(loadFindButtonLocator)) {
 			selenium.click(loadFindButtonLocator);
 			if(s == null || s.trim().equals("")) {
@@ -831,12 +779,9 @@ public class Misc {
 	public String createTimestampDirectory(String root) {
 		SimpleDateFormat now = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		String timestamp = root + now.format(new Date());
-		log.debug("Accessing the directory: '"+ timestamp + "'");
 		File d = new File(timestamp);
 		if(!d.exists()) {
-			log.debug("Creating the directory: '"+ timestamp + "'");
 			if (d.mkdirs()) {
-				log.info("[setUp]: Screenshots can be placed in '" + timestamp + "'.");
 				snapshots = timestamp;
 			}
 		}
@@ -864,7 +809,6 @@ public class Misc {
 		if(System.getProperty("snapshots", "false").equalsIgnoreCase("true")) {
 			String fileSeparator = System.getProperty("file.separator", "\\");
 			filename = snapshots + fileSeparator + filename;
-			log.debug("[tearDown]: Capturing page as a screen shot '" + filename + "'");
 			selenium.captureScreenshot(filename);
 		}
 	}
@@ -892,7 +836,6 @@ public class Misc {
 	 * by just calling the script ourselves.
 	 */
 	public void scrollToBottomOfEULA() {
-		info("Simulating Scroll to Bottom of EULA");
 		if(selenium.isElementPresent(eulaLegalTextLocator)) {
 			try {
 				selenium.runScript(toggleEulaScript);
@@ -909,7 +852,6 @@ public class Misc {
 	 * continue on to the Home page.
 	 */
 	public void gotoAcceptEULA() {
-		info("Accepting EULA");
 		if(selenium.isElementPresent(acceptEULAButtonLocator)) {
 			selenium.click(acceptEULAButtonLocator);
 			waitForPageToLoadAndCheckForOopsPage();
@@ -1043,7 +985,6 @@ public class Misc {
 	 * @param pageNumber
 	 */
 	public void gotoPage(int pageNumber) {
-		info("Enter the number '" + pageNumber + "' in the Go To Page box.");
 		if(selenium.isElementPresent(goToPageTextFieldLocator)) {
 			String s = String.valueOf(pageNumber) + "\n";
 			selenium.type(goToPageTextFieldLocator, s);
@@ -1154,10 +1095,9 @@ public class Misc {
 	public void setOwner(Owner owner) {
 		String organization = owner.getOrganization();
 		if(organization != null) {
-			info("Select the Organization '" + organization + "'");
 			if(isOptionPresent(selectOwnerOrganizationSelectListLocator, organization)) {
 				selenium.select(selectOwnerOrganizationSelectListLocator, organization);
-				waitForLoadingToFinish(Misc.defaultTimeout);
+				waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the organization '" + organization + "' in choose owner dialog");
 			}
@@ -1166,10 +1106,9 @@ public class Misc {
 		String customer = "";
 		if(owner.getCustomer() != null) {
 			customer = owner.getCustomer() + " (" + owner.getOrganization() + ")";
-			info("Select the customer '" + customer + "'");
 			if(isOptionPresent(selectOwnerCustomerSelectListLocator, customer)) {
 				selenium.select(selectOwnerCustomerSelectListLocator, customer);
-				waitForLoadingToFinish(Misc.defaultTimeout);
+				waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the customer '" + customer + "' in choose owner dialog");
 			}
@@ -1178,10 +1117,9 @@ public class Misc {
 		String division = "";
 		if(owner.getDivision() != null) {
 			division = owner.getDivision() + ", " + customer;
-			info("Select the division '" + division + "'");
 			if(isOptionPresent(selectOwnerDivisionSelectListLocator, division)) {
 				selenium.select(selectOwnerDivisionSelectListLocator, division);
-				waitForLoadingToFinish(Misc.defaultTimeout);
+				waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the division '" + division + "' in choose owner dialog");
 			}
@@ -1220,10 +1158,9 @@ public class Misc {
 	 * Click the 'Choose' link and open the choose owner dialog.
 	 */
 	public void gotoChooseOwner() {
-		info("Click Choose link to open Select Owner dialog");
 		if(selenium.isElementPresent(chooseOwnerLinkLocator)) {
 			selenium.click(chooseOwnerLinkLocator);
-			waitForLoadingToFinish(Misc.defaultTimeout);
+			waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
 		} else {
 			fail("Could not find a link to Choose owner");
 		}
@@ -1234,7 +1171,6 @@ public class Misc {
 	 * calling this method will click the Select button.
 	 */
 	public void gotoSelectOwner() {
-		info("Click Select button to select Owner");
 		if(selenium.isElementPresent(chooseOwnerSelectButtonLocator)) {
 			selenium.click(chooseOwnerSelectButtonLocator);
 		} else {
@@ -1247,7 +1183,6 @@ public class Misc {
 	 * click the Cancel button.
 	 */
 	public void gotoCancelOwner() {
-		info("Click Cancel button to select Owner");
 		if(selenium.isElementPresent(chooseOwnerCancelButtonLocator)) {
 			selenium.click(chooseOwnerCancelButtonLocator);
 		} else {
@@ -1366,7 +1301,6 @@ public class Misc {
 	 * @param s
 	 */
 	public void setSmartSearch(String s) {
-		info("Enter '" + s + "' into the Smart Search (Find:) text field");
 		if(selenium.isElementPresent(smartSearchTextFieldLocator)) {
 			selenium.type(smartSearchTextFieldLocator, s);
 		} else {
@@ -1378,7 +1312,6 @@ public class Misc {
 	 * Click the Load button on the Find text field.
 	 */
 	public void gotoSmartSearch() {
-		info("Click the Load button on Smart Search");
 		if(selenium.isElementPresent(smartSearchLoadButtonLocator)) {
 			selenium.click(smartSearchLoadButtonLocator);
 			waitForPageToLoadAndCheckForOopsPage();

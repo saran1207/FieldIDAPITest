@@ -59,7 +59,6 @@ public class ManageProductTypes {
 	 * Manage Product Types header exists.
 	 */
 	public void verifyManageProductTypesPage() {
-		misc.info("Verify going to Manage Product Types page went okay.");
 		misc.checkForErrorMessages("verifyManageProductTypesPage");
 		if(!selenium.isElementPresent(manageProductTypesPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Product Types'.");
@@ -93,7 +92,6 @@ public class ManageProductTypes {
 	 * Also verifies the Add Product Type page appeared successfully.
 	 */
 	public void gotoAddProductType() {
-		misc.info("Click the Add link for adding a product type");
 		if(selenium.isElementPresent(addProductTypeLinkLocator)) {
 			selenium.click(addProductTypeLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -130,7 +128,6 @@ public class ManageProductTypes {
 	 * Click the Save button on the Add Product Type page.
 	 */
 	public void gotoSaveProductType() {
-		misc.info("Click Save button");
 		if(selenium.isElementPresent(saveButtonLocator)) {
 			selenium.click(saveButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -143,7 +140,6 @@ public class ManageProductTypes {
 	 * Click the Cancel button on the Add Product Type page.
 	 */
 	public void gotoCancelProductType() {
-		misc.info("Click Cancel button");
 		if(selenium.isElementPresent(cancelButtonLocator)) {
 			selenium.click(cancelButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -236,7 +232,6 @@ public class ManageProductTypes {
 	}
 
 	private void addUnitOfMeasureAttribute(UnitOfMeasureAttribute uoma) {
-		misc.info("Add a Unit Of Measure attribute to the current product Type being added.");
 		int index = addAttribute(uoma);
 		String defaultLocator = "xpath=//SELECT[@id='productTypeUpdate_infoFields_" + index + "__defaultUnitOfMeasure']";
 		if(uoma.getDefault() != null) {
@@ -308,7 +303,6 @@ public class ManageProductTypes {
 	 * @param cba
 	 */
 	private void addComboBoxAttribute(ComboBoxAttribute cba) {
-		misc.info("Add a Combo Box attribute to the current product Type being added.");
 		int attributeIndex = addAttribute(cba);
 		addDropDowns(cba.getDropDowns(), attributeIndex);
 	}
@@ -319,7 +313,6 @@ public class ManageProductTypes {
 	 * @param sba
 	 */
 	private void addSelectBoxAtribute(SelectBoxAttribute sba) {
-		misc.info("Add a Select Box attribute to the current product Type being added.");
 		int attributeIndex = addAttribute(sba);
 		addDropDowns(sba.getDropDowns(), attributeIndex);
 	}
@@ -398,7 +391,6 @@ public class ManageProductTypes {
 	 * @param tfa
 	 */
 	public void addTextFieldAttribute(TextFieldAttribute tfa) {
-		misc.info("Add a text field attribute to the current product type being added");
 		addAttribute(tfa);
 	}
 	
@@ -459,7 +451,6 @@ public class ManageProductTypes {
 	 * one of the other tabs.
 	 */
 	public void gotoViewAllProductType() {
-		misc.info("Click View All tab for Product Type");
 		if(selenium.isElementPresent(viewAllProductTypeTabLinkLocator)) {
 			selenium.click(viewAllProductTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -471,7 +462,6 @@ public class ManageProductTypes {
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoViewProductType() {
-		misc.info("Click View tab for Product Type");
 		if(selenium.isElementPresent(viewProductTypeTabLinkLocator)) {
 			selenium.click(viewProductTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -483,7 +473,6 @@ public class ManageProductTypes {
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoEditProductType() {
-		misc.info("Click Edit tab for Product Type");
 		if(selenium.isElementPresent(editProductTypeTabLinkLocator)) {
 			selenium.click(editProductTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -495,7 +484,6 @@ public class ManageProductTypes {
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoInspectionTypesProductType() {
-		misc.info("Click Inspection Types tab for Product Type");
 		if(selenium.isElementPresent(inspectionTypesProductTypeTabLinkLocator)) {
 			selenium.click(inspectionTypesProductTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -507,7 +495,6 @@ public class ManageProductTypes {
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoInspectionFrequenciesProductType() {
-		misc.info("Click Inspection Frequencies tab for Product Type");
 		if(selenium.isElementPresent(inspectionFrequenciesProductTypeTabLinkLocator)) {
 			selenium.click(inspectionFrequenciesProductTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -519,7 +506,6 @@ public class ManageProductTypes {
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoSubComponentsProductType() {
-		misc.info("Click Sub-Components tab for Product Type");
 		if(selenium.isElementPresent(subComponentsProductTypeTabLinkLocator)) {
 			selenium.click(subComponentsProductTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -594,7 +580,7 @@ public class ManageProductTypes {
 				public boolean until() {
 					return !selenium.isVisible(locator);
 				}
-			}.wait("Element '" + locator + "' was never set to invisible", Long.parseLong(Misc.defaultTimeout));
+			}.wait("Element '" + locator + "' was never set to invisible", Long.parseLong(Misc.DEFAULT_TIMEOUT));
 	}
 
 	private void verifyAttributeWasRetired(String name) {
@@ -617,7 +603,6 @@ public class ManageProductTypes {
 	 * @param name
 	 */
 	public void gotoViewProductType(String name) {
-		misc.info("Click the link to view the product type '" + name + "'");
 		String productTypeLinkLocator = getProductTypeLinkLocator(name);
 		if(selenium.isElementPresent(productTypeLinkLocator)) {
 			selenium.click(productTypeLinkLocator);
@@ -640,7 +625,6 @@ public class ManageProductTypes {
 	 * @param name the name of the product type.
 	 */
 	public void gotoEditProductType(String name) {
-		misc.info("Click the link to view the product type '" + name + "'");
 		String editProductTypeLinkLocator = getProductTypeLinkLocator(name) + "/../../TD[2]/A[contains(text(),'Edit')]";
 		if(selenium.isElementPresent(editProductTypeLinkLocator)) {
 			selenium.click(editProductTypeLinkLocator);

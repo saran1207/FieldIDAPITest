@@ -83,7 +83,6 @@ public class ManageUsers {
 	}
 
 	public void verifyManageUsersPage() {
-		misc.info("Verify going to Manage Users page went okay.");
 		misc.checkForErrorMessages("verifyManageUsersPage");
 		if(!selenium.isElementPresent(manageUsersPageHeaderLocator)) {
 			fail("Could not find the header for 'Manage Users'.");
@@ -91,7 +90,6 @@ public class ManageUsers {
 	}
 	
 	public void gotoAddEmployeeUser() {
-		misc.info("Click Add Employee User");
 		if(selenium.isElementPresent(addEmployeeUserLinkLocator)) {
 			selenium.click(addEmployeeUserLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -155,7 +153,6 @@ public class ManageUsers {
 	}
 
 	public void setUserType(String s) {
-		misc.info("Set the user type to " + s);
 		if(selenium.isElementPresent(userTypeSelectListLocator)) {
 			if(misc.isOptionPresent(userTypeSelectListLocator, s)) {
 				selenium.select(userTypeSelectListLocator, s);
@@ -168,7 +165,6 @@ public class ManageUsers {
 	}
 
 	public void gotoFilterSearchButton() {
-		misc.info("Click the Search button for filter");
 		if(selenium.isElementPresent(filterSearchButtonLocator)) {
 			selenium.click(filterSearchButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -208,7 +204,6 @@ public class ManageUsers {
 	}
 
 	public void gotoEditUser(String userID) {
-		misc.info("Click the user ID '" + userID + "' to edit that user");
 		String userIDEditListLocator = "xpath=" + numberOfUserIDsXpath + "[text()='" + userID +"']";
 		if(selenium.isElementPresent(userIDEditListLocator)) {
 			selenium.click(userIDEditListLocator);
@@ -222,13 +217,11 @@ public class ManageUsers {
 	 * Click the "All On" button in the Permissions section.
 	 */
 	public void setPermissionsAllOn() {
-		misc.info("Click All On button for permissions");
 		selenium.click(addEmployeeUserAllOnButtonLocator);
 	}
 
 	public void setAddEmployeeUser(EmployeeUser employeeUser) {
 		assertNotNull(employeeUser);
-		misc.info("fill in the Employee User information");
 		verifyAddEmployeeUserPage();
 		if(employeeUser.getUserid() != null) {
 			selenium.type(addEmployeeUserUserIDTextFieldLocator, employeeUser.getUserid());
@@ -284,7 +277,6 @@ public class ManageUsers {
 	}
 
 	public void setPermissionsAddEmployeeUser(List<String> permissions) {
-		misc.info("Turning on permissions for the current add employee user");
 		verifyPermissions();
 		String permissionTableLocator1 = "css=" + permissionTableLocator;
 		for(String permission : permissions) {
@@ -297,18 +289,15 @@ public class ManageUsers {
 	 * Click the "All Off" button in the Permissions section.
 	 */
 	public void setPermissionsAllOff() {
-		misc.info("Click All Off button for permissions");
 		selenium.click(addEmployeeUserAllOffButtonLocator);
 	}
 
 	public void gotoSaveEmployeeUser() {
-		misc.info("Click the Save button on add employee user");
 		selenium.click(addEmployeeUserSaveButtonLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	public void gotoAddCustomerUser() {
-		misc.info("Click Add Customer User");
 		if(selenium.isElementPresent(addCustomerUserLinkLocator)) {
 			selenium.click(addCustomerUserLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -319,7 +308,6 @@ public class ManageUsers {
 
 	public void setAddCustomerUser(CustomerUser cu) {
 		assertNotNull(cu);
-		misc.info("fill in the Customer User information");
 		verifyAddCustomerUserPage();
 		if(cu.getUserid() != null) {
 			selenium.type(addCustomerUserUserIDTextFieldLocator, cu.getUserid());
@@ -387,13 +375,11 @@ public class ManageUsers {
 	}
 
 	public void gotoSaveCustomerUser() {
-		misc.info("Click the Save button on add customer user");
 		selenium.click(addCustomerUserSaveButtonLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	public void gotoViewAll() {
-		misc.info("Click the link to 'View All'");
 		if(selenium.isElementPresent(manageUsersViewAllLinkLocator)) {
 			selenium.click(manageUsersViewAllLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -404,7 +390,6 @@ public class ManageUsers {
 
 	public void setNameFilter(String userid) {
 		assertNotNull(userid);
-		misc.info("Set the Name on the filter to '" + userid + "'");
 		if(selenium.isElementPresent(filterNameTextFieldLocator)) {
 			selenium.type(filterNameTextFieldLocator, userid);
 		} else {
@@ -413,7 +398,6 @@ public class ManageUsers {
 	}
 
 	public void gotoSearchFilter() {
-		misc.info("Click the Search button");
 		if(selenium.isElementPresent(filterSearchButtonLocator)) {
 			selenium.click(filterSearchButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

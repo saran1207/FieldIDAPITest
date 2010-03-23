@@ -34,7 +34,6 @@ public class Search {
 	}
 
 	public void expandSelectDisplayColumns() {
-		misc.info("Expand the Select Display Columns");
 		if(selenium.isElementPresent(openSelectDisplayColumnsLinkLocator)) {
 			selenium.click(openSelectDisplayColumnsLinkLocator);
 		} else {
@@ -43,7 +42,6 @@ public class Search {
 	}
 	
 	public void collapseSelectDisplayColumns() {
-		misc.info("Collapse the Select Display Columns");
 		if(selenium.isElementPresent(closeSelectDisplayColumnsLinkLocator)) {
 			selenium.click(closeSelectDisplayColumnsLinkLocator);
 		} else {
@@ -53,7 +51,6 @@ public class Search {
 
 
 	public void expandSearchCriteria() {
-		misc.info("Expand the Search Criteria");
 		if(selenium.isElementPresent(openSearchCriteriaLinkLocator)) {
 			selenium.click(openSearchCriteriaLinkLocator);
 		} else {
@@ -62,7 +59,6 @@ public class Search {
 	}
 	
 	public void collapseSearchCriteria() {
-		misc.info("Collapse the Search Criteria");
 		if(selenium.isElementPresent(closeSearchCriteriaLinkLocator)) {
 			selenium.click(closeSearchCriteriaLinkLocator);
 		} else {

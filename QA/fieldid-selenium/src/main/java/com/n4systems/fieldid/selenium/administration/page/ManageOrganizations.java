@@ -55,7 +55,6 @@ public class ManageOrganizations {
 	 * that the 'Manage Organizations' header is there.
 	 */
 	public void verifyManageOrganizationsPage() {
-		misc.info("Verify going to Manage Organizations page went okay.");
 		misc.checkForErrorMessages("verifyManageOrganizationsPage");
 		if(!selenium.isElementPresent(manageOrganizationsPageHeaderLocator )) {
 			fail("Could not find the header for 'Manage Organizations'.");
@@ -70,7 +69,6 @@ public class ManageOrganizations {
 	 */
 	public String getPrimaryOrganizationName() {
 		String result = null;
-		misc.info("Note the name of the Primary Organization");
 		if(selenium.isElementPresent(primaryOrganizationNameLocator)) {
 			result = selenium.getText(primaryOrganizationNameLocator);
 		} else {
@@ -99,7 +97,6 @@ public class ManageOrganizations {
 	}
 	
 	public void gotoEditPrimaryOrganization() {
-		misc.info("Click link to Edit Primary Organization");
 		if(selenium.isElementPresent(primaryOrganizationEditLinkLocator)) {
 			selenium.click(primaryOrganizationEditLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -113,7 +110,6 @@ public class ManageOrganizations {
 	}
 	
 	public void gotoAddSecondaryOrganization() {
-		misc.info("Click link to add an organizational unit");
 		if(selenium.isElementPresent(addOrganizationLinkLocator)) {
 			selenium.click(addOrganizationLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -221,7 +217,6 @@ public class ManageOrganizations {
 	}
 
 	public void gotoSaveAddSecondaryOrganization() {
-		misc.info("Click the Save button");
 		if(selenium.isElementPresent(addOrganizationSaveButtonLocator)) {
 			selenium.click(addOrganizationSaveButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -229,7 +224,6 @@ public class ManageOrganizations {
 	}
 
 	public void gotoCancelAddSecondaryOrganization() {
-		misc.info("Click the Cancel button");
 		if(selenium.isElementPresent(addOrganizationCancelButtonLocator)) {
 			selenium.click(addOrganizationCancelButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

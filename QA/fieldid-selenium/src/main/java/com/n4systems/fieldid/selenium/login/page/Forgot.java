@@ -30,7 +30,6 @@ public class Forgot {
 	 * @param s - user name to type into text field.
 	 */
 	public void setUserName(String s) {
-		misc.info("Set User Name to '" + s + "'");
 		if(selenium.isElementPresent(userNameLocator)) {
 			selenium.type(userNameLocator, s);
 		} else {
@@ -45,7 +44,6 @@ public class Forgot {
 	 * to verify the reset went okay if you want to fail the test.
 	 */
 	public void gotoResetPassword() {
-		misc.info("Click Reset Password button.");
 		if(selenium.isElementPresent(resetPasswordButtonLocator)) {
 			selenium.click(resetPasswordButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -59,9 +57,7 @@ public class Forgot {
 	 * 
 	 */
 	public void verifyResetPassword() {
-		misc.info("Verify static text indicating an email has been sent.");
 		assertTrue(selenium.isElementPresent(anEmailHasBeenSentLocator));
-		misc.info("Verify there is a button to return to Sign In");
 		assertTrue(selenium.isElementPresent(returnToSignInButtonLocator));
 	}
 
@@ -69,7 +65,6 @@ public class Forgot {
 	 * After you reset the password, this can be used to the Login page.
 	 */
 	public void gotoReturnToSignInAfterResetPassword() {
-		misc.info("Click Return to Sign In button");
 		if(selenium.isElementPresent(returnToSignInButtonLocator)) {
 			selenium.click(returnToSignInButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -83,7 +78,6 @@ public class Forgot {
 	 * verify the user was given the appropriate error message.
 	 */
 	public void verifyUserNameIsRequired() {
-		misc.info("Confirm error message '" + userNameIsRequiredErrorMessage + "' appears on page.");
 		List<String> errors = misc.getFormErrorMessages();
 		if(errors.size() == 0) {
 			fail("Was expecting the error message: '" + userNameIsRequiredErrorMessage  + "' but didn't get anything.");
@@ -99,7 +93,6 @@ public class Forgot {
 	 * back at the Login page.
 	 */
 	public void gotoReturnToSignInWithoutResettingPassword() {
-		misc.info("Click link to take you back to the Sign In page.");
 		if(selenium.isElementPresent(returnToSignInLinkLocator )) {
 			selenium.click(returnToSignInLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

@@ -20,7 +20,6 @@ public class AutoAttributeWizard {
 	}
 
 	public void verifyAutoAttributeWizardPage() {
-		misc.info("Verify going to Auto Attribute Wizard page went okay.");
 		misc.checkForErrorMessages("verifyAutoAttributeWizardPage");
 		if(!selenium.isElementPresent(autoAttributeWizardPageHeaderLocator)) {
 			fail("Could not find the header for 'Auto Attribute Wizard'.");
@@ -28,7 +27,6 @@ public class AutoAttributeWizard {
 	}
 	
 	public List<String> getProductTypes() {
-		misc.info("Note the list of product types on the View All page");
 		List<String> result = new ArrayList<String>();
 		Number n = selenium.getXpathCount(productTypeCountXpath);
 		int row = 2;
@@ -43,7 +41,6 @@ public class AutoAttributeWizard {
 	}
 	
 	public void gotoProductType(String productType) {
-		misc.info("Click on the link for product type '" + productType +"'");
 		String productTypeLinkLocator = "xpath=" + productTypeCountXpath + "[contains(text(),'" + productType + "')]";
 		if(selenium.isElementPresent(productTypeLinkLocator)) {
 			selenium.click(productTypeLinkLocator);
@@ -54,7 +51,6 @@ public class AutoAttributeWizard {
 	}
 	
 	public void verifyEditProductTypeAutoAttributeWizardPage(String productType) {
-		misc.info("Verify the page has a 'Product Type: " + productType + "' header");
 		String editProductTypeHeaderLocator = "//FORM[@id='autoAttributeCriteriaEdit']/H2[contains(text(),'" + productType + "')]";
 		assertTrue("Could not find the header for product type '" + productType + "'", selenium.isElementPresent(editProductTypeHeaderLocator));
 	}

@@ -36,7 +36,6 @@ public class Admin {
 	 * ManageOrganizations class to confirm we arrived properly.
 	 */
 	public void gotoManageOrganizations() {
-		misc.info("Click link to go to Manage Organizations");
 		if(selenium.isElementPresent(manageOrganizationsLinkLocator)) {
 			selenium.click(manageOrganizationsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -52,7 +51,6 @@ public class Admin {
 	 * is a method to verify you arrived there successfully.
 	 */
 	public void gotoManageCustomers() {
-		misc.info("Click link to go to Manage Customers");
 		if(selenium.isElementPresent(manageCustomersLinkLocator)) {
 			selenium.click(manageCustomersLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -68,7 +66,6 @@ public class Admin {
 	 * is a method to verify you arrived there successfully.
 	 */
 	public void gotoManageUsers() {
-		misc.info("Click link to go to Manage Users");
 		if(selenium.isElementPresent(manageUsersLinkLocator)) {
 			selenium.click(manageUsersLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -85,7 +82,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageUserRegistrations() {
-		misc.info("Click link to go to Manage User Registrations");
 		if(selenium.isElementPresent(manageUserRegistrationsLinkLocator)) {
 			selenium.click(manageUserRegistrationsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -102,7 +98,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageSystemSettings() {
-		misc.info("Click link to go to Manage System Settings");
 		if(selenium.isElementPresent(manageSystemSettingsLinkLocator)) {
 			selenium.click(manageSystemSettingsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -118,7 +113,6 @@ public class Admin {
 	 * class is a method to verify you arrived there successfully.
 	 */
 	public void gotoManageProductTypes() {
-		misc.info("Click link to go to Manage Product Types");
 		if(selenium.isElementPresent(manageProductTypesLinkLocator)) {
 			selenium.click(manageProductTypesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -135,7 +129,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageProductTypeGroups() {
-		misc.info("Click link to go to Manage Product Type Groups");
 		if(selenium.isElementPresent(manageProductTypeGroupsLinkLocator)) {
 			selenium.click(manageProductTypeGroupsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -152,7 +145,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageProductStatuses() {
-		misc.info("Click link to go to Manage Product Statuses");
 		if(selenium.isElementPresent(manageProductStatusesLinkLocator)) {
 			selenium.click(manageProductStatusesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -169,7 +161,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageInspectionTypes() {
-		misc.info("Click link to go to Manage Inspection Types");
 		if(selenium.isElementPresent(manageInspectionTypesLinkLocator)) {
 			selenium.click(manageInspectionTypesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -186,7 +177,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageEventTypeGroups() {
-		misc.info("Click link to go to Manage Event Type Groups");
 		if(selenium.isElementPresent(manageEventTypeGroupsLinkLocator)) {
 			selenium.click(manageEventTypeGroupsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -203,7 +193,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageInspectionBooks() {
-		misc.info("Click link to go to Manage Inspection Books");
 		if(selenium.isElementPresent(manageInspectionBooksLinkLocator)) {
 			selenium.click(manageInspectionBooksLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -220,7 +209,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoAutoAttributeWizard() {
-		misc.info("Click link to go to Auto Attribute Wizard");
 		if(selenium.isElementPresent(autoAttributeWizardLinkLocator)) {
 			selenium.click(autoAttributeWizardLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -237,7 +225,6 @@ public class Admin {
 	 * successfully.
 	 */
 	public void gotoManageCommentTemplates() {
-		misc.info("Click link to go to Manage Comment Templates");
 		if(selenium.isElementPresent(manageCommentTemplatesLinkLocator)) {
 			selenium.click(manageCommentTemplatesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -253,7 +240,6 @@ public class Admin {
 	 * there successfully.
 	 */
 	public void gotoDataLog() {
-		misc.info("Click link to go to Data Log");
 		if(selenium.isElementPresent(dataLogLinkLocator)) {
 			selenium.click(dataLogLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -407,7 +393,6 @@ public class Admin {
 	 * for the header "Administration" on the page.
 	 */
 	public void verifyAdministrationPage() {
-		misc.info("Verify going to Administration page went okay.");
 		misc.checkForErrorMessages("VerifyAdministrationPage");
 		if(!selenium.isElementPresent(administrationPageHeaderLocator)) {
 			fail("Could not find the header for 'Administration'.");
@@ -419,7 +404,6 @@ public class Admin {
 	 * ManageProductCodeMappings class to confirm we arrived properly.
 	 */
 	public void gotoManageProductCodeMappings() {
-		misc.info("Click link to go to Manage Product Code Mappings");
 		if(selenium.isElementPresent(manageProductCodeMappingsLinkLocator)) {
 			selenium.click(manageProductCodeMappingsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
