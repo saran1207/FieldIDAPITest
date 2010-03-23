@@ -16,4 +16,10 @@ public interface FieldIdSelenium extends Selenium {
 	public void waitForElementToBePresent(String locator);
 
 	public void waitForPageToLoad();
+
+
+	public void openAndWaitForPageLoad(String url);
+
+
+	public void clickAndWaitForPageLoad(String selector);
 }

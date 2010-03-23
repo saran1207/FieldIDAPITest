@@ -34,6 +34,15 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 		delegateSelenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 	}
 	
+	public void openAndWaitForPageLoad(String url) {
+		open(url);
+		waitForPageToLoad();
+	}
+	
+	public void clickAndWaitForPageLoad(String selector) {
+		click(selector);
+		waitForPageToLoad();
+	}
 	
 	/**
 	 * DELEGATE METHODS
