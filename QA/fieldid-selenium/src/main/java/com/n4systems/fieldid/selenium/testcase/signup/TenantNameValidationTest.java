@@ -57,7 +57,6 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 	public void should_see_the_tenant_name_with_bad_characters_gets_a_validation_error() throws Exception {
 		signUpForm.setSiteAddress("msachesnut.msanet");
 		createAccountPage.setCreateYourAccountForm(signUpForm);
-		selenium.setSpeed("1000");
 		createAccountPage.submitCreateYourAccountForm();
 		
 		verifyTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));

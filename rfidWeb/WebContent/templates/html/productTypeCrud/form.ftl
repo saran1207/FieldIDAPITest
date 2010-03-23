@@ -119,7 +119,7 @@
 				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="productTypeImage"/>" scrolling="no" scrollbar="no" scrolling="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
 			</#if>
 			<span id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !productImageDirectory?exists || productImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
-				<@s.url id="previewImage" uniqueID="${uniqueID}" namespace="/file" action="downloadProductTypeImage" />
+				<@s.url id="previewImage" uniqueID="${uniqueID!}" namespace="/file" action="downloadProductTypeImage" />
 				<a href="${previewImage}" <#if newImage > style="display:none"</#if> id="previewImage" target="_blank" onclick="window.open('${previewImage}', '_blank', 'width=500,height=300'); return false;" ><@s.text name="label.viewimage" /></a>  
 				<@s.hidden name="removeImage" id="removeImage"/> <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
 				<@s.hidden name="newImage" id="newImage"/>

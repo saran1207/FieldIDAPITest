@@ -18,9 +18,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		String userId = "u_" + new Date().getTime();
 		registerUser(userId);
 		
-		
 		goToUserRequests();
-		selenium.setSpeed("1000");
 		openRequestFromUser(userId);
 		
 		verifyRegistrationInformationIsShown(userId);
@@ -39,6 +37,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		
 		selenium.open("/fieldid/setup.action");
 		selenium.click("link=Manage User Registrations");
+		selenium.waitForPageToLoad();
 	}
 
 	private void verifyRegistrationInformationIsShown(String userId) {

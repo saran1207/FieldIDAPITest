@@ -13,7 +13,7 @@ public class ProductTypeValidationTest extends LoggedInTestCase {
 	@Test
 	public void should_not_validate_an_info_option_after_the_field_is_changed_to_one_that_does_not_have_static_options() throws Exception {
 		selenium.open("/fieldid/productTypeEdit.action");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad();
 		selenium.click("addInfoField");
 		selenium.waitForElementToBePresent("css=#field_0", Misc.JS_TIMEOUT);
 		selenium.type("css=#field_0 .name", "field 1");
@@ -23,7 +23,7 @@ public class ProductTypeValidationTest extends LoggedInTestCase {
 		selenium.waitForElementToBePresent("css=#field_0 .fieldType", Misc.JS_TIMEOUT);
 		selenium.select("css=#field_0 .fieldType", "label=Text Field");
 		selenium.click("save");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad();
 
 		assertFalse(selenium.isTextPresent("Drop Down Option Name can not be blank."));
 		assertFalse(selenium.isElementPresent("css=#infoFieldEditing .errorMessage"));
