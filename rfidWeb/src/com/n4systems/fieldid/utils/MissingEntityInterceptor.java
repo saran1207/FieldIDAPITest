@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.utils;
 
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 

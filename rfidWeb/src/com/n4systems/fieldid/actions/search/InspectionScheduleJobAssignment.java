@@ -6,7 +6,7 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Project;

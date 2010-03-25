@@ -77,6 +77,7 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 	}
 
 	public int compareTo(InfoOptionBean other) {
+		try {
 		if (0 == getInfoField().compareTo(other.getInfoField())) {
 			if (getWeight() == null) {
 				setWeight(0L);
@@ -88,6 +89,10 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 			}
 		} else {
 			return getInfoField().compareTo(other.getInfoField());
+		}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 

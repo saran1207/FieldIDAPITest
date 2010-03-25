@@ -10,8 +10,8 @@ import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssociatedInspectionType;

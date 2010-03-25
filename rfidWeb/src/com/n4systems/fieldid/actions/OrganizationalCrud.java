@@ -12,8 +12,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;

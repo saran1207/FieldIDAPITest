@@ -9,8 +9,8 @@ import rfid.ejb.entity.UserBean;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;

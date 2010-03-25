@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.helpers;
+package com.n4systems.exceptions;
 
 public class MissingEntityException extends RuntimeException {
 

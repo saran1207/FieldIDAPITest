@@ -3,8 +3,8 @@ package com.n4systems.fieldid.actions.subscriptions;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;

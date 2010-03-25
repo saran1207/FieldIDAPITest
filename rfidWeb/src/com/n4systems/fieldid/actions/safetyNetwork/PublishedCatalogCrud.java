@@ -14,9 +14,9 @@ import org.apache.log4j.Logger;
 import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Tenant;
 import com.n4systems.security.Permissions;
