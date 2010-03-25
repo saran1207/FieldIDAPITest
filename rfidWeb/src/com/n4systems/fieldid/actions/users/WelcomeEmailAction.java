@@ -6,8 +6,8 @@ import rfid.ejb.entity.UserBean;
 import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.MissingEntityException;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 
 public class WelcomeEmailAction extends AbstractCrud {
