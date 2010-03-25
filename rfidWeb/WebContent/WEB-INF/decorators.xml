@@ -13,6 +13,10 @@
 	</decorator>
 	
 	
+	<decorator name="ajaxExternalLayout" page="/templates/ajax/layout/publicLayout.ftl">
+		<pattern>*ajax/externalAuthVerification.action*</pattern>
+	</decorator>
+	
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">
 		<pattern>*ajax/*.action*</pattern>
 	</decorator>
