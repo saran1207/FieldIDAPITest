@@ -54,8 +54,8 @@ public enum ReportField {
 	PROOF_TEST_PEAK_LOAD_DURATION	("peakLoadDuration"),
 	REPORT_TITLE					("reportTitle"),
 	NEXT_DATE_STRING				("nextDate"),
-	NEXT_DATE						("nextDate_date");
-	
+	NEXT_DATE						("nextDate_date"),
+	JOB								("job");
 	private final String paramKey;
 	
 	ReportField(String paramKey) {

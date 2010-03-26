@@ -104,8 +104,6 @@ public class InspectionCertificateGenerator {
 			
 			reportMap.put("allInspections", inspectionResultMaps);
 			
-			
-			
 			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 		
 		} catch (Exception e) {

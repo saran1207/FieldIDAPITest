@@ -39,7 +39,7 @@ public class BaseInspectionMapBuilderTest {
 		inspection.setInspector(UserBuilder.anEmployee().build());
 		inspection.setProductStatus(new ProductStatusBean());
 		
-		BaseInspectionMapBuilder builder = new BaseInspectionMapBuilder(inspectorMapBuilder, typeGroupMapBuilder, orgMapBuilder, ownerMapBuilder, scheduleMapBuilder, productStatusMapBuilder);
+		BaseInspectionMapBuilder builder = new BaseInspectionMapBuilder(inspectorMapBuilder, typeGroupMapBuilder, orgMapBuilder, ownerMapBuilder, scheduleMapBuilder, productStatusMapBuilder, new JobCertificateDataProducer());
 		inspectorMapBuilder.addParams(reportMap, inspection.getInspector(), transaction);
 		typeGroupMapBuilder.addParams(reportMap, inspection.getType().getGroup(), transaction);
 		orgMapBuilder.addParams(reportMap, inspection.getInspector().getOwner().getInternalOrg(), transaction);

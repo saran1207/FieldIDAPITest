@@ -17,14 +17,17 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 	private final MapBuilder<BaseOrg> ownerMapBuilder;
 	private final MapBuilder<Inspection> scheduleMapBuilder;
 	private final MapBuilder<ProductStatusBean> productStatusMapBuilder;
+	private final JobCertificateDataProducer jobCertificateDataProducer;
 	
-	public BaseInspectionMapBuilder(MapBuilder<UserBean> inspectorMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<ProductStatusBean> productStatusMapBuilder) {
+	public BaseInspectionMapBuilder(MapBuilder<UserBean> inspectorMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<ProductStatusBean> productStatusMapBuilder
+			, JobCertificateDataProducer jobCertificateDataProducer) {
 		this.inspectorMapBuilder = inspectorMapBuilder;
 		this.typeGroupMapBuilder = typeGroupMapBuilder;
 		this.orgMapBuilder = orgMapBuilder;
 		this.ownerMapBuilder = ownerMapBuilder;
 		this.scheduleMapBuilder = scheduleMapBuilder;
 		this.productStatusMapBuilder = productStatusMapBuilder;
+		this.jobCertificateDataProducer = jobCertificateDataProducer;
 	}
 	
 	public BaseInspectionMapBuilder(DateTimeDefiner dateDefiner) {
@@ -34,7 +37,8 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 			new OrganizationMapBuilder(),
 			new OwnerMapBuilder(),
 			new InspectionScheduleMapBuilder(dateDefiner),
-			new ProductStatusMapBuilder()
+			new ProductStatusMapBuilder(),
+			new JobCertificateDataProducer()
 		);
 	}
 	
@@ -46,6 +50,10 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 		setAllFields(ownerMapBuilder, entity.getOwner(), transaction);
 		setAllFields(productStatusMapBuilder, entity.getProductStatus(), transaction);
 		setAllFields(scheduleMapBuilder, entity, transaction);
+		
+		
+		if (entity.getSchedule() != null)
+			setAllFields(jobCertificateDataProducer, entity.getSchedule().getProject(), transaction);
 	}
 
 
