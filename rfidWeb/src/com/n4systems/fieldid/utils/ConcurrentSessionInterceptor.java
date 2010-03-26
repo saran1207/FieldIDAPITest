@@ -21,7 +21,6 @@ public class ConcurrentSessionInterceptor extends AbstractInterceptor {
 		SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
 		
 		if (! sessionUserInUse.doesActiveSessionBelongTo(sessionUser.getUniqueID(), sessionId)) {
-			invocation.getAction().addActionErrorText("label.session_kicked");
 			return "sessionBooted";
 		}
 			
