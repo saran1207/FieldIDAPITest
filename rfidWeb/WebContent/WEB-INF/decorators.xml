@@ -14,7 +14,7 @@
 	
 	
 	<decorator name="ajaxExternalLayout" page="/templates/ajax/layout/publicLayout.ftl">
-		<pattern>*ajax/externalAuthVerification.action*</pattern>
+		<pattern>*external/ajax/*</pattern>
 	</decorator>
 	
 	<decorator name="ajaxLayout" page="/templates/ajax/layout/layout.ftl">

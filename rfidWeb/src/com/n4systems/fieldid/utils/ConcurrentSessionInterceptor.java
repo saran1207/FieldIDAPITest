@@ -13,14 +13,15 @@ public class ConcurrentSessionInterceptor extends AbstractInterceptor {
 
 	@Override
 	public String intercept(ActionInvocation object) throws Exception {
-		ActionInvocationWrapper invokation = new ActionInvocationWrapper(object);
+		ActionInvocationWrapper invocation = new ActionInvocationWrapper(object);
 		
-		SessionUser sessionUser = invokation.getSessionUser();
-		String sessionId = invokation.getSession().getId();
+		SessionUser sessionUser = invocation.getSessionUser();
+		String sessionId = invocation.getSession().getId();
 		
 		SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
 		
 		if (! sessionUserInUse.doesActiveSessionBelongTo(sessionUser.getUniqueID(), sessionId)) {
+			invocation.getAction().addActionErrorText("label.session_kicked");
 			return "sessionBooted";
 		}
 			

@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.actions.webStoreSSO;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -9,15 +7,12 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.security.Permissions;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.AccessWebStore})
 public class WebStoreSSOAction extends AbstractAction {
 	private static Logger logger = Logger.getLogger(WebStoreSSOAction.class);
 	private static final long serialVersionUID = 1L;
-	
-	private final String STORE_URL = "https://checkout.netsuite.com/s.nl?c=723761&sc=10&login=T&reset=T&redirect_count=1&did_javascript_redirect=T";
 	
 	private String externalAuthKey;
 	private String callback;
@@ -29,25 +24,29 @@ public class WebStoreSSOAction extends AbstractAction {
 	}
 	
 	public String doRedirectToStore() {
-		externalAuthKey = UUID.randomUUID().toString();
-		getSessionUser().setExternalAuthKey(externalAuthKey);
+		UUID authKey = UUID.randomUUID();
 		
-		try {
-			redirectUrl = STORE_URL + "&externalAuthKey="+URLEncoder.encode(externalAuthKey,"UTF-8");
-			redirectUrl += "&baseDomain="+URLEncoder.encode(createActionURI(getTenant(), ""),"UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			logger.error("Problem generating web store url",e);
-		}
+		getSessionUser().setExternalAuthKey(authKey.toString());
+		
+		createUrl(authKey);
 				
 		return SUCCESS;
+	}
+
+	private void createUrl(UUID authKey) {
+		redirectUrl = new WebStoreSSOUrlBuilder()
+			.withBaseDomain(createActionURI(getTenant(), "") + "external/")
+			.targetAction("ajax/externalAuthVerification.action")
+			.authKey(authKey).build();
 	}
 	
 	public String doCheckExternalAuthKey() {
 		if (isExternalAuthKeyValid()) {
-			PrimaryOrg primaryOrg = getPrimaryOrg();
-			externalCredentials.setUserName(primaryOrg.getExternalUserName());
-			externalCredentials.setPassword(primaryOrg.getExternalPassword());			
-		}		
+			externalCredentials.setCredentials(getPrimaryOrg());
+			logger.info(getLogLinePrefix() + " signing into the web store");
+		}	else {
+			logger.info(getLogLinePrefix() + " did not find correct authkey");
+		}
 		
 		return SUCCESS;
 	}

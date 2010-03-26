@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.api.ExternalCredentialProvider;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
@@ -26,7 +27,7 @@ import com.n4systems.model.tenant.TenantLimit;
 @Entity
 @Table(name = "org_primary")
 @PrimaryKeyJoinColumn(name="org_id")
-public class PrimaryOrg extends InternalOrg {
+public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvider {
 	private static final long serialVersionUID = 1L;
 
 	@Embedded

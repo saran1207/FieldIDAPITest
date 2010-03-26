@@ -128,7 +128,25 @@
 	<include file="inspectionPackage.xml"/>
 	<include file="quickSetupWizardPackage.xml"/>
 	
-	
+	<package name="external" extends="default" namespace="/external/ajax">
+		<default-interceptor-ref name="secureStack" />
+
+		<global-results>
+			<result name="login" type="freemarker">/templates/external/ajax/common/signed_out.ftl</result>
+			<result name="error" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="missing" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="input" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="invalid_security" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="feature_required" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="user_permission_required" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="tenant_missing" type="freemarker">/templates/external/ajax/common/error.ftl</result>
+			<result name="sessionBooted" type="freemarker">/templates/external/ajax/common/session_kicked.ftl</result>
+		</global-results>
+
+		<action name="externalAuthVerification" method="checkExternalAuthKey" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">
+			<result name="success" type="freemarker">/templates/ajax/webStoreSSO/externalCredentials.ftl</result>
+		</action>
+	</package>
 	<package name="files" extends="default" namespace="/file">
 		<global-results>
 			<result name="success" type="stream">

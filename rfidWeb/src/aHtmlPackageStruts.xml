@@ -75,6 +75,7 @@
 		<action name="createSession" method="create" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="input" type="freemarker">/templates/aHtml/login/form.ftl</result>
+			<result name="redirect" type="freemarker">/templates/aHtml/login/complete.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/login/complete.ftl</result>
 			<result name="eula" type="freemarker">/templates/aHtml/login/complete.ftl</result>
 			<result name="confirmKick" type="freemarker">/templates/aHtml/login/confirmKick.ftl</result>
