@@ -43,7 +43,7 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testWeb1148() throws Exception {
+	public void test_attempts_to_add_the_same_product_as_a_sub_product_twice_and_check_for_a_warning() throws Exception {
 		String dialogMsg = "That product is already attached.";
 		try {
 			login.setCompany(company);
@@ -182,7 +182,7 @@ public class Validate_2009_6_3 extends FieldIDTestCase {
 		mpts.saveInspectionTypes(masterProductType);
 	}
 	
-	public void testWeb1150() throws Exception {
+	public void test_removing_a_sub_product_from_a_master_during_the_system_() throws Exception {
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);

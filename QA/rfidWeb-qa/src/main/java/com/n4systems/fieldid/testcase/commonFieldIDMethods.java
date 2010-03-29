@@ -4974,11 +4974,7 @@ public class commonFieldIDMethods {
 		if (attributes != null)
 			throw new NotImplementedYetException();
 		if (attachments != null) {
-			for (int i = 0; i < attachments.length; i++) {
-				// ie.button(text("Attach A File")).click();
-				// ie.waitUntilReady();
-				throw new NotImplementedYetException();
-			}
+			throw new NotImplementedYetException();
 		}
 
 		ie.button(id("productTypeUpdate_label_save")).click();

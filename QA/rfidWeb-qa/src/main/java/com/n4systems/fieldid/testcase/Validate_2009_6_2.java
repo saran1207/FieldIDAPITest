@@ -31,7 +31,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 		password = prop.getProperty("password", "NOT SET");
 	}
 	
-	public void testWeb1095() throws Exception {
+	public void test_creating_a_product_type_with_an_text_attrbute_no_checks_to_confirm_it() throws Exception {
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);
@@ -60,31 +60,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 		}
 	}
 	
-	public void testWeb1023() throws Exception {
-		try {
-			login.setCompany(company);
-			login.setUserName(userid);
-			login.setPassword(password);
-			login.login();
-			Identify identify = new Identify(ie);
-			identify.gotoIdentify();
-			identify.gotoAddMultipleAssets();
-			identify.handleRequiredFieldsOnAddProduct();
-			identify.addMultipleAssetsContinueToStep2();
-			identify.addMultipleAssetsContinueToStep3();
-			if(ie.html().contains("Do no generate serial numbers")) {
-				fail("Manual section for step 3 should have Do not generate serial numbers");
-			}
-		} catch (Exception e) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
-			throw e;
-		} catch (Error err) {
-			misc.myWindowCapture(timestamp + "/FAILURE-" + getName() + ".png");
-			throw err;
-		}
-	}
-	
-	public void testWeb1093() throws Exception {
+	public void test_should_delete_the_asset_and_put_you_the_add_product_screen() throws Exception {
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);
@@ -116,7 +92,7 @@ public class Validate_2009_6_2 extends FieldIDTestCase {
 		}
 	}
 	
-	public void testWeb1113() throws Exception {
+	public void test_changes_to_inspection_attributes_are_saved_during_edit() throws Exception {
 		try {
 			login.setCompany(company);
 			login.setUserName(userid);
