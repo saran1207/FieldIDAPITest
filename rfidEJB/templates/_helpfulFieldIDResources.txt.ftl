@@ -6,8 +6,8 @@ The Field ID Help System:
 https://www.fieldid.com/fieldid_help/index.html
 
 For more information about Field ID:
-http://www.n4systems.com
+http://www.fieldid.com
 
-Follow us on Twitter:
-http://www.twitter.com/fieldid
-http://www.twitter.com/n4systems
+Follow us:
+Twitter - http://www.twitter.com/fieldid
+Facebook - http://www.facebook.com/fieldid
