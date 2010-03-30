@@ -34,7 +34,7 @@ public class WEB_399 extends TestCase {
 		super.setUp();
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setUserName("n4systems");
 	}
 

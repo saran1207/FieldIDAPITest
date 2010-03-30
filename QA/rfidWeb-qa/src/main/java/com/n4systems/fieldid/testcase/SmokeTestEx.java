@@ -63,7 +63,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	static String customerID = "smoke";
 	static String customerName = "Smoke Test";
 	static String customerContact = "Smoke Test";
-	static String customerEmail = "darrell.grainger@n4systems.com";
+	static String customerEmail = "dev@n4systems.com";
 	static String customerStreet = "179 John St.";
 	static String customerCity = "Toronto";
 	static String customerState = "ON";
@@ -82,7 +82,7 @@ public class SmokeTestEx extends FieldIDTestCase {
 	static String bothDivision = new String("both-div");
 	static String neitherDivision = new String("neither-div");
 	static String adminDivision = null;
-	static String userEmail = "darrell.grainger@n4systems.com";
+	static String userEmail = "dev@n4systems.com";
 	static String createFirstName = "Create";
 	static String editorFirstName = "Editor";
 	static String bothFirstName = "Both";

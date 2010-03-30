@@ -13,8 +13,8 @@ public class WEB_680 extends TestCase {
 	static String timestamp = null;
 	static Map<String, String>setupData = null;
 	final String tenant = "cglift";
-	final String password = "makemore$";	// default password for everyone
-	final String emailAddress = "darrell.grainger@n4systems.com";
+	final String password = "Xk43g8!@";	// default password for everyone
+	final String emailAddress = "dev@n4systems.com";
 	ArrayList<String> reportNames = new ArrayList<String>();
 
 	protected void setUp() throws Exception {

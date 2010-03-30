@@ -33,7 +33,7 @@ public class WEB_252 extends TestCase {
 		super.setUp();
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setTenant("cglift");
 		helper.setUserName("n4systems");
 		helper.start(ie, helper.getLoginURL());	// login screen

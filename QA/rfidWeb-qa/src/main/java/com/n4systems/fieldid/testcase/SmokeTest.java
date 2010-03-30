@@ -53,7 +53,7 @@ public class SmokeTest extends TestCase {
 	final String masterProductType = "master";
 	final String subProductType = "sub";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 	static boolean initialized = false;
 	static String timestamp = null;
 	static long dayInMilliseconds = 86400000;	// used for scheduling inspections

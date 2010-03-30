@@ -32,7 +32,7 @@ public class WEB_665 extends TestCase {
 	
 	public void login(String tenant) throws Exception {
 		String user = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 		helper.setUserName(user);
 		helper.setPassword(password);
 		helper.setTenant(tenant);

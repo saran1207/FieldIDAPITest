@@ -21,7 +21,7 @@ public class WEB_555 extends TestCase {
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
 		helper.setUserName("n4systems");
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setTenant("brs");
 		helper.start(ie, helper.getLoginURL());
 		helper.loginBrandedDefaultRegular(ie, false);
@@ -39,8 +39,8 @@ public class WEB_555 extends TestCase {
 			helper.gotoShowCustomer(ie, customerID, customerName);
 		
 		String userID = "deleteme";
-		String userEmail = "darrell.grainger@n4systems.com";
-		String password = "makemore$";
+		String userEmail = "dev@n4systems.com";
+		String password = "Xk43g8!@";
 		String verifyPassword = password;
 
 		// if the user exists, pick a different name.

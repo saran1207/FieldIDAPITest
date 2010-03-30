@@ -17,7 +17,7 @@ public class WEB_186 extends FieldIDTestCase {
 	Random n = new Random();
 	final String tenant = "unirope";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 	static boolean initialized = false;
 	static String timestamp = null;
 	

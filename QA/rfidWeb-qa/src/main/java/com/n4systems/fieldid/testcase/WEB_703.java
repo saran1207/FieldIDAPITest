@@ -15,7 +15,7 @@ public class WEB_703 extends TestCase {
 	static String timestamp = null;
 	final String tenant = "hysafe";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 	static int numJobs = 7;
 	static int maxNumJobs = 5;				// Just what Alex has set the number of jobs to be.
 	static String userName = "N4 Systems";

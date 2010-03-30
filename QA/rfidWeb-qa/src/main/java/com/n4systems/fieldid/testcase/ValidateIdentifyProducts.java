@@ -34,7 +34,7 @@ public class ValidateIdentifyProducts extends TestCase {
 		String method = getName();
 		String company = "unirope";		// has to be a tenant with Integration
 		String username = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 		String orderNumber = "100203";	// known order number for Unirope
 
 		try {

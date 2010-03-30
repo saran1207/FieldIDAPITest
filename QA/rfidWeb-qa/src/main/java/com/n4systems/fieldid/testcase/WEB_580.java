@@ -14,7 +14,7 @@ public class WEB_580 extends TestCase {
 	static String timestamp = null;
 	final String tenant = "hysafe";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 	static String assetJobID = null;
 	static String assetJobTitle = null;
 	static String eventJobID = null;

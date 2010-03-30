@@ -37,7 +37,7 @@ public class WEB_243 extends TestCase {
 	String company = "unirope";
 	String productType = "Wire Rope Sling";
 	String userid = "n4systems";
-	String password = "makemore$";
+	String password = "Xk43g8!@";
 
 	protected void setUp() throws Exception {
 		super.setUp();

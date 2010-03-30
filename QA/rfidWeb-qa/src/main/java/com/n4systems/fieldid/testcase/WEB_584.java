@@ -15,7 +15,7 @@ public class WEB_584 extends TestCase {
 	commonFieldIDMethods helper = new commonFieldIDMethods();
 	final String tenant = "nischain";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 	final String customer = "Ford Motor Co. (Dearborn Engine)";	// has a division
 	final String division = "Ford Dearborn Engine & Fuel Tank: 3001 Miller Road";
 	final int maxUserIDLength  = 15;
@@ -33,7 +33,7 @@ public class WEB_584 extends TestCase {
 	public void testAcceptingRequestForAccountCustomerWithDivision() throws Exception {
 		// request an account
 		String userID = helper.generateRandomUserID(maxUserIDLength);
-		String emailAddress = "darrell.grainger@n4systems.com";
+		String emailAddress = "dev@n4systems.com";
 		String firstName = "Darrell";
 		String lastName = "Grainger";
 		String phone = "416-599-6464";

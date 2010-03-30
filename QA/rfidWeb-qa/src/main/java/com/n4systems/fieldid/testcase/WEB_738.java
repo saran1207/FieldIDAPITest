@@ -12,7 +12,7 @@ public class WEB_738 extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		String user = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 		String tenant = "swwr";
 		helper.setTenant(tenant);
 		helper.setUserName(user);
@@ -32,13 +32,13 @@ public class WEB_738 extends TestCase {
 		try {
 			helper.gotoLoginPage(ie, helper.getTenant());
 			String userID = "dgrainge";
-			String emailAddress = "darrell.grainger@n4systems.com";
+			String emailAddress = "dev@n4systems.com";
 			String firstName = "Darrell";
 			String lastName = "Grainger";
 			String position = "Seated";
 			String company = "N4 Systems";
 			String phone = "416-599-6464";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.requestAnAccount(ie, userID, emailAddress, firstName, lastName, position, null, company, phone, password, password, null, false, false);
 			helper.gotoLoginPage(ie, helper.getTenant());
 			helper.loginBrandedRegular(ie, helper.getUserName(), helper.getPassword(), false);

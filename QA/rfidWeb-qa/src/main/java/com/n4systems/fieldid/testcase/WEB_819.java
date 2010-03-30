@@ -13,7 +13,7 @@ public class WEB_819 extends TestCase {
 	static String timestamp = null;
 	final String tenant = "navfac";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 
 	protected void setUp() throws Exception {
 		super.setUp();

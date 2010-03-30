@@ -25,7 +25,7 @@ public class WEB_709 extends TestCase {
 		try {
 			String tenant = "hercules";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);

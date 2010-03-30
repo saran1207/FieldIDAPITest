@@ -26,7 +26,7 @@ public class WEB_552 extends TestCase {
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
 		helper.setUserName("n4systems");
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setTenant("brs");
 		helper.start(ie, helper.getLoginURL());
 		ie.maximize();

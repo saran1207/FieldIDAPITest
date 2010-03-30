@@ -21,8 +21,8 @@ public class WEB_554 extends TestCase {
 	String firstName = "First" + n;
 	String lastName = "Last" + n;
 	String userName = firstName + " " + lastName;
-	String userEmail = "darrell.grainger@n4systems.com";
-	String password = "makemore$";
+	String userEmail = "dev@n4systems.com";
+	String password = "Xk43g8!@";
 	String customerID = "bob";
 	String customerName = "Bob Newhart";
 	
@@ -31,7 +31,7 @@ public class WEB_554 extends TestCase {
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
 		helper.setUserName("n4systems");
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setTenant("unirope");
 		helper.start(ie, helper.getLoginURL());
 		helper.loginBrandedDefaultRegular(ie, false);

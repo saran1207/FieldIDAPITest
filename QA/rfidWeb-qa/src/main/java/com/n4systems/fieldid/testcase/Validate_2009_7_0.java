@@ -84,7 +84,7 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			mus.gotoManageUsers();
 			mus.gotoAddEmployeeUser();
 			String secondaryOrganizationEmployeeID = misc.getRandomString(15);
-			String email = "darrell.grainger@n4systems.com";
+			String email = "dev@n4systems.com";
 			String firstName = secondaryOrganizationEmployeeID;
 			String lastName = "Employee";
 			EmployeeUser u = new EmployeeUser(secondaryOrganizationEmployeeID, email , firstName, lastName, password);
@@ -210,7 +210,7 @@ public class Validate_2009_7_0 extends FieldIDTestCase {
 			
 			// add a system user, secondary organization, manage users permission
 			String userID = misc.getRandomString(15);
-			String email = "darrell.grainger@n4systems.com";
+			String email = "dev@n4systems.com";
 			String firstName = "Darrell";
 			String lastName = "Grainger";
 			EmployeeUser u = new EmployeeUser(userID, email, firstName, lastName, password);

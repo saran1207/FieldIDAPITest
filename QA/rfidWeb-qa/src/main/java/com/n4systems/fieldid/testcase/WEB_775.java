@@ -26,7 +26,7 @@ public class WEB_775 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			String s = "WEB-775";
 			int length = 15 - s.length();

@@ -23,7 +23,7 @@ public class WEB_773 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			String jobID = helper.generateRandomString(15);
 			String title = helper.generateRandomString(15);

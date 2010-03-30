@@ -22,7 +22,7 @@ public class WEB_95 extends TestCase {
 	String loginURL = "https://localhost.localdomain/fieldid/";
 	String company = "swwr";
 	String userid = "n4systems";
-	String password = "makemore$";
+	String password = "Xk43g8!@";
 
 	protected void setUp() throws Exception {
 		super.setUp();

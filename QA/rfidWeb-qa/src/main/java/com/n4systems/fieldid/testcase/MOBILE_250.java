@@ -12,7 +12,7 @@ public class MOBILE_250 extends TestCase {
 	static String timestamp = null;
 	final String tenant = "hysafe";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -35,7 +35,7 @@ public class MOBILE_250 extends TestCase {
 		String method = helper.getMethodName();
 
 		try {
-			String emailAddress = "darrell.grainger@n4systems.com";
+			String emailAddress = "dev@n4systems.com";
 			String password = "makemore$";
 			String filename = timestamp + "/end-user-data.txt";
 			Map<String, String> data = helper.setupForEndUser(ie, emailAddress, password);

@@ -40,7 +40,7 @@ public class WEB_690 extends TestCase {
 			initialized = true;
 			timestamp = helper.createTimestampDirectory() + "/";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			prodTypes = helper.getProductTypes(ie);
 			index = r.nextInt(prodTypes.size());
@@ -83,7 +83,7 @@ public class WEB_690 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			String typeOfJob = "Event";
 			String jobID = "jid-" + n;
@@ -109,7 +109,7 @@ public class WEB_690 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			String typeOfJob = "Event";
 			String jobID1 = "job1-" + n;
@@ -135,7 +135,7 @@ public class WEB_690 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			String typeOfJob = "Event";
 			String jobID = "many-" + n;
@@ -166,7 +166,7 @@ public class WEB_690 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			helper.gotoJobs(ie);
 			String oldJobID = "oji" + n;

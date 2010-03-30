@@ -16,7 +16,7 @@ public class WEB_565 extends TestCase {
 	final String tenant = "hysafe";
 	final String tenantName = "Hy-Safe Technology";
 	final String user = "n4systems";
-	final String password = "makemore$";
+	final String password = "Xk43g8!@";
 	final String masterProductType = "master";
 	final String subProductType = "sub";
 	static String rfidNumber = "DEADBEEFCAFEF00D";

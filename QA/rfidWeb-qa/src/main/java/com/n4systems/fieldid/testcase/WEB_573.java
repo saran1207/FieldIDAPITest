@@ -30,7 +30,7 @@ public class WEB_573 extends TestCase {
 		try {
 			String tenant = "unirope";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);
@@ -56,7 +56,7 @@ public class WEB_573 extends TestCase {
 		try {
 			String tenant = "unirope";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);
@@ -81,7 +81,7 @@ public class WEB_573 extends TestCase {
 		try {
 			String tenant = "unirope";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);
@@ -106,7 +106,7 @@ public class WEB_573 extends TestCase {
 		try {
 			String tenant = "unirope";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);
@@ -135,7 +135,7 @@ public class WEB_573 extends TestCase {
 		try {
 			String tenant = "unirope";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);
@@ -167,7 +167,7 @@ public class WEB_573 extends TestCase {
 		try {
 			String tenant = "unirope";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			helper.setEndUser(false);
 			helper.setUserName(user);

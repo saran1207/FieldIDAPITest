@@ -24,13 +24,13 @@ public class WEB_540 extends TestCase {
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setEndUser(false);
 		helper.setUserName("n4systems");
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setTenant("key");
 		helper.start(ie, helper.getLoginURL());
 		ie.maximize();
 		Random n = new Random();
 		String userID = "test" + n.nextInt();
-		String emailAddress = "darrell.grainger@n4systems.com";
+		String emailAddress = "dev@n4systems.com";
 		String firstName = "Darrell";
 		String lastName = "Grainger";
 		String position = null;

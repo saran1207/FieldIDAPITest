@@ -24,7 +24,7 @@ public class WEB_785 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			helper.gotoJobs(ie);
 			List<String> jobs = helper.getEventJobs(ie);

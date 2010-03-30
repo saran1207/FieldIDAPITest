@@ -27,7 +27,7 @@ public class WEB_780 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			Random r = new Random();
 			int n = Math.abs(r.nextInt());
@@ -53,7 +53,7 @@ public class WEB_780 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			Random r = new Random();
 			int n = Math.abs(r.nextInt());
@@ -79,7 +79,7 @@ public class WEB_780 extends TestCase {
 
 		try {
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 			helper.loginJobsTenant(ie, user, password);
 			Random r = new Random();
 			int n = Math.abs(r.nextInt());

@@ -65,7 +65,7 @@ public class WEB_706 extends TestCase {
 		try {
 			String tenant = "hercules";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			Date tomorrow = setNotification(user, password, tenant);
 			System.out.println("This test case will set up an email notification for " + tomorrow);
@@ -82,7 +82,7 @@ public class WEB_706 extends TestCase {
 		try {
 			String tenant = "unilift";
 			String user = "n4systems";
-			String password = "makemore$";
+			String password = "Xk43g8!@";
 
 			Date tomorrow = setNotification(user, password, tenant);
 			System.out.println("This test case will set up an email notification for " + tomorrow);

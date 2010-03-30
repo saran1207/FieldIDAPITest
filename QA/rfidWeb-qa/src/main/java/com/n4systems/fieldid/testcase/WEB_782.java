@@ -22,7 +22,7 @@ public class WEB_782 extends TestCase {
 		super.setUp();
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		String user = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 		helper.loginJobsTenant(ie, user, password);
 		if (!initialized) {
 			initialized = true;

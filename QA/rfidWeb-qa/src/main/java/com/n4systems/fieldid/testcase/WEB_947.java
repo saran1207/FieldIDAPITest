@@ -17,7 +17,7 @@ public class WEB_947 extends TestCase {
 	String loginURL = "https://localhost.localdomain/fieldid/";
 	String company = "unirope";
 	String userid = "n4systems";
-	String password = "makemore$";
+	String password = "Xk43g8!@";
 
 	protected void setUp() throws Exception {
 		super.setUp();

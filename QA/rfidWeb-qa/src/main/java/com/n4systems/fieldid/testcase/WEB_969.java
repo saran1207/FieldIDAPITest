@@ -23,7 +23,7 @@ public class WEB_969 extends TestCase {
 	String company = "hercules";
 	String customer = "ABB Inc.";
 	String userid = "n4systems";
-	String password = "makemore$";
+	String password = "Xk43g8!@";
 
 	protected void setUp() throws Exception {
 		super.setUp();

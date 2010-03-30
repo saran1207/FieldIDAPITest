@@ -274,7 +274,11 @@ public class ManageUsers extends TestCase {
 	 * @throws Exception
 	 */
 	private void checkAddUserEmployeePermissions() throws Exception {
-		checkAddUserCustomerPermissions();
+		misc.waitForJavascript();
+		TableRow createInspections = ie.row(createInspectionRowFinder);
+		assertTrue("Could not find the Create Inspections permission selection", createInspections.exists());
+		TableRow editInspections = ie.row(editInspectionRowFinder);
+		assertTrue("Could not find the Edit Inspections permission selection", editInspections.exists());
 		TableRow tagProducts = ie.row(tagProductsRowFinder);
 		assertTrue("Could not find the Tag Products permission selection", tagProducts.exists());
 		TableRow manageSystemConfiguration = ie.row(manageSystemConfigurationRowFinder);
@@ -313,13 +317,7 @@ public class ManageUsers extends TestCase {
 		checkAddUserPageContentHeader();
 	}
 
-	private void checkAddUserCustomerPermissions() throws Exception {
-		misc.waitForJavascript();
-		TableRow createInspections = ie.row(createInspectionRowFinder);
-		assertTrue("Could not find the Create Inspections permission selection", createInspections.exists());
-		TableRow editInspections = ie.row(editInspectionRowFinder);
-		assertTrue("Could not find the Edit Inspections permission selection", editInspections.exists());
-	}
+	
 
 	public void addCustomerUser(CustomerUser u) throws Exception {
 		FieldIDMisc.stopMonitor();
@@ -639,7 +637,7 @@ public class ManageUsers extends TestCase {
 		Iterator<String> i = p.iterator();
 		while(i.hasNext()) {
 			String permission = i.next();
-			String xpath = "//DIV[@id='pageContent']/FORM/DIV/TABLE[@class='list']/TBODY/TR/TD[contains(text(),'" + permission + "')]/..";
+			String xpath = "//TABLE[contains(@class,'permissions')]/TBODY/TR/TD[contains(text(),'" + permission + "')]/..";
 			TableRow tr = ie.row(xpath(xpath));
 			assertTrue("Could not find the Permission row containing '" + permission + "'", tr.exists());
 			Radio r = tr.radio(xpath("TD/INPUT[@value='true']"));

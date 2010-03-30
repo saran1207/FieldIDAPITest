@@ -533,7 +533,7 @@ public class ManageCustomers extends TestCase {
 		compareCustomers(customer, tmp);
 
 		String userID = "v-" + customer.getCustomerID().substring(0, 12);
-		String email = "darrell.grainger@n4systems.com";
+		String email = "dev@n4systems.com";
 		String firstName = "Validate";
 		String lastName = customer.getCustomerID();
 		String password = "makemore$";

@@ -10,7 +10,7 @@ public class EmbeddedLogin extends TestCase {
 
 	protected String embeddedLoginURL = "https://www.team.n4systems.net/static/html/embedded.html";
 	protected String userID = "n4systems";
-	protected String passwd = "makemore$";
+	protected String passwd = "Xk43g8!@";
 	
 	protected Frame newLoginFrame;
 	protected Frame oldLoginFrame;

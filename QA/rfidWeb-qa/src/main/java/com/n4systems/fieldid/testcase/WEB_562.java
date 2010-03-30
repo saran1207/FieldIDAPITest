@@ -18,7 +18,7 @@ public class WEB_562 extends TestCase {
 	static String timestamp = null;
 	String tenant = "hysafe";
 	String user = "n4systems";
-	String password = "makemore$";
+	String password = "Xk43g8!@";
 	static String name = null;
 	static String reportTitle = null;
 

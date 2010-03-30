@@ -32,7 +32,7 @@ public class ValidateHomePage extends TestCase {
 		String method = getName();
 		String company = "unirope";
 		String username = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 
 		try {
 			login.setCompany(company);
@@ -66,7 +66,7 @@ public class ValidateHomePage extends TestCase {
 		String method = getName();
 		String company = "swwr";
 		String username = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 
 		try {
 			login.setCompany(company);

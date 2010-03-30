@@ -23,7 +23,7 @@ public class WEB_810 extends TestCase {
 	String loginURL = "https://localhost.localdomain/fieldid/";
 	String company = "unirope";
 	String userid = "n4systems";
-	String password = "makemore$";
+	String password = "Xk43g8!@";
 	String expectedResult = "Select Display Columns";
 
 	protected void setUp() throws Exception {

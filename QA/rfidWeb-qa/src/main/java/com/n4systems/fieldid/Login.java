@@ -586,7 +586,6 @@ public class Login extends TestCase {
 		gotoLoginFromForgotPassword();
 		setForgotPassword(name);
 		gotoLoginFromForgotPassword2();
-		gotoN4Systems();
 		String userID = "val-" + misc.getRandomString(10);
 		String email = "dev@n4systems.com";
 		String firstName = "Dev";

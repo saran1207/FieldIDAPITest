@@ -47,7 +47,7 @@ public class WEB_44 extends TestCase {
 				"unilift",		// 10669
 				};
 		String user = "n4systems";
-		String password = "makemore$";
+		String password = "Xk43g8!@";
 		for(int t = 0; t < tenant.length; t++) {
 			login(ie, tenant[t], user, password);
 			helper.productSearch(ie, null, null, null, null, null, null, null, null, null, null, null, null, null, null);

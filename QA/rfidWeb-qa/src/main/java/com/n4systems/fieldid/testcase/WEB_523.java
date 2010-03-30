@@ -23,7 +23,7 @@ public class WEB_523 extends TestCase {
 		super.setUp();
 		helper.setBaseURL("https://localhost.localdomain/fieldid/");
 		helper.setUserName("n4systems");
-		helper.setPassword("makemore$");
+		helper.setPassword("Xk43g8!@");
 		helper.setTenant("hysafe");
 		helper.start(ie, helper.getLoginURL());
 		if(ie.link(text, "Logout").exists())	ie.link(text, "Logout").click();
