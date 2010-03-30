@@ -422,8 +422,8 @@ public class Login {
 	}
 
 	private void kickOtherSession() {
-		if (selenium.isElementPresent("signInWithSecurityButton")) {
-			selenium.click("signInWithSecurityButton");
+		if (selenium.isElementPresent("kickOtherUserOut")) {
+			selenium.click("kickOtherUserOut");
 			selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		}
 	}

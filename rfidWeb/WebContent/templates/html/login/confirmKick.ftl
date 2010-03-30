@@ -18,7 +18,7 @@
 		</div>	
 		
 		<div class="actions" > 
-			<@s.submit key="label.yes_kick_other_user" id="signInWithSecurityButton"/> <@s.text name="label.or"/> <a href="<@s.url action="login"/>" ><@s.text name="label.cancel_and_sign_in"/></a>
+			<@s.submit key="label.yes_kick_other_user" id="kickOtherUserOut"/> <@s.text name="label.or"/> <a href="<@s.url action="login"/>" ><@s.text name="label.cancel_and_sign_in"/></a>
 		</div>
 	</@s.form>
 	
