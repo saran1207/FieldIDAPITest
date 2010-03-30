@@ -19,7 +19,7 @@ import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
  * 
  *
  */
-public class CreateOrUpgradeToUnlimitedAccountSecondaryOrgLimitUnlimitedTest extends FieldIDTestCase {
+public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 
 	Login login;
 	SignUpPackages sup;
@@ -41,7 +41,7 @@ public class CreateOrUpgradeToUnlimitedAccountSecondaryOrgLimitUnlimitedTest ext
 	
 	
 	@Test
-	public void newlyCreatedUnlimitedTenantShouldBeAbleToCreateSecondaryOrganizations() throws Exception {
+	public void create_unlimited_account_type_tenant_and_it_should_be_able_to_create_secondary_org() throws Exception {
 		String username = "darrell";
 		String password = "makemore$";
 
