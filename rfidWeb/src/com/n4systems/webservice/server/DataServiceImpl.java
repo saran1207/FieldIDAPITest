@@ -837,7 +837,7 @@ public class DataServiceImpl implements DataService {
 
 			// create any new subproducts (this is not currently used by mobile (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), product);			
+				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), product, requestInformation.getVersionNumber());			
 				if (subProducts.size() > 0) {
 					/*
 					 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
@@ -1028,7 +1028,7 @@ public class DataServiceImpl implements DataService {
 				inspectionServiceDTO.setProductId( product.getId() );
 				
 				// lets look up or create all newly attached sub products and attach to product
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product);
+				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product, requestInformation.getVersionNumber());
 				updateSubProducts(productManager, tenantId, product,
 						inspectionServiceDTO, subProducts);
 				
@@ -1155,7 +1155,7 @@ public class DataServiceImpl implements DataService {
 	
 	
 	
-	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct) throws Exception {
+	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct, long apiVersion) throws Exception {
 		
 		List<SubProduct> subProducts = new ArrayList<SubProduct>();
 		
@@ -1174,19 +1174,33 @@ public class DataServiceImpl implements DataService {
 				product = persistenceManager.find(Product.class, subProductDTO.getId());
 			}				
 			
-			if (product == null) {
-				continue;
+			product = legacyCreationOfSubProductsForPre19VersionOfMobile(tenantId, subProductDTO, product, apiVersion);
+			
+			if (product != null) {
+				SubProduct subProduct = new SubProduct();
+				subProduct.setLabel(subProductMap.getName());
+				subProduct.setProduct(product);
+				subProduct.setMasterProduct(masterProduct);
+				
+				subProducts.add(subProduct);
 			}
-			
-			SubProduct subProduct = new SubProduct();
-			subProduct.setLabel(subProductMap.getName());
-			subProduct.setProduct(product);
-			subProduct.setMasterProduct(masterProduct);
-			
-			subProducts.add(subProduct);
 		}
 		
 		return subProducts;
+	}
+
+	private Product legacyCreationOfSubProductsForPre19VersionOfMobile(Long tenantId, ProductServiceDTO subProductDTO, Product product, long apiVersion)
+			throws Exception {
+		if (olderThanVersion19(apiVersion)) {
+			if (product == null) {
+				product = createProduct(subProductDTO, tenantId);
+			}
+		}
+		return product;
+	}
+	
+	private boolean olderThanVersion19(long dtoVersion) {
+		return dtoVersion < 2;
 	}
 	
 	/**
