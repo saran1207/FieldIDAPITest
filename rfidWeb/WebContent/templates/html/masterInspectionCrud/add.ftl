@@ -19,7 +19,7 @@
 	<#include "/templates/html/common/_calendar.ftl"/>
 	
 	<script type="text/javascript">
-		lookupProductUrl = "<@s.url action="products" namespace="/ajax"/>";
+		lookupProductUrl = "<@s.url action="products" namespace="/aHtml"/>";
 		productLookupTitle = "<@s.text name="title.productlookup"/>";
 		subProductIndex = ${subProducts?size};
 		updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="ajax"  />';

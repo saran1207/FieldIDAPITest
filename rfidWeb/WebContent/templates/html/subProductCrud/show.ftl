@@ -14,7 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/masterInspection.css"/>" />
 	
 	<script type="text/javascript">
-		lookupProductUrl = "<@s.url action="products" namespace="/ajax"/>";
+		lookupProductUrl = "<@s.url action="products" namespace="/aHtml"/>";
 		productLookupTitle = "<@s.text name="title.productlookup"/>";
 		subProductIndex = ${subProducts?size};
 		updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="ajax"  />';

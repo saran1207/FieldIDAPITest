@@ -13,6 +13,7 @@
 		</@n4.includeScript>
 	</head>
 	<body>
+		<#include "/templates/html/layout/_notificationArea.ftl"/>
 		${body}
 		
 		<#include "/templates/html/layout/googleAnalytics.ftl"/>

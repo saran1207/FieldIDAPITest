@@ -160,6 +160,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			}
 		} catch(RuntimeException e) {
 			logger.error("Failed to load inspection", e);
+			
 		}
 	}
 	
@@ -171,13 +172,13 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 
 	protected void testDependices() throws MissingEntityException {
-		if (product == null) {
-			addActionError(getText("error.noproduct"));
-			throw new MissingEntityException();
-		}
-
 		if (inspection == null) {
 			addActionError(getText("error.noinspection"));
+			throw new MissingEntityException();
+		}
+		
+		if (product == null) {
+			addActionError(getText("error.noproduct"));
 			throw new MissingEntityException();
 		}
 
@@ -290,12 +291,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@SkipValidation
 	@NetworkAwareAction
 	public String doShow() {
-		try {
-			product = inspection.getProduct();
-			testDependices();
-		} catch (NullPointerException e) {
-			return MISSING;
-		}
+		product = inspection != null ? inspection.getProduct() : null;
+		testDependices();
 
 		inspectionGroup = inspection.getGroup();
 		return SUCCESS;
