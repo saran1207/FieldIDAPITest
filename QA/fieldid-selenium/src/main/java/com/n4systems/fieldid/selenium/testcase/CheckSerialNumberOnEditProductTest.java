@@ -46,7 +46,7 @@ public class CheckSerialNumberOnEditProductTest extends FieldIDTestCase {
 		sdc.setAll(false);
 		sdc.setSerialNumber(true);
 		ps.setDisplayColumns(sdc);
-		ps.gotoRunProductSearch();
+		ps.runSearch();
 	}
 
 	@Ignore("Currently no way to detect javascript errors")

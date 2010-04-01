@@ -61,7 +61,7 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 		identify.gotoSaveAddAssetForm();
 		String serialNumber = p.getSerialNumber();
 		misc.setSmartSearch(serialNumber);
-		misc.gotoSmartSearch();
+		misc.submitSmartSearch();
 		asset.verifyAssetViewPage(serialNumber);
 		asset.verifyAssetViewPageDynamicContents(p);
 		asset.gotoEdit();

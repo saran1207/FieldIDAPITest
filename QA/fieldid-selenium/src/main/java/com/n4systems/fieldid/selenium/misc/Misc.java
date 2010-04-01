@@ -1311,7 +1311,7 @@ public class Misc {
 	/**
 	 * Click the Load button on the Find text field.
 	 */
-	public void gotoSmartSearch() {
+	public void submitSmartSearch() {
 		if(selenium.isElementPresent(smartSearchLoadButtonLocator)) {
 			selenium.click(smartSearchLoadButtonLocator);
 			waitForPageToLoadAndCheckForOopsPage();
@@ -1354,5 +1354,9 @@ public class Misc {
 	public void checkForNonFormErrorMessages(String string) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getContentTitle() {
+		return selenium.getText("css=#contentTitle");
 	}
 }

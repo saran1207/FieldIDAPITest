@@ -166,7 +166,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 
 	private void assertAssetIdentified(String serialNumber) {
 		misc.setSmartSearch(serialNumber);
-		misc.gotoSmartSearch();
+		misc.submitSmartSearch();
 		asset.verifyAssetViewPage(serialNumber);
 	}
 

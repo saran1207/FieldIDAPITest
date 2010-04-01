@@ -438,4 +438,9 @@ public class Login {
 	public void signInWithSystemAccount() {
 		signIn(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
 	}
+	
+	
+	public void signOut() {
+		selenium.openAndWaitForPageLoad("/fieldid/logout.action"); 
+	}
 }

@@ -21,7 +21,7 @@ ${action.setPageType('product', 'show')!}
 		<h2><@s.text name="label.productsummary"/></h2>
 		<p>
 			<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
-			<span class="fieldValue">${product.serialNumber}</span>
+			<span class="fieldValue serialNumber">${product.serialNumber}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.rfidnumber"/></label>

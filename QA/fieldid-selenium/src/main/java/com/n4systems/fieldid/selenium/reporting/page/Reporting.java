@@ -18,6 +18,12 @@ public class Reporting {
 		this.misc = misc;
 	}
 	
+	
+	
+	public void runReport() {
+		selenium.clickAndWaitForPageLoad("css=#reportForm_label_Run");
+	}
+	
 	public void assertReportingPageHeader() {
 		assertTrue("Could not find the header for the Reporting page", selenium.isElementPresent(reportingPageHeaderLocator));
 		misc.checkForErrorMessages(null);
@@ -26,5 +32,12 @@ public class Reporting {
 	public void assertReportingSearchResultsPageHeader() {
 		assertTrue("Could not find the header for the Reporting Results page", selenium.isElementPresent(reportingResultPageHeaderLocator));
 		misc.checkForErrorMessages(null);
+	}
+
+
+
+	public int totalResults() {
+		String reportTotal = selenium.getText("css=.total");
+		return Integer.valueOf(reportTotal.trim().replace("Total Inspections", "").trim());
 	}
 }

@@ -18,6 +18,11 @@ public class Schedules {
 		this.misc = misc;
 	}
 	
+	
+	public void changeScheduleStatus(String statusName) {
+		selenium.select("reportForm_criteria_status", "label=" + statusName);
+	}
+	
 	public void assertSchedulesPageHeader() {
 		assertTrue("Could not find the header for the Schedules page", selenium.isElementPresent(schedulesPageHeaderLocator));
 		misc.checkForErrorMessages(null);
@@ -26,5 +31,14 @@ public class Schedules {
 	public void assertSchedulesSearchResultsPageHeader() {
 		assertTrue("Could not find the header for the Schedule Search Results page", selenium.isElementPresent(schedulesSearchResultPageHeaderLocator));
 		misc.checkForErrorMessages(null);
+	}
+
+	public void runSchedules() {
+		selenium.clickAndWaitForPageLoad("css=#reportForm_label_Run");
+	}
+
+	public int totalResults() {
+		String reportTotal = selenium.getText("css=.total");
+		return Integer.valueOf(reportTotal.trim().replace("Total Scheduled Inspections", "").trim());
 	}
 }

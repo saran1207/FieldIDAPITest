@@ -15,6 +15,14 @@ development_branch:
   username: root
   encoding: utf8
 
+minimal_security:
+  adapter: jdbcmysql
+  database: fieldid_minimal_security
+  host: localhost
+  username: root
+  encoding: utf8
+
+
 staging:
   adapter: jdbcmysql
   database: fieldid

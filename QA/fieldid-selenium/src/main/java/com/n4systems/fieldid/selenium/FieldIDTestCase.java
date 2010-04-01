@@ -19,7 +19,7 @@ import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class FieldIDTestCase extends SeleneseTestBase {
+public abstract class FieldIDTestCase extends SeleneseTestBase {
 
 	// NOTE: if you have -Dfieldid-companyid=unirope tests will default to unirope
 	// Otherwise, they will default to fieldid.
@@ -151,10 +151,15 @@ public class FieldIDTestCase extends SeleneseTestBase {
 	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
-    protected FieldIdSelenium selenium;
+    public FieldIdSelenium selenium;
 	protected Misc misc;
 	protected Properties p;
 	public static final String badProperty = "INVALID";
+	
+	
+	protected void setInitialCompany(String initCompany) {
+		this.initCompany = initCompany;
+	}
 	
 	@Before
 	public void setUp() throws Exception {
@@ -355,6 +360,8 @@ public class FieldIDTestCase extends SeleneseTestBase {
     public void verifyTrue(boolean b) {
         stb.verifyTrue(b);
     }
+    
+    
 
     /** Like JUnit's assertEquals, but knows how to compare string arrays */
     public static void assertEquals(Object s1, Object s2) {

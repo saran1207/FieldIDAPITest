@@ -246,7 +246,7 @@ public class AssetSearch {
 		return result;
 	}
 
-	public void gotoRunProductSearch() {
+	public void runSearch() {
 		if(selenium.isElementPresent(runButtonLocator)) {
 			selenium.click(runButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

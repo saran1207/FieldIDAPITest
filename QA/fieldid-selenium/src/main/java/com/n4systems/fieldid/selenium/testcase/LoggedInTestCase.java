@@ -24,19 +24,16 @@ public abstract class LoggedInTestCase extends FieldIDTestCase {
 		
 	}
 
-	@Override
+	
 	@Before
-	public void setUp() throws Exception {
-		super.setUp();
+	public void signIn() throws Exception {
 		loginPage = new Login(selenium, misc);
 		loginPage.signIn(username, password);
 	}
 
-	@Override
 	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-		
+	public void signOut() throws Exception {
+		loginPage.signOut();
 	}
 
 }

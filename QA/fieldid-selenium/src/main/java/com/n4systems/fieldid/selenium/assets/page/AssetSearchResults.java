@@ -26,4 +26,9 @@ public class AssetSearchResults {
 			fail("Could not find the header for 'Product Search'.");
 		}
 	}
+
+	public int totalResults() {
+		String reportTotal = selenium.getText("css=.total");
+		return Integer.valueOf(reportTotal.trim().replace("Total Products", "").trim());
+	}
 }
