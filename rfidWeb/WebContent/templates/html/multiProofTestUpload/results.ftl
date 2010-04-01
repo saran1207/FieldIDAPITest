@@ -19,7 +19,7 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 								<label><@s.text name="label.serialnumber"/>: ${serialnumber}</label>
 								<span>
 									<#if inspectionProcessingFailureMap[key][serialnumber]?exists>
-										<a href='<@s.url action="inspection" namespace="/ajax/"  productId="${inspectionProcessingFailureMap[key][serialnumber].product.uniqueID}" uniqueID="${inspectionProcessingFailureMap[key][serialnumber].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewinspection"/> :: :: scrolling:true, width: 520, height: 420' >
+										<a href='<@s.url action="inspection" namespace="/aHtml/iframe"  productId="${inspectionProcessingFailureMap[key][serialnumber].product.uniqueID}" uniqueID="${inspectionProcessingFailureMap[key][serialnumber].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewinspection"/> :: :: scrolling:true, width: 520, height: 420' >
 							  				<@s.text name="link.view" />
 							  			</a>
 									<#else>
