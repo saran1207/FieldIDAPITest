@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.actions.users;
 
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;

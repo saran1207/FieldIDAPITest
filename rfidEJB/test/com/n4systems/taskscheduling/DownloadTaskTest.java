@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.MailManager;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;

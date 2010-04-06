@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.Local;
 import javax.persistence.EntityManager;
 
 import org.hibernate.collection.AbstractPersistentCollection;
@@ -20,7 +19,6 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.parents.AbstractStringIdEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.model.security.SecurityFilter;
@@ -28,13 +26,11 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 
-@Local
 public interface PersistenceManager {
 	public EntityManager getEntityManager();
 
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId);
 	
-	public <T extends AbstractStringIdEntity> T find(Class<T> entityClass, String id);
 
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields);
 
@@ -104,13 +100,10 @@ public interface PersistenceManager {
 	
 	public <T extends BaseEntity> Long save(T entity);
 	
-	public <T extends AbstractStringIdEntity> void save(T entity);
-
 	public <T> T updateAny(T entity);
 	
 	public <T extends BaseEntity> T update(T entity);
 
-	public <T extends AbstractStringIdEntity> T update(T entity);
 	
 	public <T extends AbstractEntity> Long save(T entity, UserBean user);
 

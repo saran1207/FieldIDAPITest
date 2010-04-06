@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import rfid.ejb.entity.SerialNumberCounterBean;
-import rfid.ejb.session.SerialNumberCounter;
 
+import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 

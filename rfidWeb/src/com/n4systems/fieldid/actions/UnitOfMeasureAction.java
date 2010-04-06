@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.session.UnitOfMeasureManager;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.UnitOfMeasureManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.UnitOfMeasure;
 import com.opensymphony.xwork2.Preparable;

@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.util.mail.MailMessage;
 
 public class OutputStreamMailManager implements MailManager {

@@ -2,8 +2,6 @@ package com.n4systems.ejb;
 
 import java.util.List;
 
-import javax.ejb.Local;
-
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
@@ -15,7 +13,6 @@ import com.n4systems.model.Project;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 
-@Local
 public interface ProjectManager {
 	public int attachAsset(Product asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException;
 

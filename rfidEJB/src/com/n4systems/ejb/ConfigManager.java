@@ -1,12 +1,9 @@
 package com.n4systems.ejb;
 
-import javax.ejb.Local;
-
-
 import com.n4systems.model.Configuration;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
-@Local
 public interface ConfigManager {
 
 	/**

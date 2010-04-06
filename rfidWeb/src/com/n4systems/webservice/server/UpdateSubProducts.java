@@ -3,9 +3,9 @@ package com.n4systems.webservice.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;

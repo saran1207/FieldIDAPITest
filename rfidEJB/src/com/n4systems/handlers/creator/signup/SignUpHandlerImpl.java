@@ -2,7 +2,6 @@ package com.n4systems.handlers.creator.signup;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
@@ -12,6 +11,7 @@ import com.n4systems.handlers.creator.signup.exceptions.SignUpSoftFailureExcepti
 import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.persistence.Transaction;

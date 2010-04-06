@@ -17,11 +17,11 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;

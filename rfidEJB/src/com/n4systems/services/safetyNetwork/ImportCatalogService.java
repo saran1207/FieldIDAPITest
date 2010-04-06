@@ -2,9 +2,9 @@ package com.n4systems.services.safetyNetwork;
 
 import java.util.Set;
 
-import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeScheduleSaver;
 import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeGroupHandler;

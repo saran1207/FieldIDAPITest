@@ -1,6 +1,5 @@
 package com.n4systems.mail;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.subscription.InvalidConfigurationException;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;

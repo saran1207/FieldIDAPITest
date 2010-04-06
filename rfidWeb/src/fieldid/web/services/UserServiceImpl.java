@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.CommentTempBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.ServiceDTOBeanConverter;
 
+import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 import com.n4systems.util.ServiceLocator;

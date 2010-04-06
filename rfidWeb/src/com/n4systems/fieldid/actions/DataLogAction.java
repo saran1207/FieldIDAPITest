@@ -7,10 +7,10 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.PopulatorCriteria;
 import rfid.ejb.entity.PopulatorLogBean;
-import rfid.ejb.session.PopulatorLog;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;

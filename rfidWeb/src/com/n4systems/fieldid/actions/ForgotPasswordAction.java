@@ -5,9 +5,9 @@ import javax.mail.MessagingException;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.User;
 
 public class ForgotPasswordAction extends SignInAction {
 

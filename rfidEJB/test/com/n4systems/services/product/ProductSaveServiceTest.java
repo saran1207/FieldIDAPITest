@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductSerial;
 
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubProductUniquenessException;

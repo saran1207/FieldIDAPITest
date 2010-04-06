@@ -10,10 +10,10 @@ import javax.mail.MessagingException;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;

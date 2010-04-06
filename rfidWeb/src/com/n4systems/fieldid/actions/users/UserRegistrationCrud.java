@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;

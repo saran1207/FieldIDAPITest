@@ -3,7 +3,8 @@ package rfid.ejb;
 import java.io.Serializable;
 import java.util.Date;
 
-import rfid.ejb.session.PopulatorLog;
+import com.n4systems.ejb.legacy.PopulatorLog;
+
 
 public class PopulatorCriteria implements Serializable {
 	private static final long serialVersionUID = 1L;

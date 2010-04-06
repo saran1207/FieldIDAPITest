@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;

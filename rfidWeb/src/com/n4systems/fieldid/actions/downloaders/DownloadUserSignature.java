@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.reporting.PathHandler;
 
 public class DownloadUserSignature extends AbstractDownloadAction {

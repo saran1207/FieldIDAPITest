@@ -4,8 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.session.LegacyProductType;
-
+import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 

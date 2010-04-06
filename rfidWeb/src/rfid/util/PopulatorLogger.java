@@ -1,8 +1,8 @@
 package rfid.util;
 
 import rfid.ejb.entity.PopulatorLogBean;
-import rfid.ejb.session.PopulatorLog;
 
+import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.ServiceLocator;
 

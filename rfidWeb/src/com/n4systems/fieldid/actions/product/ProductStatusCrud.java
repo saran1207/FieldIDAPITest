@@ -5,9 +5,9 @@ import java.util.Collection;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;

@@ -9,87 +9,45 @@
                
      <context:annotation-config/>
      
-	<!-- EJB MANAGERS -->
+	<!-- EJB EJBContainerS -->
 
-    <bean id="productTypeManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/LegacyProductTypeManager/local" />
-    </bean>
+    <bean id="productTypeEJBContainer" class="com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer"   />
     
+    <bean id="productSerialEJBContainer" 	class="com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer"   />
 
+	<bean id="optionEJBContainer"  class="com.n4systems.ejb.legacy.wrapper.OptionEJBContainer" />
     
-    <bean id="productSerialManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/LegacyProductSerialManager/local" />
-    </bean>
-
-	<bean id="optionManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/OptionManager/local" />
-    </bean>
+    <bean id="userEJBContainer"   	class="com.n4systems.ejb.legacy.wrapper.UserEJBContainer"   />
     
-    <bean id="userManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/UserManager/local" />
-    </bean>
+    <bean id="unitOfMeasureEJBContainer"   	class="com.n4systems.ejb.legacy.wrapper.UnitOfMeasureManagerEJBContainer"    />
     
-    <bean id="unitOfMeasureManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/UnitOfMeasureManagerImpl/local" />
-    </bean>
+    <bean id="orderMappingEJBContainer"     	class="com.n4systems.ejb.legacy.wrapper.OrderMappingEJBContainer"    />
     
-    <bean id="orderMappingManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/OrderMappingManager/local" />
-    </bean>
+    <bean id="serialNumberCounterEJBContainer"     	class="com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer"    />
     
-    <bean id="serialNumberCounterManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/SerialNumberCounterManager/local" />
-    </bean>
+    <bean id="productCodeMappingEJBContainer"     	class="com.n4systems.ejb.legacy.wrapper.ProductCodeMappingEJBContainer"/>
     
-    <bean id="productCodeMappingManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ProductCodeMappingManager/local"/>
-    </bean>
-    
-    <bean id="persistenceManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="fieldid/PersistenceManagerImpl/local" />
-	</bean>
+    <bean id="persistenceEJBContainer" 		class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer"	/>
 	
-	<bean id="autoAttributeManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/AutoAttributeManagerImpl/local" />
-    </bean>
+	<bean id="autoAttributeEJBContainer"     	class="com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer"    />
     
-    <bean id="scheduleManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/InspectionScheduleManagerImpl/local" />
-    </bean>
+    <bean id="scheduleEJBContainer"     	class="com.n4systems.ejb.wrapper.InspectionScheduleManagerEJBContainer"    />
     
-    <bean id="massUpdateManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/MassUpdateManagerImpl/local" />
-    </bean>
+    <bean id="massUpdateEJBContainer"     	class="com.n4systems.ejb.wrapper.MassUpdateManagerEJBContainer"     />
     
-    <bean id="configManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ConfigManagerImpl/local" />
-    </bean>
+    <bean id="configEJBContainer"     	class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer"    />
     
-    <bean id="inspectionManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/InspectionManagerImpl/local" />
-    </bean>
+    <bean id="inspectionEJBContainer"     	class="com.n4systems.ejb.wrapper.InspectionManagerEJBContainer"    />
     
-    <bean id="proofTestHandler" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ProofTestHandlerImpl/local" />
-    </bean>
+    <bean id="proofTestHandler"     	class="com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer"    />
     
-    <bean id="aggregateReportManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/AggregateReportManagerImpl/local" />
-    </bean>
+    <bean id="aggregateReportEJBContainer"     	class="com.n4systems.ejb.wrapper.AggregateReportManagerEJBContainer"    />
     
-    <bean id="orderManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/OrderManagerImpl/local" />
-    </bean>
+    <bean id="orderEJBContainer"    	class="com.n4systems.ejb.wrapper.OrderManagerEJBContainer"    />
     
-    <bean id="productManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ProductManagerImpl/local" />
-    </bean>
-    <bean id="projectManager" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/ProjectManagerImpl/local" />
-    </bean>
+    <bean id="productEJBContainer"     	class="com.n4systems.ejb.wrapper.ProductManagerEJBContainer"    />
+    <bean id="projectEJBContainer"     	class="com.n4systems.ejb.wrapper.ProjectManagerEJBContainer"    />
     
-     <bean id="populatorLog" class="org.springframework.jndi.JndiObjectFactoryBean">
-    	<property name="jndiName" value="fieldid/PopulatorLogManager/local" />
-    </bean>
+     <bean id="populatorLog"     	class="com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer"    />
     
 </beans>

@@ -2,8 +2,8 @@ package com.n4systems.taskscheduling.task;
 
 import java.util.List;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.exporting.ExporterFactory;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Product;
 import com.n4systems.model.downloadlink.DownloadLink;

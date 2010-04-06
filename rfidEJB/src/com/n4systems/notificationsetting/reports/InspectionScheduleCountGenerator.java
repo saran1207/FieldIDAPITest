@@ -15,7 +15,7 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.MailManager;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
 import com.n4systems.model.inspectionschedulecount.OverdueInspectionScheduleCountListLoader;
 import com.n4systems.model.inspectionschedulecount.UpcomingInspectionScheduleCountListLoader;

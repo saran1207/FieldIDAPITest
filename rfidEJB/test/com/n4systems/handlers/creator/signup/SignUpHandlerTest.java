@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.exceptions.BillingValidationException;
 import com.n4systems.handlers.creator.signup.exceptions.CommunicationErrorException;
@@ -19,6 +18,7 @@ import com.n4systems.handlers.creator.signup.exceptions.SignUpSoftFailureExcepti
 import com.n4systems.handlers.creator.signup.exceptions.TenantNameUsedException;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;

@@ -2,11 +2,8 @@ package com.n4systems.importing;
 
 import java.io.File;
 
-import javax.ejb.Local;
-
 import com.n4systems.exceptions.FileImportException;
 
-@Local
 public interface ImportManager {
 	
 	public static final int OBS_INSPECTION_TYPE_NAME = 0;

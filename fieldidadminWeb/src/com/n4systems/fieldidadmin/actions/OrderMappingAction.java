@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import rfid.ejb.entity.OrderMappingBean;
-import rfid.ejb.session.OrderMapping;
 
+import com.n4systems.ejb.legacy.OrderMapping;
 import com.n4systems.model.OrderKey;
 import com.n4systems.util.ListHelper;
 

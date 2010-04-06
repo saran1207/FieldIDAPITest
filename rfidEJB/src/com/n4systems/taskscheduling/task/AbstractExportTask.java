@@ -8,10 +8,10 @@ import java.io.OutputStream;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.exporting.Exporter;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
+import com.n4systems.mail.MailManager;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.persistence.savers.Saver;

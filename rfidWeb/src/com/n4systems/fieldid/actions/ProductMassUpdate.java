@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.product.PublishedState;

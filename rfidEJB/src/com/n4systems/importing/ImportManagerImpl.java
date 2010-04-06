@@ -5,13 +5,10 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
+
+
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -19,7 +16,7 @@ import org.apache.log4j.Logger;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.interceptor.TimingInterceptor;
+import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.exceptions.FileImportException;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
@@ -29,20 +26,21 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.FuzzyResolver;
 import com.n4systems.util.persistence.QueryBuilder;
 
-@Interceptors({TimingInterceptor.class})
-@Stateless
+
 public class ImportManagerImpl implements ImportManager {
 	private Logger logger = Logger.getLogger(ImportManager.class);
 	
-	@Resource
-	private SessionContext context;
 	
-	@PersistenceContext (unitName="rfidEM")
 	private EntityManager em;
 	
-	@EJB
+	
 	private PersistenceManager persistenceManager;
 	
+	public ImportManagerImpl(EntityManager em) {
+		this.em = em;
+		this.persistenceManager = new PersistenceManagerImpl(em);
+	}
+
 	/**
 	 * Imports observations from a CSV formatted file.<br/>
 	 * Format: <code>inspection type name, section name, criteria name, &lt;R/D&gt;, observation text</code>
@@ -158,16 +156,15 @@ public class ImportManagerImpl implements ImportManager {
 			logger.error(e);
 			
 			// also need to roll back the transaction
-			context.setRollbackOnly();
-			throw e;
+			
+			throw new RuntimeException(e);
 			
 		} catch(Exception e) {
 			
 			// wrap anything else and throw it
 			logger.error(e);
 			// also need to roll back the transaction
-			context.setRollbackOnly();
-			throw new FileImportException("Failed observation import", e, lineNumber);
+			throw new RuntimeException(new FileImportException("Failed observation import", e, lineNumber));
 			
 		} finally {
 			IOUtils.closeQuietly(fRead);

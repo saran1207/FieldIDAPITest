@@ -11,9 +11,9 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;

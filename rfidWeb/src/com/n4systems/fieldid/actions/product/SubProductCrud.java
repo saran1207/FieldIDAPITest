@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;

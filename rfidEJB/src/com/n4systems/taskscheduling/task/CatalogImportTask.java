@@ -8,9 +8,9 @@ import javax.mail.NoSuchProviderException;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductType;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;

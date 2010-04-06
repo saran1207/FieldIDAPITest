@@ -56,7 +56,11 @@ public class HomeAction extends AbstractAction {
 
 	public Pager<Project> getMyJobs() {
 		if (myJobs == null) {
+			try {
 			myJobs = jobListService.getList(true, true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} 
 		return myJobs;
 	}

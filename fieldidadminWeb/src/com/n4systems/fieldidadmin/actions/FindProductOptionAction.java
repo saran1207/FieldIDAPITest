@@ -2,8 +2,9 @@ package com.n4systems.fieldidadmin.actions;
 
 import java.util.Collection;
 
+import com.n4systems.ejb.legacy.Option;
+
 import rfid.ejb.entity.FindProductOptionManufactureBean;
-import rfid.ejb.session.Option;
 
 public class FindProductOptionAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;

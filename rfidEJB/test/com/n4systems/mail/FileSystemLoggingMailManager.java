@@ -5,7 +5,6 @@ import javax.mail.NoSuchProviderException;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.util.mail.MailMessage;
 
 public class FileSystemLoggingMailManager implements MailManager {

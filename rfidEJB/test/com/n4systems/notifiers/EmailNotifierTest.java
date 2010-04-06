@@ -9,8 +9,8 @@ import javax.mail.MessagingException;
 
 import org.junit.Test;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.ejb.MailManagerTestDouble;
+import com.n4systems.mail.MailManager;
 import com.n4systems.notifiers.notifications.Notification;
 import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.mail.MailMessage;

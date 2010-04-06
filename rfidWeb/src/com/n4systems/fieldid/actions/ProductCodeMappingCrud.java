@@ -9,9 +9,9 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductCodeMappingBean;
-import rfid.ejb.session.ProductCodeMapping;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;

@@ -4,43 +4,40 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.LegacyProductSerialManager;
-import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.LegacyProductTypeManager;
-import rfid.ejb.session.Option;
-import rfid.ejb.session.OptionManager;
-import rfid.ejb.session.PopulatorLog;
-import rfid.ejb.session.PopulatorLogManager;
-import rfid.ejb.session.ProductCodeMapping;
-import rfid.ejb.session.ProductCodeMappingManager;
-import rfid.ejb.session.SerialNumberCounter;
-import rfid.ejb.session.SerialNumberCounterManager;
-import rfid.ejb.session.ServiceDTOBeanConverter;
-import rfid.ejb.session.ServiceDTOBeanConverterImpl;
-import rfid.ejb.session.UnitOfMeasureManager;
-import rfid.ejb.session.UnitOfMeasureManagerImpl;
-import rfid.ejb.session.User;
-import rfid.ejb.session.UserManager;
-
 import com.n4systems.ejb.AutoAttributeManager;
-import com.n4systems.ejb.AutoAttributeManagerImpl;
 import com.n4systems.ejb.ConfigManager;
-import com.n4systems.ejb.ConfigManagerImpl;
 import com.n4systems.ejb.InspectionManager;
-import com.n4systems.ejb.InspectionManagerImpl;
 import com.n4systems.ejb.InspectionScheduleManager;
-import com.n4systems.ejb.InspectionScheduleManagerImpl;
-import com.n4systems.ejb.MailManager;
 import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.OrderManagerImpl;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.PersistenceManagerImpl;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.ProductManagerImpl;
 import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.ejb.ProofTestHandlerImpl;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.Option;
+import com.n4systems.ejb.legacy.PopulatorLog;
+import com.n4systems.ejb.legacy.ProductCodeMapping;
+import com.n4systems.ejb.legacy.SerialNumberCounter;
+import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
+import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.ProductCodeMappingEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.ServiceDTOBeanConverterEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
+import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
+import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
+import com.n4systems.ejb.wrapper.InspectionManagerEJBContainer;
+import com.n4systems.ejb.wrapper.InspectionScheduleManagerEJBContainer;
+import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
+import com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer;
+import com.n4systems.ejb.wrapper.ProductManagerEJBContainer;
+import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.exceptions.EJBLookupException;
+import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
@@ -96,10 +93,9 @@ public class ServiceLocator {
 	}
 	
 	
-	private static final ThreadLocal<ConfigManager> configManager = new ThreadLocal<ConfigManager>();
 	
 	public static final ConfigManager getConfigManager() {
-		return get(ConfigManager.class, ConfigManagerImpl.class, configManager);
+		return new ConfigManagerEJBContainer();
 	}
 
 	public static final MailManager getMailManager() {
@@ -107,118 +103,94 @@ public class ServiceLocator {
 	}
 	
 	
-	private static final ThreadLocal<PopulatorLog> populatorLog = new ThreadLocal<PopulatorLog>();
 	
 	public static final PopulatorLog getPopulatorLog() {
-		return get(PopulatorLog.class, PopulatorLogManager.class, populatorLog);
+		return new PopulatorLogEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<SerialNumberCounter> serialNumberCounter = new ThreadLocal<SerialNumberCounter>();
 	
 	public static final SerialNumberCounter getSerialNumberCounter() {
-		return get(SerialNumberCounter.class, SerialNumberCounterManager.class, serialNumberCounter);
+		return new SerialNumberCounterEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<User> user = new ThreadLocal<User>();
 	
 	public static final User getUser() {
-		return get(User.class, UserManager.class, user);
+		return new UserEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<LegacyProductType> productType = new ThreadLocal<LegacyProductType>();
 	
 	public static final LegacyProductType getProductType() {
-		return get(LegacyProductType.class, LegacyProductTypeManager.class, productType);
+		return new LegacyProductTypeEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<Option> option = new ThreadLocal<Option>();
 	
 	public static final Option getOption() {
-		return get(Option.class, OptionManager.class, option);
+		return new OptionEJBContainer();
 	}
 	
-	
-	private static final ThreadLocal<PersistenceManager> persistenceManager = new ThreadLocal<PersistenceManager>();
 	
 	public static final PersistenceManager getPersistenceManager() {
-		return get(PersistenceManager.class, PersistenceManagerImpl.class, persistenceManager);
+		return new PersistenceManagerEJBContainer();
 	}
 	
-	public static final PersistenceManager createPersistenceManager() {
-		return lookup(PersistenceManagerImpl.class);
-	}
 	
-	private static final ThreadLocal<ProductCodeMapping> productCodeMapping = new ThreadLocal<ProductCodeMapping>();
+	
 	
 	public static final ProductCodeMapping getProductCodeMapping() {
-		return get(ProductCodeMapping.class, ProductCodeMappingManager.class, productCodeMapping);
+		return new ProductCodeMappingEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<ProofTestHandler> proofTestHandler = new ThreadLocal<ProofTestHandler>();
 	
 	public static final ProofTestHandler getProofTestHandler() {
-		return get(ProofTestHandler.class, ProofTestHandlerImpl.class, proofTestHandler);
+		return new ProofTestHandlerEJBContainer();
 	}
 
 	
-	private static final ThreadLocal<LegacyProductSerial> productSerialManager = new ThreadLocal<LegacyProductSerial>();
 	
 	public static final LegacyProductSerial getProductSerialManager() {
-		return get(LegacyProductSerial.class, LegacyProductSerialManager.class, productSerialManager);
+		return new LegacyProductSerialEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<ServiceDTOBeanConverter> serviceDTOBeanConverter = new ThreadLocal<ServiceDTOBeanConverter>();
 	
 	public static final ServiceDTOBeanConverter getServiceDTOBeanConverter() {
-		return get(ServiceDTOBeanConverter.class, ServiceDTOBeanConverterImpl.class, serviceDTOBeanConverter);
+		return new ServiceDTOBeanConverterEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<AutoAttributeManager> autoAttributeManager = new ThreadLocal<AutoAttributeManager>();
 	
 	public static final AutoAttributeManager getAutoAttributeManager() {
-		return get(AutoAttributeManager.class, AutoAttributeManagerImpl.class, autoAttributeManager);
+		return new AutoAttributeManagerEJBContainer();
 	}
 
 	
-	private static final ThreadLocal<UnitOfMeasureManager> unitOfMeasureManager = new  ThreadLocal<UnitOfMeasureManager>();
 	
-	public static final UnitOfMeasureManager getUnitOfMeasureManager() {
-		return get(UnitOfMeasureManager.class, UnitOfMeasureManagerImpl.class, unitOfMeasureManager);
-	}
-	
-	
-	private static final ThreadLocal<InspectionScheduleManager> inspectionScheduleManager = new ThreadLocal<InspectionScheduleManager>();
 	
 	public static final InspectionScheduleManager getInspectionScheduleManager() {
-		return get(InspectionScheduleManager.class, InspectionScheduleManagerImpl.class, inspectionScheduleManager);
+		return new InspectionScheduleManagerEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<InspectionManager> inspectionManager = new ThreadLocal<InspectionManager>();
 	
 	public static final InspectionManager getInspectionManager() {
-		return get(InspectionManager.class, InspectionManagerImpl.class, inspectionManager);
+		return new InspectionManagerEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<ProductManager> productManager = new ThreadLocal<ProductManager>();
 	
 	public static final ProductManager getProductManager() {
-		return get(ProductManager.class, ProductManagerImpl.class, productManager);
+		return new ProductManagerEJBContainer();
 	}
 	
 	
-	private static final ThreadLocal<OrderManager> orderManager = new ThreadLocal<OrderManager>();
 	
 	public static final OrderManager getOrderManager() {
-		return get(OrderManager.class, OrderManagerImpl.class, orderManager);
+		return new OrderManagerEJBContainer();
 	}
 
 	public static Notifier getDefaultNotifier() {

@@ -14,11 +14,6 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.LegacyProductType;
-import rfid.ejb.session.PopulatorLog;
-import rfid.ejb.session.ServiceDTOBeanConverter;
-import rfid.ejb.session.User;
 import rfid.util.PopulatorLogger;
 
 import com.n4systems.ejb.InspectionManager;
@@ -26,6 +21,11 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.PopulatorLog;
+import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.exceptions.FindProductFailure;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;

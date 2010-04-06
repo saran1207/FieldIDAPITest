@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SharedReportUserListLoader;
 import com.n4systems.model.security.SecurityFilter;

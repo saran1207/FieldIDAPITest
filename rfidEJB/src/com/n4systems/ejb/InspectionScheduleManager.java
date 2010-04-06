@@ -3,8 +3,6 @@ package com.n4systems.ejb;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Local;
-
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
@@ -14,7 +12,6 @@ import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
 import com.n4systems.model.security.SecurityFilter;
 
-@Local
 public interface InspectionScheduleManager {
 	
 	public List<InspectionSchedule> autoSchedule(Product product);

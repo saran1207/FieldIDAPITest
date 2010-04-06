@@ -15,11 +15,11 @@ import javax.naming.NamingException;
 import org.ho.yaml.Yaml;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.User;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;

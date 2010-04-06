@@ -3,8 +3,8 @@ package com.n4systems.fieldid.actions.helpers;
 import java.util.Collections;
 import java.util.List;
 
-import rfid.ejb.session.LegacyProductSerial;
 
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
 import com.n4systems.model.safetynetwork.InspectionsByNetworkIdLoader;

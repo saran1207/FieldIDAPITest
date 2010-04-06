@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.session.LegacyProductSerial;
-import rfid.ejb.session.SerialNumberCounter;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Product;

@@ -12,7 +12,6 @@ import javax.mail.Transport;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.MailManager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;

@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.User;
 import rfid.web.helper.SessionEulaAcceptance;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.SessionUserInUse;

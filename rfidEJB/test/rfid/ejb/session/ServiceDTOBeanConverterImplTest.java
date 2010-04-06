@@ -1,11 +1,10 @@
 package rfid.ejb.session;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
-import static com.n4systems.model.builders.TenantBuilder.aTenant;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.createNiceMock;
-import static org.easymock.classextension.EasyMock.replay;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
+import static com.n4systems.model.builders.TenantBuilder.*;
+import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,6 +26,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.UserBean;
 
+import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
@@ -46,7 +46,6 @@ import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.TenantCache;
-import com.n4systems.test.helpers.EJBTestCase;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
@@ -55,7 +54,7 @@ import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 
 
-public class ServiceDTOBeanConverterImplTest extends EJBTestCase {
+public class ServiceDTOBeanConverterImplTest {
 
 	ServiceDTOBeanConverterTestExtension converter ;
 	

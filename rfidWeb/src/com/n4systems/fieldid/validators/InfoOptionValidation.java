@@ -6,7 +6,7 @@ import java.util.List;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 
-class InfoOptionValidation {
+public class InfoOptionValidation {
 	private final Collection<InfoOptionInput> infoOptionInputs;
 	private final List<InfoFieldInput> infoFieldInputs;
 

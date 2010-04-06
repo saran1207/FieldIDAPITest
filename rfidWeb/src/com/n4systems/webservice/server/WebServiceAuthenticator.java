@@ -1,9 +1,9 @@
 package com.n4systems.webservice.server;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.ServiceDTOBeanConverter;
-import rfid.ejb.session.User;
 
+import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
+import com.n4systems.ejb.legacy.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;

@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.session.Option;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.Option;
 import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;

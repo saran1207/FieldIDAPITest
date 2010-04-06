@@ -2,8 +2,6 @@ package com.n4systems.ejb;
 
 import java.util.Collection;
 
-import javax.ejb.Local;
-
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.AutoAttributeCriteria;
@@ -12,7 +10,6 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.tools.Pager;
 
-@Local
 public interface AutoAttributeManager {
 	
 	public Pager<AutoAttributeDefinition> findAllPage( AutoAttributeCriteria criteria, Tenant tenant, Integer pageNumber, Integer pageSize);

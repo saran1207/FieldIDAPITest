@@ -2,6 +2,7 @@ package rfid.ejb.session;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.model.orgs.FindOwnerByLegacyIds;
 
 public class ServiceDTOBeanConverterTestExtension extends ServiceDTOBeanConverterImpl {

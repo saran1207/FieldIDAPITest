@@ -3,8 +3,6 @@ package com.n4systems.ejb;
 import java.util.List;
 import java.util.SortedSet;
 
-import javax.ejb.Local;
-
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.UserBean;
 
@@ -20,7 +18,6 @@ import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.ProductTypeRemovalSummary;
 
-@Local
 public interface ProductManager {
 
 	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue);

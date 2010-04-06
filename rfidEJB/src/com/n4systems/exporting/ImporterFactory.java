@@ -1,13 +1,13 @@
 package com.n4systems.exporting;
 
 import rfid.ejb.entity.UserBean;
-import rfid.ejb.session.LegacyProductSerial;
 
 import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.conversion.product.ProductToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.ProductType;

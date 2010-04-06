@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.Local;
-
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Inspection;
@@ -16,7 +14,6 @@ import com.n4systems.util.ReportCriteria;
 import com.n4systems.util.SearchCriteria;
 
 @SuppressWarnings("deprecation")
-@Local
 public interface MassUpdateManager {
 
 	/**
