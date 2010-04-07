@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.view.model.SignUpRequestDecorator;
+import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.subscription.CommunicationException;
 
 public class ValidPromoCodeCrud extends AbstractCrud {
@@ -21,7 +22,7 @@ public class ValidPromoCodeCrud extends AbstractCrud {
 	
 	@Override
 	protected void initMemberFields() {
-		signUpPromoCode = new SignUpRequestDecorator(getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader(), getCreateHandlerFactory().getSubscriptionAgent());
+		signUpPromoCode = new SignUpRequestDecorator(new TenantNameAvailabilityChecker(), getCreateHandlerFactory().getSubscriptionAgent());
 	}
 
 

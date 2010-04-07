@@ -8,7 +8,7 @@ import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.tenant.TenantLimit;
-import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
+import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.Company;
@@ -32,7 +32,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
 public class SignUpRequestDecorator implements Subscription, AccountCreationInformation, HasDuplicateValueValidator, Company, Person {
-	private final TenantUniqueAvailableNameLoader uniqueNameLoader;
+	private final TenantNameAvailabilityChecker tenantNameAvailablityChecker;
 	private final SubscriptionAgent subscriptionAgent;
 	
 	private final SignUpRequest signUpRequest;
@@ -43,22 +43,20 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		this(new SignUpRequest(), null, null);
 	}
 	
-	public SignUpRequestDecorator(TenantUniqueAvailableNameLoader uniqueNameAvailableLoader, SubscriptionAgent subscriptionAgent) {
-		this(new SignUpRequest(), uniqueNameAvailableLoader, subscriptionAgent);
+	public SignUpRequestDecorator(TenantNameAvailabilityChecker tenantNameAvailablityChecker, SubscriptionAgent subscriptionAgent) {
+		this(new SignUpRequest(), tenantNameAvailablityChecker, subscriptionAgent);
 	}
 	
-	public SignUpRequestDecorator(SignUpRequest signUpRequest, TenantUniqueAvailableNameLoader uniqueNameAvailableLoader, SubscriptionAgent subscriptionAgent) {
+	public SignUpRequestDecorator(SignUpRequest signUpRequest, TenantNameAvailabilityChecker tenantNameAvailablityChecker, SubscriptionAgent subscriptionAgent) {
 		this.signUpRequest = signUpRequest;
-		this.uniqueNameLoader = uniqueNameAvailableLoader;
+		this.tenantNameAvailablityChecker = tenantNameAvailablityChecker;
 		this.subscriptionAgent = subscriptionAgent;
 		this.creditCard = new CreditCardDecorator(signUpRequest.getCreditCard());
 		this.address = new AddressInfoDecorator(signUpRequest.getBillingAddress());
 	}
 	
-	
-	
 	public boolean duplicateValueExists(String formValue) {
-		return !uniqueNameLoader.setUniqueName(formValue).load();
+		return !tenantNameAvailablityChecker.isAvailable(formValue);
 	}
 
 	public String getCompanyName() {

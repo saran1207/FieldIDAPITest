@@ -17,4 +17,9 @@ public class ConfigContextOverridableTestDouble extends ConfigContext {
 		configruations.add(new Configuration(entry, value.toString()));
 	}
 
+	@Override
+	public void markClean() {
+		super.markClean();
+	}
+
 }

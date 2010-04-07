@@ -8,7 +8,6 @@ import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.signuppackage.ContractPricingByExternalIdLoader;
 import com.n4systems.model.signuppackage.SignUpPackageListLoader;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
-import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
 
 public class NonSecureLoaderFactory {
 
@@ -47,9 +46,5 @@ public class NonSecureLoaderFactory {
 	
 	public SignUpPackageLoader createSignUpPackageLoader() {
 		return new SignUpPackageLoader();
-	}
-	
-	public TenantUniqueAvailableNameLoader createTenantUniqueAvailableNameLoader() {
-		return new TenantUniqueAvailableNameLoader();
 	}
 }

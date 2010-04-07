@@ -21,6 +21,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
+import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.persistence.FieldIDMultiTransactionManager;
 import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.subscription.AddressInfo;
@@ -50,7 +51,7 @@ public class SignUpCrud extends AbstractCrud {
 		if (sessionSignUp == null) {
 			sessionSignUp = new SignUpRequest();
 		}
-		signUpRequest = new SignUpRequestDecorator(sessionSignUp, getNonSecureLoaderFactory().createTenantUniqueAvailableNameLoader(), getCreateHandlerFactory().getSubscriptionAgent()); 
+		signUpRequest = new SignUpRequestDecorator(sessionSignUp, new TenantNameAvailabilityChecker(), getCreateHandlerFactory().getSubscriptionAgent()); 
 	}
 
 	@Override

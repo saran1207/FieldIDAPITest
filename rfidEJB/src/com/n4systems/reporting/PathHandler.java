@@ -59,6 +59,7 @@ public class PathHandler {
 	private static final String BUTTON_IMAGE_PATH_BASE = COMMON_IMAGE_PATH_BASE + "/buttons";
 	private static final String BUTTON_IMAGE_EXT = ".png";
 	private static final String N4_LOGO_IMAGE = COMMON_IMAGE_PATH_BASE + "/n4_logo.gif";
+	private static final String RESERVED_TENANT_NAMES_CONFIG_FILE = COMMON_CONFIG_BASE + "/reservedTenantNames.txt";
 	
 	// paths are in the format <tenant id>/<created year>/<created month>/<inspection id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
@@ -550,5 +551,9 @@ public class PathHandler {
 		
 		return absolutize(mergePaths(COMMON_PATH_BASE, "releaseNotes.xml"));
 		
+	}
+	
+	public static File getReservedTenantNamesConfigFile() {
+		return absolutize(RESERVED_TENANT_NAMES_CONFIG_FILE);
 	}
 }
