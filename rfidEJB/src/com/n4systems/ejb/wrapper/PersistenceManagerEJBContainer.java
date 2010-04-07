@@ -622,11 +622,12 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T passThroughFind(String queryStr, Map<String, Object> parameters) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).passThroughFind(queryStr, parameters);
+			return (T)createManager(transaction.getEntityManager()).passThroughFind(queryStr, parameters);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -637,11 +638,12 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> List<T> passThroughFindAll(String query, Map<String, Object> parameters) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).passThroughFindAll(query, parameters);
+			return (List<T>)createManager(transaction.getEntityManager()).passThroughFindAll(query, parameters);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
