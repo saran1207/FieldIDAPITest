@@ -11,6 +11,8 @@ import org.junit.Test;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigContextOverridableTestDouble;
 
 public class PrintOutPathTest {
 
@@ -19,6 +21,7 @@ public class PrintOutPathTest {
 	
 	private PrintOut printOut;
 	private Tenant tenant;
+	private ConfigContext oldContext;
 
 	@Before
 	public void setUp() throws Exception {
@@ -33,6 +36,18 @@ public class PrintOutPathTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Before
+	public void changeConfigContext() {
+		oldContext = ConfigContext.getCurrentContext();
+		ConfigContext.setCurrentContext(new ConfigContextOverridableTestDouble());
+	}
+	
+	@After 
+	public void removeConfig() {
+		ConfigContext.setCurrentContext(oldContext);
+	}
+	
 	
 	private String getAbsolutePathFor(String fullFileName) {
 		File file = new File(fullFileName);
