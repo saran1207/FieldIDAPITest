@@ -1,7 +1,8 @@
 package com.n4systems.reporting.mapbuilders;
 
 import static org.junit.Assert.*;
-
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import rfid.ejb.entity.UserBean;
@@ -9,8 +10,25 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.testutils.TestHelper;
 import com.n4systems.util.ReportMap;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigContextOverridableTestDouble;
+
 
 public class InspectorMapBuilderTest {
+
+	private ConfigContext oldContext;
+
+	@Before
+	public void changeConfigContext() {
+		oldContext = ConfigContext.getCurrentContext();
+		ConfigContext.setCurrentContext(new ConfigContextOverridableTestDouble());
+	}
+	
+	@After 
+	public void removeConfig() {
+		ConfigContext.setCurrentContext(oldContext);
+	}
+	
 
 	@Test
 	public void testSetAllFields() {

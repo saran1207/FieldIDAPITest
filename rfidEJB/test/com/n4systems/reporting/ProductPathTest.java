@@ -5,16 +5,32 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigContextOverridableTestDouble;
 
 
 
 public class ProductPathTest {
+private ConfigContext oldContext;
+
+	@Before
+	public void changeConfigContext() {
+		oldContext = ConfigContext.getCurrentContext();
+		ConfigContext.setCurrentContext(new ConfigContextOverridableTestDouble());
+	}
 	
+	@After 
+	public void removeConfig() {
+		ConfigContext.setCurrentContext(oldContext);
+	}
+		
 	
 	
 	@Test 

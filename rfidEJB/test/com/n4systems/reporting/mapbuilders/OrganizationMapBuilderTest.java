@@ -13,8 +13,9 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.testutils.TestHelper;
 import com.n4systems.util.ReportMap;
+import com.n4systems.util.ConfigContextRequiredTestCase;
 
-public class OrganizationMapBuilderTest {
+public class OrganizationMapBuilderTest extends ConfigContextRequiredTestCase{
 
 	@SuppressWarnings("unchecked")
 	@Test

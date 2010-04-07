@@ -17,8 +17,9 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.util.ConfigContextRequiredTestCase;
 
-public class DownloadTaskFactoryTest {
+public class DownloadTaskFactoryTest extends ConfigContextRequiredTestCase {
 
 	@SuppressWarnings("unchecked")
 	@Test
