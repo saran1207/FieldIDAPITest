@@ -10,22 +10,29 @@ import org.junit.Test;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.user.UserSaver;
+import com.n4systems.persistence.FieldIdTransaction;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.util.ConfigContextRequiredTestCase;
 
 
-public class AccountPlaceHolderCreateHandlerImplTest extends TestUsesTransactionBase {
+public class AccountPlaceHolderCreateHandlerImplTest extends ConfigContextRequiredTestCase {
 
-
+	protected Transaction mockTransaction;
+	
 	@Before
 	public void setup() {
 		mockTransaction();
 	}
 
+	protected void mockTransaction() {
+		mockTransaction = createMock(FieldIdTransaction.class);
+		replay(mockTransaction);
+	}
 	
 	@Test(expected=InvalidArgumentException.class)
 	public void should_throw_exception_if_no_account_creation_info_given() {

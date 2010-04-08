@@ -5,8 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.n4systems.fileprocessing.ChantFileProcessor;
+import com.n4systems.util.ConfigContextRequiredTestCase;
 
-public class ChantFileProcessorTest {
+public class ChantFileProcessorTest extends ConfigContextRequiredTestCase {
 
 	
 	
