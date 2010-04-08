@@ -24,6 +24,9 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+import com.n4systems.security.AuditLogger;
+import com.n4systems.security.CreateInspectionAuditHandler;
+import com.n4systems.security.UpdateInspectionAuditHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -37,7 +40,7 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 	public Inspection attachFilesToSubInspection(Inspection inspection, SubInspection subInspection, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).attachFilesToSubInspection(inspection, subInspection, uploadedFiles);
 
@@ -52,7 +55,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public FileDataContainer createFileDataContainer(Inspection inspection, File proofTestFile) throws ProcessingProofTestException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).createFileDataContainer(inspection, proofTestFile);
 
@@ -68,69 +71,89 @@ Transaction transaction = transactionManager.startTransaction();
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException,
 			FileAttachmentException, UnknownSubProduct {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
+
+		Throwable t = null;
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).createInspection(inspection, nextInspectionDate, userId, proofTestFile, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
+			t = e;
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			auditLogger.audit("createInspection", inspection, t);
 		}
 	}
 
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
+
+		Throwable t = null;
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).createInspection(inspection, nextInspectionDate, userId, fileData, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
+			t = e;
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			auditLogger.audit("createInspection", inspection, t);
 		}
 	}
 
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
+
+		Throwable t = null;
+
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).createInspection(inspection, nextInspectionDate, userId);
 
-		} catch (RuntimeException e) {
+		} catch (RuntimeException re) {
 			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
+			t = re;
+			throw re;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			auditLogger.audit("createInspection", inspection, t);
 		}
 	}
 
 	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException,
 			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
+		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
+
+		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).createInspections(transactionGUID, inspections, nextInspectionDates);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
+			t = e;
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			for (Inspection inspection : inspections) {
+				auditLogger.audit("createInspections", inspection, t);
+			}
 		}
 	}
 
 	public Inspection findAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findAllFields(id, filter);
 
@@ -145,7 +168,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findAllInspectionGroups(filter, productId, postFetchFields);
 
@@ -160,7 +183,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public InspectionGroup findInspectionGroupByMobileGuid(String mobileGuid, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findInspectionGroupByMobileGuid(mobileGuid, filter);
 
@@ -175,7 +198,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findInspectionsByDateAndProduct(inspectionDateRangeStart, inspectionDateRangeEnd, product, filter);
 
@@ -190,7 +213,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Inspection findInspectionThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findInspectionThroughSubInspection(subInspectionId, filter);
 
@@ -205,7 +228,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findInspectionTypeByLegacyEventId(eventId, tenantId);
 
@@ -220,7 +243,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Date findLastInspectionDate(InspectionSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findLastInspectionDate(schedule);
 
@@ -235,7 +258,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Date findLastInspectionDate(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findLastInspectionDate(scheduleId);
 
@@ -250,7 +273,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findLastInspectionDate(product, inspectionType);
 
@@ -265,7 +288,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Date findLastInspectionDate(Product product) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findLastInspectionDate(product);
 
@@ -280,7 +303,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findNewestInspections(searchCriteria, securityFilter, page, pageSize);
 
@@ -295,7 +318,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findNewestInspections(searchCriteria, securityFilter, page, pageSize);
 
@@ -310,7 +333,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public SubInspection findSubInspection(Long subInspectionId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findSubInspection(subInspectionId, filter);
 
@@ -325,7 +348,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public boolean isMasterInspection(Long id) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).isMasterInspection(id);
 
@@ -340,7 +363,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Inspection retireInspection(Inspection inspection, Long userId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).retireInspection(inspection, userId);
 
@@ -354,53 +377,66 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 	public Inspection updateInspection(Inspection inspection, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
+
+		Throwable t = null;
+		
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).updateInspection(inspection, userId, proofTestFile, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
+			t = e;
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			auditLogger.audit("updateInspection", inspection, t);
 		}
 	}
 
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
+
+		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).updateInspection(inspection, userId, fileData, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
+			t = e;
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			auditLogger.audit("updateInspection", inspection, t);
 		}
 	}
 
 	public Inspection updateInspection(Inspection inspection, Long userId) throws ProcessingProofTestException, FileAttachmentException {
+		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
+
+		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).updateInspection(inspection, userId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
+			t = e;
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
+			auditLogger.audit("updateInspection", inspection, t);
 		}
 	}
 
 	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).updateInspectionForm(inspectionType, modifyingUserId);
 

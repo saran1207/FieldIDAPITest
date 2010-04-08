@@ -1,7 +1,7 @@
 package com.n4systems.security;
 
-import javax.interceptor.InvocationContext;
+import com.n4systems.model.Inspection;
 
 public interface AuditHandler {
-	public String getMessage(InvocationContext ctx);
+	public String getMessage(Inspection inspection);
 }

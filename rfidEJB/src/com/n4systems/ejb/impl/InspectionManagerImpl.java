@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -27,7 +26,6 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.interceptor.AuditInterceptor;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -57,9 +55,6 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.security.CreateInspectionAuditHandler;
-import com.n4systems.security.CustomAuditHandler;
-import com.n4systems.security.UpdateInspectionAuditHandler;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.services.NextInspectionScheduleService;
 import com.n4systems.tools.FileDataContainer;
@@ -324,22 +319,16 @@ public class InspectionManagerImpl implements InspectionManager {
 		return savedInspections;
 	}
 
-	@Interceptors({AuditInterceptor.class})
-	@CustomAuditHandler(CreateInspectionAuditHandler.class)
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException,
 			UnknownSubProduct {
 		return createInspection(inspection, nextInspectionDate, userId, (FileDataContainer) null, (List<FileAttachment>) null);
 	}
 
-	@Interceptors({AuditInterceptor.class})
-	@CustomAuditHandler(CreateInspectionAuditHandler.class)
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 		return createInspection(inspection, nextInspectionDate, userId, createFileDataContainer(inspection, proofTestFile), uploadedFiles);
 	}
 
-	@Interceptors({AuditInterceptor.class})
-	@CustomAuditHandler(CreateInspectionAuditHandler.class)
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 
@@ -440,20 +429,14 @@ public class InspectionManagerImpl implements InspectionManager {
 		return currentStatus;
 	}
 
-	@Interceptors({AuditInterceptor.class})
-	@CustomAuditHandler(UpdateInspectionAuditHandler.class)
 	public Inspection updateInspection(Inspection inspection, Long userId) throws ProcessingProofTestException, FileAttachmentException {
 		return updateInspection(inspection, userId, (FileDataContainer) null, (List<FileAttachment>) null);
 	}
 
-	@Interceptors({AuditInterceptor.class})
-	@CustomAuditHandler(UpdateInspectionAuditHandler.class)
 	public Inspection updateInspection(Inspection inspection, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		return updateInspection(inspection, userId, createFileDataContainer(inspection, proofTestFile), uploadedFiles);
 	}
 
-	@Interceptors({AuditInterceptor.class})
-	@CustomAuditHandler(UpdateInspectionAuditHandler.class)
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(inspection, fileData);
 		updateDeficiencies(inspection.getResults());

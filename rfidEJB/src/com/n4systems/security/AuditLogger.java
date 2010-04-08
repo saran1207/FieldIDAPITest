@@ -1,12 +1,8 @@
 package com.n4systems.security;
 
-import com.n4systems.util.LoggingHelper;
-
-import java.lang.reflect.Method;
-
-import javax.interceptor.InvocationContext;
-
 import org.apache.log4j.Logger;
+
+import com.n4systems.model.Inspection;
 
 /**
  * A Log wrapper for writing audit logs 
@@ -17,46 +13,39 @@ public class AuditLogger {
 	private static final char EMPTYCHAR = '-';
 	private static final String MSG_SUCCESS = "Successful";
 	private static final String MSG_FAIL = "Failed";
-	private Logger auditLogger = Logger.getLogger("AuditLog");
 	
-	public AuditLogger() {}
+	private final Logger auditLogger;
+	private final AuditHandler handler;
 	
-	/**
-	 * Writes to the audit log, a successful invocation, using information from the InvocationContext
-	 * @param ctx	Current InvocationContext
-	 * @see #audit(InvocationContext, Throwable)
-	 */
-	public void audit(InvocationContext ctx) {
-		audit(ctx, null);
+
+	
+	public AuditLogger(AuditHandler handler) {
+		this(handler, Logger.getLogger("AuditLog"));
 	}
 	
-	/**
-	 * Writes to the audit log, using information from the InvocationContext.  Logs a success message when t is null,
-	 * and failure otherwise.  Looks for a {@see CustomAuditHandler} on the method invoked and generates the message 
-	 * from there.  Message is null if the method is missing a CustomAuditHandler annotation
-	 * @param ctx	Current InvocationContext
-	 * @param t		Optional Throwable
-	 * @see #audit(Method, String, Throwable)
-	 */
-	public void audit(InvocationContext ctx, Throwable t) {
-		String message = null;
-		Method method = ctx.getMethod();
+	public AuditLogger(AuditHandler handler, Logger auditLogger) {
+		this.handler = handler;
+		this.auditLogger = auditLogger;
+	}
+	
+	
+	
+	
+	
+	public void audit(String methodName, Inspection inspection, Throwable t) {
+		String message = "";
 		
 		try {
-			// if this method defined a custom handler, then we will set the audit message
-			// via that handler
-			CustomAuditHandler customHandler = method.getAnnotation(CustomAuditHandler.class);
-			if (customHandler != null) {
-				AuditHandler handler = customHandler.value().newInstance();
-				message = handler.getMessage(ctx);
-			}
+			message = handler.getMessage(inspection);
 		} catch(Throwable throwable) {
 			// we don't want any problems within the audit handler to affect the actual running of the method
 			logger.warn("Failed while generating custom AuditHandler message", throwable);
 		}
 		
-		audit(method, message, t);
+		audit(methodName, message, t);
 	}
+
+
 	
 	/**
 	 * Writes an audit message.  Logs a success message when t is null,
@@ -65,8 +54,8 @@ public class AuditLogger {
 	 * @param message	Optional audit message
 	 * @param t			Optional Throwable
 	 */
-	public void audit(Method method, String message, Throwable t) {
-		auditLogger.info(formatMessage(method, message, SecurityContext.getContext(), t));
+	private void audit(String methodName, String message, Throwable t) {
+		auditLogger.info(formatMessage(methodName, message, SecurityContext.getContext(), t));
 	}
 	
 	/**
@@ -79,11 +68,11 @@ public class AuditLogger {
 	 * @param t					Optional Exception if the request failed
 	 * @return 					A formatted audit log String
 	 */
-	private String formatMessage(Method method, String auditMessage, SecurityContext securityContext, Throwable t) {
+	private String formatMessage(String methodName, String auditMessage, SecurityContext securityContext, Throwable t) {
 		StringBuilder message = new StringBuilder();
 
 		writeField(message, System.currentTimeMillis());
-		writeField(message, LoggingHelper.prepareMethodName(method));
+		writeField(message, methodName);
 		
 		if (securityContext != null) {
 			writeField(message, securityContext.getUser().getTenant());
