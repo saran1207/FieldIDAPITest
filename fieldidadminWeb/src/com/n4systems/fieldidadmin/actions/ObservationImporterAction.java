@@ -7,11 +7,9 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import com.n4systems.importing.ImportManager;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.TenantCache;
 import com.n4systems.util.ListHelper;
-import com.n4systems.util.persistence.QueryBuilder;
 
 public class ObservationImporterAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
@@ -58,13 +56,11 @@ public class ObservationImporterAction extends AbstractAdminAction {
 	}
 	
 	public Map<Long, String> getTenants() {
-		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
-		builder.setSimpleSelect();
-		builder.setOrder("displayName");
+		
 		
 		Map<Long, String> tenantMap = new HashMap<Long, String>();
 		try {
-			tenantMap = ListHelper.longListableToMap(persistenceManager.findAll(builder));
+			tenantMap = ListHelper.longListableToMap(TenantCache.getInstance().findAllTenants());
 		} catch(Exception e) {
 			addActionError("Unable to load Tenants: " + e.getMessage());
 		}

@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class FileImportException extends Exception {
+public class FileImportException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private Long lineNumber = 0L;

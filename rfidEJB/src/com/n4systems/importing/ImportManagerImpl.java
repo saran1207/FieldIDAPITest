@@ -157,14 +157,14 @@ public class ImportManagerImpl implements ImportManager {
 			
 			// also need to roll back the transaction
 			
-			throw new RuntimeException(e);
+			throw e;
 			
 		} catch(Exception e) {
 			
 			// wrap anything else and throw it
 			logger.error(e);
 			// also need to roll back the transaction
-			throw new RuntimeException(new FileImportException("Failed observation import", e, lineNumber));
+			throw new FileImportException("Failed observation import", e, lineNumber);
 			
 		} finally {
 			IOUtils.closeQuietly(fRead);
