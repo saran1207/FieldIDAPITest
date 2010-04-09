@@ -12,9 +12,9 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
+import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
@@ -31,7 +31,6 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 	private static final long serialVersionUID = 1L;
 	
-	private final InfoFieldDynamicGroupGenerator infoGroupGen;
 	private final InspectionManager inspectionManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	
@@ -56,12 +55,12 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 			final ProductManager productManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
-		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager);
+		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager, 
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_schedule_search", "product"));
 		
 		this.inspectionManager = inspectionManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		
-		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
 	}
 
 	public void prepare() throws Exception {
@@ -69,16 +68,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
 	}
 	
-	@Override
-	public List<ColumnMappingGroup> getDynamicGroups() {
-		try {
-		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_schedule_search", "product", 
-				getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup()), getTenant());
-		}catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+	
 	
 	@Override
 	protected InspectionScheduleSearchContainer createSearchContainer() {

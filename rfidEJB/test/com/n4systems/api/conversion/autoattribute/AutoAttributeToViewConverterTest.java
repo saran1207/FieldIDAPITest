@@ -36,10 +36,10 @@ public class AutoAttributeToViewConverterTest {
 	}
 	
 	private AutoAttributeDefinition createAutoAttributeDef() {
-		InfoOptionBean in1 = InfoOptionBeanBuilder.aStaticInfoOption().withName("in_opt_1").forField(InfoFieldBeanBuilder.aSelectBox().withName("in_field_1").build()).build();
-		InfoOptionBean in2 = InfoOptionBeanBuilder.aDynamicInfoOption().withName("in_opt_2").forField(InfoFieldBeanBuilder.aTextField().withName("in_field_2").build()).build();
-		InfoOptionBean out1 = InfoOptionBeanBuilder.aStaticInfoOption().withName("out_opt_1").forField(InfoFieldBeanBuilder.aSelectBox().withName("out_field_1").build()).build();
-		InfoOptionBean out2 = InfoOptionBeanBuilder.aDynamicInfoOption().withName("out_opt_2").forField(InfoFieldBeanBuilder.aTextField().withName("out_field_2").build()).build();
+		InfoOptionBean in1 = InfoOptionBeanBuilder.aStaticInfoOption().withName("in_opt_1").forField(InfoFieldBeanBuilder.aSelectBox().named("in_field_1").build()).build();
+		InfoOptionBean in2 = InfoOptionBeanBuilder.aDynamicInfoOption().withName("in_opt_2").forField(InfoFieldBeanBuilder.aTextField().named("in_field_2").build()).build();
+		InfoOptionBean out1 = InfoOptionBeanBuilder.aStaticInfoOption().withName("out_opt_1").forField(InfoFieldBeanBuilder.aSelectBox().named("out_field_1").build()).build();
+		InfoOptionBean out2 = InfoOptionBeanBuilder.aDynamicInfoOption().withName("out_opt_2").forField(InfoFieldBeanBuilder.aTextField().named("out_field_2").build()).build();
 		
 		AutoAttributeCriteria crit = new AutoAttributeCriteria();
 		crit.getInputs().add(in1.getInfoField());

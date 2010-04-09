@@ -94,11 +94,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public SortedSet<String> findAllCommonInfoFieldNames(List<ProductType> productTypes) {
+	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findAllCommonInfoFieldNames(productTypes);
+			return createManager(transaction.getEntityManager()).findAllCommonInfoFieldNames(productTypeIds);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -110,21 +110,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public SortedSet<String> findAllCommonInfoFieldNames(SecurityFilter filter) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findAllCommonInfoFieldNames(filter);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-
-	}
+	
 
 	public Product findProduct(Long id, SecurityFilter filter, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

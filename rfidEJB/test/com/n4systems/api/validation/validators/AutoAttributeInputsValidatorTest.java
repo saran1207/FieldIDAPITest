@@ -26,13 +26,13 @@ public class AutoAttributeInputsValidatorTest {
 	public void setup_converter() {
 		InfoOptionBeanBuilder optionBuilder = InfoOptionBeanBuilder.aStaticInfoOption();
 		
-		InfoFieldBean in1 = InfoFieldBeanBuilder.aComboBox().withName("in1").build();
+		InfoFieldBean in1 = InfoFieldBeanBuilder.aComboBox().named("in1").build();
 		in1.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(in1).withName("in1-1").build(),
 				optionBuilder.forField(in1).withName("in1-2").build()
 		)));
 		
-		InfoFieldBean in2 = InfoFieldBeanBuilder.aSelectBox().withName("in2").build();
+		InfoFieldBean in2 = InfoFieldBeanBuilder.aSelectBox().named("in2").build();
 		in2.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(in2).withName("in2-1").build(),
 				optionBuilder.forField(in2).withName("in2-2").build()

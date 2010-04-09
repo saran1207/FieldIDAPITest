@@ -10,8 +10,7 @@ import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.subscriptions.view.model.SignUpRequestDecorator;
-import com.n4systems.model.tenant.TenantUniqueAvailableNameLoader;
-import com.n4systems.persistence.Transaction;
+import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.validator.ActionValidatorManager;
@@ -22,8 +21,6 @@ public class VaildiationsForSignUpCrud {
 	
 	private ActionValidatorManager avm;
 	private SignUpCrudExtension signUpCrud;
-
-
 
 
 
@@ -127,17 +124,13 @@ public class VaildiationsForSignUpCrud {
 
 
 
-	private class SuccessfulTenantUniqueAvailableNameLoader extends TenantUniqueAvailableNameLoader {
+	private class SuccessfulTenantUniqueAvailableNameLoader extends TenantNameAvailabilityChecker {
 
 		@Override
-		public Boolean load() {
+		public boolean isAvailable(String name) {
 			return true;
 		}
 
-		@Override
-		public Boolean load(Transaction transaction) {
-			return true;
-		}
 		
 	}
 }

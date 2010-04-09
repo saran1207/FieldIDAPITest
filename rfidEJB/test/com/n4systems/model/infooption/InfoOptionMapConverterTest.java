@@ -28,19 +28,19 @@ public class InfoOptionMapConverterTest {
 	public void setup_info_fields() {
 		InfoOptionBeanBuilder optionBuilder = InfoOptionBeanBuilder.aStaticInfoOption();
 
-		comboField = InfoFieldBeanBuilder.aComboBox().withName("combo").build();
+		comboField = InfoFieldBeanBuilder.aComboBox().named("combo").build();
 		comboField.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(comboField).withName("cf-1").build(),
 				optionBuilder.forField(comboField).withName("cf-2").build()
 		)));
 
-		selectField = InfoFieldBeanBuilder.aSelectBox().withName("select").build();
+		selectField = InfoFieldBeanBuilder.aSelectBox().named("select").build();
 		selectField.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(selectField).withName("sf-1").build(),
 				optionBuilder.forField(selectField).withName("sf-2").build()
 		)));
 		
-		textField = InfoFieldBeanBuilder.aTextField().withName("text").build();
+		textField = InfoFieldBeanBuilder.aTextField().named("text").build();
 		textField.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>());
 		
 		fields = Arrays.asList(comboField, selectField, textField);

@@ -58,17 +58,17 @@ public class AutoAttributeOutputsValidatorTest {
 	private AutoAttributeCriteria createCriteria() {
 		AutoAttributeCriteria criteria = new AutoAttributeCriteria();
 		criteria.getOutputs().addAll(Arrays.asList(
-			InfoFieldBeanBuilder.aComboBox().withName("combo").withOptions(
+			InfoFieldBeanBuilder.aComboBox().named("combo").withOptions(
 				InfoOptionBeanBuilder.aStaticInfoOption().withName("c-1").build(),
 				InfoOptionBeanBuilder.aStaticInfoOption().withName("c-2").build()
 			).build(),
 			
-			InfoFieldBeanBuilder.aSelectBox().withName("select").withOptions(
+			InfoFieldBeanBuilder.aSelectBox().named("select").withOptions(
 					InfoOptionBeanBuilder.aStaticInfoOption().withName("s-1").build(),
 					InfoOptionBeanBuilder.aStaticInfoOption().withName("s-2").build()
 			).build(),
 			
-			InfoFieldBeanBuilder.aTextField().withName("text").build()
+			InfoFieldBeanBuilder.aTextField().named("text").build()
 		));
 		
 		

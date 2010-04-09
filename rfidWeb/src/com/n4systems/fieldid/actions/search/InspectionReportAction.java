@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.search;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.ejb.legacy.User;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGenerator;
+import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
@@ -40,7 +40,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private static final long serialVersionUID = 1L;
 	public static final String REPORT_CRITERIA = "reportCriteria";
 
-	private final InfoFieldDynamicGroupGenerator infoGroupGen;
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
 	private final User userManager;
 	
@@ -61,12 +60,12 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			final User userManager, 
 			final ProductManager productManager) {
 		
-		super(InspectionReportAction.class, REPORT_CRITERIA, "Inspection Report", persistenceManager);
+		super(InspectionReportAction.class, REPORT_CRITERIA, "Inspection Report", persistenceManager, 
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_search", "product"));
 
 		this.userManager = userManager;
 		
 		
-		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
 		attribGroupGen = new InspectionAttributeDynamicGroupGenerator(persistenceManager);
 	}
 
@@ -78,18 +77,10 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
-		List<ColumnMappingGroup> dynamicGroups = new ArrayList<ColumnMappingGroup>();
+		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
 		
-		try {	
-			
-			dynamicGroups.addAll(infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_search", "product", 
-					getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup()), getTenant()));
-			
-			dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
-			
-		} catch (RuntimeException e) {
-			logger.error("Failed loading dynamic groups", e);
-		}
+		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
+		
 		
 		return dynamicGroups;
 	}

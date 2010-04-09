@@ -21,7 +21,7 @@ import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTermOrNull;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 
-abstract public class SearchContainer implements BaseSearchDefiner, Serializable {
+abstract public class SearchContainer implements BaseSearchDefiner, Serializable, ProductTypeFilteredSearchContainer {
 	private static final String STRUTS_VALUE_WHEN_YOU_SELECT_NO_VALUES_FROM_CHECKBOXES = "false";
 
 	private static final long serialVersionUID = 1L;
@@ -51,6 +51,9 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	abstract protected void evalSearchFilters();
 	abstract protected String defaultSortColumn();
 	abstract protected SortTerm.Direction defaultSortDirection();
+	
+	abstract public Long getProductType();
+	abstract public Long getProductTypeGroup();
 	
 	public Class<?> getSearchClass() {
 		return searchClass;

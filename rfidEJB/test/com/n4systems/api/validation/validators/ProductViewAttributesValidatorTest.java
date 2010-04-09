@@ -77,17 +77,17 @@ public class ProductViewAttributesValidatorTest {
 		ProductType type = new ProductType();
 		type.setInfoFields(Arrays.asList(
 				
-				InfoFieldBeanBuilder.aComboBox().setRequired(true).withName("combo").withOptions(
+				InfoFieldBeanBuilder.aComboBox().setRequired(true).named("combo").withOptions(
 						InfoOptionBeanBuilder.aStaticInfoOption().withName("c-1").build(),
 						InfoOptionBeanBuilder.aStaticInfoOption().withName("c-2").build()
 				).build(),
 				
-				InfoFieldBeanBuilder.aSelectBox().withName("select").withOptions(
+				InfoFieldBeanBuilder.aSelectBox().named("select").withOptions(
 						InfoOptionBeanBuilder.aStaticInfoOption().withName("s-1").build(),
 						InfoOptionBeanBuilder.aStaticInfoOption().withName("s-2").build()
 				).build(),
 				
-				InfoFieldBeanBuilder.aTextField().setRequired(true).withName("text").build()
+				InfoFieldBeanBuilder.aTextField().setRequired(true).named("text").build()
 		));
 		
 		return type;

@@ -67,9 +67,9 @@ public class ProductToModelConverterTest {
 	@Before
 	public void setup_product_type() {
 		InfoFieldBean[] fields = {
-				InfoFieldBeanBuilder.aComboBox().withName("combo").build(),
-				InfoFieldBeanBuilder.aComboBox().withName("select").build(),
-				InfoFieldBeanBuilder.aComboBox().withName("text").build()
+				InfoFieldBeanBuilder.aComboBox().named("combo").build(),
+				InfoFieldBeanBuilder.aComboBox().named("select").build(),
+				InfoFieldBeanBuilder.aComboBox().named("text").build()
 		};
 		
 		fields[0].setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(

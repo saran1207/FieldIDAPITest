@@ -50,8 +50,8 @@ public class ProductToViewConverterTest {
 		InfoOptionBeanBuilder optionBuilder = InfoOptionBeanBuilder.aDynamicInfoOption();
 		InfoFieldBeanBuilder fieldBuilder = InfoFieldBeanBuilder.aTextField();
 		
-		model.getInfoOptions().add(optionBuilder.withName("Opt1").forField(fieldBuilder.withName("Field1").build()).build());
-		model.getInfoOptions().add(optionBuilder.withName("Opt2").forField(fieldBuilder.withName("Field2").build()).build());
+		model.getInfoOptions().add(optionBuilder.withName("Opt1").forField(fieldBuilder.named("Field1").build()).build());
+		model.getInfoOptions().add(optionBuilder.withName("Opt2").forField(fieldBuilder.named("Field2").build()).build());
 		
 		// ensure this is a non-integration tenant
 		model.getOwner().getPrimaryOrg().getExtendedFeatures().remove(ExtendedFeature.Integration);

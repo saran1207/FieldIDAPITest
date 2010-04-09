@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -538,16 +536,10 @@ public class ProductManagerImpl implements ProductManager {
 		this.persistenceManager = persistenceManager;
 	}
 
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public SortedSet<String> findAllCommonInfoFieldNames(SecurityFilter filter) {
-		// find all the product types for a tenant and compute the common info
-		// fields
-		return findAllCommonInfoFieldNames(persistenceManager.findAll(new QueryBuilder<ProductType>(ProductType.class, filter)));
-	}
+	
 
 	@SuppressWarnings("unchecked")
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public SortedSet<String> findAllCommonInfoFieldNames(List<ProductType> productTypes) {
+	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds) {
 		/*
 		 * This algorithm works by initializing our name set with all the
 		 * InfoField names from the first product type returned. We then iterate
@@ -556,11 +548,11 @@ public class ProductManagerImpl implements ProductManager {
 		 * type. This way, the resulting set will contain only entries appearing
 		 * in all product types.
 		 */
-		Long countOfProductTypes = new Long(productTypes.size());
-		String query = "SELECT TRIM(name) FROM " + InfoFieldBean.class.getName() + " WHERE productInfo IN(:productTypes) ";
+		Long countOfProductTypes = new Long(productTypeIds.size());
+		String query = "SELECT TRIM(name) FROM " + InfoFieldBean.class.getName() + " WHERE productInfo.id IN(:productTypes) ";
 		query += "GROUP BY TRIM(name) HAVING COUNT(id) = :numberOfProductTypes";
 
-		Query commonNamesQuery = em.createQuery(query).setParameter("productTypes", productTypes).setParameter("numberOfProductTypes", countOfProductTypes);
+		Query commonNamesQuery = em.createQuery(query).setParameter("productTypes", productTypeIds).setParameter("numberOfProductTypes", countOfProductTypes);
 		return new TreeSet<String>((List<String>) commonNamesQuery.getResultList());
 	}
 

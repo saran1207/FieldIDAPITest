@@ -152,30 +152,30 @@ public class AutoAttributeToModelConverterTest {
 	private AutoAttributeCriteria createCriteria() {
 		InfoOptionBeanBuilder optionBuilder = InfoOptionBeanBuilder.aStaticInfoOption();
 		
-		InfoFieldBean in1 = InfoFieldBeanBuilder.aComboBox().withName("in1").build();
+		InfoFieldBean in1 = InfoFieldBeanBuilder.aComboBox().named("in1").build();
 		in1.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(in1).withName("in1-1").build(),
 				optionBuilder.forField(in1).withName("in1-2").build()
 		)));
 		
-		InfoFieldBean in2 = InfoFieldBeanBuilder.aSelectBox().withName("in2").build();
+		InfoFieldBean in2 = InfoFieldBeanBuilder.aSelectBox().named("in2").build();
 		in2.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(in2).withName("in2-1").build(),
 				optionBuilder.forField(in2).withName("in2-2").build()
 		)));
 
-		InfoFieldBean out1 = InfoFieldBeanBuilder.aComboBox().withName("out1").build();
+		InfoFieldBean out1 = InfoFieldBeanBuilder.aComboBox().named("out1").build();
 		out1.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(out1).withName("out1-1").build()
 		)));
 
-		InfoFieldBean out2 = InfoFieldBeanBuilder.aSelectBox().withName("out2").build();
+		InfoFieldBean out2 = InfoFieldBeanBuilder.aSelectBox().named("out2").build();
 		out2.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>(Arrays.asList(
 				optionBuilder.forField(out2).withName("out2-1").build(),
 				optionBuilder.forField(out2).withName("out2-2").build()
 		)));
 		
-		InfoFieldBean out3 = InfoFieldBeanBuilder.aTextField().withName("out3").build();
+		InfoFieldBean out3 = InfoFieldBeanBuilder.aTextField().named("out3").build();
 		out3.setUnfilteredInfoOptions(new TreeSet<InfoOptionBean>());
 				
 		AutoAttributeCriteria crit = new AutoAttributeCriteria();

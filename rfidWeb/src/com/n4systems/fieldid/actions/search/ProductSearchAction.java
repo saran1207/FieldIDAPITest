@@ -10,9 +10,9 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
+import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserListableLoader;
@@ -26,7 +26,6 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public static final String SEARCH_CRITERIA = "searchCriteria";
 	private static final long serialVersionUID = 1L;
 	
-	private final InfoFieldDynamicGroupGenerator infoGroupGen;
 	private List<ListingPair> employees;
 	
 	private OwnerPicker ownerPicker;
@@ -35,10 +34,9 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 			final PersistenceManager persistenceManager, 
 			final ProductManager productManager) {
 		
-		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager);
+		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager, 
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
 
-		
-		infoGroupGen = new InfoFieldDynamicGroupGenerator(persistenceManager, productManager);
 	}
 	
 	public void prepare() throws Exception {
@@ -47,11 +45,6 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	}
 	
 	
-	@Override
-	public List<ColumnMappingGroup> getDynamicGroups() {
-		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "product_search", 
-				getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup()), getTenant());
-	}
 	
 	@Override
 	protected ProductSearchContainer createSearchContainer() {

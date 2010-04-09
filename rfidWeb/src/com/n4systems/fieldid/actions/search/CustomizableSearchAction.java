@@ -15,6 +15,7 @@ import com.n4systems.ejb.PageHolder;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
+import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingFactory;
@@ -24,6 +25,7 @@ import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ListingPairs;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -49,21 +51,28 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private Map<String, WebOutputHandler> cellHandlers = new HashMap<String, WebOutputHandler>();
 	private TableView resultsTable;
 	private ProductTypeLister productTypes;
+	protected final InfoFieldDynamicGroupGenerator infoGroupGen;
 	
 	public CustomizableSearchAction(
 			final Class<? extends CustomizableSearchAction<T>> implementingClass, 
 			final String sessionKey, 
 			final String excelReportFileName, 
-			final PersistenceManager persistenceManager) {
+			final PersistenceManager persistenceManager, InfoFieldDynamicGroupGenerator infoGroupGen) {
 		
 		super(persistenceManager);
 		
 		this.containerSessionKey = sessionKey;
 		this.implementingClass = implementingClass;
 		this.excelReportFileName = excelReportFileName;
+		this.infoGroupGen = infoGroupGen;
 	}
 
-	abstract public List<ColumnMappingGroup> getDynamicGroups();
+	public List<ColumnMappingGroup> getDynamicGroups() {
+		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), ListingPairs.convertToIdList(getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup())));
+	}
+	
+	
+	
 	abstract protected T createSearchContainer();
 	
 	private void initializeColumnMappings() {

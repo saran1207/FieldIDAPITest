@@ -35,7 +35,7 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 	}
 
 	
-	public InfoFieldBeanBuilder withName(String name) {
+	public InfoFieldBeanBuilder named(String name) {
 		return new InfoFieldBeanBuilder(name, type, required, options);
 	}
 	
@@ -60,6 +60,7 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 		return field;
 	}
 
+	
 
 	
 

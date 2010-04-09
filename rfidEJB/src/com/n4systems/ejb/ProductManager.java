@@ -56,22 +56,15 @@ public interface ProductManager {
 
 	public ProductTypeRemovalSummary testArchive(ProductType productType);
 	
-	/**
-	 * Computes a set of {@link InfoFieldBean} names which are common to all {@link ProductType}s for a Tenant.
-	 * @see #findAllCommonInfoFieldNames(List)
-	 * @param filter	A SecurityFilter
-	 * @return			SortedSet of InfoField names
-	 */
-	public SortedSet<String> findAllCommonInfoFieldNames(SecurityFilter filter);
 	
 	/**
 	 * Computes a set of {@link InfoFieldBean} names which are common to all the provided {@link ProductType}s.  Name
 	 * matches are exact (case sensitive and non-word char sensitive).  The list will be returned sorted ascending 
 	 * alpha-numerically.
-	 * @param productTypes	A List of ProductTypes
+	 * @param productTypeIds TODO
 	 * @return				SortedSet of InfoField names
 	 */
-	public SortedSet<String> findAllCommonInfoFieldNames(List<ProductType> productTypes);
+	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds);
 	
 	public void deleteProductTypeGroup(ProductTypeGroup group);
 	
