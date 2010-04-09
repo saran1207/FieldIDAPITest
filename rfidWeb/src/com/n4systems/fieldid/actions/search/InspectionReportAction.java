@@ -82,7 +82,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		
 		try {	
 			
-			dynamicGroups.addAll(infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_search", "product", getSecurityFilter()));
+			dynamicGroups.addAll(infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_search", "product", 
+					getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup()), getTenant()));
 			
 			dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
 			

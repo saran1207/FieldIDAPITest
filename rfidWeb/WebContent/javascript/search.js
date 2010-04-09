@@ -26,7 +26,7 @@ function productTypeChanged(productType) {
 	var area = $('selectColumnNotificationArea');
 	area.update(updatingColumnText);
 	area.show();
-	getResponse(dynamicColumnUrl, "GET", { "criteria.productType": Element.extend(productType).getValue() } );
+	getResponse(dynamicColumnUrl, "GET", { "criteria.productType": Element.extend(productType).getValue(), "criteria.productTypeGroup" : $('productTypeGroup').getValue() } );
 }
 
 var groupToProductType = new Object();

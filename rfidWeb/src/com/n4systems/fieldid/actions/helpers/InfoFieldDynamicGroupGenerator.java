@@ -1,16 +1,17 @@
 package com.n4systems.fieldid.actions.helpers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.model.ProductType;
-import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.Tenant;
+import com.n4systems.util.ListingPair;
+import com.n4systems.util.ListingPairs;
 
 public class InfoFieldDynamicGroupGenerator {
 	
@@ -23,32 +24,31 @@ public class InfoFieldDynamicGroupGenerator {
 		this.productManager = productManager;
 	}
 	
-	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, String idPrefix, final SecurityFilter filter) {
-		return getDynamicGroups(productTypeId, idPrefix, null, filter);
+	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, String idPrefix,  List<ListingPair> productTypePairs, Tenant tenant) {
+		return getDynamicGroups(productTypeId, idPrefix, null, productTypePairs, tenant);
 	}
 	
-	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, String idPrefix, String pathPrefix, final SecurityFilter filter) {
+	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, String idPrefix, String pathPrefix, List<ListingPair> productTypePairs, Tenant tenant) {
 		if (dynamigGroups == null) {
 			dynamigGroups = new ArrayList<ColumnMappingGroup>();
 			ColumnMappingGroup infoFieldGroup = new ColumnMappingGroup(idPrefix + "_product_info_options", "label.productattributes", 2048);
 			infoFieldGroup.setDynamic(true);
 			
 			int order = 1024;
+			List<Long> productTypeIds = new ArrayList<Long>();
 			if (productTypeId != null) {
-				// when a product type has been selected, we will use all the infofields from the product type
-				ProductType productType = persistenceManager.find(ProductType.class, productTypeId, filter, "infoFields");
-				
-				// construct and add our field mappings
-				for (InfoFieldBean field: productType.getInfoFields()) {
-					infoFieldGroup.getMappings().add(createInfoFieldMapping(field.getName(), idPrefix, pathPrefix, order));
-					order++;
-				}
+				productTypeIds.add(productTypeId) ;
 			} else {
-				// if no product type was selected we need to compute all the common infofields
-				for (String fieldName: productManager.findAllCommonInfoFieldNames(filter)) {
-					infoFieldGroup.getMappings().add(createInfoFieldMapping(fieldName, idPrefix, pathPrefix, order));
-					order++;
-				}
+				productTypeIds.addAll(ListingPairs.convertToIdList(productTypePairs));
+			}
+			
+			
+			List<ProductType> productTypes = persistenceManager.findAll(ProductType.class, new HashSet<Long>(productTypeIds), tenant, "infoFields");
+			
+			
+			for (String fieldName: productManager.findAllCommonInfoFieldNames(productTypes)) {
+				infoFieldGroup.getMappings().add(createInfoFieldMapping(fieldName, idPrefix, pathPrefix, order));
+				order++;
 			}
 			
 			dynamigGroups.add(infoFieldGroup);

@@ -72,7 +72,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		try {
-		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_schedule_search", "product", getSecurityFilter());
+		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "inspection_schedule_search", "product", 
+				getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup()), getTenant());
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;

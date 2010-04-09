@@ -49,7 +49,8 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
-		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "product_search", getSecurityFilter());
+		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), "product_search", 
+				getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup()), getTenant());
 	}
 	
 	@Override
