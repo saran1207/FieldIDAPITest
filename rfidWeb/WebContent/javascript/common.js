@@ -500,7 +500,9 @@ function updateDropDown(select, newList, selectId) {
 }
 
 function replaceSelectList(select, newList) {
-	select.options.length = 0;
+	while (select.length > 0) {
+		select.remove(0);
+	} 
 	
 	newList.each(function (element) {
 			var option = new Element("option", { value : element.id }).update(element.name);

@@ -19,6 +19,9 @@ import com.n4systems.test.helpers.FluentArrayList;
 
 
 public class InfoFieldDynamicGroupGeneratorTest {
+
+	private static final CommonProductAttributeFinder NOT_TO_BE_USED_FINDER = null;
+	
 	
 	private final class CommonProductAttributeFinderReturning implements CommonProductAttributeFinder {
 		SortedSet<String> commonInfoFields;
@@ -37,14 +40,14 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	@Test
 	public void should_call_the_attribute_finder_once_only_once_for_info_fields_when_called_multiple_times() throws Exception {
 		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
-		expect(commonAttributeFinder.findAllCommonInfoFieldNames(new ArrayList<Long>())).andReturn(new TreeSet<String>());
+		expect(commonAttributeFinder.findAllCommonInfoFieldNames(new FluentArrayList<Long>(1L))).andReturn(new TreeSet<String>());
 		replay(commonAttributeFinder);
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
 		
-		sut.getDynamicGroups(null, new ArrayList<Long>());
-		sut.getDynamicGroups(null, new ArrayList<Long>());
-		sut.getDynamicGroups(null, new ArrayList<Long>());
+		sut.getDynamicGroups(null, new FluentArrayList<Long>(1L));
+		sut.getDynamicGroups(null, new FluentArrayList<Long>(1L));
+		sut.getDynamicGroups(null, new FluentArrayList<Long>(1L));
 		
 		verify(commonAttributeFinder);
 	}
@@ -52,7 +55,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	
 	@Test
 	public void should_call_the_attribute_finder_with_list_of_product_type_ids_passed_in_when_the_selected_product_type_id_is_null() throws Exception {
-		List<Long> productTypeIds = new ArrayList<Long>();
+		List<Long> productTypeIds = new FluentArrayList<Long>(1L);
 
 		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
 		expect(commonAttributeFinder.findAllCommonInfoFieldNames(productTypeIds)).andReturn(new TreeSet<String>());
@@ -79,6 +82,25 @@ public class InfoFieldDynamicGroupGeneratorTest {
 		sut.getDynamicGroups(1L, productTypeIds);
 		
 		verify(commonAttributeFinder);
+	}
+	
+	@Test
+	public void should_not_call_find_common_info_field_finder_if_there_are_no_product_types_in_the_list() {
+		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(NOT_TO_BE_USED_FINDER , "pre");
+		sut.getDynamicGroups(null, new ArrayList<Long>());
+	}
+	
+	@Test
+	public void should_return_an_empty_set_of_column_mappings_when_there_are_no_product_types_to_select() {
+		
+		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(NOT_TO_BE_USED_FINDER , "pre");
+		
+		
+		List<ColumnMappingGroup> actualDynamicGroup = sut.getDynamicGroups(null, new ArrayList<Long>());
+		
+		
+		assertThat(actualDynamicGroup.size(), equalTo(1));
+		assertTrue(actualDynamicGroup.get(0).getMappings().isEmpty());
 	}
 	
 	

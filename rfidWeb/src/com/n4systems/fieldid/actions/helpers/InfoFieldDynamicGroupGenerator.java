@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.helpers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
@@ -33,7 +34,8 @@ public class InfoFieldDynamicGroupGenerator {
 
 	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, List<Long> productTypeIds) {
 		if (dynamigGroups == null) {
-			createDynamicGroups(consolidateProductTypeIds(productTypeId, productTypeIds));
+			List<Long> consolidateProductTypeIds = consolidateProductTypeIds(productTypeId, productTypeIds);
+			createDynamicGroups(consolidateProductTypeIds);
 		}
 		return dynamigGroups;
 	}
@@ -62,6 +64,7 @@ public class InfoFieldDynamicGroupGenerator {
 
 	
 	private ColumnMappingGroup convertInfoFiledsToColumnMappings(SortedSet<String> infoFieldNames) {
+		
 		int order = STARTING_ORDER_INDEX_FOR_INFO_FIELDS;
 		ColumnMappingGroup infoFieldGroup = createColumnMappingGroup();
 		for (String fieldName: infoFieldNames) {
@@ -81,6 +84,9 @@ public class InfoFieldDynamicGroupGenerator {
 	
 
 	private SortedSet<String> getCommonInfoFields(List<Long> productTypeIds) {
+		if (productTypeIds.isEmpty()) {
+			return new TreeSet<String>();
+		}
 		return commonAttributeFinder.findAllCommonInfoFieldNames(productTypeIds);
 	}
 

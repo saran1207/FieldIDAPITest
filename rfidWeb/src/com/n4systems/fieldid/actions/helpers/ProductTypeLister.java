@@ -60,7 +60,6 @@ public class ProductTypeLister {
 		if (groupedProductTypes == null) {
 			groupedProductTypes = new HashMap<String, List<ListingPair>>();
 			
-			
 			for (String groupName : getGroups()) {
 				List<ListingPair> types = findProductTypesForGroup(groupName);
 				assignGroupToList(groupName, types);
@@ -68,7 +67,7 @@ public class ProductTypeLister {
 		}
 		
 		List<ListingPair> list = groupedProductTypes.get(group);
-		return list;
+		return list != null ? list : new ArrayList<ListingPair>();
 	}
 	
 	public List<ListingPair> getGroupedProductTypesById(Long groupId) {

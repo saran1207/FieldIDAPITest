@@ -6,7 +6,7 @@
 			<label id="lbl_${mapping.id}" for="chk_${mapping.id}"><@s.text name="${mapping.label}"/></label>
 		</div>
 	</#list>
-	<#if group.mappings.empty>
+	<#if !group.mappings?exists || group.mappings.empty>
 		<div>
 			<@s.text name="label.no_common_attributes"/>
 		</div>
