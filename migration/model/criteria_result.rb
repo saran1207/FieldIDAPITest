@@ -1,7 +1,7 @@
 require "user"
 require "state"
 require "criteria"
-require "inspection"
+require "abstract_inspection"
 require "tenant"
 
 class CriteriaResult < ActiveRecord::Base
@@ -11,6 +11,6 @@ class CriteriaResult < ActiveRecord::Base
   belongs_to  :modifiedBy,    :foreign_key => 'modifiedBy',       :class_name => 'User'
   belongs_to  :state,         :foreign_key => 'state_id',         :class_name => 'State'
   belongs_to  :criteria,      :foreign_key => 'criteria_id',      :class_name => 'Criteria'
-  belongs_to  :inspection,    :foreign_key => 'inspection_id',    :class_name => 'Inspection'
+  belongs_to  :inspection,    :foreign_key => 'inspection_id',    :class_name => 'AbstractInspection'
   
 end

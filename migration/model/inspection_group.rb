@@ -1,6 +1,6 @@
 require "tenant"
 require "user"
-require "inspection"
+require "inspectionsmaster"
 
 class InspectionGroup < ActiveRecord::Base
   set_table_name :inspectiongroups
