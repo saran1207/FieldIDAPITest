@@ -108,6 +108,21 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
+	public Inspection createInspectionNoStatusOverride(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+		try {
+			return createManager(transaction.getEntityManager()).createInspectionNoStatusOverride(inspection, nextInspectionDate, userId);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+	}
+	
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());

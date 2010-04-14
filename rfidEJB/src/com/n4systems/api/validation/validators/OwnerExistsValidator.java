@@ -34,7 +34,7 @@ public class OwnerExistsValidator implements FieldValidator {
 		try {
 			org = orgExistsLoader.load();
 		} catch (NonUniqueResultException e) {
-			
+			return ValidationResult.fail(NonUniqueOwnerValidatorFail, StringUtils.stringOrEmpty(organization), StringUtils.stringOrEmpty(customer), StringUtils.stringOrEmpty(division));
 		} catch (RuntimeException e) {
 			// ignore anything else
 		}

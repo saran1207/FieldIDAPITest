@@ -11,7 +11,10 @@ import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
+import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
+import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
@@ -69,6 +72,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signup.SignupReferralListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
+import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.tools.Pager;
@@ -179,6 +183,14 @@ public class LoaderFactory {
 		return new HasLinkedProductsLoader(filter);
 	}
 
+	public InspectionBookByNameLoader createInspectionBookByNameLoader() {
+		return new InspectionBookByNameLoader(filter);
+	}
+
+	public InspectionBookFindOrCreateLoader createInspectionBookFindOrCreateLoader() {
+		return new InspectionBookFindOrCreateLoader(filter);
+	}
+
 	public InspectionBookListLoader createInspectionBookListLoader() {
 		return new InspectionBookListLoader(filter);
 	}
@@ -201,6 +213,10 @@ public class LoaderFactory {
 
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
+	}
+
+	public NextInspectionDateByInspectionLoader createNextInspectionDateByInspectionLoader() {
+		return new NextInspectionDateByInspectionLoader(filter);
 	}
 
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
@@ -339,6 +355,10 @@ public class LoaderFactory {
 		return new UnreadMessageCountLoader(filter);
 	}
 
+	public UserByFullNameLoader createUserByFullNameLoader() {
+		return new UserByFullNameLoader(filter);
+	}
+
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
@@ -354,11 +374,11 @@ public class LoaderFactory {
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
-	
+
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-	
+
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

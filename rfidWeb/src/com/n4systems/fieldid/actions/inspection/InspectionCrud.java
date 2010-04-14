@@ -424,6 +424,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				throw new ValidationException("not validated.");
 			}
 
+			// TODO: change this to the InspectionBookFindOrCreateLoader
 			InspectionBookByNameLoader bookLoader = new InspectionBookByNameLoader(getSecurityFilter());
 			bookLoader.setName(newInspectionBookTitle);
 			bookLoader.setOwner(getOwner());

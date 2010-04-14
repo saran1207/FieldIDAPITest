@@ -129,7 +129,7 @@ public abstract class AbstractImportAction extends AbstractAction {
 	}
 	
 	private Importer createAndValidateImporter() throws IOException, FileNotFoundException, ParseException, MarshalingException {
-		MapReader mapReader = new ExcelMapReader(new FileInputStream(importDoc));
+		MapReader mapReader = new ExcelMapReader(new FileInputStream(importDoc), getSessionUser().getTimeZone());
 		
 		Importer importer = createImporter(mapReader);
 		

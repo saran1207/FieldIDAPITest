@@ -1,7 +1,9 @@
 package com.n4systems.exporting;
 
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
+import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -21,4 +23,9 @@ public class ExporterFactory {
 	public ProductExporter createProductExporter(ListLoader<Product> productLoader) {
 		return new ProductExporter(productLoader);
 	}
+	
+	public InspectionExporter createInspectionExporter(ListLoader<Inspection> inspectionLoader, NextInspectionDateByInspectionLoader nextDateLoader) {
+		return new InspectionExporter(inspectionLoader, nextDateLoader);
+	}
+	
 }

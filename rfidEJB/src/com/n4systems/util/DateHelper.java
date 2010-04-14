@@ -479,4 +479,11 @@ public class DateHelper {
 	public static int getThisMonth() {
 		return getTodayCalendar().get(Calendar.MONTH);
 	}
+	
+	public static Date delocalizeDate(Date date, TimeZone fromZone) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MILLISECOND, fromZone.getOffset(date.getTime()) * -1);
+		return cal.getTime();
+	}
 }

@@ -183,6 +183,7 @@
 		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
 		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
 		<action name="downloadExampleProductExport" method="downloadExample" class="com.n4systems.fieldid.actions.product.ProductImportAction" />
+		<action name="downloadExampleInspectionExport" method="downloadExample" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction" />
 		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
 		
 		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >

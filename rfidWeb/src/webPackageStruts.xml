@@ -1918,5 +1918,20 @@
 			<result name="error" type="freemarker">/templates/html/productImport/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productImport/import.ftl</result>
 		</action>
+		
+		<action name="inspectionImportExport" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
+			<result name="success" type="freemarker">/templates/html/inspectionImport/importExport.ftl</result>
+		</action>
+		
+		<action name="showImportInspections" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
+			<result name="success" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+		</action>
+
+		<action name="importInspections" method="import" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
+			<result name="input" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+			<result name="missing" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+			<result name="error" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+		</action>
 	</package>
 </struts>

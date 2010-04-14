@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class CombineExcelMapReaderWriterTest {
 		writer.write(inputMap);
 		writer.close();
 		
-		ExcelMapReader mapReader = new ExcelMapReader(new ByteArrayInputStream(out.toByteArray()));
+		ExcelMapReader mapReader = new ExcelMapReader(new ByteArrayInputStream(out.toByteArray()), TimeZone.getTimeZone("UTC"));
 		
 		Map<String, Object> outputMap = mapReader.readMap();
 		

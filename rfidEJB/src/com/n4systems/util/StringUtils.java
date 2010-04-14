@@ -80,4 +80,8 @@ public class StringUtils {
 	public static String pathToName(String str) {
 		return str.replace('.', '_'); 
 	}
+	
+	public static String stripWhitespace(String str) {
+		return str.replaceAll("\\s", "");
+	}
 }

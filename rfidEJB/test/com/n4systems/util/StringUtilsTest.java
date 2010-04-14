@@ -63,4 +63,9 @@ public class StringUtilsTest {
 		assertEquals("_hello_", StringUtils.pathToName(".hello."));
 		assertEquals("hello_mark_how_are_you", StringUtils.pathToName("hello.mark.how.are.you"));
 	}
+	
+	@Test
+	public void test_strip_whitespace() {
+		assertEquals("helloworld", StringUtils.stripWhitespace(" hello wor\tld"));
+	}
 }

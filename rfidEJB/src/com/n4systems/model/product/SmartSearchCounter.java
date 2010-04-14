@@ -1,31 +1,29 @@
 package com.n4systems.model.product;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Product;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class SmartSearchLoader extends ListLoader<Product> {
-
+public class SmartSearchCounter extends SecurityFilteredLoader<Long> {
 	private String searchText;
 	private boolean useSerialNumber = true;
 	private boolean useRfidNumber = true;
 	private boolean useRefNumber = true;
 	
-	public SmartSearchLoader(SecurityFilter filter) {
+	public SmartSearchCounter(SecurityFilter filter) {
 		super(filter);
 	}
 
-	protected QueryBuilder<Product> createQuery(SecurityFilter filter) {
-		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, filter);
+	@Override
+	protected Long load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, filter);
 		builder.addWhere(new SmartSearchWhereClause(searchText, useSerialNumber, useRfidNumber, useRefNumber));
-		builder.addOrder("created");
 		
-		return builder;
+		Long count = builder.getCount(em);
+		return count;
 	}
 
 	public void setUseSerialNumber(boolean useSerialNumber) {
@@ -40,13 +38,7 @@ public class SmartSearchLoader extends ListLoader<Product> {
 		this.useRefNumber = useRefNumber;
 	}
 
-	@Override
-	public List<Product> load(EntityManager em, SecurityFilter filter) {
-		List<Product> products = createQuery(filter).getResultList(em);
-		return products;
-	}
-
-	public SmartSearchLoader setSearchText(String searchText) {
+	public SmartSearchCounter setSearchText(String searchText) {
 		this.searchText = searchText;
 		return this;
 	}

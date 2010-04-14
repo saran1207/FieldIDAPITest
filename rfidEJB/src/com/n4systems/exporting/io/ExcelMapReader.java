@@ -3,7 +3,9 @@ package com.n4systems.exporting.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import jxl.Cell;
 import jxl.DateCell;
@@ -11,15 +13,18 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.MapUtils;
 
 public class ExcelMapReader implements MapReader {
+	private final TimeZone timeZone;
 	private Workbook workbook;
 	private Sheet sheet;
 	private String[] titles;
 	private int currentRow = -1;
 	
-	public ExcelMapReader(InputStream in) throws IOException {
+	public ExcelMapReader(InputStream in, TimeZone timeZone) throws IOException {
+		this.timeZone = timeZone;
 		try {
 			workbook = Workbook.getWorkbook(in);
 		} catch (BiffException e) {
@@ -90,7 +95,13 @@ public class ExcelMapReader implements MapReader {
 		
 		for (int i = 0; i < cells.length; i++) {
 			if (cells[i] instanceof DateCell) {
-				values[i] = ((DateCell)cells[i]).getDate();
+				/*
+				 * Unfortunately, excel and jxl don't understand timezones.  When a date comes back
+				 * using .getDate(), it will come in exactly as the datetime from Excel cell.  This means
+				 * that the date is a localized time when it should be UTC.  We need to convert it back.
+				 */
+				Date localizedDate = ((DateCell)cells[i]).getDate();
+				values[i] = DateHelper.delocalizeDate(localizedDate, timeZone);
 			} else {
 				/*
 				 * For now, all other field types will come back as Strings.  At some point 

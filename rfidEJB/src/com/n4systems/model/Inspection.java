@@ -25,6 +25,7 @@ import org.hibernate.annotations.IndexColumn;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
@@ -40,7 +41,7 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspectionsmaster")
 @PrimaryKeyJoinColumn(name="inspection_id")
-public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection> {
+public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection>, Exportable {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap", "subInspections" };
 	
@@ -315,6 +316,13 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return enhanced;
 	}
 
-	
+	// Inspection are never exported
+	@Override
+	public String getGlobalId() {
+		return null;
+	}
+
+	@Override
+	public void setGlobalId(String globalId) {}
 	
 }

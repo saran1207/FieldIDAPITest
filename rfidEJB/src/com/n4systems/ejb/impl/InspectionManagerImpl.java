@@ -319,6 +319,10 @@ public class InspectionManagerImpl implements InspectionManager {
 		return savedInspections;
 	}
 
+	public Inspection createInspectionNoStatusOverride(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+		return createInspection(inspection, nextInspectionDate, userId, (FileDataContainer) null, (List<FileAttachment>) null, false);
+	}
+	
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException,
 			UnknownSubProduct {
 		return createInspection(inspection, nextInspectionDate, userId, (FileDataContainer) null, (List<FileAttachment>) null);
@@ -332,6 +336,10 @@ public class InspectionManagerImpl implements InspectionManager {
 	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
 			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 
+		return createInspection(inspection, nextInspectionDate, userId, fileData, uploadedFiles, true);
+	}
+
+	private Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean overrideStatus) throws UnknownSubProduct, ProcessingProofTestException {
 		// if the inspection has no group, lets create a new one now
 		if (inspection.getGroup() == null) {
 			inspection.setGroup(new InspectionGroup());
@@ -340,8 +348,10 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 		
 		// set the status from the state sets
-		inspection.setStatus(calculateInspectionResult(inspection));
-
+		if (overrideStatus) {
+			inspection.setStatus(calculateInspectionResult(inspection));
+		}
+		
 		// set proof test info on the inspection from a file data container
 		setProofTestData(inspection, fileData);
 

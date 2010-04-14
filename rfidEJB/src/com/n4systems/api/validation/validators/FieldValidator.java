@@ -23,7 +23,15 @@ public interface FieldValidator {
 	public static final String BlankInputOptionValidatorFail = "The input field '%s' must not be blank.";
 	public static final String MissingRequiredProductAttributeValidatorFail = "The attribute '%s' is required.";
 	public static final String InvalidDateValidatorFail = "The date '%s' in field '%s' is not valid.  Please ensure the date is in the correct format.";
-	public static final String OwnerResolutionValidatorFail = "Could not resolve an owner for organization '%s', customer '%s' and division '%s'.";
+	public static final String OwnerResolutionValidatorFail = "Could not find an owner for organization '%s', customer '%s' and division '%s'.";
+	public static final String NonUniqueOwnerValidatorFail = "Found multiple owners for organization '%s', customer '%s' and division '%s'.";
+	public static final String InspectionStatusValidatorFail = "'%s' is not a valid result.  Results may be 'Pass', 'Fail', or 'N/A'";
+	public static final String YNValidatorFail = "'%s' is not allowed for the field '%s'.  Valid values are 'Y' or 'N'.";
+	public static final String NoUserFoundValidationFail = "Could not find a user with the name '%s' for the field '%s'.";
+	public static final String MultipleUserFoundValidationFail = "Multiple users have been found matching the name '%s'.  The matching users are: '%s'.";
+	public static final String NoProductFoundValidationFail = "Could not find an asset matching the identifier '%s' for the field '%s'.";
+	public static final String MultipleProductFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
+	public static final String AssociatedInspectionTypeValidationFail = "The inspection type '%s' is not allowed for the product type '%s'.";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext);
 }
