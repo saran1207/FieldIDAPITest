@@ -15,8 +15,8 @@ class RemoveSecondaryOrgSafetyNetworkConnections < ActiveRecord::Migration
   
   
   def self.remove_connection(connection) 
-    TypedOrgConnection.delete_all(:conditions => {:orgconnection_id => connection.id})
-    
+    TypedOrgConnection.delete_all(:orgconnection_id => connection.id)
+    connection.delete
   end
   
   
