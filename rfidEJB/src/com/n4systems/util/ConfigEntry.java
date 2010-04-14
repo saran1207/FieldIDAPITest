@@ -58,7 +58,7 @@ public enum ConfigEntry {
 	ACTIVE_SESSION_TIME_OUT						(	"30"				),
 	FIELDID_ADMINISTRATOR_EMAIL					(	"team@fieldid.com"	),
 	SYSTEM_USER_USERNAME						(	"n4systems"				),
-	SYSTEM_USER_PASSWORD						(	"2a3bb4bc2f0cf8f2c09cd8aef2824a901d186fe7"	),
+	SYSTEM_USER_PASSWORD						(	"7c4fd0a53d8aa0d0f15f716cc6324e95223d9902"	),
 	SYSTEM_USER_ADDRESS							(	"admin@fieldid.com"						),
 	UNBRANDED_SUBDOMAIN							(	"www"										),
 	GLOBAL_APPLICATION_ROOT						(	"/var/fieldid"			),

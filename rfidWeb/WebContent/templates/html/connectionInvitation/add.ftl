@@ -7,7 +7,6 @@ ${action.setPageType('safety_network_connections', 'add')!}
 		var remoteTenantUrl = '<@s.url action="remoteOrgList" namespace="/ajax" />';
 	</@n4.includeScript>
 </head>
-<#include "/templates/html/common/_orgPicker.ftl"/>
 <@s.url id="cancelUrl" action="connections"/>
 
 <div id="chooseTenant" >	
@@ -51,7 +50,10 @@ ${action.setPageType('safety_network_connections', 'add')!}
 			</div>
 			<div class="infoSet infoBlock">
 				<label for="localOrg" class="label"><@s.text name="label.to_my_org"/></label>
-				<@n4.orgPicker name="localOrg" required="true" orgType="internal" id="localOrgName"/>
+				<span class="fieldHolder">
+					${primaryOrg.name}
+					<@s.hidden name="localOrgName" id="localOrgName_orgName" value="${primaryOrg.name}"/>
+				</span>
 			</div>
 			
 		</div>

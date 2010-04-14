@@ -14,9 +14,9 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.messages.MessageCommandSaver;
 import com.n4systems.model.messages.MessageSaver;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.PrimaryOrgListableLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.PersistenceManager;
@@ -50,8 +50,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 	private List<ListingPair> tenants;
 	private List<ListingPair> remoteOrgs;
 	private Tenant remoteTenant;
-	private InternalOrg localOrg;
-	private InternalOrg remoteOrg;
+	private PrimaryOrg remoteOrg;
 	private ConnectionType connectionType = ConnectionType.VENDOR;
 	
 	private String personalizedBody;
@@ -67,7 +66,6 @@ public class ConnectionInvitationAction extends AbstractAction {
 	
 	@SkipValidation
 	public String doAdd() {
-		localOrg = getInternalOrg();
 		
 		
 		personalizedBody = getDefautMessageBody();
@@ -116,7 +114,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 				getDefaultNotifier(), 
 				getDefaultMessageSubject(), new AdminUserListLoader(new TenantOnlySecurityFilter(remoteOrg.getTenant())), new ActionURLBuilder(getBaseURI(), getConfigContext()));
 		
-		connectionCreator.withCommand(command).from(localOrg).to(remoteOrg).personalizeBody(personalizedBody);
+		connectionCreator.withCommand(command).from(getPrimaryOrg()).to(remoteOrg).personalizeBody(personalizedBody);
 		
 		connectionCreator.create(transaction);
 	}
@@ -135,10 +133,10 @@ public class ConnectionInvitationAction extends AbstractAction {
 		switch (connectionType) {
 			case CUSTOMER:
 				command.setCustomerOrgId(remoteOrg.getId());
-				command.setVendorOrgId(localOrg.getId());
+				command.setVendorOrgId(getPrimaryOrg().getId());
 				break;
 			case VENDOR:
-				command.setCustomerOrgId(localOrg.getId());
+				command.setCustomerOrgId(getPrimaryOrg().getId());
 				command.setVendorOrgId(remoteOrg.getId());
 				break;
 		}
@@ -156,21 +154,15 @@ public class ConnectionInvitationAction extends AbstractAction {
 		this.connectionType = ConnectionType.valueOf(connectionType);
 	}
 	
-	public InternalOrg getLocalOrg() {
-		return localOrg;
+	public PrimaryOrg getLocalOrg() {
+		return getPrimaryOrg();
 	}
 	
 	public Long getLocalOrgId() {
-		return (localOrg != null) ? localOrg.getId() : null;
+		return getPrimaryOrg().getId();
 	}
 
-	public void setLocalOrgId(Long id) {
-		if (id == null) {
-			localOrg = null;
-		} else if (localOrg == null || !localOrg.getId().equals(id)) {
-			localOrg = (InternalOrg)getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(id).load();
-		}
-	}
+
 	
 	public Long getRemoteOrgId() {
 		return (remoteOrg != null) ? remoteOrg.getId() : null;
@@ -180,7 +172,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 		if (id == null) {
 			remoteOrg = null;
 		} else if (remoteOrg == null || !remoteOrg.getId().equals(id)) {
-			remoteOrg = (InternalOrg)getNonSecureLoaderFactory().createNonSecureIdLoader(BaseOrg.class).setId(id).load();
+			remoteOrg = (PrimaryOrg)getNonSecureLoaderFactory().createNonSecureIdLoader(PrimaryOrg.class).setId(id).load();
 		}
 	}
 
@@ -197,7 +189,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 	}
 	
 	protected InternalOrgListableLoader createRemoteOrgLoader() {
-		return new InternalOrgListableLoader(new TenantOnlySecurityFilter(getRemoteTenantId()));
+		return new PrimaryOrgListableLoader(new TenantOnlySecurityFilter(getRemoteTenantId()));
 	}
 	
 	public List<ListingPair> getTenants() {

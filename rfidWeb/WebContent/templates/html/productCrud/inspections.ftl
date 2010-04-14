@@ -19,6 +19,9 @@ ${action.setPageType('product', 'inspections')!}
 					<#include "../inspectionCrud/_userName.ftl"/>
 				</td>
 				<td>
+					<#if useContext>
+						<#assign additionsToQueryString="&useContext=true"/>
+					</#if>
 					<#include "../inspectionCrud/_viewInspectionLink.ftl"/>
 				</td>
 			</tr>

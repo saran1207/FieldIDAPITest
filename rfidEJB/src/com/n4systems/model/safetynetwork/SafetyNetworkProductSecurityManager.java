@@ -76,5 +76,14 @@ public class SafetyNetworkProductSecurityManager {
 		
 		return securedProducts;
 	}
+
+	public boolean listContainsAnAssetPubliclyPublished(List<Product> products) {
+		for (Product product: products) {
+			if (product.getOwner().isInternal()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

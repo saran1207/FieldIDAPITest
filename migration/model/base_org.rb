@@ -36,4 +36,14 @@ class BaseOrg < ActiveRecord::Base
   def displayString
     "#{name} (#{id.to_s})"
   end
+  
+  def primary?
+    secondary_id.nil? && customer_id.nil?
+  end
+  
+  def secondary?
+    !secondary_id.nil? && customer_id.nil?
+  end
+  
+  
 end

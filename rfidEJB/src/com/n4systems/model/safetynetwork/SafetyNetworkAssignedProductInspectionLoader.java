@@ -26,25 +26,21 @@ public class SafetyNetworkAssignedProductInspectionLoader extends SafetyNetworkI
 	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection) {
 		SafetyNetworkProductSecurityManager securityManager = new SafetyNetworkProductSecurityManager(filter.getOwner());
 		
-		Product inspectionProduct = inspection.getProduct();
+		List<Product> linkedProducts = getLinkedProducts(em, filter, inspection.getProduct());
 		
-		// if we'er lucky enough to get an inspection for a product which is directly assigned we can stop here
-		if (securityManager.isAssigned(inspectionProduct)) {
-			return true;
-		}
+		boolean hasAssignedProduct = securityManager.listContainsAnAssignedProduct(linkedProducts);
+		boolean productIsPubliclyAvailable = securityManager.listContainsAnAssetPubliclyPublished(linkedProducts);
 		
-		// now we need to collect up all the products with the same network id as the inspections product.
-		// then we can see if at least one of them was assigned to me
-		productsByNetworkIdLoader.setNetworkId(inspectionProduct.getNetworkId());
-		productsByNetworkIdLoader.setExcludeProductId(inspectionProduct.getId());
+		return hasAssignedProduct || productIsPubliclyAvailable;
+	}
+
+	private List<Product> getLinkedProducts(EntityManager em, SecurityFilter filter, Product product) {
+		productsByNetworkIdLoader.setNetworkId(product.getNetworkId());
 		
 		// there's no need for these to be enhanced since they're just used for a security check
 		productsByNetworkIdLoader.bypassSecurityEnhancement();
 		
-		List<Product> linkedProducts = productsByNetworkIdLoader.load(em, filter);
-		boolean hasAssignedProduct = securityManager.listContainsAnAssignedProduct(linkedProducts);
-		
-		return hasAssignedProduct;
+		return productsByNetworkIdLoader.load(em, filter);
 	}
 	
 }

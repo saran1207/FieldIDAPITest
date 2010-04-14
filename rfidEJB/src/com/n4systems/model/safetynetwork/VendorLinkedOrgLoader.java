@@ -8,4 +8,6 @@ public class VendorLinkedOrgLoader extends LinkedOrgLoader {
 		super(filter, OrgConnectionType.VENDOR);
 	}
 
+	
+
 }

@@ -42,8 +42,8 @@ public class ListingPairsTest {
 	
 	
 
-	@Test(expected=NullPointerException.class)
-	public void should_throw_null_pointer_exception_if_null_is_handed_in() {
-		ListingPairs.convertToIdList(null);
+	@Test()
+	public void should_return_an_empty_list_when_null_is_given() {
+		assertThat(ListingPairs.convertToIdList(null).size(), equalTo(0));
 	}
 }

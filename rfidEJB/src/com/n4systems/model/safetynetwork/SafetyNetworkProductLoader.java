@@ -37,9 +37,9 @@ public class SafetyNetworkProductLoader extends SecurityFilteredLoader<Product> 
 		// security check.
 		Product product = PostFetcher.postFetchFields(productLoader.load(em, new OpenSecurityFilter()), postLoadFields);
 		
-		// First we need to ensure that the InternalOrg owner for this product is one of my vendors.
+		// First we need to ensure that the PrimaryOrg owner for this product is one of my vendors.
 		// if, it is not, this loader will throw a SecurityException
-		InternalOrg vendor = vendorOrgLoader.setLinkedOrgId(product.getOwner().getInternalOrg().getId()).load(em, filter);
+		InternalOrg vendor = vendorOrgLoader.setLinkedOrg(product.getOwner().getPrimaryOrg()).load(em, filter);
 		
 		// this check is extraneous but is here as a fail safe
 		if (vendor == null) {
