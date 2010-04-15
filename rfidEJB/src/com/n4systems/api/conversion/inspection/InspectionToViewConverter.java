@@ -20,14 +20,10 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 	public InspectionView toView(Inspection model) throws ConversionException {
 		InspectionView view = new InspectionView();
 		
-		view.setComments(model.getComments());
-		view.setInspectionDate(model.getDate());
-		view.setLocation(model.getLocation());
-		view.setPrintable(model.isPrintable());
-		view.setInspector(model.getInspector().getFullName());
-		view.setIdentifier(model.getProduct().getSerialNumber());
-		view.setStatus(model.getStatus().getDisplayName());
-		
+		convertDirectFields(model, view);
+		converterInspector(model, view);
+		convertProductIdentifier(model, view);
+		convertInspectionStatus(model, view);
 		convertOwnerFields(model.getOwner(), view);
 		convertBook(model, view);
 		convertProductStatus(model, view);
@@ -35,25 +31,44 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 		
 		return view;
 	}
+
+	protected void convertDirectFields(Inspection model, InspectionView view) {
+		view.setComments(model.getComments());
+		view.setInspectionDate(model.getDate());
+		view.setLocation(model.getLocation());
+		view.setPrintable(model.isPrintable());
+	}
+
+	protected void convertInspectionStatus(Inspection model, InspectionView view) {
+		view.setStatus(model.getStatus().getDisplayName());
+	}
+
+	protected void convertProductIdentifier(Inspection model, InspectionView view) {
+		view.setIdentifier(model.getProduct().getSerialNumber());
+	}
+
+	protected void converterInspector(Inspection model, InspectionView view) {
+		view.setInspector(model.getInspector().getFullName());
+	}
 	
-	private void convertNextDate(Inspection model, InspectionView view) {
+	protected void convertNextDate(Inspection model, InspectionView view) {
 		Date nextDate = nextDateLoader.setInspection(model).load();
 		view.setNextInspectionDate(nextDate);
 	}
 
-	private void convertBook(Inspection model, InspectionView view) {
+	protected void convertBook(Inspection model, InspectionView view) {
 		if (model.getBook() != null) {
 			view.setInspectionBook(model.getBook().getName());
 		}
 	}
 
-	private void convertProductStatus(Inspection model, InspectionView view) {
+	protected void convertProductStatus(Inspection model, InspectionView view) {
 		if (model.getProductStatus() != null) {
 			view.setProductStatus(model.getProductStatus().getName());
 		}
 	}
 
-	private void convertOwnerFields(BaseOrg owner, InspectionView view) {
+	protected void convertOwnerFields(BaseOrg owner, InspectionView view) {
 		view.setOrganization(owner.getInternalOrg().getName());
 		
 		if (owner.isExternal()) {

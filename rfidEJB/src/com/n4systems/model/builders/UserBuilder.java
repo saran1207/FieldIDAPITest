@@ -9,6 +9,7 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 
 	private final BaseOrg owner;
 	private final String firstName;
+	private final String lastName;
 	private final String userId;
 	private final boolean administratorAccess;
 	private final String emailAddress;
@@ -21,11 +22,11 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 	}
 	
 	public static UserBuilder anEmployee() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some name", "user_id", false, "user@example.com", false, null, false);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false);
 	}
 	
 	public static UserBuilder aSystemUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some name", "user_id", false, "user@example.com", true, null, false);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", true, null, false);
 	}
 	
 	public static UserBuilder anAdminUser() {
@@ -34,13 +35,14 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 	
 	
 	public static UserBuilder aCustomerUser() {
-		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some name", "user_id", false, "user@example.com", false, null, false);
+		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false);
 	}
 	
-	private UserBuilder(BaseOrg owner, String firstName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess, String password, boolean resetPasswordKey) {
+	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess, String password, boolean resetPasswordKey) {
 		super();
 		this.owner = owner;
 		this.firstName = firstName;
+		this.lastName = lastName;
 		this.userId = userId;
 		this.administratorAccess = administratorAccess;
 		this.emailAddress = emailAddress;
@@ -50,38 +52,42 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 	}
 	
 	public UserBuilder withOwner(BaseOrg baseOrg) {
-		return new UserBuilder(baseOrg, firstName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(baseOrg, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
 	}
 	
 	public UserBuilder withFirstName(String firstName) {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+	}
+	
+	public UserBuilder withLastName(String lastName) {
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
 	}
 	
 	public UserBuilder withUserId(String userId) {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
 	}
 	
 	public UserBuilder withAdministratorAccess() {
-		return new UserBuilder(owner, firstName, userId, true, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, true, emailAddress, false, password, resetPasswordKey);
 	}
 	
 	public UserBuilder withEmailAddress(String emailAddress) {
-		return  new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
 	}
 	
 	public UserBuilder withNoPassword() {
-		return  new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, null, resetPasswordKey);
+		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, null, resetPasswordKey);
 	}
 	public UserBuilder withPassword(String password) {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
 	}
 
 	public UserBuilder withResetPasswordKey() {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, password, true);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, true);
 	}
 
 	public UserBuilder withOutResetPasswordKey() {
-		return new UserBuilder(owner, firstName, userId, administratorAccess, emailAddress, false, password, false);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false);
 	}
 	
 	@Override
@@ -89,6 +95,7 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 		UserBean user = new UserBean();
 		user.setUniqueID(uniqueId);
 		user.setFirstName(firstName);
+		user.setLastName(lastName);
 		user.setUserID(userId);
 		user.setTenant(owner.getTenant());
 		user.setOwner(owner);

@@ -208,4 +208,17 @@ public class DateHelperTest {
         assertEquals("Incrementing Month", "27/05/2011 15:50:32.234", dateIncremented);
 
 	}
+	
+	@Test
+	public void delocalize_date() throws ParseException {
+		TimeZone tz = TimeZone.getTimeZone("America/Toronto");
+		String dateStr = "01/02/2010 00:00";
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		
+		Date date = sdf.parse(dateStr);
+		sdf.setTimeZone(tz);
+		
+		assertEquals(dateStr, sdf.format(DateHelper.delocalizeDate(date, tz)));
+	}
 }

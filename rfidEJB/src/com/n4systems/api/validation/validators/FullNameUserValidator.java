@@ -34,7 +34,7 @@ public class FullNameUserValidator implements FieldValidator {
 		}
 	}
 
-	private String formatUserNameList(List<UserBean> users) {
+	protected String formatUserNameList(List<UserBean> users) {
 		StringBuilder userNameList = new StringBuilder();
 		
 		Iterator<UserBean> userIterator = users.iterator();

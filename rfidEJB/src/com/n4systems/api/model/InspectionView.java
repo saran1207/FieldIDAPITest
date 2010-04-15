@@ -139,7 +139,7 @@ public class InspectionView extends ExternalModelView {
 		} else if (!(nextInspectionDate instanceof Date)) {
 			throw new ClassCastException("nextInspectionDate should have been instance of java.lang.Date but was " + nextInspectionDate.getClass().getName());
 		}
-		return (Date)inspectionDate;
+		return (Date)nextInspectionDate;
 	}
 	
 	public void setNextInspectionDate(Object nextInspectionDate) {

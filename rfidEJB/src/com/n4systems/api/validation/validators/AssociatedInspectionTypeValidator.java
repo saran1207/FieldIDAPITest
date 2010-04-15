@@ -16,6 +16,10 @@ public class AssociatedInspectionTypeValidator extends InspectionViewValidator {
 
 	@Override
 	protected ValidationResult validate(Object fieldValue, InspectionView view, String fieldName, SecurityFilter filter, InspectionType inspectionType) {
+		if (fieldValue == null) {
+			return ValidationResult.pass();
+		}
+		
 		String identifier = (String)fieldValue;
 		
 		SmartSearchLoader productLoader = createSmartSearchLoader(filter).setSearchText(identifier);
