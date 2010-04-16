@@ -7,6 +7,7 @@ import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.easymock.classextension.EasyMock;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import rfid.ejb.entity.UserBean;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
+import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.NullNotifier;
 import com.n4systems.notifiers.TestSingleNotifier;
@@ -36,6 +38,16 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 	private UserBean userInTheVendorTenant;
 	private UserBean userInTheCustomerTenant;
 	
+	
+	@Before
+	public void initSafetyNetworkCache() {
+		SafetyNetworkSecurityCache.initialize();
+	}
+	
+	@After
+	public void cleanUpSafetyNetworkCache() {
+		SafetyNetworkSecurityCache.initialize();
+	}
 	
 	@Before
 	public void setup() {
