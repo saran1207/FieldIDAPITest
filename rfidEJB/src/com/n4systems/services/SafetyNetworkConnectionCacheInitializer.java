@@ -11,12 +11,11 @@ public class SafetyNetworkConnectionCacheInitializer implements Initializer {
 	
 	public void initialize() {
 		logger.info("Pre-Loading SafetyNetworkSecurityCache ... ");
-		SafetyNetworkSecurityCache cache = SafetyNetworkSecurityCache.getInstance();
-
+		SafetyNetworkSecurityCache.initialize();
 		AllEntityListLoader<OrgConnection> connectionLoader = new AllEntityListLoader<OrgConnection>(OrgConnection.class);
 		
 		for (OrgConnection conn: connectionLoader.load()) {
-			cache.connect(conn);
+			SafetyNetworkSecurityCache.recordConnection(conn);
 		}
 		logger.info("Complete");
 	}

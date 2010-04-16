@@ -33,10 +33,8 @@ public class LinkTenantHandlerImp implements LinkTenantHandler {
 	
 	
 	protected OrgConnection createOrgConnection() {
-		OrgConnection conn = new OrgConnection();
+		OrgConnection conn = new OrgConnection(referrerOrg, getPrimaryOrg());
 		conn.setModifiedBy(getAdminUser());
-		conn.setVendor(referrerOrg);
-		conn.setCustomer(getPrimaryOrg());
 		return conn;
 	}
 

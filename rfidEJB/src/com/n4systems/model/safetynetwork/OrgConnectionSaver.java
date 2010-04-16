@@ -28,24 +28,24 @@ public class OrgConnectionSaver extends Saver<OrgConnection> {
 	}
 	
 	@Override
-	protected void save(EntityManager em, OrgConnection conn) {
-		if (isUsingHouseAccount(conn)) {
+	protected void save(EntityManager em, OrgConnection connection) {
+		if (isUsingHouseAccount(connection)) {
 			// you can never link to a house account we'll fail silently is this conn has one in it
 			return;
 		}
 		
-		super.save(em, conn);
+		super.save(em, connection);
 
-		createTypedConnections(em, conn);
+		createTypedConnections(em, connection);
 		
 		// on save, we also need to create our linked customer
-		orgSaver.save(em, createCustomerOrgFromConnection(conn));
+		orgSaver.save(em, createCustomerOrgFromConnection(connection));
 		
 		// now update the connection cache
-		SafetyNetworkSecurityCache.getInstance().connect(conn);
+		SafetyNetworkSecurityCache.recordConnection(connection);
 		
 		// and reset the Vendor cache for the customer side
-		vendorCache.expire(conn.getCustomer());
+		vendorCache.expire(connection.getCustomer());
 	}
 
 	private void createTypedConnections(EntityManager em, OrgConnection conn) {

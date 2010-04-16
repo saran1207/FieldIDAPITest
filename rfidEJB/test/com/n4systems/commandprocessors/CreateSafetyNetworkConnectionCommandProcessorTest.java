@@ -13,7 +13,6 @@ import org.junit.Test;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.notifiers.Notifier;
@@ -53,7 +52,7 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		CreateSafetyNetworkConnectionMessageCommand command = createCommand(customer, vendor, userInTheVendorTenant);
 		
 		
-		NonSecureIdLoader<BaseOrg> mockLoader = createSuccessfulIdLoader();
+		NonSecureIdLoader<PrimaryOrg> mockLoader = createSuccessfulIdLoader();
 		
 		OrgConnectionExistsLoader mockConnectionExistsLoader = createMockConnectionExistsLoaderWithResponse(command, false);
 		
@@ -79,7 +78,7 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		
 		ConfigContext.setCurrentContext(getConfigContext());
 		
-		NonSecureIdLoader<BaseOrg> mockLoader = createMock(NonSecureIdLoader.class);
+		NonSecureIdLoader<PrimaryOrg> mockLoader = createMock(NonSecureIdLoader.class);
 		replay(mockLoader);
 		
 		OrgConnectionExistsLoader mockConnectionExistsLoader = createMockConnectionExistsLoaderWithResponse(command, true);
@@ -149,7 +148,7 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 	public void should_call_notifier_after_successful_creation_of_the_connection() throws Exception {
 		CreateSafetyNetworkConnectionMessageCommand command = createCommand(customer, vendor, userInTheVendorTenant);
 		
-		NonSecureIdLoader<BaseOrg> mockLoader = createSuccessfulIdLoader();
+		NonSecureIdLoader<PrimaryOrg> mockLoader = createSuccessfulIdLoader();
 		
 		OrgConnectionExistsLoader mockConnectionExistsLoader = createMockConnectionExistsLoaderWithResponse(command, false);
 		
@@ -193,17 +192,17 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 	
 	
 
-	private TestDoubleNonSecuredLoaderFactory overrideNonSecuredLoaderFactory(NonSecureIdLoader<BaseOrg> mockLoader, OrgConnectionExistsLoader mockConnectionExistsLoader) {
+	private TestDoubleNonSecuredLoaderFactory overrideNonSecuredLoaderFactory(NonSecureIdLoader<PrimaryOrg> mockLoader, OrgConnectionExistsLoader mockConnectionExistsLoader) {
 		TestDoubleNonSecuredLoaderFactory nonSecureLoaderFactory = new TestDoubleNonSecuredLoaderFactory();
-		nonSecureLoaderFactory.add(BaseOrg.class, mockLoader);
+		nonSecureLoaderFactory.add(PrimaryOrg.class, mockLoader);
 		nonSecureLoaderFactory.setOrgConnectionExistsLoader(mockConnectionExistsLoader);
 		return nonSecureLoaderFactory;
 	}
 
 
 	@SuppressWarnings("unchecked")
-	private NonSecureIdLoader<BaseOrg> createSuccessfulIdLoader() {
-		NonSecureIdLoader<BaseOrg> mockLoader = createMock(NonSecureIdLoader.class);
+	private NonSecureIdLoader<PrimaryOrg> createSuccessfulIdLoader() {
+		NonSecureIdLoader<PrimaryOrg> mockLoader = createMock(NonSecureIdLoader.class);
 		expect(mockLoader.setId(customer.getId())).andReturn(mockLoader);
 		expect(mockLoader.load((Transaction)anyObject())).andReturn(customer);
 		expect(mockLoader.setId(vendor.getId())).andReturn(mockLoader);

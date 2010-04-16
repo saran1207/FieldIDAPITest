@@ -10,7 +10,7 @@ import javax.persistence.UniqueConstraint;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.tenant.HasSetupDataTenant;
@@ -36,28 +36,29 @@ public class OrgConnection extends AbstractEntity implements UnsecuredEntity, Ha
 
 	public OrgConnection() {}
 	
-	public OrgConnection(InternalOrg vendor, InternalOrg customer) {
+	public OrgConnection(PrimaryOrg vendor, PrimaryOrg customer) {
+		guard(vendor, customer);
 		this.vendor = vendor;
 		this.customer = customer;
 	}
 	
-	public InternalOrg getVendor() {
-		return (InternalOrg)vendor;
+	private void guard(PrimaryOrg vendor, PrimaryOrg customer) {
+		if (vendor.equals(customer)) {
+			throw new IllegalArgumentException("The connecting orgs are the same.  they must be 2 different orgs. from 2 different tenants.");
+		}
 	}
 
-	public void setVendor(InternalOrg vendor) {
-		this.vendor = vendor;
+	public PrimaryOrg getVendor() {
+		return (PrimaryOrg)vendor;
 	}
 
-	public InternalOrg getCustomer() {
-		return (InternalOrg)customer;
+
+	public PrimaryOrg getCustomer() {
+		return (PrimaryOrg)customer;
 	}
 
-	public void setCustomer(InternalOrg customer) {
-		this.customer = customer;
-	}
 	
-	public InternalOrg getByConnectionType(OrgConnectionType type) {
+	public PrimaryOrg getByConnectionType(OrgConnectionType type) {
 		if (type.isCustomer()) {
 			return getCustomer();
 		} else {

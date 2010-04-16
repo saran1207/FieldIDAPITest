@@ -1,9 +1,9 @@
 package com.n4systems.caching.safetynetwork;
 
+import static com.n4systems.model.builders.OrgBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.easymock.classextension.EasyMock;
@@ -12,8 +12,10 @@ import org.junit.Test;
 
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
+import com.n4systems.test.helpers.FluentArrayList;
 
 public class VendorListCacheLoaderTest {
 	
@@ -30,15 +32,15 @@ public class VendorListCacheLoaderTest {
 		}
 	}
 	
-	private InternalOrg fromOrg;
-	private List<InternalOrg> vendors;
+	private PrimaryOrg fromOrg;
+	private List<PrimaryOrg> vendors;
 	private List<OrgConnection> connections;
 	
 	@Before
 	public void setup_connections() {
 		fromOrg = OrgBuilder.aPrimaryOrg().buildPrimary();
 		
-		vendors = Arrays.asList(OrgBuilder.aPrimaryOrg().buildPrimary(), OrgBuilder.aSecondaryOrg().buildSecondary(), OrgBuilder.aSecondaryOrg().buildSecondary());
+		vendors = new FluentArrayList<PrimaryOrg>(aPrimaryOrg().buildPrimary(), aPrimaryOrg().buildPrimary(), aPrimaryOrg().buildPrimary());
 		
 		connections = new ArrayList<OrgConnection>();
 		connections.add(new OrgConnection(vendors.get(0), fromOrg));

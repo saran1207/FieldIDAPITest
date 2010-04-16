@@ -3,6 +3,7 @@ package com.n4systems.model.safetynetwork;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,11 +12,23 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.testutils.DummyEntityManager;
 
 public class OrgConnectionSaverTest {
 	
 	private OrgConnection conn;
+	
+	@Before
+	public void initSafetyNetworkSecurtiyCache() {
+		SafetyNetworkSecurityCache.initialize();
+	}
+	
+	@After
+	public void cleanUpSafetyNetworkSecurityCache() {
+		SafetyNetworkSecurityCache.initialize();
+		
+	}
 	
 	@Before
 	public void setup() {

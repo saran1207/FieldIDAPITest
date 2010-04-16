@@ -2,8 +2,8 @@ package com.n4systems.commandprocessors;
 
 
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
@@ -50,17 +50,18 @@ public class CreateSafetyNetworkConnectionCommandProcessor extends CommandProces
 
 	
 	private OrgConnection buildConnection(CreateSafetyNetworkConnectionMessageCommand command) {
-		OrgConnection connection = new OrgConnection();
-		connection.setModifiedBy(actor);
+		PrimaryOrg vendor =  fetchOrg(command.getVendorOrgId());
+		PrimaryOrg customer = fetchOrg(command.getCustomerOrgId());
 		
-		connection.setVendor(fetchOrg(command.getVendorOrgId()));
-		connection.setCustomer(fetchOrg(command.getCustomerOrgId()));
+		OrgConnection connection = new OrgConnection(vendor, customer);
+
+		connection.setModifiedBy(actor);
 		
 		return connection;
 	}
 
-	private InternalOrg fetchOrg(Long orgId) {
-		return (InternalOrg)nonSecureLoaderFactory.createNonSecureIdLoader(BaseOrg.class).setId(orgId).load(transaction);
+	private PrimaryOrg fetchOrg(Long orgId) {
+		return (PrimaryOrg)nonSecureLoaderFactory.createNonSecureIdLoader(PrimaryOrg.class).setId(orgId).load(transaction);
 	}
 
 	@Override
