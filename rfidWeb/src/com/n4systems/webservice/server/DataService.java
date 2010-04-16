@@ -6,6 +6,7 @@ import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
+import com.n4systems.webservice.dto.CompletedJobScheduleRequest;
 import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
@@ -93,6 +94,6 @@ public interface DataService {
 	public RequestResponse updateInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	public RequestResponse removeInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	
-	
+	public RequestResponse createCompletedJobSchedule(CompletedJobScheduleRequest request) throws ServiceException;
 	
 }

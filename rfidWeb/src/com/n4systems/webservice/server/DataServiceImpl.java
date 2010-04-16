@@ -90,11 +90,13 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
 import com.n4systems.webservice.dto.AutoAttributeDefinitionListResponse;
+import com.n4systems.webservice.dto.CompletedJobScheduleRequest;
 import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
@@ -142,6 +144,7 @@ import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomer
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
+import com.n4systems.webservice.server.handlers.CompletedScheduleCreator;
 import com.n4systems.webservice.server.handlers.HelloHandler;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
 import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
@@ -1529,6 +1532,26 @@ public class DataServiceImpl implements DataService {
 		mobileUpdateInfo.setFileName(ConfigContext.getCurrentContext().getString(ConfigEntry.CURRENT_MOBILE_FILE_NAME));
 		
 		return mobileUpdateInfo;
+	}
+	
+	public RequestResponse createCompletedJobSchedule(CompletedJobScheduleRequest request) throws ServiceException {
+		try {
+			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			Date convertedNextDate = converter.convertStringToDate(request.getNextDate());
+			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(request.getTenantId());
+			
+			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new InspectionByMobileGuidLoader<Inspection>(filter, Inspection.class), 
+															new InspectionScheduleSaver(), new FilteredIdLoader<Project>(filter, Project.class));
+			scheduleCreator.create(request.getInspectionMobileGuid(), convertedNextDate, request.getJobId());
+		} catch (InspectionNotFoundException e) {
+			logger.error("could not find inspection for completed job schedule", e);
+			throw new ServiceException("Could not find inspection");
+		} catch (Exception e) {
+			logger.error("problem creating completed job schedule", e);
+			throw new ServiceException();
+		}
+		
+		return new RequestResponse();
 	}
 
 	private int getSetupDataPageSize() {
