@@ -38,10 +38,8 @@
 			</div>
 			
 			
-			<div class="infoSet">
-				<label for="criteria.productType"><@s.text name="label.producttype"/></label>
-				<#include "../customizableSearch/_productTypeSelect.ftl"/>
-			</div>	
+			<#include "../customizableSearch/_productTypeSelect.ftl"/>
+				
 			<div class="infoSet">
 				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
 				<@s.select  name="criteria.productStatus" list="productStatuses" listKey="id" listValue="name" emptyOption="true" />
