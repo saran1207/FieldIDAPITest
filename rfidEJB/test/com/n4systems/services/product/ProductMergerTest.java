@@ -19,6 +19,7 @@ import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.exceptions.product.DuplicateProductException;
 import com.n4systems.exceptions.product.ProductTypeMissMatchException;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
@@ -30,6 +31,7 @@ import com.n4systems.model.builders.SubInspectionBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.services.InspectionScheduleService;
+import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.persistence.QueryBuilder;
 
 
@@ -100,6 +102,7 @@ public class ProductMergerTest {
 		verifyMocks();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void should_merge_products_together_with_inspections() {
 		List<Inspection> inspectionsOnLosingProduct = new ArrayList<Inspection>(); 
@@ -109,7 +112,7 @@ public class ProductMergerTest {
 		
 				
 		try {
-			expect(mockInspectionManager.updateInspection((Inspection)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()))).andReturn(inspectionsOnLosingProduct.get(0));
+			expect(mockInspectionManager.updateInspection((Inspection)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
 		} catch (Exception e1) {
 			fail("should not throw exception");
 		} 
@@ -128,6 +131,7 @@ public class ProductMergerTest {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void should_merge_products_together_with_inspections_that_have_a_schedule_on_it() {
 		List<Inspection> inspectionsOnLosingProduct = new ArrayList<Inspection>(); 
@@ -139,7 +143,7 @@ public class ProductMergerTest {
 		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Inspection>());
 				
 		try {
-			expect(mockInspectionManager.updateInspection((Inspection)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()))).andReturn(inspectionsOnLosingProduct.get(0));
+			expect(mockInspectionManager.updateInspection((Inspection)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
 		} catch (Exception e1) {
 			fail("should not throw exception");
 		} 
@@ -159,6 +163,7 @@ public class ProductMergerTest {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	@Test 
 	public void should_merge_subproduct_together() {
 		SubInspection sub = SubInspectionBuilder.aSubInspection("tom").withProduct(losingProduct).build();
@@ -173,7 +178,7 @@ public class ProductMergerTest {
 		
 		
 		try {
-			expect(mockInspectionManager.updateInspection((Inspection)eq(masterInspections.get(0)), eq(user.getId()))).andReturn(masterInspections.get(0));
+			expect(mockInspectionManager.updateInspection(eq(masterInspections.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(masterInspections.get(0));
 		} catch (Exception e) {
 			fail("should not throw exception " + e.getMessage());
 		}

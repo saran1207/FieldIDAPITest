@@ -29,6 +29,7 @@ import com.n4systems.ejb.legacy.User;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
 import com.n4systems.ejb.legacy.impl.UserManager;
+import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueProductException;
 import com.n4systems.exceptions.SubProductUniquenessException;
@@ -436,7 +437,12 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		try {
-			inspectionManager.createInspection(inspection, nextDate, inspector.getUniqueID(), fileData, null);
+			
+			
+			inspectionManager.createInspection(
+					new CreateInspectionParameterBuilder(inspection,inspector.getUniqueID())
+					.withANextInspectionDate(nextDate)
+					.withProofTestFile(fileData).build());
 			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an inspection, log the failure

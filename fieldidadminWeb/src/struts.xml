@@ -71,26 +71,6 @@
 			<result name="success" type="redirectAction">findProductOptionList</result>
 		</action>
 		
-		<action name="importerList" method="list" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success" type="freemarker">/templates/html/importer/list.ftl</result>
-		</action>
-		
-		<action name="importAllData" method="listAllFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success" type="freemarker">/templates/html/importer/importListAll.ftl</result>
-		</action>
-		
-		<action name="importEndUsers" method="listEndUserFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success" type="freemarker">/templates/html/importer/importListEndUser.ftl</result>
-		</action>
-		
-		<action name="importProductSerials" method="listProductSerialFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success" type="freemarker">/templates/html/importer/importListProductSerial.ftl</result>
-		</action>
-		
-		<action name="importInspections" method="listInspectionFiles" class="com.n4systems.fieldidadmin.actions.ImporterAction">
-			<result name="success" type="freemarker">/templates/html/importer/importListInspection.ftl</result>
-		</action>
-		
 		<action name="unitOfMeasureList" method="list" class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
 			<result name="success" type="freemarker">/templates/html/unitofmeasure/list.ftl</result>
 		</action>

@@ -22,6 +22,8 @@ import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.api.validation.validators.InspectionViewValidator;
 import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.impl.CreateInspectionParameter;
+import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.UnknownSubProduct;
@@ -68,9 +70,16 @@ public class InspectionImporterTest {
 		expect(converter.toModel(view, transaction)).andReturn(inspection);
 		replay(converter);
 		
+		
+		CreateInspectionParameter createInspectionParameter = new CreateInspectionParameterBuilder(inspection, modifiedBy)
+				.withANextInspectionDate(view.getNextInspectionDateAsDate())
+				.doNotCalculateInspectionResult().build();
+
 		InspectionManager manager = createMock(InspectionManager.class);
-		expect(manager.createInspectionNoStatusOverride(inspection, view.getNextInspectionDateAsDate(), modifiedBy)).andReturn(inspection);
+		expect(manager.createInspection(eq(createInspectionParameter))).andReturn(inspection);
 		replay(manager);
+		
+		
 		
 		InspectionImporter importer = new InspectionImporter(null, validator, manager, converter) {
 			protected List<InspectionView> readAllViews() throws IOException, ParseException, MarshalingException {

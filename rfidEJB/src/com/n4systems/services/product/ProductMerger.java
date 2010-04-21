@@ -47,6 +47,16 @@ public class ProductMerger {
 	}
 
 	public Product merge(Product winningProduct, Product losingProduct) {
+		guard(winningProduct, losingProduct);
+
+		moveInspections(winningProduct, losingProduct);
+		moveSubInspections(winningProduct, losingProduct);
+		archiveLosingProduct(losingProduct);
+
+		return winningProduct;
+	}
+
+	private void guard(Product winningProduct, Product losingProduct) {
 		if (!losingProduct.getType().equals(winningProduct.getType())) {
 			throw new ProductTypeMissMatchException("product types must match");
 		}
@@ -58,12 +68,6 @@ public class ProductMerger {
 		if (!losingProduct.getTenant().equals(winningProduct.getTenant())) {
 			throw new TenantNotValidForActionException("tenants must match");
 		}
-
-		moveInspections(winningProduct, losingProduct);
-		moveSubInspections(winningProduct, losingProduct);
-		archiveLosingProduct(losingProduct);
-
-		return winningProduct;
 	}
 
 	private void archiveLosingProduct(Product losingProduct) {
@@ -108,7 +112,7 @@ public class ProductMerger {
 
 	private void updateInspection(Inspection inspection) {
 		try {
-			inspectionManager.updateInspection(inspection, user.getId());
+			inspectionManager.updateInspection(inspection, user.getId(), null, null);
 		} catch (Exception e) {
 			throw new ProcessFailureException("could not update inspections to new product", e);
 		}

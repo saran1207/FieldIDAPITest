@@ -1,6 +1,5 @@
 package com.n4systems.ejb.wrapper;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.impl.InspectionManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -53,77 +53,8 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public FileDataContainer createFileDataContainer(Inspection inspection, File proofTestFile) throws ProcessingProofTestException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createFileDataContainer(inspection, proofTestFile);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException,
-			FileAttachmentException, UnknownSubProduct {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
-
-		Throwable t = null;
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createInspection(inspection, nextInspectionDate, userId, proofTestFile, uploadedFiles);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-			t = e;
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("createInspection", inspection, t);
-		}
-	}
-
-	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
-			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
-
-		Throwable t = null;
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createInspection(inspection, nextInspectionDate, userId, fileData, uploadedFiles);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-			t = e;
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("createInspection", inspection, t);
-		}
-	}
-
-	public Inspection createInspectionNoStatusOverride(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createInspectionNoStatusOverride(inspection, nextInspectionDate, userId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 	
-	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
 
@@ -131,7 +62,7 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).createInspection(inspection, nextInspectionDate, userId);
+			return createManager(transaction.getEntityManager()).createInspection(parameterObject);
 
 		} catch (RuntimeException re) {
 			transactionManager.rollbackTransaction(transaction);
@@ -139,9 +70,10 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 			throw re;
 		} finally {
 			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("createInspection", inspection, t);
+			auditLogger.audit("createInspection", parameterObject.inspection, t);
 		}
 	}
+	
 
 	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException,
 			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
@@ -391,26 +323,6 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Inspection updateInspection(Inspection inspection, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
-
-		Throwable t = null;
-		
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateInspection(inspection, userId, proofTestFile, uploadedFiles);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-			t = e;
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("updateInspection", inspection, t);
-		}
-	}
-
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
 
@@ -430,24 +342,6 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Inspection updateInspection(Inspection inspection, Long userId) throws ProcessingProofTestException, FileAttachmentException {
-		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
-
-		Throwable t = null;
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateInspection(inspection, userId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-			t = e;
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("updateInspection", inspection, t);
-		}
-	}
 
 	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

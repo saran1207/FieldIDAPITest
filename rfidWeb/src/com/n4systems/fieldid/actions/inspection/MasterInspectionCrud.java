@@ -9,6 +9,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.UnknownSubProduct;
@@ -203,8 +204,11 @@ public class MasterInspectionCrud extends AbstractCrud {
 					masterInspection.cleanSubInspectionsForNonValidSubProducts(product);
 				}
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
-				inspection = inspectionManager.createInspection(master, masterInspection.getNextDate(), getSessionUser().getUniqueID(), masterInspection
-						.getProofTestFile(), masterInspection.getUploadedFiles());
+				inspection = inspectionManager.createInspection(
+						new CreateInspectionParameterBuilder(master, getSessionUserId())
+						.withANextInspectionDate(masterInspection.getNextDate())
+						.withProofTestFile(masterInspection.getProofTestFile())
+						.withUploadedImages(masterInspection.getUploadedFiles()).build());
 				uniqueID = inspection.getId();
 			} else {
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());

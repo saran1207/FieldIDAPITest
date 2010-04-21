@@ -7,6 +7,7 @@ import com.n4systems.api.model.InspectionView;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.validators.InspectionViewValidator;
 import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Inspection;
 import com.n4systems.persistence.Transaction;
@@ -31,7 +32,11 @@ public class InspectionImporter extends AbstractImporter<InspectionView> {
 		Inspection inspection = converter.toModel(view, transaction);
 		
 		try {
-			inspectionManager.createInspectionNoStatusOverride(inspection, view.getNextInspectionDateAsDate(), modifiedBy);
+			inspectionManager.createInspection(
+						new CreateInspectionParameterBuilder(inspection, modifiedBy)
+							.withANextInspectionDate(view.getNextInspectionDateAsDate())
+							.doNotCalculateInspectionResult()
+							.build());
 		} catch (Exception e) {
 			throw new ConversionException("Could not create inspection", e);
 		}

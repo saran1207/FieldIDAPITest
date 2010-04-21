@@ -38,6 +38,7 @@ public class FileDataContainer {
 		chartData = Chart.newInstance();
 	}
 
+
 	public byte[] getChart() {
 		return chart;
 	}

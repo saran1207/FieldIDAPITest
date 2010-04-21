@@ -90,7 +90,6 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
@@ -167,15 +166,12 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws ServiceException {
-		
 		try {
-			
 			logAuthenticationAttempt(authenticationRequest);
 			
 			WebServiceAuthenticator authenticator = new WebServiceAuthenticator(authenticationRequest);
 			
 			return authenticator.authenticate();
-			
 		} catch( Exception e ) {
 			logger.error("exception occured while authenticating the web service.", e);
 			throw new ServiceException();

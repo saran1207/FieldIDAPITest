@@ -1,10 +1,10 @@
 package com.n4systems.ejb;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -45,38 +45,38 @@ public interface InspectionManager {
 
 	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter);
 
-	public FileDataContainer createFileDataContainer(Inspection inspection, File proofTestFile) throws ProcessingProofTestException;
-
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates)
-			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct;
-
-	public Inspection createInspectionNoStatusOverride(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
-	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
-
-	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles)
-			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
-
-	public Inspection createInspection(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles)
-			throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
-
-	public Inspection updateInspection(Inspection inspection, Long userId) throws ProcessingProofTestException, FileAttachmentException;
-
-	public Inspection updateInspection(Inspection inspection, Long userId, File proofTestFile, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException;
-
-	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException;
-
-	public Inspection attachFilesToSubInspection(Inspection inspection, SubInspection subInspection, List<FileAttachment> uploadedFiles) throws FileAttachmentException;
-
-	public Inspection retireInspection(Inspection inspection, Long userId);
-
-	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId);
-
-	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId);
+	
+	
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	
 	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
-
+	
 	public boolean isMasterInspection(Long id);
+	
+	
+	
+	
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates)
+			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct;
+
+	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
+	
+	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException;
+
+	
+	
+	public Inspection attachFilesToSubInspection(Inspection inspection, SubInspection subInspection, List<FileAttachment> uploadedFiles) throws FileAttachmentException;
+
+	public Inspection retireInspection(Inspection inspection, Long userId);
+
+
+	
+	
+	
+	
+	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId);
+
+	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId);
 
 }

@@ -140,6 +140,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	public InspectionGroup getGroup() {
 		return group;
 	}
+	
+	
 
 	public void setGroup(InspectionGroup group) {
 		this.group = group;

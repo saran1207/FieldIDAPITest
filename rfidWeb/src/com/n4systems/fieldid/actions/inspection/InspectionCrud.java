@@ -22,6 +22,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -383,7 +384,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				inspection.setFormVersion(inspection.getType().getFormVersion());
 				
 				// it's save time
-				inspection = inspectionManager.createInspection(inspection, nextInspection, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+				
+				inspection = inspectionManager.createInspection(
+						new CreateInspectionParameterBuilder(inspection, getSessionUserId())
+						.withANextInspectionDate(nextInspection)
+						.withProofTestFile(fileData)
+						.withUploadedImages(getUploadedFiles()).build());
 				uniqueID = inspection.getId();
 				
 			} else {
@@ -473,7 +479,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (proofTest != null && proofTestType != ProofTestType.OTHER) {
 			inspection.setProofTestInfo(new ProofTestInfo());
 			inspection.getProofTestInfo().setProofTestType(proofTestType);
-			fileData = inspectionManager.createFileDataContainer(inspection, proofTest);
+			fileData = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
 			inspection.setProofTestInfo(new ProofTestInfo());
 			inspection.getProofTestInfo().setProofTestType(proofTestType);
@@ -483,6 +489,21 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			fileData.setTestDuration(testDuration);
 			fileData.setPeakLoadDuration(peakLoadDuration);
 		}
+	}
+
+	private FileDataContainer createFileDataContainer() throws ProcessingProofTestException {
+
+		FileDataContainer fileData;
+		try {
+			fileData = inspection.getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+		} catch (Exception e) {
+			throw new ProcessingProofTestException(e);
+		} finally {
+			// clean up the temp proof test file
+			proofTest.delete();
+		}
+
+		return fileData;
 	}
 
 	@SkipValidation

@@ -24,7 +24,7 @@
 			<option value="findProductOptionList.action">Find Product Option</option>
 			<option value="unitOfMeasureList.action">Unit of Measures</option>
 			<option value="orderMappingList.action">Order Mappings</option>
-			<option value="importerList.action">Importer</option>
+			<option value="importObservations.action">Observation Importer</option>
 			<option value="mailTest.action">Mail</option>
 			<option value="configCrud.action">Configuration</option>
 			<option value="certSelection.action">Certs</option>
