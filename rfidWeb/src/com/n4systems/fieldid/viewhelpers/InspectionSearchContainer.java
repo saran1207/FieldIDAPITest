@@ -13,7 +13,7 @@ import com.n4systems.util.persistence.search.SortTerm;
 
 public class InspectionSearchContainer extends SearchContainer implements ReportDefiner {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group"};
+	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group", "productStatus"};
 	
 	private Long savedReportId;
 	private boolean savedReportModified;
