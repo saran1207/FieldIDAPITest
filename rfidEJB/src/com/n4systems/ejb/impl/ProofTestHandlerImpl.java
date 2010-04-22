@@ -63,6 +63,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 private InspectionManager inspectionManager;
 	 private User userManager;
 	 private PopulatorLog populatorLogManager;
+
+	private InspectionSaver inspectionSaver;
 	
 	
 	
@@ -80,6 +82,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		this.inspectionManager = new InspectionManagerImpl(em);
 		this.userManager = new UserManager(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
+		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), new InspectionScheduleManagerImpl(em), persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
+		
 	}
 	
 	
@@ -125,7 +129,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	public Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
+	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
@@ -439,10 +443,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		try {
 			
 			
-			inspectionManager.createInspection(
+			inspectionSaver.createInspection(
 					new CreateInspectionParameterBuilder(inspection,inspector.getUniqueID())
 					.withANextInspectionDate(nextDate)
 					.withProofTestFile(fileData).build());
+			
 			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an inspection, log the failure

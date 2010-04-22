@@ -19,6 +19,8 @@ import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.CopyInspectionFactory;
+import com.n4systems.handlers.creator.InspectionPersistenceFactory;
+import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
@@ -39,6 +41,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 
 	private InspectionManager inspectionManager;
 	private InspectionScheduleManager inspectionScheduleManager;
+	private final InspectionPersistenceFactory inspectionPersistenceFactory;
 
 	private Inspection inspection;
 	private InspectionGroup inspectionGroup;
@@ -50,11 +53,13 @@ public class MasterInspectionCrud extends AbstractCrud {
 	private boolean dirtySession = true;
 
 	private boolean cleanToInspectionsToMatchConfiguration = false;
+	
 
 	public MasterInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
+		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
 	}
 
 	@Override
@@ -204,7 +209,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 					masterInspection.cleanSubInspectionsForNonValidSubProducts(product);
 				}
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
-				inspection = inspectionManager.createInspection(
+				inspection = inspectionPersistenceFactory.createInspectionCreator().create(
 						new CreateInspectionParameterBuilder(master, getSessionUserId())
 						.withANextInspectionDate(masterInspection.getNextDate())
 						.withProofTestFile(masterInspection.getProofTestFile())

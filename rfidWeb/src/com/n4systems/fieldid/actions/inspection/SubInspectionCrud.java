@@ -197,7 +197,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 
 		if (uniqueID == null) {
-			subInspection.setFormVersion(subInspection.getType().getFormVersion());
+			subInspection.syncFormVersionWithType();
 
 			if (subInspection.isEditable()) {
 				inspectionHelper.processFormCriteriaResults(subInspection, criteriaResults, modifiedBy);
@@ -249,7 +249,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			if (masterInspectionHelper.getInspection().isNew()) {
 				inspection.setTenant(getTenant());
 				inspection.setProduct(product);
-				inspection.setFormVersion(inspection.getType().getFormVersion());
+				inspection.syncFormVersionWithType();
 
 				masterInspectionHelper.setProductStatus(inspection.getProductStatus());
 

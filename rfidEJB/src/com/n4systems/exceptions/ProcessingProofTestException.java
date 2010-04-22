@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class ProcessingProofTestException extends Exception {
+public class ProcessingProofTestException extends RuntimeException {
 
 	
 	private static final long serialVersionUID = 1L;

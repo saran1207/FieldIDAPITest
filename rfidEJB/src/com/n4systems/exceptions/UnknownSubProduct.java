@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-public class UnknownSubProduct extends Exception {
+public class UnknownSubProduct extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

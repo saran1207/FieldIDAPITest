@@ -2,17 +2,13 @@ package com.n4systems.ejb.wrapper;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 
 import com.n4systems.ejb.InspectionManager;
-import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.impl.InspectionManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
@@ -24,8 +20,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
-import com.n4systems.security.AuditLogger;
-import com.n4systems.security.CreateInspectionAuditHandler;
+import com.n4systems.security.Log4JAuditLogger;
 import com.n4systems.security.UpdateInspectionAuditHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
@@ -54,49 +49,9 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 	}
 
 	
-	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
-
-		Throwable t = null;
-
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createInspection(parameterObject);
-
-		} catch (RuntimeException re) {
-			transactionManager.rollbackTransaction(transaction);
-			t = re;
-			throw re;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("createInspection", parameterObject.inspection, t);
-		}
-	}
 	
 
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException,
-			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
-		AuditLogger auditLogger = new AuditLogger(new CreateInspectionAuditHandler());
-
-		Throwable t = null;
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createInspections(transactionGUID, inspections, nextInspectionDates);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-			t = e;
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-			for (Inspection inspection : inspections) {
-				auditLogger.audit("createInspections", inspection, t);
-			}
-		}
-	}
+	
 
 	public Inspection findAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -324,7 +279,7 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 	}
 
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		AuditLogger auditLogger = new AuditLogger(new UpdateInspectionAuditHandler());
+		Log4JAuditLogger auditLogger = new Log4JAuditLogger(new UpdateInspectionAuditHandler());
 
 		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();

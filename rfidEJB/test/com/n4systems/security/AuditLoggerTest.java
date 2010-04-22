@@ -25,7 +25,7 @@ public class AuditLoggerTest {
 		expect(auditHandler.getMessage(inspection)).andReturn("log Message");
 		replay(auditHandler);
 		
-		AuditLogger sut = new AuditLogger(auditHandler);
+		Log4JAuditLogger sut = new Log4JAuditLogger(auditHandler);
 		
 		sut.audit("method", inspection, null);
 		
@@ -41,7 +41,7 @@ public class AuditLoggerTest {
 		replay(auditLog);
 		
 		
-		AuditLogger sut = new AuditLogger(new NullAuditHandler(), auditLog);
+		Log4JAuditLogger sut = new Log4JAuditLogger(new NullAuditHandler(), auditLog);
 		
 		sut.audit("methodName", inspection, null);
 		assertThat(logMessage.getValue(), containsString("methodName"));
@@ -55,7 +55,7 @@ public class AuditLoggerTest {
 		replay(auditLog);
 		
 		
-		AuditLogger sut = new AuditLogger(new NullAuditHandler(), auditLog);
+		Log4JAuditLogger sut = new Log4JAuditLogger(new NullAuditHandler(), auditLog);
 		
 		sut.audit("methodName", inspection, null);
 		assertThat(logMessage.getValue(), containsString("Success"));
@@ -69,7 +69,7 @@ public class AuditLoggerTest {
 		replay(auditLog);
 		
 		
-		AuditLogger sut = new AuditLogger(new NullAuditHandler(), auditLog);
+		Log4JAuditLogger sut = new Log4JAuditLogger(new NullAuditHandler(), auditLog);
 		
 		sut.audit("methodName", inspection, new Exception());
 		assertThat(logMessage.getValue(), containsString("Failed"));
@@ -92,7 +92,7 @@ public class AuditLoggerTest {
 		};
 		
 		
-		AuditLogger sut = new AuditLogger(auditHandler, auditLog);
+		Log4JAuditLogger sut = new Log4JAuditLogger(auditHandler, auditLog);
 		
 		sut.audit("methodName", inspection, new Exception());
 		assertThat(logMessage.getValue(), containsString("Audit Handler Message ----____----"));
@@ -114,7 +114,7 @@ public class AuditLoggerTest {
 		};
 		
 		
-		AuditLogger sut = new AuditLogger(auditHandler, auditLog);
+		Log4JAuditLogger sut = new Log4JAuditLogger(auditHandler, auditLog);
 		
 		sut.audit("methodName", inspection, new Exception());
 		

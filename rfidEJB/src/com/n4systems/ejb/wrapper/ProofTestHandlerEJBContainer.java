@@ -12,8 +12,6 @@ import com.n4systems.ejb.impl.ProofTestHandlerImpl;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -25,21 +23,6 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 		return new ProofTestHandlerImpl(em);
 	}
 
-	public Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg owner, InspectionBook book, boolean productOverridesInspector)
-			throws FileProcessingException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createOrUpdateProofTest(fileData, inspector, owner, book, productOverridesInspector);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, UserBean inspector) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

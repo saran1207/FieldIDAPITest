@@ -8,10 +8,10 @@ import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.conversion.product.ProductToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.wrapper.InspectionManagerEJBContainer;
 import com.n4systems.exporting.io.MapReader;
+import com.n4systems.handlers.creator.InspectionPersistenceFactory;
+import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
@@ -75,8 +75,8 @@ public class ImporterFactory {
 		return ServiceLocator.getProductSerialManager();
 	}
 
-	protected InspectionManager createInspectionManager() {
-		return new InspectionManagerEJBContainer();
+	protected InspectionPersistenceFactory createInspectionPersistenceFactory() {
+		return new ProductionInspectionPersistenceFactory();
 	}
 
 	protected InspectionToModelConverter createInspectionToModelConverter(InspectionType type) {
@@ -104,7 +104,7 @@ public class ImporterFactory {
 	}
 
 	public InspectionImporter createInspectionImporter(MapReader reader, Long modifiedBy, InspectionType type) {
-		InspectionImporter importer = new InspectionImporter(reader, createViewValidator(), createInspectionManager(), createInspectionToModelConverter(type));
+		InspectionImporter importer = new InspectionImporter(reader, createViewValidator(), createInspectionPersistenceFactory(), createInspectionToModelConverter(type));
 		importer.setModifiedBy(modifiedBy);
 		return importer;
 	}

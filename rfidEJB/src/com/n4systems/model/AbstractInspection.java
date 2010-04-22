@@ -176,5 +176,8 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		}
 		return imageAttachments;
 	}
+	public void syncFormVersionWithType() {
+		setFormVersion(getType().getFormVersion());
+	}
 	
 }

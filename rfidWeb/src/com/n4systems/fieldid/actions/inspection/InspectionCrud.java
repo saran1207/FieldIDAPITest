@@ -36,6 +36,7 @@ import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.Criteria;
@@ -78,6 +79,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private final User userManager;
 	protected final ProductManager productManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
+	protected final ProductionInspectionPersistenceFactory inspectionPersistenceFactory;
 	protected final InspectionHelper inspectionHelper;
 	
 	
@@ -121,6 +123,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	private String proofTestDirectory;
 	private boolean newFile = false;
+	
 
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
@@ -131,6 +134,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		this.productManager = productManager;
 		this.inspectionHelper = new InspectionHelper(persistenceManager);
 		this.inspectionScheduleManager = inspectionScheduleManager;
+		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
+
 	}
 
 	@Override
@@ -381,11 +386,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
 				
 				// ensure the form version is set from the inspection type on create
-				inspection.setFormVersion(inspection.getType().getFormVersion());
+				inspection.syncFormVersionWithType();
 				
 				// it's save time
 				
-				inspection = inspectionManager.createInspection(
+				inspection = inspectionPersistenceFactory.createInspectionCreator().create(
 						new CreateInspectionParameterBuilder(inspection, getSessionUserId())
 						.withANextInspectionDate(nextInspection)
 						.withProofTestFile(fileData)
@@ -422,7 +427,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return SUCCESS;
 	}
 
-	
 	protected void findInspectionBook() throws ValidationException, PersistenceException {
 		if (newInspectionBookTitle != null) {
 			if (newInspectionBookTitle.trim().length() == 0) {

@@ -38,7 +38,7 @@ import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
 
 public class ServiceLocator {
-	
+
 	public static final ConfigManager getConfigManager() {
 		return new ConfigManagerEJBContainer();
 	}
@@ -46,94 +46,63 @@ public class ServiceLocator {
 	public static final MailManager getMailManager() {
 		return MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext());
 	}
-	
-	
-	
+
 	public static final PopulatorLog getPopulatorLog() {
 		return new PopulatorLogEJBContainer();
 	}
-	
-	
-	
+
 	public static final SerialNumberCounter getSerialNumberCounter() {
 		return new SerialNumberCounterEJBContainer();
 	}
-	
-	
-	
+
 	public static final User getUser() {
 		return new UserEJBContainer();
 	}
-	
-	
-	
+
 	public static final LegacyProductType getProductType() {
 		return new LegacyProductTypeEJBContainer();
 	}
-	
-	
-	
+
 	public static final Option getOption() {
 		return new OptionEJBContainer();
 	}
-	
-	
+
 	public static final PersistenceManager getPersistenceManager() {
 		return new PersistenceManagerEJBContainer();
 	}
-	
-	
-	
-	
+
 	public static final ProductCodeMapping getProductCodeMapping() {
 		return new ProductCodeMappingEJBContainer();
 	}
-	
-	
-	
+
 	public static final ProofTestHandler getProofTestHandler() {
 		return new ProofTestHandlerEJBContainer();
 	}
 
-	
-	
 	public static final LegacyProductSerial getProductSerialManager() {
 		return new LegacyProductSerialEJBContainer();
 	}
-	
-	
-	
+
 	public static final ServiceDTOBeanConverter getServiceDTOBeanConverter() {
 		return new ServiceDTOBeanConverterEJBContainer();
 	}
-	
-	
-	
+
 	public static final AutoAttributeManager getAutoAttributeManager() {
 		return new AutoAttributeManagerEJBContainer();
 	}
 
-	
-	
-	
 	public static final InspectionScheduleManager getInspectionScheduleManager() {
 		return new InspectionScheduleManagerEJBContainer();
 	}
-	
-	
-	
+
 	public static final InspectionManager getInspectionManager() {
 		return new InspectionManagerEJBContainer();
 	}
-	
-	
-	
+
 	public static final ProductManager getProductManager() {
 		return new ProductManagerEJBContainer();
 	}
-	
-	
-	
+
 	public static final OrderManager getOrderManager() {
 		return new OrderManagerEJBContainer();
 	}

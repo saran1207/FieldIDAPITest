@@ -31,6 +31,9 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.handlers.creator.InspectionPersistenceFactory;
+import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
+import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
@@ -1010,7 +1013,6 @@ public class DataServiceImpl implements DataService {
 			
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			InspectionManager inspectionManager = ServiceLocator.getInspectionManager();
 			LegacyProductSerial productManager = ServiceLocator.getProductSerialManager();
 			InspectionScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
 			
@@ -1050,7 +1052,11 @@ public class DataServiceImpl implements DataService {
 			List<Inspection> savedInspections = null;
 			
 			try {
-				savedInspections = inspectionManager.createInspections( requestInformation.getMobileGuid(), inspections, nextInspectionDates);
+				InspectionPersistenceFactory inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
+				
+				InspectionsInAGroupCreator inspectionsInAGroupCreator = inspectionPersistenceFactory.createInspectionsInAGroupCreator();
+				
+				savedInspections = inspectionsInAGroupCreator.create( requestInformation.getMobileGuid(), inspections, nextInspectionDates);
 				logger.info( "save inspections on product " + product.getSerialNumber() );
 				populatorLogger.logMessage(tenantId, "Created inspection for product with serial number "+product.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 			} catch ( TransactionAlreadyProcessedException e) {

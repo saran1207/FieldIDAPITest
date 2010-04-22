@@ -21,7 +21,6 @@ import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.api.validation.validators.InspectionViewValidator;
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -29,6 +28,8 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.handlers.creator.NullObjectDefaultedInspectionPersistenceFactory;
+import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.builders.InspectionTypeBuilder;
@@ -75,13 +76,14 @@ public class InspectionImporterTest {
 				.withANextInspectionDate(view.getNextInspectionDateAsDate())
 				.doNotCalculateInspectionResult().build();
 
-		InspectionManager manager = createMock(InspectionManager.class);
-		expect(manager.createInspection(eq(createInspectionParameter))).andReturn(inspection);
-		replay(manager);
+		InspectionCreator creator = createMock(InspectionCreator.class);
+		expect(creator.create(eq(createInspectionParameter))).andReturn(inspection);
+		replay(creator);
 		
+		NullObjectDefaultedInspectionPersistenceFactory inspectionPersistenceFactory = new NullObjectDefaultedInspectionPersistenceFactory();
+		inspectionPersistenceFactory.inspectionCreator = creator;
 		
-		
-		InspectionImporter importer = new InspectionImporter(null, validator, manager, converter) {
+		InspectionImporter importer = new InspectionImporter(null, validator, inspectionPersistenceFactory, converter) {
 			protected List<InspectionView> readAllViews() throws IOException, ParseException, MarshalingException {
 				return Arrays.asList(view);
 			}
@@ -100,7 +102,7 @@ public class InspectionImporterTest {
 		
 		assertEquals(1, importer.runImport(transaction));
 		
-		verify(manager);
+		verify(creator);
 		verify(converter);	
 	}
 	

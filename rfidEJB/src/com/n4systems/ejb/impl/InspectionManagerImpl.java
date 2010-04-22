@@ -2,7 +2,6 @@ package com.n4systems.ejb.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
-import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -30,37 +28,38 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
-import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
 
-public class InspectionManagerImpl implements InspectionManager, LastInspectionDateFinder {
+public class InspectionManagerImpl implements InspectionManager {
 	static Logger logger = Logger.getLogger(InspectionManagerImpl.class);
 
 	
 	private EntityManager em;
 
 	private final PersistenceManager persistenceManager;
-	private final InspectionSaver inspectionSaver;
+	private final ManagerBackedInspectionSaver inspectionSaver;
+
+
+	private final EntityManagerLastInspectionDateFinder lastInspectionFinder;
 
 	
 	public InspectionManagerImpl(EntityManager em) {
 		super();
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
-		this.inspectionSaver = new InspectionSaver(new LegacyProductSerialManager(em), new InspectionScheduleManagerImpl(em), persistenceManager, em, this);
+		this.lastInspectionFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
+		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), new InspectionScheduleManagerImpl(em), persistenceManager, em, lastInspectionFinder);
 	}
 
 	/**
@@ -189,91 +188,13 @@ public class InspectionManagerImpl implements InspectionManager, LastInspectionD
 	}
 
 
-	/**
-	 * This will persist an entire list of inspections. If it encounters an
-	 * inspection with no inspection group it will apply that inspection group
-	 * to all the rest of the inspections with no inspection group.
-	 * WARNING: All inspections passed into this method <b>MUST</b> be for the same
-	 * Product (The Product on the Inspection may be changed otherwise).
-	 */
+	
 	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates)
 			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
-		List<Inspection> savedInspections = new ArrayList<Inspection>();
-
-		/*
-		 *  XXX - Here we pull the Product off the first inspection.  We then re-attach the product back into persistence managed scope.
-		 *  This is done so that the infoOptions can be indexed after the Product is updated (otherwise you get a lazy load on infoOptions).
-		 *  Since all inspections passed in here are for the same product, we cannot re-attach in the loop since only one entity type with the same id
-		 *  can exist in managed scope.  In loop we then set the now managed entity back onto the inspection so they all point to the same
-		 *  instance.  This is not optimal and a refactor is in order to avoid this strange case. 
-		 */
-		Product managedProduct = inspections.iterator().next().getProduct();
-		persistenceManager.reattach(managedProduct);
-		
-		InspectionGroup createdInspectionGroup = null;
-		Tenant tenant = null;
-		Inspection savedInspection = null;
-		for (Inspection inspection : inspections) {
-			if (tenant == null) {
-				tenant = inspection.getTenant();
-			}
-			if (createdInspectionGroup != null && inspection.getGroup() == null) {
-				inspection.setGroup(createdInspectionGroup);
-			}
-
-			// set the managed product back onto the inspection.  See note above.
-			inspection.setProduct(managedProduct);
-			
-			// Pull the attachments off the inspection and send them in seperately so that they get processed properly
-			List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>();
-			fileAttachments.addAll(inspection.getAttachments());
-			inspection.setAttachments(new ArrayList<FileAttachment>());
-			
-			// Pull off the sub inspection attachments and put them in a map for later use
-			Map<Product, List<FileAttachment>> subInspectionAttachments = new HashMap<Product, List<FileAttachment>>();
-			for (SubInspection subInspection : inspection.getSubInspections()) {
-				subInspectionAttachments.put(subInspection.getProduct(), subInspection.getAttachments());
-				subInspection.setAttachments(new ArrayList<FileAttachment>());
-			}
-			
-			savedInspection = createInspection(new CreateInspectionParameterBuilder(inspection, inspection.getModifiedBy().getId())
-					.withANextInspectionDate(nextInspectionDates.get(inspection)).withUploadedImages(fileAttachments).build());
-			
-			// handle the subinspection attachments
-			SubInspection subInspection = null;
-			for (int i =0; i < inspection.getSubInspections().size(); i++) {
-				subInspection = inspection.getSubInspections().get(i);
-				savedInspection = attachFilesToSubInspection(savedInspection, subInspection, new ArrayList<FileAttachment>(subInspectionAttachments.get(subInspection.getProduct())));
-			}			
-
-			// If the inspection didn't have an inspection group before saving,
-			// and we havn't created an inspection group yet
-			// hang on to the now created inspection group to apply to other
-			// inspections
-			if (createdInspectionGroup == null && inspection.getGroup() != null) {
-				createdInspectionGroup = savedInspection.getGroup();
-			}
-
-			savedInspections.add(savedInspection);
-		}
-
-		TransactionSupervisor transaction = new TransactionSupervisor(persistenceManager);
-		transaction.completeInspectionTransaction(transactionGUID, tenant);
-
-		return savedInspections;
+		return new ManagerBackedCreateInspectionsMethodObject(persistenceManager, inspectionSaver).createInspections(transactionGUID, inspections, nextInspectionDates);
 	}
 
-
-	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
-		return inspectionSaver.createInspection(parameterObject);
-	}
-
-
-
 	
-
-	
-
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		return inspectionSaver.updateInspection(inspection, userId, fileData, uploadedFiles);
 	}
@@ -302,41 +223,7 @@ public class InspectionManagerImpl implements InspectionManager, LastInspectionD
 		return inspectionSaver.attachFilesToSubInspection(inspection, subInspection, uploadedFiles);
 	}
 
-	public Date findLastInspectionDate(Product product) {
-		return findLastInspectionDate(product, null);
-	}
-
-	public Date findLastInspectionDate(Long scheduleId) {
-		return findLastInspectionDate(persistenceManager.find(InspectionSchedule.class, scheduleId));
-	}
-
-	public Date findLastInspectionDate(InspectionSchedule schedule) {
-		return findLastInspectionDate(schedule.getProduct(), schedule.getInspectionType());
-	}
-
-	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
-
-		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
-
-		qBuilder.setMaxSelect("date");
-		qBuilder.addSimpleWhere("product.id", product.getId());
-		qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-
-		if (inspectionType != null) {
-			qBuilder.addSimpleWhere("type.id", inspectionType.getId());
-		}
-
-		Date lastInspectionDate = null;
-		try {
-			lastInspectionDate = qBuilder.getSingleResult(em);
-		} catch (InvalidQueryException e) {
-			logger.error("Unable to find last inspection date", e);
-		} catch (Exception e) {
-			logger.error("Unable to find last inspection date", e);
-		}
-
-		return lastInspectionDate;
-	}
+	
 
 	
 	
@@ -449,5 +336,22 @@ public class InspectionManagerImpl implements InspectionManager, LastInspectionD
 		Inspection inspection = em.find(Inspection.class, id);
 
 		return (inspection != null) ? (!inspection.getSubInspections().isEmpty()) : false;
+	}
+
+	
+	public Date findLastInspectionDate(InspectionSchedule schedule) {
+		return lastInspectionFinder.findLastInspectionDate(schedule);
+	}
+
+	public Date findLastInspectionDate(Long scheduleId) {
+		return lastInspectionFinder.findLastInspectionDate(scheduleId);
+	}
+
+	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
+		return lastInspectionFinder.findLastInspectionDate(product, inspectionType);
+	}
+
+	public Date findLastInspectionDate(Product product) {
+		return lastInspectionFinder.findLastInspectionDate(product);
 	}
 }

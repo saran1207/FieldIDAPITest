@@ -12,6 +12,7 @@ import com.n4systems.persistence.Transaction;
 public class TestingTransaction implements Transaction {
 	public EntityManager entityManager;
 	public EntityTransaction entityTransaction;
+	public boolean action = true;
 	
 	public void commit() {
 		invalidCall();
