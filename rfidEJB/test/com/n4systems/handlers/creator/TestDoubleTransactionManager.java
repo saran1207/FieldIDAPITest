@@ -8,17 +8,24 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.util.persistence.TestingTransaction;
 
-final class TestDoubleTransactionManager implements TransactionManager {
+public final class TestDoubleTransactionManager implements TransactionManager {
 	
 	private TestingTransaction testingTransaction;
 
+	
+	
 	@Override
 	public Transaction startTransaction() {
+		return getTransaction();
+	}
+
+	public Transaction getTransaction() {
 		if (testingTransaction == null) {
 			testingTransaction = new TestingTransaction();
 		}
 		return testingTransaction;
 	}
+	
 
 	@Override
 	public void rollbackTransaction(Transaction transaction) {

@@ -1,7 +1,5 @@
 package com.n4systems.handlers.creator;
 
-import static com.n4systems.exceptions.Exceptions.*;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,34 +13,46 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
 
-public class WebServiceInspectionsCreator implements InspectionsInAGroupCreator {
+public class WebServiceInspectionsCreator extends BasicTransactionManagement implements InspectionsInAGroupCreator {
 
-	private final TransactionManager transactionManager;
 	private final InspectionPersistenceFactory inspectionPersistenceFactory;
+	private Map<Inspection, Date> nextInspectionDates;
+	private List<Inspection> inspections;
+	private String transactionGUID;
+	private List<Inspection> results = null;
 
 	public WebServiceInspectionsCreator(TransactionManager transactionManager, InspectionPersistenceFactory inspectionPersistenceFactory) {
-		this.transactionManager = transactionManager;
+		super(transactionManager);
 		this.inspectionPersistenceFactory = inspectionPersistenceFactory;
 	}
 
 	public List<Inspection> create(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, 
 			ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
-		Transaction transaction = transactionManager.startTransaction();
+		this.transactionGUID = transactionGUID;
+		this.inspections = inspections;
+		this.nextInspectionDates = nextInspectionDates;
 		
-		try {
-			List<Inspection> savedInspections = inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction).createInspections(transactionGUID, inspections, nextInspectionDates);
+		run();
 		
-			logSuccess(savedInspections);
-			
-			return savedInspections;
-			
-		} catch (Exception e) {
-			transactionManager.rollbackTransaction(transaction);
-			logFailure(inspections, e);
-			throw convertToRuntimeException(e);
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
+		return results; 
+	}
+
+	protected void finished() {
+	}
+
+	protected void success() {
+		
+		
+	}
+
+	protected void failure(Exception e) {
+		logFailure(inspections, e);
+	}
+
+	protected void doProcess(Transaction transaction) {
+		List<Inspection> savedInspections = inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction).createInspections(transactionGUID, inspections, nextInspectionDates);
+		logSuccess(savedInspections);
+		results = savedInspections;
 	}
 
 

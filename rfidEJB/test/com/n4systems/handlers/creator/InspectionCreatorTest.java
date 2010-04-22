@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.n4systems.ejb.impl.CreateInspectionParameter;
@@ -23,7 +24,6 @@ import com.n4systems.model.SubInspection;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
-import com.n4systems.util.persistence.TestingTransaction;
 
 
 public class InspectionCreatorTest {
@@ -45,20 +45,10 @@ public class InspectionCreatorTest {
 
 
 	@Test
-	public void should_start_and_finish_a_transaction_from_the_transaction_manager_when_about_to_create() throws Exception {
-		TestingTransaction transaction = new TestingTransaction();
-		
-		transactionManager = createMock(TransactionManager.class);
-		expect(transactionManager.startTransaction()).andReturn(transaction);
-		transactionManager.finishTransaction(transaction);
-		replay(transactionManager);
-		
-		
+	public void should_use_basic_transaction_management() throws Exception {
 		InspectionCreator sut = new InspectionCreator(transactionManager, inspectionPersistenceFactory );
 		
-		sut.create(new CreateInspectionParameterBuilder(anInspection().build(), 1L).build());
-		
-		verify(transactionManager);
+		Assert.assertThat(sut, instanceOf(BasicTransactionManagement.class));
 	}
 	
 	
@@ -99,32 +89,6 @@ public class InspectionCreatorTest {
 		verify(inspectionSaver);
 	}
 	
-	
-	@Test
-	public void should_rollback_the_transaction_if_the_saver_throws_an_exception() throws Exception {
-		CreateInspectionParameter parameter = new CreateInspectionParameterBuilder(anInspection().build(), 1L).build();
-		
-		inspectionPersistenceFactory.inspectionSaver = new InspectionSaverSabatour();
-		
-		TestingTransaction transaction = new TestingTransaction();
-		
-		transactionManager = createMock(TransactionManager.class);
-		expect(transactionManager.startTransaction()).andReturn(transaction);
-		transactionManager.rollbackTransaction(transaction);
-		transactionManager.finishTransaction(transaction);
-		replay(transactionManager);
-		
-		
-		InspectionCreator sut = new InspectionCreator(transactionManager, inspectionPersistenceFactory);
-		
-		try {
-			sut.create(parameter);
-		} catch (Exception e) {
-			// don't do anything with an exception
-		}
-		
-		verify(transactionManager);
-	}
 	
 	
 	@Test(expected=ProcessFailureException.class)

@@ -3,7 +3,6 @@ package com.n4systems.ejb.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -17,8 +16,6 @@ import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
@@ -189,10 +186,6 @@ public class InspectionManagerImpl implements InspectionManager {
 
 
 	
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates)
-			throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
-		return new ManagerBackedCreateInspectionsMethodObject(persistenceManager, inspectionSaver).createInspections(transactionGUID, inspections, nextInspectionDates);
-	}
 
 	
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {

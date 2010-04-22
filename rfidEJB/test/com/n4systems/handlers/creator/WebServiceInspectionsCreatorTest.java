@@ -3,6 +3,7 @@ package com.n4systems.handlers.creator;
 import static com.n4systems.model.builders.InspectionBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,6 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.test.helpers.FluentArrayList;
-import com.n4systems.util.persistence.TestingTransaction;
 
 
 public class WebServiceInspectionsCreatorTest {
@@ -45,21 +45,9 @@ public class WebServiceInspectionsCreatorTest {
 	
 	
 	@Test
-	public void should_start_and_finish_a_transaction_from_the_transaction_manager_when_about_to_create() throws Exception {
-		TestingTransaction transaction = new TestingTransaction();
-		
-		transactionManager = createMock(TransactionManager.class);
-		expect(transactionManager.startTransaction()).andReturn(transaction);
-		transactionManager.finishTransaction(transaction);
-		replay(transactionManager);
-		
-		
-		
+	public void should_use_basic_transaction_management() throws Exception {
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
-		
-		sut.create(transactionGUID, inspections, nextInspectionDates);
-		
-		verify(transactionManager);
+		assertThat(sut, instanceOf(BasicTransactionManagement.class));
 	}
 	
 	
@@ -79,28 +67,7 @@ public class WebServiceInspectionsCreatorTest {
 		verify(inspectionPersistenceFactory);
 	}
 	
-	@Test
-	public void should_start_rollback_and_finish_a_transaction_when_there_is_an_exception_thrown_from_the_CreateInspectionsMethodObject() throws Exception {
-		TestingTransaction transaction = new TestingTransaction();
-		
-		transactionManager = createMock(TransactionManager.class);
-		expect(transactionManager.startTransaction()).andReturn(transaction);
-		transactionManager.rollbackTransaction(transaction);
-		transactionManager.finishTransaction(transaction);
-		replay(transactionManager);
-		
-		inspectionPersistenceFactory.createInspectionsMethodObject = new CreateInspectionsMethodObjectSabatour();
-		
-		
-		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
-		
-		try {
-			sut.create(transactionGUID, inspections, nextInspectionDates);
-		} catch (Exception e) {	}
-		
-		verify(transactionManager);
-	}
-	
+
 	
 	@Test(expected=TransactionAlreadyProcessedException.class)
 	public void should_not_wrap_an_exception_thrown_by_the_create_inspections_method() throws Exception {
