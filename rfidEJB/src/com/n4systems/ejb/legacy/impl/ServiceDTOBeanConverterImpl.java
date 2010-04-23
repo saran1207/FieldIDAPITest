@@ -879,9 +879,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		stateSetServiceDTO.setName(stateSet.getName());
 
 		for (State state : stateSet.getStates()) {
-			if (!state.isRetired()) {
-				stateSetServiceDTO.getStates().add(convert(state, stateSet.getId()));
-			}
+			stateSetServiceDTO.getStates().add(convert(state, stateSet.getId()));
 		}
 
 		return stateSetServiceDTO;
