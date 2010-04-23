@@ -68,7 +68,7 @@
 		<label><@s.text name="label.inspectiondate"/></label>
 		<span >
 			<#if form_action="ADD">		
-				<@s.datetimepicker id="inspectionDate" onchange="updateNextDate();" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
+				<@s.datetimepicker id="inspectionDate"  name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
 			<#else>
 				<@s.datetimepicker id="inspectionDate" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
 			</#if>

@@ -14,6 +14,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
@@ -44,6 +45,8 @@ public class MasterInspection {
 
 	private InspectionSchedule schedule;
 	private Long scheduleId;
+
+	private InspectionType nextInspectionType;
 
 	public MasterInspection() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
@@ -311,4 +314,14 @@ public class MasterInspection {
 	public void setScheduleId(Long scheduleId) {
 		this.scheduleId = scheduleId;
 	}
+
+	public void setNextInspectionType(InspectionType nextInspectionType) {
+		this.nextInspectionType = nextInspectionType;
+		
+	}
+
+	public InspectionType getNextInspectionType() {
+		return nextInspectionType;
+	}
+	
 }

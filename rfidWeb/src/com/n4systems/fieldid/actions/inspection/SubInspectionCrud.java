@@ -260,8 +260,10 @@ public class SubInspectionCrud extends InspectionCrud {
 				// setup the next inspection date.
 				if (nextInspectionDate != null && nextInspectionDate.length() > 0) {
 					masterInspectionHelper.setNextDate(convertDate(nextInspectionDate));
+					masterInspectionHelper.setNextInspectionType(nextInspectionType);
 				} else {
 					masterInspectionHelper.setNextDate(null);
+					masterInspectionHelper.setNextInspectionType(null);
 				}
 			} else {
 				if (inspection.isEditable()) {

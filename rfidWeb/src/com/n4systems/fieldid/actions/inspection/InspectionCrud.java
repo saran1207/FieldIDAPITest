@@ -20,6 +20,7 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.User;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
@@ -86,7 +87,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private InspectionGroup inspectionGroup;
 	protected Product product;
 	protected Inspection inspection;
-	protected String nextInspectionDate;
+	
 	protected List<CriteriaResult> criteriaResults;
 	protected String inspectionDate;
 	protected String charge;
@@ -123,6 +124,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	private String proofTestDirectory;
 	private boolean newFile = false;
+	
+	protected String nextInspectionDate;
+	protected InspectionType nextInspectionType;
 	
 
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
@@ -264,12 +268,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		setUpSupportedProofTestTypes();
 
 		
-		// get the next inspection date default.
-		ProductTypeSchedule schedule = product.getType().getSchedule(inspection.getType(), product.getOwner());
-		if (schedule != null) {
-			Date nextDate = schedule.getNextDate(DateHelper.getToday());
-			nextInspectionDate = convertDate(nextDate);
-		}
+		autoSuggestNextInspection();
 		
 		if (inspectionSchedule != null) {	
 			inspectionSchedule.inProgress();
@@ -284,6 +283,15 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		suggestSchedule();
 
 		return SUCCESS;
+	}
+
+	private void autoSuggestNextInspection() {
+		ProductTypeSchedule schedule = product.getType().getSchedule(inspection.getType(), product.getOwner());
+		if (schedule != null) {
+			Date nextDate = schedule.getNextDate(DateHelper.getToday());
+			nextInspectionDate = convertDate(nextDate);
+			nextInspectionType = getInspectionType();
+		}
 	}
 
 	private void suggestSchedule() {
@@ -390,11 +398,15 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				
 				// it's save time
 				
-				inspection = inspectionPersistenceFactory.createInspectionCreator().create(
-						new CreateInspectionParameterBuilder(inspection, getSessionUserId())
-						.withANextInspectionDate(nextInspection)
+				CreateInspectionParameterBuilder createInspectionParameterBuilder = new CreateInspectionParameterBuilder(inspection, getSessionUserId())
 						.withProofTestFile(fileData)
-						.withUploadedImages(getUploadedFiles()).build());
+						.withUploadedImages(getUploadedFiles());
+				
+				if (nextInspectionDate != null) {
+					createInspectionParameterBuilder.addSchedule(new InspectionScheduleBundle(product, nextInspectionType, nextInspection));
+				}
+				
+				inspection = inspectionPersistenceFactory.createInspectionCreator().create(createInspectionParameterBuilder.build());
 				uniqueID = inspection.getId();
 				
 			} else {
@@ -1007,5 +1019,18 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	public boolean isLinkedInspection() {
 		return !inspection.getTenant().equals(getTenant());
+	}
+
+	public Long getNextInspectionType() {
+		return nextInspectionType != null ? nextInspectionType.getId() : null;
+	}
+
+	public void setNextInspectionType(Long nextInspectionType) {
+		if (nextInspectionType == null) {
+			this.nextInspectionType = null;
+		} else if (this.nextInspectionType == null || !nextInspectionType.equals(this.nextInspectionType.getId())) {
+			this.nextInspectionType = persistenceManager.find(InspectionType.class, nextInspectionType, getTenantId());
+		}
+		
 	}
 }
