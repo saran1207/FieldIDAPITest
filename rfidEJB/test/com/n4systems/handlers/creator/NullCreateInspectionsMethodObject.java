@@ -16,6 +16,11 @@ import com.n4systems.model.Inspection;
 
 final class NullCreateInspectionsMethodObject implements CreateInspectionsMethodObject {
 	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException,
+	FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
+		return createInspections(transactionGUID, inspections);
+	}
+
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws ProcessingProofTestException,
 			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
 		return inspections;
 	}

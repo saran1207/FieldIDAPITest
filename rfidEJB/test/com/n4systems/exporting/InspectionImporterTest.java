@@ -32,6 +32,7 @@ import com.n4systems.handlers.creator.NullObjectDefaultedInspectionPersistenceFa
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
+import com.n4systems.model.builders.InspectionBuilder;
 import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
@@ -60,7 +61,7 @@ public class InspectionImporterTest {
 		final InspectionView view = new InspectionView();
 		view.setNextInspectionDate(new Date());
 		
-		Inspection inspection = new Inspection();
+		Inspection inspection = InspectionBuilder.anInspection().build();
 		
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());

@@ -2,13 +2,16 @@ package com.n4systems.handlers.creator.inspections;
 
 import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.impl.InspectionSaver;
+import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.InspectionSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
+import com.n4systems.services.NextInspectionScheduleSerivce;
 
 public class InspectionCreator extends BasicTransactionManagement {
 
@@ -16,6 +19,8 @@ public class InspectionCreator extends BasicTransactionManagement {
 	private AuditLogger auditLogger;
 	private CreateInspectionParameter parameter;
 	private Inspection result;
+	private NextInspectionScheduleSerivce nextScheduleSerivce;
+	private InspectionSaver createInspectionSaver;
 
 	public InspectionCreator(TransactionManager transactionManager, InspectionPersistenceFactory inspectionPersistenceFactory) {
 		super(transactionManager);
@@ -51,7 +56,24 @@ public class InspectionCreator extends BasicTransactionManagement {
 
 	@Override
 	protected void doProcess(Transaction transaction) {
-		InspectionSaver createInspectionSaver = inspectionPersistenceFactory.createInspectionSaver(transaction);
+		createTransactionDependentServices(transaction);
+		createInspection(transaction);
+		createSchedules(transaction);
+	}
+
+	private void createTransactionDependentServices(Transaction transaction) {
+		createInspectionSaver = inspectionPersistenceFactory.createInspectionSaver(transaction);
+		nextScheduleSerivce = inspectionPersistenceFactory.createNextInspectionScheduleService(transaction);
+	}
+
+	private void createSchedules(Transaction transaction) {
+		for (InspectionScheduleBundle inspectionScheduleBundle : parameter.schedules) {
+			InspectionSchedule inspectionSchedule = new InspectionSchedule(inspectionScheduleBundle.product, inspectionScheduleBundle.type, inspectionScheduleBundle.scheduledDate);
+			nextScheduleSerivce.createNextSchedule(inspectionSchedule);
+		}
+	}
+
+	private void createInspection(Transaction transaction) {
 		result = createInspectionSaver.createInspection(parameter);
 	}
 
@@ -69,6 +91,4 @@ public class InspectionCreator extends BasicTransactionManagement {
 		recordSuccess(parameter);
 	}
 
-
-	
 }

@@ -56,7 +56,6 @@ public class Log4JAuditLogger implements AuditLogger {
 	 */
 	private void audit(String methodName, String message, Throwable t) {
 		auditLogger.info(formatMessage(methodName, message, SecurityContext.getContext(), t));
-		System.out.println(methodName);
 	}
 	
 	/**

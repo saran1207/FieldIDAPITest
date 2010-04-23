@@ -18,14 +18,18 @@ public class CreateInspectionParameter {
 	public final FileDataContainer fileData;
 	public final List<FileAttachment> uploadedFiles;
 	public final boolean calculateInspectionResult;
+	
+	public final List<InspectionScheduleBundle> schedules;
 
-	public CreateInspectionParameter(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean calculateInspectionResult) {
+
+	public CreateInspectionParameter(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean calculateInspectionResult, List<InspectionScheduleBundle> schedules) {
 		this.inspection = inspection;
 		this.nextInspectionDate = nextInspectionDate;
 		this.userId = userId;
 		this.fileData = fileData;
 		this.uploadedFiles = uploadedFiles;
 		this.calculateInspectionResult = calculateInspectionResult;
+		this.schedules = schedules;
 	}
 
 	@Override

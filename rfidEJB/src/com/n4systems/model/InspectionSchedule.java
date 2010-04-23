@@ -210,8 +210,10 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 
 		if (schedule == null)
 			return false;
-		if (getId() == null)
-			return false;
+		if (getId() == null) {
+			return false; //product.equals(schedule.product) && inspectionType.equals(schedule.inspectionType) && nextDate.equals(schedule.nextDate);
+		}
+			
 
 		return getId().equals(schedule.getId());
 

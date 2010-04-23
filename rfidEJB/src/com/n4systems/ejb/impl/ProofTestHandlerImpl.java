@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-
-
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
@@ -36,7 +34,6 @@ import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
@@ -82,7 +79,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		this.inspectionManager = new InspectionManagerImpl(em);
 		this.userManager = new UserManager(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
-		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), new InspectionScheduleManagerImpl(em), persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
+		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), 
+				persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
 		
 	}
 	
@@ -420,10 +418,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		inspection.setType(inspType);
 		inspection.setPrintable(inspType.isPrintable());
 		
-		// the next inspection date we will pull from our product
-		//TODO look at this line AA
-		InspectionSchedule schedule = null; //product.getSchedule(inspType);
-		Date nextDate = (schedule != null) ? schedule.getNextDate() : null;
+		
 		
 		// let's see if there are any inspection info fields that need to be set
 		String infoFieldName, infoOptionName, resolvedInfoField;
@@ -445,7 +440,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			inspectionSaver.createInspection(
 					new CreateInspectionParameterBuilder(inspection,inspector.getUniqueID())
-					.withANextInspectionDate(nextDate)
 					.withProofTestFile(fileData).build());
 			
 			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");

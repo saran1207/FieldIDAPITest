@@ -40,8 +40,8 @@ public class NextInspectionScheduleServiceTest {
 		expect(mockInspectionScheduleManager.update((InspectionSchedule)anyObject())).andReturn(schedule);
 		replay(mockInspectionScheduleManager);
 		
-		NextInspectionScheduleService scheduleService = new NextInspectionScheduleService(product, inspectionType, nextDate, mockInspectionScheduleManager);		
-		InspectionSchedule returnedSchedule = scheduleService.createNextSchedule();
+		ManagerBackedNextInspectionScheduleService scheduleService = new ManagerBackedNextInspectionScheduleService(mockInspectionScheduleManager);		
+		InspectionSchedule returnedSchedule = scheduleService.createNextSchedule(new InspectionSchedule(product, inspectionType, nextDate));
 		
 		verify(mockInspectionScheduleManager);
 		assertEquals(schedule.getId(), returnedSchedule.getId());
@@ -60,8 +60,8 @@ public class NextInspectionScheduleServiceTest {
 		expect(mockInspectionScheduleManager.getAvailableSchedulesFor(product)).andReturn(existingSchedules);
 		replay(mockInspectionScheduleManager);
 		
-		NextInspectionScheduleService scheduleService = new NextInspectionScheduleService(product, inspectionType, nextDateDifferentTime, mockInspectionScheduleManager);
-		InspectionSchedule returnedSchedule = scheduleService.createNextSchedule();
+		ManagerBackedNextInspectionScheduleService scheduleService = new ManagerBackedNextInspectionScheduleService(mockInspectionScheduleManager);
+		InspectionSchedule returnedSchedule = scheduleService.createNextSchedule(new InspectionSchedule(product, inspectionType, nextDateDifferentTime));
 		
 		verify(mockInspectionScheduleManager);
 		assertEquals(schedule.getId(), returnedSchedule.getId());		

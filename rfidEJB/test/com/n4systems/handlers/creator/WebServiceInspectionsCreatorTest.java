@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.easymock.IAnswer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,9 +20,10 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.InspectionSchedule;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
+import com.n4systems.services.NextInspectionScheduleSerivce;
 import com.n4systems.test.helpers.FluentArrayList;
 
 
@@ -30,12 +32,18 @@ public class WebServiceInspectionsCreatorTest {
 		@Override
 		public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubProduct {
+					return createInspections(transactionGUID, inspections);
+				}
+
+		@Override
+		public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+				FileAttachmentException, UnknownSubProduct {
 			throw new TransactionAlreadyProcessedException();
 		}
 	}
 
 
-	private TransactionManager transactionManager  = new TestDoubleTransactionManager();
+	private TestDoubleTransactionManager transactionManager  = new TestDoubleTransactionManager();
 	private NullObjectDefaultedInspectionPersistenceFactory inspectionPersistenceFactory = new NullObjectDefaultedInspectionPersistenceFactory();
 
 	
@@ -52,11 +60,12 @@ public class WebServiceInspectionsCreatorTest {
 	
 	
 	@Test
-	public void should_create_CreateInspectionsMethodObject_from_the_factory_with_the_entity_manager_from_the_created_transaction() throws Exception {
-		Transaction transaction = transactionManager.startTransaction();
+	public void should_create_dependancies_from_the_factory_with_the_created_transaction() throws Exception {
+		Transaction transaction = transactionManager.getTransaction();
 		
 		InspectionPersistenceFactory inspectionPersistenceFactory = createMock(InspectionPersistenceFactory.class);
 		expect(inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction)).andReturn(new NullCreateInspectionsMethodObject());
+		expect(inspectionPersistenceFactory.createNextInspectionScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
 		expect(inspectionPersistenceFactory.createCreateInspectionAuditLogger()).andReturn(new NullAuditLogger());
 		replay(inspectionPersistenceFactory);
 		
@@ -85,7 +94,7 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_call_the_with_the_inspections_sent_in_CreateInspectionsMethodObject() throws Exception {
 		
 		CreateInspectionsMethodObject mockCreateInspectionsMethod = createMock(CreateInspectionsMethodObject.class);
-		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, inspections, nextInspectionDates)).andReturn(inspections);
+		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, inspections)).andReturn(inspections);
 		replay(mockCreateInspectionsMethod);
 		
 		inspectionPersistenceFactory.createInspectionsMethodObject = mockCreateInspectionsMethod;
@@ -105,7 +114,7 @@ public class WebServiceInspectionsCreatorTest {
 		List<Inspection> savedInspections = new FluentArrayList<Inspection>(anInspection().build(), anInspection().build());
 		
 		CreateInspectionsMethodObject mockCreateInspectionsMethod = createMock(CreateInspectionsMethodObject.class);
-		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, inspections, nextInspectionDates)).andReturn(savedInspections);
+		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, inspections)).andReturn(savedInspections);
 		replay(mockCreateInspectionsMethod);
 		
 		inspectionPersistenceFactory.createInspectionsMethodObject = mockCreateInspectionsMethod;
@@ -163,5 +172,24 @@ public class WebServiceInspectionsCreatorTest {
 		verify(auditLogger);
 	}
 	
+	
+	@Test
+	public void should_create_all_schedules_for_the_next_inspeciton_date_map() throws Exception {
+		
+		NextInspectionScheduleSerivce nextInspectionScheduleSerivce = createMock(NextInspectionScheduleSerivce.class);
+		expect(nextInspectionScheduleSerivce.createNextSchedule(isA(InspectionSchedule.class)))
+			.andAnswer(new IAnswer<InspectionSchedule>() {	@Override public InspectionSchedule answer() throws Throwable { return (InspectionSchedule)getCurrentArguments()[0]; } })
+			.times(nextInspectionDates.size());
+		replay(nextInspectionScheduleSerivce);
+		
+		inspectionPersistenceFactory.nextInspectionScheduleSerivce = nextInspectionScheduleSerivce;
+		
+		
+		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
+		
+		sut.create(transactionGUID, inspections, nextInspectionDates);
+		
+		verify(nextInspectionScheduleSerivce);
+	}
 	
 }

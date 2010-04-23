@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -36,24 +34,23 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.InspectionScheduleServiceImpl;
-import com.n4systems.services.NextInspectionScheduleService;
 import com.n4systems.tools.FileDataContainer;
 
 public class ManagerBackedInspectionSaver implements InspectionSaver {
 	private final Logger logger = Logger.getLogger(ManagerBackedInspectionSaver.class);
 	
 	public final LegacyProductSerial legacyProductManager;
-	public final InspectionScheduleManager inspectionScheduleManager;
+	
 	public final PersistenceManager persistenceManager;
 	public final EntityManager em;
 	public final LastInspectionDateFinder lastInspectionDateFinder;
+
 	
 
-	public ManagerBackedInspectionSaver(LegacyProductSerial legacyProductManager, InspectionScheduleManager inspectionScheduleManager, PersistenceManager persistenceManager, 
+	public ManagerBackedInspectionSaver(LegacyProductSerial legacyProductManager, PersistenceManager persistenceManager, 
 			EntityManager em, LastInspectionDateFinder lastInspectionDateFinder) {
 		super();
 		this.legacyProductManager = legacyProductManager;
-		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.persistenceManager = persistenceManager;
 		this.em = em;
 		this.lastInspectionDateFinder = lastInspectionDateFinder;
@@ -67,31 +64,23 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 			persistenceManager.save(parameterObject.inspection.getGroup(), parameterObject.userId);
 		}
 		
-		// set the status from the state sets
 		if (parameterObject.calculateInspectionResult) {
 			parameterObject.inspection.setStatus(calculateInspectionResult(parameterObject.inspection));
 		}
 		
-		// set proof test info on the inspection from a file data container
 		setProofTestData(parameterObject.inspection, parameterObject.fileData);
 	
 		confirmSubInspectionsAreAgainstAttachedSubProducts(parameterObject.inspection);
 	
 		setOrderForSubInspections(parameterObject.inspection);
 		
-		// persist the inspection
 		persistenceManager.save(parameterObject.inspection, parameterObject.userId);
 	
-		// update the product data
 		updateProduct(parameterObject.inspection, parameterObject.userId);
 	
-		// update the next inspection date
-		processNextInspection(parameterObject.inspection, parameterObject.nextInspectionDate);
 	
-		// save the proof test file and chart image to disk
 		saveProofTestFiles(parameterObject.inspection, parameterObject.fileData);
 	
-		// save attachments to disk
 		processUploadedFiles(parameterObject.inspection, parameterObject.uploadedFiles);
 	
 		return parameterObject.inspection;
@@ -190,14 +179,6 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	}
 	
-	private void processNextInspection(Inspection inspection, Date nextDate) {
-		Product product = em.find(Product.class, inspection.getProduct().getId());
-		
-		if (nextDate != null) {
-			NextInspectionScheduleService scheduleService = new NextInspectionScheduleService(product, inspection.getType(), nextDate, inspectionScheduleManager);
-			scheduleService.createNextSchedule();
-		} 
-	}
 	
 	
 	private void updateScheduleOwnerShip(Inspection inspection, Long userId) {
@@ -382,7 +363,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 
 	/**
-	 * This must be called AFTER the inspection and subinspection have been persisted
+	 * This must be called AFTER the inspection and sub-inspection have been persisted
 	 */
 	public Inspection attachFilesToSubInspection(Inspection inspection, SubInspection subInspection, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		inspection = attachUploadedFiles(inspection, subInspection, uploadedFiles);

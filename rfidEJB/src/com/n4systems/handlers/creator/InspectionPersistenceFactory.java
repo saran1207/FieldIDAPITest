@@ -5,6 +5,7 @@ import com.n4systems.ejb.impl.InspectionSaver;
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
+import com.n4systems.services.NextInspectionScheduleSerivce;
 
 public interface InspectionPersistenceFactory {
 
@@ -17,5 +18,7 @@ public interface InspectionPersistenceFactory {
 	public CreateInspectionsMethodObject createCreateInspectionsMethodObject(Transaction transaction);
 
 	public InspectionsInAGroupCreator createInspectionsInAGroupCreator();
+
+	public NextInspectionScheduleSerivce createNextInspectionScheduleService(Transaction transaction);
 
 }

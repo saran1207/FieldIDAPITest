@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -50,13 +51,18 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	private final EntityManagerLastInspectionDateFinder lastInspectionFinder;
 
+
+	private final InspectionScheduleManager inspectionScheduleManager;
+
 	
 	public InspectionManagerImpl(EntityManager em) {
 		super();
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.lastInspectionFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
-		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), new InspectionScheduleManagerImpl(em), persistenceManager, em, lastInspectionFinder);
+		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
+		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), 
+				persistenceManager, em, lastInspectionFinder);
 	}
 
 	/**
@@ -199,7 +205,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		inspection = persistenceManager.update(inspection, userId);
 		inspectionSaver.updateProductInspectionDate(inspection.getProduct());
 		inspection.setProduct(persistenceManager.update(inspection.getProduct()));
-		inspectionSaver.inspectionScheduleManager.restoreScheduleForInspection(inspection);
+		inspectionScheduleManager.restoreScheduleForInspection(inspection);
 		return inspection;
 	}
 

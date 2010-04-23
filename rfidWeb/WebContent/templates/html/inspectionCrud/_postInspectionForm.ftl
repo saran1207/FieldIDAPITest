@@ -25,14 +25,8 @@
 			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 		</span>
 	</p>
-		
-	<#if !inspection.id?exists >
-		<p>
-			<label><@s.text name="label.nextinspectiondate"/>:</label>
-			
-			<span class="date">
-				<@s.datetimepicker id="nextDate" name="nextInspectionDate" theme="fieldidSimple"/>
-			</span>
-		</p>
-	</#if>
+	<#if inspection.new >
+		<#include "_schedules.ftl"/>
+	</#if>	
+	
 </#if>

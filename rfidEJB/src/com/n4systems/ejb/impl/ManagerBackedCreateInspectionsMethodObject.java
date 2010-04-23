@@ -32,6 +32,10 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 	}
 
 	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
+		return createInspections(transactionGUID, inspections);
+	}
+
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
 		List<Inspection> savedInspections = new ArrayList<Inspection>();
 		
 		/*
@@ -71,7 +75,7 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 			}
 			
 			savedInspection = inspectionSaver.createInspection(new CreateInspectionParameterBuilder(inspection, inspection.getModifiedBy().getId())
-					.withANextInspectionDate(nextInspectionDates.get(inspection)).withUploadedImages(fileAttachments).build());
+					.withUploadedImages(fileAttachments).build());
 			
 			// handle the subinspection attachments
 			SubInspection subInspection = null;

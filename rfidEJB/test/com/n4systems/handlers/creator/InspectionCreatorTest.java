@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.impl.InspectionSaver;
+import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessFailureException;
@@ -20,10 +22,13 @@ import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.SubInspection;
+import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
+import com.n4systems.services.NextInspectionScheduleSerivce;
 
 
 public class InspectionCreatorTest {
@@ -55,13 +60,20 @@ public class InspectionCreatorTest {
 	
 	
 	@Test
-	public void should_create_saver_from_the_factory_with_the_entity_manager_from_the_created_transaction() throws Exception {
+	public void should_create_dependancies_from_the_factory_with_the_entity_manager_from_the_created_transaction() throws Exception {
 		Transaction transaction = transactionManager.startTransaction();
-		
 		InspectionPersistenceFactory inspectionPersistenceFactory = createMock(InspectionPersistenceFactory.class);
+		
+		// dependency creation.
 		expect(inspectionPersistenceFactory.createInspectionSaver(transaction)).andReturn(new NullInspectionSaver());
+		
+		expect(inspectionPersistenceFactory.createNextInspectionScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
+		
 		expect(inspectionPersistenceFactory.createCreateInspectionAuditLogger()).andReturn(new NullAuditLogger());
+		
+		
 		replay(inspectionPersistenceFactory);
+		
 		
 		InspectionCreator sut = new InspectionCreator(transactionManager, inspectionPersistenceFactory);
 		
@@ -100,7 +112,6 @@ public class InspectionCreatorTest {
 		InspectionCreator sut = new InspectionCreator(transactionManager, inspectionPersistenceFactory);
 		
 		sut.create(parameter);
-		
 	}
 	
 	
@@ -142,21 +153,8 @@ public class InspectionCreatorTest {
 	
 	
 	
-	@Test
-	public void should_get_audit_logger_from_factory() throws Exception {
-		InspectionPersistenceFactory inspectionPersistenceFactory = createMock(InspectionPersistenceFactory.class);
-		expect(inspectionPersistenceFactory.createInspectionSaver((Transaction)anyObject())).andReturn(new NullInspectionSaver());
-		expect(inspectionPersistenceFactory.createCreateInspectionAuditLogger()).andReturn(new NullAuditLogger());
-		replay(inspectionPersistenceFactory);
-		
-		InspectionCreator sut = new InspectionCreator(transactionManager, inspectionPersistenceFactory);
-		try {
-			sut.create(new CreateInspectionParameterBuilder(anInspection().build(), 1L).build());
-		} catch (Exception e) {	}
-		
-		verify(inspectionPersistenceFactory);
 	
-	}
+	
 	
 	@Test
 	public void should_return_the_saved_inspection_on_success() throws Exception {
@@ -179,7 +177,32 @@ public class InspectionCreatorTest {
 		
 		assertThat(actualReturnedInspection, sameInstance(savedInspection));
 	}
-
+	
+	
+	@Test
+	public void should_save_the_set_inspection_schedules_given() throws Exception {
+		Inspection inspection = anInspection().build();
+		CreateInspectionParameter parameter = new CreateInspectionParameterBuilder(inspection, 1L)
+			.addSchedule(new InspectionScheduleBundle(inspection.getProduct(), InspectionTypeBuilder.anInspectionType().build(), new Date()))
+			.addSchedule(new InspectionScheduleBundle(inspection.getProduct(), InspectionTypeBuilder.anInspectionType().build(), new Date(2000)))
+			.build();
+		
+		NextInspectionScheduleSerivce nextScheduleService = createMock(NextInspectionScheduleSerivce.class);
+		expect(nextScheduleService.createNextSchedule(isA(InspectionSchedule.class))).andReturn(null).times(2);
+		replay(nextScheduleService);
+		
+		inspectionPersistenceFactory.nextInspectionScheduleSerivce = nextScheduleService;
+		
+		
+		InspectionCreator sut = new InspectionCreator(transactionManager, inspectionPersistenceFactory);
+		
+		sut.create(parameter);
+		
+		verify(nextScheduleService);
+	}
+	
+	
+	
 
 	
 }

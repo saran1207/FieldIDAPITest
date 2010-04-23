@@ -3,12 +3,12 @@ package com.n4systems.handlers.creator.inspections.factory;
 import javax.persistence.EntityManager;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.impl.ManagerBackedCreateInspectionsMethodObject;
 import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
 import com.n4systems.ejb.impl.EntityManagerLastInspectionDateFinder;
 import com.n4systems.ejb.impl.InspectionSaver;
 import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.LastInspectionDateFinder;
+import com.n4systems.ejb.impl.ManagerBackedCreateInspectionsMethodObject;
 import com.n4systems.ejb.impl.ManagerBackedInspectionSaver;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
@@ -21,6 +21,8 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.security.CreateInspectionAuditHandler;
 import com.n4systems.security.Log4JAuditLogger;
+import com.n4systems.services.ManagerBackedNextInspectionScheduleService;
+import com.n4systems.services.NextInspectionScheduleSerivce;
 
 
 
@@ -35,7 +37,7 @@ public class ProductionInspectionPersistenceFactory implements InspectionPersist
 		PersistenceManager persistenceManager = new PersistenceManagerImpl(em);
 		LastInspectionDateFinder lastInspectionDateFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
 		
-		return new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), new InspectionScheduleManagerImpl(em), persistenceManager, em, lastInspectionDateFinder);
+		return new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), persistenceManager, em, lastInspectionDateFinder);
 	}
 
 	public InspectionCreator createInspectionCreator() {
@@ -57,6 +59,10 @@ public class ProductionInspectionPersistenceFactory implements InspectionPersist
 		return new WebServiceInspectionsCreator(createTransactionManager(), this);
 	}
 	
+	public NextInspectionScheduleSerivce createNextInspectionScheduleService(Transaction transaction) {
+		return new ManagerBackedNextInspectionScheduleService(new InspectionScheduleManagerImpl(transaction.getEntityManager()));
+	}
+		
 
 	
 }
