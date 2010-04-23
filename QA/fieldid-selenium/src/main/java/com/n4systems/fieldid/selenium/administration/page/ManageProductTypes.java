@@ -537,17 +537,17 @@ public class ManageProductTypes {
 	 */
 	private void deleteRetireProductTypeAttributeHelper(List<Attribute> attributes, boolean delete) throws InterruptedException {
 		String linkText = "Retire";
-		if(delete) {
+		if (delete) {
 			linkText = "Delete";
 		}
-		Iterator<Attribute> i = attributes.iterator();
-		while(i.hasNext()) {
-			Attribute a = i.next();
+		selenium.isElementPresent("css=h2:contains('Attributes')");
+		
+		for (Attribute a : attributes) {
 			String locator = "xpath=//INPUT[@value='" + a.getName() + "']";
 			String deleteLocator = locator + "/../../DIV[contains(@class,'linkCol')]/A[contains(text(),'" + linkText + "')]";
-			if(selenium.isElementPresent(deleteLocator)) {
+			if (selenium.isElementPresent(deleteLocator)) {
 				selenium.click(deleteLocator);
-				if(delete) {
+				if (delete) {
 					waitForAttributeToBeDeleted(locator);
 					verifyAttributeWasDeleted(a.getName());
 				} else {
@@ -626,7 +626,7 @@ public class ManageProductTypes {
 	 */
 	public void gotoEditProductType(String name) {
 		String editProductTypeLinkLocator = getProductTypeLinkLocator(name) + "/../../TD[2]/A[contains(text(),'Edit')]";
-		if(selenium.isElementPresent(editProductTypeLinkLocator)) {
+		if (selenium.isElementPresent(editProductTypeLinkLocator)) {
 			selenium.click(editProductTypeLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
