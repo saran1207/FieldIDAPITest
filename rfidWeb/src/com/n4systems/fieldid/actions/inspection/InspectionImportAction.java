@@ -140,7 +140,7 @@ public class InspectionImportAction extends AbstractImportAction {
 	 */
 	private String getExportFileName() {
 		String exportName = type.getName();
-		return getText("label.export_file", ArrayUtils.newArray(exportName));
+		return getText("label.export_file.inspection", ArrayUtils.newArray(exportName));
 	}
 	
 	public String getFileName() {
