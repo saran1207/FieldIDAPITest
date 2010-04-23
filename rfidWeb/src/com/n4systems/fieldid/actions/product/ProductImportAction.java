@@ -67,7 +67,7 @@ public class ProductImportAction extends AbstractImportAction {
 			exporter.export(writer);
 			
 		} catch (Exception e) {
-			logger.error("Failed generating example auto-attribute export", e);
+			logger.error("Failed generating example asset export", e);
 			return ERROR;
 		} finally {
 			StreamUtils.close(writer);
@@ -135,7 +135,7 @@ public class ProductImportAction extends AbstractImportAction {
 	 */
 	private String getExportFileName() {
 		String exportName = type.getName();
-		return getText("label.export_file", ArrayUtils.newArray(exportName));
+		return getText("label.export_file.asset", ArrayUtils.newArray(exportName));
 	}
 	
 	public String getFileName() {

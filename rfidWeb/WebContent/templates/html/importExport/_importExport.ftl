@@ -5,17 +5,17 @@
 <h2 class="sectionTitle largeText"><@s.text name="label.import_export" /></h2>
 
 <div id="leftBox">
-	<p><@s.text name="label.import_export.desc" /></p>
+	<p><@s.text name="label.import_export.desc.${labelTarget}" /></p>
 	
 	<div id="importBox">
-		<h3><@s.text name="label.import" /></h3>
+		<h3><@s.text name="label.import.${labelTarget}" /></h3>
 		<a href='${importUrl}'><@s.text name="label.upload_excel" /></a>
 		<a href='${exportExample}'><@s.text name="label.download_excel_template" /></a>
 	</div>
 	
 	<#if exportExcel?exists>
 		<div id="exportBox">
-			<h3><@s.text name="label.export" /></h3>
+			<h3><@s.text name="label.export.${labelTarget}" /></h3>
 				<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.excel_file" /></a>
 		</div>
 	</#if>

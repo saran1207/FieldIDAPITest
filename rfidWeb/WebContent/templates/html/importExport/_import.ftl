@@ -2,7 +2,7 @@
 	<@n4.includeStyle type="page" href="importExport"/>
 	<script language="javascript" src="javascript/importExport.js"> </script>
 </head>
-<h2 class="sectionTitle"><@s.text name="label.import" /></h2>
+<h2 class="sectionTitle"><@s.text name="label.import.${labelTarget}" /></h2>
 
 <#include "../common/_formErrors.ftl"/>
 <@s.form id="uploadForm" action="${importAction}" cssClass="fullForm fluentSets" theme="fieldid" method="POST" enctype="multipart/form-data">

@@ -66,7 +66,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), attribLoader);
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute auto attribute export", e);
-			addFlashMessage(getText("error.export_failed"));
+			addFlashMessage(getText("error.export_failed.autoattrib"));
 			return ERROR;
 		}
 		return SUCCESS;
@@ -74,7 +74,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 
 	private String getExportFileName() {
 		String exportName = autoAttributeCriteria.getProductType().getName();
-		return getText("label.export_file", ArrayUtils.newArray(exportName));
+		return getText("label.export_file.autoattrib", ArrayUtils.newArray(exportName));
 	}
 	
 	public AutoAttributeDefinition createExampleDefinition() {

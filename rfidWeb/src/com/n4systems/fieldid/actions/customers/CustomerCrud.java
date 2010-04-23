@@ -150,10 +150,10 @@ public class CustomerCrud extends AbstractCrud {
 	@SkipValidation
 	public String doExport() {
 		try {
-			getDownloadCoordinator().generateCustomerExport(getText("label.export_file"), getDownloadLinkUrl(), createCustomerOrgListLoader(), getSecurityFilter());
+			getDownloadCoordinator().generateCustomerExport(getText("label.export_file.customer"), getDownloadLinkUrl(), createCustomerOrgListLoader(), getSecurityFilter());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute customer export", e);
-			addFlashMessage(getText("error.export_failed"));
+			addFlashMessage(getText("error.export_failed.customer"));
 			return ERROR;
 		}
 		return SUCCESS;
