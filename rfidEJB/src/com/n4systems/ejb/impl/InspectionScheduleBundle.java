@@ -27,15 +27,15 @@ public class InspectionScheduleBundle {
 
 	private void guard() {
 		if (product == null) {
-			throw new IllegalArgumentException("product can not be null");
+			throw new NullPointerException("product");
 		}
 		
 		if (type == null) {
-			throw new IllegalArgumentException("inspection type can not be null");
+			throw new NullPointerException("type");
 		}
 		
 		if (scheduledDate == null) {
-			throw new IllegalArgumentException("schedule date can not be null");
+			throw new NullPointerException("scheduleDate");
 		}
 	}
 

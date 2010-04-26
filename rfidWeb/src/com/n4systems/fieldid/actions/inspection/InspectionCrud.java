@@ -65,6 +65,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.StringUtils;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -617,7 +618,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public void setNextInspectionDate(String nextInspectionDate) {
-		this.nextInspectionDate = nextInspectionDate;
+		this.nextInspectionDate = StringUtils.clean(nextInspectionDate);
 	}
 
 	public List<ListingPair> getInspectors() {
