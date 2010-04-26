@@ -74,8 +74,11 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	private void createSchedules(Transaction transaction) {
 		for (Entry<Inspection, Date> nextInspectionDate : nextInspectionDates.entrySet()) {
 			Inspection inspectionCreatingSchedule = nextInspectionDate.getKey();
-			InspectionSchedule schedule = new InspectionSchedule(inspectionCreatingSchedule.getProduct(), inspectionCreatingSchedule.getType(), nextInspectionDate.getValue());
-			createNextInspectionScheduleService.createNextSchedule(schedule);
+			
+			if (nextInspectionDate.getValue() != null) {
+				InspectionSchedule schedule = new InspectionSchedule(inspectionCreatingSchedule.getProduct(), inspectionCreatingSchedule.getType(), nextInspectionDate.getValue());
+				createNextInspectionScheduleService.createNextSchedule(schedule);
+			}
 		}
 	}
 
