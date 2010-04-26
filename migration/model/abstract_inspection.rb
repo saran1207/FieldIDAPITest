@@ -15,6 +15,8 @@ class AbstractInspection < ActiveRecord::Base
   belongs_to  :product,         :foreign_key => 'product_id',         :class_name => 'Product'
   has_many    :results,         :foreign_key => 'inspection_id',      :class_name => 'CriteriaResult'
   has_many    :infoOptions,     :foreign_key => 'inspections_id',     :class_name => 'InspectionInfoOption'
+  has_many :sub_inspections,  :foreign_key => 'inspection_id', :class_name => 'SubInspection'
+  has_many :master_inspections, :foreign_key => 'inspection_id', :class_name => 'Inspection'
   
   def getFilePath
     return tenant.name + created.strftime("/%y/%m/") + id.to_s
