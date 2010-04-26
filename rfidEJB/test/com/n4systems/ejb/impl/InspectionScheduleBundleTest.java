@@ -27,21 +27,21 @@ public class InspectionScheduleBundleTest {
 		Assert.assertThat(sut, notNullValue());
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=NullPointerException.class)
 	public void should_not_allow_null_for_product() throws Exception {
 		
 		new InspectionScheduleBundle(null, inspectionType, scheduleDate);
 		
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=NullPointerException.class)
 	public void should_not_allow_null_for_inspection_type() throws Exception {
 		
 		new InspectionScheduleBundle(product, null, scheduleDate);
 		
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=NullPointerException.class)
 	public void should_not_allow_null_for_schedule_date() throws Exception {
 		
 		new InspectionScheduleBundle(product, inspectionType, null);
