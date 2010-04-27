@@ -3,6 +3,7 @@ require 'abstract_inspection'
 require 'inspection_info_option'
 require 'criteria_result'
 require 'inspection_file_attachment'
+require "product_status"
 
   def getMasterInspectionIds(serialnumber)
     #Get the corresponding product_id
@@ -118,4 +119,42 @@ require 'inspection_file_attachment'
   def verify_pictures(inspection_id, number_of_pictures)
     result_set = InspectionFileAttachment.find_by_inspections_id(inspection_id)
     if result_set.kind_of? Array then result_set.count == number_of_pictures else 1 == number_of_pictures end
+  end
+
+
+  def verify_product_attributes(serialnumber, attributes_list)
+
+    #Retrieve attributes.
+    info_options = Product.first(:include =>:infoOptionsFK, :conditions =>{:serialnumber =>serialnumber}).infoOptions
+    attributes = Array.new
+    info_options.each do |attribute|
+      attributes << attribute.name
+    end
+
+    attributes.sort.eql?(attributes_list.sort)
+
+  end
+
+  def verify_identified_date(serialnumber, date)
+    #  Product.find_by_serialnumber(serialnumber).date
+  end
+
+  #Note to self, remove [0] index when rp10 duplication issus is removed.
+  def verify_product_status(serialnumber, status)
+    #.name doesn't return what I need. Do another lookup.
+    uniqueid = Product.all(:include =>:product_statuses, :conditions =>
+        { :serialnumber => serialnumber})[1].productstatus_uniqueid
+    ProductStatus.find_by_uniqueid(uniqueid).name.should == status
+  end
+
+  def verify_order_number(serialnumber, order_number)
+    result_set = Product.first(:include =>{:tenant =>:orders}, :conditions =>{:serialnumber =>serialnumber}).tenant.orders
+    order_numbers=Array.new
+
+    result_set.each do |order|
+      order_numbers << order.ordernumber
+    end
+
+    order_numbers.include?(order_number)
+
   end
