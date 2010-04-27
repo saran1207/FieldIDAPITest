@@ -41,23 +41,27 @@ describe "Asset attributes" do
 
     #Check purchase and order numbers
     Product.find_by_serialnumber(@edit_csv_contents[1][1]).purchaseorder.should == @edit_csv_contents[1][7]
+    verify_order_number(@edit_csv_contents[1][1], @edit_csv_contents[1][8]).should_not be false
+
+    #Check product type.
+    Product.first(:include => :productinfo, :conditions => {:serialnumber => @edit_csv_contents[1][1]}).productinfo.name.should == @edit_csv_contents[1][11]
 
   end
 
-  #using rp10. This test may fail after cleaning DB.
-  it "status of an existing online asset was correctly changed  (Test #2)" do
+  #changed from rp10 to rp60, due to duplicate on rp10. This test may fail after cleaning DB.
+  it "status of an existing online asset was correctly changed (Test #2)" do
     
-    #verify_product_status(@edit_csv_contents[2][1] ,@edit_csv_contents[2][6]).should_not be false
-  
-
+    verify_product_status(@edit_csv_contents[2][1] ,@edit_csv_contents[2][6])
   end
    
   it "multiple asset edit correctly performed  (Test #3)" do
+
     Product.find_by_serialnumber(@edit_csv_contents[3][1]).location.should == @edit_csv_contents[3][4]
     Product.find_by_serialnumber(@edit_csv_contents[3][3]).location.should == @edit_csv_contents[3][4]
   end
 
   it "edit performed right after inspection on the same asset  (Test #4)" do
+
     verify_product_attributes(@edit_csv_contents[4][1],
       [@edit_csv_contents[4][12],@edit_csv_contents[4][13], @edit_csv_contents[4][14]]).should_not be false
   end
@@ -70,38 +74,24 @@ describe "Asset attributes" do
   #verify_identified_date(@edit_csv_contents[5][1], @edit_csv_contents[5][9])
   #end
 
+  it "multiple single edits queued one after another (Test #6)" do
 
-  it "multiple single edits queued one after another (Test #6)"
+    verify_product_attributes(@edit_csv_contents[6][1],
+      [@edit_csv_contents[6][12],@edit_csv_contents[6][13], @edit_csv_contents[6][14]]).should_not be false
 
-  it "edit performed on master location, propagates to sub (Test #7)"
+  end
 
-  it "reflect the owner for a newly created asset (Test #8)" do
+  it "edit performed on master location, propagates to sub (Test #7)" do
+
+    #Join on sub products, ensure this subproduct's location matches the master's, which was edited.
+    Product.first(:include => :subProducts, :conditions=>{:serialnumber => @edit_csv_contents[7][1]}).location.should == @edit_csv_contents[7][4]
+  end
+
+  #Reusing rp60
+  it "reflect the tenant and customer for a newly created asset (Test #8)" do
 
     #Test Organization and customer name are correct.
-    #  Product.first(:include => :owner, :conditions =>{:serialnumber => @csv_contents[1][0]}).owner.name.should ==  @csv_contents[1][4]
+    Product.first(:include => :tenant, :conditions =>{:serialnumber => @edit_csv_contents[8][1]}).tenant.name.should ==  @edit_csv_contents[8][16]
   end
 
-  def verify_product_attributes(serialnumber, attributes_list)
-
-    #Retrieve attributes.
-    info_options = Product.first(:include =>:infoOptionsFK, :conditions =>{:serialnumber =>serialnumber}).infoOptions
-    attributes = Array.new
-    info_options.each do |attribute|
-      attributes << attribute.name
-    end
-    
-    attributes.sort.eql?(attributes_list.sort)
-      
-  end
-
-  def verify_identified_date(serialnumber, date)
-    #  Product.find_by_serialnumber(serialnumber).date
-  end
-
-  def verify_product_status(serialnumber, status)
-    #.name doesn't return what I need. Do another lookup.
-    uniqueid = Product.first(:include =>:product_statuses, :conditions =>
-        { :serialnumber => serialnumber}).productstatus_uniqueid
-    ProductStatus.find_by_uniqueid(uniqueid).name
-  end
 end
