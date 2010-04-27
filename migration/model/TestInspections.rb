@@ -119,7 +119,7 @@ describe "An Inspection" do
   end
 
   it "multi event inspections work (Test #8)" do
-    #inspection_id = getInspectionIds(@inspection_csv_contents[8][1])
+    (master_inspection_id = getMasterInspectionIds(@inspection_csv_contents[8][1])).count.should be 3
   end
 
   #==============================================================================================================================
