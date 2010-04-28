@@ -6,6 +6,7 @@ public class StateServiceDTO extends AbstractBaseServiceDTO {
 	private String status;
 	private String buttonName;
 	private Long stateSetId;
+	private boolean retired;
 	
 	public String getDisplayText() {
 		return displayText;
@@ -30,6 +31,12 @@ public class StateServiceDTO extends AbstractBaseServiceDTO {
 	}
 	public void setStateSetId(Long stateSetId) {
 		this.stateSetId = stateSetId;
+	}
+	public boolean isRetired() {
+		return retired;
+	}
+	public void setRetired(boolean retired) {
+		this.retired = retired;
 	}
 	
 }
