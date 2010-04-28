@@ -893,6 +893,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		stateServiceDTO.setDisplayText(state.getDisplayText());
 		stateServiceDTO.setStatus(state.getStatus().name());
 		stateServiceDTO.setStateSetId(stateSetId);
+		stateServiceDTO.setRetired(state.isRetired());
 
 		return stateServiceDTO;
 	}
