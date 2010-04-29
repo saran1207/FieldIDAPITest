@@ -50,7 +50,6 @@ import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
-import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
@@ -65,7 +64,6 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.StringUtils;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -126,9 +124,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private String proofTestDirectory;
 	private boolean newFile = false;
 	
-	protected String nextInspectionDate;
-	protected InspectionType nextInspectionType;
-	
+	private List<String> nextInspectionDates = new ArrayList<String>();
+	private List<Long> nextInspectionTypes = new ArrayList<Long>();
 
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
@@ -267,9 +264,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		setInspector(getSessionUser().getUniqueID());
 		inspection.setPrintable(inspection.getType().isPrintable());
 		setUpSupportedProofTestTypes();
-
-		
-		autoSuggestNextInspection();
 		
 		if (inspectionSchedule != null) {	
 			inspectionSchedule.inProgress();
@@ -284,15 +278,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		suggestSchedule();
 
 		return SUCCESS;
-	}
-
-	private void autoSuggestNextInspection() {
-		ProductTypeSchedule schedule = product.getType().getSchedule(inspection.getType(), product.getOwner());
-		if (schedule != null) {
-			Date nextDate = schedule.getNextDate(DateHelper.getToday());
-			nextInspectionDate = convertDate(nextDate);
-			nextInspectionType = getInspectionType();
-		}
 	}
 
 	private void suggestSchedule() {
@@ -381,13 +366,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			inspection.setTenant(getTenant());
 			inspection.setProduct(product);
 			inspection.setDate(convertDateTime(inspectionDate));
-
-			// setup the next inspection date.
-			Date nextInspection = null;
-			if (nextInspectionDate != null && nextInspectionDate.length() > 0) {
-				nextInspection = convertDate(nextInspectionDate);
-			}
-
+			
 			processProofTestFile();
 			
 			if (inspection.isNew()) {
@@ -397,15 +376,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				// ensure the form version is set from the inspection type on create
 				inspection.syncFormVersionWithType();
 				
-				// it's save time
-				
 				CreateInspectionParameterBuilder createInspectionParameterBuilder = new CreateInspectionParameterBuilder(inspection, getSessionUserId())
 						.withProofTestFile(fileData)
 						.withUploadedImages(getUploadedFiles());
 				
-				if (nextInspectionDate != null) {
-					createInspectionParameterBuilder.addSchedule(new InspectionScheduleBundle(product, nextInspectionType, nextInspection));
-				}
+				createInspectionParameterBuilder.addSchedules(createInspectionScheduleBundles());
 				
 				inspection = inspectionPersistenceFactory.createInspectionCreator().create(createInspectionParameterBuilder.build());
 				uniqueID = inspection.getId();
@@ -438,6 +413,23 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 		addFlashMessageText("message.inspectionsaved");
 		return SUCCESS;
+	}
+
+	protected List<InspectionScheduleBundle> createInspectionScheduleBundles() {
+		List<InspectionScheduleBundle> scheduleBundles = new ArrayList<InspectionScheduleBundle>();
+		
+		Date scheduleDate;
+		InspectionType scheduleType;
+		if (!nextInspectionDates.isEmpty()) {
+			for (int i = 0; i < nextInspectionDates.size(); i++) {
+				scheduleDate = convertDate(nextInspectionDates.get(i));
+				scheduleType = persistenceManager.find(InspectionType.class, nextInspectionTypes.get(i), getTenantId());
+				
+				scheduleBundles.add(new InspectionScheduleBundle(product, scheduleType, scheduleDate));
+			}
+		}
+		
+		return scheduleBundles;
 	}
 
 	protected void findInspectionBook() throws ValidationException, PersistenceException {
@@ -610,15 +602,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public Inspection getInspection() {
 		return inspection;
-	}
-
-	public String getNextInspectionDate() {
-		return nextInspectionDate;
-	}
-
-	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
-	public void setNextInspectionDate(String nextInspectionDate) {
-		this.nextInspectionDate = StringUtils.clean(nextInspectionDate);
 	}
 
 	public List<ListingPair> getInspectors() {
@@ -1022,16 +1005,42 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return !inspection.getTenant().equals(getTenant());
 	}
 
-	public Long getNextInspectionType() {
-		return nextInspectionType != null ? nextInspectionType.getId() : null;
+	public List<String> getNextInspectionDates() {
+		return nextInspectionDates;
 	}
 
-	public void setNextInspectionType(Long nextInspectionType) {
-		if (nextInspectionType == null) {
-			this.nextInspectionType = null;
-		} else if (this.nextInspectionType == null || !nextInspectionType.equals(this.nextInspectionType.getId())) {
-			this.nextInspectionType = persistenceManager.find(InspectionType.class, nextInspectionType, getTenantId());
-		}
-		
+	public void setNextInspectionDates(List<String> nextInspectionDates) {
+		this.nextInspectionDates = nextInspectionDates;
 	}
+
+	public List<Long> getNextInspectionTypes() {
+		return nextInspectionTypes;
+	}
+
+	public void setNextInspectionTypes(List<Long> nextInspectionTypes) {
+		this.nextInspectionTypes = nextInspectionTypes;
+	}
+	
+	
+//	public String getNextInspectionDate() {
+//		return nextInspectionDate;
+//	}
+//
+//	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
+//	public void setNextInspectionDate(String nextInspectionDate) {
+//		this.nextInspectionDate = StringUtils.clean(nextInspectionDate);
+//	}
+//	
+//	public Long getNextInspectionType() {
+//		return nextInspectionType != null ? nextInspectionType.getId() : null;
+//	}
+//
+//	public void setNextInspectionType(Long nextInspectionType) {
+//		if (nextInspectionType == null) {
+//			this.nextInspectionType = null;
+//		} else if (this.nextInspectionType == null || !nextInspectionType.equals(this.nextInspectionType.getId())) {
+//			this.nextInspectionType = persistenceManager.find(InspectionType.class, nextInspectionType, getTenantId());
+//		}
+//		
+//	}
 }

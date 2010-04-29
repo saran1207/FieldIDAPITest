@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions.helpers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +8,12 @@ import java.util.Random;
 
 import rfid.ejb.entity.ProductStatusBean;
 
+import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.fieldid.utils.ListHelper;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
@@ -33,8 +32,6 @@ public class MasterInspection {
 
 	private List<SubInspection> subInspections = new ArrayList<SubInspection>();
 
-	private Date nextDate;
-
 	private Long currentId = -1L;
 
 	private Long inspectionGroupId;
@@ -46,8 +43,8 @@ public class MasterInspection {
 	private InspectionSchedule schedule;
 	private Long scheduleId;
 
-	private InspectionType nextInspectionType;
-
+	private List<InspectionScheduleBundle> scheduleBundles = new ArrayList<InspectionScheduleBundle>();
+	
 	public MasterInspection() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
 		subInspectionUploadedFiles = new HashMap<SubInspection, List<FileAttachment>>();
@@ -101,14 +98,6 @@ public class MasterInspection {
 
 	public void setProductStatus(ProductStatusBean productStatus) {
 		this.productStatus = productStatus;
-	}
-
-	public Date getNextDate() {
-		return nextDate;
-	}
-
-	public void setNextDate(Date nextDate) {
-		this.nextDate = nextDate;
 	}
 
 	public boolean matchingToken(String token) {
@@ -314,14 +303,12 @@ public class MasterInspection {
 	public void setScheduleId(Long scheduleId) {
 		this.scheduleId = scheduleId;
 	}
-
-	public void setNextInspectionType(InspectionType nextInspectionType) {
-		this.nextInspectionType = nextInspectionType;
-		
-	}
-
-	public InspectionType getNextInspectionType() {
-		return nextInspectionType;
-	}
 	
+	public List<InspectionScheduleBundle> getScheduleBundles() {
+		return scheduleBundles;
+	}
+
+	public void setScheduleBundles(List<InspectionScheduleBundle> scheduleBundles) {
+		this.scheduleBundles = scheduleBundles;
+	}
 }

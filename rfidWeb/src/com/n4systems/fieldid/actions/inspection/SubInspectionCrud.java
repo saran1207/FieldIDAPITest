@@ -110,7 +110,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		setUpSupportedProofTestTypes();
 		encodeInfoOptionMapForUseInForm();
 		inspection.setProductStatus(masterInspectionHelper.getProductStatus());
-		nextInspectionDate = convertDate(masterInspectionHelper.getNextDate());
+		
 		setScheduleId(masterInspectionHelper.getScheduleId());
 		reattachUploadedFiles();
 
@@ -256,15 +256,9 @@ public class SubInspectionCrud extends InspectionCrud {
 				if (inspection.isEditable()) {
 					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
 				}
-
-				// setup the next inspection date.
-				if (nextInspectionDate != null && nextInspectionDate.length() > 0) {
-					masterInspectionHelper.setNextDate(convertDate(nextInspectionDate));
-					masterInspectionHelper.setNextInspectionType(nextInspectionType);
-				} else {
-					masterInspectionHelper.setNextDate(null);
-					masterInspectionHelper.setNextInspectionType(null);
-				}
+					
+				masterInspectionHelper.getScheduleBundles().addAll(createInspectionScheduleBundles());
+				
 			} else {
 				if (inspection.isEditable()) {
 					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);

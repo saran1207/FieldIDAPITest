@@ -429,5 +429,12 @@
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
 		
+		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.inspection.AddInspectionScheduleAjaxAction">
+			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/inspectionSchedule.ftl</result>
+		</action>
+		
+		<action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.inspection.AddInspectionScheduleAjaxAction">
+			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/inspectionSchedule.ftl</result>
+		</action>
 	</package>
 </struts>

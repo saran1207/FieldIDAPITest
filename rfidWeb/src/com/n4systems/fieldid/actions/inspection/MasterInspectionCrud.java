@@ -9,7 +9,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -213,9 +212,8 @@ public class MasterInspectionCrud extends AbstractCrud {
 				CreateInspectionParameterBuilder createInspecitonBuiler = new CreateInspectionParameterBuilder(master, getSessionUserId())
 						.withProofTestFile(masterInspection.getProofTestFile())
 						.withUploadedImages(masterInspection.getUploadedFiles());
-				if (masterInspection.getNextDate() != null) {
-					createInspecitonBuiler.addSchedule(new InspectionScheduleBundle(master.getProduct(), masterInspection.getNextInspectionType(), masterInspection.getNextDate()));
-				}
+				
+				createInspecitonBuiler.addSchedules(masterInspection.getScheduleBundles());
 				
 				inspection = inspectionPersistenceFactory.createInspectionCreator().create(
 						createInspecitonBuiler.build());
