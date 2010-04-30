@@ -7,6 +7,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.Project;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
@@ -14,6 +15,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private InspectionType inspectionType;
 	private Product product;
+	private Project job;
 	private String date;
 	private Long index;
 	
@@ -54,6 +56,18 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		product = getLoaderFactory().createFilteredIdLoader(Product.class).setId(id).setPostFetchFields("type.inspectionTypes").load();
 	}
 
+	public Project getJob() {
+		return job;
+	}
+	
+	public Long getJobId() {
+		return (product != null) ? product.getId(): null;
+	}
+
+	public void setJobId(Long id) {
+		job = getLoaderFactory().createFilteredIdLoader(Project.class).setId(id).load();
+	}
+	
 	public String getDate() {
 		return date;
 	}

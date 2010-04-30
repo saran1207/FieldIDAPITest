@@ -8,18 +8,19 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
+import com.n4systems.model.Project;
 
-public class InspectionScheduleBundle {
-
+public class InspectionScheduleBundle {	
+	private final Product product;
+	private final InspectionType type;
+	private final Project job;
+	private final Date scheduledDate;
 	
-	public final Product product;
-	public final InspectionType type;
-	public final Date scheduledDate;
-	
-	public InspectionScheduleBundle(Product product, InspectionType type, Date scheduledDate) {
+	public InspectionScheduleBundle(Product product, InspectionType type, Project job, Date scheduledDate) {
 		super();
 		this.product = product;
 		this.type = type;
+		this.job = job;
 		this.scheduledDate = scheduledDate;
 		
 		guard();
@@ -38,6 +39,22 @@ public class InspectionScheduleBundle {
 			throw new NullPointerException("scheduleDate");
 		}
 	}
+	
+	public Product getProduct() {
+		return product;
+	}
+
+	public InspectionType getType() {
+		return type;
+	}
+
+	public Project getJob() {
+		return job;
+	}
+
+	public Date getScheduledDate() {
+		return scheduledDate;
+	}
 
 	@Override
 	public int hashCode() {
@@ -53,9 +70,5 @@ public class InspectionScheduleBundle {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
-	
-	
-	
 	
 }

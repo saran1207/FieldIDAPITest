@@ -52,7 +52,7 @@ public class CreateInspectionParameterBuilderTest extends ConfigContextRequiredT
 	@Test
 	public void should_create_a_create_inspection_parameter_with_a_next_inspection_date() throws Exception {
 		Date nextInspectionDate = new Date();
-		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), nextInspectionDate));
+		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate));
 		CreateInspectionParameter createInpsectionParameter = new CreateInspectionParameter(inspection, nextInspectionDate, userId, null, null, true, schedules);
 		
 		sut.withANextInspectionDate(nextInspectionDate);
@@ -100,7 +100,7 @@ public class CreateInspectionParameterBuilderTest extends ConfigContextRequiredT
 		Date nextInspectionDate = new Date();
 		FileDataContainer proofTestData = new FileDataContainer();
 		ArrayList<FileAttachment> uploadedImages = new ArrayList<FileAttachment>();
-		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), nextInspectionDate));
+		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate));
 		
 		CreateInspectionParameter expectedCreateInpsectionParameter = new CreateInspectionParameter(inspection, nextInspectionDate, userId, proofTestData, uploadedImages, false, schedules);
 		
@@ -119,9 +119,9 @@ public class CreateInspectionParameterBuilderTest extends ConfigContextRequiredT
 	public void should_create_inspection_bundle_with_a_single_schedule_bundles_added() throws Exception {
 		Date nextInspectionDate = new Date();
 		
-		CreateInspectionParameter createInpsectionParameter = new CreateInspectionParameter(inspection, null, userId, null, null, true, ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), nextInspectionDate)));
+		CreateInspectionParameter createInpsectionParameter = new CreateInspectionParameter(inspection, null, userId, null, null, true, ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate)));
 		
-		sut.addSchedule(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), nextInspectionDate));
+		sut.addSchedule(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate));
 		
 		CreateInspectionParameter build = sut.build();
 		assertThat(build, equalTo(createInpsectionParameter));
@@ -131,8 +131,8 @@ public class CreateInspectionParameterBuilderTest extends ConfigContextRequiredT
 	public void should_create_inspection_bundle_with_the_list_of_schedule_bundles_added() throws Exception {
 		Date nextInspectionDate = new Date();
 		
-		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), nextInspectionDate), 
-				new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), new Date(100000L)));
+		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate), 
+				new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, new Date(100000L)));
 		
 		CreateInspectionParameter createInpsectionParameter = new CreateInspectionParameter(inspection, null, userId, null, null, true, schedules);
 		for (InspectionScheduleBundle bundle : schedules) {
@@ -147,8 +147,8 @@ public class CreateInspectionParameterBuilderTest extends ConfigContextRequiredT
 	public void should_create_inspection_bundle_with_the_list_of_schedule_bundles_added_in_a_single_call() throws Exception {
 		Date nextInspectionDate = new Date();
 		
-		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), nextInspectionDate), 
-				new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), new Date(100000L)));
+		List<InspectionScheduleBundle> schedules = ImmutableList.of(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate), 
+				new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, new Date(100000L)));
 		
 		CreateInspectionParameter createInpsectionParameter = new CreateInspectionParameter(inspection, null, userId, null, null, true, schedules);
 		sut.addSchedules(schedules);

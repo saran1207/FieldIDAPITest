@@ -17,6 +17,7 @@ import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
+import com.n4systems.model.jobs.EventJobListableLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
@@ -161,6 +162,10 @@ public class LoaderFactory {
 
 	public DownloadLinkListLoader createDownloadLinkListLoader() {
 		return new DownloadLinkListLoader(filter);
+	}
+
+	public EventJobListableLoader createEventJobListableLoader() {
+		return new EventJobListableLoader(filter);
 	}
 
 	public FileAttachmentLoader createFileAttachmentLoader() {
@@ -378,7 +383,7 @@ public class LoaderFactory {
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

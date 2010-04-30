@@ -50,6 +50,7 @@ import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
+import com.n4systems.model.Project;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
@@ -63,6 +64,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -107,6 +109,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private List<Listable<Long>> commentTemplates;
 	private List<ListingPair> inspectionBooks;
 	private List<InspectionSchedule> availableSchedules;
+	private List<ListingPair> eventJobs;
 	
 	private OwnerPicker ownerPicker;
 	
@@ -126,7 +129,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	private List<String> nextInspectionDates = new ArrayList<String>();
 	private List<Long> nextInspectionTypes = new ArrayList<Long>();
-
+	private List<Long> nextInspectionJobs = new ArrayList<Long>();
+	
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
@@ -420,12 +424,19 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		
 		Date scheduleDate;
 		InspectionType scheduleType;
+		Project scheduleJob;
 		if (!nextInspectionDates.isEmpty()) {
 			for (int i = 0; i < nextInspectionDates.size(); i++) {
 				scheduleDate = convertDate(nextInspectionDates.get(i));
 				scheduleType = persistenceManager.find(InspectionType.class, nextInspectionTypes.get(i), getTenantId());
 				
-				scheduleBundles.add(new InspectionScheduleBundle(product, scheduleType, scheduleDate));
+				if (nextInspectionJobs.get(i) != null) {
+					scheduleJob = getLoaderFactory().createFilteredIdLoader(Project.class).setId(nextInspectionJobs.get(i)).load();
+				} else {
+					scheduleJob = null;
+				}
+				
+				scheduleBundles.add(new InspectionScheduleBundle(product, scheduleType, scheduleJob, scheduleDate));
 			}
 		}
 		
@@ -967,6 +978,14 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return scheduleOptions;
 	}
 	
+	public List<ListingPair> getJobs() {
+		if (eventJobs == null) {
+			List<Listable<Long>> eventJobListables = getLoaderFactory().createEventJobListableLoader().load();
+			eventJobs = ListHelper.longListableToListingPair(eventJobListables);
+		}
+		return eventJobs;
+	}
+	
 	public boolean isInspectionScheduleOnInspection() {
 		return inspectionScheduleOnInspection;
 	}
@@ -1020,27 +1039,13 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public void setNextInspectionTypes(List<Long> nextInspectionTypes) {
 		this.nextInspectionTypes = nextInspectionTypes;
 	}
+
+	public List<Long> getNextInspectionJobs() {
+		return nextInspectionJobs;
+	}
+
+	public void setNextInspectionJobs(List<Long> nextInspectionJobs) {
+		this.nextInspectionJobs = nextInspectionJobs;
+	}
 	
-	
-//	public String getNextInspectionDate() {
-//		return nextInspectionDate;
-//	}
-//
-//	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
-//	public void setNextInspectionDate(String nextInspectionDate) {
-//		this.nextInspectionDate = StringUtils.clean(nextInspectionDate);
-//	}
-//	
-//	public Long getNextInspectionType() {
-//		return nextInspectionType != null ? nextInspectionType.getId() : null;
-//	}
-//
-//	public void setNextInspectionType(Long nextInspectionType) {
-//		if (nextInspectionType == null) {
-//			this.nextInspectionType = null;
-//		} else if (this.nextInspectionType == null || !nextInspectionType.equals(this.nextInspectionType.getId())) {
-//			this.nextInspectionType = persistenceManager.find(InspectionType.class, nextInspectionType, getTenantId());
-//		}
-//		
-//	}
 }
