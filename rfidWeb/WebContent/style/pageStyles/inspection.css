@@ -381,3 +381,12 @@
 	font-weight: normal;
 	color: #cccccc;
 }
+
+.schedulesAdd div {
+	float: left;
+	padding-right: 10px;
+}
+
+.schedulesAdd a {
+	font-size: 1.4em;
+}

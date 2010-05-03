@@ -44,24 +44,15 @@
 <div id="schedules">
 </div>
 
-<div class="infoSet">
-	<span class="label">
-		<@s.select name="nextInspectionTypeSelection" id="nextInspectionTypeSelection" list="%{product.type.inspectionTypes}" listKey="id" listValue="name" theme="fieldidSimple"/>
-	</span>
-	<span class="fieldHolder">
-		<span class="date">
-			on 
-			<@s.datetimepicker id="nextDate" name="newScheduleDate" theme="fieldidSimple"/>
-		</span>
-		
-		<#if securityGuard.projectsEnabled>
-			<span class="date">
-				<@s.select name="jobSelection" id="jobSelection" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
-			</span>
-		</#if>
-		
-		<a href="#add" name="add" onclick="return addSchedule();">add</a>
-	</span>
+<div class="infoSet schedulesAdd">
+	<div><@s.select name="nextInspectionTypeSelection" id="nextInspectionTypeSelection" list="%{product.type.inspectionTypes}" listKey="id" listValue="name" theme="fieldidSimple"/></div>
+	<div><@s.text name="label.on"/></div>
+	<div><@s.datetimepicker id="nextDate" name="newScheduleDate" theme="fieldidSimple"/></div>
+	<#if securityGuard.projectsEnabled>
+		<div><@s.select name="jobSelection" id="jobSelection" list="jobs" listKey="id" listValue="name" emptyOption="true"/></div>
+	</#if>
+	
+	<a href="#add" name="add" onclick="return addSchedule();">add</a>
 </div>
 
 <@n4.includeScript>

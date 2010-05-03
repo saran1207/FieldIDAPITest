@@ -430,7 +430,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				scheduleDate = convertDate(nextInspectionDates.get(i));
 				scheduleType = persistenceManager.find(InspectionType.class, nextInspectionTypes.get(i), getTenantId());
 				
-				if (nextInspectionJobs.get(i) != null) {
+				if (nextInspectionJobs.size() > i && nextInspectionJobs.get(i) != null) {
 					scheduleJob = getLoaderFactory().createFilteredIdLoader(Project.class).setId(nextInspectionJobs.get(i)).load();
 				} else {
 					scheduleJob = null;
