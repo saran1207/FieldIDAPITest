@@ -2,19 +2,20 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.handlers.LoaderBackedCommonInspectionTypeHandler;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.inspectiontype.CommonProductTypeDatabaseLoader;
-import com.n4systems.model.inspectiontype.CommonProductTypeLoader;
 
 public class MultiInspectAction extends AbstractAction {
 
 	
 	private List<Long> assetIds = new ArrayList<Long>();
-	private List<InspectionType> eventTypes;
+	private Set<InspectionType> eventTypes;
 	private List<ProductType> findCommonEventTypes;
 	
 	public MultiInspectAction(PersistenceManager persistenceManager) {
@@ -23,17 +24,12 @@ public class MultiInspectAction extends AbstractAction {
 
 	
 	public String doInspectionTypes() {
-		eventTypes = null;
-		findCommonEventTypes = findCommonEventTypes();
-		
+		eventTypes = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeDatabaseLoader(getSecurityFilter())).findCommonInspectionTypesFor(assetIds);
+
 		return SUCCESS;
 	}
 
 
-	private List<ProductType> findCommonEventTypes() {
-		CommonProductTypeLoader commonEventTypeLoader = new CommonProductTypeDatabaseLoader(getSecurityFilter());
-		return commonEventTypeLoader.forAssets(assetIds).load();
-	}
 
 	
 	
@@ -42,7 +38,7 @@ public class MultiInspectAction extends AbstractAction {
 	}
 
 
-	public List<InspectionType> getEventTypes() {
+	public Set<InspectionType> getEventTypes() {
 		return eventTypes;
 	}
 

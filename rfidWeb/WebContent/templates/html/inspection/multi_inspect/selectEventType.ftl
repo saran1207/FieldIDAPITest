@@ -13,6 +13,3 @@ ${action.setPageType('inspection', 'add')!}
 
 </#list>
 
-<#list findCommonEventTypes as productType>
-	${productType.name}
-</#list>
