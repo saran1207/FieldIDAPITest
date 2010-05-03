@@ -13,8 +13,7 @@ public class LoaderBackedCommonInspectionTypeHandler implements CommonInspection
 
 	private final CommonProductTypeLoader productTypeIdLoader;
 
-	public LoaderBackedCommonInspectionTypeHandler(
-			CommonProductTypeLoader productTypeIdLoader) {
+	public LoaderBackedCommonInspectionTypeHandler(CommonProductTypeLoader productTypeIdLoader) {
 		this.productTypeIdLoader = productTypeIdLoader;
 	}
 
@@ -35,6 +34,7 @@ public class LoaderBackedCommonInspectionTypeHandler implements CommonInspection
 		return productTypeIdLoader.forAssets(assetIds).load();
 	}
 
+	@SuppressWarnings("deprecation")
 	private Set<InspectionType> filterCommonInspectionTypes(
 			List<ProductType> resultSet) {
 		Set<InspectionType> commonInspectionTypes = null;

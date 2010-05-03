@@ -19,6 +19,8 @@
 	 	<action name="selectEventType" method="inspectionTypes" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
 			<result name="success" type="freemarker">/templates/html/inspection/multi_inspect/selectEventType.ftl</result>
 		</action>
-		
+		<action name="performEvent" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+			<result name="success" type="freemarker">/templates/html/inspection/multi_inspect/performEvent.ftl</result>
+		</action>
 	</package>
 </struts>
