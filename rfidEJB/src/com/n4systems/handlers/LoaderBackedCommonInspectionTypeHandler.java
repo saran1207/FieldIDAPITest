@@ -1,14 +1,10 @@
 package com.n4systems.handlers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.collections.SetUtils;
-
-import com.google.common.collect.Sets;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.inspectiontype.CommonProductTypeLoader;
