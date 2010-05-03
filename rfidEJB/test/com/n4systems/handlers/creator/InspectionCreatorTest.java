@@ -23,7 +23,6 @@ import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Project;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;

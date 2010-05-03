@@ -127,6 +127,7 @@
 	<include file="quickSetup2WizardPackage.xml"/>
 	<include file="inspectionPackage.xml"/>
 	<include file="quickSetupWizardPackage.xml"/>
+	<include file="multiInspectPackageStruts.xml"/>
 	
 	<package name="external" extends="default" namespace="/external/ajax">
 		<default-interceptor-ref name="secureStack" />

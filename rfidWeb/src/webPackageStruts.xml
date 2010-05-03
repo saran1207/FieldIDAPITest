@@ -1933,5 +1933,9 @@
 			<result name="error" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
 		</action>
+		
+		
+		
+		
 	</package>
 </struts>
