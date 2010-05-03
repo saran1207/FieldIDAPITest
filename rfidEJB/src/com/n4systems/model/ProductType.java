@@ -86,6 +86,8 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	@OneToMany(mappedBy="productType")
 	private Set<AssociatedInspectionType> inspectionTypes;
 	
+	
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private ProductTypeGroup group;
 		
@@ -475,5 +477,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	public ProductType enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
+
+	
 	
 }
