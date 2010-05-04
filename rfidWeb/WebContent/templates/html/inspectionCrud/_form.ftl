@@ -39,15 +39,9 @@
 	<#include "/templates/html/common/_formErrors.ftl" />
 	
 	<#include "_inspectionSummaryForm.ftl"/>
-	
-	<#setting url_escaping_charset='UTF-8'>	
-	<#list inspectionType.infoFieldNames as infoField >
-		<p>	
-			<label>${infoField}:</label>
-			<span><@s.textfield name="encodedInfoOptionMap['${infoField?url}']"/></span>
-		</p>
-	 	
-	</#list>
+
+	<#include "_attributes.ftl"/>
+
 	<#if inspection.id?exists && action.isParentProduct() >
 		<p>
 			<label><@s.text name="label.result"/>:</label>

@@ -3,6 +3,8 @@ ${action.setPageType('inspection', 'add')!}
 
 <div id="inspectionType">${inspectionType.name}</div>
 
+<#include "_form.ftl" />
+
 <button id="saveInspections"><@s.text name="label.save_all"/></button>
 
 <ul id="assets">
