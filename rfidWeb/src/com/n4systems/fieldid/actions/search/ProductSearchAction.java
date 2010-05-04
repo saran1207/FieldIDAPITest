@@ -29,6 +29,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private List<ListingPair> employees;
 	
 	private OwnerPicker ownerPicker;
+	private List<Long> searchIds;
 	
 	public ProductSearchAction( 
 			final PersistenceManager persistenceManager, 
@@ -83,8 +84,12 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		return SUCCESS;
 	}
 
-	private List<Long> getSearchIds() {
-		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(this), getSecurityFilter());
+	public List<Long> getSearchIds() {
+		if (searchIds == null) {
+			searchIds = new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(this), getSecurityFilter());
+		}
+		
+		return searchIds;
 	}
 	
 	@SkipValidation

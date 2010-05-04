@@ -16,7 +16,7 @@ ${action.setPageType('inspection', 'add')!}
 	<@s.hidden name="type" value="${eventTypeId}"/>
 	<@s.hidden name="inspector" value="${sessionUserId}"/>
 	<@s.hidden name="scheduleId" value="0"/>
-	<@s.hidden name="inspectionDate" value="05/04/10 10:00 AM"/>
+	<@s.hidden name="inspectionDate" value="05/04/10 9:00 AM"/>
 	
 	<@s.hidden name="productId" id="productId"/>
 	<@s.hidden name="location" id="location"/>
@@ -33,7 +33,7 @@ ${action.setPageType('inspection', 'add')!}
 		asset = new Object();
 		asset.id = ${asset.id};
 		asset.ownerId = ${asset.owner.id};
-		asset.location = "${asset.location?js_string}";
+		asset.location = "${(asset.location?js_string)!}";
 		asset.productStatusId = "${(asset.productStatus.id)!}"; 
 		assets.push(asset);
 	</#list>
@@ -54,9 +54,7 @@ ${action.setPageType('inspection', 'add')!}
 				$('location').value= asset.location;
 				$('productStatusId').value= asset.productStatusId;
 				
-				$('createInspection').request({
-					asynchronous:false,
-					onSuccess: contentCallback});
+				$('createInspection').request({	onSuccess: contentCallback});
 			}); 
 		});
 	});
