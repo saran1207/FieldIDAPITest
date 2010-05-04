@@ -54,7 +54,7 @@ import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
-import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
+import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
@@ -712,8 +712,7 @@ public class DataServiceImpl implements DataService {
 	
 		try {
 
-			new InspectionScheduleUpdateHandler(new InspectionScheduleByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
-					new FilteredIdLoader<InspectionSchedule>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionSchedule.class),
+			new InspectionScheduleUpdateHandler(new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
 					new InspectionScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
 			
 		} catch (Exception e) {
@@ -729,8 +728,7 @@ public class DataServiceImpl implements DataService {
 		
 		try {
 
-			new InspectionScheduleUpdateHandler(new InspectionScheduleByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
-					new FilteredIdLoader<InspectionSchedule>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionSchedule.class),
+			new InspectionScheduleUpdateHandler(new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
 					new InspectionScheduleSaver()).removeInspectionSchedule(request.getScheduleService());
 			
 		} catch (Exception e) {
@@ -1024,6 +1022,7 @@ public class DataServiceImpl implements DataService {
 			Map<Inspection, Date> nextInspectionDates = new HashMap<Inspection, Date>();
 			Map<Inspection, InspectionSchedule> inspectionSchedules = new HashMap<Inspection, InspectionSchedule>();
 			Product product = null;
+			InspectionScheduleByGuidOrIdLoader scheduleLoader = new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
 			for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
 				product = findOrTagProduct( tenantId, inspectionServiceDTO );				
 				inspectionServiceDTO.setProductId( product.getId() );
@@ -1046,7 +1045,8 @@ public class DataServiceImpl implements DataService {
 				Inspection inspection = converter.convert(inspectionServiceDTO, tenantId);
 				inspections.add( inspection );
 				nextInspectionDates.put(inspection, converter.convertNextDate(inspectionServiceDTO));
-				inspectionSchedules.put(inspection, converter.convertInspectionSchedule(inspectionServiceDTO));				
+				inspectionSchedules.put(inspection, loadScheduleFromInspectionDto(scheduleLoader,
+						inspectionServiceDTO));				
 			}	
 		
 			List<Inspection> savedInspections = null;
@@ -1099,6 +1099,12 @@ public class DataServiceImpl implements DataService {
 			logger.error( "failed while processing inspections", e );
 			throw new ServiceException("Problem processing inspections");
 		}
+	}
+
+	private InspectionSchedule loadScheduleFromInspectionDto(
+			InspectionScheduleByGuidOrIdLoader scheduleLoader,
+			InspectionServiceDTO inspectionServiceDTO) {
+		return scheduleLoader.setId(inspectionServiceDTO.getInspectionScheduleId()).setMobileGuid(inspectionServiceDTO.getInspectionScheduleMobileGuid()).load();
 	}
 
 	private void updateSubProducts(LegacyProductSerial productManager,

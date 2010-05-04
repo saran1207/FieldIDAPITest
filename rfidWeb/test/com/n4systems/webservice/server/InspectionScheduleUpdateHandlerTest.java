@@ -1,10 +1,12 @@
 package com.n4systems.webservice.server;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
-import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
-import static org.junit.Assert.*;
+import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static com.n4systems.model.builders.InspectionScheduleBuilder.aScheduledInspectionSchedule;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,10 +17,9 @@ import org.junit.Test;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
+import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 
@@ -26,8 +27,7 @@ public class InspectionScheduleUpdateHandlerTest {
 
 
 	private InspectionScheduleSaver saver;
-	private InspectionScheduleByMobileGuidLoader inspectionScheduleByMobileGuidLoader;
-	private FilteredIdLoader<InspectionSchedule> filteredInspectionScheduleLoader;
+	private InspectionScheduleByGuidOrIdLoader inspectionScheduleByMobileGuidLoader;
 	private InspectionSchedule inspectionSchedule;
 	private InspectionScheduleServiceDTO inspectionScheduleServiceDTO;
 	private Inspection inspection;
@@ -44,16 +44,13 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void loading_inspection_schedule_by_shcedule_id() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		
-		createFilteredInspectionScheduleLoaderMock();
+
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
-		
-		verify(filteredInspectionScheduleLoader);
 		
 	}
 	
@@ -61,12 +58,11 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void loading_inspection_schedule_by_shcedule_mobile_guid() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(-1L, new Date());
-		
-		createFilteredInspectionScheduleLoaderMock();
+
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -81,7 +77,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 		createInspectionScheduleByMobileGuidLoaderMockReturningNull();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, null);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, null);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -94,11 +90,11 @@ public class InspectionScheduleUpdateHandlerTest {
 		c1.set(2011, 11, 20, 0, 0, 0);
 		
 		buildInspectionScheduleServiceDTO(1L, c1.getTime());
-		
-		createFilteredInspectionScheduleLoaderMock();
+	
+		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -113,12 +109,11 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void update_when_schedule_is_not_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		
-		createFilteredInspectionScheduleLoaderMock();
+	
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		verify(saver);
@@ -131,10 +126,9 @@ public class InspectionScheduleUpdateHandlerTest {
 		buildInspectionScheduleServiceDTO(1L, new Date());
 		inspectionSchedule.completed(inspection);
 		
-		createFilteredInspectionScheduleLoaderMock();
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, null);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, null);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -145,11 +139,10 @@ public class InspectionScheduleUpdateHandlerTest {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
 		
-		createFilteredInspectionScheduleLoaderMock();
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverRemoveMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
 		
 		sut.removeInspectionSchedule(inspectionScheduleServiceDTO);
 		verify(saver);
@@ -161,34 +154,27 @@ public class InspectionScheduleUpdateHandlerTest {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
 		inspectionSchedule.completed(inspection);
-		
-		createFilteredInspectionScheduleLoaderMock();
+
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, filteredInspectionScheduleLoader, null);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, null);
 		
 		sut.removeInspectionSchedule(inspectionScheduleServiceDTO);
 		
 	}
-	
-	@SuppressWarnings("unchecked")
-	private void createFilteredInspectionScheduleLoaderMock() {
-		filteredInspectionScheduleLoader = createMock(FilteredIdLoader.class);
-		expect(filteredInspectionScheduleLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(filteredInspectionScheduleLoader);
-		expect(filteredInspectionScheduleLoader.load()).andReturn(inspectionSchedule);
-		replay(filteredInspectionScheduleLoader);
-	}
 
 	private void createInspectionScheduleByMobileGuidLoaderMock() {
-		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByMobileGuidLoader.class);
+		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByGuidOrIdLoader.class);
 		expect(inspectionScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(inspectionScheduleByMobileGuidLoader);
+		expect(inspectionScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(inspectionScheduleByMobileGuidLoader);
 		expect(inspectionScheduleByMobileGuidLoader.load()).andReturn(inspectionSchedule);
 		replay(inspectionScheduleByMobileGuidLoader);
 	}
 
 	private void createInspectionScheduleByMobileGuidLoaderMockReturningNull() {
-		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByMobileGuidLoader.class);
+		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByGuidOrIdLoader.class);
 		expect(inspectionScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(inspectionScheduleByMobileGuidLoader);
+		expect(inspectionScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(inspectionScheduleByMobileGuidLoader);
 		expect(inspectionScheduleByMobileGuidLoader.load()).andReturn(null);
 		replay(inspectionScheduleByMobileGuidLoader);
 	}

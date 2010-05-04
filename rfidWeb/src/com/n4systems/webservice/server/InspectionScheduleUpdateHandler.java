@@ -5,9 +5,8 @@ import org.apache.log4j.Logger;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
-import com.n4systems.model.inspectionschedule.InspectionScheduleByMobileGuidLoader;
+import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 import fieldid.web.services.dto.AbstractBaseServiceDTO;
@@ -15,18 +14,15 @@ import fieldid.web.services.dto.AbstractBaseServiceDTO;
 public class InspectionScheduleUpdateHandler {
 	
 	private static Logger logger = Logger.getLogger(InspectionScheduleUpdateHandler.class);
-	private InspectionScheduleByMobileGuidLoader inspectionScheduleByMobileGuidLoader;
-	private FilteredIdLoader<InspectionSchedule> filteredInspectionScheduleLoader;
+	private InspectionScheduleByGuidOrIdLoader inspectionScheduleByMobileGuidLoader;
 	private InspectionScheduleSaver saver;
 	
 	public InspectionScheduleUpdateHandler(
-			InspectionScheduleByMobileGuidLoader inspectionScheduleByMobileGuidLoader,
-			FilteredIdLoader<InspectionSchedule> filteredInspectionScheduleLoader,
+			InspectionScheduleByGuidOrIdLoader inspectionScheduleByMobileGuidLoader,
 			InspectionScheduleSaver inspectionScheduleSaver) {
 		
 		super();
 		this.inspectionScheduleByMobileGuidLoader = inspectionScheduleByMobileGuidLoader;
-		this.filteredInspectionScheduleLoader = filteredInspectionScheduleLoader;
 		this.saver = inspectionScheduleSaver;
 		
 	}
@@ -55,13 +51,10 @@ public class InspectionScheduleUpdateHandler {
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
 		//load inspection schedule either using id or mobileGuid
-		InspectionSchedule inspectionSchedule = null;
-		
-		if (inspectionScheduleServiceDTO.isCreatedOnMobile()) {
-			inspectionSchedule = inspectionScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid()).load();
-		} else {
-			inspectionSchedule = filteredInspectionScheduleLoader.setId(inspectionScheduleServiceDTO.getId()).load();
-		}
+		InspectionSchedule inspectionSchedule = inspectionScheduleByMobileGuidLoader.
+														setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid()).
+														setId(inspectionScheduleServiceDTO.getId()).
+														load();
 		
 		return inspectionSchedule;
 		

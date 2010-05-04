@@ -647,16 +647,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return Observation.State.COMMENT;
 	}
 
-	public InspectionSchedule convertInspectionSchedule(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
-		InspectionSchedule schedule = null;
-
-		if (inspectionServiceDTO.inspectionScheduleExists()) {
-			schedule = persistenceManager.find(InspectionSchedule.class, inspectionServiceDTO.getInspectionScheduleId());
-		}
-
-		return schedule;
-	}
-
 	public ProductStatusServiceDTO convert(ProductStatusBean productStatus) {
 
 		ProductStatusServiceDTO productStatusServiceDTO = new ProductStatusServiceDTO();

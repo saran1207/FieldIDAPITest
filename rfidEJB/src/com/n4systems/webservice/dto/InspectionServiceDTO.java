@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.util.StringUtils;
+
 public class InspectionServiceDTO extends AbstractInspectionServiceDTO implements DTOHasOwners {
 
 	private String location;	
@@ -21,12 +23,15 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private long productStatusId;
 	private long jobSiteId;
 	private long inspectionScheduleId;
+	private String inspectionScheduleMobileGuid;
 	private List<SubInspectionServiceDTO> subInspections = new ArrayList<SubInspectionServiceDTO>();
 	private List<SubProductMapServiceDTO> newSubProducts = new ArrayList<SubProductMapServiceDTO>();
 	private List<SubProductMapServiceDTO> detachSubProducts = new ArrayList<SubProductMapServiceDTO>();
 	private long orgId;
 	private long customerId;
 	private long divisionId;
+	
+
 
 	// These are only used by PRE 1.14 mobile versions; now uses ownerId
 	private long organizationId;
@@ -168,7 +173,7 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 		this.inspectionScheduleId = inspectionScheduleId;
 	}	
 	public boolean inspectionScheduleExists() {
-		return isValidServerId(inspectionScheduleId);
+		return isValidServerId(inspectionScheduleId) || StringUtils.isNotEmpty(inspectionScheduleMobileGuid);
 	}
 	public Date getUtcDate() {
 		return utcDate;
@@ -221,7 +226,10 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	public void setPerformedById(long performedById) {
 		this.performedById = performedById;
 	}
-	
-	
-	
+	public String getInspectionScheduleMobileGuid() {
+		return inspectionScheduleMobileGuid;
+	}
+	public void setInspectionScheduleMobileGuid(String inspectionScheduleMobileGuid) {
+		this.inspectionScheduleMobileGuid = inspectionScheduleMobileGuid;
+	}
 }
