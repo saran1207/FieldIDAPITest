@@ -23,4 +23,21 @@
 			<result name="success" type="freemarker">/templates/html/inspection/multi_inspect/performEvent.ftl</result>
 		</action>
 	</package>
+	
+	<package name="multiInspect/ajax" extends="default" namespace="/multiInspect/ajax">
+		
+		<global-results>
+			<result name="login" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">login</param>
+			</result>
+			
+		</global-results>
+		
+	 	<action name="inspectionCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/ajax/inspection/multi_inspect/created.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/inspection/multi_inspect/failure.ftl</result>
+			<result name="input" type="freemarker">/templates/ajax/inspection/multi_inspect/failure.ftl</result>
+		</action>
+	</package>
 </struts>

@@ -24,7 +24,7 @@ ${action.setPageType('inspection', 'add')!}
 		
 		var element = Event.element(event);
 		
-		$('eventTypeId').value = element.getAttribute('value');
+		$('eventTypeId').value = element.readAttribute('value');
 		$('perfromEvent').submit();
 	}
 	
