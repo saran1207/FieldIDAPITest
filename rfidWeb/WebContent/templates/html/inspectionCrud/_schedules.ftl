@@ -7,9 +7,16 @@
 		function addSchedule() {
 			var types = $('nextInspectionTypeSelection');
 			var jobs = $('jobSelection');
+			var nextDate = $('nextDate');
+			
+			if (!validDate(nextDate.getValue())) {
+		 		nextDate.addClassName("inputError");
+		 		nextDate.title='<@s.text name="error.mustbeadate"/>';
+		 		return false;
+		 	}
 			
 			var params = new Object();
-			params.date =  $('nextDate').getValue();
+			params.date =  nextDate.getValue();
 			params.inspectionType = types.options[types.selectedIndex].value;
 			params.jobId = jobs.options[jobs.selectedIndex].value;
 			params.index = index;
@@ -21,8 +28,11 @@
 		
 		function removeSchedule(idx) {
 			$('schedule_' + idx).remove();
-			
 			return false;
+		}
+		
+		function validDate(date) {
+			return !(date.trim() == "");	
 		}
 		
 		function autoSuggest() {
