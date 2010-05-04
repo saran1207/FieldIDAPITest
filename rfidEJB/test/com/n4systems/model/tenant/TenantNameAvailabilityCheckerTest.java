@@ -28,7 +28,6 @@ public class TenantNameAvailabilityCheckerTest {
 	@Test
 	public void is_available_checks_for_unbranded_subdomain() {
 		ConfigContextOverridableTestDouble config = new ConfigContextOverridableTestDouble();
-		config.markClean();
 		config.addConfigurationValue(ConfigEntry.UNBRANDED_SUBDOMAIN, "unbranded");
 		
 		TenantNameAvailabilityChecker checker = new TenantNameAvailabilityChecker(new EmptyTenantListLoader(), config, reservedTenantNameFile);
@@ -64,7 +63,6 @@ public class TenantNameAvailabilityCheckerTest {
 	@Test
 	public void is_available_returns_true_when_name_available() {
 		ConfigContextOverridableTestDouble config = new ConfigContextOverridableTestDouble();
-		config.markClean();
 		config.addConfigurationValue(ConfigEntry.UNBRANDED_SUBDOMAIN, "unbranded");
 		
 		TenantNameAvailabilityChecker checker = new TenantNameAvailabilityChecker(new AllEntityListLoader<Tenant>(Tenant.class) {

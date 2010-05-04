@@ -19,7 +19,7 @@
 			<#if Session.sessionUser.hasAccess('tag') >
 				| <a href="<@s.url action="massUpdateProducts" searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
-			| <a href="#multiInspect" name="multiInspect" id="multiInspect"><@s.text name="label.multi_inspect"/></a>
+			| <#if (totalResults <= maxSizeForMultiInspect) ><a href="#multiInspect" name="multiInspect" id="multiInspect"><@s.text name="label.multi_inspect"/></a></#if>
 			
 			
 		</div>
@@ -39,20 +39,20 @@
 	</div>
 </#if>
 <#include "../customizableSearch/_massActionRestriction.ftl"/>
-
-<@s.form id="performMultiInspect" action="selectEventType" namespace="/multiInspect">
-	<#list searchIds as assetId>
-		<@s.hidden name="assetIds[${assetId_index}]" value="${assetId}"/> 
-	</#list>
-</@s.form>
-
-<@n4.includeScript>
-	onDocumentLoad(function() {
-		$('multiInspect').observe('click', function(event) {
-			event.stop();
-			$('performMultiInspect').submit();
+<#if (totalResults <= maxSizeForMultiInspect) >
+	<@s.form id="performMultiInspect" action="selectEventType" namespace="/multiInspect">
+		<#list searchIds as assetId>
+			<@s.hidden name="assetIds[${assetId_index}]" value="${assetId}"/> 
+		</#list>
+	</@s.form>
+	
+	<@n4.includeScript>
+		onDocumentLoad(function() {
+			$('multiInspect').observe('click', function(event) {
+				event.stop();
+				$('performMultiInspect').submit();
+			});
 		});
-	});
-</@n4.includeScript>
-
+	</@n4.includeScript>
+</#if>
 

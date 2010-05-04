@@ -6,6 +6,7 @@ public class ConfigContextOverridableTestDouble extends ConfigContext {
 
 	public ConfigContextOverridableTestDouble() {
 		super();
+		markClean();
 	}
 	
 	protected void reloadConfigurations() {
@@ -15,11 +16,8 @@ public class ConfigContextOverridableTestDouble extends ConfigContext {
 	
 	public void addConfigurationValue(ConfigEntry entry, Object value) {
 		configruations.add(new Configuration(entry, value.toString()));
+		
 	}
 
-	@Override
-	public void markClean() {
-		super.markClean();
-	}
 
 }

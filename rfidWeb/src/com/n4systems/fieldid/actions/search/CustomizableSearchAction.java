@@ -425,5 +425,10 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	public Integer getMaxSizeForAssigningInspectionsToJobs() {
 		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId());
 	}
+	
+	public Integer getMaxSizeForMultiInspect() {
+		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
+	}
+	
 
 }

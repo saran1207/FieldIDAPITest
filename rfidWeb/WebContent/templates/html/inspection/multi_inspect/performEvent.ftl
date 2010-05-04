@@ -54,7 +54,9 @@ ${action.setPageType('inspection', 'add')!}
 				$('location').value= asset.location;
 				$('productStatusId').value= asset.productStatusId;
 				
-				$('createInspection').request({	onSuccess: contentCallback});
+				$('createInspection').request({
+					asynchronous:false,	
+					onSuccess: contentCallback});
 			}); 
 		});
 	});

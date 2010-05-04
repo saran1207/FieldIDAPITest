@@ -6,11 +6,13 @@ import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.handlers.CommonInspectionTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonInspectionTypeHandler;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.inspectiontype.CommonProductTypeDatabaseLoader;
+import com.n4systems.util.ConfigContext;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -32,9 +34,16 @@ public class MultiInspectAction extends AbstractAction {
 
 	
 	public String doInspectionTypes() {
-		eventTypes = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeDatabaseLoader(getSecurityFilter())).findCommonInspectionTypesFor(assetIds);
+		CommonInspectionTypeHandler loaderBackedCommonInspectionTypeHandler = createCommonInspectionTypeHandler();
+		
+		eventTypes = loaderBackedCommonInspectionTypeHandler.findCommonInspectionTypesFor(assetIds);
 
 		return SUCCESS;
+	}
+
+
+	private CommonInspectionTypeHandler createCommonInspectionTypeHandler() {
+		return new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
 	}
 
 

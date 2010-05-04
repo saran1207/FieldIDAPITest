@@ -47,6 +47,7 @@ public enum ConfigEntry {
 	CURRENT_MOBILE_MINOR_VERSION                (   "12"                    ),
 	CURRENT_MOBILE_BUILD_VERSION                (   "0"                     ),
 	CURRENT_MOBILE_FILE_NAME                    (   "Field ID Mobile.CAB"   ),
+	MAX_SIZE_FOR_MULTI_INSPECT					(	"250"					),
 	MAX_MULTI_ADD_SIZE							(	"250"					),
 	SETUPDATA_MIN_UPDATE_INTERVAL_MS			(	"30000"					),
 	UPLOAD_FILE_SIZE_LIMIT_DEFAULT_IN_KB			(	"5120"				),
