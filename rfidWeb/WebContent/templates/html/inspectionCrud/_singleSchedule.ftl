@@ -1,4 +1,4 @@
-<div class="infoSet" id="schedule_${index}">
+<div class="infoSet <#if inspectionDate?exists>autoSuggested</#if>" id="schedule_${index}">
 	<label class="label" id="nextInspectionTypeText">${type.name}</label>
 	<span  class="fieldHolder">
 		<@s.hidden name="nextInspectionTypes[${index}]" id="nextInspectionType_${index}" value="${type.id}"/>

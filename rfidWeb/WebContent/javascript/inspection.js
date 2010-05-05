@@ -374,3 +374,71 @@ function changeToInspectionBookSelect() {
 	$('newInspectionBook').disable();
 	$('inspectionBooks').focus();
 }
+
+var index;
+var addScheduleUrl;
+var autoSuggestUrl;
+var dateErrorText;
+var inspectionTypeId;
+var productId;
+
+function addSchedule() {
+	var types = $('nextInspectionTypeSelection');
+	var jobs = $('jobSelection');
+	var nextDate = $('nextDate');
+	
+	if (!validDate(nextDate.getValue())) {
+ 		nextDate.addClassName("inputError");
+ 		nextDate.title='<@s.text name="error.mustbeadate"/>';
+ 		return false;
+ 	}
+	
+	var params = new Object();
+	params.date =  nextDate.getValue();
+	params.inspectionType = types.options[types.selectedIndex].value;
+	params.jobId = jobs.options[jobs.selectedIndex].value;
+	params.index = index;
+		
+	getResponse(addScheduleUrl, "post", params);
+	
+	return false;
+}
+
+function removeSchedule(idx) {
+	$('schedule_' + idx).remove();
+	return false;
+}
+
+function validDate(date) {
+	return !(date.trim() == "");	
+}
+
+function autoSuggest() {
+	var params = new Object();
+	params.inspectionType = inspectionTypeId;
+	params.inspectionDate = $('inspectionDate').getValue();
+	params.product = productId;
+	params.index = index;
+	
+	getResponse(autoSuggestUrl, "post", params);
+	
+	return false;
+}
+
+function updateAutoSuggest() {
+	var autoSuggestedSchedules = $$('.autoSuggested');
+	
+	/*
+	 * if there is no auto suggested schedule, or the user has removed it, 
+	 * there's no need for update.
+	 */
+	if (autoSuggestedSchedules.size() == 0) {
+		return;
+	}
+	
+	autoSuggestedSchedules.each(function(item) {
+		item.remove();
+	});
+	
+	autoSuggest();
+}

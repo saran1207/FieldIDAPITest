@@ -1,55 +1,3 @@
-<head>
-	<@n4.includeScript>
-		var index = 0;
-		var addScheduleUrl = '<@s.url action="addSchedule" namespace="/ajax" />';
-		var autoSuggestUrl = '<@s.url action="autoSuggestSchedule" namespace="/ajax" />';
-		
-		function addSchedule() {
-			var types = $('nextInspectionTypeSelection');
-			var jobs = $('jobSelection');
-			var nextDate = $('nextDate');
-			
-			if (!validDate(nextDate.getValue())) {
-		 		nextDate.addClassName("inputError");
-		 		nextDate.title='<@s.text name="error.mustbeadate"/>';
-		 		return false;
-		 	}
-			
-			var params = new Object();
-			params.date =  nextDate.getValue();
-			params.inspectionType = types.options[types.selectedIndex].value;
-			params.jobId = jobs.options[jobs.selectedIndex].value;
-			params.index = index;
-			
-			getResponse(addScheduleUrl, "post", params);
-			
-			return false;
-		}
-		
-		function removeSchedule(idx) {
-			$('schedule_' + idx).remove();
-			return false;
-		}
-		
-		function validDate(date) {
-			return !(date.trim() == "");	
-		}
-		
-		function autoSuggest() {
-			var params = new Object();
-			params.inspectionType = ${type};
-			params.product = ${productId}
-			params.index = index;
-			
-			getResponse(autoSuggestUrl, "post", params);
-			
-			return false;
-		}
-		
-	</@n4.includeScript>
-</head>
-
-
 <h2><@s.text name="label.schedules"/></h2>
 <div id="schedules">
 </div>
@@ -66,5 +14,12 @@
 </div>
 
 <@n4.includeScript>
+	index = 0;
+	addScheduleUrl = '<@s.url action="addSchedule" namespace="/ajax" />';
+	autoSuggestUrl = '<@s.url action="autoSuggestSchedule" namespace="/ajax" />';
+	dateErrorText = '<@s.text name="error.mustbeadate"/>';
+	inspectionTypeId = '${type}';
+	productId = '${productId}';
+	
 	autoSuggest();
 </@n4.includeScript>

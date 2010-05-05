@@ -18,6 +18,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private Project job;
 	private String date;
 	private Long index;
+	private String inspectionDate;
 	
 	public AddInspectionScheduleAjaxAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -28,9 +29,15 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	}
 	
 	public String doAutoSuggest() {
+		Date startDate = convertDate(inspectionDate);
+		
+		if (startDate == null) {
+			startDate = DateHelper.getToday();
+		}
+		
 		ProductTypeSchedule schedule = product.getType().getSchedule(inspectionType, product.getOwner());
 		if (schedule != null) {
-			Date nextDate = schedule.getNextDate(DateHelper.getToday());
+			Date nextDate = schedule.getNextDate(startDate);
 			date = convertDate(nextDate);
 		}
 		return SUCCESS;
@@ -75,6 +82,14 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public String getInspectionDate() {
+		return inspectionDate;
+	}
+
+	public void setInspectionDate(String inspectionDate) {
+		this.inspectionDate = inspectionDate;
 	}
 
 	public Long getIndex() {
