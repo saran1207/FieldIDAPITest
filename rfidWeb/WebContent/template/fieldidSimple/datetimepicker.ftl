@@ -25,7 +25,7 @@
 	<span class="timeZone">${sessionUser.timeZoneName}</span>
 </#if>
 
-<img class="datePicker" src="images/icons/FieldID_CALENDAR-CHECK-normal.png"  id="dateTrigger_${parameters.id}"/>
+<img class="datePicker" src="<@s.url value="/images/icons/FieldID_CALENDAR-CHECK-normal.png"/>"  id="dateTrigger_${parameters.id}"/>
 <script type="text/javascript">
   Calendar.setup(
     {

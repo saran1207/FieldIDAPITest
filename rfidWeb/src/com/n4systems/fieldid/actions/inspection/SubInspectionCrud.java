@@ -120,7 +120,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	private void restoreCriteriaResultsFromStoredInspection() {
 		criteriaResults = new ArrayList<CriteriaResult>();
 
-		List<CriteriaSection> availbleSections = getAvailableSections(inspection);
+		List<CriteriaSection> availbleSections = getInspectionFormHelper().getAvailableSections(inspection);
 
 		for (CriteriaSection criteriaSection : availbleSections) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {

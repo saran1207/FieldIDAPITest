@@ -38,11 +38,8 @@ import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
-import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -83,6 +80,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private final InspectionScheduleManager inspectionScheduleManager;
 	protected final ProductionInspectionPersistenceFactory inspectionPersistenceFactory;
 	protected final InspectionHelper inspectionHelper;
+	protected final InspectionFormHelper inspectionFormHelper; 
 	
 	
 	private InspectionGroup inspectionGroup;
@@ -112,15 +110,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private List<ListingPair> eventJobs;
 	
 	private OwnerPicker ownerPicker;
-	
-
-	private Map<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>>();
-	private Map<AbstractInspection, List<CriteriaSection>> availableSections = new HashMap<AbstractInspection, List<CriteriaSection>>();
 
 	private Map<String, String> encodedInfoOptionMap = new HashMap<String, String>(); 
-
-
-	private List<CriteriaSection> currentCriteriaSections;
 
 	protected FileDataContainer fileData = null;
 
@@ -141,6 +132,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		this.inspectionHelper = new InspectionHelper(persistenceManager);
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
+		this.inspectionFormHelper = new InspectionFormHelper();
 
 	}
 
@@ -775,53 +767,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		inspection.setInfoOptionMap(infoOptionMap);
 	}
 
-	public List<CriteriaSection> getAvailableSections(AbstractInspection inspection) {
-		if (availableSections.get(inspection) == null) {
-			availableSections.put(inspection, new ArrayList<CriteriaSection>());
-			getVisibleResults(inspection);
-
-			if (!inspection.getType().getSections().isEmpty()) {
-				for (CriteriaSection section : inspection.getType().getSections()) {
-					if (!sections.get(inspection).isEmpty()) {
-						if (sections.get(inspection).containsKey(section)) {
-							availableSections.get(inspection).add(section);
-						}
-					} else if (inspection.isNew()) {
-						if (!section.isRetired()) {
-							availableSections.get(inspection).add(section);
-						}
-					}
-				}
-			}
-		}
-		currentCriteriaSections = availableSections.get(inspection);
-		return availableSections.get(inspection);
-	}
-
-	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractInspection inspection) {
-		if (sections.get(inspection) == null) {
-			sections.put(inspection, new HashMap<CriteriaSection, List<CriteriaResult>>());
-			if (!inspection.getType().getSections().isEmpty() && !inspection.getResults().isEmpty()) {
-				for (CriteriaSection section : inspection.getType().getSections()) {
-					List<CriteriaResult> results = new ArrayList<CriteriaResult>();
-					for (Criteria criteria : section.getCriteria()) {
-						for (CriteriaResult criteriaResult : inspection.getResults()) {
-							if (criteriaResult.getCriteria().equals(criteria)) {
-								results.add(criteriaResult);
-							}
-						}
-					}
-					if (!results.isEmpty()) {
-						sections.get(inspection).put(section, results);
-					}
-				}
-			}
-		}
-
-		return sections.get(inspection);
-
-	}
-
+	
 	public File returnFile(String fileName) {
 		return new File(fileName);
 	}
@@ -892,9 +838,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return subInspections;
 	}
 
-	public List<CriteriaSection> getCurrentCriteriaSections() {
-		return currentCriteriaSections;
-	}
+	
 	
 	/** Finds a Recommendation on the criteriaResults for this criteriaId and recommendation index */
 	public Recommendation findEditRecommendation(Long criteriaId, int recIndex) {
@@ -1050,6 +994,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public void setNextInspectionJobs(List<Long> nextInspectionJobs) {
 		this.nextInspectionJobs = nextInspectionJobs;
+	}
+
+	public InspectionFormHelper getInspectionFormHelper() {
+		return inspectionFormHelper;
 	}
 	
 }

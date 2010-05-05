@@ -1,5 +1,5 @@
-<#if action.getVisibleResults( formInspection ).get( section )?exists >
-	<#assign results=action.getVisibleResults( formInspection ).get( section )>
+<#if inspectionFormHelper.getVisibleResults( formInspection ).get( section )?exists >
+	<#assign results=inspectionFormHelper.getVisibleResults( formInspection ).get( section )>
 	<#list results as criteriaResult >
 		<div class="infoSet">
 			<label>${criteriaResult.criteria.displayName}</label>

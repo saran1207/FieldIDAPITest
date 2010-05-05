@@ -82,7 +82,7 @@ public class ProductTypeLister {
 				List<ListingPair> types = getGroupedProductTypes(group.getName());
 				groupedProductTypesById.put(group.getId(), types);
 			}
-			groupedProductTypesById.put(-1L, productTypes);
+			groupedProductTypesById.put(-1L, getProductTypes());
 		}
 		
 		List<ListingPair> list = groupedProductTypesById.get(groupId);
