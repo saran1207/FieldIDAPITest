@@ -36,5 +36,4 @@ public interface InspectionScheduleManager {
 	public Long getInspectionTypeIdForSchedule(Long scheduleId);
 	
 	public Long getInspectionIdForSchedule(Long scheduleId);
-	public List<InspectionSchedule> getSchedulesInTimeFrame(Product product, InspectionType inspectionType, Date inspectionDate);
 }

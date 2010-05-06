@@ -130,20 +130,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<InspectionSchedule> getSchedulesInTimeFrame(Product product, InspectionType inspectionType, Date inspectionDate) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getSchedulesInTimeFrame(product, inspectionType, inspectionDate);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public void remove(ProductTypeSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

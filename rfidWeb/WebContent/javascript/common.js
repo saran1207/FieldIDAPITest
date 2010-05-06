@@ -77,7 +77,7 @@ function getResponse(url, method, parameters, nonInteractive) {
 		ajaxOptions.parameters = parameters;
 	}
 
-	ajaxOptions.method = method
+	ajaxOptions.method = method;
 
 	try {
 		new Ajax.Request(url, ajaxOptions);

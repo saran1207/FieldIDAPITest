@@ -396,9 +396,12 @@ function addSchedule() {
 	var params = new Object();
 	params.date =  nextDate.getValue();
 	params.inspectionType = types.options[types.selectedIndex].value;
-	params.jobId = jobs.options[jobs.selectedIndex].value;
 	params.index = index;
-		
+	
+	if (jobs != null) {
+		params.jobId = jobs.options[jobs.selectedIndex].value;
+	}
+	
 	getResponse(addScheduleUrl, "post", params);
 	
 	return false;

@@ -32,5 +32,10 @@ public class OwnerPicker {
 			entity.setOwner(loader.setId(id).load());
 		}
 	}
+
+	public void updateOwner(BaseOrg owner) {
+		entity.setOwner(owner);
+	}
+	
 	
 }

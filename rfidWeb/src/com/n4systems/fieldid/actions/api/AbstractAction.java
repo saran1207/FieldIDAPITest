@@ -48,7 +48,6 @@ import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
@@ -59,7 +58,7 @@ import com.n4systems.util.uri.ActionURLBuilder;
 import freemarker.template.utility.StringUtil;
 
 @SuppressWarnings("serial")
-abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware  {
+abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator  {
 	public static final String MISSING = "missing";
 	public static final String INVALID_SECURITY = "invalid_security";
 	public static final String REDIRECT_TO_URL = "redirect_to_url";
@@ -214,36 +213,33 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return this;
 	}
 	
+	
+	
 	public String convertDate(Date date) {
-		return DateHelper.date2String(getSessionUser().getDateFormat(), date);
+		return getSessionUser().createUserDateConverter().convertDate(date);
 	}
 	
 	public Date convertDate(String date) {
-		return DateHelper.string2Date(getSessionUser().getDateFormat(), date);
+		return getSessionUser().createUserDateConverter().convertDate(date);
 	}
 	
 	public Date convertToEndOfDay(String date) {
-		Date day = convertDate(date);
-		return (day != null) ? DateHelper.getEndOfDay(day) : null;
+		return getSessionUser().createUserDateConverter().convertToEndOfDay(date);
 	}
 	
 	public String convertDateTime(Date date) {
-		return DateHelper.date2String(getSessionUser().getDateTimeFormat(), date, getSessionUser().getTimeZone());
+		return getSessionUser().createUserDateConverter().convertDateTime(date);
 	}
 	
 	public Date convertDateTime(String date) {
-		return DateHelper.string2DateTime(getSessionUser().getDateTimeFormat(), date, getSessionUser().getTimeZone());
+		return getSessionUser().createUserDateConverter().convertDateTime(date);
 	}
 	
 	public boolean isValidDate(String date, boolean usingTime) {
-		// blank dates are ok
-		if(date == null || date.trim().length() == 0) {
-			return true;
-		}
-		String format = ( usingTime ) ? getSessionUser().getDateTimeFormat() : getSessionUser().getDateFormat();
-		return  DateHelper.isDateValid(format, date);
+		return getSessionUser().createUserDateConverter().isValidDate(date, usingTime);
 	}
 	
+
 	public String formatDateTime(Date date) {
 		return formatAnyDate(date, true, true);
 	}

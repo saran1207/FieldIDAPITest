@@ -21,6 +21,7 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
+import com.n4systems.ejb.impl.ScheduleInTimeFrameLoader;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.User;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
@@ -31,6 +32,7 @@ import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
+import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspection;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
@@ -63,10 +65,8 @@ import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
+import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 
 public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAware {
@@ -88,7 +88,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected Inspection inspection;
 	
 	protected List<CriteriaResult> criteriaResults;
-	protected String inspectionDate;
 	protected String charge;
 	protected ProofTestType proofTestType;
 	protected File proofTest;// The actual file
@@ -109,7 +108,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private List<InspectionSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
 	
-	private OwnerPicker ownerPicker;
+	private WebModifiedableInspection modifiableInspection;
 
 	private Map<String, String> encodedInfoOptionMap = new HashMap<String, String>(); 
 
@@ -121,6 +120,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private List<String> nextInspectionDates = new ArrayList<String>();
 	private List<Long> nextInspectionTypes = new ArrayList<Long>();
 	private List<Long> nextInspectionJobs = new ArrayList<Long>();
+	private ScheduleInTimeFrameLoader scheduleInTimeFrameLoader;
 	
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
@@ -133,6 +133,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
 		this.inspectionFormHelper = new InspectionFormHelper();
+		this.scheduleInTimeFrameLoader = new ScheduleInTimeFrameLoader(persistenceManager);
 
 	}
 
@@ -171,7 +172,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@Override
 	protected void postInit() {
 		super.postInit();
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
+		modifiableInspection = new WebModifiedableInspection(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter());
 	}
 	
 
@@ -273,6 +274,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		
 		suggestSchedule();
 
+		modifiableInspection.updateValuesToMatch(inspection);
+		
 		return SUCCESS;
 	}
 
@@ -316,6 +319,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 
 		setUpSupportedProofTestTypes();
+		
+		modifiableInspection.updateValuesToMatch(inspection);
 		return SUCCESS;
 	}
 
@@ -355,13 +360,15 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			UserBean modifiedBy = fetchCurrentUser();
 			
 			findInspectionBook();
+			
+			modifiableInspection.pushValuesTo(inspection);
 
 			inspection.setInfoOptionMap(decodeMapKeys(encodedInfoOptionMap));
 
 			inspection.setGroup(inspectionGroup);
 			inspection.setTenant(getTenant());
 			inspection.setProduct(product);
-			inspection.setDate(convertDateTime(inspectionDate));
+			
 			
 			processProofTestFile();
 			
@@ -544,9 +551,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	
 
-	public String getLocation() {
-		return inspection.getLocation();
-	}
 
 	public Long getType() {
 		return (inspection.getType() != null) ? inspection.getType().getId() : null;
@@ -560,9 +564,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return inspection.isPrintable();
 	}
 
-	public void setLocation(String location) {
-		inspection.setLocation(location);
-	}
 
 	public void setPrintable(boolean printable) {
 		inspection.setPrintable(printable);
@@ -611,6 +612,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return inspection;
 	}
 
+	
+	// this pair should go together and have us create a control for inspector selection.
 	public List<ListingPair> getInspectors() {
 		if (inspectors == null) {
 			inspectors = userManager.getInspectorList(getSecurityFilter());
@@ -624,6 +627,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 		return inspectors;
 	}
+	
+	
+	
 
 	public List<ProductStatusBean> getProductStatuses() {
 		if (productStatuses == null) {
@@ -706,18 +712,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		criteriaResults = results;
 	}
 
-	public String getInspectionDate() {
-		if (inspectionDate == null) {
-			inspectionDate = convertDateTime(inspection.getDate());
-		}
-		return inspectionDate;
-	}
-
-	@RequiredStringValidator(message = "", key = "error.mustbeadate")
-	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate", parameters = { @ValidationParameter(name = "usingTime", value = "true") })
-	public void setInspectionDate(String inspectionDate) {
-		this.inspectionDate = inspectionDate;
-	}
 
 	public String getProofTestType() {
 		getProofTestTypeEnum();
@@ -907,7 +901,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public List<InspectionSchedule> getAvailableSchedules() {
 		if (availableSchedules == null) {
-			availableSchedules = inspectionScheduleManager.getSchedulesInTimeFrame(product, inspection.getType(), inspection.getDate());
+			
+			availableSchedules = scheduleInTimeFrameLoader.getSchedulesInTimeFrame(product, inspection.getType(), inspection.getDate());
 			if (inspectionSchedule != null && !availableSchedules.contains(inspectionSchedule)) {
 				availableSchedules.add(0, inspectionSchedule);  
 			}
@@ -951,17 +946,21 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	public Long getOwnerId() {
-		return ownerPicker.getOwnerId();
+		return modifiableInspection.getOwnerId();
 	}
 
 	
 	public void setOwnerId(Long id) {
-		ownerPicker.setOwnerId(id);
+		modifiableInspection.setOwnerId(id);
 	}
 
-	@RequiredFieldValidator(message="", key="error.owner_required")
+	@VisitorFieldValidator(message = "")
+	public WebModifiedableInspection getModifiableInspection() {
+		return modifiableInspection;
+	}
+	
 	public BaseOrg getOwner() {
-		return ownerPicker.getOwner();
+		return modifiableInspection.getOwner();
 	}
 	
 	public void setAllowNetworkResults(boolean allow) {
@@ -998,6 +997,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public InspectionFormHelper getInspectionFormHelper() {
 		return inspectionFormHelper;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public List<InspectionType> getEventTypes() {
+		return new ArrayList<InspectionType>(product.getType().getInspectionTypes());
 	}
 	
 }

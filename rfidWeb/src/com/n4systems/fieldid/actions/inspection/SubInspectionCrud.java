@@ -114,6 +114,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		setScheduleId(masterInspectionHelper.getScheduleId());
 		reattachUploadedFiles();
 
+		getModifiableInspection().updateValuesToMatch(inspection);
 		return SUCCESS;
 	}
 
@@ -163,16 +164,18 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 		reattachUploadedFiles();
 		setScheduleId(masterInspectionHelper.getScheduleId());
+		
+		getModifiableInspection().updateValuesToMatch(inspection);
 		return super.doEdit();
 	}
 
-	@SkipValidation
+	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doStoreNewSubInspection() {
 		return storeSubInspection();
 	}
 	
-	@SkipValidation
+	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doStoreExistingSubInspection() {
 		return storeSubInspection();
@@ -186,6 +189,7 @@ public class SubInspectionCrud extends InspectionCrud {
 
 		inspection.setTenant(getTenant());
 		inspection.setProduct(product);
+		getModifiableInspection().pushValuesTo(inspection);
 
 		UserBean modifiedBy = fetchCurrentUser();
 
@@ -221,13 +225,11 @@ public class SubInspectionCrud extends InspectionCrud {
 		return SUCCESS;
 	}
 
-	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doStoreNewMasterInspection() {
 		return storeMasterInspection();
 	}
 	
-	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doStoreExistingMasterInspection() {
 		return storeMasterInspection();
@@ -238,13 +240,16 @@ public class SubInspectionCrud extends InspectionCrud {
 			addActionErrorText("error.nomasterinspection");
 			return MISSING;
 		}
-
+		
+	
 		UserBean modifiedBy = fetchCurrentUser();
 
 		try {
 			findInspectionBook();
 			processProofTestFile();
+			getModifiableInspection().pushValuesTo(inspection);
 			masterInspectionHelper.setProofTestFile(fileData);
+			
 
 			if (masterInspectionHelper.getInspection().isNew()) {
 				inspection.setTenant(getTenant());
@@ -268,8 +273,6 @@ public class SubInspectionCrud extends InspectionCrud {
 			}
 		
 			inspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
-			inspection.setDate(convertDateTime(inspectionDate));
-			
 			masterInspectionHelper.setSchedule(inspectionSchedule);
 			masterInspectionHelper.setScheduleId(inspectionScheduleId);
 			masterInspectionHelper.setUploadedFiles(getUploadedFiles());
@@ -339,10 +342,13 @@ public class SubInspectionCrud extends InspectionCrud {
 		return masterInspectionHelper;
 	}
 	
+	
+	
 	@Override
 	public void setType(Long type) {
 		inspection.setType(null);
 		super.setType(type);
-	}	
+	}
+
 
 }

@@ -34,11 +34,11 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
  
 public class InspectionScheduleManagerImpl implements InspectionScheduleManager {
-	private static final long INSPECTION_SCHEDULE_DATE_RANGE = 30L;
+	
 
 	private static Logger logger = Logger.getLogger( InspectionScheduleManagerImpl.class );
 	
-	 private PersistenceManager persistenceManager;
+	private PersistenceManager persistenceManager;
 	
 	
 	protected EntityManager em;
@@ -194,20 +194,5 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		return persistenceManager.find(builder);
 	}
 	
-	/**
-	 * gets the list of schedules from the past that are not closed and into the future only INPSECTION_SCHEDULE_DATE_RANGE days
-	 *  
-	 */
-	public List<InspectionSchedule> getSchedulesInTimeFrame(Product product, InspectionType inspectionType, Date inspectionDate) {
-		
-		Date to = DateHelper.addDaysToDate(inspectionDate, INSPECTION_SCHEDULE_DATE_RANGE);
-		
-		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("product", product).addSimpleWhere("inspectionType", inspectionType);
-		query.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-		query.addWhere(Comparator.LE, "to", "nextDate", to);
-		query.addOrder("nextDate");
-		
-		return persistenceManager.findAll(query);
-	}
+	
 }

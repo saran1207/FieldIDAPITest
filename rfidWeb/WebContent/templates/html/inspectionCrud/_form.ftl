@@ -44,7 +44,7 @@
 
 	<#if inspection.id?exists && action.isParentProduct() >
 		<p>
-			<label><@s.text name="label.result"/>:</label>
+			<label><@s.text name="label.result"/></label>
 			<span><@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" /></span>
 		</p>
 	</#if>

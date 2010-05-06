@@ -13,19 +13,7 @@ ${action.setPageType('inspection', 'add')!}
 	</#list>
 </ul>
 
-<@s.form action="inspectionCreate" namespace="/multiInspect/ajax" id="createInspection">
-	
-	<@s.hidden name="type" value="${eventTypeId}"/>
-	<@s.hidden name="inspector" value="${sessionUserId}"/>
-	<@s.hidden name="scheduleId" value="0"/>
-	<@s.hidden name="inspectionDate" value="05/04/10 9:00 AM"/>
-	
-	<@s.hidden name="productId" id="productId"/>
-	<@s.hidden name="location" id="location"/>
-	<@s.hidden name="ownerId" id="ownerId"/>
-	<@s.hidden name="productStatus" id="productStatusId"/>
-	
-</@s.form> 
+
 
 <@n4.includeScript>
 	
@@ -49,14 +37,20 @@ ${action.setPageType('inspection', 'add')!}
 		$('saveInspections').observe('click', function(event) {
 			event.stop();
 			
+			var options = getStandardCallbacks();
+			options.asynchronous = false;
+			options.parameters = $('inspectionCreate').serialize();
+			options.method =  "post";
+			
+			new Ajax.Request('<@s.url action="inspectionCheck" namespace="ajax"/>', options);
+			
+			
 			$$('.assetLine').each(function(element) {
 				var asset = element.asset;
 				$('productId').value= asset.id;
-				$('ownerId').value= asset.ownerId;
-				$('location').value= asset.location;
-				$('productStatusId').value= asset.productStatusId;
 				
-				$('createInspection').request({
+				
+				$('inspectionCreate').request({
 					asynchronous:false,	
 					onSuccess: contentCallback});
 			}); 

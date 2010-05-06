@@ -39,12 +39,12 @@
 	
 	<p>
 		<label><@s.text name="label.owner"/></label>
-		<span><@n4.orgPicker name="owner" required="true" id="ownerId" /></span>
+		<span><@n4.orgPicker name="modifiableInspection.owner" required="true" id="ownerId" /></span>
 	</p>	
 	
 	<p>
 		<label><@s.text name="label.location"/></label>
-		<span><@s.textfield name="location" /></span>
+		<span><@s.textfield name="modifiableInspection.location" /></span>
 	</p>
 </#if>
 
@@ -68,9 +68,9 @@
 		<label><@s.text name="label.inspectiondate"/></label>
 		<span >
 			<#if form_action="ADD">		
-				<@s.datetimepicker id="inspectionDate" onchange="updateAutoSuggest();" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
+				<@s.datetimepicker id="inspectionDate" onchange="updateAutoSuggest();" name="modifiableInspection.inspectionDate" theme="fieldidSimple"  type="dateTime"/>
 			<#else>
-				<@s.datetimepicker id="inspectionDate" name="inspectionDate" theme="fieldidSimple"  type="dateTime"/>
+				<@s.datetimepicker id="inspectionDate" name="modifiableInspection.inspectionDate" theme="fieldidSimple"  type="dateTime"/>
 			</#if>
 		</span>
 		

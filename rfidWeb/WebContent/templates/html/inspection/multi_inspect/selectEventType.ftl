@@ -22,6 +22,7 @@ ${action.setPageType('inspection', 'add')!}
 	function performInspection(event) {
 		event.stop();
 		
+		
 		var element = Event.element(event);
 		
 		$('eventTypeId').value = element.readAttribute('value');
