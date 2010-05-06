@@ -3,6 +3,7 @@ package com.n4systems.model.builders;
 import static com.n4systems.model.builders.ProductTypeBuilder.*;
 import static com.n4systems.model.builders.SubProductBuilder.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -89,7 +90,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		Product product = generate();
 		product.setId(id);
 		populateMasterProductInSubProducts(product);
-		product.setSubProducts(Arrays.asList(subProducts));
+		product.setSubProducts(new ArrayList<SubProduct>(Arrays.asList(subProducts)));
 		return product;
 	}
 	
