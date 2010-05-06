@@ -3,9 +3,8 @@ package com.n4systems.model.builders;
 import static com.n4systems.model.builders.ProductTypeBuilder.*;
 import static com.n4systems.model.builders.SubProductBuilder.*;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import rfid.ejb.entity.ProductStatusBean;
 
@@ -14,7 +13,6 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.test.helpers.FluentArrayList;
 
 public class ProductBuilder extends BaseBuilder<Product>{
 
@@ -25,18 +23,18 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	private final String serialNumber;
 	private final Date modified;
 	
-	private final List<SubProduct> subProducts;
+	private final SubProduct[] subProducts;
 	private final String location;
 	private final ProductStatusBean productStatus;
 	
 	public static ProductBuilder aProduct() {
-		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, null, null, new ArrayList<SubProduct>());
+		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, null, null);
 	}
 	
 	
 
 
-	public ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, String location, ProductStatusBean productStatus, List<SubProduct> subProducts) {
+	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, String location, ProductStatusBean productStatus, SubProduct... subProducts) {
 		super();
 		this.tenant = tenant;
 		this.owner = owner;
@@ -45,7 +43,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		this.modified = modified;
 		this.location = location;
 		this.productStatus = productStatus;
-		this.subProducts = new ArrayList<SubProduct>(subProducts);
+		this.subProducts = subProducts;
 	}
 
 
@@ -70,13 +68,12 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	}
 	
 	public ProductBuilder withOneSubProduct() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, new FluentArrayList<SubProduct>(aSubProduct().build()));
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, aSubProduct().build());
 		
 	}
 	
 	public ProductBuilder withTwoSubProducts() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, 
-				new FluentArrayList<SubProduct>(aSubProduct().build(),aSubProduct().build()));
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, aSubProduct().build(),aSubProduct().build());
 	}
 	
 	public ProductBuilder inLocation(String location) {
@@ -92,7 +89,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		Product product = generate();
 		product.setId(id);
 		populateMasterProductInSubProducts(product);
-		product.setSubProducts(subProducts);
+		product.setSubProducts(Arrays.asList(subProducts));
 		return product;
 	}
 	
