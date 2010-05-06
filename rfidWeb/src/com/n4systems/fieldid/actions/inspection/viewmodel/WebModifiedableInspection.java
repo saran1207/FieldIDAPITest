@@ -66,7 +66,7 @@ public class WebModifiedableInspection implements UserDateFormatValidator {
 	public void pushValuesTo(Inspection inspection) {
 		inspection.setLocation(location);
 		inspection.setOwner(ownerPicker.getOwner());
-		inspection.setDate(dateConverter.convertDateTime(inspectionDate));
+		inspection.setDate(inspectionDate != null ? dateConverter.convertDateTime(inspectionDate) : null);
 	}
 	
 	public String getInspectionDate() {

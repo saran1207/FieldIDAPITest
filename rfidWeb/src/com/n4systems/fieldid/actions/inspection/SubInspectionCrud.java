@@ -169,13 +169,13 @@ public class SubInspectionCrud extends InspectionCrud {
 		return super.doEdit();
 	}
 
-	
+	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doStoreNewSubInspection() {
 		return storeSubInspection();
 	}
 	
-	
+	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doStoreExistingSubInspection() {
 		return storeSubInspection();
