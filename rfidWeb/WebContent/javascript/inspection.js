@@ -387,11 +387,6 @@ function addSchedule() {
 	var jobs = $('jobSelection');
 	var nextDate = $('nextDate');
 	
-	if (!validDate(nextDate.getValue())) {
- 		nextDate.addClassName("inputError");
- 		nextDate.title='<@s.text name="error.mustbeadate"/>';
- 		return false;
- 	}
 	
 	var params = new Object();
 	params.date =  nextDate.getValue();

@@ -23,6 +23,6 @@
 	inspectionTypeId = '${type!0}';
 	productId = '${productId!0}';
 	<#if !noAutoSuggest?exists || !noAutoSuggest>
-		autoSuggest();
+		onDocumentLoad(autoSuggest);
 	</#if>
 </@n4.includeScript>

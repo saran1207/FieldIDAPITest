@@ -94,6 +94,7 @@ public class MultiInspectAction extends AbstractCrud {
 		
 		commonAssetValues = new CommonAssetValuesFinder(assets).findCommonValues();
 		inspection.setOwner(commonAssetValues.owner);
+		inspection.setLocation(commonAssetValues.location);
 		modifiableInspection.updateValuesToMatch(inspection);
 		
 		return SUCCESS;
@@ -184,17 +185,10 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 	
 	
-	public BaseOrg getOwner() {
-		return commonAssetValues.owner;
-	}
-	
 	public Long getProductStatus() {
 		return commonAssetValues.productStatus != null ? commonAssetValues.productStatus.getUniqueID() : null;
 	}
 	
-	public String getLocation() {
-		return commonAssetValues.location;
-	}
 
 
 	@VisitorFieldValidator(message="")

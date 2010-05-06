@@ -117,9 +117,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private String proofTestDirectory;
 	private boolean newFile = false;
 	
-	private List<String> nextInspectionDates = new ArrayList<String>();
-	private List<Long> nextInspectionTypes = new ArrayList<Long>();
-	private List<Long> nextInspectionJobs = new ArrayList<Long>();
+	
+	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
+	
+	
 	private ScheduleInTimeFrameLoader scheduleInTimeFrameLoader;
 	
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
@@ -424,24 +425,20 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		Date scheduleDate;
 		InspectionType scheduleType;
 		Project scheduleJob;
-		if (!nextInspectionDates.isEmpty()) {
-			for (int i = 0; i < nextInspectionDates.size(); i++) {
-				if (nextInspectionDates.get(i) == null) {
-					continue;
-				}
+		
+			for (WebInspectionSchedule nextSchedule : nextSchedules) {
+				scheduleDate = convertDate(nextSchedule.getDate());
+				scheduleType = persistenceManager.find(InspectionType.class, nextSchedule.getType(), getTenantId());
 				
-				scheduleDate = convertDate(nextInspectionDates.get(i));
-				scheduleType = persistenceManager.find(InspectionType.class, nextInspectionTypes.get(i), getTenantId());
-				
-				if (nextInspectionJobs.size() > i && nextInspectionJobs.get(i) != null) {
-					scheduleJob = getLoaderFactory().createFilteredIdLoader(Project.class).setId(nextInspectionJobs.get(i)).load();
+				if (nextSchedule.getJob() != null) {
+					scheduleJob = getLoaderFactory().createFilteredIdLoader(Project.class).setId(nextSchedule.getJob()).load();
 				} else {
 					scheduleJob = null;
 				}
 				
 				scheduleBundles.add(new InspectionScheduleBundle(product, scheduleType, scheduleJob, scheduleDate));
 			}
-		}
+		
 		
 		return scheduleBundles;
 	}
@@ -971,30 +968,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return !inspection.getTenant().equals(getTenant());
 	}
 
-	public List<String> getNextInspectionDates() {
-		return nextInspectionDates;
-	}
-
-	public void setNextInspectionDates(List<String> nextInspectionDates) {
-		this.nextInspectionDates = nextInspectionDates;
-	}
-
-	public List<Long> getNextInspectionTypes() {
-		return nextInspectionTypes;
-	}
-
-	public void setNextInspectionTypes(List<Long> nextInspectionTypes) {
-		this.nextInspectionTypes = nextInspectionTypes;
-	}
-
-	public List<Long> getNextInspectionJobs() {
-		return nextInspectionJobs;
-	}
-
-	public void setNextInspectionJobs(List<Long> nextInspectionJobs) {
-		this.nextInspectionJobs = nextInspectionJobs;
-	}
-
 	public InspectionFormHelper getInspectionFormHelper() {
 		return inspectionFormHelper;
 	}
@@ -1002,6 +975,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@SuppressWarnings("deprecation")
 	public List<InspectionType> getEventTypes() {
 		return new ArrayList<InspectionType>(product.getType().getInspectionTypes());
+	}
+
+	public List<WebInspectionSchedule> getNextSchedules() {
+		return nextSchedules;
 	}
 	
 }

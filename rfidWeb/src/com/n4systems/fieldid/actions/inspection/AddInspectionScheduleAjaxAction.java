@@ -2,6 +2,8 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.Date;
 
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.InspectionType;
@@ -10,6 +12,7 @@ import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +31,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
+	@SkipValidation
 	public String doAutoSuggest() {
 		Date startDate = convertDate(inspectionDate);
 		
@@ -79,6 +83,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		return date;
 	}
 
+	@RequiredStringValidator(message="", key="error.mustbeadate")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public void setDate(String date) {
 		this.date = date;
