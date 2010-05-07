@@ -23,6 +23,9 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private Long index;
 	private String inspectionDate;
 	
+	private WebInspectionSchedule nextSchedule = new WebInspectionSchedule();
+	
+	
 	public AddInspectionScheduleAjaxAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -42,21 +45,23 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		ProductTypeSchedule schedule = product.getType().getSchedule(inspectionType, product.getOwner());
 		if (schedule != null) {
 			Date nextDate = schedule.getNextDate(startDate);
-			date = convertDate(nextDate);
+			setDate(convertDate(nextDate));
 		}
 		return SUCCESS;
 	}
-
-	public InspectionType getType() {
+	
+	public InspectionType getInspectionType() {
 		return inspectionType;
 	}
 	
-	public Long getInspectionType() {
+	public Long getInspectionTypeId() {
 		return inspectionType.getId();
 	}
 
-	public void setInspectionType(Long id) {
+	public void setInspectionTypeId(Long id) {
 		inspectionType = persistenceManager.find(InspectionType.class, id, getTenantId());
+		nextSchedule.setType(id);
+		nextSchedule.setTypeName(inspectionType.getName());
 	}
 
 	public Long getProduct() {
@@ -72,11 +77,15 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	}
 	
 	public Long getJobId() {
-		return (product != null) ? product.getId(): null;
+		return (job != null) ? job.getId(): null;
 	}
 
 	public void setJobId(Long id) {
 		job = getLoaderFactory().createFilteredIdLoader(Project.class).setId(id).load();
+		if (job != null) {
+			nextSchedule.setJob(job.getId());
+			nextSchedule.setJobName(job.getName());
+		}
 	}
 	
 	public String getDate() {
@@ -87,6 +96,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public void setDate(String date) {
 		this.date = date;
+		nextSchedule.setDate(date);
 	}
 
 	public String getInspectionDate() {
@@ -103,6 +113,10 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 
 	public void setIndex(Long index) {
 		this.index = index;
+	}
+
+	public WebInspectionSchedule getNextSchedule() {
+		return nextSchedule;
 	}
 	
 }

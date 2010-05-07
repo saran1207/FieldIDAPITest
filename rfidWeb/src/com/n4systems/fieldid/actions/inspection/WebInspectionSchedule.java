@@ -6,6 +6,9 @@ public class WebInspectionSchedule {
 	private Long job;
 	
 	private String date;
+	
+	private String typeName;
+	private String jobName;
 
 	public Long getType() {
 		return type;
@@ -29,6 +32,22 @@ public class WebInspectionSchedule {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	
 	

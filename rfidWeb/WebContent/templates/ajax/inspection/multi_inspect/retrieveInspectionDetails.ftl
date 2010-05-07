@@ -1,5 +1,6 @@
 <#assign html>
-	<div id="inspectionType">${inspectionType.name}</div>
+	
+	
 	
 	<#include "/templates/html/inspection/multi_inspect/_form.ftl" />
 
@@ -16,9 +17,10 @@ $('step2Loading').hide();
 $('step2').update('${html?js_string}');
 $('step2').show();
 $('continueButton').observe("click", function(){	
-						var options = getStandardCallbacks();
-						options.parameters = $('inspectionCreate').serialize();
-						options.method =  "post";
-						new Ajax.Request('<@s.url action="inspectionCheck" namespace="ajax"/>', options);});
+		var options = getStandardCallbacks();
+		options.parameters = $('inspectionCreate').serialize();
+		options.method =  "post";
+		new Ajax.Request('<@s.url action="inspectionCheck" namespace="ajax"/>', options);
+});
 						 
 attachOrgEvents("#step2");

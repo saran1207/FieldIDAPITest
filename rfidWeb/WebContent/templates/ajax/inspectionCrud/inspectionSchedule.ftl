@@ -7,5 +7,6 @@
 		$('schedules').insert({bottom: '${html}'});
 		$('schedule_${index}').highlight();
 		index++;
+		$('newScheduleForm').hide();
 	</#escape>
 </#if>

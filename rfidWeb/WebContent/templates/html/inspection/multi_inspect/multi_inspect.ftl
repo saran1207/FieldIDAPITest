@@ -8,15 +8,8 @@ ${action.setPageType('inspection', 'add')!}
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	
-	<script type="text/javascript">
-		var loading_holder = '${loaderDiv?js_string}';
-		
-		onDocumentLoad(function(){ toStep(1); });
-		
-	</script>
-
-	
 	<@n4.includeScript src="inspection" />
+	<@n4.includeScript src="multi_inspect" />
 	<@n4.includeStyle type="page" href="inspection" />
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
@@ -24,7 +17,20 @@ ${action.setPageType('inspection', 'add')!}
 	<@n4.includeScript src="commentTemplates"/>
 		
 	<@n4.includeScript>
-		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"   />';
+		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>';
+		var loading_holder = '${loaderDiv?js_string}';
+		
+		onDocumentLoad(function(){ toStep(1); });
+		
+		var asset = null;
+		<#list assets as asset>
+			asset = new Object();
+			asset.id = ${asset.id};
+			asset.ownerId = ${asset.owner.id};
+			asset.location = "${(asset.location?js_string)!}";
+			asset.productStatusId = "${(asset.productStatus.id)!}"; 
+			assets.push(asset);
+		</#list>
 	</@n4.includeScript>
 
 </head>
@@ -56,52 +62,6 @@ ${action.setPageType('inspection', 'add')!}
 		<div class="step">
 		<h2>3. <@s.text name="label.confirm"/></h2>
 		<div class="stepContent"  id="step3">
-								
-				<@n4.includeScript>
-				
-				var assets = new Array();
-				var asset = null;
-				<#list assets as asset>
-					asset = new Object();
-					asset.id = ${asset.id};
-					asset.ownerId = ${asset.owner.id};
-					asset.location = "${(asset.location?js_string)!}";
-					asset.productStatusId = "${(asset.productStatus.id)!}"; 
-					assets.push(asset);
-				</#list>
-						
-				onDocumentLoad(function() {
-							
-					
-					$('saveInspections').observe('click', function(event) {
-						event.stop();
-						
-						toStep(4);
-					
-						
-						var totalAssets = assets.length;
-						var completed = 0;
-						var totalComplete;
-						
-						assets.each(function(asset) {
-							$('productId').value= asset.id;
-							
-							
-							$('inspectionCreate').request({
-								asynchronous:false,	
-								onSuccess: contentCallback});
-							
-							completed++;
-							totalComplete = completed/totalAssets*100;
-							
-							$$('#step4 .percentBarUsed').first().setStyle({width: totalComplete + "%"});
-							
-							
-						}); 
-					});
-				});
-			</@n4.includeScript>			
-				
 			<div id="inspectionTypeToReplace"></div>
 			
 			<div class="stepAction">
@@ -116,10 +76,15 @@ ${action.setPageType('inspection', 'add')!}
 		<div class="step">
 		<h2>4. <@s.text name="label.complete"/></h2>
 		<div class="stepContent"  id="step4">
+			<div style="overflow:hidden">
+				<div style="width:300px; float:left;">
+					<@n4.percentbar  progress="0" total="${assets.size()}"/>
+				</div>
+				<div style="float:left; margin:5px;"><span id="completedInspections">0</span> <@s.text name="label.of"/> ${assets.size()}</div>
+			</div>
 			
-			<@n4.percentbar  progress="0" total="${assets.size()}"/>
 			
-			<button id="backToSearchPage" onClick="redirect('<@s.url action="search" namespace="/"/>')" >Back to Search</button>
+			<button id="backToSearchPage" onClick="redirect('<@s.url action="search" namespace="/"/>')" ><@s.text name="label.back_to_search"/></button>
 			
 		</div>
 		

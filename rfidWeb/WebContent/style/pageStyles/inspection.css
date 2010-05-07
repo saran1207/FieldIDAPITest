@@ -382,11 +382,9 @@
 	color: #cccccc;
 }
 
-.schedulesAdd div {
-	float: left;
-	padding-right: 10px;
-}
-
-.schedulesAdd a {
-	font-size: 1.4em;
+#newScheduleForm {
+	width:300px;
+	padding:25px;
+	border:solid 1px #333;
+	background-color:#fff;
 }

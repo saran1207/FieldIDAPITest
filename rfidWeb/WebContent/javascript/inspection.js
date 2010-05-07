@@ -390,7 +390,7 @@ function addSchedule() {
 	
 	var params = new Object();
 	params.date =  nextDate.getValue();
-	params.inspectionType = types.options[types.selectedIndex].value;
+	params.inspectionTypeId = types.options[types.selectedIndex].value;
 	params.index = index;
 	
 	if (jobs != null) {
