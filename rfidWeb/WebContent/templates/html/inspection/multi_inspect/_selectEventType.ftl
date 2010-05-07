@@ -1,14 +1,16 @@
-${action.setPageType('inspection', 'add')!}
 
 <#if !eventTypes?exists || eventTypes.empty>
 	<@s.text name="error.no_common_inspection_types"/>
 <#else>
-	<#list eventTypes as eventType>
-		<a href="#" class="eventType" value="${eventType.id}">${eventType.name?html}</a>
-	</#list>
+	<ul>
+		<#list eventTypes as eventType>
+			<li><a href="#" class="eventType" value="${eventType.id}">${eventType.name?html}</a></li>
+		</#list>
+	</ul>
 </#if>
-<@s.form action="performEvent" id="perfromEvent">
-	<@s.hidden name="eventTypeId" id="eventTypeId"/>
+
+<@s.form action="retrieveInspectionDetails" namespace="/multiInspect/ajax" id="retrieveInspectionDetails">
+	<@s.hidden name="type" id="eventTypeId"/>
 	
 	<#list assetIds as assetId>
 		<@s.hidden name="assetIds[${assetId_index}]"/> 
@@ -26,7 +28,10 @@ ${action.setPageType('inspection', 'add')!}
 		var element = Event.element(event);
 		
 		$('eventTypeId').value = element.readAttribute('value');
-		$('perfromEvent').submit();
+		$('retrieveInspectionDetails').request(getStandardCallbacks());
+		toStep(2, "step2Loading");
+		
+		
 	}
 	
 	

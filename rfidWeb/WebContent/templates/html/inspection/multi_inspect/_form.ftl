@@ -1,19 +1,8 @@
-<head>
-	<@n4.includeScript src="inspection" />
-	<@n4.includeStyle type="page" href="inspection" />
-	<#include "/templates/html/common/_calendar.ftl"/>
-	<#include "/templates/html/common/_orgPicker.ftl"/>
-	
-	<@n4.includeScript src="commentTemplates"/>
-		
-	<@n4.includeScript>
-		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"   />';
-	</@n4.includeScript>
-</head>
+
 
 <@s.form action="inspectionCreate" namespace="/multiInspect/ajax" id="inspectionCreate" cssClass="crudForm" theme="simple">
 	<#include "/templates/html/common/_formErrors.ftl"/>
-	<@s.hidden name="type" value="${eventTypeId}"/>
+	<@s.hidden name="type"/>
 	<@s.hidden name="scheduleId" value="0"/>
 
 	<@s.hidden name="productId" id="productId"/>

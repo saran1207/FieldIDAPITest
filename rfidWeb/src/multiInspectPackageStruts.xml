@@ -17,11 +17,9 @@
 		</global-results>
 		
 	 	<action name="selectEventType" method="inspectionTypes" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
-			<result name="success" type="freemarker">/templates/html/inspection/multi_inspect/selectEventType.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspection/multi_inspect/multi_inspect.ftl</result>
 		</action>
-		<action name="performEvent" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
-			<result name="success" type="freemarker">/templates/html/inspection/multi_inspect/performEvent.ftl</result>
-		</action>
+	
 	</package>
 	
 	<package name="multiInspect/ajax" extends="default" namespace="/multiInspect/ajax">
@@ -33,7 +31,9 @@
 			</result>
 			
 		</global-results>
-		
+		<action name="retrieveInspectionDetails" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+			<result name="success" type="freemarker">/templates/ajax/inspection/multi_inspect/retrieveInspectionDetails.ftl</result>
+		</action>
 		
 		<action name="inspectionCheck" method="inspectionCheck" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
 			<result name="success" type="freemarker">/templates/ajax/inspection/multi_inspect/valid.ftl</result>

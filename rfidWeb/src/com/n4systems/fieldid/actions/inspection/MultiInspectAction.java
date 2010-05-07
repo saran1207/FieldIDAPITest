@@ -90,9 +90,9 @@ public class MultiInspectAction extends AbstractCrud {
 
 	@SkipValidation
 	public String doPerformEvent() {
-		assets = persistenceManager.findAll(new QueryBuilder<Product>(Product.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
 		
-		commonAssetValues = new CommonAssetValuesFinder(assets).findCommonValues();
+		
+		commonAssetValues = new CommonAssetValuesFinder(getAssets()).findCommonValues();
 		inspection.setOwner(commonAssetValues.owner);
 		inspection.setLocation(commonAssetValues.location);
 		modifiableInspection.updateValuesToMatch(inspection);
@@ -118,11 +118,11 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 
 
-	public Long getEventTypeId() {
+	public Long getType() {
 		return inspectionType != null ? inspectionType.getId() : null;
 	}
 
-	public void setEventTypeId(Long type) {
+	public void setType(Long type) {
 		if (type == null) {
 			inspectionType = null;
 		} else if (inspectionType == null || !type.equals(inspectionType.getId())) {
@@ -140,6 +140,10 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 
 	public List<Product> getAssets() {
+		if (assets == null){
+			assets = persistenceManager.findAll(new QueryBuilder<Product>(Product.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
+		}
+				
 		return assets;
 	}
 
