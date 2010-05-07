@@ -80,7 +80,6 @@ public class ArchiveProductTypeTask implements Runnable {
 	}
 
 	private void sendResultNotifications() throws NoSuchProviderException, MessagingException {
-		// TODO this should use a resource file to put out the correct language and move html to the template system for emails.
 		String subject = "Product Type Deleted [" + getProductTypeName() + "]";
 		String body;
 		if (deleteFailed()) {

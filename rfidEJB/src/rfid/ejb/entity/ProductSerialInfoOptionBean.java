@@ -7,9 +7,7 @@ import javax.persistence.Table;
 
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
-/*
- * XXX - please refactor me ... I'm crappy
- */
+
 @Entity
 @Table(name = "productserial_infooption")
 public class ProductSerialInfoOptionBean extends LegacyBaseEntity {

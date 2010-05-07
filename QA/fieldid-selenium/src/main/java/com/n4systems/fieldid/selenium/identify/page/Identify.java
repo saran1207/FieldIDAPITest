@@ -349,7 +349,6 @@ public class Identify {
 	}
 
 	private void waitForUnitOfMeasureDialogToOpen(String id) {
-		// TODO should wait for the loading image to disappear
 		misc.sleep(3000);
 	}
 
