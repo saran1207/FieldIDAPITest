@@ -21,3 +21,4 @@ $('continueButton').observe("click", function(){
 						options.method =  "post";
 						new Ajax.Request('<@s.url action="inspectionCheck" namespace="ajax"/>', options);});
 						 
+attachOrgEvents("#step2");
