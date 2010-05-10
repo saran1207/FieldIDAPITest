@@ -9,13 +9,14 @@ function sendRequests() {
 		
 		
 		$('inspectionCreate').request({
-			asynchronous:false,	
-			onSuccess: contentCallback});
-		
-		completed++;
-		totalComplete = completed/totalAssets*100;
-		
-		$$('#step4 .percentBarUsed').first().setStyle({width: totalComplete + "%"});
+			asynchronous:true,	
+			onSuccess: contentCallback,
+			onComplete: function(){	completed++;
+				totalComplete = completed/totalAssets*100; 
+				$$('#step4 .percentBarUsed').first().setStyle({width: totalComplete + "%"});}	
+			
+		});
+				
 		$('completedInspections').update(completed);
 		
 	}); 
