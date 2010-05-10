@@ -47,11 +47,13 @@
 
 .stepAction {
 	margin-top: 10px;
+	padding-top: 5px;
+	border-top:1px solid #D0DAFA;
 }
+
 .stepAction input, .stepAction button {
 	padding: 5px 10px;
 }
-
 
 
 .loading {

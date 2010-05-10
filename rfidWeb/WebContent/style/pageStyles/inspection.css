@@ -383,8 +383,18 @@
 }
 
 #newScheduleForm {
-	width:300px;
-	padding:25px;
-	border:solid 1px #333;
+	overflow:hidden;
+	width:500px;
+	border:solid 3px #999;
 	background-color:#fff;
 }
+
+.inspectionSchedule {
+	padding: 10px 5px;
+}
+
+#schedules label {
+	font-weight: bold;
+}
+
+

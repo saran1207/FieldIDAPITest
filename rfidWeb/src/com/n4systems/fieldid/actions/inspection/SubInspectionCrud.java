@@ -115,6 +115,10 @@ public class SubInspectionCrud extends InspectionCrud {
 		reattachUploadedFiles();
 
 		getModifiableInspection().updateValuesToMatch(inspection);
+		
+		
+		getNextSchedules().addAll(masterInspectionHelper.getNextSchedules());
+		
 		return SUCCESS;
 	}
 
@@ -262,7 +266,7 @@ public class SubInspectionCrud extends InspectionCrud {
 					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
 				}
 					
-				masterInspectionHelper.getScheduleBundles().addAll(createInspectionScheduleBundles());
+				masterInspectionHelper.setNextSchedules(getNextSchedules());
 				
 			} else {
 				if (inspection.isEditable()) {

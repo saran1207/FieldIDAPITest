@@ -12,7 +12,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
@@ -123,7 +123,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	public String doSave() {
 		try {
-			ListHelper.clearEmpties(view.getAddresses());
+			StrutsListHelper.clearEmpties(view.getAddresses());
 			
 			NotificationSetting setting = new NotificationSetting();
 			

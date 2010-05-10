@@ -1,7 +1,7 @@
 <#assign form_action="EDIT" /> 
 ${action.setPageType('inspection', 'edit')!}
 
-<@s.form action="inspectionUpdate" theme="simple" cssClass="crudForm largeForm" onsubmit="return checkForUploads()" >
+<@s.form action="inspectionUpdate" theme="simple" cssClass="crudForm fullPageForm" onsubmit="return checkForUploads()" >
 	<#include "_form.ftl"/>
 
 	<div class="formAction">

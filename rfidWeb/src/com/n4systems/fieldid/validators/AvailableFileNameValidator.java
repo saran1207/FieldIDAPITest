@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.FileAttachment;
 
 public class AvailableFileNameValidator {
@@ -18,7 +18,7 @@ public class AvailableFileNameValidator {
 		allAttachments.addAll(attachments);
 		allAttachments.addAll(uploadedFiles);
 
-		ListHelper.clearNulls(allAttachments);
+		StrutsListHelper.clearNulls(allAttachments);
 	}
 
 	public boolean isFileNameAvailable(FileAttachment fileAttachment) {

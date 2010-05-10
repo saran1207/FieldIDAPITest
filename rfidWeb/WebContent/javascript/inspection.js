@@ -404,6 +404,7 @@ function addSchedule() {
 
 function removeSchedule(idx) {
 	$('schedule_' + idx).remove();
+	scheduleListUpdated();
 	return false;
 }
 
@@ -413,7 +414,7 @@ function validDate(date) {
 
 function autoSuggest() {
 	var params = new Object();
-	params.inspectionType = inspectionTypeId;
+	params.inspectionTypeId = inspectionTypeId;
 	params.inspectionDate = $('inspectionDate').getValue();
 	params.product = productId;
 	params.index = index;
@@ -439,4 +440,14 @@ function updateAutoSuggest() {
 	});
 	
 	autoSuggest();
+}
+
+function scheduleListUpdated() {
+	if ($('schedules').empty()) {
+		$('schedules').hide();
+		$('emptySchedules').show();
+	} else {
+		$('schedules').show();
+		$('emptySchedules').hide();
+	}
 }

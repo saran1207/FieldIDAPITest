@@ -1,6 +1,6 @@
 ${action.setPageType('inspection', 'add')!}
 
-<@s.form action="inspectionCreate" theme="simple" cssClass="crudForm largeForm" method="post"  onsubmit="return checkForUploads();" >
+<@s.form action="inspectionCreate" theme="simple" cssClass="crudForm fullPageForm" method="post"  onsubmit="return checkForUploads();" >
 	<#assign form_action="ADD" />
 	<#include "_form.ftl"/>
 

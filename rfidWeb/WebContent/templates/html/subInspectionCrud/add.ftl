@@ -4,7 +4,7 @@
 	<#assign formAction="baseInspectionCreate"/>
 </#if>
 ${action.setPageType('inspection', 'add')!}
-<@s.form action="${formAction}" theme="simple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
+<@s.form action="${formAction}" theme="simple" cssClass="crudForm fullPageForm" method="post" onsubmit="return checkForUploads();" >
 	<@s.hidden name="parentProductId"/>
 	<@s.hidden name="token"/>
 	<#include "/templates/html/inspectionCrud/_form.ftl"/>

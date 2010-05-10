@@ -46,7 +46,11 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		if (schedule != null) {
 			Date nextDate = schedule.getNextDate(startDate);
 			setDate(convertDate(nextDate));
+			nextSchedule.setAutoScheduled(true);
 		}
+		
+		
+		
 		return SUCCESS;
 	}
 	
@@ -97,6 +101,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	public void setDate(String date) {
 		this.date = date;
 		nextSchedule.setDate(date);
+		
 	}
 
 	public String getInspectionDate() {

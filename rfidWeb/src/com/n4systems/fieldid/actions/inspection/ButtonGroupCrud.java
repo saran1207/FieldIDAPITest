@@ -8,7 +8,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
@@ -99,8 +99,8 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 			return MISSING;
 		}
 		
-		ListHelper.clearNulls( stateSet.getStates() );
-		ListHelper.setTenants( stateSet.getStates(), getTenant() );
+		StrutsListHelper.clearNulls( stateSet.getStates() );
+		StrutsListHelper.setTenants( stateSet.getStates(), getTenant() );
 				
 		stateSet.setTenant( getTenant() );
 		

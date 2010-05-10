@@ -8,7 +8,7 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
@@ -76,7 +76,7 @@ public class InspectionFormCrud extends AbstractCrud {
 	 * also assign the right tenant.
 	 */
 	private void processCriteriaSections() {
-		ListHelper.clearNulls( criteriaSections );
+		StrutsListHelper.clearNulls( criteriaSections );
 		
 		for( CriteriaSection section : criteriaSections ) {
 			section.setTenant( getTenant() );
@@ -90,17 +90,17 @@ public class InspectionFormCrud extends AbstractCrud {
 	 * @param section
 	 */
 	private void processCriteria( CriteriaSection section ) {
-		ListHelper.clearNulls( section.getCriteria() );
+		StrutsListHelper.clearNulls( section.getCriteria() );
 		
 		for( Criteria criteria : section.getCriteria() ) {
 			criteria.setTenant( getTenant() );
 			criteria.setStates( persistenceManager.find( StateSet.class, criteria.getStates().getId(), getTenantId() ) );
 			
-			ListHelper.clearNulls(criteria.getRecommendations());
-			ListHelper.removeMarkedEntries("--deleted--", criteria.getRecommendations());
+			StrutsListHelper.clearNulls(criteria.getRecommendations());
+			StrutsListHelper.removeMarkedEntries("--deleted--", criteria.getRecommendations());
 			
-			ListHelper.clearNulls(criteria.getDeficiencies());
-			ListHelper.removeMarkedEntries("--deleted--", criteria.getDeficiencies());
+			StrutsListHelper.clearNulls(criteria.getDeficiencies());
+			StrutsListHelper.removeMarkedEntries("--deleted--", criteria.getDeficiencies());
 		}
 	}
 	

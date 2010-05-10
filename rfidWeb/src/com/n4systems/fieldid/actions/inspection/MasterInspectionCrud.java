@@ -9,6 +9,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -17,8 +18,10 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
+import com.n4systems.fieldid.actions.inspection.viewmodel.WebInspectionScheduleToInspectionScheduleBundleConverter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.CopyInspectionFactory;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.Inspection;
@@ -213,7 +216,9 @@ public class MasterInspectionCrud extends AbstractCrud {
 						.withProofTestFile(masterInspection.getProofTestFile())
 						.withUploadedImages(masterInspection.getUploadedFiles());
 				
-				createInspecitonBuiler.addSchedules(masterInspection.getScheduleBundles());
+				
+				
+				createInspecitonBuiler.addSchedules(createInspectionScheduleBundles(masterInspection.getNextSchedules()));
 				
 				inspection = inspectionPersistenceFactory.createInspectionCreator().create(
 						createInspecitonBuiler.build());
@@ -262,6 +267,29 @@ public class MasterInspectionCrud extends AbstractCrud {
 		}
 	}
 
+	
+	
+	protected List<InspectionScheduleBundle> createInspectionScheduleBundles(List<WebInspectionSchedule> nextSchedules) {
+		List<InspectionScheduleBundle> scheduleBundles = new ArrayList<InspectionScheduleBundle>();
+		StrutsListHelper.clearNulls(nextSchedules);
+		
+		WebInspectionScheduleToInspectionScheduleBundleConverter converter = createWebInspectionScheduleToInspectionScheduleBundleConverter();
+		
+		for (WebInspectionSchedule nextSchedule : nextSchedules) {
+			InspectionScheduleBundle bundle = converter.convert(nextSchedule, product);
+			scheduleBundles.add(bundle );
+		}
+	
+		
+		return scheduleBundles;
+	}
+
+	private WebInspectionScheduleToInspectionScheduleBundleConverter createWebInspectionScheduleToInspectionScheduleBundleConverter() {
+		WebInspectionScheduleToInspectionScheduleBundleConverter converter = new WebInspectionScheduleToInspectionScheduleBundleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
+		return converter;
+	}
+	
+	
 	private void completeSchedule(Long inspectionScheduleId, InspectionSchedule inspectionSchedule) {
 		if (inspectionScheduleId != null) {
 

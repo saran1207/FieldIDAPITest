@@ -220,7 +220,7 @@ em {
 	font-weight: bold;
 }
 
-.infoSet .fieldHolder .unitOfMeasure input, .infoSet .fieldHolder input.dateTime {
+.infoSet .fieldHolder .unitOfMeasure input, .infoSet .fieldHolder input.dateTime, .infoSet .fieldHolder input.date {
 	width: 200px;
 }	
 
@@ -245,4 +245,14 @@ em {
 	text-align: center;
 	font-size: 1.5em;
 	margin-top:10px;
+}
+
+
+.blockSeparated {
+	border-top: 1px solid #D0DAFA;
+	padding-top:5px;
+}
+
+.fullPageForm {
+	width: 901px;
 }

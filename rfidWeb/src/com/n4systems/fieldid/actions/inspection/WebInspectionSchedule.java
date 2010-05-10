@@ -1,6 +1,14 @@
 package com.n4systems.fieldid.actions.inspection;
 
+import com.n4systems.model.InspectionSchedule;
+
 public class WebInspectionSchedule {
+	public static WebInspectionSchedule createAutoScheduled(InspectionSchedule schedule) {
+		WebInspectionSchedule webInspectionSchedule = new WebInspectionSchedule();
+		webInspectionSchedule.setAutoScheduled(true);
+		return webInspectionSchedule;
+	}
+	
 
 	private Long type;
 	private Long job;
@@ -10,6 +18,9 @@ public class WebInspectionSchedule {
 	private String typeName;
 	private String jobName;
 
+	private boolean autoScheduled;
+	
+	
 	public Long getType() {
 		return type;
 	}
@@ -49,6 +60,16 @@ public class WebInspectionSchedule {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
+
+	public boolean isAutoScheduled() {
+		return autoScheduled;
+	}
+
+	public void setAutoScheduled(boolean autoScheduled) {
+		this.autoScheduled = autoScheduled;
+	}
+
+
 	
 	
 	

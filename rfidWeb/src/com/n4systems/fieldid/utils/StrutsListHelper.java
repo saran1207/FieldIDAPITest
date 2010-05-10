@@ -14,7 +14,7 @@ import java.util.List;
  * @author aaitken
  *
  */
-public class ListHelper {
+public class StrutsListHelper {
 
 	
 	/**

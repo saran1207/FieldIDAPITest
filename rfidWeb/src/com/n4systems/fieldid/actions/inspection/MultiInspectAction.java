@@ -11,6 +11,7 @@ import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.User;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspection;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -79,8 +80,17 @@ public class MultiInspectAction extends AbstractCrud {
 		modifiableInspection = new WebModifiedableInspection(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter());
 	}
 	
+	public void testDependancies() {
+		if (getAssets() == null || getAssets().isEmpty()) {
+			addActionErrorText("error.no_assets_given");
+			throw new MissingEntityException("no assets given");
+		}
+	}
+	
+	
 	@SkipValidation
 	public String doInspectionTypes() {
+		testDependancies();
 		return SUCCESS;
 	}
 
@@ -90,7 +100,7 @@ public class MultiInspectAction extends AbstractCrud {
 
 	@SkipValidation
 	public String doPerformEvent() {
-		
+		testDependancies();
 		
 		commonAssetValues = new CommonAssetValuesFinder(getAssets()).findCommonValues();
 		inspection.setOwner(commonAssetValues.owner);
@@ -194,9 +204,12 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 	
 
-
 	@VisitorFieldValidator(message="")
 	public WebModifiedableInspection getModifiableInspection() {
 		return modifiableInspection;
+	}
+	
+	public List<WebInspectionSchedule> getNextSchedules() {
+		return new ArrayList<WebInspectionSchedule>();
 	}
 }

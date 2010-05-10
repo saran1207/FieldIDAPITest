@@ -32,11 +32,14 @@ import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
+import com.n4systems.fieldid.actions.inspection.viewmodel.ScheduleToWebInspectionScheduleConverter;
+import com.n4systems.fieldid.actions.inspection.viewmodel.WebInspectionScheduleToInspectionScheduleBundleConverter;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspection;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
@@ -49,7 +52,7 @@ import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
-import com.n4systems.model.Project;
+import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
@@ -275,9 +278,22 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		
 		suggestSchedule();
 
+		autoSchedule();
+		
+		
 		modifiableInspection.updateValuesToMatch(inspection);
 		
 		return SUCCESS;
+	}
+
+	private void autoSchedule() {
+		ProductTypeSchedule schedule = product.getType().getSchedule(inspection.getType(), product.getOwner());
+		if (schedule != null) {
+			ScheduleToWebInspectionScheduleConverter converter = new ScheduleToWebInspectionScheduleConverter(getSessionUser().createUserDateConverter());
+			WebInspectionSchedule nextSchedule = converter.convert(schedule, inspection.getDate());
+			nextSchedule.setAutoScheduled(true);
+			nextSchedules.add(nextSchedule);
+		}
 	}
 
 	private void suggestSchedule() {
@@ -421,26 +437,22 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	protected List<InspectionScheduleBundle> createInspectionScheduleBundles() {
 		List<InspectionScheduleBundle> scheduleBundles = new ArrayList<InspectionScheduleBundle>();
+		StrutsListHelper.clearNulls(nextSchedules);
 		
-		Date scheduleDate;
-		InspectionType scheduleType;
-		Project scheduleJob;
+		WebInspectionScheduleToInspectionScheduleBundleConverter converter = createWebInspectionScheduleToInspectionScheduleBundleConverter();
 		
-			for (WebInspectionSchedule nextSchedule : nextSchedules) {
-				scheduleDate = convertDate(nextSchedule.getDate());
-				scheduleType = persistenceManager.find(InspectionType.class, nextSchedule.getType(), getTenantId());
-				
-				if (nextSchedule.getJob() != null) {
-					scheduleJob = getLoaderFactory().createFilteredIdLoader(Project.class).setId(nextSchedule.getJob()).load();
-				} else {
-					scheduleJob = null;
-				}
-				
-				scheduleBundles.add(new InspectionScheduleBundle(product, scheduleType, scheduleJob, scheduleDate));
-			}
-		
+		for (WebInspectionSchedule nextSchedule : nextSchedules) {
+			InspectionScheduleBundle bundle = converter.convert(nextSchedule, product);
+			scheduleBundles.add(bundle );
+		}
+	
 		
 		return scheduleBundles;
+	}
+
+	private WebInspectionScheduleToInspectionScheduleBundleConverter createWebInspectionScheduleToInspectionScheduleBundleConverter() {
+		WebInspectionScheduleToInspectionScheduleBundleConverter converter = new WebInspectionScheduleToInspectionScheduleBundleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
+		return converter;
 	}
 
 	protected void findInspectionBook() throws ValidationException, PersistenceException {
@@ -827,7 +839,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			}
 		}
 		return subInspections;
-	}
+	}	
 
 	
 	

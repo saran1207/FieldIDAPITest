@@ -65,7 +65,6 @@
 			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 	</div>
 	
-	<#assign noAutoSuggest=true/>
 	<#include "/templates/html/inspectionCrud/_schedules.ftl" />
 	
 </@s.form>

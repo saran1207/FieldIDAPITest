@@ -17,7 +17,7 @@ import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.SubProductHelper;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
@@ -236,7 +236,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 	private void processSubProducts() throws MissingEntityException {
 		product.getSubProducts().clear();
-		ListHelper.clearNulls(subProducts);
+		StrutsListHelper.clearNulls(subProducts);
 
 		if (subProducts != null && !subProducts.isEmpty()) {
 			for (SubProductHelper subProduct : subProducts) {

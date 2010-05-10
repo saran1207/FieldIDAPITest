@@ -8,8 +8,8 @@ import java.util.Random;
 
 import rfid.ejb.entity.ProductStatusBean;
 
-import com.n4systems.ejb.impl.InspectionScheduleBundle;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -43,7 +43,8 @@ public class MasterInspection {
 	private InspectionSchedule schedule;
 	private Long scheduleId;
 
-	private List<InspectionScheduleBundle> scheduleBundles = new ArrayList<InspectionScheduleBundle>();
+	
+	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
 	
 	public MasterInspection() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
@@ -192,7 +193,7 @@ public class MasterInspection {
 
 	public Inspection getCompletedInspection() {
 		inspection.getSubInspections().clear();
-		ListHelper.clearNulls(subInspections);
+		StrutsListHelper.clearNulls(subInspections);
 		for (SubInspection subInspection : subInspections) {
 			SubInspection s = createSubInspectionFromInspection(createInspectionFromSubInspection(subInspection));
 			s.setId((subInspection.getId() < 0) ? null : subInspection.getId());
@@ -304,11 +305,12 @@ public class MasterInspection {
 		this.scheduleId = scheduleId;
 	}
 	
-	public List<InspectionScheduleBundle> getScheduleBundles() {
-		return scheduleBundles;
+
+	public List<WebInspectionSchedule> getNextSchedules() {
+		return nextSchedules;
 	}
 
-	public void setScheduleBundles(List<InspectionScheduleBundle> scheduleBundles) {
-		this.scheduleBundles = scheduleBundles;
+	public void setNextSchedules(List<WebInspectionSchedule> nextSchedules) {
+		this.nextSchedules = nextSchedules;
 	}
 }

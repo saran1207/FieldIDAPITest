@@ -8,7 +8,7 @@ import java.util.Map;
 import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
@@ -161,15 +161,15 @@ public class InspectionHelper {
 	 */
 	public void processObservations(CriteriaResult result, Tenant tenant, UserBean modifiedBy) {
 		// these lists can have nulls in them
-		ListHelper.clearNulls(result.getDeficiencies());
-		ListHelper.clearNulls(result.getRecommendations());
+		StrutsListHelper.clearNulls(result.getDeficiencies());
+		StrutsListHelper.clearNulls(result.getRecommendations());
 
 		// remove blank comments
 		clearBlankObservationComment(result.getDeficiencies());
 		clearBlankObservationComment(result.getRecommendations());
 
-		ListHelper.setSecurity(result.getDeficiencies(), tenant, modifiedBy);
-		ListHelper.setSecurity(result.getRecommendations(), tenant, modifiedBy);
+		StrutsListHelper.setSecurity(result.getDeficiencies(), tenant, modifiedBy);
+		StrutsListHelper.setSecurity(result.getRecommendations(), tenant, modifiedBy);
 	}
 
 	/**
@@ -308,11 +308,11 @@ public class InspectionHelper {
 	
 	/**
 	 * Given a list of Observations, counts the number of not null Observation.
-	 * @see ListHelper#countNotNull(java.util.Collection)
+	 * @see StrutsListHelper#countNotNull(java.util.Collection)
 	 * @param observations		A list of observations
 	 * @return					The number of observations in the list.
 	 */
 	public <T extends Observation> int countObservations(List<T> observations) {
-		return ListHelper.countNotNull(observations);
+		return StrutsListHelper.countNotNull(observations);
 	}
 }

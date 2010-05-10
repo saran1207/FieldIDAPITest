@@ -14,7 +14,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.model.InspectionType;
@@ -112,7 +112,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 		processSupportedTypes();
 
-		ListHelper.clearNulls(inspectionType.getInfoFieldNames());
+		StrutsListHelper.clearNulls(inspectionType.getInfoFieldNames());
 
 		inspectionType.setTenant(getTenant());
 		try {

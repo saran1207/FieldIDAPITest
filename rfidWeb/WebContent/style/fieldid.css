@@ -1366,7 +1366,7 @@ pageSection.largeForm {
 	width: 180px;
 }
 
-.twoColumns .infoSet span.unitOfMeasure input,.twoColumns .infoSet input.date
+.twoColumns .infoSet span.unitOfMeasure input,.twoColumns .infoSet .fieldHolder input.date
 	{
 	width: 150px;
 }

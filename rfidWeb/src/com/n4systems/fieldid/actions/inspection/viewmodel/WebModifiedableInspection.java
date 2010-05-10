@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.inspection.viewmodel;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.api.UserDateFormatValidator;
-import com.n4systems.fieldid.actions.helpers.UserDateConverter;
+import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.orgs.BaseOrg;
@@ -15,7 +15,7 @@ import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 public class WebModifiedableInspection implements UserDateFormatValidator {
 
 	private final OwnerPicker ownerPicker;
-	private final UserDateConverter dateConverter;
+	private final SessionUserDateConverter dateConverter;
 	
 	
 	private String location;
@@ -25,7 +25,7 @@ public class WebModifiedableInspection implements UserDateFormatValidator {
 	
 	
 
-	public WebModifiedableInspection(OwnerPicker ownerPicker, UserDateConverter dateConverter) {
+	public WebModifiedableInspection(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter) {
 		super();
 		this.ownerPicker = ownerPicker;
 		this.dateConverter = dateConverter;

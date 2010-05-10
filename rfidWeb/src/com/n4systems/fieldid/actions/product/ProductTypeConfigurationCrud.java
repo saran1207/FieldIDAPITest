@@ -12,7 +12,7 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.utils.ListHelper;
+import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.ProductType;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
@@ -77,7 +77,7 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 		try {
 			productType.getSubTypes().clear();
 			if( !subProductIds.isEmpty() ) {
-				ListHelper.clearNulls( subProductIds );
+				StrutsListHelper.clearNulls( subProductIds );
 				QueryBuilder<ProductType> subTypeQuery = new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter());
 				subTypeQuery.addWhere( Comparator.IN, "productIds", "id", subProductIds );
 				subTypeQuery.setSimpleSelect();

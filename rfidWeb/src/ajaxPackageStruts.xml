@@ -366,9 +366,7 @@
 			<result name="success" type="freemarker">/templates/ajax/multiProductCrud/otherIdentifiersForm.ftl</result>
 		</action>
 		
-		<action name="calcNextDate" method="calculate" class="com.n4systems.fieldid.actions.inspection.CalcNextDateAction">
-			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/nextDate.ftl</result>
-		</action>
+	
 		
 		
 		<action name="orgs" method="list" class="com.n4systems.fieldid.actions.BaseOrgCrud" >

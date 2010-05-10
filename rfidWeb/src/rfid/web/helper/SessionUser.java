@@ -5,7 +5,7 @@ import java.util.TimeZone;
 
 import rfid.ejb.entity.UserBean;
 
-import com.n4systems.fieldid.actions.helpers.UserDateConverter;
+import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -271,8 +271,8 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	
-	public UserDateConverter createUserDateConverter() {
-		return new UserDateConverter(this);
+	public SessionUserDateConverter createUserDateConverter() {
+		return new SessionUserDateConverter(this);
 	}
 	
 	
