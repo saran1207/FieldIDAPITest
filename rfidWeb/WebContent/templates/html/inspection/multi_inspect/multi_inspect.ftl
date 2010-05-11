@@ -6,6 +6,7 @@ ${action.setPageType('inspection', 'add')!}
 
 <head>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
+
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	
 	<@n4.includeScript src="inspection" />
@@ -36,18 +37,17 @@ ${action.setPageType('inspection', 'add')!}
 </head>
 
 <div id="steps">
+
 	<div class="step">
 		<h2>1. <@s.text name="label.select_event"/></h2>
 		<div class="stepContent"  id="step1">
 			<#include "_selectEventType.ftl" />
 		</div>
-		
 	</div>
 
 	<div class="step">
 		<h2>2. <@s.text name="label.perform_event"/></h2>
 		<div class="stepContent"  id="step2">
-			
 			
 		</div>
 		<div class="stepContent loader" id="step2Loading" style="display:none">
@@ -59,26 +59,31 @@ ${action.setPageType('inspection', 'add')!}
 		
 		
 	</div>
-		<div class="step">
+	<div class="step">
 		<h2>3. <@s.text name="label.confirm"/></h2>
 		<div class="stepContent"  id="step3">
+
 			<div id="inspectionTypeToReplace"></div>
 			
-			<div class="stepAction">
-				<button id="saveInspections"><@s.text name="label.save_all"/></button>
-			<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2)"><@s.text name="label.back_to_step "/> 2</a>
-	</div>	
-							
-			
-	</div>
+				<div class="stepAction">
+					<button id="saveInspections"><@s.text name="label.save_all"/></button>
+				<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2)"><@s.text name="label.back_to_step "/> 2</a>
+				</div>	
+			</div>
 		
 	</div>
-		<div class="step">
+	
+
+	
+	<div class="step">
 		<h2>4. <@s.text name="label.complete"/></h2>
 		<div class="stepContent"  id="step4">
 			<div style="overflow:hidden">
 				<div style="width:300px; float:left;">
 					<@n4.percentbar  progress="0" total="${assets.size()}"/>
+					<div id="listComplete">
+				
+					</div>
 				</div>
 				<div style="float:left; margin:5px;"><span id="completedInspections">0</span> <@s.text name="label.of"/> ${assets.size()}</div>
 			</div>
@@ -89,4 +94,19 @@ ${action.setPageType('inspection', 'add')!}
 		</div>
 		
 	</div>
+
+</div>
+
+<div class="helpfulHints">
+	<h3><@s.text name="label.where_do_i_start"/></h3>
+	<p><@s.text name="label.where_do_i_start.full"/></p>
+
+	<h3><@s.text name="label.what_will_be_imported"/></h3>
+	<p><@s.text name="label.what_will_be_imported.full"/></p>
+
+	<h3><@s.text name="label.will_this_overwrite_my_existing_setup"/></h3>
+	<p><@s.text name="label.will_this_overwrite_my_existing_setup.full"/></p>
+
+	<h3><@s.text name="label.how_do_i_know_if_the_import_was_successful"/></h3>
+	<p><@s.text name="label.how_do_i_know_if_the_import_was_successful.full"/></p>
 </div>
