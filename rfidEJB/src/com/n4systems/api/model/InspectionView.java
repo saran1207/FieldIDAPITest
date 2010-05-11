@@ -20,7 +20,7 @@ public class InspectionView extends ExternalModelView {
 	@ExportField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, ProductIdentifierValidator.class, AssociatedInspectionTypeValidator.class })
 	private String identifier;
 
-	@ExportField(title = "Inspection Date", order = 200, validators = { NotNullValidator.class, DateValidator.class })
+	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
 	private Object inspectionDate;
 
 	@ExportField(title = "Inspection Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, InspectionStatusValidator.class })
