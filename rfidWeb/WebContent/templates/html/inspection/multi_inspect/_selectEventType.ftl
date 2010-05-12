@@ -1,13 +1,25 @@
-
-<#if !eventTypes?exists || eventTypes.empty>
-	<@s.text name="error.no_common_inspection_types"/>
+	
+		
+<#if multiInspectGroupSorter.group.empty>
+	<@s.text name="error.ANOTHER_PROLLEM"/>
 <#else>
-	<ul>
-		<#list eventTypes as eventType>
-			<li><a href="#" class="eventType" value="${eventType.id}">${eventType.name?html}</a></li>
+	<ul id="eventTypes">
+		<#list multiInspectGroupSorter.groups as group>
+			<li class="group">
+				${group.name?html}
+				<ul class="types">
+					<#list multiInspectGroupSorter.getInspectionTypesForGroup(group) as eventType>
+						<li><a href="#" class="eventType" value="${eventType.id}">${eventType.name?html}</a></li>
+					</#list>
+				</ul>
+			</li>
+							
 		</#list>
 	</ul>
-</#if>
+</#if>	
+	
+	
+
 
 <@s.form action="retrieveInspectionDetails" namespace="/multiInspect/ajax" id="retrieveInspectionDetails">
 	<@s.hidden name="type" id="eventTypeId"/>
@@ -18,6 +30,7 @@
 </@s.form>
 
 <@s.text name="label.number_of_assets"><@s.param>${assetIds.size()}</@s.param></@s.text>
+
 
 
 <@n4.includeScript>
