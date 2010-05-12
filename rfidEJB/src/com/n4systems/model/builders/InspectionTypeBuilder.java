@@ -1,5 +1,7 @@
 package com.n4systems.model.builders;
 
+import static com.n4systems.model.builders.InspectionTypeGroupBuilder.*;
+
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 
@@ -25,7 +27,7 @@ public class InspectionTypeBuilder extends EntityWithTenantBuilder<InspectionTyp
 	}
 	
 	public static InspectionTypeBuilder anInspectionType() {
-		return new InspectionTypeBuilder("some Name", "some description", true, false, false, InspectionType.DEFAULT_FORM_VERSION, new InspectionTypeGroup());
+		return new InspectionTypeBuilder("some Name", "some description", true, false, false, InspectionType.DEFAULT_FORM_VERSION, anInspectionTypeGroup().build());
 	}
 	
 	public InspectionTypeBuilder named(String name) {
