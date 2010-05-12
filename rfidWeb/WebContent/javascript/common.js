@@ -328,8 +328,9 @@ function showQuickView(elementId, event) {
 	quickViewBox.addClassName("quickView");
 	var button = Event.findElement(event, "A");
 
-	quickViewBox.absolutize();
 	quickViewBox.show();
+	quickViewBox.absolutize();
+	
 
 	var position = button.cumulativeOffset();
 
@@ -533,8 +534,9 @@ function onDocumentLoad(functionToRun) {
 }
 
 
-
-
 onDocumentLoad(function() {
-		$$('.hide').invoke("hide");
+		$$('.hide').each(function(element) {
+			element.hide();
+			element.removeClassName('hide');
+		});
 	});

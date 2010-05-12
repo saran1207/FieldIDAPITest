@@ -256,3 +256,6 @@ em {
 .fullPageForm {
 	width: 901px;
 }
+.hide {
+	display:none;
+}

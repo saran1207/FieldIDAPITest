@@ -1,14 +1,8 @@
 <#assign html>
-	
-	
-	
 	<#include "/templates/html/inspection/multi_inspect/_form.ftl" />
-
-	
-	
 	<div class="stepAction">
-			<button id="continueButton">Continue</button>
-			<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(1)"><@s.text name="label.back_to_step "/> 1</a>
+		<button id="continueButton"><@s.text name="label.continue"/></button>
+		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(1)"><@s.text name="label.back_to_step"/> 1</a>
 	</div>	
 </#assign>
 

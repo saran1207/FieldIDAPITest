@@ -42,10 +42,10 @@ function findAssets() {
 	if( productLinks != null ) {
 		if( productLinks.size() == 1 ) {
 			
-			attachAsset( productLinks[0] );
+			attachAsset(productLinks[0]);
 		} else {
-			for( var i = 0; i < productLinks.length; i++ ) {
-				productLinks[i].observe('click', attachAssetListener );
+			for (var i = 0; i < productLinks.length; i++ ) {
+				productLinks[i].observe('click', attachAssetListener);
 			}
 		}
 	}

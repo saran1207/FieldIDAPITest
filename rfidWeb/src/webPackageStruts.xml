@@ -836,6 +836,10 @@
 		</action>
 
 
+		<action name="startEvent" class="com.n4systems.fieldid.actions.SimpleAction">
+			<result name="success" type="freemarker">/templates/html/events/select.ftl</result>
+		</action>
+	
 		<action name="inspect" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionGroupCrud">
 			<result name="error" type="freemarker">/templates/html/inspectionGroup/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/inspectionGroup/list.ftl</result>
@@ -1935,7 +1939,10 @@
 		</action>
 		
 		
-		
-		
+		<action name="assetSelection" method="selection" class="com.n4systems.fieldid.actions.assets.AssetSelectionAction">
+			<result name="input" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
+			<result name="error" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
+			<result name="success" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
+		</action>		
 	</package>
 </struts>

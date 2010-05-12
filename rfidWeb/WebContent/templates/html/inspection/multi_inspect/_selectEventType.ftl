@@ -1,6 +1,6 @@
 	
 		
-<#if multiInspectGroupSorter.group.empty>
+<#if multiInspectGroupSorter.groups.empty>
 	<@s.text name="error.ANOTHER_PROLLEM"/>
 <#else>
 	<ul id="eventTypes">
@@ -37,14 +37,11 @@
 	function performInspection(event) {
 		event.stop();
 		
-		
 		var element = Event.element(event);
 		
 		$('eventTypeId').value = element.readAttribute('value');
 		$('retrieveInspectionDetails').request(getStandardCallbacks());
 		toStep(2, "step2Loading");
-		
-		
 	}
 	
 	

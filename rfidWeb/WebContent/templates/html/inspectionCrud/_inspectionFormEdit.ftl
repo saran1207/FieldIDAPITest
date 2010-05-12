@@ -1,16 +1,16 @@
 <#assign lightBoxProperties=":: :: width: 470, height: 300, menubar: true, topclose: false, autosize: false, scrolling: true" />
 
 <script type="text/javascript">
-	var recImageUrl = '<@s.url value="/images/rec.png"/>';
-	var defImageUrl = '<@s.url value="/images/def.png"/>';
-	var recSelectImageUrl = '<@s.url value="/images/rec-plus.png"/>';
-	var defSelectImageUrl = '<@s.url value="/images/def-plus.png"/>';
+	recImageUrl = '<@s.url value="/images/rec.png"/>';
+	defImageUrl = '<@s.url value="/images/def.png"/>';
+	recSelectImageUrl = '<@s.url value="/images/rec-plus.png"/>';
+	defSelectImageUrl = '<@s.url value="/images/def-plus.png"/>';
 </script>
 
 <#list section.criteria as criteria >
 	<#if !criteria.retired >				
 		<div class="infoSet" >
-			<label>${criteria.displayName}</label>
+			<label class="label">${criteria.displayName}</label>
 			 
 			<#assign current_state=criteria.states.availableStates[0]>
 			<#if (criteriaResults[criteriaCount].state.id)?exists >

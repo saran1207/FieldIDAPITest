@@ -5,7 +5,7 @@
 </#assign>
 
 <#escape x as x?js_string>	
-	$('results').replace( '${html}' );
+	$('results').replace('${html}');
 	findAssets();
 	$('results').highlight();
 </#escape>

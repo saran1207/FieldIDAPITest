@@ -52,6 +52,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private CommonInspectionTypeHandler commonInspectionTypeHandler;
 	private CommonAssetValues commonAssetValues;
 	private WebModifiedableInspection modifiableInspection;
+	private MultiInspectGroupSorter multiInspectGroupSorter;
 	
 
 	public MultiInspectAction(PersistenceManager persistenceManager, User userManager) {
@@ -207,6 +208,13 @@ public class MultiInspectAction extends AbstractCrud {
 	@VisitorFieldValidator(message="")
 	public WebModifiedableInspection getModifiableInspection() {
 		return modifiableInspection;
+	}
+	
+	public MultiInspectGroupSorter getMultiInspectGroupSorter() {
+		if (multiInspectGroupSorter == null) {
+			multiInspectGroupSorter = new MultiInspectGroupSorter(getEventTypes());
+		}
+		return multiInspectGroupSorter;
 	}
 	
 	public List<WebInspectionSchedule> getNextSchedules() {

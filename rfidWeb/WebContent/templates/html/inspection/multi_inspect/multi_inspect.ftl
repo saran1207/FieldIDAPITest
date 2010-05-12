@@ -1,4 +1,4 @@
-${action.setPageType('inspection', 'add')!}
+${action.setPageType('inspection', 'multi_event')!}
 
 <#assign loaderDiv>
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>
@@ -25,11 +25,7 @@ ${action.setPageType('inspection', 'add')!}
 		
 		var asset = null;
 		<#list assets as asset>
-			asset = new Object();
-			asset.id = ${asset.id};
-			asset.ownerId = ${asset.owner.id};
-			asset.location = "${(asset.location?js_string)!}";
-			asset.productStatusId = "${(asset.productStatus.id)!}"; 
+			<#include "/templates/html/productCrud/_js_product.ftl"/>
 			assets.push(asset);
 		</#list>
 	</@n4.includeScript>
@@ -62,35 +58,36 @@ ${action.setPageType('inspection', 'add')!}
 	<div class="step">
 		<h2>3. <@s.text name="label.confirm"/></h2>
 		<div class="stepContent"  id="step3">
-
-			<div id="inspectionTypeToReplace"></div>
-			
-				<div class="stepAction">
-					<button id="saveInspections"><@s.text name="label.save_all"/></button>
-				<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2)"><@s.text name="label.back_to_step "/> 2</a>
-				</div>	
+			<div>
+				-----YOU ARE ABOUT TO CREATE <span id="inspectionTypeToReplace"></span> ON ${assets.size()} ASSETS-----
 			</div>
-		
-	</div>
-	
 
-	
-	<div class="step">
-		<h2>4. <@s.text name="label.complete"/></h2>
-		<div class="stepContent"  id="step4">
-			<div style="overflow:hidden">
+			<div class="stepAction">
+				<input type="button" id="saveInspections" value="<@s.text name="label.save_all"/>" />
+				<@s.text name="label.or"/> <a href="#" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
+			</div>
+			<div style="overflow:hidden" class="progress hide">
 				<div style="width:300px; float:left;">
 					<@n4.percentbar  progress="0" total="${assets.size()}"/>
-					<div id="listComplete">
-				
-					</div>
 				</div>
 				<div style="float:left; margin:5px;"><span id="completedInspections">0</span> <@s.text name="label.of"/> ${assets.size()}</div>
 			</div>
-			
-			
-			<button id="backToSearchPage" onClick="redirect('<@s.url action="search" namespace="/"/>')" ><@s.text name="label.back_to_search"/></button>
-			
+		</div>	
+		
+	</div>
+	<div class="step">
+		<h2>4. <@s.text name="label.complete"/></h2>
+		<div class="stepContent"  id="step4">
+			<div id="listComplete">
+			</div>
+			<@s.form action="selectEventType" theme="simple">
+				<#list assets as asset>
+					<@s.hidden name="assetIds[${asset_index}]"/>
+				</#list>
+				<@s.submit id="preformAnotherEvent" key="label.perform_another_event_on_these_assets"/>
+				<@s.text name="label.or"/>
+				<a href="<@s.url action="assetSelection" namespace="/"/>"><@s.text name="label.select_a_new_set_of_assets"/></a>
+			</@s.form>
 		</div>
 		
 	</div>

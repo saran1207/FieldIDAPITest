@@ -13,9 +13,7 @@ import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.api.Listable;
 
 public class MultiInspectGroupSorter {
-	private final class ListableByDisplayNameComparator implements
-			Comparator<Listable<Long>> {
-		@Override
+	private final class ListableByDisplayNameComparator implements Comparator<Listable<Long>> {
 		public int compare(Listable<Long> o1, Listable<Long> o2) {
 			return o1.getDisplayName().compareToIgnoreCase(o2.getDisplayName());
 		}

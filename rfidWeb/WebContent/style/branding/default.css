@@ -21,7 +21,7 @@ body {
 }
 
 .percentBarUsed {
-	background: url(../../images/barForeground.png) repeat-x;
+	background: #79c5e5 url(../../images/barForeground.png) repeat-x;
 }
 .percentBar {
 	border: 2px solid #79c5e5;

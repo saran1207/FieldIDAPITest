@@ -99,10 +99,14 @@
 .inspectionForm div.infoSet span.criteriaButton, .inspectionForm div.infoSet div.criteriaButton {
 	padding-top:0px;
 	padding-bottom: 0px;
+	float:left;
+	display:block;
 }
 
 .inspectionForm div.infoSet span.criteriaText {
 	width: 10em;
+	float:left;
+	display:block;
 }
 
 .youAreOn, .inspectionSectionIndex, .inspectionSectionTitle {

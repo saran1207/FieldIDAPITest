@@ -8,7 +8,7 @@
 					<th>&nbsp;</th>
 					<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
 					<th><@s.text name="label.rfidnumber"/></th>
-					<th><@s.text name="label.customer"/></th>
+					<th><@s.text name="label.owner"/></th>
 					<th><@s.text name="label.producttype"/></th>
 					<th><@s.text name="label.identified"/></th>
 					<th><@s.text name="label.reference_number"/></th>
@@ -23,6 +23,7 @@
 						<td>${action.formatDate(product.identified, false)}</td>
 						<td>${(product.customerRefNumber?html)!}</td>	
 					</tr>
+					
 				</#list>
 			</table>
 		</div>
@@ -37,3 +38,13 @@
 </#if>
 
 </div>
+<#if products?exists >
+	<#list products as product >
+		<@n4.includeScript>
+			var asset = null;
+			<#assign asset=product/>
+			<#include "/templates/html/productCrud/_js_product.ftl"/>
+			$$("[productId='${product.id}']").first().asset = asset;
+		</@n4.includeScript>
+	</#list>
+</#if>

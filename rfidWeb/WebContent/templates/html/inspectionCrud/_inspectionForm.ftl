@@ -2,7 +2,7 @@
 	<#assign results=inspectionFormHelper.getVisibleResults( formInspection ).get( section )>
 	<#list results as criteriaResult >
 		<div class="infoSet">
-			<label>${criteriaResult.criteria.displayName}</label>
+			<label class="label">${criteriaResult.criteria.displayName}</label>
 			<span class="criteriaButton">
 				<img src="<@s.url value="/images/inspectionButtons/${criteriaResult.state.buttonName}.png" includeParams="none"/>"/>
 			</span>

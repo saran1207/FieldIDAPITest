@@ -45,7 +45,7 @@
 			</#if>
 			
 			<li>
-				<a href="<@s.url action="inspect" namespace="/"/>" class="speedLink" id="menuInspect"><@s.text name="speed.inspect"/></a>
+				<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink" id="menuInspect"><@s.text name="speed.inspect"/></a>
 			</li>
 			<li>
 				<a href="<@s.url action="search" namespace="/"/>" class="speedLink" id="menuAssets"><@s.text name="speed.assets" /></a>
