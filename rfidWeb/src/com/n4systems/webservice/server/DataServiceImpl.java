@@ -50,6 +50,7 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
@@ -455,6 +456,7 @@ public class DataServiceImpl implements DataService {
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<AutoAttributeCriteria> queryBuilder = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, securityFilter);
 			queryBuilder.addPostFetchPaths("productType", "inputs", "outputs");
+			queryBuilder.addSimpleWhere("productType.state", EntityState.ACTIVE);
 			// this is so postgres can paginate correctly.
 			queryBuilder.addOrder("id");
 			
@@ -490,6 +492,7 @@ public class DataServiceImpl implements DataService {
 			QueryBuilder<AutoAttributeDefinition> queryBuilder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, securityFilter);
 			queryBuilder.addFetch("criteria");
 			queryBuilder.addPostFetchPaths("outputs");
+			queryBuilder.addSimpleWhere("criteria.productType.state", EntityState.ACTIVE);
 			// for postgres to paginate correctly.
 			queryBuilder.addOrder("id");
 			
