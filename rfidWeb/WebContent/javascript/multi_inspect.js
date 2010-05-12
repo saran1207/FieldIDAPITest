@@ -13,15 +13,12 @@ function sendRequests() {
 			onSuccess: contentCallback,
 			onComplete: function(){	completed++;
 				totalComplete = completed/totalAssets*100; 
-				$$('#step4 .percentBarUsed').first().setStyle({width: totalComplete + "%"});}	
-			
+				$$('#step4 .percentBarUsed').first().setStyle({width: totalComplete + "%"});
+				$('completedInspections').update(completed);
+			}	
 		});
-				
-		$('completedInspections').update(completed);
-		
 	}); 
 }
-
 
 onDocumentLoad(function() {
 	
