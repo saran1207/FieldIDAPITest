@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.assets;
+package com.n4systems.fieldid.actions.inspection;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;

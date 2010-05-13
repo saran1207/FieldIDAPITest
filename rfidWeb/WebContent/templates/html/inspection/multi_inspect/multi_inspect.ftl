@@ -3,14 +3,26 @@ ${action.setPageType('inspection', 'multi_event')!}
 <#assign loaderDiv>
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>
 </#assign>
+<#assign row>
+<tr class="%%EXTRA_CLASS%%"> 
+	<td>%%SERIAL_NUMBER%%</td>
+	<td>%%RFID%%</td>
+	<td>%%OWNER%%</td>
+	<td>%%TYPE%%</td>
+	<td>%%IDENTIFIED%%</td>
+	<td>%%REFERENCE_NUMBER%%</td>
+	<td>%%CREATION_STATUS%%</td>
+</tr>
+</#assign>
+
 
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
-
-	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
+	<@n4.includeStyle href="steps"/>
+	<@n4.includeScript src="steps"/>
 	
 	<@n4.includeScript src="inspection" />
 	<@n4.includeScript src="multi_inspect" />
+	<@n4.includeStyle href="multi_event" type="page" />
 	<@n4.includeStyle type="page" href="inspection" />
 
 	<#include "/templates/html/common/_calendar.ftl"/>
@@ -21,6 +33,7 @@ ${action.setPageType('inspection', 'multi_event')!}
 	<@n4.includeScript>
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>';
 		var loading_holder = '${loaderDiv?js_string}';
+		var resultRow = '${row?js_string}';
 		
 		onDocumentLoad(function(){ toStep(1); });
 		
@@ -61,35 +74,62 @@ ${action.setPageType('inspection', 'multi_event')!}
 	<div class="step">
 		<h2>3. <@s.text name="label.confirm"/></h2>
 		<div class="stepContent"  id="step3">
-			<div>
-				-----YOU ARE ABOUT TO CREATE <span id="inspectionTypeToReplace"></span> ON ${assets.size()} ASSETS-----
-			</div>
-
+			
+			<p>You are about to create a <span id="inspectionTypeToReplace"></span> on each of the ${assets.size()} assets.</p>
 			<div class="stepAction">
 				<input type="button" id="saveInspections" value="<@s.text name="label.save_all"/>" />
 				<@s.text name="label.or"/> <a href="#" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
 			</div>
-			<div style="overflow:hidden" class="progress hide">
-				<div style="width:300px; float:left;">
-					<@n4.percentbar  progress="0" total="${assets.size()}"/>
+			
+			<div style="overflow:hidden text-align:center" class="progress hide stepAction">
+				<div style="float:left">
+					${loaderDiv}
+					<p style="text-align:center">
+						<@s.text name="label.sending"/>
+					</p>
+					<div style="width:300px; float:left;">
+						<@n4.percentbar  progress="0" total="${assets.size()}"/>
+					</div>
+					<div style="float:left; margin:5px;"><span id="completedInspections">0</span> <@s.text name="label.of"/> ${assets.size()}</div>
 				</div>
-				<div style="float:left; margin:5px;"><span id="completedInspections">0</span> <@s.text name="label.of"/> ${assets.size()}</div>
+				<table id="creationError" class="list hide">
+					<tr class="header">
+						<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+						<th><@s.text name="label.rfidnumber"/></th>
+						<th><@s.text name="label.owner"/></th>
+						<th><@s.text name="label.producttype"/></th>
+						<th><@s.text name="label.identified"/></th>
+						<th><@s.text name="label.reference_number"/></th>
+						<th><@s.text name="label.create_status"/></th>
+					</tr>
+				</table>
 			</div>
 		</div>	
 	</div>
 	<div class="step">
 		<h2>4. <@s.text name="label.complete"/></h2>
 		<div class="stepContent"  id="step4">
-			<div id="listComplete">
+			<table id="listComplete" class="list">
+				<tr class="header">
+					<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+					<th><@s.text name="label.rfidnumber"/></th>
+					<th><@s.text name="label.owner"/></th>
+					<th><@s.text name="label.producttype"/></th>
+					<th><@s.text name="label.identified"/></th>
+					<th><@s.text name="label.reference_number"/></th>
+					<th><@s.text name="label.create_status"/></th>
+				</tr>
+			</table>
+			<div class="stepAction">
+				<@s.form action="selectEventType" theme="simple">
+					<#list assets as asset>
+						<@s.hidden name="assetIds[${asset_index}]"/>
+					</#list>
+					<@s.submit id="preformAnotherEvent" key="label.perform_another_event_on_these_assets"/>
+					<@s.text name="label.or"/>
+					<a href="<@s.url action="assetSelection" namespace="/"/>"><@s.text name="label.select_a_new_set_of_assets"/></a>
+				</@s.form>
 			</div>
-			<@s.form action="selectEventType" theme="simple">
-				<#list assets as asset>
-					<@s.hidden name="assetIds[${asset_index}]"/>
-				</#list>
-				<@s.submit id="preformAnotherEvent" key="label.perform_another_event_on_these_assets"/>
-				<@s.text name="label.or"/>
-				<a href="<@s.url action="assetSelection" namespace="/"/>"><@s.text name="label.select_a_new_set_of_assets"/></a>
-			</@s.form>
 		</div>
 		
 	</div>
@@ -98,6 +138,6 @@ ${action.setPageType('inspection', 'multi_event')!}
 <div class="multiInspectLightBox">
 	
 		<a href='<@s.text name="label.youtube_video"/>' rel='flash' class='lightview' title=<@s.text name=""/> >
-			<img src="<@s.url value="/images/multi-event.jpg"/>" />
+			<img src="<@s.url value="/images/multi-event-video.jpg"/>" />
 		</a>
 </div>

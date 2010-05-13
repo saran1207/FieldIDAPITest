@@ -1,0 +1,30 @@
+.failed {
+	background-color: #FFEBEB;
+}
+.failed:hover {
+	background-color: #FFE0E0;
+}
+
+#resultBlock {
+	min-height: 80px; 
+}
+
+#introduction {
+	overflow: hidden;
+}
+
+#writtenInstructions {
+	float: left;
+	width: 500px;
+	padding-left: 120px;
+	background: no-repeat left center url(../../images/multi-event-large.jpg);
+	padding-top: 20px;
+	margin: 5px 0 5px 60px;
+	
+}
+
+#videoInstruction {
+	float:left;
+	padding-left:50px;
+}
+

@@ -3,7 +3,7 @@
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 </head>
 <div id="mainContent">
-	<ul class="subSystemList">
+	<ul class="subSystemList twoColumSubSystem">
 		<li id="manage_connections">
 			<h2 class="clean"><a href="<@s.url action="connections"/>"><@s.text name="label.manage_connections"/></a></h2>
 			<p><a href="<@s.url action="connections"/>"><@s.text name="label.manage_connections.full"/></a></p>

@@ -1,25 +1,13 @@
 ${action.setPageType('inspection', 'multi_event')}
 
 <#assign repeatedAssetHtml>
-	<div class="emptyList" >
-		<p>
-			<@s.text name="message.asset_already_added" />
-		</p>
-	</div>
+	<div class="emptyList" ><p><@s.text name="message.asset_already_added" /></p></div>
 </#assign>
 <#assign assetAddedHtml>
-	<div class="emptyList" >
-		<p>
-			<@s.text name="message.asset_added" />
-		</p>
-	</div>
+	<div class="emptyList" ><p><@s.text name="message.asset_added" /></p></div>
 </#assign>
 <#assign assetRemovedHtml>
-	<div class="emptyList" >
-		<p>
-			<@s.text name="message.asset_remove" />
-		</p>
-	</div>
+	<div class="emptyList" ><p><@s.text name="message.asset_remove" /></p></div>
 </#assign>
 
 
@@ -29,7 +17,15 @@ ${action.setPageType('inspection', 'multi_event')}
 <div id="resultBlock">
 	<div id="searchResults">
 		<div id="introduction">
-			<br/><br/>----- here is the intro ------<br/><br/>
+			<div id="writtenInstructions">
+				<h2 class="clean"><@s.text name="instructions.how_to_select_multiple_assets.title"/></h2>
+				<p class="instructions">
+					<@s.text name="instructions.how_to_select_multiple_assets"/>
+				</p>
+			</div>
+			<div id="videoInstruction">
+				<a class="lightview" rel="iframe" href="http://www.google.com/" ><img src="<@s.url value="/images/multi-event-video.jpg"/>" alt="<@s.text name="label.intro_video"/>"/></a>
+			</div>
 		</div>
 	</div>
 	<div class="hide" id="searchLimit">
@@ -42,7 +38,9 @@ ${action.setPageType('inspection', 'multi_event')}
 		<@s.submit key="label.perform_event" id="perform_event" disabled="true"/>
 	</div>
 	<div><@s.text name="label.number_assets_selected"/> <span id="listSize">0</span></div>
-	<div id="emptySelection"><@s.text name="label.select_some_assets_to_do_multi_event"/></div>
+	<div id="emptySelection" class="emptyList">
+		<p><@s.text name="label.select_some_assets_to_do_multi_event"/></p>
+	</div>
 	<table id="selectedAssets" class="list hide">
 		<tr class="header">
 			<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
@@ -73,11 +71,7 @@ ${action.setPageType('inspection', 'multi_event')}
 </#assign>
 
 <head>
-	<style>
-		#resultBlock {
-			min-height: 80px; 
-		}
-	</style>
+	<@n4.includeStyle type="page" href="multi_event"/>
 	<@n4.includeScript>
 		function selectAsset(event) {
 			event.stop();

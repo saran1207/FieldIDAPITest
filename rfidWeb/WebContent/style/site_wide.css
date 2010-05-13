@@ -259,3 +259,36 @@ em {
 .hide {
 	display:none;
 }
+
+.twoColumSubSystem {
+	width:600px;
+}
+.subSystemList {
+	float: left;
+	overflow:hidden;
+}
+
+.subSystemList li { 
+	float:left;
+	width: 300px;
+}
+
+.subSystemList li p {
+	min-height:65px;
+	padding: 20px 10px 0 65px;
+}
+
+.subSystemList li p a {
+	color: #000;
+	text-decoration: none;
+}
+
+.subSystemList li h2 a {
+	color: #000;
+	text-decoration: none;
+	font-size: 1.5em;
+}
+
+.subSystemList li:hover h2 a {
+	text-decoration: underline;
+}

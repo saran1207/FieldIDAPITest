@@ -836,7 +836,7 @@
 		</action>
 
 
-		<action name="startEvent" class="com.n4systems.fieldid.actions.SimpleAction">
+		<action name="startEvent" class="com.n4systems.fieldid.actions.inspection.StartEvent">
 			<result name="success" type="freemarker">/templates/html/events/select.ftl</result>
 		</action>
 	
@@ -1939,7 +1939,7 @@
 		</action>
 		
 		
-		<action name="assetSelection" method="selection" class="com.n4systems.fieldid.actions.assets.AssetSelectionAction">
+		<action name="assetSelection" method="selection" class="com.n4systems.fieldid.actions.inspection.AssetSelectionAction">
 			<result name="input" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
