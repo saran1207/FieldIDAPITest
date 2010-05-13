@@ -8,11 +8,8 @@
 	  			<a href="<@s.url action="myAccount" namespace="/"/>"><@s.text name="label.myaccount"/></a>
 			</li>
 	  		<li>
-	  			<a href="/fieldid_help/index.html" target="_blank"><@s.text name="label.help"/></a>
+	  			<a href="http://www.n4systems.com/support" target="_blank"><@s.text name="label.help_support"/></a>
 			</li>
-			<li>
-	  			<a href="http://n4systems.helpserve.com/" target="_blank" ><@s.text name="label.support"/></a>
-	  		</li>
 			<#if userSecurityGuard.allowedAccessWebStore>
 			<li>
 	  			<a href="<@s.url action="redirectToWebStore"  namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
