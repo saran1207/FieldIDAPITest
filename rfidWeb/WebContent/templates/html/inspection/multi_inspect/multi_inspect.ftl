@@ -37,11 +37,12 @@ ${action.setPageType('inspection', 'multi_event')!}
 
 	<div class="step">
 		<h2>1. <@s.text name="label.select_event"/></h2>
-		<div class="multiInspectInstructions">
-			<p><@s.text name="label.multi_inspect_instructions"/></p>	
-		</div>
+	
 		
 		<div class="stepContent" id="step1">
+			<div class="multiInspectInstructions">
+				<p><@s.text name="label.multi_inspect_instructions"/></p>	
+			</div>
 			<#include "_selectEventType.ftl" />
 		</div>
 	</div>
@@ -96,7 +97,7 @@ ${action.setPageType('inspection', 'multi_event')!}
 
 <div class="multiInspectLightBox">
 	
-		<a href='http://www.youtube.com/' class='lightview' rel='image' title=<@s.text name=""/> >
+		<a href='<@s.text name="label.youtube_video"/>' rel='flash' class='lightview' title=<@s.text name=""/> >
 			<img src="<@s.url value="/images/multi-event.jpg"/>" />
 		</a>
 </div>
