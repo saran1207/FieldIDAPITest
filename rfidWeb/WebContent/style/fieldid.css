@@ -1527,3 +1527,12 @@ input.description {
 	margin-left: 5px;
 	margin-top: 1.2em;
 }
+
+.groupInspectionTypeList {
+	float: left;
+	overflow:hidden;
+}
+
+.groupInspectionTypeList li {
+	padding:5px 5px;
+}
