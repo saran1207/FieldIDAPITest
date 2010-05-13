@@ -12,6 +12,7 @@ ${action.setPageType('inspection', 'multi_event')!}
 	<@n4.includeScript src="inspection" />
 	<@n4.includeScript src="multi_inspect" />
 	<@n4.includeStyle type="page" href="inspection" />
+
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	
@@ -36,11 +37,14 @@ ${action.setPageType('inspection', 'multi_event')!}
 
 	<div class="step">
 		<h2>1. <@s.text name="label.select_event"/></h2>
-		<div class="stepContent"  id="step1">
+		<div class="multiInspectInstructions">
+			<p><@s.text name="label.multi_inspect_instructions"/></p>	
+		</div>
+		
+		<div class="stepContent" id="step1">
 			<#include "_selectEventType.ftl" />
 		</div>
 	</div>
-
 	<div class="step">
 		<h2>2. <@s.text name="label.perform_event"/></h2>
 		<div class="stepContent"  id="step2">
@@ -52,8 +56,6 @@ ${action.setPageType('inspection', 'multi_event')!}
 				<@s.text name="label.retrieving_inspection_info" />
 			</p>
 		</div>
-		
-		
 	</div>
 	<div class="step">
 		<h2>3. <@s.text name="label.confirm"/></h2>
@@ -73,7 +75,6 @@ ${action.setPageType('inspection', 'multi_event')!}
 				<div style="float:left; margin:5px;"><span id="completedInspections">0</span> <@s.text name="label.of"/> ${assets.size()}</div>
 			</div>
 		</div>	
-		
 	</div>
 	<div class="step">
 		<h2>4. <@s.text name="label.complete"/></h2>
@@ -91,19 +92,11 @@ ${action.setPageType('inspection', 'multi_event')!}
 		</div>
 		
 	</div>
-
 </div>
 
-<div class="helpfulHints">
-	<h3><@s.text name="label.where_do_i_start"/></h3>
-	<p><@s.text name="label.where_do_i_start.full"/></p>
-
-	<h3><@s.text name="label.what_will_be_imported"/></h3>
-	<p><@s.text name="label.what_will_be_imported.full"/></p>
-
-	<h3><@s.text name="label.will_this_overwrite_my_existing_setup"/></h3>
-	<p><@s.text name="label.will_this_overwrite_my_existing_setup.full"/></p>
-
-	<h3><@s.text name="label.how_do_i_know_if_the_import_was_successful"/></h3>
-	<p><@s.text name="label.how_do_i_know_if_the_import_was_successful.full"/></p>
+<div class="multiInspectLightBox">
+	
+		<a href='http://www.youtube.com/' class='lightview' rel='image' title=<@s.text name=""/> >
+			<img src="<@s.url value="/images/multi-event.jpg"/>" />
+		</a>
 </div>
