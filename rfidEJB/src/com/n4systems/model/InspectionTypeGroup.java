@@ -22,6 +22,8 @@ public class InspectionTypeGroup extends EntityWithTenant implements NamedEntity
 	@Column(nullable=false)
 	private String name;
 	
+	
+
 	@Column(nullable=false)
 	private String reportTitle;
 
@@ -119,5 +121,10 @@ public class InspectionTypeGroup extends EntityWithTenant implements NamedEntity
 			default:
 				throw new IllegalArgumentException("Unknown InspectionReportType " + reportType.name());
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 }
