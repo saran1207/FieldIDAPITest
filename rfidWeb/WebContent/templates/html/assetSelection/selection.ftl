@@ -24,7 +24,7 @@ ${action.setPageType('inspection', 'multi_event')}
 				</p>
 			</div>
 			<div id="videoInstruction">
-				<a class="lightview" rel="iframe" href="http://www.google.com/" ><img src="<@s.url value="/images/multi-event-video.jpg"/>" alt="<@s.text name="label.intro_video"/>"/></a>
+					<a class="lightview" id="showVideo" href='/videos/multi-event-video.swf'><img src="<@s.url value="/images/multi-event-video.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
 			</div>
 		</div>
 	</div>
