@@ -51,9 +51,6 @@ public class OrderManagerImpl implements OrderManager {
 	 private PersistenceManager persistenceManager;
 	 private OrderMapping orderMappingManager;
 	
-	
-	public OrderManagerImpl() {
-	}
 	public OrderManagerImpl(EntityManager em) {
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.orderMappingManager = new OrderMappingManager(em);

@@ -52,9 +52,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	
 	private PersistenceManager persistenceManager;
 
-	
-	public MassUpdateManagerImpl() {}
-	
 	public MassUpdateManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);

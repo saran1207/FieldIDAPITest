@@ -25,10 +25,6 @@ public class NoteManagerImpl implements NoteManager {
 	
 	private PersistenceManager persistenceManager;
 
-	
-	public NoteManagerImpl() {
-	}
-	
 	public NoteManagerImpl(EntityManager em) {
 		this.persistenceManager = new PersistenceManagerImpl(em);
 	}

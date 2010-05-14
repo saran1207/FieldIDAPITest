@@ -35,10 +35,6 @@ public class ProjectManagerImpl implements ProjectManager {
 	
 	private NoteManager noteManager;
 
-	
-	public ProjectManagerImpl() {
-	}
-	
 	public ProjectManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);

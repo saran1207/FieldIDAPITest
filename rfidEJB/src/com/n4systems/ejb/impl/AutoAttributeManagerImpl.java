@@ -31,9 +31,9 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 
 	
 	private PersistenceManager persistenceManager;
-	public AutoAttributeManagerImpl() { }
 
 	public AutoAttributeManagerImpl(EntityManager em) {
+		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.em = em;
 	}
 

@@ -43,9 +43,6 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	
 	protected EntityManager em;
 
-	public InspectionScheduleManagerImpl() {
-	}
-	
 	public InspectionScheduleManagerImpl(EntityManager em) {
 		this.em = em;
 		persistenceManager = new PersistenceManagerImpl(em);

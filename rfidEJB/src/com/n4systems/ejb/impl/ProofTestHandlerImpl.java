@@ -63,14 +63,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 
 	private InspectionSaver inspectionSaver;
 	
-	
-	
-	
-	
-	public ProofTestHandlerImpl() {
-		super();
-	}
-	
 	public ProofTestHandlerImpl(EntityManager em) {
 		this.legacyProductManager = new LegacyProductSerialManager(em);
 		this.productManager = new ProductManagerImpl(em);

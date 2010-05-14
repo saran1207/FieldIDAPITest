@@ -73,8 +73,6 @@ public class ProductManagerImpl implements ProductManager {
 		this.projectManager = new ProjectManagerImpl(em);
 	}
 
-	public ProductManagerImpl() {
-	}
 
 	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue) {
 		return findProductByIdentifiers(filter, searchValue, null);
@@ -525,18 +523,7 @@ public class ProductManagerImpl implements ProductManager {
 		return summary;
 	}
 
-	/*
-	 * TESTING injection hooks.
-	 */
-	protected void setEntityManager(EntityManager em) {
-		this.em = em;
-	}
-
-	protected void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
-	}
-
-	
+		
 
 	@SuppressWarnings("unchecked")
 	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds) {
