@@ -1,5 +1,4 @@
-${action.setPageType('inspection', 'multi_event')}
-
+<title><@s.text name="title.mass_event"/></title>
 <#assign repeatedAssetHtml>
 	<div class="emptyList" ><p><@s.text name="message.asset_already_added" /></p></div>
 </#assign>
@@ -16,15 +15,14 @@ ${action.setPageType('inspection', 'multi_event')}
 <#include "../inspectionGroup/_searchForm.ftl"/>
 <div id="resultBlock">
 	<div id="searchResults">
-		<div id="introduction">
+		<div id="introduction">	
 			<div id="writtenInstructions">
-				<h2 class="clean"><@s.text name="instructions.how_to_select_multiple_assets.title"/></h2>
 				<p class="instructions">
 					<@s.text name="instructions.how_to_select_multiple_assets"/>
 				</p>
 			</div>
 			<div id="videoInstruction">
-					<a class="lightview" id="showVideo" href='/videos/multi-event-video.swf'><img src="<@s.url value="/images/multi-event-video.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
+				<a class="lightview" id="showVideo" href='/videos/multi-event-video.swf'><img src="<@s.url value="/images/multi-event-video-small.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
 			</div>
 		</div>
 	</div>
@@ -33,11 +31,11 @@ ${action.setPageType('inspection', 'multi_event')}
 	</div>
 </div>
 <hr/>
-<@s.form action="selectEventType" namespace="/multiInspect" theme="fieldid">
-	<div class="formActions">
+<@s.form action="selectEventType" namespace="/multiInspect" theme="fieldid" cssClass="hide">
+	<div class="formActions prominent" id="performEvent">
 		<@s.submit key="label.perform_event" id="perform_event" disabled="true"/>
 	</div>
-	<div><@s.text name="label.number_assets_selected"/> <span id="listSize">0</span></div>
+	<h2><@s.text name="label.number_assets_selected"/> <span id="listSize">0</span></h2>
 	<div id="emptySelection" class="emptyList">
 		<p><@s.text name="label.select_some_assets_to_do_multi_event"/></p>
 	</div>
@@ -86,6 +84,8 @@ ${action.setPageType('inspection', 'multi_event')}
 				updateResults('${repeatedAssetHtml?js_string}');
 				return;
 			}
+			
+			$('selectEventType').show();
 		
 			var html = '${row?js_string}';
 			

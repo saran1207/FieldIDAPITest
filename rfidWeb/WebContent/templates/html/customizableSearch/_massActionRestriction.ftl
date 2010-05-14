@@ -33,8 +33,13 @@
 </#if>
 
 
-
-
+<#if maxSizeForMultiInspect lt totalResults >
+	<div id="warning_multi_event" class="hidden" ><@s.text name="warning.max_size_for_multi_event"><@s.param>${maxSizeForMultiInspect}</@s.param></@s.text></div>
+	<script type="text/javascript">
+		var multiEvents = $$(".multiEvent");
+		multiEvents.each(function(element, index) { element.addClassName("disabled"); element.observe('click', function(event) { Event.stop(event);  showQuickView('warning_multi_event', event); } ); } );
+	</script>	
+</#if>
 
 <#if maxSizeForAssigningInspectionsToJobs lt totalResults>
 	<div id="warning_assignInspectionsToJob" class="hidden" ><@s.text name="warning.max_size_for_assigning_inspectiosn_to_job"><@s.param>${maxSizeForAssigningInspectionsToJobs}</@s.param></@s.text></div>

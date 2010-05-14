@@ -151,8 +151,12 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 
 	public List<Product> getAssets() {
-		if (assets == null){
-			assets = persistenceManager.findAll(new QueryBuilder<Product>(Product.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
+		if (assets == null) {
+			if (!assetIds.isEmpty()) {
+				assets = persistenceManager.findAll(new QueryBuilder<Product>(Product.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
+			} else {
+				assets = new ArrayList<Product>();
+			}
 		}
 				
 		return assets;

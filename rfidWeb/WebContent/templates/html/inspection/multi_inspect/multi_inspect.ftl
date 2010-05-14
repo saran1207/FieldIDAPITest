@@ -1,5 +1,4 @@
-${action.setPageType('inspection', 'multi_event')!}
-
+<title><@s.text name="title.mass_event"/></title>
 <#assign loaderDiv>
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>
 </#assign>
@@ -60,11 +59,11 @@ ${action.setPageType('inspection', 'multi_event')!}
 		</div>
 	</div>
 	<div class="step">
-		<h2>2. <@s.text name="label.perform_event"/></h2>
+		<h2>2. <@s.text name="label.perform_the_event"/></h2>
 		<div class="stepContent"  id="step2">
 			
 		</div>
-		<div class="stepContent loader" id="step2Loading" style="display:none">
+		<div class="stepContent loader hide" id="step2Loading" >
 			${loaderDiv}
 			<p>
 				<@s.text name="label.retrieving_inspection_info" />
@@ -75,7 +74,7 @@ ${action.setPageType('inspection', 'multi_event')!}
 		<h2>3. <@s.text name="label.confirm"/></h2>
 		<div class="stepContent"  id="step3">
 			
-			<p>You are about to create a <span id="inspectionTypeToReplace"></span> on each of the ${assets.size()} assets.</p>
+			<p><@s.text name="label.you_are_about_to_perform_mass_event_on"><@s.param><span id="inspectionTypeToReplace"></span></@s.param><@s.param>${assets.size()}</@s.param></@s.text></p>
 			<div class="stepAction">
 				<input type="button" id="saveInspections" value="<@s.text name="label.save_all"/>" />
 				<@s.text name="label.or"/> <a href="#" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
@@ -136,7 +135,7 @@ ${action.setPageType('inspection', 'multi_event')!}
 </div>
 
 <div class="multiInspectLightBox">
-		<a href='/videos/multi-event-video.swf' rel='flash' class='lightview' title=<@s.text name=""/> >
-			<img src="<@s.url value="/images/multi-event-video.jpg"/>" />
+		<a href='/videos/multi-event-video.swf' rel='flash' class='lightview' title=<@s.text name="label.instructional_video"/> >
+			<img src="<@s.url value="/images/multi-event-video-small.jpg"/>"  />
 		</a>
 </div>

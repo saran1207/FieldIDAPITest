@@ -292,3 +292,8 @@ em {
 .subSystemList li:hover h2 a {
 	text-decoration: underline;
 }
+
+.separated {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

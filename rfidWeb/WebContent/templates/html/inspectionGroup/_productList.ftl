@@ -1,7 +1,9 @@
 <#if !namespace?exists><#assign namespace="/"/></#if>
 <div id="results">
+
 <#if products?exists >
 	<#if !products.isEmpty() >
+		<h2 class="clean"><@s.text name="label.found_multiple_assets"/></h2>
 		<div id="resultsTable">
 			<table class="list">
 				<tr>

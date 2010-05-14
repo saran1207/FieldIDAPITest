@@ -19,7 +19,10 @@
 			<#if Session.sessionUser.hasAccess('tag') >
 				| <a href="<@s.url action="massUpdateProducts" searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
-			| <#if (totalResults <= maxSizeForMultiInspect) ><a href="#multiInspect" name="multiInspect" id="multiInspect"><@s.text name="label.multi_inspect"/></a></#if>
+			<#if Session.sessionUser.hasAccess('createInspection') >
+				| <a href="#multiEvent" name="multiEvent" id="multiInspect" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
+			</#if>
+			
 			
 			
 		</div>

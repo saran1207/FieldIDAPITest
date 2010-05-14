@@ -1,7 +1,7 @@
 	
 		
 <#if multiInspectGroupSorter.groups.empty>
-	<@s.text name="error.no_event_type_groups_retrieved"/>
+	<@s.text name="error.no_common_event_types"/>  <a href="<@s.url action="assetSelection" namespace="/"/>"><@s.text name="label.select_a_new_set_of_assets"/></a>
 <#else>
 
 	<ul id="eventTypes" class="groupInspectionTypeList">
@@ -27,7 +27,6 @@
 	</#list>
 </@s.form>
 
-<div style="float:right;"><@s.text name="label.number_of_assets"><@s.param>${assetIds.size()}</@s.param></@s.text></div>
 
 
 

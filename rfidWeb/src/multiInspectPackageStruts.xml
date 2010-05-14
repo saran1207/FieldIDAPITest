@@ -13,7 +13,9 @@
 				<param name="namespace">/</param>
 				<param name="actionName">login</param>
 			</result>
-			
+			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
 		</global-results>
 		
 	 	<action name="selectEventType" method="inspectionTypes" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
