@@ -136,8 +136,7 @@ ${action.setPageType('inspection', 'multi_event')!}
 </div>
 
 <div class="multiInspectLightBox">
-	
-		<a href='<@s.text name="label.youtube_video"/>' rel='flash' class='lightview' title=<@s.text name=""/> >
+		<a href='/videos/ringling.swf' rel='flash' class='lightview' title=<@s.text name=""/> >
 			<img src="<@s.url value="/images/multi-event-video.jpg"/>" />
 		</a>
 </div>
