@@ -1,0 +1,218 @@
+#YAML text fixture for test scripts (TestInspection.rb, TestJob.rb).
+#For version: 1.20 
+---
+InspectionTests:
+    Test1:
+        Comments: Created new standard product and performed inspection (With forms, inspection attrs, picture)
+        Bugs: If two inspection attributes are given the same name, one value is lost on submit. 
+        SerialNumber: rp30
+        ProductType: Standard Type 2
+        InspectionType: Standard Inspection 2
+        InspectionSection1: Section 3
+        InspectionSection2: Section 4
+        InspectionAttribute1: TestInspectionAtt1
+        InspectionAttribute2: TestInspectionAtt2
+        InspectionAttribute3: TestInspectionAtt4
+        FormButton1: "2"
+        FormButton2: "3"
+        RecommendationState1: OUTSTANDING
+        DeficiencyState1: REPAIREDONSITE
+        NumberOfPictures: 1
+    Test2:
+        Comments: Created new master product and perform inspection. Change product status during inspection (With forms, with observations, with inspection attrs, 1 picture) 
+        ProductType: Master Type 2
+        SerialNumber: rp31
+        ProductStatus: In Service
+        InspectionType: Master Inspection 2
+        InspectionAttribute1: MasterInspectionAtt1
+        InspectionAttribute2: MasterInspectionAtt2
+        InspectionAttribute3: MasterInspectionAtt3
+        FormButton1: Lable 1
+        RecommendationState1: RECOMMEND
+        RecommendationState2: COMMENT?
+        DeficiencyState1: REPAIREDONSITE
+        DeficiencyState2: COMMENT
+        NumberOfPictures: 1
+    Test3:
+        Comments: Create new sub, independent of inspection. Attach this existing one to master rp31 and perform inspections on both. 
+        ProductType: StandardType
+        SerialNumber: rp32
+        Label:  Attached existing
+        MasterComponent: rp31
+        InspectionType: Master Inspection 1
+        InspectionAttribute1: SubInspectionAtt1
+        InspectionAttribute2: SubInspectionAtt2
+        FormButton1: "2"
+        RecommendationState1: RECOMMEND
+        RecommendationState2: COMMENT
+        DeficiencyState1: REPAIREDONSITE
+        DeficiencyState2: COMMENT
+ 
+    Test4:
+        Comments: Create new sub, during inspection. Attach to master rp31 
+        ProductType: MasterType 1 or 2
+        SerialNumber: rp31
+        InspectionType: Master Inspection 1
+        Subcomponent1: rp33
+        Attribute1: AttachAtt1
+        Attribute2: AttachAtt2
+        InspectionAttribute1:
+        InspectionAttribute2:
+        InspectionAttribute3:
+        FormButton1: "2"
+        FormButton2:
+        RecommendationState1:
+        RecommendationState2:
+        DeficiencyState1:
+        DeficiencyState2:
+        NumberOfPictures:
+    Test5:
+        Comments: Attach product with previous inspection to master product. (Photo) 
+        ProductType: Standard
+        InspectionType: Master Inspection 1
+        SerialNumber: rp30
+        MasterComponent: rp31
+        Attribute1: 
+        Attribute2: 
+        InspectionAttribute1:
+        InspectionAttribute2:
+        InspectionAttribute3:
+        FormButton1: 
+        FormButton2:
+        RecommendationState1:
+        RecommendationState2:
+        DeficiencyState1:
+        DeficiencyState2:
+        NumberOfPictures: 1
+    Test6:
+        Comments: Test inspection attributes of this attached subcomponent.
+        ProductType: MasterType one or 2?
+        SerialNumber: rp32
+        MasterComponent: rp31
+        InspectionAttribute1: SubInspectionAtt1
+        InspectionAttribute2: SubInspectionAtt1
+        InspectionAttribute3:
+        FormButton1:
+        FormButton2:
+        RecommendationState1: 
+        RecommendationState2: 
+        DeficiencyState1:
+        DeficiencyState2:
+        NumberOfPictures: 
+    Test7:
+        Comments: Added to book during inspection.
+        ProductType: Master Type 2
+        SerialNumber: rp34
+        Attribute1: 
+        Attribute2: 
+        InspectionBook: NewInspectionBook1
+        InspectionAttribute1:
+        InspectionAttribute2:
+        InspectionAttribute3:
+        FormButton1:
+        FormButton2:
+        RecommendationState1: 
+        RecommendationState2: 
+        DeficiencyState1:
+        DeficiencyState2:
+        NumberOfPictures: 
+    Test8:
+        Comments: Multiple events (3) are performed one after another on a master with a sub.
+        ProductType: MasterType one or 2
+        SerialNumber: rp34
+        Subcomponent1: rp35
+
+ScheduleTests:
+    Test1:
+        Comments: Create 2 schedules.
+        SerialNumber: rp40
+        EventType: Master Inspection 1
+    Test2:
+        Comments: Created schedule on attached subcomponent
+        SerialNumber: rp41
+        MasterComponent: rp40
+        EventType: Standard Inspection 1
+
+AttributeTests:
+    Test1:
+        Comments: Create, then edit on the mobile before syncing.
+        SerialNumber: rp60
+        Location: Over here
+        Status: In Service
+        PurchaseOrder: P6
+        OrderNumber: O7
+        IdentifiedDate:
+        Group: All
+        ProductType: MasterType
+        Attribute1: "55"
+        Attribute2: Choice1
+        Attribute3: 5 m 6 cm
+        Attribute4: durf
+        Tenant: Smoke
+        Customer: Pavlov's Patisserie
+        Division: Downtown
+
+
+    Test2:
+        Comments: Edit online asset
+        SerialNumber: rp10
+        Location: Over here
+        Division: Downtown
+        Status: Out of Service
+        PurchaseOrder: P6
+        OrderNumber: O7
+        IdentifiedDate:
+        Group: All
+        ProductType: StandardType
+        Attribute1: "55"
+        Attribute2:  Choice2
+        Attribute3: durf
+        Tenant: smoke
+        Customer: Pavlov's Patisserie
+    Test3:
+        Comments: Multi edit. 
+        SerialNumber: rp61
+        MultiEditComponent1: rp62 
+        MultiEditComponent2: rp621
+        Location: Multi Edited
+    Test4:
+        Comments: Created, Inspect then edit afterwards.
+        SerialNumber: rp63
+        Attribute1: "99"
+        Attribute2: "99"
+        Attribute3: "99"
+    Test5:
+        Comments: Edit during inspection both assets
+        SerialNumber: rp65
+        MultiEditComponent1: rp64
+        Location: There
+        Status: In for Repair
+        Attribute1: "99"
+        Attribute2: "99"
+        Attribute3: "99"
+    Test6:
+        Comments: Multiple edits one after another on attributes.
+        SerialNumber: rp66
+        Location: Here
+        Attribute1: "90"
+        Attribute2: "90"
+        Attribute3: "90"
+    Test7:
+        Comments: Edited master location after inspection, should propagate to sub.
+        SerialNumber: rp67
+        SubComponent: rp68
+        Location: Here
+    Test8:
+        Comments: Edited master location after inspection, should propagate to sub
+        SerialNumber: rp67
+        SubComponent: rp68
+        Location: Here
+        Tenant: smoke
+JobTests:
+    Test1:
+        Comments: Pull down job from the web for single asset. Complete correctly and send.
+        SerialNumber: jobTest1
+    Test2:
+         Comments: Pull down job from the web for master and subcomponent. Both complete correctly and send.
+         SerialNumber: jobTest2
+         SubComponent: JobTestSub1
