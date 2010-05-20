@@ -18,6 +18,7 @@ import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
@@ -32,10 +33,12 @@ import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.notifiers.notifications.InspectionImportFailureNotification;
 import com.n4systems.notifiers.notifications.InspectionImportSuccessNotification;
 import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.DateHelper;
 
 @SuppressWarnings("serial")
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 public class InspectionImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(InspectionImportAction.class);
 	

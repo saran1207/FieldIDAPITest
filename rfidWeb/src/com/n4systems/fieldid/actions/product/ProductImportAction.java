@@ -20,6 +20,7 @@ import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.downloadlink.ContentType;
@@ -28,9 +29,11 @@ import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.notifiers.notifications.ProductImportFailureNotification;
 import com.n4systems.notifiers.notifications.ProductImportSuccessNotification;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 
 @SuppressWarnings("serial")
+@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class ProductImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(ProductImportAction.class);
 	
