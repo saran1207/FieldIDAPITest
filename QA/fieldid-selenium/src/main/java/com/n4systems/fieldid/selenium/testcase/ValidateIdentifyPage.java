@@ -8,11 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.assets.page.Asset;
+import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.datatypes.Product;
-import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.reporting.page.Reporting;
 import com.n4systems.fieldid.selenium.schedule.page.Schedules;
@@ -23,8 +23,8 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 	Schedules schedule;
 	Reporting reporting;
 	AssetSearch assets;
-	Identify identify;
-	Asset asset;
+	IdentifyPageDriver identify;
+	AssetPage asset;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -33,8 +33,8 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		schedule = new Schedules(selenium, misc);
 		reporting = new Reporting(selenium, misc);
 		assets = new AssetSearch(selenium, misc);
-		identify = new Identify(selenium, misc);
-		asset = new Asset(selenium, misc);
+		identify = new IdentifyPageDriver(selenium, misc);
+		asset = new AssetPage(selenium, misc);
 	}
 	
 	@Test
@@ -154,7 +154,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 	private String identifyProduct() throws Exception {
 		Product product = new Product();
 		product = identify.setAddAssetForm(product, true);
-		identify.gotoSaveAddAssetForm();
+		identify.saveNewAsset();
 		return product.getSerialNumber();
 	}
 

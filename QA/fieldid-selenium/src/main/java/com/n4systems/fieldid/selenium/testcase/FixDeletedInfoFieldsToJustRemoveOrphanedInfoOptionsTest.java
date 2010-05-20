@@ -18,7 +18,7 @@ import com.n4systems.fieldid.selenium.datatypes.ProductType;
 import com.n4systems.fieldid.selenium.datatypes.SelectBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
-import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
 /**
@@ -30,7 +30,7 @@ import com.n4systems.fieldid.selenium.login.page.Login;
 public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends FieldIDTestCase {
 
 	Login login;
-	Identify identify;
+	IdentifyPageDriver identify;
 	Admin admin;
 	ManageProductTypes mpts;
 	ManageProductCodeMappings mpcms;
@@ -39,7 +39,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		identify = new Identify(selenium, misc);
+		identify = new IdentifyPageDriver(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mpts = new ManageProductTypes(selenium, misc);
 		mpcms = new ManageProductCodeMappings(selenium, misc);

@@ -36,11 +36,11 @@
 		</@s.else>
 		
 		<#if !infoField.retired || infoOptionIsNull == false>
-			<div class="infoSet">		
+			<div class="infoSet" infoFieldName="${infoField.name?j_string}">		
 				<@s.hidden name="${prefix}InfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
 				
 				<#if infoField.retired >
-					<label class="label">${infoField.name} (<@s.text name="label.retired"/>)</label>
+					<label class="label">${infoField.name?html} (<@s.text name="label.retired"/>)</label>
 					<span id="${infoField.uniqueID}" class="attribute fieldHolder" >
 						<@s.label id="${infoField.uniqueID}" cssClass="attribute ${requiredClass}" name="${prefix}InfoOptions[${stat.index}].name" />
 						<@s.hidden name="${prefix}InfoOptions[${stat.index}].name" />

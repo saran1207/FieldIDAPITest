@@ -23,7 +23,7 @@ import com.n4systems.fieldid.selenium.datatypes.SafetyNetworkRegistration;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
-public class Identify {
+public class IdentifyPageDriver {
 
 	private FieldIdSelenium selenium;
 	private Misc misc;
@@ -106,7 +106,7 @@ public class Identify {
 	private String multiAddSaveAndCreateButtonLocator = "xpath=//input[@id='masterForm_label_save_and_create']";
 	private String multiAddBackToStep3LinkLocator = "xpath=//a[contains(text(),'Back To Step 3')]";
 
-	public Identify(FieldIdSelenium selenium, Misc misc) {
+	public IdentifyPageDriver(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -453,7 +453,7 @@ public class Identify {
 		return p;
 	}
 
-	public void gotoSaveAddAssetForm() {
+	public void saveNewAsset() {
 		if(selenium.isElementPresent(identifyAddSaveButtonLocator)) {
 			selenium.click(identifyAddSaveButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -776,5 +776,24 @@ public class Identify {
 		selenium.click(multiAddSaveAndCreateButtonLocator);
 		misc.checkForErrorMessages("MultiAddStep4");
 		misc.waitForPageToLoadAndCheckForOopsPage();
+	}
+
+	public void gotoAddSingleAsset() {
+		selenium.open("/fieldid/productAdd.action");
+	}
+
+	public void fillInTextAttribute(String fieldName, String value) {
+		selenium.type("css=.infoSet[infoFieldName='" + fieldName.replace("'", "/'") + "'] .attribute", value);
+		
+	}
+
+	public void fillInSelectAttribute(String fieldName, String value) {
+		selenium.select("css=.infoSet[infoFieldName='" + fieldName.replace("'", "/'") + "'] .attribute", value);
+		
+	}
+	
+	public void fillInComboAttribute(String fieldName, String value) {
+		selenium.select("css=.infoSet[infoFieldName='" + fieldName.replace("'", "/'") + "'] .attribute", value);
+		
 	}
 }

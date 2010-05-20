@@ -965,6 +965,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	@VisitorFieldValidator(message = "")
 	public WebModifiedableInspection getModifiableInspection() {
+		if (modifiableInspection == null) {
+			throw new NullPointerException("action has not been initialized.");
+		}
 		return modifiableInspection;
 	}
 	

@@ -132,7 +132,8 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	}
 
 	public void setColumns(List<String> columns) {
-		this.columns = columns;
+		this.columns.clear();
+		this.columns.addAll(columns);
 	}
 
 	public String getSortColumn() {

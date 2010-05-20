@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import com.n4systems.fieldid.selenium.assets.page.Asset;
+import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 @Ignore
@@ -38,7 +38,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 	
 	@Test
 	public void should_not_have_any_regerstration_message_if_tracibilty_is_accessed_and_user_is_in_their_default_context() throws Exception {
-		Asset assetPage = new Asset(selenium, misc);
+		AssetPage assetPage = new AssetPage(selenium, misc);
 		
 		smartSearchFor("UR 13875");
 	

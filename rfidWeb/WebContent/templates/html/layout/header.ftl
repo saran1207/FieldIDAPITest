@@ -41,9 +41,11 @@
 				</li>
 			</#if>
 			
-			<li>
-				<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink" id="menuInspect"><@s.text name="speed.inspect"/></a>
-			</li>
+			<#if sessionUser.hasAccess("createinspection") == true || sessionUser.hasAccess("editinspection") == true >
+				<li>
+					<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink" id="menuInspect"><@s.text name="speed.inspect"/></a>
+				</li>
+			</#if>
 			<li>
 				<a href="<@s.url action="search" namespace="/"/>" class="speedLink" id="menuAssets"><@s.text name="speed.assets" /></a>
 			</li>

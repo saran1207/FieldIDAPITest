@@ -80,12 +80,12 @@ ${action.setPageType('product', 'show')!}
 	<#include "_customerInformation.ftl"/>
 	
 	<#if !product.orderedInfoOptionList.isEmpty() >
-		<div class="viewSection smallViewSection" >
+		<div class="viewSection smallViewSection" id="attributes" >
 			<h2>${product.type.name} <@s.text name="label.attributes"/></h2>
 			<#list product.orderedInfoOptionList as infoOption >
 				<p>
 					<label>${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
-					<span class="fieldValue">${infoOption.name}</span>
+					<span class="fieldValue" infoFieldName="${infoOption.infoField.name?j_string}">${infoOption.name}</span>
 				</p>
 			</#list>
 		</div>
@@ -102,7 +102,6 @@ ${action.setPageType('product', 'show')!}
 					<#else>
 						${(product.shopOrder.order.orderNumber)!}
 					</#if>
-						
 				</span>
 			</p>
 			

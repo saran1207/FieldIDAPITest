@@ -196,7 +196,7 @@ public class CustomerCrud extends AbstractCrud {
 		return customer.getContact().getEmail();
 	}
 
-	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.validemail")
+	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.emailformat")
 	public void setAccountManagerEmail(String accountManagerEmail) {
 		customer.getContact().setEmail(accountManagerEmail);
 	}

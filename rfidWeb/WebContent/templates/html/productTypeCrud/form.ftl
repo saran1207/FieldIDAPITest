@@ -85,9 +85,6 @@
 	<p>
 		<label><@s.text name="label.cautionsurl" /></label>
 		<span>
-			<@s.fielderror>
-				<@s.param>cautionsUrl</@s.param>				
-			</@s.fielderror>
 			<@s.textfield name="cautionsUrl" />
 		</span>
 	</p>

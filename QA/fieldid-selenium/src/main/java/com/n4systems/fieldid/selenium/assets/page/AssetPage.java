@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.selenium.assets.page;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
-public class Asset {
+public class AssetPage {
 	FieldIdSelenium selenium;
 	Misc misc;
 	
@@ -52,7 +51,7 @@ public class Asset {
 	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productUpdate_publishedState']";
 	private String editAssetCommentTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 
-	public Asset(FieldIdSelenium selenium, Misc misc) {
+	public AssetPage(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -273,5 +272,9 @@ public class Asset {
 		if(p.getComments() != null) {
 			selenium.type(editAssetCommentTextFieldLocator, p.getComments());
 		}
+	}
+
+	public void verifyAttribute(String fieldName, String value) {
+		assertEquals(value, selenium.getText("css=#attributes .fieldValue[infoFieldName='"+ fieldName.replace("'", "/'") + "']"));
 	}
 }

@@ -17,6 +17,7 @@ import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspect
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.CommonInspectionTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonInspectionTypeHandler;
 import com.n4systems.model.Inspection;
@@ -25,12 +26,14 @@ import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspectiontype.CommonProductTypeDatabaseLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 public class MultiInspectAction extends AbstractCrud {
 
 	private List<Long> assetIds = new ArrayList<Long>();
@@ -211,6 +214,9 @@ public class MultiInspectAction extends AbstractCrud {
 
 	@VisitorFieldValidator(message="")
 	public WebModifiedableInspection getModifiableInspection() {
+		if (modifiableInspection == null) {
+			throw new NullPointerException("action has not been initialized.");
+		}
 		return modifiableInspection;
 	}
 	

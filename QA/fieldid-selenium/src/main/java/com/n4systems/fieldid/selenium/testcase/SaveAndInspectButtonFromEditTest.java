@@ -4,9 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.assets.page.Asset;
+import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.datatypes.Product;
-import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.inspect.page.Inspect;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
@@ -19,16 +19,16 @@ import com.n4systems.fieldid.selenium.login.page.Login;
 public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 
 	Login login;
-	Identify identify;
-	Asset asset;
+	IdentifyPageDriver identify;
+	AssetPage asset;
 	Inspect inspect;
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		identify = new Identify(selenium, misc);
-		asset = new Asset(selenium, misc);
+		identify = new IdentifyPageDriver(selenium, misc);
+		asset = new AssetPage(selenium, misc);
 		inspect = new Inspect(selenium, misc);
 	}
 
@@ -58,7 +58,7 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 		}
 		Product p = new Product();
 		p = identify.setAddAssetForm(p, true);
-		identify.gotoSaveAddAssetForm();
+		identify.saveNewAsset();
 		String serialNumber = p.getSerialNumber();
 		misc.setSmartSearch(serialNumber);
 		misc.submitSmartSearch();

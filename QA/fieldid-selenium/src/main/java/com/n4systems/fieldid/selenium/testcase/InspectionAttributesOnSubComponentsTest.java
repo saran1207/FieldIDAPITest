@@ -10,7 +10,7 @@ import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageInspectionTypes;
 import com.n4systems.fieldid.selenium.administration.page.ManageProductTypes;
 import com.n4systems.fieldid.selenium.datatypes.Product;
-import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
 public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
@@ -19,7 +19,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 	private Admin admin;
 	private ManageInspectionTypes mits;
 	private ManageProductTypes mpts;
-	private Identify identify;
+	private IdentifyPageDriver identify;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -28,7 +28,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		admin = new Admin(selenium, misc);
 		mits = new ManageInspectionTypes(selenium, misc);
 		mpts = new ManageProductTypes(selenium, misc);
-		identify = new Identify(selenium, misc);
+		identify = new IdentifyPageDriver(selenium, misc);
 		String company = getStringProperty("company");
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
@@ -52,7 +52,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		Product product = new Product();
 		product.setProductType(productType);
 		product = identify.setAddAssetForm(product, true);
-		identify.gotoSaveAddAssetForm();
+		identify.saveNewAsset();
 		return product.getSerialNumber();
 	}
 

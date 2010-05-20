@@ -12,14 +12,14 @@ import com.n4systems.fieldid.selenium.datatypes.ProductCodeMapping;
 import com.n4systems.fieldid.selenium.datatypes.SelectBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
-import com.n4systems.fieldid.selenium.identify.page.Identify;
+import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 public class ManageProductCodeMappings {
 	FieldIdSelenium selenium;
 	Misc misc;
-	Identify identify;
+	IdentifyPageDriver identify;
 	
 	private String manageProductCodeMappingsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Product Code Mappings')]";
 	private String addProductCodeMappingLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[contains(@class,'add')]/A[contains(text(),'Add')]";
@@ -32,7 +32,7 @@ public class ManageProductCodeMappings {
 	public ManageProductCodeMappings(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
-		identify = new Identify(selenium, misc);
+		identify = new IdentifyPageDriver(selenium, misc);
 	}
 
 	public void verifyManageProductCodeMappingsPage() {

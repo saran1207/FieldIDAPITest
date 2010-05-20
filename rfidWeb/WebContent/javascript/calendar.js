@@ -87,7 +87,7 @@ Calendar._C = null;
 Calendar.is_ie = ( /msie/i.test(navigator.userAgent) &&
 		   !/opera/i.test(navigator.userAgent) );
 
-Calendar.is_ie7 = ( Calendar.is_ie && /msie 7\.0/i.test(navigator.userAgent) );
+Calendar.is_ie7 = ( Calendar.is_ie && ( /msie 7\.0/i.test(navigator.userAgent) || /msie 8\.0/i.test(navigator.userAgent) ) );
 
 
 Calendar.is_ie5 = ( Calendar.is_ie && /msie 5\.0/i.test(navigator.userAgent) );

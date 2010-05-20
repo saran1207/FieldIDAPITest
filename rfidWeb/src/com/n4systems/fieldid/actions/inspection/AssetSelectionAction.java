@@ -2,8 +2,12 @@ package com.n4systems.fieldid.actions.inspection;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigEntry;
 
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 public class AssetSelectionAction extends AbstractAction {
 
 	public AssetSelectionAction(PersistenceManager persistenceManager) {

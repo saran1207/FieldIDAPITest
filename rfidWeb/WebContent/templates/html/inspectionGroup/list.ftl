@@ -17,6 +17,5 @@ ${action.setPageType('inspection', 'select_product')!}
 		
 		event.stop();
 		redirect( url + "?uniqueID=" + Event.element( event ).getAttribute( 'productId' ) );
-		$('searchResults').update('');
 	}
 </script>

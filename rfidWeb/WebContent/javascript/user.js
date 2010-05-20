@@ -66,6 +66,7 @@ function insertImageUploadFrame() {
 }
 
 function updatePersonalMessage() {
+	if ($('sendEmail') == null) { return };
 	if ($('sendEmail').checked) {
 		$('personalMessage').show();
 	} else {
@@ -80,6 +81,7 @@ function injectUploadFrameIfVisible() {
 
 
 function updatePasswordInputs() {
+	if ($('assignPassword') == null) { return }
 	if ($('assignPassword').checked) {
 		$('passwords').show();
 	} else {
@@ -104,11 +106,17 @@ onDocumentLoad(function() {
 });
 
 onDocumentLoad(function() { $$('.initialsInput').each(function(element) { element.observe("change", updateInitials); }); });
-onDocumentLoad(function() { $('initials').observe('dblclick', updateInitials()); });
+onDocumentLoad(function() { $('initials').observe('dblclick', updateInitials); });
 onDocumentLoad(updatePersonalMessage);
-onDocumentLoad(function() { $('sendEmail').observe('change', updatePersonalMessage); });
+onDocumentLoad(function() { $$('#sendEmail').each(
+		function(element) { 
+			element.observe('change', updatePersonalMessage); 
+		}); 
+	});
 onDocumentLoad(injectUploadFrameIfVisible);	
 onDocumentLoad(updatePasswordInputs);
 onDocumentLoad(function() { 
-		$('assignPassword').observe("change", updatePasswordInputs);
+		$$('#assignPassword').each(function(element) {
+			element.observe("change", updatePasswordInputs);
+		});
 	});

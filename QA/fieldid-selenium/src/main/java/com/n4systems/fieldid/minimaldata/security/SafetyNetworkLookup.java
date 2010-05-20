@@ -159,8 +159,6 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		misc.setVendorContext("Test Vendor");
 		misc.setSmartSearch(serialNumber);
 		misc.submitSmartSearch();
-		
-		
 	}
 
 	private void assertProductFound(String serialNumber) {

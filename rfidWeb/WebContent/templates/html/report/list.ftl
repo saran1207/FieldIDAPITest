@@ -25,7 +25,7 @@
 		</li>
 		<#if container.fromSavedReport>
 			<li>
-				<a href="<@s.url action="savedReportAdd" searchId="${searchId}"/>" class="saveLink" onclick="if(formChange) {return false;}"><@s.text name="label.savereportas" /></a>
+				<a href="<@s.url action="savedReportAdd" searchId="${searchId}"/>" class="saveLink" onclick="if(formChanged) {return false;}"><@s.text name="label.savereportas" /></a>
 			</li>
 		</#if>
 	</ul>
