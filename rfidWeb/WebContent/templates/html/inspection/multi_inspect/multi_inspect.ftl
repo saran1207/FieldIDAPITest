@@ -135,7 +135,5 @@
 </div>
 
 <div class="multiInspectLightBox">
-		<a href='/videos/multi-event-video.swf' rel='flash' class='lightview' title=<@s.text name="label.instructional_video"/> >
-			<img src="<@s.url value="/images/multi-event-video-small.jpg"/>"  />
-		</a>
+		<a class="lightview" id="showVideo" title="<@s.text name="label.instructional_video"/> ::  :: width: 700, height: 570"rel="iframe" href='/videos/instructions/multi-event-video/index.html'><img src="<@s.url value="/images/multi-event-video-small.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
 </div>
