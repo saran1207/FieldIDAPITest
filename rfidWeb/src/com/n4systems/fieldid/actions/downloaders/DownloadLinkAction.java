@@ -10,8 +10,6 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.DownloadLink;
-import com.n4systems.model.staticdownloads.StaticDownload;
-import com.n4systems.model.staticdownloads.StaticDownloadCache;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -96,11 +94,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		}
 		return downloads;
 	}
-	
-	public List<StaticDownload> getStaticDownloads() {
-		return StaticDownloadCache.getInstance().getStaticDownloads();
-	}
-	
+		
 	public String getExpiresText(Date created) {
 		Integer expireTTL = getConfigContext().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
 
