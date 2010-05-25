@@ -17,13 +17,15 @@ h3 {
 #quickLinkList li {
 	list-style-image: url(/fieldid/images/listMarkerCircle.gif);
 	list-style-position: inside;
+	/*margin: 10px 0 10px 5px;*/
 	margin: 10px 0 10px 5px;
-	
 }
 
 #quickLinkList a, #quickLinkList a:hover, #quickLinkList a:visited, #quickLinkList a:active {
-	font-size:1.4em;
+	font-size:1.2em;
 	padding-left:10px;
+	position: relative;
+	top: -3.5px;
 	
 }
 
