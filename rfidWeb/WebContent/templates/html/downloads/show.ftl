@@ -37,7 +37,7 @@ ${action.setPageType('my_account', 'downloads')!}
 	</table>
 <#else>
 	<div class="emptyList" >
-		<h2><@s.text name="label.nodownloads" /></h2>
+		<p><@s.text name="label.nodownloads" /></p>
 	</div>
 </#if>
 

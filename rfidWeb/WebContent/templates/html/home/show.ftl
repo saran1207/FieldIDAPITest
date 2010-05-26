@@ -9,6 +9,7 @@
 			<li><a href="<@s.url action="schedule!createSearch"/>?criteria.status=INCOMPLETE"><@s.text name="label.viewupcominginspections"/></a></li>
  			<li><a href="<@s.url action="report"/>"><@s.text name="label.viewinspectionhistory"/></a></li>
 			<li><a href="<@s.url action="search"/>"><@s.text name="label.findaproduct"/></a></li>
+			<li><a href="http://www.n4systems.com/extras"><@s.text name="label.staticdownloads"/></a></li>
 			<#if securityGuard.brandingEnabled && primaryOrg.webSite?exists >
 				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
 			</#if>
