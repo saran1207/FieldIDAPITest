@@ -341,7 +341,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	@Validations(customValidators = {
 			@CustomValidator(type = "requiredStringSet", message = "", key = "error.inspectionattributeblank"),
-			@CustomValidator(type = "uniquenessValidator", message = "", key = "error.duplicateinfofieldname") })
+			@CustomValidator(type = "uniqueInfoFieldValidator", message = "", key = "error.duplicateinfofieldname") })
 	public void setInfoFields(List<String> infoFieldNames) {
 		infoFields = infoFieldNames;
 	}

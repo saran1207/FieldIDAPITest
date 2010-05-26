@@ -34,5 +34,5 @@
  <validator name="uploadAttachmentValidator" class="com.n4systems.fieldid.validators.UploadAttachmentValidator" />
  <validator name="subProductValidator" class="com.n4systems.fieldid.validators.SubProductTypeValidator" />
  <validator name="conditionalVisitorFieldValidator" class="com.n4systems.fieldid.validators.ConditionalVisitorFieldValidator" />
- <validator name="uniquenessValidator" class="com.n4systems.fieldid.validators.UniquenessValidator" />
+ <validator name="uniqueInfoFieldValidator" class="com.n4systems.fieldid.validators.UniqueInfoFieldValidator" />
 </validators>

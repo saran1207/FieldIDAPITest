@@ -7,7 +7,7 @@ import java.util.Set;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
 
-public class UniquenessValidator extends FieldValidatorSupport {
+public class UniqueInfoFieldValidator extends FieldValidatorSupport {
 
 	@SuppressWarnings("unchecked")
 	public void validate(Object action) throws ValidationException {
