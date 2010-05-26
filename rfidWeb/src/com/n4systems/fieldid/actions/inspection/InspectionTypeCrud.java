@@ -15,6 +15,7 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
 import com.n4systems.model.InspectionType;
@@ -33,6 +34,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class InspectionTypeCrud extends AbstractCrud {
@@ -49,6 +51,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	public InspectionTypeCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
+		
 	}
 
 	@Override
@@ -336,7 +339,9 @@ public class InspectionTypeCrud extends AbstractCrud {
 		return infoFields;
 	}
 
-	@CustomValidator(type = "requiredStringSet", message = "", key = "error.inspectionattributeblank")
+	@Validations(customValidators = {
+			@CustomValidator(type = "requiredStringSet", message = "", key = "error.inspectionattributeblank"),
+			@CustomValidator(type = "uniquenessValidator", message = "", key = "error.duplicateinfofieldname") })
 	public void setInfoFields(List<String> infoFieldNames) {
 		infoFields = infoFieldNames;
 	}
@@ -344,7 +349,6 @@ public class InspectionTypeCrud extends AbstractCrud {
 	public InspectionTypeArchiveSummary getArchiveSummary() {
 		return archiveSummary;
 	}
-
 	
 
 }
