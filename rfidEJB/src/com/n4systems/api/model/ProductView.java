@@ -8,6 +8,8 @@ import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.ProductStatusExistsValidator;
 import com.n4systems.api.validation.validators.ProductViewAttributesValidator;
+import com.n4systems.api.validation.validators.ProductViewToProductRfidLengthValidator;
+import com.n4systems.api.validation.validators.ProductViewToProductSerialLengthValidator;
 import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
@@ -15,10 +17,10 @@ import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 @SuppressWarnings("serial")
 public class ProductView extends ExternalModelView {
 	
-	@ExportField(title = "Serial Number", order = 100, validators = { NotNullValidator.class })
+	@ExportField(title = "Serial Number", order = 100, validators = { NotNullValidator.class, ProductViewToProductSerialLengthValidator.class })
 	private String serialNumber;
 
-	@ExportField(title = "RFID Number", order = 200)
+	@ExportField(title = "RFID Number", order = 200, validators = {ProductViewToProductRfidLengthValidator.class})
 	private String rfidNumber;
 
 	@ExportField(title = "Reference Number", order = 300)

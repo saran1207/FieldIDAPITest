@@ -16,6 +16,7 @@ public interface FieldValidator {
 	public static final String ExternalOrgGlobalIdValidatorFail = "Could not find %s '%s'";
 	public static final String ExternalOrgTypeValidatorFail = "%s must be either 'C' or 'D'";
 	public static final String NotNullValidatorFail = "%s must not be blank";
+	public static final String ProductViewStringLengthValidatorFail = "%s cannot exceed %d characters";
 	public static final String NamedFieldNotFoundValidatorFail = "Could not find an %s named '%s'";
 	public static final String ProductTypeExistsValidatorFail = "Could not find a Product Type named '%s'";
 	public static final String InputInfoFieldNotFoundValidatorFail = "The input field '%1$s' could not be found.  Please add the column 'I:%1$s'.";
