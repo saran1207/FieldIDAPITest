@@ -23,10 +23,12 @@ public interface LegacyProductType {
 	public ProductType findProductTypeForItemNum(String itemNumber, Long tenantId);
 	
 	public ProductType updateProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException ;
-	public Long persistProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException,ImageAttachmentException ;
+	
+	
 	
 	public ProductType updateProductType(ProductType productTypeBean) throws FileAttachmentException, ImageAttachmentException ;
-	public Long persistProductType(ProductType productTypeBean) throws FileAttachmentException, ImageAttachmentException ;
+	
+	
 	public List<ProductType> getProductTypesForTenant(Long tenantId);
 	
 	public List<ListingPair> getProductTypeListForTenant(Long tenantId);

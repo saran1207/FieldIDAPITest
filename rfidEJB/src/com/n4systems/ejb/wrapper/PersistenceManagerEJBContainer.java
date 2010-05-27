@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
@@ -24,6 +23,7 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -562,20 +562,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findLegacy(entityClass, entityId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public <T extends EntityWithTenant & NamedEntity> String findName(Class<T> entityClass, Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -804,7 +791,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public <T extends AbstractEntity> Long save(T entity, UserBean user) {
+	public <T extends AbstractEntity> Long save(T entity, User user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -894,7 +881,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public <T extends AbstractEntity> T update(T entity, UserBean user) {
+	public <T extends AbstractEntity> T update(T entity, User user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

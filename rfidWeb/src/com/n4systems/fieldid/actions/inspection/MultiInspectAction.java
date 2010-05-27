@@ -10,7 +10,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspection;
@@ -48,7 +48,7 @@ public class MultiInspectAction extends AbstractCrud {
 	
 	private List<Product> assets;
 
-	private User userManager;
+	private UserManager userManager;
 	private List<ListingPair> inspectors;
 	private List<Listable<Long>> commentTemplates;
 	private List<ProductStatusBean> productStatuses;
@@ -58,7 +58,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private MultiInspectGroupSorter multiInspectGroupSorter;
 	
 
-	public MultiInspectAction(PersistenceManager persistenceManager, User userManager) {
+	public MultiInspectAction(PersistenceManager persistenceManager, UserManager userManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 		this.inspectionFormHelper = new InspectionFormHelper();

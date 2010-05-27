@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -16,6 +15,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.HasFileAttachments;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -79,9 +79,9 @@ abstract public class UploadFileSupport extends AbstractCrud {
 	 * {@link FileAttachment#getModifiedBy() modifiedBy} user updated provided the <tt>comments</tt> have changed.</li>
 	 * <p/>
 	 * @param hasAttachments	A bean implementing {@link HasFileAttachments} to update and clean inspections on
-	 * @param modifiedBy		The {@link UserBean} to set as the modifiedBy user if comments on the attachment have changed. 
+	 * @param modifiedBy		The {@link User} to set as the modifiedBy user if comments on the attachment have changed. 
 	 */
-	protected void updateAttachmentList(HasFileAttachments hasAttachments, UserBean modifiedBy) {
+	protected void updateAttachmentList(HasFileAttachments hasAttachments, User modifiedBy) {
 		// Create a map of attachment ids to their comments so we know which ones are still attached and 
 		// can update the comments
 		String comment = null;

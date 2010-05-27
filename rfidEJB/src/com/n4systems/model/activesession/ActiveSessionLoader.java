@@ -14,7 +14,7 @@ public class ActiveSessionLoader extends Loader<ActiveSession> implements IdLoad
 	@Override
 	protected ActiveSession load(EntityManager em) {
 		gaurd();
-		return getQueryBuilder().addSimpleWhere("user.uniqueID", userIdentifier).getSingleResult(em);
+		return getQueryBuilder().addSimpleWhere("user.id", userIdentifier).getSingleResult(em);
 	}
 
 	private void gaurd() {

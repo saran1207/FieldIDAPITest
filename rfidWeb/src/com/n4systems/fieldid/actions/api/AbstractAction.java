@@ -13,7 +13,6 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import rfid.ejb.entity.FindProductOptionManufactureBean;
-import rfid.ejb.entity.UserBean;
 import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
@@ -42,6 +41,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
@@ -73,7 +73,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private SaverFactory saverFactory;
 	private Gson json;
 	private TenantLimitProxy limitProxy;
-	private UserBean user = null;
+	private User user = null;
 	private NavOptionsController navOptions;
 	private String redirectUrl;
 	private RemovalHandlerFactory rhFactory;
@@ -99,8 +99,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getSession().getSecurityGuard();
 	}
 	
-	protected UserBean getUser() {
-		return persistenceManager.findLegacy(UserBean.class, getSessionUser().getUniqueID());
+	protected User getUser() {
+		return persistenceManager.find(User.class, getSessionUser().getUniqueID());
 	}
 	
 	protected boolean isLoggedIn() {
@@ -115,11 +115,11 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 	
 	protected void loadSessionUser(Long userId) {
-		UserBean user = persistenceManager.find(new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter()).addSimpleWhere("uniqueID", userId).addPostFetchPaths("permissions", "owner.primaryOrg.id"));
+		User user = persistenceManager.find(new QueryBuilder<User>(User.class, new OpenSecurityFilter()).addSimpleWhere("id", userId).addPostFetchPaths("permissions", "owner.primaryOrg.id"));
 		setupSessionUser(user);
 	}
 	
-	private void setupSessionUser(UserBean user) {
+	private void setupSessionUser(User user) {
 		getSession().setSessionUser(new SessionUser(user));
 		getSession().setUserSecurityGuard(new SessionUserSecurityGuard(user));
 		new AbstractActionTenantContextInitializer(this).refreshSecurityGaurd();
@@ -318,12 +318,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 
 	
-	protected UserBean fetchCurrentUser() {
+	protected User fetchCurrentUser() {
 		if (getSessionUserId() == null) {
 			return null;
 		}
 		if (user == null) {
-			user = persistenceManager.findLegacy(UserBean.class, getSessionUserId());
+			user = persistenceManager.find(User.class, getSessionUserId());
 		}
 		return user;
 	}

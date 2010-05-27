@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -18,6 +17,7 @@ import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 
 public class PathHandler {
@@ -523,22 +523,22 @@ public class PathHandler {
 		return logo;
 	}
 	
-	private static String getUserPrivatePath(UserBean user) {
-		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getUniqueID().toString());
+	private static String getUserPrivatePath(User user) {
+		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
 	}
 
 	/** @return The absolute private directory for a user  */
-	public static File getUserPrivateDir(UserBean user) {
+	public static File getUserPrivateDir(User user) {
 		return absolutize(getUserPrivatePath(user));
 	}
 	
 	/** @return The path to a file under a users private directory */
-	public static File getUserFile(UserBean user, String fileName) {
+	public static File getUserFile(User user, String fileName) {
 		return new File(getUserPrivateDir(user), fileName);
 	}
 	
 	/** @return The signature image for a user  */
-	public static File getSignatureImage(UserBean user) {
+	public static File getSignatureImage(User user) {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
 	

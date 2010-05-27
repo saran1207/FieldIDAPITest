@@ -1,6 +1,5 @@
 package com.n4systems.exporting;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
@@ -20,6 +19,7 @@ import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.services.product.ProductSaveService;
@@ -56,7 +56,7 @@ public class ImporterFactory {
 		return new AutoAttributeToModelConverter(criteria);
 	}
 
-	protected ProductToModelConverter createProductToModelConverter(UserBean identifiedBy, ProductType type) {
+	protected ProductToModelConverter createProductToModelConverter(User identifiedBy, ProductType type) {
 		ProductToModelConverter converter = new ProductToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createProductStatusByNameLoader(), new InfoOptionMapConverter());
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
@@ -67,7 +67,7 @@ public class ImporterFactory {
 		return new NonIntegrationOrderManager(saverFactory.createNonIntegrationLineItemSaver());
 	}
 
-	protected ProductSaveService createProductSaveService(UserBean user) {
+	protected ProductSaveService createProductSaveService(User user) {
 		return new ProductSaveService(createLegacyProductSerial(), user);
 	}
 
@@ -99,7 +99,7 @@ public class ImporterFactory {
 		return new AutoAttributeImporter(reader, createViewValidator(), saverFactory.createAutoAttributeDefinitionSaver(), createAutoAttributeToModelConverter(criteria));
 	}
 
-	public ProductImporter createProductImporter(MapReader reader, UserBean identifiedBy, ProductType type) {
+	public ProductImporter createProductImporter(MapReader reader, User identifiedBy, ProductType type) {
 		return new ProductImporter(reader, createViewValidator(), createProductSaveService(identifiedBy), createProductToModelConverter(identifiedBy, type));
 	}
 

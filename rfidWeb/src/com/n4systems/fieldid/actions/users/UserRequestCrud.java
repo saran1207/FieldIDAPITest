@@ -10,7 +10,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -38,13 +38,13 @@ public class UserRequestCrud extends AbstractCrud {
 	private UserRequest userRequest;
 	private List<UserRequest> userRequests;
 
-	private User userManager;
+	private UserManager userManager;
 	private Collection<ListingPair> organizationalUnits;
 	
 	private OwnerPicker ownerPicker;
 	
 
-	public UserRequestCrud(User userManager, PersistenceManager persistenceManager) {
+	public UserRequestCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}

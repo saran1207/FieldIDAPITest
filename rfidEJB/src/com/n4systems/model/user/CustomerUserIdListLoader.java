@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -20,7 +19,7 @@ public class CustomerUserIdListLoader extends ListLoader<Long> {
 
 	@Override
 	protected List<Long> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(UserBean.class, filter);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
 		builder.addSimpleWhere("system", false);
 		builder.addSimpleWhere("deleted", false);
 		builder.addWhere(new WhereParameter<Long>(Comparator.NOTNULL, "owner.customerOrg"));

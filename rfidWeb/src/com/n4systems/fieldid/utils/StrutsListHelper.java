@@ -2,8 +2,8 @@ package com.n4systems.fieldid.utils;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.user.User;
 
-import rfid.ejb.entity.UserBean;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +42,7 @@ public class StrutsListHelper {
 		}
 	}
 	
-	public static <T extends EntityWithTenant> void setSecurity( Collection<T> list, Tenant tenant, UserBean modifiedBy ) {
+	public static <T extends EntityWithTenant> void setSecurity( Collection<T> list, Tenant tenant, User modifiedBy ) {
 		for( EntityWithTenant entity : list ) {
 			if( entity != null ) { 
 				entity.setTenant( tenant );

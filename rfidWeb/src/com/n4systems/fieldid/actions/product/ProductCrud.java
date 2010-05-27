@@ -27,7 +27,7 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.ProductCodeMapping;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
@@ -124,7 +124,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// managers
 	private LegacyProductType productTypeManager;
 	private LegacyProductSerial legacyProductSerialManager;
-	private User userManager;
+	private UserManager userManager;
 
 	private ProductCodeMapping productCodeMappingManager;
 	private InspectionScheduleManager inspectionScheduleManager;
@@ -140,7 +140,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
-			User userManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
+			UserManager userManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
 			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
@@ -856,13 +856,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	public Long getAssignedUser() {
-		return (product.getAssignedUser() != null) ? product.getAssignedUser().getUniqueID() : null;
+		return (product.getAssignedUser() != null) ? product.getAssignedUser().getId() : null;
 	}
 
 	public void setAssignedUser(Long user) {
 		if (user == null) {
 			product.setAssignedUser(null);
-		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getUniqueID())) {
+		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
 			product.setAssignedUser(userManager.findUser(user, getTenantId()));
 		}
 	}

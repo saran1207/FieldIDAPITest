@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.ejb.NoteManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
@@ -159,31 +157,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	
-	public Pager<UserBean> getResourcesPaged(Project project, SecurityFilter filter, int page, int pageSize) {
-		Query countQuery = resourceCountQuery(project, filter);
-		Query selectQuery = resourceSelectQuery(project, filter);
-		return new Page<UserBean>(selectQuery, countQuery, page, pageSize);
-	}
 	
-	private Query resourceCountQuery(Project project, SecurityFilter filter) {
-		String countQueryStr = "SELECT count(resource) " + baseResourceQuery(filter);
-		return createResourceQuery(project, filter, countQueryStr);
-	}
 
-	private Query createResourceQuery(Project project, SecurityFilter filter, String queryStr) {
-		Query query = em.createQuery(queryStr).setParameter("project", project);
-		filter.applyParameters(query, Project.class);
-		return query;
-	}
-	
-	private Query resourceSelectQuery(Project project, SecurityFilter filter) {
-		String selectQueryStr = "SELECT resource " + baseResourceQuery(filter) + " ORDER BY resource.firstName, resource.lastName"; 
-		return createResourceQuery(project, filter, selectQueryStr);
-	}
-
-	private String baseResourceQuery(SecurityFilter filter) {
-		String queryStr = "FROM " + Project.class.getName() + " p, IN( p.resources ) resource where p = :project AND " + filter.produceWhereClause(Project.class, "p");
-		return queryStr;
-	}
 	
 }

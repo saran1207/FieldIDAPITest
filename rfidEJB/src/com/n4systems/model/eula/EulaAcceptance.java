@@ -10,12 +10,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.exceptions.NotUpdatableException;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name = "eulaacceptances")
@@ -24,7 +24,7 @@ public class EulaAcceptance extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private UserBean acceptor;
+	private User acceptor;
 
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -47,11 +47,11 @@ public class EulaAcceptance extends EntityWithTenant {
 		super(tenant);
 	}
 
-	public UserBean getAcceptor() {
+	public User getAcceptor() {
 		return acceptor;
 	}
 
-	public void setAcceptor(UserBean acceptor) {
+	public void setAcceptor(User acceptor) {
 		if (!acceptor.isAdmin()) {
 			throw new InvalidArgumentException("must be an admin user");
 		}

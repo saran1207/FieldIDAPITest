@@ -156,6 +156,10 @@ module ActiveRecord
       # foreign_column if it doesn't already exist.
       #
       # See SchemaStatements#add_foreign_key for more detail
+      def add_foreign_key_1(table_name, columns, foreign_table_name, foreign_columns, options={})
+        add_foreign_key(table_name, foreign_table_name, options.merge({ :source_column => columns[0], :foreign_column => foreign_columns[0] }) )
+      end
+      
       def add_foreign_key( table_name, foreign_table_name, options={} )
         execute build_add_sql( table_name, foreign_table_name, options )
       end
@@ -165,6 +169,10 @@ module ActiveRecord
       # index on the foreign_column that was created by add_foreign_key
       #
       # See SchemaStatements#drop_foreign_key for more detail
+      def drop_foreign_key_1(table_name, columns, foreign_table_name, foreign_columns, options={})
+        drop_foreign_key(table_name, foreign_table_name, options.merge({ :source_column => columns[0], :foreign_column => foreign_columns[0] }) )
+      end
+
       def drop_foreign_key( table_name, foreign_table_name, options={} )
         execute build_drop_sql( table_name, foreign_table_name, options )
       end
@@ -179,9 +187,82 @@ module ActiveRecord
       def table_has_index( table_name, index_name ) #:nodoc:
         indexes(table_name).any? {|i| i.name == index_name}
       end
+      
+      def show_foreign_keys(table_name, name = nil)
+        sql = "SHOW CREATE TABLE #{quote_table_name(table_name)}"
+        results = execute(sql)
+  
+        foreign_keys = []
+  
+        results.each do |row|
+          row["Create Table"].each_line do |line|
+            if line =~ /^  CONSTRAINT [`"](.+?)[`"] FOREIGN KEY \([`"](.+?)[`"]\) REFERENCES [`"](.+?)[`"] \((.+?)\)( ON DELETE (.+?))?( ON UPDATE (.+?))?,?$/
+              name = $1
+              column_names = $2
+              references_table_name = $3
+              references_column_names = $4
+              on_update = $8
+              on_delete = $6
+              on_update = on_update.downcase.gsub(' ', '_').to_sym if on_update
+              on_delete = on_delete.downcase.gsub(' ', '_').to_sym if on_delete
+  
+              foreign_keys << ForeignKeyDefinition.new(name,
+                                             table_name, column_names.gsub('`', '').split(', '),
+                                             references_table_name, references_column_names.gsub('`', '').split(', '),
+                                             on_update, on_delete)
+            end
+          end 
+        end
+  
+        foreign_keys
+      end
     end
     
     
     
+  end
+end
+
+class ForeignKeyDefinition < Struct.new(:name, :table_name, :column_names, :references_table_name, :references_column_names, :on_update, :on_delete, :deferrable)
+    ACTIONS = { :cascade => "CASCADE", :restrict => "RESTRICT", :set_null => "SET NULL", :set_default => "SET DEFAULT", :no_action => "NO ACTION" }.freeze
+
+  def to_dump
+    dump = "add_foreign_key"
+    dump << " #{table_name.inspect}, [#{Array(column_names).collect{ |name| name.inspect }.join(', ')}]"
+    dump << ", #{references_table_name.inspect}, [#{Array(references_column_names).collect{ |name| name.inspect }.join(', ')}]"
+    dump << ", :on_update => :#{on_update}" if on_update
+    dump << ", :on_delete => :#{on_delete}" if on_delete
+    dump << ", :deferrable => #{deferrable}" if deferrable
+    dump << ", :name => #{name.inspect}" if name
+    dump
+  end
+end
+
+
+class Alex < ActiveRecord::Migration
+  def self.go
+    keys = []
+    sql = "SHOW TABLES"
+    select_all(sql).inject("") do |structure, table|
+      table.delete('Table_type')
+ 
+      show_foreign_keys(table.to_a.first.last).each do |t|
+        if t.references_table_name == "users"
+          keys << t.to_dump
+        end
+      end
+    end
+    keys.each { |key| puts key}
+  end
+  def self.hi
+    execute("ALTER TABLE users modify id bigint(21) NOT NULL AUTO_INCREMENT")
+  end
+  
+  def self.clean
+    drop_table(:organization_extendedfeatures)
+    drop_table(:tenantlink)
+    drop_foreign_key(:organization , :organization, :source_column => :parent_id, :foreign_column => :id, :name => "fk_organization_parent")
+    drop_foreign_key(:organization , :organization, :source_column => :r_tenant, :foreign_column => :id, :name => "fk_organization_tenant")
+    drop_table(:organization)
   end
 end

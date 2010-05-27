@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 
 public class DownloadLinkTest {
 
@@ -30,7 +30,7 @@ public class DownloadLinkTest {
 	@SuppressWarnings("serial")
 	@Test
 	public void test_get_file_no_parent_create() {
-		UserBean user = new UserBean() {
+		User user = new User() {
 			public File getPrivateDir() {
 				return new File(".");
 			}
@@ -49,7 +49,7 @@ public class DownloadLinkTest {
 		final File userDir = new File(System.getProperty("java.io.tmpdir"), "test_" + UUID.randomUUID().toString().substring(25));
 		userDir.deleteOnExit();
 		
-		UserBean user = new UserBean() {
+		User user = new User() {
 			public File getPrivateDir() {
 				return userDir;
 			}

@@ -15,7 +15,7 @@ import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
@@ -55,7 +55,7 @@ public class ServiceLocator {
 		return new SerialNumberCounterEJBContainer();
 	}
 
-	public static final User getUser() {
+	public static final UserManager getUser() {
 		return new UserEJBContainer();
 	}
 

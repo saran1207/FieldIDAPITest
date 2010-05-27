@@ -10,7 +10,6 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -30,6 +29,7 @@ import com.n4systems.model.builders.ProductTypeBuilder;
 import com.n4systems.model.builders.SubInspectionBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -37,7 +37,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class ProductMergerTest {
 
-	private UserBean user = UserBuilder.aUser().build();
+	private User user = UserBuilder.aUser().build();
 	private Product winningProduct;
 	private Product losingProduct;
 	private PersistenceManager mockPersistenceManager;
@@ -229,7 +229,7 @@ public class ProductMergerTest {
 	
 	private void mockArchiveOfLosingProduct() {
 		try {
-			expect(mockProductManager.archive((Product)eq(losingProduct), (UserBean)anyObject())).andReturn(losingProduct);
+			expect(mockProductManager.archive((Product)eq(losingProduct), (User)anyObject())).andReturn(losingProduct);
 		} catch (UsedOnMasterInspectionException e) {
 			fail("mock should not throw exception");
 		}

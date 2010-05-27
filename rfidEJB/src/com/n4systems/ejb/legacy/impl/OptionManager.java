@@ -5,15 +5,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-
-
 import javax.persistence.EntityManager;
-
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.FindProductOptionBean;
 import rfid.ejb.entity.FindProductOptionManufactureBean;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -34,18 +30,13 @@ public class OptionManager implements Option {
 
 	 private PersistenceManager persistenceManager;
 	
-	public OptionManager() {
-	}
 	
 	public OptionManager(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 	}
 	
-	@Deprecated
-	public Collection<FindProductOptionManufactureBean> getFindProductOptionsForManufacture(Long tenantId) {
-		return getFindProductOptionsForTenant(tenantId);
-	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public Collection<FindProductOptionManufactureBean>	getFindProductOptionsForTenant(Long tenantId) {
@@ -71,27 +62,9 @@ public class OptionManager implements Option {
 		em.merge(findProductOptionManufacturer);
 	}
 
-	public Long persistFindProductOptionManufacture(FindProductOptionManufactureBean findProductOptionManufacturer) {
-		findProductOptionManufacturer.setDateModified(new Date());
-		em.persist(findProductOptionManufacturer);
-		return findProductOptionManufacturer.getUniqueID();
-	}
 	
-	@SuppressWarnings("unchecked")
-	public Collection<FindProductOptionBean> getAllFindProductOptions() {
-		return em.createQuery("from FindProductOptionBean f").getResultList();
-	}
-	
-	public FindProductOptionBean getFindProductOption(Long uniqueID) {
-		return em.find(FindProductOptionBean.class, uniqueID);
-	}
-	
-	public FindProductOptionBean getFindProductOption(String identifier) {
-		Query query = em.createQuery("from FindProductOptionBean f where f.identifier = :identifier");
-		query.setParameter("identifier", identifier);
-		
-		return (FindProductOptionBean)query.getSingleResult();
-	}
+
+
 	
 	public List<TagOption> findTagOptions(SecurityFilter filter) {
 		QueryBuilder<TagOption> builder = new QueryBuilder<TagOption>(TagOption.class, filter);

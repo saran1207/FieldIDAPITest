@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.SortedSet;
 
 import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.NonUniqueProductException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
@@ -13,6 +12,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
@@ -26,7 +26,6 @@ public interface ProductManager {
 
 	public Product findProductAllFields(Long id, SecurityFilter filter);
 
-	public Product findProduct(Long uniqueID);
 
 	public Product findProduct(Long id, SecurityFilter filter);
 
@@ -44,7 +43,7 @@ public interface ProductManager {
 
 	public boolean partOfAMasterProduct(Long typeId);
 
-	public Product archive(Product product, UserBean archivedBy) throws UsedOnMasterInspectionException;
+	public Product archive(Product product, User archivedBy) throws UsedOnMasterInspectionException;
 	
 	public ProductRemovalSummary testArchive(Product product);
 
@@ -76,7 +75,7 @@ public interface ProductManager {
 	
 	// methods are just here to allow for a single transaction
 	
-	public Product mergeProducts(Product winningProduct, Product losingProduct, UserBean user);
+	public Product mergeProducts(Product winningProduct, Product losingProduct, User user);
 	 
 
 

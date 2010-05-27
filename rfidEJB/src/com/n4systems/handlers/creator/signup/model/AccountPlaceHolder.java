@@ -1,18 +1,18 @@
 package com.n4systems.handlers.creator.signup.model;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 
 public class AccountPlaceHolder {
 
 	private final Tenant tenant;
 	private final PrimaryOrg primaryOrg;
-	private final UserBean systemUser;
-	private final UserBean adminUser;
+	private final User systemUser;
+	private final User adminUser;
 	
-	public AccountPlaceHolder(Tenant tenant, PrimaryOrg primaryOrg, UserBean systemUser, UserBean adminUser) {
+	public AccountPlaceHolder(Tenant tenant, PrimaryOrg primaryOrg, User systemUser, User adminUser) {
 		super();
 		this.tenant = tenant;
 		this.primaryOrg = primaryOrg;
@@ -28,11 +28,11 @@ public class AccountPlaceHolder {
 		return primaryOrg;
 	}
 
-	public UserBean getSystemUser() {
+	public User getSystemUser() {
 		return systemUser;
 	}
 
-	public UserBean getAdminUser() {
+	public User getAdminUser() {
 		return adminUser;
 	}
 	

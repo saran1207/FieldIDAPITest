@@ -7,13 +7,13 @@ import java.net.URI;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
 import com.n4systems.util.uri.SignupUrlBuilder;
 
 public class SignupUrlBuilderTest {
-	private final UserBean user = new UserBean();
+	private final User user = new User();
 	
 	@Before
 	public void setup() {

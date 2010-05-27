@@ -6,16 +6,16 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.legacy.User;
-import com.n4systems.ejb.legacy.impl.UserManager;
+import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -23,10 +23,10 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.UserType;
 
-public class UserEJBContainer extends EJBTransactionEmulator<User> implements User {
+public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implements UserManager {
 
-	protected User createManager(EntityManager em) {
-		return new UserManager(em);
+	protected UserManager createManager(EntityManager em) {
+		return new EntityManagerBackedUserManager(em);
 	}
 
 	public void acceptRequest(UserRequest userRequest) {
@@ -44,7 +44,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void createAndEmailLoginKey(UserBean user, URI baseURI) throws MessagingException {
+	public void createAndEmailLoginKey(User user, URI baseURI) throws MessagingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -59,7 +59,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long createUser(UserBean userBean) throws DuplicateUserException, DuplicateRfidException {
+	public Long createUser(User userBean) throws DuplicateUserException, DuplicateRfidException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -89,7 +89,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean findUser(Long uniqueID, Long tenantId) {
+	public User findUser(Long uniqueID, Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -104,7 +104,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean findUser(String tenantName, String userID, String plainTextPassword) {
+	public User findUser(String tenantName, String userID, String plainTextPassword) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -119,7 +119,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean findUser(String tenantName, String rfidNumber) {
+	public User findUser(String tenantName, String rfidNumber) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -134,22 +134,9 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean findUserBean(Long uniqueID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findUserBean(uniqueID);
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
 
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public UserBean findUserBeanByID(String tenantName, String userID) {
+	public User findUserBeanByID(String tenantName, String userID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -164,22 +151,8 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean findUserBeanByIDWithDeleted(String tenantName, String userID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findUserBeanByIDWithDeleted(tenantName, userID);
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public UserBean findUserByResetKey(String tenantName, String userName, String resetPasswordKey) {
+	public User findUserByResetKey(String tenantName, String userName, String resetPasswordKey) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -209,11 +182,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean getUser(Long uniqueID) {
+	public User findUser(Long uniqueID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getUser(uniqueID);
+			return createManager(transaction.getEntityManager()).findUser(uniqueID);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -239,7 +212,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Pager<UserBean> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer) {
+	public Pager<User> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -254,7 +227,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Pager<UserBean> getUsers(SecurityFilter filter, boolean activeOnly, int pageNumber, int pageSize, String nameFilter, UserType userType) {
+	public Pager<User> getUsers(SecurityFilter filter, boolean activeOnly, int pageNumber, int pageSize, String nameFilter, UserType userType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -269,35 +242,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean getUserWithSignature(Long uniqueID, Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getUserWithSignature(uniqueID, tenantId);
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public UserBean getUserWithSignature(Long uniqueID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getUserWithSignature(uniqueID);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 	public void removeUser(Long uniqueID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -314,7 +259,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void saveUserRequest(UserRequest userRequest, UserBean userAccount) throws DuplicateUserException, DuplicateRfidException {
+	public void saveUserRequest(UserRequest userRequest, User userAccount) throws DuplicateUserException, DuplicateRfidException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -344,7 +289,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void updateUser(UserBean dto) throws DuplicateUserException {
+	public void updateUser(User dto) throws DuplicateUserException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

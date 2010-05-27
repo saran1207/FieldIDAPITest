@@ -2,16 +2,16 @@ package com.n4systems.model.builders;
 
 import java.util.Date;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.user.User;
 
 public abstract class AbstractEntityBuilder<K extends AbstractEntity> extends BaseEntityBuilder<K> {
 	protected Date created;
 	protected Date modified;
-	protected UserBean modifiedBy;
+	protected User modifiedBy;
 	
-	public AbstractEntityBuilder(Long id, Date created, Date modified, UserBean modifiedBy) {
+	public AbstractEntityBuilder(Long id, Date created, Date modified, User modifiedBy) {
 		super(id);
 		this.created = created;
 		this.modified = modified;

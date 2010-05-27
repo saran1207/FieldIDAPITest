@@ -4,12 +4,12 @@ import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.AlertStatus;
 import com.n4systems.model.tenant.AlertStatusSaver;
 import com.n4systems.model.user.AdminUserListLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.services.limiters.LimitType;
 import com.n4systems.services.limiters.ResourceLimit;
 import com.n4systems.util.ServiceLocator;
@@ -65,7 +65,7 @@ public class LimitNotificationAlertTask implements Runnable {
 
 	private void addNotificationAddresses(TemplateMailMessage alertMessage) {
 		AdminUserListLoader userLoader = new AdminUserListLoader(new TenantOnlySecurityFilter(tenantId));
-		for (UserBean user: userLoader.load()) {
+		for (User user: userLoader.load()) {
 			alertMessage.getToAddresses().add(user.getEmailAddress());
 		}
 	}

@@ -11,7 +11,6 @@ import javax.mail.NoSuchProviderException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -20,6 +19,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -40,7 +40,7 @@ public class ArchiveProductTypeTask implements Runnable {
 	private boolean subProductTypeDetachFailed = false;
 	private boolean autoAttributeDeleteFailed = false;
 	private Map<Product, Exception> failedProducts = new HashMap<Product, Exception>();
-	private UserBean archivedBy;
+	private User archivedBy;
 	private ProductType type;
 	private ProductManager productManager;
 	private PersistenceManager persistenceManager;
@@ -51,7 +51,7 @@ public class ArchiveProductTypeTask implements Runnable {
 	}
 
 	public void run() {
-		archivedBy = persistenceManager.findLegacy(UserBean.class, archivedById);
+		archivedBy = persistenceManager.find(User.class, archivedById);
 		type = persistenceManager.find(ProductType.class, productTypeId);
 		if (type == null) {
 			logger.error("product type was not correctly given. It can not be deleted.");

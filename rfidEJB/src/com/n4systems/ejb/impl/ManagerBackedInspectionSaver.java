@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
@@ -31,6 +30,7 @@ import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.InspectionScheduleServiceImpl;
@@ -159,7 +159,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 	
 	
 	private void updateProduct(Inspection inspection, Long modifiedById) {
-		UserBean modifiedBy = em.find(UserBean.class, modifiedById);
+		User modifiedBy = em.find(User.class, modifiedById);
 		Product product = em.find(Product.class, inspection.getProduct().getId());
 
 		updateProductInspectionDate(product);

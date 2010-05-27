@@ -12,7 +12,7 @@ import rfid.ejb.entity.ProductStatusBean;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.product.PublishedState;
@@ -36,7 +36,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ProductMassUpdate.class);
 	
-	private User userManager;
+	private UserManager userManager;
 	private LegacyProductSerial productSerialManager;
 	private ProductSearchContainer criteria;
 
@@ -47,7 +47,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	
 	private OwnerPicker ownerPicker;
 	
-	public ProductMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager, User userManager) {
+	public ProductMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager, UserManager userManager) {
 		super(massUpdateManager, persistenceManager);
 		this.productSerialManager = productSerialManager;
 		this.userManager = userManager;
@@ -171,13 +171,13 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	}
 	
 	public Long getAssignedUser() {
-		return ( product.getAssignedUser() != null ) ? product.getAssignedUser().getUniqueID() : null;
+		return ( product.getAssignedUser() != null ) ? product.getAssignedUser().getId() : null;
 	}
 	
 	public void setAssignedUser(Long user) {
 		if(user == null) {
 			product.setAssignedUser(null);
-		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getUniqueID())) {
+		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
 			product.setAssignedUser(userManager.findUser(user, getTenantId()));
 		}
 	}

@@ -1,12 +1,12 @@
 package com.n4systems.reporting.mapbuilders;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.StreamHelper;
 
-public class InspectorMapBuilder extends AbstractMapBuilder<UserBean> {
+public class InspectorMapBuilder extends AbstractMapBuilder<User> {
 
 	public InspectorMapBuilder() {
 		super(
@@ -18,7 +18,7 @@ public class InspectorMapBuilder extends AbstractMapBuilder<UserBean> {
 	}
 	
 	@Override
-	protected void setAllFields(UserBean entity, Transaction transaction) {
+	protected void setAllFields(User entity, Transaction transaction) {
 		setField(ReportField.INSPECTOR_IDENTIFIED_BY,	entity.getUserLabel());
 		setField(ReportField.INSPECTOR_NAME,			entity.getUserLabel());
 		setField(ReportField.INSPECTOR_POSITION,		entity.getPosition());

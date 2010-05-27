@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasUser;
@@ -24,6 +23,7 @@ import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name = "notificationsettings")
@@ -41,7 +41,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
-	private UserBean user;
+	private User user;
 	
 	@Column(name="addr", nullable=false)
 	@CollectionOfElements(fetch=FetchType.EAGER)
@@ -94,11 +94,11 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     }
 
 	
-	public UserBean getUser() {
+	public User getUser() {
     	return user;
     }
 
-	public void setUser(UserBean user) {
+	public void setUser(User user) {
     	this.user = user;
     }
 

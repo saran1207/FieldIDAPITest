@@ -4,7 +4,6 @@ import org.easymock.classextension.EasyMock;
 import org.junit.Test;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
@@ -14,6 +13,7 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ReportMap;
 
@@ -22,7 +22,7 @@ public class BaseInspectionMapBuilderTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetAllFields() {
-		MapBuilder<UserBean> inspectorMapBuilder = EasyMock.createMock(MapBuilder.class);
+		MapBuilder<User> inspectorMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<InspectionTypeGroup> typeGroupMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<InternalOrg> orgMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<BaseOrg> ownerMapBuilder = EasyMock.createMock(MapBuilder.class);

@@ -11,11 +11,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name = "signupreferrals")
@@ -23,7 +23,7 @@ public class SignupReferral extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("referralTenant.id", null, "referralUser.uniqueID", null);
+		return new SecurityDefiner("referralTenant.id", null, "referralUser.id", null);
 	}
 	
 	@Column(name="signupdate", nullable = false)
@@ -40,7 +40,7 @@ public class SignupReferral extends BaseEntity {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "referral_user_id", nullable = false)
-	private UserBean referralUser;
+	private User referralUser;
 	
 	@Override
 	protected void onCreate() {
@@ -76,11 +76,11 @@ public class SignupReferral extends BaseEntity {
 		this.referredTenant = referredTenant;
 	}
 
-	public UserBean getReferralUser() {
+	public User getReferralUser() {
 		return referralUser;
 	}
 
-	public void setReferralUser(UserBean referralUser) {
+	public void setReferralUser(User referralUser) {
 		this.referralUser = referralUser;
 	}
 	

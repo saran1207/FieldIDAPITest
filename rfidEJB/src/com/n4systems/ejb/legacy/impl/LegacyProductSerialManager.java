@@ -1,7 +1,6 @@
 package com.n4systems.ejb.legacy.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,11 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
@@ -24,7 +20,6 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.MassUpdateManager;
@@ -50,12 +45,12 @@ import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-import com.n4systems.util.reflection.Reflector;
 
 
 public class LegacyProductSerialManager implements LegacyProductSerial {
@@ -80,8 +75,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	
 	
 	
-	public LegacyProductSerialManager() {
-	}
 	
 	
 	public LegacyProductSerialManager(EntityManager em) {
@@ -93,26 +86,8 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		massUpdateManager = new MassUpdateManagerImpl(em);
 	}
 
-	public ProductStatusBean findProductStatus(Long uniqueID) {
-		ProductStatusBean obj = em.find(ProductStatusBean.class, uniqueID);
-		return obj;
-	}
+	
 
-	/**
-	 * Sets the product status on the given product serial
-	 * 
-	 * @param productSerialId
-	 * @param productStatusId
-	 */
-	public void updateProductStatus(Long productSerialId, Long productStatusId) {
-		Product productSerial = productManager.findProduct(productSerialId);
-
-		if (productStatusId == null) {
-			productSerial.setProductStatus(null);
-		} else {
-			productSerial.setProductStatus(findProductStatus(productStatusId));
-		}
-	}
 
 	public ProductStatusBean findProductStatus(Long uniqueID, Long tenantId) {
 		Query query = em.createQuery("FROM ProductStatusBean ps WHERE ps.uniqueID = :uniqueID AND ps.tenant.id = :tenantId");
@@ -156,83 +131,9 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return query.getResultList();
 	}
 
-	public ProductStatusBean FindProductStatusByName(Long tenantId, String name) {
-		Query query = em.createQuery("from ProductStatusBean ps where UPPER(ps.name) = :name and ps.tenant.id = :tenantId");
-		query.setParameter("tenantId", tenantId);
-		query.setParameter("name", name.toUpperCase());
+	
 
-		try {
-			return (ProductStatusBean) query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
 
-	/**
-	 * Find a product serial that belongs to the list of end users OR a list of
-	 * divisions. We use the primitive long type as opposed to the object type
-	 * because it is supported in web services
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Product> findProductSerialByEndUserDivision(Long tenantId, Long[] customerList, Long[] divisionList, Date beginDate, int max, Long lastId) {
-
-		List<Product> piList = null;
-
-		// only bother going forward if there are at least some customers or
-		// some divisions specified
-		if (customerList.length > 0 || divisionList.length > 0) {
-			// THIS NEEDS TO PULL IN THE INFOOPTIONS
-			String queryString = "select DISTINCT( ps ) from Product ps where ps.tenant.id = :tenantId AND state = :activeState AND (";
-
-			if (customerList.length > 0) {
-				queryString += "ps.owner.customerOrg.id in (:customerList) ";
-
-				if (divisionList.length > 0) {
-					queryString += "OR ";
-				}
-			}
-
-			if (divisionList.length > 0) {
-				queryString += "ps.owner.divisionOrg.id in (:divisionList)";
-			}
-
-			queryString += ") AND ps.modified >= :beginDate " + " AND ps.id > :beginId ORDER BY ps.id ASC";
-
-			Query query = em.createQuery(queryString);
-
-			if (customerList.length > 0) {
-				query.setParameter("customerList", Arrays.asList(customerList));
-			}
-
-			if (divisionList.length > 0) {
-				query.setParameter("divisionList", Arrays.asList(divisionList));
-			}
-
-			query.setParameter("tenantId", tenantId);
-			query.setParameter("beginId", lastId);
-			query.setParameter("beginDate", beginDate);
-			query.setParameter("activeState", EntityState.ACTIVE);
-			query.setMaxResults(max + 1);
-
-			piList = (List<Product>) query.getResultList();
-
-			try {
-				for (Product productSerial : piList) {
-					Set<InfoOptionBean> infoOptions = (Set<InfoOptionBean>) Reflector.getPathValue(productSerial, "infoOptions");
-					for (InfoOptionBean infoOption : infoOptions) {
-						infoOption.getUniqueID();
-						break;
-					}
-
-				}
-
-			} catch (Exception e) {
-				logger.warn("Failed during post load", e);
-			}
-		}
-
-		return piList;
-	}
 
 	public boolean rfidExists(String rfidNumber, Long tenantId) {
 		return rfidExists(rfidNumber, tenantId, null);
@@ -270,13 +171,9 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return (rfidCount > 0) ? true : false;
 	}
 
-	public void create(List<Product> products, UserBean modifiedBy) throws SubProductUniquenessException {
-		for (Product product: products) {
-			create(product, modifiedBy);
-		}
-	}
 	
-	public Product create(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+	
+	public Product create(Product product, User modifiedBy) throws SubProductUniquenessException {
 		runProductSavePreRecs(product, modifiedBy);
 		
 		ProductSaver saver = new ProductSaver();
@@ -307,13 +204,13 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void runProductSavePreRecs(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+	private void runProductSavePreRecs(Product product, User modifiedBy) throws SubProductUniquenessException {
 		moveRfidFromProductSerials(product, modifiedBy);
 		setCountsTowardsLimitFlagOnLinkedProducts(product);
 		processSubProducts(product, modifiedBy);
 	}
 
-	public Product update(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+	public Product update(Product product, User modifiedBy) throws SubProductUniquenessException {
 		product.touch();
 		runProductSavePreRecs(product, modifiedBy);
 		
@@ -346,7 +243,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void processSubProducts(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+	private void processSubProducts(Product product, User modifiedBy) throws SubProductUniquenessException {
 
 		checkForUniqueSubProducts(product);
 		clearOldSubProducts(product);
@@ -383,7 +280,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void detachFromPreviousParent(Product product, SubProduct subProduct, UserBean modifiedBy) {
+	private void detachFromPreviousParent(Product product, SubProduct subProduct, User modifiedBy) {
 		Product parentProduct = productManager.parentProduct(subProduct.getProduct());
 
 		if (parentProduct != null && !parentProduct.equals(product)) {
@@ -413,10 +310,10 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	 * creates the product serial and updates the given users add
 	 * productHistory.
 	 */
-	public Product createWithHistory(Product product, UserBean modifiedBy) throws SubProductUniquenessException {
+	public Product createWithHistory(Product product, User modifiedBy) throws SubProductUniquenessException {
 		product = create(product, modifiedBy);
 
-		AddProductHistoryBean addProductHistory = getAddProductHistory(modifiedBy.getUniqueID());
+		AddProductHistoryBean addProductHistory = getAddProductHistory(modifiedBy.getId());
 
 		if (addProductHistory == null) {
 			addProductHistory = new AddProductHistoryBean();
@@ -436,7 +333,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return product;
 	}
 
-	private void moveRfidFromProductSerials(Product product, UserBean modifiedBy) {
+	private void moveRfidFromProductSerials(Product product, User modifiedBy) {
 		ProductSaver saver = new ProductSaver();
 		saver.setModifiedBy(modifiedBy);
 		
@@ -463,7 +360,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	@SuppressWarnings("unchecked")
 	public AddProductHistoryBean getAddProductHistory(Long rFieldidUser) {
-		Query query = em.createQuery("from AddProductHistoryBean aph where aph.user.uniqueID = :rFieldidUser");
+		Query query = em.createQuery("from AddProductHistoryBean aph where aph.user.id = :rFieldidUser");
 		query.setParameter("rFieldidUser", rFieldidUser);
 
 		List<AddProductHistoryBean> addProductHistoryList = (List<AddProductHistoryBean>) query.getResultList();
@@ -528,21 +425,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Inspection> findAllInspections(Product product, SecurityFilter securityFilter) {
-
-		Query inspectionQuery = createAllInspectionQuery(product, securityFilter, false);
-
-		List<Inspection> inspection = null;
-
-		try {
-			inspection = (List<Inspection>) inspectionQuery.getResultList();
-		} catch (NoResultException e) {
-			inspection = new ArrayList<Inspection>();
-			logger.error("could not load inspections from local", e);
-		}
-		return inspection;
-	}
+	
 
 	private Query createAllInspectionQuery(Product product, SecurityFilter securityFilter, boolean count) {
 		return createAllInspectionQuery(product, securityFilter, count, false);
@@ -573,7 +456,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return inspectionQuery;
 	}
 
-	public Product createProductWithServiceTransaction(String transactionGUID, Product product, UserBean modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
+	public Product createProductWithServiceTransaction(String transactionGUID, Product product, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
 
 		product = create(product, modifiedBy);
 

@@ -1,14 +1,14 @@
 package com.n4systems.fieldid.permissions;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
 public class SessionUserSecurityGuard implements UserSecurityGuard {
 
 	private final int permissions;
 	
-	public SessionUserSecurityGuard(UserBean user) {
+	public SessionUserSecurityGuard(User user) {
 		permissions = user.getPermissions();
 	}
 	

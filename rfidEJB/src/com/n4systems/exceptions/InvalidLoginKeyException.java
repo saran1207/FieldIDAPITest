@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public class InvalidLoginKeyException extends AuthException {
 	private static final long serialVersionUID = 1L;
@@ -17,7 +17,7 @@ public class InvalidLoginKeyException extends AuthException {
 		super(cause);
 	}
 	
-	public InvalidLoginKeyException(UserBean user, String message) {
+	public InvalidLoginKeyException(User user, String message) {
 		super("Invalid LoginKey requested for User [" + user.getUserID() + "], Tenant [" + user.getTenant().getName() + "].  " + message);
 	}
 }

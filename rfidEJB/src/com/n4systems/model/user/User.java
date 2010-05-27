@@ -1,25 +1,18 @@
-package rfid.ejb.entity;
+package com.n4systems.model.user;
 
 import java.io.File;
 import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
+import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.SecurityLevel;
@@ -31,15 +24,14 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Listable<Long>, HasOwner, Saveable, SecurityEnhanced<UserBean> {
+public class User extends EntityWithOwner implements Listable<Long>, HasOwner, Saveable, SecurityEnhanced<User> {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;
 	
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner(UserBean.class);
+		return new SecurityDefiner(User.class);
 	}
 	
-	private String modifiedBy;
 	private String userID;
 	private String archivedUserID;
 	private String firstName;
@@ -59,30 +51,30 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	private boolean admin = false;
 	
 	
-	
 	@Column(name="permissions", nullable=false)
 	private int permissions = 0; // permissions should always start out empty
 	
-	@ManyToOne(fetch=FetchType.EAGER, optional=false)
-	@JoinColumn(name="owner_id", nullable = false)
-	private BaseOrg owner;
 	
 	private Long externalId;
-	
-	@PrePersist
-    protected void prePersist() {
-		trimNames();
-		generateReferralKeyIfNull();
-		super.prePersist();
-    }
     
-	@PreUpdate
-	protected void preMerge() {
-		super.preMerge();
+	
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		onChange();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		onChange();
+	}
+
+	private void onChange() {
 		trimNames();
 		generateReferralKeyIfNull();
-    }
-	
+	}
+
 	private void trimNames() {
 		this.userID = (userID != null) ? userID.trim() : null;
 		this.firstName = (firstName != null) ? firstName.trim() : null;
@@ -95,9 +87,6 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		}
 	}
 	
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
 	
 	public String getEmailAddress() {
 		return emailAddress;
@@ -136,7 +125,7 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	}
 
 	public boolean isEmployee() {
-		return owner.isInternal();
+		return getOwner().isInternal();
 	}
 
 	public boolean isDeleted() {
@@ -268,13 +257,9 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 		return getUserLabel();
 	}
 
-	public Long getId() {
-		return getUniqueID();
-	}
-
 	@Override
     public String toString() {
-	    return String.format("%s (%d) {%s}", getUserID(), getUniqueID(), getTenant());
+	    return String.format("%s (%d) {%s}", getUserID(), getId(), getTenant());
     }
 
 	public String getHashSecurityCardNumber() {
@@ -290,27 +275,27 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	}
 	
 	public boolean equals(Object obj) {
-		if (obj instanceof UserBean) {
-			return equals((UserBean) obj);
+		if (obj instanceof User) {
+			return equals((User) obj);
 		} else {
 			return super.equals(obj);
 		}
 	}
 	
-	public boolean equals(UserBean user) {
-		if (getUniqueID() == null && user.getUniqueID() == null) {
+	public boolean equals(User user) {
+		if (getId() == null && user.getId() == null) {
 			return super.equals(user);
 		} else {
-			return getUniqueID().equals(user.getUniqueID());
+			return getId().equals(user.getId());
 		}
 	}
 	
 	@Override
 	public int hashCode() {
-		if (getUniqueID() == null) {
+		if (getId() == null) {
 			return super.hashCode();
 		} else {
-			return getUniqueID().intValue();
+			return getId().intValue();
 		}
 	}
 
@@ -323,17 +308,9 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	}
 
 	public boolean isNew() {
-		return (getUniqueID() == null);
+		return (getId() == null);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public BaseOrg getOwner() {
-		return owner;
-	}
-
-	public void setOwner(BaseOrg owner) {
-		this.owner = owner;
-	}
 
 	public Long getExternalId() {
 		return externalId;
@@ -353,26 +330,12 @@ public class UserBean extends LegacyBeanTenantWithCreateModifyDate implements Li
 	
 	@Deprecated
 	public Long getCustomerId() {
-		return (owner.isExternal()) ? owner.getCustomerOrg().getId() : null;
+		return (getOwner().isExternal()) ? getOwner().getCustomerOrg().getId() : null;
 	}
 	
-	@Deprecated
-	public Long getR_EndUser() {
-		return getCustomerId();
-	}
 	
-	@Deprecated
-	public Long getDivisionId() {
-		return (owner.isDivision()) ? owner.getId() : null;
-	}
-	
-	@Deprecated
-	public Long getR_Division() {
-		return getDivisionId();
-	}
-	
-	public UserBean enhance(SecurityLevel level) {
-		UserBean enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+	public User enhance(SecurityLevel level) {
+		User enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		return enhanced;
 	}
 

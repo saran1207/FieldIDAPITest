@@ -85,21 +85,6 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void persistSerialNumberCounter(SerialNumberCounterBean serialNumberCounter) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			createManager(transaction.getEntityManager()).persistSerialNumberCounter(serialNumberCounter);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 	public void updateSerialNumberCounter(SerialNumberCounterBean serialNumberCounter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

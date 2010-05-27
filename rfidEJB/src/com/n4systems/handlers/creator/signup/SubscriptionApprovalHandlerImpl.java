@@ -1,10 +1,10 @@
 package com.n4systems.handlers.creator.signup;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.SignUpTenantResponse;
@@ -15,7 +15,7 @@ public class SubscriptionApprovalHandlerImpl implements SubscriptionApprovalHand
 	final UserSaver userSaver;
 	
 	SignUpTenantResponse subscriptionApproval;
-	UserBean adminUser;
+	User adminUser;
 	PrimaryOrg primaryOrg;
 	
 	public SubscriptionApprovalHandlerImpl(OrgSaver orgSaver, UserSaver userSaver) {

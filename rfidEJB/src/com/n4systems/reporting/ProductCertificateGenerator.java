@@ -16,7 +16,6 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
@@ -28,6 +27,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ReportMap;
 
@@ -37,7 +37,7 @@ public class ProductCertificateGenerator {
 	
 	public ProductCertificateGenerator() {}
 	
-	public JasperPrint generate(Product product, UserBean user) throws ReportException, NonPrintableManufacturerCert {
+	public JasperPrint generate(Product product, User user) throws ReportException, NonPrintableManufacturerCert {
 
 		if (!product.getType().isHasManufactureCertificate()) {
 			throw new NonPrintableManufacturerCert("no cert for product.");
@@ -122,7 +122,7 @@ public class ProductCertificateGenerator {
 		}
 	}
 	
-	private void addUserParams(ReportMap<Object> params, UserBean user) {
+	private void addUserParams(ReportMap<Object> params, User user) {
 		params.putEmpty("inspectorName", "identifiedBy", "position", "initials");
 
 		if (user != null) {

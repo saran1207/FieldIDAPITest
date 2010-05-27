@@ -1,26 +1,30 @@
-package rfid.ejb.entity;
+package com.n4systems.model.user;
 
 import org.junit.Test;
+
+import com.n4systems.model.user.User;
+
 import static org.junit.Assert.*;
 
-public class UserBeanTest {
+public class UserTest {
 	
 	@Test
 	public void pre_persist_ensures_referral_key_is_set() {
-		UserBean user = new UserBean();
+		User user = new User();
 		user.setReferralKey(null);
 		
-		user.prePersist();
+		user.onCreate();
 		
 		assertNotNull(user.getReferralKey());
 	}
 	
 	@Test
 	public void pre_merge_ensures_referral_key_is_set() {
-		UserBean user = new UserBean();
+		User user = new User();
 		user.setReferralKey(null);
 		
-		user.preMerge();
+		user.onUpdate();
+		
 		
 		assertNotNull(user.getReferralKey());
 	}

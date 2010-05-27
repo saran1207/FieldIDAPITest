@@ -2,7 +2,6 @@ package com.n4systems.handlers.creator.signup;
 
 import java.util.Set;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
@@ -13,6 +12,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.SignUpTenantResponse;
@@ -105,7 +105,7 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	}
 
 
-	private UserBean getAdminUser() {
+	private User getAdminUser() {
 		return accountPlaceHolder.getAdminUser();
 	}
 

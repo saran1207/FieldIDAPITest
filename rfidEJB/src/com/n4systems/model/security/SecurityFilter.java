@@ -44,7 +44,7 @@ public interface SecurityFilter extends QueryFilter {
 	
 	/**
 	 * Returns the User ID used by this filter 
-	 * @return UserBean id
+	 * @return User id
 	 */
 	public Long getUserId();
 	

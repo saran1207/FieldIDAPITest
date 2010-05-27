@@ -19,12 +19,12 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.IndexColumn;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 
 @Entity
@@ -78,7 +78,7 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     private Set<InspectionSchedule> schedules = new HashSet<InspectionSchedule>();
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    private Set<UserBean> resources = new HashSet<UserBean>();
+    private Set<User> resources = new HashSet<User>();
     
     private boolean retired;
     
@@ -246,11 +246,11 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 		this.schedules = schedules;
 	}
 
-	public Set<UserBean> getResources() {
+	public Set<User> getResources() {
 		return resources;
 	}
 
-	public void setResources(Set<UserBean> resources) {
+	public void setResources(Set<User> resources) {
 		this.resources = resources;
 	}
 }

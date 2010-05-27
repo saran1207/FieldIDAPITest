@@ -1,7 +1,6 @@
 package com.n4systems.api.conversion.inspection;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
@@ -16,6 +15,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 
@@ -86,7 +86,7 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 
 	protected void resolveInspector(InspectionView view, Inspection model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 user
-		UserBean inspector = userLoader.setFullName(view.getInspector()).load(transaction).get(0);
+		User inspector = userLoader.setFullName(view.getInspector()).load(transaction).get(0);
 		model.setInspector(inspector);
 	}
 

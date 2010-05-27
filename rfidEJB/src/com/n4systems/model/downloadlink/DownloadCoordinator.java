@@ -3,12 +3,12 @@ package com.n4systems.model.downloadlink;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Product;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.InspectionReportType;
@@ -29,11 +29,11 @@ import com.n4systems.util.views.TableView;
 public class DownloadCoordinator {
 	private final Executor executor;
 	private final Saver<DownloadLink> linkSaver;
-	private final UserBean user;
+	private final User user;
 	private final DownloadLinkFactory linkFactory;
 	private final DownloadTaskFactory taskFactory;
 	
-	public DownloadCoordinator(UserBean user, Saver<DownloadLink> linkSaver, Executor executor, DownloadLinkFactory linkFactory, DownloadTaskFactory taskFactory) {
+	public DownloadCoordinator(User user, Saver<DownloadLink> linkSaver, Executor executor, DownloadLinkFactory linkFactory, DownloadTaskFactory taskFactory) {
 		this.user = user;
 		this.linkSaver = linkSaver;
 		this.executor = executor;
@@ -41,7 +41,7 @@ public class DownloadCoordinator {
 		this.taskFactory = taskFactory;
 	}
 	
-	public DownloadCoordinator(UserBean user, Saver<DownloadLink> linkSaver) {
+	public DownloadCoordinator(User user, Saver<DownloadLink> linkSaver) {
 		this(user, linkSaver, TaskExecutor.getInstance(), new DownloadLinkFactory(), new DownloadTaskFactory(linkSaver));
 	}
 	

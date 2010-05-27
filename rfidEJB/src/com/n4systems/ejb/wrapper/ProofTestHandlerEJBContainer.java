@@ -5,13 +5,13 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.impl.ProofTestHandlerImpl;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -24,7 +24,7 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 	}
 
 
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, UserBean inspector) throws FileProcessingException {
+	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User inspector) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {

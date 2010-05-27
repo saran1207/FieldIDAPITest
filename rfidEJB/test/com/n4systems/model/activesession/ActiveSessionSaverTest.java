@@ -10,8 +10,8 @@ import javax.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
 
@@ -19,7 +19,7 @@ public class ActiveSessionSaverTest {
 
 	private static final String A_SESSION_ID_1 = "a32923jasdflkajsdfa";
 	private static final String A_SESSION_ID_2 = "k32j2akjfakjsdfkja";
-	private UserBean user;
+	private User user;
 	private ActiveSession newActiveSession;
 
 

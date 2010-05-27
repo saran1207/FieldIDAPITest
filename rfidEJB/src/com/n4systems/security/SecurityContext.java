@@ -1,8 +1,8 @@
 package com.n4systems.security;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 
-import rfid.ejb.entity.UserBean;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ public final class SecurityContext implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final ThreadLocal<SecurityContext> context = new ThreadLocal<SecurityContext>();
 	
-	private final UserBean user;
+	private final User user;
 	private final String sessionId;
 	
 	/**
@@ -25,7 +25,7 @@ public final class SecurityContext implements Serializable {
 	 * @throws SecurityException	If a UserBean could not be found for the given userId
 	 */
 	public static void initialize(Long userId, Long tenantId, String sessionId) throws SecurityException {
-		UserBean user = ServiceLocator.getUser().findUser(userId, tenantId);
+		User user = ServiceLocator.getUser().findUser(userId, tenantId);
 		
 		if (user == null) {
 			clear();
@@ -68,12 +68,12 @@ public final class SecurityContext implements Serializable {
 	}
 	
 	/** public constructor is hidden */
-	private SecurityContext(UserBean user, String sessionId) {
+	private SecurityContext(User user, String sessionId) {
 		this.user = user;
 		this.sessionId = sessionId;
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
     	return user;
     }
 

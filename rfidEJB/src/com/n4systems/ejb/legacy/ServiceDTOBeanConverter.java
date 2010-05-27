@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -28,6 +27,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.user.User;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookServiceDTO;
@@ -54,15 +54,15 @@ public interface ServiceDTOBeanConverter {
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
 	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
-	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException;
+	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User inspector) throws IOException;
 	public Date convertNextDate( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO );
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );
 	public com.n4systems.webservice.dto.AutoAttributeDefinitionServiceDTO convert( AutoAttributeDefinition definition );
 	public ProductStatusServiceDTO convert( ProductStatusBean productStatus );
 	public ProductTypeServiceDTO convert_new( ProductType productType );
 	public TenantServiceDTO convert(PrimaryOrg tenant);
-	public com.n4systems.webservice.dto.UserServiceDTO convert(UserBean user);
-	public UserBean convert(com.n4systems.webservice.dto.UserServiceDTO user);
+	public com.n4systems.webservice.dto.UserServiceDTO convert(User user);
+	public User convert(com.n4systems.webservice.dto.UserServiceDTO user);
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook);
 	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup);
 	public Date convertStringToDate(String stringDate);

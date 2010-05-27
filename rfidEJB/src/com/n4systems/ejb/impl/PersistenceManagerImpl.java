@@ -22,7 +22,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.stat.Statistics;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PerformSearchRequiringTransaction;
 import com.n4systems.ejb.PersistenceManager;
@@ -39,6 +38,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
@@ -84,11 +84,6 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 
-	
-	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId) {
-		return em.find(entityClass, entityId);
-	}
-	
 	
 	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter) {
 		QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, filter);
@@ -390,11 +385,11 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
-	public <T extends AbstractEntity> Long save(T entity, UserBean user) {
+	public <T extends AbstractEntity> Long save(T entity, User user) {
 		return save(updateModifiedBy(entity, user));
 	}
 
-	public <T extends AbstractEntity> T update(T entity, UserBean user) {
+	public <T extends AbstractEntity> T update(T entity, User user) {
 		return update(updateModifiedBy(entity, user));
 	}
 
@@ -445,10 +440,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	private <T extends AbstractEntity> T updateModifiedBy(T entity, Long userId) {
-		return updateModifiedBy(entity, findLegacy(UserBean.class, userId));
+		return updateModifiedBy(entity, find(User.class, userId));
 	}
 
-	private <T extends AbstractEntity> T updateModifiedBy(T entity, UserBean user) {
+	private <T extends AbstractEntity> T updateModifiedBy(T entity, User user) {
 		entity.setModifiedBy(user);
 		return entity;
 	}

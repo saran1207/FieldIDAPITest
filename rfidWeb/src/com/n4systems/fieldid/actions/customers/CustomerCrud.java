@@ -5,10 +5,9 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.jboss.logging.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -21,6 +20,7 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
@@ -39,16 +39,16 @@ public class CustomerCrud extends AbstractCrud {
 	private static final int USER_RESULTS_MAX = 100000;
 	private static Logger logger = Logger.getLogger(CustomerCrud.class);
 	
-	private final User userManager;
+	private final UserManager userManager;
 	private final OrgSaver saver;
 	
 	private CustomerOrg customer;
 	private Pager<CustomerOrg> customerPage;
 	private String listFilter;
-	private Pager<UserBean> userList;
+	private Pager<User> userList;
 	private List<ListingPair> internalOrgList;
 	
-	public CustomerCrud(User userManager, PersistenceManager persistenceManager) {
+	public CustomerCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 		this.saver = new OrgSaver();
@@ -241,7 +241,7 @@ public class CustomerCrud extends AbstractCrud {
 		return internalOrgList;
 	}
 	
-	public List<UserBean> getUserList() {
+	public List<User> getUserList() {
 		if (userList == null) {
 			userList = userManager.getUsers(getSecurityFilter(), true, 1, USER_RESULTS_MAX, null, UserType.CUSTOMERS, customer);
 		}

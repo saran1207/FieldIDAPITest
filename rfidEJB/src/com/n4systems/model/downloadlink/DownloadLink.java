@@ -11,12 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.user.User;
 import com.n4systems.util.mail.MailMessage;
 
 @Entity
@@ -42,7 +42,7 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="user_id", nullable=false)
-	private UserBean user;
+	private User user;
 	
 	public DownloadLink() {}
 
@@ -75,11 +75,11 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 		this.state = state;
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserBean user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

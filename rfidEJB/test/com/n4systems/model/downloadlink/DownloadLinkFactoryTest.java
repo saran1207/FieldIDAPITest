@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 
 public class DownloadLinkFactoryTest {
 
@@ -14,7 +14,7 @@ public class DownloadLinkFactoryTest {
 	public void test_create_download_link() {
 		DownloadLinkFactory dlf = new DownloadLinkFactory();
 		
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		
 		DownloadLink link = dlf.createDownloadLink(user, "myname", ContentType.CSV);
 		

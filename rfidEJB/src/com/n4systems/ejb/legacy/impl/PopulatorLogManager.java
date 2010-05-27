@@ -1,12 +1,8 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 
 import javax.persistence.EntityManager;
-
 import javax.persistence.Query;
 
 import rfid.ejb.PopulatorCriteria;
@@ -22,17 +18,11 @@ public class PopulatorLogManager implements PopulatorLog {
 	protected EntityManager em;
 	
 	
-	public PopulatorLogManager() {
-	}
 
 	public PopulatorLogManager(EntityManager em) {
 		this.em = em;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<PopulatorLogBean> findAllPopulatorLog() {
-		return (List<PopulatorLogBean>)em.createQuery("from PopulatorLogBean pl order by pl.uniqueID desc").getResultList();
-	}
 	
 	public Pager<PopulatorLogBean> findPopulatorLogBySearch(Long tenantId, PopulatorCriteria criteria, int pageNumber, int pageSize) {
 
@@ -87,16 +77,7 @@ public class PopulatorLogManager implements PopulatorLog {
 		return new Page<PopulatorLogBean>(query, countQuery, pageNumber, pageSize); 		
 	}
 
-	public void removeAllMessages() {
-		String msgType = "Message";
-		em.createQuery("delete from PopulatorLogBean as pl where pl.logType = :msgType")
-				.setParameter(PopulatorLog.logType.datapopulator.toString(), msgType).executeUpdate();
-	}
 	
-	public void removeAllLogs() {
-		em.createQuery("delete from PopulatorLogBean")
-				.executeUpdate();
-	}
 
 	public Long createPopulatorLog(PopulatorLogBean bean) {
 		PopulatorLogBean obj = new PopulatorLogBean();
@@ -109,29 +90,6 @@ public class PopulatorLogManager implements PopulatorLog {
 		return obj.getUniqueID();
 	}
 
-	public void removePopulatorLog(Long uniqueID) {
-		PopulatorLogBean obj = em.find(PopulatorLogBean.class, uniqueID);
-		em.remove(obj);
-	}
-	
-	// XXX - this appears to be broken
-	public ArrayList<String> findAllLogTypes(long tenantId){
-		
-		ArrayList<String> allMessageTypesAsString = new ArrayList<String>();
-		for (logType logType : PopulatorLogManager.logType.values()){
-			allMessageTypesAsString.add(logType.toString());
-		}
-		return allMessageTypesAsString;
-	}
-	
-	// XXX - this appears to be broken
-	public ArrayList<String> findAllLogStatuses(long tenantId){
 
-		ArrayList<String> allStatusAsString = new ArrayList<String>();
-		for (logStatus logStatus : PopulatorLogManager.logStatus.values()){
-			allStatusAsString.add(logStatus.toString());
-		}
-		return allStatusAsString;		
-	}
 
 }

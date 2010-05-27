@@ -7,7 +7,6 @@ import java.util.concurrent.Executor;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Product;
@@ -15,6 +14,7 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
@@ -27,7 +27,7 @@ public class DownloadCoordinatorTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void generate_customer_export_creates_and_saves_download_link() {
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		
 		Saver<DownloadLink> linkSaver = createMock(Saver.class);
 		DownloadLinkFactory linkFactory = createMock(DownloadLinkFactory.class);
@@ -53,7 +53,7 @@ public class DownloadCoordinatorTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void generate_auto_atribute_export_creates_and_saves_download_link() {
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		
 		Saver<DownloadLink> linkSaver = createMock(Saver.class);
 		DownloadLinkFactory linkFactory = createMock(DownloadLinkFactory.class);
@@ -78,7 +78,7 @@ public class DownloadCoordinatorTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void generate_product_export_creates_and_saves_download_link() {
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		
 		Saver<DownloadLink> linkSaver = createMock(Saver.class);
 		DownloadLinkFactory linkFactory = createMock(DownloadLinkFactory.class);
@@ -110,14 +110,14 @@ public class DownloadCoordinatorTest {
 		CustomerExportTask task = createMock(CustomerExportTask.class);
 		ListLoader<CustomerOrg> loader = createMock(ListLoader.class);
 		
-		DownloadCoordinator dc = new DownloadCoordinator(new UserBean(), createMock(Saver.class), executor, linkFactory, taskFactory);
+		DownloadCoordinator dc = new DownloadCoordinator(new User(), createMock(Saver.class), executor, linkFactory, taskFactory);
 		
 		String url = "http://url";
 		
 		DownloadLink link = new DownloadLink();
 		SecurityFilter filter = new OpenSecurityFilter();
 		
-		expect(linkFactory.createDownloadLink((UserBean)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
+		expect(linkFactory.createDownloadLink((User)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
 		expect(taskFactory.createCustomerExportTask(link, url, loader, filter)).andReturn(task);
 		
@@ -142,13 +142,13 @@ public class DownloadCoordinatorTest {
 		AutoAttributeExportTask task = createMock(AutoAttributeExportTask.class);
 		ListLoader<AutoAttributeDefinition> loader = createMock(ListLoader.class);
 		
-		DownloadCoordinator dc = new DownloadCoordinator(new UserBean(), createMock(Saver.class), executor, linkFactory, taskFactory);
+		DownloadCoordinator dc = new DownloadCoordinator(new User(), createMock(Saver.class), executor, linkFactory, taskFactory);
 		
 		String url = "http://url";
 		
 		DownloadLink link = new DownloadLink();
 		
-		expect(linkFactory.createDownloadLink((UserBean)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
+		expect(linkFactory.createDownloadLink((User)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
 		expect(taskFactory.createAutoAttributeExportTask(link, url, loader)).andReturn(task);
 		
@@ -173,13 +173,13 @@ public class DownloadCoordinatorTest {
 		ProductExportTask task = createMock(ProductExportTask.class);
 		ListLoader<Product> loader = createMock(ListLoader.class);
 		
-		DownloadCoordinator dc = new DownloadCoordinator(new UserBean(), createMock(Saver.class), executor, linkFactory, taskFactory);
+		DownloadCoordinator dc = new DownloadCoordinator(new User(), createMock(Saver.class), executor, linkFactory, taskFactory);
 		
 		String url = "http://url";
 		
 		DownloadLink link = new DownloadLink();
 		
-		expect(linkFactory.createDownloadLink((UserBean)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
+		expect(linkFactory.createDownloadLink((User)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
 		expect(taskFactory.createProductExportTask(link, url, loader)).andReturn(task);
 		

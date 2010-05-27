@@ -2,9 +2,9 @@ package com.n4systems.taskscheduling.task;
 
 import java.io.File;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.InspectionSummaryGenerator;
 import com.n4systems.reporting.ReportDefiner;
@@ -24,7 +24,7 @@ public class PrintInspectionSummaryReportTask extends DownloadTask {
 	}
 
 	@Override
-	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
+	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
 		new CertificatePrinter().printToPDF(reportGen.generate(reportDefiner, user), downloadFile);			
 	}
 

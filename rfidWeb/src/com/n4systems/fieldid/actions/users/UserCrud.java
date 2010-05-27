@@ -9,11 +9,10 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
@@ -23,6 +22,7 @@ import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
@@ -44,15 +44,15 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(UserCrud.class);
 
-	protected UserBean user;
+	protected User user;
 	protected OwnerPicker ownerPicker;
 
-	protected User userManager;
+	protected UserManager userManager;
 	
 	private PasswordEntry passwordEntry = new PasswordEntry();
 	private boolean assignPassword = true;
 	
-	protected Pager<UserBean> page;
+	protected Pager<User> page;
 	private String listFilter;
 	private String userType = UserType.ALL.name();
 	private String securityCardNumber;
@@ -62,14 +62,14 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private WelcomeMessage welcomeMessage = new WelcomeMessage();
 	private UploadedImage signature = new UploadedImage();
 
-	protected UserCrud(User userManager, PersistenceManager persistenceManager) {
+	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
 
 	@Override
 	protected void initMemberFields() {
-		user = new UserBean();
+		user = new User();
 		user.setTimeZoneID(getSessionUserOwner().getInternalOrg().getDefaultTimeZone());		
 		initializeTimeZoneLists();
 	}
@@ -177,11 +177,11 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		
 		
 		try {
-			if (user.getUniqueID() == null) {
+			if (user.getId() == null) {
 				user.assignPassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
 				new UserSaver().save(user);
-				uniqueID = user.getUniqueID();
+				uniqueID = user.getId();
 				sendWelcomeEmail();
 			} else {
 				new UserSaver().update(user);
@@ -189,7 +189,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		} catch (Exception e) {
 			addActionErrorText("error.saving_user");
 			logger.error("failed to save user ", e);
-			return INPUT;
+			return ERROR;
 		}
 		
 		
@@ -323,7 +323,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 
-	public Pager<UserBean> getPage() {
+	public Pager<User> getPage() {
 		if (page == null) {
 			UserType userTypeFilter = UserType.ALL;
 			if (userType != null) {
@@ -379,7 +379,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		this.userType = userType;
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 

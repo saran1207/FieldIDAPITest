@@ -1,8 +1,8 @@
 package com.n4systems.model.api;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public interface HasUser extends HasTenant {
-	public UserBean getUser();
-	public void setUser(UserBean user);
+	public User getUser();
+	public void setUser(User user);
 }

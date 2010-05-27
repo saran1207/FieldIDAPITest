@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.PopulatorLogBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -23,10 +22,10 @@ import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
-import com.n4systems.ejb.legacy.impl.UserManager;
+import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueProductException;
@@ -42,6 +41,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
@@ -58,7 +58,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 private LegacyProductType productTypeManager;
 	 private PersistenceManager persistenceManager;
 	 private InspectionManager inspectionManager;
-	 private User userManager;
+	 private UserManager userManager;
 	 private PopulatorLog populatorLogManager;
 
 	private InspectionSaver inspectionSaver;
@@ -69,7 +69,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		this.legacyProductManager = new LegacyProductSerialManager(em);
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.inspectionManager = new InspectionManagerImpl(em);
-		this.userManager = new UserManager(em);
+		this.userManager = new EntityManagerBackedUserManager(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
 		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), 
 				persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
@@ -105,21 +105,21 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			throw new FileProcessingException("Failed to process Proof Test", e);
 		} 
 		// now lets look up our beans
-		UserBean user = userManager.findUser(userId, tenantId);
+		User user = userManager.findUser(userId, tenantId);
 		BaseOrg customer = persistenceManager.find(BaseOrg.class, ownerId, tenantId);
 		InspectionBook book = persistenceManager.find(InspectionBook.class, inspectionBookId, tenantId);
 		
 		return createOrUpdateProofTest(fileData, user, customer, book, false);
 	}
 	
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, UserBean inspector) throws FileProcessingException  {
+	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User inspector) throws FileProcessingException  {
 		return createOrUpdateProofTest(fileData, inspector, null, null, true);
 	}
 	
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, UserBean inspector, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
+	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User inspector, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
@@ -203,7 +203,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
-					inspectionManager.updateInspection(inspection, inspector.getUniqueID(), fileData, null);
+					inspectionManager.updateInspection(inspection, inspector.getId(), fileData, null);
 					writeLogMessage(tenant, "Updated Inspection for Product with serial [" + serialNumber + "] and Inspection date [" + inspection.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one inspection to cause the others to fail, so we will simply log these expections and move on
@@ -222,7 +222,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return inspectionMap;
 	}
 	
-	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, UserBean user, String customerName, boolean createCustomer) {
+	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, User user, String customerName, boolean createCustomer) {
 		// if the customer name is null or empty, we'll assume it's for no customer
 		if (StringUtils.isEmpty(customerName)) {
 			return null;
@@ -259,7 +259,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return customerName.trim();
 	}
 	
-	private Product findOrCreateProduct(PrimaryOrg primaryOrg, UserBean user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {
+	private Product findOrCreateProduct(PrimaryOrg primaryOrg, User user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {
 		Long customerId = (customer != null) ?  customer.getId() : null;
 		
 		// we must have a valid serial number
@@ -283,7 +283,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return product;
 	}
 
-	private Product createProduct(PrimaryOrg primaryOrg, UserBean user, BaseOrg owner, String serialNumber, Map<String, String> productOptions) {
+	private Product createProduct(PrimaryOrg primaryOrg, User user, BaseOrg owner, String serialNumber, Map<String, String> productOptions) {
 		Product product = new Product();
 		
 		product.setTenant(primaryOrg.getTenant());
@@ -368,7 +368,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return product;
 	}
 	
-	private Inspection createInspection(Tenant tenant, UserBean inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData) {
+	private Inspection createInspection(Tenant tenant, User inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		
@@ -431,7 +431,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			
 			inspectionSaver.createInspection(
-					new CreateInspectionParameterBuilder(inspection,inspector.getUniqueID())
+					new CreateInspectionParameterBuilder(inspection,inspector.getId())
 					.withProofTestFile(fileData).build());
 			
 			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");

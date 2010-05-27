@@ -2,16 +2,16 @@ package com.n4systems.webservice.server;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.webservice.server.bundles.AuthBundle;
 
 public abstract class AbstractWebServiceImpl implements AbstractWebService {
 	private Logger logger = Logger.getLogger(AbstractWebServiceImpl.class);
 
-	protected UserBean authenticateUser(AuthBundle authUser) throws WebserviceAuthenticationException {
-		UserBean user = ServiceLocator.getUser().findUser(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword());
+	protected User authenticateUser(AuthBundle authUser) throws WebserviceAuthenticationException {
+		User user = ServiceLocator.getUser().findUser(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword());
 		
 		if(user == null) {
 			logger.warn("User failed authentication to the webservice: tenant [" + authUser.getTenantName() + "] username [" + authUser.getUserName() + "]");

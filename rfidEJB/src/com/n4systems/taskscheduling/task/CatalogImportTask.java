@@ -7,7 +7,6 @@ import javax.mail.NoSuchProviderException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductType;
@@ -15,6 +14,7 @@ import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -26,7 +26,7 @@ import com.n4systems.util.mail.MailMessage;
 public class CatalogImportTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(CatalogImportTask.class);
 
-	private UserBean user;
+	private User user;
 	private PrimaryOrg primaryOrg;
 	private Tenant linkedTenant;
 	private Set<Long> importProductTypeIds;
@@ -127,11 +127,11 @@ public class CatalogImportTask implements Runnable {
 		}
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserBean user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 

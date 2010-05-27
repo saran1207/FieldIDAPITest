@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 
@@ -14,7 +14,7 @@ public class SessionUserSecurityGuardTest extends AbstractUserSecurityTestCase {
 
 	@Test
 	public void ensure_each_method_protects_its_permission() {		
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		SessionUserSecurityGuard securityGuard = null;
 		
 		for (int permission : Permissions.getVisibleSystemUserPermissions()) {

@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.SearchPerformer;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ExcelBuilder;
 import com.n4systems.util.persistence.QueryFilter;
@@ -38,7 +38,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 
 	
 	@Override
-	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
+	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
 		SecurityFilter filter = user.getSecurityFilter();
 		
 		DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);

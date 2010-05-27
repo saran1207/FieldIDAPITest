@@ -5,7 +5,6 @@ import java.util.SortedSet;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.impl.ProductManagerImpl;
@@ -16,6 +15,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -30,7 +30,7 @@ public class ProductManagerEJBContainer extends EJBTransactionEmulator<ProductMa
 		return new ProductManagerImpl(em);
 	}
 
-	public Product archive(Product product, UserBean archivedBy) throws UsedOnMasterInspectionException {
+	public Product archive(Product product, User archivedBy) throws UsedOnMasterInspectionException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -144,25 +144,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product findProduct(Long uniqueID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findProduct(uniqueID);
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-
-	}
 
 	public Product findProductAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findProductAllFields(id, filter);
 
@@ -178,7 +164,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Product findProductByGUID(String mobileGUID, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findProductByGUID(mobileGUID, filter);
 
@@ -288,7 +274,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product mergeProducts(Product winningProduct, Product losingProduct, UserBean user) {
+	public Product mergeProducts(Product winningProduct, Product losingProduct, User user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

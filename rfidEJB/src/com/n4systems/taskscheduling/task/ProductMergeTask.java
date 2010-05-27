@@ -2,10 +2,10 @@ package com.n4systems.taskscheduling.task;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.model.Product;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 
@@ -14,7 +14,7 @@ public class ProductMergeTask implements Runnable {
 	
 	private final Product winningProduct;
 	private final Product losingProduct;
-	private final UserBean user;
+	private final User user;
 	
 	private final String serialNumberOfLoser;
 	private final String serialNumberOfWinner;
@@ -22,7 +22,7 @@ public class ProductMergeTask implements Runnable {
 	private ProductManager productManager;
 	private boolean error = false;
 	
-	public ProductMergeTask(Product winningProduct, Product losingProduct, UserBean user) {
+	public ProductMergeTask(Product winningProduct, Product losingProduct, User user) {
 		super();
 		this.winningProduct = winningProduct;
 		this.losingProduct = losingProduct;

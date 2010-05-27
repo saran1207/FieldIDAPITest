@@ -4,11 +4,11 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.signup.SignupReferralSaver;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByReferralCodeLoader;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -42,7 +42,7 @@ public class ReferralProcessorTask implements Runnable {
 		try {
 			transaction = transactionManager.startTransaction();
 			
-			UserBean referralUser = loadReferralUser(transaction);
+			User referralUser = loadReferralUser(transaction);
 			
 			SignupReferral referral = createSignupReferral(referralUser);
 			
@@ -55,14 +55,14 @@ public class ReferralProcessorTask implements Runnable {
 		}
 	}
 
-	protected UserBean loadReferralUser(Transaction transaction) {
+	protected User loadReferralUser(Transaction transaction) {
 		UserByReferralCodeLoader referralCodeLoader = new UserByReferralCodeLoader();
 		referralCodeLoader.setTenant(referralTenant);
 		referralCodeLoader.setReferralCode(referralCode);
 		return referralCodeLoader.load(transaction);
 	}
 	
-	private SignupReferral createSignupReferral(UserBean referralUser) throws NullReferralUserException {
+	private SignupReferral createSignupReferral(User referralUser) throws NullReferralUserException {
 		if (referralUser == null) {
 			throw new NullReferralUserException();
 		}

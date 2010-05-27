@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.EntityStillReferencedException;
@@ -17,17 +16,18 @@ import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductAttachmentSaver;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.model.user.User;
 
 public class ProductSaveService {
 	private static Logger logger = Logger.getLogger(ProductSaveService.class);
 	private final LegacyProductSerial productManager;
-	private final UserBean user;
+	private final User user;
 	private SecurityFilter filter;
 	private Product product;
 	private List<ProductAttachment> existingAttachments;
 	private List<ProductAttachment> uploadedAttachments;
 
-	public ProductSaveService(LegacyProductSerial productManager, UserBean user) {
+	public ProductSaveService(LegacyProductSerial productManager, User user) {
 		super();
 		this.productManager = productManager;
 		this.user = user;

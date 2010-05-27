@@ -16,12 +16,11 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
@@ -31,6 +30,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ReportMap;
 import com.n4systems.util.ServiceLocator;
@@ -42,9 +42,9 @@ public class InspectionSummaryGenerator {
 	
 	private final PersistenceManager persistenceManager;
 	private final InspectionManager inspectionManager;
-	private final User userManager;
+	private final UserManager userManager;
 	
-	public InspectionSummaryGenerator(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager) {
+	public InspectionSummaryGenerator(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager) {
 		this.persistenceManager = persistenceManager;
 		this.inspectionManager = inspectionManager;
 		this.userManager = userManager;
@@ -54,7 +54,7 @@ public class InspectionSummaryGenerator {
 		this(ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager(), ServiceLocator.getUser());
 	}
 	
-	public JasperPrint generate(ReportDefiner reportDefiner, UserBean user) throws ReportException {
+	public JasperPrint generate(ReportDefiner reportDefiner, User user) throws ReportException {
 		File jasperFile = PathHandler.getSummaryReportFile(user.getTenant());
 
 		// check to see if the report exists
@@ -110,7 +110,7 @@ public class InspectionSummaryGenerator {
 		return jasperPrint;
 	}
 
-	private List<Long> getSearchIds(ReportDefiner reportDefiner, UserBean user) {
+	private List<Long> getSearchIds(ReportDefiner reportDefiner, User user) {
 		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(reportDefiner), user.getSecurityFilter());
 	}
 
@@ -145,7 +145,7 @@ public class InspectionSummaryGenerator {
 		}
 
 		if (reportDefiner.getInspector() != null) {
-			reportMap.put("inspector", userManager.findUserBean(reportDefiner.getInspector()).getUserLabel());
+			reportMap.put("inspector", userManager.findUser(reportDefiner.getInspector()).getUserLabel());
 		}
 		
 		if (reportDefiner.getOwner() != null) {

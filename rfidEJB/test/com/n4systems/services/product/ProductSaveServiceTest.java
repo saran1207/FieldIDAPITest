@@ -8,13 +8,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.Product;
+import com.n4systems.model.user.User;
 
 
 
@@ -23,7 +23,7 @@ import com.n4systems.model.Product;
 
 public class ProductSaveServiceTest {
 
-	private UserBean user;
+	private User user;
 	
 	@Before
 	public void setUp() {

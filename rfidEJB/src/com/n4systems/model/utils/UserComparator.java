@@ -2,9 +2,9 @@ package com.n4systems.model.utils;
 
 import java.util.Comparator;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 /**
  * sorts the users into a list so that
  * it goes 
@@ -23,13 +23,13 @@ import com.n4systems.model.orgs.BaseOrg;
  * 
  *
  */
-public class UserComparator implements Comparator<UserBean> {
+public class UserComparator implements Comparator<User> {
 	
 	private static final int CLOSER_TO_THE_BOTTOM = 1;
 	private static final int EQUAL = 0;
 	private static final int CLOSER_TO_THE_TOP = -1;
 
-	public int compare(UserBean user1, UserBean user2) {
+	public int compare(User user1, User user2) {
 		int result = compareOwners(user1.getOwner(), user2.getOwner());
 		if (result == EQUAL) {
 			result = user1.getUserLabel().compareToIgnoreCase(user2.getUserLabel());

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -13,7 +12,7 @@ import com.n4systems.util.persistence.PassthruWhereClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
-public class UserByFullNameLoader extends ListLoader<UserBean> {
+public class UserByFullNameLoader extends ListLoader<User> {
 	private String fullName;
 	
 	public UserByFullNameLoader(SecurityFilter filter) {
@@ -21,8 +20,8 @@ public class UserByFullNameLoader extends ListLoader<UserBean> {
 	}
 
 	@Override
-	protected List<UserBean> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, filter, "u");
+	protected List<User> load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, filter, "u");
 		builder.addWhere(WhereClauseFactory.create("active", true));
 		builder.addWhere(WhereClauseFactory.create("deleted", false));
 		
@@ -32,7 +31,7 @@ public class UserByFullNameLoader extends ListLoader<UserBean> {
 		
 		builder.addWhere(clause);
 		
-		List<UserBean> users = builder.getResultList(em);
+		List<User> users = builder.getResultList(em);
 		return users;
 	}
 

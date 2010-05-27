@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.impl.ProjectManagerImpl;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
@@ -171,21 +169,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Pager<UserBean> getResourcesPaged(Project project, SecurityFilter filter, int page, int pageSize) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getResourcesPaged(project, filter, page, pageSize);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-
-	}
+	
 
 	public Pager<InspectionSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<ScheduleStatus> statuses) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

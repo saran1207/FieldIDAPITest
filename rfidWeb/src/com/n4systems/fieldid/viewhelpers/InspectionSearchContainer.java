@@ -53,9 +53,9 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
-		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
+		addSimpleTerm("product.assignedUser.id", assignedUserId);
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
-		addSimpleTerm("inspector.uniqueID", inspectorId);
+		addSimpleTerm("inspector.id", inspectorId);
 		addSimpleTerm("schedule.project.id", jobId);
 		if (status != null) {
 			addSimpleTerm("status", status);

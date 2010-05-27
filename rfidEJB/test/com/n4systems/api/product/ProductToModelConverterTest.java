@@ -16,7 +16,6 @@ import org.junit.Test;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.product.ProductToModelConverter;
@@ -40,6 +39,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.Asserts;
@@ -144,7 +144,7 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_ignores_shop_order_for_integration_tenants() throws ConversionException {
-		UserBean identifiedBy = createIdentifiedBy();
+		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 		
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
@@ -179,7 +179,7 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_sets_identified_by_and_type() throws ConversionException {
-		UserBean identifiedBy = createIdentifiedBy();
+		User identifiedBy = createIdentifiedBy();
 		
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(identifiedBy);
@@ -193,7 +193,7 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_publishes_product_when_auto_publish_on() throws ConversionException {
-		UserBean identifiedBy = createIdentifiedBy();
+		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(true);
 		
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
@@ -207,7 +207,7 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_does_not_publish_product_when_auto_publish_off() throws ConversionException {
-		UserBean identifiedBy = createIdentifiedBy();
+		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(false);
 		
 		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
@@ -264,8 +264,8 @@ public class ProductToModelConverterTest {
 		converter.toModel(view, null);
 	}
 	
-	private UserBean createIdentifiedBy() {
-		UserBean user = UserBuilder.anEmployee().build();
+	private User createIdentifiedBy() {
+		User user = UserBuilder.anEmployee().build();
 		
 		user.getOwner().getPrimaryOrg().setDateFormat("yyyy-MM-dd");
 		user.getOwner().getPrimaryOrg().getExtendedFeatures().remove(ExtendedFeature.Integration);

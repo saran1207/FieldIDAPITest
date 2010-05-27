@@ -14,7 +14,7 @@ public class SecurityDefiner implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_TENANT_PATH = "tenant.id";
 	public static final String DEFAULT_OWNER_PATH = "owner";
-	public static final String DEFAULT_USER_PATH = "user.uniqueID";
+	public static final String DEFAULT_USER_PATH = "user.id";
 	public static final String DEFAULT_STATE_PATH = "state";
 
 	private final String tenantPath;

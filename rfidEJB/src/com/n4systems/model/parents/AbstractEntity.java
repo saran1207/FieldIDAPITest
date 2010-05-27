@@ -10,12 +10,12 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.user.User;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -29,7 +29,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modifiedBy")
-	private UserBean modifiedBy;
+	private User modifiedBy;
 
 	public AbstractEntity() {}
 	
@@ -67,11 +67,11 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 	}
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public UserBean getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(UserBean modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 

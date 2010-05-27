@@ -4,10 +4,10 @@ import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.model.user.User;
 
 public class ForgotPasswordAction extends SignInAction {
 
@@ -20,7 +20,7 @@ public class ForgotPasswordAction extends SignInAction {
 	private Long uniqueID;
 
 	
-	public ForgotPasswordAction(User userManager, PersistenceManager persistenceManager) {
+	public ForgotPasswordAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 		
 	}
@@ -35,7 +35,7 @@ public class ForgotPasswordAction extends SignInAction {
 			return INPUT;
 		}
 
-		UserBean user = userManager.findUserBeanByID(getSecurityGuard().getTenantName(), userName);
+		User user = userManager.findUserBeanByID(getSecurityGuard().getTenantName(), userName);
 		if (user != null) {
 			try {
 				userManager.createAndEmailLoginKey(user, getBaseURI());
@@ -53,7 +53,7 @@ public class ForgotPasswordAction extends SignInAction {
 	}
 
 	public String doReset() {
-		UserBean user = userManager.findUserByResetKey(getSecurityGuard().getTenantName(), userName, loginKey);
+		User user = userManager.findUserByResetKey(getSecurityGuard().getTenantName(), userName, loginKey);
 
 		if (user == null) {
 			return MISSING;

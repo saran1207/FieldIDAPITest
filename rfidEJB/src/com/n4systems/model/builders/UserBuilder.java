@@ -1,11 +1,11 @@
 package com.n4systems.model.builders;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
-public class UserBuilder extends BaseLegacyBuilder<UserBean> {
+public class UserBuilder extends BaseBuilder<User> {
 
 	private final BaseOrg owner;
 	private final String firstName;
@@ -91,9 +91,9 @@ public class UserBuilder extends BaseLegacyBuilder<UserBean> {
 	}
 	
 	@Override
-	public UserBean build() {
-		UserBean user = new UserBean();
-		user.setUniqueID(uniqueId);
+	public User build() {
+		User user = new User();
+		user.setId(id);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setUserID(userId);

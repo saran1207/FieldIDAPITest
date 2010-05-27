@@ -10,7 +10,7 @@ import rfid.ejb.entity.ProductStatusBean;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
@@ -41,7 +41,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public static final String REPORT_CRITERIA = "reportCriteria";
 
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
-	private final User userManager;
+	private final UserManager userManager;
 	
 	private InspectionReportType reportType;
 	private String savedReportName;
@@ -57,7 +57,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public InspectionReportAction(
 			final PersistenceManager persistenceManager,
-			final User userManager, 
+			final UserManager userManager, 
 			final ProductManager productManager) {
 		
 		super(InspectionReportAction.class, REPORT_CRITERIA, "Inspection Report", persistenceManager, 
@@ -260,7 +260,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public boolean isSavedReportModified() {
 		if (getContainer().isFromSavedReport()) {
 			QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
-			query.addSimpleWhere("user.uniqueID", getSessionUser().getId()).addSimpleWhere("id", getContainer().getSavedReportId());
+			query.addSimpleWhere("user.id", getSessionUser().getId()).addSimpleWhere("id", getContainer().getSavedReportId());
 			
 			SavedReport savedReport = persistenceManager.find(query);  
 			return SavedReportHelper.isModified(getContainer(), savedReport, getSecurityFilter());

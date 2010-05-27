@@ -11,10 +11,10 @@ import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.user.User;
 
 public class EntityListArchiverTest {
 
@@ -23,7 +23,7 @@ public class EntityListArchiverTest {
 	
 	@Test
 	public void test_archive() {
-		UserBean modifyUser = UserBuilder.anEmployee().build();
+		User modifyUser = UserBuilder.anEmployee().build();
 
 		List<SimpleArchivableEntity> entities = Arrays.asList(createMock(SimpleArchivableEntity.class), createMock(SimpleArchivableEntity.class), createMock(SimpleArchivableEntity.class));
 		List<Long> ids = Arrays.asList(1L, 2L, 3L);

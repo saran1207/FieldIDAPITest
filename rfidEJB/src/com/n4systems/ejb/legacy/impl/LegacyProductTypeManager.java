@@ -64,7 +64,6 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	
 	
 	
-	public LegacyProductTypeManager() {}
 	
 	public LegacyProductTypeManager(EntityManager em) {
 		this.em = em;
@@ -178,12 +177,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	}
 	
 	
-	public Long persistProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException {
-		em.persist(productTypeBean);
-		processUploadedFiles( productTypeBean, uploadedFiles );
-		processProductImage( productTypeBean, productImage );
-		return productTypeBean.getId();
-	}
+	
 
 		
 	@SuppressWarnings("unchecked")
@@ -389,7 +383,5 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	public ProductType updateProductType(ProductType productTypeBean ) throws FileAttachmentException, ImageAttachmentException {
 		return updateProductType(productTypeBean, (List<FileAttachment>)null, null );
 	}
-	public Long persistProductType(ProductType productTypeBean) throws FileAttachmentException, ImageAttachmentException {
-		return persistProductType(productTypeBean, (List<FileAttachment>)null, null );
-	}
+	
 }

@@ -7,10 +7,10 @@ import java.net.URI;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import com.n4systems.notifiers.TestSingleNotifier;
 import com.n4systems.notifiers.notifications.UserWelcomeEmail;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
@@ -23,7 +23,7 @@ public class UserActivationEmailTest {
 	@Test
 	public void should_create_notification_for_given_user() throws Exception {
 		TestSingleNotifier notifier = new TestSingleNotifier();
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserWelcomeNotificationProducer sut = new UserWelcomeNotificationProducer(notifier, createActionUrlBuilder());
 		sut.sendWelcomeNotificationTo(user);
@@ -36,7 +36,7 @@ public class UserActivationEmailTest {
 	@Test
 	public void should_create_notification_for_given_user_when_personalized() throws Exception {
 		TestSingleNotifier notifier = new TestSingleNotifier();
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserWelcomeNotificationProducer sut = new UserWelcomeNotificationProducer(notifier, createActionUrlBuilder());
 		sut.sendPersonalizedWelcomeNotificationTo(user, "this is my personal note");
@@ -47,7 +47,7 @@ public class UserActivationEmailTest {
 	@Test
 	public void should_create_non_personalized_notification() throws Exception {
 		TestSingleNotifier notifier = new TestSingleNotifier();
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserWelcomeNotificationProducer sut = new UserWelcomeNotificationProducer(notifier, createActionUrlBuilder());
 		sut.sendWelcomeNotificationTo(user);
@@ -60,7 +60,7 @@ public class UserActivationEmailTest {
 	@Test
 	public void should_create_a_personalized_notification() throws Exception {
 		TestSingleNotifier notifier = new TestSingleNotifier();
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserWelcomeNotificationProducer sut = new UserWelcomeNotificationProducer(notifier, createActionUrlBuilder());
 		sut.sendPersonalizedWelcomeNotificationTo(user, "Personalized Message");
@@ -74,7 +74,7 @@ public class UserActivationEmailTest {
 	@Test
 	public void should_provide_sign_in_url_to_notification() throws Exception {
 		TestSingleNotifier notifier = new TestSingleNotifier();
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserWelcomeNotificationProducer sut = new UserWelcomeNotificationProducer(notifier, createActionUrlBuilder());
 		sut.sendWelcomeNotificationTo(user);
@@ -86,7 +86,7 @@ public class UserActivationEmailTest {
 	@Test
 	public void should_provide_forgot_password_url_to_notification() throws Exception {
 		TestSingleNotifier notifier = new TestSingleNotifier();
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserWelcomeNotificationProducer sut = new UserWelcomeNotificationProducer(notifier, createActionUrlBuilder());
 		sut.sendWelcomeNotificationTo(user);

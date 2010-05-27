@@ -8,10 +8,10 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 
 public class FullNameUserValidatorTest {
@@ -29,7 +29,7 @@ public class FullNameUserValidatorTest {
 		
 		final UserByFullNameLoader loader = createMock(UserByFullNameLoader.class);
 		expect(loader.setFullName(fullName)).andReturn(loader);
-		expect(loader.load()).andReturn(Arrays.asList(new UserBean()));
+		expect(loader.load()).andReturn(Arrays.asList(new User()));
 		replay(loader);
 		
 		FullNameUserValidator validator = new FullNameUserValidator() {
@@ -48,7 +48,7 @@ public class FullNameUserValidatorTest {
 		
 		final UserByFullNameLoader loader = createMock(UserByFullNameLoader.class);
 		expect(loader.setFullName(fullName)).andReturn(loader);
-		expect(loader.load()).andReturn(new ArrayList<UserBean>());
+		expect(loader.load()).andReturn(new ArrayList<User>());
 		replay(loader);
 		
 		FullNameUserValidator validator = new FullNameUserValidator() {
@@ -67,7 +67,7 @@ public class FullNameUserValidatorTest {
 		
 		final UserByFullNameLoader loader = createMock(UserByFullNameLoader.class);
 		expect(loader.setFullName(fullName)).andReturn(loader);
-		expect(loader.load()).andReturn(Arrays.asList(new UserBean(), new UserBean()));
+		expect(loader.load()).andReturn(Arrays.asList(new User(), new User()));
 		replay(loader);
 		
 		FullNameUserValidator validator = new FullNameUserValidator() {
@@ -85,9 +85,9 @@ public class FullNameUserValidatorTest {
 		FullNameUserValidator validator = new FullNameUserValidator();
 		
 		UserBuilder uBuilder = UserBuilder.anEmployee();
-		UserBean mark = uBuilder.withFirstName("Mark").withLastName("Frederiksen").build();
-		UserBean jesse = uBuilder.withFirstName("Jesse").withLastName("Miller").build();
-		UserBean alex = uBuilder.withFirstName("Alex").withLastName("Aitken").build();
+		User mark = uBuilder.withFirstName("Mark").withLastName("Frederiksen").build();
+		User jesse = uBuilder.withFirstName("Jesse").withLastName("Miller").build();
+		User alex = uBuilder.withFirstName("Alex").withLastName("Aitken").build();
 		
 		String nameList = validator.formatUserNameList(Arrays.asList(mark, jesse, alex));
 		

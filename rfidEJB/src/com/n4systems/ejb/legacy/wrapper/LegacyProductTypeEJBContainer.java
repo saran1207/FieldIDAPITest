@@ -135,36 +135,8 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long persistProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage) throws FileAttachmentException, ImageAttachmentException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).persistProductType(productTypeBean, uploadedFiles, productImage);
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public Long persistProductType(ProductType productTypeBean) throws FileAttachmentException, ImageAttachmentException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).persistProductType(productTypeBean);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public ProductType updateProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage) throws FileAttachmentException, ImageAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

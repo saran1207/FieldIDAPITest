@@ -4,18 +4,18 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Product;
+import com.n4systems.model.user.User;
 
 public class ProductCertificateReportGenerator extends CertificateReportGenerator<Product> {
 	private Logger logger = Logger.getLogger(ProductCertificateReportGenerator.class);
 	
 	private final ProductCertificateGenerator certGenerator;
 
-	private UserBean user;
+	private User user;
 	
 	public ProductCertificateReportGenerator(ProductCertificateGenerator certGenerator) {
 		this.certGenerator = certGenerator;
@@ -25,7 +25,7 @@ public class ProductCertificateReportGenerator extends CertificateReportGenerato
 		this(new ProductCertificateGenerator());
 	}
 	
-	public void setUser(UserBean user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

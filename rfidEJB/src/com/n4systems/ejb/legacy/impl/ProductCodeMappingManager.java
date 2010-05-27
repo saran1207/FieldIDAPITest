@@ -33,20 +33,14 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 	
 	private EntityManager em;
 	
-	 private PersistenceManager persistenceManager;
+	private PersistenceManager persistenceManager;
 		
-	public ProductCodeMappingManager() { }
 	
 	public ProductCodeMappingManager(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<ProductCodeMappingBean> getAllProductCodes() {
-		Query q = em.createQuery("from ProductCodeMappingBean");		
-		return q.getResultList();
-	}
 	
 	@SuppressWarnings("unchecked")
 	public List<ProductCodeMappingBean> getAllProductCodesByTenant( Long r_manufacturer ) {
@@ -103,13 +97,6 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 		return type;
 	}
 
-	public void save(ProductCodeMappingBean bean) {
-		em.persist( bean );
-	}
-
-	public ProductCodeMappingBean getProductCodeByUniqueId(Long id) {
-		return em.find(ProductCodeMappingBean.class, id);
-	}
 
 	
 	public ProductCodeMappingBean getProductCodeByUniqueIdAndTenant( Long id, Long manufacturer ) {
@@ -131,10 +118,6 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 		em.merge( productCodeMapping );
 	}
 
-	public void deleteById(Long uniqueID) {
-		ProductCodeMappingBean bean = em.find(ProductCodeMappingBean.class, uniqueID);		
-		em.remove( bean );
-	}
 	
 	public void deleteByIdAndTenant(Long uniqueID, Long r_manufacturer ) {
 		Query q = em.createQuery("from ProductCodeMappingBean as pcm where pcm.tenant.id = :manufacturer AND pcm.uniqueID = :uniqueID ");

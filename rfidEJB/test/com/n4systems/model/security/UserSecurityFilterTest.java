@@ -8,8 +8,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
@@ -20,8 +20,8 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class UserSecurityFilterTest {
 
 	@Test public void should_apply_only_tenant_user_belongs_to_primary_org() throws Exception {
-		UserBean user = anEmployee().build();
-		QueryBuilder<UserBean> queryBuilder = new TestingQueryBuilder<UserBean>(UserBean.class);
+		User user = anEmployee().build();
+		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 		
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
 		
@@ -36,8 +36,8 @@ public class UserSecurityFilterTest {
 	}
 	
 	@Test public void should_apply_tenant_and_customer_user_belongs_to_a_primary_customer() throws Exception {
-		UserBean user = aCustomerUser().withOwner(aPrimaryCustomerOrg().build()).build();
-		QueryBuilder<UserBean> queryBuilder = new TestingQueryBuilder<UserBean>(UserBean.class);
+		User user = aCustomerUser().withOwner(aPrimaryCustomerOrg().build()).build();
+		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
 		
@@ -49,8 +49,8 @@ public class UserSecurityFilterTest {
 	
 	
 	@Test public void should_apply_tenant_and_owner_division_user_belongs_to_a_primary_division() throws Exception {
-		UserBean user = aCustomerUser().withOwner(aPrimaryDivisionOrg().build()).build();
-		QueryBuilder<UserBean> queryBuilder = new TestingQueryBuilder<UserBean>(UserBean.class);
+		User user = aCustomerUser().withOwner(aPrimaryDivisionOrg().build()).build();
+		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
 		
@@ -62,8 +62,8 @@ public class UserSecurityFilterTest {
 	
 	
 	@Test public void should_apply_tenant_and_customer_user_belongs_to_a_secondary_customer() throws Exception {
-		UserBean user = aCustomerUser().withOwner(aSecondaryCustomerOrg().build()).build();
-		QueryBuilder<UserBean> queryBuilder = new TestingQueryBuilder<UserBean>(UserBean.class);
+		User user = aCustomerUser().withOwner(aSecondaryCustomerOrg().build()).build();
+		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
 		
@@ -75,8 +75,8 @@ public class UserSecurityFilterTest {
 	
 	
 	@Test public void should_apply_tenant_and_owner_division_user_belongs_to_a_secondary_division() throws Exception {
-		UserBean user = aCustomerUser().withOwner(aSecondaryDivisionOrg().build()).build();
-		QueryBuilder<UserBean> queryBuilder = new TestingQueryBuilder<UserBean>(UserBean.class);
+		User user = aCustomerUser().withOwner(aSecondaryDivisionOrg().build()).build();
+		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
 		
@@ -87,8 +87,8 @@ public class UserSecurityFilterTest {
 	}
 	
 	@Test public void should_apply_tenant_and_owner_organization_and_include_primary_orgs_user_belongs_to_a_secondary_org() throws Exception {
-		UserBean user = anEmployee().withOwner(aSecondaryOrg().build()).build();
-		QueryBuilder<UserBean> queryBuilder = new TestingQueryBuilder<UserBean>(UserBean.class);
+		User user = anEmployee().withOwner(aSecondaryOrg().build()).build();
+		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
 		

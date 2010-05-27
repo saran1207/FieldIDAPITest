@@ -5,7 +5,6 @@ import java.util.TreeSet;
 
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
@@ -22,6 +21,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 
 public class ProductToModelConverter implements ViewToModelConverter<Product, ProductView> {
@@ -31,7 +31,7 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 	private final InfoOptionMapConverter optionConverter;
 	
 	private ProductType type;
-	private UserBean identifiedBy;
+	private User identifiedBy;
 	
 	public ProductToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager, ProductStatusByNameLoader productStatusLoader, InfoOptionMapConverter optionConverter) {
 		this.orgLoader = orgLoader;
@@ -117,7 +117,7 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		return type;
 	}
 	
-	public void setIdentifiedBy(UserBean identifiedBy) {
+	public void setIdentifiedBy(User identifiedBy) {
 		this.identifiedBy = identifiedBy;
 	}
 	

@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidQueryException;
@@ -22,6 +21,7 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -36,7 +36,6 @@ public interface PersistenceManager {
 
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant, String... postFetchFields);
 
-	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId);
 
 	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter);
 	
@@ -105,9 +104,9 @@ public interface PersistenceManager {
 	public <T extends BaseEntity> T update(T entity);
 
 	
-	public <T extends AbstractEntity> Long save(T entity, UserBean user);
+	public <T extends AbstractEntity> Long save(T entity, User user);
 
-	public <T extends AbstractEntity> T update(T entity, UserBean user);
+	public <T extends AbstractEntity> T update(T entity, User user);
 
 	public <T extends AbstractEntity> Long save(T entity, Long userId);
 

@@ -1,12 +1,12 @@
 package com.n4systems.model.downloadlink;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public class DownloadLinkFactory {
 	
 	public DownloadLinkFactory() {}
 	
-	public DownloadLink createDownloadLink(UserBean user, String name, ContentType type) {
+	public DownloadLink createDownloadLink(User user, String name, ContentType type) {
 		DownloadLink link = new DownloadLink();
 		link.setState(DownloadState.REQUESTED);
 		link.setContentType(type);

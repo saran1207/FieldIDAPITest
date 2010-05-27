@@ -15,9 +15,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CollectionOfElements;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.user.User;
 
 
 @Entity 
@@ -43,7 +43,7 @@ public abstract class MessageCommand extends AbstractEntity {
 	
 	@ManyToOne()
 	@JoinColumn(name = "createdBy", nullable = false)
-	private UserBean createdBy;
+	private User createdBy;
 	
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	private Map<String,String> paramaters = new HashMap<String, String>();
@@ -64,12 +64,12 @@ public abstract class MessageCommand extends AbstractEntity {
 	}
 
 
-	public void setCreatedBy(UserBean createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
 
-	public UserBean getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 	

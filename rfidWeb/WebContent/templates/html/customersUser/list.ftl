@@ -16,12 +16,12 @@ ${action.setPageType('customer', 'users')!}
 		<tr>
 		<#assign count=0 >
 		<#list userList as user >
-			<tr id="user_${user.uniqueID!}" >
+			<tr id="user_${user.id!}" >
 				<td><a href="<@s.url action="customersUserEdit" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
 				<td>${user.userLabel?html! }</td>
 				<td>${(user.owner.divisionOrg.name)!?html}</td>
 				<td>${user.emailAddress?html! } </td>
-				<td><div><a href="<@s.url action="customersUserDelete" uniqueID="${(user.uniqueID)!}" includeParams="get"/>"><@s.text name="label.remove" /></a></div></td>
+				<td><div><a href="<@s.url action="customersUserDelete" uniqueID="${(user.id)!}" includeParams="get"/>"><@s.text name="label.remove" /></a></div></td>
 			</tr>
 		</#list>
 </table>

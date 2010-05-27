@@ -4,10 +4,10 @@ import java.io.File;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Product;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.ModifiedBySaver;
 import com.n4systems.reporting.PathHandler;
 
@@ -24,7 +24,7 @@ public class ProductAttachmentSaver extends ModifiedBySaver<ProductAttachment> {
 		this.product = product;
 	}
 
-	public ProductAttachmentSaver(UserBean modifiedBy, Product product) {
+	public ProductAttachmentSaver(User modifiedBy, Product product) {
 		super(modifiedBy);
 		this.product = product;
 	}

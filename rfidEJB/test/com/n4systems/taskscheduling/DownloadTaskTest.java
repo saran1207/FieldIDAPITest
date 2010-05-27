@@ -10,7 +10,6 @@ import javax.mail.NoSuchProviderException;
 import org.easymock.classextension.EasyMock;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.builders.UserBuilder;
@@ -18,6 +17,7 @@ import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.user.User;
 import com.n4systems.taskscheduling.task.DownloadTask;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -36,7 +36,7 @@ public class DownloadTaskTest {
 		}
 
 		@Override
-		protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
+		protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
 			genereateFileCount++;
 			assertEquals(downloadLink.getFile(), downloadFile);
 			assertSame(downloadLink.getUser(), user);
@@ -54,7 +54,7 @@ public class DownloadTaskTest {
 		}
 
 		@Override
-		protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
+		protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
 			genereateFileCount++;
 			throw e;
 		}
@@ -100,7 +100,7 @@ public class DownloadTaskTest {
 		}
 	}
 	
-	private final UserBean user;
+	private final User user;
 	private final DownloadLink link;
 	
 	@SuppressWarnings("serial")

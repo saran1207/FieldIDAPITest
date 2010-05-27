@@ -1,6 +1,5 @@
 package com.n4systems.handlers.creator.signup;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -9,6 +8,7 @@ import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 
 public class LinkTenantHandlerImp implements LinkTenantHandler {
@@ -47,7 +47,7 @@ public class LinkTenantHandlerImp implements LinkTenantHandler {
 		return connection;
 	}
 	
-	protected UserBean getAdminUser() {
+	protected User getAdminUser() {
 		return accountPlaceHolder.getAdminUser();
 	}
 

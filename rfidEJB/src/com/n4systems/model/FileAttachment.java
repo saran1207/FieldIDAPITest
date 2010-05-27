@@ -5,9 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name = "fileattachments")
@@ -22,7 +22,7 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 	
 	public FileAttachment() {}
 
-	public FileAttachment(Tenant tenant, UserBean modifiedBy, String fileName) {
+	public FileAttachment(Tenant tenant, User modifiedBy, String fileName) {
 		super(tenant);
 		setModifiedBy(modifiedBy);
 		setFileName(fileName);

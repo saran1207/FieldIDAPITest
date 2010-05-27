@@ -18,7 +18,7 @@ public class NotificationSettingByUserListLoader extends ListLoader<Notification
 	@Override
 	protected List<NotificationSetting> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<NotificationSetting> builder = new QueryBuilder<NotificationSetting>(NotificationSetting.class, filter);
-		builder.addSimpleWhere("user.uniqueID", userId);
+		builder.addSimpleWhere("user.id", userId);
 		builder.addOrder("name");
 		
 		List<NotificationSetting> settingsList =  builder.getResultList(em);

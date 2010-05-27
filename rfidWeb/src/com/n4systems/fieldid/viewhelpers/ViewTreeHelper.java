@@ -3,12 +3,12 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Collections;
 import java.util.List;
 
-import rfid.ejb.entity.UserBean;
 
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SharedReportUserListLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.UserComparator;
 
 public class ViewTreeHelper {
@@ -20,13 +20,13 @@ public class ViewTreeHelper {
 	
 	/**
 	 * Creates a view tree for a set of user information. 
-	 * @see User#getOuterUserList(Long, Long, Long, Long, SecurityFilter)
-	 * @see #addUserToTree(UserBean, ViewTree, SecurityFilter)
+	 * @see UserManager#getOuterUserList(Long, Long, Long, Long, SecurityFilter)
+	 * @see #addUserToTree(User, ViewTree, SecurityFilter)
 	 * @return				A constructed ViewTree of User id's
 	 */
 	public ViewTree<Long> getUserViewTree(SavedReport report, SecurityFilter filter) {
 		
-		List<UserBean> users = userListLoader.setReport(report).load();
+		List<User> users = userListLoader.setReport(report).load();
 		
 		// sort the users by customer and division, so the tree nodes are added in order
 		Collections.sort(users, new UserComparator());
@@ -34,7 +34,7 @@ public class ViewTreeHelper {
 		ViewTree<Long> treeRoot = new ViewTree<Long>(filter.getTenantId(), filter.getOwner().getPrimaryOrg().getName());
 
 		// populate the tree
-		for (UserBean user: users) {
+		for (User user: users) {
 			addUserToTree(user, treeRoot, filter);
 		}
 		
@@ -47,7 +47,7 @@ public class ViewTreeHelper {
 	 * @param treeRoot	The root of the tree
 	 * @param filter	a security filter used in customer/division name resolution
 	 */
-	private void addUserToTree(UserBean user, ViewTree<Long> treeRoot, SecurityFilter filter) {
+	private void addUserToTree(User user, ViewTree<Long> treeRoot, SecurityFilter filter) {
 		ViewTree<Long> node;
 		
 		// first we need to locate the tree node to add this user on

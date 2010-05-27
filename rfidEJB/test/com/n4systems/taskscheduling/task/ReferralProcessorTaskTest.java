@@ -5,12 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.signup.SignupReferral;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.persistence.savers.Saver;
@@ -21,7 +21,7 @@ import com.n4systems.testutils.DummyTransactionManager;
 public class ReferralProcessorTaskTest {
 	private Tenant referralTenant;
 	private Tenant referredTenant;
-	private UserBean referralUser;
+	private User referralUser;
 	private String referralCode;
 	
 	@Before
@@ -41,7 +41,7 @@ public class ReferralProcessorTaskTest {
 		
 		ReferralProcessorTask task = new ReferralProcessorTask(referralTenant, referredTenant, referralCode, saver, tm) {
 			@Override
-			protected UserBean loadReferralUser(Transaction transaction) {
+			protected User loadReferralUser(Transaction transaction) {
 				return referralUser;
 			}
 		};
@@ -68,7 +68,7 @@ public class ReferralProcessorTaskTest {
 		
 		ReferralProcessorTask task = new ReferralProcessorTask(referralTenant, referredTenant, referralCode, new DummySaver<SignupReferral>(), tm) {
 			@Override
-			protected UserBean loadReferralUser(Transaction transaction) {
+			protected User loadReferralUser(Transaction transaction) {
 				return null;
 			}
 		};
@@ -97,7 +97,7 @@ public class ReferralProcessorTaskTest {
 		
 		ReferralProcessorTask task = new ReferralProcessorTask(referralTenant, referredTenant, referralCode, saver, new DummyTransactionManager()) {
 			@Override
-			protected UserBean loadReferralUser(Transaction transaction) {
+			protected User loadReferralUser(Transaction transaction) {
 				return referralUser;
 			}
 		};

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
@@ -33,6 +32,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -79,7 +79,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public FileAttachment convert(AbstractInspection inspection, InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException {
+	public FileAttachment convert(AbstractInspection inspection, InspectionImageServiceDTO inspectionImageServiceDTO, User inspector) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -409,7 +409,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserServiceDTO convert(UserBean user) {
+	public UserServiceDTO convert(User user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -424,7 +424,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public UserBean convert(UserServiceDTO user) {
+	public User convert(UserServiceDTO user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

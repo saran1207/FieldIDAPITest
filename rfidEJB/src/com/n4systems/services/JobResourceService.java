@@ -1,27 +1,27 @@
 package com.n4systems.services;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EmployeeAlreadyAttachedException;
 import com.n4systems.exceptions.NonEmployeeUserException;
 import com.n4systems.model.Project;
+import com.n4systems.model.user.User;
 
 public class JobResourceService {
 
 	private Project job;
 	private PersistenceManager persistenceManager;
-	private UserBean modifier;
+	private User modifier;
 	
 	
-	public JobResourceService(Project job, PersistenceManager persistenceManager, UserBean modifier) {
+	public JobResourceService(Project job, PersistenceManager persistenceManager, User modifier) {
 		super();
 		this.persistenceManager = persistenceManager;
 		this.job = job;
 		this.modifier = modifier;
 	}
 	
-	public int attach(UserBean employee) throws NonEmployeeUserException, EmployeeAlreadyAttachedException{
+	public int attach(User employee) throws NonEmployeeUserException, EmployeeAlreadyAttachedException{
 		if (!employee.isEmployee()) {
 			throw new NonEmployeeUserException("a customer user attempted to be assigned");
 		}
@@ -37,7 +37,7 @@ public class JobResourceService {
 	}
 	
 	
-	public int dettach(UserBean employee) throws NonEmployeeUserException {
+	public int dettach(User employee) throws NonEmployeeUserException {
 		if (!employee.isEmployee()) {
 			throw new NonEmployeeUserException("a customer user attempted to be detached");
 		}

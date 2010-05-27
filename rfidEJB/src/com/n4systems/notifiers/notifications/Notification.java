@@ -1,23 +1,23 @@
 package com.n4systems.notifiers.notifications;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public abstract class Notification {
 
 	protected static final String SPACE = " ";
 	
-	private UserBean to;
+	private User to;
 	
 
 	public abstract String notificationName();
 
 	public abstract String subject();
 
-	public UserBean getTo() {
+	public User getTo() {
 		return to;
 	}
 
-	public void notifiyUser(UserBean to) {
+	public void notifiyUser(User to) {
 		this.to = to;
 	}
 

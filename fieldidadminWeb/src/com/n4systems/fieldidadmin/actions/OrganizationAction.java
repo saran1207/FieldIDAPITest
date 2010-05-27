@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
@@ -18,6 +17,7 @@ import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -40,7 +40,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	private Long id;
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
-	private UserBean adminUser = new UserBean();
+	private User adminUser = new User();
 	private String title;
 	private String note;
 	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();	
@@ -157,7 +157,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 
 	
 	private void createSystemAccount(Transaction transaction) {
-		UserBean user = new UserBean();
+		User user = new User();
 		user.setTenant(tenant);
 		user.setOwner(primaryOrg);
 		user.setTimeZoneID("United States:New York - New York");
@@ -198,12 +198,12 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		this.id = id;
 	}
 
-	public UserBean getAdminUser() {
+	public User getAdminUser() {
 		return adminUser;
 	}
 	
 	@FieldExpressionValidator(expression="(adminUser.userID != 'n4systems')", message = "Admin user cannot have a userid of n4systems.")
-	public void setAdminUser(UserBean adminUser) {
+	public void setAdminUser(User adminUser) {
 		this.adminUser = adminUser;
 	}
 	

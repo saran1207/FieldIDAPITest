@@ -10,12 +10,12 @@ import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.Product;
 import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 
 public class ProductSaverTest {
 
@@ -44,7 +44,7 @@ public class ProductSaverTest {
 	@Test
 	public void update_sets_modifiedby_and_resaves_product() {
 		Product product = ProductBuilder.aProduct().build();
-		UserBean modifiedBy = UserBuilder.anEmployee().build();
+		User modifiedBy = UserBuilder.anEmployee().build();
 		
 		EntityManager em = createMock(EntityManager.class);
 		expect(em.merge(product)).andReturn(product);

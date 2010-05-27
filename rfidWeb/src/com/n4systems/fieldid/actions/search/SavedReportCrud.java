@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -19,6 +18,7 @@ import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SharedReportUserListLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
@@ -155,14 +155,14 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	}
 	
 	public String doShare() {
-		UserBean fromUser = fetchCurrentUser();
+		User fromUser = fetchCurrentUser();
 		
 		try {
-			UserBean toUser; 
+			User toUser; 
 			SavedReport shareReport;
 			for (Long userId: shareUsers) {
 				
-				toUser = persistenceManager.findLegacy(UserBean.class, userId, getSecurityFilter());
+				toUser = persistenceManager.find(User.class, userId, getSecurityFilter());
 				shareReport = SavedReportHelper.createdSharedReport(report, fromUser, toUser);
 				
 				persistenceManager.save(shareReport, getSessionUser().getId());

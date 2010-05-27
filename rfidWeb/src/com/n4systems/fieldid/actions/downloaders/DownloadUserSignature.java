@@ -3,20 +3,20 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 
 public class DownloadUserSignature extends AbstractDownloadAction {
 
-	private final User userManager;
+	private final UserManager userManager;
 
 	private Long userId;
-	private UserBean user;
+	private User user;
 	
-	public DownloadUserSignature(PersistenceManager persistenceManager, User userManager) {
+	public DownloadUserSignature(PersistenceManager persistenceManager, UserManager userManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
@@ -32,7 +32,7 @@ public class DownloadUserSignature extends AbstractDownloadAction {
 	}
 
 
-	protected UserBean loadUser() {
+	protected User loadUser() {
 		return userManager.findUser(userId, getTenantId());
 	}
 	

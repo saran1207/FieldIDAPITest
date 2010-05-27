@@ -13,7 +13,6 @@ import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 import rfid.util.PopulatorLogger;
 
 import com.n4systems.ejb.InspectionManager;
@@ -25,7 +24,7 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.FindProductFailure;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
@@ -79,6 +78,7 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.services.SetupDataLastModUpdateService;
@@ -409,19 +409,19 @@ public class DataServiceImpl implements DataService {
 			int currentPage = request.getPageNumber().intValue();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
-			QueryBuilder<UserBean> userBuilder = new QueryBuilder<UserBean>(UserBean.class, securityFilter);
+			QueryBuilder<User> userBuilder = new QueryBuilder<User>(User.class, securityFilter);
 			// This is for postgres to ensure paging works
-			userBuilder.addOrder("uniqueID");
+			userBuilder.addOrder("id");
 			
 			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				Pager<UserBean> userPage = persistenceManager.findAllPaged(userBuilder, currentPage, getSetupDataPageSize());
+				Pager<User> userPage = persistenceManager.findAllPaged(userBuilder, currentPage, getSetupDataPageSize());
 				response.setTotalPages((int)userPage.getTotalPages());
 				
-				for(UserBean user: userPage.getList()) {
+				for(User user: userPage.getList()) {
 					response.getUsers().add(converter.convert(user));
 				}
 			} else {
-				response.setTotalPages(persistenceManager.countAllPages(UserBean.class, getSetupDataPageSize(), securityFilter));
+				response.setTotalPages(persistenceManager.countAllPages(User.class, getSetupDataPageSize(), securityFilter));
 				response.setCurrentPage(currentPage);
 			}
 			
@@ -634,7 +634,7 @@ public class DataServiceImpl implements DataService {
 	
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {						
 		
-		User userManager = ServiceLocator.getUser();
+		UserManager userManager = ServiceLocator.getUser();
 		
 		try {
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
@@ -642,7 +642,7 @@ public class DataServiceImpl implements DataService {
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
 			
 			if (request.modifiedByIdExists()) {
-				UserBean userBean = userManager.findUserBean(request.getModifiedById());
+				User userBean = userManager.findUser(request.getModifiedById());
 				product.setModifiedBy(userBean);
 			} 
 			
@@ -662,7 +662,7 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {						
 		
 		try {
-			User userManager = ServiceLocator.getUser();
+			UserManager userManager = ServiceLocator.getUser();
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
@@ -671,7 +671,7 @@ public class DataServiceImpl implements DataService {
 			product.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
 			
 			if (request.modifiedByIdExists()) {
-				UserBean userBean = userManager.findUserBean(request.getModifiedById());
+				User userBean = userManager.findUser(request.getModifiedById());
 				product.setModifiedBy(userBean);
 			} 
 			
@@ -872,7 +872,7 @@ public class DataServiceImpl implements DataService {
 		
 		String userId = userDTO.getUserId();
 		try {
-			User userManager = ServiceLocator.getUser();
+			UserManager userManager = ServiceLocator.getUser();
 
 			Tenant tenant = getTenantCache().findTenant(requestInformation.getTenantId());
 			PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(tenant.getId());
@@ -880,12 +880,12 @@ public class DataServiceImpl implements DataService {
 			// if the userid is unique, we can assume it does not exist
 			if (userManager.userIdIsUnique(requestInformation.getTenantId(), userId)) {
 				// set the basic information
-				UserBean user = ServiceLocator.getServiceDTOBeanConverter().convert(userDTO);
+				User user = ServiceLocator.getServiceDTOBeanConverter().convert(userDTO);
 				user.setTenant(tenant);
 				user.setOwner(primaryOrg);
 				
 				// make sure the id is cleared
-				user.setUniqueID(null);
+				user.setId(null);
 				
 				// we don't want people actually loging into these accounts so we'll set the password to a random UUID
 				// and set them inactive
@@ -1125,10 +1125,10 @@ public class DataServiceImpl implements DataService {
 		Long tenantId = requestInformation.getTenantId();
 		
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		User userManager = ServiceLocator.getUser();
+		UserManager userManager = ServiceLocator.getUser();
 		try {
 
-			UserBean inspector = userManager.findUserBean(inspectionImageServiceDTO.getInspectorId());
+			User inspector = userManager.findUser(inspectionImageServiceDTO.getInspectorId());
 			
 			InspectionAttachmentSaver attachmentSaver = new InspectionAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());

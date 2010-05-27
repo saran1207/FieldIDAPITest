@@ -1,7 +1,7 @@
 package com.n4systems.model.notificationsettings;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.ModifiedBySaver;
 
 public class NotificationSettingSaver extends ModifiedBySaver<NotificationSetting> {
@@ -14,7 +14,7 @@ public class NotificationSettingSaver extends ModifiedBySaver<NotificationSettin
 		super(modifiedBy);
 	}
 
-	public NotificationSettingSaver(UserBean modifiedBy) {
+	public NotificationSettingSaver(User modifiedBy) {
 		super(modifiedBy);
 	}
 

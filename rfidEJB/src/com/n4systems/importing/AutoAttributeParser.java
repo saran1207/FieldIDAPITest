@@ -6,13 +6,13 @@ import java.util.List;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InfoFieldNotFoundException;
 import com.n4systems.exceptions.InfoOptionNotFoundException;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.user.User;
 import com.n4systems.util.FuzzyResolver;
 
 public class AutoAttributeParser {
@@ -23,7 +23,7 @@ public class AutoAttributeParser {
 	/** ProductType for these attributes, set once in the constructor */
 	private ProductType productType;
 	/** A User to set as the modifiedBy user on the generated objects */
-	private UserBean modifiedBy;
+	private User modifiedBy;
 	/** 
 	 * List of {@link AAColumn}s appearing in the same order as in <code>attributeData<code>.  
 	 * Set by {@link #getCriteria()} and used in {@link #getDefinitions()} 
@@ -61,7 +61,7 @@ public class AutoAttributeParser {
 	 * Constructs the AutoAttributeParser, setting the raw Auto-Attribute data and the ProductType<br />
 	 * The first (index 0) <code>attributeData</code> <u>MUST</u> be a header line listing the Input/Output InfoFieldBean names. (eg I:Bleh, O:Asdf)<br />
 	 * All elements after the first represent a static or dynamic info field.
-	 * @see #AutoAttributeParser(List, ProductType, UserBean)
+	 * @see #AutoAttributeParser(List, ProductType, User)
 	 * @param attributeData		Raw auto-atribute data
 	 * @param productType		ProductType for this AutoAttributeCriteria
 	 */
@@ -77,7 +77,7 @@ public class AutoAttributeParser {
 	 * @param productType		ProductType for this AutoAttributeCriteria
 	 * @param modifiedBy		A user to set as the modifiedBy User on the AutoAttributeCriteria and AutoAttributeDefinitions
 	 */
-	public AutoAttributeParser(List<String[]> attributeData, ProductType productType, UserBean modifiedBy) {
+	public AutoAttributeParser(List<String[]> attributeData, ProductType productType, User modifiedBy) {
 		this.attributeData = attributeData;
 		this.productType = productType;
 		this.modifiedBy = modifiedBy;

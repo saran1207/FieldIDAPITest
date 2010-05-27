@@ -5,9 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import com.n4systems.testutils.TestHelper;
 import com.n4systems.util.ReportMap;
 import com.n4systems.util.ConfigContext;
@@ -34,7 +34,7 @@ public class InspectorMapBuilderTest {
 	public void testSetAllFields() {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		user.setFirstName(TestHelper.randomString());
 		user.setLastName(TestHelper.randomString());
 		user.setPosition(TestHelper.randomString());

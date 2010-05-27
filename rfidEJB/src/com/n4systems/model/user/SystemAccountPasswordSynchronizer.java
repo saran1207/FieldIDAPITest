@@ -3,7 +3,6 @@ package com.n4systems.model.user;
 import java.util.HashMap;
 import java.util.Map;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -38,13 +37,13 @@ public class SystemAccountPasswordSynchronizer {
 		}
 		
 		//hash the password as we will be setting it directly on the user
-		String hashPassword = UserBean.hashPassword(newPassword);
+		String hashPassword = User.hashPassword(newPassword);
 		
 		// save the hash password against the global config so that it is updated for new users
 		cm.saveEntry(ConfigEntry.SYSTEM_USER_PASSWORD, hashPassword);
 		
 		// construct our update statement
-		String update = "UPDATE " + UserBean.class.getName() + " SET hashPassword = :hashPassword WHERE system = true";
+		String update = "UPDATE " + User.class.getName() + " SET hashPassword = :hashPassword WHERE system = true";
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("hashPassword", hashPassword);

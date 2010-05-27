@@ -7,13 +7,13 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSaver;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
@@ -58,7 +58,7 @@ public class AccountPlaceHolderCreateHandlerImplTest extends ConfigContextRequir
 		replay(mockPrimaryOrgCreator);
 		
 		UserSaver mockUserSaver = createMock(UserSaver.class);
-		mockUserSaver.save(same(mockTransaction), isA(UserBean.class));
+		mockUserSaver.save(same(mockTransaction), isA(User.class));
 		expectLastCall().times(2);
 		replay(mockUserSaver);
 		

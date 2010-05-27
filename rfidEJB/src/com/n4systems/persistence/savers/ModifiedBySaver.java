@@ -1,20 +1,20 @@
 package com.n4systems.persistence.savers;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.HasModifiedBy;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserUnfilteredLoader;
 import com.n4systems.persistence.Transaction;
 
 public abstract class ModifiedBySaver<T extends Saveable & HasModifiedBy> extends Saver<T> {
-	private final UserBean modifiedBy;
+	private final User modifiedBy;
 	
 	public ModifiedBySaver() {
-		this((UserBean)null);
+		this((User)null);
 	}
 	
-	public ModifiedBySaver(UserBean modifiedBy) {
+	public ModifiedBySaver(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 	

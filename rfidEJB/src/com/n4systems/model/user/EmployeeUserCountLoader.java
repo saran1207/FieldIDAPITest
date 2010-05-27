@@ -2,7 +2,6 @@ package com.n4systems.model.user;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
@@ -24,7 +23,7 @@ public class EmployeeUserCountLoader extends Loader<Long> implements LimitLoader
 	protected Long load(EntityManager em) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 		
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(UserBean.class, filter);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
 		builder.addSimpleWhere("system", false);
 		builder.addSimpleWhere("active", true);
 		builder.addSimpleWhere("deleted", false);

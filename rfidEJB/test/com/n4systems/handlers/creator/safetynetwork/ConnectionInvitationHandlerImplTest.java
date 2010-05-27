@@ -14,7 +14,6 @@ import org.easymock.IAnswer;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
@@ -23,6 +22,7 @@ import com.n4systems.model.messages.MessageCommand;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.AdminUserListLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.NullNotifier;
 import com.n4systems.notifiers.TestSingleNotifier;
@@ -40,7 +40,7 @@ public class ConnectionInvitationHandlerImplTest {
 	private static final String BASE_URI = "https://n4.fielid.com/";
 	private PrimaryOrg remoteOrg;
 	private PrimaryOrg localOrg;
-	private UserBean adminUser;
+	private User adminUser;
 
 	@Before
 	public void setup() {
@@ -273,7 +273,7 @@ public class ConnectionInvitationHandlerImplTest {
 	private AdminUserListLoader getAdminLoader() {
 		AdminUserListLoader adminLoader = createMock(AdminUserListLoader.class);
 		
-		expect(adminLoader.load((Transaction)anyObject())).andReturn(new FluentArrayList<UserBean>(adminUser));
+		expect(adminLoader.load((Transaction)anyObject())).andReturn(new FluentArrayList<User>(adminUser));
 		replay(adminLoader);
 		return adminLoader;
 	}

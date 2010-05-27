@@ -12,10 +12,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.time.Clock;
 
@@ -30,7 +30,7 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	
 	@PrimaryKeyJoinColumn(name="user_id")
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
-	private UserBean user;
+	private User user;
 	
 	
 	@Column(nullable=false, length=64)
@@ -42,7 +42,7 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	public ActiveSession() {
 	}
 	
-	public ActiveSession(UserBean user, String sessionId) {
+	public ActiveSession(User user, String sessionId) {
 		super();
 		setUser(user);
 		this.sessionId = sessionId;
@@ -56,11 +56,11 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 		lastTouched = new Date();
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserBean user) {
+	public void setUser(User user) {
 		this.user = user;
 		this.userId = user.getId();
 		

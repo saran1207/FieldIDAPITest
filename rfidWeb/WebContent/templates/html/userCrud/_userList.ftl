@@ -22,8 +22,8 @@
 			</#if>
 			<td>${user.emailAddress?html! } </td>
 			<td>
-				<#if user.uniqueID != Session.sessionUser.uniqueID && !user.admin >
-					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'customerUserDelete')}" namespace="/ajax" uniqueID="${(user.uniqueID)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
+				<#if user.id != sessionUser.id && !user.admin >
+					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'customerUserDelete')}" namespace="/ajax" uniqueID="${(user.id)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
 				</#if>
 			</td>
 		</tr>

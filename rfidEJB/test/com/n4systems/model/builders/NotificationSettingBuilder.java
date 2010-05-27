@@ -1,18 +1,18 @@
 package com.n4systems.model.builders;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.UpcomingEventReport;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 
 public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting> {
 
 	private final PrimaryOrg owner;
 	private final String name;
 	private final Boolean includeOverdue;
-	private final UserBean user;
+	private final User user;
 	private final UpcomingEventReport upcomingReport;
 	
 	
@@ -23,7 +23,7 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 	}
 	
 	
-	private NotificationSettingBuilder(PrimaryOrg owner, String name, Boolean includeUpcoming, Boolean includeOverdue, UserBean user) {
+	private NotificationSettingBuilder(PrimaryOrg owner, String name, Boolean includeUpcoming, Boolean includeOverdue, User user) {
 		super();
 		this.owner = owner;
 		this.name = name;

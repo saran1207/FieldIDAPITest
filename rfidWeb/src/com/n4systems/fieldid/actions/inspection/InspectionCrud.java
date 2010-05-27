@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -23,7 +22,7 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.ejb.impl.ScheduleInTimeFrameLoader;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.MissingEntityException;
@@ -62,6 +61,7 @@ import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectionbook.InspectionBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
@@ -78,7 +78,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	private final InspectionManager inspectionManager;
 	private final LegacyProductSerial legacyProductManager;
-	private final User userManager;
+	private final UserManager userManager;
 	protected final ProductManager productManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	protected final ProductionInspectionPersistenceFactory inspectionPersistenceFactory;
@@ -126,7 +126,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	private ScheduleInTimeFrameLoader scheduleInTimeFrameLoader;
 	
-	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager,
+	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
@@ -374,7 +374,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 		try {
 			// get the user to set modifiedBy's later
-			UserBean modifiedBy = fetchCurrentUser();
+			User modifiedBy = fetchCurrentUser();
 			
 			findInspectionBook();
 			
@@ -675,7 +675,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	public Long getInspector() {
-		return (inspection.getInspector() != null) ? inspection.getInspector().getUniqueID() : null;
+		return (inspection.getInspector() != null) ? inspection.getInspector().getId() : null;
 	}
 
 	public void setInspector(Long inspector) {

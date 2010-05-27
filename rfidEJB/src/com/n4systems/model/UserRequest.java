@@ -2,13 +2,11 @@ package com.n4systems.model;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.user.User;
 
 
 @Entity
@@ -21,8 +19,7 @@ public class UserRequest extends EntityWithTenant {
 	private String city;
     
     @ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "r_useraccount")
-    private UserBean userAccount;
+    private User userAccount;
     
     private String comment;
 
@@ -42,11 +39,11 @@ public class UserRequest extends EntityWithTenant {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public UserBean getUserAccount() {
+	public User getUserAccount() {
 		return userAccount;
 	}
 
-	public void setUserAccount(UserBean userAccount) {
+	public void setUserAccount(User userAccount) {
 		this.userAccount = userAccount;
 	}
 

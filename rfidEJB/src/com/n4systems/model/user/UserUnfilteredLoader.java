@@ -2,23 +2,22 @@ package com.n4systems.model.user;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class UserUnfilteredLoader extends Loader<UserBean> {
+public class UserUnfilteredLoader extends Loader<User> {
 	private Long id;
 	
 	public UserUnfilteredLoader() {}
 
 	@Override
-	protected UserBean load(EntityManager em) {
-		QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, new OpenSecurityFilter());
-		builder.addSimpleWhere("uniqueID", id);
+	protected User load(EntityManager em) {
+		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+		builder.addSimpleWhere("id", id);
 		
-		UserBean user = builder.getSingleResult(em);
+		User user = builder.getSingleResult(em);
 		return user;
 	}
 

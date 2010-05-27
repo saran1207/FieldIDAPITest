@@ -2,11 +2,11 @@ package com.n4systems.fieldid.actions.users;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
@@ -14,7 +14,7 @@ public class AdminChangePasswordCrud extends ChangePasswordCrud {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public AdminChangePasswordCrud(User userManager, PersistenceManager persistenceManager) {
+	public AdminChangePasswordCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 	}
 	
@@ -52,7 +52,7 @@ public class AdminChangePasswordCrud extends ChangePasswordCrud {
 		return ERROR;
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 }

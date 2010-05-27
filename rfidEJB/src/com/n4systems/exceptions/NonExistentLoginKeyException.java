@@ -1,6 +1,6 @@
 package com.n4systems.exceptions;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public class NonExistentLoginKeyException extends AuthException {
 	private static final long serialVersionUID = 1L;
@@ -17,7 +17,7 @@ public class NonExistentLoginKeyException extends AuthException {
 		super(cause);
 	}
 	
-	public NonExistentLoginKeyException(UserBean user) {
+	public NonExistentLoginKeyException(User user) {
 		super("Non-Existant LoginKey requested for User [" + user.getUserID() + "], Tenant [" + user.getTenant().getName() + "]");
 	}
 

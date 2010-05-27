@@ -5,10 +5,9 @@ import java.util.SortedSet;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
@@ -18,6 +17,7 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -38,23 +38,23 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(UserRegistrationCrud.class);
 	
-	private UserBean userAccount;
+	private User userAccount;
 
 	private UserRequest userRequest;
 	private String password;
 	private String passwordConfirmation;
-	private User userManager;
+	private UserManager userManager;
 	private Country country;
 	private Region region;
 
-	public UserRegistrationCrud(User userManager, PersistenceManager persistenceManager) {
+	public UserRegistrationCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
 
 	@Override
 	protected void initMemberFields() {
-		userAccount = new UserBean();
+		userAccount = new User();
 		userRequest = new UserRequest();
 		String defaultZoneId = getConfigContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID);
 		country = CountryList.getInstance().getCountryByFullName(defaultZoneId);
@@ -95,7 +95,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		message.setEmailConent(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList"), getTenant().getName()));
 		
 		AdminUserListLoader userLoader = new AdminUserListLoader(new TenantOnlySecurityFilter(getTenant()));
-		for (UserBean user: userLoader.load()) {
+		for (User user: userLoader.load()) {
 			message.getToAddresses().add(user.getEmailAddress());
 		}
 		

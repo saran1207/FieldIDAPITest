@@ -11,7 +11,6 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exporting.Exporter;
 import com.n4systems.exporting.io.ExcelMapWriter;
@@ -19,6 +18,7 @@ import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 
 public class AbstractExportTaskTest {
@@ -49,7 +49,7 @@ public class AbstractExportTaskTest {
 		
 		String expectedFormat = "yyyy-MM-dd";
 		
-		UserBean user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().build();
 		user.getOwner().getPrimaryOrg().setDateFormat(expectedFormat);
 		
 		String dateFormat = task.getDateFormat(user);
@@ -63,7 +63,7 @@ public class AbstractExportTaskTest {
 		final MapWriter mapWriter = createMock(MapWriter.class);
 		
 		AbstractExportTaskImpl task = new AbstractExportTaskImpl(null, null, null, null, null, exporter) {
-			protected MapWriter createMapWriter(File downloadFile, UserBean user) throws IOException {
+			protected MapWriter createMapWriter(File downloadFile, User user) throws IOException {
 				return mapWriter;
 			}
 		};

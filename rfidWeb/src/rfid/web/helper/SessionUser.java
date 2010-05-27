@@ -3,13 +3,13 @@ package rfid.web.helper;
 import java.util.Date;
 import java.util.TimeZone;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
@@ -35,7 +35,7 @@ public class SessionUser implements DateTimeDefinition {
 	private String externalAuthKey;
 	private boolean admin;
 	
-	public SessionUser( UserBean user ) {
+	public SessionUser( User user ) {
 		this.tenant = user.getTenant();
 		this.owner = user.getOwner();
 		this.userID = user.getUserID();

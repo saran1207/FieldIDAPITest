@@ -40,7 +40,7 @@ public class ProductSearchContainer extends SearchContainer {
 		addSimpleTerm("type.id", productTypeId);
 		addSimpleTerm("type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
-		addSimpleTerm("assignedUser.uniqueID", assignedUserId);
+		addSimpleTerm("assignedUser.id", assignedUserId);
 		addDateRangeTerm("identified", fromDate, toDate);
 	}
 

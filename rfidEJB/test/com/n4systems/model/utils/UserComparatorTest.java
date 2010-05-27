@@ -7,9 +7,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 
 
 
@@ -38,8 +38,8 @@ public class UserComparatorTest {
 	@Test
 	public void should_order_users_case_insensitive_alphabetically_inside_the_same_owner() {
 		
-		UserBean user1 = anEmployee().withOwner(primaryOrg).withFirstName("A").build();
-		UserBean user2 = anEmployee().withOwner(primaryOrg).withFirstName("z").build();
+		User user1 = anEmployee().withOwner(primaryOrg).withFirstName("A").build();
+		User user2 = anEmployee().withOwner(primaryOrg).withFirstName("z").build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -49,8 +49,8 @@ public class UserComparatorTest {
 	public void should_order_users_in_primary_org_above_users_in_secondary_org() {
 		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(primaryOrg).build();
-		UserBean user2 = anEmployee().withOwner(secondaryOrg).build();
+		User user1 = anEmployee().withOwner(primaryOrg).build();
+		User user2 = anEmployee().withOwner(secondaryOrg).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -60,8 +60,8 @@ public class UserComparatorTest {
 		BaseOrg secondaryOrg1 = aSecondaryOrg().withParent(primaryOrg).withName("A").build();
 		BaseOrg secondaryOrg2 = aSecondaryOrg().withParent(primaryOrg).withName("z").build();
 		
-		UserBean user1 = anEmployee().withOwner(secondaryOrg1).build();
-		UserBean user2 = anEmployee().withOwner(secondaryOrg2).build();
+		User user1 = anEmployee().withOwner(secondaryOrg1).build();
+		User user2 = anEmployee().withOwner(secondaryOrg2).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -71,8 +71,8 @@ public class UserComparatorTest {
 		BaseOrg secondaryOrg = aSecondaryOrg().withParent(primaryOrg).build();
 		BaseOrg customerOrg = aCustomerOrg().withParent(primaryOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(secondaryOrg).build();
-		UserBean user2 = anEmployee().withOwner(customerOrg).build();
+		User user1 = anEmployee().withOwner(secondaryOrg).build();
+		User user2 = anEmployee().withOwner(customerOrg).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -83,8 +83,8 @@ public class UserComparatorTest {
 		BaseOrg customerOrg = aCustomerOrg().withParent(primaryOrg).build();
 		BaseOrg divisionOrg = aDivisionOrg().withParent(customerOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(customerOrg).build();
-		UserBean user2 = anEmployee().withOwner(divisionOrg).build();
+		User user1 = anEmployee().withOwner(customerOrg).build();
+		User user2 = anEmployee().withOwner(divisionOrg).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -95,8 +95,8 @@ public class UserComparatorTest {
 		BaseOrg customerOrg = aCustomerOrg().withParent(secondaryOrg).build();
 		
 		
-		UserBean user1 = anEmployee().withOwner(secondaryOrg).build();
-		UserBean user2 = anEmployee().withOwner(customerOrg).build();
+		User user1 = anEmployee().withOwner(secondaryOrg).build();
+		User user2 = anEmployee().withOwner(customerOrg).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -107,8 +107,8 @@ public class UserComparatorTest {
 		BaseOrg customerOrg = aCustomerOrg().withParent(secondaryOrg).build();
 		BaseOrg divisionOrg = aDivisionOrg().withParent(customerOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(customerOrg).build();
-		UserBean user2 = anEmployee().withOwner(divisionOrg).build();
+		User user1 = anEmployee().withOwner(customerOrg).build();
+		User user2 = anEmployee().withOwner(divisionOrg).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -119,8 +119,8 @@ public class UserComparatorTest {
 		BaseOrg secondaryCustomerOrg = aCustomerOrg().withParent(secondaryOrg).build();
 		BaseOrg primaryCustomer = aCustomerOrg().withParent(primaryOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(primaryCustomer).build();
-		UserBean user2 = anEmployee().withOwner(secondaryCustomerOrg).build();
+		User user1 = anEmployee().withOwner(primaryCustomer).build();
+		User user2 = anEmployee().withOwner(secondaryCustomerOrg).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
@@ -130,14 +130,14 @@ public class UserComparatorTest {
 		BaseOrg secondaryDivision = aDivisionOrg().withParent(aCustomerOrg().withParent(secondaryOrg).build()).build();
 		BaseOrg primaryCustomer = aCustomerOrg().withParent(primaryOrg).build();
 		
-		UserBean user1 = anEmployee().withOwner(primaryCustomer).build();
-		UserBean user2 = anEmployee().withOwner(secondaryDivision).build();
+		User user1 = anEmployee().withOwner(primaryCustomer).build();
+		User user2 = anEmployee().withOwner(secondaryDivision).build();
 		
 		executeCompareAndVerify(user1, user2);
 	}
 	
 
-	private void executeCompareAndVerify(UserBean userCloserToTheBottom, UserBean userCloserToTheTop) {
+	private void executeCompareAndVerify(User userCloserToTheBottom, User userCloserToTheTop) {
 		int actualCompareValue = new UserComparator().compare(userCloserToTheBottom, userCloserToTheTop);
 		
 		assertTrue(new Integer(actualCompareValue).toString() + " is not less than 0", actualCompareValue < 0);

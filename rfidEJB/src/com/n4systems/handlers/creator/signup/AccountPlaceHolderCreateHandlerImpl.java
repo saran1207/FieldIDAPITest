@@ -1,6 +1,5 @@
 package com.n4systems.handlers.creator.signup;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
@@ -8,6 +7,7 @@ import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSaver;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
@@ -45,8 +45,8 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		
 		PrimaryOrg primaryOrg = createPrimaryOrg(transaction, tenant);
 		
-		UserBean systemUser = createSystemUser(transaction, primaryOrg);
-		UserBean adminUser = createAdminUser(transaction, primaryOrg);
+		User systemUser = createSystemUser(transaction, primaryOrg);
+		User adminUser = createAdminUser(transaction, primaryOrg);
 		
 		
 		return new AccountPlaceHolder(tenant, primaryOrg, systemUser, adminUser);
@@ -65,8 +65,8 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		return tenant;
 	}
 	
-	private UserBean createAdminUser(Transaction transaction, PrimaryOrg primaryOrg) {
-		UserBean user = new UserBean();
+	private User createAdminUser(Transaction transaction, PrimaryOrg primaryOrg) {
+		User user = new User();
 		
 		setCommonUserFields(primaryOrg, user);
 		
@@ -83,8 +83,8 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		return user;
 	}
 
-	private UserBean createSystemUser(Transaction transaction, PrimaryOrg primaryOrg) {
-		UserBean user = new UserBean();
+	private User createSystemUser(Transaction transaction, PrimaryOrg primaryOrg) {
+		User user = new User();
 		user.setSystem(true);
 		
 		setCommonUserFields(primaryOrg, user);
@@ -100,7 +100,7 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		return user;
 	}
 
-	private void setCommonUserFields(PrimaryOrg primaryOrg, UserBean user) {
+	private void setCommonUserFields(PrimaryOrg primaryOrg, User user) {
 		user.setActive(true);
 		user.setTenant(primaryOrg.getTenant());
 		user.setOwner(primaryOrg);

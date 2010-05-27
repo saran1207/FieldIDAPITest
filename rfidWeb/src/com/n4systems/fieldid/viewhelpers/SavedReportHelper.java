@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class SavedReportHelper {
@@ -44,7 +44,7 @@ public class SavedReportHelper {
 	 * @param toUser	The user to share this report to
 	 * @return			A new SavedReport
 	 */
-	public static SavedReport createdSharedReport(SavedReport report, UserBean fromUser, UserBean toUser) {
+	public static SavedReport createdSharedReport(SavedReport report, User fromUser, User toUser) {
 		SavedReport sharedReport = copyNonEntityReportFields(report);
 		
 		// override the owner and sharedBy name

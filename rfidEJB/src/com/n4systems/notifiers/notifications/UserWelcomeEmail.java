@@ -1,6 +1,6 @@
 package com.n4systems.notifiers.notifications;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public class UserWelcomeEmail extends Notification {
 	
@@ -10,7 +10,7 @@ public class UserWelcomeEmail extends Notification {
 	private final String signInUrl;
 	private final String forgotPasswordUrl;
 
-	public UserWelcomeEmail(UserBean notifyUser, String signInUrl, String forgotPasswordLink) {
+	public UserWelcomeEmail(User notifyUser, String signInUrl, String forgotPasswordLink) {
 		super();
 		this.signInUrl = signInUrl;
 		this.forgotPasswordUrl = forgotPasswordLink;

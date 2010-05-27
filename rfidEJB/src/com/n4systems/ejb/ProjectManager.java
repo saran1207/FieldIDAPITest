@@ -2,8 +2,6 @@ package com.n4systems.ejb;
 
 import java.util.List;
 
-import rfid.ejb.entity.UserBean;
-
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.model.FileAttachment;
@@ -34,5 +32,4 @@ public interface ProjectManager {
 
 	public List<Project> getProjectsForAsset(Product asset, SecurityFilter filter);
 	
-	public Pager<UserBean> getResourcesPaged(Project project, SecurityFilter filter, int page, int pageSize);
 }

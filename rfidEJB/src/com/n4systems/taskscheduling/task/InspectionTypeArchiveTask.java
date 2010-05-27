@@ -2,12 +2,12 @@ package com.n4systems.taskscheduling.task;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectiontype.InspectionTypeSaver;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ServiceLocator;
@@ -20,13 +20,13 @@ public class InspectionTypeArchiveTask implements Runnable {
 	
 	private final InspectionType inspectionType;
 	private final RemovalHandlerFactory handlerFactory;
-	private final UserBean currentUser;
+	private final User currentUser;
 	
 	private Transaction transaction;
 	private InspectionTypeArchiveHandler archiveHandler;
 	
 	
-	public InspectionTypeArchiveTask(InspectionType inspectionType, UserBean user, RemovalHandlerFactory handlerFactory) {
+	public InspectionTypeArchiveTask(InspectionType inspectionType, User user, RemovalHandlerFactory handlerFactory) {
 		super();
 		this.inspectionType = inspectionType;
 		this.handlerFactory = handlerFactory;

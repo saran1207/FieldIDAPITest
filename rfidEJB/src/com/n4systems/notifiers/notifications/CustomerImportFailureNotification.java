@@ -1,10 +1,10 @@
 package com.n4systems.notifiers.notifications;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public class CustomerImportFailureNotification extends ImportFailureNotification {
 
-	public CustomerImportFailureNotification(UserBean notifiyUser) {
+	public CustomerImportFailureNotification(User notifiyUser) {
 		super(notifiyUser);
 	}
 

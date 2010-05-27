@@ -7,10 +7,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.fileprocessing.FileProcessorFactory;
 import com.n4systems.model.Inspection;
+import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.webservice.server.bundles.AuthBundle;
@@ -42,7 +42,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 	
 	public List<ProofTestStatusBundle> uploadProofTest(AuthBundle authUser, List<ProofTestBundle> bundles) throws WebserviceAuthenticationException, WebserviceException {
 		//authenticate the user
-		UserBean user = authenticateUser(authUser);
+		User user = authenticateUser(authUser);
 		
 		List<ProofTestStatusBundle> statusList = new ArrayList<ProofTestStatusBundle>();
 		
@@ -53,7 +53,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 		return statusList;
 	}
 
-	private void processBundle(AuthBundle authUser, UserBean user, List<ProofTestStatusBundle> statusList, ProofTestBundle bundle) {
+	private void processBundle(AuthBundle authUser, User user, List<ProofTestStatusBundle> statusList, ProofTestBundle bundle) {
 		try {
 			
 			logger.info("Processing Inspection File [" + bundle.getFileName() + "] for tenant [" + authUser.getTenantName() + "] user [" + authUser.getUserName() + "]");

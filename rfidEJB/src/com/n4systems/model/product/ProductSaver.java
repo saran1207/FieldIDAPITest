@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.Product;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 
 public class ProductSaver extends Saver<Product> {
 	private final RecursiveLinkedChildProductLoader linkedProductLoader; 
-	private UserBean modifiedBy;
+	private User modifiedBy;
 	
 	public ProductSaver(RecursiveLinkedChildProductLoader linkedProductLoader) {
 		this.linkedProductLoader = linkedProductLoader;
@@ -85,7 +85,7 @@ public class ProductSaver extends Saver<Product> {
 		throw new NotImplementedException();
 	}
 	
-	public ProductSaver setModifiedBy(UserBean modifiedBy) {
+	public ProductSaver setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 		return this;
 	}

@@ -22,7 +22,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.IndexColumn;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Exportable;
@@ -34,6 +33,7 @@ import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
@@ -59,7 +59,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	private boolean printable;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
-	private UserBean inspector;
+	private User inspector;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
 	private InspectionGroup group;
@@ -128,11 +128,11 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	}
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public UserBean getInspector() {
+	public User getInspector() {
 		return inspector;
 	}
 
-	public void setInspector(UserBean inspector) {
+	public void setInspector(User inspector) {
 		this.inspector = inspector;
 	}
 

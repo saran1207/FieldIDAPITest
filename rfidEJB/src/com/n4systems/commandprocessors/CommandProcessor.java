@@ -1,10 +1,10 @@
 package com.n4systems.commandprocessors;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.messages.MessageCommand;
 import com.n4systems.model.messages.MessageCommandSaver;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 
@@ -14,7 +14,7 @@ public abstract class CommandProcessor<T extends MessageCommand> {
 	
 	protected T command;
 
-	protected UserBean actor;
+	protected User actor;
 	protected NonSecureLoaderFactory nonSecureLoaderFactory;
 	protected Transaction transaction;
 
@@ -51,7 +51,7 @@ public abstract class CommandProcessor<T extends MessageCommand> {
 	}
 
 	
-	public CommandProcessor<T> setActor(UserBean actor) {
+	public CommandProcessor<T> setActor(User actor) {
 		this.actor = actor;
 		return this;
 	}

@@ -16,7 +16,6 @@ import javax.persistence.EntityManager;
 
 import javax.persistence.Query;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -30,6 +29,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.tools.Pager;
@@ -248,7 +248,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				updateQueryString += ", modifiedBy = null ";
 			} else {
 				updateQueryString += ", modifiedBy = :modifiedBy ";
-				parameters.put("modifiedBy", em.find(UserBean.class, userId));
+				parameters.put("modifiedBy", em.find(User.class, userId));
 			}
 			ids.add(null);
 			Query updateQuery = em.createQuery(updateQueryString + " WHERE id IN ( :ids )");
@@ -281,7 +281,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			return 0L;
 		}
 		
-		UserBean user = persistenceManager.findLegacy(UserBean.class, userId);
+		User user = persistenceManager.find(User.class, userId);
 		
 		Set<String> updateKeys = getEnabledKeys(fieldMap);
 		
@@ -376,7 +376,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				updateQueryString += ", modifiedBy = null ";
 			} else {
 				updateQueryString += ", modifiedBy = :modifiedBy ";
-				parameters.put("modifiedBy", em.find(UserBean.class, userId));
+				parameters.put("modifiedBy", em.find(User.class, userId));
 			}
 			updateQueryString += " WHERE id IN (:ids)";
 			parameters.put("ids", scheduleIds);

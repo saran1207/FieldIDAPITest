@@ -7,16 +7,16 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-public class SharedReportUserListLoader extends ListLoader<UserBean> {
+public class SharedReportUserListLoader extends ListLoader<User> {
 
 	private SavedReport report;
 		
@@ -25,8 +25,8 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 	}
 
 	@Override
-	protected List<UserBean> load(EntityManager em, SecurityFilter filter) {
-		Set<UserBean> users = new HashSet<UserBean>();
+	protected List<User> load(EntityManager em, SecurityFilter filter) {
+		Set<User> users = new HashSet<User>();
 		
 		users.addAll(getAllUsersBelowTheOwnerOnTheReport(em, filter));
 		
@@ -35,14 +35,14 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		users.addAll(getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(em, filter));
 		
 		users.removeAll(userGoingToShareTheReport(em, filter));
-		return new ArrayList<UserBean>(users);
+		return new ArrayList<User>(users);
 	}
 
 
-	private List<UserBean> getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(EntityManager em, SecurityFilter filter) {
-		List<UserBean> users = new ArrayList<UserBean>();
+	private List<User> getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(EntityManager em, SecurityFilter filter) {
+		List<User> users = new ArrayList<User>();
 		if (getOwnerForReport(em, filter).getSecondaryOrg() == null) {
-			QueryBuilder<UserBean> query = new QueryBuilder<UserBean>(UserBean.class, filter);
+			QueryBuilder<User> query = new QueryBuilder<User>(User.class, filter);
 			
 			query.addWhere(Comparator.NOTNULL, "owner.secondaryOrg", "owner.secondaryOrg", -1);
 			query.addWhere(Comparator.NULL, "owner.customerOrg", "owner.customerOrg", -1);
@@ -52,8 +52,8 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		return users;
 	}
 
-	private List<UserBean> getAllUsersDirectlyAboveTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
-		List<UserBean> users = new ArrayList<UserBean>();
+	private List<User> getAllUsersDirectlyAboveTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
+		List<User> users = new ArrayList<User>();
 		BaseOrg org = getOwnerForReport(em, filter);
 		
 		while (org.getParent() != null) {
@@ -64,15 +64,15 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		return users;
 	}
 
-	private void loadUsersForOrg(EntityManager em, SecurityFilter filter, List<UserBean> users, BaseOrg org) {
-		QueryBuilder<UserBean> query = new QueryBuilder<UserBean>(UserBean.class, filter);
+	private void loadUsersForOrg(EntityManager em, SecurityFilter filter, List<User> users, BaseOrg org) {
+		QueryBuilder<User> query = new QueryBuilder<User>(User.class, filter);
 		query.addSimpleWhere("owner", org);
 		users.addAll(query.getResultList(em));
 	}
 
 
-	private List<UserBean> getAllUsersBelowTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<UserBean> usersBelowOwnerQuery = new QueryBuilder<UserBean>(UserBean.class, filter);
+	private List<User> getAllUsersBelowTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<User> usersBelowOwnerQuery = new QueryBuilder<User>(User.class, filter);
 	
 		getOwnerFilterForReport(em, filter).applyFilter(usersBelowOwnerQuery);
 		
@@ -97,10 +97,10 @@ public class SharedReportUserListLoader extends ListLoader<UserBean> {
 		return reportsOwnerId;
 	}
 	
-	private Set<UserBean> userGoingToShareTheReport(EntityManager em, SecurityFilter filter) {
-		Set<UserBean> user = new HashSet<UserBean>(1);
+	private Set<User> userGoingToShareTheReport(EntityManager em, SecurityFilter filter) {
+		Set<User> user = new HashSet<User>(1);
 		if (filter.getUserId() != null) {
-			user.add(em.find(UserBean.class, filter.getUserId()));
+			user.add(em.find(User.class, filter.getUserId()));
 		}
 		return user;
 	}

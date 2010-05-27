@@ -15,11 +15,11 @@ belongs_to  :tenant,        :foreign_key => 'tenant_id',                :class_n
   belongs_to  :productinfo,   :foreign_key => 'type_id',                :class_name => 'ProductType'
   has_many    :infoOptionsFK, :foreign_key => 'r_productserial',        :class_name => 'ProductserialInfooption'
   has_many    :infoOptions,                                             :class_name => 'InfoOption',				:through => :infoOptionsFK
-  belongs_to  :identifiedBy,  :foreign_key => 'identifiedby_uniqueid',  :class_name => 'User'
+  belongs_to  :identifiedBy,  :foreign_key => 'identifiedby_id',        :class_name => 'User'
   belongs_to  :assignedUser,  :foreign_key => 'assigneduser_id',        :class_name => 'User'
   has_many    :subProducts,	  :foreign_key => 'masterproduct_id',       :class_name => 'SubProduct'
   belongs_to  :owner,         :foreign_key => 'owner_id',               :class_name => 'BaseOrg'
-  has_many    :product_statuses,   :foreign_key => 'uniqueid',     :class_name => 'ProductStatus'
+  belongs_to  :product_status,   :foreign_key => 'productstatus_unqiueid',     :class_name => 'ProductStatus'
   
   def findInfoOptionByInfoField(infoField)
     

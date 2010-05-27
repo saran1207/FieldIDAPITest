@@ -47,7 +47,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
-		addSimpleTerm("product.assignedUser.uniqueID", assignedUserId);
+		addSimpleTerm("product.assignedUser.id", assignedUserId);
 		addSimpleTerm("inspectionType.group.id", inspectionTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);

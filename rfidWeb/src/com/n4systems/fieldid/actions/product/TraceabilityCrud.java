@@ -14,7 +14,7 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.ProductCodeMapping;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
@@ -22,7 +22,7 @@ import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoade
 
 public class TraceabilityCrud extends ProductCrud {
 
-	public TraceabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, User userManager,
+	public TraceabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, UserManager userManager,
 			ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(productTypeManager, legacyProductSerialManager, persistenceManager, userManager, productCodeMappingManager, productManager, orderManager, projectManager, inspectionScheduleManager);
 	}

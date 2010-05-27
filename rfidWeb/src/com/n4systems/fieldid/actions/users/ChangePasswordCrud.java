@@ -3,11 +3,11 @@ package com.n4systems.fieldid.actions.users;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
@@ -20,15 +20,15 @@ public class ChangePasswordCrud extends AbstractCrud {
 
 	private static final Logger logger = Logger.getLogger( ChangePasswordCrud.class );
 	
-	protected User userManager;
-	protected UserBean user;
+	protected UserManager userManager;
+	protected User user;
 	
 	
 	private String originalPassword;
 	private String newPassword;
 	private String confirmPassword;
 	
-	public ChangePasswordCrud( User userManager, PersistenceManager persistenceManager ) {
+	public ChangePasswordCrud( UserManager userManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
@@ -71,7 +71,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 
 	protected void updatePassword() {
 		if( user != null ) {
-			userManager.updatePassword( user.getUniqueID(), newPassword );
+			userManager.updatePassword( user.getId(), newPassword );
 			logger.info( "password updated for " + getSessionUser().getUserID() );
 			
 			getSession().remove( "passwordReset" );

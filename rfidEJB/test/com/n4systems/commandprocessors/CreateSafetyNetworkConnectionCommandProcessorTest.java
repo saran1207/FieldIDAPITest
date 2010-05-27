@@ -11,12 +11,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
+import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.NullNotifier;
 import com.n4systems.notifiers.TestSingleNotifier;
@@ -35,8 +35,8 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 
 	private PrimaryOrg customer;
 	private PrimaryOrg vendor;
-	private UserBean userInTheVendorTenant;
-	private UserBean userInTheCustomerTenant;
+	private User userInTheVendorTenant;
+	private User userInTheCustomerTenant;
 	
 	
 	@Before
@@ -107,7 +107,7 @@ public class CreateSafetyNetworkConnectionCommandProcessorTest {
 		verify(mockConnectionExistsLoader);
 	}
 
-	private CreateSafetyNetworkConnectionMessageCommand createCommand(PrimaryOrg customer, PrimaryOrg vendor, UserBean creator) {
+	private CreateSafetyNetworkConnectionMessageCommand createCommand(PrimaryOrg customer, PrimaryOrg vendor, User creator) {
 		CreateSafetyNetworkConnectionMessageCommand command = new CreateSafetyNetworkConnectionMessageCommand();
 		command.setCustomerOrgId(customer.getId());
 		command.setVendorOrgId(vendor.getId());

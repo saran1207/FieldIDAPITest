@@ -5,14 +5,13 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.actions.exceptions.PersistenceException;
@@ -28,6 +27,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubInspection;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
 public class SubInspectionCrud extends InspectionCrud {
@@ -38,7 +38,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	private MasterInspection masterInspectionHelper;
 	private boolean currentInspectionNew = true;
 
-	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, User userManager, LegacyProductSerial legacyProductManager, 
+	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager, 
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
 
 		super(persistenceManager, inspectionManager, userManager, legacyProductManager, productManager, inspectionScheduleManager);
@@ -195,7 +195,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		inspection.setProduct(product);
 		getModifiableInspection().pushValuesTo(inspection);
 
-		UserBean modifiedBy = fetchCurrentUser();
+		User modifiedBy = fetchCurrentUser();
 
 		SubInspection subInspection = masterInspectionHelper.createSubInspectionFromInspection(inspection);
 		subInspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
@@ -246,7 +246,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 		
 	
-		UserBean modifiedBy = fetchCurrentUser();
+		User modifiedBy = fetchCurrentUser();
 
 		try {
 			findInspectionBook();

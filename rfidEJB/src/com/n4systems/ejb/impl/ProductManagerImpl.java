@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.ProductCodeMappingBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -35,6 +34,7 @@ import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.persistence.archivers.InspectionListArchiver;
 import com.n4systems.services.product.ProductMerger;
@@ -103,20 +103,7 @@ public class ProductManagerImpl implements ProductManager {
 
 	}
 
-	public Product findProduct(Long id) {
-		QueryBuilder<Product> qBuilder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
-
-		qBuilder.setSimpleSelect();
-		qBuilder.addSimpleWhere("id", id);
-		qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-
-		try {
-			return persistenceManager.find(qBuilder);
-		} catch (InvalidQueryException e) {
-			logger.error("Unable to load Product", e);
-			return null;
-		}
-	}
+	
 
 	public Product findProductAllFields(Long id, SecurityFilter filter) {
 		Product product =  findProduct(id, filter, "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
@@ -307,7 +294,7 @@ public class ProductManagerImpl implements ProductManager {
 		}
 	}
 
-	public Product archive(Product product, UserBean archivedBy) throws UsedOnMasterInspectionException {
+	public Product archive(Product product, User archivedBy) throws UsedOnMasterInspectionException {
 		product = persistenceManager.reattach(product);
 		product = fillInSubProductsOnProduct(product);
 		if (!testArchive(product).validToDelete()) {
@@ -339,13 +326,13 @@ public class ProductManagerImpl implements ProductManager {
 		return save(product, archivedBy);
 	}
 
-	private void detatachFromProjects(Product product, UserBean archivedBy) {
+	private void detatachFromProjects(Product product, User archivedBy) {
 		for (Project project : product.getProjects()) {
 			projectManager.detachAsset(product, project, archivedBy.getId());
 		}
 	}
 
-	private void archiveInspections(Product product, UserBean archivedBy) {
+	private void archiveInspections(Product product, User archivedBy) {
 		InspectionListArchiver archiver = new InspectionListArchiver(getInspectionIdsForProduct(product));
 		archiver.archive(em);	
 	}
@@ -358,7 +345,7 @@ public class ProductManagerImpl implements ProductManager {
 		return new TreeSet<Long>(persistenceManager.findAll(idBuilder));
 	}
 
-	private void archiveSchedules(Product product, UserBean archivedBy) {
+	private void archiveSchedules(Product product, User archivedBy) {
 		String updateQuery = "UPDATE " + InspectionSchedule.class.getName() + " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
 				+ " WHERE product = :product AND state = :activeState ";
 
@@ -374,7 +361,7 @@ public class ProductManagerImpl implements ProductManager {
 		logger.info("archived schedules for product " + product);
 	}
 
-	protected Product save(Product product, UserBean modifiedBy) {
+	protected Product save(Product product, User modifiedBy) {
 		ProductSaver productSaver = new ProductSaver();
 		productSaver.setModifiedBy(modifiedBy);
 		
@@ -568,7 +555,7 @@ public class ProductManagerImpl implements ProductManager {
 		return new FindSubProducts(persistenceManager, product).findSubProducts();
 	}
 
-	public Product mergeProducts(Product winningProduct, Product losingProduct, UserBean user) {
+	public Product mergeProducts(Product winningProduct, Product losingProduct, User user) {
 		ProductMerger merger = new ProductMerger(persistenceManager, this, ServiceLocator.getInspectionManager(), user);
 		// reload the winning and losing products so they are fully under managed scope.
 		Product reloadedWinner = persistenceManager.find(Product.class, winningProduct.getId());

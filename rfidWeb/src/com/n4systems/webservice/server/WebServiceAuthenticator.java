@@ -1,9 +1,9 @@
 package com.n4systems.webservice.server;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
@@ -25,7 +25,7 @@ public class WebServiceAuthenticator {
 		
 		
 		if (passesMinimumMobileVersion()) {
-			UserBean loginUser = getUserIfValid();
+			User loginUser = getUserIfValid();
 			
 			if (loginUser != null) {
 				authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.SUCCESSFUL);
@@ -44,16 +44,16 @@ public class WebServiceAuthenticator {
 		return authenticationResponse;		
 	}
 	
-	private UserBean getUserIfValid()
+	private User getUserIfValid()
 	{
-		User userManager = ServiceLocator.getUser();
+		UserManager userManager = ServiceLocator.getUser();
 		
 		String tenantName = authenticationRequest.getTenantName();		
 		String userId = authenticationRequest.getUserId();
 		String password = authenticationRequest.getPassword();
 		String securityRfid = authenticationRequest.getSecurityRfidNumber();
 		
-		UserBean loginUser = null;
+		User loginUser = null;
 		
 		if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.USERNAME) {
 			loginUser = userManager.findUser(tenantName, userId, password);				

@@ -9,7 +9,6 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.InspectionView;
@@ -28,6 +27,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
@@ -162,7 +162,7 @@ public class InspectionToModelConverterTest {
 		InspectionView view = new InspectionView();
 		view.setInspector("inspector name");
 		
-		UserBean user = UserBuilder.aUser().build();
+		User user = UserBuilder.aUser().build();
 		
 		UserByFullNameLoader userLoader = createMock(UserByFullNameLoader.class);
 		expect(userLoader.setFullName(view.getInspector())).andReturn(userLoader);

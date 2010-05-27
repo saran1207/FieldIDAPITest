@@ -2,10 +2,10 @@ package com.n4systems.model.security;
 
 import javax.persistence.Query;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class UserSecurityFilter extends AbstractSecurityFilter {
@@ -18,7 +18,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 		this.filterUserId = filterUserId;
 	}
 	
-	public UserSecurityFilter(UserBean user) {
+	public UserSecurityFilter(User user) {
 		this(user.getOwner(), user.getId());
 	}
 

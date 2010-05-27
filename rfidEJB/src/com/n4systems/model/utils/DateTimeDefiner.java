@@ -2,8 +2,8 @@ package com.n4systems.model.utils;
 
 import java.util.TimeZone;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.DateTimeDefinition;
 
 public class DateTimeDefiner implements DateTimeDefinition {
@@ -17,7 +17,7 @@ public class DateTimeDefiner implements DateTimeDefinition {
 		this.timeZone = timeZone;
 	}
 
-	public DateTimeDefiner(UserBean user) {
+	public DateTimeDefiner(User user) {
 		this(user.getOwner().getPrimaryOrg().getDateFormat(), user.getTimeZone());
 	}
 

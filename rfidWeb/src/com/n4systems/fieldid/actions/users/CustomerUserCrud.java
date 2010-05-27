@@ -2,7 +2,7 @@ package com.n4systems.fieldid.actions.users;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -16,7 +16,7 @@ import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 public class CustomerUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
 	
-	public CustomerUserCrud( User userManager, PersistenceManager persistenceManager ) {
+	public CustomerUserCrud( UserManager userManager, PersistenceManager persistenceManager ) {
 		super(userManager, persistenceManager);
 	}
 	

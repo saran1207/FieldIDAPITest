@@ -34,7 +34,7 @@ public class JobListService {
 		qBuilder.setSimpleSelect().addOrder(orderBy, ascendingOrderBy).addSimpleWhere("retired", false);
 		if (justAssignedOn) {
 			qBuilder.addRequiredLeftJoin("resources", "resource");
-			qBuilder.addWhere(new WhereParameter<Long>(Comparator.EQ, "resourceId", "resource.uniqueID", filter.getUserId(), null, true));
+			qBuilder.addWhere(new WhereParameter<Long>(Comparator.EQ, "resourceId", "resource.id", filter.getUserId(), null, true));
 		}
 		if (onlyOpen) {
 			qBuilder.addSimpleWhere("open", true);

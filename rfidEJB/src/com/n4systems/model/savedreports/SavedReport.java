@@ -15,13 +15,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name="savedreports")
@@ -65,7 +65,7 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	
 	@ManyToOne(optional=false)
 	@JoinColumn(name="user_id", updatable=false)
-	private UserBean user;
+	private User user;
 	
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	private Map<String, String> criteria = new HashMap<String, String>(); 
@@ -144,11 +144,11 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 		this.sortColumn = sortColumn;
 	}
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserBean owner) {
+	public void setUser(User owner) {
 		this.user = owner;
 	}
 

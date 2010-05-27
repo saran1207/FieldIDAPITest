@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.NonPrintableEventType;
@@ -18,6 +17,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectionLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -44,7 +44,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 	}
 	
 	@Override
-	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
+	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
 		Transaction transaction = null;
         try {
         	transaction = PersistenceManager.startTransaction();
@@ -66,7 +66,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 		}
 	}
 
-	private void generateReport(UserBean user, File downloadFile, String downloadName, Transaction transaction) throws IOException, UnsupportedEncodingException, NonPrintableEventType, ReportException {
+	private void generateReport(User user, File downloadFile, String downloadName, Transaction transaction) throws IOException, UnsupportedEncodingException, NonPrintableEventType, ReportException {
 		List<Inspection> inspections = loadInspections(user, transaction);
 		reportGen.setType(reportType);
 		
@@ -75,7 +75,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 
 	
 
-	private List<Inspection> loadInspections(UserBean user, Transaction transaction) {
+	private List<Inspection> loadInspections(User user, Transaction transaction) {
 		return new LazyLoadingList<Inspection>(inspectionIds, inspectionLoader, transaction);
 	}
 

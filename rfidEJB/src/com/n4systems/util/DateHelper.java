@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
 
@@ -464,11 +464,11 @@ public class DateHelper {
 		return new FieldidDateFormatter(date, dateTimeDefinition).format();
 	}
 	
-	public static String getFormattedCurrentDate(UserBean user) {
+	public static String getFormattedCurrentDate(User user) {
 		return format(new PlainDate(), new DateTimeDefiner(user));
 	}
 	
-	public static String getFormattedCurrentDateTime(UserBean user) {
+	public static String getFormattedCurrentDateTime(User user) {
 		return format(new Date(), new DateTimeDefiner(user));
 	}
 	

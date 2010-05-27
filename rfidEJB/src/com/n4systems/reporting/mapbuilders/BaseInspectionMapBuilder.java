@@ -1,17 +1,17 @@
 package com.n4systems.reporting.mapbuilders;
 
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
 
 public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
-	private final MapBuilder<UserBean> inspectorMapBuilder;
+	private final MapBuilder<User> inspectorMapBuilder;
 	private final MapBuilder<InspectionTypeGroup> typeGroupMapBuilder;
 	private final MapBuilder<InternalOrg> orgMapBuilder;
 	private final MapBuilder<BaseOrg> ownerMapBuilder;
@@ -19,7 +19,7 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 	private final MapBuilder<ProductStatusBean> productStatusMapBuilder;
 	private final JobCertificateDataProducer jobCertificateDataProducer;
 	
-	public BaseInspectionMapBuilder(MapBuilder<UserBean> inspectorMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<ProductStatusBean> productStatusMapBuilder
+	public BaseInspectionMapBuilder(MapBuilder<User> inspectorMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<ProductStatusBean> productStatusMapBuilder
 			, JobCertificateDataProducer jobCertificateDataProducer) {
 		this.inspectorMapBuilder = inspectorMapBuilder;
 		this.typeGroupMapBuilder = typeGroupMapBuilder;

@@ -9,12 +9,12 @@ import org.easymock.IAnswer;
 import org.easymock.classextension.EasyMock;
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.safetynetwork.IdLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.time.Clock;
@@ -43,7 +43,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_session_is_not_being_used_by_your_session_when_the_active_session_belongs_to_a_different_session_id() throws Exception {
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		
 		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
@@ -56,7 +56,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_session_is_being_used_by_your_session_when_the_active_session_has_the_same_session_id() throws Exception {
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		
 		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_1);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
@@ -69,7 +69,7 @@ public class SessionUserInUseTest {
 	@Test 
 	public void should_find_that_the_session_does_not_belong_to_you_if_it_has_expired() {
 		NonDataSourceBackedConfigContext configContext = new NonDataSourceBackedConfigContext();
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		
 		ActiveSession activeSession = createExpiredSession(user, A_SESSION_ID_1);
 		
@@ -85,7 +85,7 @@ public class SessionUserInUseTest {
 	@Test 
 	public void should_find_for_a_system_user_that_the_session_does_not_belong_to_you_if_it_has_expired() throws Exception {
 		NonDataSourceBackedConfigContext configContext = new NonDataSourceBackedConfigContext();
-		UserBean systemUser = aSystemUser().build();
+		User systemUser = aSystemUser().build();
 		
 		ActiveSession activeSession = createExpiredSession(systemUser, A_SESSION_ID_1);
 		
@@ -131,7 +131,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_touch_the_active_session_when_it_belongs_to_the_passed_in_session_id() {
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		
 		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_1);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
@@ -150,7 +150,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_a_system_users_owns_the_active_session_when_the_active_session_is_their_session() throws Exception {
-		UserBean systemUser = aSystemUser().build();
+		User systemUser = aSystemUser().build();
 		
 		ActiveSession activeSession = new ActiveSession(systemUser, A_SESSION_ID_1);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
@@ -163,7 +163,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_a_system_users_owns_the_active_session_when_the_active_session_is_not_their_session() throws Exception {
-		UserBean systemUser = aSystemUser().build();
+		User systemUser = aSystemUser().build();
 		
 		ActiveSession activeSession = new ActiveSession(systemUser, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
@@ -177,7 +177,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_no_active_session_returned_by_the_loader_means_that_there_is_no_active_session() throws Exception {
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(null);
 		
 		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), getSuccessfulSaver());
@@ -186,7 +186,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_there_is_an_active_session_when_one_exists_and_has_not_expired() throws Exception {
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
@@ -196,7 +196,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_there_is_not_an_active_session_for_a_system_user_when_one_exists_and_has_not_expired() throws Exception {
-		UserBean sysetmUser = aSystemUser().build();
+		User sysetmUser = aSystemUser().build();
 		ActiveSession activeSession = new ActiveSession(sysetmUser, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
@@ -207,7 +207,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_there_is_not_an_active_session_for_a_system_user_when_one_does_not_exists() throws Exception {
-		UserBean sysetmUser = aSystemUser().build();
+		User sysetmUser = aSystemUser().build();
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(null);
 		
 		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), getSuccessfulSaver());
@@ -217,7 +217,7 @@ public class SessionUserInUseTest {
 	
 	@Test
 	public void should_find_that_there_is_not_an_active_session_for_a_user_when_it_has_expired() throws Exception {
-		UserBean user = aUser().build();
+		User user = aUser().build();
 		Clock clock = new StoppedClock();
 		
 		ActiveSession activeSession = createExpiredSession(user, A_SESSION_ID_2);
@@ -231,7 +231,7 @@ public class SessionUserInUseTest {
 	
 	
 	
-	private ActiveSession createExpiredSession(UserBean user, String sessionId) {
+	private ActiveSession createExpiredSession(User user, String sessionId) {
 		ActiveSession activeSession = new ActiveSession(user, sessionId) {
 			@Override
 			public boolean isExpired(int timeoutInMinutes, Clock clock) {

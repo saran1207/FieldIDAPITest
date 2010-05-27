@@ -6,12 +6,12 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.Product;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -35,7 +35,7 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 	}
 	
 	@Override
-	protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception {
+	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
 		Transaction transaction = null;
 		try {
 			transaction = PersistenceManager.startTransaction();
@@ -59,7 +59,7 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 		}
 	}
 	
-	private List<Product> loadProducts(UserBean user, Transaction transaction) {
+	private List<Product> loadProducts(User user, Transaction transaction) {
 		return new LazyLoadingList<Product>(productIdList, productLoader, transaction);
 	}
 

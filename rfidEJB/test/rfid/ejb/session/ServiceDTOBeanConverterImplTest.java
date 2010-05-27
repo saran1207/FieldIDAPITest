@@ -24,7 +24,6 @@ import org.junit.Test;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.model.InspectionSchedule;
@@ -44,6 +43,7 @@ import com.n4systems.model.orgs.FindOwnerByLegacyIds;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.TenantCache;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
@@ -130,8 +130,8 @@ public class ServiceDTOBeanConverterImplTest {
 		schedules.add( new InspectionSchedule() );
 		
 				
-		UserBean modifiedBy = new UserBean();
-		modifiedBy.setUniqueID( 4L );
+		User modifiedBy = new User();
+		modifiedBy.setId(4L);
 		
 		Product product = new Product();
 		product.setId( 1L );
@@ -169,8 +169,8 @@ public class ServiceDTOBeanConverterImplTest {
 		ProductType foundProductType = new ProductType();
 		foundProductType.setId( 5L );
 		
-		UserBean foundUser = new UserBean();
-		foundUser.setUniqueID(productServiceDTO.getIdentifiedById());
+		User foundUser = new User();
+		foundUser.setId(productServiceDTO.getIdentifiedById());
 		
 		Tenant foundTenant = aTenant().build();
 		productServiceDTO.setProductTypeId( foundProductType.getId() );
@@ -179,7 +179,7 @@ public class ServiceDTOBeanConverterImplTest {
 		
 		EasyMock.expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
 		if (productServiceDTO.identifiedByExists()) {
-			EasyMock.expect(mockEntityManager.find(UserBean.class, foundUser.getId())).andReturn(foundUser);
+			EasyMock.expect(mockEntityManager.find(User.class, foundUser.getId())).andReturn(foundUser);
 		} 
 		EasyMock.replay( mockEntityManager );
 		converter.setEntityManager(mockEntityManager);
@@ -323,7 +323,7 @@ public class ServiceDTOBeanConverterImplTest {
 		}
 		
 		if( productServiceDTO.identifiedByExists() ) {
-			assertEquals( new Long( productServiceDTO.getIdentifiedById() ), product.getIdentifiedBy().getUniqueID() );
+			assertEquals( new Long( productServiceDTO.getIdentifiedById() ), product.getIdentifiedBy().getId() );
 			assertEquals( new Long( product.getIdentifiedBy().getOwner().getId() ), product.getOwner().getId() );
 		} else {
 			assertNull( product.getIdentifiedBy() );

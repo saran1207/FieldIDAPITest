@@ -6,12 +6,12 @@ import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -37,7 +37,7 @@ public abstract class DownloadTask implements Runnable {
 		this(downloadLink, downloadUrl, templateName, new DownloadLinkSaver(), ServiceLocator.getMailManager());
 	}
 	
-	abstract protected void generateFile(File downloadFile, UserBean user, String downloadName) throws Exception;
+	abstract protected void generateFile(File downloadFile, User user, String downloadName) throws Exception;
 	
 	public void run() {
 		logger.info(String.format("Download Task Started [%s]", downloadLink));

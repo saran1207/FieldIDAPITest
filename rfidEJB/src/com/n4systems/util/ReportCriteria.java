@@ -113,7 +113,7 @@ public class ReportCriteria extends AbstractSearchCriteria<Inspection> {
 	}
 
 	public void setInspector(Long inspector) {
-		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "inspector", "inspector.uniqueID", inspector);
+		queryBuilder.addWhere(WhereParameter.Comparator.EQ, "inspector", "inspector.id", inspector);
 	}
 
 	public Long getInspectionBook() {

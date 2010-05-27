@@ -1,0 +1,6 @@
+#!/usr/bin/env jruby
+require File.expand_path('../../lib/boot', __FILE__)
+
+require 'irb'
+require 'irb/completion'
+IRB.start

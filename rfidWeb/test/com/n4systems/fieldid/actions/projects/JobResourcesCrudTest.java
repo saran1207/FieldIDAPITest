@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
@@ -41,8 +41,8 @@ public class JobResourcesCrudTest {
 			}
 			
 			@Override
-			public Pager<UserBean> getPage() {
-				return new SillyPager<UserBean>(new ArrayList<UserBean>());
+			public Pager<User> getPage() {
+				return new SillyPager<User>(new ArrayList<User>());
 			}
 		};
 		
@@ -59,7 +59,7 @@ public class JobResourcesCrudTest {
 	@SuppressWarnings("serial")
 	@Test
 	public void get_employees_excludes_users_already_assigned_to_job() {
-		final UserBean user = UserBuilder.anEmployee().build();
+		final User user = UserBuilder.anEmployee().build();
 		
 		List<Listable<Long>> users = new ArrayList<Listable<Long>>();
 		users.add(user);
@@ -77,8 +77,8 @@ public class JobResourcesCrudTest {
 			}
 			
 			@Override
-			public Pager<UserBean> getPage() {
-				return new SillyPager<UserBean>(Arrays.asList(user));
+			public Pager<User> getPage() {
+				return new SillyPager<User>(Arrays.asList(user));
 			}
 		};
 		

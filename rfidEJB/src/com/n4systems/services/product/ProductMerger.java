@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -20,6 +19,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -29,15 +29,15 @@ public class ProductMerger {
 	private final PersistenceManager persistenceManager;
 	private final ProductManager productManager;
 	private final InspectionManager inspectionManager;
-	private final UserBean user;
+	private final User user;
 
 	private final InspectionScheduleService scheduleService;
 
-	public ProductMerger(PersistenceManager persistenceManager, ProductManager productManager, InspectionManager inspectionManger, UserBean user) {
+	public ProductMerger(PersistenceManager persistenceManager, ProductManager productManager, InspectionManager inspectionManger, User user) {
 		this(persistenceManager, productManager, inspectionManger, new InspectionScheduleServiceImpl(persistenceManager), user);
 	}
 
-	public ProductMerger(PersistenceManager persistenceManager, ProductManager productManager, InspectionManager inspectionManger, InspectionScheduleService inspectionScheduleService, UserBean user) {
+	public ProductMerger(PersistenceManager persistenceManager, ProductManager productManager, InspectionManager inspectionManger, InspectionScheduleService inspectionScheduleService, User user) {
 		super();
 		this.persistenceManager = persistenceManager;
 		this.productManager = productManager;

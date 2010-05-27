@@ -3,9 +3,9 @@ package com.n4systems.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.user.User;
 import com.n4systems.util.BitField;
 import com.n4systems.util.persistence.SimpleListable;
 
@@ -145,14 +145,14 @@ public class Permissions {
 	/**
 	 * @return True iff one or more perms is set on user.
 	 */
-	public static boolean hasOneOf(UserBean user, int ... perms) {
+	public static boolean hasOneOf(User user, int ... perms) {
 		return hasOneOf(user.getPermissions(), perms);
 	}
 	
 	/**
 	 * @return True iff ALL perms are set on user.
 	 */
-	public static boolean hasAllOf(UserBean user, int ... perms) {
+	public static boolean hasAllOf(User user, int ... perms) {
 		BitField permField = new BitField(user.getPermissions());
 		
 		boolean hasAccess = true;
@@ -165,12 +165,9 @@ public class Permissions {
 		return hasAccess;
 	}
 	
-	/**
-	 * @return A new ArrayList<UserBean> of users passing hasOneOf(user, perms)
-	 */
-	public static List<UserBean> filterHasOneOf(List<UserBean> users, int ... perms) {
-		List<UserBean> filteredUsers = new ArrayList<UserBean>();
-		for (UserBean user: users) {
+	public static List<User> filterHasOneOf(List<User> users, int ... perms) {
+		List<User> filteredUsers = new ArrayList<User>();
+		for (User user: users) {
 			if (hasOneOf(user, perms)) {
 				filteredUsers.add(user);
 			}
@@ -178,12 +175,10 @@ public class Permissions {
 		return filteredUsers;
 	}
 	
-	/**
-	 * @return A new ArrayList<UserBean> of users passing hasAllOf(user, perms)
-	 */
-	public static List<UserBean> filterHasAllOf(List<UserBean> users, int ... perms) {
-		List<UserBean> filteredUsers = new ArrayList<UserBean>();
-		for (UserBean user: users) {
+	
+	public static List<User> filterHasAllOf(List<User> users, int ... perms) {
+		List<User> filteredUsers = new ArrayList<User>();
+		for (User user: users) {
 			if (hasAllOf(user, perms)) {
 				filteredUsers.add(user);
 			}

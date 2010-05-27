@@ -2,7 +2,6 @@ package com.n4systems.model.user;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
@@ -13,23 +12,23 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-public class UserSaver extends Saver<UserBean> {
+public class UserSaver extends Saver<User> {
 
 	@Override
-	protected void save(EntityManager em, UserBean entity) {
+	protected void save(EntityManager em, User entity) {
 		checkUnique(em, entity);
 		
 		super.save(em, entity);
 	}
 
 	@Override
-	protected UserBean update(EntityManager em, UserBean entity) {
+	protected User update(EntityManager em, User entity) {
 		checkUnique(em, entity);
 		
 		return super.update(em, entity);
 	}
 	
-	private void checkUnique(EntityManager em, UserBean user) {
+	private void checkUnique(EntityManager em, User user) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(user.getTenant().getId());
 		
 		if(userIdExists(em, filter, user)) {
@@ -41,27 +40,27 @@ public class UserSaver extends Saver<UserBean> {
 		}
 	}
 	
-	private boolean userIdExists(EntityManager em, SecurityFilter filter, UserBean user) {
-		QueryBuilder<UserBean> userCount = new QueryBuilder<UserBean>(UserBean.class, filter);
+	private boolean userIdExists(EntityManager em, SecurityFilter filter, User user) {
+		QueryBuilder<User> userCount = new QueryBuilder<User>(User.class, filter);
 		userCount.addWhere(Comparator.EQ, "userID", "userID", user.getUserID(), WhereParameter.IGNORE_CASE);
 		
 		if (!user.isNew()) {
-			userCount.addWhere(Comparator.NE, "uniqueID", "uniqueID", user.getUniqueID());
+			userCount.addWhere(Comparator.NE, "id", "id", user.getId());
 		}
 		
 		return userCount.entityExists(em);
 	}
 
-	public boolean rfidExists(EntityManager em, SecurityFilter filter, UserBean user) {
+	public boolean rfidExists(EntityManager em, SecurityFilter filter, User user) {
 		if(user.getHashSecurityCardNumber() == null || user.getHashSecurityCardNumber().length() == 0) {
 			return false;
 		}
 		
-		QueryBuilder<UserBean> userCount = new QueryBuilder<UserBean>(UserBean.class, filter);
+		QueryBuilder<User> userCount = new QueryBuilder<User>(User.class, filter);
 		userCount.addSimpleWhere("hashSecurityCardNumber", user.getHashSecurityCardNumber());
 		
 		if (!user.isNew()) {
-			userCount.addWhere(Comparator.NE, "uniqueID", "uniqueID", user.getUniqueID());
+			userCount.addWhere(Comparator.NE, "id", "id", user.getId());
 		}
 		
 		return userCount.entityExists(em);

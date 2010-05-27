@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -17,6 +16,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.Observation;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.user.User;
 
 /**
  * A helper class for the InspectionCrud and SubInspectionCrud.  Consolidates form processing, 
@@ -100,13 +100,13 @@ public class InspectionHelper {
 	 * them.  Each skeleton CriteriaResult is processed into a full result by looking up the Criteria and State by id, and then setting the inspection
 	 * and tenant fields.  The results Observations are then processed before adding it to the inspeciton's result list.  When complete
 	 * inspection will have it's full list of processed CriteriaResults attached.
-	 * @see #processObservations(CriteriaResult, UserBean)
+	 * @see #processObservations(CriteriaResult, User)
 	 * @param inspection			An AbstractInspection (sub or master)
 	 * @param formCriteriaResults	CriteriaResults input from a form.
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
 	 * @param pm					A PersistenceManager instance
 	 */
-	public void processFormCriteriaResults(AbstractInspection inspection, List<CriteriaResult> formCriteriaResults, UserBean modifiedBy) {
+	public void processFormCriteriaResults(AbstractInspection inspection, List<CriteriaResult> formCriteriaResults, User modifiedBy) {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
@@ -159,7 +159,7 @@ public class InspectionHelper {
 	 * @param result		A CriteriaResult
 	 * @param modifiedBy	A modifiedBy user to set on the result
 	 */
-	public void processObservations(CriteriaResult result, Tenant tenant, UserBean modifiedBy) {
+	public void processObservations(CriteriaResult result, Tenant tenant, User modifiedBy) {
 		// these lists can have nulls in them
 		StrutsListHelper.clearNulls(result.getDeficiencies());
 		StrutsListHelper.clearNulls(result.getRecommendations());

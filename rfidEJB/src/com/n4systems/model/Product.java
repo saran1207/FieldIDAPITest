@@ -25,7 +25,6 @@ import javax.persistence.Transient;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
@@ -36,6 +35,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 
 
@@ -93,11 +93,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	private Set<ProductSerialExtensionValueBean> productSerialExtensionValues = new HashSet<ProductSerialExtensionValueBean>();
 
 	@ManyToOne(optional = true)
-	private UserBean identifiedBy;
+	private User identifiedBy;
     
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigneduser_id")
-    private UserBean assignedUser;
+    private User assignedUser;
     
     @Transient
     private List<SubProduct> subProducts = new ArrayList<SubProduct>();
@@ -312,11 +312,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public UserBean getIdentifiedBy() {
+	public User getIdentifiedBy() {
 		return identifiedBy;
 	}
 
-	public void setIdentifiedBy(UserBean identifiedBy) {
+	public void setIdentifiedBy(User identifiedBy) {
 		this.identifiedBy = identifiedBy;
 	}
 
@@ -391,11 +391,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-    public UserBean getAssignedUser() {
+    public User getAssignedUser() {
 		return assignedUser;
 	}
 
-	public void setAssignedUser(UserBean assignedTo) {
+	public void setAssignedUser(User assignedTo) {
 		this.assignedUser = assignedTo;
 	}
 

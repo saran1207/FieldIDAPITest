@@ -2,13 +2,12 @@ package com.n4systems.model.user;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class UserFilteredLoader extends SecurityFilteredLoader<UserBean> {
+public class UserFilteredLoader extends SecurityFilteredLoader<User> {
 	private Long id;
 
 	public UserFilteredLoader(SecurityFilter filter) {
@@ -16,11 +15,11 @@ public class UserFilteredLoader extends SecurityFilteredLoader<UserBean> {
 	}
 
 	@Override
-	protected UserBean load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<UserBean> builder = new QueryBuilder<UserBean>(UserBean.class, filter);
-		builder.addSimpleWhere("uniqueID", id);
+	protected User load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, filter);
+		builder.addSimpleWhere("id", id);
 		
-		UserBean user = builder.getSingleResult(em);
+		User user = builder.getSingleResult(em);
 	    return user;
 	}
 

@@ -16,6 +16,7 @@ import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
+import com.n4systems.model.user.User;
 
 /**
  * This stores, for each system user, the last options they used when creating a
@@ -32,7 +33,7 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "r_fieldiduser")
-	private UserBean user;
+	private User user;
 	
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
@@ -52,17 +53,17 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigneduser_id")
-    private UserBean assignedUser;
+    private User assignedUser;
 	
 	@ManyToMany(targetEntity = InfoOptionBean.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "addproducthistory_infooption", joinColumns = @JoinColumn(name = "r_addproducthistory", referencedColumnName = "uniqueid"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	private List<InfoOptionBean> infoOptions;
 
-	public UserBean getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserBean user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
@@ -114,11 +115,11 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 		this.location = location;
 	}
 	
-    public UserBean getAssignedUser() {
+    public User getAssignedUser() {
 		return assignedUser;
 	}
 
-	public void setAssignedUser(UserBean assignedTo) {
+	public void setAssignedUser(User assignedTo) {
 		this.assignedUser = assignedTo;
 	}
 

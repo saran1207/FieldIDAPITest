@@ -1,11 +1,11 @@
 package com.n4systems.notifiers.notifications;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public abstract class ImportSuccessNotification extends Notification {
 	private int totalImported = 0;
 
-	public ImportSuccessNotification(UserBean notifyUser) {
+	public ImportSuccessNotification(User notifyUser) {
 		notifiyUser(notifyUser);
 	}
 	

@@ -4,17 +4,17 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.user.User;
 
 public class EntityListArchiver<T extends AbstractEntity & Archivable> {
 	private final Class<T> archiveClass;
 	private final Set<Long> ids;
-	private final UserBean modifyUser;
+	private final User modifyUser;
 	
-	public EntityListArchiver(Class<T> archiveClass, Set<Long> ids, UserBean modifyUser) {
+	public EntityListArchiver(Class<T> archiveClass, Set<Long> ids, User modifyUser) {
 		this.archiveClass = archiveClass;
 		this.modifyUser = modifyUser;
 		this.ids = ids;

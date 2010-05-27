@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.FindProductOptionBean;
 import rfid.ejb.entity.FindProductOptionManufactureBean;
 
 import com.n4systems.ejb.legacy.Option;
@@ -89,53 +88,9 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Collection<FindProductOptionBean> getAllFindProductOptions() {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getAllFindProductOptions();
+	
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public FindProductOptionBean getFindProductOption(Long uniqueID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getFindProductOption(uniqueID);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public FindProductOptionBean getFindProductOption(String key) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getFindProductOption(key);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public FindProductOptionManufactureBean getFindProductOptionManufacture(Long uniqueID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -153,22 +108,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public Collection<FindProductOptionManufactureBean> getFindProductOptionsForManufacture(Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getFindProductOptionsForManufacture(tenantId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public Collection<FindProductOptionManufactureBean> getFindProductOptionsForTenant(Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -186,21 +126,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long persistFindProductOptionManufacture(FindProductOptionManufactureBean findProductOptionManufacturer) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).persistFindProductOptionManufacture(findProductOptionManufacturer);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public void updateFindProductOptionManufacture(FindProductOptionManufactureBean findProductOptionManufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

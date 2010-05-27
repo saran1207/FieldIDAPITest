@@ -8,7 +8,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.orgs.BaseOrg;
@@ -26,7 +26,7 @@ public class EmployeeCrud extends UserCrud {
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 	protected List<ListingPair> permissions;
 	
-	public EmployeeCrud(User userManager, PersistenceManager persistenceManager) {
+	public EmployeeCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 	}
 

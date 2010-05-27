@@ -3,13 +3,13 @@ package com.n4systems.fieldid.actions.user;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -20,17 +20,17 @@ public class MyAccount extends AbstractCrud implements HasDuplicateValueValidato
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(MyAccount.class);
 
-	private User userManager;
-	private UserBean currentUser;
+	private UserManager userManager;
+	private User currentUser;
 
-	public MyAccount(User userManager, PersistenceManager persistenceManager) {
+	public MyAccount(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
 
 	@Override
 	protected void initMemberFields() {
-		currentUser = userManager.getUser(getSessionUser().getId());
+		currentUser = userManager.findUser(getSessionUser().getId());
 	}
 
 	@Override

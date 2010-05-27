@@ -1,8 +1,8 @@
 package com.n4systems.model.api;
 
-import rfid.ejb.entity.UserBean;
+import com.n4systems.model.user.User;
 
 public interface HasModifiedBy {
-	public UserBean getModifiedBy();
-	public void setModifiedBy(UserBean modifiedBy);
+	public User getModifiedBy();
+	public void setModifiedBy(User modifiedBy);
 }

@@ -20,9 +20,7 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 	
 	protected EntityManager em;
 	
-	public SerialNumberCounterManager() {
-		super();
-	}
+	
 
 	public SerialNumberCounterManager(EntityManager em) {
 		super();
@@ -33,9 +31,6 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 		em.merge(serialNumberCounter);
 	}
 	
-	public void persistSerialNumberCounter(SerialNumberCounterBean serialNumberCounter) {
-		em.persist(serialNumberCounter);
-	}
 	
 	@SuppressWarnings("unchecked")
 	public Collection<SerialNumberCounterBean> getSerialNumberCounters() {

@@ -5,7 +5,6 @@ require "permissions"
 
 class User < ActiveRecord::Base
   set_table_name :users
-  set_primary_key :uniqueid
 
   belongs_to  :tenant,              :foreign_key => 'tenant_id',       :class_name => 'Tenant'
   

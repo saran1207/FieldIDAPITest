@@ -3,11 +3,10 @@ package com.n4systems.fieldid.actions;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 import rfid.web.helper.SessionEulaAcceptance;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.User;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -15,6 +14,7 @@ import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.time.SystemClock;
@@ -24,13 +24,13 @@ public class SignInAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger(SignInAction.class);
 	private static final long serialVersionUID = 1L;
 
-	protected User userManager;
+	protected UserManager userManager;
 
 	private String previousUrl;
 
 	private SignIn signIn = new SignIn();
 
-	public SignInAction(User userManager, PersistenceManager persistenceManager) {
+	public SignInAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}
@@ -58,7 +58,7 @@ public class SignInAction extends AbstractAction {
 	}
 
 	public String doCreate() {
-		UserBean loginUser = null;
+		User loginUser = null;
 
 		if (signIn.isValid(this)) {
 			loginUser = findUser();
@@ -74,12 +74,12 @@ public class SignInAction extends AbstractAction {
 		return INPUT;
 	}
 
-	private void storeUserAuthenticationForConfirmOfSessionKick(UserBean loginUser) {
+	private void storeUserAuthenticationForConfirmOfSessionKick(User loginUser) {
 		getSession().setUserAuthHolder(loginUser.getId());
 	}
 
-	private UserBean findUser() {
-		UserBean loginUser;
+	private User findUser() {
+		User loginUser;
 		if (signIn.isNormalLogin()) {
 			loginUser = userManager.findUser(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
 		} else {
@@ -88,12 +88,12 @@ public class SignInAction extends AbstractAction {
 		return loginUser;
 	}
 
-	private boolean signInWillKickAnotherSessionOut(UserBean loginUser) {
+	private boolean signInWillKickAnotherSessionOut(User loginUser) {
 		SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
 		return sessionUserInUse.isThereAnActiveSessionFor(loginUser.getId()) && !sessionUserInUse.doesActiveSessionBelongTo(loginUser.getId(), getSession().getId());
 	}
 
-	private String signIn(UserBean loginUser) {
+	private String signIn(User loginUser) {
 		logUserIn(loginUser);
 		
 		
@@ -109,7 +109,7 @@ public class SignInAction extends AbstractAction {
 			return ERROR;
 		}
 		
-		UserBean loginUser = userManager.findUserBean(userId);
+		User loginUser = userManager.findUser(userId);
 		if (loginUser != null) {
 			return signIn(loginUser); 
 		}
@@ -156,17 +156,17 @@ public class SignInAction extends AbstractAction {
 
 	
 
-	protected void logUserIn(UserBean loginUser) {
+	protected void logUserIn(User loginUser) {
 		fetchPerviousUrl();
 		clearSession();
-		loadSessionUser(loginUser.getUniqueID());
+		loadSessionUser(loginUser.getId());
 		loadEULAInformation();
 		rememberMe();
 		registerActiveSession(loginUser, getSession().getId());
 		logger.info(getLogLinePrefix() + "Login: " + signIn.getUserName() + " of " + getSecurityGuard().getTenantName());
 	}
 
-	private void registerActiveSession(UserBean loginUser, String sessionId) {
+	private void registerActiveSession(User loginUser, String sessionId) {
 		new ActiveSessionSaver().save(new ActiveSession(loginUser, sessionId));
 	}
 

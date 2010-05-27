@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EmployeeAlreadyAttachedException;
@@ -16,6 +15,7 @@ import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.JobResourceService;
@@ -30,9 +30,9 @@ public class JobResourcesCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(JobResourcesCrud.class);
 	
-	private UserBean employee;
+	private User employee;
 	private Project job;
-	private Pager<UserBean> resources;
+	private Pager<User> resources;
 	private List<ListingPair> employees;
 	
 	
@@ -42,12 +42,12 @@ public class JobResourcesCrud extends AbstractCrud {
 	
 	@Override
 	protected void initMemberFields() {
-		employee = new UserBean();
+		employee = new User();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		employee = persistenceManager.findLegacy(UserBean.class, uniqueId, getSecurityFilter());
+		employee = persistenceManager.find(User.class, uniqueId, getSecurityFilter());
 	}
 	
 	private void testRequiredEntities(boolean employeeNeeded) {
@@ -147,19 +147,19 @@ public class JobResourcesCrud extends AbstractCrud {
 		}
 	}
 
-	public UserBean getEmployee() {
+	public User getEmployee() {
 		return employee;
 	}
 
-	public Pager<UserBean> getPage() {
+	public Pager<User> getPage() {
 		if (resources == null) {
 			persistenceManager.reattchAndFetch(job, "resources");
-			resources = new SillyPager<UserBean>(job.getResources());
+			resources = new SillyPager<User>(job.getResources());
 		}
 		return resources;
 	}
 	
-	public List<UserBean> getResources() {
+	public List<User> getResources() {
 		return getPage().getList();
 	
 	}

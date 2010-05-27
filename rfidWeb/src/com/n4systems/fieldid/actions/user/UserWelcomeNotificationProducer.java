@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.actions.user;
 
-import rfid.ejb.entity.UserBean;
 
+import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.notifications.UserWelcomeEmail;
 import com.n4systems.util.uri.ActionURLBuilder;
@@ -20,12 +20,12 @@ public class UserWelcomeNotificationProducer {
 	}
 
 	
-	public void sendWelcomeNotificationTo(UserBean user) {
+	public void sendWelcomeNotificationTo(User user) {
 		sendNotification(user, null);
 	}
 
 
-	private void sendNotification(UserBean user, String personalMessage) {
+	private void sendNotification(User user, String personalMessage) {
 		UserWelcomeEmail notification = new UserWelcomeEmail(user, loginUrl, forgotPasswordUrl);
 		notification.setPersonalMessage(personalMessage);
 		notifier.notify(notification );
@@ -34,7 +34,7 @@ public class UserWelcomeNotificationProducer {
 	
 
 
-	public void sendPersonalizedWelcomeNotificationTo(UserBean user, String personalMessage) {
+	public void sendPersonalizedWelcomeNotificationTo(User user, String personalMessage) {
 		sendNotification(user, personalMessage);
 	}
 

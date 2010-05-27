@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -71,6 +70,7 @@ import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -216,7 +216,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
 		inspectionDTO.setLocation( inspection.getLocation() );
-		inspectionDTO.setPerformedById( inspection.getInspector().getUniqueID() );
+		inspectionDTO.setPerformedById( inspection.getInspector().getId() );
 		inspectionDTO.setStatus( inspection.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
 		inspectionDTO.setUtcDate(inspection.getDate());
@@ -275,8 +275,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setRfidNumber(product.getRfidNumber() == null ? null : product.getRfidNumber().toUpperCase());
 		productDTO.setSerialNumber(product.getSerialNumber());
 		productDTO.setComments(product.getComments());
-		productDTO.setIdentifiedById(product.getIdentifiedBy() != null ? product.getIdentifiedBy().getUniqueID() : 0);
-		productDTO.setModifiedById(product.getModifiedBy() != null ? product.getModifiedBy().getUniqueID() : 0);
+		productDTO.setIdentifiedById(product.getIdentifiedBy() != null ? product.getIdentifiedBy().getId() : 0);
+		productDTO.setModifiedById(product.getModifiedBy() != null ? product.getModifiedBy().getId() : 0);
 		productDTO.setOrderNumber(product.getShopOrder() != null ? product.getShopOrder().getOrder().getOrderNumber() : "");
 		productDTO.setModified(product.getModified());
 
@@ -346,12 +346,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		targetProduct.setProductStatus(convertField(ProductStatusBean.class, productServiceDTO.getProductStatusId(), targetProduct.getProductStatus()));
 
 		if (productServiceDTO.identifiedByExists()) {
-			UserBean user = em.find(UserBean.class, productServiceDTO.getIdentifiedById());
+			User user = em.find(User.class, productServiceDTO.getIdentifiedById());
 			targetProduct.setIdentifiedBy(user);
 		}
 
 		if (productServiceDTO.modifiedByIdExists()) {
-			UserBean modifiedBy = em.find(UserBean.class, productServiceDTO.getModifiedById());
+			User modifiedBy = em.find(User.class, productServiceDTO.getModifiedById());
 			targetProduct.setModifiedBy(modifiedBy);
 		}
 
@@ -465,7 +465,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}		
 		
 		// Required object lookups		
-		UserBean inspector = (UserBean)em.find(UserBean.class, inspectionServiceDTO.getPerformedById());
+		User inspector = (User)em.find(User.class, inspectionServiceDTO.getPerformedById());
 		inspection.setModifiedBy( inspector );		
 		inspection.setInspector( inspector );
 
@@ -525,12 +525,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return inspection;
 	}
 
-	public FileAttachment convert(AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, UserBean inspector) throws IOException {
+	public FileAttachment convert(AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User inspector) throws IOException {
 		return convertToFileAttachment(inspectionImageServiceDTO.getImage(), inspection.getTenant(), inspector);
 
 	}
 
-	private FileAttachment convertToFileAttachment(ImageServiceDTO imageServiceDTO, Tenant tenant, UserBean modifiedBy) throws IOException {
+	private FileAttachment convertToFileAttachment(ImageServiceDTO imageServiceDTO, Tenant tenant, User modifiedBy) throws IOException {
 		// some files come prepended with a '\'. We should remove these here.
 		String fileName = imageServiceDTO.getFileName().replace("\\", "");
 
@@ -540,7 +540,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return fileAttachment;
 	}
 
-	private FileAttachment convertFileAttachmentAndWriteToTemp(ImageServiceDTO imageServiceDTO, Tenant tenant, UserBean modifiedBy) throws IOException {
+	private FileAttachment convertFileAttachmentAndWriteToTemp(ImageServiceDTO imageServiceDTO, Tenant tenant, User modifiedBy) throws IOException {
 		FileAttachment fileAttachment = null;
 
 		try {
@@ -566,7 +566,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return fileAttachment;
 	}
 
-	private List<FileAttachment> convertToFileAttachmentsAndWriteToTemp(List<ImageServiceDTO> images, Tenant tenant, UserBean modifiedBy) throws IOException {
+	private List<FileAttachment> convertToFileAttachmentsAndWriteToTemp(List<ImageServiceDTO> images, Tenant tenant, User modifiedBy) throws IOException {
 		List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>();
 
 		if (images != null) {
@@ -578,7 +578,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return fileAttachments;
 	}
 
-	private SubInspection convert(SubInspectionServiceDTO subInspectionServiceDTO, Tenant tenant, UserBean inspector) throws IOException {
+	private SubInspection convert(SubInspectionServiceDTO subInspectionServiceDTO, Tenant tenant, User inspector) throws IOException {
 		SubInspection subInspection = new SubInspection();
 		populate(subInspection, subInspectionServiceDTO, tenant);
 		subInspection.setName(subInspectionServiceDTO.getName());
@@ -958,7 +958,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return serviceDefinition;
 	}
 
-	public com.n4systems.webservice.dto.UserServiceDTO convert(UserBean user) {
+	public com.n4systems.webservice.dto.UserServiceDTO convert(User user) {
 		persistenceManager.reattach(user);
 
 		com.n4systems.webservice.dto.UserServiceDTO userService = new com.n4systems.webservice.dto.UserServiceDTO();
@@ -1004,10 +1004,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return baseOrg.getId();
 	}
 
-	public UserBean convert(com.n4systems.webservice.dto.UserServiceDTO userDTO) {
-		UserBean user = new UserBean();
+	public User convert(com.n4systems.webservice.dto.UserServiceDTO userDTO) {
+		User user = new User();
 
-		user.setUniqueID((userDTO.getId() == NULL_ID) ? null : userDTO.getId());
+		user.setId(((userDTO.getId() == NULL_ID) ? null : userDTO.getId()));
 		user.setUserID(userDTO.getUserId());
 
 		return user;
@@ -1081,8 +1081,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		populateOwners(job.getOwner(), jobService);
 
-		for (UserBean user : job.getResources()) {
-			jobService.getResourceUserIds().add(user.getUniqueID());
+		for (User user : job.getResources()) {
+			jobService.getResourceUserIds().add(user.getId());
 		}
 
 		return jobService;

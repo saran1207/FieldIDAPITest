@@ -2,20 +2,20 @@ package com.n4systems.fieldid.actions.notifications;
 
 import java.util.Date;
 
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.UpcomingEventReport;
+import com.n4systems.model.user.User;
 
 public class NotificationSettingViewModelConverter {
 	
 	private final Tenant tenant;
-	private final UserBean user;
+	private final User user;
 	
-	public NotificationSettingViewModelConverter(Tenant tenant, UserBean user) {
+	public NotificationSettingViewModelConverter(Tenant tenant, User user) {
 		this.tenant = tenant;
 		this.user = user;
 	}

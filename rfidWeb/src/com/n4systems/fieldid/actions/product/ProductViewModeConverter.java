@@ -8,7 +8,6 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
-import rfid.ejb.entity.UserBean;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
@@ -19,6 +18,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -29,10 +29,10 @@ import com.n4systems.services.TenantCache;
 public class ProductViewModeConverter {
 	private final LoaderFactory loaderFactory;
 	private final OrderManager orderManager;
-	private final UserBean identifier;
+	private final User identifier;
 	private Transaction transaction;
 	
-	public ProductViewModeConverter(LoaderFactory loaderFactory, OrderManager orderManager, UserBean identifier) {
+	public ProductViewModeConverter(LoaderFactory loaderFactory, OrderManager orderManager, User identifier) {
 		this.loaderFactory = loaderFactory;
 		this.orderManager = orderManager;
 		this.identifier = identifier;
@@ -90,8 +90,8 @@ public class ProductViewModeConverter {
 		return productType;
 	}
 	
-	private UserBean resolveUser(Long userId) {
-		UserBean user = null;
+	private User resolveUser(Long userId) {
+		User user = null;
 		if (userId != null) {
 			UserFilteredLoader loader = loaderFactory.createUserFilteredLoader().setId(userId);
 			user = loader.load(transaction);
