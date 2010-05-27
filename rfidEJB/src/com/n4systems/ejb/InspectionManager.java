@@ -23,34 +23,23 @@ public interface InspectionManager {
 
 	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId, String... postFetchFields);
 
-	public InspectionGroup findInspectionGroupByMobileGuid(String mobileGuid, SecurityFilter filter);
-
 	public SubInspection findSubInspection(Long subInspectionId, SecurityFilter filter);
 
 	public Inspection findInspectionThroughSubInspection(Long subInspectionId, SecurityFilter filter);
 
 	public Inspection findAllFields(Long id, SecurityFilter filter);
 
-	public Date findLastInspectionDate(Product product);
-
 	public Date findLastInspectionDate(InspectionSchedule schedule);
 
 	public Date findLastInspectionDate(Long scheduleId);
 
-	public Date findLastInspectionDate(Product product, InspectionType inspectionType);
-
 	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter);
-
-	
-	
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	
 	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	
 	public boolean isMasterInspection(Long id);
-	
-	
 	
 	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException;
 
@@ -59,12 +48,7 @@ public interface InspectionManager {
 
 	public Inspection retireInspection(Inspection inspection, Long userId);
 
-
 	
-	
-	
-	
-	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId);
 
 	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId);
 

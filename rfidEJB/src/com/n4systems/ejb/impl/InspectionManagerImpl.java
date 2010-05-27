@@ -29,7 +29,6 @@ import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
@@ -94,24 +93,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		return (List<InspectionGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, productId), postFetchFields);
 	}
 
-	/**
-	 * Finds a unique inspection group for a tenant based on the mobile guid
-	 */
-	public InspectionGroup findInspectionGroupByMobileGuid(String mobileGuid, SecurityFilter filter) {
-		InspectionGroup inspectionGroup = null;
-
-		QueryBuilder<InspectionGroup> queryBuilder = new QueryBuilder<InspectionGroup>(InspectionGroup.class, filter);
-		queryBuilder.setSimpleSelect().addSimpleWhere("mobileGuid", mobileGuid);
-
-		try {
-			inspectionGroup = persistenceManager.find(queryBuilder);
-		} catch (InvalidQueryException iqe) {
-			logger.error("bad query while loading inspection group", iqe);
-		}
-
-		return inspectionGroup;
-	}
-
+	
 	public Inspection findInspectionThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
 		String str = "select i FROM Inspection i, IN( i.subInspections ) s WHERE s.id = :subInspection AND ";
 		str += filter.produceWhereClause(Inspection.class, "i");
@@ -246,25 +228,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		return persistenceManager.update(inspectionType, modifyingUserId);
 	}
 
-	/**
-	 * Returns an InspectionType using it's legacyEventId (EventType id) XXX -
-	 * this should be removed once the legacyEventId is no longer needed
-	 */
-	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId) {
-		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
-
-		QueryBuilder<InspectionType> qBuilder = new QueryBuilder<InspectionType>(InspectionType.class, filter);
-		qBuilder.setSimpleSelect().addSimpleWhere("legacyEventId", eventId);
-
-		InspectionType inspectionType = null;
-		try {
-			inspectionType = persistenceManager.find(qBuilder);
-		} catch (InvalidQueryException e) {
-			logger.error("Failed while finding InspectionType by legacyEventId", e);
-		}
-
-		return inspectionType;
-	}
+	
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
@@ -346,11 +310,5 @@ public class InspectionManagerImpl implements InspectionManager {
 		return lastInspectionFinder.findLastInspectionDate(scheduleId);
 	}
 
-	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
-		return lastInspectionFinder.findLastInspectionDate(product, inspectionType);
-	}
 
-	public Date findLastInspectionDate(Product product) {
-		return lastInspectionFinder.findLastInspectionDate(product);
-	}
 }

@@ -83,20 +83,7 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public InspectionGroup findInspectionGroupByMobileGuid(String mobileGuid, SecurityFilter filter) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findInspectionGroupByMobileGuid(mobileGuid, filter);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -128,20 +115,6 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public InspectionType findInspectionTypeByLegacyEventId(Long eventId, Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findInspectionTypeByLegacyEventId(eventId, tenantId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 	public Date findLastInspectionDate(InspectionSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -173,35 +146,8 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findLastInspectionDate(product, inspectionType);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public Date findLastInspectionDate(Product product) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findLastInspectionDate(product);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
+	
 
 	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

@@ -20,7 +20,6 @@ public interface LegacyProductType {
 	 
 	
 	public ProductType findDefaultProductType(Long tenantId);
-	public ProductType findProductTypeForItemNum(String itemNumber, Long tenantId);
 	
 	public ProductType updateProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException ;
 	

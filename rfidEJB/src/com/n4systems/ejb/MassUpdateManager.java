@@ -10,10 +10,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
-import com.n4systems.util.ReportCriteria;
-import com.n4systems.util.SearchCriteria;
 
-@SuppressWarnings("deprecation")
 public interface MassUpdateManager {
 
 	/**
@@ -37,14 +34,6 @@ public interface MassUpdateManager {
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 
 	public List<Long> createSchedulesForInspections(List<Long> inspectionIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
-
-	/** Use {@link #updateProducts(List, Product, Map, Long)  */
-	@Deprecated
-	public Long updateProducts(SearchCriteria searchCriteria, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
-
-	/** Use {@link #updateInspections(List, Product, Map, Long)  */
-	@Deprecated
-	public Long updateInspections(ReportCriteria reportCriteria, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 
 	
 }

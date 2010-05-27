@@ -57,20 +57,6 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductType findProductTypeForItemNum(String itemNumber, Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findProductTypeForItemNum(itemNumber, tenantId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 	public ProductType findProductTypeForProduct(Long productId) throws InvalidQueryException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

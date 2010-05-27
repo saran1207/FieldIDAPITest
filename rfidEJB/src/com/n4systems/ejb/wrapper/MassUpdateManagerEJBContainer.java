@@ -17,10 +17,7 @@ import com.n4systems.model.Project;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
-import com.n4systems.util.ReportCriteria;
-import com.n4systems.util.SearchCriteria;
 
-@SuppressWarnings("deprecation")
 public class MassUpdateManagerEJBContainer extends EJBTransactionEmulator<MassUpdateManager> implements MassUpdateManager {
 
 	protected MassUpdateManager createManager(EntityManager em) {
@@ -102,20 +99,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateInspections(ReportCriteria reportCriteria, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateInspections(reportCriteria, inspection, values, userId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public Long updateInspectionSchedules(Set<Long> ids, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -147,18 +131,4 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateProducts(SearchCriteria searchCriteria, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateProducts(searchCriteria, product, values, userId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 }

@@ -9,13 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-
 import javax.persistence.Query;
-
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -34,15 +30,10 @@ import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
-import com.n4systems.util.ReportCriteria;
-import com.n4systems.util.SearchCriteria;
-import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SimpleSelect;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-@SuppressWarnings("deprecation")
 
 public class MassUpdateManagerImpl implements MassUpdateManager {
 
@@ -422,25 +413,9 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Long updateProducts(SearchCriteria searchCriteria, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
-		return updateProducts((List<Long>) searchCriteria.getIdQueryBuilder().createQuery(em).getResultList(), product, values, userId);
-	}
+	
 
-	@SuppressWarnings("unchecked")
-	public Long updateInspections(ReportCriteria reportCriteria, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
-		QueryBuilder<Inspection> builder = reportCriteria.getSearchQueryBuilder();
-		builder.setSelectArgument(new SimpleSelect("id"));
-		builder.getSelectArgument().setDistinct(true);
-
-		for (JoinClause joinClauses : builder.getJoinArguments()) {
-			joinClauses.setType(JoinClause.JoinType.LEFT);
-		}
-		builder.getOrderArguments().clear();
-
-		Query idQuery = builder.createQuery(em);
-		return updateInspections((List<Long>) idQuery.getResultList(), inspection, values, userId);
-	}
+	
 
 
 }

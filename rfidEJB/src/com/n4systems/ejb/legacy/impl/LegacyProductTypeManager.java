@@ -92,17 +92,11 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	}
 	
 	public ProductType findDefaultProductType(Long tenantId) {
-		return findProductTypeForItemNum(ProductType.DEFAULT_ITEM_NUMBER, tenantId);
-	}
-	
-	public ProductType findProductTypeForItemNum(String name, Long tenantId) {
 		QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class, new TenantOnlySecurityFilter(tenantId));
-		query.addWhere(Comparator.EQ, "name", "name", name, WhereParameter.IGNORE_CASE);
+		query.addWhere(Comparator.EQ, "name", "name", ProductType.DEFAULT_ITEM_NUMBER, WhereParameter.IGNORE_CASE);
 		
 		return query.getSingleResult(em);
 	}
-	
-	
 	
 	@SuppressWarnings("unchecked")
 	public List<ProductType> getProductTypesForTenant(Long tenantId) {

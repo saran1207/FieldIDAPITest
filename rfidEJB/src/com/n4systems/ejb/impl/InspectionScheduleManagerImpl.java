@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-
 import javax.persistence.EntityManager;
-
-import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 
@@ -21,11 +17,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
-import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.DateHelper;
@@ -88,59 +80,18 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		}
 	}
 	
-	public void removeAllSchedulesFor(ProductType productType, InspectionType inspectionType) {
-		List<Long> inspectionIds = getAvailableScheduleIdsFor(productType, inspectionType);
-		if (!inspectionIds.isEmpty()) {
-			String jpql = "DELETE " + InspectionSchedule.class.getName() + " WHERE id IN (:ids)";
-			Query query = em.createQuery(jpql);
-			query.setParameter("ids", inspectionIds);
-			query.executeUpdate();
-		}
-	}
 	
-	private List<Long> getAvailableScheduleIdsFor(ProductType productType, InspectionType inspectionType) {
-		QueryBuilder<Long> query = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
-		query.setSimpleSelect("id");
-		query.addSimpleWhere("product.type", productType).addSimpleWhere("inspectionType", inspectionType);
-		query.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-		return persistenceManager.findAll(query);
-	}
+	
 	
 	
 	public void create(ProductTypeSchedule schedule) {
 		persistenceManager.save(schedule);
 	}
 	
-	public ProductTypeSchedule update(ProductTypeSchedule schedule) {
-		return persistenceManager.update(schedule);
-	}
 	
-	public void remove(ProductTypeSchedule schedule) {
-		persistenceManager.delete(schedule);
-	}
 	
-	public List<InspectionScheduleCount> getInspectionScheduleCount(Date fromDate, Date toDate, Long tenantId) {
-		return getInspectionScheduleCount(fromDate, toDate, new TenantOnlySecurityFilter(tenantId));
-	}
 	
-	@SuppressWarnings("unchecked")
-	public List<InspectionScheduleCount> getInspectionScheduleCount(Date fromDate, Date toDate, SecurityFilter secFilter) {
-		String jpql = "select new " + InspectionScheduleCount.class.getName() + "(i.nextDate, i.product.owner.name, i.product.type.name, count(*)) " +
-				"from " + InspectionSchedule.class.getName() + " i " +
-				"where " + secFilter.produceWhereClause(InspectionSchedule.class, "i") + " and i.nextDate >= :fromDate and i.nextDate < :toDate AND state = :activeState AND status != :completedStatus " + 
-				"group by i.nextDate, i.product.owner.name, i.product.type.name " + 
-				"order by i.nextDate asc";
-				
-		Query query = em.createQuery(jpql);
-		
-		secFilter.applyParameters(query, InspectionSchedule.class);
-		query.setParameter("fromDate", fromDate);
-		query.setParameter("toDate", toDate);
-		query.setParameter("activeState", EntityState.ACTIVE);
-		query.setParameter("completedStatus", ScheduleStatus.COMPLETED);
-		
-		return query.getResultList();
-	}
+	
 
 
 	
