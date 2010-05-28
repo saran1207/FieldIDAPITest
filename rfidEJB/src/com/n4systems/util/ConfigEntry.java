@@ -26,7 +26,7 @@ public enum ConfigEntry {
 	MOBILE_PAGESIZE_INSPECTIONS					(	"500"					),
 	MOBLIE_PAGESIZE_SETUPDATA					(	"500"					),
 	WEB_TOTAL_INSPECTION_BUTTONS				(	"3"						),
-	WEB_FILE_UPLOAD_MAX							(	"50"						),
+	WEB_FILE_UPLOAD_MAX							(	"50"					),
 	PRODUCT_FILE_UPLOAD_MAX						(	"2"						),
 	WEB_PAGINATION_PAGE_SIZE					(	"20"					),
 	INTEGRATION_PRODUCTTYPE_RESOLVES_BY_CODE	(	"true"					),
@@ -58,7 +58,7 @@ public enum ConfigEntry {
 	// ones below here are never overridden by the tenant.
 	ACTIVE_SESSION_TIME_OUT						(	"30"				),
 	FIELDID_ADMINISTRATOR_EMAIL					(	"team@fieldid.com"	),
-	SYSTEM_USER_USERNAME						(	"n4systems"				),
+	SYSTEM_USER_USERNAME						(	"n4systems"			),
 	SYSTEM_USER_PASSWORD						(	"7c4fd0a53d8aa0d0f15f716cc6324e95223d9902"	),
 	SYSTEM_USER_ADDRESS							(	"admin@fieldid.com"						),
 	UNBRANDED_SUBDOMAIN							(	"www"										),
