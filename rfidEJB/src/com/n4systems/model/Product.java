@@ -519,5 +519,10 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 	@Override
 	public void setGlobalId(String globalId) {}
+
+	public void changeSerialNumberTo(String serialNumber) {
+		this.serialNumber = serialNumber;
+		
+	}
 	
 }

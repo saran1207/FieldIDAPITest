@@ -19,6 +19,7 @@ import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
 
+import com.n4systems.commands.ChangeSerialNumberOnAsset;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -48,9 +49,11 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.assets.Asset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User1;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
@@ -137,6 +140,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	protected List<Product> linkedProducts;
 	protected Map<Long, List<ProductAttachment>> linkedProductAttachments;
+	private String serialNumber;
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
@@ -377,7 +381,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 			
 			// we only set identified by on save
 			product.setIdentifiedBy(fetchCurrentUser());
-			
+			product.setSerialNumber(serialNumber);
+				
 			ProductSaveService saver = getProductSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setProduct(product);
@@ -449,6 +454,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 			ProductSaveService saver = getProductSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setExistingAttachments(getAttachments());
+			applySerialNumberCommand(saver);
+			
 			saver.setProduct(product);
 
 			product = saver.update();
@@ -467,6 +474,23 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 
 		return "saved";
+	}
+
+	private void applySerialNumberCommand(ProductSaveService saver) {
+		if (!serialNumber.trim().equals(product.getSerialNumber())) {
+			saver.addCommand(createCommand());
+		}
+		
+	}
+
+	private ChangeSerialNumberOnAsset createCommand() {
+		Asset asset = new Asset();
+		asset.id = product.getId();
+		User1 user = new User1();
+		user.id = getSessionUserId();
+	
+		
+		return new ChangeSerialNumberOnAsset(asset, serialNumber, user);
 	}
 
 	@SkipValidation
@@ -628,13 +652,14 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	public String getSerialNumber() {
-		return product.getSerialNumber();
+		return serialNumber;
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
 	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength = "50")
 	public void setSerialNumber(String serialNumber) {
-		product.setSerialNumber(serialNumber);
+		this.serialNumber = serialNumber;
+		
 	}
 
 	public String getRfidNumber() {
