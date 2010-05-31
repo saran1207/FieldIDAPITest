@@ -198,6 +198,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		return statuses;
 	}
 	
+	
+	//FIXME: rename method!
 	public List<ListingPair> getInspectors() {
 		if (users == null) {
 			users = userManager.getUserList(getSecurityFilter());

@@ -30,11 +30,12 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private Long productStatusId;
 	private Long assignedUserId;
 	private Long inspectionTypeGroupId;
-	private Long inspectorId;
 	private Long inspectionBookId;
 	private Long jobId;
 	private Date fromDate;
 	private Date toDate;
+	
+	private Long performedBy;
 	
 	private Status status;
 	
@@ -55,8 +56,9 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.assignedUser.id", assignedUserId);
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
-		addSimpleTerm("inspector.id", inspectorId);
+		addSimpleTerm("inspector.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
+		
 		if (status != null) {
 			addSimpleTerm("status", status);
 		}
@@ -150,12 +152,12 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		this.inspectionTypeGroupId = inspectionTypeGroupId;
 	}
 
-	public Long getInspector() {
-		return inspectorId;
+	public Long getPerformedBy() {
+		return performedBy;
 	}
 
-	public void setInspector(Long inspectorId) {
-		this.inspectorId = inspectorId;
+	public void setPerformedBy(Long performedBy) {
+		this.performedBy = performedBy;
 	}
 
 	public Long getInspectionBook() {

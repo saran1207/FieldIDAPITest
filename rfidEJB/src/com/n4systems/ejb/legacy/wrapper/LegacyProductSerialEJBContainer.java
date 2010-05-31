@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 
 import rfid.ejb.entity.AddProductHistoryBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.legacy.LegacyProductSerial;
@@ -313,23 +312,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void update(ProductSerialExtensionValueBean productSerialExtensionValue) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			createManager(transaction.getEntityManager()).update(productSerialExtensionValue);
 
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
 
 	public Long updateProductStatus(ProductStatusBean productStatus) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

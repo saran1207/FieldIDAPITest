@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.AddProductHistoryBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -382,9 +381,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return (Collection<ProductSerialExtensionBean>) query.getResultList();
 	}
 
-	public void update(ProductSerialExtensionValueBean productSerialExtensionValue) {
-		em.merge(productSerialExtensionValue);
-	}
+	
 
 	public boolean duplicateSerialNumber(String serialNumber, Long uniqueID, Tenant tenant) {
 		String queryString = "select count(p.id) from Product p where p.tenant = :tenant " + " and lower(p.serialNumber) = :serialNumber";

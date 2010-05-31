@@ -144,8 +144,8 @@ public class InspectionSummaryGenerator {
 			reportMap.put("inspectionTypeGroup", persistenceManager.find(InspectionTypeGroup.class, reportDefiner.getInspectionTypeGroup()).getName());
 		}
 
-		if (reportDefiner.getInspector() != null) {
-			reportMap.put("inspector", userManager.findUser(reportDefiner.getInspector()).getUserLabel());
+		if (reportDefiner.getPerformedBy() != null) {
+			reportMap.put("inspector", userManager.findUser(reportDefiner.getPerformedBy()).getUserLabel());
 		}
 		
 		if (reportDefiner.getOwner() != null) {

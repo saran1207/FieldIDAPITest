@@ -40,7 +40,7 @@
 			</div>
 			<div class="infoSet">
 				<label for="criteria.inspector"><@s.text name="label.inspector"/></label>
-				<@s.select name="criteria.inspector" list="inspectors" listKey="id" listValue="name" emptyOption="true" />
+				<@s.select name="criteria.performedBy" list="inspectors" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			<div class="infoSet">
 				<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>

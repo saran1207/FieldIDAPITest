@@ -16,6 +16,6 @@ public interface ReportDefiner extends BaseSearchDefiner {
 	public Long getProductType();
 	public Long getInspectionBook();
 	public Long getInspectionTypeGroup();
-	public Long getInspector();
+	public Long getPerformedBy();
 	public BaseOrg getOwner();
 }

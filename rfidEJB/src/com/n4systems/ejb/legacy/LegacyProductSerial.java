@@ -6,7 +6,6 @@ import java.util.List;
 
 import rfid.ejb.entity.AddProductHistoryBean;
 import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.exceptions.SubProductUniquenessException;
@@ -63,9 +62,6 @@ public interface LegacyProductSerial {
 	 #########################################################*/
 	
 	public Product update(Product productSerial, User modifiedBy) throws SubProductUniquenessException;
-	
-	//FIXME remove
-	public void update(ProductSerialExtensionValueBean productSerialExtensionValue);	
 	
 	
 	public Product createProductWithServiceTransaction( String transactionGUID, Product product, User modifiedBy ) throws TransactionAlreadyProcessedException, SubProductUniquenessException;
