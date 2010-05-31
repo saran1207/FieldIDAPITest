@@ -1,12 +1,11 @@
 require "saved_report_criteria"
 class RenameSavedReportsInspectorColumnToPerformedBy < ActiveRecord::Migration
   def self.up
-    SavedReportCriteria.transaction do
-      SavedReportCriteria.find(:all, :conditions => { :mapkey => "inspector" }).each do | criteria |
-        criteria.mapkey = "performedBy"
-        criteria.save
-      end
-      
-    end
+    SavedReportCriteria.update_all({ :mapkey => "performedBy" },  { :mapkey => "inspector" })
+  end
+  
+  
+  def self.down
+    SavedReportCriteria.update_all({ :mapkey => "inspector" }, { :mapkey => "performedBy" })
   end
 end
