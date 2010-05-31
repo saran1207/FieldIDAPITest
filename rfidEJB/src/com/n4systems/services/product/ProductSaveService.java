@@ -1,12 +1,10 @@
 package com.n4systems.services.product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 
-import com.n4systems.commands.ChangeSerialNumberOnAsset;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
@@ -28,8 +26,6 @@ public class ProductSaveService {
 	private Product product;
 	private List<ProductAttachment> existingAttachments;
 	private List<ProductAttachment> uploadedAttachments;
-	
-	private List<ChangeSerialNumberOnAsset> commands = new ArrayList<ChangeSerialNumberOnAsset>();
 
 	public ProductSaveService(LegacyProductSerial productManager, User user) {
 		super();
@@ -86,15 +82,7 @@ public class ProductSaveService {
 
 	private void updateProduct() throws SubProductUniquenessException {
 		saveRequirements();
-		applyCommands();
 		product = productManager.update(product, user);
-	}
-
-	private void applyCommands() {
-		for (ChangeSerialNumberOnAsset command : commands) {
-			command.applyChange(product);
-		}
-		
 	}
 
 	private void saveRequirements() {
@@ -176,10 +164,6 @@ public class ProductSaveService {
 	public ProductSaveService setUploadedAttachments(List<ProductAttachment> uploadedAttachments) {
 		this.uploadedAttachments = uploadedAttachments;
 		return this;
-	}
-
-	public void addCommand(ChangeSerialNumberOnAsset createCommand) {
-		commands.add(createCommand);
 	}
 
 }
