@@ -6,23 +6,23 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.StreamHelper;
 
-public class InspectorMapBuilder extends AbstractMapBuilder<User> {
+public class PerformedByMapBuilder extends AbstractMapBuilder<User> {
 
-	public InspectorMapBuilder() {
+	public PerformedByMapBuilder() {
 		super(
-			ReportField.INSPECTOR_IDENTIFIED_BY,
 			ReportField.INSPECTOR_NAME,
-			ReportField.INSPECTOR_POSITION,
-			ReportField.INSPECTOR_INITIALS
+			ReportField.PERFORM_BY_NAME,
+			ReportField.PERFORMED_BY_POSITION,
+			ReportField.PERFORMED_BY_INITIALS
 		);
 	}
 	
 	@Override
 	protected void setAllFields(User entity, Transaction transaction) {
-		setField(ReportField.INSPECTOR_IDENTIFIED_BY,	entity.getUserLabel());
 		setField(ReportField.INSPECTOR_NAME,			entity.getUserLabel());
-		setField(ReportField.INSPECTOR_POSITION,		entity.getPosition());
-		setField(ReportField.INSPECTOR_INITIALS, 		entity.getInitials());
+		setField(ReportField.PERFORM_BY_NAME,			entity.getUserLabel());
+		setField(ReportField.PERFORMED_BY_POSITION,		entity.getPosition());
+		setField(ReportField.PERFORMED_BY_INITIALS, 		entity.getInitials());
 		setField(ReportField.USER_SIGNATURE_IMAGE,		StreamHelper.openQuietly(PathHandler.getSignatureImage(entity)));
 	}
 
