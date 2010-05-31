@@ -84,6 +84,7 @@ public class InspectionSummaryGenerator {
 				inspectionMap.put("inspectionType", inspection.getType().getName());
 				inspectionMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
 				inspectionMap.put("inspector", inspection.getInspector().getUserLabel());
+				inspectionMap.put("performedBy", inspection.getInspector().getUserLabel());
 				inspectionMap.put("result", inspection.getStatus().getDisplayName());
 				inspectionMap.put("division", (inspection.getOwner().isDivision()) ? inspection.getOwner().getName() : null);
 				
@@ -146,6 +147,7 @@ public class InspectionSummaryGenerator {
 
 		if (reportDefiner.getPerformedBy() != null) {
 			reportMap.put("inspector", userManager.findUser(reportDefiner.getPerformedBy()).getUserLabel());
+			reportMap.put("performedBy", userManager.findUser(reportDefiner.getPerformedBy()).getUserLabel());
 		}
 		
 		if (reportDefiner.getOwner() != null) {
