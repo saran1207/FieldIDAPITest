@@ -15,6 +15,7 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+import com.n4systems.fieldid.viewhelpers.TrimmedString;
 
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
@@ -44,11 +45,11 @@ public class InspectionTypeCrud extends AbstractCrud {
 	private List<ListingPair> inspectionTypeGroups;
 	private List<InspectionType> inspectionTypes;
 	private InspectionType inspectionType;
-	private List<String> infoFields;
+	private List<TrimmedString> infoFieldNames;
 	private String saveAndAdd;
 	private Map<String, Boolean> types;
 	private InspectionTypeArchiveSummary archiveSummary;
-
+	
 	public InspectionTypeCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		
@@ -88,14 +89,14 @@ public class InspectionTypeCrud extends AbstractCrud {
 	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
-		infoFields = inspectionType.getInfoFieldNames();
+		infoFieldNames = mapToTrimmedStrings(inspectionType.getInfoFieldNames());
 		return SUCCESS;
 	}
 
 	@SkipValidation
 	public String doEdit() {
 		testRequiredEntities(true);
-		infoFields = inspectionType.getInfoFieldNames();
+		infoFieldNames = mapToTrimmedStrings(inspectionType.getInfoFieldNames());
 		return SUCCESS;
 	}
 
@@ -111,7 +112,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	private String doSave() {
 
-		inspectionType.setInfoFieldNames(infoFields);
+		inspectionType.setInfoFieldNames(mapFromTrimmedStrings(infoFieldNames));
 
 		processSupportedTypes();
 
@@ -332,23 +333,40 @@ public class InspectionTypeCrud extends AbstractCrud {
 		this.saveAndAdd = saveAndAdd;
 	}
 
-	public List<String> getInfoFields() {
-		if (infoFields == null) {
-			infoFields = new ArrayList<String>();
+	public List<TrimmedString> getInfoFields() {
+		if (infoFieldNames == null) {
+			infoFieldNames = new ArrayList<TrimmedString>();
 		}
-		return infoFields;
+		return infoFieldNames;
 	}
 
 	@Validations(customValidators = {
 			@CustomValidator(type = "requiredStringSet", message = "", key = "error.inspectionattributeblank"),
 			@CustomValidator(type = "uniqueInfoFieldValidator", message = "", key = "error.duplicateinfofieldname") })
-	public void setInfoFields(List<String> infoFieldNames) {
-		infoFields = infoFieldNames;
+	public void setInfoFields(List<TrimmedString> infoFields) {
+		infoFieldNames = infoFields;
 	}
 
 	public InspectionTypeArchiveSummary getArchiveSummary() {
 		return archiveSummary;
 	}
 	
-
+	public List<TrimmedString> mapToTrimmedStrings(List<String> strings){
+		List<TrimmedString> result = new ArrayList<TrimmedString>();
+		for (String str : strings){
+			result.add(new TrimmedString(str));
+		}
+		return result;
+	}
+	
+	public List<String> mapFromTrimmedStrings(List<TrimmedString> trimmed){
+		List<String> strings = new ArrayList<String>();
+		for (TrimmedString trimmedString : trimmed){
+			if (trimmedString != null){
+				strings.add(trimmedString.getTrimmedString());
+			}
+		}
+		return strings;
+	}
+	
 }

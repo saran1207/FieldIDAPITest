@@ -1,6 +1,10 @@
 package com.n4systems.fieldid.viewhelpers;
 
-public class TrimmedString {
+import org.apache.commons.lang.builder.EqualsBuilder;
+
+import sun.security.util.Cache.EqualByteArray;
+
+public class TrimmedString{
 
 	private final String trimmedString;
 
@@ -25,12 +29,17 @@ public class TrimmedString {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return trimmedString.equals(obj);
+		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 
 	@Override
 	public int hashCode() {
 		return trimmedString.hashCode();
 	}
+	
+	public int length(){
+		return trimmedString.length();
+	}
+
 	
 }
