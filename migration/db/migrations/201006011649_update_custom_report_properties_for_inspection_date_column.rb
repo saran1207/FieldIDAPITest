@@ -1,5 +1,6 @@
 require 'file_content_replacer'
-class UpdateCustomReportPropertiesToRenameInspectorColumn < ActiveRecord::Migration
+class UpdateCustomReportPropertiesForInspectionDateColumn < ActiveRecord::Migration
+      
   @@config_dir_path = "/var/fieldid/private/conf"
   @@inspection_report_file = "com.n4systems.fieldid.actions.search/InspectionReportAction.properties"
   
@@ -10,7 +11,7 @@ class UpdateCustomReportPropertiesToRenameInspectorColumn < ActiveRecord::Migrat
     conf_dir.each do |tenant_with_customized_report_columns|
       if !tenant_with_customized_report_columns.starts_with? '.'
         file_name = @@config_dir_path + '/' + tenant_with_customized_report_columns + '/' + @@inspection_report_file
-        FileContentReplacer.replace_content(file_name, 'inspection_search_inspector', 'inspection_search_performed_by') 
+        FileContentReplacer.replace_content(file_name, 'inspection_search_inspectiondate', 'inspection_search_date_performed') 
       end
     end
     
@@ -22,12 +23,9 @@ class UpdateCustomReportPropertiesToRenameInspectorColumn < ActiveRecord::Migrat
     conf_dir.each do |tenant_with_customized_report_columns|
       if !tenant_with_customized_report_columns.starts_with? '.'
         file_name = @@config_dir_path + '/' + tenant_with_customized_report_columns + '/' + @@inspection_report_file
-        FileContentReplacer.replace_content(file_name, 'inspection_search_performed_by', 'inspection_search_inspector') 
+        FileContentReplacer.replace_content(file_name, 'inspection_search_date_performed', 'inspection_search_inspectiondate') 
       end
     end
   end
-  
-  
-  
   
 end
