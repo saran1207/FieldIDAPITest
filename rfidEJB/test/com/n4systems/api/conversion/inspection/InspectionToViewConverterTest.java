@@ -93,12 +93,11 @@ public class InspectionToViewConverterTest {
 	}
 	
 	@Test
-	public void to_view_copies_inspector_full_name() throws ConversionException {
+	public void to_view_copies_performed_by_full_name() throws ConversionException {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-//			protected void converterInspector(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}

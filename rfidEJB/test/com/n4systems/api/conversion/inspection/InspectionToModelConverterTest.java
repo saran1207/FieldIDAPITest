@@ -33,6 +33,27 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
 
 public class InspectionToModelConverterTest {
+	private final class InspectionToModelConverterWithAllButConvertPerformedByEmptied extends InspectionToModelConverter {
+		private InspectionToModelConverterWithAllButConvertPerformedByEmptied(UserByFullNameLoader userLoader) {
+			super(null, null, null, null, userLoader);
+		}
+
+		protected void resolveType(Inspection model) {}
+
+		protected void resolveStatus(String statusName, Inspection model) {}
+
+		protected void resolveProduct(InspectionView view, Inspection model, Transaction transaction) {}
+
+		protected void resolvePrintable(InspectionView view, Inspection model) {}
+
+		protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
+
+		protected void resolveProductStatus(InspectionView view, Inspection model, Transaction transaction) {}
+
+		protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+	}
+
+	private static final String PERSONS_NAME = "Full Name";
 	private Transaction transaction = new DummyTransaction();
 		
 	@Test
@@ -158,9 +179,9 @@ public class InspectionToModelConverterTest {
 	}
 	
 	@Test
-	public void to_model_resolves_inspector() throws ConversionException {
+	public void to_model_resolves_performed_by() throws ConversionException {
 		InspectionView view = new InspectionView();
-		view.setPerformedBy("inspector name");
+		view.setPerformedBy(PERSONS_NAME);
 		
 		User user = UserBuilder.aUser().build();
 		
@@ -169,15 +190,7 @@ public class InspectionToModelConverterTest {
 		expect(userLoader.load(transaction)).andReturn(Arrays.asList(user));
 		replay(userLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, userLoader) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveProduct(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveProductStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
-		};
+		InspectionToModelConverter converter = new InspectionToModelConverterWithAllButConvertPerformedByEmptied(userLoader);
 		
 		assertEquals(user, converter.toModel(view, transaction).getPerformedBy());
 		verify(userLoader);

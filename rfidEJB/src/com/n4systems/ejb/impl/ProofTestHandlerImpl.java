@@ -119,7 +119,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
+	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, InspectionBook book, boolean productOverridesPerformedBy) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
@@ -176,7 +176,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			 *  If the product identifiedBy is set to override the performedBy (databridge upload uses this)
 			 *  and the two are different, then set the performedBy to be the identifiedBy from the product
 			 */
-			if (productOverridesInspector) {
+			if (productOverridesPerformedBy) {
 				performedBy = product.getIdentifiedBy();
 			}
 			
