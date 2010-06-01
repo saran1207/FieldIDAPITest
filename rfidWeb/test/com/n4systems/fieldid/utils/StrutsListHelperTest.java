@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.n4systems.test.helpers.FluentArrayList;
 
 
-public class ListHelperTest {
+public class StrutsListHelperTest {
 
 	
 	@Test
