@@ -544,18 +544,18 @@ public class ManageProductTypes {
 		
 		for (Attribute a : attributes) {
 			String locator = "xpath=//INPUT[@value='" + a.getName() + "']";
-			String deleteLocator = locator + "/../../DIV[contains(@class,'linkCol')]/A[contains(text(),'" + linkText + "')]";
-			if (selenium.isElementPresent(deleteLocator)) {
-				selenium.click(deleteLocator);
-				if (delete) {
-					waitForAttributeToBeDeleted(locator);
-					verifyAttributeWasDeleted(a.getName());
-				} else {
-					waitForAttributeToBeRetired(deleteLocator);
-					verifyAttributeWasRetired(a.getName());
-				}
+			final String deleteLocator = locator + "/../../DIV[contains(@class,'linkCol')]/A[contains(text(),'" + linkText + "')]";
+			
+			new Wait() { public boolean until() { return selenium.isElementPresent(deleteLocator); } }.wait("Could not find a " + linkText + " link on the attribute '" + a.getName() + "' or could not find the attribute");
+			
+			selenium.click(deleteLocator);
+			
+			if (delete) {
+				waitForAttributeToBeDeleted(locator);
+				verifyAttributeWasDeleted(a.getName());
 			} else {
-				fail("Could not find a " + linkText + " link on the attribute '" + a.getName() + "' or could not find the attribute");
+				waitForAttributeToBeRetired(deleteLocator);
+				verifyAttributeWasRetired(a.getName());
 			}
 		}
 	}
