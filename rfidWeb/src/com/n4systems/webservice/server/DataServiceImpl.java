@@ -1128,7 +1128,7 @@ public class DataServiceImpl implements DataService {
 		UserManager userManager = ServiceLocator.getUser();
 		try {
 
-			User inspector = userManager.findUser(inspectionImageServiceDTO.getInspectorId());
+			User performedBy = userManager.findUser(inspectionImageServiceDTO.getInspectorId());
 			
 			InspectionAttachmentSaver attachmentSaver = new InspectionAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
@@ -1156,7 +1156,7 @@ public class DataServiceImpl implements DataService {
 				targetInspection = inspection;
 			}
 			
-			FileAttachment newFileAttachment = converter.convert(targetInspection, inspectionImageServiceDTO, inspector);
+			FileAttachment newFileAttachment = converter.convert(targetInspection, inspectionImageServiceDTO, performedBy);
 			attachmentSaver.save(newFileAttachment);
 				
 		} catch (Exception e) {

@@ -44,9 +44,9 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 	
 	@Override
 	protected void setAllFields(Inspection entity, Transaction transaction) {
-		setAllFields(performedByMapBuilder, entity.getInspector(), transaction);
+		setAllFields(performedByMapBuilder, entity.getPerformedBy(), transaction);
 		setAllFields(typeGroupMapBuilder, entity.getType().getGroup(), transaction);
-		setAllFields(orgMapBuilder, entity.getInspector().getOwner().getInternalOrg(), transaction);
+		setAllFields(orgMapBuilder, entity.getPerformedBy().getOwner().getInternalOrg(), transaction);
 		setAllFields(ownerMapBuilder, entity.getOwner(), transaction);
 		setAllFields(productStatusMapBuilder, entity.getProductStatus(), transaction);
 		setAllFields(scheduleMapBuilder, entity, transaction);

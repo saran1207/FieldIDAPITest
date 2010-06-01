@@ -67,9 +67,12 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	public void setPrintable(boolean printable) {
 		this.printable = printable;
 	}
+	
+	@Deprecated
 	public long getInspectorId() {
 		return performedById;
 	}
+	@Deprecated
 	public void setInspectorId(long performedById) {
 		this.performedById = performedById;
 	}

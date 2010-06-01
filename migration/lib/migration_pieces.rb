@@ -216,6 +216,15 @@ module ActiveRecord
   
         foreign_keys
       end
+      
+      def run_with_out_foreign_keys(&block)
+        execute("SET FOREIGN_KEY_CHECKS = 0")
+        begin
+          block.call
+        ensure 
+          execute("SET FOREIGN_KEY_CHECKS = 1")
+        end
+      end
     end
     
     

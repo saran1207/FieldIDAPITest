@@ -79,11 +79,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public FileAttachment convert(AbstractInspection inspection, InspectionImageServiceDTO inspectionImageServiceDTO, User inspector) throws IOException {
+	public FileAttachment convert(AbstractInspection inspection, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspection, inspectionImageServiceDTO, inspector);
+			return createManager(transaction.getEntityManager()).convert(inspection, inspectionImageServiceDTO, performedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

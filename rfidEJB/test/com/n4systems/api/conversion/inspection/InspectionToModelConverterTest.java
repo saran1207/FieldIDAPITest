@@ -179,7 +179,7 @@ public class InspectionToModelConverterTest {
 			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
 		};
 		
-		assertEquals(user, converter.toModel(view, transaction).getInspector());
+		assertEquals(user, converter.toModel(view, transaction).getPerformedBy());
 		verify(userLoader);
 	}
 	

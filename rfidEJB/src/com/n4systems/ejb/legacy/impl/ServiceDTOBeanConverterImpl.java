@@ -216,7 +216,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
 		inspectionDTO.setLocation( inspection.getLocation() );
-		inspectionDTO.setPerformedById( inspection.getInspector().getId() );
+		inspectionDTO.setPerformedById( inspection.getPerformedBy().getId() );
 		inspectionDTO.setStatus( inspection.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
 		inspectionDTO.setUtcDate(inspection.getDate());
@@ -465,9 +465,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}		
 		
 		// Required object lookups		
-		User inspector = (User)em.find(User.class, inspectionServiceDTO.getPerformedById());
-		inspection.setModifiedBy( inspector );		
-		inspection.setInspector( inspector );
+		User performedBy = (User)em.find(User.class, inspectionServiceDTO.getPerformedById());
+		inspection.setModifiedBy( performedBy );		
+		inspection.setPerformedBy( performedBy );
 
 
 		BaseOrg owner = null;
@@ -487,10 +487,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			inspection.setBook(persistenceManager.find(InspectionBook.class, inspectionServiceDTO.getInspectionBookId()));
 		} else if (inspectionServiceDTO.getInspectionBookTitle() != null) {
 
-			InspectionBookByNameLoader loader = new InspectionBookByNameLoader(new OrgOnlySecurityFilter(inspector.getOwner()));
+			InspectionBookByNameLoader loader = new InspectionBookByNameLoader(new OrgOnlySecurityFilter(performedBy.getOwner()));
 			loader.setName(inspectionServiceDTO.getInspectionBookTitle());
 			loader.setOwner(owner);
-			InspectionBook inspectionBook = loader.load(em, new OrgOnlySecurityFilter(inspector.getOwner()));
+			InspectionBook inspectionBook = loader.load(em, new OrgOnlySecurityFilter(performedBy.getOwner()));
 
 			if (inspectionBook == null) {
 				inspectionBook = new InspectionBook();
@@ -514,19 +514,19 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		if (inspectionServiceDTO.getSubInspections() != null) {
 			for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
-				inspection.getSubInspections().add(convert(subInspection, tenant, inspector));
+				inspection.getSubInspections().add(convert(subInspection, tenant, performedBy));
 			}
 		}
 
 		inspection.setProductStatus(convertProductStatus(inspectionServiceDTO));
 
-		inspection.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, inspector));
+		inspection.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
 
 		return inspection;
 	}
 
-	public FileAttachment convert(AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User inspector) throws IOException {
-		return convertToFileAttachment(inspectionImageServiceDTO.getImage(), inspection.getTenant(), inspector);
+	public FileAttachment convert(AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {
+		return convertToFileAttachment(inspectionImageServiceDTO.getImage(), inspection.getTenant(), performedBy);
 
 	}
 
@@ -578,11 +578,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return fileAttachments;
 	}
 
-	private SubInspection convert(SubInspectionServiceDTO subInspectionServiceDTO, Tenant tenant, User inspector) throws IOException {
+	private SubInspection convert(SubInspectionServiceDTO subInspectionServiceDTO, Tenant tenant, User performedBy) throws IOException {
 		SubInspection subInspection = new SubInspection();
 		populate(subInspection, subInspectionServiceDTO, tenant);
 		subInspection.setName(subInspectionServiceDTO.getName());
-		subInspection.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(subInspectionServiceDTO.getImages(), tenant, inspector));
+		subInspection.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(subInspectionServiceDTO.getImages(), tenant, performedBy));
 
 		return subInspection;
 	}

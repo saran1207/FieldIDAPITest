@@ -15,7 +15,7 @@ ${action.setPageType('product', 'inspections')!}
 				<td>${inspection.type.name}</td>
 				<td><@s.text name="${(inspection.status.label?html)!}"/></td>
 				<td>
-					<#assign user=inspection.inspector />
+					<#assign user=inspection.performedBy />
 					<#include "../inspectionCrud/_userName.ftl"/>
 				</td>
 				<td>

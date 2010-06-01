@@ -11,7 +11,7 @@ class Inspection < ActiveRecord::Base
   belongs_to  :inspection,      :foreign_key => 'inspection_id',      :class_name => 'AbstractInspection'
   belongs_to  :group,           :foreign_key => 'group_id',           :class_name => 'InspectionGroup'
   belongs_to  :book,            :foreign_key => 'book_id',            :class_name => 'InspectionBook'
-  belongs_to  :inspector,       :foreign_key => 'inspector_id',       :class_name => 'User'
+  belongs_to  :performed_by,    :foreign_key => 'performedby_id',     :class_name => 'User'
   
   def tenant_id
     inspection.tenant_id

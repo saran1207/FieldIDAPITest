@@ -104,7 +104,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private String newInspectionBookTitle;
 	private boolean allowNetworkResults = false;
 	private List<SubInspection> subInspections;
-	private List<ListingPair> inspectors;
+	private List<ListingPair> examiners;
 	private List<ProductStatusBean> productStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private List<ListingPair> inspectionBooks;
@@ -262,7 +262,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		inspection.setOwner(product.getOwner());
 		inspection.setLocation(product.getLocation());
 		inspection.setDate(DateHelper.getTodayWithTime());
-		setInspector(getSessionUser().getUniqueID());
+		setPerformedBy(getSessionUser().getUniqueID());
 		inspection.setPrintable(inspection.getType().isPrintable());
 		setUpSupportedProofTestTypes();
 		
@@ -622,19 +622,18 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	
-	// this pair should go together and have us create a control for inspector selection.
-	public List<ListingPair> getInspectors() {
-		if (inspectors == null) {
-			inspectors = userManager.getInspectorList(getSecurityFilter());
+	public List<ListingPair> getExaminers() {
+		if (examiners == null) {
+			examiners = userManager.getExaminers(getSecurityFilter());
 		}
-		return inspectors;
+		return examiners;
 	}
 
 	public List<ListingPair> getUsers() {
-		if (inspectors == null) {
-			inspectors = userManager.getUserList(getSecurityFilter());
+		if (examiners == null) {
+			examiners = userManager.getUserList(getSecurityFilter());
 		}
-		return inspectors;
+		return examiners;
 	}
 	
 	
@@ -674,15 +673,15 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 	}
 
-	public Long getInspector() {
-		return (inspection.getInspector() != null) ? inspection.getInspector().getId() : null;
+	public Long getperformedBy() {
+		return (inspection.getPerformedBy() != null) ? inspection.getPerformedBy().getId() : null;
 	}
 
-	public void setInspector(Long inspector) {
-		if (inspector == null) {
-			inspection.setInspector(null);
-		} else if (inspection.getInspector() == null || !inspector.equals(inspection.getInspector())) {
-			inspection.setInspector(userManager.findUser(inspector, getTenantId()));
+	public void setPerformedBy(Long performedBy) {
+		if (performedBy == null) {
+			inspection.setPerformedBy(null);
+		} else if (inspection.getPerformedBy() == null || !performedBy.equals(inspection.getPerformedBy())) {
+			inspection.setPerformedBy(userManager.findUser(performedBy, getTenantId()));
 		}
 
 	}

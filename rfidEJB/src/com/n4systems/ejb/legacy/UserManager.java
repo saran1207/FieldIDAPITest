@@ -37,7 +37,7 @@ public interface UserManager {
 	
 	
 	public List<ListingPair> getUserList( SecurityFilter filter );
-	public List<ListingPair> getInspectorList( SecurityFilter filter );
+	public List<ListingPair> getExaminers( SecurityFilter filter );
 
 	
 	public Pager<User> getUsers( SecurityFilter filter, boolean activeOnly, int pageNumber, int pageSize, String nameFilter, UserType userType );

@@ -24,11 +24,11 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 	}
 
 
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User inspector) throws FileProcessingException {
+	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).inspectionServiceUpload(fileData, inspector);
+			return createManager(transaction.getEntityManager()).inspectionServiceUpload(fileData, performedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

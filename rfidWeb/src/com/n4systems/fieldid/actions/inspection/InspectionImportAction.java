@@ -97,7 +97,7 @@ public class InspectionImportAction extends AbstractImportAction {
 		example.setDate(new Date());
 		example.setOwner(getSessionUserOwner());
 		example.setPrintable(true);
-		example.setInspector(getUser());
+		example.setPerformedBy(getUser());
 		example.setStatus(Status.PASS);
 
 		example.setComments(getText("example.inspection.comments"));

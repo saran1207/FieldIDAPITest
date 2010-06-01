@@ -48,7 +48,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 	}
 
 	protected void converterInspector(Inspection model, InspectionView view) {
-		view.setInspector(model.getInspector().getFullName());
+		view.setInspector(model.getPerformedBy().getFullName());
 	}
 	
 	protected void convertNextDate(Inspection model, InspectionView view) {

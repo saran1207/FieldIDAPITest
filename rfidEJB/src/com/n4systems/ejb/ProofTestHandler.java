@@ -12,5 +12,5 @@ import com.n4systems.tools.FileDataContainer;
 
 public interface ProofTestHandler {
 	public Map<String, Inspection> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException;
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User inspector) throws FileProcessingException;
+	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException;
 }

@@ -48,7 +48,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private List<ListingPair> employees;
 	private List<ListingPair> savedReports;
 	private List<ListingPair> inspectionBooks;
-	private List<ListingPair> users;
+	private List<ListingPair> examiners;
 	private List<ListingPair> inspectionTypes;
 	private List<ProductStatusBean> statuses;
 	private List<ListingPair> eventJobs;
@@ -199,12 +199,11 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	}
 	
 	
-	//FIXME: rename method!
-	public List<ListingPair> getInspectors() {
-		if (users == null) {
-			users = userManager.getUserList(getSecurityFilter());
+	public List<ListingPair> getExaminers() {
+		if (examiners == null) {
+			examiners = userManager.getUserList(getSecurityFilter());
 		}
-		return users;
+		return examiners;
 	}
 	
 	public List<ListingPair> getInspectionBooks() {

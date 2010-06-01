@@ -6,7 +6,7 @@ public class ReportingSelectDisplayColumns {
 	boolean customerName = true;
 	boolean result = true;
 	boolean inspectionBook = false;
-	boolean inspector = false;
+	boolean performedBy = false;
 	boolean division = false;
 	boolean organization = false;
 	boolean comments = false;
@@ -170,7 +170,7 @@ public class ReportingSelectDisplayColumns {
 		customerName = b;
 		result = b;
 		inspectionBook = b;
-		inspector = b;
+		performedBy = b;
 		division = b;
 		organization = b;
 		comments = b;

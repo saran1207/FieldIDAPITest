@@ -11,6 +11,8 @@ public class InspectionImageServiceDTO {
 		return inspectorId;
 	}
 
+	
+	//FIXME this needs to be renamed but mobile will depend on it.
 	public void setInspectorId(long inspectorId) {
 		this.inspectorId = inspectorId;
 	}

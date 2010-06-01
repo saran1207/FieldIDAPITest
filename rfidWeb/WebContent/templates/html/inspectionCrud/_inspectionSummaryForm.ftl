@@ -55,12 +55,12 @@
 </p>
 <#if action.isParentProduct() >
 	<p>
-		<label><@s.text name="label.inspector"/></label>
+		<label><@s.text name="label.performed_by"/></label>
 		<span>
 		<#if inspection.id?exists>
-			<@s.select name="inspector" list="users" listKey="id" listValue="name"  />
+			<@s.select name="performedBy" list="users" listKey="id" listValue="name"  />
 		<#else>
-			<@s.select name="inspector" list="inspectors" listKey="id" listValue="name"  />
+			<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
 		</#if>
 		</span>
 	</p>

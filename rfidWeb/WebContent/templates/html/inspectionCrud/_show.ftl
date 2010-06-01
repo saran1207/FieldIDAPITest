@@ -87,7 +87,7 @@
 	</p>
 	
 	<p>
-		<label><@s.text name="label.inspector"/></label>
+		<label><@s.text name="label.performed_by"/></label>
 		<span>
 			<#include "_userName.ftl"/>
 		</span>

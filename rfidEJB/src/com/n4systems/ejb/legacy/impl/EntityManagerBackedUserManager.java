@@ -296,7 +296,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	 */
 	//TODO extract to a loader it is only used by one call on inspection crud.
 	@SuppressWarnings("unchecked")
-	public List<ListingPair> getInspectorList( SecurityFilter filter ) {
+	public List<ListingPair> getExaminers( SecurityFilter filter ) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
 		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.active = true and deleted = false and ub.system = false and ( " + 
 					filter.produceWhereClause(User.class, "ub") + " OR ( "+

@@ -106,11 +106,11 @@ public class InspectionToViewConverterTest {
 		};
 		
 		Inspection model = new Inspection();
-		model.setInspector(UserBuilder.anEmployee().withFirstName("Mark").withLastName("F").build());
+		model.setPerformedBy(UserBuilder.anEmployee().withFirstName("Mark").withLastName("F").build());
 		
 		InspectionView view = converter.toView(model);
 		
-		assertEquals(model.getInspector().getFullName(), view.getInspector());
+		assertEquals(model.getPerformedBy().getFullName(), view.getInspector());
 	}
 	
 	@Test

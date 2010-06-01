@@ -87,7 +87,7 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 	protected void resolveInspector(InspectionView view, Inspection model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 user
 		User inspector = userLoader.setFullName(view.getInspector()).load(transaction).get(0);
-		model.setInspector(inspector);
+		model.setPerformedBy(inspector);
 	}
 
 	protected void resolvePrintable(InspectionView view, Inspection model) {

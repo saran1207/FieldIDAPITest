@@ -167,11 +167,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<ListingPair> getInspectorList(SecurityFilter filter) {
+	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getInspectorList(filter);
+			return createManager(transaction.getEntityManager()).getExaminers(filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

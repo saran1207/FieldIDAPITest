@@ -59,7 +59,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	private boolean printable;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
-	private User inspector;
+	private User performedBy;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
 	private InspectionGroup group;
@@ -128,19 +128,19 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	}
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public User getInspector() {
-		return inspector;
+	public User getPerformedBy() {
+		return performedBy;
 	}
+	
 
-	public void setInspector(User inspector) {
-		this.inspector = inspector;
+	public void setPerformedBy(User performedBy) {
+		this.performedBy = performedBy;
 	}
 
 	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public InspectionGroup getGroup() {
 		return group;
 	}
-	
 	
 
 	public void setGroup(InspectionGroup group) {
@@ -285,7 +285,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	    		"\nDate: " + date +
 	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
-	    		"\nInspector: " + getInspector() + 
+	    		"\nInspector: " + getPerformedBy() + 
 	    		"\nStatus: " + getStatus() + 
 	    		"\nSubInspections: " + StringUtils.indent(subInspectionString, 1);
     }
@@ -303,7 +303,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	public Inspection enhance(SecurityLevel level) {
 		Inspection enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setBook(enhance(book, level));
-		enhanced.setInspector(enhance(inspector, level));
+		enhanced.setPerformedBy(enhance(performedBy, level));
 		enhanced.setGroup(enhance(group, level));
 		enhanced.setType(enhance(getType(), level));
 		enhanced.setProduct(enhance(getProduct(), level));

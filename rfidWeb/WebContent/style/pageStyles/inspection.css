@@ -171,7 +171,7 @@
 	margin-top:5px;
 }
 
-.inspectionType, .inspectionDate, .inspector, .editInspection {
+.inspectionType, .inspectionDate, .performedBy, .editInspection {
 	display: block;
 	float: left;
 	width: 200px;
@@ -180,7 +180,7 @@
 	width:150px;	
 }
 
-.inspector {
+.performedBy {
 	width:250px;	
 }
 

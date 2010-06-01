@@ -49,7 +49,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private List<Product> assets;
 
 	private UserManager userManager;
-	private List<ListingPair> inspectors;
+	private List<ListingPair> examiners;
 	private List<Listable<Long>> commentTemplates;
 	private List<ProductStatusBean> productStatuses;
 	private CommonInspectionTypeHandler commonInspectionTypeHandler;
@@ -169,11 +169,11 @@ public class MultiInspectAction extends AbstractCrud {
 		return inspectionType.isPrintable();
 	}
 
-	public List<ListingPair> getInspectors() {
-		if (inspectors == null) {
-			inspectors = userManager.getInspectorList(getSecurityFilter());
+	public List<ListingPair> getExaminers() {
+		if (examiners == null) {
+			examiners = userManager.getExaminers(getSecurityFilter());
 		}
-		return inspectors;
+		return examiners;
 	}
 
 	public Inspection getInspection() {

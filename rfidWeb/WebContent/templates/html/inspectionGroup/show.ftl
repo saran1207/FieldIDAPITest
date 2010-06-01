@@ -51,8 +51,8 @@ ${action.setPageType('inspection', 'list')!}
 								<span class="inspectionDate">
 									${action.formatDateTime(inspection.date)}
 								</span>
-								<span class="inspector">
-									<@s.text name="label.inspectedby"/>: ${ (inspection.inspector.userLabel)! }
+								<span class="performedBy">
+									<@s.text name="label.performed_by"/>: ${ (inspection.performedBy.userLabel)! }
 								</span>
 								<span class="editInspection">
 									<#if sessionUser.hasAccess("editinspection") >

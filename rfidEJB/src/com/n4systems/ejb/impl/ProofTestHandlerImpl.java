@@ -112,20 +112,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return createOrUpdateProofTest(fileData, user, customer, book, false);
 	}
 	
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User inspector) throws FileProcessingException  {
-		return createOrUpdateProofTest(fileData, inspector, null, null, true);
+	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException  {
+		return createOrUpdateProofTest(fileData, performedBy, null, null, true);
 	}
 	
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User inspector, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
+	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, InspectionBook book, boolean productOverridesInspector) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
-		Tenant tenant = inspector.getTenant();
-		PrimaryOrg primaryOrg = inspector.getOwner().getPrimaryOrg();
+		Tenant tenant = performedBy.getTenant();
+		PrimaryOrg primaryOrg = performedBy.getOwner().getPrimaryOrg();
 		
 		
 		
@@ -137,7 +137,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		if(customerId == null && fileData.isResolveCustomer()) {
 			// lets resolve a customer from the file data container.  This will also create a customer if resolution fails and createCustomer is set
 			
-			customer = findOrCreateCustomer(primaryOrg, inspector, fileData.getCustomerName(), fileData.isCreateCustomer());
+			customer = findOrCreateCustomer(primaryOrg, performedBy, fileData.getCustomerName(), fileData.isCreateCustomer());
 						
 			// If the customer is still null then, we were unalbe to find or create a customer.  Let's assume we we're supposed to use no customer
 			if(customer == null) {
@@ -158,7 +158,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			inspection = null;
 			try {
 				// find a product for this tenant, serial and customer
-				product = findOrCreateProduct(primaryOrg, inspector, serialNumber, customer, fileData);
+				product = findOrCreateProduct(primaryOrg, performedBy, serialNumber, customer, fileData);
 			} catch (NonUniqueProductException e) {
 				writeLogMessage(tenant, "There are multiple Product with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
@@ -173,20 +173,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 			
 			/*
-			 *  If the product identifiedBy is set to override the inspector (databridge upload uses this)
-			 *  and the two are different, then set the inspector to be the identifiedBy from the product
+			 *  If the product identifiedBy is set to override the performedBy (databridge upload uses this)
+			 *  and the two are different, then set the performedBy to be the identifiedBy from the product
 			 */
 			if (productOverridesInspector) {
-				inspector = product.getIdentifiedBy();
+				performedBy = product.getIdentifiedBy();
 			}
 			
-			// convert date to utc using the inspectors time.
-			Date inspectionDateInUTC = DateHelper.convertToUTC(inspectionDate, inspector.getTimeZone());
-			Date inspectionDateRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(inspectionDate), inspector.getTimeZone());
-			Date inspectionDateRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(inspectionDate), inspector.getTimeZone());
+			// convert date to utc using the performed By time.
+			Date inspectionDateInUTC = DateHelper.convertToUTC(inspectionDate, performedBy.getTimeZone());
+			Date inspectionDateRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(inspectionDate), performedBy.getTimeZone());
+			Date inspectionDateRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(inspectionDate), performedBy.getTimeZone());
 
 			// if we find a product then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, inspector.getSecurityFilter());
+			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, performedBy.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
 			for (Inspection insp: inspections) {
@@ -199,11 +199,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, inspector, customer, product, book, inspectionDateInUTC, fileData);
+				inspection = createInspection(tenant, performedBy, customer, product, book, inspectionDateInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
-					inspectionManager.updateInspection(inspection, inspector.getId(), fileData, null);
+					inspectionManager.updateInspection(inspection, performedBy.getId(), fileData, null);
 					writeLogMessage(tenant, "Updated Inspection for Product with serial [" + serialNumber + "] and Inspection date [" + inspection.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one inspection to cause the others to fail, so we will simply log these expections and move on
@@ -272,7 +272,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		if(product == null) {
 			if(!fileData.isCreateProduct()) {
-				// if we're not supposted to create new products and we could not find one, return null
+				// if we're not supported to create new products and we could not find one, return null
 				return null;
 			} else {
 				// create product is set, lets create a default
@@ -368,7 +368,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return product;
 	}
 	
-	private Inspection createInspection(Tenant tenant, User inspector, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData) {
+	private Inspection createInspection(Tenant tenant, User performedBy, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		
@@ -393,7 +393,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		inspection.setProduct(product);
 		inspection.setProductStatus(product.getProductStatus());
 		inspection.setDate(inspectionDate);
-		inspection.setInspector(inspector);
+		inspection.setPerformedBy(performedBy);
 		inspection.setBook(book);
 		inspection.setComments(fileData.getComments());
 		inspection.setLocation(product.getLocation());
@@ -431,7 +431,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			
 			inspectionSaver.createInspection(
-					new CreateInspectionParameterBuilder(inspection,inspector.getId())
+					new CreateInspectionParameterBuilder(inspection,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
 			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");

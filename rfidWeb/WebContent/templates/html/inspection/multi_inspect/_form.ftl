@@ -26,8 +26,8 @@
 	
 	<h2><@s.text name="label.inspectiondetails"/></h2>
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.inspector"/></label>
-		<@s.select name="inspector" list="inspectors" listKey="id" listValue="name"  />
+		<label class="label"><@s.text name="label.performed_by"/></label>
+		<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.inspectiondate"/></label>
