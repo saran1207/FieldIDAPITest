@@ -89,14 +89,14 @@ public class InspectionTypeCrud extends AbstractCrud {
 	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
-		infoFieldNames = mapToTrimmedStrings(inspectionType.getInfoFieldNames());
+		infoFieldNames = TrimmedString.mapToTrimmedStrings(inspectionType.getInfoFieldNames());
 		return SUCCESS;
 	}
 
 	@SkipValidation
 	public String doEdit() {
 		testRequiredEntities(true);
-		infoFieldNames = mapToTrimmedStrings(inspectionType.getInfoFieldNames());
+		infoFieldNames = TrimmedString.mapToTrimmedStrings(inspectionType.getInfoFieldNames());
 		return SUCCESS;
 	}
 
@@ -112,7 +112,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	private String doSave() {
 
-		inspectionType.setInfoFieldNames(mapFromTrimmedStrings(infoFieldNames));
+		inspectionType.setInfoFieldNames(TrimmedString.mapFromTrimmedStrings(infoFieldNames));
 
 		processSupportedTypes();
 
@@ -349,24 +349,6 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	public InspectionTypeArchiveSummary getArchiveSummary() {
 		return archiveSummary;
-	}
-	
-	public List<TrimmedString> mapToTrimmedStrings(List<String> strings){
-		List<TrimmedString> result = new ArrayList<TrimmedString>();
-		for (String str : strings){
-			result.add(new TrimmedString(str));
-		}
-		return result;
-	}
-	
-	public List<String> mapFromTrimmedStrings(List<TrimmedString> trimmed){
-		List<String> strings = new ArrayList<String>();
-		for (TrimmedString trimmedString : trimmed){
-			if (trimmedString != null){
-				strings.add(trimmedString.getTrimmedString());
-			}
-		}
-		return strings;
 	}
 	
 }

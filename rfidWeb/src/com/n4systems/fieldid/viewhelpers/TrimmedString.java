@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.viewhelpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-import sun.security.util.Cache.EqualByteArray;
 
 public class TrimmedString{
 
@@ -41,5 +43,21 @@ public class TrimmedString{
 		return trimmedString.length();
 	}
 
-	
+	public static List<TrimmedString> mapToTrimmedStrings(List<String> strings){
+		List<TrimmedString> result = new ArrayList<TrimmedString>();
+		for (String str : strings){
+			result.add(new TrimmedString(str));
+		}
+		return result;
+	}
+
+	public static List<String> mapFromTrimmedStrings(List<TrimmedString> trimmed){
+		List<String> strings = new ArrayList<String>();
+		for (TrimmedString trimmedString : trimmed){
+			if (trimmedString != null){
+				strings.add(trimmedString.getTrimmedString());
+			}
+		}
+		return strings;
+	}
 }

@@ -12,11 +12,12 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.subscriptions.view.model.SignUpRequestDecorator;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.util.ConfigContextRequiredTestCase;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.validator.ActionValidatorManager;
 import com.opensymphony.xwork2.validator.ActionValidatorManagerFactory;
 
-public class VaildiationsForSignUpCrud {
+public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
 
 	
 	private ActionValidatorManager avm;
