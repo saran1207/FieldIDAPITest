@@ -21,7 +21,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 		InspectionView view = new InspectionView();
 		
 		convertDirectFields(model, view);
-		converterInspector(model, view);
+		converterPerformedBy(model, view);
 		convertProductIdentifier(model, view);
 		convertInspectionStatus(model, view);
 		convertOwnerFields(model.getOwner(), view);
@@ -47,8 +47,8 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 		view.setIdentifier(model.getProduct().getSerialNumber());
 	}
 
-	protected void converterInspector(Inspection model, InspectionView view) {
-		view.setInspector(model.getPerformedBy().getFullName());
+	protected void converterPerformedBy(Inspection model, InspectionView view) {
+		view.setPerformedBy(model.getPerformedBy().getFullName());
 	}
 	
 	protected void convertNextDate(Inspection model, InspectionView view) {

@@ -144,7 +144,7 @@ public class MultiInspectAction extends AbstractCrud {
 		}
 	}
 
-
+//FIXME change method.
 	public Long getInspector() {
 		return getSessionUser().getUniqueID();
 	}

@@ -285,7 +285,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	    		"\nDate: " + date +
 	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
-	    		"\nInspector: " + getPerformedBy() + 
+	    		"\nPerformed By: " + getPerformedBy() + 
 	    		"\nStatus: " + getStatus() + 
 	    		"\nSubInspections: " + StringUtils.indent(subInspectionString, 1);
     }

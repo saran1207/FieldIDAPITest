@@ -29,8 +29,8 @@ public class InspectionView extends ExternalModelView {
 	@ExportField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
 
-	@ExportField(title = "Inspector", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })
-	private String inspector;
+	@ExportField(title = "Performed By", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })
+	private String performedBy;
 
 	@ExportField(title = "Inspection Book", order = 600)
 	private String inspectionBook;
@@ -86,12 +86,12 @@ public class InspectionView extends ExternalModelView {
 		this.status = status;
 	}
 
-	public String getInspector() {
-		return inspector;
+	public String getPerformedBy() {
+		return performedBy;
 	}
 
-	public void setInspector(String inspector) {
-		this.inspector = inspector;
+	public void setPerformedBy(String performedBy) {
+		this.performedBy = performedBy;
 	}
 
 	public String getInspectionBook() {

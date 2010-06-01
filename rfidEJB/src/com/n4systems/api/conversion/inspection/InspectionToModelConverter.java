@@ -51,7 +51,7 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		resolveStatus(view.getStatus(), model);
 		resolveProduct(view, model, transaction);
 		resolvePrintable(view, model);
-		resolveInspector(view, model, transaction);
+		resolvePerformedBy(view, model, transaction);
 		resolveInspectionBook(view, model, transaction);
 		
 		resolveProductStatus(view, model, transaction);
@@ -84,10 +84,10 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		model.setProduct(product);
 	}
 
-	protected void resolveInspector(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 user
-		User inspector = userLoader.setFullName(view.getInspector()).load(transaction).get(0);
-		model.setPerformedBy(inspector);
+		User performedBy = userLoader.setFullName(view.getPerformedBy()).load(transaction).get(0);
+		model.setPerformedBy(performedBy);
 	}
 
 	protected void resolvePrintable(InspectionView view, Inspection model) {

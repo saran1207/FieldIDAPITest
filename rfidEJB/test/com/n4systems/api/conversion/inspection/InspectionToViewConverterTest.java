@@ -29,7 +29,7 @@ public class InspectionToViewConverterTest {
 //			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -56,7 +56,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 //			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -77,7 +77,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 //			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -110,7 +110,7 @@ public class InspectionToViewConverterTest {
 		
 		InspectionView view = converter.toView(model);
 		
-		assertEquals(model.getPerformedBy().getFullName(), view.getInspector());
+		assertEquals(model.getPerformedBy().getFullName(), view.getPerformedBy());
 	}
 	
 	@Test
@@ -127,7 +127,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 //			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -147,7 +147,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 //			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -171,7 +171,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 //			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -189,7 +189,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 //			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -213,7 +213,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 //			protected void convertProductStatus(Inspection model, InspectionView view) {}
@@ -231,7 +231,7 @@ public class InspectionToViewConverterTest {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
-			protected void converterInspector(Inspection model, InspectionView view) {}
+			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertProductStatus(Inspection model, InspectionView view) {}
