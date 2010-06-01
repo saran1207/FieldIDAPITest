@@ -10,7 +10,7 @@ public class PerformedByMapBuilder extends AbstractMapBuilder<User> {
 
 	public PerformedByMapBuilder() {
 		super(
-			ReportField.INSPECTOR_NAME,
+			ReportField.DEPERCATED_INSPECTOR_NAME,
 			ReportField.PERFORM_BY_NAME,
 			ReportField.PERFORMED_BY_POSITION,
 			ReportField.PERFORMED_BY_INITIALS
@@ -19,7 +19,7 @@ public class PerformedByMapBuilder extends AbstractMapBuilder<User> {
 	
 	@Override
 	protected void setAllFields(User entity, Transaction transaction) {
-		setField(ReportField.INSPECTOR_NAME,			entity.getUserLabel());
+		setField(ReportField.DEPERCATED_INSPECTOR_NAME,			entity.getUserLabel());
 		setField(ReportField.PERFORM_BY_NAME,			entity.getUserLabel());
 		setField(ReportField.PERFORMED_BY_POSITION,		entity.getPosition());
 		setField(ReportField.PERFORMED_BY_INITIALS, 		entity.getInitials());

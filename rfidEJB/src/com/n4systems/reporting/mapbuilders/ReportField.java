@@ -44,7 +44,7 @@ public enum ReportField {
 	ORDER_NUMBER					("orderNumber"),
 	LINE_ITEM_DESC					("customerPartDescription"),
 	LINE_ITEM_PRODUCT_CODE			("productName"),
-	INSPECTOR_NAME					("inspectorName"),
+	DEPERCATED_INSPECTOR_NAME		("inspectorName"),
 	PERFORMED_BY_POSITION			("position"),
 	PERFORMED_BY_INITIALS			("initials"),
 	PERFORM_BY_NAME 				("performByName"),

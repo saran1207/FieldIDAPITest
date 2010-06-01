@@ -1128,7 +1128,7 @@ public class DataServiceImpl implements DataService {
 		UserManager userManager = ServiceLocator.getUser();
 		try {
 
-			User performedBy = userManager.findUser(inspectionImageServiceDTO.getInspectorId());
+			User performedBy = userManager.findUser(inspectionImageServiceDTO.getPerformedById());
 			
 			InspectionAttachmentSaver attachmentSaver = new InspectionAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());

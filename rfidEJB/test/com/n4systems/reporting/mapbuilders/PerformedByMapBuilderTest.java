@@ -44,7 +44,7 @@ public class PerformedByMapBuilderTest {
 		PerformedByMapBuilder builder = new PerformedByMapBuilder();
 		builder.addParams(reportMap, user, null);
 		
-		assertEquals(user.getUserLabel(), reportMap.get(ReportField.INSPECTOR_NAME.getParamKey()));
+		assertEquals(user.getUserLabel(), reportMap.get(ReportField.DEPERCATED_INSPECTOR_NAME.getParamKey()));
 		assertEquals(user.getUserLabel(), reportMap.get(ReportField.PERFORM_BY_NAME.getParamKey()));
 		assertEquals(user.getPosition(), reportMap.get(ReportField.PERFORMED_BY_POSITION.getParamKey()));
 		assertEquals(user.getInitials(), reportMap.get(ReportField.PERFORMED_BY_INITIALS.getParamKey()));

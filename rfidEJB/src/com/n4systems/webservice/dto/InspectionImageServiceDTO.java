@@ -4,17 +4,19 @@ public class InspectionImageServiceDTO {
 
 	private String inspectionMobileGuid;
 	private boolean fromSubInspection;
-	private long inspectorId;
+	private long performedById;
 	private ImageServiceDTO image;
 
-	public long getInspectorId() {
-		return inspectorId;
+	public long getPerformedById() {
+		return performedById;
 	}
 
-	
-	//FIXME this needs to be renamed but mobile will depend on it.
-	public void setInspectorId(long inspectorId) {
-		this.inspectorId = inspectorId;
+	public void setPerformedById(long performedById) {
+		this.performedById = performedById;
+	}
+	@Deprecated
+	public void setInspectorId(long performedById) {
+		this.performedById = performedById;
 	}
 
 	public boolean isFromSubInspection() {
