@@ -3,7 +3,7 @@ ${action.setPageType('product', 'inspections')!}
 <#if !inspections.isEmpty() >
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.inspectiondate"/></th>
+			<th><@s.text name="label.date_performed"/></th>
 			<th><@s.text name="label.inspectiontype"/></th>
 			<th><@s.text name="label.result"/></th>
 			<th><@s.text name="label.inspectedby"/></th>

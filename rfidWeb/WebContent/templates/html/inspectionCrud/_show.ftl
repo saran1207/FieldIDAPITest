@@ -93,7 +93,7 @@
 		</span>
 	</p>
 	<p>
-		<label><@s.text name="label.inspectiondate"/></label>
+		<label><@s.text name="label.date_performed"/></label>
 		<span>${action.formatDateTime(inspection.date)}</span>
 	</p>
 

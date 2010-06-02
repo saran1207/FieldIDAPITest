@@ -30,7 +30,7 @@
 		<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
 	</div>
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.inspectiondate"/></label>
+		<label class="label"><@s.text name="label.date_performed"/></label>
 		<@s.datetimepicker id="inspectionDate" name="modifiableInspection.inspectionDate"  type="dateTime"/>
 	</div>
 	

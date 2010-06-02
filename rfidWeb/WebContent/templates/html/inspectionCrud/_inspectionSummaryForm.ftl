@@ -65,7 +65,7 @@
 		</span>
 	</p>
 	<p>
-		<label><@s.text name="label.inspectiondate"/></label>
+		<label><@s.text name="label.date_performed"/></label>
 		<span >
 			<#if form_action="ADD">		
 				<@s.datetimepicker id="inspectionDate" onchange="updateAutoSuggest();" name="modifiableInspection.inspectionDate" theme="fieldidSimple"  type="dateTime"/>
