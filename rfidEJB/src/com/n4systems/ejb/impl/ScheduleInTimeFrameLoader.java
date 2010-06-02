@@ -22,10 +22,10 @@ public class ScheduleInTimeFrameLoader {
 	}
 
 	
-	public List<InspectionSchedule> getSchedulesInTimeFrame(Product product, InspectionType inspectionType, Date inspectionDate) {
+	public List<InspectionSchedule> getSchedulesInTimeFrame(Product product, InspectionType inspectionType, Date datePerformed) {
 		
 		
-		Date to = DateHelper.addDaysToDate(inspectionDate, INSPECTION_SCHEDULE_DATE_RANGE);
+		Date to = DateHelper.addDaysToDate(datePerformed, INSPECTION_SCHEDULE_DATE_RANGE);
 		
 		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
 		query.addSimpleWhere("product", product).addSimpleWhere("inspectionType", inspectionType);

@@ -17,14 +17,14 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
 
 public class RobertsFileProcessorTest {
-	private Date inspectionDate;
+	private Date datePerformed;
 	private RobertsFileProcessor processor;
 	
 	@Before
 	public void setUp() throws Exception {
 		processor = new RobertsFileProcessor();
 		
-		inspectionDate = (new SimpleDateFormat("dd-MM-yyyy")).parse("16-01-2009");
+		datePerformed = (new SimpleDateFormat("dd-MM-yyyy")).parse("16-01-2009");
 		
 		ConfigContext.setCurrentContext(new NonDataSourceBackedConfigContext());
 	}
@@ -84,7 +84,7 @@ public class RobertsFileProcessorTest {
 		assertEquals("<COMMENTS GO HERE>", dataContainer.getComments());
 		assertEquals(Arrays.asList("SERIALNUMBER"), dataContainer.getSerialNumbers());
 		assertEquals("<CUSTOMER NAME>", dataContainer.getCustomerName());
-		assertEquals(inspectionDate, dataContainer.getInspectionDate());
+		assertEquals(datePerformed, dataContainer.getDatePerformed());
 		assertTrue(dataContainer.getChart().length > 0);
 	}
 	

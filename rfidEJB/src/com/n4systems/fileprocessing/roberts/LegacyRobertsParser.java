@@ -14,7 +14,7 @@ abstract public class LegacyRobertsParser implements RobertsParser {
 	private static final int CUSTOMER_LINE = 1;
 	private static final int COMMENT_LINE = 4;
 	private static final int SERIAL_NUMBER_LINE = 13;
-	private static final int INSPECTION_DATE_LINE = 18;
+	private static final int DATE_PERFORMED_LINE = 18;
 	private static final int DATA_START_LINE = 26;
 
 	private final RobertsSerialNumberConverter serialConverter;
@@ -42,7 +42,7 @@ abstract public class LegacyRobertsParser implements RobertsParser {
 		fileDataContainer.setCustomerName(lines.get(CUSTOMER_LINE));
 		fileDataContainer.setComments(lines.get(COMMENT_LINE));
 		fileDataContainer.setSerialNumbers(serialConverter.toCSV(lines.get(SERIAL_NUMBER_LINE)));
-		fileDataContainer.setInspectionDate(parseDate(lines.get(INSPECTION_DATE_LINE)));
+		fileDataContainer.setDatePerformed(parseDate(lines.get(DATE_PERFORMED_LINE)));
 	}
 
 	private void parseDataSection(FileDataContainer fileDataContainer, List<String> lines) {

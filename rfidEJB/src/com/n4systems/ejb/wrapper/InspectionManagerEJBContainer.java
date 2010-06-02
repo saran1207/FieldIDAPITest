@@ -85,11 +85,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 	
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter) {
+	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Product product, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findInspectionsByDateAndProduct(inspectionDateRangeStart, inspectionDateRangeEnd, product, filter);
+			return createManager(transaction.getEntityManager()).findInspectionsByDateAndProduct(datePerformedRangeStart, datePerformedRangeEnd, product, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

@@ -61,8 +61,8 @@ public class WiropFileProcessor extends FileProcessor {
 			logger.info("Wirop log serial number [" + headers[SERIAL_NUMBER] + "]");
 			
 			// parse the date ... this step is so stupid ... 
-			Date inspectionDate = DateHelper.string2Date(headerDateFormat, headers[TEST_DATE].trim());
-			fileDataContainer.setInspectionDate(inspectionDate);
+			Date datePerformed = DateHelper.string2Date(headerDateFormat, headers[TEST_DATE].trim());
+			fileDataContainer.setDatePerformed(datePerformed);
 			logger.info("Wirop log test date [" + headers[TEST_DATE] + "]");
 			
 			fileDataContainer.setCustomerName(headers[CUSTOMER_NAME].trim());

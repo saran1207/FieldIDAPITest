@@ -152,13 +152,13 @@ public class InspectionManagerImpl implements InspectionManager {
 		return inspection;
 	}
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter) {
+	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Product product, SecurityFilter filter) {
 		
 
 		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", inspectionDateRangeStart).addWhere(Comparator.LE, "endingDate", "date", inspectionDateRangeEnd); 
+		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", datePerformedRangeStart).addWhere(Comparator.LE, "endingDate", "date", datePerformedRangeEnd); 
 		queryBuilder.addSimpleWhere("product", product);
 
 		List<Inspection> inspections;

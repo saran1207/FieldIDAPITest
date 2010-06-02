@@ -21,41 +21,41 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	private final List<FileAttachment> attachments;
 	private final boolean printable;
 	
-	private final Date inspectionDate;
+	private final Date datePerformed;
 	
 		
 	public static InspectionBuilder anInspection() {
 		return new InspectionBuilder(anInspectionType().build(), aProduct().build(), new ArrayList<SubInspection>(), new Date(), new ArrayList<FileAttachment>(), true);
 	}
 	
-	private InspectionBuilder(InspectionType type, Product product, List<SubInspection> subInspections, Date inspectionDate, List<FileAttachment> attachements, boolean printable) {
+	private InspectionBuilder(InspectionType type, Product product, List<SubInspection> subInspections, Date datePerformed, List<FileAttachment> attachements, boolean printable) {
 		this.inspectionType = type;
 		this.product = product;
 		this.subInspections = subInspections;
 		this.attachments = attachements;
-		this.inspectionDate = inspectionDate;
+		this.datePerformed = datePerformed;
 		this.printable = printable;
 	}
 	
 	public InspectionBuilder ofType(InspectionType type) {
-		return new InspectionBuilder(type, product, subInspections, inspectionDate, attachments, printable);
+		return new InspectionBuilder(type, product, subInspections, datePerformed, attachments, printable);
 	}
 	
 	public InspectionBuilder on(Product product) {
-		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments, printable);
+		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable);
 	}
 	
 	public InspectionBuilder withSubInspections(List<SubInspection> subInspections) {
-		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments, printable);
+		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable);
 	}
 	
 
-	public InspectionBuilder withInspectionDate(Date inspectionDate) {
-		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments, printable);
+	public InspectionBuilder performedOn(Date datePerformed) {
+		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable);
 	}
 	
 	public InspectionBuilder withAttachment(List<FileAttachment> attachments) {
-		return new InspectionBuilder(inspectionType, product, subInspections, inspectionDate, attachments, printable);
+		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable);
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 		inspection.setType(inspectionType);
 		inspection.setProduct(product);
 		inspection.setSubInspections(subInspections);
-		inspection.setDate(inspectionDate);
+		inspection.setDate(datePerformed);
 		inspection.setAttachments(attachments);
 		inspection.setPrintable(printable);
 		return inspection;

@@ -148,7 +148,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 
 		} 
-		Date inspectionDate = fileData.getInspectionDate();
+		Date inspectionDate = fileData.getDatePerformed();
 
 		Product product;
 		List<Inspection> inspections;

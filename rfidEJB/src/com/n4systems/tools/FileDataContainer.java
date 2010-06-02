@@ -19,7 +19,7 @@ public class FileDataContainer {
 	
 	private List<String> serialNumbers = new ArrayList<String>();
 	private String peakLoad;
-	private Date inspectionDate;
+	private Date datePerformed;
 	private String testDuration;
 	private String peakLoadDuration;
 	private String comments;
@@ -108,12 +108,12 @@ public class FileDataContainer {
 		this.peakLoad = peakLoad;
 	}
 
-	public Date getInspectionDate() {
-		return inspectionDate;
+	public Date getDatePerformed() {
+		return datePerformed;
 	}
 
-	public void setInspectionDate(Date inspectionDate) {
-		this.inspectionDate = inspectionDate;
+	public void setDatePerformed(Date datePerformed) {
+		this.datePerformed = datePerformed;
 	}
 
 	public String getTestDuration() {

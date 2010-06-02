@@ -37,8 +37,8 @@ public class NationalAutomationFileProcessor extends FileProcessor {
 	private final int SERIAL_NUMBER_ROW = 8;
 	private final short SERIAL_NUMBER_CELL = 3;
 	
-	private final int INSPECTION_DATE_ROW = 17;
-	private final short INSPECTION_DATE_CELL = 1;
+	private final int DATE_PERFORMED_ROW = 17;
+	private final short DATE_PERFORMED_CELL = 1;
 	
 	public void processFile(FileDataContainer fileDataContainer, InputStream file) throws FileProcessingException {
 		fileDataContainer.setFileType(ProofTestType.NATIONALAUTOMATION);
@@ -153,16 +153,16 @@ public class NationalAutomationFileProcessor extends FileProcessor {
 			
 				}
 				
-				HSSFRow inspectionDateRow = extraInfoSheet.getRow(INSPECTION_DATE_ROW);
-				HSSFCell inspectionDateCell = inspectionDateRow.getCell(INSPECTION_DATE_CELL);
+				HSSFRow datePerformedRow = extraInfoSheet.getRow(DATE_PERFORMED_ROW);
+				HSSFCell datePerformedCell = datePerformedRow.getCell(DATE_PERFORMED_CELL);
 				
-				if (inspectionDateCell != null) {
-					if (inspectionDateCell.getDateCellValue() != null) {
-						fileDataContainer.setInspectionDate(inspectionDateCell.getDateCellValue());
-					} else if (inspectionDateCell.getRichStringCellValue() != null) {
-						String inspectionDateString = inspectionDateCell.getRichStringCellValue().getString();
+				if (datePerformedCell != null) {
+					if (datePerformedCell.getDateCellValue() != null) {
+						fileDataContainer.setDatePerformed(datePerformedCell.getDateCellValue());
+					} else if (datePerformedCell.getRichStringCellValue() != null) {
+						String datePerformedString = datePerformedCell.getRichStringCellValue().getString();
 						// since we don't what format this date will be in, this is the best we can do
-						fileDataContainer.setInspectionDate(DateFormat.getDateInstance().parse(inspectionDateString));
+						fileDataContainer.setDatePerformed(DateFormat.getDateInstance().parse(datePerformedString));
 					}
 				}
 			}

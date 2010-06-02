@@ -185,17 +185,11 @@ public class DateHelper {
 	}
 
 	public static Date getYesterday() {
-		// XXX refactor to use increment
-		Calendar yesterday = getTodayCalendar();
-		yesterday.roll(Calendar.DAY_OF_YEAR, false);
-		return yesterday.getTime();
+		return increment(getToday(), -1, DAY);
 	}
 
 	public static Date getTomorrow() {
-		// XXX refactor to use increment
-		Calendar tomorrow = getTodayCalendar();
-		tomorrow.roll(Calendar.DAY_OF_YEAR, true);
-		return tomorrow.getTime();
+		return increment(getToday(), DAY, 1);
 	}
 
 	@Deprecated

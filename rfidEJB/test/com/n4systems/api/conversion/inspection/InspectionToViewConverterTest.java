@@ -45,7 +45,7 @@ public class InspectionToViewConverterTest {
 		InspectionView view = converter.toView(model);
 		
 		assertEquals(model.getComments(), view.getComments());
-		assertEquals(model.getDate(), view.getInspectionDate());
+		assertEquals(model.getDate(), view.getDatePerformed());
 		assertEquals(model.getLocation(), view.getLocation());
 		assertEquals(model.isPrintable(), view.isPrintable());
 	}

@@ -34,7 +34,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 
 	protected void convertDirectFields(Inspection model, InspectionView view) {
 		view.setComments(model.getComments());
-		view.setInspectionDate(model.getDate());
+		view.setDatePerformed(model.getDate());
 		view.setLocation(model.getLocation());
 		view.setPrintable(model.isPrintable());
 	}

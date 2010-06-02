@@ -38,23 +38,23 @@ public class InspectionViewTest {
 		
 		InspectionView view = new InspectionView();
 		
-		view.setInspectionDate(date);
+		view.setDatePerformed(date);
 		
-		assertSame(date, view.getInspectionDateAsDate());
+		assertSame(date, view.getDatePerformedAsDate());
 	}
 	
 	@Test
 	public void test_get_inspection_date_as_date_allows_null() {
 		InspectionView view = new InspectionView();
-		assertNull(view.getInspectionDateAsDate());
+		assertNull(view.getDatePerformedAsDate());
 	}
 	
 	@Test(expected=ClassCastException.class)
 	public void test_get_inspection_date_as_date_throws_exception_on_wrong_type() {
 		InspectionView view = new InspectionView();
-		view.setInspectionDate("bad date type");
+		view.setDatePerformed("bad date type");
 		
-		view.getInspectionDateAsDate();
+		view.getDatePerformedAsDate();
 	}
 	
 	@Test

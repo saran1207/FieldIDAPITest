@@ -33,7 +33,7 @@ public interface InspectionManager {
 
 	public Date findLastInspectionDate(Long scheduleId);
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date inspectionDateRangeStart, Date inspectionDateRangeEnd, Product product, SecurityFilter filter);
+	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Product product, SecurityFilter filter);
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	

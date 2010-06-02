@@ -21,7 +21,7 @@ public class InspectionView extends ExternalModelView {
 	private String identifier;
 
 	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
-	private Object inspectionDate;
+	private Object datePerformed;
 
 	@ExportField(title = "Inspection Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, InspectionStatusValidator.class })
 	private String status;
@@ -60,22 +60,22 @@ public class InspectionView extends ExternalModelView {
 		this.identifier = identifier;
 	}
 
-	public Object getInspectionDate() {
-		return inspectionDate;
+	public Object getDatePerformed() {
+		return datePerformed;
 	}
 
-	public Date getInspectionDateAsDate() {
-		if (inspectionDate == null) {
+	public Date getDatePerformedAsDate() {
+		if (datePerformed == null) {
 			return null;
-		} else if (!(inspectionDate instanceof Date)) {
-			throw new ClassCastException("inspectionDate should have been instance of java.lang.Date but was " + inspectionDate.getClass().getName());
+		} else if (!(datePerformed instanceof Date)) {
+			throw new ClassCastException("datePerformed should have been instance of java.lang.Date but was " + datePerformed.getClass().getName());
 		}
 
-		return (Date)inspectionDate;
+		return (Date)datePerformed;
 	}
 	
-	public void setInspectionDate(Object inspectionDate) {
-		this.inspectionDate = inspectionDate;
+	public void setDatePerformed(Object datePerformed) {
+		this.datePerformed = datePerformed;
 	}
 
 	public String getStatus() {

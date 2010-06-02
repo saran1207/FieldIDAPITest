@@ -143,8 +143,8 @@ public class ChantFileProcessor extends FileProcessor {
 		Node fixDataNode = doc.selectSingleNode(formXPath("dtFixedData"));
 		
 		// start with inspection date
-		Date inspectionDate = parseInspectionDate(fixDataNode);
-		fileDataContainer.setInspectionDate(inspectionDate);
+		Date datePerformed = parseDatePerformed(fixDataNode);
+		fileDataContainer.setDatePerformed(datePerformed);
 		/*
 		 * XXX - for now we're going to pull the duration directly as a string from the file
 		 * at some point we should probably changed to a real number with a unit
@@ -156,7 +156,7 @@ public class ChantFileProcessor extends FileProcessor {
 		
 		fileDataContainer.setSerialNumbers(serialNumber);
 		
-		logger.debug("Chant file is for serial number [" + serialNumber + "] and inspection date [" + String.valueOf(inspectionDate) + "]");
+		logger.debug("Chant file is for serial number [" + serialNumber + "] and inspection date [" + String.valueOf(datePerformed) + "]");
 		// note: FileDataContainer.PEAK_LOAD is set later on when processing series data
 	}
 	
@@ -164,20 +164,20 @@ public class ChantFileProcessor extends FileProcessor {
 	 * Parses the inspection date from a dtFixedData node.  Can throw a FileProcessingException if
 	 * the date fails parsing
 	 */
-	private Date parseInspectionDate(Node fixedDataNode) throws FileProcessingException {
+	private Date parseDatePerformed(Node fixedDataNode) throws FileProcessingException {
 		String dateString = getChildNodeText(fixedDataNode, "Date");
 		SimpleDateFormat inputFormatter = new SimpleDateFormat(INPUT_DATE_FORMAT);
 		
-		Date inspectionDate = null;
+		Date datePerformed = null;
 		try {
 			String replacedDate = correctTimeZoneAndMillisecondFormatting(dateString);
-			inspectionDate = inputFormatter.parse(replacedDate);
+			datePerformed = inputFormatter.parse(replacedDate);
 		} catch(Exception e) {
 			// we must fail if a valid inspection date cannot be found
 			throw new FileProcessingException("Unable to parse inspection date", e);
 		}
 		
-		return inspectionDate;
+		return datePerformed;
 	}
 
 	protected String correctTimeZoneAndMillisecondFormatting(String dateString) {

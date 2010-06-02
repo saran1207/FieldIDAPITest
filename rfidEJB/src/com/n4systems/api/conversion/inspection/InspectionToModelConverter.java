@@ -45,7 +45,7 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		resolveOwner(view, model, transaction);
 		
 		model.setLocation(view.getLocation());
-		model.setDate(view.getInspectionDateAsDate());
+		model.setDate(view.getDatePerformedAsDate());
 		model.setComments(view.getComments());
 		
 		resolveStatus(view.getStatus(), model);

@@ -32,8 +32,8 @@ public class RealTimeInspectionLookupHandlerTest {
 		mostRecentDate = DateHelper.createDate(2009, 9, 20);
 		
 		multipleInspections = new FluentArrayList<Inspection>(
-				anInspection().withInspectionDate(recentDate).build(), 
-				anInspection().withInspectionDate(recentDate).build());
+				anInspection().performedOn(recentDate).build(), 
+				anInspection().performedOn(recentDate).build());
 	}
 	
 	@Test

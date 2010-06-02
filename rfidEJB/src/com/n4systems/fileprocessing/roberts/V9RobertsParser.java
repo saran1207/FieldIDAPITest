@@ -39,7 +39,7 @@ public class V9RobertsParser implements RobertsParser {
 		fileDataContainer.setFileType(ProofTestType.ROBERTS);
 		fileDataContainer.setCustomerName(headerMap.get("Customer"));
 		fileDataContainer.setComments(headerMap.get("User Paragraph"));
-		fileDataContainer.setInspectionDate(parseDate(headerMap.get("Test Date")));
+		fileDataContainer.setDatePerformed(parseDate(headerMap.get("Test Date")));
 		fileDataContainer.setSerialNumbers(serialConverter.toCSV(headerMap.get("Serial No.")));
 		
 		// we'll dump the entire header map into the extra info so the fields are available to dynamic processors later on
