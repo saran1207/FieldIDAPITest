@@ -289,11 +289,6 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return (List<ListingPair>)query.getResultList();
 	}
 	
-	/**
-	 * Returns a collection of users for a particular tenant and end user 
-	 * @param tenantid the tenant to return the list of users for
-	 * @param endUserID optional argument to filter the list to a particular end user
-	 */
 	//TODO extract to a loader it is only used by one call on inspection crud.
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getExaminers( SecurityFilter filter ) {

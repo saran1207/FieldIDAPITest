@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.validators;
+package com.n4systems.fieldid.actions.validations;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -22,7 +22,7 @@ import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
-
+@SuppressWarnings("unchecked")
 public class UniqueInfoFieldValidatorTest {
 			
 	private ActionValidatorManager avm;
@@ -35,7 +35,6 @@ public class UniqueInfoFieldValidatorTest {
 		
 		List<TrimmedString> modelFields = new ArrayList<TrimmedString>();
 		
-		@SuppressWarnings("unchecked")
 		private Map fieldErrors = new HashedMap();
 		
 		@CustomValidator(type = "uniqueInfoFieldValidator", message = "", key = "error.duplicateinfofieldname")
@@ -51,60 +50,44 @@ public class UniqueInfoFieldValidatorTest {
 
 		public void addActionMessage(String arg0) {	}
 
-		@SuppressWarnings("unchecked")
 		public void addFieldError(String arg0, String arg1) {
 			fieldErrors.put(arg0, arg1);
 		}
 
-		@SuppressWarnings("unchecked")
 		public Collection getActionErrors() {
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
-		@Override
 		public Collection getActionMessages() {
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
-		@Override
 		public Map getFieldErrors() {
 			return fieldErrors;
 		}
 
-		@Override
 		public boolean hasActionErrors() {
 			return false;
 		}
 
-		@Override
 		public boolean hasActionMessages() {
 			return false;
 		}
 
-		@Override
 		public boolean hasErrors() {
 			return false;
 		}
 
-		@Override
 		public boolean hasFieldErrors() {
 			return false;
 		}
 
-		@SuppressWarnings("unchecked")
-		@Override
 		public void setActionErrors(Collection arg0) {
 		}
 
-		@SuppressWarnings("unchecked")
-		@Override
 		public void setActionMessages(Collection arg0) {
 		}
 
-		@SuppressWarnings("unchecked")
-		@Override
 		public void setFieldErrors(Map arg0) {
 			this.fieldErrors = arg0;
 		}
@@ -126,6 +109,7 @@ public class UniqueInfoFieldValidatorTest {
 		inputFields = new ArrayList<TrimmedString>();
 	}
 
+	
 	@Test
 	public void should_raise_field_error_on_duplicate_field_names() throws ValidationException {
 		
@@ -134,6 +118,7 @@ public class UniqueInfoFieldValidatorTest {
 		crud.modelFields = inputFields;
 		avm.validate(crud, "uniqueInfoFieldValidator");
 		assertThat(crud.getFieldErrors().size(), equalTo(1));
+		assertThat(crud.getFieldErrors(), hasKey("modelFields"));
 	}
 	
 	@Test
