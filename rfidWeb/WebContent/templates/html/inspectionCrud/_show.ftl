@@ -2,7 +2,8 @@
 <div id="inspection" >
 	<div id="productSummary">
 		<h2>
-			<span><@s.text name="label.productsummary"/></span>
+			<span>${product.type.name!""?html} <@s.text name="label.summary"/></span>
+			
 			
 			<@s.url id="inspectionCertUrl" action="downloadInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
 			<@s.url id="observationCertUrl" action="downloadInspectionCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
@@ -35,13 +36,6 @@
 			<label><@s.text name="label.rfidnumber"/></label>
 			<span>
 				${product.rfidNumber!""?html}
-			</span>
-		</p>
-		
-		<p>
-			<label><@s.text name="label.producttype"/></label>
-			<span>
-				${product.type.name!""?html}
 			</span>
 		</p>
 		<p>
@@ -80,12 +74,8 @@
 		<span>${inspection.location!?html}</span>
 	</p>
 	
-	<h2><@s.text name="label.inspectiondetails"/></h2>
-	<p> 
-		<label><@s.text name="label.inspectiontype"/></label>
-		<span>${inspectionType.name?html}</span>
-	</p>
-	
+	<h2>${inspectionType.name?html} <@s.text name="label.information"/></h2>
+		
 	<p>
 		<label><@s.text name="label.performed_by"/></label>
 		<span>
@@ -162,7 +152,7 @@
 	
 	
 	
-	<h2><@s.text name="label.postinspectioninformation"/></h2>
+	<h2><@s.text name="label.posteventinformation"/></h2>
 	
 	<p>
 		<label><@s.text name="label.comments"/></label>
@@ -214,7 +204,7 @@
 				<#assign identifier=subInspection.id/>
 				
 				<#include "_inspection.ftl" />
-				<h2><@s.text name="label.postinspectioninformation"/></h2>
+				<h2><@s.text name="label.posteventinformation"/></h2>
 		
 				<p>
 					<label><@s.text name="label.comments"/></label>

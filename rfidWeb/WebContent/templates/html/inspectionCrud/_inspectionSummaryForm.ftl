@@ -6,7 +6,8 @@
 <@s.hidden name="inspectionGroupId"/>
 <@s.hidden id="inspectionTypeId" name="type"/>
 <div id="productSummary">
-	<h2><@s.text name="label.productsummary"/></h2>
+	<h2>${product.type.name!?html} <@s.text name="label.summary"/></h2>
+	
 	<p>
 		<label><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
 		<span>
@@ -19,14 +20,6 @@
 			${product.rfidNumber!?html}
 		</span>
 	</p>
-	
-	<p>
-		<label><@s.text name="label.producttype"/></label>
-		<span>
-			${product.type.name!?html}
-		</span>
-	</p>
-	
 	<p>
 		<label><@s.text name="label.desc"/></label>
 		<span>
@@ -48,11 +41,8 @@
 	</p>
 </#if>
 
-<h2><@s.text name="label.inspectiondetails"/></h2>
-<p> 
-	<label><@s.text name="label.inspectiontype"/></label>
-	<span>${inspection.type.name?html}</span>
-</p>
+<h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>
+
 <#if action.isParentProduct() >
 	<p>
 		<label><@s.text name="label.performed_by"/></label>

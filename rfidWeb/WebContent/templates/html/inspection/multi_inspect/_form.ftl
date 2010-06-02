@@ -7,10 +7,7 @@
 
 	<@s.hidden name="productId" id="productId"/>
 	
-	<div class="infoSet">
-		<label class="label"><@s.text name="label.inspectiontype"/></label>
-		<span class="fieldHolder">${inspection.type.name?html}</span>
-	</div>
+	
 	
 	<h2><@s.text name="label.customerinformation"/></h2>
 	
@@ -24,7 +21,7 @@
 		<@s.textfield name="modifiableInspection.location" />
 	</div>
 	
-	<h2><@s.text name="label.inspectiondetails"/></h2>
+	<h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.performed_by"/></label>
 		<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
@@ -50,7 +47,7 @@
 	
 	
 
-	<h2><@s.text name="label.postinspectioninformation"/></h2>
+	<h2><@s.text name="label.posteventinformation"/></h2>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.comments"/></label>
 		<div class="fieldHolder">

@@ -1,5 +1,5 @@
 
-<h2><@s.text name="label.postinspectioninformation"/></h2>
+<h2><@s.text name="label.posteventinformation"/></h2>
 <p>
 	<label><@s.text name="label.comments"/></label>
 	<span>
