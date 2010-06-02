@@ -6,7 +6,7 @@ ${action.setPageType('product', 'inspections')!}
 			<th><@s.text name="label.date_performed"/></th>
 			<th><@s.text name="label.inspectiontype"/></th>
 			<th><@s.text name="label.result"/></th>
-			<th><@s.text name="label.inspectedby"/></th>
+			<th><@s.text name="label.performed_by"/></th>
 			<th><@s.text name="label.details"/></th>
 		</tr>
 		<#list inspections as inspection >
