@@ -31,7 +31,7 @@
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
-		<@s.datetimepicker id="inspectionDate" name="modifiableInspection.inspectionDate"  type="dateTime"/>
+		<@s.datetimepicker id="datePerformed" name="modifiableInspection.datePerformed"  type="dateTime"/>
 	</div>
 	
 	

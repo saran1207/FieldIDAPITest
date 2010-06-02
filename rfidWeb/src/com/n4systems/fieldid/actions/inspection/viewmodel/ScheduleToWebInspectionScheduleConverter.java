@@ -16,7 +16,7 @@ public class ScheduleToWebInspectionScheduleConverter {
 		
 	}
 
-	public WebInspectionSchedule convert(ProductTypeSchedule schedule, Date currentInspectionDate) {
+	public WebInspectionSchedule convert(ProductTypeSchedule schedule, Date currentDatePerformed) {
 		if (schedule == null) { return null; }
 		
 		
@@ -26,7 +26,7 @@ public class ScheduleToWebInspectionScheduleConverter {
 		webInspectionSchedule.setTypeName(schedule.getInspectionType().getName());
 		
 		
-		webInspectionSchedule.setDate(dateConverter.convertDate(schedule.getNextDate(currentInspectionDate)));
+		webInspectionSchedule.setDate(dateConverter.convertDate(schedule.getNextDate(currentDatePerformed)));
 		
 		return webInspectionSchedule;
 	}

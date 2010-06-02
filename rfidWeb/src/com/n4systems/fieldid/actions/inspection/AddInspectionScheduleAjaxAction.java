@@ -21,7 +21,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private Project job;
 	private String date;
 	private Long index;
-	private String inspectionDate;
+	private String datePerformed;
 	
 	private WebInspectionSchedule nextSchedule = new WebInspectionSchedule();
 	
@@ -36,7 +36,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	
 	@SkipValidation
 	public String doAutoSuggest() {
-		Date startDate = convertDate(inspectionDate);
+		Date startDate = convertDate(datePerformed);
 		
 		if (startDate == null) {
 			startDate = DateHelper.getToday();
@@ -104,14 +104,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		
 	}
 
-	public String getInspectionDate() {
-		return inspectionDate;
-	}
-
-	public void setInspectionDate(String inspectionDate) {
-		this.inspectionDate = inspectionDate;
-	}
-
+	
 	public Long getIndex() {
 		return index;
 	}
@@ -122,6 +115,14 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 
 	public WebInspectionSchedule getNextSchedule() {
 		return nextSchedule;
+	}
+
+	public String getDatePerformed() {
+		return datePerformed;
+	}
+
+	public void setDatePerformed(String datePerformed) {
+		this.datePerformed = datePerformed;
 	}
 	
 }

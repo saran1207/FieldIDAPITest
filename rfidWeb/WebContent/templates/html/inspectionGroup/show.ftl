@@ -48,7 +48,7 @@ ${action.setPageType('inspection', 'list')!}
 										${ ( inspection.type.name )!}
 									</a>
 								</span>
-								<span class="inspectionDate">
+								<span class="datePerformed">
 									${action.formatDateTime(inspection.date)}
 								</span>
 								<span class="performedBy">

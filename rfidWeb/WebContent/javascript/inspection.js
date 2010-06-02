@@ -415,7 +415,7 @@ function validDate(date) {
 function autoSuggest() {
 	var params = new Object();
 	params.inspectionTypeId = inspectionTypeId;
-	params.inspectionDate = $('inspectionDate').getValue();
+	params.datePerformed = $('datePerformed').getValue();
 	params.product = productId;
 	params.index = index;
 	

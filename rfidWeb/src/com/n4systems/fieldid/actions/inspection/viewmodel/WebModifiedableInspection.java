@@ -20,8 +20,8 @@ public class WebModifiedableInspection implements UserDateFormatValidator {
 	
 	private String location;
 	
-	private Date utcInspectionDate;
-	private String inspectionDate;
+	private Date utcDatePerformed;
+	private String datePerformed;
 	
 	
 
@@ -59,27 +59,27 @@ public class WebModifiedableInspection implements UserDateFormatValidator {
 	public void updateValuesToMatch(Inspection inspection) {
 		location = inspection.getLocation();
 		ownerPicker.updateOwner(inspection.getOwner());
-		utcInspectionDate = inspection.getDate();
+		utcDatePerformed = inspection.getDate();
 	}
 	
 	
 	public void pushValuesTo(Inspection inspection) {
 		inspection.setLocation(location);
 		inspection.setOwner(ownerPicker.getOwner());
-		inspection.setDate(inspectionDate != null ? dateConverter.convertDateTime(inspectionDate) : null);
+		inspection.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
 	}
 	
-	public String getInspectionDate() {
-		if (inspectionDate == null) {
-			inspectionDate = dateConverter.convertDateTime(utcInspectionDate);
+	public String getDatePerformed() {
+		if (datePerformed == null) {
+			datePerformed = dateConverter.convertDateTime(utcDatePerformed);
 		}
-		return inspectionDate;
+		return datePerformed;
 	}
 
 	@RequiredStringValidator(message = "", key = "error.mustbeadatetime")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadatetime", parameters = { @ValidationParameter(name = "usingTime", value = "true") })
-	public void setInspectionDate(String inspectionDate) {
-		this.inspectionDate = inspectionDate;
+	public void setDatePerformed(String datePerformed) {
+		this.datePerformed = datePerformed;
 	}
 
 
