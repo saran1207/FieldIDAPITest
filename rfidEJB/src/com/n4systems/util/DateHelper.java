@@ -185,7 +185,7 @@ public class DateHelper {
 	}
 
 	public static Date getYesterday() {
-		return increment(getToday(), -1, DAY);
+		return increment(getToday(), DAY, -1);
 	}
 
 	public static Date getTomorrow() {
