@@ -142,26 +142,25 @@ public class ChantFileProcessor extends FileProcessor {
 		
 		Node fixDataNode = doc.selectSingleNode(formXPath("dtFixedData"));
 		
-		// start with inspection date
 		Date datePerformed = parseDatePerformed(fixDataNode);
 		fileDataContainer.setDatePerformed(datePerformed);
+		
 		/*
 		 * XXX - for now we're going to pull the duration directly as a string from the file
 		 * at some point we should probably changed to a real number with a unit
 		 */
-		fileDataContainer.setTestDuration(getChildNodeText(fixDataNode, "Duration"));
+		String duration = getChildNodeText(fixDataNode, "Duration");
+		fileDataContainer.setTestDuration(duration);
 		
-		// lets grab the produt serial number
 		String serialNumber = getChildNodeText(fixDataNode, "Serial_x0020_Number");
-		
 		fileDataContainer.setSerialNumbers(serialNumber);
 		
-		logger.debug("Chant file is for serial number [" + serialNumber + "] and inspection date [" + String.valueOf(datePerformed) + "]");
+		logger.debug("Chant file is for serial number [" + serialNumber + "] and date performed [" + String.valueOf(datePerformed) + "]");
 		// note: FileDataContainer.PEAK_LOAD is set later on when processing series data
 	}
 	
 	/*
-	 * Parses the inspection date from a dtFixedData node.  Can throw a FileProcessingException if
+	 * Parses the date performed from a dtFixedData node.  Can throw a FileProcessingException if
 	 * the date fails parsing
 	 */
 	private Date parseDatePerformed(Node fixedDataNode) throws FileProcessingException {
@@ -173,8 +172,8 @@ public class ChantFileProcessor extends FileProcessor {
 			String replacedDate = correctTimeZoneAndMillisecondFormatting(dateString);
 			datePerformed = inputFormatter.parse(replacedDate);
 		} catch(Exception e) {
-			// we must fail if a valid inspection date cannot be found
-			throw new FileProcessingException("Unable to parse inspection date", e);
+			// we must fail if a valid date performed cannot be found
+			throw new FileProcessingException("Unable to parse date performed", e);
 		}
 		
 		return datePerformed;

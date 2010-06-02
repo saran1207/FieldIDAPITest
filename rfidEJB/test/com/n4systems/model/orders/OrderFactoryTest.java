@@ -42,4 +42,6 @@ public class OrderFactoryTest {
 		assertEquals(OrderType.SHOP, line.getOrder().getOrderType());
 		assertEquals(OrderFactory.NON_INTEGRATION_DESCRIPTION, line.getOrder().getDescription());
 	}
+	
+	
 }

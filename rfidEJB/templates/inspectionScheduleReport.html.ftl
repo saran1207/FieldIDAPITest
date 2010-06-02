@@ -39,7 +39,7 @@ table.overdue td {
 		<#else>
 			<table class="message" cellpadding=2 cellspacing=2 border>
 				<tr>
-					<th>Inspection Date</th>
+					<th>Scheduled Date</th>
 					<th>Organization</th>
 					<th>Customer</th>
 					<th>Division</th>
@@ -72,7 +72,7 @@ table.overdue td {
 		<#else>
 			<table class="message overdue" cellpadding=2 cellspacing=2 border>
 				<tr>
-					<th>Inspection Date</th>
+					<th>Scheduled Date</th>
 					<th>Organization</th>
 					<th>Customer</th>
 					<th>Division</th>

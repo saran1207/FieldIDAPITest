@@ -175,12 +175,10 @@ public class DateHelper {
 	}
 
 	public static boolean withinTheLastHour(Date target) {
-		// XXX refactor to use increment
-		Calendar oneHourAgo = Calendar.getInstance();
 		Date now = new Date();
-		oneHourAgo.add(Calendar.HOUR, -1);
+		Date oneHourAgo = increment(now, HOUR, -1);
 
-		return (target.before(now) && target.after(oneHourAgo.getTime()));
+		return (target.before(now) && target.after(oneHourAgo));
 
 	}
 

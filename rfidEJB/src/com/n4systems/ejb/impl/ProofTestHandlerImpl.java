@@ -148,7 +148,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 
 		} 
-		Date inspectionDate = fileData.getDatePerformed();
+		Date datePerformed = fileData.getDatePerformed();
 
 		Product product;
 		List<Inspection> inspections;
@@ -181,12 +181,12 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			}
 			
 			// convert date to utc using the performed By time.
-			Date inspectionDateInUTC = DateHelper.convertToUTC(inspectionDate, performedBy.getTimeZone());
-			Date inspectionDateRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(inspectionDate), performedBy.getTimeZone());
-			Date inspectionDateRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(inspectionDate), performedBy.getTimeZone());
+			Date datePerformedInUTC = DateHelper.convertToUTC(datePerformed, performedBy.getTimeZone());
+			Date datePerformedRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(datePerformed), performedBy.getTimeZone());
+			Date datePerformedRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(datePerformed), performedBy.getTimeZone());
 
 			// if we find a product then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndProduct(inspectionDateRangeStartInUTC, inspectionDateRangeEndInUTC, product, performedBy.getSecurityFilter());
+			inspections = inspectionManager.findInspectionsByDateAndProduct(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, product, performedBy.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
 			for (Inspection insp: inspections) {
@@ -199,15 +199,15 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, performedBy, customer, product, book, inspectionDateInUTC, fileData);
+				inspection = createInspection(tenant, performedBy, customer, product, book, datePerformedInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
 					inspectionManager.updateInspection(inspection, performedBy.getId(), fileData, null);
-					writeLogMessage(tenant, "Updated Inspection for Product with serial [" + serialNumber + "] and Inspection date [" + inspection.getDate() + "]");
+					writeLogMessage(tenant, "Updated Inspection for Product with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one inspection to cause the others to fail, so we will simply log these expections and move on
-					writeLogMessage(tenant, "Failed to update Inspection for Product with serial [" + serialNumber + "] and Inspection date [" + inspection.getDate() + "]", false, e);
+					writeLogMessage(tenant, "Failed to update Inspection for Product with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]", false, e);
 					inspectionMap.put(serialNumber, null);
 					continue;
 				}
@@ -368,7 +368,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return product;
 	}
 	
-	private Inspection createInspection(Tenant tenant, User performedBy, BaseOrg owner, Product product, InspectionBook book, Date inspectionDate, FileDataContainer fileData) {
+	private Inspection createInspection(Tenant tenant, User performedBy, BaseOrg owner, Product product, InspectionBook book, Date datePerformed, FileDataContainer fileData) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		
@@ -392,7 +392,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		inspection.setProduct(product);
 		inspection.setProductStatus(product.getProductStatus());
-		inspection.setDate(inspectionDate);
+		inspection.setDate(datePerformed);
 		inspection.setPerformedBy(performedBy);
 		inspection.setBook(book);
 		inspection.setComments(fileData.getComments());
@@ -434,10 +434,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 					new CreateInspectionParameterBuilder(inspection,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
-			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]");
+			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an inspection, log the failure
-			writeLogMessage(tenant, "Failed to create Inspection for Product with serial [" + product.getSerialNumber() + "] and Inspection date [" + inspection.getDate() + "]", false, e);
+			writeLogMessage(tenant, "Failed to create Inspection for Product with serial [" + product.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]", false, e);
 			return null;
 		}
 		
