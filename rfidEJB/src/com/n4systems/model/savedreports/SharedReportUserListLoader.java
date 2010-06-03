@@ -42,8 +42,7 @@ public class SharedReportUserListLoader extends ListLoader<User> {
 	private List<User> getAllSecondaryOrgUsersIfReportOwnerIsNotUnderASecondaryOrg(EntityManager em, SecurityFilter filter) {
 		List<User> users = new ArrayList<User>();
 		if (getOwnerForReport(em, filter).getSecondaryOrg() == null) {
-			QueryBuilder<User> query = new QueryBuilder<User>(User.class, filter);
-			
+			QueryBuilder<User> query = getUserQuery(filter);
 			query.addWhere(Comparator.NOTNULL, "owner.secondaryOrg", "owner.secondaryOrg", -1);
 			query.addWhere(Comparator.NULL, "owner.customerOrg", "owner.customerOrg", -1);
 			users.addAll(query.getResultList(em));
@@ -51,6 +50,14 @@ public class SharedReportUserListLoader extends ListLoader<User> {
 		
 		return users;
 	}
+
+	private QueryBuilder<User> getUserQuery(SecurityFilter filter) {
+		QueryBuilder<User> query = new QueryBuilder<User>(User.class, filter);
+		query.addSimpleWhere("active", true);
+		query.addSimpleWhere("deleted", false);
+		return query;
+	}
+
 
 	private List<User> getAllUsersDirectlyAboveTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
 		List<User> users = new ArrayList<User>();
@@ -65,14 +72,14 @@ public class SharedReportUserListLoader extends ListLoader<User> {
 	}
 
 	private void loadUsersForOrg(EntityManager em, SecurityFilter filter, List<User> users, BaseOrg org) {
-		QueryBuilder<User> query = new QueryBuilder<User>(User.class, filter);
+		QueryBuilder<User> query = getUserQuery(filter);
 		query.addSimpleWhere("owner", org);
 		users.addAll(query.getResultList(em));
 	}
 
 
 	private List<User> getAllUsersBelowTheOwnerOnTheReport(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<User> usersBelowOwnerQuery = new QueryBuilder<User>(User.class, filter);
+		QueryBuilder<User> usersBelowOwnerQuery = getUserQuery(filter);
 	
 		getOwnerFilterForReport(em, filter).applyFilter(usersBelowOwnerQuery);
 		

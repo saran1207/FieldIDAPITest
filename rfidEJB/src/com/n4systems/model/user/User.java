@@ -18,6 +18,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
@@ -47,12 +48,13 @@ public class User extends EntityWithOwner implements Listable<Long>, HasOwner, S
 	
 	private boolean active = false;
 	private boolean deleted = false;
+	
 	private boolean system = false;
 	private boolean admin = false;
 	
 	
 	@Column(name="permissions", nullable=false)
-	private int permissions = 0; // permissions should always start out empty
+	private int permissions = Permissions.NO_PERMISSIONS;
 	
 	
 	private Long externalId;

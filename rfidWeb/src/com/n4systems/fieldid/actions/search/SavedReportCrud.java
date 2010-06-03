@@ -70,7 +70,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		InspectionSearchContainer container = converter.convert(report);
 		
 		searchId = container.getSearchId();
-		getSession().setReportCriteria(container); // TODO move this somewhere better AA.
+		getSession().setReportCriteria(container); 
 		return SUCCESS;
 	}
 

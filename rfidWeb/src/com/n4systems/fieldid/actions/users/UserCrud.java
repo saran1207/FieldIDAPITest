@@ -56,7 +56,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private String listFilter;
 	private String userType = UserType.ALL.name();
 	private String securityCardNumber;
-	private Country country;
+	private Country country;	
 	private Region region;
 	
 	private WelcomeMessage welcomeMessage = new WelcomeMessage();
