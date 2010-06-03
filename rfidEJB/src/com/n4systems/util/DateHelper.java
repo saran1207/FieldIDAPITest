@@ -271,11 +271,10 @@ public class DateHelper {
 	 * @return The Date only representation of the given calendar object
 	 */
 	private static Calendar setToDay(Calendar date) {
-		// XXX refactor to use truncate()
-		date.set(Calendar.HOUR_OF_DAY, 0);
-		date.set(Calendar.MINUTE, 0);
-		date.set(Calendar.SECOND, 0);
-		date.set(Calendar.MILLISECOND, 0);
+		truncate(date, HOUR);
+		truncate(date, MINUTE);
+		truncate(date, SECOND);
+		truncate(date, MILLISECOND);
 		return date;
 	}
 
@@ -363,9 +362,14 @@ public class DateHelper {
 	 */
 	public static Date truncate(Date date, int field) {
 		Calendar cal = Calendar.getInstance();
-
 		cal.setTime(date);
 
+		truncate(cal, field);
+
+		return cal.getTime();
+	}
+
+	private static void truncate(Calendar cal, int field) {
 		// Each field operates on the next smaller field and continues down the
 		// chain.
 		switch (field) {
@@ -399,8 +403,6 @@ public class DateHelper {
 		default:
 			throw new IllegalArgumentException("Invalid date field: " + field);
 		}
-
-		return cal.getTime();
 	}
 
 	/**
