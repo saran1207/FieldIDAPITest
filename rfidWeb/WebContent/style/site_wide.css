@@ -224,13 +224,13 @@ em {
 	width: 200px;
 }	
 
-#noPermissionMessage, #planLimitExceeded {
+#noPermissionMessage, #planLimitExceeded, #ieOnlyMessage {
 	padding:20px;
 	font-size: 2em;
 	text-align: center;
 }
 
-#noPermissionMessage p, #planLimitExceeded p {
+#noPermissionMessage p, #planLimitExceeded p, ieOnlyMessage p {
 	margin: 5px 0;
 }
 

@@ -1,14 +1,12 @@
-<head>
-	<#include "/templates/html/common/_orgPicker.ftl"/>
-</head>
+
 ${action.setPageType('inspection', 'multi_proof_test')!}
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/inspectionBook.js" includeParams="none"/>" ></script>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+	<@n4.includeScript src="inspectionBook" />
 	<script type="text/javascript" >
 		updateInspectionBooksUrl = '<@s.url action="inspectionBooks" namespace="ajax"  includeParams="none" />';
 		function multiProofSubmit( form )
 		{
-			
 			var Flash;
 			if(document.embeds && document.embeds.length>=1 && navigator.userAgent.indexOf("Safari") == -1) {
 				Flash = $("EmbedFlashFilesUpload");
@@ -22,8 +20,19 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 			Flash.SetVariable("SubmitFlash", FormValues); 
 			return false;
 		}
+		
+		function replaceScreenWithMessageIfNotIE() {
+			if (!Prototype.Browser.IE) {
+				$('proofTestForm').hide();
+				$('ieOnlyMessage').show();
+			}
+		}
+		
+		onDocumentLoad(replaceScreenWithMessageIfNotIE);
 	</script>
 </head>
+
+
 <@s.form action="multiProofTestCreate" id="proofTestForm" cssClass="crudForm" theme="simple">
 <#assign flashVars></#assign>
 
@@ -77,6 +86,12 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 	
 	<div class="formAction" >
 		<button onclick="multiProofSubmit(this.form); return false;"><@s.text name="hbutton.upload"/></button>
-	</div>  	
+	</div>  
   
 </@s.form>
+
+<div id="ieOnlyMessage" class="hide">
+	<p class="error">
+		<@s.text name="label.ie_only_for_multi_proof_upload"/>
+	</>
+</div>
