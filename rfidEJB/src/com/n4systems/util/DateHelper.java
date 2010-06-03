@@ -271,6 +271,7 @@ public class DateHelper {
 	 * @return The Date only representation of the given calendar object
 	 */
 	private static Calendar setToDay(Calendar date) {
+		truncate(date, DAY);
 		truncate(date, HOUR);
 		truncate(date, MINUTE);
 		truncate(date, SECOND);
