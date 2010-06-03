@@ -25,7 +25,7 @@ public final class SecurityContext implements Serializable {
 	 * @throws SecurityException	If a UserBean could not be found for the given userId
 	 */
 	public static void initialize(Long userId, Long tenantId, String sessionId) throws SecurityException {
-		User user = ServiceLocator.getUser().findUser(userId, tenantId);
+		User user = ServiceLocator.getPersistenceManager().find(User.class, userId, tenantId);
 		
 		if (user == null) {
 			clear();

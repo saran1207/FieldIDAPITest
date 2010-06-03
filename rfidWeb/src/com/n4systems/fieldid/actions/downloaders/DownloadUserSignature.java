@@ -3,22 +3,18 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 
 public class DownloadUserSignature extends AbstractDownloadAction {
 
-	private final UserManager userManager;
 
 	private Long userId;
 	private User user;
 	
-	public DownloadUserSignature(PersistenceManager persistenceManager, UserManager userManager) {
+	public DownloadUserSignature(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.userManager = userManager;
 	}
 
 	@Override
@@ -33,7 +29,7 @@ public class DownloadUserSignature extends AbstractDownloadAction {
 
 
 	protected User loadUser() {
-		return userManager.findUser(userId, getTenantId());
+		return persistenceManager.find(User.class, userId, getTenantId());
 	}
 	
 	@Override

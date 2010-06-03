@@ -22,10 +22,8 @@ import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
-import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueProductException;
@@ -58,7 +56,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 private LegacyProductType productTypeManager;
 	 private PersistenceManager persistenceManager;
 	 private InspectionManager inspectionManager;
-	 private UserManager userManager;
 	 private PopulatorLog populatorLogManager;
 
 	private InspectionSaver inspectionSaver;
@@ -69,7 +66,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		this.legacyProductManager = new LegacyProductSerialManager(em);
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.inspectionManager = new InspectionManagerImpl(em);
-		this.userManager = new EntityManagerBackedUserManager(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
 		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), 
 				persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
@@ -105,7 +101,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			throw new FileProcessingException("Failed to process Proof Test", e);
 		} 
 		// now lets look up our beans
-		User user = userManager.findUser(userId, tenantId);
+		User user = persistenceManager.find(User.class, userId, tenantId);
 		BaseOrg customer = persistenceManager.find(BaseOrg.class, ownerId, tenantId);
 		InspectionBook book = persistenceManager.find(InspectionBook.class, inspectionBookId, tenantId);
 		

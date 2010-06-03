@@ -16,11 +16,9 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 
-
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
@@ -42,16 +40,14 @@ public class InspectionSummaryGenerator {
 	
 	private final PersistenceManager persistenceManager;
 	private final InspectionManager inspectionManager;
-	private final UserManager userManager;
 	
-	public InspectionSummaryGenerator(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager) {
+	public InspectionSummaryGenerator(PersistenceManager persistenceManager, InspectionManager inspectionManager) {
 		this.persistenceManager = persistenceManager;
 		this.inspectionManager = inspectionManager;
-		this.userManager = userManager;
 	}
 	
 	public InspectionSummaryGenerator() {
-		this(ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager(), ServiceLocator.getUser());
+		this(ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager());
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, User user) throws ReportException {
@@ -145,7 +141,7 @@ public class InspectionSummaryGenerator {
 		}
 
 		if (reportDefiner.getPerformedBy() != null) {
-			reportMap.put("performedBy", userManager.findUser(reportDefiner.getPerformedBy()).getUserLabel());
+			reportMap.put("performedBy", persistenceManager.find(User.class, reportDefiner.getPerformedBy()).getUserLabel());
 		}
 		
 		if (reportDefiner.getOwner() != null) {

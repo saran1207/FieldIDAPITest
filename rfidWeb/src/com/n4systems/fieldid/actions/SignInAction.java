@@ -109,7 +109,7 @@ public class SignInAction extends AbstractAction {
 			return ERROR;
 		}
 		
-		User loginUser = userManager.findUser(userId);
+		User loginUser = persistenceManager.find(User.class, userId);
 		if (loginUser != null) {
 			return signIn(loginUser); 
 		}

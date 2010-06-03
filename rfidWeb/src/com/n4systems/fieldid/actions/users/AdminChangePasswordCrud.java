@@ -26,7 +26,7 @@ public class AdminChangePasswordCrud extends ChangePasswordCrud {
 
 	@Override
 	protected void loadMemberFields( Long uniqueId ) {
-		user = userManager.findUser(uniqueId, getTenantId());
+		user = persistenceManager.find(User.class, uniqueId, getTenantId());
 
 	}
 

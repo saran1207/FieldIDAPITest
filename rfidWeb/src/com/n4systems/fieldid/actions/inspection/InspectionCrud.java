@@ -681,7 +681,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (performedBy == null) {
 			inspection.setPerformedBy(null);
 		} else if (inspection.getPerformedBy() == null || !performedBy.equals(inspection.getPerformedBy())) {
-			inspection.setPerformedBy(userManager.findUser(performedBy, getTenantId()));
+			inspection.setPerformedBy(persistenceManager.find(User.class, performedBy, getTenantId()));
 		}
 
 	}

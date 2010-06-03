@@ -30,7 +30,7 @@ public class JobResourcesCrudTest {
 		users.add(new SimpleListable<Long>(2L, "two"));		
 		
 		final UserListableLoader loader = createMock(UserListableLoader.class);
-		loader.setNoDeleted(true);
+		expect(loader.setNoDeleted(true)).andReturn(loader);
 		expect(loader.load()).andReturn(users);
 		replay(loader);
 		
@@ -66,7 +66,7 @@ public class JobResourcesCrudTest {
 		users.add(new SimpleListable<Long>(2L, "two"));		
 		
 		final UserListableLoader loader = createMock(UserListableLoader.class);
-		loader.setNoDeleted(true);
+		expect(loader.setNoDeleted(true)).andReturn(loader);
 		expect(loader.load()).andReturn(users);
 		replay(loader);
 		

@@ -17,8 +17,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.UserType;
 
 public interface UserManager {
-	public User findUser(Long uniqueID);
-	public User findUser(Long uniqueID, Long tenantId);
+	
 	public User findUser(String tenantName, String userID, String plainTextPassword);
 	public User findUser(String tenantName, String rfidNumber);
 

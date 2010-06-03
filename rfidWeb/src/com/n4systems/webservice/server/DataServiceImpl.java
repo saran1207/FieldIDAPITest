@@ -634,15 +634,14 @@ public class DataServiceImpl implements DataService {
 	
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {						
 		
-		UserManager userManager = ServiceLocator.getUser();
-		
+		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 		try {
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
 			
 			if (request.modifiedByIdExists()) {
-				User userBean = userManager.findUser(request.getModifiedById());
+				User userBean = persistenceManager.find(User.class, request.getModifiedById());
 				product.setModifiedBy(userBean);
 			} 
 			
@@ -662,16 +661,16 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {						
 		
 		try {
-			UserManager userManager = ServiceLocator.getUser();
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			product.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
 			
 			if (request.modifiedByIdExists()) {
-				User userBean = userManager.findUser(request.getModifiedById());
+				User userBean = persistenceManager.find(User.class, request.getModifiedById());
 				product.setModifiedBy(userBean);
 			} 
 			
@@ -1125,10 +1124,11 @@ public class DataServiceImpl implements DataService {
 		Long tenantId = requestInformation.getTenantId();
 		
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		UserManager userManager = ServiceLocator.getUser();
+		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+		
 		try {
 
-			User performedBy = userManager.findUser(inspectionImageServiceDTO.getPerformedById());
+			User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
 			
 			InspectionAttachmentSaver attachmentSaver = new InspectionAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());

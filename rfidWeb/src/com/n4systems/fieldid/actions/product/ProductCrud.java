@@ -27,7 +27,6 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.ProductCodeMapping;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
@@ -51,6 +50,7 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
@@ -124,7 +124,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// managers
 	private LegacyProductType productTypeManager;
 	private LegacyProductSerial legacyProductSerialManager;
-	private UserManager userManager;
 
 	private ProductCodeMapping productCodeMappingManager;
 	private InspectionScheduleManager inspectionScheduleManager;
@@ -140,12 +139,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
-			UserManager userManager, ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
+			ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
 			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 		this.legacyProductSerialManager = legacyProductSerialManager;
-		this.userManager = userManager;
 		this.productCodeMappingManager = productCodeMappingManager;
 		this.productManager = productManager;
 		this.orderManager = orderManager;
@@ -863,7 +861,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		if (user == null) {
 			product.setAssignedUser(null);
 		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
-			product.setAssignedUser(userManager.findUser(user, getTenantId()));
+			product.setAssignedUser(persistenceManager.find(User.class, user, getTenantId()));
 		}
 	}
 

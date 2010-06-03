@@ -18,8 +18,7 @@ public class AdminUserListLoader extends ListLoader<User> {
 	@Override
 	protected List<User> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, filter);
-		builder.addSimpleWhere("active", true);
-		builder.addSimpleWhere("deleted", false);
+		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.addSimpleWhere("admin", true);
 		builder.addOrder("firstName", "lastName");
 		

@@ -12,6 +12,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -53,8 +54,7 @@ public class SharedReportUserListLoader extends ListLoader<User> {
 
 	private QueryBuilder<User> getUserQuery(SecurityFilter filter) {
 		QueryBuilder<User> query = new QueryBuilder<User>(User.class, filter);
-		query.addSimpleWhere("active", true);
-		query.addSimpleWhere("deleted", false);
+		UserQueryHelper.applyFullyActiveFilter(query);
 		return query;
 	}
 

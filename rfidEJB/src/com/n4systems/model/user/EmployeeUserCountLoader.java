@@ -25,8 +25,7 @@ public class EmployeeUserCountLoader extends Loader<Long> implements LimitLoader
 		
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
 		builder.addSimpleWhere("system", false);
-		builder.addSimpleWhere("active", true);
-		builder.addSimpleWhere("deleted", false);
+		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
 		
 		Long userCount = builder.getCount(em);

@@ -55,7 +55,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 	
 	
 	public String doUpdate() {
-		user = userManager.findUser( getSessionUser().getUniqueID(), getTenantId() );
+		user = persistenceManager.find(User.class, getSessionUserId(), getTenantId() );
 		if( getSession().get( "passwordReset" ) == null ) {
 			if( !user.matchesPassword( originalPassword ) ) {
 				addFieldError("originalPassword", getText("error.incorrectpassword"));

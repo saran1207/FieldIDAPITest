@@ -89,20 +89,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public User findUser(Long uniqueID, Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findUser(uniqueID, tenantId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public User findUser(String tenantName, String userID, String plainTextPassword) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -182,21 +169,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public User findUser(Long uniqueID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findUser(uniqueID);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
+	
 	public List<ListingPair> getUserList(SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();

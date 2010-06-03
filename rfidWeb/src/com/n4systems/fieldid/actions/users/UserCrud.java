@@ -79,7 +79,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		if (user == null) {
-			user = userManager.findUser(uniqueId, getTenantId());
+			user = persistenceManager.find(User.class, uniqueId, getTenantId());
 			initializeTimeZoneLists();
 		}
 	}

@@ -30,7 +30,7 @@ public class MyAccount extends AbstractCrud implements HasDuplicateValueValidato
 
 	@Override
 	protected void initMemberFields() {
-		currentUser = userManager.findUser(getSessionUser().getId());
+		currentUser = persistenceManager.find(User.class, getSessionUser().getId());
 	}
 
 	@Override

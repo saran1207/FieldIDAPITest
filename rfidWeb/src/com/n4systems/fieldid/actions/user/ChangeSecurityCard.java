@@ -44,7 +44,7 @@ public class ChangeSecurityCard extends AbstractCrud {
 	
 	
 	public String doUpdate() {
-		User user = userManager.findUser( getSessionUser().getUniqueID(), getTenantId() );
+		User user = persistenceManager.find(User.class, getSessionUserId(), getTenantId() );
 		
 		if( user != null ) {
 			
