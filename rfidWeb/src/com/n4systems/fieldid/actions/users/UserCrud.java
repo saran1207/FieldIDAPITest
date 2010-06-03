@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.users;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -20,6 +21,8 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.PasswordEntry;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.activesession.ActiveSession;
+import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -38,7 +41,6 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
-
 
 abstract public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator, HasDuplicateRfidValidator {
 	private static final long serialVersionUID = 1L;
@@ -432,5 +434,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		this.assignPassword = assignPassword;
 	}
 	
-		
+	public Date dateCreated(User user){
+		ActiveSession session = new ActiveSessionLoader().setId(user.getId()).load();
+		return (session != null) ? session.getDateCreated() : null;
+	}
+	
 }

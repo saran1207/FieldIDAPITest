@@ -38,6 +38,10 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	
 	@Column(nullable=false)
 	protected Date lastTouched;
+	
+	
+	@Column(nullable=false)
+	private Date dateCreated = new Date();
 
 	public ActiveSession() {
 	}
@@ -105,4 +109,11 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 		lastTouched = null;
 	}
 
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+	
+	
+	
+	
 }

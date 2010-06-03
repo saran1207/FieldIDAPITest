@@ -12,6 +12,7 @@ ${action.setPageType('customer', 'users')!}
 	    	<th ><@s.text name="label.username"/></th>
 	    	<th ><@s.text name="label.division_name"/></th>
 	  		<th ><@s.text name="label.emailaddress"/></th>
+	  		<th ><@s.text name="label.lastlogin"/></th>
 			<th></th>
 		<tr>
 		<#assign count=0 >
@@ -21,6 +22,8 @@ ${action.setPageType('customer', 'users')!}
 				<td>${user.userLabel?html! }</td>
 				<td>${(user.owner.divisionOrg.name)!?html}</td>
 				<td>${user.emailAddress?html! } </td>
+				<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
+				
 				<td><div><a href="<@s.url action="customersUserDelete" uniqueID="${(user.id)!}" includeParams="get"/>"><@s.text name="label.remove" /></a></div></td>
 			</tr>
 		</#list>

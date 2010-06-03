@@ -8,6 +8,7 @@
     		<th ><@s.text name="label.division"/></th>
     	</#if>
   		<th ><@s.text name="label.emailaddress"/></th>
+		<th><@s.text name="label.lastlogin"/></th>
 		<th></th>
 	<tr>
 	<#assign count=0 >
@@ -20,12 +21,17 @@
 				<td>${(user.owner.customerOrg.name?html)!}</td>
 				<td>${(user.owner.divisionOrg.name?html)!}</td>
 			</#if>
+			
 			<td>${user.emailAddress?html! } </td>
+			
+			<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
 			<td>
 				<#if user.id != sessionUser.id && !user.admin >
 					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'customerUserDelete')}" namespace="/ajax" uniqueID="${(user.id)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
 				</#if>
 			</td>
+			
+		
 		</tr>
 	</#list>
 </table>
