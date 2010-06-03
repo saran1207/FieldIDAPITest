@@ -9,7 +9,6 @@ import com.n4systems.ejb.AggregateReportManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.util.AggregateReport;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
@@ -34,14 +33,10 @@ public class AggregateReportAction extends AbstractAction {
 	}
 	
 	private boolean findCriteria() {
-		if(getSession().containsKey( InspectionReportAction.REPORT_CRITERIA ) && getSession().get( InspectionReportAction.REPORT_CRITERIA ) != null) {
-			criteria = (InspectionSearchContainer)getSession().get( InspectionReportAction.REPORT_CRITERIA );
-		}
 		
-		if( criteria == null || searchId == null || !searchId.equals( criteria.getSearchId() ) ) {
-			return false;
-		}
-		return true;
+		criteria =  getSession().getReportCriteria();
+		
+		return !( criteria == null || searchId == null || !searchId.equals( criteria.getSearchId() ) );
 	}
 	
 	@SkipValidation

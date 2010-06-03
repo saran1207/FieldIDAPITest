@@ -8,7 +8,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.utils.DateTimeDefiner;
@@ -78,13 +77,7 @@ public class DownloadInspectionCert extends DownloadAction {
 	}
 
 	public InspectionSearchContainer getCriteria() {
-		InspectionSearchContainer criteria = null;
-		
-		if(getSession().containsKey(InspectionReportAction.REPORT_CRITERIA) && getSession().get(InspectionReportAction.REPORT_CRITERIA) != null) {
-			criteria = (InspectionSearchContainer)getSession().get(InspectionReportAction.REPORT_CRITERIA);
-		} 
-		
-		return criteria;
+		return getSession().getReportCriteria();
 	}
 	
 	public String getReportType() {

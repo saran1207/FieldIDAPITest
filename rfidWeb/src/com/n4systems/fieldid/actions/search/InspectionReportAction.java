@@ -16,6 +16,7 @@ import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGene
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
@@ -38,8 +39,6 @@ import com.opensymphony.xwork2.Preparable;
 public class InspectionReportAction extends CustomizableSearchAction<InspectionSearchContainer> implements Preparable {
 	private static final String REPORT_PAGE_NUMBER = "reportPageNumber";
 	private static final long serialVersionUID = 1L;
-	public static final String REPORT_CRITERIA = "reportCriteria";
-
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
 	private final UserManager userManager;
 	
@@ -59,8 +58,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			final PersistenceManager persistenceManager,
 			final UserManager userManager, 
 			final ProductManager productManager) {
-		
-		super(InspectionReportAction.class, REPORT_CRITERIA, "Inspection Report", persistenceManager, 
+		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
+		super(InspectionReportAction.class, WebSession.REPORT_CRITERIA, "Inspection Report", persistenceManager, 
 				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_search", "product"));
 
 		this.userManager = userManager;

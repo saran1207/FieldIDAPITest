@@ -9,7 +9,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
 import com.n4systems.fieldid.actions.search.InspectionScheduleJobAssignment;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
@@ -127,9 +126,8 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	}
 	
 	private boolean findReportCriteria() {
-		if (getSession().containsKey(InspectionReportAction.REPORT_CRITERIA) && getSession().get(InspectionReportAction.REPORT_CRITERIA) != null) {
-			reportCriteria = (InspectionSearchContainer)getSession().get(InspectionReportAction.REPORT_CRITERIA);
-		}
+		
+		reportCriteria = getSession().getReportCriteria();
 
 		return !(reportCriteria == null || searchId == null || !searchId.equals(reportCriteria.getSearchId()));
 	}

@@ -13,7 +13,6 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
@@ -54,9 +53,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	}
 	
 	private boolean findCriteria() {
-		if(getSession().containsKey( InspectionReportAction.REPORT_CRITERIA ) && getSession().get( InspectionReportAction.REPORT_CRITERIA ) != null) {
-			criteria = (InspectionSearchContainer)getSession().get( InspectionReportAction.REPORT_CRITERIA );
-		}
+		criteria = getSession().getReportCriteria();
 		
 		if( criteria == null || searchId == null || !searchId.equals( criteria.getSearchId() ) ) {
 			return false;

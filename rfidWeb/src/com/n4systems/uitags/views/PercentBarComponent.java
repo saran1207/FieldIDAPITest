@@ -6,13 +6,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.components.UIBean;
 
 import com.opensymphony.xwork2.util.ValueStack;
-
+//TODO: extend to move usage to warnings to a a tenant limit bar.  a percent bar in general wouldn't know that there are implications to be at 100%, if it is used as a progress bar then it will be good to be at 100% 
 public class PercentBarComponent extends UIBean {
 	private static final int USAGE_WARNING_LIMIT = 90;
 
 	private static final int USAGE_EXCEED_LIMIT = 98;
 
-	private static final int UNLIMITED = -1;  // TODO: should tie into the value from the limit classes   or a more global concept of unlimited in the system.
+	public static final int UNLIMITED = -1;  
 
 	public static final String TEMPLATE = "percentBar";
 

@@ -15,12 +15,12 @@ import javax.servlet.http.HttpSession;
 import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.actions.search.InspectionReportAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
+import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
@@ -40,6 +40,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String IMPORT_TASK_ID = "import_task_id";
 	
 	private final HttpSession session;
+	public static final String REPORT_CRITERIA = "reportCriteria";
 	
 	public WebSession(HttpSession session) {
 		this.session = session;
@@ -103,17 +104,16 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	}
 	
 	
-	public SearchContainer getReportCriteria() {
-		// TODO: the report criteria key should be moved here
-		return get(InspectionReportAction.REPORT_CRITERIA, SearchContainer.class);
+	public InspectionSearchContainer getReportCriteria() {
+		return get(REPORT_CRITERIA, InspectionSearchContainer.class);
 	}
 	
 	public void setReportCriteria(SearchContainer container) {
-		put(InspectionReportAction.REPORT_CRITERIA, container);
+		put(REPORT_CRITERIA, container);
 	}
 	
 	public void clearReportCriteria() {
-		remove(InspectionReportAction.REPORT_CRITERIA);
+		remove(REPORT_CRITERIA);
 	}
 	
 	public Map<String, String> getTenantLanguageOverrides() {
