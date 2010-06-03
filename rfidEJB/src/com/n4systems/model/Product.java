@@ -381,7 +381,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.identified = new PlainDate(identified);
 	}
 	
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public String getLocation() {
 		return location;
 	}
