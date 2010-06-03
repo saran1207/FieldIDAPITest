@@ -8,11 +8,11 @@ import com.n4systems.util.DataUnit;
 
 public enum SignUpPackageDetails {
 	
-	Free("FIDFREE", "Free", 1000L, 1L, 25L, 0L),
+	Free("FIDFREE", "Free", 1000L, 1L, 25L, TenantLimit.NONE),
 	
-	Basic("FIDBASIC", "Basic", 1000L, 5L, 250L, 0L, ExtendedFeature.EmailAlerts),
+	Basic("FIDBASIC", "Basic", 1000L, 5L, 250L, TenantLimit.NONE, ExtendedFeature.EmailAlerts),
 	
-	Plus("FIDPLUS", "Plus", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.Branding, ExtendedFeature.EmailAlerts, 
+	Plus("FIDPLUS", "Plus", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.NONE, ExtendedFeature.Branding, ExtendedFeature.EmailAlerts, 
 				ExtendedFeature.Projects),
 																	
 	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 

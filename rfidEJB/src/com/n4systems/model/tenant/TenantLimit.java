@@ -11,6 +11,7 @@ import com.n4systems.util.HashCode;
 @Embeddable
 public class TenantLimit implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final Long NONE = 0L;
 	public static Long UNLIMITED = -1L;
 	
 	@Column(name="diskspace_limit", nullable = false)
