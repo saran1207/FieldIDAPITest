@@ -118,7 +118,6 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	@SkipValidation
 	public String doShow() {
 		testRequiredEntities(true);
-
 		return SUCCESS;
 	}
 
@@ -141,6 +140,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
+	@UserPermissionFilter(open=true)
 	public String doList() {
 		testRequiredEntities(false, false);
 		return SUCCESS;

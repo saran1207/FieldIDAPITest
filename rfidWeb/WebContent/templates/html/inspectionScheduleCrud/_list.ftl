@@ -4,7 +4,7 @@
 	
 </head>
 
-<#if !inVendorContext>
+<#if !inVendorContext && action.sessionUser.hasAccess("createinspection")>
 	<#include "_addForm.ftl"/>
 </#if>
 
