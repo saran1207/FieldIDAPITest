@@ -53,13 +53,9 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public User findUser(String tenantName, String userID, String plainTextPassword) {
-		if (userID != null)
-			userID = userID.toLowerCase();
-		if (tenantName != null)
-			tenantName = tenantName.toLowerCase();
-
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
+		
 		builder.addSimpleWhere("hashPassword", User.hashPassword(plainTextPassword));
 		builder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE);
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
@@ -73,13 +69,14 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (rfidNumber.trim().length() == 0) {
 			return null;
 		}
+		
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.addSimpleWhere("hashSecurityCardNumber", User.hashPassword(rfidNumber));
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
 
 		List<User> userBeans = builder.getResultList(em, 0, 2);
-
+		
 		if (userBeans.size() != 1) {
 			return null;
 		} else {
@@ -93,9 +90,11 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public boolean userIdIsUnique(Long tenantId, String userId, Long currentUserId) {
-		if (userId != null)
-			userId = userId.toLowerCase();
-
+		if (userId == null) {
+			return true;
+		}
+		
+		
 		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
 		queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userId, WhereParameter.IGNORE_CASE);
 
