@@ -2148,82 +2148,6 @@ INSERT INTO `org_secondary` VALUES (15539069,15539068,'West Coast','Canada:Ontar
 UNLOCK TABLES;
 
 --
--- Table structure for table `organization`
---
-
-DROP TABLE IF EXISTS `organization`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organization` (
-  `id` bigint(21) NOT NULL AUTO_INCREMENT,
-  `displayname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `certificatename` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parent_id` bigint(20) DEFAULT NULL,
-  `r_addressinfo` bigint(20) DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `usingserialnumber` tinyint(1) NOT NULL DEFAULT '1',
-  `adminemail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `serialnumberformat` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `modifiedby` bigint(20) DEFAULT NULL,
-  `r_tenant` bigint(20) DEFAULT NULL,
-  `fidac` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `accountdiscriminator` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dateformat` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `website` varchar(2056) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `diskspace_limit` bigint(20) DEFAULT NULL,
-  `user_limit` bigint(20) DEFAULT NULL,
-  `asset_limit` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_organization_on_snac` (`fidac`),
-  UNIQUE KEY `index_organization_on_name` (`name`),
-  KEY `index_organization_on_modifiedby` (`modifiedby`),
-  KEY `index_organization_on_parent_id` (`parent_id`),
-  KEY `index_organization_on_r_addressinfo` (`r_addressinfo`),
-  KEY `index_organization_on_r_tenant` (`r_tenant`),
-  CONSTRAINT `fk_organization_addressinfo` FOREIGN KEY (`r_addressinfo`) REFERENCES `addressinfo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_organization_parent` FOREIGN KEY (`parent_id`) REFERENCES `organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_organization_tenant` FOREIGN KEY (`r_tenant`) REFERENCES `organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_organization_users` FOREIGN KEY (`modifiedby`) REFERENCES `users` (`uniqueid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `organization`
---
-
-LOCK TABLES `organization` WRITE;
-/*!40000 ALTER TABLE `organization` DISABLE KEYS */;
-/*!40000 ALTER TABLE `organization` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `organization_extendedfeatures`
---
-
-DROP TABLE IF EXISTS `organization_extendedfeatures`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `organization_extendedfeatures` (
-  `organization_id` bigint(20) NOT NULL,
-  `element` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  KEY `index_organization_extendedfeatures_on_organization_id` (`organization_id`),
-  CONSTRAINT `fk_organization_extendedfeatures_organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `organization_extendedfeatures`
---
-
-LOCK TABLES `organization_extendedfeatures` WRITE;
-/*!40000 ALTER TABLE `organization_extendedfeatures` DISABLE KEYS */;
-/*!40000 ALTER TABLE `organization_extendedfeatures` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `populatorlog`
 --
 
@@ -3410,34 +3334,6 @@ INSERT INTO `tasks` VALUES ('DiskUsage','2009-08-09 12:14:00','2009-08-09 12:14:
 UNLOCK TABLES;
 
 --
--- Table structure for table `tenantlink`
---
-
-DROP TABLE IF EXISTS `tenantlink`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tenantlink` (
-  `id` bigint(21) NOT NULL AUTO_INCREMENT,
-  `r_manufacturer` bigint(20) NOT NULL,
-  `r_linkedtenant` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_tenantlink_on_r_manufacturer_and_r_linkedtenant` (`r_linkedtenant`,`r_manufacturer`),
-  KEY `fk_tenantlink_manufacturer` (`r_manufacturer`),
-  CONSTRAINT `fk_tenantlink_linkedteant` FOREIGN KEY (`r_linkedtenant`) REFERENCES `organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tenantlink_manufacturer` FOREIGN KEY (`r_manufacturer`) REFERENCES `organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tenantlink`
---
-
-LOCK TABLES `tenantlink` WRITE;
-/*!40000 ALTER TABLE `tenantlink` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tenantlink` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tenants`
 --
 
@@ -3632,4 +3528,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-05-18 15:16:31
+-- Dump completed on 2010-05-26 18:18:07
