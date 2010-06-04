@@ -10,14 +10,15 @@ require 'criteriaresults_deficiencies'
 require 'inspection_file_attachment'
 require 'sub_inspections'
 require 'inspectionmaster'
+require 'yaml'
 
-
-#Prerequisites: Serialnumbers are unique.
-#Note: Assets may have multiple inspections, thus why inspection ids are 
+#Prerequisites: SerialNumbers are unique.
+#Note: Assets may have multiple inspections, thus why inspection ids are
 #retrieved in arrays. In general, inspections performed earlier are at
 #the start of the array.
 #
-#Current test input retrieved from 190TestNewInspections.csv
+#Current test input retrieved from test_config.yml
+#Current mobile version under testing: 1.19.1RC1
 
 describe "An Inspection" do
 
@@ -29,97 +30,120 @@ describe "An Inspection" do
     ActiveRecord::Base.configurations = YAML::load( File.open( ENV[ "DBCONFIG" ] ) )
     ActiveRecord::Base.establish_connection( ActiveRecord::Base.configurations[ "development" ] )
 
-    #Read in the csv contents.
-    @inspection_csv_contents = FasterCSV.read("190TestNewInspections.csv", :quote_char => '"', :col_sep =>',', :row_sep =>:auto)
-  
+    #Read in the yaml contents.
+    TESTDATA = YAML::load(File.read('c:\workspace\web\migration\model\test_config.yml'))
   end
 
+
+  #TODO: FIX OBSERVATIONS
   it "of standard type with: forms, inspection attributes, picture; persists when created (Test #1)" do
- 
-    (master_inspection_ids = getMasterInspectionIds(@inspection_csv_contents[1][1])).empty?.should_not be true
-    
+
+
+    test_data = TESTDATA['InspectionTests']['Test1']
+    (master_inspection_ids = getMasterInspectionIds(test_data['SerialNumber'])).empty?.should_not be true
+
     #Test inspection attributes.
     #Note: I know there is only one inspection in the array for this asset, reference it directly.
-    verify_inspection_attributes(master_inspection_ids[0], [@inspection_csv_contents[1][4], @inspection_csv_contents[1][5]]).should_not be false
+    verify_inspection_attributes(master_inspection_ids[0],
+      [test_data['InspectionAttribute1'],test_data['InspectionAttribute2'],test_data['InspectionAttribute3']]).should_not be false
 
     #Test Criteria Form buttons
-    verify_criteria_forms_buttons(master_inspection_ids[0], [@inspection_csv_contents[1][8]]).should_not be false
-    
+    verify_criteria_forms_buttons(master_inspection_ids[0], [test_data['FormButton1'],test_data['FormButton2']]).should_not be false
+
     #Test observation states
-    verify_criteria_forms_observations(master_inspection_ids[0],
-      [@inspection_csv_contents[1][12],@inspection_csv_contents[1][13]],
-      [@inspection_csv_contents[1][14],@inspection_csv_contents[1][15]]).should_not be false
+    # verify_criteria_forms_observations(master_inspection_ids[0],
+    #   [test_data['RecommendationState1']],
+    #   [test_data['DeficiencyState1']]).should_not be false
 
     #Test picture exists.
-    verify_pictures(master_inspection_ids[0], Integer(@inspection_csv_contents[1][16])).should_not be false
+    verify_pictures(master_inspection_ids[0], Integer(test_data['NumberOfPictures'])).should_not be false
 
   end
 
   it "of master type, with forms and picture but no observations or attributes, persists when created (Test #2)" do
-    
-    (master_inspection_ids = getMasterInspectionIds(@inspection_csv_contents[2][1])).empty?.should_not be true
-    
-    verify_criteria_forms_buttons(master_inspection_ids[0],
-      [@inspection_csv_contents[2][8], @inspection_csv_contents[2][9]]).should_not be false
 
-    verify_pictures(master_inspection_ids[0], Integer(@inspection_csv_contents[2][16])).should_not be false
+    test_data = TESTDATA['InspectionTests']['Test2']
+
+    (master_inspection_ids = getMasterInspectionIds(test_data['SerialNumber'])).empty?.should_not be true
+
+    verify_criteria_forms_buttons(master_inspection_ids[0],
+      [test_data['FormButton1']]).should_not be false
+
+    verify_pictures(master_inspection_ids[0], Integer(test_data['NumberOfPictures'])).should_not be false
 
   end
 
   it "test that a previously created asset is correctly attached and inspected(Test #3)" do
 
-    sub_product_id = Product.find_by_serialnumber(@inspection_csv_contents[3][3]).id
-    sub_product_ids = getSubProductIds(@inspection_csv_contents[3][1])
-    
-    #Check to see whether it was attached
+    test_data = TESTDATA['InspectionTests']['Test3']
+
+    sub_product_ids = getSubProductIds(test_data['MasterComponent'])
+
+    sub_product_id = Product.find_by_serialnumber(test_data['SerialNumber']).id
+
+    #Check to see whether it is in the set of sub product ids belonging to this master.
     sub_product_ids.include?(sub_product_id).should_not be false
 
     #Check to see whether it's inspection exists.
-    (sub_inspections = getSubInspectionIds(@inspection_csv_contents[3][3])).empty?.should be false
+    (sub_inspections = getSubInspectionIds(test_data['SerialNumber'])).empty?.should be false
 
   end
 
   it "of a created subcomponent persists when attached to a master (Test #4)" do
 
-    sub_product_id = Product.find_by_serialnumber(@inspection_csv_contents[4][3]).id
-    sub_product_ids = getSubProductIds(@inspection_csv_contents[4][1])
+    test_data = TESTDATA['InspectionTests']['Test4']
+
+    sub_product_id = Product.find_by_serialnumber(test_data['Subcomponent1']).id
+    sub_product_ids = getSubProductIds(test_data['SerialNumber'])
 
     #Check to see whether it was attached
     sub_product_ids.include?(sub_product_id).should_not be false
 
     #Check to see whether it's inspection exists.
-    (sub_inspections= getSubInspectionIds(@inspection_csv_contents[4][3])).empty?.should be false
+    (sub_inspections= getSubInspectionIds(test_data['Subcomponent1'])).empty?.should be false
   end
 
   it "of a subcomponent is not removed when asset is attached to a master and inspected again (Test #5)" do
 
-    sub_product_id = Product.find_by_serialnumber(@inspection_csv_contents[5][1]).id
-    sub_product_ids = getSubProductIds(@inspection_csv_contents[5][3])
+    test_data = TESTDATA['InspectionTests']['Test5']
+
+    sub_product_id = Product.find_by_serialnumber(test_data['SerialNumber']).id
+    sub_product_ids = getSubProductIds(test_data['MasterComponent'])
 
     #Check to see whether it was attached
     sub_product_ids.include?(sub_product_id).should_not be false
 
-    #Check to see whether it's previous inspection still exists.
-    (previous_inspections = getMasterInspectionIds(@inspection_csv_contents[5][1])).empty?.should be false
+    #Check to see whether it's previous inspection still exists. Remember, they're in master inspections table if they
+    #were performed while this asset was unattached.
+    (previous_inspections = getMasterInspectionIds(test_data['SerialNumber'])).empty?.should be false
+
   end
 
   it "of standard component attached to master, has correct inspection attributes (Test #6)" do
 
-    #Retrive subinspection. Note: If it's subinspection doesn't exist, it's not properly attached to a master!
-    (sub_inspection_ids = getSubInspectionIds(@inspection_csv_contents[6][1])).should_not be nil
+    test_data = TESTDATA['InspectionTests']['Test6']
 
-    verify_inspection_attributes(sub_inspection_ids[0], [@inspection_csv_contents[6][4], @inspection_csv_contents[6][5]]).should_not be false
- 
+    #Retrive subinspection. Note: If it's subinspection doesn't exist, it's not properly attached to a master!
+    (sub_inspection_ids = getSubInspectionIds(test_data['SerialNumber'])).should_not be nil
+
+    verify_inspection_attributes(sub_inspection_ids[0], [test_data['InspectionAttribute1'], test_data['InspectionAttribute2']]).should_not be false
+
   end
 
   it "was correctly added to a new book (Test #7)" do
-    master_inspection_id = getMasterInspectionIds(@inspection_csv_contents[7][1])
-    Inspection.first(:include => :book, :conditions=>{:inspection_id=>master_inspection_id[0]}).book.name.should == @inspection_csv_contents[7][4]
+
+    test_data = TESTDATA['InspectionTests']['Test7']
+
+    master_inspection_id = getMasterInspectionIds(test_data['SerialNumber'])
+    Inspection.first(:include => :book, :conditions=>{:inspection_id=>master_inspection_id[0]}).book.name.should == test_data['InspectionBook']
 
   end
 
   it "multi event inspections work (Test #8)" do
-    (master_inspection_id = getMasterInspectionIds(@inspection_csv_contents[8][1])).count.should be 3
+
+    test_data = TESTDATA['InspectionTests']['Test8']
+
+    (master_inspection_id = getMasterInspectionIds(test_data['SerialNumber'])).count.should be 3
   end
 
   #==============================================================================================================================
@@ -128,30 +152,45 @@ end
 
 describe "A Schedule" do
 
-  #Setup
-  before(:all) do
-    @schedule_csv_contents = FasterCSV.read("190TestNewSchedules.csv", :quote_char => '"', :col_sep =>',', :row_sep =>:auto)
-
-  end
-
   #Check against product id for "scheduled" schedules, and against inspection ids for completed schedules. Incomplete schedules have nil inpsection_ids
   it "multiple, persists when created (Test #1)" do
-  
-    product_id = Product.find_by_serialnumber(@schedule_csv_contents[1][1]).id
-      
+
+    test_data = TESTDATA['ScheduleTests']['Test1']
+
+    product_id = Product.find_by_serialnumber(test_data['SerialNumber']).id
+
     (inspection_schedule_set = InspectionSchedule.all(:include => :product, :conditions=> {:product_id => product_id})).count.should be 2
 
   end
 
   it "on an attached subcomponent exists when created (Test #2)" do
 
-    product_id = Product.find_by_serialnumber(@schedule_csv_contents[2][1]).id
+    test_data = TESTDATA['ScheduleTests']['Test2']
+
+    product_id = Product.find_by_serialnumber(test_data['SerialNumber']).id
 
     (inspection_schedule_set = InspectionSchedule.all(:include => :product, :conditions=> {:product_id => product_id})).empty?.should be false
-    
+
   end
 
-  #NOTE: Completed schedules aren't updated on the web. 
+  #NOTE: Completed schedules aren't updated on the web.
   it "persists when completed"
-   
+
+end
+
+describe "A job" do
+
+  it "is correctly downloaded and completed for single asset" do
+    test_data = TESTDATA['JobTests']['Test1']
+    (master_inspection_ids = getMasterInspectionIds(test_data['SerialNumber'])).empty?.should be false
+
+  end
+
+  it "is correctly downloaded and complete for master with sub" do
+      test_data = TESTDATA['JobTests']['Test2']
+    (master_inspection_ids = getMasterInspectionIds(test_data['SerialNumber'])).empty?.should be false
+    (sub_inspection_ids = getMasterInspectionIds(test_data['SubComponent'])).empty?.should be false
+  end
+
+
 end
