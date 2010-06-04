@@ -15,7 +15,6 @@ import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.user.User;
-import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.time.SystemClock;
 

@@ -44,7 +44,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		misc.gotoIdentify();
 		assertWeAreOnAddWithOrderPage();
 	}
@@ -57,7 +57,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String orderNumber = getStringProperty("integrationordernumber");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		String serialNumber = identifyAssetWithOrderNumber(orderNumber);
 		assertAssetIdentified(serialNumber);
 	}
@@ -69,7 +69,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("notintegrationcompanyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		String serialNumber = identifyAssetNoIntegration();
 		assertAssetIdentified(serialNumber);
 	}
@@ -81,7 +81,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		String serialNumber = identifySingleAssetIntegrationTenant();
 		assertAssetIdentified(serialNumber);
 	}
@@ -93,7 +93,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);
@@ -106,7 +106,7 @@ public class ValidateIdentifyPage extends FieldIDTestCase {
 		String company = getStringProperty("notintegrationcompanyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);

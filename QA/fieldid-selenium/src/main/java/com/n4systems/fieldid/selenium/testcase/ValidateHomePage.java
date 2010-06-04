@@ -38,7 +38,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("companyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.assertHomePage();
 	}
 	
@@ -49,7 +49,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("companyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.assertHomePageQuickSetupWizard();
 	}
 	
@@ -60,7 +60,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("jobscompanyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.assertHomePageJobsSection();
 	}
 	
@@ -71,7 +71,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("companyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.clickViewUpcomingInspections();
 		schedule.assertSchedulesSearchResultsPageHeader();
 	}
@@ -83,7 +83,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("companyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.clickViewInspectionHistoryForAProduct();
 		reporting.assertReportingPageHeader();
 	}
@@ -95,7 +95,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("companyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.clickFindAProduct();
 		assets.assertAssetsPage();
 	}
@@ -107,7 +107,7 @@ public class ValidateHomePage extends FieldIDTestCase {
 		String company = getStringProperty("companyid");
 
 		setCompany(company);
-		login.signIn(username, password);
+		login.signInAllTheWay(username, password);
 		home.clickMoreForInstructionalVideos();
 		videos.assertInstructionalVideosPageHeader();
 	}

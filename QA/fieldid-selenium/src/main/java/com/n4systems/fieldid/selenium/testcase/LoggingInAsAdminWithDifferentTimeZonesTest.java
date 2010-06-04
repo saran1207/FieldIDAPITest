@@ -80,7 +80,7 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		
 		
 		setCompany(companyName);
-		login.signIn(userId, password);
+		login.signInAllTheWay(userId, password);
 		login.verifySignedIn();
 		misc.gotoSignOut();
 		

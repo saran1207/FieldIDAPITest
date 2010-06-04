@@ -395,12 +395,16 @@ public class Login {
 	 * page. If any of the expected elements are missing it will fail.
 	 * Otherwise we assume everything is okay.
 	 */
-	public void verifyLoginPage() {
+	public void verifyLoginPageWithNoErrors() {
 		List<String> errorMessages = misc.getFormErrorMessages();
 		if(errorMessages.size() > 0) {
 			String errors = misc.convertListToString(errorMessages);
 			fail("There were errors on the last action\n" + errors);
 		}
+		verifySignInPage();
+	}
+
+	private void verifySignInPage() {
 		assertTrue(selenium.isElementPresent(userNameLocator));
 		assertTrue(selenium.isElementPresent(passwordLocator));
 		assertTrue(selenium.isElementPresent(signInButtonLocator));
@@ -408,27 +412,35 @@ public class Login {
 		assertTrue(selenium.isElementPresent(forgotMyPasswordLinkLocator));
 	}
 
-	public void signIn(String username, String password) {
-		setUserName(username);
-		setPassword(password);
-		gotoSignIn();
+	public void signInAllTheWay(String username, String password) {
+		submitSignIn(username, password);
 		
-		kickOtherSession();
+		kickOtherSessionIfNeeded();
 		
-		acceptEULA();
+		acceptEULAIfNeed();
 		
 		
 		verifySignedIn();
 	}
 
-	private void kickOtherSession() {
+	public void submitSignIn(String username, String password) {
+		setUserName(username);
+		setPassword(password);
+		gotoSignIn();
+	}
+
+	private void kickOtherSessionIfNeeded() {
 		if (selenium.isElementPresent("kickOtherUserOut")) {
-			selenium.click("kickOtherUserOut");
-			selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+			confirmKickingSession();
 		}
 	}
 
-	private void acceptEULA() {
+	public void confirmKickingSession() {
+		selenium.click("kickOtherUserOut");
+		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+	}
+
+	private void acceptEULAIfNeed() {
 		if (misc.isEULA()) {
 			misc.scrollToBottomOfEULA();
 			misc.gotoAcceptEULA();
@@ -436,11 +448,22 @@ public class Login {
 	}
 	
 	public void signInWithSystemAccount() {
-		signIn(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
+		signInAllTheWay(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
 	}
 	
 	
 	public void signOut() {
 		selenium.openAndWaitForPageLoad("/fieldid/logout.action"); 
+	}
+
+	public void assertOnConfirmSessionKick() {
+		assertTrue("not confirm page.", selenium.isElementPresent("css=#signInConfirm"));
+		
+	}
+
+	public void verifyLoginPageWithKickMessage() {
+		verifySignInPage();
+		assertTrue("message saying you were kicked out is not displayed", selenium.isTextPresent("signed in with the same username causing you to be signed out"));
+		
 	}
 }

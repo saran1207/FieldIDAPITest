@@ -28,7 +28,7 @@ public abstract class LoggedInTestCase extends FieldIDTestCase {
 	@Before
 	public void signIn() throws Exception {
 		loginPage = new Login(selenium, misc);
-		loginPage.signIn(username, password);
+		loginPage.signInAllTheWay(username, password);
 	}
 
 	@After

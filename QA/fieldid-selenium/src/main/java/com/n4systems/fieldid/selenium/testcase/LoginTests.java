@@ -24,7 +24,7 @@ public class LoginTests extends FieldIDTestCase {
 		try {
 			login.gotoIForgotMyPassword();
 			forgot.gotoReturnToSignInWithoutResettingPassword();
-			login.verifyLoginPage();
+			login.verifyLoginPageWithNoErrors();
 		} catch(Exception e) {
 			throw e;
 		}
@@ -37,7 +37,7 @@ public class LoginTests extends FieldIDTestCase {
 
 		try {
 			setCompany(companyID);
-			login.verifyLoginPage();
+			login.verifyLoginPageWithNoErrors();
 		} catch(Exception e) {
 			throw e;
 		}
@@ -52,7 +52,7 @@ public class LoginTests extends FieldIDTestCase {
 			returnToLoginPage();
 			// can only verify we didn't get an Oops page
 			// TODO: verify the reset password email went out
-			login.verifyLoginPage();
+			login.verifyLoginPageWithNoErrors();
 		} catch(Exception e) {
 			throw e;
 		}
@@ -63,7 +63,7 @@ public class LoginTests extends FieldIDTestCase {
 	}
 
 	private void resetMyPassword(String username) {
-		login.verifyLoginPage();
+		login.verifyLoginPageWithNoErrors();
 		login.gotoIForgotMyPassword();
 		forgot.setUserName(username);
 		forgot.gotoResetPassword();

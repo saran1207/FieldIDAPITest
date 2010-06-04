@@ -9,9 +9,7 @@ import static org.junit.Assert.*;
 import org.easymock.Capture;
 import org.easymock.IAnswer;
 import org.easymock.classextension.EasyMock;
-import org.hamcrest.Matchers;
 import org.junit.Test;
-
 
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;

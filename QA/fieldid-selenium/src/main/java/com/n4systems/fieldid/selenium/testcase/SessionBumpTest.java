@@ -29,28 +29,39 @@ public class SessionBumpTest extends FieldIDTestCase {
 		shutDownSelenium(secondSession);
 	}
 	
-	@Ignore
 	@Test
-	public void should_warn_the_user_that_they_will_be_booted_next_release() throws Exception {
+	public void should_warn_second_user_that_another_user_will_be_kicked_out_if_they_confirm() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
 		
 		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
 		
-		loginSession1.signIn("sricci", "makemore$");
+		loginSession1.signInAllTheWay("saunders", "makemore$");
 		
-		loginSession2.signIn("sricci", "makemore$");
-		
-		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
-		
-		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
-		
-		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("error"));
-		assertTrue(selenium.getText("error").contains("A username can only be used by one person at a time"));
-		new Home(secondSession, misc).assertHomePageHeader();
+		loginSession2.submitSignIn("saunders", "makemore$");
+		loginSession2.assertOnConfirmSessionKick();
 	}
 	
+	
+	@Test
+	public void should_kick_out_first_account_if_the_second_user_confirms_session_kick() throws Exception {
+		Login loginSession1 = new Login(selenium, misc);
+		
+		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
+		
+		loginSession1.signInAllTheWay("saunders", "makemore$");
+		
+		loginSession2.submitSignIn("saunders", "makemore$");
+		loginSession2.assertOnConfirmSessionKick();
+		loginSession2.confirmKickingSession();
+		loginSession2.verifySignedIn();
+		
+		misc.gotoHome();
+		loginSession1.verifyLoginPageWithKickMessage();
+		
+		
+		
+		
+	}
 	
 	@Ignore
 	@Test
@@ -59,9 +70,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
 		
-		loginSession1.signIn("sricci", "makemore$");
+		loginSession1.signInAllTheWay("sricci", "makemore$");
 		
-		loginSession2.signIn("sricci", "makemore$");
+		loginSession2.signInAllTheWay("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
 		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
@@ -109,12 +120,12 @@ public class SessionBumpTest extends FieldIDTestCase {
 		Login loginSession1 = new Login(selenium, misc);
 		Login loginSession2 = new Login(secondSession, new Misc(secondSession));
 		
-		loginSession1.signIn("sricci", "makemore$");
+		loginSession1.signInAllTheWay("sricci", "makemore$");
 		selenium.open("/fieldid/productAdd.action");
 		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
 		
 		
-		loginSession2.signIn("sricci", "makemore$");
+		loginSession2.signInAllTheWay("sricci", "makemore$");
 		
 		selenium.click("css=.searchOwner");
 		selenium.waitForAjax(Misc.AJAX_TIMEOUT);
