@@ -3,10 +3,13 @@ package com.n4systems.fieldid.utils;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import org.easymock.Capture;
 import org.easymock.IAnswer;
 import org.easymock.classextension.EasyMock;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 
@@ -97,7 +100,18 @@ public class SessionUserInUseTest {
 		assertFalse(sut.doesActiveSessionBelongTo(systemUser.getId(), A_SESSION_ID_1));
 	}
 
-	
+	@Test
+	public void should_find_that_the_session_does_not_belong_to_you_if_it_is_not_active_and_it_is_not_expired(){
+		User user = aUser().build();
+		
+		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_2);
+		activeSession.setActive(false);
+		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
+		
+		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), getSuccessfulSaver());
+			
+		assertFalse(sut.doesActiveSessionBelongTo(user.getId(), A_SESSION_ID_2));
+	}
 	
 	
 	@Test
@@ -136,14 +150,17 @@ public class SessionUserInUseTest {
 		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_1);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
-		ActiveSessionSaver saver = EasyMock.createMock(ActiveSessionSaver.class);
-		expect(saver.update(activeSession)).andReturn(activeSession);
+		Capture<ActiveSession> capturedSession = new Capture<ActiveSession>();
+		
+		ActiveSessionSaver saver = createMock(ActiveSessionSaver.class);
+		expect(saver.update(capture(capturedSession))).andReturn(activeSession);
 		replay(saver);
 		
 		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), saver);
 			
 		sut.doesActiveSessionBelongTo(user.getId(), A_SESSION_ID_1);
 		
+		assertThat(capturedSession.getValue(), hasProperty("lastTouched", nullValue()));
 		verify(saver);
 	}
 	
@@ -204,6 +221,27 @@ public class SessionUserInUseTest {
 		assertFalse(sut.isThereAnActiveSessionFor(sysetmUser.getId())); 
 	}
 	
+	@Test
+	public void should_find_there_is_not_an_active_session_for_a_system_user_when_one_exists_and_has_not_expired_but_is_inactive(){
+		User sysetmUser = aSystemUser().build();
+		ActiveSession activeSession = new ActiveSession(sysetmUser, A_SESSION_ID_2);
+		activeSession.setActive(false);
+		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
+		
+		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), getSuccessfulSaver());
+		assertFalse(sut.isThereAnActiveSessionFor(sysetmUser.getId()));
+	}
+	
+	@Test
+	public void should_find_there_is_not_an_active_session_for_a_regular_user_when_one_exists_and_has_not_expired_but_is_inactive(){
+		User user = aUser().build();
+		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_2);
+		activeSession.setActive(false);
+		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
+		
+		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), getSuccessfulSaver());
+		assertFalse(sut.isThereAnActiveSessionFor(user.getId()));
+	}
 	
 	@Test
 	public void should_find_that_there_is_not_an_active_session_for_a_system_user_when_one_does_not_exists() throws Exception {

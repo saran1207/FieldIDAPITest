@@ -38,27 +38,5 @@ public class ActiveSessionSaver extends Saver<ActiveSession>{
 	}
 
 
-	@Override
-	protected ActiveSession update(EntityManager em, ActiveSession entity) {
-		ActiveSession session = em.find(ActiveSession.class, entity.getUser().getId());
-		session.touch();
-		em.merge(session);
-		return session;
-	}
-
-
-
-
-
-	@Override
-	protected void remove(EntityManager em, ActiveSession entity) {
-		ActiveSession currentSession = getCurrentActiveSession(em, entity);
-		if (entity.equals(currentSession)) {
-			super.remove(em, entity);
-		}
-	}
-
-	
-	
 	
 }

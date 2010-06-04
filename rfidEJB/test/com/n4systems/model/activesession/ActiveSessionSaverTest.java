@@ -80,25 +80,6 @@ public class ActiveSessionSaverTest {
 		verify(entityManager);
 	}
 	
-	
-	
-	
-	
-
-	@Test()
-	public void should_update_active_session_by_loading_the_existing_one_and_updating_the_last_touch_time() {
-		EntityManager em = createMock(EntityManager.class);
-		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_1);
-		
-		expect(em.find(ActiveSession.class, user.getId())).andReturn(activeSession);
-		expect(em.merge(activeSession)).andReturn(activeSession);
-		replay(em);
-		
-		createQueryBuildOverridenActiveSessionSaver(null).update(em, new ActiveSession(user, A_SESSION_ID_2));
-		verify(em);
-	}
-
-	
 	private final class ActiveSessionSaverTestExtension extends ActiveSessionSaver {
 		private final ActiveSession existingActiveSession;
 		QueryBuilder<ActiveSession> builder;

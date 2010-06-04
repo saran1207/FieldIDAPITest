@@ -27,7 +27,9 @@ public class SessionUserInUse {
 		ActiveSession activeSession = getActiveSession(userIdentifier);
 		
 		 if (activeSessionExists(activeSession) && activeSessionHasNotExpired(activeSession) && activeSessionMatchSessionId(sessionId, activeSession)) {
+			activeSession.touch();
 			saver.update(activeSession);
+			
 			return true; 
 			 
 		 }
@@ -35,7 +37,7 @@ public class SessionUserInUse {
 	}
 	
 	private boolean activeSessionExists(ActiveSession activeSession) {
-		return activeSession != null;
+		return activeSession != null && activeSession.isActive();
 	}
 
 	private boolean activeSessionMatchSessionId(String sessionId, ActiveSession activeSession) {
@@ -66,6 +68,10 @@ public class SessionUserInUse {
 		return configContext.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
 	}
 	
-	
+	public void expireSession(Long userIdentifier){
+		ActiveSession activeSession = getActiveSession(userIdentifier);
+		activeSession.setActive(false);
+		saver.update(activeSession);
+	}
 
 }

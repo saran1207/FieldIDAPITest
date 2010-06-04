@@ -134,13 +134,8 @@ public class SignInAction extends AbstractAction {
 
 	private void expireActiveSession() {
 		if (isLoggedIn()) {
-			Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
-			try {
-				new ActiveSessionSaver().remove(transaction, new ActiveSession(fetchCurrentUser(), getSession().getId()));
-				transaction.commit();
-			} catch (Exception e) {
-				transaction.rollback();
-			}
+			SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
+			sessionUserInUse.expireSession(getSessionUserId());
 		}
 	}
 

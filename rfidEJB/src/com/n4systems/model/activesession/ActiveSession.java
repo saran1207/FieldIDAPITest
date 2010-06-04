@@ -26,12 +26,13 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	@Id
 	@Column(name="user_id")
 	private Long userId;
-
 	
 	@PrimaryKeyJoinColumn(name="user_id")
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
 	private User user;
 	
+	@Column
+	private boolean active=true;
 	
 	@Column(nullable=false, length=64)
 	private String sessionId;
@@ -102,6 +103,14 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 
 	public boolean isForNonSystemUser() {
 		return !isForSystemUser();
+	}
+	
+	public boolean isActive(){
+		return active;
+	}
+	
+	public void setActive(boolean flag){
+		active=flag;
 	}
 	
 	/** Nulls the modified field.  Will force Hibernate to save on merge. */
