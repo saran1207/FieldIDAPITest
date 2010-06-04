@@ -113,6 +113,19 @@ public class SessionUserInUseTest {
 		assertFalse(sut.doesActiveSessionBelongTo(user.getId(), A_SESSION_ID_2));
 	}
 	
+	@Test
+	public void should_find_that_the_session_for_a_system_user_does_belong_to_you_if_it_is_not_active_and_it_is_not_expired(){
+		User user = aSystemUser().build();
+		
+		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_2);
+		activeSession.setActive(false);
+		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
+		
+		SessionUserInUse sut = new SessionUserInUse(loader, new NonDataSourceBackedConfigContext(), defaultClock(), getSuccessfulSaver());
+			
+		assertTrue(sut.doesActiveSessionBelongTo(user.getId(), A_SESSION_ID_2));
+	}
+	
 	
 	@Test
 	public void should_request_loader_to_retrieve_the_active_session_for_the_user_id_passed_in() throws Exception {

@@ -110,7 +110,8 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	}
 	
 	public void setActive(boolean flag){
-		active=flag;
+		
+		active= (isForSystemUser()) ? true : flag;
 	}
 	
 	/** Nulls the modified field.  Will force Hibernate to save on merge. */
