@@ -86,6 +86,10 @@ public class SessionSecurityGuard implements SystemSecurityGuard {
 	public boolean isJobSitesEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
+	
+	public boolean isAssignedToEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
+	}
 
 	public boolean isUnlimitedLinkedAssetsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);

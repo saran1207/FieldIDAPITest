@@ -12,6 +12,7 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	private boolean usingJobSites;
 	private boolean usingSerialNumber;
 	private boolean usingJobs;
+	private boolean usingAssignedTo;
 	
 	public String getSerialNumberFormat() {
 		return serialNumberFormat;
@@ -48,5 +49,11 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	}
 	public void setUsingJobs(boolean usingJobs) {
 		this.usingJobs = usingJobs;
+	}
+	public void setUsingAssignedTo(boolean usingAssignedTo) {
+		this.usingAssignedTo = usingAssignedTo;
+	}
+	public boolean isUsingAssignedTo() {
+		return usingAssignedTo;
 	}	
 }

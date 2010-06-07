@@ -1023,17 +1023,21 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return groupServiceDTO;
 	}
 
-	public TenantServiceDTO convert(PrimaryOrg tenant) {
+	public TenantServiceDTO convert(PrimaryOrg primaryOrg) {
 
 		TenantServiceDTO tenantService = new TenantServiceDTO();
-		tenantService.setId(tenant.getTenant().getId());
-		tenantService.setName(tenant.getTenant().getName());
-		tenantService.setDisplayName(tenant.getName());
-		tenantService.setSerialNumberFormat(tenant.getSerialNumberFormat());
-		tenantService.setUsingJobs(tenant.getExtendedFeatures().contains(ExtendedFeature.Projects));
-		tenantService.setUsingSerialNumber(tenant.isUsingSerialNumber());
-		tenantService.setUsingJobSites(tenant.getExtendedFeatures().contains(ExtendedFeature.JobSites));
-
+		
+		tenantService.setId(primaryOrg.getTenant().getId());
+		tenantService.setName(primaryOrg.getTenant().getName());
+		tenantService.setDisplayName(primaryOrg.getName());
+		tenantService.setSerialNumberFormat(primaryOrg.getSerialNumberFormat());
+		
+		tenantService.setUsingSerialNumber(primaryOrg.isUsingSerialNumber());
+		
+		tenantService.setUsingJobs(primaryOrg.hasExtendedFeature(ExtendedFeature.Projects));
+		tenantService.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
+		tenantService.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
+		
 		return tenantService;
 	}
 

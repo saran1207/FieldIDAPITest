@@ -16,6 +16,7 @@ package com.n4systems.model;
 public enum ExtendedFeature {
 	Integration("feature.integration", "allows access to orders."),
 	JobSites("feature.job_sites", "allows the use of jobsites to control the assignment of assets and inspections."),
+	AssignedTo("feature.assigned_to", "allows users to be assigned to assets."),
 	Projects("feature.jobs", "allows the use of projects to track larger safety systems."),
 	Branding("feature.branding", "allows the user to up load their own image for the tenant logo."),
 	PartnerCenter("feature.partner_center", "allows the tenant to add customer users"),
