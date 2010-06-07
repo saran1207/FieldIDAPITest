@@ -20,6 +20,7 @@ import com.n4systems.services.TenantCache;
 public class QuickSetupWizardAction extends AbstractAction {
 
 	private boolean turnOnJobSites;
+	private boolean assignedTo=false;
 	private TransactionManager transactionManager;
 	
 	
@@ -35,6 +36,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 	
 	public String doStep1() {
 		turnOnJobSites = getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites);
+		assignedTo=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
 		return SUCCESS;
 	}
 	
@@ -42,8 +44,8 @@ public class QuickSetupWizardAction extends AbstractAction {
 		Transaction transaction = transactionManager().startTransaction();
 		
 		try {
-			updateFeatures(transaction);
-			
+			updateJobFeature(transaction);
+			updateAssignedToFeature(transaction);
 			transactionManager().finishTransaction(transaction);
 			
 			clearCachedValues();
@@ -69,11 +71,15 @@ public class QuickSetupWizardAction extends AbstractAction {
 	}
 
 
-	private void updateFeatures(Transaction transaction) throws Exception {
+	private void updateJobFeature(Transaction transaction) throws Exception {
 		PrimaryOrg updatedPrimaryOrg = processJobSiteSetting(transaction);
 		new OrgSaver().update(transaction, updatedPrimaryOrg);
 	}
 
+	private void updateAssignedToFeature(Transaction transaction) throws Exception {
+		PrimaryOrg updatedPrimaryOrg = processAssignedToSetting(transaction);
+		new OrgSaver().update(transaction, updatedPrimaryOrg);
+	}
 
 	private void clearCachedValues() {
 		TenantCache.getInstance().reloadPrimaryOrg(getPrimaryOrg().getTenant().getId());
@@ -82,21 +88,41 @@ public class QuickSetupWizardAction extends AbstractAction {
 	
 	private PrimaryOrg processJobSiteSetting(Transaction transaction) throws Exception {
 		PrimaryOrg primaryOrg = getPrimaryOrg();
-		ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.JobSites, primaryOrg);
+		ExtendedFeatureSwitch featureSwitchJobs = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.JobSites, primaryOrg);
 		
 		if (turnOnJobSites) {
-			featureSwitch.enableFeature(transaction);
+			featureSwitchJobs.enableFeature(transaction);
 		} else {
-			featureSwitch.disableFeature(transaction);
+			featureSwitchJobs.disableFeature(transaction);
 		}
 		return primaryOrg;
 	}	
+	
+	private PrimaryOrg processAssignedToSetting(Transaction transaction) throws Exception {
+		PrimaryOrg primaryOrg = getPrimaryOrg();
+		ExtendedFeatureSwitch featureSwitchAssignedTo = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.AssignedTo, primaryOrg);
+		
+		if (assignedTo) {
+			featureSwitchAssignedTo.enableFeature(transaction);
+		} else {
+			featureSwitchAssignedTo.disableFeature(transaction);
+		}
+		
+		return primaryOrg;
+	}
 
 	public boolean isTurnOnJobSites() {
 		return turnOnJobSites;
 	}
 
+	public boolean isAssignedTo(){
+		return assignedTo;
+	}
 
+	public void setIsAssignedTo(boolean assignedTo){
+		this.assignedTo=assignedTo;
+	}
+	
 	public void setTurnOnJobSites(boolean turnOnJobSites) {
 		this.turnOnJobSites = turnOnJobSites;
 	}

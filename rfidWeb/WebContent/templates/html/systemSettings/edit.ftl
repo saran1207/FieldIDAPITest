@@ -93,8 +93,18 @@ ${action.setPageType('account_settings', 'list')!}
 		<h2><@s.text name="label.system_settings" /></h2>
 	
 	<div class="infoSet">
+		<label>
+			<@s.text name="label.enable_assigned_to_field"/>
+			<a href="javascript:void(0);" id="whatsThis_assignedTo_button" >?</a>
+			<div id="whatsThis_embeddedCode" class="hidden" style="border :1px solid black">
+				<h3>HURF DURF</h3>
+				<img src="http://img145.imageshack.us/img145/6237/080407lunglessfroghmed1wo2.jpg"/>
+			</div>
+			<script type="text/javascript">
+				$("whatsThis_assignedTo_button").observe( 'click', function(event) { showQuickView('whatsThis_embeddedCode', event); } );
+			</script>
+		</label>
 		<span class="fieldHolder">
-			<label class="label"><@s.text name="label.enable_assigned_to_field"/></label>
 			<@s.checkbox name="assignedTo" /> 
 		</span>
 	</div>

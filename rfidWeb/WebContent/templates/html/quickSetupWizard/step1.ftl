@@ -21,6 +21,13 @@
 			</span>
 		</div>
 		
+		<div class="infoSet">
+			<span class="fieldHolder">
+				<@s.checkbox name="assignedTo" /> 
+				<label><@s.text name="label.enable_assigned_to_field"/></label>
+			</span>
+		</div>
+		
 		
 		<div class="actions">
 			<@s.submit key="label.next" />

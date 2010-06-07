@@ -14,6 +14,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
@@ -85,13 +86,14 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	public String doUpdate() {
-		
+
 		Transaction transaction = transactionManager().startTransaction();
-		
+
 		try {
 			updateAssignedToFeature(transaction);
-			updateSystemSettings();
+			updateSystemSettings(transaction);
 
+			transactionManager().finishTransaction(transaction);
 			clearCachedValues();
 		} catch (Exception e) {
 			addActionErrorText("error.updating_system_settings");
@@ -101,7 +103,19 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private void updateSystemSettings() throws IOException {
+	private void updateAssignedToFeature(Transaction transaction) throws Exception {
+		PrimaryOrg updatedPrimaryOrg = processAssignedToSetting(transaction);
+		new OrgSaver().update(transaction, updatedPrimaryOrg);
+	}
+
+	private void updateSystemSettings(Transaction transaction) throws Exception {
+		PrimaryOrg updatedPrimaryOrg = processSystemSettings(transaction);
+		new OrgSaver().update(transaction, updatedPrimaryOrg);
+	}
+
+	private PrimaryOrg processSystemSettings(Transaction transaction) throws IOException {
+		PrimaryOrg primaryOrg = getPrimaryOrg();
+
 		if (getSecurityGuard().isBrandingEnabled()) {
 			processLogo();
 			primaryOrg.setWebSite(webSite);
@@ -110,29 +124,22 @@ public class SystemSettingsCrud extends AbstractCrud {
 		primaryOrg.setDateFormat(dateFormat);
 		primaryOrg.setDefaultVendorContext(defaultVendorContext);
 
-		persistenceManager.update(primaryOrg, fetchCurrentUser());
-
-		
 		addFlashMessageText("message.system_settings_updated");
+
+		return primaryOrg;
 	}
 
-	public void updateAssignedToFeature(Transaction transaction) {
-			try {
+	private PrimaryOrg processAssignedToSetting(Transaction transaction) throws Exception {
+		PrimaryOrg primaryOrg = getPrimaryOrg();
+		ExtendedFeatureSwitch featureSwitchAssignedTo = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.AssignedTo, primaryOrg);
 
-				ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.AssignedTo, primaryOrg);
-				
-				if(isAssignedTo()){
-				featureSwitch.enableFeature(transaction);
-				}else{
-					featureSwitch.disableFeature(transaction);
-				}
-				transactionManager().finishTransaction(transaction);
+		if (assignedTo) {
+			featureSwitchAssignedTo.enableFeature(transaction);
+		} else {
+			featureSwitchAssignedTo.disableFeature(transaction);
+		}
 
-			} catch (Exception e) {
-				transactionManager().rollbackTransaction(transaction);
-				addActionErrorText("error.could_not_enable_assigned_to_feature");
-			}
-		
+		return primaryOrg;
 	}
 
 	private TransactionManager transactionManager() {
