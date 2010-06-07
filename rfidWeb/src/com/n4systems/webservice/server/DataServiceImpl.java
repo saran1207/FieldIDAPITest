@@ -36,11 +36,13 @@ import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPe
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
+import com.n4systems.model.LineItem;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.ProductTypeGroup;
@@ -87,6 +89,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -782,16 +785,7 @@ public class DataServiceImpl implements DataService {
 		
 			Product product = converter.convert(productDTO, existingProduct, requestInformation.getTenantId());
 
-			//updating order number if it is different value
-			if (productDTO.getOrderNumber() != null && productDTO.getOrderNumber().trim().length() > 0)
-			{
-				if (product.getShopOrder() != null && 
-						!product.getShopOrder().getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim()) ) {
-					product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
-				} else if (product.getShopOrder() == null) {
-					product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), requestInformation.getTenantId()));
-				}
-			}
+			updateShopOrderOnProduct(product, productDTO, orderManager, requestInformation.getTenantId());
 			
 			// on edit, the identified by user is populated with the modified user
 			ServiceLocator.getProductSerialManager().update(product, product.getModifiedBy());
@@ -800,6 +794,19 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error( "failed while processing product", e );
 			throw new ServiceException("Problem updating product");
+		}
+	}
+
+	private void updateShopOrderOnProduct(Product product, ProductServiceDTO productDTO, OrderManager orderManager, Long tenantId) {
+		PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(tenantId);
+		
+		// Update the shop order only if the tenant does not have Integration and the order number has changed
+		// Integration tenants cannot add/update order information from mobile
+		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration) && StringUtils.isNotEmpty(productDTO.getOrderNumber())) {
+			LineItem currentProductOrder = product.getShopOrder();
+			if (currentProductOrder == null || !currentProductOrder.getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim())) {
+				product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), tenantId));
+			}
 		}
 	}
 	
@@ -960,10 +967,7 @@ public class DataServiceImpl implements DataService {
 		
 		product = converter.convert( productDTO, product, tenantId );
 		
-		if (productDTO.getOrderNumber() != null &&
-				productDTO.getOrderNumber().trim().length() > 0) {
-			product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), tenantId));
-		}
+		updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
 		
 		return product;
 	}
