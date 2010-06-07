@@ -1038,7 +1038,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		tenantService.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 		tenantService.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		
-		tenantService.setUsingIntegration(tenant.hasExtendedFeature(ExtendedFeature.Integration));
+		tenantService.setUsingIntegration(primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 		return tenantService;
 	}
 
