@@ -13,32 +13,41 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
+import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
+import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.persistence.FieldIdTransactionManager;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.TenantCache;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
-	private AccountHelper accountHelper; 
-	
-	
+	private AccountHelper accountHelper;
+
 	private PrimaryOrg primaryOrg;
-	
+
 	private String dateFormat;
 	private Long defaultVendorContext;
-	
+
 	private String webSite;
 	private File uploadedImage;
 	private String imageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
+	private boolean assignedTo = false;
+
+	private TransactionManager transactionManager;
 
 	public SystemSettingsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -47,56 +56,95 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		primaryOrg = getPrimaryOrg();
-		
+
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		initMemberFields();
 	}
-	
+
 	@Override
 	protected void postInit() {
 		super.postInit();
 		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
 	}
 
-
 	@SkipValidation
 	public String doEdit() {
 		dateFormat = primaryOrg.getDateFormat();
 		defaultVendorContext = primaryOrg.getDefaultVendorContext();
-		
+		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
 		webSite = primaryOrg.getWebSite();
-		
+
 		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
 		if (privateLogoPath.exists()) {
 			imageDirectory = privateLogoPath.getName();
 		}
 		return SUCCESS;
 	}
-	
-	
+
 	public String doUpdate() {
+		
+		Transaction transaction = transactionManager().startTransaction();
+		
 		try {
-			
-			if (getSecurityGuard().isBrandingEnabled()) {
-				processLogo();
-				primaryOrg.setWebSite(webSite);
-			}
-			
-			primaryOrg.setDateFormat(dateFormat);
-			primaryOrg.setDefaultVendorContext(defaultVendorContext);
-			
-			persistenceManager.update(primaryOrg, fetchCurrentUser());
-			
-			refreshSessionUser();
-			addFlashMessageText("message.system_settings_updated");
+			updateAssignedToFeature(transaction);
+			updateSystemSettings();
+
+			clearCachedValues();
 		} catch (Exception e) {
 			addActionErrorText("error.updating_system_settings");
+			return ERROR;
 		}
 
 		return SUCCESS;
+	}
+
+	private void updateSystemSettings() throws IOException {
+		if (getSecurityGuard().isBrandingEnabled()) {
+			processLogo();
+			primaryOrg.setWebSite(webSite);
+		}
+
+		primaryOrg.setDateFormat(dateFormat);
+		primaryOrg.setDefaultVendorContext(defaultVendorContext);
+
+		persistenceManager.update(primaryOrg, fetchCurrentUser());
+
+		
+		addFlashMessageText("message.system_settings_updated");
+	}
+
+	public void updateAssignedToFeature(Transaction transaction) {
+			try {
+
+				ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.AssignedTo, primaryOrg);
+				
+				if(isAssignedTo()){
+				featureSwitch.enableFeature(transaction);
+				}else{
+					featureSwitch.disableFeature(transaction);
+				}
+				transactionManager().finishTransaction(transaction);
+
+			} catch (Exception e) {
+				transactionManager().rollbackTransaction(transaction);
+				addActionErrorText("error.could_not_enable_assigned_to_feature");
+			}
+		
+	}
+
+	private TransactionManager transactionManager() {
+		if (transactionManager == null) {
+			transactionManager = new FieldIdTransactionManager();
+		}
+		return transactionManager;
+	}
+
+	private void clearCachedValues() {
+		TenantCache.getInstance().reloadPrimaryOrg(getPrimaryOrg().getTenant().getId());
+		refreshSessionUser();
 	}
 
 	private void processLogo() throws IOException {
@@ -155,6 +203,14 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return newImage;
 	}
 
+	public boolean isAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(boolean assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+
 	public void setNewImage(boolean newImage) {
 		this.newImage = newImage;
 	}
@@ -162,7 +218,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String getDateFormat() {
 		return dateFormat;
 	}
-	
+
 	public List<StringListingPair> getDateFormats() {
 		List<StringListingPair> dateFormats = new ArrayList<StringListingPair>();
 		dateFormats.add(new StringListingPair("MM/dd/yy", "MM/dd/yy (12/31/99)"));
@@ -170,18 +226,15 @@ public class SystemSettingsCrud extends AbstractCrud {
 		dateFormats.add(new StringListingPair("MM/dd/yyyy", "MM/dd/yyyy (12/31/1999)"));
 		dateFormats.add(new StringListingPair("dd/MM/yyyy", "dd/MM/yyyy (31/12/1999)"));
 		dateFormats.add(new StringListingPair("yyyy-MM-dd", "yyyy-MM-dd (1999-12-31)"));
-		
+
 		return dateFormats;
 	}
 
-	@FieldExpressionValidator(message="", key="error.date_format_not_valid", expression="(validDateFormat == true)", fieldName="dateFormat")
+	@FieldExpressionValidator(message = "", key = "error.date_format_not_valid", expression = "(validDateFormat == true)", fieldName = "dateFormat")
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
 	}
-	
-	
-	
-	
+
 	public boolean isValidDateFormat() {
 		try {
 			@SuppressWarnings("unused")
@@ -189,10 +242,10 @@ public class SystemSettingsCrud extends AbstractCrud {
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public UpgradePackageFilter currentPackageFilter() {
 		return accountHelper.currentPackageFilter();
 	}
@@ -201,7 +254,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return defaultVendorContext;
 	}
 
-	@FieldExpressionValidator(message="", key="error.selected_company_is_not_one_of_your_vendors", expression="(validVendor == true)")
+	@FieldExpressionValidator(message = "", key = "error.selected_company_is_not_one_of_your_vendors", expression = "(validVendor == true)")
 	public void setDefaultVendorContext(Long defaultVendorContext) {
 		if (defaultVendorContext == null || defaultVendorContext.equals(getPrimaryOrg().getId())) {
 			this.defaultVendorContext = null;
@@ -209,12 +262,12 @@ public class SystemSettingsCrud extends AbstractCrud {
 			this.defaultVendorContext = defaultVendorContext;
 		}
 	}
-	
+
 	public boolean isValidVendor() {
 		if (defaultVendorContext == null) {
 			return true;
 		}
-		
+
 		for (ListingPair vendor : getVendorContextList()) {
 			if (vendor.getId().equals(defaultVendorContext)) {
 				return true;
@@ -222,6 +275,4 @@ public class SystemSettingsCrud extends AbstractCrud {
 		}
 		return false;
 	}
-	
-	
 }

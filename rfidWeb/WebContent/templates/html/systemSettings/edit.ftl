@@ -91,6 +91,13 @@ ${action.setPageType('account_settings', 'list')!}
 	<@s.form action="systemSettingsUpdate" cssClass="crudForm pageSection largeForm" theme="fieldid">
 		<#include "../common/_formErrors.ftl"/>
 		<h2><@s.text name="label.system_settings" /></h2>
+	
+	<div class="infoSet">
+		<span class="fieldHolder">
+			<label class="label"><@s.text name="label.enable_assigned_to_field"/></label>
+			<@s.checkbox name="assignedTo" /> 
+		</span>
+	</div>
 		
 		<#include "_settings.ftl"/>
 		<div class="formAction">
