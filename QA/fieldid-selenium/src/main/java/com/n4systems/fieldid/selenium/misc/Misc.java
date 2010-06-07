@@ -339,32 +339,9 @@ public class Misc {
 		gotoHelper("My Account", myAccountLinkLocator);
 	}
 	
-	/**
-	 * Click the Help link. This is not a goto*() method because a new window
-	 * will open up. This feature is not implemented yet.
-	 */
-	public void popupHelp() {
-		// TODO
-		fail("Not yet implemented.");
-	}
 	
-	/**
-	 * Click the Support link. This is not a goto*() method because a new
-	 * window will open up. This feature is not implemented yet.
-	 */
-	public void popupSupport() {
-		// TODO
-		fail("Not yet implemented.");
-	}
 	
-	/**
-	 * Click the Field ID Store link. This is not a goto*() method because a
-	 * new windows will open up. This feature is not implemented yet.
-	 */
-	public void popupFieldIDStore() {
-		// TODO
-		fail("Not yet implemented.");
-	}
+	
 	
 	/**
 	 * Click the Sign Out link. Should return you to the Login page.
@@ -1238,15 +1215,9 @@ public class Misc {
 	 * This method will wait for the timezones to finish updating before
 	 * returning.
 	 * 
-	 * TODO: it is currently hard code to 5 seconds. Change it so it actually
-	 * sees when the time zone updating is finished and returns immediately
-	 * after that.
 	 */
-	public void WaitForTimeZoneToUpdate() {
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-		}
+	public void waitForTimeZoneToUpdate() {
+		selenium.waitForAjax();
 	}
 
 	/**
@@ -1258,14 +1229,7 @@ public class Misc {
 		try { Thread.sleep(millis); } catch (InterruptedException e) { }
 	}
 
-	/**
-	 * A wrapper to Thread.sleep(millis, nanos) so we don't have to wrap it in a try/catch block.
-	 * 
-	 * @param millis
-	 */
-	public void sleep(long millis, int nanos) {
-		try { Thread.sleep(millis, nanos); } catch (InterruptedException e) { }
-	}
+	
 
 	/**
 	 * Gets the Owner information from the Choose Owner dialog. It assumes
@@ -1328,16 +1292,6 @@ public class Misc {
 		this.gotoAdministration();
 	}
 
-	public void clickGenerateSerialNumber() {
-		selenium.click("//A[text()='generate']");
-	}
-
-	public boolean isJavascriptError() {
-		boolean b = true;
-		// TODO: once Selenium has some way to detect Javascript errors implement this
-		// SEE: http://jira.openqa.org/browse/SEL-613
-		return b;
-	}
 
 	public boolean isSessionExpired() {
 		boolean result = false;
@@ -1351,10 +1305,6 @@ public class Misc {
 		return result;
 	}
 
-	public void checkForNonFormErrorMessages(String string) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public String getContentTitle() {
 		return selenium.getText("css=#contentTitle");

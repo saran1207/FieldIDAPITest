@@ -20,7 +20,7 @@
 			<th class="checkboxRow"><@s.text name="label.select"/></th>
 			<th><@s.text name="label.fieldstoupdate"/></th>
 		</tr>
-		<#if securityGuard.jobSitesEnabled>
+		<#if securityGuard.assignedToEnabled>
 		
 			<tr>
 				<td><@s.checkbox name="select['assignedUser']" id="check_assignedUser"/></td>

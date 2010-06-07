@@ -217,7 +217,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		return prepParam;
 	}
 	
-	// XXX - only string functions are supported right now
+
 	private String prepareStringValue() throws InvalidQueryException {
 		BitField bits = new BitField(options);
 		

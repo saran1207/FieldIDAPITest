@@ -22,7 +22,6 @@ public interface WhereClause<T> extends ClauseArgument {
 		
 	}
 	
-	//XXX - this shouldn't need a name but the QueryBuilder needs a way to reference it in the Map
 	public String getName(); 
 	public T getValue();
 	public ChainOp getChainOperator();

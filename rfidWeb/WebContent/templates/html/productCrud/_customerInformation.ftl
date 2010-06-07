@@ -1,15 +1,14 @@
 <div class="viewSection smallViewSection" id="customerInformation" >
 	<#if securityGuard.jobSitesEnabled >
 		<h2><@s.text name="label.siteinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
-		<p>
-			<label><@s.text name="label.assignedto"/></label>
-			<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
-		</p>
 	<#else>	
 		<h2><@s.text name="label.customerinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
 	</#if>
 	
-	
+	<p>
+		<label><@s.text name="label.assignedto"/></label>
+		<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
+	</p>
 	
 	<p>
 		<label><@s.text name="label.organization"/></label>

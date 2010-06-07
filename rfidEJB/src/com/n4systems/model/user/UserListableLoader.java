@@ -6,9 +6,11 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListableLoader;
 import com.n4systems.util.persistence.ListableSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class UserListableLoader extends ListableLoader {
 	private boolean noDeleted = false;
+	private boolean employeesOnly = false;
 
 	public UserListableLoader(SecurityFilter filter) {
 		super(filter);
@@ -31,12 +33,22 @@ public class UserListableLoader extends ListableLoader {
 			builder.addSimpleWhere("deleted", false);
 		}
 		
+		if (employeesOnly) {
+			builder.addWhere(Comparator.NULL, "customerid", "owner.customerOrg", "");
+		}
+		
+		
 		return builder;
 	}
 
 
 	public UserListableLoader setNoDeleted(boolean noDeleted) {
 		this.noDeleted = noDeleted;
+		return this;
+	}
+	
+	public UserListableLoader employeesOnly() {
+		employeesOnly = true;
 		return this;
 	}
 

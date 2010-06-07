@@ -604,9 +604,7 @@ public class IdentifyPageDriver {
 		if(p.getComments() != null) {
 			selenium.type(multiAddCommentTextFieldLocator, p.getComments());
 		}
-		if(p.getAttachments() != null && p.getAttachments().size() > 0) {
-			// TODO
-		}
+		
 	}
 
 	private void assertMultiAddStep1Form() {
@@ -625,7 +623,6 @@ public class IdentifyPageDriver {
 		if(selenium.isElementPresent(multiAddStep1ContinueButtonLocator)) {
 			selenium.click(multiAddStep1ContinueButtonLocator);
 			misc.checkForErrorMessages("MultiAddStep1");
-			// TODO: do I need a wait for AJAX here?
 		} else {
 			fail("Could not find the Continue button on step 1 of Multi Add");
 		}
@@ -645,8 +642,9 @@ public class IdentifyPageDriver {
 	public void clickContinueButtonMultiAddStep2() {
 		if(selenium.isElementPresent(multiAddStep2ContinueButtonLocator)) {
 			selenium.click(multiAddStep2ContinueButtonLocator);
+			selenium.waitForAjax();
 			misc.checkForErrorMessages("MultiAddStep2");
-			// TODO: do I need a wait for AJAX here?
+			
 		} else {
 			fail("Could not find the Continue button on step 2 of Multi Add");
 		}

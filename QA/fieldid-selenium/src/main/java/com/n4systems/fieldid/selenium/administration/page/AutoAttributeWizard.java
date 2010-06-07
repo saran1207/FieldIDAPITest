@@ -55,31 +55,6 @@ public class AutoAttributeWizard {
 		assertTrue("Could not find the header for product type '" + productType + "'", selenium.isElementPresent(editProductTypeHeaderLocator));
 	}
 	
-	/**
-	 * TODO:
-	 * - get a list of available fields
-	 * - get a list of input fields
-	 * - get a list of output fields
-	 * - drag and drop from available fields to input fields
-	 * - drag and drop from available fields to output fields
-	 * - drag and drop from input fields to available fields
-	 * - drag and drop from input fields to output fields
-	 * - drag and drop from output fields to input fields
-	 * - drag and drop from output fields to available fields
-	 * - goto Cancel
-	 * - goto Save
-	 * - goto View All
-	 * - goto Edit
-	 * - goto Definitions
-	 * - get a list of definitions
-	 * - goto add definition
-	 * - set definition: fills into the form for add definition
-	 * - goto Save definition
-	 * - goto Save and Add definition
-	 * - goto Cancel
-	 * - goto View All Definitions (from Add Definition)
-	 * - remove a definition
-	 * - edit a definition
-	 */
+	
 
 }

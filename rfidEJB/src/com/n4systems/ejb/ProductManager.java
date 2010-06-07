@@ -60,8 +60,8 @@ public interface ProductManager {
 	 * Computes a set of {@link InfoFieldBean} names which are common to all the provided {@link ProductType}s.  Name
 	 * matches are exact (case sensitive and non-word char sensitive).  The list will be returned sorted ascending 
 	 * alpha-numerically.
-	 * @param productTypeIds TODO
-	 * @return				SortedSet of InfoField names
+	 * @param productTypeIds 
+	 * @return SortedSet of InfoField names
 	 */
 	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds);
 	

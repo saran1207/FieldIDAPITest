@@ -26,12 +26,9 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductCleaner;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
-import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -44,7 +41,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	private final OrderManager orderManager;
 	
 	// drop down lists
-	private List<ListingPair> employees;
+	private List<Listable<Long>> employees;
 	private List<ProductStatusBean> productStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private List<ProductSerialExtensionBean> extentions;
@@ -141,11 +138,9 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return copiedUploadedFiles;
 	}
 
-	public List<ListingPair> getEmployees() {
+	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
-			employees = ListHelper.longListableToListingPair(loader.load());
-			
+			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
 		}
 		return employees;
 	}

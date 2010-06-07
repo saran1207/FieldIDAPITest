@@ -174,7 +174,7 @@ public class ManageOrganizations {
 		}
 		if(o.getCountry() != null) {
 			selenium.select(addOrganizationCountryTextFieldLocator, o.getCountry());
-			misc.WaitForTimeZoneToUpdate();
+			misc.waitForTimeZoneToUpdate();
 		}
 		if(o.getTimeZone() != null) {
 			selenium.select(addOrganizationTimeZoneTextFieldLocator, o.getTimeZone());

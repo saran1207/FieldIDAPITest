@@ -151,7 +151,7 @@ public class DateHelper {
 
 	private static Calendar getTodayCalendar() {
 		Calendar today = Calendar.getInstance();
-		return setToDay(today);
+		return setToBeginningOfTheDay(today);
 	}
 
 	public static Date getFirstDayOfThisYear() {
@@ -235,16 +235,14 @@ public class DateHelper {
 	 * Given a Date object, returns a Date representing only the Date portion
 	 * (time portion is zeroed)
 	 * 
-	 * @see #setToDay(Calendar)
+	 * @see #setToBeginningOfTheDay(Calendar)
 	 * @param date
 	 *            A given date object
 	 * @return The Date only portion of date
 	 */
 	public static Date getDateWithOutTime(Date date) {
-		// XXX refactor to use truncate()
-		Calendar d = Calendar.getInstance();
-		d.setTime(date);
-		return setToDay(d).getTime();
+		Calendar d = createCalendarForDate(date);
+		return setToBeginningOfTheDay(d).getTime();
 	}
 
 	public static Date getBeginingOfDay(Date date) {
@@ -252,14 +250,21 @@ public class DateHelper {
 	}
 
 	public static Date getEndOfDay(Date date) {
-		Calendar d = Calendar.getInstance();
-		d.setTime(date);
-		setToDay(d);
+		Calendar d = createCalendarForDate(date);
+		setToBeginningOfTheDay(d);
+		
 		d.set(Calendar.HOUR_OF_DAY, 23);
 		d.set(Calendar.MINUTE, 59);
 		d.set(Calendar.SECOND, 59);
 		d.set(Calendar.MILLISECOND, 999);
+		
 		return d.getTime();
+	}
+
+	private static Calendar createCalendarForDate(Date date) {
+		Calendar d = Calendar.getInstance();
+		d.setTime(date);
+		return d;
 	}
 
 	/**
@@ -270,7 +275,7 @@ public class DateHelper {
 	 *            A Calendar date object
 	 * @return The Date only representation of the given calendar object
 	 */
-	private static Calendar setToDay(Calendar date) {
+	private static Calendar setToBeginningOfTheDay(Calendar date) {
 		truncate(date, DAY);
 		truncate(date, HOUR);
 		truncate(date, MINUTE);
@@ -362,8 +367,7 @@ public class DateHelper {
 	 * @return
 	 */
 	public static Date truncate(Date date, int field) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
+		Calendar cal = createCalendarForDate(date);
 
 		truncate(cal, field);
 
@@ -419,9 +423,7 @@ public class DateHelper {
 	 * @return Date post field incrementation
 	 */
 	public static Date increment(Date date, int field, int amount) {
-		Calendar cal = Calendar.getInstance();
-
-		cal.setTime(date);
+		Calendar cal = createCalendarForDate(date);
 
 		switch (field) {
 		case YEAR:
@@ -476,8 +478,7 @@ public class DateHelper {
 	}
 	
 	public static Date delocalizeDate(Date date, TimeZone fromZone) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
+		Calendar cal = createCalendarForDate(date);
 		cal.add(Calendar.MILLISECOND, fromZone.getOffset(date.getTime()) * -1);
 		return cal.getTime();
 	}

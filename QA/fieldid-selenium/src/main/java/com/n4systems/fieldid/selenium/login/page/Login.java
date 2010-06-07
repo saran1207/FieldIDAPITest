@@ -353,15 +353,7 @@ public class Login {
 		setSecurityRFIDNumber(rfid);
 		clickSignInWithUserName();
 
-		gotoIForgotMyPassword();
-		// TODO: verify
-		selenium.goBack();
-		misc.waitForPageToLoadAndCheckForOopsPage();
 		
-		gotoIsNotTheCompanyIWant();
-		// TODO: verify
-		selenium.goBack();
-		misc.waitForPageToLoadAndCheckForOopsPage();
 		
 		if(isPlansAndPricingAvailable()) {
 			gotoPlansAndPricing();

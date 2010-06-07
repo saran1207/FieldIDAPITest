@@ -3,8 +3,6 @@ package rfid.ejb.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -149,27 +147,10 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	 * @return
 	 */
 	public List<InfoOptionBean> getInfoOptions() {
-		
-		return new ArrayList<InfoOptionBean>( unfilteredInfoOptions );
+		return new ArrayList<InfoOptionBean>(unfilteredInfoOptions);
 	}
 
-	/**
-	 * Returns only the static info options, sorted TODO add some sort of
-	 * weighting to each option so it can be propertly sorted
-	 * 
-	 * @return
-	 */
-	public SortedSet<InfoOptionBean> retrieveInfoOptions() {
-		SortedSet<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
 
-		for (InfoOptionBean infoOption : getUnfilteredInfoOptions()) {
-			if (infoOption.isStaticData()) {
-				infoOptions.add(infoOption);
-			}
-		}
-
-		return infoOptions;
-	}
 
 	public Long getWeight() {
 		return weight;

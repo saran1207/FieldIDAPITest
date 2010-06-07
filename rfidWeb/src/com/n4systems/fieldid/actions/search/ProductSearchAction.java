@@ -14,11 +14,9 @@ import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAt
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 import com.opensymphony.xwork2.Preparable;
 
@@ -26,7 +24,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public static final String SEARCH_CRITERIA = "searchCriteria";
 	private static final long serialVersionUID = 1L;
 	
-	private List<ListingPair> employees;
+	private List<Listable<Long>> employees;
 	
 	private OwnerPicker ownerPicker;
 	private List<Long> searchIds;
@@ -117,10 +115,9 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 	
-	public List<ListingPair> getEmployees() {
+	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
-			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
-			employees = ListHelper.longListableToListingPair(loader.load());
+			employees = getLoaderFactory().createHistoricalEmployeesListableLoader().load();
 		}
 		return employees;
 	}

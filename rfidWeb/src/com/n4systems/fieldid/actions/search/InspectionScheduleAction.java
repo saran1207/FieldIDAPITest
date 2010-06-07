@@ -19,10 +19,9 @@ import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.model.utils.CompressedScheduleStatus;
-import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Preparable;
@@ -34,7 +33,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	private final InspectionManager inspectionManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	
-	private List<ListingPair> employees;
+	private List<Listable<Long>> employees;
 	private List<ListingPair> eventJobs;
 	
 	private OwnerPicker ownerPicker;
@@ -131,10 +130,9 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		return persistenceManager.findAllLP(InspectionTypeGroup.class, getTenantId(), "name");
 	}
 	
-	public List<ListingPair> getEmployees() {
+	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
-			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
-			employees = ListHelper.longListableToListingPair(loader.load());
+			employees = getLoaderFactory().createHistoricalEmployeesListableLoader().load();
 		}
 		return employees;
 	}

@@ -258,7 +258,7 @@ public class ManageUsers {
 		if(employeeUser.getCountry() != null) {
 			if(misc.isOptionPresent(addEmployeeUserCountrySelectListLocator, employeeUser.getCountry())) {
 				selenium.select(addEmployeeUserCountrySelectListLocator, employeeUser.getCountry());
-				misc.WaitForTimeZoneToUpdate();
+				misc.waitForTimeZoneToUpdate();
 			} else {
 				fail("The country '" + employeeUser.getCountry() + "' does not exist on the select list");
 			}
@@ -344,7 +344,7 @@ public class ManageUsers {
 		if(cu.getCountry() != null) {
 			if(misc.isOptionPresent(addCustomerCountrySelectListLocator, cu.getCountry())) {
 				selenium.select(addCustomerCountrySelectListLocator, cu.getCountry());
-				misc.WaitForTimeZoneToUpdate();
+				misc.waitForTimeZoneToUpdate();
 			} else {
 				fail("The country '" + cu.getCountry() + "' does not exist on the select list");
 			}

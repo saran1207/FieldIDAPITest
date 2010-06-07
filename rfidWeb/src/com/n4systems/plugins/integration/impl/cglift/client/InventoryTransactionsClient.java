@@ -131,21 +131,5 @@ public class InventoryTransactionsClient {
 		return var;
 	}
 
-	public static void main(String[] args) {
-
-		InventoryTransactionsClient client = new InventoryTransactionsClient();
-
-		//create a default service endpoint
-		@SuppressWarnings("unused")
-		InventoryTransactionsSoap service = client
-				.getInventoryTransactionsSoap();
-
-		//TODO: Add custom client code here
-		//
-		//service.yourServiceOperationHere();
-
-		System.out.println("test client completed");
-		System.exit(0);
-	}
-
+	
 }

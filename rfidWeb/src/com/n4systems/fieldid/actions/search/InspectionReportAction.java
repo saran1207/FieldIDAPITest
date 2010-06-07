@@ -24,13 +24,12 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
@@ -44,7 +43,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	private InspectionReportType reportType;
 	private String savedReportName;
-	private List<ListingPair> employees;
+	private List<Listable<Long>> employees;
 	private List<ListingPair> savedReports;
 	private List<ListingPair> inspectionBooks;
 	private List<ListingPair> examiners;
@@ -222,10 +221,9 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		return inspectionTypes;
 	}
 	 
-	public List<ListingPair> getEmployees() {
+	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
-			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
-			employees = ListHelper.longListableToListingPair(loader.load());
+			employees = getLoaderFactory().createHistoricalEmployeesListableLoader().load();
 		}
 		return employees;
 	}

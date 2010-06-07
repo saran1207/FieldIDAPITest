@@ -227,10 +227,8 @@ public class AssetPage {
 	}
 
 	public void setAssetForm(Product p) {
-		this.verifyAssetEditPageContents();
-		if(p.getSafetyNetworkRegistration() != null) {
-			; // TODO handle setting the safety network
-		}
+		verifyAssetEditPageContents();
+		
 		if(p.getPublished() == true) {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish");
 		} else {

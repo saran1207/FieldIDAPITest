@@ -14,10 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-
-
 import javax.persistence.EntityManager;
-
 
 import org.apache.log4j.Logger;
 
@@ -39,7 +36,6 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -74,6 +70,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
 import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
@@ -1024,23 +1021,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	}
 
 	public TenantServiceDTO convert(PrimaryOrg primaryOrg) {
-
-		TenantServiceDTO tenantService = new TenantServiceDTO();
-		
-		tenantService.setId(primaryOrg.getTenant().getId());
-		tenantService.setName(primaryOrg.getTenant().getName());
-		tenantService.setDisplayName(primaryOrg.getName());
-		tenantService.setSerialNumberFormat(primaryOrg.getSerialNumberFormat());
-		
-		tenantService.setUsingSerialNumber(primaryOrg.isUsingSerialNumber());
-		
-		tenantService.setUsingJobs(primaryOrg.hasExtendedFeature(ExtendedFeature.Projects));
-		tenantService.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
-		tenantService.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
-		
-		tenantService.setUsingIntegration(primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
-		return tenantService;
+		return new PrimaryOrgToServiceDTOConverter().convert(primaryOrg);
 	}
+
+
 
 	public Date convertStringToDate(String stringDate) {
 		if (stringDate == null || stringDate.length() == 0)

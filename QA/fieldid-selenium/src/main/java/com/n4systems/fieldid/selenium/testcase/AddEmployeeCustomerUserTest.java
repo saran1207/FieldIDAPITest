@@ -32,7 +32,6 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	
 	@Test
 	public void should_be_able_to_add_an_employee_user() throws Exception {
-		//TODO:  permissions need help
 		gotoAddAnEmployeeUser();
 		EmployeeUser eu = addAnEmployeeUser();
 		assertUserWasAdded(eu);

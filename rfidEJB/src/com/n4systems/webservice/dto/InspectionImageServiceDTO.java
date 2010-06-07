@@ -14,6 +14,9 @@ public class InspectionImageServiceDTO {
 	public void setPerformedById(long performedById) {
 		this.performedById = performedById;
 	}
+	
+	
+	
 	@Deprecated
 	public void setInspectorId(long performedById) {
 		this.performedById = performedById;

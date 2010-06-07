@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Product {
 	String serialNumber;
@@ -15,16 +13,8 @@ public class Product {
 	String purchaseOrder;
 	String identified;
 	String productType;
-	/**
-	 * TODO:
-	 * Add support for attributes
-	 * 	text fields
-	 *	select lists
-	 *	combo boxes
-	 *	units of measure
-	 */
+	
 	String comments;
-	List<Attachment> attachments = new ArrayList<Attachment>();
 	
 	public void setSerialNumber(String s) {
 		this.serialNumber = s;
@@ -74,9 +64,6 @@ public class Product {
 		this.comments = s;
 	}
 
-	public void addAttachment(Attachment a) {
-		attachments.add(a);
-	}
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -126,7 +113,5 @@ public class Product {
 		return comments;
 	}
 
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
+	
 }

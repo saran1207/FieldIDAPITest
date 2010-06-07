@@ -51,12 +51,9 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -78,7 +75,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private AutoAttributeCriteria autoAttributeCriteria;
 
 	private List<Product> products;
-	private List<ListingPair> employees;
+	private List<Listable<Long>> employees;
 
 	private List<ProductAttachment> productAttachments;
 
@@ -354,10 +351,19 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doEdit() {
+		makeEmployeesIncludeCurrentAssignedUser();
 		testExistingProduct();
 		setProductTypeId(product.getType().getId());
 		loadAttachments();
 		return SUCCESS;
+	}
+
+	private void makeEmployeesIncludeCurrentAssignedUser() {
+		if (product.getAssignedUser() != null && !getEmployees().contains(product.getAssignedUser())) {
+			getEmployees().add(product.getAssignedUser());
+			
+		}
+		
 	}
 	
 	
@@ -429,7 +435,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doUpdate() {
 		testProduct();
-
+		makeEmployeesIncludeCurrentAssignedUser();
 		
 		try {
 			prepareProductToBeSaved();
@@ -844,10 +850,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return parentProduct;
 	}
 
-	public List<ListingPair> getEmployees() {
+	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
-			employees = ListHelper.longListableToListingPair(loader.load());
+			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
 			
 		}
 		return employees;

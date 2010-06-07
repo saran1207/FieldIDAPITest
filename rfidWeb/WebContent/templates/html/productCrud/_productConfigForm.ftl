@@ -4,11 +4,11 @@
 
 
 
-<#if securityGuard.jobSitesEnabled >
+<#if securityGuard.assignedToEnabled >
 	<div class="infoSet">
 		<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 		<#if !parentProduct?exists >
-			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
+			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
 		<#else>
 			<span class="fieldHolder" id="assigneduser">
 					${(product.assignedUser.userLabel)!}

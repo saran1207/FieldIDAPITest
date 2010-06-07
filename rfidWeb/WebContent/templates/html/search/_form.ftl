@@ -42,14 +42,12 @@
 			</div>	
 			
 				
-			<#if securityGuard.jobSitesEnabled>
+			<#if securityGuard.assignedToEnabled>
 				<div class="infoSet">
 					<label for="criteria.assingedUser"><@s.text name="label.assignedto"/></label>
-					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="name" emptyOption="true" />
+					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
 				</div>
 			</#if>
-			
-			
 			
 		
 			<div class="infoSet">

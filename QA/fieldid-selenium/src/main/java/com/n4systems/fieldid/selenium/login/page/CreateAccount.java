@@ -93,7 +93,7 @@ public class CreateAccount {
 		if(t.getEmail() != null)				selenium.type(emailTextFieldLocator, t.getEmail());
 		if(t.getCountry() != null) {
 			selenium.select(countrySelectListLocator, t.getCountry());
-			misc.WaitForTimeZoneToUpdate();
+			misc.waitForTimeZoneToUpdate();
 		}
 		if(t.getTimeZone() != null)				selenium.select(timeZoneSelectListLocator, t.getTimeZone());
 		if(t.getUserName() != null)				selenium.type(userNameTextFieldLocator, t.getUserName());

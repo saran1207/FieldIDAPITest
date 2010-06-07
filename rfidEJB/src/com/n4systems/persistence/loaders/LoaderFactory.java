@@ -371,6 +371,14 @@ public class LoaderFactory {
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
+	
+	public UserListableLoader createCurrentEmployeesListableLoader() {
+		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
+	}
+	
+	public UserListableLoader createHistoricalEmployeesListableLoader() {
+		return createUserListableLoader().employeesOnly();
+	}
 
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
 		return new VendorLinkedOrgListLoader(filter);
