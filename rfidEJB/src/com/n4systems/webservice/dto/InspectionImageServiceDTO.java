@@ -18,6 +18,12 @@ public class InspectionImageServiceDTO {
 	public void setInspectorId(long performedById) {
 		this.performedById = performedById;
 	}
+	
+	@Deprecated
+	public long getInspectorId() {
+		return performedById;
+	}
+	
 
 	public boolean isFromSubInspection() {
 		return fromSubInspection;
