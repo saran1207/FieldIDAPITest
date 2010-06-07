@@ -1,4 +1,4 @@
-package com.n4systems.servicedto.conv;
+package com.n4systems.servicedto.converts;
 
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static org.hamcrest.Matchers.*;
