@@ -11,6 +11,15 @@ public class SetupDataLastModDatesServiceDTO implements Serializable {
 	private Date autoAttributes;
 	private Date owners;
 	private Date jobs;
+	private Date employees;
+
+	public Date getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Date employees) {
+		this.employees = employees;
+	}
 
 	public SetupDataLastModDatesServiceDTO() {}
 

@@ -60,6 +60,10 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date jobs = new Date();
 	
+	@Column(name="employees", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date employees = new Date();
+	
 	public SetupDataLastModDates() {}
 	
 	public SetupDataLastModDates(Tenant tenant) {
@@ -93,6 +97,9 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 			case JOBS:
 				jobs = newDate;
 				break;
+			case EMPLOYEES:
+				employees = newDate;
+				break;
 		}
 	}
 	
@@ -108,6 +115,8 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 				return owners;
 			case JOBS:
 				return jobs;
+			case EMPLOYEES:
+				return employees;
 		}
 		return null;
 	}
@@ -170,5 +179,14 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	public void setJobs(Date jobs) {
 		this.jobs = jobs;
 	}
+	
+	public Date getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Date employees) {
+		this.employees = employees;
+	}
+	
 
 }

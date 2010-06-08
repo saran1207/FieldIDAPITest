@@ -19,6 +19,7 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.user.User;
 
 public enum SetupDataGroup {
 	/*
@@ -56,6 +57,9 @@ public enum SetupDataGroup {
 	),
 	JOBS (
 			Project.class
+	),
+	EMPLOYEES (
+			User.class
 	);
 	
 	private final Class<?>[] groupClasses;
