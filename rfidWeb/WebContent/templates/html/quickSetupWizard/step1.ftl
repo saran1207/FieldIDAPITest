@@ -1,4 +1,4 @@
-<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></title>
+	<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
@@ -8,28 +8,30 @@
 	
 	<@s.form action="step1Complete" cssClass="fullForm fluentSets  prominent" theme="fieldid">	
 		
-		<div class="infoSet">
-			<span class="fieldHolder">
-				<@s.radio name="turnOnJobSites" list="off"/>
-				<label class="description"> - <@s.text name="label.im_a_distributor_or_manufacturer"/></label>
-			</span>
-		</div>
-		<div class="infoSet">
-			<span class="fieldHolder">
-				<@s.radio name="turnOnJobSites" list="on" />
-				<label class="description"> - <@s.text name="label.im_an_end_user_or_manage_job_sites"/></label>
-			</span>
-		</div>
-		
-		<div class="infoSet">
-			<span class="fieldHolder">
-				<@s.checkbox name="turnOnAssignedTo" theme="fieldidSimple"/>
-				<label class="description"><@s.text name="label.enable_assigned_to_field"/></label> 
-			</span>
-			
+		<div class="altbox">
+			<div class="infoSet">
+				<span class="fieldHolder">
+					<@s.radio name="turnOnJobSites" list="off"/>
+					<label class="description"> - <@s.text name="label.im_a_distributor_or_manufacturer"/></label>
+				</span>
+			</div>
+			<div class="infoSet">
+				<span class="fieldHolder">
+					<@s.radio name="turnOnJobSites" list="on" />
+					<label class="description"> - <@s.text name="label.im_an_end_user_or_manage_job_sites"/></label>
+				</span>
+			</div>
 		</div>
 		
-		
+		<div class="altbox colorBox infoSet assignToBox">
+			<span class="fieldHolder">
+			<@s.checkbox name="turnOnAssignedTo" theme="fieldidSimple"/>
+				<label class="labelHeading">
+					<@s.text name="label.enable_asset_assignment"/>
+				</label>
+			</span>
+			<span class="description assignToDescription"><@s.text name="label.assigned_to_field_description"/></span>
+		</div>
 		<div class="actions">
 			<@s.submit key="label.next" />
 			<@s.text name="label.or"/>

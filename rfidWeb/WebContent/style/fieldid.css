@@ -1537,3 +1537,29 @@ input.description {
 .groupInspectionTypeList li {
 	padding:5px 5px;
 }
+
+.assignToBox {
+	background-color:#EAEAEA;
+	padding: 10px 10px 10px 0
+}
+
+.labelHeading {
+	padding-left: 9px;
+	position:relative;
+	top: -2px;
+	font-size:1.0em;
+	font-weight: bold;
+}
+
+.assignToDescription {
+	padding-left: 26px;	
+}
+
+.altbox{
+	padding-left: 10px;
+}
+	
+.colorBox{
+	background-color:#EAEAEA;
+}
+
