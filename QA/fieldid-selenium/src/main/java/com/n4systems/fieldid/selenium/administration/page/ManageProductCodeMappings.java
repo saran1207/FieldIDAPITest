@@ -148,7 +148,7 @@ public class ManageProductCodeMappings {
 		if(selenium.isElementPresent(productTypeSelectListLocator)) {
 			if(misc.isOptionPresent(productTypeSelectListLocator, name)) {
 				selenium.select(productTypeSelectListLocator, name);
-				misc.sleep(3000);	// TODO figure out how to detect update is finished
+				selenium.waitForAjax();
 			} else {
 				fail("Could not find '" + name + "' in the list of product types");
 			}

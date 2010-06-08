@@ -44,6 +44,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.Asserts;
 import com.n4systems.testutils.DummyTransaction;
+import com.n4systems.util.persistence.TestingTransaction;
 
 public class ProductToModelConverterTest {
 
@@ -56,11 +57,14 @@ public class ProductToModelConverterTest {
 	};
 	
 	private InfoOptionMapConverter dummyOptionConverter = new InfoOptionMapConverter() {
+
 		@Override
 		public List<InfoOptionBean> convertProductAttributes(Map<String, String> optionMap, ProductType type) throws MissingInfoOptionException, StaticOptionResolutionException {
 			return new ArrayList<InfoOptionBean>();
 		}
 	};
+	
+	private Transaction transaction = new TestingTransaction();
 	
 	ProductType type;
 	
@@ -134,10 +138,10 @@ public class ProductToModelConverterTest {
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
-		expect(orgLoader.createAndSave(view.getShopOrder(), tenant)).andReturn(line);
+		expect(orgLoader.createAndSave(view.getShopOrder(), tenant, transaction)).andReturn(line);
 		replay(orgLoader);
 		
-		Product product = converter.toModel(view, new DummyTransaction());
+		Product product = converter.toModel(view, transaction);
 		verify(orgLoader);
 		assertSame(line, product.getShopOrder());
 	}

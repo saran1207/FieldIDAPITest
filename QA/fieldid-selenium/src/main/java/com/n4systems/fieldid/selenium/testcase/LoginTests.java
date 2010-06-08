@@ -51,7 +51,7 @@ public class LoginTests extends FieldIDTestCase {
 			resetMyPassword(username);
 			returnToLoginPage();
 			// can only verify we didn't get an Oops page
-			// TODO: verify the reset password email went out
+			// XXX: verify the reset password email went out
 			login.verifyLoginPageWithNoErrors();
 		} catch(Exception e) {
 			throw e;

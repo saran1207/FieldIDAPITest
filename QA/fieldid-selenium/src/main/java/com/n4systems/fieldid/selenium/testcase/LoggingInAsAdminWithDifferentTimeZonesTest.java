@@ -38,7 +38,7 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 	public void setUp() throws Exception {
 		super.setUp();
 		login = new Login(selenium, misc);
-		// TODO: SQL code to update all users to have the same, known password
+		// XXX: SQL code to update all users to have the same, known password
 	}
 	
 	

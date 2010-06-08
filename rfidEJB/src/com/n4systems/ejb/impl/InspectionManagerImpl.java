@@ -75,8 +75,6 @@ public class InspectionManagerImpl implements InspectionManager {
 		String queryString = "Select DISTINCT ig FROM InspectionGroup as ig INNER JOIN ig.inspections as inspection LEFT JOIN inspection.product as product"
 				+ " WHERE product.id = :id AND inspection.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY ig.created ";
 
-		// TODO: move the query creation to PersistenceManager then this does
-		// not need an Entity Manager at all.
 		Query query = em.createQuery(queryString);
 
 		filter.applyParameters(query);
