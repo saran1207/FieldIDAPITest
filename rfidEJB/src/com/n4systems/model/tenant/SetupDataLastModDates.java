@@ -81,44 +81,11 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	}
 	
 	public void setModDate(SetupDataGroup group, Date newDate) {
-		switch (group) {
-			case PRODUCT_TYPE:
-				productTypes = newDate;
-				break;
-			case INSPECTION_TYPE:
-				inspectionTypes = newDate;
-				break;
-			case AUTO_ATTRIBUTES:
-				autoAttributes = newDate;
-				break;
-			case OWNERS:
-				owners = newDate;
-				break;
-			case JOBS:
-				jobs = newDate;
-				break;
-			case EMPLOYEES:
-				employees = newDate;
-				break;
-		}
+		group.setLastModDate(newDate, this);
 	}
 	
 	public Date getModDate(SetupDataGroup group) {
-		switch (group) {
-			case PRODUCT_TYPE:
-				return productTypes;
-			case INSPECTION_TYPE:
-				return inspectionTypes;
-			case AUTO_ATTRIBUTES:
-				return autoAttributes;
-			case OWNERS:
-				return owners;
-			case JOBS:
-				return jobs;
-			case EMPLOYEES:
-				return employees;
-		}
-		return null;
+		return group.getLastModDate(this);
 	}
 	
 	public Long getTenantId() {
@@ -134,8 +101,6 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	}
 
 	public void setTenant(Tenant tenant) {
-		// need to set both here ... I thought Hibernate would manage setting the tenant id
-		// from the tenant given the PrimaryKeyJoinColumn annotation but it doesn't ...
 		this.tenant = tenant;
 		this.tenantId = tenant.getId();
 	}

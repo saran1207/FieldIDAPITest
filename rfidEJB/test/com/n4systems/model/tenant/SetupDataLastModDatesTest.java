@@ -9,21 +9,14 @@ import com.n4systems.model.Tenant;
 
 public class SetupDataLastModDatesTest {
 
-	@SuppressWarnings("serial")
-	private class _SetupDataLastModDates extends SetupDataLastModDates {
-		@Override
-		public Long getTenantId() {
-			return super.getTenantId();
-		}
-	}
 	
 	@Test
-	public void test_tenantid_set_by_tenant_setter() {
+	public void should_set_tenant_and_tenant_id_since_hibernate_will_not_propogate_that_information_correctly() {
 		Tenant tenant = new Tenant();
 		
 		tenant.setId(12345L);
 		
-		_SetupDataLastModDates setupModDates = new _SetupDataLastModDates();
+		SetupDataLastModDates setupModDates = new SetupDataLastModDates();
 		
 		setupModDates.setTenant(tenant);
 		
