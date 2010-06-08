@@ -15,8 +15,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
@@ -116,15 +115,12 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	}
 
 	private void processFeature(String featureName, boolean featureOn, Transaction transaction) {
+		
 		try {
 			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
-			ExtendedFeatureSwitch featureSwitch = ExtendedFeatureFactory.getSwitchFor(feature, primaryOrg);
 			
-			if (featureOn) {
-				featureSwitch.enableFeature(transaction);
-			} else {
-				featureSwitch.disableFeature(transaction);
-			}
+			new ToggleExendedFeatureMethod(feature, featureOn).applyTo(primaryOrg, transaction);
+						
 		} catch (IllegalArgumentException e) {
 			addFieldError("extendedFeatures", "incorrect type of extended feature");
 		} catch (Exception e) {

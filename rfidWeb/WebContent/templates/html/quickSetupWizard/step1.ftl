@@ -23,9 +23,10 @@
 		
 		<div class="infoSet">
 			<span class="fieldHolder">
-				<@s.checkbox name="assignedTo" /> 
-				<label><@s.text name="label.enable_assigned_to_field"/></label>
+				<@s.checkbox name="turnOnAssignedTo" theme="fieldidSimple"/>
+				<label class="description"><@s.text name="label.enable_assigned_to_field"/></label> 
 			</span>
+			
 		</div>
 		
 		

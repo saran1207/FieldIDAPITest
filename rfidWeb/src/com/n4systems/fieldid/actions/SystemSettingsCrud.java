@@ -17,8 +17,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -57,7 +56,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		primaryOrg = getPrimaryOrg();
-
+		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
 	}
 
 	@Override
@@ -92,54 +91,40 @@ public class SystemSettingsCrud extends AbstractCrud {
 		try {
 			updateAssignedToFeature(transaction);
 			updateSystemSettings(transaction);
-
+			save(transaction);
 			transactionManager().finishTransaction(transaction);
-			clearCachedValues();
+			addFlashMessageText("message.system_settings_updated");
 		} catch (Exception e) {
 			addActionErrorText("error.updating_system_settings");
 			return ERROR;
+		} finally {
+			clearCachedValues();
 		}
-
 		return SUCCESS;
 	}
 
+	private void save(Transaction transaction){
+		new OrgSaver().update(transaction, getPrimaryOrg());
+	}
+	
 	private void updateAssignedToFeature(Transaction transaction) throws Exception {
-		PrimaryOrg updatedPrimaryOrg = processAssignedToSetting(transaction);
-		new OrgSaver().update(transaction, updatedPrimaryOrg);
+		PrimaryOrg primaryOrg = getPrimaryOrg();
+		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, assignedTo).applyTo(primaryOrg, transaction);
+	
 	}
 
 	private void updateSystemSettings(Transaction transaction) throws Exception {
-		PrimaryOrg updatedPrimaryOrg = processSystemSettings(transaction);
-		new OrgSaver().update(transaction, updatedPrimaryOrg);
-	}
-
-	private PrimaryOrg processSystemSettings(Transaction transaction) throws IOException {
 		PrimaryOrg primaryOrg = getPrimaryOrg();
-
+		
 		if (getSecurityGuard().isBrandingEnabled()) {
 			processLogo();
 			primaryOrg.setWebSite(webSite);
 		}
-
+		
 		primaryOrg.setDateFormat(dateFormat);
 		primaryOrg.setDefaultVendorContext(defaultVendorContext);
-
-		addFlashMessageText("message.system_settings_updated");
-
-		return primaryOrg;
-	}
-
-	private PrimaryOrg processAssignedToSetting(Transaction transaction) throws Exception {
-		PrimaryOrg primaryOrg = getPrimaryOrg();
-		ExtendedFeatureSwitch featureSwitchAssignedTo = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.AssignedTo, primaryOrg);
-
-		if (assignedTo) {
-			featureSwitchAssignedTo.enableFeature(transaction);
-		} else {
-			featureSwitchAssignedTo.disableFeature(transaction);
-		}
-
-		return primaryOrg;
+		
+		
 	}
 
 	private TransactionManager transactionManager() {

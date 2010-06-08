@@ -17,7 +17,7 @@ public abstract class ExtendedFeatureSwitch {
 	protected abstract void featureSetup(Transaction transaction);
 	protected abstract void featureTearDown(Transaction transaction);
 	
-	public final void enableFeature(Transaction transaction) {
+	public void enableFeature(Transaction transaction) {
 		if (!primaryOrg.hasExtendedFeature(feature)) {
 			featureSetup(transaction);
 			addFeatureToTenant(feature);
@@ -28,7 +28,7 @@ public abstract class ExtendedFeatureSwitch {
 		primaryOrg.getExtendedFeatures().add(feature);
 	}
 	
-	public final void disableFeature(Transaction transaction) {
+	public void disableFeature(Transaction transaction) {
 		if (primaryOrg.hasExtendedFeature(feature)) {
 			featureTearDown(transaction);
 			removeFeatureFromTenant(feature);

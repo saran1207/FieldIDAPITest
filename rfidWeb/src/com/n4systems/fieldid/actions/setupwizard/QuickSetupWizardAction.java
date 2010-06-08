@@ -6,9 +6,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
+import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -20,7 +18,8 @@ import com.n4systems.services.TenantCache;
 public class QuickSetupWizardAction extends AbstractAction {
 
 	private boolean turnOnJobSites;
-	private boolean assignedTo=false;
+	private boolean turnOnAssignedTo=false;
+
 	private TransactionManager transactionManager;
 	
 	
@@ -36,7 +35,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 	
 	public String doStep1() {
 		turnOnJobSites = getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites);
-		assignedTo=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
+		turnOnAssignedTo=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
 		return SUCCESS;
 	}
 	
@@ -46,15 +45,18 @@ public class QuickSetupWizardAction extends AbstractAction {
 		try {
 			updateJobFeature(transaction);
 			updateAssignedToFeature(transaction);
+			save(transaction);
 			transactionManager().finishTransaction(transaction);
-			
-			clearCachedValues();
+		
+			addFlashMessageText("message.company_profile_setup");
 		} catch (Exception e) {
 			transactionManager().rollbackTransaction(transaction);
 			addActionErrorText("error.could_not_setup_your_company_profile");
 			return ERROR;
+		} finally {
+			clearCachedValues();
 		}
-		addFlashMessageText("message.company_profile_setup");
+		
 		return SUCCESS;
 	}
 	
@@ -70,15 +72,17 @@ public class QuickSetupWizardAction extends AbstractAction {
 		return transactionManager;
 	}
 
+	private void save(Transaction transaction) {
+		new OrgSaver().update(transaction, getPrimaryOrg());
+	}
 
 	private void updateJobFeature(Transaction transaction) throws Exception {
-		PrimaryOrg updatedPrimaryOrg = processJobSiteSetting(transaction);
-		new OrgSaver().update(transaction, updatedPrimaryOrg);
+		new ToggleExendedFeatureMethod(ExtendedFeature.JobSites, turnOnJobSites).applyTo(getPrimaryOrg(), transaction);
+	
 	}
 
 	private void updateAssignedToFeature(Transaction transaction) throws Exception {
-		PrimaryOrg updatedPrimaryOrg = processAssignedToSetting(transaction);
-		new OrgSaver().update(transaction, updatedPrimaryOrg);
+		 new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, turnOnAssignedTo).applyTo(getPrimaryOrg(), transaction);
 	}
 
 	private void clearCachedValues() {
@@ -86,45 +90,21 @@ public class QuickSetupWizardAction extends AbstractAction {
 		refreshSessionUser();
 	}
 	
-	private PrimaryOrg processJobSiteSetting(Transaction transaction) throws Exception {
-		PrimaryOrg primaryOrg = getPrimaryOrg();
-		ExtendedFeatureSwitch featureSwitchJobs = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.JobSites, primaryOrg);
-		
-		if (turnOnJobSites) {
-			featureSwitchJobs.enableFeature(transaction);
-		} else {
-			featureSwitchJobs.disableFeature(transaction);
-		}
-		return primaryOrg;
-	}	
-	
-	private PrimaryOrg processAssignedToSetting(Transaction transaction) throws Exception {
-		PrimaryOrg primaryOrg = getPrimaryOrg();
-		ExtendedFeatureSwitch featureSwitchAssignedTo = ExtendedFeatureFactory.getSwitchFor(ExtendedFeature.AssignedTo, primaryOrg);
-		
-		if (assignedTo) {
-			featureSwitchAssignedTo.enableFeature(transaction);
-		} else {
-			featureSwitchAssignedTo.disableFeature(transaction);
-		}
-		
-		return primaryOrg;
-	}
-
 	public boolean isTurnOnJobSites() {
 		return turnOnJobSites;
 	}
 
-	public boolean isAssignedTo(){
-		return assignedTo;
-	}
-
-	public void setIsAssignedTo(boolean assignedTo){
-		this.assignedTo=assignedTo;
-	}
 	
 	public void setTurnOnJobSites(boolean turnOnJobSites) {
 		this.turnOnJobSites = turnOnJobSites;
+	}
+
+	public boolean isTurnOnAssignedTo() {
+		return turnOnAssignedTo;
+	}
+
+	public void setTurnOnAssignedTo(boolean turnOnAssignedTo) {
+		this.turnOnAssignedTo = turnOnAssignedTo;
 	}
 
 	
