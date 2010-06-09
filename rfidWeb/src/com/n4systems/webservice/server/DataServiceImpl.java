@@ -70,7 +70,6 @@ import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.product.ProductByMobileGuidLoader;
-import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.product.ProductSubProductsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
@@ -87,6 +86,7 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
+import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -627,15 +627,15 @@ public class DataServiceImpl implements DataService {
 			
 			Product product = lookupProduct(lookupInformation, request.getTenantId());
 			
+			User user = null;
 			if (request.modifiedByIdExists()) {
-				User userBean = persistenceManager.find(User.class, request.getModifiedById());
-				product.setModifiedBy(userBean);
+				user = persistenceManager.find(User.class, request.getModifiedById());
 			} 
 			
 			product.setLocation(request.getLocation());
 			
-			ProductSaver saver = new ProductSaver();
-			saver.update(product);
+			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
+			saver.setProduct(product).update();
 			
 		} catch (Exception e) {
 			logger.error("Exception occured while doing a limited product update");
@@ -656,17 +656,19 @@ public class DataServiceImpl implements DataService {
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 			product.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
 			
+			User user = null;
+			
 			if (request.modifiedByIdExists()) {
-				User userBean = persistenceManager.find(User.class, request.getModifiedById());
-				product.setModifiedBy(userBean);
+				user = persistenceManager.find(User.class, request.getModifiedById());
 			} 
 			
 			product.setLocation(request.getLocation());
 			product.setCustomerRefNumber(request.getCustomerRefNumber());
 			product.setPurchaseOrder(request.getPurchaseOrder());
 			
-			ProductSaver saver = new ProductSaver();
-			saver.update(product);
+			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
+			saver.setProduct(product).update();
+			
 			
 		} catch (Exception e) {
 			logger.error("Exception occured while doing product update by customer");

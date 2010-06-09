@@ -22,11 +22,11 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public static UserBuilder anEmployee() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null);
 	}
 	
 	public static UserBuilder aSystemUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", true, null, false);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", true, null, false, null);
 	}
 	
 	public static UserBuilder anAdminUser() {
@@ -35,11 +35,11 @@ public class UserBuilder extends BaseBuilder<User> {
 	
 	
 	public static UserBuilder aCustomerUser() {
-		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false);
+		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null);
 	}
 	
-	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess, String password, boolean resetPasswordKey) {
-		super();
+	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess, String password, boolean resetPasswordKey, Long id) {
+		super(id);
 		this.owner = owner;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -52,42 +52,46 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public UserBuilder withOwner(BaseOrg baseOrg) {
-		return new UserBuilder(baseOrg, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(baseOrg, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
 	}
 	
 	public UserBuilder withFirstName(String firstName) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
 	}
 	
 	public UserBuilder withLastName(String lastName) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
 	}
 	
 	public UserBuilder withUserId(String userId) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
 	}
 	
 	public UserBuilder withAdministratorAccess() {
-		return new UserBuilder(owner, firstName, lastName, userId, true, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, true, emailAddress, false, password, resetPasswordKey, id);
 	}
 	
 	public UserBuilder withEmailAddress(String emailAddress) {
-		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
 	}
 	
 	public UserBuilder withNoPassword() {
-		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, null, resetPasswordKey);
+		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, null, resetPasswordKey, id);
 	}
 	public UserBuilder withPassword(String password) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
 	}
 
 	public UserBuilder withResetPasswordKey() {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, true);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, true, id);
 	}
 
 	public UserBuilder withOutResetPasswordKey() {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false);
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false, id);
+	}
+	
+	public UserBuilder withId(long id) {
+		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false, id);
 	}
 	
 	@Override
@@ -122,6 +126,8 @@ public class UserBuilder extends BaseBuilder<User> {
 		
 		return user;
 	}
+
+	
 
 	
 

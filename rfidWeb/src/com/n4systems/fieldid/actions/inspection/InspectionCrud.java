@@ -38,6 +38,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
+import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
@@ -625,18 +626,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public List<ListingPair> getExaminers() {
 		if (examiners == null) {
 			examiners = userManager.getExaminers(getSecurityFilter());
+			OptionLists.includeInList(examiners, new ListingPair(inspection.getPerformedBy()));
 		}
 		return examiners;
 	}
 
-	public List<ListingPair> getUsers() {
-		if (examiners == null) {
-			examiners = userManager.getUserList(getSecurityFilter());
-		}
-		return examiners;
-	}
-	
-	
 	
 
 	public List<ProductStatusBean> getProductStatuses() {

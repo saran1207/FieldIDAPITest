@@ -10,6 +10,7 @@ public interface SystemSecurityGuard {
 	public Long getTenantId();
 	public Tenant getTenant();
 	public PrimaryOrg getPrimaryOrg();
+	
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature);
 	public boolean isPartnerCenterEnabled();
 	public boolean isIntegrationEnabled();

@@ -14,6 +14,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -69,11 +70,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long modifyProudcts(List<Long> ids) {
+	public Long updateProductModifiedDate(List<Long> ids) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).modifyProudcts(ids);
+			return createManager(transaction.getEntityManager()).updateProductModifiedDate(ids);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -116,11 +117,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateProducts(ids, product, values, userId);
+			return createManager(transaction.getEntityManager()).updateProducts(ids, product, values, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

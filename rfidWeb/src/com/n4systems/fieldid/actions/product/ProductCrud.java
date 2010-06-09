@@ -38,6 +38,7 @@ import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
@@ -359,11 +360,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	private void makeEmployeesIncludeCurrentAssignedUser() {
-		if (product.getAssignedUser() != null && !getEmployees().contains(product.getAssignedUser())) {
-			getEmployees().add(product.getAssignedUser());
-			
-		}
-		
+		OptionLists.includeInList(getEmployees(), product.getAssignedUser());
 	}
 	
 	

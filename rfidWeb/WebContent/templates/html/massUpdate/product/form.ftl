@@ -27,7 +27,7 @@
 				<td>
 					<p>
 						<label class="label" ><@s.text name="label.assignedto"/>:</label>
-						<span class="field"><@s.select name="assignedUser" list="employees" listKey="id" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('assignedUser');" /></span>
+						<span class="field"><@s.select name="assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" labelposition="left" onchange="selectField('assignedUser');" /></span>
 					</p>
 				</td>
 			</tr>

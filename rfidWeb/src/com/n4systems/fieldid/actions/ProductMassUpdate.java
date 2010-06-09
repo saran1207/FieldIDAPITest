@@ -20,13 +20,12 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.Product;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -40,10 +39,9 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	private ProductSearchContainer criteria;
 
 	private Product product = new Product();
-	private List<ListingPair> employees;
+	private List<Listable<Long>> employees;
 	
 	private String identified;
-	
 	private OwnerPicker ownerPicker;
 	
 	public ProductMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
@@ -97,7 +95,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 			
 			List<Long> ids = getSearchIds(criteria, criteria.getSecurityFilter());
 			
-			Long results = massUpdateManager.updateProducts(ids, product, select, getSessionUser().getUniqueID() );
+			Long results = massUpdateManager.updateProducts(ids, product, select, fetchCurrentUser());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			addFlashMessage(getText("message.productmassupdatesuccessful", messageArgs));
@@ -168,6 +166,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		return productSerialManager.getAllProductStatus(getTenantId());
 	}
 	
+	
 	public Long getAssignedUser() {
 		return ( product.getAssignedUser() != null ) ? product.getAssignedUser().getId() : null;
 	}
@@ -180,10 +179,10 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		}
 	}
 	
-	public List<ListingPair> getEmployees() {
+	public List<Listable<Long>> getEmployees() {
 		if( employees == null ) {
-			UserListableLoader loader = getLoaderFactory().createUserListableLoader();
-			employees = ListHelper.longListableToListingPair(loader.load());
+			UserListableLoader loader = getLoaderFactory().createHistoricalEmployeesListableLoader();
+			employees = loader.load();
 		}
 		return employees;
 	}

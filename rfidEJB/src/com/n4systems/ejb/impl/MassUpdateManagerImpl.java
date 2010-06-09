@@ -15,7 +15,11 @@ import javax.persistence.Query;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Inspection;
@@ -42,10 +46,17 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 	
 	private PersistenceManager persistenceManager;
+	
+	private LegacyProductSerial legacyProductManager;
+
+
+	private ProductManager productManager;
 
 	public MassUpdateManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
+		this.legacyProductManager = new LegacyProductSerialManager(em);
+		this.productManager = new ProductManagerImpl(em);
 	}
 
 	public Long updateInspectionSchedules(Set<Long> scheduleIds, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
@@ -63,6 +74,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			updateJpql = "UPDATE " + InspectionSchedule.class.getName() + " SET modified = :modDate";
 
 			Map<String, Object> bindParams = new HashMap<String, Object>();
+
 			// construct our update statement and populate our list of bind
 			// parameters
 			for (String paramKey : values.keySet()) {
@@ -80,11 +92,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					updateJpql += ", location = :" + paramKey;
 					bindParams.put(paramKey, inspectionSchedule.getLocation());
 				}
+				
 				if (paramKey.equals("owner")) {
-					
 					updateJpql += ", owner = :owner ";
 					bindParams.put("owner", inspectionSchedule.getOwner());
-					
 				}
 
 			}
@@ -158,10 +169,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
 		List<Long> productIds = queryExecutor.getResultList(em, productIdQuery, ListHelper.toList(scheduleIds));
 
-		modifyProudcts(productIds);
+		updateProductModifiedDate(productIds);
 	}
 	
-	public Long modifyProudcts(List<Long> ids) {
+	public Long updateProductModifiedDate(List<Long> ids) {
 		if (ids == null || ids.size() == 0) {
 			return 0L;
 		}
@@ -170,101 +181,60 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
 	}
 
-	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateProducts(List<Long> ids, Product productModificationData, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 		try {
-			if (ids.size() == 0) {
-				return 0L;
+			for (Long id : ids) {
+				Product product = productManager.findProductAllFields(id, new OpenSecurityFilter());
+				
+				updateProduct(product, productModificationData, values);
+				
+				legacyProductManager.update(product, modifiedBy);
+				
+				result++;
 			}
 
-			String updateQueryString = "UPDATE " + Product.class.getName() + " SET modified = :now";
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("now", new Date());
-			boolean ownershipBeingSet = false;
-			
-			for (Map.Entry<String, Boolean> entry : values.entrySet()) {
-				if (entry.getValue() == true) {
-					updateQueryString += ", ";
-
-					if (entry.getKey().equals("owner")) {
-						ownershipBeingSet = true;
-
-						updateQueryString += " owner = :owner ";
-						parameters.put("owner", product.getOwner());
-					}
-
-					if (entry.getKey().equals("assignedUser")) {
-						if (product.getAssignedUser() == null) {
-							updateQueryString += " assignedUser = null ";
-						} else {
-							updateQueryString += " assignedUser = :assignedUser ";
-							parameters.put("assignedUser", product.getAssignedUser());
-						}
-					}
-
-					if (entry.getKey().equals("productStatus")) {
-						if (product.getProductStatus() == null) {
-							updateQueryString += " productStatus = null ";
-						} else {
-							updateQueryString += " productStatus = :productStatus ";
-							parameters.put("productStatus", product.getProductStatus());
-						}
-					}
-
-					if (entry.getKey().equals("purchaseOrder")) {
-						updateQueryString += " purchaseOrder = :purchaseOrder ";
-						parameters.put("purchaseOrder", product.getPurchaseOrder());
-					}
-
-					if (entry.getKey().equals("location")) {
-						ownershipBeingSet = true;
-						updateQueryString += " location = :location ";
-						parameters.put("location", product.getLocation());
-					}
-
-					if (entry.getKey().equals("identified")) {
-						updateQueryString += " identified = :identified ";
-						parameters.put("identified", product.getIdentified());
-					}
-
-					if (entry.getKey().equals("published")) {
-						updateQueryString += " published = :published ";
-						parameters.put("published", product.isPublished());
-					}
-					
-				}
-			}
-
-			if (product.getModifiedBy() == null) {
-				updateQueryString += ", modifiedBy = null ";
-			} else {
-				updateQueryString += ", modifiedBy = :modifiedBy ";
-				parameters.put("modifiedBy", em.find(User.class, userId));
-			}
-			ids.add(null);
-			Query updateQuery = em.createQuery(updateQueryString + " WHERE id IN ( :ids )");
-			updateQuery.setParameter("ids", ids);
-			for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-				updateQuery.setParameter(entry.getKey(), entry.getValue());
-			}
-
-			result = new Long(updateQuery.executeUpdate());
-			
-			if (ownershipBeingSet) {
-				QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "products", "product.id", ids).addWhere(Comparator.NE, "status","status", ScheduleStatus.COMPLETED);
-				Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(values);
-				InspectionSchedule schedule = new InspectionSchedule();
-				schedule.setProduct(product);
-				updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
-			}
-
-		} catch (InvalidQueryException iqe) {
-			throw new UpdateFailureException(iqe);
+		} catch (SubProductUniquenessException e) {
+			throw new UpdateFailureException(e);
 		} catch (EntityExistsException cve) {
 			throw new UpdateConatraintViolationException(cve);
 		}
 
+		
 		return result;
+	}
+
+	private void updateProduct(Product product, Product productModificationData, Map<String, Boolean> values) {
+		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
+			if (entry.getValue() == true) {
+				if (entry.getKey().equals("owner")) {
+					product.setOwner(productModificationData.getOwner());
+				}
+				if (entry.getKey().equals("location")) {
+					product.setLocation(productModificationData.getLocation());
+				}
+
+				if (entry.getKey().equals("assignedUser")) {
+					product.setAssignedUser(productModificationData.getAssignedUser());
+				}
+
+				if (entry.getKey().equals("productStatus")) {
+					product.setProductStatus(productModificationData.getProductStatus());
+				}
+
+				if (entry.getKey().equals("purchaseOrder")) {
+					product.setPurchaseOrder(productModificationData.getPurchaseOrder());
+				}
+
+				if (entry.getKey().equals("identified")) {
+					product.setIdentified(productModificationData.getIdentified());
+				}
+
+				if (entry.getKey().equals("published")) {
+					product.setPublished(productModificationData.isPublished());
+				}
+			}
+		}
 	}
 
 	public Long updateInspections(List<Long> ids, Inspection inspectionChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {

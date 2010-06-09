@@ -46,14 +46,6 @@ public class ProductSaver extends Saver<Product> {
 		return managedProduct;
 	}
 	
-	/**
-	 * Performs an update without any linked product checks and resaves
-	 * @param em		EntityManager
-	 * @param product	Product
-	 */
-	public void simpleUpdate(EntityManager em, Product product) {
-		super.update(em, product);
-	}
 
 	private Product resave(EntityManager em, Product product) {
 		// if the networkid is null, we need to update which will force the network Id to get setup

@@ -10,6 +10,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.Project;
+import com.n4systems.model.user.User;
 
 public interface MassUpdateManager {
 
@@ -21,7 +22,7 @@ public interface MassUpdateManager {
 	 * @param values
 	 * @return
 	 */
-	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
+	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
 
 	public Long updateInspections(List<Long> ids, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 
@@ -29,7 +30,7 @@ public interface MassUpdateManager {
 
 	public Long deleteInspectionSchedules(Set<Long> scheduleIds) throws UpdateFailureException;
 	
-	public Long modifyProudcts(List<Long> ids);
+	public Long updateProductModifiedDate(List<Long> ids);
 	
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 

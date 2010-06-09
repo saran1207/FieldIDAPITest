@@ -3,10 +3,8 @@ package com.n4systems.ejb.legacy.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -21,11 +19,9 @@ import rfid.ejb.entity.ProductSerialExtensionBean;
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
-import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
-import com.n4systems.ejb.impl.MassUpdateManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.impl.ProductManagerImpl;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
@@ -46,7 +42,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
-import com.n4systems.util.ListHelper;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -56,21 +51,13 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	private static final Logger logger = Logger.getLogger(LegacyProductSerialManager.class);
 
 	
-	protected EntityManager em;
-
+	protected final EntityManager em;
+	private final PersistenceManager persistenceManager;
+	private final InspectionScheduleManager inspectionScheduleManager;
+	private final ProductManager productManager;
 	
-	private PersistenceManager persistenceManager;
-
-	
-	private InspectionScheduleManager inspectionScheduleManager;
-
-	
-	private ProductManager productManager;
-
-	
-	private MassUpdateManager massUpdateManager;
-
 	private Logger auditLogger = Logger.getLogger("AuditLog");
+
 	
 	
 	
@@ -82,7 +69,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		persistenceManager = new PersistenceManagerImpl(em);
 		inspectionScheduleManager =  new InspectionScheduleManagerImpl(em);
 		productManager =  new ProductManagerImpl(em);
-		massUpdateManager = new MassUpdateManagerImpl(em);
 	}
 
 	
@@ -228,18 +214,23 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	private void updateSchedulesOwnership(Product product) {
-		try {
-			QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addSimpleWhere("product", product).addWhere(Comparator.NE, "status", "status",
-					ScheduleStatus.COMPLETED);
-			Map<String, Boolean> selectedAttributes = new HashMap<String, Boolean>();
-			selectedAttributes.put("customer", true);
-			selectedAttributes.put("location", true);
-			InspectionSchedule schedule = new InspectionSchedule();
-			schedule.setProduct(product);
-			massUpdateManager.updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		
+		QueryBuilder<Long> schedules = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter())
+					.setSimpleSelect("id")
+					.addSimpleWhere("product", product)
+					.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
+			
+		for (Long id : schedules.getResultList(em)) {
+			InspectionSchedule schedule = persistenceManager.find(InspectionSchedule.class, id);
+			
+			schedule.setOwner(product.getOwner());
+			schedule.setLocation(product.getLocation());
+			
+			persistenceManager.save(schedule);
 		}
+		
+			
+		
 	}
 
 	private void processSubProducts(Product product, User modifiedBy) throws SubProductUniquenessException {
@@ -254,6 +245,8 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 			subProduct.getProduct().setOwner(product.getOwner());
 			subProduct.getProduct().setLocation(product.getLocation());
+			subProduct.getProduct().setAssignedUser(product.getAssignedUser());
+			subProduct.getProduct().setProductStatus(product.getProductStatus());
 			subProduct.setWeight(weight);
 
 			ProductSaver saver = new ProductSaver();

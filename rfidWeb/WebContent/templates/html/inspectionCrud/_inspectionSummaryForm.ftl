@@ -47,11 +47,7 @@
 	<p>
 		<label><@s.text name="label.performed_by"/></label>
 		<span>
-		<#if inspection.id?exists>
-			<@s.select name="performedBy" list="users" listKey="id" listValue="name"  />
-		<#else>
 			<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
-		</#if>
 		</span>
 	</p>
 	<p>
