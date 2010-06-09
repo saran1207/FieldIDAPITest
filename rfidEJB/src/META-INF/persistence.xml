@@ -24,11 +24,12 @@
 			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
 			
+			<!--
 			<property name="hibernate.cache.use_second_level_cache" value="true" />
 			<property name="hibernate.cache.use_query_cache" value="true" />
 			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
 			<property name="hibernate.generate_statistics" value="true" />
-
+-->
 			
 			<!-- 
 			<property name="hibernate.transaction.flush_before_completion" value="true" />
