@@ -75,6 +75,7 @@ import com.n4systems.model.signup.SignupReferralListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.model.user.UserFilteredLoader;
+import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.tools.Pager;
 
@@ -370,6 +371,10 @@ public class LoaderFactory {
 
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
+	}
+	
+	public EmployeePaginatedLoader createEmployeePaginatedLoader() {
+		return new EmployeePaginatedLoader(filter);
 	}
 	
 	public UserListableLoader createCurrentEmployeesListableLoader() {

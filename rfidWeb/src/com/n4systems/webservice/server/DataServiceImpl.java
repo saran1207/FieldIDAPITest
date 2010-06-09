@@ -81,8 +81,10 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.tools.Pager;
@@ -131,7 +133,7 @@ import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
-import com.n4systems.webservice.dto.UserListResponse;
+import com.n4systems.webservice.dto.EmployeeListResponse;
 import com.n4systems.webservice.dto.UserServiceDTO;
 import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -400,47 +402,29 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
-	public UserListResponse getAllUsers(PaginatedRequestInformation request) throws ServiceException {
+	public EmployeeListResponse getAllEmployees(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
-			logger.info("Finding Users: Tenant [" + request.getTenantId() + "] Page [" + request.getPageNumber() + "]");
 			
-			UserListResponse response = new UserListResponse();
+			int currentPage = requestInformation.getPageNumber().intValue();			
+									
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			EmployeePaginatedLoader loader = loaderFactory.createEmployeePaginatedLoader();
+			loader.setPageSize(getSetupDataPageSize());
+			loader.setPage(currentPage);
 			
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+			Pager<User> pager = loader.load();
 			
-			int currentPage = request.getPageNumber().intValue();
-			
-			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
-			QueryBuilder<User> userBuilder = new QueryBuilder<User>(User.class, securityFilter);
-			// This is for postgres to ensure paging works
-			userBuilder.addOrder("id");
-			
-			if (currentPage != PaginatedRequestInformation.INFORMATION_PAGE) {
-				Pager<User> userPage = persistenceManager.findAllPaged(userBuilder, currentPage, getSetupDataPageSize());
-				response.setTotalPages((int)userPage.getTotalPages());
-				
-				for(User user: userPage.getList()) {
-					response.getUsers().add(converter.convert(user));
-				}
-			} else {
-				response.setTotalPages(persistenceManager.countAllPages(User.class, getSetupDataPageSize(), securityFilter));
-				response.setCurrentPage(currentPage);
-			}
-			
-			response.setRecordsPerPage(getSetupDataPageSize());
+			EmployeeListResponse response = new EmployeeListResponse(pager, getSetupDataPageSize());
 			response.setStatus(ResponseStatus.OK);
 			
-			logger.info("Returning Users: Tenant [" + request.getTenantId() + 
-					"] Page [" + response.getCurrentPage() + "/" + response.getTotalPages() + 
-					"] Users [" + response.getUsers().size() + 
-					"] PageSize [" + response.getRecordsPerPage() + 
-					"] Status [" +response.getStatus().name() + "]");
+			for (User user : pager.getList()) {
+				response.getEmployees().add( new EmployeeServiceDTOConverter().convert(user) );
+			}
 			
 			return response;
 			
 		} catch (Exception e) {
-			logger.error( "failed while processing users", e );
+			logger.error( "failed while downloading all employee lists", e );
 			throw new ServiceException();			
 		}
 	}

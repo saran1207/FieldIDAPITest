@@ -82,6 +82,7 @@ import com.n4systems.webservice.dto.CriteriaServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DTOHasOwners;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
+import com.n4systems.webservice.dto.EmployeeServiceDTO;
 import com.n4systems.webservice.dto.ImageServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldNameServiceDTO;
 import com.n4systems.webservice.dto.InfoFieldServiceDTO;
@@ -1112,6 +1113,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		dto.setOwners(setupModDates.getOwners());
 		dto.setProductTypes(setupModDates.getProductTypes());
 		dto.setJobs(setupModDates.getJobs());
+		dto.setEmployees(setupModDates.getEmployees());
 
 		return dto;
 	}

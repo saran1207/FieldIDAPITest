@@ -30,7 +30,7 @@ import com.n4systems.webservice.dto.RequestResponse;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
-import com.n4systems.webservice.dto.UserListResponse;
+import com.n4systems.webservice.dto.EmployeeListResponse;
 import com.n4systems.webservice.dto.UserServiceDTO;
 import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -62,7 +62,7 @@ public interface DataService {
 	public AutoAttributeDefinitionListResponse getAutoAttributeDefinition(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
 	public AutoAttributeCriteriaListResponse getAutoAttributeCriteria(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
 	public ProductTypeGroupListResponse getAllProductTypeGroups(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
-	public UserListResponse getAllUsers(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
+	public EmployeeListResponse getAllEmployees(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
 	
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
