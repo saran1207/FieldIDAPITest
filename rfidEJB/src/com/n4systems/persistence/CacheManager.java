@@ -6,8 +6,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
 
-import com.n4systems.util.ServiceLocator;
-
 public class CacheManager {
 	private static Logger logger = Logger.getLogger("cache-info");
 	
@@ -25,7 +23,6 @@ public class CacheManager {
 	
 	public void logStats() {
 		logStats("fieldid", PersistenceManager.getHibernateStats());
-		logStats("rfidEM", ServiceLocator.getPersistenceManager().getHibernateStats());
 		
 	}
 	
