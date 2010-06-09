@@ -5,7 +5,7 @@
 		<h2><@s.text name="label.customerinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
 	</#if>
 	
-	<#if securityGuard.assignToEnabled>
+	<#if securityGuard.assignedToEnabled>
 		<p>
 			<label><@s.text name="label.assignedto"/></label>
 			<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
