@@ -10,9 +10,7 @@
 		<#if !parentProduct?exists >
 			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
 		<#else>
-			<span class="fieldHolder" id="assigneduser">
-					${(product.assignedUser.userLabel)!}
-			</span>
+			<span class="fieldHolder" id="assignedUser">${(product.assignedUser.userLabel)!}</span>
 		</#if>
 	</div>
 </#if>
@@ -37,7 +35,11 @@
 </div>
 <div class="infoSet">
 	<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>
-	<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />		
+	<#if !parentProduct?exists >
+		<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
+	<#else>
+		<span class="fieldHolder" id="productStatus">${(product.productStatus.name?html)!}</span>
+	</#if>		
 </div>
 
 <div class="infoSet">
