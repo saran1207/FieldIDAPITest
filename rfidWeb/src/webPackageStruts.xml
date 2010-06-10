@@ -1607,7 +1607,7 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">productMultiAdd</param>
 			</result>
-
+			<result name="saveinspect" type="freemarker">/templates/html/multiProductCrud/renderOut.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiProductCrud/form.ftl</result>
 		</action>
 

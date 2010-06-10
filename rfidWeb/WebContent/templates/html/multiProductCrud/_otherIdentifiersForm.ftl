@@ -38,8 +38,12 @@
 	</div>
 </@s.form>
 <div class="stepAction" id="step4Actions">
-	<@s.form action="productMultiAddCreate" namespace="/" id="masterForm" theme="fieldid">
-		<@s.submit key="label.save_and_create" onclick="mergeAndSubmit('step1form', 'step4form', 'masterForm'); return false;"/>
-		<@s.text name="label.or"/> <a href="#step3" onclick="backToStep3(); return false;"><@s.text name="label.back_to_step"/> 3</a>
-	</@s.form>
+
+<@s.form action="productMultiAddCreate" namespace="/" id="masterForm" theme="fieldid">
+	<@s.submit id="saveButton" cssClass="save" name="save" key="hbutton.save" onclick="return mergeAndSubmit('step1form', 'step4form', 'masterForm');"/>
+	<@s.submit id="saveAndInspButton" cssClass="save" name="saveAndInspect" key="hbutton.saveandinspect" onclick="return mergeAndSubmit('step1form', 'step4form', 'masterForm');"/>
+	
+
+</@s.form>
+
 </div>

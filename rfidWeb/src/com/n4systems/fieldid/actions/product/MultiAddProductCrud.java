@@ -54,6 +54,8 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	
 	private OwnerPicker ownerPicker;
+	private String saveAndInspect;
+	private List<Long> listOfIds = new ArrayList<Long>();
 	
 	public MultiAddProductCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyProductSerial legacyProductManager) {
 		super(persistenceManager);
@@ -68,8 +70,6 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 	}
-	
-	
 
 	@Override
 	protected void postInit() {
@@ -94,7 +94,6 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		logger.info("Resolving fields on base product");
 		ProductViewModeConverter converter = new ProductViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		Product product = converter.viewToModel(productView);
-		
 		try {
 			ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
 			int i = 1;
@@ -107,9 +106,11 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 				
 				saver.setProduct(product);
 				saver.setUploadedAttachments(copyUploadedFiles());
-				saver.create();
-				saver.clear();
 				
+				listOfIds.add(saver.create().getId());
+				
+				saver.clear();
+			
 				// make sure all persistence fields have been wiped
 				cleaner.clean(product);
 				
@@ -123,10 +124,16 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 			addActionErrorText("error.productsave");
 			return ERROR;
 		}
+	
+		if(saveAndInspect!=null){
+			return "saveinspect";
+		}
 		
 		logger.info("Product Multi-Add Complete");
 		return SUCCESS;
 	}
+	
+	
 	
 	private List<ProductAttachment> copyUploadedFiles() {
 		List<ProductAttachment> copiedUploadedFiles = new ArrayList<ProductAttachment>();
@@ -272,6 +279,18 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	public List<StringListingPair> getPublishedStates() {
 		return PublishedState.getPublishedStates(this);
+	}
+
+	public void setSaveAndInspect(String saveAndInspect) {
+		this.saveAndInspect = saveAndInspect;
+	}
+
+	public String getSaveAndInspect() {
+		return saveAndInspect;
+	}
+
+	public List<Long> getListOfIds() {
+		return listOfIds;
 	}
 	
 }
