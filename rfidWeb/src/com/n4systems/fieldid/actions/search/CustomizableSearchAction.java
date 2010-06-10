@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.search;
 
+import static com.n4systems.util.ListingPairs.*;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -17,15 +20,18 @@ import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
+import com.n4systems.fieldid.reporting.helpers.AvailableReportColumns;
+import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
+import com.n4systems.fieldid.reporting.helpers.ReportColumnFilter;
+import com.n4systems.fieldid.reporting.helpers.SharedColumnFactory;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingFactory;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.ListingPairs;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -40,6 +46,30 @@ import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @Validation
 public abstract class CustomizableSearchAction<T extends SearchContainer> extends AbstractPaginatedAction implements SearchDefiner<TableView> {
+	private class CustomizableSearchActionDynamicColumnProvider implements DynamicColumnProvider {
+		private final CustomizableSearchAction<T> action;
+
+		private CustomizableSearchActionDynamicColumnProvider(CustomizableSearchAction<T> action) {
+			this.action = action;
+		}
+
+		public SortedSet<ColumnMappingGroup> getDynamicGroups() {
+			return new TreeSet<ColumnMappingGroup>(action.getDynamicGroups());
+		}
+	}
+
+	private final class AssignedToReportColumnFilter implements ReportColumnFilter {
+		private final boolean assignedToEnabled;
+
+		private AssignedToReportColumnFilter(boolean assignedToEnabled) {
+			this.assignedToEnabled = assignedToEnabled;
+		}
+
+		public boolean available(ColumnMapping columnMapping) {
+			return (!assignedToEnabled && columnMapping.needsAnExtendedFeature() && ExtendedFeature.valueOf(columnMapping.getRequiredExtendedFeature()) == ExtendedFeature.AssignedTo);
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 	protected Logger logger = Logger.getLogger(CustomizableSearchAction.class);
 	
@@ -68,7 +98,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 
 	public List<ColumnMappingGroup> getDynamicGroups() {
-		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), ListingPairs.convertToIdList(getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup())));
+		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), convertToIdList(getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup())));
 	}
 	
 	
@@ -76,8 +106,12 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	abstract protected T createSearchContainer();
 	
 	private void initializeColumnMappings() {
-		mappingGroups = ColumnMappingFactory.getMappings(implementingClass, getTenant());
-		mappingGroups.addAll(getDynamicGroups());
+		initializeAValueInMappingGroupsSoCallToGetContainerInGetDynamicGroupsDontStartLoopOfCallsThatResultInAStackOverflow();
+		
+		AvailableReportColumns reportColumns = new AvailableReportColumns(new SharedColumnFactory(implementingClass, getTenant()), new CustomizableSearchActionDynamicColumnProvider(this));
+		reportColumns.setFilter(new AssignedToReportColumnFilter(getSecurityGuard().isAssignedToEnabled()));
+		
+		mappingGroups.addAll(reportColumns.getMappingGroups());
 		
 		// initialize the output handlers 
 		for (ColumnMappingGroup group: mappingGroups) {
@@ -85,6 +119,10 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 				registerCellHandler(mapping.getId(), mapping.getOutputHandler());
 			}
 		}
+	}
+
+	private void initializeAValueInMappingGroupsSoCallToGetContainerInGetDynamicGroupsDontStartLoopOfCallsThatResultInAStackOverflow() {
+		mappingGroups = new TreeSet<ColumnMappingGroup>();
 	}
 	
 	private void registerCellHandler(String columnId, String className) {
@@ -250,7 +288,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	@SuppressWarnings("unchecked")
 	public T getContainer() {
 		T container = (T)getSession().get(containerSessionKey);
-		if(container == null) {
+		if (container == null) {
 			container = createSearchContainer();		
 			container.setSelectedColumns(getDefaultSelectedColumns());
 			setCriteria(container);

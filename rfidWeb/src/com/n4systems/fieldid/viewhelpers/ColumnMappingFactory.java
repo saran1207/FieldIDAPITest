@@ -79,7 +79,8 @@ public class ColumnMappingFactory {
 					props.getString("outputHandler"),
 					props.getBoolean("sortable"), 
 					props.getBoolean("onByDefault"), 
-					props.getInteger("order")
+					props.getInteger("order"), 
+					props.getString("requiredExtendedFeature")
 				)
 			);
 		}

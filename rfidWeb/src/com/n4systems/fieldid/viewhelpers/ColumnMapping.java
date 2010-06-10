@@ -2,21 +2,23 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String id;
-	private String label;
-	private String pathExpression;
-	private String sortExpression;
-	private String outputHandler;
-	private boolean sortable = true;
-	private boolean onByDefault = false;
-	private int order = 0;
+	private final String id;
+	private final String label;
+	private final String pathExpression;
+	private final String sortExpression;
+	private final String outputHandler;
+	private final boolean sortable;
+	private final boolean onByDefault;
+	private final int order;
+	private final String requiredExtendedFeature;
 	
-	public ColumnMapping() {}
 	
-	public ColumnMapping(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order) {
+	public ColumnMapping(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order, String requiredExtendedFeature) {
 		this.id = id;
 		this.label = label;
 		this.pathExpression = pathExpression;
@@ -25,6 +27,7 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 		this.sortable = sortable;
 		this.onByDefault = onByDefault;
 		this.order = order;
+		this.requiredExtendedFeature = requiredExtendedFeature;
 	}
 	
 	public int compareTo(ColumnMapping mapping) {
@@ -36,65 +39,39 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 		return id;
 	}
 	
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 	
 	public String getLabel() {
 		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
 	}
 
 	public String getPathExpression() {
 		return pathExpression;
 	}
 
-	public void setPathExpression(String beanPath) {
-		this.pathExpression = beanPath;
-	}
 	
 	public String getSortExpression() {
 		// sort expression falls back on path expression
 		return (sortExpression != null) ? sortExpression : pathExpression;
 	}
 
-	public void setSortExpression(String sortExpression) {
-		this.sortExpression = sortExpression;
-	}
 
 	public String getOutputHandler() {
 		return outputHandler;
 	}
 
-	public void setOutputHandler(String outputHandlerClass) {
-		this.outputHandler = outputHandlerClass;
-	}
 
 	public boolean isSortable() {
 		return sortable;
 	}
 
-	public void setSortable(boolean sortable) {
-		this.sortable = sortable;
-	}
 
 	public boolean isOnByDefault() {
 		return onByDefault;
 	}
 
-	public void setOnByDefault(boolean onByDefault) {
-		this.onByDefault = onByDefault;
-	}
-
 	public int getOrder() {
 		return order;
-	}
-
-	public void setOrder(int orderWeight) {
-		this.order = orderWeight;
 	}
 
 	@Override
@@ -111,5 +88,20 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	public int hashCode() {
 		return id.hashCode();
 	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+
+	public boolean needsAnExtendedFeature() {
+		return requiredExtendedFeature != null;
+	}
+
+	public String getRequiredExtendedFeature() {
+		return requiredExtendedFeature;
+	}
+	
+	
 	
 }

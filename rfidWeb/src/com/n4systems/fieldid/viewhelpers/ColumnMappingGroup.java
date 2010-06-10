@@ -4,16 +4,17 @@ import java.io.Serializable;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class ColumnMappingGroup implements Serializable, Comparable<ColumnMappingGroup> {
 	private static final long serialVersionUID = 1L;
 	
-	private String id;
-	private String label;
-	private int order = 0;
+	private final String id;
+	private final String label;
+	private final int order;
 	private boolean dynamic = false;
-	private SortedSet<ColumnMapping> mappings = new TreeSet<ColumnMapping>();
+	private final SortedSet<ColumnMapping> mappings = new TreeSet<ColumnMapping>();
 	
-	public ColumnMappingGroup() {}
 	
 	public ColumnMappingGroup(String id, String label, int order) {
 		this.id = id;
@@ -30,34 +31,18 @@ public class ColumnMappingGroup implements Serializable, Comparable<ColumnMappin
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getLabel() {
 		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
 	}
 
 	public int getOrder() {
 		return order;
 	}
-
-	public void setOrder(int order) {
-		this.order = order;
-	}
-
+	
 	public SortedSet<ColumnMapping> getMappings() {
 		return mappings;
 	}
-
-	public void setMappings(SortedSet<ColumnMapping> mappings) {
-		this.mappings = mappings;
-	}
-
+	
 	public boolean isDynamic() {
 		return dynamic;
 	}
@@ -79,5 +64,11 @@ public class ColumnMappingGroup implements Serializable, Comparable<ColumnMappin
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+	
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }
