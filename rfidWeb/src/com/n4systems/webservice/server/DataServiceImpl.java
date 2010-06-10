@@ -30,6 +30,8 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.fieldid.permissions.SessionSecurityGuard;
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
@@ -84,6 +86,7 @@ import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
+import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.product.ProductSaveService;
@@ -769,7 +772,8 @@ public class DataServiceImpl implements DataService {
 			// we want to ensure this doesn't change on update.  The converter will leave it alone if it's not set.
 			productDTO.setIdentifiedById(0);
 		
-			Product product = converter.convert(productDTO, existingProduct, requestInformation.getTenantId());
+			SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(requestInformation.getTenantId()));
+			Product product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, existingProduct, requestInformation.getTenantId());
 
 			updateShopOrderOnProduct(product, productDTO, orderManager, requestInformation.getTenantId());
 			

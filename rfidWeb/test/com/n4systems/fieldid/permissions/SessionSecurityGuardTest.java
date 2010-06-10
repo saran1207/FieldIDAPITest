@@ -18,7 +18,7 @@ import com.n4systems.services.TenantCache;
 
 
 
-public class SessionSecurityGuardTest extends SecurityGuardTestCase{
+public class SessionSecurityGuardTest {
 
 	
 	@Test
@@ -57,7 +57,7 @@ public class SessionSecurityGuardTest extends SecurityGuardTestCase{
 	}
 
 	private Boolean testIfFeatueIsEnabled(ExtendedFeature feature, SessionSecurityGuard sut) {
-		String featureEnabledMethodName = getFeatureMethodName(feature);
+		String featureEnabledMethodName = feature.featureEnabledMethodName();
 		try {
 			Method method = sut.getClass().getMethod(featureEnabledMethodName);
 			return (Boolean)method.invoke(sut);

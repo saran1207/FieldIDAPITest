@@ -29,6 +29,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private String description;
 	private long vendorId;
 	private Date modified;
+	private long assignedUserId;
 
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
@@ -194,4 +195,13 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}	
+	public long getAssignedUserId() {
+		return assignedUserId;
+	}
+	public void setAssignedUserId(long assignedUserId) {
+		this.assignedUserId = assignedUserId;
+	}
+	public boolean assignedUserIdExists() {
+		return isValidServerId( assignedUserId );
+	}
 }

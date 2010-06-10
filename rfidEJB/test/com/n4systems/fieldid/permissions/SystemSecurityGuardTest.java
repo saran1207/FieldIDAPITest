@@ -8,7 +8,7 @@ import com.n4systems.model.ExtendedFeature;
 
 
 
-public class SystemSecurityGuardTest extends SecurityGuardTestCase {
+public class SystemSecurityGuardTest {
 
 	/**
 	 * all extended feature should have accessor method in the form "is[FeatureName]Enabled()"
@@ -17,7 +17,7 @@ public class SystemSecurityGuardTest extends SecurityGuardTestCase {
 	public void should_have_a_method_for_each_extended_feature() {
 		Class<SystemSecurityGuard> interfaceDefinition = SystemSecurityGuard.class;
 		for (ExtendedFeature feature : ExtendedFeature.values()) {
-			String featureEnabledMethodName = getFeatureMethodName(feature);
+			String featureEnabledMethodName = feature.featureEnabledMethodName();
 			try {
 				assertNotNull(interfaceDefinition.getMethod(featureEnabledMethodName));
 			} catch (NoSuchMethodException e) {

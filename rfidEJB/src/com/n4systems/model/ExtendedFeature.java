@@ -46,6 +46,11 @@ public enum ExtendedFeature {
 	public String getDescription() {
 		return description;
 	}
+
+	public String featureEnabledMethodName() {
+		String featureName = name();
+		return "is" + featureName + "Enabled";
+	}
 	
 }
 
