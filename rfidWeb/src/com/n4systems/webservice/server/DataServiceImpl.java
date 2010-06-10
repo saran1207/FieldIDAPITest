@@ -952,10 +952,10 @@ public class DataServiceImpl implements DataService {
 		productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
 		
 		Product product = new Product();
-		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 		OrderManager orderManager = ServiceLocator.getOrderManager();
 		
-		product = converter.convert( productDTO, product, tenantId );
+		SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(tenantId));
+		product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, product, tenantId);
 		
 		updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
 		
