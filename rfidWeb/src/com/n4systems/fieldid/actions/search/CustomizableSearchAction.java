@@ -22,14 +22,12 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.reporting.helpers.AvailableReportColumns;
 import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
-import com.n4systems.fieldid.reporting.helpers.ReportColumnFilter;
 import com.n4systems.fieldid.reporting.helpers.SharedColumnFactory;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryFilter;
@@ -55,18 +53,6 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 
 		public SortedSet<ColumnMappingGroup> getDynamicGroups() {
 			return new TreeSet<ColumnMappingGroup>(action.getDynamicGroups());
-		}
-	}
-
-	private final class AssignedToReportColumnFilter implements ReportColumnFilter {
-		private final boolean assignedToEnabled;
-
-		private AssignedToReportColumnFilter(boolean assignedToEnabled) {
-			this.assignedToEnabled = assignedToEnabled;
-		}
-
-		public boolean available(ColumnMapping columnMapping) {
-			return (!assignedToEnabled && columnMapping.needsAnExtendedFeature() && ExtendedFeature.valueOf(columnMapping.getRequiredExtendedFeature()) == ExtendedFeature.AssignedTo);
 		}
 	}
 

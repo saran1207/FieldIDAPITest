@@ -3,6 +3,7 @@ package com.n4systems.fieldid.reporting.helpers;
 import java.util.Random;
 
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.builders.Builder;
 import com.n4systems.util.RandomString;
 
@@ -23,7 +24,7 @@ public class ColumnMappingBuilder implements Builder<ColumnMapping> {
 		return new ColumnMappingBuilder(RandomString.getString(10), RandomString.getString(10), "path.path", "path.path", null, true, true, new Random().nextInt(), null);
 	}
 	
-	public ColumnMappingBuilder(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order,
+	private ColumnMappingBuilder(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order,
 			String requiredExtendedFeature) {
 		super();
 		this.id = id;
@@ -37,9 +38,19 @@ public class ColumnMappingBuilder implements Builder<ColumnMapping> {
 		this.requiredExtendedFeature = requiredExtendedFeature;
 	}
 	
+	public ColumnMappingBuilder requiringExtendedFeature(ExtendedFeature feature) {
+		return new ColumnMappingBuilder(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, feature.name());
+	}
+	
+	public ColumnMappingBuilder requiringNoExtendedFeature() {
+		return new ColumnMappingBuilder(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, null);
+	}
+	
 	public ColumnMapping build() {
 		return new ColumnMapping(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, requiredExtendedFeature);
 	}
+
+	
 
 	
 
