@@ -10,7 +10,7 @@ function mergeAndSubmit(form1id, form2id, masterFormId) {
 	convertAndAppendInputsToForm(formMaster, $(form1id).getElements());
 	convertAndAppendInputsToForm(formMaster, $(form2id).getElements());
 	
-	formMaster.submit();
+	return true;
 }
 
 function convertInputToHidden(input) {
