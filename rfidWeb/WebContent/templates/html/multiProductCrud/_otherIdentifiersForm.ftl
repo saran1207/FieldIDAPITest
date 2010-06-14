@@ -41,9 +41,9 @@
 
 <@s.form action="productMultiAddCreate" namespace="/" id="masterForm" theme="fieldid">
 	<@s.submit id="saveButton" cssClass="save" name="save" key="hbutton.save" onclick="return mergeAndSubmit('step1form', 'step4form', 'masterForm');"/>
-	<@s.submit id="saveAndInspButton" cssClass="save" name="saveAndInspect" key="hbutton.saveandinspect" onclick="return mergeAndSubmit('step1form', 'step4form', 'masterForm');"/>
-	
-
+	<#if Session.sessionUser.hasAccess("createinspection") >
+		<@s.submit id="saveAndInspButton" cssClass="save" name="saveAndInspect" key="hbutton.saveandinspect" onclick="return mergeAndSubmit('step1form', 'step4form', 'masterForm');"/>
+	</#if>
 </@s.form>
 
 </div>

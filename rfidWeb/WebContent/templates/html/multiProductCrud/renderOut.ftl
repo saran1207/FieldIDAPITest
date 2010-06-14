@@ -7,7 +7,6 @@
 			<@s.hidden name="assetIds[${assetId_index}]" value="${assetId}"/> 
 	</#list>
 
-
 	<@n4.includeScript>
 		onDocumentLoad(function() {
 				document.getElementsByTagName('h1')[0].hide();			
@@ -15,6 +14,12 @@
 		});
 	</@n4.includeScript>
 </@s.form>
-<div class="centerWheel"
+<div class="centerWheel">
 	<img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/>
+	
+</div>
+<div class="loadingText">
+	<h1>
+		<@s.text name="label.creating_multi_inspect_products" />
+	</h1>
 </div>
