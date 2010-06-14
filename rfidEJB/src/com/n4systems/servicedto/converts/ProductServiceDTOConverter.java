@@ -24,11 +24,11 @@ public class ProductServiceDTOConverter {
 		
 		LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(tenantId));
 		
-		PopulateAssignedUserFactory populateAssignedUserFactory = new PopulateAssignedUserFactory(systemSecurityGuard, loaderFactory);
+		AssignedUserConverterFactory assignedUserConverterFactory = new AssignedUserConverterFactory(systemSecurityGuard, loaderFactory);
 		
-		PopulateAssignedUser populateAssignedUser = populateAssignedUserFactory.getPopulateAssignedUser();
+		AssignedUserConverter assignedUserConverter = assignedUserConverterFactory.getAssignedUserConverter();
 		
-		return populateAssignedUser.populateAssignedTo(productServiceDTO, product, tenantId);
+		return assignedUserConverter.convert(productServiceDTO, product);
 		
 	}
 	

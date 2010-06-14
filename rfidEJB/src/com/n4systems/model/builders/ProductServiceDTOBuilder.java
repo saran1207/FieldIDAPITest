@@ -16,7 +16,7 @@ public class ProductServiceDTOBuilder extends BaseBuilder<ProductServiceDTO> {
 	}
 	
 	public static ProductServiceDTOBuilder aProductServiceDTO() {
-		return new ProductServiceDTOBuilder(1L);
+		return new ProductServiceDTOBuilder(0L);
 	}
 	
 	private ProductServiceDTOBuilder(long assignedUserId) {

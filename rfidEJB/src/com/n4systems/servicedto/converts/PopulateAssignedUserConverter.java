@@ -6,15 +6,15 @@ import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 
-public class PopulateAssignedUserImpl implements PopulateAssignedUser {
+public class PopulateAssignedUserConverter implements AssignedUserConverter {
 
 	private LoaderFactory loaderFactory;
 	
-	public PopulateAssignedUserImpl(LoaderFactory loaderFactory) {
+	public PopulateAssignedUserConverter(LoaderFactory loaderFactory) {
 		this.loaderFactory = loaderFactory;
 	}
 	
-	public Product populateAssignedTo(ProductServiceDTO productServiceDTO, Product product, long tenantId) {
+	public Product convert(ProductServiceDTO productServiceDTO, Product product) {
 
 		User user = null;
 		if (productServiceDTO.assignedUserIdExists()) {

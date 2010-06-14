@@ -3,6 +3,7 @@ package com.n4systems.testutils;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.loaders.FilteredListableLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
@@ -10,6 +11,7 @@ public class TestDoubleLoaderFactory extends LoaderFactory {
 
 	private FilteredListableLoader filteredListableLoader;
 	private BaseOrgParentFilterListLoader baseOrgParentFilterListLoader;
+	private UserFilteredLoader userFilteredLoader;
 	
 	public TestDoubleLoaderFactory(SecurityFilter filter) {
 		super(filter);
@@ -35,8 +37,14 @@ public class TestDoubleLoaderFactory extends LoaderFactory {
 	}
 
 	
+	@Override
+	public UserFilteredLoader createUserFilteredLoader() {
+		return userFilteredLoader;
+	}
 	
-	
+	public void setUserFileterLoader(UserFilteredLoader userFilteredLoader) {
+		this.userFilteredLoader = userFilteredLoader;
+	}
 	
 	
 	

@@ -3,23 +3,22 @@ package com.n4systems.servicedto.converts;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
-public class PopulateAssignedUserFactory {
+public class AssignedUserConverterFactory {
 
 	private SystemSecurityGuard systemSecurityGuard;
 	private LoaderFactory loaderFactory;
 	
-	public PopulateAssignedUserFactory(SystemSecurityGuard systemSecurityGuard, LoaderFactory loaderFactory) {
+	public AssignedUserConverterFactory(SystemSecurityGuard systemSecurityGuard, LoaderFactory loaderFactory) {
 		this.systemSecurityGuard = systemSecurityGuard;
 		this.loaderFactory = loaderFactory;
 	}
 
-	public PopulateAssignedUser getPopulateAssignedUser() {
+	public AssignedUserConverter getAssignedUserConverter() {
 		if (systemSecurityGuard.isAssignedToEnabled()) {
-			return new PopulateAssignedUserImpl(loaderFactory);
+			return new PopulateAssignedUserConverter(loaderFactory);
 		} else {
-			return new DoNotPopulateAssignedUserImpl();
+			return new NullAssignedUserConverter();
 		}
 	}
-	
 	
 }
