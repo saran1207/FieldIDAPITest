@@ -11,6 +11,8 @@ public class ExtendedFeatureFactory {
 				return new PartnerCenterSwitch(primaryOrg);
 			case EmailAlerts:
 				return new EmailAlertsSwitch(primaryOrg);
+			case AssignedTo:
+				return new AssignedToSwitch(primaryOrg);
 			default:
 				return new DefaultExtendedFeatureSwitch(primaryOrg, feature);
 		}
