@@ -192,11 +192,11 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		this.toDate = toDate;
 	}
 	
-	public Long getAssingedUser() {
+	public Long getAssignedUser() {
 		return assignedUserId;
 	}
 	
-	public void setAssingedUser(Long assignedUserId) {
+	public void setAssignedUser(Long assignedUserId) {
 		this.assignedUserId = assignedUserId;
 	}
 
