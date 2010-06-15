@@ -53,8 +53,8 @@
 			</div>	
 			<#if securityGuard.assignedToEnabled >
 				<div class="infoSet">
-					<label for="criteria.assingedUser"><@s.text name="label.assignedto"/></label>
-					<@s.select name="criteria.assingedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
+					<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
+					<@s.select name="criteria.assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
 				</div>
 			</#if>
 			
