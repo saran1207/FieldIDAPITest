@@ -22,11 +22,11 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.IndexColumn;
 
-
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
@@ -86,6 +86,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	
 	@OneToOne(mappedBy="inspection")
 	private InspectionSchedule schedule;
+	
+	private AssignedToUpdate assignedTo;
 	
 	public Inspection() {
 		super();
@@ -327,6 +329,34 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	@Override
 	public void setGlobalId(String globalId) {}
 
+	public AssignedToUpdate getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(AssignedToUpdate assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+	
+	public boolean hasAssignToUpdate() {
+		return assignedTo.isAssignmentApplyed();
+	}
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		normalizeAssignmentForPersistence();
+	}
+
+	private void normalizeAssignmentForPersistence() {
+		if (assignedTo == null)
+			assignedTo = AssignedToUpdate.ignoreAssignment();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		normalizeAssignmentForPersistence();
+	}
 	
 	
 }

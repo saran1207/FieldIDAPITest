@@ -757,7 +757,6 @@ public class DataServiceImpl implements DataService {
 			RequestResponse response = new RequestResponse();
 			response.setStatus(ResponseStatus.OK);
 
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			OrderManager orderManager = ServiceLocator.getOrderManager();
 
 			Product existingProduct = lookupProduct(productDTO, requestInformation.getTenantId());

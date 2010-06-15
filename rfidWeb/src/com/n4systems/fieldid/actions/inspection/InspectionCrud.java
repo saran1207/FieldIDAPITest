@@ -58,6 +58,7 @@ import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.inspectionbook.InspectionBookSaver;
@@ -108,6 +109,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private List<ListingPair> examiners;
 	private List<ProductStatusBean> productStatuses;
 	private List<Listable<Long>> commentTemplates;
+	private List<Listable<Long>> employees;
 	private List<ListingPair> inspectionBooks;
 	private List<InspectionSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
@@ -124,8 +126,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
 	
-	
 	private ScheduleInTimeFrameLoader scheduleInTimeFrameLoader;
+	
+	
+	private User assignedTo;
+	private boolean assignToSomeone = false;
+	
 	
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
@@ -386,6 +392,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			inspection.setGroup(inspectionGroup);
 			inspection.setTenant(getTenant());
 			inspection.setProduct(product);
+			
+			if (assignToSomeone) {
+				AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(assignedTo);
+				inspection.setAssignedTo(assignedToUpdate);
+			}
 			
 			
 			processProofTestFile();
@@ -987,6 +998,34 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public List<WebInspectionSchedule> getNextSchedules() {
 		return nextSchedules;
+	}
+
+	public Long getAssignedToId() {
+		return (assignedTo != null) ? assignedTo.getId() : null;
+	}
+
+	public void setAssignedToId(Long assginedToId) {
+		if (assginedToId == null) {
+			assignedTo = null;
+		} else if (assignedTo == null || !assginedToId.equals(assignedTo.getId())) {
+			assignedTo = persistenceManager.find(User.class, assginedToId, getTenantId());
+		}
+	}
+
+	public void setAssignToSomeone(boolean assignToSomeone) {
+		this.assignToSomeone = assignToSomeone;
+	}
+
+	public boolean isAssignToSomeone() {
+		return assignToSomeone;
+	}
+	
+	
+	public List<Listable<Long>> getEmployees() {
+		if (employees == null) {
+			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
+		}
+		return employees;
 	}
 	
 }

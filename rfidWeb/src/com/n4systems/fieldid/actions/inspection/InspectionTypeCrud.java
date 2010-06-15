@@ -50,6 +50,8 @@ public class InspectionTypeCrud extends AbstractCrud {
 	private Map<String, Boolean> types;
 	private InspectionTypeArchiveSummary archiveSummary;
 	
+	private boolean assignedToAvailable = false;
+	
 	public InspectionTypeCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		
@@ -66,6 +68,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 		query.addSimpleWhere("id", uniqueId);
 		query.addPostFetchPaths("sections", "supportedProofTests", "infoFieldNames");
 		inspectionType = persistenceManager.find(query);
+		
 	}
 
 	private void testRequiredEntities(boolean existing) {
@@ -89,6 +92,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
+		assignedToAvailable = inspectionType.isAssignedToAvailable();
 		infoFieldNames = TrimmedString.mapToTrimmedStrings(inspectionType.getInfoFieldNames());
 		return SUCCESS;
 	}
@@ -96,6 +100,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 	@SkipValidation
 	public String doEdit() {
 		testRequiredEntities(true);
+		assignedToAvailable = inspectionType.isAssignedToAvailable();
 		infoFieldNames = TrimmedString.mapToTrimmedStrings(inspectionType.getInfoFieldNames());
 		return SUCCESS;
 	}
@@ -115,6 +120,8 @@ public class InspectionTypeCrud extends AbstractCrud {
 		inspectionType.setInfoFieldNames(TrimmedString.mapFromTrimmedStrings(infoFieldNames));
 
 		processSupportedTypes();
+		
+		processAssignedToAvailable();
 
 		StrutsListHelper.clearNulls(inspectionType.getInfoFieldNames());
 
@@ -137,6 +144,15 @@ public class InspectionTypeCrud extends AbstractCrud {
 			addActionErrorText("error.failedtosave");
 			return ERROR;
 		}
+	}
+
+	private void processAssignedToAvailable() {
+		if (assignedToAvailable && getSecurityGuard().isAssignedToEnabled()) {
+			inspectionType.makeAssignedToAvailable();
+		} else {
+			inspectionType.removeAssignedTo();
+		}
+		
 	}
 
 	public String doDeleteConfirm() {
@@ -349,6 +365,14 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	public InspectionTypeArchiveSummary getArchiveSummary() {
 		return archiveSummary;
+	}
+
+	public boolean isAssignedToAvailable() {
+		return assignedToAvailable;
+	}
+
+	public void setAssignedToAvailable(boolean assignedToAvailable) {
+		this.assignedToAvailable = assignedToAvailable;
 	}
 	
 }

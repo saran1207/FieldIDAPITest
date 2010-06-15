@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -67,6 +66,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		if (parameterObject.calculateInspectionResult) {
 			parameterObject.inspection.setStatus(calculateInspectionResult(parameterObject.inspection));
 		}
+		
 		
 		setProofTestData(parameterObject.inspection, parameterObject.fileData);
 	
@@ -166,9 +166,10 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 		// pushes the location and the ownership to the product based on the
 		// inspections data.
-		product.setOwner(inspection.getOwner());
-		product.setLocation(inspection.getLocation());
-		product.setProductStatus(inspection.getProductStatus());
+		ownershipUpdates(inspection, product);
+		statusUpdates(inspection, product);
+		assignedToUpdates(inspection, product);
+		
 		
 		try {
 			legacyProductManager.update(product, modifiedBy);
@@ -177,6 +178,22 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	private void assignedToUpdates(Inspection inspection, Product product) {
+		if (inspection.hasAssignToUpdate()) {
+			//product.setAssignedUser(inspection.getAssignedTo().getAssignedUser());
+		}
+		
+	}
+
+	private void statusUpdates(Inspection inspection, Product product) {
+		product.setProductStatus(inspection.getProductStatus());
+	}
+
+	private void ownershipUpdates(Inspection inspection, Product product) {
+		product.setOwner(inspection.getOwner());
+		product.setLocation(inspection.getLocation());
 	}
 	
 	

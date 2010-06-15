@@ -11,20 +11,26 @@
 </p>
 
 <#if action.isParentProduct() >
-	
 	<p>
 		<label><@s.text name="label.printable"/></label>
-		<span>
-			<@s.checkbox name="printable" /> <@s.text name="label.printableexplination"/>
-		</span> 
+		<span><@s.checkbox name="printable" /> <@s.text name="label.printableexplination"/></span> 
 	</p>
 	
 	<p>
 		<label><@s.text name="label.productstatus"/></label>
-		<span>
-			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
-		</span>
+		<span><@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" /></span>
 	</p>
+	
+	<#if inspectionType.assignedToAvailable && form_action="ADD">
+		<h2><@s.text name="label.assign_asset_to"/></h2>
+		<p>
+			<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" emptyOption="true"/>
+			<@s.hidden name="assignToSomeone" value="true"/>
+		</p>
+	<#elseif form_action="EDIT">
+		<#include "_assigned_to.ftl"/>
+	</#if>
+	
 	<#if inspection.new >
 		<#include "_schedules.ftl"/>
 	</#if>	

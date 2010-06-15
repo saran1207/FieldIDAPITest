@@ -41,6 +41,7 @@ public class MasterInspection {
 	private List<FileAttachment> uploadedFiles;
 
 	private InspectionSchedule schedule;
+
 	private Long scheduleId;
 
 	

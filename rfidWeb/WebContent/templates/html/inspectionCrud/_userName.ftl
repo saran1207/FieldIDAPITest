@@ -1,5 +1,5 @@
 <#if !user?exists ><#assign user=inspection.performedBy /></#if>
-<#if inspection.tenant.id == Session.sessionUser.tenant.id >
+<#if inspection.tenant.id == sessionUser.tenant.id >
 	${(user.userLabel)!action.getText("label.unknown")}
 <#else>
 	<#assign tenant=inspection.tenant/>

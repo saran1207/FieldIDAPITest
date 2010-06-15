@@ -3,8 +3,8 @@ package com.n4systems.servicedto.converts;
 import static com.n4systems.model.builders.ProductServiceDTOBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.*;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class PopulateAssignedUserImplTest {
 		
 		sut.convert(productServiceDTO, product);
 		
-		Assert.assertEquals(product.getAssignedUser(), assignedUser);
+		assertEquals(product.getAssignedUser(), assignedUser);
 		
 	}
 
@@ -55,11 +55,11 @@ public class PopulateAssignedUserImplTest {
 		
 		sut.convert(productServiceDTO, product);
 		
-		Assert.assertEquals(product.getAssignedUser(), null);
-		
+		assertNull(product.getAssignedUser());
 	}
 	
-	@SuppressWarnings("unchecked")
+	
+	
 	private TestDoubleLoaderFactory userFilteredLoaderMock() {
 		
 		UserFilteredLoader userFilteredLoader = createMock(UserFilteredLoader.class);

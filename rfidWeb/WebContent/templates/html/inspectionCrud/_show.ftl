@@ -174,6 +174,9 @@
 		</span>
 	</p>
 	
+	<#include "_assigned_to.ftl"/>
+	
+	
 	<#if !linkedInspection >
 		<#assign downloadAction="downloadAttachedFile"/>
 		<#assign attachments=inspection.attachments/>

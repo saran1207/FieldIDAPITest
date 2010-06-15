@@ -51,6 +51,9 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 	@Column(nullable=false)
 	private boolean master = false;
 	
+	@Column(nullable=false)
+	private boolean assignedToAvailable = false;
+	
 	@ManyToOne(cascade={CascadeType.REFRESH}, optional=false)
 	private InspectionTypeGroup group;
 
@@ -244,5 +247,16 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 	public InspectionType enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
+
+	public boolean isAssignedToAvailable() {
+		return assignedToAvailable;
+	}
 	
+	public void makeAssignedToAvailable() {
+		assignedToAvailable = true;
+	}
+	
+	public void removeAssignedTo() {
+		assignedToAvailable = false;
+	}
 }

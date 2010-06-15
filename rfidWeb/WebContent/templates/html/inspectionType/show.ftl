@@ -44,6 +44,13 @@ ${action.setPageType('inspection_type', 'show')!}
 		</span>
 	</p>		
 	
+	<p>
+		<label><@s.text name="label.assigned_to_can_be_updated"/></label>
+		<span class="fieldValue">
+			${inspectionType.assignedToAvailable?string(action.getText('label.yes'), action.getText('lable.no'))} 
+		</span>
+	</p>	
+	
 	<h2><@s.text name="label.supportedprooftesttypes"/></h2>
 	<#if inspectionType.supportedProofTests?size != 0 >
 		<#list inspectionType.supportedProofTests as proofTestType >

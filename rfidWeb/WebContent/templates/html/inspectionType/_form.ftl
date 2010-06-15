@@ -43,6 +43,14 @@
 	</span>
 </p>
 
+<#if securityGuard.assignedToEnabled>
+	<p>
+		<label><@s.text name="label.assigned_to_can_be_updated"/></label>
+		<span>
+			<@s.checkbox name="assignedToAvailable"/>
+		</span>
+	</p>
+</#if>
 <table class="list">
 	<tr>
 		<th><@s.text name="label.supportedprooftesttype"/></th>
