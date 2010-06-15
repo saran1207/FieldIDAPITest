@@ -41,11 +41,15 @@ public class MasterInspection {
 	private List<FileAttachment> uploadedFiles;
 
 	private InspectionSchedule schedule;
-
+	
 	private Long scheduleId;
 
 	
 	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
+
+	private Long assignedToId;
+
+	private boolean assignToSomeone;
 	
 	public MasterInspection() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
@@ -313,5 +317,20 @@ public class MasterInspection {
 
 	public void setNextSchedules(List<WebInspectionSchedule> nextSchedules) {
 		this.nextSchedules = nextSchedules;
+	}
+
+	public void setAssignToUpdate(Long assignedToId, boolean assignToSomeone) {
+		this.assignedToId = assignedToId;
+		this.assignToSomeone = assignToSomeone;
+		
+		
+	}
+
+	public Long getAssignedToId() {
+		return assignedToId;
+	}
+
+	public boolean isAssignToSomeone() {
+		return assignToSomeone;
 	}
 }

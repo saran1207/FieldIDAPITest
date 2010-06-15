@@ -107,7 +107,7 @@ public class CatalogImportTask implements Runnable {
 		body += "<table>" +
 					"<tr><td>" + importCatalogService.getSummary().getProductTypeImportSummary().getImportMapping().size() + "</td>" +
 					"<td>Product Type(s) have been imported.</td></tr>" +
-					"<tr><td>" + importCatalogService.getSummary().getInspectionTypeImportSummary().getImportMapping().size() + "</td>" +
+					"<tr><td>" + importCatalogService.getSummary().getInspectionTypeImportSummary().numberImported() + "</td>" +
 					"<td>Inspection Type(s) have been imported.</td></tr>" +
 				"</table>";
 		return body;

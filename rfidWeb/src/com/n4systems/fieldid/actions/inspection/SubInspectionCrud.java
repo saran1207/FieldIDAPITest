@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.inspection;
 
+import static com.n4systems.fieldid.utils.CopyInspectionFactory.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +63,7 @@ public class SubInspectionCrud extends InspectionCrud {
 					currentInspectionNew = false;
 				}
 			} else {
-				inspection = CopyInspectionFactory.copyInspection(masterInspectionHelper.createInspectionFromSubInspection(masterInspectionHelper.getSubInspection(uniqueId)));
+				inspection = copyInspection(masterInspectionHelper.createInspectionFromSubInspection(masterInspectionHelper.getSubInspection(uniqueId)));
 				if (uniqueId != null) {
 					currentInspectionNew = false;
 				}
@@ -109,6 +111,7 @@ public class SubInspectionCrud extends InspectionCrud {
 
 		setUpSupportedProofTestTypes();
 		encodeInfoOptionMapForUseInForm();
+		setUpAssignTo();
 		inspection.setProductStatus(masterInspectionHelper.getProductStatus());
 		
 		setScheduleId(masterInspectionHelper.getScheduleId());
@@ -120,6 +123,12 @@ public class SubInspectionCrud extends InspectionCrud {
 		getNextSchedules().addAll(masterInspectionHelper.getNextSchedules());
 		
 		return SUCCESS;
+	}
+
+	private void setUpAssignTo() {
+		setAssignedToId(masterInspectionHelper.getAssignedToId());
+		setAssignToSomeone(masterInspectionHelper.isAssignToSomeone());
+		
 	}
 
 	private void restoreCriteriaResultsFromStoredInspection() {
@@ -253,7 +262,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			processProofTestFile();
 			getModifiableInspection().pushValuesTo(inspection);
 			masterInspectionHelper.setProofTestFile(fileData);
-			
+			masterInspectionHelper.setAssignToUpdate(getAssignedToId(), isAssignToSomeone());
 
 			if (masterInspectionHelper.getInspection().isNew()) {
 				inspection.setTenant(getTenant());

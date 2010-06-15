@@ -34,6 +34,14 @@ public class InspectionTypeImportSummary extends BaseImportSummary {
 	public int getNumberRenamed() {
 		return numberRenamed;
 	}
+
+	public Integer numberImported() {
+		return importMapping.size();
+	}
+	
+	
+	
+	
 	
 	
 }

@@ -11,6 +11,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.inspectiontype.InspectionTypeCleaner;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeImportSummary;
@@ -43,17 +44,42 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	private void importInspectionType(Long originalId) throws ImportFailureException {
 		InspectionType importedInspectionType = importCatalog.getPublishedInspectionType(originalId);
 		try {
-			InspectionTypeCleaner typeCleaner = new InspectionTypeCleaner(tenant);
-			typeCleaner.clean(importedInspectionType);
-			importedInspectionType.setGroup(importedGroupMapping.get(importedInspectionType.getGroup().getId()));
-			importedInspectionType.setName(createUniqueInspectionTypeName(importedInspectionType.getName()));
-			mapStateSets(importedInspectionType);
-			persistenceManager.save(importedInspectionType);
+			importIntoAccount(importedInspectionType);
+			
 			summary.getImportMapping().put(originalId, importedInspectionType);
 		} catch (Exception e) {
 			summary.setFailure(importedInspectionType.getName(), FailureType.COULD_NOT_CREATE, e);
 			throw new ImportFailureException(e);
 		}
+	}
+
+	private void importIntoAccount(InspectionType importedInspectionType) {
+		clean(importedInspectionType);
+		
+		resolveGroup(importedInspectionType);
+		
+		produceUniqueName(importedInspectionType);
+		
+		mapStateSets(importedInspectionType);
+		
+		save(importedInspectionType);
+	}
+
+	private void save(InspectionType importedInspectionType) {
+		persistenceManager.save(importedInspectionType);
+	}
+
+	private void produceUniqueName(InspectionType importedInspectionType) {
+		importedInspectionType.setName(createUniqueInspectionTypeName(importedInspectionType.getName()));
+	}
+
+	private void resolveGroup(InspectionType importedInspectionType) {
+		importedInspectionType.setGroup(importedGroupMapping.get(importedInspectionType.getGroup().getId()));
+	}
+
+	private void clean(InspectionType importedInspectionType) {
+		Cleaner<InspectionType> typeCleaner = new InspectionTypeCleaner(tenant);
+		typeCleaner.clean(importedInspectionType);
 	}
 	
 	private void mapStateSets(InspectionType importedInspectionType) {

@@ -338,7 +338,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	}
 	
 	public boolean hasAssignToUpdate() {
-		return assignedTo.isAssignmentApplyed();
+		return assignedTo != null && assignedTo.isAssignmentApplyed();
 	}
 
 	@Override

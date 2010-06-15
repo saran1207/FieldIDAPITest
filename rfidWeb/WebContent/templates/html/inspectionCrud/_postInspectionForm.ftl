@@ -24,8 +24,11 @@
 	<#if inspectionType.assignedToAvailable && form_action="ADD">
 		<h2><@s.text name="label.assign_asset_to"/></h2>
 		<p>
+			<button name="ignoreAssignment" id="ignoreAssignTo"><@s.text name="label.ignore"/></button>
+			
+			<button name="performAssignment" id="performAssignment"><@s.text name="label.assign_to_someone"/></button>
 			<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" emptyOption="true"/>
-			<@s.hidden name="assignToSomeone" value="true"/>
+			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
 		</p>
 	<#elseif form_action="EDIT">
 		<#include "_assigned_to.ftl"/>
@@ -36,3 +39,19 @@
 	</#if>	
 	
 </#if>
+
+<@n4.includeScript>
+	$$('#ignoreAssignTo').each(function(element) { 
+			element.observe('click', function(event) {
+				event.stop();
+				$('assignToSomeone').value = 'false';
+				
+			})
+		});
+	$$('#performAssignment').each(function(element) { 
+			element.observe('click', function(event) {
+				event.stop();
+				$('assignToSomeone').value = 'true';
+			})
+		});
+</@n4.includeScript>
