@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements ProductLookupable {
 
+	private static final Long UNSET_ID = 0L;
 	private String serialNumber;
 	private String rfidNumber;
 	private String comments;
@@ -78,6 +79,14 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public void setIdentified(String identified) {
 		this.identified = identified;
 	}
+	public void unsetIdentifedById() {
+		this.identifiedById = UNSET_ID;
+	}
+	
+	public boolean isIdentifiedSet() {
+		return !UNSET_ID.equals(identifiedById);
+	}
+	
 	public String getLastInspectionDate() {
 		return lastInspectionDate;
 	}
@@ -204,4 +213,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public boolean assignedUserIdExists() {
 		return isValidServerId( assignedUserId );
 	}
+	
+	
+	
 }

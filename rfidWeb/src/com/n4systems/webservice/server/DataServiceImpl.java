@@ -85,6 +85,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.servicedto.converts.DtoToModelConverterFactory;
 import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
 import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
@@ -759,7 +760,8 @@ public class DataServiceImpl implements DataService {
 
 			OrderManager orderManager = ServiceLocator.getOrderManager();
 
-			Product existingProduct = lookupProduct(productDTO, requestInformation.getTenantId());
+			long tenantId = requestInformation.getTenantId();
+			Product existingProduct = lookupProduct(productDTO, tenantId);
 			
 			if( existingProduct == null ) {
 				logger.error( "can not load product to edit" );
@@ -767,14 +769,13 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
-			
-			// we want to ensure this doesn't change on update.  The converter will leave it alone if it's not set.
-			productDTO.setIdentifiedById(0);
+			productDTO.unsetIdentifedById();
 		
-			SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(requestInformation.getTenantId()));
-			Product product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, existingProduct);
+			ProductServiceDTOConverter converter = DtoToModelConverterFactory.createFactory(createSecurityGuard(tenantId)).createProductConverter(); 
+			
+			Product product = converter.convert(productDTO, existingProduct);
 
-			updateShopOrderOnProduct(product, productDTO, orderManager, requestInformation.getTenantId());
+			updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
 			
 			// on edit, the identified by user is populated with the modified user
 			ServiceLocator.getProductSerialManager().update(product, product.getModifiedBy());
@@ -784,6 +785,11 @@ public class DataServiceImpl implements DataService {
 			logger.error( "failed while processing product", e );
 			throw new ServiceException("Problem updating product");
 		}
+	}
+
+	private SystemSecurityGuard createSecurityGuard(long tenantId) {
+		SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(tenantId));
+		return systemSecurityGuard;
 	}
 
 	private void updateShopOrderOnProduct(Product product, ProductServiceDTO productDTO, OrderManager orderManager, Long tenantId) {
@@ -953,12 +959,17 @@ public class DataServiceImpl implements DataService {
 		Product product = new Product();
 		OrderManager orderManager = ServiceLocator.getOrderManager();
 		
-		SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(tenantId));
-		product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, product);
+		ProductServiceDTOConverter converter = createProductServiceDTOConverter(tenantId);
+		product = converter.convert(productDTO, product);
 		
 		updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
 		
 		return product;
+	}
+
+	private ProductServiceDTOConverter createProductServiceDTOConverter(Long tenantId) {
+		ProductServiceDTOConverter converter = DtoToModelConverterFactory.createFactory(createSecurityGuard(tenantId)).createProductConverter();
+		return converter;
 	}
 	
 	private ProductServiceDTO fixModifyByFromOldVersionsOfMobile(ProductServiceDTO productDTO) {
