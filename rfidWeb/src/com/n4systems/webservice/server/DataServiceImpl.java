@@ -772,7 +772,7 @@ public class DataServiceImpl implements DataService {
 			productDTO.setIdentifiedById(0);
 		
 			SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(requestInformation.getTenantId()));
-			Product product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, existingProduct, requestInformation.getTenantId());
+			Product product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, existingProduct);
 
 			updateShopOrderOnProduct(product, productDTO, orderManager, requestInformation.getTenantId());
 			
@@ -954,7 +954,7 @@ public class DataServiceImpl implements DataService {
 		OrderManager orderManager = ServiceLocator.getOrderManager();
 		
 		SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(tenantId));
-		product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, product, tenantId);
+		product = new ProductServiceDTOConverter(systemSecurityGuard).convert(productDTO, product);
 		
 		updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
 		

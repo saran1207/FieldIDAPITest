@@ -17,7 +17,7 @@ import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.testutils.TestDoubleLoaderFactory;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 
-public class PopulateAssignedUserImplTest {
+public class PopulateAssignedUserConverterTest {
 
 	private Product product;
 	private ProductServiceDTO productServiceDTO;
