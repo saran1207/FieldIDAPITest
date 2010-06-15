@@ -26,14 +26,14 @@ public class AssignedToSwitch extends ExtendedFeatureSwitch {
 	protected void featureTearDown(Transaction transaction) {
 		removeSavedReportsUsingAssignedTo(transaction);
 	}
-	
-	private void removeSavedReportsUsingAssignedTo(Transaction transaction){
+
+	private void removeSavedReportsUsingAssignedTo(Transaction transaction) {
 		SavedReportListLoader loader = new SavedReportListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
 		SavedReportSaver saver = new SavedReportSaver();
-		List<SavedReport> reportsToRemove = SavedReportAssignedToTrimmer.extractAssignedToReferences(loader.load()); 
-		
-		if(!reportsToRemove.isEmpty()){
-			for (SavedReport report : reportsToRemove){
+		List<SavedReport> reportsToRemove = SavedReportAssignedToTrimmer.extractAssignedToReferences(loader.load());
+
+		if (!reportsToRemove.isEmpty()) {
+			for (SavedReport report : reportsToRemove) {
 				saver.remove(report);
 			}
 		}
