@@ -132,12 +132,6 @@
 					</span>
 					
 				</div>
-				
-				<div class="infoSet">
-					<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> <span><@s.checkbox name="signUp.purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/></span></label>
-					<span class="weak"><@s.text name="instruction.phone_support_charge"/></span>
-				</div>
-			
 			</div>
 		</div>
 	</#if>
@@ -232,9 +226,6 @@
 	<p><@s.text name="label.email"/>: <a href="mailto:sales@fieldid.com">sales@fieldid.com</a></p>
 	<p><@s.text name="label.phone"/>: 416-599-6464</p>
 	<p><@s.text name="label.toll_free"/>: 1-800-996-4797</p>
-	
-	<h3><@s.text name="label.how_is_phone_support_charged"/></h3>
-	<p class="weak"><@s.text name="description.how_is_phone_support_charged"/></p>
 	
 	<h3><@s.text name="label.what_is_the_account_on_the_left"/></h3>
 	<p class="weak"><@s.text name="description.what_is_the_account_on_the_left"/></p>

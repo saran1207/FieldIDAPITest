@@ -37,7 +37,6 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 	private String tenantName;
 	
 	private Integer numberOfUsers = 1;
-	private boolean purchasingPhoneSupport;
 	private String userN4Id;
 	private String companyN4Id;
 	private String externalPassword;
@@ -244,12 +243,7 @@ public class SignUpRequest implements Subscription, AccountCreationInformation, 
 
 
 	public boolean isPurchasingPhoneSupport() {
-		return purchasingPhoneSupport;
-	}
-
-	
-	public void setPurchasingPhoneSupport(boolean purchasingPhoneSupport) {
-		this.purchasingPhoneSupport = purchasingPhoneSupport;
+		return false;
 	}
 
 	public void setCreditCard(CreditCard creditCard) {

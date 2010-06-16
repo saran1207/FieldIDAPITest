@@ -271,9 +271,6 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public boolean isPurchasingPhoneSupport() {
 		return signUpRequest.isPurchasingPhoneSupport();
 	}
-	public void setPurchasingPhoneSupport(boolean purchasePhoneSupport) {
-		signUpRequest.setPurchasingPhoneSupport(purchasePhoneSupport);
-	}
 
 	public boolean isUsingCreditCard() {
 		return signUpRequest.isUsingCreditCard();
