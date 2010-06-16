@@ -33,7 +33,7 @@ public class PlansAndPricingAction extends AbstractAction {
 	}
 	
 	private String getExternalPlansAndPricingUrl() {
-		return configContext.getString(ConfigEntry.PLANS_AND_PRICING_URL);
+		return configContext.getString(ConfigEntry.EXTERNAL_PLANS_AND_PRICING_URL);
 	}
 
 	public String getExternalUrl() {
