@@ -38,7 +38,7 @@ public class AssignedToSwitch extends ExtendedFeatureSwitch {
 
 		if (!reportsToRemove.isEmpty()) {
 			for (SavedReport report : reportsToRemove) {
-				saver.remove(report);
+				saver.remove(transaction, report);
 			}
 		}
 	}
@@ -50,7 +50,7 @@ public class AssignedToSwitch extends ExtendedFeatureSwitch {
 
 		for (InspectionType inspectionType : inspectionTypesToToggle) {
 			inspectionType.removeAssignedTo();
-			saver.update(inspectionType);
+			saver.update(transaction, inspectionType);
 
 		}
 	}
