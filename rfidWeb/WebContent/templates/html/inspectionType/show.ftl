@@ -47,7 +47,7 @@ ${action.setPageType('inspection_type', 'show')!}
 	<p>
 		<label><@s.text name="label.assigned_to_can_be_updated"/></label>
 		<span class="fieldValue">
-			${inspectionType.assignedToAvailable?string(action.getText('label.yes'), action.getText('lable.no'))} 
+			${inspectionType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))} 
 		</span>
 	</p>	
 	
