@@ -61,7 +61,7 @@ public class SavedReportAssignedToRemovalTest {
 	public void should_return_a_report_that_has_an_assignedto_criteria() {
 		reportsList.add(reportNormal);
 		reportsList.add(reportWithCriteriaToRemove);
-		assertTrue(SavedReportAssignedToTrimmer.extractAssignedToReferences(reportsList).size() == 1);
+		assertEquals(SavedReportAssignedToTrimmer.extractAssignedToReferences(reportsList).size(), 1);
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class SavedReportAssignedToRemovalTest {
 		reportsList.add(reportNormal);
 		reportsList.add(reportWithColumnToRemove);
 		reportsList.add(reportWithCriteriaToRemove);
-		assertTrue(SavedReportAssignedToTrimmer.extractAssignedToReferences(reportsList).size() == 2);
+		assertEquals(SavedReportAssignedToTrimmer.extractAssignedToReferences(reportsList).size(), 2);
 	}
 
 }

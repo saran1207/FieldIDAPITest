@@ -140,11 +140,11 @@ public class ProductSearchContainer extends SearchContainer {
 		this.purchaseOrder = purchaseOrder;
 	}
 	
-	public Long getAssingedUser() {
+	public Long getAssignedUser() {
 		return assignedUserId;
 	}
 	
-	public void setAssingedUser(Long assignedUserId) {
+	public void setAssignedUser(Long assignedUserId) {
 		this.assignedUserId = assignedUserId;
 	}
 

@@ -60,7 +60,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		
 		setProductStatus(criteria.getProductStatus());
 		setPurchaseOrder(criteria.getPurchaseOrder());
-		setAssignedUser(criteria.getAssingedUser());
+		setAssignedUser(criteria.getAssignedUser());
 	}
 
 	@SkipValidation
