@@ -60,7 +60,7 @@ public enum ConfigEntry {
 	FIELDID_ADMINISTRATOR_EMAIL					(	"team@fieldid.com"	),
 	SYSTEM_USER_USERNAME						(	"n4systems"			),
 	SYSTEM_USER_PASSWORD						(	"7c4fd0a53d8aa0d0f15f716cc6324e95223d9902"	),
-	SYSTEM_USER_ADDRESS							(	"admin@fieldid.com"						),
+	SYSTEM_USER_ADDRESS							(	"admin@fieldid.com"		),
 	UNBRANDED_SUBDOMAIN							(	"www"										),
 	GLOBAL_APPLICATION_ROOT						(	"/var/fieldid"			),
 	DEFAULT_TIMEZONE_ID							(	"United States:New York - New York"			),
@@ -69,11 +69,12 @@ public enum ConfigEntry {
 	HOUSE_ACCOUNT_NAME							(	"fieldid"				),
 	HOUSE_ACCOUNT_PRIMARY_ORG_ID				(	"15511550"				),
 	DOWNLOAD_TTL_DAYS							(	"2"						),
-	SIGNUP_PATH									(	"/signup"						),
+	SIGNUP_PATH									(	"/signup"				),
 	SAFETY_NETWORK_HELP_URL						(	"https://www.fieldid.com/fieldid_help/?Safety_Network_Overview.html"	),
 	SAFETY_NETWORK_VIDEO_URL					(	"http://www.n4systems.com/qwe__wqe/training/safety_network_invite/"		),
-	SYSTEM_PROTOCOL								(	"https"	);
-	
+	SYSTEM_PROTOCOL								(	"https"					),
+	EXTERNAL_PLANS_AND_PRICING_ENABLED			(	"true" 					),
+	PLANS_AND_PRICING_URL						(	"http://www.n4systems.com/pricing/"	);
 	
 	private String defaultValue;
 	

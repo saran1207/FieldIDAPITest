@@ -1,41 +1,18 @@
 package com.n4systems.util.uri;
 
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.endsWith;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
-import java.net.URI;
-
-import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.Tenant;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigContextOverridableTestDouble;
-import com.n4systems.util.ConfigEntry;
-
-
 public class BaseUrlBuilderTest {
-
 	
-	private ConfigContextOverridableTestDouble configContext;
-
-	private final class BlankPathBaseUrlBuilder extends BaseUrlBuilder {
-		private BlankPathBaseUrlBuilder(URI baseUri, ConfigContext configContext) {
-			super(baseUri, configContext);
-		}
-
-		@Override
-		protected String path() {
-			return "";
-		}
-	}
-	
-	private final class SuppliedPathBaseUrlBuilder extends BaseUrlBuilder {
+	private class SuppliedPathUrlBuilder extends BaseUrlBuilder {
 		private final String path;
-
-		private SuppliedPathBaseUrlBuilder(URI baseUri, ConfigContext configContext, String path) {
-			super(baseUri, configContext);
+		
+		private SuppliedPathUrlBuilder(String baseUri, String path) {
+			super(baseUri);
 			this.path = path;
 		}
 
@@ -44,59 +21,39 @@ public class BaseUrlBuilderTest {
 			return path;
 		}
 	}
-
 	
-	@Before
-	public void setup() {
-		configContext = new ConfigContextOverridableTestDouble();
-		configContext.addConfigurationValue(ConfigEntry.SYSTEM_PROTOCOL, "https");
+	private class BlankPathBaseUrlBuilder extends SuppliedPathUrlBuilder {
+		private BlankPathBaseUrlBuilder(String baseUri) {
+			super(baseUri, "");
+		}
 	}
 	
-	@Test
-	public void should_not_change_the_protocol_on_the_uri_when_it_matches_the_config_entry() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/"), configContext);
+	@Test 
+	public void should_preserve_base_path_with_relative_path() {
+		BaseUrlBuilder sut = new SuppliedPathUrlBuilder("http://www.bleh.com/hello/", "world/");
+		assertEquals("http://www.bleh.com/hello/world/", sut.build());
+	}
+	
+	@Test 
+	public void should_wipe_base_path_with_absolute_path() {
+		BaseUrlBuilder sut = new SuppliedPathUrlBuilder("http://www.bleh.com/hello/", "/world/");
+		assertEquals("http://www.bleh.com/world/", sut.build());
+	}
+	
+	@Test 
+	public void should_wipe_base_file_with_any_path() {
+		String base = "http://www.bleh.com/hello";
 		
-		assertEquals("https://somedomain.com/", sut.build());
+		BaseUrlBuilder sut = new SuppliedPathUrlBuilder(base, "/world/");
+		assertEquals("http://www.bleh.com/world/", sut.build());
+		
+		sut = new SuppliedPathUrlBuilder(base, "world/");
+		assertEquals("http://www.bleh.com/world/", sut.build());
 	}
-
-	@Test
-	public void should_change_the_protocol_on_the_uri_when_it_matches_the_config_entry() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("http://somedomain.com/"), configContext);
-		assertEquals("https://somedomain.com/", sut.build());
-	}
-	
-	
-	@Test
-	public void should_maintain_the_context_in_the_base_url() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
-		assertEquals("https://somedomain.com/fieldid/", sut.build());
-	}
-	
-	
-	@Test
-	public void should_keep_file_and_query_string_of_target_when_correcting_the_protocol() throws Exception {
-		BaseUrlBuilder sut = new SuppliedPathBaseUrlBuilder(URI.create("http://somedomain.com/fieldid/"), configContext, "somefile.action?query=string");
-		assertEquals("https://somedomain.com/fieldid/somefile.action?query=string", sut.build());
-	}
-	
-	@Test
-	public void should_keep_file_and_query_string_of_target_when_not_correcting_the_protocol() throws Exception {
-		BaseUrlBuilder sut = new SuppliedPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext, "somefile.action?query=string");
-		assertEquals("https://somedomain.com/fieldid/somefile.action?query=string", sut.build());
-	}
-	
-	@Test
-	public void should_force_sub_domain_change_when_supplied_with_a_company_target() throws Exception {
-		Tenant tenant =  aTenant().named("alternate-tenant").build();
-		BaseUrlBuilder sut = new SuppliedPathBaseUrlBuilder(URI.create("https://company.somedomain.com/fieldid/"), configContext, "somefile.action");
-		sut.setCompany(tenant);
-		assertEquals("https://alternate-tenant.somedomain.com/fieldid/somefile.action", sut.build());
-	}
-	
 	
 	@Test
 	public void should_add_parameters_to_path_when_given() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder("https://somedomain.com/fieldid/");
 		sut.addParameter("param1", 4);
 		assertThat(sut.build(), endsWith("?param1=4"));
 	}	
@@ -104,7 +61,7 @@ public class BaseUrlBuilderTest {
 	
 	@Test
 	public void should_add_multiple_parameters_with_amps_between_them() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder("https://somedomain.com/fieldid/");
 		sut.addParameter("param1", 4).addParameter("param2", "hello").addParameter("param3", 'c');
 		
 		assertThat(sut.build(), endsWith("?param1=4&param2=hello&param3=c"));
@@ -113,7 +70,7 @@ public class BaseUrlBuilderTest {
 	
 	@Test
 	public void should_url_escape_the_values_of_a_parameter() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder("https://somedomain.com/fieldid/");
 		sut.addParameter("param", "= &");
 		
 		assertThat(sut.build(), endsWith("?param=%3D+%26"));
@@ -121,7 +78,7 @@ public class BaseUrlBuilderTest {
 	
 	@Test
 	public void should_url_escape_the_name_of_a_parameter() throws Exception {
-		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder(URI.create("https://somedomain.com/fieldid/"), configContext);
+		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder("https://somedomain.com/fieldid/");
 		sut.addParameter("param 1", "somevalue");
 		
 		assertThat(sut.build(), endsWith("?param+1=somevalue"));

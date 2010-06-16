@@ -1,55 +1,49 @@
 package com.n4systems.util.uri;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.Tenant;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.HostNameParser;
 
 public abstract class BaseUrlBuilder implements UrlBuilder {
-
-	private static final String URL_ENCODING_CHARACTER_SET = "UTF-8";
+	protected static final String URL_ENCODING_CHARACTER_SET = "UTF-8";
+	
 	private final URI baseUri;
-	private final ConfigContext configContext;
-	private Tenant tenant;
+	private final Map<String, Object> parameters = new HashMap<String, Object>();
 	
-	private Map<String, Object> parameters = new HashMap<String, Object>();
-	
-	
-
-	public BaseUrlBuilder(URI baseUri, ConfigContext configContext) {
-		super();
-		
-		this.baseUri = baseUri;
-		this.configContext = configContext;
-		
+	public BaseUrlBuilder(String baseUri) {
+		this(URI.create(baseUri));
 	}
-
+	
+	public BaseUrlBuilder(URI baseUri) {
+		this.baseUri = baseUri;
+	}
+	
+	/**
+	 * Returns the absolute or relative path for this URL.  Note that
+	 * absolute paths (paths starting with '/') will override any path
+	 * supplied in the baseUri.  Relative paths will be appended to the baseUri.  
+	 * @return
+	 */
 	protected abstract String path();
 	
-	
-	private URI getURI() {
-		return getBaseUri().resolve(path() + getQueryString());
+	private URI buildFullURI() {
+		return baseUri.resolve(path() + getQueryString());
 	}
 	
-	private String getQueryString()  {
-		if (parameters.isEmpty()) {
-			return "";
-		}
-		try {
-			return createQueryString();
-		} catch (UnsupportedEncodingException e) {
-			throw new InvalidArgumentException("UTF-8 encoding is not supported ", e);
-		}
+	@Override
+	public String build() {
+		URI fullUri = buildFullURI();
+		
+		return fullUri.toString();
+	}
+
+	private String encodeParameter(String urlString) throws UnsupportedEncodingException {
+		return URLEncoder.encode(urlString, URL_ENCODING_CHARACTER_SET);
 	}
 
 	private String createQueryString() throws UnsupportedEncodingException {
@@ -60,72 +54,25 @@ public abstract class BaseUrlBuilder implements UrlBuilder {
 		
 		return queryString.replaceFirst("&", "?");
 	}
-
-	private String encodeParameter(String urlString) throws UnsupportedEncodingException {
-		return URLEncoder.encode(urlString, URL_ENCODING_CHARACTER_SET);
-	}
-
-	public String build() {
+	
+	private String getQueryString() {
+		if (parameters.isEmpty()) {
+			return "";
+		}
 		try {
-			URL url = getURL();
-			
-			url = setProtocol(url);
-			
-			url = adjustDomain(url);
-			return url.toString();
-		} catch (MalformedURLException e) {
-			throw new InvalidArgumentException("the url could not be construtcted", e);
+			return createQueryString();
+		} catch (UnsupportedEncodingException e) {
+			throw new InvalidArgumentException("UTF-8 encoding is not supported ", e);
 		}
 	}
-
-	private URL adjustDomain(URL result) throws MalformedURLException {
-		if (tenant != null) {
-			HostNameParser hostParser = HostNameParser.create(result);
-			String newHostname = hostParser.replaceFirstSubDomain(tenant.getName());
-			return new URL(result.getProtocol(), newHostname, result.getFile());
-			
-		}
-		return result;
-	}
-
-	private URL setProtocol(URL url) throws MalformedURLException {
-		if (url.getProtocol().equalsIgnoreCase(configContext.getString(ConfigEntry.SYSTEM_PROTOCOL))) {
-			return url;
-		}
-		
-		return new URL(configContext.getString(ConfigEntry.SYSTEM_PROTOCOL), url.getHost(), url.getFile());
-	}
-
-	private URL getURL() {
-		try {
-			return getURI().toURL();
-		} catch (MalformedURLException e) {
-			throw new InvalidArgumentException("the url could not be construtcted", e);
-		}
+	
+	public BaseUrlBuilder addParameter(String paramName, Object paramValue) {
+		parameters.put(paramName, paramValue);
+		return this;
 	}
 	
 	@Override
 	public String toString() {
 		return build();
-	}
-	
-	
-	private URI getBaseUri() {
-		return baseUri;
-	}
-
-	public ConfigContext getConfigContext() {
-		return configContext;
-	}
-
-	public BaseUrlBuilder setCompany(Tenant tenant) {
-		this.tenant = tenant;
-		return this;
-	}
-	
-	
-	public BaseUrlBuilder addParameter(String paramName, Object paramValue) {
-		parameters.put(paramName, paramValue);
-		return this;
 	}
 }

@@ -12,8 +12,21 @@
 			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
 		</global-results>
 		
-		
-		<action name="signUpPackages" method="list" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
+		<action name="signUpPackages" method="showPlansAndPricing" class="com.n4systems.fieldid.actions.subscriptions.PlansAndPricingAction">
+			<result name="external" type="redirect">
+				<param name="location">${externalUrl}</param>
+			</result>
+			
+			<result name="internal" type="redirectAction">
+				<param name="actionName">localPlansAndPricing</param>
+				<param name="refCode">${refCode}</param>
+			</result>
+			
+			<result name="error" type="redirectAction">localPlansAndPricing</result>
+			<result name="input" type="redirectAction">localPlansAndPricing</result>
+		</action>
+
+		<action name="localPlansAndPricing" method="list" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
 			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>

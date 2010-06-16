@@ -6,7 +6,7 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.StringUtils;
 
-public class ActionURLBuilder extends BaseUrlBuilder {
+public class ActionURLBuilder extends InternalUrlBuilder {
 	private String action;
 	private BaseEntity entity;
 	
