@@ -81,13 +81,15 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
-import com.n4systems.model.user.User;
 import com.n4systems.model.user.EmployeePaginatedLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.servicedto.converts.DtoToModelConverterFactory;
 import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
+import com.n4systems.servicedto.converts.InspectionServiceDTOConverter;
 import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
+import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.product.ProductSaveService;
@@ -113,6 +115,7 @@ import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
+import com.n4systems.webservice.dto.EmployeeListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionListResponse;
@@ -137,7 +140,6 @@ import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.SubInspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
-import com.n4systems.webservice.dto.EmployeeListResponse;
 import com.n4systems.webservice.dto.UserServiceDTO;
 import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -368,8 +370,8 @@ public class DataServiceImpl implements DataService {
 			
 			int currentPage = request.getPageNumber().intValue();
 			
-			Date modified = converter.convertStringToDate(request.getModified());
-			
+			Date modified = DtoDateConverter.convertStringToDate(request.getModified());
+		
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
 			QueryBuilder<Project> jobBuilder = new QueryBuilder<Project>(Project.class, securityFilter);
 			jobBuilder.addWhere(Comparator.EQ, "eventjob", "eventJob", true);
@@ -972,6 +974,11 @@ public class DataServiceImpl implements DataService {
 		return converter;
 	}
 	
+	private InspectionServiceDTOConverter createInspectionServiceDTOConverter(Long tenantId) {
+		InspectionServiceDTOConverter converter = DtoToModelConverterFactory.createFactory(createSecurityGuard(tenantId)).createInspectionConverter();
+		return converter;
+	}
+	
 	private ProductServiceDTO fixModifyByFromOldVersionsOfMobile(ProductServiceDTO productDTO) {
 		if (!productDTO.modifiedByIdExists()) {
 			productDTO.setModifiedById(productDTO.getIdentifiedById());
@@ -1014,14 +1021,14 @@ public class DataServiceImpl implements DataService {
 				return response; 
 			}
 			
+			Long tenantId = requestInformation.getTenantId();
 			
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			
+			InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
+			
 			LegacyProductSerial productManager = ServiceLocator.getProductSerialManager();
 			InspectionScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
-			
-		
-			Long tenantId = requestInformation.getTenantId();
 			
 			List<Inspection> inspections = new ArrayList<Inspection>();
 //			Map<Inspection, ProductStatusBean> productStatus = new HashMap<Inspection, ProductStatusBean>();
@@ -1048,9 +1055,9 @@ public class DataServiceImpl implements DataService {
 					}
 				}
 				
-				Inspection inspection = converter.convert(inspectionServiceDTO, tenantId);
+				Inspection inspection = converter.convert(inspectionServiceDTO);
 				inspections.add( inspection );
-				nextInspectionDates.put(inspection, converter.convertNextDate(inspectionServiceDTO));
+				nextInspectionDates.put(inspection, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
 				inspectionSchedules.put(inspection, loadScheduleFromInspectionDto(scheduleLoader,
 						inspectionServiceDTO));				
 			}	
@@ -1381,7 +1388,7 @@ public class DataServiceImpl implements DataService {
 			
 			queryBuilder.addWhere(customerDivisionWhere);
 			
-			Date createDate = converter.convertStringToDate(searchCriteria.getCreateDate()); 
+			Date createDate = DtoDateConverter.convertStringToDate(searchCriteria.getCreateDate()); 
 			if (createDate != null) {
 				queryBuilder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", createDate);
 			}
@@ -1438,7 +1445,7 @@ public class DataServiceImpl implements DataService {
 				queryBuilder.addWhere(WhereParameter.Comparator.IN, "project_id", "project.id", searchCriteria.getJobIds());
 			}
 			
-			Date createDate = converter.convertStringToDate(searchCriteria.getCreateDate()); 
+			Date createDate = DtoDateConverter.convertStringToDate(searchCriteria.getCreateDate()); 
 			if (createDate != null) {
 				queryBuilder.addWhere(WhereParameter.Comparator.GE, "project_modified", "project.modified", createDate);
 			}
@@ -1551,8 +1558,7 @@ public class DataServiceImpl implements DataService {
 	
 	public RequestResponse createCompletedJobSchedule(CompletedJobScheduleRequest request) throws ServiceException {
 		try {
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			Date convertedNextDate = converter.convertStringToDate(request.getNextDate());
+			Date convertedNextDate = DtoDateConverter.convertStringToDate(request.getNextDate());
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(request.getTenantId());
 			
 			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new InspectionByMobileGuidLoader<Inspection>(filter, Inspection.class), 

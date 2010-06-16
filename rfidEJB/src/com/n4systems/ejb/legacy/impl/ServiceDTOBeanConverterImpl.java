@@ -3,10 +3,7 @@ package com.n4systems.ejb.legacy.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -71,6 +68,7 @@ import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
+import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
 import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
@@ -357,8 +355,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetProduct.setInfoOptions(convertInfoOptions(productServiceDTO));
 		}
 
-		if (convertStringToDate(productServiceDTO.getIdentified()) != null) {
-			targetProduct.setIdentified(convertStringToDate(productServiceDTO.getIdentified()));
+		if (DtoDateConverter.convertStringToDate(productServiceDTO.getIdentified()) != null) {
+			targetProduct.setIdentified(DtoDateConverter.convertStringToDate(productServiceDTO.getIdentified()));
 		}
 
 		if (targetProduct.isNew()) {
@@ -459,7 +457,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			inspection.setDate(inspectionServiceDTO.getUtcDate());
 		} else {
 			// TODO convert from their set timezone
-			inspection.setDate( convertStringToDate(inspectionServiceDTO.getDate()) );
+			inspection.setDate( DtoDateConverter.convertStringToDate(inspectionServiceDTO.getDate()) );
 		}		
 		
 		// Required object lookups		
@@ -517,7 +515,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 
 		inspection.setProductStatus(convertProductStatus(inspectionServiceDTO));
-
 		inspection.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
 
 		return inspection;
@@ -711,6 +708,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionTypeService.setMaster(inspectionType.isMaster());
 		inspectionTypeService.setGroupId(inspectionType.getGroup().getId());
 		inspectionTypeService.setFormVersion(inspectionType.getFormVersion());
+		inspectionTypeService.setAssignedToAvailable(inspectionType.isAssignedToAvailable());
 
 		for (CriteriaSection section : inspectionType.getSections()) {
 			if (!section.isRetired()) {
@@ -1023,35 +1021,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 	public TenantServiceDTO convert(PrimaryOrg primaryOrg) {
 		return new PrimaryOrgToServiceDTOConverter().convert(primaryOrg);
-	}
-
-
-
-	public Date convertStringToDate(String stringDate) {
-		if (stringDate == null || stringDate.length() == 0)
-			return null;
-
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy hh:mm:ss a");
-		Date dateConvert = null;
-		try {
-			dateConvert = df.parse(stringDate);
-		} catch (ParseException e) {
-
-			// try another way
-			try {
-				df = new SimpleDateFormat("yy-MM-dd hh:mm:ss");
-				dateConvert = df.parse(stringDate);
-			} catch (ParseException ee) {
-				// do nothing, return null
-				logger.warn("failed to parse string date " + stringDate.toString(), ee);
-			}
-		}
-
-		return dateConvert;
-	}
-
-	public Date convertNextDate(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
-		return convertStringToDate(inspectionServiceDTO.getNextDate());
 	}
 
 	private ProductStatusBean convertProductStatus(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {

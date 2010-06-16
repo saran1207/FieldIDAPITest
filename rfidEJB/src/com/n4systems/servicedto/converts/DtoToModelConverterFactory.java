@@ -20,5 +20,10 @@ public class DtoToModelConverterFactory {
 	public ProductServiceDTOConverter createProductConverter() {
 		return new ProductServiceDTOConverter(systemSecurityGuard);
 	}
+	
+	public InspectionServiceDTOConverter createInspectionConverter() {
+		return new InspectionServiceDTOConverter(systemSecurityGuard);
+	}
+	
 
 }

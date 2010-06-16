@@ -13,6 +13,7 @@ public class InspectionTypeServiceDTO extends AbstractBaseServiceDTO {
 	private long formVersion;
 	private List<CriteriaSectionServiceDTO> sections = new ArrayList<CriteriaSectionServiceDTO>();
 	private List<InfoFieldNameServiceDTO> infoFieldNames = new ArrayList<InfoFieldNameServiceDTO>();
+	private boolean assignedToAvailable;
 	
 	public String getName() {
 		return name;
@@ -61,5 +62,12 @@ public class InspectionTypeServiceDTO extends AbstractBaseServiceDTO {
     }
 	public void setFormVersion(long formVersion) {
     	this.formVersion = formVersion;
-    }			
+    }
+	public boolean isAssignedToAvailable() {
+		return assignedToAvailable;
+	}
+	public void setAssignedToAvailable(boolean assignedToAvailable) {
+		this.assignedToAvailable = assignedToAvailable;
+	}
+	
 }

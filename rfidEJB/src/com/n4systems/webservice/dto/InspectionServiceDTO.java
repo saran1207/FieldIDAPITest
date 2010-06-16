@@ -30,9 +30,8 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private long orgId;
 	private long customerId;
 	private long divisionId;
+	private long assignedUserId;
 	
-
-
 	// These are only used by PRE 1.14 mobile versions; now uses ownerId
 	private long organizationId;
 	
@@ -235,4 +234,15 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	public void setInspectionScheduleMobileGuid(String inspectionScheduleMobileGuid) {
 		this.inspectionScheduleMobileGuid = inspectionScheduleMobileGuid;
 	}
+	public long getAssignedUserId() {
+		return assignedUserId;
+	}
+	public void setAssignedUserId(long assignedUserId) {
+		this.assignedUserId = assignedUserId;
+	}
+	public boolean assignedUserIdExists(){
+		return isValidServerId( assignedUserId );
+	}
+	
+	
 }
