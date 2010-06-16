@@ -182,7 +182,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	private void assignedToUpdates(Inspection inspection, Product product) {
 		if (inspection.hasAssignToUpdate()) {
-			//product.setAssignedUser(inspection.getAssignedTo().getAssignedUser());
+			product.setAssignedUser(inspection.getAssignedTo().getAssignedUser());
 		}
 		
 	}
