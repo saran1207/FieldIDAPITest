@@ -2,6 +2,7 @@ package com.n4systems.fieldid.collection.helpers;
 
 import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.*;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
+import static com.n4systems.model.builders.UserBuilder.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -70,7 +71,7 @@ public class CommonAssetValuesFinderTest {
 		
 		ProductBuilder builder = ProductBuilder.aProduct().havingStatus(productStatus);
 		Product asset1 = builder.withOwner(aPrimaryOrg().build()).inLocation("location1").build();
-		Product asset2 = builder.withOwner(aPrimaryOrg().build()).inLocation("location2").build();
+		Product asset2 = builder.withOwner(aPrimaryOrg().build()).inLocation("location2").assignedTo(anEmployee().build()).build();
 		
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset1, asset2));
 		
@@ -83,10 +84,10 @@ public class CommonAssetValuesFinderTest {
 	@Test
 	public void should_find_only_the_location_field_is_common_value_when_multiple_assets_only_have_the_location_in_common() throws Exception {
 		
-		ProductBuilder builder = ProductBuilder.aProduct().inLocation("location1");
+		ProductBuilder builder = ProductBuilder.aProduct().inLocation("location1").assignedTo(null);
 		Product asset1 = builder.withOwner(aPrimaryOrg().build()).havingStatus(null).build();
 		Product asset2 = builder.withOwner(aPrimaryOrg().build()).havingStatus(productStatus).build();
-		Product asset3 = builder.withOwner(aPrimaryOrg().build()).havingStatus(null).build();
+		Product asset3 = builder.withOwner(aPrimaryOrg().build()).havingStatus(null).assignedTo(anEmployee().build()).build();
 		
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset1, asset2, asset3));
 		
