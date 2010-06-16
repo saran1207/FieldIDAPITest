@@ -1,6 +1,6 @@
 <#if inspection.hasAssignToUpdate()>
 	<p>
-		<label><@s.text name="label.asset_assignment_changed_to"/></label>
-		<span>${(inspection.assignedTo.assignedUser.userLabel)!action.getText('label.no_one')}</span>
+		<label><@s.text name="label.assigned_to"/></label>
+		<span>${(inspection.assignedTo.assignedUser.userLabel)!action.getText('label.not_assigned')}</span>
 	</p>
 </#if>

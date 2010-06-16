@@ -38,12 +38,7 @@
 				${product.rfidNumber!""?html}
 			</span>
 		</p>
-		<p>
-			<label><@s.text name="label.productstatus"/></label>
-			<span>
-				${(inspection.productStatus.name)!}
-			</span>
-		</p>
+		
 		<p>
 			<label><@s.text name="label.desc"/></label>
 			<span>
@@ -176,6 +171,12 @@
 	
 	<#include "_assigned_to.ftl"/>
 	
+	<p>
+		<label><@s.text name="label.productstatus"/></label>
+		<span>
+			${(inspection.productStatus.name)!}
+		</span>
+	</p>
 	
 	<#if !linkedInspection >
 		<#assign downloadAction="downloadAttachedFile"/>

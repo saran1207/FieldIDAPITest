@@ -272,6 +272,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		setPerformedBy(getSessionUser().getUniqueID());
 		inspection.setPrintable(inspection.getType().isPrintable());
 		setUpSupportedProofTestTypes();
+		assignedTo = product.getAssignedUser();
 		
 		if (inspectionSchedule != null) {	
 			inspectionSchedule.inProgress();
