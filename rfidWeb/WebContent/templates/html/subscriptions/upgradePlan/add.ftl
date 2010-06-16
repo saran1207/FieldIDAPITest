@@ -40,16 +40,6 @@ ${action.setPageType('account_settings', 'upgrade')!}
 					</ul>
 				</div>
 			</div>
-			
-			<div class="infoSection">
-				<h3><@s.text name="label.add_on_phone_support"/></h3>
-				<div class="infoBlock ">
-					<div class="infoSet">
-						<label class="label" for="purchasingPhoneSupport"><@s.text name="label.phone_support"/> (30%) <span><@s.checkbox name="purchasingPhoneSupport" theme="simple" cssClass="changesPrice"/></span></label>
-					</div>
-				
-				</div>
-			</div>
 		
 		</#if>
 		<#assign charge_label="label.you_will_be_charged_this_immediately"/>

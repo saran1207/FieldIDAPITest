@@ -44,7 +44,6 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 	private List<DecoratedSignUpPackage> availablePackagesForUpdate;
 	private SignUpPackage upgradePackage;
 	private PaymentOption paymentOption;
-	private boolean phoneSupport;
 	
 	private List<SignUpPackage> allSignUpPackages;
 	
@@ -209,7 +208,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 
 	private boolean getPhoneSupport() {
 		if (isFreeAccount()) {
-			return isPurchasingPhoneSupport();
+			return false;
 		}
 		
 		return accountCurrentlyHasPhoneSupport();
@@ -294,16 +293,6 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 
 	public void setPaymentOption(String paymentOption) {
 		this.paymentOption = PaymentOption.valueOf(paymentOption);
-	}
-	
-
-	public boolean isPurchasingPhoneSupport() {
-		return phoneSupport;
-	}
-
-
-	public void setPurchasingPhoneSupport(boolean phoneSupport) {
-		this.phoneSupport = phoneSupport;
 	}
 	
 	@Override
