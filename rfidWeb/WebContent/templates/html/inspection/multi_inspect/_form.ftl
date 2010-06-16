@@ -68,6 +68,29 @@
 			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 	</div>
 	
+	<#if inspectionType.assignedToAvailable>
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.assign_asset_to"/></label>
+			<@s.select id="assignedToId" name="assignedToId" list="employees" listKey="id" listValue="displayName" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}" />
+			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+		</div>
+	</#if>
+	
+	
 	<#include "/templates/html/inspectionCrud/_schedules.ftl" />
 	
 </@s.form>
+
+
+<@n4.includeScript>
+		function updateAssignToSomone() {
+			var value = $('assignedToId').getValue();
+			if (value == '-1') {
+				$('assignToSomeone').value = 'false';
+			} else {
+				$('assignToSomeone').value = 'true';
+			}
+		}
+	$('assignedToId').observe('change', updateAssignToSomone);
+	updateAssignToSomone();
+</@n4.includeScript>

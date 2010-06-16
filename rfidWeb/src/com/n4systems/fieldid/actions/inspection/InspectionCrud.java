@@ -70,6 +70,7 @@ import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
@@ -1024,7 +1025,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
+			employees = new ArrayList<Listable<Long>>();
+			employees.add(new SimpleListable<Long>(0L, getText("label.unassigned")));
+			employees.addAll(getLoaderFactory().createCurrentEmployeesListableLoader().load());
 		}
 		return employees;
 	}

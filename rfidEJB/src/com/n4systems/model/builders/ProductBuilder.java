@@ -14,9 +14,12 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 
 public class ProductBuilder extends BaseBuilder<Product>{
-
+	private static final User NOT_ASSIGNED = null;
+	
+	
 	private final Tenant tenant;
 	private final BaseOrg owner;
 	private final ProductType type;
@@ -27,15 +30,16 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	private final SubProduct[] subProducts;
 	private final String location;
 	private final ProductStatusBean productStatus;
+	private final User assignedTo;
 	
 	public static ProductBuilder aProduct() {
-		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, null, null);
+		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, null, null, NOT_ASSIGNED);
 	}
 	
 	
 
 
-	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, String location, ProductStatusBean productStatus, SubProduct... subProducts) {
+	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, String location, ProductStatusBean productStatus, User assignedTo, SubProduct... subProducts) {
 		super();
 		this.tenant = tenant;
 		this.owner = owner;
@@ -44,45 +48,50 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		this.modified = modified;
 		this.location = location;
 		this.productStatus = productStatus;
+		this.assignedTo = assignedTo;
 		this.subProducts = subProducts;
 	}
 
 
 	public ProductBuilder ofType(ProductType type) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
 	
 	public ProductBuilder forTenant(Tenant tenant) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
 	
 	public ProductBuilder withOwner(BaseOrg owner) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
 	
 	public ProductBuilder withSerialNumber(String serialNumber) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
 	
 	public ProductBuilder withModifiedDate(Date modified) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
 	
 	public ProductBuilder withOneSubProduct() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, aSubProduct().build());
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, aSubProduct().build());
 		
 	}
 	
 	public ProductBuilder withTwoSubProducts() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, aSubProduct().build(),aSubProduct().build());
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo,aSubProduct().build(), aSubProduct().build());
 	}
 	
 	public ProductBuilder inLocation(String location) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
 	
 	public ProductBuilder havingStatus(ProductStatusBean productStatus) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, subProducts);
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+	}
+	
+	public ProductBuilder assignedTo(User employee) {
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, employee, subProducts);
 	}
 	
 	@Override
@@ -104,6 +113,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		product.setModified(modified);
 		product.setLocation(location);
 		product.setProductStatus(productStatus);
+		product.setAssignedUser(assignedTo);
 		
 		return product;
 	}
@@ -115,6 +125,11 @@ public class ProductBuilder extends BaseBuilder<Product>{
 			}
 		}
 	}
+
+
+
+
+	
 
 	
 	

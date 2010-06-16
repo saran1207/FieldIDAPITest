@@ -24,7 +24,7 @@
 	<#if inspectionType.assignedToAvailable && form_action="ADD">
 		<p>
 			<label><@s.text name="label.assign_asset_to"/></label>
-			<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.not_assigned')}"/>
+			<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName"/>
 			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
 		</p>
 	<#elseif form_action="EDIT">
@@ -37,18 +37,3 @@
 	
 </#if>
 
-<@n4.includeScript>
-	$$('#ignoreAssignTo').each(function(element) { 
-			element.observe('click', function(event) {
-				event.stop();
-				$('assignToSomeone').value = 'false';
-				
-			})
-		});
-	$$('#performAssignment').each(function(element) { 
-			element.observe('click', function(event) {
-				event.stop();
-				$('assignToSomeone').value = 'true';
-			})
-		});
-</@n4.includeScript>

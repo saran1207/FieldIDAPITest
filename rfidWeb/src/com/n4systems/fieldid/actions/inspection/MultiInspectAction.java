@@ -30,12 +30,15 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 public class MultiInspectAction extends AbstractCrud {
 
+	private static final long UNASSIGNED_OPTION_VALUE = 0L;
+	private static final long KEEP_THE_SAME_OPTION = -1L;
 	private List<Long> assetIds = new ArrayList<Long>();
 	private Set<InspectionType> eventTypes;
 
@@ -56,6 +59,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private CommonAssetValues commonAssetValues;
 	private WebModifiedableInspection modifiableInspection;
 	private MultiInspectGroupSorter multiInspectGroupSorter;
+	private List<Listable<Long>> employees;
 	
 
 	public MultiInspectAction(PersistenceManager persistenceManager, UserManager userManager) {
@@ -205,6 +209,13 @@ public class MultiInspectAction extends AbstractCrud {
 		return productStatuses;
 	}
 	
+	public Long getAssignedToId() {
+		if (commonAssetValues.hasCommonAssignment()) { 
+			return commonAssetValues.assignment.assignTo != null ? commonAssetValues.assignment.assignTo.getId() : UNASSIGNED_OPTION_VALUE; 
+		}
+		
+		return KEEP_THE_SAME_OPTION;
+	}
 	
 	public Long getProductStatus() {
 		return commonAssetValues.productStatus != null ? commonAssetValues.productStatus.getUniqueID() : null;
@@ -224,6 +235,15 @@ public class MultiInspectAction extends AbstractCrud {
 			multiInspectGroupSorter = new MultiInspectGroupSorter(getEventTypes());
 		}
 		return multiInspectGroupSorter;
+	}
+	
+	public List<Listable<Long>> getEmployees() {
+		if (employees == null) {
+			employees = new ArrayList<Listable<Long>>();
+			employees.add(new SimpleListable<Long>(0L, getText("label.unassigned")));
+			employees.addAll(getLoaderFactory().createCurrentEmployeesListableLoader().load());
+		}
+		return employees;
 	}
 	
 	public List<WebInspectionSchedule> getNextSchedules() {

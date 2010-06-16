@@ -4,6 +4,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.n4systems.model.user.User;
 
 @Embeddable
@@ -51,6 +54,16 @@ public class AssignedToUpdate {
 			return "ignored Assigned To Update";
 		}
 		return "AssignedToUpdate for [" + ((assignedUser != null) ? assignedUser.getUserLabel() : "-- NO ONE ---") + "]" ;
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 	
 	

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.collection.helpers;
 
+import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.*;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -74,7 +75,7 @@ public class CommonAssetValuesFinderTest {
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset1, asset2));
 		
 		
-		CommonAssetValues expectedCommonValues = new CommonAssetValues(null, null, productStatus);
+		CommonAssetValues expectedCommonValues = new CommonAssetValues(NO_COMMON_LOCATION, NO_COMMON_OWNER, productStatus, NO_COMMON_ASSIGNMENT);
 		
 		assertThat(sut.findCommonValues(), equalTo(expectedCommonValues));
 	}
@@ -90,9 +91,12 @@ public class CommonAssetValuesFinderTest {
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset1, asset2, asset3));
 		
 		
-		CommonAssetValues expectedCommonValues = new CommonAssetValues("location1", null, null);
+		CommonAssetValues expectedCommonValues = new CommonAssetValues("location1", NO_COMMON_OWNER, NO_COMMON_PRODUCT_STATUS, NO_COMMON_ASSIGNMENT);
 		
 		assertThat(sut.findCommonValues(), equalTo(expectedCommonValues));
 	}
+	
+	
+	
 	
 }
