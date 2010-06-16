@@ -30,7 +30,7 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.fieldid.permissions.SessionSecurityGuard;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
@@ -788,7 +788,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private SystemSecurityGuard createSecurityGuard(long tenantId) {
-		SystemSecurityGuard systemSecurityGuard = new SessionSecurityGuard(getTenantCache().findTenant(tenantId));
+		SystemSecurityGuard systemSecurityGuard = new SerializableSecurityGuard(getTenantCache().findTenant(tenantId));
 		return systemSecurityGuard;
 	}
 

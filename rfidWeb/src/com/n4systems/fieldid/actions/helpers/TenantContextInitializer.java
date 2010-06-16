@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.lang.TenantLanguageSessionHelper;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
-import com.n4systems.fieldid.permissions.SessionSecurityGuard;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.TenantCache;
@@ -116,7 +116,7 @@ public abstract class TenantContextInitializer {
 
 	private void resetSecurityGuard(Tenant tenant) {
 		forgetSecurityGuard();
-		securityGuard = new SessionSecurityGuard(tenant);
+		securityGuard = new SerializableSecurityGuard(tenant);
 		rememberSecurityGuard(securityGuard);
 		
 		tenantLanguageLoad(tenant);

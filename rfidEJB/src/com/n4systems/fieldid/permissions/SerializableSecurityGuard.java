@@ -1,22 +1,24 @@
 package com.n4systems.fieldid.permissions;
 
+import java.io.Serializable;
+
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.TenantCache;
 
-public class SessionSecurityGuard implements SystemSecurityGuard {
+public class SerializableSecurityGuard implements SystemSecurityGuard, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private final Tenant tenant;
 	private final PrimaryOrg primaryOrg;
 	
-	public SessionSecurityGuard(Tenant tenant) {
+	public SerializableSecurityGuard(Tenant tenant) {
 		this(tenant, TenantCache.getInstance().findPrimaryOrg(tenant.getId()));
 	}
 	
-	public SessionSecurityGuard(Tenant tenant, PrimaryOrg primaryOrg) {
+	public SerializableSecurityGuard(Tenant tenant, PrimaryOrg primaryOrg) {
 		if (tenant == null) {
 			throw new InvalidArgumentException("Tenant cannot be null");
 		}

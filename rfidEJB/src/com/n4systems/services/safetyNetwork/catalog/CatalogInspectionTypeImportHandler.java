@@ -1,5 +1,7 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
+import static com.n4systems.model.inspectiontype.InspectionTypeCleanerFactory.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,8 +13,6 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.api.Cleaner;
-import com.n4systems.model.inspectiontype.InspectionTypeCleaner;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -26,9 +26,7 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	private Set<Long> originalInspectionTypeIds;
 	private InspectionTypeImportSummary summary = new InspectionTypeImportSummary();
 	
-	public CatalogInspectionTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
-		this(persistenceManager, tenant, importCatalog, new InspectionTypeImportSummary());
-	}
+	
 	
 	public CatalogInspectionTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, InspectionTypeImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
@@ -78,10 +76,9 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void clean(InspectionType importedInspectionType) {
-		Cleaner<InspectionType> typeCleaner = new InspectionTypeCleaner(tenant);
-		typeCleaner.clean(importedInspectionType);
+		cleanerFor(tenant).clean(importedInspectionType);
 	}
-	
+
 	private void mapStateSets(InspectionType importedInspectionType) {
 		for (CriteriaSection criteriaSection : importedInspectionType.getSections()) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {

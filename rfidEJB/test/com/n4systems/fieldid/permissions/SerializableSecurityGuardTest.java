@@ -18,7 +18,7 @@ import com.n4systems.services.TenantCache;
 
 
 
-public class SessionSecurityGuardTest {
+public class SerializableSecurityGuardTest {
 
 	
 	@Test
@@ -31,7 +31,7 @@ public class SessionSecurityGuardTest {
 			replay(mockCache);
 			TenantCache.setInstance(mockCache);
 			
-			SessionSecurityGuard sut = new SessionSecurityGuard(tenant);
+			SerializableSecurityGuard sut = new SerializableSecurityGuard(tenant);
 			
 			assertFalse("could not find accessor for extended feature " + feature.toString(), testIfFeatueIsEnabled(feature, sut));
 		}
@@ -49,14 +49,14 @@ public class SessionSecurityGuardTest {
 			TenantCache.setInstance(mockCache);
 			
 			
-			SessionSecurityGuard sut = new SessionSecurityGuard(tenant);
+			SerializableSecurityGuard sut = new SerializableSecurityGuard(tenant);
 			
 			assertTrue("could not find accessor for extended feature " + feature.toString(), testIfFeatueIsEnabled(feature, sut));
 		}
 		 
 	}
 
-	private Boolean testIfFeatueIsEnabled(ExtendedFeature feature, SessionSecurityGuard sut) {
+	private Boolean testIfFeatueIsEnabled(ExtendedFeature feature, SerializableSecurityGuard sut) {
 		String featureEnabledMethodName = feature.featureEnabledMethodName();
 		try {
 			Method method = sut.getClass().getMethod(featureEnabledMethodName);
@@ -73,7 +73,7 @@ public class SessionSecurityGuardTest {
 	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_not_have_the_partner_center() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withNoExtendedFeatures().build();
 		
-		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
 		
 		assertTrue(sut.isPlansAndPricingAvailable());
 	}
@@ -82,7 +82,7 @@ public class SessionSecurityGuardTest {
 	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_not_have_the_partner_center_and_plans_and_pricing_not_available() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withNoExtendedFeatures().withPlansAndPricingNotAvailable().build();
 		
-		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
 		
 		assertTrue(sut.isPlansAndPricingAvailable());
 	}
@@ -91,7 +91,7 @@ public class SessionSecurityGuardTest {
 	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_has_the_partner_center_and_plans_and_pricing_available_set_to_true() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withExtendedFeatures(ExtendedFeature.PartnerCenter).withPlansAndPricingAvailable().build();
 		
-		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
 		
 		assertTrue(sut.isPlansAndPricingAvailable());
 	}
@@ -101,7 +101,7 @@ public class SessionSecurityGuardTest {
 	public void should_show_that_plans_and_pricing_is_not_available_when_the_primary_org_does_has_the_partner_center() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withExtendedFeatures(ExtendedFeature.PartnerCenter).build();
 		
-		SessionSecurityGuard sut = new SessionSecurityGuard(primaryOrg.getTenant(), primaryOrg);
+		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
 		
 		assertTrue(!sut.isPlansAndPricingAvailable());
 	}
