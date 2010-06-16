@@ -14,6 +14,8 @@ public class CsvMapWriterTest {
 	
 	@Test
 	public void test_write() throws IOException {
+		String lineSep = System.getProperty("line.separator");
+		
 		Writer strWrite = new StringWriter();
 		
 		MapWriter writer = new CsvMapWriter(strWrite);
@@ -27,7 +29,7 @@ public class CsvMapWriterTest {
 		
 		writer.write(map);
 		
-		String expected = "\"title1\",\"title2\",\"title3\"\n\"value1\",\"42\",\"asd,bleh\"\n";
+		String expected = "\"title1\",\"title2\",\"title3\"" + lineSep + "\"value1\",\"42\",\"asd,bleh\"" + lineSep;
 		
 		assertEquals(expected, strWrite.toString());
 	}
