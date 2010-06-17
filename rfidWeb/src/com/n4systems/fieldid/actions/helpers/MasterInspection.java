@@ -334,10 +334,12 @@ public class MasterInspection {
 	
 	
 	public void applyAssignToUpdateToInspection() {
-		if (assignToSomeone) {
-			inspection.setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
-		} else {
-			inspection.removeAssignTo();
+		if (inspection.isNew()) {
+			if (assignToSomeone) {
+				inspection.setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
+			} else {
+				inspection.removeAssignTo();
+			}
 		}
 	}
 
