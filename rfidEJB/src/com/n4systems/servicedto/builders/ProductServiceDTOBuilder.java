@@ -1,5 +1,6 @@
-package com.n4systems.model.builders;
+package com.n4systems.servicedto.builders;
 
+import com.n4systems.model.builders.BaseBuilder;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 
 public class ProductServiceDTOBuilder extends BaseBuilder<ProductServiceDTO> {

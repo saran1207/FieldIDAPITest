@@ -1,7 +1,6 @@
 package com.n4systems.ejb.legacy;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import rfid.ejb.entity.ProductStatusBean;
@@ -53,15 +52,12 @@ public interface ServiceDTOBeanConverter {
 	public ProductServiceDTO convert(Product product);
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
-	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
-	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );
 	public com.n4systems.webservice.dto.AutoAttributeDefinitionServiceDTO convert( AutoAttributeDefinition definition );
 	public ProductStatusServiceDTO convert( ProductStatusBean productStatus );
 	public ProductTypeServiceDTO convert_new( ProductType productType );
 	public TenantServiceDTO convert(PrimaryOrg tenant);
 	public com.n4systems.webservice.dto.UserServiceDTO convert(User user);
-	public User convert(com.n4systems.webservice.dto.UserServiceDTO user);
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook);
 	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup);
 	public JobServiceDTO convert(Project job);
@@ -70,7 +66,14 @@ public interface ServiceDTOBeanConverter {
 	public DivisionOrgServiceDTO convert(DivisionOrg divisionOrg);
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg);
 	public VendorServiceDTO convert(OrgConnection orgConnections);
+	
+	
 	public BaseOrg convert(long ownerId, long tenantId);
+	
+	
 	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
+	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
+	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
+	public User convert(com.n4systems.webservice.dto.UserServiceDTO user);
 	
 }

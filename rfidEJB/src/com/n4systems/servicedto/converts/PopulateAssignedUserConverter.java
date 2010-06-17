@@ -1,5 +1,6 @@
 package com.n4systems.servicedto.converts;
 
+import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
 import com.n4systems.model.inspection.AssignedToUpdate;
@@ -30,16 +31,32 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 	}
 
 	@Override
-	public Inspection convert(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) {
+	public Inspection convert(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) throws ConversionException {
+		if (inspectionServiceDTO.isAssignmentIncluded()) {
+			applyAssignment(inspectionServiceDTO, inspection);
+		}
+		return inspection;
+	}
+
+	private void applyAssignment(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) throws ConversionException {
 		User user = null;
 		if (inspectionServiceDTO.assignedUserIdExists()) {
-			UserFilteredLoader loader = loaderFactory.createUserFilteredLoader().setId(inspectionServiceDTO.getAssignedUserId());
-			user = loader.load();
+			user = loadUser(inspectionServiceDTO);
 		}
+		
 		AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(user);
 		inspection.setAssignedTo(assignedToUpdate);
+	}
+
+	private User loadUser(InspectionServiceDTO inspectionServiceDTO) throws ConversionException {
+		User user;
+		UserFilteredLoader loader = loaderFactory.createUserFilteredLoader().setId(inspectionServiceDTO.getAssignedUserId());
+		user = loader.load();
+		if (user == null) { 
+			throw new ConversionException("Assigned use lookup failed for " + inspectionServiceDTO.getAssignedUserId());
+		}
 		
-		return inspection;
+		return user;
 	}
 	
 }

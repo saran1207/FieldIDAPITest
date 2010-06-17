@@ -1,7 +1,6 @@
 package com.n4systems.ejb.legacy.wrapper;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
