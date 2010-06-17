@@ -21,4 +21,6 @@ public abstract class WebOutputHandler implements ExcelOutputHandler {
 	}
 	
 	public abstract String handleWeb(Long entityId, Object value);
+
+	
 }

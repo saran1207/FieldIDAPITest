@@ -60,28 +60,36 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
+		addSimpleTerm("status", status);
 		
-		if (status != null) {
-			addSimpleTerm("status", status);
-		}
+		applyInspectionBookTerm();
+		
+		applyAssignedToTerm();
 		
 		
+		
+		addDateRangeTerm("date", fromDate, toDate);
+	}
+
+	private void applyInspectionBookTerm() {
 		// when inspectionBookId is 0, we search for inspections not in a book
 		if(inspectionBookId != null && inspectionBookId == 0) {
 			addNullTerm("book.id");
 		} else {
 			addSimpleTerm("book.id", inspectionBookId);
 		}
-		
-		if(assignedUserId != null && assignedUserId == 0) {
-			addNullTerm("assignedTo.assignedUser.id");
-		} else {
-			addSimpleTerm("assignedTo.assignedUser.id", assignedUserId);
+	}
+
+	private void applyAssignedToTerm() {
+		if (assignedUserId != null) {
+			addSimpleTerm("assignedTo.assignmentApplyed", true);
+			
+			if(assignedUserId == 0) {
+				addNullTerm("assignedTo.assignedUser.id");
+			} else {
+				addSimpleTerm("assignedTo.assignedUser.id", assignedUserId);
+			}
 		}
-		
-		
-		
-		addDateRangeTerm("date", fromDate, toDate);
 	}
 	
 	@Override

@@ -11,8 +11,15 @@ import com.n4systems.model.user.User;
 
 @Embeddable
 public class AssignedToUpdate {
+	
+	public static final User UNASSIGNED = null;
+
 	public static AssignedToUpdate assignAssetToUser(User assignedTo) {
 		return new AssignedToUpdate(assignedTo, true);
+	}
+	
+	public static AssignedToUpdate unassignAsset() {
+		return new AssignedToUpdate(UNASSIGNED, true);
 	}
 
 	public static AssignedToUpdate ignoreAssignment() {

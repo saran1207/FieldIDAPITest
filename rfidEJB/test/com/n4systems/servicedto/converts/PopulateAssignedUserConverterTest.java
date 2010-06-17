@@ -173,6 +173,6 @@ public class PopulateAssignedUserConverterTest {
 	
 
 	private AssignedToUpdate assignmentToUnassigned() {
-		return AssignedToUpdate.assignAssetToUser(null);
+		return AssignedToUpdate.unassignAsset();
 	}
 }
