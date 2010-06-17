@@ -43,14 +43,12 @@ ${action.setPageType('inspection_type', 'show')!}
 			<#if inspectionType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 		</span>
 	</p>		
-	
-	<p>
-		<label><@s.text name="label.assigned_to_can_be_updated"/></label>
-		<span class="fieldValue">
-			${inspectionType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))} 
-		</span>
-	</p>	
-	
+	<#if securityGuard.assignedToEnabled>
+		<p>
+			<label><@s.text name="label.assigned_to_can_be_updated"/></label>
+			<span class="fieldValue">${inspectionType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))}</span>
+		</p>	
+	</#if>
 	<h2><@s.text name="label.supportedprooftesttypes"/></h2>
 	<#if inspectionType.supportedProofTests?size != 0 >
 		<#list inspectionType.supportedProofTests as proofTestType >
