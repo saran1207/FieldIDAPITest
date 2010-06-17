@@ -17,6 +17,8 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
+import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
 
 public class MasterInspection {
@@ -47,7 +49,7 @@ public class MasterInspection {
 	
 	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
 
-	private Long assignedToId;
+	private User assignedTo;
 
 	private boolean assignToSomeone;
 	
@@ -196,7 +198,15 @@ public class MasterInspection {
 		return null;
 	}
 
+	
 	public Inspection getCompletedInspection() {
+		applyAssignToUpdateToInspection();
+		processSubInspections();
+
+		return inspection;
+	}
+
+	private void processSubInspections() {
 		inspection.getSubInspections().clear();
 		StrutsListHelper.clearNulls(subInspections);
 		for (SubInspection subInspection : subInspections) {
@@ -208,8 +218,6 @@ public class MasterInspection {
 			inspection.getSubInspections().add(s);
 
 		}
-
-		return inspection;
 	}
 
 	private void processResults(SubInspection s) {
@@ -319,18 +327,27 @@ public class MasterInspection {
 		this.nextSchedules = nextSchedules;
 	}
 
-	public void setAssignToUpdate(Long assignedToId, boolean assignToSomeone) {
-		this.assignedToId = assignedToId;
+	public void setAssignToUpdate(User assignedTo, boolean assignToSomeone) {
+		this.assignedTo = assignedTo;
 		this.assignToSomeone = assignToSomeone;
-		
-		
+	}
+	
+	
+	public void applyAssignToUpdateToInspection() {
+		if (assignToSomeone) {
+			inspection.setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
+		} else {
+			inspection.removeAssignTo();
+		}
 	}
 
 	public Long getAssignedToId() {
-		return assignedToId;
+		return assignedTo != null ? assignedTo.getId() : null;
 	}
 
 	public boolean isAssignToSomeone() {
 		return assignToSomeone;
 	}
+	
+	
 }

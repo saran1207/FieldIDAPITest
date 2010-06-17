@@ -8,7 +8,7 @@
 	<div class="infoSet">
 		<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 		<#if !parentProduct?exists >
-			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.not_assigned')}" />
+			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" />
 		<#else>
 			<span class="fieldHolder" id="assignedUser">${(product.assignedUser.userLabel)!}</span>
 		</#if>

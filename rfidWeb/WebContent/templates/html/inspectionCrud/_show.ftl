@@ -168,15 +168,16 @@
 			<@s.text name="label.on"/> ${action.formatDateTime(inspection.modified)} 
 		</span>
 	</p>
-	
-	<#include "_assigned_to.ftl"/>
-	
 	<p>
 		<label><@s.text name="label.productstatus"/></label>
 		<span>
 			${(inspection.productStatus.name)!}
 		</span>
 	</p>
+	
+	<#include "_assigned_to.ftl"/>
+	
+	
 	
 	<#if !linkedInspection >
 		<#assign downloadAction="downloadAttachedFile"/>

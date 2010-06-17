@@ -262,7 +262,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			processProofTestFile();
 			getModifiableInspection().pushValuesTo(inspection);
 			masterInspectionHelper.setProofTestFile(fileData);
-			masterInspectionHelper.setAssignToUpdate(getAssignedToId(), isAssignToSomeone());
+			masterInspectionHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
 
 			if (masterInspectionHelper.getInspection().isNew()) {
 				inspection.setTenant(getTenant());

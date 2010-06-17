@@ -212,6 +212,8 @@ public class MasterInspectionCrud extends AbstractCrud {
 					masterInspection.cleanSubInspectionsForNonValidSubProducts(product);
 				}
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
+				
+				
 				CreateInspectionParameterBuilder createInspecitonBuiler = new CreateInspectionParameterBuilder(master, getSessionUserId())
 						.withProofTestFile(masterInspection.getProofTestFile())
 						.withUploadedImages(masterInspection.getUploadedFiles());

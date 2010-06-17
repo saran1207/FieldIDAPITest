@@ -282,7 +282,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 			subInspectionString += "\n" + subInspection;
 		}
 		
-	    return	super.toString() + 
+	    return	super.toString() +
+	    		"\nAssigned To: " + assignedTo +
 	    		"\nState: " + state + 
 	    		"\nDate: " + date +
 	    		"\nOwner: " + getOwner() +
@@ -337,6 +338,10 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.assignedTo = assignedTo;
 	}
 	
+	public void removeAssignTo() {
+		assignedTo = null;
+	}
+	
 	public boolean hasAssignToUpdate() {
 		return assignedTo != null && assignedTo.isAssignmentApplyed();
 	}
@@ -351,12 +356,13 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		if (assignedTo == null)
 			assignedTo = AssignedToUpdate.ignoreAssignment();
 	}
+	
 
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
 		normalizeAssignmentForPersistence();
 	}
-	
+
 	
 }

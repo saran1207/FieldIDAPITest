@@ -27,7 +27,7 @@
 				<td>
 					<p>
 						<label class="label" ><@s.text name="label.assignedto"/>:</label>
-						<span class="field"><@s.select name="assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" labelposition="left" onchange="selectField('assignedUser');" /></span>
+						<span class="field"><@s.select name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" labelposition="left" onchange="selectField('assignedUser');" /></span>
 					</p>
 				</td>
 			</tr>
@@ -98,13 +98,13 @@
 		
 		
 		<#if userSecurityGuard.allowedManageSafetyNetwork == true>
-		<tr>
-			<td><@s.checkbox name="select['published']" id="check_published" /></td>
-			<td>
-				<label class="label"><@s.text name="label.publishedstateselector"/>:</label>
-				<@s.select name="published" list="publishedStates" listKey="id" listValue="name" onchange="selectField('published');" />
-			</td>
-		</tr>
+			<tr>
+				<td><@s.checkbox name="select['published']" id="check_published" /></td>
+				<td>
+					<label class="label"><@s.text name="label.publishedstateselector"/>:</label>
+					<@s.select name="published" list="publishedStates" listKey="id" listValue="name" onchange="selectField('published');" />
+				</td>
+			</tr>
 		</#if>
 		
 	</table>	

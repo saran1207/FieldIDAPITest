@@ -1005,6 +1005,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public Long getAssignedToId() {
 		return (assignedTo != null) ? assignedTo.getId() : null;
 	}
+	public User getAssignedTo() {
+		return assignedTo;
+	}
 
 	public void setAssignedToId(Long assginedToId) {
 		if (assginedToId == null) {

@@ -24,6 +24,7 @@ public class CopyInspectionFactory {
 		
 		copyAbstractInspection( newInspection, inspection );
 		
+		newInspection.setAssignedTo(inspection.getAssignedTo());
 		newInspection.setOwner( inspection.getOwner() );
 		newInspection.setBook( inspection.getBook() );
 		newInspection.setGroup( inspection.getGroup() );
