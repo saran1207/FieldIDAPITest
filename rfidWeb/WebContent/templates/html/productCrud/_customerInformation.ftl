@@ -8,7 +8,7 @@
 	<#if securityGuard.assignedToEnabled>
 		<p>
 			<label><@s.text name="label.assignedto"/></label>
-			<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
+			<span class="fieldValue">${(product.assignedUser.userLabel)!action.getText('label.unassigned')}</span>
 		</p>
 	</#if>
 	<p>

@@ -94,6 +94,10 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, employee, subProducts);
 	}
 	
+	public ProductBuilder unassigned() {
+		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, null, subProducts);
+	}
+	
 	@Override
 	public Product build() {
 		Product product = generate();
@@ -125,6 +129,11 @@ public class ProductBuilder extends BaseBuilder<Product>{
 			}
 		}
 	}
+
+
+
+
+	
 
 
 
