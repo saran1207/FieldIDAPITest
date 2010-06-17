@@ -22,7 +22,7 @@ import com.n4systems.model.security.SecurityLevel;
 import freemarker.ext.beans.BeanModel;
 import freemarker.ext.beans.BeansWrapper;
 
-
+//TODO: move to the integeration tests and add integration tests to the ant build.
 public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWrongMethodTest {
 
 	@Test
