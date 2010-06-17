@@ -47,12 +47,18 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
-		addSimpleTerm("product.assignedUser.id", assignedUserId);
 		addSimpleTerm("inspectionType.group.id", inspectionTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);
 		addDateRangeTerm("nextDate", fromDate, toDate);
 		addSimpleInTerm("status", status.getScheduleStatuses());
+		
+		if(assignedUserId != null && assignedUserId == 0) {
+			addNullTerm("product.assignedUser.id");
+		} else {
+			addSimpleTerm("product.assignedUser.id", assignedUserId);
+		}
+		
 	}
 	
 	@Override
@@ -117,8 +123,6 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	public void setProductStatus(Long productStatus) {
 		this.productStatusId = productStatus;
 	}
-	
-	
 
 	public Long getProductType() {
 		return productTypeId;
@@ -136,11 +140,11 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		this.inspectionTypeId = inspectionType;
 	}
 	
-	public Long getAssingedUser() {
+	public Long getAssignedUser() {
 		return assignedUserId;
 	}
 	
-	public void setAssingedUser(Long assignedUser) {
+	public void setAssignedUser(Long assignedUser) {
 		this.assignedUserId = assignedUser;
 	}
 

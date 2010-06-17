@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.actions.search;
 
+import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,10 +35,12 @@ import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.opensymphony.xwork2.Preparable;
 
 public class InspectionReportAction extends CustomizableSearchAction<InspectionSearchContainer> implements Preparable {
+	
 	private static final String REPORT_PAGE_NUMBER = "reportPageNumber";
 	private static final long serialVersionUID = 1L;
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
@@ -223,7 +228,9 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	 
 	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
-			employees = getLoaderFactory().createHistoricalEmployeesListableLoader().load();
+			employees = new ArrayList<Listable<Long>>();
+			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
+			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
 		}
 		return employees;
 	}

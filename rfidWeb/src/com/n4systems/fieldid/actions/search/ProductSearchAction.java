@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.actions.search;
 
+import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -17,6 +20,7 @@ import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 import com.opensymphony.xwork2.Preparable;
 
@@ -117,7 +121,9 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	
 	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
-			employees = getLoaderFactory().createHistoricalEmployeesListableLoader().load();
+			employees = new ArrayList<Listable<Long>>();
+			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
+			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
 		}
 		return employees;
 	}

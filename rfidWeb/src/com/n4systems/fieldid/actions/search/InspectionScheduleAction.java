@@ -1,4 +1,6 @@
 package com.n4systems.fieldid.actions.search;
+import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.Preparable;
 
 public class InspectionScheduleAction extends CustomizableSearchAction<InspectionScheduleSearchContainer> implements Preparable {
@@ -132,7 +135,9 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
-			employees = getLoaderFactory().createHistoricalEmployeesListableLoader().load();
+			employees = new ArrayList<Listable<Long>>();
+			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
+			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
 		}
 		return employees;
 	}

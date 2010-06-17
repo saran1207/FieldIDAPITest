@@ -13,6 +13,9 @@ import com.n4systems.util.persistence.search.SortTerm;
 
 public class InspectionSearchContainer extends SearchContainer implements ReportDefiner {
 	private static final long serialVersionUID = 1L;
+	
+	public static final long UNASSIGNED_USER = 0L;
+	
 	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group", "productStatus"};
 	
 	private Long savedReportId;
@@ -54,7 +57,6 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
-		addSimpleTerm("product.assignedUser.id", assignedUserId);
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
@@ -70,6 +72,14 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		} else {
 			addSimpleTerm("book.id", inspectionBookId);
 		}
+		
+		if(assignedUserId != null && assignedUserId == 0) {
+			addNullTerm("assignedTo.assignedUser.id");
+		} else {
+			addSimpleTerm("assignedTo.assignedUser.id", assignedUserId);
+		}
+		
+		
 		
 		addDateRangeTerm("date", fromDate, toDate);
 	}
@@ -194,6 +204,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	
 	public Long getAssignedUser() {
 		return assignedUserId;
+		
 	}
 	
 	public void setAssignedUser(Long assignedUserId) {
