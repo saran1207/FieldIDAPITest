@@ -53,12 +53,16 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addDateRangeTerm("nextDate", fromDate, toDate);
 		addSimpleInTerm("status", status.getScheduleStatuses());
 		
+		addAssigUserTerm();
+		
+	}
+
+	private void addAssigUserTerm() {
 		if(assignedUserId != null && assignedUserId == 0) {
 			addNullTerm("product.assignedUser.id");
 		} else {
 			addSimpleTerm("product.assignedUser.id", assignedUserId);
 		}
-		
 	}
 	
 	@Override

@@ -42,12 +42,16 @@ public class ProductSearchContainer extends SearchContainer {
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
 		addDateRangeTerm("identified", fromDate, toDate);
 		
+		addAssignedUserTerm();
+		
+	}
+
+	private void addAssignedUserTerm() {
 		if(assignedUserId != null && assignedUserId == 0) {
 			addNullTerm("assignedUser.id");
 		} else {
 			addSimpleTerm("assignedUser.id", assignedUserId);
 		}
-		
 	}
 
 	@Override

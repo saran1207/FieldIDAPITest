@@ -61,17 +61,17 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
 		addSimpleTerm("status", status);
-		
-		applyInspectionBookTerm();
-		
-		applyAssignedToTerm();
-		
-		
-		
 		addDateRangeTerm("date", fromDate, toDate);
+		
+		addInspectionBookTerm();
+		addAssignedToTerm();
+		
+		
+		
+
 	}
 
-	private void applyInspectionBookTerm() {
+	private void addInspectionBookTerm() {
 		// when inspectionBookId is 0, we search for inspections not in a book
 		if(inspectionBookId != null && inspectionBookId == 0) {
 			addNullTerm("book.id");
@@ -80,7 +80,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		}
 	}
 
-	private void applyAssignedToTerm() {
+	private void addAssignedToTerm() {
 		if (assignedUserId != null) {
 			addSimpleTerm("assignedTo.assignmentApplyed", true);
 			
