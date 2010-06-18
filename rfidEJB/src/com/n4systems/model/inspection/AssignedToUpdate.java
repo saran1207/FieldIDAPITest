@@ -72,6 +72,10 @@ public class AssignedToUpdate {
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
+
+	public boolean isUnassigned() {
+		return assignedUser == UNASSIGNED;
+	}
 	
 	
 	

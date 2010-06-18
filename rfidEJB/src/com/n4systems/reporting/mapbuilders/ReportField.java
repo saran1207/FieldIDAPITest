@@ -55,7 +55,8 @@ public enum ReportField {
 	REPORT_TITLE					("reportTitle"),
 	NEXT_DATE_STRING				("nextDate"),
 	NEXT_DATE						("nextDate_date"),
-	JOB								("job");
+	JOB								("job"), 
+	ASSIGNED_USER					("assignedUserName");
 	private final String paramKey;
 	
 	ReportField(String paramKey) {

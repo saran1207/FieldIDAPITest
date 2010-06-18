@@ -7,11 +7,13 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
+import com.n4systems.reporting.mapbuilders.ReportField;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.ReportMap;
 
 public class ProductReportMapProducer extends ReportMapProducer {
 
+	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 	private final Product product;
 	public ProductReportMapProducer(Product product, DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
@@ -42,8 +44,16 @@ public class ProductReportMapProducer extends ReportMapProducer {
 		add("lastInspectionDate", formatDate(product.getLastInspectionDate(), true));
 		add("infoOptionBeanList", product.getOrderedInfoOptionList());
 		add("infoOptionDataSource", new JRBeanCollectionDataSource(product.getOrderedInfoOptionList()));
+		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
+		
 	}
 
+	
+	private String assignedUserName() {
+		return product.isAssigned() ? product.getAssignedUser().getUserLabel() : UNASSIGNED_USER_NAME;
+	}
+
+	
 	private void addProductTypeParams() {
 		ProductType productType = product.getType();
 		

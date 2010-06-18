@@ -398,6 +398,10 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	public void setAssignedUser(User assignedTo) {
 		this.assignedUser = assignedTo;
 	}
+	
+	public boolean isAssigned() {
+		return assignedUser != null;
+	}
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isMasterProduct( ) {
