@@ -15,7 +15,7 @@ public class AssignedUserConverterFactoryTest {
 	private static final LoaderFactory A_LOADER_FACTORY = null;
 
 	@Test
-	public void should_produce_an_assigned_user_converter_that_will_translate_the_assigned_to_user_when_the_assignedTo_feature_is_enabled() throws Exception {
+	public void should_produce_an_assigned_user_converter_that_will_translate_the_assigned_to_user_when_the_assignedTo_feature_is_enabled_for_asset_conversion() throws Exception {
 		SystemSecurityGuard systemSecurityGuard = createMock(SystemSecurityGuard.class);
 		expect(systemSecurityGuard.isAssignedToEnabled()).andReturn(true);
 		replay(systemSecurityGuard);
@@ -24,11 +24,11 @@ public class AssignedUserConverterFactoryTest {
 		AssignedUserConverterFactory sut = new AssignedUserConverterFactory(systemSecurityGuard, A_LOADER_FACTORY);
 		
 		
-		assertThat(sut.getAssignedUserConverter(), instanceOf(PopulateAssignedUserConverter.class));
+		assertThat(sut.getAssignedUserConverterForAsset(), instanceOf(PopulateAssignedUserConverter.class));
 	}
 	
 	@Test
-	public void should_produce_a_null_assigned_user_converter_that_will_translate_the_assigned_to_user_when_the_assignedTo_feature_is_disabled() throws Exception {
+	public void should_produce_a_null_assigned_user_converter_that_will_translate_the_assigned_to_user_when_the_assignedTo_feature_is_disabled_for_asset_conversion() throws Exception {
 		SystemSecurityGuard systemSecurityGuard = createMock(SystemSecurityGuard.class);
 		expect(systemSecurityGuard.isAssignedToEnabled()).andReturn(false);
 		replay(systemSecurityGuard);
@@ -37,7 +37,35 @@ public class AssignedUserConverterFactoryTest {
 		AssignedUserConverterFactory sut = new AssignedUserConverterFactory(systemSecurityGuard, A_LOADER_FACTORY);
 		
 		
-		assertThat(sut.getAssignedUserConverter(), instanceOf(NullAssignedUserConverter.class));
+		assertThat(sut.getAssignedUserConverterForAsset(), instanceOf(NullAssignedUserConverter.class));
+	}
+	
+	
+	
+	@Test
+	public void should_produce_an_assigned_user_converter_that_will_translate_the_assigned_to_user_when_the_assignedTo_feature_is_enabled_for_event_conversion() throws Exception {
+		SystemSecurityGuard systemSecurityGuard = createMock(SystemSecurityGuard.class);
+		expect(systemSecurityGuard.isAssignedToEnabled()).andReturn(true);
+		replay(systemSecurityGuard);
+		
+		
+		AssignedUserConverterFactory sut = new AssignedUserConverterFactory(systemSecurityGuard, A_LOADER_FACTORY);
+		
+		
+		assertThat(sut.getAssignedUserConverterForEvent(), instanceOf(PopulateAssignedUserConverter.class));
+	}
+	
+	@Test
+	public void should_produce_an_assigned_user_converter_that_will_translate_the_assigned_to_user_when_the_assignedTo_feature_is_disabled_for_event_conversion() throws Exception {
+		SystemSecurityGuard systemSecurityGuard = createMock(SystemSecurityGuard.class);
+		expect(systemSecurityGuard.isAssignedToEnabled()).andReturn(false);
+		replay(systemSecurityGuard);
+		
+		
+		AssignedUserConverterFactory sut = new AssignedUserConverterFactory(systemSecurityGuard, A_LOADER_FACTORY);
+		
+		
+		assertThat(sut.getAssignedUserConverterForEvent(), instanceOf(PopulateAssignedUserConverter.class));
 	}
 	
 	

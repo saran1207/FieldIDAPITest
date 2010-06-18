@@ -21,7 +21,7 @@ public class InspectionServiceDTOConverter {
 	}
 
 	private AssignedUserConverter createAssignedUserConverter(SystemSecurityGuard systemSecurityGuard) {
-		return new AssignedUserConverterFactory(systemSecurityGuard, new LoaderFactory(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()))).getAssignedUserConverter();
+		return new AssignedUserConverterFactory(systemSecurityGuard, new LoaderFactory(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()))).getAssignedUserConverterForEvent();
 	}
 
 	public Inspection convert(InspectionServiceDTO inspectionServiceDTO) throws Exception {

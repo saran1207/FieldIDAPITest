@@ -13,12 +13,17 @@ public class AssignedUserConverterFactory {
 		this.loaderFactory = loaderFactory;
 	}
 
-	public AssignedUserConverter getAssignedUserConverter() {
+	public AssignedUserConverter getAssignedUserConverterForAsset() {
 		if (systemSecurityGuard.isAssignedToEnabled()) {
 			return new PopulateAssignedUserConverter(loaderFactory);
 		} else {
 			return new NullAssignedUserConverter();
 		}
 	}
+
+	public AssignedUserConverter getAssignedUserConverterForEvent() {
+		return new PopulateAssignedUserConverter(loaderFactory);
+	}
+	
 	
 }
