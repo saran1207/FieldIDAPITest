@@ -58,6 +58,7 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -360,7 +361,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	private void makeEmployeesIncludeCurrentAssignedUser() {
-		OptionLists.includeInList(getEmployees(), product.getAssignedUser());
+		Listable<Long> assignedUserListable = product.getAssignedUser() != null ? new SimpleListable<Long>(product.getAssignedUser()) : null;
+		
+		OptionLists.includeInList(getEmployees(), assignedUserListable);
 	}
 	
 	
