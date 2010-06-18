@@ -27,6 +27,7 @@ import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.FindProductFailure;
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -1042,8 +1043,7 @@ public class DataServiceImpl implements DataService {
 				
 				// lets look up or create all newly attached sub products and attach to product
 				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product, requestInformation.getVersionNumber());
-				updateSubProducts(productManager, tenantId, product,
-						inspectionServiceDTO, subProducts);
+				updateSubProducts(productManager, tenantId, product, inspectionServiceDTO, subProducts);
 				
 				
 				// we also need to get the product for any sub-inspections
@@ -1090,6 +1090,9 @@ public class DataServiceImpl implements DataService {
 									schedule.completed(scheduleEntry.getKey());
 									scheduleManager.update(schedule);
 								}
+							} catch (InvalidScheduleStateException e) {
+								logger.warn("the state of the schedule is not valid to be completed.");
+								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on product with serial number "+savedInspection.getProduct().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 							} catch (Exception e) {
 								logger.error("failed to attach schedule to inspection", e);
 								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on product with serial number "+savedInspection.getProduct().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);

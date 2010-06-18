@@ -229,7 +229,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		return status;
 	}
 
-	public void completed(Inspection inspection) {
+	public void completed(Inspection inspection) throws InvalidScheduleStateException {
 		if (status == ScheduleStatus.COMPLETED) {
 			throw new InvalidScheduleStateException();
 		}
