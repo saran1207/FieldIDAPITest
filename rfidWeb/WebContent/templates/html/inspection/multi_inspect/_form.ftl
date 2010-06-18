@@ -83,14 +83,16 @@
 
 
 <@n4.includeScript>
-		function updateAssignToSomone() {
-			var value = $('assignedToId').getValue();
-			if (value == '-1') {
-				$('assignToSomeone').value = 'false';
-			} else {
-				$('assignToSomeone').value = 'true';
-			}
+	function updateAssignToSomone() {
+		var value = $('assignedToId').getValue();
+		if (value == '-1') {
+			$('assignToSomeone').value = 'false';
+		} else {
+			$('assignToSomeone').value = 'true';
 		}
-	$('assignedToId').observe('change', updateAssignToSomone);
-	updateAssignToSomone();
+	}
+	$$('#assignedToId').each(function(element) {
+			element.observe('change', updateAssignToSomone);
+			updateAssignToSomone();
+		});
 </@n4.includeScript>

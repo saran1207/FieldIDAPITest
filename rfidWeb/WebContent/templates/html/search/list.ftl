@@ -16,10 +16,10 @@
 			<a href="<@s.url action="searchPrintAllCerts" namespace="/aHtml" searchId="${searchId}"/>" class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.printallmanufacturercertificate"/></a>
 			| 		
 			<a href='<@s.url action="searchResults" namespace="/aHtml" searchId="${searchId}"/>'  class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a> 
-			<#if Session.sessionUser.hasAccess('tag') >
+			<#if sessionUser.hasAccess('tag') >
 				| <a href="<@s.url action="massUpdateProducts" searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
-			<#if Session.sessionUser.hasAccess('createinspection') >
+			<#if sessionUser.hasAccess('createinspection') >
 				| <a href="#multiEvent" name="multiEvent" id="multiInspect" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
 			</#if>
 			
@@ -51,9 +51,11 @@
 	
 	<@n4.includeScript>
 		onDocumentLoad(function() {
-			$('multiInspect').observe('click', function(event) {
-				event.stop();
-				$('performMultiInspect').submit();
+			$$('#multiInspect').each(function(element) { 
+				element.observe('click', function(event) {
+					event.stop();
+					$('performMultiInspect').submit();
+				});
 			});
 		});
 	</@n4.includeScript>
