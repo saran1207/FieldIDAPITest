@@ -27,7 +27,7 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 		waitForElementToBePresent(locator, Misc.DEFAULT_TIMEOUT);
 	}
 	public void waitForElementToBePresent(String locator, String timeout)  {
-		delegateSelenium.waitForCondition("var value = selenium.isElementPresent( '" + locator + "'); value == true", timeout);
+		delegateSelenium.waitForCondition("var value = selenium.isElementPresent( '" + locator.replace("'", "\\'") + "'); value == true", timeout);
 	}
 
 	public void waitForPageToLoad() {

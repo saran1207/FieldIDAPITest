@@ -136,6 +136,7 @@ public class ManageProductCodeMappings {
 		String id = null;
 		String locator = "xpath=//LABEL[contains(@class,'label') and contains(text(),'" + name + "')]/../SPAN[contains(@class,'fieldHolder')]/SELECT[contains(@class,'attribute')]";
 		String attributeLocator = locator + "@id";
+		selenium.waitForElementToBePresent(locator);
 		if(selenium.isElementPresent(locator)) {
 			id = selenium.getAttribute(attributeLocator);
 		} else {

@@ -3,10 +3,10 @@ package com.n4systems.fieldid.selenium.testcase;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.After;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageProductCodeMappings;
@@ -136,52 +136,6 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		return result;
 	}
 
-	@Ignore
-	@Test
-	public void productWithRetiredAttributesCanBeEdited() throws Exception {
-		String companyID = getStringProperty("company");
-
-		setCompany(companyID);
-		login.signInWithSystemAccount();
-		// identify a product
-		// go to manage product type and retire an attribute
-		// edit the product
-		// verify it saved okay
-		throw new RuntimeException("not Implmented");
-	}
-
-	@Ignore
-	@Test
-	public void attributesCanOnlyBeRetiredIfUsedInAutoAttribute() throws Exception {
-		String companyID = getStringProperty("company");
-
-		setCompany(companyID);
-		login.signInWithSystemAccount();
-		// create a product type with select box attributes
-		// save it
-		// use the product type in an auto attribute
-		// edit product type and retire the select box
-		// fail if I can 'Delete' the attribute
-		throw new RuntimeException("not Implmented");
-	}
-
-	@Ignore
-	@Test
-	public void attributesCanOnlyBeRetiredIfUsedInExistingProduct() throws Exception {
-		String companyID = getStringProperty("company");
-
-		setCompany(companyID);
-		login.signInWithSystemAccount();
-		// create a product type with select box attributes
-		// save it
-		// use the product type to create a product
-		// edit product type and retire the select box
-		// fail if I can 'Delete' the attribute
-		throw new RuntimeException("not Implmented");
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
+	
+	
 }
