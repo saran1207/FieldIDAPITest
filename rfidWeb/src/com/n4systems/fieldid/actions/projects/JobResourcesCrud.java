@@ -113,8 +113,7 @@ public class JobResourcesCrud extends AbstractCrud {
 
 	public List<ListingPair> getEmployees() {
 		if (employees == null) {
-			UserListableLoader loader = createUserListLoader().setNoDeleted(true);
-			employees = ListHelper.longListableToListingPair(loader.load());
+			employees = ListHelper.longListableToListingPair(createUserListLoader().load());
 			
 			List<ListingPair> assignedEmployees = ListHelper.longListableToListingPair(getPage().getList());
 			employees.removeAll(assignedEmployees);
@@ -123,7 +122,7 @@ public class JobResourcesCrud extends AbstractCrud {
 	}
 
 	protected UserListableLoader createUserListLoader() {
-		UserListableLoader loader = getLoaderFactory().createUserListableLoader();
+		UserListableLoader loader = getLoaderFactory().createCurrentEmployeesListableLoader();
 		return loader;
 	}
 

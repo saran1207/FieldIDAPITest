@@ -183,7 +183,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		}
 
 		if (nameFilter != null) {
-			queryString += "AND (  LOWER(ub.userID) like :nameFilter OR LOWER( ub.firstName ) like :nameFilter " + "OR LOWER(ub.lastName) like :nameFilter )";
+			queryString += "AND (  LOWER(ub.userID) like :nameFilter OR LOWER( ub.firstName ) like :nameFilter OR LOWER(ub.lastName) like :nameFilter )";
 		}
 
 		if (customer != null) {
