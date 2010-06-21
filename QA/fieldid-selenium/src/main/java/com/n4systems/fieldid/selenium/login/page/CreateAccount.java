@@ -31,7 +31,6 @@ public class CreateAccount {
 	private String companyPhoneNumberTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_phoneNumber']";
 	private String siteAddressTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_tenantName']";
 	private String numberOfUsersTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_numberOfUsers']";
-	private String phoneSupportCheckBoxLocator = "xpath=//INPUT[@id='mainContent_signUp_purchasingPhoneSupport']";
 	private String promoCodeTextFieldLocator = "xpath=//INPUT[@id='promoCode']";
 	private String payByCreditCardLinkLocator = "xpath=//A[@id='payCreditCard']";
 	private String payByPurchaseOrderLinkLocator = "xpath=//A[@id='payPurchaseOrder']";
@@ -70,7 +69,6 @@ public class CreateAccount {
 		assertTrue("Could not find the Site Address text field", selenium.isElementPresent(siteAddressTextFieldLocator));
 		if(notfree) {
 			assertTrue("Could not find the Number Of Users text field", selenium.isElementPresent(numberOfUsersTextFieldLocator));
-			assertTrue("Could not find the Phone Support check box", selenium.isElementPresent(phoneSupportCheckBoxLocator));
 			assertTrue("Could not find the Promo Code text field", selenium.isElementPresent(promoCodeTextFieldLocator));
 			assertTrue("Could not find the Pay by Credit link", selenium.isElementPresent(payByCreditCardLinkLocator));
 			assertTrue("Could not find the Pay by Purchase Order link", selenium.isElementPresent(payByPurchaseOrderLinkLocator));
@@ -118,15 +116,7 @@ public class CreateAccount {
 			selenium.type(numberOfUsersTextFieldLocator, Integer.toString(t.getNumberOfUsers()));
 		}
 		
-		// here we assume if the element is not present, we are configuring a free account.
-		// use verifyCreateAccountForm() to confirm this element is there when expected.
-		if(selenium.isElementPresent(phoneSupportCheckBoxLocator)) {
-			if(t.getPhoneSupport()) {
-				selenium.check(phoneSupportCheckBoxLocator);
-			} else {
-				selenium.uncheck(phoneSupportCheckBoxLocator);
-			}
-		}
+		
 		
 		String paymentOption = t.getPaymentOptions();
 		if(paymentOption != null) {

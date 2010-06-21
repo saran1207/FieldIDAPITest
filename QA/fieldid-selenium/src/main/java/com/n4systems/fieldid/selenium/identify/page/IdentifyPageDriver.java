@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.identify.page;
 
 import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -103,7 +105,7 @@ public class IdentifyPageDriver {
 	private String multiAddRFIDNumber2TextFieldLocator = "xpath=//input[@id='step4form_identifiers_0__rfidNumber']";
 	private String multiAddReferenceNumber1TextFieldLocator = "xpath=//input[@id='step4form_identifiers_0__referenceNumber']";
 	private String multiAddReferenceNumber2TextFieldLocator = "xpath=//input[@id='step4form_identifiers_0__referenceNumber']";
-	private String multiAddSaveAndCreateButtonLocator = "xpath=//input[@id='masterForm_label_save_and_create']";
+	private String multiAddSaveAndCreateButtonLocator = "css=#saveButton";
 	private String multiAddBackToStep3LinkLocator = "xpath=//a[contains(text(),'Back To Step 3')]";
 
 	public IdentifyPageDriver(FieldIdSelenium selenium, Misc misc) {
@@ -766,7 +768,7 @@ public class IdentifyPageDriver {
 		assertTrue(selenium.isElementPresent(multiAddReferenceNumber1TextFieldLocator));
 		assertTrue(selenium.isElementPresent(multiAddReferenceNumber2TextFieldLocator));
 		assertTrue(selenium.isElementPresent(multiAddSaveAndCreateButtonLocator));
-		assertTrue(selenium.isElementPresent(multiAddBackToStep3LinkLocator));
+		assertTrue("back to step 3 link is available", selenium.isElementPresent(multiAddBackToStep3LinkLocator));
 	}
 
 	public void clickSaveAndCreateButtonMultiAddStep4() {
