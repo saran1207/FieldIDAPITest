@@ -45,7 +45,6 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.ProductTypeRemovalSummary;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -556,7 +555,7 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	public Product mergeProducts(Product winningProduct, Product losingProduct, User user) {
-		ProductMerger merger = new ProductMerger(persistenceManager, this, ServiceLocator.getInspectionManager(), user);
+		ProductMerger merger = new ProductMerger(persistenceManager, this, new InspectionManagerImpl(em), user);
 		// reload the winning and losing products so they are fully under managed scope.
 		Product reloadedWinner = persistenceManager.find(Product.class, winningProduct.getId());
 		Product reloadedLoser = persistenceManager.find(Product.class, losingProduct.getId());
