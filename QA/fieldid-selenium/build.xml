@@ -32,8 +32,9 @@
     
     <target name="test.minimal.data.run" description="Run the tests" depends="init, app.compile" >
         
-        <property name="test_package_target" value="minimaldata" />
-        <antcall target="run.junit"/>
+        <antcall target="run.junit">
+        	<param name="test_package_target" value="minimaldata" />
+		</antcall>
     </target>
   
     <target name="test.full.data.run" description="Run the tests" depends="init, app.compile" >
@@ -49,11 +50,11 @@
                 <path refid="app.lib.path" />
             </classpath>
 			
-			<sysproperty key="fieldid-browser" value="*chrome"/>
-			<sysproperty key="selenium-server" value="192.168.2.88"/>
-			<sysproperty key="fieldid-protocol" value="https"/>
-			<sysproperty key="selenium-snapshots" value="/tmp/"/>
-			<sysproperty key="fieldid-domain" value="grumpy.n4systems.net"/>
+			<sysproperty key="fieldid-browser" value="${fieldid-browser}"/>
+			<sysproperty key="selenium-server" value="${selenium-server}"/>
+			<sysproperty key="fieldid-protocol" value="${fieldid-protocol}"/>
+			<sysproperty key="selenium-snapshots" value="${selenium-snapshots}"/>
+			<sysproperty key="fieldid-domain" value="${fieldid-domain}"/>
         	
 			<formatter type="xml"/>
             
