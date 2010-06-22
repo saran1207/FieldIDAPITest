@@ -2,6 +2,8 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.n4systems.fieldid.selenium.util.SeleniumJavaScriptInteraction;
 

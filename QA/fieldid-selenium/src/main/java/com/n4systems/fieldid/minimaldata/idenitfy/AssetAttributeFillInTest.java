@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
-import com.n4systems.fieldid.selenium.testcase.LoggedInTestCase;
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 
 public class AssetAttributeFillInTest extends LoggedInTestCase {
 

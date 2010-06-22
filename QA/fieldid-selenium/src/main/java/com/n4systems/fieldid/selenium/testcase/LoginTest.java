@@ -7,7 +7,7 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.login.page.Forgot;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
-public class LoginTests extends FieldIDTestCase {
+public class LoginTest extends FieldIDTestCase {
 
 	Login login;
 	Forgot forgot;

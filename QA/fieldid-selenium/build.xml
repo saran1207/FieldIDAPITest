@@ -1,45 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="fieldid-web-automation" default="run-tests" basedir=".">
+<project name="fieldid-web-automation" default="test.full.data.run" basedir=".">
 
-	<property name="workspace" value=""/>
-	<property name="outputdir" value="tmp/rawtestoutput"/>
-	<property name="classdir" value="bin"/>
-	<property name="server-host" value="localhost"/>
-	<property name="server-port" value="4444"/>
+	<property file="build.properties" />
 
-	<target name="run-tests">
-		<parallel>
-			<sequential>
-				<waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
-					<http url="http://${server-host}:${server-port}/selenium-server/driver/?cmd=testComplete" />
-				</waitfor>
-				<antcall target="testcases"></antcall>
-				<antcall target="stop-server"></antcall>
-			</sequential>
-		</parallel>
-	</target>
+    <path id="app.lib.path">
+        <fileset dir="${lib.dir}" includes="*.jar" excludes="*-src.jar"/>
+    </path>
 
-	<target name="testcases">
-		<tstamp/>
-		<property name="reportdir" value="test-reports/${DSTAMP}-${TSTAMP}"/>
-		<mkdir dir="${outputdir}"/>
-		<mkdir dir="${reportdir}"/>
+	<target name="init">
+    	<mkdir dir="${build.dir}"/>
+    	<mkdir dir="${app.classes.dir}" />
+		<mkdir dir="${reports.dir}"/>
+		<mkdir dir="${reports.xml.dir}"/>
+		<mkdir dir="${reports.html.dir}"/>
+    </target>
+
+    <target name="clean">
+    	<delete dir="${build.dir}" quiet="true" />
+		<delete dir="${reports.dir}" quiet="true" />
+    </target>
+    
+    <target name="app.compile" depends="init">
+    	
+        <javac destdir="${app.classes.dir}" srcdir="${src.dir}">
+        	<classpath>
+                <path refid="app.lib.path" />
+            </classpath>
+        </javac>
+    </target>
+
+    
+    <target name="test.minimal.data.run" description="Run the tests" depends="init, app.compile" >
+        
+        <property name="test_package_target" value="minimaldata" />
+        <antcall target="run.junit"/>
+    </target>
+  
+    <target name="test.full.data.run" description="Run the tests" depends="init, app.compile" >
+        <antcall target="run.junit">
+        	<param name="test_package_target" value="testcase" />
+        </antcall>
+    </target>
+    
+	<target name="run.junit">
 		<junit printsummary="true" failureproperty="junit.failure">
-			<classpath path="classes:${classdir}:lib/junit-4.5.jar:lib/log4j-1.2.15.jar:lib/selenium-java-client-driver.jar:lib/selenium-server.jar"/>
-			<batchtest todir="${outputdir}">
-				<fileset dir="${classdir}">
-					<include name="**/testcase/*.class"/>
-				</fileset>
-				<formatter type="xml"/>
-			</batchtest>
-			<sysproperty key="fieldid-browser" value="*firefox"/>
-		</junit>
-		<junitreport>
-			<fileset dir="${outputdir}"/>
-			<report todir="${reportdir}"/>
+       		<classpath>
+                <path location="${app.classes.dir}" />
+                <path refid="app.lib.path" />
+            </classpath>
+			
+			<sysproperty key="fieldid-browser" value="*chrome"/>
+			<sysproperty key="selenium-server" value="192.168.2.88"/>
+			<sysproperty key="fieldid-protocol" value="https"/>
+			<sysproperty key="selenium-snapshots" value="/tmp/"/>
+			<sysproperty key="fieldid-domain" value="grumpy.n4systems.net"/>
+        	
+			<formatter type="xml"/>
+            
+			<batchtest todir="${reports.xml.dir}" failureProperty="junit.failure"	>
+                <fileset dir="${src.dir}" includes="**/${test_package_target}/**/*Test.java" />
+            </batchtest>
+            
+        </junit>
+        
+        <junitreport todir="${reports.xml.dir}">
+			<fileset dir="${reports.xml.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports.html.dir}" />
 		</junitreport>
-		<fail if="junit.failure" message="Test case(s) failed. See ${reportdir}."/>
+		
+		<fail if="junit.failure" message="Test case(s) failed. See ${reports.html.dir}."/>
 	</target>
+
+	
 
 	
 </project>

@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.home.page.Home;
+import com.n4systems.fieldid.selenium.lib.BrowserResitriction;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.Misc;

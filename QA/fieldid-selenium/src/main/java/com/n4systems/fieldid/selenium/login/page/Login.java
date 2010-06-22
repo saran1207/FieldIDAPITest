@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.Misc;
-import com.n4systems.fieldid.selenium.testcase.LoggedInTestCase;
 
 public class Login {
 	FieldIdSelenium selenium;

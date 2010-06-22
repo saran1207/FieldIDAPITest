@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.n4systems.fieldid.selenium.testcase.LoggedInTestCase;
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 
 
 @RunWith(Parameterized.class)

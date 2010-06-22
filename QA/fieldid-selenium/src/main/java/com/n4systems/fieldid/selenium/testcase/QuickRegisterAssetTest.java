@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.testcase;
 import org.junit.Ignore;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 @Ignore

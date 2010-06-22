@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.testcase;
+package com.n4systems.fieldid.selenium.lib;
 
 import org.junit.After;
 import org.junit.Before;

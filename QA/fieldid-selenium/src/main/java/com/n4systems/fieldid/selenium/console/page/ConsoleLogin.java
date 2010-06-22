@@ -2,8 +2,8 @@ package com.n4systems.fieldid.selenium.console.page;
 
 import static org.junit.Assert.assertFalse;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.Misc;
-import com.n4systems.fieldid.selenium.testcase.LoggedInTestCase;
 
 public class ConsoleLogin {
 	FieldIdSelenium selenium;

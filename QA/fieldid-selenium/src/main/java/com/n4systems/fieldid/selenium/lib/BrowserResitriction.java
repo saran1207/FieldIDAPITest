@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.testcase;
+package com.n4systems.fieldid.selenium.lib;
 
 public @interface BrowserResitriction {
 

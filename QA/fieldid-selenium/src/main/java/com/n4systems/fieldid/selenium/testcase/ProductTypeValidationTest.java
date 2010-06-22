@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import org.junit.Test;
 
+import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.Misc;
 
 public class ProductTypeValidationTest extends LoggedInTestCase {

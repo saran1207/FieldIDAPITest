@@ -2,9 +2,9 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageInspectionTypes;
@@ -94,8 +94,4 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		return null;
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 }

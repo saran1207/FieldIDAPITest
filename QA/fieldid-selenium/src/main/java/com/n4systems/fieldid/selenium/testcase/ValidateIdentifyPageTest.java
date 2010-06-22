@@ -17,7 +17,7 @@ import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.reporting.page.Reporting;
 import com.n4systems.fieldid.selenium.schedule.page.Schedules;
 
-public class ValidateIdentifyPage extends FieldIDTestCase {
+public class ValidateIdentifyPageTest extends FieldIDTestCase {
 
 	Login login;
 	Schedules schedule;

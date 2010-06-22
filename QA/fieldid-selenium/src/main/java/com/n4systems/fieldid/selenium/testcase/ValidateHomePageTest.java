@@ -11,7 +11,7 @@ import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.reporting.page.Reporting;
 import com.n4systems.fieldid.selenium.schedule.page.Schedules;
 
-public class ValidateHomePage extends FieldIDTestCase {
+public class ValidateHomePageTest extends FieldIDTestCase {
 
 	Login login;
 	Home home;
