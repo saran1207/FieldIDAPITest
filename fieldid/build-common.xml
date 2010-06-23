@@ -3,6 +3,8 @@
 	<description>FieldID Common Build File</description>
 
 	<property name="buildfile.path" location="${dist}/${proj}" />
+	<property name="reports.dir" location="reports" />
+	<property name="reports.xml.dir" location="${reports.dir}/junit.xml" />
 
 	<path id="classpath.tests">
 		<fileset dir="${ear_home.test_lib}" includes="*.jar" />
@@ -13,6 +15,7 @@
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
 		<delete dir="${build.test}"/>
+		<delete dir="${reports.dir}"/>
 	</target>
 	
 	
@@ -20,6 +23,8 @@
 	<target name="init-dirs">
 		<mkdir dir="${build}" />
 		<mkdir dir="${build.test}" />
+		<mkdir dir="${reports.dir}"/>
+		<mkdir dir="${reports.xml.dir}"/>
 		<mkdir dir="${dist}" />
 	</target>
 
@@ -104,7 +109,7 @@
 	
 	<target name="test" depends="compile-tests" >
 		
-		<junit haltonfailure="true" >
+		<junit printsummary="true" failureproperty="junit.failure">
 			<classpath refid="classpath.deps" />
 			<classpath path="${build}"/>
 			<classpath path="${build.test}"/>
@@ -113,11 +118,16 @@
 			<classpath refid="classpath.jboss" />
 			<classpath path="${fieldidEjb.home}/tests"/>
 			<classpath refid="classpath.tests"/>
-			<formatter type="brief" usefile="false"/>
-			<batchtest>
+			<formatter type="xml"/>
+			<batchtest todir="${reports.xml.dir}">
 				<fileset dir="${build.test}" includes="**/*Test.class" />
 			</batchtest>
+			
 		</junit>
+		
+		
+		
+		<fail if="junit.failure" message="Test case(s) failed. See ${reports.xml.dir}."/>
 	</target>
 
 	<target name="package-jar" depends="compile-jar">

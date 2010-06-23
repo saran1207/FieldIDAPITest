@@ -28,18 +28,26 @@
 	
 	<target name="test" depends="compile-tests" >
 		
-		<junit haltonfailure="true" >
+		<junit printsummary="true" failureproperty="junit.failure">
 			<classpath refid="classpath.deps" />
 			<classpath path="${build}"/>
 			<classpath path="${build.test}"/>
 			<classpath refid="classpath.jboss" />
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.tests"/>
-			<formatter type="brief" usefile="false"/>
-			<batchtest>
+			
+			<formatter type="xml"/>
+			
+			<batchtest todir="${reports.xml.dir}">
 				<fileset dir="${build.test}" includes="**/*Test.class" />
 			</batchtest>
 		</junit>
+		
+		
+		
+		<!--fail if="junit.failure" message="Test case(s) failed. See ${reports.xml.dir}."/ -->
+		
+		
 	</target>
 	
 	
