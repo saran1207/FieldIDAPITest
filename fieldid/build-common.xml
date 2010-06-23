@@ -4,7 +4,7 @@
 
 	<property name="buildfile.path" location="${dist}/${proj}" />
 	<property name="reports.dir" location="reports" />
-	<property name="reports.xml.dir" location="${reports.dir}/junit.xml" />
+	<property name="reports.xml.dir" location="${reports.dir}/junit-xml" />
 
 	<path id="classpath.tests">
 		<fileset dir="${ear_home.test_lib}" includes="*.jar" />
