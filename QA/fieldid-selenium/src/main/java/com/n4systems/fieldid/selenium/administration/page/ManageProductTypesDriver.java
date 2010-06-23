@@ -16,7 +16,7 @@ import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.Misc;
 import com.thoughtworks.selenium.Wait;
 
-public class ManageProductTypes {
+public class ManageProductTypesDriver {
 	FieldIdSelenium selenium;
 	Misc misc;
 	private String manageProductTypesPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Product Types')]";
@@ -49,7 +49,7 @@ public class ManageProductTypes {
 	private String subComponentsProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Sub-Components')]";
 	private String inspectionTypeTableXpath = "//form[@id='productTypeEventTypesSave']/table";
 	
-	public ManageProductTypes(FieldIdSelenium selenium, Misc misc) {
+	public ManageProductTypesDriver(FieldIdSelenium selenium, Misc misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

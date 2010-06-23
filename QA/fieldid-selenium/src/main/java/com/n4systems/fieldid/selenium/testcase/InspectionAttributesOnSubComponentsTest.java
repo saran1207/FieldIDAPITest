@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageInspectionTypes;
-import com.n4systems.fieldid.selenium.administration.page.ManageProductTypes;
+import com.n4systems.fieldid.selenium.administration.page.ManageProductTypesDriver;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
@@ -18,7 +18,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 	private Login login;
 	private Admin admin;
 	private ManageInspectionTypes mits;
-	private ManageProductTypes mpts;
+	private ManageProductTypesDriver mpts;
 	private IdentifyPageDriver identify;
 	
 	@Before
@@ -27,7 +27,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		login = new Login(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mits = new ManageInspectionTypes(selenium, misc);
-		mpts = new ManageProductTypes(selenium, misc);
+		mpts = new ManageProductTypesDriver(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		String company = getStringProperty("company");
 		String username = getStringProperty("username");

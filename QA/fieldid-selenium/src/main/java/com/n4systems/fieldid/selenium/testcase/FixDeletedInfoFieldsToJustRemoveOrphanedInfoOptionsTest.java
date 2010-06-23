@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageProductCodeMappings;
-import com.n4systems.fieldid.selenium.administration.page.ManageProductTypes;
+import com.n4systems.fieldid.selenium.administration.page.ManageProductTypesDriver;
 import com.n4systems.fieldid.selenium.datatypes.Attribute;
 import com.n4systems.fieldid.selenium.datatypes.ComboBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.ProductCodeMapping;
@@ -32,8 +32,9 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	Login login;
 	IdentifyPageDriver identify;
 	Admin admin;
-	ManageProductTypes mpts;
+	ManageProductTypesDriver mpts;
 	ManageProductCodeMappings mpcms;
+	private String companyWithIntegration = "unirope";
 
 	@Before
 	public void setUp() throws Exception {
@@ -41,15 +42,15 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		login = new Login(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		admin = new Admin(selenium, misc);
-		mpts = new ManageProductTypes(selenium, misc);
+		mpts = new ManageProductTypesDriver(selenium, misc);
 		mpcms = new ManageProductCodeMappings(selenium, misc);
 	}
 
 	@Test
 	public void attributesCanBeDeletedFromUnusedProductType() throws Exception {
-		String companyID = getStringProperty("company");
+		 
 
-		setCompany(companyID);
+		setCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
 		ProductType productType = createAProductTypeWithAttributes();
 		verifyEditProductTypeHasDeleteAttribute(productType);
@@ -90,9 +91,8 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInProductCodeMapping() throws Exception {
-		String companyID = getStringProperty("company");
 
-		setCompany(companyID);
+		setCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
 		ProductType productType = createAProductTypeWithAttributes();
 		useProductTypeInProductCodeMapping(productType);

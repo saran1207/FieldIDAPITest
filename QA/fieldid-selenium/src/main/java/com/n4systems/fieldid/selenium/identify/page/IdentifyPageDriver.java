@@ -345,8 +345,9 @@ public class IdentifyPageDriver {
 			if(selenium.getValue(unitOfMeasureInputLocator).equals("")) {
 				selenium.type(unitOfMeasureInputLocator, value);
 			}
-			String submitButton = "//INPUT[contains(@id,'" + id + "') and @value='Submit' and @type='submit']";
+			String submitButton = "css=#unitOfMeasureForm_" + id + "_hbutton_submit";
 			selenium.click(submitButton);
+			
 		}
 	}
 
