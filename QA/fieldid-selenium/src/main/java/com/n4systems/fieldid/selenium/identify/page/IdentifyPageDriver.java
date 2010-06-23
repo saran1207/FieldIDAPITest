@@ -347,7 +347,7 @@ public class IdentifyPageDriver {
 			}
 			String submitButton = "css=#unitOfMeasureForm_" + id + "_hbutton_submit";
 			selenium.click(submitButton);
-			
+			selenium.waitForAjax();
 		}
 	}
 
