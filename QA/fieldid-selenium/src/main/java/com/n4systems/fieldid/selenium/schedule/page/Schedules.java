@@ -3,17 +3,17 @@ package com.n4systems.fieldid.selenium.schedule.page;
 import static org.junit.Assert.assertTrue;
 
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Schedules {
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String schedulesPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Schedule Search')]";
 	private String schedulesSearchResultPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Schedule Search Results')]";
 
-	public Schedules(FieldIdSelenium selenium, Misc misc) {
+	public Schedules(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

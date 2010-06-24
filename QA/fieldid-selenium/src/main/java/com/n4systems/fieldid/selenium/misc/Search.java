@@ -7,7 +7,7 @@ import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class Search {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 
 	// Locators
 	private String clearFormButtonLocator = "xpath=//INPUT[@type='reset' and @value='Clear Form']";
@@ -22,7 +22,7 @@ public class Search {
 	private String numberOfColumnsXpath = resultTableXpath + "/TBODY/TR/TH";
 	private String numberOfRowsXpath = resultTableXpath + "/TBODY/TR/TD[1]";
 
-	public Search(FieldIdSelenium selenium, Misc misc) {
+	public Search(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

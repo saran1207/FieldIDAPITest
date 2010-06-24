@@ -3,11 +3,11 @@ package com.n4systems.fieldid.selenium.console.page;
 import static org.junit.Assert.assertFalse;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ConsoleLogin {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	
 	// Locators
@@ -17,7 +17,7 @@ public class ConsoleLogin {
 	private String submitButtonLocator = "xpath=//INPUT[@id='signIntoSystem_0']";
 	private String organizationLinkLocator = "xpath=//UL[@id='nav']/LI/A[contains(text(),'Organizations')]";
 
-	public ConsoleLogin(FieldIdSelenium selenium, Misc misc) {
+	public ConsoleLogin(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -96,7 +96,7 @@ public class ConsoleLogin {
 
 	public ConsoleLogin gotoPage(String pageUrl) {
 		selenium.open(adminConsoleURL + pageUrl);
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		return this;
 	}
 }

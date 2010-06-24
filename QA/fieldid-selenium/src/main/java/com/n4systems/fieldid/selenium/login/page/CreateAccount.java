@@ -5,11 +5,11 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class CreateAccount {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String headerText = "You Have Selected the";
@@ -45,7 +45,7 @@ public class CreateAccount {
 	private String creditCardExpiryYearSelectListLocator = "xpath=//SELECT[@id='mainContent_creditCard_expiryYear']";
 	private String purchaseOrderNumberTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_purchaseOrderNumber']";
 
-	public CreateAccount(FieldIdSelenium selenium, Misc misc) {
+	public CreateAccount(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

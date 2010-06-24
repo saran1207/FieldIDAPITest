@@ -5,16 +5,16 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class AutoAttributeWizard {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	private String autoAttributeWizardPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Auto Attribute Wizard')]";
 	private String productTypeTableXpath = "//DIV[@id='pageContent']/TABLE[@class='list']";
 	private String productTypeCountXpath = productTypeTableXpath + "/TBODY/TR/TD/A";
 	
-	public AutoAttributeWizard(FieldIdSelenium selenium, Misc misc) {
+	public AutoAttributeWizard(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

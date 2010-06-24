@@ -4,12 +4,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Forgot {
 
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String userNameLocator = "xpath=//INPUT[@id='userName']";
@@ -19,7 +19,7 @@ public class Forgot {
 	private String userNameIsRequiredErrorMessage = "User Name is required.";
 	private String returnToSignInLinkLocator = "xpath=//A[contains(text(),'Return to Sign In')]";
 
-	public Forgot(FieldIdSelenium selenium, Misc misc) {
+	public Forgot(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

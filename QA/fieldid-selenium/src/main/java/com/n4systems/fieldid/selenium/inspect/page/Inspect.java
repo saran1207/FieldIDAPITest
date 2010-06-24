@@ -2,16 +2,16 @@ package com.n4systems.fieldid.selenium.inspect.page;
 
 import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Inspect {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String inspectHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Inspect - ')]";
 
-	public Inspect(FieldIdSelenium selenium, Misc misc) {
+	public Inspect(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

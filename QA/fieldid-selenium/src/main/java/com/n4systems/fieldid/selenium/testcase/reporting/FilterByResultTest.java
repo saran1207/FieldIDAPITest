@@ -10,7 +10,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 
 @RunWith(value = Parameterized.class)
@@ -52,7 +52,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 
 	private void submitForm() {
 		selenium.click("css=#reportForm_label_Run");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
 	private void verifyInspectionResultsAreCorrectOnThisPage() {
@@ -71,7 +71,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 
 	private void goToLastPage() {
 		selenium.click("link=Last");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
 }

@@ -7,7 +7,7 @@ import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ReferrerTrackingTest extends FieldIDTestCase {
 
@@ -155,7 +155,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		loginPage.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/refer.action");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 	
 	

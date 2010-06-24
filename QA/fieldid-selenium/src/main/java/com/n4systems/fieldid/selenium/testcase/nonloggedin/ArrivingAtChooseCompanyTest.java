@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.login.page.Choose;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 
@@ -38,7 +38,7 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 	public void should_forward_to_choose_company_page_from_root_of_www_domain() throws Exception {
 		String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
 		choosePage.verifyChooseCompany();
 		assertEquals("regexp:" + (url + "chooseCompany.action").replaceAll("\\/", "\\\\/").replaceAll("\\.", "\\\\."), selenium.getLocation());

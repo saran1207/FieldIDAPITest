@@ -17,7 +17,7 @@ import java.util.Random;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
-public class Misc {
+public class MiscDriver {
 
 	Random r = new Random(System.currentTimeMillis());
 	public static final String DEFAULT_TIMEOUT = "60000";
@@ -81,7 +81,7 @@ public class Misc {
 	private String smartSearchTextFieldLocator = "xpath=//INPUT[@id='searchText']";
 	private String smartSearchLoadButtonLocator = "xpath=//INPUT[@id='smartSearchButton']";
 	
-	public Misc(FieldIdSelenium selenium) {
+	public MiscDriver(FieldIdSelenium selenium) {
 		this.selenium = selenium;
 		search = new Search(selenium, this);
 	}
@@ -96,7 +96,7 @@ public class Misc {
 	 * found.
 	 */
 	public void waitForPageToLoadAndCheckForOopsPage() {
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		if(isOopsPage()) {
 			fail("Got an Oops page. Check Field ID logs.");
 		}
@@ -648,14 +648,14 @@ public class Misc {
 	 * this will <strong>fail</strong>. 
 	 */
 	public void waitForSessionTimeoutLightBox() {
-		assertTrue("Timeout for waitForLightBox must be positive", Misc.sessionTimeoutLightBoxTimeout > 0);
-		int seconds = Misc.sessionTimeoutLightBoxTimeout;
+		assertTrue("Timeout for waitForLightBox must be positive", MiscDriver.sessionTimeoutLightBoxTimeout > 0);
+		int seconds = MiscDriver.sessionTimeoutLightBoxTimeout;
 		while(!selenium.isElementPresent(lightboxLocator) && seconds > 0) {
 			try { Thread.sleep(1000); } catch (Exception e) { }
 			seconds--;
 		}
 		if(seconds <= 0) {
-			fail("After " + Misc.sessionTimeoutLightBoxTimeout + " seconds, no light box appeared.");
+			fail("After " + MiscDriver.sessionTimeoutLightBoxTimeout + " seconds, no light box appeared.");
 		}
 	}
 
@@ -1074,7 +1074,7 @@ public class Misc {
 		if(organization != null) {
 			if(isOptionPresent(selectOwnerOrganizationSelectListLocator, organization)) {
 				selenium.select(selectOwnerOrganizationSelectListLocator, organization);
-				waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
+				waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the organization '" + organization + "' in choose owner dialog");
 			}
@@ -1085,7 +1085,7 @@ public class Misc {
 			customer = owner.getCustomer() + " (" + owner.getOrganization() + ")";
 			if(isOptionPresent(selectOwnerCustomerSelectListLocator, customer)) {
 				selenium.select(selectOwnerCustomerSelectListLocator, customer);
-				waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
+				waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the customer '" + customer + "' in choose owner dialog");
 			}
@@ -1096,7 +1096,7 @@ public class Misc {
 			division = owner.getDivision() + ", " + customer;
 			if(isOptionPresent(selectOwnerDivisionSelectListLocator, division)) {
 				selenium.select(selectOwnerDivisionSelectListLocator, division);
-				waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
+				waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the division '" + division + "' in choose owner dialog");
 			}
@@ -1137,7 +1137,7 @@ public class Misc {
 	public void gotoChooseOwner() {
 		if(selenium.isElementPresent(chooseOwnerLinkLocator)) {
 			selenium.click(chooseOwnerLinkLocator);
-			waitForLoadingToFinish(Misc.DEFAULT_TIMEOUT);
+			waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
 		} else {
 			fail("Could not find a link to Choose owner");
 		}

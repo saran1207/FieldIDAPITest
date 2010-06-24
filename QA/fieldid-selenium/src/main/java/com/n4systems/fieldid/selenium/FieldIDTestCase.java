@@ -15,7 +15,7 @@ import org.junit.Before;
 
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
 
@@ -152,9 +152,10 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 
 	private SeleneseTestBase stb = new SeleneseTestBase();
     public FieldIdSelenium selenium;
-	protected Misc misc;
+	protected MiscDriver misc;
 	protected Properties p;
 	public static final String badProperty = "INVALID";
+	public SystemDriverFactory systemDriverFactory;
 	
 	
 	protected void setInitialCompany(String initCompany) {
@@ -166,8 +167,13 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 		loadingProperties();
 		selenium = createWebBrowser();
 		setWebBrowserSpeed();
-		createMiscClasses();
-		//misc.createTimestampDirectory(snapshots);
+		initializeSystemDrivers();
+
+	}
+
+	private void initializeSystemDrivers() {
+		systemDriverFactory = new SystemDriverFactory(selenium);
+		misc = systemDriverFactory.createMiscDriver();
 	}
 
 	/**
@@ -462,18 +468,9 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
     protected void setTestContext() {
         selenium.setContext(getClass().getSimpleName() + "." + getClass().getName());
     }
-    	
-	/**
-	 * The Misc object is a group of methods which should be available anywhere.
-	 * In some cases these are utility methods like generating a random RFID
-	 * number. In other cases it is an interface to Log4j. It is also all the
-	 * functionality which exists in the header or footer of the Field ID web
-	 * pages. Things like the Home, Identify, Inspect, etc. icons or the Sign Out
-	 * and My Account links. 
-	 */
-	private void createMiscClasses() {
-		misc = new Misc(selenium);
-	}
+    
+	
+	
 
 	/**
 	 * Create an instance of Selenium with the pre-determined web browser
@@ -486,9 +483,9 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 		FieldIdSelenium selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
 		
 		selenium.start();
-		selenium.setTimeout(Misc.DEFAULT_TIMEOUT);
+		selenium.setTimeout(MiscDriver.DEFAULT_TIMEOUT);
 		selenium.open(contextRoot);
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		selenium.windowMaximize();
 		
 		return selenium;
@@ -541,7 +538,7 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	public void setCompany(String companyID) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 	
 	

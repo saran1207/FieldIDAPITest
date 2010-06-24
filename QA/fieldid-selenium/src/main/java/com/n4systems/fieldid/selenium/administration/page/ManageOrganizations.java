@@ -7,11 +7,11 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.datatypes.PrimaryOrganization;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ManageOrganizations {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	private String manageOrganizationsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Organizations')]";
 	private String primaryOrganizationNameLocator = "xpath=//LABEL[@for='name']/../SPAN[@class='fieldHolder']";
 	private String secondaryOrganizationsTableRowXpath = "//TR[contains(@id,'organization_')]";
@@ -45,7 +45,7 @@ public class ManageOrganizations {
 	private String addOrganizationCancelButtonLocator = "xpath=//INPUT[@value='Cancel']";
 	private String limitWarningMessageLocator = "xpath=//DIV[contains(@class,'limitWarning')]";
 	
-	public ManageOrganizations(FieldIdSelenium selenium, Misc misc) {
+	public ManageOrganizations(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

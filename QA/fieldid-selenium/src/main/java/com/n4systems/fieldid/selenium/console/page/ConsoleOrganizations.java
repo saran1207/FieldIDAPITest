@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.ConsoleTenant;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ConsoleOrganizations {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String organizationsTableXpath = "//DIV[@id='content']/TABLE";
@@ -22,7 +22,7 @@ public class ConsoleOrganizations {
 	private String cancelButtonLocator = "xpath=//INPUT[@id='organizationUpdate_redirectAction:organizations']";
 	private String showPlansAndPricingCheckBoxLocator = "xpath=//INPUT[@id='organizationUpdate_primaryOrg_plansAndPricingAvailable']";
 
-	public ConsoleOrganizations(FieldIdSelenium selenium, Misc misc) {
+	public ConsoleOrganizations(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

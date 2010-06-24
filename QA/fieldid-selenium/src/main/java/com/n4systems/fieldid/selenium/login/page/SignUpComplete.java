@@ -3,11 +3,11 @@ package com.n4systems.fieldid.selenium.login.page;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class SignUpComplete {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String headerText = "Account Created";
@@ -30,7 +30,7 @@ public class SignUpComplete {
 	private String adminPaymentOptionTextLocator = "xpath=//LABEL[contains(text(),'Selected payment option')]/../SPAN";
 	private String adminAmountPayableTextLocator = "xpath=//SPAN[@id='totalPrice']";
 
-	public SignUpComplete(FieldIdSelenium selenium, Misc misc) {
+	public SignUpComplete(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

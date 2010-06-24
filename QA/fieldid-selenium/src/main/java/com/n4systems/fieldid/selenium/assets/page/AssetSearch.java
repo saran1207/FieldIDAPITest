@@ -7,12 +7,12 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.ProductSelectDisplayColumns;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.misc.Search;
 
 public class AssetSearch {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	Search search;
 	
 	// Locators
@@ -56,7 +56,7 @@ public class AssetSearch {
 	private String runButtonLocator = "xpath=//INPUT[@id='reportForm_label_Run']";
 	private String productSearchResultTable = "xpath=//TABLE[@id='resultsTable']";
 
-	public AssetSearch(FieldIdSelenium selenium, Misc misc) {
+	public AssetSearch(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 		search = misc.getSearch();
@@ -174,7 +174,7 @@ public class AssetSearch {
 		if(asc.getProductTypeGroup() != null) {
 			if(misc.isOptionPresent(productTypeGroupSelectListLocator, asc.getProductTypeGroup())) {
 				selenium.select(productTypeGroupSelectListLocator, asc.getProductTypeGroup());
-				search.waitForDisplayColumnsToUpdate(Misc.DEFAULT_TIMEOUT);
+				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the product type group '" + asc.getProductTypeGroup() + "'");
 			}
@@ -183,7 +183,7 @@ public class AssetSearch {
 		if(asc.getProductType() != null) {
 			if(misc.isOptionPresent(productTypeSelectListLocator, asc.getProductType())) {
 				selenium.select(productTypeSelectListLocator, asc.getProductType());
-				search.waitForDisplayColumnsToUpdate(Misc.DEFAULT_TIMEOUT);
+				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the product type  '" + asc.getProductType() + "'");
 			}

@@ -2,11 +2,11 @@ package com.n4systems.fieldid.selenium.administration.page;
 
 import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Admin {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String administrationPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Setup')]";
@@ -26,7 +26,7 @@ public class Admin {
 	private String dataLogLinkLocator = "xpath=//A[contains(text(),'Data Log')]";
 	private String manageProductCodeMappingsLinkLocator = "xpath=//A[contains(text(),'Manage Product Code Mappings')]";
 
-	public Admin(FieldIdSelenium selenium, Misc misc) {
+	public Admin(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

@@ -7,11 +7,11 @@ import java.util.List;
 
 import com.n4systems.fieldid.selenium.datatypes.InspectionType;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ManageInspectionTypes {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	private String manageInspectionTypesPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Inspection Types')]";
 	private String inspectionTypeTableXpath = "//div[@id='pageContent']/table";
 	private String inspectionTypeTableRowCountXpath = inspectionTypeTableXpath + "/tbody/tr/td[1]/a[1]";
@@ -37,7 +37,7 @@ public class ManageInspectionTypes {
 	private String editInspectionTypeInspectionAttributesListXpath = "//h2[contains(text(),'Inspection Attributes')]/../div[@id='infoFields']";
 	private String editInspectionTypeInspectionAttributesXpath = editInspectionTypeInspectionAttributesListXpath + "/p[contains(@id,'attribute_')]";
 	
-	public ManageInspectionTypes(FieldIdSelenium selenium, Misc misc) {
+	public ManageInspectionTypes(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -159,7 +159,7 @@ public class ManageInspectionTypes {
 	public void clickAddAttributeButton() throws InterruptedException {
 		if(selenium.isElementPresent(editInspectionTypeAddAttributeButtonLocator)) {
 			selenium.click(editInspectionTypeAddAttributeButtonLocator);
-			selenium.waitForAjax(Misc.DEFAULT_TIMEOUT);
+			selenium.waitForAjax(MiscDriver.DEFAULT_TIMEOUT);
 		} else {
 			fail("Could not find the Add Attribute button");
 		}

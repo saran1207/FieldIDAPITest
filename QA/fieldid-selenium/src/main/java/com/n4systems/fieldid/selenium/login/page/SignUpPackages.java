@@ -5,11 +5,11 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class SignUpPackages {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Package types
 	public final static String packageTypeFree = "Free";
@@ -25,7 +25,7 @@ public class SignUpPackages {
 	private String numberOfSignUpPackagesXpath = signUpPackagesTableXpath + "/THEAD/TR[2]/TH[contains(@id,'package_')]";
 	private String returnToSignInLinkLocator = "xpath=//A[contains(text(),'Return to Sign In')]";
 
-	public SignUpPackages(FieldIdSelenium selenium, Misc misc) {
+	public SignUpPackages(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

@@ -3,16 +3,16 @@ package com.n4systems.fieldid.selenium.home.page;
 import static org.junit.Assert.assertTrue;
 
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class InstructionalVideos {
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String instructionalVideosPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Instructional Videos')]";
 
-	public InstructionalVideos(FieldIdSelenium selenium, Misc misc) {
+	public InstructionalVideos(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

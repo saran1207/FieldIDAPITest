@@ -8,11 +8,11 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ManageUsers {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 
 	public final static String UserTypeAll = "All";
 	public final static String UserTypeCustomer = "Customer";
@@ -77,7 +77,7 @@ public class ManageUsers {
 	private String manageUsersViewAllLinkLocator = "xpath=//A[contains(text(),'View All')]";
 	private String filterNameTextFieldLocator = "xpath=//INPUT[@id='nameFilter']";
 	
-	public ManageUsers(FieldIdSelenium selenium, Misc misc) {
+	public ManageUsers(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

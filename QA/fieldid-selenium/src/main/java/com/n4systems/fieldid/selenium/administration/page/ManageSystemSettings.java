@@ -4,11 +4,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.datatypes.SystemSettings;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ManageSystemSettings {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	private String manageSystemSettingsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage System Settings')]";
 	private String companyIDLocator = "xpath=//LABEL[contains(text(),'Company ID')]/../SPAN";
 	private String yourCurrentPlanLocator = "xpath=//*[@id='currentPlan']";
@@ -26,7 +26,7 @@ public class ManageSystemSettings {
 	private String saveButtonLocator = "xpath=//INPUT[@id='systemSettingsUpdate_label_save']";
 	private String cancelLinkLocator = "xpath=//A[contains(text(),'Cancel')]";
 	
-	public ManageSystemSettings(FieldIdSelenium selenium, Misc misc) {
+	public ManageSystemSettings(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

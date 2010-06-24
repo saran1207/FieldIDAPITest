@@ -3,11 +3,11 @@ package com.n4systems.fieldid.selenium.assets.page;
 import static org.junit.Assert.*;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class AssetPage {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String assetHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset - ')]";
@@ -51,7 +51,7 @@ public class AssetPage {
 	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productUpdate_publishedState']";
 	private String editAssetCommentTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 
-	public AssetPage(FieldIdSelenium selenium, Misc misc) {
+	public AssetPage(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

@@ -13,12 +13,12 @@ import com.n4systems.fieldid.selenium.datatypes.SelectBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Wait;
 
 public class ManageProductTypesDriver {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	private String manageProductTypesPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Product Types')]";
 	private String productTypeTableXpath = "//DIV[@id='pageContent']/TABLE[@class='list']";
 	private String productTypeTableLocator = "xpath=" + productTypeTableXpath;
@@ -49,7 +49,7 @@ public class ManageProductTypesDriver {
 	private String subComponentsProductTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Sub-Components')]";
 	private String inspectionTypeTableXpath = "//form[@id='productTypeEventTypesSave']/table";
 	
-	public ManageProductTypesDriver(FieldIdSelenium selenium, Misc misc) {
+	public ManageProductTypesDriver(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -585,7 +585,7 @@ public class ManageProductTypesDriver {
 				public boolean until() {
 					return !selenium.isVisible(locator);
 				}
-			}.wait("Element '" + locator + "' was never set to invisible", Long.parseLong(Misc.DEFAULT_TIMEOUT));
+			}.wait("Element '" + locator + "' was never set to invisible", Long.parseLong(MiscDriver.DEFAULT_TIMEOUT));
 	}
 
 	private void verifyAttributeWasRetired(String name) {

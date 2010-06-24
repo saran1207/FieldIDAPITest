@@ -3,19 +3,19 @@ package com.n4systems.fieldid.selenium.login.page;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 
 public class Choose {
 
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String companyIDLocator = "xpath=//INPUT[@id='companyId']";
 	private String findSignInPageButtonLocator = "xpath=//INPUT[@id='signInToCompany_label_find_sign_in']";
 
-	public Choose(FieldIdSelenium selenium, Misc misc) {
+	public Choose(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

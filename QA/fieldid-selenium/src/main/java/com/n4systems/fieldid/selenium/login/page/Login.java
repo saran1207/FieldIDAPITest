@@ -7,11 +7,11 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Login {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String companyNameLocator = "xpath=//UL[@id='otherActions']/LI/SPAN/A[contains(text(),'is not the company I want.')]/../../LABEL";
@@ -27,7 +27,7 @@ public class Login {
 	private String forgotMyPasswordLinkLocator = "xpath=//UL[@id='otherActions']/LI/SPAN/A[contains(text(),'I forgot my password')]";
 	private String isNotTheCompanyIWantLinkLocator = "xpath=//UL[@id='otherActions']/LI/SPAN/A[contains(text(),'is not the company I want.')]";	
 
-	public Login(FieldIdSelenium selenium, Misc misc) {
+	public Login(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -429,7 +429,7 @@ public class Login {
 
 	public void confirmKickingSession() {
 		selenium.click("kickOtherUserOut");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
 	private void acceptEULAIfNeed() {

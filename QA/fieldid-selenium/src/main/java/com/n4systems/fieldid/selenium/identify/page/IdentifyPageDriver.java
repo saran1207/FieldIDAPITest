@@ -23,12 +23,12 @@ import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.datatypes.SafetyNetworkRegistration;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class IdentifyPageDriver {
 
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String identifyPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Identify')]";
@@ -108,7 +108,7 @@ public class IdentifyPageDriver {
 	private String multiAddSaveAndCreateButtonLocator = "css=#saveButton";
 	private String multiAddBackToStep3LinkLocator = "xpath=//a[contains(text(),'Back To Step 3')]";
 
-	public IdentifyPageDriver(FieldIdSelenium selenium, Misc misc) {
+	public IdentifyPageDriver(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
@@ -254,7 +254,7 @@ public class IdentifyPageDriver {
 		}
 		if(p.getProductType() != null) {
 			selenium.select(identifyAddProductTypeTextFieldLocator, p.getProductType());
-			waitForProductTypeAttributesToChange(Misc.DEFAULT_TIMEOUT);
+			waitForProductTypeAttributesToChange(MiscDriver.DEFAULT_TIMEOUT);
 		}
 		setRequiredProductAttributes();
 		
@@ -428,7 +428,7 @@ public class IdentifyPageDriver {
 			String asset = registration.getAssetNumber();
 			selenium.type(registerAssetSerialRFIDReferenceNumberTextFieldLocator, asset);
 			selenium.click(registerAssetLoadButtonLocator);
-			selenium.waitForAjax(Misc.DEFAULT_TIMEOUT);
+			selenium.waitForAjax(MiscDriver.DEFAULT_TIMEOUT);
 			assertFalse("Could not find vendor '" + vendor + "', asset '" + asset + "'", selenium.isElementPresent(couldNotFindAnyPublishedAssetTextLocator));
 		} else {
 			fail("Could not find a link to register the asset over the safety network");
@@ -601,7 +601,7 @@ public class IdentifyPageDriver {
 		}
 		if(p.getProductType() != null) {
 			selenium.select(multiAddProductTypeSelectListLocator, p.getProductType());
-			waitForProductTypeAttributesToChange(Misc.DEFAULT_TIMEOUT);
+			waitForProductTypeAttributesToChange(MiscDriver.DEFAULT_TIMEOUT);
 		}
 		setRequiredProductAttributes();
 		if(p.getComments() != null) {

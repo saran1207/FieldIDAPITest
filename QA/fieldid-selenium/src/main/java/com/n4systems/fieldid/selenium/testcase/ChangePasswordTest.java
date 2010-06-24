@@ -8,7 +8,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 @RunWith(value = Parameterized.class)
 public class ChangePasswordTest extends LoggedInTestCase {
@@ -43,9 +43,9 @@ public class ChangePasswordTest extends LoggedInTestCase {
 		String locator = "xpath=//table[@id='userList']/tbody/tr[3]/td[1]/a";
 		String userName = selenium.getText(locator);
 		selenium.click(locator);
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		selenium.click("link=Change Password");
-		selenium.waitForPageToLoad(Misc.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
 		selenium.click("label.cancel");
 		misc.waitForPageToLoadAndCheckForOopsPage();

@@ -4,12 +4,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import java.util.List;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class QuickSetupWizard {
 
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String quickSetupWizardPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard')]";
@@ -37,7 +37,7 @@ public class QuickSetupWizard {
 	private String previewSystemLogoImageLocator = "xpath=//IMG[@id='previewImage')]";
 	private String quickSetupWizardLinkLocator = "xpath=//A[contains(text(),'Quick Setup Wizard')]";
 	
-	public QuickSetupWizard(FieldIdSelenium selenium, Misc misc) {
+	public QuickSetupWizard(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

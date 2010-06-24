@@ -14,11 +14,11 @@ import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ManageProductCodeMappings {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	IdentifyPageDriver identify;
 	
 	private String manageProductCodeMappingsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Product Code Mappings')]";
@@ -29,7 +29,7 @@ public class ManageProductCodeMappings {
 	private String saveButtonLocator = "xpath=//INPUT[@id='productCodeMappingEdit_hbutton_save']";
 	private String cancelButtonLocator = "xpath=//A[contains(text(),'Cancel')]";
 	
-	public ManageProductCodeMappings(FieldIdSelenium selenium, Misc misc) {
+	public ManageProductCodeMappings(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 		identify = new IdentifyPageDriver(selenium, misc);

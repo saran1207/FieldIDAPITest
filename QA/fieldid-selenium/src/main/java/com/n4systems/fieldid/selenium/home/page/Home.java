@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Home {
 
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String homePageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Home')]";
@@ -31,7 +31,7 @@ public class Home {
 	private String quickSetupWizardLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Quick Setup Wizard')]";
 	private String jobsSectionHeaderLocator = "xpath=//div[@id='jobs']/h3[contains(text(),'Jobs')]";
 
-	public Home(FieldIdSelenium selenium, Misc misc) {
+	public Home(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

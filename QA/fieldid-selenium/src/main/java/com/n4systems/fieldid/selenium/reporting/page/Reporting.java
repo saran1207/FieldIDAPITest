@@ -3,17 +3,17 @@ package com.n4systems.fieldid.selenium.reporting.page;
 import static org.junit.Assert.assertTrue;
 
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class Reporting {
 	private FieldIdSelenium selenium;
-	private Misc misc;
+	private MiscDriver misc;
 	
 	// Locators
 	private String reportingPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Reporting')]";
 	private String reportingResultPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Reporting Results')]";
 
-	public Reporting(FieldIdSelenium selenium, Misc misc) {
+	public Reporting(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

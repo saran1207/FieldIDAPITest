@@ -2,16 +2,16 @@ package com.n4systems.fieldid.selenium.assets.page;
 
 import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class AssetSearchResults {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	
 	// Locators
 	private String productSearchResultsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Product Search Results')]";
 
-	public AssetSearchResults(FieldIdSelenium selenium, Misc misc) {
+	public AssetSearchResults(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

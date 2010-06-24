@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import com.n4systems.fieldid.selenium.datatypes.Customer;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.Misc;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 /**
  * Note: For Manage Job Sites, it is really Manage Customers with a label
@@ -20,7 +20,7 @@ import com.n4systems.fieldid.selenium.misc.Misc;
  */
 public class ManageCustomers {
 	FieldIdSelenium selenium;
-	Misc misc;
+	MiscDriver misc;
 	private String manageCustomersPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Customers')]";
 	private String filterByNameTextFieldLocator = "xpath=//INPUT[@id='listFilter']";
 	private String filterButtonLocator = "xpath=//INPUT[@value='Filter']";
@@ -46,7 +46,7 @@ public class ManageCustomers {
 	private String addDivisionLinkLocator = "xpath=//A[contains(text(),'Add Division')]";
 	private String importExportCustomerLinkLocator = "xpath=//LI[contains(@class,'add')]/A[contains(text(),'Import/Export')]";
 	
-	public ManageCustomers(FieldIdSelenium selenium, Misc misc) {
+	public ManageCustomers(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
