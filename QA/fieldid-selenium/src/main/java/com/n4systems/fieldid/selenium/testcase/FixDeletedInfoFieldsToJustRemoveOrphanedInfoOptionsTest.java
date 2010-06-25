@@ -20,6 +20,7 @@ import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 /**
  * WEB-1526
@@ -64,11 +65,11 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	}
 
 	private ProductType createAProductTypeWithAttributes() {
-		String productType = misc.getRandomString(10);
-		String textFieldAttributeName = misc.getRandomString(10);
-		String unitOfMeasureAttributeName = misc.getRandomString(10);
-		String selectBoxAttributeName = misc.getRandomString(10);
-		String comboBoxAttributeName = misc.getRandomString(10);
+		String productType = MiscDriver.getRandomString(10);
+		String textFieldAttributeName = MiscDriver.getRandomString(10);
+		String unitOfMeasureAttributeName = MiscDriver.getRandomString(10);
+		String selectBoxAttributeName = MiscDriver.getRandomString(10);
+		String comboBoxAttributeName = MiscDriver.getRandomString(10);
 		misc.gotoAdministration();
 		admin.gotoManageProductTypes();
 		mpts.gotoAddProductType();
@@ -111,7 +112,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		admin.gotoManageProductCodeMappings();
 		mpcms.gotoAddProductCodeMapping();
 		mpcms.setProductTypeInProductCodeMapping(productType.getName());
-		String productCode = misc.getRandomString(3);
+		String productCode = MiscDriver.getRandomString(3);
 		Map<Attribute, String> productAttributes = createRandomProductCodeMappings(productType.getAttributes());
 		ProductCodeMapping pcm = new ProductCodeMapping(productCode, productType.getName(), productAttributes);
 		mpcms.setProductCodeMapping(pcm);
@@ -129,7 +130,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 				String[] options = selenium.getSelectOptions(locator);
 				value = options[1];
 			} else {
-				value = misc.getRandomString(6);
+				value = MiscDriver.getRandomString(6);
 			}
 			result.put(a, value);
 		}

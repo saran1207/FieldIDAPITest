@@ -19,7 +19,7 @@ import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class MiscDriver {
 
-	Random r = new Random(System.currentTimeMillis());
+	public static Random r = new Random(System.currentTimeMillis());
 	public static final String DEFAULT_TIMEOUT = "60000";
 	// Current timeout for session is 30 minutes. This is set to 31 minutes
 	// just to be safe. That is, session will timeout in 30 minutes but it
@@ -614,7 +614,7 @@ public class MiscDriver {
 		return s.toString();
 	}
 	
-	private StringBuffer getRandomString(String validCharacters, int maxLength) {
+	private static StringBuffer getRandomString(String validCharacters, int maxLength) {
 		StringBuffer s = new StringBuffer(maxLength);
 		for(int i = 0; i < maxLength; i++) {
 			int n = r.nextInt(validCharacters.length());
@@ -631,7 +631,7 @@ public class MiscDriver {
 	 * @param length
 	 * @return
 	 */
-	public String getRandomString(int length) {
+	public static String getRandomString(int length) {
 		String validCharacters = "abcdefghijklmnopqrstuvwxyz";
 		StringBuffer s = getRandomString(validCharacters, length);
 		

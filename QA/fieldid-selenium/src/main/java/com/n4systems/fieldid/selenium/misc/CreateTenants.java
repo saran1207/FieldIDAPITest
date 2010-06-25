@@ -15,11 +15,9 @@ public class CreateTenants {
 	private SignUpPackages sup;
 	private CreateAccount create;
 	private SignUpComplete complete;
-	private MiscDriver misc;
 	private Random r;
 
 	public CreateTenants(FieldIdSelenium selenium, MiscDriver misc) {
-		this.misc = misc;
 		this.r = new Random();
 		login = new Login(selenium, misc);
 		sup = new SignUpPackages(selenium, misc);
@@ -41,9 +39,9 @@ public class CreateTenants {
 		if(promoCode == null) {
 			promoCode = "";
 		}
-		String username = misc.getRandomString(10);
+		String username = MiscDriver.getRandomString(10);
 		String password = "makemore$";
-		String tenantName = misc.getRandomString(10);
+		String tenantName = MiscDriver.getRandomString(10);
 		String tenantID = tenantName.toLowerCase();
 
 		login.gotoPlansAndPricing();
@@ -60,7 +58,7 @@ public class CreateTenants {
 			t.setPhoneSupport(r.nextBoolean());
 			t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
 			t.setPaymentType(CreateTenant.payByPurchaseOrder);
-			t.setpurchaseOrderNumber(misc.getRandomString(5));
+			t.setpurchaseOrderNumber(MiscDriver.getRandomString(5));
 		}
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();

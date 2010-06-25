@@ -300,7 +300,7 @@ public class IdentifyPageDriver {
 				+ classStringIdentifyingUnitOfMeasureFields + "')) and @id='" 
 				+ id + "']";
 			if(selenium.isElementPresent(locator) && selenium.getValue(locator).equals("")) {
-				String value = misc.getRandomString(8);
+				String value = MiscDriver.getRandomString(8);
 				selenium.type(locator, value);
 			}
 		}

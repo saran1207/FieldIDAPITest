@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.testcase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageOrganizations;
@@ -13,6 +14,7 @@ import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 /**
  * WEB-1469
@@ -104,7 +106,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 	}
 
 	private CreateTenant createANewTenant(String username, String password) {
-		String tenantName = misc.getRandomString(8);
+		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
 		if(!login.isPlansAndPricingAvailable()) {

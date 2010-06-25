@@ -11,6 +11,7 @@ import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 /**
  * WEB-1378
@@ -113,7 +114,7 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 	}
 
 	private CreateTenant createANewTenant(String username, String password) {
-		String tenantName = misc.getRandomString(8);
+		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
 		setCompany("msa");

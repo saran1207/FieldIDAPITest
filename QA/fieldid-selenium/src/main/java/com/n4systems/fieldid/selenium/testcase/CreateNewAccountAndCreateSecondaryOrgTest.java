@@ -13,6 +13,7 @@ import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 /**
  * WEB-1498
@@ -69,7 +70,7 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		mos.verifyManageOrganizationsPage();
 		mos.gotoAddSecondaryOrganization();
 		mos.waitForTenantSettingsToBeCreated();
-		String name = misc.getRandomString(15);
+		String name = MiscDriver.getRandomString(15);
 		Organization o = new Organization(name);
 		mos.setSecondaryOrganization(o);
 		mos.gotoSaveAddSecondaryOrganization();
@@ -97,7 +98,7 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 	}
 
 	private CreateTenant createANewUnlimitedTenant(String username, String password) {
-		String tenantName = misc.getRandomString(8);
+		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
 		if(!login.isPlansAndPricingAvailable()) {

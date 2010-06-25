@@ -114,7 +114,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	}
 	
 	private CreateTenant createANewUnlimitedTenant(String username, String password) {
-		String tenantName = misc.getRandomString(8);
+		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
 		CreateAccount create = new CreateAccount(selenium, misc);

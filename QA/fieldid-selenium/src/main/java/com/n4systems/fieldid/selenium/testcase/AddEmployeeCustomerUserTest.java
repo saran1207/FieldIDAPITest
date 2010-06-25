@@ -12,6 +12,7 @@ import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.SystemUser;
 import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 
@@ -48,8 +49,8 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("customer-password");
 		Owner owner = new Owner();
-		String firstName = misc.getRandomString(10);
-		String lastName = misc.getRandomString(10);
+		String firstName = MiscDriver.getRandomString(10);
+		String lastName = MiscDriver.getRandomString(10);
 		String userid = firstName.toLowerCase();
 		CustomerUser cu = new CustomerUser(userid, email, password, password, owner, firstName, lastName);
 		mus.setAddCustomerUser(cu);
@@ -86,8 +87,8 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("employee-password");
 		Owner owner = new Owner();
-		String firstName = misc.getRandomString(10);
-		String lastName = misc.getRandomString(10);
+		String firstName = MiscDriver.getRandomString(10);
+		String lastName = MiscDriver.getRandomString(10);
 		String userid = firstName.toLowerCase();
 		EmployeeUser employeeUser = new EmployeeUser(userid, email, password, password, owner, firstName, lastName);
 		employeeUser.addPermission(EmployeeUser.create);
