@@ -1,15 +1,16 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
 
-import static com.n4systems.fieldid.selenium.administration.page.CommentTemplate.*;
+import static com.n4systems.fieldid.selenium.data.CommentTemplate.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.administration.page.ManageCommentTemplatesDriver;
-import com.n4systems.fieldid.selenium.administration.page.CommentTemplate;
+import com.n4systems.fieldid.selenium.data.CommentTemplate;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
+
 @SuppressWarnings("unchecked")
 public class CommentTemplateCrudTest extends LoggedInTestCase {
 
@@ -20,7 +21,7 @@ public class CommentTemplateCrudTest extends LoggedInTestCase {
 
 	@Before
 	public void setupDrivers() throws Exception {
-		driver = systemDriverFactory.createProductStatusDriver();
+		driver = systemDriverFactory.createCommentTemplateDriver();
 	}
 	
 	@Test
@@ -68,13 +69,11 @@ public class CommentTemplateCrudTest extends LoggedInTestCase {
 	public void should_require_an_edited_comment_template_to_have_name() throws Exception {
 		CommentTemplate invalidNameInTempalte = new CommentTemplate(TEMPLATE_NAME_THAT_IS_TOO_SHORT, randomStatusComment());
 		
-		
 		CommentTemplate template = driver.selectAnExistingTemplate();
 		
 		driver.editTemplate(template, invalidNameInTempalte);
 		
 		driver.assertVaildationErrorFor(ManageCommentTemplatesDriver.FieldName.NAME_FIELD, allOf(containsString("required"), containsString("name")));
-		
 	}
 	
 	

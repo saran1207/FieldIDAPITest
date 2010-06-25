@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.administration.page;
+package com.n4systems.fieldid.selenium.data;
 
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 

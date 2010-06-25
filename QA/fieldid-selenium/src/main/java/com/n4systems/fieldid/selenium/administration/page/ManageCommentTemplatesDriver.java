@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import org.hamcrest.Matcher;
 
+import com.n4systems.fieldid.selenium.data.CommentTemplate;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class ManageCommentTemplatesDriver {
@@ -43,8 +44,8 @@ public class ManageCommentTemplatesDriver {
 		selenium.clickAndWaitForPageLoad(ADD_ACTION_LINK_LOCATOR);
 	}
 
-	public void assertTemplateWasCreated(CommentTemplate productTemplateForm) {
-		assertTemplateValuesHaveBeenSaved(productTemplateForm);
+	public void assertTemplateWasCreated(CommentTemplate template) {
+		assertTemplateValuesHaveBeenSaved(template);
 	}
 
 
@@ -66,18 +67,18 @@ public class ManageCommentTemplatesDriver {
 	}
 
 
-	public void removeTemplate(CommentTemplate productTemplate) {
+	public void removeTemplate(CommentTemplate template) {
 		gotoCommentTemplates();
 		selenium.chooseOkOnNextConfirmation();
-		selenium.click("css=td:contains('" + productTemplate.name + "') + td a:contains('Remove')");
+		selenium.click("css=td:contains('" + template.name + "') + td a:contains('Remove')");
 		
 		assertThat(selenium.getConfirmation(), startsWith("Are you sure you want to delete this?"));
 		selenium.waitForPageToLoad();
 	}
 
 
-	public void assertTemplateWasRemoved(CommentTemplate productTemplate) {
-		assertFalse(selenium.isTextPresent(productTemplate.name));
+	public void assertTemplateWasRemoved(CommentTemplate template) {
+		assertFalse(selenium.isTextPresent(template.name));
 	}
 
 

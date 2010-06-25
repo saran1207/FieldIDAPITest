@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium;
 
 import com.n4systems.fieldid.selenium.administration.page.ManageCommentTemplatesDriver;
+import com.n4systems.fieldid.selenium.administration.page.ManageProductStatusDriver;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
@@ -16,12 +17,17 @@ public class SystemDriverFactory {
 	}
 	
 	
-	public ManageCommentTemplatesDriver createProductStatusDriver() {
+	public ManageCommentTemplatesDriver createCommentTemplateDriver() {
 		return new ManageCommentTemplatesDriver(selenium);
 	}
 
 
 	public MiscDriver createMiscDriver() {
 		return misc;
+	}
+
+
+	public ManageProductStatusDriver createProductStatusDriver() {
+		return new ManageProductStatusDriver(selenium);
 	}
 }
