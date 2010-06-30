@@ -1,9 +1,13 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
 public class Owner {
-	String organization;
-	String customer;
-	String division;
+	public static Owner someOrg() {
+		return new Owner();
+	}
+	
+	public final String organization;
+	public final String customer;
+	public final String division;
 	
 	public Owner(String organization, String customer, String division) {
 		this.organization = organization;
@@ -12,15 +16,15 @@ public class Owner {
 	}
 	
 	public Owner(String organization, String customer) {
-		this.organization = organization;
-		this.customer = customer;
+		this(organization, customer, null);
 	}
 	
 	public Owner(String organization) {
-		this.organization = organization;
+		this(organization, null, null);
 	}
 	
-	public Owner() {
+	private Owner() {
+		this(null, null, null);
 	}
 
 	public String toString() {
@@ -43,15 +47,9 @@ public class Owner {
 		return this.division;
 	}
 	
-	public void setOrganization(String organization) {
-		this.organization = organization;
+	
+	public boolean specifiesOrg() {
+		return organization != null;
 	}
 	
-	public void setCustomer(String customer) {
-		this.customer = customer;
-	}
-	
-	public void setDivision(String division) {
-		this.division = division;
-	}
 }

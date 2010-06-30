@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.selenium.administration.page;
 
+import static com.n4systems.fieldid.selenium.nav.OptionNavgationDriver.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import org.hamcrest.Matcher;
 
-import com.n4systems.fieldid.selenium.data.CommentTemplate;
+import com.n4systems.fieldid.selenium.datatypes.CommentTemplate;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 
 public class ManageCommentTemplatesDriver {
@@ -21,7 +22,6 @@ public class ManageCommentTemplatesDriver {
 	}
 	
 	private static final String SAVE_BUTTON_LOCATOR = "commentTemplateEdit_hbutton_save";
-	private static final String ADD_ACTION_LINK_LOCATOR = "css=.options .add a";
 	private static final String NAME_FIELD_LOCATOR = "commentTemplateEdit_name";
 	private static final String COMMENT_FIELD_LOCATOR = "commentTemplateEdit_comment";
 	

@@ -13,18 +13,16 @@ ${action.setPageType('inspection_book', 'list')!}
 		</tr>
 		<#list page.getList() as book > 
 			<tr id="book_${book.id}" >
-				<td><a href="<@s.url action="inspectionBookEdit" uniqueID="${book.id}"/>" >${book.name?html}</a></td>
+				<td><a href="<@s.url action="inspectionBookEdit" uniqueID="${book.id}"/>" bookid="${book.id}">${book.name?html}</a></td>
 				<td>${(book.owner.name?html)!}</td>
 				<td>${action.formatDateTime(book.created)}</td>
 				<td><span id="bookStatus_${book.id}">${book.open?string( action.getText( "label.open" ), action.getText( "label.closed" ) ) }</td>
 				<td><span id="bookStatusLink_${book.id}">
-						
 						<#if book.open >
 							<#include "_closeLink.ftl" />
 						<#else>
 							<#include "_openLink.ftl" />
 						</#if>
-						
 					</span> | <a href="javascript:void(0);" onclick="return getResponse( '<@s.url action="inspectionBookDelete" namespace="/ajax" uniqueID="${book.id}"/>' );"><@s.text name="label.delete"/></a>
 				</td>
 			</tr>	

@@ -6,7 +6,7 @@ public class SystemUser {
 	private String securityRFIDNumber;
 	private String password;
 	private String verifyPassword;
-	private Owner owner = new Owner();
+	private Owner owner;
 	private String firstName;
 	private String lastName;
 	private String initials;

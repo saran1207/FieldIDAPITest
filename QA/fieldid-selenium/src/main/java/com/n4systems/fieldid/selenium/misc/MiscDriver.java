@@ -1070,6 +1070,11 @@ public class MiscDriver {
 	 * @param owner
 	 */
 	public void setOwner(Owner owner) {
+		if (!owner.specifiesOrg()) {
+			selenium.select(selectOwnerOrganizationSelectListLocator, "index=0");
+			waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
+		}
+		
 		String organization = owner.getOrganization();
 		if(organization != null) {
 			if(isOptionPresent(selectOwnerOrganizationSelectListLocator, organization)) {
@@ -1240,23 +1245,23 @@ public class MiscDriver {
 	 * @return
 	 */
 	public Owner getOwner() {
-		Owner result = new Owner();
+		
 		String organization = selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator);
-		String customerOrganization = "";
-		result.setOrganization(organization.trim());
+		String customer = null;
+		String division = null;
+		
 		String[] s = selenium.getSelectOptions(selectOwnerCustomerSelectListLocator);
+		;
 		if(s.length > 0 && !s.equals("")) {
-			customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
-			String customer = customerOrganization.replace(" (" + organization + ")", "");
-			result.setCustomer(customer.trim());
+			String customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
+			customer = customerOrganization.replace(" (" + organization + ")", "").trim();
 		}
 		s = selenium.getSelectOptions(selectOwnerDivisionSelectListLocator);
 		if(s.length > 0 && !s[0].equals("")) {
 			String divisionCustomerOrganization = selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator);
-			String division = divisionCustomerOrganization.replace(", " + customerOrganization, "");
-			result.setDivision(division.trim());
+			division = divisionCustomerOrganization.replace(", " + customer, "").replace(" (" + organization + ")", "").trim();
 		}
-		return result;
+		return new Owner(organization.trim(), customer, division);
 	}
 
 	/**

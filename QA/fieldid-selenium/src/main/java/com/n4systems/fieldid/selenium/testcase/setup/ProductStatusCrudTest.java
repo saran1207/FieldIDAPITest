@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.administration.page.ManageProductStatusDriver;
-import com.n4systems.fieldid.selenium.data.ProductStatus;
+import com.n4systems.fieldid.selenium.datatypes.ProductStatus;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 
 

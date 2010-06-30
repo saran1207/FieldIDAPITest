@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static com.n4systems.fieldid.selenium.datatypes.Owner.*;
+
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
@@ -48,7 +50,7 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	private CustomerUser addACustomerUser() {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("customer-password");
-		Owner owner = new Owner();
+		Owner owner = someOrg();
 		String firstName = MiscDriver.getRandomString(10);
 		String lastName = MiscDriver.getRandomString(10);
 		String userid = firstName.toLowerCase();
@@ -86,7 +88,7 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	private EmployeeUser addAnEmployeeUser() {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("employee-password");
-		Owner owner = new Owner();
+		Owner owner = someOrg();
 		String firstName = MiscDriver.getRandomString(10);
 		String lastName = MiscDriver.getRandomString(10);
 		String userid = firstName.toLowerCase();

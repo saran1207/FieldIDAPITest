@@ -1,14 +1,14 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
 
-import static com.n4systems.fieldid.selenium.data.CommentTemplate.*;
+import static com.n4systems.fieldid.selenium.datatypes.CommentTemplate.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.administration.page.ManageCommentTemplatesDriver;
-import com.n4systems.fieldid.selenium.data.CommentTemplate;
+import com.n4systems.fieldid.selenium.datatypes.CommentTemplate;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 
 @SuppressWarnings("unchecked")

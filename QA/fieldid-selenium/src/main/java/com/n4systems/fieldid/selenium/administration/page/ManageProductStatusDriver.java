@@ -5,8 +5,9 @@ import static org.junit.Assert.*;
 
 import org.hamcrest.Matcher;
 
-import com.n4systems.fieldid.selenium.data.ProductStatus;
+import com.n4systems.fieldid.selenium.datatypes.ProductStatus;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.nav.OptionNavgationDriver;
 
 public class ManageProductStatusDriver {
 	public enum FieldName {
@@ -18,8 +19,6 @@ public class ManageProductStatusDriver {
 			this.inputId = inputId;
 		}
 	};
-	private static final String ADD_ACTION_LINK_LOCATOR = "css=.options .add a";
-
 	private static final String SAVE_BUTTON_LOCATOR = "productStatusEdit_hbutton_save";
 	
 
@@ -36,7 +35,7 @@ public class ManageProductStatusDriver {
 
 	public void gotoAddStatus() {
 		gotoProductStatuses();
-		selenium.clickAndWaitForPageLoad(ADD_ACTION_LINK_LOCATOR);
+		selenium.clickAndWaitForPageLoad(OptionNavgationDriver.ADD_ACTION_LINK_LOCATOR);
 	}
 	
 	
