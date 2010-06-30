@@ -1,5 +1,14 @@
 require "predefined_location"
+require "tenant"
 class PredefinedLocationGenerator
+  def self.generateFor(tenant_name, depth, nodes_per_level)
+    tenant = Tenant.find(:first, :conditions => { :name => tenant_name })
+    raise Exception.new("tenant could not be found") unless !tenant.nil?
+    
+    PredefinedLocationGenerator.new(depth, nodes_per_level, tenant).generate
+  end
+  
+  
   def initialize(depth, nodes_per_level, tenant)  
     @depth = depth 
     @nodes_per_level = nodes_per_level
@@ -22,13 +31,11 @@ class PredefinedLocationGenerator
         location.save
         create_nodes(level + 1, location)
       end
+      
     end
   
     def generate_name(i)
       "location " + i.to_s + "__" + (0...5).map{ ('a'..'z').to_a[rand(26)] }.join
     end
-  
-  
-  
   
 end
