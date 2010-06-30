@@ -32,6 +32,18 @@
 	<#else>
 		<span class="fieldHolder" id="location">${(product.location?html)!}</span>
 	</#if>
+	
+	
+</div>
+<div class="infoSet">
+	<label class="label" for="advancedLocation"><@s.text name="label.advancedlocation"/></label>
+	<#if !parentProduct?exists >
+		<@s.select id="advancedLocation" name="advancedLocation" list="predefinedLocations" listKey="id" listValue="name" />
+	<#else>
+		<span class="fieldHolder" id="advancedLocation">${(product.advancedLocation.predefinedLocation.name?html)!}</span>
+	</#if>
+	
+	
 </div>
 <div class="infoSet">
 	<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>

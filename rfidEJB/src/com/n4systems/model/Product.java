@@ -29,6 +29,7 @@ import rfid.ejb.entity.ProductStatusBean;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -118,6 +119,8 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     
     @Column(name="countstowardslimit", nullable=false)
     private boolean countsTowardsLimit = true;
+    
+    private Location advancedLocation = new Location();
     
     @Transient
     private Long last_linked_id;
@@ -523,5 +526,13 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 	@Override
 	public void setGlobalId(String globalId) {}
+
+	public Location getAdvancedLocation() {
+		return advancedLocation;
+	}
+
+	public void setAdvancedLocation(Location advancedLocation) {
+		this.advancedLocation = advancedLocation;
+	}
 	
 }
