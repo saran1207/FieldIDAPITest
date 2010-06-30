@@ -16,8 +16,9 @@ public class N4TagModels {
     private IncludeStyleModel includeStyle;
     private OrgPickerModel orgPicker;
     private SafetyNetworkSmartSearchModel safetyNetworkSmartSearch;
+    private DynamicLocationModel dynamicLocation;
     
-    public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
+	public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         this.stack = stack;
         this.req = req;
         this.res = res;
@@ -60,4 +61,10 @@ public class N4TagModels {
     	return safetyNetworkSmartSearch;
     }
     
+    public DynamicLocationModel getDynamicLocation() {
+		if (dynamicLocation==null){
+			dynamicLocation = new DynamicLocationModel(stack, req, res);
+		}
+    	return dynamicLocation;
+	}
 }

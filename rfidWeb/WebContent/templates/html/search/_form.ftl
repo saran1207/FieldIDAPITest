@@ -5,6 +5,18 @@
 	<script type="text/javascript">
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="searchDynamicColumns" namespace="/ajax" />';
+		
+		Event.observe(window, 'load', function() {
+ 		
+ 			    $('tree').hide();
+ 			 	$('locationTree').observe('click', function(){
+				$('tree').show();
+				$('tree').absolutize();
+				$('tree').style.top = 400 +"px";
+				$('tree').style.left = 500 +"px";
+			});
+		});
+			
 	</script>
 	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
@@ -41,14 +53,12 @@
 				
 			</div>	
 			
-				
 			<#if securityGuard.assignedToEnabled>
 				<div class="infoSet">
 					<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
 					<@s.select name="criteria.assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
 				</div>
 			</#if>
-			
 		
 			<div class="infoSet">
 				<label for="criteria.referenceNumber"><@s.text name="label.referencenumber"/></label>
@@ -65,7 +75,14 @@
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
 				<@s.textfield name="criteria.location"/>
+
+				<a href="#" id="locationTree" >Location Tree</a>
+
+				<div id="tree">
+					<@n4.dynamicLocation name="dynamicLocation"/>
+				</div>
 			</div>	
+		
 			<div class="infoSet">
 				<label for="owner"><@s.text name="label.owner"/></label>
 				<@n4.orgPicker name="owner"/>
@@ -90,3 +107,5 @@
 		</div>
 	</@s.form >
 </div>
+
+			
