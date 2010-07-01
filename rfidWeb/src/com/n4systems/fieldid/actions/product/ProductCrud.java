@@ -48,7 +48,6 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
@@ -696,7 +695,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	public void setLocation(String location) {
-		product.setLocation(location);
+		product.setAdvancedLocation(product.getAdvancedLocation().createForAdjustedFreeformLocation(location));
 	}
 	
 	
@@ -709,7 +708,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		if (id != null) {
 			predfinedLocation = persistenceManager.find(PredefinedLocation.class, id, getTenantId());
 		}
-		product.setAdvancedLocation(new Location(predfinedLocation));
+		product.setAdvancedLocation(product.getAdvancedLocation().createForAdjustedPredefinedLocation(predfinedLocation));
 	}
 	
 

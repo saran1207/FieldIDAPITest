@@ -59,7 +59,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	private String rfidNumber;
 	private String customerRefNumber;
 	private String purchaseOrder;	
-	private String location;
 	
 	@Column(length=2047)
 	private String comments;
@@ -386,11 +385,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public String getLocation() {
-		return location;
+		return advancedLocation.getFreeformLocation();
 	}
 
 	public void setLocation(String location) {
-		this.location = location;
+		advancedLocation = Location.onlyFreeformLocation(location);
 	}
 	
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)

@@ -33,7 +33,7 @@ public class ProductSearchContainer extends SearchContainer {
 	protected void evalSearchTerms() {
 		addStringTerm("rfidNumber", rfidNumber);
 		addWildcardTerm("serialNumber", serialNumber);
-		addWildcardTerm("location", location);
+		addWildcardTerm("advancedLocation.freeformLocation", location);
 		addStringTerm("shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("customerRefNumber", referenceNumber);
 		addStringTerm("purchaseOrder", purchaseOrder);

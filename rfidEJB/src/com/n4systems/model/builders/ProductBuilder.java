@@ -13,6 +13,7 @@ import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 
@@ -28,18 +29,18 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	private final Date modified;
 	
 	private final SubProduct[] subProducts;
-	private final String location;
+	private final Location location;
 	private final ProductStatusBean productStatus;
 	private final User assignedTo;
 	
 	public static ProductBuilder aProduct() {
-		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, null, null, NOT_ASSIGNED);
+		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, new Location(), null, NOT_ASSIGNED);
 	}
 	
 	
 
 
-	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, String location, ProductStatusBean productStatus, User assignedTo, SubProduct... subProducts) {
+	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, Location location, ProductStatusBean productStatus, User assignedTo, SubProduct... subProducts) {
 		super();
 		this.tenant = tenant;
 		this.owner = owner;
@@ -83,8 +84,13 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	}
 	
 	public ProductBuilder inLocation(String location) {
+		return withAdvancedLocation(Location.onlyFreeformLocation(location));
+	}
+	
+	public ProductBuilder withAdvancedLocation(Location location) {
 		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
 	}
+
 	
 	public ProductBuilder havingStatus(ProductStatusBean productStatus) {
 		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
@@ -97,6 +103,8 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	public ProductBuilder unassigned() {
 		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, null, subProducts);
 	}
+	
+	
 	
 	@Override
 	public Product build() {
@@ -115,10 +123,9 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		product.setType(type);
 		product.setSerialNumber(serialNumber);
 		product.setModified(modified);
-		product.setLocation(location);
 		product.setProductStatus(productStatus);
 		product.setAssignedUser(assignedTo);
-		
+		product.setAdvancedLocation(location);
 		return product;
 	}
 	
@@ -133,13 +140,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 
 
 
-	
 
 
-
-
-	
-
-	
 	
 }
