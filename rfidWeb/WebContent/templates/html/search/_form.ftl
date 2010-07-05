@@ -8,7 +8,6 @@
 		
 		Event.observe(window, 'load', function() {
  		
- 			    $('tree').hide();
  			 	$('locationTree').observe('click', function(){
 				$('tree').show();
 				$('tree').absolutize();
@@ -75,12 +74,12 @@
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
 				<@s.textfield name="criteria.location"/>
-
 				<a href="#" id="locationTree" >Location Tree</a>
 
-				<div id="tree">
+				<div id="tree" class="hide">
 					<@n4.dynamicLocation name="dynamicLocation"/>
 				</div>
+							
 			</div>	
 		
 			<div class="infoSet">
@@ -106,6 +105,6 @@
 			<@s.submit key="label.Run"/>
 		</div>
 	</@s.form >
-</div>
 
-			
+	
+</div>

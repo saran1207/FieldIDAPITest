@@ -34,6 +34,7 @@
           overflow-y:scroll;\
           overflow-x:hidden;\
           position:absolute;\
+          max-width:200px;\
         }\
         .containerobj a {\
           display:block;\
@@ -71,9 +72,10 @@
           text-decoration:none;\
           font-size:0.7em;\
         }\
-        p{\
+        .treeHeading{\
         	background-color:#D0DAFA;\
         	color:#333333;\
+        	font-weight:bold;\
            }\
         </style>');
     }
@@ -135,7 +137,7 @@
         	     submenu(container,self);
           }
           else if (!event.metaKey && !event.shiftKey) {
-        	    // No children, show title instead (if it exists, or a link)
+        /*	    // No children, show title instead (if it exists, or a link)
               var title = $('<a/>').attr({href:$(self).attr('href')}).text($(self).attr('title') ? $(self).attr('title') : $(self).text());
               var featurebox = $('<div/>').html(title).addClass('feature').appendTo(container);
               // Set the width
@@ -144,12 +146,13 @@
                 remainingspace += $(item).width();
               });
               var fillwidth = $(container).width() - remainingspace;
-              $(featurebox).css({'top':0,'left':remainingspace}).width(fillwidth).show();  
+              $(featurebox).css({'top':0,'left':remainingspace}).width(fillwidth).show();  */
           }
        
           
           //Scroll to the right whenever a new node is selected.
           $(container).scrollLeft("10000");
+          
         }
         // Handle Keyboard navigation
         if(event.type == "keydown"){
@@ -187,9 +190,13 @@
   function submenu(container,item){
     var leftPos = 0;
     $.each($(container).children('div'),function(i,mydiv){
-      leftPos += $(mydiv).width();
+    //Currently, the width() function is borked in msie. Hardcode width for the 
+    //time being. 
+    //leftPos += $(mydiv).width();
+    	leftPos += 200;
     });
-    var submenu = $('<div/>').css({'top':0,'left':leftPos}).appendTo(container);
+    
+    var submenu = $('<div/>').css({'top':0, 'left':leftPos}).appendTo(container);
     if($.browser.msie) { $(submenu).width('200px'); } // Cuz IE don't support auto width
     var subitems = $(item).data('sub').children('li');
     $.each(subitems,function(i,subitem){
@@ -227,8 +234,5 @@
       event.preventDefault();
     });
   }
-  
-
-  
 
 })(jQuery);
