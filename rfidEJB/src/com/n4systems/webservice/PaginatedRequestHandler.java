@@ -32,7 +32,7 @@ abstract public class PaginatedRequestHandler<R extends AbstractListResponse>  i
 			return response;
 		} catch (Exception e) {
 			logger.error(String.format("%s failed request handling", getClass().getSimpleName()), e);
-			throw new ServiceException();
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
