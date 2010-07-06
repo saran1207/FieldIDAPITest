@@ -16,6 +16,7 @@ import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -101,6 +102,17 @@ public enum SetupDataGroup {
 		public void setLastModDate(Date newDate, SetupDataLastModDates lastModeDates) {
 			lastModeDates.setEmployees(newDate);
 		}
+	},
+	LOCATIONS(PredefinedLocation.class) {
+		@Override
+		public Date getLastModDate(SetupDataLastModDates lastModDates) {
+			return lastModDates.getLocations();
+		}
+
+		@Override
+		public void setLastModDate(Date newDate, SetupDataLastModDates lastModeDates) {
+			lastModeDates.setLocations(newDate);
+		}
 	};
 
 	private final Class<?>[] groupClasses;
@@ -113,8 +125,8 @@ public enum SetupDataGroup {
 		return groupClasses;
 	}
 
-	public abstract Date getLastModDate(SetupDataLastModDates lastModeDates);
+	public abstract Date getLastModDate(SetupDataLastModDates lastModDates);
 
-	public abstract void setLastModDate(Date newDate, SetupDataLastModDates lastModeDates);
+	public abstract void setLastModDate(Date newDate, SetupDataLastModDates lastModDates);
 
 }

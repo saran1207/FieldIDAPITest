@@ -106,6 +106,8 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.webservice.ModelToServiceConverterFactory;
+import com.n4systems.webservice.RequestHandlerFactory;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
@@ -159,6 +161,7 @@ import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomer
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
+import com.n4systems.webservice.predefinedlocation.PredefinedLocationListResponse;
 import com.n4systems.webservice.server.handlers.CompletedScheduleCreator;
 import com.n4systems.webservice.server.handlers.HelloHandler;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
@@ -166,10 +169,14 @@ import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
 
 @SuppressWarnings("deprecation")
 public class DataServiceImpl implements DataService {
-
+	private static final int OLD_FIRST_PAGE = 1;
 	private static Logger logger = Logger.getLogger(DataServiceImpl.class);
-
-	private static int OLD_FIRST_PAGE = 1;
+	
+	private final RequestHandlerFactory requestHandlerFactory;
+	
+	public DataServiceImpl() {
+		requestHandlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), new ModelToServiceConverterFactory());
+	}
 	
 	public HelloResponse hello(HelloRequest helloRequest) throws ServiceException {
 		try {
@@ -434,6 +441,11 @@ public class DataServiceImpl implements DataService {
 			logger.error( "failed while downloading all employee lists", e );
 			throw new ServiceException();			
 		}
+	}
+	
+	public PredefinedLocationListResponse getAllPredefinedLocations(PaginatedRequestInformation request) throws ServiceException {
+		PredefinedLocationListResponse response = requestHandlerFactory.createAllPredefinedLocationsRequestHandler().getResponse(request);
+		return response;
 	}
 	
 	public JobSiteListResponse getAllJobSites(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {

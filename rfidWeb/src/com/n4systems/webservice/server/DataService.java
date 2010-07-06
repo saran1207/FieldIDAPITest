@@ -10,6 +10,7 @@ import com.n4systems.webservice.dto.CompletedJobScheduleRequest;
 import com.n4systems.webservice.dto.CustomerOrgCreateServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
 import com.n4systems.webservice.dto.DivisionOrgListResponse;
+import com.n4systems.webservice.dto.EmployeeListResponse;
 import com.n4systems.webservice.dto.InspectionBookListResponse;
 import com.n4systems.webservice.dto.InspectionImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionListResponse;
@@ -30,7 +31,6 @@ import com.n4systems.webservice.dto.RequestResponse;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
 import com.n4systems.webservice.dto.StateSetListResponse;
 import com.n4systems.webservice.dto.TransactionLogServiceDTO;
-import com.n4systems.webservice.dto.EmployeeListResponse;
 import com.n4systems.webservice.dto.UserServiceDTO;
 import com.n4systems.webservice.dto.VendorListResponse;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -42,11 +42,12 @@ import com.n4systems.webservice.dto.findproduct.FindProductResponse;
 import com.n4systems.webservice.dto.hello.HelloRequest;
 import com.n4systems.webservice.dto.hello.HelloResponse;
 import com.n4systems.webservice.dto.inspectionschedule.InspectionScheduleRequest;
-import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.dto.limitedproductupdate.LimitedProductUpdateRequest;
+import com.n4systems.webservice.dto.limitedproductupdate.UpdateProductByCustomerRequest;
 import com.n4systems.webservice.exceptions.InspectionException;
 import com.n4systems.webservice.exceptions.ProductException;
 import com.n4systems.webservice.exceptions.ServiceException;
+import com.n4systems.webservice.predefinedlocation.PredefinedLocationListResponse;
 
 @SuppressWarnings("deprecation")
 public interface DataService {
@@ -63,6 +64,7 @@ public interface DataService {
 	public AutoAttributeCriteriaListResponse getAutoAttributeCriteria(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
 	public ProductTypeGroupListResponse getAllProductTypeGroups(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
 	public EmployeeListResponse getAllEmployees(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
+	public PredefinedLocationListResponse getAllPredefinedLocations(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException;
 	
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException;

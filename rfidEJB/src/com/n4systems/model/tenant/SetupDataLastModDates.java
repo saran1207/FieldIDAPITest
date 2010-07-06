@@ -64,6 +64,10 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date employees = new Date();
 	
+	@Column(name="locations", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date locations = new Date();	
+	
 	public SetupDataLastModDates() {}
 	
 	public SetupDataLastModDates(Tenant tenant) {
@@ -152,6 +156,13 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	public void setEmployees(Date employees) {
 		this.employees = employees;
 	}
-	
+
+	public Date getLocations() {
+		return locations;
+	}
+
+	public void setLocations(Date locations) {
+		this.locations = locations;
+	}
 
 }

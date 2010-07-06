@@ -12,7 +12,8 @@ public class SetupDataLastModDatesServiceDTO implements Serializable {
 	private Date owners;
 	private Date jobs;
 	private Date employees;
-
+	private Date locations;
+	
 	public Date getEmployees() {
 		return employees;
 	}
@@ -62,4 +63,13 @@ public class SetupDataLastModDatesServiceDTO implements Serializable {
 	public void setJobs(Date jobs) {
 		this.jobs = jobs;
 	}
+
+	public Date getLocations() {
+		return locations;
+	}
+
+	public void setLocations(Date locations) {
+		this.locations = locations;
+	}
+	
 }

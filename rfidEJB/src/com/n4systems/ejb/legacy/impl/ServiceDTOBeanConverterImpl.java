@@ -1083,7 +1083,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		dto.setProductTypes(setupModDates.getProductTypes());
 		dto.setJobs(setupModDates.getJobs());
 		dto.setEmployees(setupModDates.getEmployees());
-
+		dto.setLocations(setupModDates.getLocations());
+		
 		return dto;
 	}
 

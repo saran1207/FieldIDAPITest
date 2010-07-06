@@ -18,6 +18,7 @@ import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoad
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
+import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
@@ -73,9 +74,9 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signup.SignupReferralListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
+import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.model.user.UserFilteredLoader;
-import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.tools.Pager;
 
@@ -101,6 +102,10 @@ public class LoaderFactory {
 		return new AllEntityListLoader<T>(clazz);
 	}
 
+	public AllPredefinedLocationsPaginatedLoader createAllPredefinedLocationsPaginatedLoader() {
+		return new AllPredefinedLocationsPaginatedLoader(filter);
+	}
+
 	public AssociatedInspectionTypesLoader createAssociatedInspectionTypesLoader() {
 		return new AssociatedInspectionTypesLoader(filter);
 	}
@@ -123,6 +128,10 @@ public class LoaderFactory {
 
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
 		return new CommentTemplateListableLoader(filter);
+	}
+
+	public UserListableLoader createCurrentEmployeesListableLoader() {
+		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
 	}
 
 	public CurrentEulaLoader createCurrentEulaLoader() {
@@ -165,6 +174,10 @@ public class LoaderFactory {
 		return new DownloadLinkListLoader(filter);
 	}
 
+	public EmployeePaginatedLoader createEmployeePaginatedLoader() {
+		return new EmployeePaginatedLoader(filter);
+	}
+
 	public EventJobListableLoader createEventJobListableLoader() {
 		return new EventJobListableLoader(filter);
 	}
@@ -187,6 +200,10 @@ public class LoaderFactory {
 
 	public HasLinkedProductsLoader createHasLinkedProductsLoader() {
 		return new HasLinkedProductsLoader(filter);
+	}
+
+	public UserListableLoader createHistoricalEmployeesListableLoader() {
+		return createUserListableLoader().employeesOnly();
 	}
 
 	public InspectionBookByNameLoader createInspectionBookByNameLoader() {
@@ -356,33 +373,21 @@ public class LoaderFactory {
 	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}
-
+	
 	public UnreadMessageCountLoader createUnreadMessageCountLoader() {
 		return new UnreadMessageCountLoader(filter);
 	}
-
+	
 	public UserByFullNameLoader createUserByFullNameLoader() {
 		return new UserByFullNameLoader(filter);
 	}
-
+	
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
 
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
-	}
-	
-	public EmployeePaginatedLoader createEmployeePaginatedLoader() {
-		return new EmployeePaginatedLoader(filter);
-	}
-	
-	public UserListableLoader createCurrentEmployeesListableLoader() {
-		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
-	}
-	
-	public UserListableLoader createHistoricalEmployeesListableLoader() {
-		return createUserListableLoader().employeesOnly();
 	}
 
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
@@ -392,7 +397,7 @@ public class LoaderFactory {
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}

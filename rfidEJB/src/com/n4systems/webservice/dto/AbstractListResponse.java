@@ -8,13 +8,17 @@ public abstract class AbstractListResponse extends RequestResponse {
 	private int recordsPerPage;
 	private int totalPages;
 
-	public AbstractListResponse() {
-	}
+	public AbstractListResponse() {}
 
 	public AbstractListResponse(Pager<?> page, int pageSize) {
-		currentPage = page.getCurrentPage();
-		recordsPerPage = pageSize;
-		totalPages = (int) page.getTotalPages();
+		this(page.getCurrentPage(), (int)page.getTotalPages(), pageSize);
+	}
+
+	public AbstractListResponse(int currentPage, int totalPages, int recordsPerPage) {
+		super();
+		this.currentPage = currentPage;
+		this.totalPages = totalPages;
+		this.recordsPerPage = recordsPerPage;
 	}
 
 	public int getCurrentPage() {
