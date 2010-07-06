@@ -16,9 +16,11 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.uitags.views.Node;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
@@ -29,10 +31,10 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private static final long serialVersionUID = 1L;
 	
 	private List<Listable<Long>> employees;
-	
+	private LocationHelper locationHelper = new LocationHelper();
 	private OwnerPicker ownerPicker;
 	private List<Long> searchIds;
-	
+	private List<Node> nodes;
 	public ProductSearchAction( 
 			final PersistenceManager persistenceManager, 
 			final ProductManager productManager) {
@@ -139,9 +141,11 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());
-		
 	}
-
 	
+	public List<Node> getNodes(){
+		nodes = new ArrayList<Node>( locationHelper.createNodes());
+		return nodes;
+	}
 	
 }

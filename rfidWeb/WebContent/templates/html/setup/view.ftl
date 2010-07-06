@@ -72,6 +72,11 @@
 				<label><a href="inspectionBooks.action" ><@s.text name="title.manage_inspection_books.plural" /></a></label>
 				<span>Create inspection books to organize your inspections.</span>
 			</p>
+			
+			<p>
+				<label><a href="predefinedLocation.action" ><@s.text name="title.manage_locations" /></a></label>
+				<span>Create location heirarchies.</span>
+			</p>
 		</div>
 	</#if>
 	

@@ -1032,6 +1032,10 @@
 		<action name="inspectionBooks" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
 			<result name="success" type="freemarker">/templates/html/inspectionBook/list.ftl</result>
 		</action>
+		
+		<action name="predefinedLocation" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
+		</action>
 
 		<action name="inspectionBookAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
 			<result name="success" type="freemarker">/templates/html/inspectionBook/add.ftl</result>

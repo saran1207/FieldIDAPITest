@@ -1,5 +1,6 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/search.css"/>" />
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
@@ -74,14 +75,14 @@
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
 				<@s.textfield name="criteria.location"/>
-				<a href="#" id="locationTree" >Location Tree</a>
+
+				<a href="#" id="locationTree" ><@s.text name="label.choose_location"/></a>
 
 				<div id="tree" class="hide">
-					<@n4.dynamicLocation name="dynamicLocation"/>
+					<@n4.dynamicLocation name="dynamicLocation" nodesList=nodes/>
 				</div>
 							
 			</div>	
-		
 			<div class="infoSet">
 				<label for="owner"><@s.text name="label.owner"/></label>
 				<@n4.orgPicker name="owner"/>
