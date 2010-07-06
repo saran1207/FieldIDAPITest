@@ -12,6 +12,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.model.Product;
@@ -49,6 +50,7 @@ public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWr
 	
 	
 	
+	@Ignore
 	@Test
     public void should_get_the_parent_method_implementation_even_with_a_interface_with_the_same_method_using_a_generic() throws Exception {
 		ImplementationWithInterface implementation = new ImplementationWithInterface();
@@ -73,7 +75,7 @@ public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWr
         assertThat(beanModel.get("id").toString(), equalTo("1"));
     }
 	
-	
+	@Ignore
 	@Test
     public void should_work_with_enhanced_class() throws Exception {
 		ImplementationWithInterface implementation = new ImplementationWithInterface();

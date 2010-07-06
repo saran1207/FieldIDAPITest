@@ -40,7 +40,7 @@
           display:block;\
           clear:both;\
           white-space:nowrap;\
-          min-width:150px;\
+          min-width:200px;\
           padding-right:15px;\
         }\
         .containerobj a:focus {\
@@ -100,7 +100,8 @@
     });
 
     // Event handling functions
-    $(container).bind("click keydown", function(event){
+    $(container).bind("click keydown", selectElement);
+    function selectElement(event){
       if ($(event.target).is("a")) {
         var self = event.target;
         if (!settings.multi) {
@@ -178,14 +179,36 @@
         }
         event.preventDefault();
       }
-    });
+    }
 
+    
+    if (settings['defaultSelection'] != null) {
+    	selectNode(settings['defaultSelection'], origid);
+    }
   };
+
   
   $.fn.columnview.defaults = {
-    multi: false
+    multi: false,
+    defaultSelection: null
   };
 
+  	function selectNode(selectedNodeId, origid) {
+  		var preSelectedValue = $('#' + origid + "-processed a[nodeId='" + selectedNodeId + "']").first();
+  	
+		var targets = new Array();
+		
+		preSelectedValue.parents('li.expanded').each(function() {
+			var nodeId = $(this).children('a[nodeId]').attr('nodeId');
+			targets.push('#' + origid + " a[nodeId='" + nodeId + "']")
+		});
+		
+		while(targets.length > 0) {
+			$(targets.pop()).click();
+		}
+		
+		$('#' + origid + " a[nodeId='" + selectedNodeId + "']").click();
+  	}
   // Generate deeper level menus
   function submenu(container,item){
     var leftPos = 0;
@@ -236,3 +259,4 @@
   }
 
 })(jQuery);
+      

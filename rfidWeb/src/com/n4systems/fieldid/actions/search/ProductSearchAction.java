@@ -20,7 +20,7 @@ import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.uitags.views.Node;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
@@ -138,7 +138,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		getContainer().setOwner(ownerPicker.getOwner());
 	}
 
-	public List<Node> getNodes() {
+	public List<HierarchicalNode> getNodes() {
 		return locationHelper.createNodes();
 	}
 }

@@ -19,6 +19,8 @@ import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
 import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
+import com.n4systems.model.location.PredefinedLocationListLoader;
+import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
@@ -230,6 +232,15 @@ public class LoaderFactory {
 		return new InternalOrgByNameLoader(filter);
 	}
 
+	
+	public PredefinedLocationTreeLoader createPredefinedLocationTreeLoader() {
+		return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader());
+	}
+
+	public PredefinedLocationListLoader createPredefinedLocationListLoader() {
+		return new PredefinedLocationListLoader(filter);
+	}
+	
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
 		return new InternalOrgListableLoader(filter);
 	}

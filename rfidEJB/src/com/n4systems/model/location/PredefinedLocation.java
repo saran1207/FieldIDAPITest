@@ -38,4 +38,9 @@ public class PredefinedLocation extends EntityWithTenant implements NamedEntity 
 	public PredefinedLocation getParent() {
 		return parent;
 	}
+
+	public boolean hasParent() {
+		return parent != null;
+	}
+	
 }

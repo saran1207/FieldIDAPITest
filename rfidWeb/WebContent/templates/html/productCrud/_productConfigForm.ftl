@@ -1,5 +1,6 @@
 <head>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 </head>
 
 
@@ -25,26 +26,36 @@
 
 
 
+
 <div class="infoSet">
 	<label class="label" for="location"><@s.text name="label.location"/></label>
 	<#if !parentProduct?exists >
-		<@s.textfield id="location" name="location" />
+		<#if helper.hasPredefinedLocationTree()>
+			<@s.hidden name="advancedLocation" id="advancedLocation"/>
+			<@s.hidden name="location" id="location"/>
+			<@n4.dynamicLocation id="advancedLocationSelection" nodesList=helper.predefinedLocationTree name="advancedLocation" />
+			<@s.textfield id="freeform" name="freeformLocation" value="${product.advancedLocation.freeformLocation!}" theme="simple"/>
+			<@n4.includeScript>
+				onDocumentLoad(function() {
+						$('advancedLocationSelection_getactive').observe('click', function(event) {
+							event.stop();
+							$$('#advancedLocationSelection a.active').each(function(element) {
+									
+									var value = element.getAttribute("nodeId");
+									$('advancedLocation').value = value;
+									$('location').value = $('freeform').getValue();
+								});
+						});
+					});
+			</@n4.includeScript>
+		<#else>
+			<@s.textfield id="location" name="location" />
+		</#if>
 	<#else>
-		<span class="fieldHolder" id="location">${(product.location?html)!}</span>
+		<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(product.advancedLocation))?html}</span>
 	</#if>
-	
-	
 </div>
-<div class="infoSet">
-	<label class="label" for="advancedLocation"><@s.text name="label.advancedlocation"/></label>
-	<#if !parentProduct?exists >
-		<@s.select id="advancedLocation" name="advancedLocation" list="predefinedLocations" listKey="id" listValue="name" />
-	<#else>
-		<span class="fieldHolder" id="advancedLocation">${(product.advancedLocation.predefinedLocation.name?html)!}</span>
-	</#if>
-	
-	
-</div>
+
 <div class="infoSet">
 	<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>
 	<#if !parentProduct?exists >

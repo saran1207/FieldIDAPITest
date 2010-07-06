@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.n4systems.uitags.views.Node;
+import com.n4systems.uitags.views.HierarchicalNode;
 
 public class LocationHelper {
 
-	private ArrayList<Node> nodes;
+	private ArrayList<HierarchicalNode> nodes;
 	
-	private Node buildNode(int levelsToGo, int nodesPerLevel) {
+	private HierarchicalNode buildNode(int levelsToGo, int nodesPerLevel) {
 		Random generator = new Random();
-		Node node = new Node();
+		HierarchicalNode node = new HierarchicalNode();
 
 		String[] names = { "Locker", "Level", "Building", "Box", "Shelf", "Table", "Floor", "Room", "Unit", "Sector" };
 		String[] levels = { "Job Site", "Sub-Area", "Division", "Area", "Level" };
@@ -33,8 +33,8 @@ public class LocationHelper {
 		return node;
 	}
 
-	public List<Node> createNodes() {
-		nodes = new ArrayList<Node>();
+	public List<HierarchicalNode> createNodes() {
+		nodes = new ArrayList<HierarchicalNode>();
 
 		int levels = 3;
 		

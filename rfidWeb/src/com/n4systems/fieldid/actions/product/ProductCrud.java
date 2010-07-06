@@ -39,6 +39,7 @@ import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
+import com.n4systems.fieldid.viewhelpers.ProductCrudHelper;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
@@ -179,6 +180,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	protected void postInit() {
 		super.postInit();
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		overrideHelper(new ProductCrudHelper(getLoaderFactory()));
 	}
 	
 

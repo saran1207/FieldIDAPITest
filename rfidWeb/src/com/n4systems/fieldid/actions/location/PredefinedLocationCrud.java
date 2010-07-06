@@ -2,18 +2,17 @@ package com.n4systems.fieldid.actions.location;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.fieldid.viewhelpers.TrimmedString;
-import com.n4systems.uitags.views.Node;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
+import com.n4systems.uitags.views.HierarchicalNode;
 
 public class PredefinedLocationCrud extends AbstractCrud {
 
 	private LocationHelper locationHelper = new LocationHelper();
-	private List<Node> nodes;
+	private List<HierarchicalNode> nodes;
 	private List<TrimmedString> infoFieldNames;
 	
 	public PredefinedLocationCrud(PersistenceManager persistenceManager) {
@@ -22,21 +21,21 @@ public class PredefinedLocationCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		nodes = new ArrayList<Node>();
+		nodes = new ArrayList<HierarchicalNode>();
 	}
 
 	@Override
 	//Need to query DB for data. For now use helper to generate tree.
 	protected void loadMemberFields(Long uniqueId) {
-		nodes = new ArrayList<Node>(locationHelper.createNodes());
+		nodes = new ArrayList<HierarchicalNode>(locationHelper.createNodes());
 	}
 
 	public String doList() {
 		return SUCCESS;
 	}
 
-	public List<Node> getNodes() {
-		nodes = new ArrayList<Node>(locationHelper.createNodes());
+	public List<HierarchicalNode> getNodes() {
+		nodes = new ArrayList<HierarchicalNode>(locationHelper.createNodes());
 			return nodes;
 	}
 

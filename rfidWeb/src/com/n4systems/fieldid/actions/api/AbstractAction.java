@@ -64,7 +64,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public static final String REDIRECT_TO_URL = "redirect_to_url";
 	
 	protected final PersistenceManager persistenceManager;
-	protected final BaseActionHelper helper;
+	protected BaseActionHelper helper;
 	
 	private Collection<String> flashMessages = new ArrayList<String>();
 	private Collection<String> flashErrors = new ArrayList<String>();
@@ -86,6 +86,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		this.persistenceManager = persistenceManager;
 		helper = new BaseActionHelper();
 	}
+	
 	
 	public SessionUser getSessionUser() {
 		return getSession().getSessionUser();
@@ -456,6 +457,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 	public BaseActionHelper getHelper() {
 		return helper;
+	}
+	
+	public void overrideHelper(BaseActionHelper helper) {
+		this.helper = helper;
 	}
 	
 	public DownloadCoordinator getDownloadCoordinator() {

@@ -22,6 +22,7 @@ public class Location {
 	private String freeformLocation;
 
 	public Location() {
+		
 		this(null, null);
 	}
 

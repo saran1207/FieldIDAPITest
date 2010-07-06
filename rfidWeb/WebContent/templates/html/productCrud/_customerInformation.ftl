@@ -23,14 +23,10 @@
 		<label><@s.text name="label.division"/></label>
 		<span class="fieldValue">${(product.owner.divisionOrg.name)!}</span>
 	</p>
-	<p>
-		<label><@s.text name="label.advancedlocation"/></label>
-		<span class="fieldValue">${(product.advancedLocation.predefinedLocation.name)!}</span>
-	</p>
-	
+
 	<p>
 		<label><@s.text name="label.location"/></label>
-		<span class="fieldValue">${(product.location)!}</span>
+		<span class="fieldValue">${(helper.getFullNameOfLocation(product.advancedLocation))?html}</span>
 	</p>
 	<p>
 		<label><@s.text name="label.referencenumber"/></label>

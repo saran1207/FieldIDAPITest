@@ -1,21 +1,20 @@
-  <ul class="menu" id="original">
+  <ul class="menu hide" id="${parameters.id}">
 
-	<li class="leaf level"><p class="treeHeading">${nodesList?first.levelName}</p></li>
+	<li class="leaf level"><p class="treeHeading">${(parameters.nodesList?first.levelName?html)!}</p></li>
 	<#macro recursion entry>
 
 	  <#if !entry.leaf >
 	
-	  <li class="expanded"><a href="#">${entry.name}</a><br /> 
+	  	<li class="expanded"><a href="#" nodeId="${entry.id}">${(entry.name?html)!}</a><br /> 
 	      <ul class="menu">
-	  	  	<li class="leaf"><p class="treeHeading">${entry.levelName}</p></li>
+	  	  	<li class="leaf"><p class="treeHeading">${(entry.levelName?html)!}</p></li>
 	  	 	<#list entry.children as subentry>
 	  			<@recursion entry=subentry/>
 	  		</#list>
-	  		<li class="leaf"><input type="text" name="dynamic"/></li>
 	 	   </ul> 
-	 </li>
+	 	</li>
 	 <#else>
-	 	<li class="leaf"><a href="#">${entry.name}</a></li> 
+	 	<li class="leaf"><a href="#" nodeId="${entry.id}">${(entry.name?html)!}</a></li> 
 	 </#if>
 	</#macro> 
 
@@ -24,23 +23,11 @@
 	</#list>
   </ul> 
   
-<input type="button" name="getactive" value="<@s.text name="label.select_location"/>" id="getactive"/>
- <input type="button" name="close" value="<@s.text name="label.close"/>" id="close"/>
+<input type="button" name="getactive" value="<@s.text name="label.select_location"/>" id="${parameters.id}_getactive"/>
+ <input type="button" name="close" value="<@s.text name="label.close"/>" id="${parameters.id}_close"/>
   <script type="text/javascript" charset="utf-8">
     jQuery(document).ready(function(){
-      jQuery('#original').columnview({multi:true});
-      jQuery('#getactive').click(function(){
-        jQuery('#original a.active').css({'background-color':'orange'});
-       	
-         //Pull out the selected element's id.
-         //console.log(jQuery('.active').html());
-      });
-      
-       jQuery('#close').click(function(){
-      	 jQuery(this).parent().hide();
-         
-      });
-       
+      jQuery('#${parameters.id}').columnview({defaultSelection:'${parameters.nameValue!}'});
     });
   </script>
 

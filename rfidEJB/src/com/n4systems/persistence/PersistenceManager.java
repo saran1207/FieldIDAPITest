@@ -70,45 +70,29 @@ public class PersistenceManager {
 		}
 	}
 	
-	public static <T> T executeLoader(Loader<T> loader) {
-		T result = null;
-		Transaction transaction = startTransaction();
-		try {
-			result = loader.load(transaction);
-		} catch(RuntimeException e) {
-			rollbackTransaction(transaction);
-			throw e;
-		} finally {
-			finishTransaction(transaction);
-		}
-		
-		return result;
+	public static <T> T executeLoader(final Loader<T> loader) {
+		return new PersistenceManagerTransactor().execute(new UnitOfWork<T>() {
+			public T run(Transaction transaction) {
+				return loader.load(transaction);
+			}
+		});
 	}
 
-	public static <T extends Saveable> void executeSaver(Saver<T> saver, T entity) {
-		Transaction transaction = startTransaction();
-		try {
-			saver.save(transaction, entity);
-		} catch(RuntimeException e) {
-			rollbackTransaction(transaction);
-			throw e;
-		} finally {
-			finishTransaction(transaction);
-		}
+	public static <T extends Saveable> void executeSaver(final Saver<T> saver, final T entity) {
+		new PersistenceManagerTransactor().execute(new UnitOfWork<Void>() {
+			public Void run(Transaction transaction) {
+				saver.save(transaction, entity);
+				return null;
+			}
+		});
 	}
 
-	public static <T extends Saveable> T executeUpdater(Saver<T> saver, T entity) {
-		T managedEntity = null;
-		Transaction transaction = startTransaction();
-		try {
-			managedEntity = saver.update(transaction, entity);
-		} catch(RuntimeException e) {
-			rollbackTransaction(transaction);
-			throw e;
-		} finally {
-			finishTransaction(transaction);
-		}
-		return managedEntity;
+	public static <T extends Saveable> T executeUpdater(final Saver<T> saver, final T entity) {
+		return new PersistenceManagerTransactor().execute(new UnitOfWork<T>() {
+			public T run(Transaction transaction) {
+				return saver.update(transaction, entity);
+			}
+		});
 	}
 
 	@SuppressWarnings("unchecked")

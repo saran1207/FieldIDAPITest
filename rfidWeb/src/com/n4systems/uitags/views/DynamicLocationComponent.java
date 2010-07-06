@@ -11,7 +11,8 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class DynamicLocationComponent extends UIBean {
 	
 	public static final String TEMPLATE = "dynamicLocation";
- private List<Object> nodesList;
+ 
+	private List<Object> nodesList;
 	
 	public DynamicLocationComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
@@ -25,6 +26,7 @@ public class DynamicLocationComponent extends UIBean {
 	@Override
 	public void evaluateParams() {
 		super.evaluateParams();
+		
 		addParameter("nodesList", nodesList);
 	}
 

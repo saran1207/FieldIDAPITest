@@ -11,8 +11,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;

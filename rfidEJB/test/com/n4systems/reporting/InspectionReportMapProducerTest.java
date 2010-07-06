@@ -78,6 +78,8 @@ public class InspectionReportMapProducerTest {
 	}
 	
 
+	
+
 	@Test
 	public void should_have_assinged_user_as_first_name_last_name_when_an_assignment_to_a_user_was_done() {
 		User namedEmployee = anEmployee().withFirstName("first").withLastName("last").build();
