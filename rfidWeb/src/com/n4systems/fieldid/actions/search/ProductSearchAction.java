@@ -29,28 +29,23 @@ import com.opensymphony.xwork2.Preparable;
 public class ProductSearchAction extends CustomizableSearchAction<ProductSearchContainer> implements Preparable {
 	public static final String SEARCH_CRITERIA = "searchCriteria";
 	private static final long serialVersionUID = 1L;
-	
+
 	private List<Listable<Long>> employees;
 	private LocationHelper locationHelper = new LocationHelper();
 	private OwnerPicker ownerPicker;
 	private List<Long> searchIds;
-	private List<Node> nodes;
-	public ProductSearchAction( 
-			final PersistenceManager persistenceManager, 
-			final ProductManager productManager) {
-		
-		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
+
+	public ProductSearchAction(final PersistenceManager persistenceManager, final ProductManager productManager) {
+
+		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
 
 	}
-	
+
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
 	}
-	
-	
-	
+
 	@Override
 	protected ProductSearchContainer createSearchContainer() {
 		return new ProductSearchContainer(getSecurityFilter());
@@ -61,30 +56,30 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		clearContainer();
 		return INPUT;
 	}
-	
+
 	@Override
 	protected void clearContainer() {
 		super.clearContainer();
 		setOwnerId(null);
 	}
-	
+
 	public String doPrintAllCerts() {
 		if (!isSearchIdValid()) {
-			addFlashErrorText( "error.searchexpired");
+			addFlashErrorText("error.searchexpired");
 			return INPUT;
 		}
 		String reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
 			List<Long> productIds = getSearchIds();
-			
+
 			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), productIds);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			logger.error("Failed to print all manufacturer certs", e);
 			addFlashErrorText("error.reportgeneration");
 			return ERROR;
 		}
-		
+
 		return SUCCESS;
 	}
 
@@ -92,15 +87,15 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		if (searchIds == null) {
 			searchIds = new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(this), getSecurityFilter());
 		}
-		
+
 		return searchIds;
 	}
-	
+
 	@SkipValidation
 	public String doGetDynamicColumnOptions() {
 		return SUCCESS;
 	}
-	
+
 	public String getFromDate() {
 		return convertDate(getContainer().getFromDate());
 	}
@@ -120,9 +115,9 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public List<ProductStatusBean> getProductStatuses() {
 		return getLoaderFactory().createProductStatusListLoader().load();
 	}
-	
+
 	public List<Listable<Long>> getEmployees() {
-		if(employees == null) {
+		if (employees == null) {
 			employees = new ArrayList<Listable<Long>>();
 			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
 			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
@@ -142,10 +137,8 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());
 	}
-	
-	public List<Node> getNodes(){
-		nodes = new ArrayList<Node>( locationHelper.createNodes());
-		return nodes;
+
+	public List<Node> getNodes() {
+		return locationHelper.createNodes();
 	}
-	
 }
