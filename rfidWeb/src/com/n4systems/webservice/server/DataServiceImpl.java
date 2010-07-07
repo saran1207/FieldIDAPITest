@@ -786,7 +786,7 @@ public class DataServiceImpl implements DataService {
 			productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
 			productDTO.unsetIdentifedById();
 		
-			ProductServiceDTOConverter converter = DtoToModelConverterFactory.createFactory(createSecurityGuard(tenantId)).createProductConverter(); 
+			ProductServiceDTOConverter converter = createProductServiceDTOConverter(tenantId);
 			
 			Product product = converter.convert(productDTO, existingProduct);
 

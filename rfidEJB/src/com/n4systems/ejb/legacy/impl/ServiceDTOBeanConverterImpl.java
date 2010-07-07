@@ -263,6 +263,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setIdentified(AbstractBaseServiceDTO.dateToString(product.getIdentified()));
 		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(product.getLastInspectionDate()));
 		productDTO.setLocation(product.getLocation());
+		productDTO.setPredefinedLocationId(product.getAdvancedLocation().getPredefinedLocation().getId());
 		productDTO.setMobileGuid(product.getMobileGUID());
 		productDTO.setProductStatusId(product.getProductStatus() != null ? product.getProductStatus().getUniqueID() : 0);
 		productDTO.setProductTypeId(product.getType().getId());
@@ -313,7 +314,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		targetProduct.setComments(productServiceDTO.getComments());
 		targetProduct.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());
-		targetProduct.setLocation(productServiceDTO.getLocation());
 		targetProduct.setType(em.find(ProductType.class, productServiceDTO.getProductTypeId()));
 		targetProduct.setPurchaseOrder(productServiceDTO.getPurchaseOrder());
 		targetProduct.setRfidNumber(productServiceDTO.getRfidNumber());

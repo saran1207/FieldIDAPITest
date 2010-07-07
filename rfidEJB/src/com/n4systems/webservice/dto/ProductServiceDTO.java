@@ -31,7 +31,8 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private long vendorId;
 	private Date modified;
 	private long assignedUserId;
-
+	private long predefinedLocationId;
+	
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
 	private long jobSiteId;
@@ -213,7 +214,15 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public boolean assignedUserIdExists() {
 		return isValidServerId( assignedUserId );
 	}
-	
+	public long getPredefinedLocationId() {
+		return predefinedLocationId;
+	}
+	public void setPredefinedLocationId(long predefinedLocationId) {
+		this.predefinedLocationId = predefinedLocationId;
+	}
+	public boolean predefinedLocationIdExists() {
+		return isValidServerId(predefinedLocationId);
+	}
 	
 	
 }
