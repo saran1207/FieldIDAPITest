@@ -90,7 +90,6 @@ public class ServiceDTOBeanConverterImplTest {
 		Product product = new Product();
 		
 		product.setId(1L);
-		product.setLocation( "some value" );
 		product.setMobileGUID( "0000-000-00000-0000123" );
 		product.setIdentified(identifiedDate);
 		product.setPurchaseOrder( "0987654321" );
@@ -211,9 +210,6 @@ public class ServiceDTOBeanConverterImplTest {
 		productServiceDTO.setCustomerRefNumber( "1234-54321" );
 		
 		productServiceDTO.setIdentified( "11/06/08 06:30:01 am" );
-		
-		
-		productServiceDTO.setLocation( "location" );
 		productServiceDTO.setMobileGuid( "1234-1234-123222-112221" );
 		productServiceDTO.setPurchaseOrder( "0987654321" );
 		productServiceDTO.setRfidNumber( "af331fe3058901abae3319933" );
@@ -301,7 +297,6 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals( foundProductType, product.getType() );
 		assertEquals( productServiceDTO.getComments(), product.getComments() );
 		assertEquals( productServiceDTO.getCustomerRefNumber(), product.getCustomerRefNumber() );
-		assertEquals( productServiceDTO.getLocation(), product.getLocation() );
 		assertEquals( productServiceDTO.getPurchaseOrder(), product.getPurchaseOrder() );
 		assertEquals( productServiceDTO.getRfidNumber(), product.getRfidNumber() );
 		assertEquals( productServiceDTO.getSerialNumber(), product.getSerialNumber() );
