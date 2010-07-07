@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.components.UIBean;
 import com.opensymphony.xwork2.util.ValueStack;
 
-public class DynamicLocationComponent extends UIBean {
+public class HeirarchicalListComponent extends UIBean {
 	
 	public static final String TEMPLATE = "dynamicLocation";
  
-	private List<Object> nodesList;
+	private List<HeirarchicalNode> nodesList;
 	
-	public DynamicLocationComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
+	public HeirarchicalListComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
 	}
 
@@ -30,11 +30,11 @@ public class DynamicLocationComponent extends UIBean {
 		addParameter("nodesList", nodesList);
 	}
 
-	public void setNodesList(List<Object> list){
-		nodesList = new ArrayList<Object>(list);
+	public void setNodesList(List<HeirarchicalNode> list){
+		nodesList = new ArrayList<HeirarchicalNode>(list);
 	}
 	
-	public List<Object> getNodesList(){
+	public List<HeirarchicalNode> getNodesList(){
 		return  nodesList;
 	}
 

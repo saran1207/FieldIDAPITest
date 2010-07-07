@@ -16,7 +16,7 @@ public class DynamicLocationModel extends TagModel {
 
 	@Override
 	protected Component getBean() {
-		return new DynamicLocationComponent(stack, req, res);
+		return new HeirarchicalListComponent(stack, req, res);
 	}
 
 

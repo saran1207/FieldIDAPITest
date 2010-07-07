@@ -10,7 +10,7 @@ import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
 import com.n4systems.uitags.views.HeirarchicalNode;
 
-public class LocationTreeToHierarchicalNodesConverter {
+public class LocationTreeToHeirarchicalNodesConverter {
 	
 
 	public List<HeirarchicalNode> convert(PredefinedLocationTree tree) {

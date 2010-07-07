@@ -29,7 +29,7 @@ public class LocationHelper {
 			}
 		});
 		
-		return new LocationTreeToHierarchicalNodesConverter().convert(locationTree);
+		return new LocationTreeToHeirarchicalNodesConverter().convert(locationTree);
 	}
 	
 	public boolean hasPredefinedLocationTree() {
