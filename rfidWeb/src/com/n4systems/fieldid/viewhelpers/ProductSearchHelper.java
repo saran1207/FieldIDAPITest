@@ -8,7 +8,7 @@ import java.util.List;
 import com.n4systems.model.location.Location;
 import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.uitags.views.HierarchicalNode;
+import com.n4systems.uitags.views.HeirarchicalNode;
 
 public final class ProductSearchHelper extends BaseActionHelper {
 
@@ -23,7 +23,7 @@ public final class ProductSearchHelper extends BaseActionHelper {
 		return locationHelper.getFullNameOfLocation(location);
 	}
 
-	public List<HierarchicalNode> getPredefinedLocationTree() {
+	public List<HeirarchicalNode> getPredefinedLocationTree() {
 		return locationHelper.getPredefinedLocationTree();
 	}
 

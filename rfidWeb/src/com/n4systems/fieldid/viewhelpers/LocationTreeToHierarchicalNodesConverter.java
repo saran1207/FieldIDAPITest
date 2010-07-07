@@ -8,17 +8,17 @@ import java.util.Set;
 
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
-import com.n4systems.uitags.views.HierarchicalNode;
+import com.n4systems.uitags.views.HeirarchicalNode;
 
 public class LocationTreeToHierarchicalNodesConverter {
 	
 
-	public List<HierarchicalNode> convert(PredefinedLocationTree tree) {
+	public List<HeirarchicalNode> convert(PredefinedLocationTree tree) {
 		return childList(tree.getNodes());
 	}
 
-	public HierarchicalNode convertLocationToNode(PredefinedLocationTreeNode location) {
-		HierarchicalNode node = new HierarchicalNode();
+	public HeirarchicalNode convertLocationToNode(PredefinedLocationTreeNode location) {
+		HeirarchicalNode node = new HeirarchicalNode();
 		node.setName(location.getName());
 		node.setId(location.getId());
 		
@@ -27,8 +27,8 @@ public class LocationTreeToHierarchicalNodesConverter {
 		return node;
 	}
 
-	private List<HierarchicalNode> childList(Set<PredefinedLocationTreeNode> nextLevel) {
-		List<HierarchicalNode> children = new ArrayList<HierarchicalNode>();
+	private List<HeirarchicalNode> childList(Set<PredefinedLocationTreeNode> nextLevel) {
+		List<HeirarchicalNode> children = new ArrayList<HeirarchicalNode>();
 		for (PredefinedLocationTreeNode child : nextLevel) {
 			children.add(convertLocationToNode(child));
 		}
@@ -37,10 +37,10 @@ public class LocationTreeToHierarchicalNodesConverter {
 		return children;
 	}
 
-	private void sortNodesAlphabetically(List<HierarchicalNode> children) {
+	private void sortNodesAlphabetically(List<HeirarchicalNode> children) {
 		Collections.sort(children, 
-			new Comparator<HierarchicalNode>() {
-				public int compare(HierarchicalNode o1, HierarchicalNode o2) {
+			new Comparator<HeirarchicalNode>() {
+				public int compare(HeirarchicalNode o1, HeirarchicalNode o2) {
 					return o1.getName().compareToIgnoreCase(o2.getName());
 				}
 			});
