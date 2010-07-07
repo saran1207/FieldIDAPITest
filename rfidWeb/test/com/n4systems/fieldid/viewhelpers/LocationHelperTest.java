@@ -8,17 +8,18 @@ import org.junit.Test;
 
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.persistence.Transactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 
-public class ProductCrudHelperTest {
-
+public class LocationHelperTest {
 	
 	private static final LoaderFactory UNUSED_LOADER_FACTORY = null;
+	private static final Transactor UNUSED_TRANSACTOR = null;
 
 	@Test
 	public void should_give_an_emtpy_string_as_the_name_of_a_null_location() throws Exception {
-		String generatedName = new ProductCrudHelper(UNUSED_LOADER_FACTORY).getFullNameOfLocation(null);
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(null);
 		assertThat(generatedName, equalTo(""));
 	}
 	
@@ -27,7 +28,7 @@ public class ProductCrudHelperTest {
 	public void should_return_just_the_name_of_the_single_location_when_the_predefined_location_is_a_root_node() throws Exception {
 		PredefinedLocation predefinedLocation = aRootPredefinedLocation().withName("root").build();
 		
-		String generatedName = new ProductCrudHelper(UNUSED_LOADER_FACTORY).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocation));
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocation));
 		assertThat(generatedName, equalTo("root"));
 	}
 	
@@ -40,7 +41,7 @@ public class ProductCrudHelperTest {
 		PredefinedLocation predefinedLocationChild = aPredefinedLocation().withName("leaf").withParent(aRootPredefinedLocation().withName("root").build()).build();
 		
 		
-		String generatedName = new ProductCrudHelper(UNUSED_LOADER_FACTORY).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocationChild));
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocationChild));
 		assertThat(generatedName, allOf(startsWith("root"), endsWith("leaf")));
 	}
 	
@@ -55,7 +56,7 @@ public class ProductCrudHelperTest {
 		PredefinedLocation predefinedLocationChild = aPredefinedLocation().withName("leaf").withParent(aRootPredefinedLocation().withName("root").build()).build();
 		
 		
-		String generatedName = new ProductCrudHelper(UNUSED_LOADER_FACTORY).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocationChild));
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocationChild));
 		assertThat(generatedName, equalTo("root leaf"));
 	}
 
@@ -77,10 +78,16 @@ public class ProductCrudHelperTest {
 		
 		String freeformLocation = "freeform";
 		
-		String generatedName = new ProductCrudHelper(UNUSED_LOADER_FACTORY).getFullNameOfLocation(new Location(predefinedLocationChild, freeformLocation));
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(new Location(predefinedLocationChild, freeformLocation));
 		assertThat(generatedName, allOf(containsString("root"), containsString("leaf"), endsWith(" " +  freeformLocation)));
 	}
 
-
+	@Test
+	public void should_have_name_that_is_only_the_freeform_location_when_there_is_no_predefined_location() throws Exception {
+		String freeformLocation = "freeform";
+		
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(Location.onlyFreeformLocation(freeformLocation));
+		assertThat(generatedName,  equalTo(freeformLocation));
+	}
 	
 }

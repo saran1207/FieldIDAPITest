@@ -78,8 +78,8 @@
 
 				<a href="#" id="locationTree" ><@s.text name="label.choose_location"/></a>
 
-				<div id="tree" class="hide">
-					<@n4.dynamicLocation name="dynamicLocation" nodesList=nodes/>
+				<div id="tree" class="">
+					<@n4.dynamicLocation name="dynamicLocation" nodesList=helper.predefinedLocationTree/>
 				</div>
 							
 			</div>	

@@ -19,3 +19,13 @@ h2 {
 #registerOverNetworkLinkContainer {
 	padding: 5px;
 }
+
+
+#locationSelection {
+	position:absolute;
+	left: -10000px;
+	background-color:#fff;
+	width:400px;
+	padding:4px;
+	border: 1px solid #333;
+}

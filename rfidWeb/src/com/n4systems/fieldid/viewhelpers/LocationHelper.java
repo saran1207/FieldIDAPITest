@@ -1,49 +1,99 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Stack;
 
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationTree;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.Transactor;
+import com.n4systems.persistence.UnitOfWork;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
 
 public class LocationHelper {
 
-	private ArrayList<HierarchicalNode> nodes;
+	private final LoaderFactory factory;
+	private final Transactor transactor;
+
+	public LocationHelper(LoaderFactory factory, Transactor transactor) {
+		this.factory = factory;
+		this.transactor = transactor;
+	}
+
+	public List<HierarchicalNode> getPredefinedLocationTree() {
+		PredefinedLocationTree locationTree = transactor.execute(new UnitOfWork<PredefinedLocationTree>() {
+			public PredefinedLocationTree run(Transaction transaction) {
+				return factory.createPredefinedLocationTreeLoader().load(transaction);
+			}
+		});
+		
+		return new LocationTreeToHierarchicalNodesConverter().convert(locationTree);
+	}
 	
-	private HierarchicalNode buildNode(int levelsToGo, int nodesPerLevel) {
-		Random generator = new Random();
-		HierarchicalNode node = new HierarchicalNode();
+	public boolean hasPredefinedLocationTree() {
+		return transactor.execute(new UnitOfWork<Boolean>() {
+			public Boolean run(Transaction transaction) {
+				return !factory.createPredefinedLocationListLoader().load(transaction).isEmpty();
+			}
+		});
+	}
 
-		String[] names = { "Locker", "Level", "Building", "Box", "Shelf", "Table", "Floor", "Room", "Unit", "Sector" };
-		String[] levels = { "Job Site", "Sub-Area", "Division", "Area", "Level" };
-		String[] numbers = { "3", "4", "5", "1", "2", "6", "5", "9", "8", "7", "7g" };
-		int rndNames = generator.nextInt(names.length);
-		int rndNumbers = generator.nextInt(numbers.length);
-		int rndLevels = generator.nextInt(levels.length);
-		node.setName(names[rndNames] + " " + numbers[rndNumbers]);
 
-		if (levelsToGo > 0) {
-			for (int i = 0; i < nodesPerLevel; i++) {
-				node.addChild(buildNode(levelsToGo - 1, nodesPerLevel));
-
-				node.setLevelName(names[rndLevels]);
+	public String getFullNameOfLocation(Location location) {
+		if (location == null) {
+			return "";
+		}
+		
+		Stack<String> names = new Stack<String>();
+		
+		addFreeform(names, location);
+		
+		addPredefined(names, location);
+		
+		return convertStackToString(names);
+	}
+	
+	
+	private String convertStackToString(Stack<String> names) {
+		String fullName = "";
+		while (!names.isEmpty()) {
+			fullName += names.pop();
+			if (!names.isEmpty()) {
+				fullName += " ";
 			}
 		}
-
-		return node;
+		return fullName;
 	}
 
-	public List<HierarchicalNode> createNodes() {
-		nodes = new ArrayList<HierarchicalNode>();
 
-		int levels = 3;
-		
-		int childrenPerNode = 10;
 
-		for (int i = 0; i < childrenPerNode; i++) {
-			nodes.add(buildNode(levels - 1, childrenPerNode));
+	private void addPredefined(Stack<String> names, Location location) {
+		if (location.hasPredefinedLocation()) {
+			PredefinedLocation predefinedLocation = location.getPredefinedLocation();
+			
+			names.push(predefinedLocation.getName());
+			
+			while (predefinedLocation.hasParent()) {
+				names.push(predefinedLocation.getParent().getName());
+				
+				predefinedLocation = predefinedLocation.getParent();
+			}
 		}
-		return nodes;
 	}
+
+
+
+	private void addFreeform(Stack<String> names, Location location) {
+		if (location.hasFreeForm()) { 
+			names.push(location.getFreeformLocation());
+		}
+	}
+
+
+	
+
+	
 	
 }

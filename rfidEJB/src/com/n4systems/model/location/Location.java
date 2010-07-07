@@ -6,6 +6,9 @@ import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.SecurityLevel;
+
 @Embeddable
 public class Location {
 
@@ -31,11 +34,11 @@ public class Location {
 		this.predefinedLocation = predefinedLocation;
 		this.freeformLocation = freeformLocation;
 	}
-
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public PredefinedLocation getPredefinedLocation() {
 		return predefinedLocation;
 	}
-
+	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public String getFreeformLocation() {
 		return freeformLocation;
 	}
@@ -49,13 +52,16 @@ public class Location {
 		return new Location(predefinedLocation, freeformLocation);
 	}
 
-	public Location createForAdjustedPredefinedLocation(
-			PredefinedLocation predefinedLocation) {
+	public Location createForAdjustedPredefinedLocation(PredefinedLocation predefinedLocation) {
 		return new Location(predefinedLocation, freeformLocation);
 	}
 
 	public boolean hasFreeForm() {
 		return freeformLocation != null && !freeformLocation.isEmpty();
+	}
+
+	public boolean hasPredefinedLocation() {
+		return predefinedLocation != null;
 	}
 
 }

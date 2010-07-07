@@ -40,7 +40,7 @@
           display:block;\
           clear:both;\
           white-space:nowrap;\
-          min-width:200px;\
+          min-width:185px;\
           padding-right:15px;\
         }\
         .containerobj a:focus {\
@@ -100,9 +100,8 @@
     });
 
     // Event handling functions
-    $(container).bind("click keydown", selectElement);
-    function selectElement(event){
-      if ($(event.target).is("a")) {
+    $(container).bind("click keydown", function(event) {
+      if ($(event.target).is("a") || $(event.target).parent('a')) {
         var self = event.target;
         if (!settings.multi) {
           delete event.shiftKey;
@@ -137,22 +136,10 @@
             // Menu has children, so add another submenu
         	     submenu(container,self);
           }
-          else if (!event.metaKey && !event.shiftKey) {
-        /*	    // No children, show title instead (if it exists, or a link)
-              var title = $('<a/>').attr({href:$(self).attr('href')}).text($(self).attr('title') ? $(self).attr('title') : $(self).text());
-              var featurebox = $('<div/>').html(title).addClass('feature').appendTo(container);
-              // Set the width
-              var remainingspace = 0;
-              $.each($(container).children('div').slice(0,-1),function(i,item){
-                remainingspace += $(item).width();
-              });
-              var fillwidth = $(container).width() - remainingspace;
-              $(featurebox).css({'top':0,'left':remainingspace}).width(fillwidth).show();  */
-          }
-       
+          
           
           //Scroll to the right whenever a new node is selected.
-          $(container).scrollLeft("10000");
+          $(container).scrollLeft("100000");
           
         }
         // Handle Keyboard navigation
@@ -179,36 +166,21 @@
         }
         event.preventDefault();
       }
-    }
+    });
 
     
-    if (settings['defaultSelection'] != null) {
-    	selectNode(settings['defaultSelection'], origid);
-    }
-  };
+    
+    $(self).selectNode(settings['defaultSelection'], origid);
+    
+  }
 
   
   $.fn.columnview.defaults = {
     multi: false,
-    defaultSelection: null
+    defaultSelection: -1
   };
 
-  	function selectNode(selectedNodeId, origid) {
-  		var preSelectedValue = $('#' + origid + "-processed a[nodeId='" + selectedNodeId + "']").first();
   	
-		var targets = new Array();
-		
-		preSelectedValue.parents('li.expanded').each(function() {
-			var nodeId = $(this).children('a[nodeId]').attr('nodeId');
-			targets.push('#' + origid + " a[nodeId='" + nodeId + "']")
-		});
-		
-		while(targets.length > 0) {
-			$(targets.pop()).click();
-		}
-		
-		$('#' + origid + " a[nodeId='" + selectedNodeId + "']").click();
-  	}
   // Generate deeper level menus
   function submenu(container,item){
     var leftPos = 0;
@@ -236,7 +208,7 @@
     var triheight = $(item).height();
     var canvas = $("<canvas></canvas>").attr({height:triheight,width:10}).addClass('widget').appendTo(item);    if(!color){ color = $(canvas).css('color'); }
     canvas = $(canvas).get(0);
-    if(canvas.getContext){
+    if (canvas.getContext){
       var context = canvas.getContext('2d');
       context.fillStyle = color;
       context.beginPath();
@@ -258,5 +230,29 @@
     });
   }
 
+  
+  
+  $.fn.selectNode = function(selectedNodeId, origid) {
+	  	var defaultNode = $('#' + origid + "-processed a[nodeId='" + selectedNodeId + "']");
+	  	
+  		
+  		if (defaultNode.length == 0) {
+  			selectedNodeId = -1;
+  		} else {
+  			var preSelectedValue = defaultNode.first();
+			var targets = new Array();
+			
+			preSelectedValue.parents('li.expanded').each(function() {
+				var nodeId = $(this).children('a[nodeId]').attr('nodeId');
+				targets.push('#' + origid + " a[nodeId='" + nodeId + "']")
+			});
+			
+			while(targets.length > 0) {
+				$(targets.pop()).click();
+			}
+  		}
+  		
+		$('#' + origid + " a[nodeId='" + selectedNodeId + "']").click();
+  };
 })(jQuery);
-      
+

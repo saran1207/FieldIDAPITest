@@ -525,7 +525,8 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 	@Override
 	public void setGlobalId(String globalId) {}
-
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}

@@ -16,11 +16,10 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
+import com.n4systems.fieldid.viewhelpers.ProductSearchHelper;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
@@ -31,7 +30,6 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private static final long serialVersionUID = 1L;
 
 	private List<Listable<Long>> employees;
-	private LocationHelper locationHelper = new LocationHelper();
 	private OwnerPicker ownerPicker;
 	private List<Long> searchIds;
 
@@ -44,6 +42,8 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
+		
+		overrideHelper(new ProductSearchHelper(getLoaderFactory()));
 	}
 
 	@Override
@@ -138,7 +138,5 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		getContainer().setOwner(ownerPicker.getOwner());
 	}
 
-	public List<HierarchicalNode> getNodes() {
-		return locationHelper.createNodes();
-	}
+	
 }
