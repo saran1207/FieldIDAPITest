@@ -25,8 +25,6 @@
 </div>
 
 
-
-
 <div class="infoSet">
 	<label class="label" for="location"><@s.text name="label.location"/></label>
 	<#if !parentProduct?exists >
@@ -39,7 +37,7 @@
 				<a href="#" id="showLocationSelection"><@s.text name="label.choose"/></a>
 				<div id="locationSelection">
 					<label for="predefinedLocation"><@s.text name="label.predefined_location"/></label><br/>
-					<@n4.dynamicLocation id="advancedLocationSelection" nodesList=helper.predefinedLocationTree name="advancedLocation" />
+					<@n4.heirarchicalList id="advancedLocationSelection" nodesList=helper.predefinedLocationTree name="advancedLocation" />
 					<label for="freeformLocation"><@s.text name="label.freeform_location"/></label><br/>
 					<@s.textfield id="freeform" name="freeformLocation" value="${product.advancedLocation.freeformLocation!}" theme="simple"/>
 					<div>
@@ -52,24 +50,25 @@
 					onDocumentLoad(function() {
 							$('advancedLocationSelection_getactive').observe('click', function(event) {
 								event.stop();
-								$$('#advancedLocationSelection a.active').each(function(element) {
-										var predefinedLocationId = element.getAttribute("nodeId");
-										var name = element.getAttribute("nodeName");
-										$('advancedLocation').value = predefinedLocationId;
-										$('location').value = $('freeform').getValue();
-										$('locationName').value = name + " " + $('freeform').getValue();
-										$('locationSelection').hide();
-									});
+								$('locationSelection').setStyle({left:'-10000px'});
+								
+								var node = jQuery('#advancedLocationSelection').getSelectedNode();
+										
+								$('advancedLocation').value = node.id;
+								$('location').value = $('freeform').getValue();
+								$('locationName').value = node.parentNames.join(" ") + " " + node.name + " " + $('freeform').getValue();
+								
 								
 							});
-							$('advancedLocationSelection_close').observe('click', function(event) { event.stop(); $('locationSelection').hide();
+							$('advancedLocationSelection_close').observe('click', function(event) { event.stop(); 
+								$('locationSelection').setStyle({left:'-10000px'});
 								$('freeform').value = $('location').getValue();
 								var predefinedLocationId = $('advancedLocation').getValue(); 
-								jQuery("advancedLocationSelection").selectNode(predefinedLocationId, 'advancedLocationSelection');
+								jQuery("#advancedLocationSelection").selectNode(predefinedLocationId);
+								
 							});
 							$('showLocationSelection').observe('click', function(event) {
 									event.stop();
-									$('locationSelection').show();
 									translate($('locationSelection'), $('showLocationSelection'), 0, 0);
 								});
 						});

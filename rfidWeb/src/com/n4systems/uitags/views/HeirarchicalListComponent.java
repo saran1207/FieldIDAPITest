@@ -10,7 +10,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 public class HeirarchicalListComponent extends UIBean {
 	
-	public static final String TEMPLATE = "dynamicLocation";
+	public static final String TEMPLATE = "heirarchicalList";
  
 	private List<HeirarchicalNode> nodesList;
 	

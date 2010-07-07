@@ -6,7 +6,7 @@
 
 	  <#if !entry.leaf >
 	
-	  	<li class="expanded"><a href="#" nodeId="${entry.id!}" nodeName="${(entry.name?html)!}">${(entry.name?html)!}</a><br /> 
+	  	<li class="expanded"><a href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}">${(entry.name?html)!}</a><br /> 
 	      <ul class="menu">
 	  	  	<li class="leaf"><p class="treeHeading">${(entry.levelName?html)!}</p></li>
 	  	 	<#list entry.children as subentry>
@@ -15,7 +15,7 @@
 	 	   </ul> 
 	 	</li>
 	 <#else>
-	 	<li class="leaf"><a href="#" nodeId="${entry.id!}" nodeName="${(entry.name?html)!}">${(entry.name?html)!}</a></li> 
+	 	<li class="leaf"><a href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}">${(entry.name?html)!}</a></li> 
 	 </#if>
 	</#macro> 
 

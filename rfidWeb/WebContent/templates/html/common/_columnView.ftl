@@ -1,3 +1,3 @@
-<@n4.includeScript src="jquery-1.4.2.min.js"/>
-<script>jQuery.noConflict();</script>
-<@n4.includeScript src="jquery.columnview.js"/>
+<@n4.includeScript src="jquery-1.4.2.min"/>
+<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>
+<@n4.includeScript src="jquery.columnview"/>

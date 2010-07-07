@@ -8,9 +8,9 @@ import org.apache.struts2.views.freemarker.tags.TagModel;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
-public class DynamicLocationModel extends TagModel {
+public class HeirarchicalListModel extends TagModel {
 
-	public DynamicLocationModel(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
+	public HeirarchicalListModel(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
 		super(stack, req, res);
 	}
 
@@ -18,7 +18,6 @@ public class DynamicLocationModel extends TagModel {
 	protected Component getBean() {
 		return new HeirarchicalListComponent(stack, req, res);
 	}
-
 
 
 }

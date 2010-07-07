@@ -7,16 +7,6 @@
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="searchDynamicColumns" namespace="/ajax" />';
 		
-		Event.observe(window, 'load', function() {
- 		
- 			 	$('locationTree').observe('click', function(){
-				$('tree').show();
-				$('tree').absolutize();
-				$('tree').style.top = 400 +"px";
-				$('tree').style.left = 500 +"px";
-			});
-		});
-			
 	</script>
 	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
@@ -76,11 +66,9 @@
 				<label for="criteria.location"><@s.text name="label.location"/></label>
 				<@s.textfield name="criteria.location"/>
 
-				<a href="#" id="locationTree" ><@s.text name="label.choose_location"/></a>
+				
 
-				<div id="tree" class="">
-					<@n4.dynamicLocation name="dynamicLocation" nodesList=helper.predefinedLocationTree/>
-				</div>
+			
 							
 			</div>	
 			<div class="infoSet">

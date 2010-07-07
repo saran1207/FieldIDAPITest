@@ -170,7 +170,7 @@
 
     
     
-    $(self).selectNode(settings['defaultSelection'], origid);
+    $(container).selectNode(settings['defaultSelection']);
     
   }
 
@@ -232,8 +232,9 @@
 
   
   
-  $.fn.selectNode = function(selectedNodeId, origid) {
-	  	var defaultNode = $('#' + origid + "-processed a[nodeId='" + selectedNodeId + "']");
+  $.fn.selectNode = function(selectedNodeId) {
+	    var elementId = $(this).attr('id');
+	  	var defaultNode = $('#' + elementId + "-processed a[nodeId='" + selectedNodeId + "']");
 	  	
   		
   		if (defaultNode.length == 0) {
@@ -244,7 +245,7 @@
 			
 			preSelectedValue.parents('li.expanded').each(function() {
 				var nodeId = $(this).children('a[nodeId]').attr('nodeId');
-				targets.push('#' + origid + " a[nodeId='" + nodeId + "']")
+				targets.push('#' + elementId + " a[nodeId='" + nodeId + "']")
 			});
 			
 			while(targets.length > 0) {
@@ -252,7 +253,21 @@
 			}
   		}
   		
-		$('#' + origid + " a[nodeId='" + selectedNodeId + "']").click();
+		$('#' + elementId + " a[nodeId='" + selectedNodeId + "']").click();
+  };
+  
+  $.fn.getSelectedNode = function() {
+	  var selectedNode = $(this).find('a.active');
+	  var parentNames = new Array(); 
+      $(this).find('a.inpath').each(function() {
+		  	parentNames.push($(this).attr('nodeDisplayName'));
+	  	});
+	  var node = {
+			  id: selectedNode.attr('nodeId'),
+	  		  name: selectedNode.attr('nodeDisplayName'),
+	  		  parentNames: parentNames
+	  };
+	  return node;
   };
 })(jQuery);
 
