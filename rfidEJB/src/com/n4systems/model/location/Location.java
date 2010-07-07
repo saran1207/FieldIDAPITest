@@ -54,4 +54,8 @@ public class Location {
 		return new Location(predefinedLocation, freeformLocation);
 	}
 
+	public boolean hasFreeForm() {
+		return freeformLocation != null && !freeformLocation.isEmpty();
+	}
+
 }

@@ -59,7 +59,7 @@ public class ProductCrudHelper extends BaseActionHelper {
 		}
 		
 		
-		fullName += location.getFreeformLocation() != null ? " " + location.getFreeformLocation() : "";
+		fullName += location.hasFreeForm() ? " " + location.getFreeformLocation() : "";
 		
 		return fullName;
 	}
