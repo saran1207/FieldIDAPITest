@@ -17,7 +17,7 @@
   <ul class="menu hide" id="${parameters.id}">
 
 	<li class="leaf level"><p class="treeHeading">${(parameters.nodesList?first.levelName?html)!}</p></li>
-	<li class="leaf"><a href="#" nodeId="-1" nodeName=""><@s.text name="label.none"/></a></li>
+	<li class="leaf"><a href="#" nodeId="-1" nodeDisplayName=""><@s.text name="label.none"/></a></li>
 	<#list nodesList as entry>
 		<@createTree entry=entry/>
 	</#list>
