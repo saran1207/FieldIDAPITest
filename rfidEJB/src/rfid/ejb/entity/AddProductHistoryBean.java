@@ -49,6 +49,8 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	private ProductStatusBean productStatus;
 	
 	private String purchaseOrder;
+	
+	
 	private String location;
 	
     @ManyToOne(optional = true)

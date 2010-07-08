@@ -49,7 +49,6 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -61,7 +60,6 @@ import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -138,7 +136,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	protected List<Product> linkedProducts;
 	protected Map<Long, List<ProductAttachment>> linkedProductAttachments;
-	private List<PredefinedLocation> predefinedLocations;
+	
+	private AssetWebModel asset = new AssetWebModel(this);
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
@@ -173,6 +172,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		} catch(Exception e) {
 			logger.error("Unable to load product", e);
 		}
+		asset.match(product);
 		
 	}
 	
@@ -214,6 +214,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 			setProductTypeId(productId);
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
+		
+		asset.match(product);
 
 		
 	}
@@ -435,6 +437,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 		convertInputsToInfoOptions();
 		convertInputsToExtensionValues();
 		processOrderMasters();
+		
+		asset.fillInAsset(product);
 	}
 	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
@@ -692,26 +696,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		product.setCustomerRefNumber(customerRefNumber);
 	}
 
-	public String getLocation() {
-		return product.getLocation();
-	}
-
-	public void setLocation(String location) {
-		product.setAdvancedLocation(product.getAdvancedLocation().createForAdjustedFreeformLocation(location));
-	}
-	
-	
-	public Long getAdvancedLocation() {
-		return (product.getAdvancedLocation().getPredefinedLocation() != null) ? product.getAdvancedLocation().getPredefinedLocation().getId() : null;
-	}
-	
-	public void setAdvancedLocation(Long id) {
-		PredefinedLocation predfinedLocation = null;
-		if (id != null) {
-			predfinedLocation = persistenceManager.find(PredefinedLocation.class, id, getTenantId());
-		}
-		product.setAdvancedLocation(product.getAdvancedLocation().createForAdjustedPredefinedLocation(predfinedLocation));
-	}
 	
 
 	public Long getProductStatus() {
@@ -1072,12 +1056,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return refreshRegirstation;
 	}
 
-	
-	public List<PredefinedLocation> getPredefinedLocations() {
-		if (predefinedLocations == null) {
-			predefinedLocations = persistenceManager.findAll(new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, getSecurityFilter()).addWhere(Comparator.NULL, "parent.id",  "parent.id", " "));
-		}
-		return predefinedLocations;
+
+	public void setAsset(AssetWebModel asset) {
+		this.asset = asset;
+	}
+
+	public AssetWebModel getAsset() {
+		return asset;
 	}
 	
 	

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.List;
 import java.util.Stack;
 
+import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationTree;
@@ -41,6 +42,10 @@ public class LocationHelper {
 	}
 
 
+	public String getFullNameOfLocation(LocationWebModel location) {
+		return getFullNameOfLocation(location.createLocation());
+	}
+	
 	public String getFullNameOfLocation(Location location) {
 		if (location == null) {
 			return "";

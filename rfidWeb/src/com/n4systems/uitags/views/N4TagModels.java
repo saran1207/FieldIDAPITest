@@ -17,6 +17,7 @@ public class N4TagModels {
     private OrgPickerModel orgPicker;
     private SafetyNetworkSmartSearchModel safetyNetworkSmartSearch;
     private HeirarchicalListModel dynamicLocation;
+	private LocationModel location;
     
 	public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         this.stack = stack;
@@ -67,4 +68,13 @@ public class N4TagModels {
 		}
     	return dynamicLocation;
 	}
+    
+    
+    public LocationModel getLocation() {
+    	if (location == null) {
+    		location = new LocationModel(stack, req, res);
+    		
+    	}
+    	return location;
+    }
 }

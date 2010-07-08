@@ -21,7 +21,7 @@ h2 {
 }
 
 
-#locationSelection {
+.locationSelection {
 	position:absolute;
 	left: -10000px;
 	background-color:#fff;

@@ -26,59 +26,13 @@
 
 
 <div class="infoSet">
-	<label class="label" for="location"><@s.text name="label.location"/></label>
+	<label class="label" for="asset.location"><@s.text name="label.location"/></label>
 	<#if !parentProduct?exists >
-		<#if helper.hasPredefinedLocationTree()>
-			
-			<div class="fieldHolder">
-				<@s.hidden name="advancedLocation" id="advancedLocation"/>
-				<@s.hidden name="location" id="location"/>
-				<@s.textfield id="locationName" name="locate" theme="simple" value="${helper.getFullNameOfLocation(product.advancedLocation)}" readonly="true"/>
-				<a href="#" id="showLocationSelection"><@s.text name="label.choose"/></a>
-				<div id="locationSelection">
-					<label for="predefinedLocation"><@s.text name="label.predefined_location"/></label><br/>
-					<@n4.heirarchicalList id="advancedLocationSelection" nodesList=helper.predefinedLocationTree name="advancedLocation" />
-					<label for="freeformLocation"><@s.text name="label.freeform_location"/></label><br/>
-					<@s.textfield id="freeform" name="freeformLocation" value="${product.advancedLocation.freeformLocation!}" theme="simple"/>
-					<div>
-					<input type="button" name="getactive" value="<@s.text name="label.select_location"/>" id="advancedLocationSelection_getactive"/>
-					<@s.text name="label.or"/>
- 					<a href="#" id="advancedLocationSelection_close"><@s.text name="label.cancel"/></a>
-					</div>
-				</div>
-				<@n4.includeScript>
-					onDocumentLoad(function() {
-							$('advancedLocationSelection_getactive').observe('click', function(event) {
-								event.stop();
-								$('locationSelection').setStyle({left:'-10000px'});
-								
-								var node = jQuery('#advancedLocationSelection').getSelectedNode();
-										
-								$('advancedLocation').value = node.id;
-								$('location').value = $('freeform').getValue();
-								$('locationName').value = node.parentNames.join(" ") + " " + node.name + " " + $('freeform').getValue();
-								
-								
-							});
-							$('advancedLocationSelection_close').observe('click', function(event) { event.stop(); 
-								$('locationSelection').setStyle({left:'-10000px'});
-								$('freeform').value = $('location').getValue();
-								var predefinedLocationId = $('advancedLocation').getValue(); 
-								jQuery("#advancedLocationSelection").selectNode(predefinedLocationId);
-								
-							});
-							$('showLocationSelection').observe('click', function(event) {
-									event.stop();
-									translate($('locationSelection'), $('showLocationSelection'), 0, 0);
-								});
-						});
-				</@n4.includeScript>
-			</div>
-		<#else>
-			<@s.textfield id="location" name="location" />
-		</#if>
+		<div class="fieldHolder">
+			<@n4.location name="asset.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(asset.location)}"  theme="simple"/>
+		</div>
 	<#else>
-		<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(product.advancedLocation))?html}</span>
+		<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(asset.location))?html}</span>
 	</#if>
 </div>
 

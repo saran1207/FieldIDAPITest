@@ -2,6 +2,7 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.util.List;
 
+import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -28,6 +29,11 @@ public class ProductCrudHelper extends BaseActionHelper {
 	}
 	
 	public String getFullNameOfLocation(Location location) {
+		return locationHelper.getFullNameOfLocation(location);
+	}
+
+
+	public String getFullNameOfLocation(LocationWebModel location) {
 		return locationHelper.getFullNameOfLocation(location);
 	}
 

@@ -16,10 +16,11 @@ public class LocationHelperTest {
 	
 	private static final LoaderFactory UNUSED_LOADER_FACTORY = null;
 	private static final Transactor UNUSED_TRANSACTOR = null;
+	private static final Location NULL_LOCATION = null;
 
 	@Test
 	public void should_give_an_emtpy_string_as_the_name_of_a_null_location() throws Exception {
-		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(null);
+		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(NULL_LOCATION);
 		assertThat(generatedName, equalTo(""));
 	}
 	
