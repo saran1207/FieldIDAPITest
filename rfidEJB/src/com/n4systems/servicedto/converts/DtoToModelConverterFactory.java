@@ -19,10 +19,8 @@ public class DtoToModelConverterFactory {
 		this.systemSecurityGuard = systemSecurityGuard;
 	}
 
-
 	public ProductServiceDTOConverter createProductConverter() {
-		return new ProductServiceDTOConverter(systemSecurityGuard,
-				new FilteredIdLoader<PredefinedLocation>(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()), PredefinedLocation.class));
+		return new ProductServiceDTOConverter(systemSecurityGuard);
 	}
 	
 	public InspectionServiceDTOConverter createInspectionConverter() {

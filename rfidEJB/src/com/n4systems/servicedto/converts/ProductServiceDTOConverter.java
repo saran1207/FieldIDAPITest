@@ -17,13 +17,13 @@ public class ProductServiceDTOConverter {
 	private ServiceDTOBeanConverter serviceDTOBeanconverter;
 	private SystemSecurityGuard systemSecurityGuard;
 	private AssignedUserConverter assignedUserConverter;
-	private FilteredIdLoader<PredefinedLocation> filteredPredefinedLocationIdLoader;
+	private LocationServiceDTOConverter locationServiceDTOConverter;
 	
-	public ProductServiceDTOConverter(SystemSecurityGuard systemSecurityGuard, FilteredIdLoader<PredefinedLocation> filteredPredefinedLocationIdLoader) {
+	public ProductServiceDTOConverter(SystemSecurityGuard systemSecurityGuard) {
 		this.systemSecurityGuard = systemSecurityGuard;
 		this.serviceDTOBeanconverter = getServiceDTOBeanConverter();
 		this.assignedUserConverter = createAssignedUserConverter(systemSecurityGuard);
-		this.filteredPredefinedLocationIdLoader = filteredPredefinedLocationIdLoader;
+		this.locationServiceDTOConverter = createLocationServiceConverter();
 		
 	}
 
@@ -31,17 +31,14 @@ public class ProductServiceDTOConverter {
 		return new AssignedUserConverterFactory(systemSecurityGuard, new LoaderFactory(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()))).getAssignedUserConverterForAsset();
 	}
 
+	private LocationServiceDTOConverter createLocationServiceConverter() {
+		return new LocationServiceDTOConverter(new FilteredIdLoader<PredefinedLocation>(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()), PredefinedLocation.class));
+	}
+	
 	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct) {
 		serviceDTOBeanconverter.convert(productServiceDTO, targetProduct, systemSecurityGuard.getTenantId());
 		assignedUserConverter.convert(productServiceDTO, targetProduct);
-		
-		PredefinedLocation predefinedLocation = null;
-		if (productServiceDTO.predefinedLocationIdExists()) {
-			predefinedLocation = filteredPredefinedLocationIdLoader.setId(productServiceDTO.getPredefinedLocationId()).load();
-			targetProduct.setAdvancedLocation(new Location(predefinedLocation, productServiceDTO.getLocation()));
-		} else {
-			targetProduct.setAdvancedLocation(targetProduct.getAdvancedLocation().createForAdjustedFreeformLocation(productServiceDTO.getLocation()));
-		}
+		locationServiceDTOConverter.convert(productServiceDTO.getLocation(), targetProduct);
 		
 		return targetProduct;
 	}

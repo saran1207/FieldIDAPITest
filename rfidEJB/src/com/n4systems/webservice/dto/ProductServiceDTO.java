@@ -15,7 +15,6 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private String customerRefNumber;
 	private String mobileGuid;
 	private String purchaseOrder;
-	private String location;
 	private String orderNumber;
 	private String identified; // date
 	private long modifiedById;
@@ -31,7 +30,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private long vendorId;
 	private Date modified;
 	private long assignedUserId;
-	private long predefinedLocationId;
+	private LocationServiceDTO location;
 	
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
@@ -67,13 +66,6 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public void setPurchaseOrder(String purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
 	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	
 	public String getIdentified() {
 		return identified;
 	}
@@ -214,14 +206,11 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public boolean assignedUserIdExists() {
 		return isValidServerId( assignedUserId );
 	}
-	public long getPredefinedLocationId() {
-		return predefinedLocationId;
+	public LocationServiceDTO getLocation() {
+		return location;
 	}
-	public void setPredefinedLocationId(long predefinedLocationId) {
-		this.predefinedLocationId = predefinedLocationId;
-	}
-	public boolean predefinedLocationIdExists() {
-		return isValidServerId(predefinedLocationId);
+	public void setLocation(LocationServiceDTO location) {
+		this.location = location;
 	}
 	
 	

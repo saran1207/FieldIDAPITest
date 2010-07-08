@@ -53,6 +53,7 @@ import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -67,6 +68,8 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.servicedto.converts.LocationServiceDTOConverter;
+import com.n4systems.servicedto.converts.LocationToLocationServiceDTOConverter;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantCache;
@@ -89,6 +92,7 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
+import com.n4systems.webservice.dto.LocationServiceDTO;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO;
 import com.n4systems.webservice.dto.ObservationServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
@@ -262,8 +266,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setCustomerRefNumber(product.getCustomerRefNumber());
 		productDTO.setIdentified(AbstractBaseServiceDTO.dateToString(product.getIdentified()));
 		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(product.getLastInspectionDate()));
-		productDTO.setLocation(product.getLocation());
-		productDTO.setPredefinedLocationId(product.getAdvancedLocation().getPredefinedLocation().getId());
 		productDTO.setMobileGuid(product.getMobileGUID());
 		productDTO.setProductStatusId(product.getProductStatus() != null ? product.getProductStatus().getUniqueID() : 0);
 		productDTO.setProductTypeId(product.getType().getId());
@@ -304,7 +306,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			productDTO.getSchedules().add(convert(schedule));
 		}
 
+		productDTO.setLocation(convert(product.getAdvancedLocation()));
+		
 		return productDTO;
+	}
+
+	private LocationServiceDTO convert(Location location) {
+		return new LocationToLocationServiceDTOConverter().convert(location);
 	}
 
 	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId) {
