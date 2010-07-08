@@ -25,22 +25,14 @@ public class LocationHelper {
 	}
 
 	public List<HeirarchicalNode> getPredefinedLocationTree() {
-		PredefinedLocationTree locationTree = transactor.execute(new UnitOfWork<PredefinedLocationTree>() {
-			public PredefinedLocationTree run(Transaction transaction) {
-				return factory.createPredefinedLocationTreeLoader().load(transaction);
+		return  transactor.execute(new UnitOfWork<List<HeirarchicalNode>>() {
+			public List<HeirarchicalNode> run(Transaction transaction) {
+				PredefinedLocationTree locationTree = factory.createPredefinedLocationTreeLoader().load(transaction);
+				PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
+				return new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, levels);
 			}
 		});
-		
-		PredefinedLocationLevels levels = transactor.execute(new UnitOfWork<PredefinedLocationLevels>() {
-			public PredefinedLocationLevels run(Transaction transaction) {
-				List<PredefinedLocationLevels> levels = factory.createAllEntityListLoader(PredefinedLocationLevels.class).load(transaction);
-				
-				return levels.isEmpty() ? new PredefinedLocationLevels() : levels.get(0);
-			}
-		});
-
-		
-		return new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, levels);
+	 
 	}
 	
 	public boolean hasPredefinedLocationTree() {

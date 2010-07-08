@@ -204,7 +204,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 			product.setProductStatus(addProductHistory.getProductStatus());
 			product.setPurchaseOrder(addProductHistory.getPurchaseOrder());
-			product.setLocation(addProductHistory.getLocation());
+			product.setAdvancedLocation(addProductHistory.getLocation());
 			product.setInfoOptions(new TreeSet<InfoOptionBean>(addProductHistory.getInfoOptions()));
 
 		} else {

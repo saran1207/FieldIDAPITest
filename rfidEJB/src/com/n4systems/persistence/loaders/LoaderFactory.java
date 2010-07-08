@@ -103,7 +103,7 @@ public class LoaderFactory {
 	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
 		return new AllEntityListLoader<T>(clazz);
 	}
-
+	
 	public AllPredefinedLocationsPaginatedLoader createAllPredefinedLocationsPaginatedLoader() {
 		return new AllPredefinedLocationsPaginatedLoader(filter);
 	}
@@ -232,19 +232,11 @@ public class LoaderFactory {
 		return new InternalOrgByNameLoader(filter);
 	}
 
-	
-	public PredefinedLocationTreeLoader createPredefinedLocationTreeLoader() {
-		return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader());
-	}
-
-	public PredefinedLocationListLoader createPredefinedLocationListLoader() {
-		return new PredefinedLocationListLoader(filter);
-	}
-	
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
 		return new InternalOrgListableLoader(filter);
 	}
 
+	
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
 	}
@@ -252,7 +244,7 @@ public class LoaderFactory {
 	public NextInspectionDateByInspectionLoader createNextInspectionDateByInspectionLoader() {
 		return new NextInspectionDateByInspectionLoader(filter);
 	}
-
+	
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
 	}
@@ -271,6 +263,18 @@ public class LoaderFactory {
 
 	public <T> PassthruListLoader<T> createPassthruListLoader(List<T> entities) {
 		return new PassthruListLoader<T>(entities);
+	}
+
+	public PredefinedLocationLevelsLoader createPredefinedLocationLevelsLoader() {
+		return new PredefinedLocationLevelsLoader(filter);
+	}
+
+	public PredefinedLocationListLoader createPredefinedLocationListLoader() {
+		return new PredefinedLocationListLoader(filter);
+	}
+
+	public PredefinedLocationTreeLoader createPredefinedLocationTreeLoader() {
+		return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader());
 	}
 
 	public PrimaryOrgByTenantLoader createPrimaryOrgByTenantLoader() {

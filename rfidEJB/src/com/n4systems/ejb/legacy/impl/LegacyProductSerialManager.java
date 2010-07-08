@@ -316,7 +316,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		addProductHistory.setProductType(product.getType());
 		addProductHistory.setProductStatus(product.getProductStatus());
 		addProductHistory.setPurchaseOrder(product.getPurchaseOrder());
-		addProductHistory.setLocation(product.getLocation());
+		addProductHistory.setLocation(product.getAdvancedLocation());
 		addProductHistory.setInfoOptions(new ArrayList<InfoOptionBean>(product.getInfoOptions()));
 		addProductHistory.setAssignedUser(product.getAssignedUser());
 

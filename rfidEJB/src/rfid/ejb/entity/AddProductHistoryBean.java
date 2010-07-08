@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasUser;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 import com.n4systems.model.user.User;
@@ -51,7 +52,7 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	private String purchaseOrder;
 	
 	
-	private String location;
+	private Location location;
 	
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigneduser_id")
@@ -109,13 +110,7 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 		this.infoOptions = infoOptions;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
+	
 	
     public User getAssignedUser() {
 		return assignedUser;
@@ -123,6 +118,14 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 
 	public void setAssignedUser(User assignedTo) {
 		this.assignedUser = assignedTo;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public Location getLocation() {
+		return location;
 	}
 
 }
