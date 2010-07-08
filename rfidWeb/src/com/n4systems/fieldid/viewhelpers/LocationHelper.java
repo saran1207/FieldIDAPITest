@@ -6,6 +6,7 @@ import java.util.Stack;
 import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.Transactor;
@@ -30,7 +31,16 @@ public class LocationHelper {
 			}
 		});
 		
-		return new LocationTreeToHeirarchicalNodesConverter().convert(locationTree);
+		PredefinedLocationLevels levels = transactor.execute(new UnitOfWork<PredefinedLocationLevels>() {
+			public PredefinedLocationLevels run(Transaction transaction) {
+				List<PredefinedLocationLevels> levels = factory.createAllEntityListLoader(PredefinedLocationLevels.class).load(transaction);
+				
+				return levels.isEmpty() ? new PredefinedLocationLevels() : levels.get(0);
+			}
+		});
+
+		
+		return new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, levels);
 	}
 	
 	public boolean hasPredefinedLocationTree() {

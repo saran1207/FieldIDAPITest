@@ -64,4 +64,5 @@ public class Location {
 		return predefinedLocation != null;
 	}
 
+
 }

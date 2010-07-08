@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
 import com.n4systems.uitags.views.HeirarchicalNode;
@@ -13,24 +14,25 @@ import com.n4systems.uitags.views.HeirarchicalNode;
 public class LocationTreeToHeirarchicalNodesConverter {
 	
 
-	public List<HeirarchicalNode> convert(PredefinedLocationTree tree) {
-		return childList(tree.getNodes());
+	public List<HeirarchicalNode> convert(PredefinedLocationTree tree, PredefinedLocationLevels levels) {
+		return childList(tree.getNodes(), levels);
 	}
 
-	public HeirarchicalNode convertLocationToNode(PredefinedLocationTreeNode location) {
+	public HeirarchicalNode convertLocationToNode(PredefinedLocationTreeNode location, PredefinedLocationLevels levels) {
 		HeirarchicalNode node = new HeirarchicalNode();
 		node.setName(location.getName());
 		node.setId(location.getId());
+		node.setLevelName(levels.getNameForLevel(location).getName());
 		
-		node.addChildren(childList(location.getChildren()));
+		node.addChildren(childList(location.getChildren(), levels));
 		
 		return node;
 	}
 
-	private List<HeirarchicalNode> childList(Set<PredefinedLocationTreeNode> nextLevel) {
+	private List<HeirarchicalNode> childList(Set<PredefinedLocationTreeNode> nextLevel, PredefinedLocationLevels levels) {
 		List<HeirarchicalNode> children = new ArrayList<HeirarchicalNode>();
 		for (PredefinedLocationTreeNode child : nextLevel) {
-			children.add(convertLocationToNode(child));
+			children.add(convertLocationToNode(child, levels));
 		}
 		
 		sortNodesAlphabetically(children);

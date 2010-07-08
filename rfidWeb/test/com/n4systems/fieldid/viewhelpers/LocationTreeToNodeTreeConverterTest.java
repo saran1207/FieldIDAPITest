@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
 import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
 import com.n4systems.uitags.views.HeirarchicalNode;
@@ -56,13 +57,13 @@ public class LocationTreeToNodeTreeConverterTest {
 
 	@Test(expected=RuntimeException.class)
 	public void should_fail_if_the_tree_is_null() throws Exception {
-		new LocationTreeToHeirarchicalNodesConverter().convert(null);
+		new LocationTreeToHeirarchicalNodesConverter().convert(null, new PredefinedLocationLevels());
 	}
 	
 	
 	@Test
 	public void should_convert_an_empty_location_tree_into_an_empty_list_of_nodes() throws Exception {
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(anEmtpyPredefinedLocationTree());
+		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(anEmtpyPredefinedLocationTree(), new PredefinedLocationLevels());
 		assertThat(convertedTree, anEmptyList(HeirarchicalNode.class));
 	}
 	
@@ -77,7 +78,7 @@ public class LocationTreeToNodeTreeConverterTest {
 		
 		locationTree.addNode(new PredefinedLocationTreeNode(locationNode));
 		
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree);
+		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
 		
 		assertThat(new ArrayList<Object>(convertedTree), hasItem(node("name", 1L)));
 	}
@@ -97,7 +98,7 @@ public class LocationTreeToNodeTreeConverterTest {
 		PredefinedLocationTree locationTree = aPredefinedLocationTreeWithTopLevelLocations(locationNode);
 		
 		
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree);
+		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
 		
 		assertThat(convertedTree, hasNodeTree(3,3));
 	}
@@ -116,7 +117,7 @@ public class LocationTreeToNodeTreeConverterTest {
 		
 		PredefinedLocationTree locationTree = aPredefinedLocationTreeWithTopLevelLocations(locationNode_Bob, locationNode_mark, locationNode_alex, locationNode_Matt, locationNode_47_fraiser);
 		
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree);
+		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
 		
 		assertThat((Iterable<?>)convertedTree, contains(hasProperty("name", equalTo("47 fraiser st")),
 										hasProperty("name", equalTo("alex")),

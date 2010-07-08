@@ -10,7 +10,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @SuppressWarnings("serial")
 @Entity(name = "predefinedlocations")
-public class PredefinedLocation extends EntityWithTenant implements NamedEntity {
+public class PredefinedLocation extends EntityWithTenant implements NamedEntity, TreeNode {
 
 	@Column(nullable = false, length = 255)
 	private String name;
@@ -41,6 +41,14 @@ public class PredefinedLocation extends EntityWithTenant implements NamedEntity 
 
 	public boolean hasParent() {
 		return parent != null;
+	}
+
+
+	public int levelNumber() {
+		if (hasParent()) {
+			return parent.levelNumber() + 1;
+		}
+		return 1;
 	}
 	
 }

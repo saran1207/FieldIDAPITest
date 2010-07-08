@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class PredefinedLocationTreeNode {
+public class PredefinedLocationTreeNode implements TreeNode {
 
 	private final Set<PredefinedLocationTreeNode> children = new HashSet<PredefinedLocationTreeNode>();
 	private final PredefinedLocation nodeValue;
@@ -30,6 +30,11 @@ public class PredefinedLocationTreeNode {
 	public void addChild(PredefinedLocationTreeNode child) {
 		children.add(child);
 	}
+	
+	public int levelNumber() {
+		return nodeValue.levelNumber();
+	}
+	
 	
 	@Override
 	public String toString() {
