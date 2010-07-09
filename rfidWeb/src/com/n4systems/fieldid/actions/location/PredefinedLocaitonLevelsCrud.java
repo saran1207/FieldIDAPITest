@@ -9,7 +9,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.location.LevelName;
 import com.n4systems.model.location.PredefinedLocationLevels;
-import com.n4systems.persistence.savers.Saver;
+import com.n4systems.model.location.PredefinedLocationLevelsSaver;
 import com.n4systems.security.Permissions;
 
 
@@ -88,8 +88,7 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 	}
 
 	private void updateLevels(PredefinedLocationLevels locationLevels) {
-		Saver<PredefinedLocationLevels> saver = new Saver<PredefinedLocationLevels>() {};
-		saver.update(locationLevels);
+		new PredefinedLocationLevelsSaver().update(locationLevels);
 	}
 	
 	public List<LevelName> getLevels() {
