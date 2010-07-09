@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.actions.location;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -21,7 +24,6 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	private PredefinedLocation parentNode;
 	private String name;
 	private Long parentId;
-	private Long predefinedLocationId;
 	private PredefinedLocationSaver saver; 
 
 	public PredefinedLocationCrud(PersistenceManager persistenceManager) {
@@ -31,7 +33,6 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		predefinedLocation = new PredefinedLocation();
-		saver = new PredefinedLocationSaver();
 	}
 
 	@Override
@@ -49,6 +50,7 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
+	@SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}
@@ -56,12 +58,12 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	public String doUpdate() {
 		// testRequiredEntities(false);
 		try {
-
+			saver = new PredefinedLocationSaver();
 			predefinedLocation.setParent(getParentNode(getParentId()));
 			predefinedLocation.setName(getName());
 			predefinedLocation.setTenant(getTenant());
 				
-			 saver.save(predefinedLocation);
+			saver.save(predefinedLocation);
 
 			addFlashMessageText("message.location_saved");
 		} catch (Exception e) {
@@ -72,7 +74,7 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-//	@RequiredStringValidator(message = "", key = "error.titlerequired")
+	@RequiredStringValidator(message = "", key = "error.titlerequired")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -97,9 +99,9 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		}
 		return parentNode;
 	}
-
-	public Long getPredefinedLocationId() {
-		return predefinedLocationId;
+	
+	private List<PredefinedLocation> getEmpty(){
+		return new ArrayList<PredefinedLocation>();
 	}
 
 }
