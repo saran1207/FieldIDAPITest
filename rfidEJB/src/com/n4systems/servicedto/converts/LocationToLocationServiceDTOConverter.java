@@ -10,9 +10,17 @@ public class LocationToLocationServiceDTOConverter {
 		LocationServiceDTO locationServiceDTO = new LocationServiceDTO();
 		
 		locationServiceDTO.setFreeformLocation(location.getFreeformLocation());
-		locationServiceDTO.setPredefinedLocationId(location.getPredefinedLocation().getId());
+		if ( isPredefinedLocationExists(location)) {
+			locationServiceDTO.setPredefinedLocationId(location.getPredefinedLocation().getId());
+		} else {
+			locationServiceDTO.setPredefinedLocationId(0);
+		}
 		
 		return locationServiceDTO;
+	}
+
+	private boolean isPredefinedLocationExists(Location location) {
+		return location.getPredefinedLocation() != null;
 	}
 
 
