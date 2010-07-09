@@ -2,7 +2,7 @@
 	  <#if !entry.leaf >
 	  	<li class="expanded"><a href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}">${(entry.name?html)!}</a><br /> 
 	      <ul class="menu">
-	  	  	<li class="leaf"><p class="treeHeading">${(entry.children.first.levelName?html)!}</p></li>
+	  	  	<li class="leaf"><p class="treeHeading">${(entry.children?first.levelName?html)!}</p></li>
 	  	 	<#list entry.children as subentry>
 	  			<@createTree entry=subentry/>
 	  		</#list>

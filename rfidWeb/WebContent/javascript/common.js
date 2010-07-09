@@ -529,6 +529,18 @@ function isValueDefined(value, additionalUndefinedValue) {
 	return (value != undefined &&  value != null && value != additionalUndefinedValue);
 }
 
+
+function postForm(url, values) {
+	var form = new Element('form');
+	form.action = url;
+	form.method = 'POST';
+	for (var name in values) {
+		form.insert(new Element('input', { type:"hidden", name: name, value: values[name]}));
+	}
+	
+	form.submit();
+}
+
 function onDocumentLoad(functionToRun) {
 	document.observe("dom:loaded", functionToRun);
 }

@@ -77,6 +77,10 @@
 				<label><a href="predefinedLocation.action" ><@s.text name="title.manage_locations" /></a></label>
 				<span>Create location heirarchies.</span>
 			</p>
+			<p>
+				<label><a href="<@s.url action="predefinedLocationLevels"/>" ><@s.text name="title.manage_location_levels" /></a></label>
+				<span>Create location level name</span>
+			</p>
 		</div>
 	</#if>
 	

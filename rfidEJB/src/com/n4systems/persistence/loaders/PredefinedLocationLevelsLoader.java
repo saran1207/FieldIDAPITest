@@ -17,7 +17,10 @@ public class PredefinedLocationLevelsLoader extends SecurityFilteredLoader<Prede
 		QueryBuilder<PredefinedLocationLevels> queryBuilder = new QueryBuilder<PredefinedLocationLevels>(PredefinedLocationLevels.class, filter);
 		PredefinedLocationLevels levels = queryBuilder.getSingleResult(em);
 		
-		return levels != null ? levels : new PredefinedLocationLevels();
+		if (levels == null) {
+			levels = new PredefinedLocationLevels();
+		}
+		return levels;
 	}
 
 }
