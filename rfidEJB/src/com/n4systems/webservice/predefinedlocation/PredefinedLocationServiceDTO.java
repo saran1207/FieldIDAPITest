@@ -4,6 +4,7 @@ import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
 
 public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 	private String name;
+	private String levelName;
 	private Long parentId;
 
 	public String getName() {
@@ -20,5 +21,13 @@ public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
 	}
 }

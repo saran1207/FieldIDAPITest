@@ -172,10 +172,16 @@ public class DataServiceImpl implements DataService {
 	private static final int OLD_FIRST_PAGE = 1;
 	private static Logger logger = Logger.getLogger(DataServiceImpl.class);
 	
-	private final RequestHandlerFactory requestHandlerFactory;
+	public DataServiceImpl() {}
 	
-	public DataServiceImpl() {
-		requestHandlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), new ModelToServiceConverterFactory());
+	private RequestHandlerFactory createResponseHandlerFactory(RequestInformation request) {
+		LoaderFactory loaderFactory = createLoaderFactory(request);
+		RequestHandlerFactory handlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), loaderFactory, new ModelToServiceConverterFactory(loaderFactory));
+		return handlerFactory;
+	}
+	
+	private LoaderFactory createLoaderFactory(RequestInformation request) {
+		return new LoaderFactory(new TenantOnlySecurityFilter(request.getTenantId()));
 	}
 	
 	public HelloResponse hello(HelloRequest helloRequest) throws ServiceException {
@@ -444,7 +450,7 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	public PredefinedLocationListResponse getAllPredefinedLocations(PaginatedRequestInformation request) throws ServiceException {
-		PredefinedLocationListResponse response = requestHandlerFactory.createAllPredefinedLocationsRequestHandler().getResponse(request);
+		PredefinedLocationListResponse response = createResponseHandlerFactory(request).createAllPredefinedLocationsRequestHandler().getResponse(request);
 		return response;
 	}
 	

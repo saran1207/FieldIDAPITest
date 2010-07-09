@@ -2,6 +2,9 @@ package com.n4systems.webservice;
 
 import static junit.framework.Assert.*;
 
+import static org.easymock.classextension.EasyMock.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -22,8 +25,8 @@ public class PaginatedRequestHandlerTest {
 	};
 	
 	private class TestPaginatedRequestHandler extends PaginatedRequestHandler<TestAbstractListResponse> {
-		public TestPaginatedRequestHandler(ConfigContext configContext) {
-			super(configContext);
+		public TestPaginatedRequestHandler(ConfigContext configContext, LoaderFactory loaderFactory) {
+			super(configContext, loaderFactory);
 		}
 
 		@Override
@@ -32,14 +35,24 @@ public class PaginatedRequestHandlerTest {
 		}	
 	}
 	
+	private LoaderFactory loaderFactory;
+	
+	@Before
+	public void mockLoaderFactory() {
+		loaderFactory = createMock(LoaderFactory.class);
+	}
+	
 	@Test
 	public void gets_current_page_from_request() throws ServiceException {
-		TestPaginatedRequestHandler sut = new TestPaginatedRequestHandler(new NonDataSourceBackedConfigContext());
+		TestPaginatedRequestHandler sut = new TestPaginatedRequestHandler(new NonDataSourceBackedConfigContext(), loaderFactory);
 		
 		PaginatedRequestInformation request = new PaginatedRequestInformation();
 		request.setPageNumber(99L);
 		
+		replay(loaderFactory);
 		assertEquals(99, sut.getResponse(request).getCurrentPage());
+		
+		verify(loaderFactory);
 	}
 	
 	@Test
@@ -47,17 +60,20 @@ public class PaginatedRequestHandlerTest {
 		ConfigContextOverridableTestDouble context = new ConfigContextOverridableTestDouble();
 		context.addConfigurationValue(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA, 2047);
 		
-		TestPaginatedRequestHandler sut = new TestPaginatedRequestHandler(context);
+		TestPaginatedRequestHandler sut = new TestPaginatedRequestHandler(context, loaderFactory);
 		
 		PaginatedRequestInformation request = new PaginatedRequestInformation();
 		request.setPageNumber(99L);
 		
+		replay(loaderFactory);
 		assertEquals(2047, sut.getResponse(request).getRecordsPerPage());
+		
+		verify(loaderFactory);
 	}
 
 	@Test(expected=ServiceException.class)
 	public void rethrows_exceptions_as_service_exception() throws ServiceException {
-		PaginatedRequestHandler<TestAbstractListResponse> sut = new PaginatedRequestHandler<TestAbstractListResponse>(new NonDataSourceBackedConfigContext()) {
+		PaginatedRequestHandler<TestAbstractListResponse> sut = new PaginatedRequestHandler<TestAbstractListResponse>(new NonDataSourceBackedConfigContext(), null) {
 			@Override
 			protected TestAbstractListResponse createResponse(LoaderFactory loaderFactory, int currentPage, int pageSize) throws Exception {
 				throw new Exception("problem");

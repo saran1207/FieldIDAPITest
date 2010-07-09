@@ -12,8 +12,8 @@ import com.n4systems.webservice.exceptions.ServiceException;
 public class AllPredefinedLocationsRequestHandler extends PaginatedRequestHandler<PredefinedLocationListResponse> {
 	private final PaginatedModelToServiceConverter<PredefinedLocation, PredefinedLocationServiceDTO> converter;
 	
-	public AllPredefinedLocationsRequestHandler(ConfigContext configContext, PaginatedModelToServiceConverter<PredefinedLocation, PredefinedLocationServiceDTO> converter) {
-		super(configContext);
+	public AllPredefinedLocationsRequestHandler(ConfigContext configContext, LoaderFactory loaderFactory, PaginatedModelToServiceConverter<PredefinedLocation, PredefinedLocationServiceDTO> converter) {
+		super(configContext, loaderFactory);
 		this.converter = converter;
 	}
 
