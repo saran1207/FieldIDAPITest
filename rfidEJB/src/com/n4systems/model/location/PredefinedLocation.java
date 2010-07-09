@@ -38,6 +38,10 @@ public class PredefinedLocation extends EntityWithTenant implements NamedEntity,
 	public PredefinedLocation getParent() {
 		return parent;
 	}
+	
+	public void setParent(PredefinedLocation parentNode) {
+		parent=parentNode;
+	}
 
 	public boolean hasParent() {
 		return parent != null;
@@ -50,5 +54,4 @@ public class PredefinedLocation extends EntityWithTenant implements NamedEntity,
 		}
 		return 1;
 	}
-	
 }
