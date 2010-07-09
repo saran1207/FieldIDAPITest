@@ -1,4 +1,4 @@
-${action.setPageType('predefined_location', 'list')!}
+${action.setPageType('predefined_location', 'location_list')!}
 <#assign currentAction="predefinedLocation.action" />
 <head>
 	<@n4.includeStyle type="page" href="locationCrud" />

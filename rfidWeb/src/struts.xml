@@ -124,8 +124,6 @@
 	
 	<include file="ajaxPackageStruts.xml"/>
 	<include file="aHtmlPackageStruts.xml"/>
-	<include file="quickSetup2WizardPackage.xml"/>
-	<include file="inspectionPackage.xml"/>
 	<include file="quickSetupWizardPackage.xml"/>
 	<include file="multiInspectPackageStruts.xml"/>
 	

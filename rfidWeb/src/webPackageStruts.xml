@@ -3,7 +3,7 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts><!-- Configuration for the default package. -->
-
+	
 	<package name="web" extends="default" namespace="/">
 		<global-results>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
@@ -1033,7 +1033,7 @@
 			<result name="success" type="freemarker">/templates/html/inspectionBook/list.ftl</result>
 		</action>
 		
-		<action name="predefinedLocation" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocations" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>
 
@@ -1948,29 +1948,7 @@
 			<result name="error" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 		</action>		
-		
-		<action name="predefinedLocationLevels" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
-			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="success" type="freemarker">/templates/html/location/level/list.ftl</result>
-		</action>
-		
-		<action name="predefinedLocationLevelCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
-			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="success" type="redirectAction">predefinedLocationLevels</result>
-		</action>
-		
-		<action name="predefinedLocationLevelDelete" method="delete" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
-			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="success" type="redirectAction">predefinedLocationLevels</result>
-		</action>
-		
-		<action name="predefinedLocationLevelUpdate" method="update" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
-			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="success" type="redirectAction">predefinedLocationLevels</result>
-		</action>
 	</package>
+	
+	<include file="locationPackageStruts.xml"/>
 </struts>

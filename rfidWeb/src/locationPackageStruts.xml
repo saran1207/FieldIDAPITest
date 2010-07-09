@@ -1,0 +1,33 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<package name="location" extends="web" namespace="/">
+		<action name="predefinedLocationLevels" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
+			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/location/level/list.ftl</result>
+		</action>
+		
+		<action name="predefinedLocationLevelCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
+			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="success" type="redirectAction">predefinedLocationLevels</result>
+		</action>
+		
+		<action name="predefinedLocationLevelDelete" method="delete" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
+			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="success" type="redirectAction">predefinedLocationLevels</result>
+		</action>
+		
+		<action name="predefinedLocationLevelUpdate" method="update" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
+			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
+			<result name="success" type="redirectAction">predefinedLocationLevels</result>
+		</action>
+	</package>
+</struts>
+		
