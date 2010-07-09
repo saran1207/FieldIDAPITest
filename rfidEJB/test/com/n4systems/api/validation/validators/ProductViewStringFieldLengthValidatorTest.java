@@ -101,6 +101,20 @@ public class ProductViewStringFieldLengthValidatorTest {
 		assertThat(validationResult.getMessage(), allOf(containsString("the_field"), containsString("255")));
 	}
 	
+	
+	@Test
+	public void should_pass_validation_when_the_field_value_is_null() throws Exception {
+		ProductViewStringFieldLengthValidator sut = new ProductViewStringFieldLengthValidator() {
+			protected Field getField() {
+				return Reflector.findField(TestModel.class, "defaultLengthField"); 
+			}
+		};
+		
+		String emptyCell = null;
+		assertTrue(sut.validate(emptyCell, null, null, null, null).isPassed());
+	}
+	
+	
 	private String bigString(int size) {
 		String str = "";
 		for (int i = 0; i < size; i++) {

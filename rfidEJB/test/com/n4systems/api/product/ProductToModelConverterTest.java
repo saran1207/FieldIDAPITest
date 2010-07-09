@@ -138,7 +138,7 @@ public class ProductToModelConverterTest {
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
-		expect(orgLoader.createAndSave(view.getShopOrder(), tenant, transaction)).andReturn(line);
+		expect(orgLoader.createAndSave(view.getShopOrder(), tenant)).andReturn(line);
 		replay(orgLoader);
 		
 		Product product = converter.toModel(view, transaction);

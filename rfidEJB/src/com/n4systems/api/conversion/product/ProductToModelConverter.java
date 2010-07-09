@@ -87,7 +87,14 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 	}
 
 	private LineItem createShopOrder(String orderNumber, Tenant tenant, Transaction transaction) {
-		return (orderNumber != null) ? nonIntegrationOrderManager.createAndSave(orderNumber, tenant, transaction) : null;
+		/*
+		 * TODO: refactor to use the existing transaction once the legacy product manager gets off ejb  and the product saver in the importer is using the same transaction as the converter to do the work.
+		 * 
+		 * The problem here is that the ProductSaveService is running inside it's own transaction so if we use the 
+		 * existing transaction here, the non integration order will not have been committed by time the product
+		 * save service tries to look it up by id.
+		 */
+		return (orderNumber != null) ? nonIntegrationOrderManager.createAndSave(orderNumber, tenant) : null;
 	}
 	
 	private ProductStatusBean resolveProductStatus(String productStatus, Transaction transaction) {

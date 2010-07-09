@@ -48,7 +48,7 @@ public abstract class ProductViewStringFieldLengthValidator  implements FieldVal
 		gaurd(fieldValue);
 		
 		
-		if (((String) fieldValue).length() <= maxLength) {
+		if (fieldValue == null ||	((String) fieldValue).length() <= maxLength) {
 			return ValidationResult.pass();
 		} else {
 			return ValidationResult.fail(ProductViewStringLengthValidatorFail, fieldName, maxLength);
@@ -56,7 +56,7 @@ public abstract class ProductViewStringFieldLengthValidator  implements FieldVal
 	}
 
 	private void gaurd(Object fieldValue) {
-		if (!(fieldValue instanceof String)) {
+		if (fieldValue != null && !(fieldValue instanceof String)) {
 			throw new Defect("this validator may only operate on a string field.");
 		}
 		
