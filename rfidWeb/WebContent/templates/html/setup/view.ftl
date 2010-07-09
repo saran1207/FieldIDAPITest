@@ -74,7 +74,7 @@
 			</p>
 			
 			<p>
-				<label><a href="<@s.url action="predefinedLocations"/>" ><@s.text name="title.manage_locations" /></a></label>
+				<label><a href="<@s.url action="predefinedLocations"/>" ><@s.text name="title.manage_predefined_locations.plural" /></a></label>
 				<span>Manage your location hierarchy.</span>
 			</p>
 			
