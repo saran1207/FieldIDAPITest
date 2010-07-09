@@ -52,7 +52,7 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	private String purchaseOrder;
 	
 	
-	private Location location;
+	private Location location = new Location();
 	
     @ManyToOne(optional = true)
     @JoinColumn(name = "assigneduser_id")
