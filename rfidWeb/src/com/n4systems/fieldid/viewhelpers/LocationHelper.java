@@ -93,7 +93,7 @@ public class LocationHelper {
 
 
 	private void addFreeform(Stack<String> names, Location location) {
-		if (location.hasFreeForm()) { 
+		if (location.hasFreeform()) { 
 			names.push(location.getFreeformLocation());
 		}
 	}

@@ -25,15 +25,15 @@ public class Location {
 	private String freeformLocation;
 
 	public Location() {
-		
 		this(null, null);
 	}
 
 	public Location(PredefinedLocation predefinedLocation, String freeformLocation) {
 		super();
 		this.predefinedLocation = predefinedLocation;
-		this.freeformLocation = freeformLocation;
+		this.freeformLocation = freeformLocation == null ? "" : freeformLocation;
 	}
+	
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public PredefinedLocation getPredefinedLocation() {
 		return predefinedLocation;
@@ -56,7 +56,7 @@ public class Location {
 		return new Location(predefinedLocation, freeformLocation);
 	}
 
-	public boolean hasFreeForm() {
+	public boolean hasFreeform() {
 		return freeformLocation != null && !freeformLocation.isEmpty();
 	}
 
