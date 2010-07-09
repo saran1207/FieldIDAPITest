@@ -5,7 +5,6 @@ import static com.n4systems.util.ServiceLocator.*;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Product;
-import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.FilteredIdLoader;

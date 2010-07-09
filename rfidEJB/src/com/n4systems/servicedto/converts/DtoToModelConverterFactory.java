@@ -1,9 +1,6 @@
 package com.n4systems.servicedto.converts;
 
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class DtoToModelConverterFactory {
 

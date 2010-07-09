@@ -68,7 +68,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
-import com.n4systems.servicedto.converts.LocationServiceDTOConverter;
 import com.n4systems.servicedto.converts.LocationToLocationServiceDTOConverter;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
