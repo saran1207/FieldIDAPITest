@@ -17,10 +17,10 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
-import com.n4systems.uitags.views.HeirarchicalNode;
+import com.n4systems.uitags.views.HierarchicalNode;
 
 
-public class LocationTreeToNodeTreeConverterTest {
+public class LocationTreeToHierarchicalNodesConverterTest {
 	private class TreeStats {
 		private int maxDepth = 0;
 		private int nodeCount = 0;
@@ -57,14 +57,14 @@ public class LocationTreeToNodeTreeConverterTest {
 
 	@Test(expected=RuntimeException.class)
 	public void should_fail_if_the_tree_is_null() throws Exception {
-		new LocationTreeToHeirarchicalNodesConverter().convert(null, new PredefinedLocationLevels());
+		new LocationTreeToHierarchicalNodesConverter().convert(null, new PredefinedLocationLevels());
 	}
 	
 	
 	@Test
 	public void should_convert_an_empty_location_tree_into_an_empty_list_of_nodes() throws Exception {
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(anEmtpyPredefinedLocationTree(), new PredefinedLocationLevels());
-		assertThat(convertedTree, anEmptyList(HeirarchicalNode.class));
+		List<HierarchicalNode> convertedTree = new LocationTreeToHierarchicalNodesConverter().convert(anEmtpyPredefinedLocationTree(), new PredefinedLocationLevels());
+		assertThat(convertedTree, anEmptyList(HierarchicalNode.class));
 	}
 	
 	
@@ -78,7 +78,7 @@ public class LocationTreeToNodeTreeConverterTest {
 		
 		locationTree.addNode(new PredefinedLocationTreeNode(locationNode));
 		
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
+		List<HierarchicalNode> convertedTree = new LocationTreeToHierarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
 		
 		assertThat(new ArrayList<Object>(convertedTree), hasItem(node("name", 1L)));
 	}
@@ -98,7 +98,7 @@ public class LocationTreeToNodeTreeConverterTest {
 		PredefinedLocationTree locationTree = aPredefinedLocationTreeWithTopLevelLocations(locationNode);
 		
 		
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
+		List<HierarchicalNode> convertedTree = new LocationTreeToHierarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
 		
 		assertThat(convertedTree, hasNodeTree(3,3));
 	}
@@ -117,7 +117,7 @@ public class LocationTreeToNodeTreeConverterTest {
 		
 		PredefinedLocationTree locationTree = aPredefinedLocationTreeWithTopLevelLocations(locationNode_Bob, locationNode_mark, locationNode_alex, locationNode_Matt, locationNode_47_fraiser);
 		
-		List<HeirarchicalNode> convertedTree = new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
+		List<HierarchicalNode> convertedTree = new LocationTreeToHierarchicalNodesConverter().convert(locationTree, new PredefinedLocationLevels());
 		
 		assertThat((Iterable<?>)convertedTree, contains(hasProperty("name", equalTo("47 fraiser st")),
 										hasProperty("name", equalTo("alex")),
@@ -180,16 +180,16 @@ public class LocationTreeToNodeTreeConverterTest {
 	
 	
 
-	private Matcher<List<HeirarchicalNode>> hasNodeTree(final int totalNodes, final int maxDepth) {
+	private Matcher<List<HierarchicalNode>> hasNodeTree(final int totalNodes, final int maxDepth) {
 		
-		return new TypeSafeMatcher<List<HeirarchicalNode>>() {
+		return new TypeSafeMatcher<List<HierarchicalNode>>() {
 
 			@Override
-			public boolean matchesSafely(List<HeirarchicalNode> item) {
+			public boolean matchesSafely(List<HierarchicalNode> item) {
 				TreeStats stats;
 				stats = new TreeStats();
 				
-				for (HeirarchicalNode basicNode : item) {
+				for (HierarchicalNode basicNode : item) {
 					stats.incrementNodeCount();
 					getStatsForNode(stats, basicNode, 1);
 				}
@@ -198,9 +198,9 @@ public class LocationTreeToNodeTreeConverterTest {
 				return (stats.maxDepth == maxDepth && stats.nodeCount == maxDepth);
 			}
 
-			private void getStatsForNode(TreeStats stats, HeirarchicalNode basicNode, int level) {
+			private void getStatsForNode(TreeStats stats, HierarchicalNode basicNode, int level) {
 				stats.atDepth(level);
-				for (HeirarchicalNode child : basicNode.getChildren()) {
+				for (HierarchicalNode child : basicNode.getChildren()) {
 					stats.incrementNodeCount();
 					getStatsForNode(stats, child, level + 1);
 				}

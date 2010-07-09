@@ -16,7 +16,7 @@ public class N4TagModels {
     private IncludeStyleModel includeStyle;
     private OrgPickerModel orgPicker;
     private SafetyNetworkSmartSearchModel safetyNetworkSmartSearch;
-    private HeirarchicalListModel dynamicLocation;
+    private HierarchicalListModel dynamicLocation;
 	private LocationModel location;
     
 	public N4TagModels(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
@@ -62,9 +62,9 @@ public class N4TagModels {
     	return safetyNetworkSmartSearch;
     }
     
-    public HeirarchicalListModel getHeirarchicalList() {
+    public HierarchicalListModel getHierarchicalList() {
 		if (dynamicLocation==null){
-			dynamicLocation = new HeirarchicalListModel(stack, req, res);
+			dynamicLocation = new HierarchicalListModel(stack, req, res);
 		}
     	return dynamicLocation;
 	}

@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class HeirarchicalNode {
+public class HierarchicalNode {
 	private String name;
 	private Long id;
 	
 	private String levelName;
 	
-	private final List<HeirarchicalNode> children = new ArrayList<HeirarchicalNode>();
+	private final List<HierarchicalNode> children = new ArrayList<HierarchicalNode>();
 	
 	
 	public String getLevelName() {
@@ -26,15 +26,15 @@ public class HeirarchicalNode {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<HeirarchicalNode> getChildren() {
+	public List<HierarchicalNode> getChildren() {
 		return children;
 	}
 	
-	public void addChild(HeirarchicalNode child) {
+	public void addChild(HierarchicalNode child) {
 		children.add(child);
 	}
 	
-	public void addChildren(List<HeirarchicalNode> children) {
+	public void addChildren(List<HierarchicalNode> children) {
 		this.children.addAll(children);
 	}
 	

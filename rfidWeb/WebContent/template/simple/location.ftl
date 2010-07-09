@@ -11,7 +11,7 @@
 	
 	<div id="${parameters.id}_locationSelection" class="locationSelection offScreen">
 		<label for="predefinedLocation"><@s.text name="label.predefined_location"/></label><br/>
-		<@n4.heirarchicalList id="${parameters.id}_predefinedLocationSelector" nodesList=helper.predefinedLocationTree name="asset.location.predefinedLocationId" />
+		<@n4.hierarchicalList id="${parameters.id}_predefinedLocationSelector" nodesList=helper.predefinedLocationTree name="asset.location.predefinedLocationId" />
 
 		<label for="freeformLocationInput"><@s.text name="label.freeform_location"/></label><br/>
 		<@s.textfield id="${parameters.id}_freeformInput" name="freeformLocationInput" value="%{${parameters.name}.freeformLocation}" theme="simple"/>

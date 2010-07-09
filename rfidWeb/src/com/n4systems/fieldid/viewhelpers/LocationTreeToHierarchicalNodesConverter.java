@@ -9,17 +9,17 @@ import java.util.Set;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
-import com.n4systems.uitags.views.HeirarchicalNode;
+import com.n4systems.uitags.views.HierarchicalNode;
 
-public class LocationTreeToHeirarchicalNodesConverter {
+public class LocationTreeToHierarchicalNodesConverter {
 	
 
-	public List<HeirarchicalNode> convert(PredefinedLocationTree tree, PredefinedLocationLevels levels) {
+	public List<HierarchicalNode> convert(PredefinedLocationTree tree, PredefinedLocationLevels levels) {
 		return childList(tree.getNodes(), levels);
 	}
 
-	public HeirarchicalNode convertLocationToNode(PredefinedLocationTreeNode location, PredefinedLocationLevels levels) {
-		HeirarchicalNode node = new HeirarchicalNode();
+	public HierarchicalNode convertLocationToNode(PredefinedLocationTreeNode location, PredefinedLocationLevels levels) {
+		HierarchicalNode node = new HierarchicalNode();
 		node.setName(location.getName());
 		node.setId(location.getId());
 		node.setLevelName(levels.getNameForLevel(location).getName());
@@ -29,8 +29,8 @@ public class LocationTreeToHeirarchicalNodesConverter {
 		return node;
 	}
 
-	private List<HeirarchicalNode> childList(Set<PredefinedLocationTreeNode> nextLevel, PredefinedLocationLevels levels) {
-		List<HeirarchicalNode> children = new ArrayList<HeirarchicalNode>();
+	private List<HierarchicalNode> childList(Set<PredefinedLocationTreeNode> nextLevel, PredefinedLocationLevels levels) {
+		List<HierarchicalNode> children = new ArrayList<HierarchicalNode>();
 		for (PredefinedLocationTreeNode child : nextLevel) {
 			children.add(convertLocationToNode(child, levels));
 		}
@@ -39,10 +39,10 @@ public class LocationTreeToHeirarchicalNodesConverter {
 		return children;
 	}
 
-	private void sortNodesAlphabetically(List<HeirarchicalNode> children) {
+	private void sortNodesAlphabetically(List<HierarchicalNode> children) {
 		Collections.sort(children, 
-			new Comparator<HeirarchicalNode>() {
-				public int compare(HeirarchicalNode o1, HeirarchicalNode o2) {
+			new Comparator<HierarchicalNode>() {
+				public int compare(HierarchicalNode o1, HierarchicalNode o2) {
 					return o1.getName().compareToIgnoreCase(o2.getName());
 				}
 			});

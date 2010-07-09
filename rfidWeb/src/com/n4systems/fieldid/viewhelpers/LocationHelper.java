@@ -12,7 +12,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.Transactor;
 import com.n4systems.persistence.UnitOfWork;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.uitags.views.HeirarchicalNode;
+import com.n4systems.uitags.views.HierarchicalNode;
 
 public class LocationHelper {
 
@@ -24,12 +24,12 @@ public class LocationHelper {
 		this.transactor = transactor;
 	}
 
-	public List<HeirarchicalNode> getPredefinedLocationTree() {
-		return  transactor.execute(new UnitOfWork<List<HeirarchicalNode>>() {
-			public List<HeirarchicalNode> run(Transaction transaction) {
+	public List<HierarchicalNode> getPredefinedLocationTree() {
+		return  transactor.execute(new UnitOfWork<List<HierarchicalNode>>() {
+			public List<HierarchicalNode> run(Transaction transaction) {
 				PredefinedLocationTree locationTree = factory.createPredefinedLocationTreeLoader().load(transaction);
 				PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
-				return new LocationTreeToHeirarchicalNodesConverter().convert(locationTree, levels);
+				return new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
 			}
 		});
 	 

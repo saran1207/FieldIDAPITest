@@ -6,7 +6,7 @@
 		<#list orgs.list as org>
 			<div class="orgSearchResult">
 				<div class="searchedName" ><a href="#" org="${org.id}" orgName="${org.displayName?html}" >${org.name?html}</a></div>
-				<div class="heirarchy">
+				<div class="hierarchy">
 					${org.primaryOrg.name?html} ${(" | " + org.secondaryOrg.name?html)!} ${(" | " + org.customerOrg.name?html)!}${(" | " + org.divisionOrg.name?html)!}
 				</div> 
 			</div>

@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.components.UIBean;
 import com.opensymphony.xwork2.util.ValueStack;
 
-public class HeirarchicalListComponent extends UIBean {
+public class HierarchicalListComponent extends UIBean {
 	
-	public static final String TEMPLATE = "heirarchicalList";
+	public static final String TEMPLATE = "hierarchicalList";
  
-	private List<HeirarchicalNode> nodesList;
+	private List<HierarchicalNode> nodesList;
 	
-	public HeirarchicalListComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
+	public HierarchicalListComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
 	}
 
@@ -30,11 +30,11 @@ public class HeirarchicalListComponent extends UIBean {
 		addParameter("nodesList", nodesList);
 	}
 
-	public void setNodesList(List<HeirarchicalNode> list){
-		nodesList = new ArrayList<HeirarchicalNode>(list);
+	public void setNodesList(List<HierarchicalNode> list){
+		nodesList = new ArrayList<HierarchicalNode>(list);
 	}
 	
-	public List<HeirarchicalNode> getNodesList(){
+	public List<HierarchicalNode> getNodesList(){
 		return  nodesList;
 	}
 

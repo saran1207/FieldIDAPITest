@@ -8,15 +8,15 @@ import org.apache.struts2.views.freemarker.tags.TagModel;
 
 import com.opensymphony.xwork2.util.ValueStack;
 
-public class HeirarchicalListModel extends TagModel {
+public class HierarchicalListModel extends TagModel {
 
-	public HeirarchicalListModel(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
+	public HierarchicalListModel(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
 		super(stack, req, res);
 	}
 
 	@Override
 	protected Component getBean() {
-		return new HeirarchicalListComponent(stack, req, res);
+		return new HierarchicalListComponent(stack, req, res);
 	}
 
 

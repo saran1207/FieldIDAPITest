@@ -15,7 +15,7 @@ public class LocationComponent extends UIBean {
 	public static final String TEMPLATE = "location";
 	
 	
-	private List<HeirarchicalNode> nodesList;
+	private List<HierarchicalNode> nodesList;
 	private String fullName = "";
 	
 	public LocationComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
@@ -36,11 +36,11 @@ public class LocationComponent extends UIBean {
 		addParameter("fullName", fullName);
 	}
 
-	public void setNodesList(List<HeirarchicalNode> list){
-		nodesList = new ArrayList<HeirarchicalNode>(list);
+	public void setNodesList(List<HierarchicalNode> list){
+		nodesList = new ArrayList<HierarchicalNode>(list);
 	}
 	
-	public List<HeirarchicalNode> getNodesList(){
+	public List<HierarchicalNode> getNodesList(){
 		return  nodesList;
 	}
 
