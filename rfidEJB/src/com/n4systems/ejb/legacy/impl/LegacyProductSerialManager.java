@@ -244,7 +244,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			detachFromPreviousParent(product, subProduct, modifiedBy);
 
 			subProduct.getProduct().setOwner(product.getOwner());
-			subProduct.getProduct().setLocation(product.getLocation());
+			subProduct.getProduct().setAdvancedLocation(product.getAdvancedLocation());
 			subProduct.getProduct().setAssignedUser(product.getAssignedUser());
 			subProduct.getProduct().setProductStatus(product.getProductStatus());
 			subProduct.setWeight(weight);
