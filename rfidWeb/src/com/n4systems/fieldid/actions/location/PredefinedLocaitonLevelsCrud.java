@@ -6,10 +6,14 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.location.LevelName;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.security.Permissions;
 
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 
 	private PredefinedLocationLevels predefinedLocationLevels;
