@@ -36,7 +36,7 @@ public class IdentifyPageDriver {
 	private String identifyAddGenerateLinkLocator = "xpath=//A[contains(text(),'generate')]";
 	private String identifyAddRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
 	private String identifyAddReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
-	private String identifyAddLocationTextFieldLocator = "xpath=//INPUT[@id='location']";
+	private String identifyAddLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
 	private String identifyAddProductStatusSelectListLocator = "xpath=//SELECT[@id='productCreate_productStatus']";
 	private String identifyAddPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='productCreate_purchaseOrder']";
 	private String identifyAddIdentifiedTextFieldLocator = "xpath=//INPUT[@id='identified']";

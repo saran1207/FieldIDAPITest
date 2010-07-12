@@ -35,7 +35,7 @@ public class AssetPage {
 	private String editAssetGenerateLinkLocator = "xpath=//A[contains(text(),'generate')]";
 	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
 	private String editAssetReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
-	private String editAssetLocationTextFieldLocator = "xpath=//INPUT[@id='location']";
+	private String editAssetLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
 	private String editAssetProductStatusSelectListLocator = "xpath=//SELECT[@id='productUpdate_productStatus']";
 	private String editAssetPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='productUpdate_purchaseOrder']";
 	private String editAssetIdentifiedTextFieldLocator = "xpath=//INPUT[@id='identified']";
