@@ -14,6 +14,7 @@ import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.model.Product;
 import com.n4systems.model.builders.ProductBuilder;
+import com.n4systems.model.location.Location;
 import com.n4systems.test.helpers.FluentArrayList;
 
 
@@ -84,7 +85,7 @@ public class CommonAssetValuesFinderTest {
 	@Test
 	public void should_find_only_the_location_field_is_common_value_when_multiple_assets_only_have_the_location_in_common() throws Exception {
 		
-		ProductBuilder builder = ProductBuilder.aProduct().inLocation("location1").assignedTo(null);
+		ProductBuilder builder = ProductBuilder.aProduct().withAdvancedLocation(new Location(null, "location1")).assignedTo(null);
 		Product asset1 = builder.withOwner(aPrimaryOrg().build()).havingStatus(null).build();
 		Product asset2 = builder.withOwner(aPrimaryOrg().build()).havingStatus(productStatus).build();
 		Product asset3 = builder.withOwner(aPrimaryOrg().build()).havingStatus(null).assignedTo(anEmployee().build()).build();
@@ -92,10 +93,12 @@ public class CommonAssetValuesFinderTest {
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset1, asset2, asset3));
 		
 		
-		CommonAssetValues expectedCommonValues = new CommonAssetValues("location1", NO_COMMON_OWNER, NO_COMMON_PRODUCT_STATUS, NO_COMMON_ASSIGNMENT);
+		CommonAssetValues expectedCommonValues = new CommonAssetValues(Location.onlyFreeformLocation("location1"), NO_COMMON_OWNER, NO_COMMON_PRODUCT_STATUS, NO_COMMON_ASSIGNMENT);
 		
 		assertThat(sut.findCommonValues(), equalTo(expectedCommonValues));
 	}
+	
+	
 	
 	
 	

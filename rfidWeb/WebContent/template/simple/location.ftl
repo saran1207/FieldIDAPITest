@@ -23,32 +23,32 @@
 	</div>
 	
 	<@n4.includeScript>
-		onDocumentLoad(function() {
-				$('${parameters.id}_locationSelection_select').observe('click', function(event) {
-					event.stop();
-					$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
-					
-					var node = jQuery('#${parameters.id}_predefinedLocationSelector').getSelectedNode();
-					$('${parameters.id}_predefinedLocationId').value = node.id;
-					$('${parameters.id}_freeformLocation').value = $('${parameters.id}_freeformInput').getValue();
-					$('${parameters.id}_locationName').value = node.parentNames.join(" ") + " " + node.name + " " + $('${parameters.id}_freeformInput').getValue();
-					
-					
-				});
+		
+			$('${parameters.id}_locationSelection_select').observe('click', function(event) {
+				event.stop();
+				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
 				
-				$('${parameters.id}_locationSelection_cancel').observe('click', function(event) { event.stop(); 
-					$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
-					$('${parameters.id}_freeformInput').value = $('${parameters.id}_freeFromLocation').getValue();
-					var predefinedLocationId = $('${parameters.id}_predefinedLocationId').getValue(); 
-					jQuery("#${parameters.id}_predefinedLocationSelector").selectNode(predefinedLocationId);
-					
-				});
+				var node = jQuery('#${parameters.id}_predefinedLocationSelector').getSelectedNode();
+				$('${parameters.id}_predefinedLocationId').value = node.id;
+				$('${parameters.id}_freeformLocation').value = $('${parameters.id}_freeformInput').getValue();
+				$('${parameters.id}_locationName').value = node.parentNames.join(" ") + " " + node.name + " " + $('${parameters.id}_freeformInput').getValue();
 				
-				$('${parameters.id}_showLocationSelection').observe('click', function(event) {
-						event.stop();
-						$('${parameters.id}_locationSelection').removeClassName('offScreen');
-						translate($('${parameters.id}_locationSelection'), $('${parameters.id}_showLocationSelection'), 0, 0);
-					});
+				
 			});
+			
+			$('${parameters.id}_locationSelection_cancel').observe('click', function(event) { event.stop(); 
+				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
+				$('${parameters.id}_freeformInput').value = $('${parameters.id}_freeformLocation').getValue();
+				var predefinedLocationId = $('${parameters.id}_predefinedLocationId').getValue(); 
+				jQuery("#${parameters.id}_predefinedLocationSelector").selectNode(predefinedLocationId);
+				
+			});
+			
+			$('${parameters.id}_showLocationSelection').observe('click', function(event) {
+					event.stop();
+					$('${parameters.id}_locationSelection').removeClassName('offScreen');
+					translate($('${parameters.id}_locationSelection'), $('${parameters.id}_showLocationSelection'), 0, 0);
+				});
+		
 	</@n4.includeScript>
 </#if>

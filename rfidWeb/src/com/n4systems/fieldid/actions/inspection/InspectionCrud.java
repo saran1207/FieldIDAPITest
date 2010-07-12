@@ -29,11 +29,12 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
+import com.n4systems.fieldid.actions.helpers.InspectionCrudHelper;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.actions.inspection.viewmodel.ScheduleToWebInspectionScheduleConverter;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebInspectionScheduleToInspectionScheduleBundleConverter;
-import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspection;
+import com.n4systems.fieldid.actions.inspection.viewmodel.InspectionWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
@@ -115,7 +116,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private List<InspectionSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
 	
-	private WebModifiedableInspection modifiableInspection;
+	private InspectionWebModel modifiableInspection;
 
 	private Map<String, String> encodedInfoOptionMap = new HashMap<String, String>(); 
 
@@ -184,7 +185,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@Override
 	protected void postInit() {
 		super.postInit();
-		modifiableInspection = new WebModifiedableInspection(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter());
+		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
+		overrideHelper(new InspectionCrudHelper(getLoaderFactory()));
 	}
 	
 
@@ -268,7 +270,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		// set defaults.
 		inspection.setProductStatus(product.getProductStatus());
 		inspection.setOwner(product.getOwner());
-		inspection.setLocation(product.getLocation());
+		inspection.setAdvancedLocation(product.getAdvancedLocation());
 		inspection.setDate(DateHelper.getTodayWithTime());
 		setPerformedBy(getSessionUser().getUniqueID());
 		inspection.setPrintable(inspection.getType().isPrintable());
@@ -970,7 +972,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	@VisitorFieldValidator(message = "")
-	public WebModifiedableInspection getModifiableInspection() {
+	public InspectionWebModel getModifiableInspection() {
 		if (modifiableInspection == null) {
 			throw new NullPointerException("action has not been initialized.");
 		}

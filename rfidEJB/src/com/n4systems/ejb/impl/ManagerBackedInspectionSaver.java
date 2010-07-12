@@ -193,7 +193,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	private void ownershipUpdates(Inspection inspection, Product product) {
 		product.setOwner(inspection.getOwner());
-		product.setLocation(inspection.getLocation());
+		product.setAdvancedLocation(inspection.getAdvancedLocation());
 	}
 	
 	
@@ -202,7 +202,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		InspectionSchedule schedule = inspection.getSchedule();
 		if (schedule != null) {
 			schedule.setOwner(inspection.getOwner());
-			schedule.setLocation(inspection.getLocation());
+			schedule.setAdvancedLocation(inspection.getAdvancedLocation());
 			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
 		}
 	}

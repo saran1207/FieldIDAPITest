@@ -1,5 +1,6 @@
 <head>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 </head>
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <@s.hidden name="productId"/>
@@ -35,10 +36,10 @@
 		<span><@n4.orgPicker name="modifiableInspection.owner" required="true" id="ownerId" /></span>
 	</p>	
 	
-	<p>
+	<div class="infoSet">
 		<label><@s.text name="label.location"/></label>
-		<span><@s.textfield name="modifiableInspection.location" /></span>
-	</p>
+		<div class="fieldHolder"><@n4.location name="modifiableInspection.location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableInspection.location)}" theme="simple"/></div>
+	</div>
 </#if>
 
 <h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>

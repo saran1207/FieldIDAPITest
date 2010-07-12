@@ -54,7 +54,6 @@ public class ProductViewModeConverter {
 			model.setProductStatus(resolveProductStatus(view.getProductStatus()));
 			model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), primaryOrg));
 			model.setIdentified(view.getIdentified());
-			model.setLocation(view.getLocation());
 			model.setPurchaseOrder(view.getPurchaseOrder());
 			model.setComments(view.getComments());
 			

@@ -27,6 +27,7 @@ import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.NetworkAccessLevel;
@@ -49,7 +50,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return new SecurityDefiner("tenant.id", "product.owner", null, "state");
 	}
 	
-	private String location;
+	private Location advancedLocation = new Location();
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -99,11 +100,11 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 
 	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getLocation() {
-		return location;
+		return advancedLocation.getFreeformLocation();
 	}
 
 	public void setLocation(String location) {
-		this.location = location;
+		advancedLocation = Location.onlyFreeformLocation(location);
 	}
 
 	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
@@ -362,6 +363,17 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	protected void onUpdate() {
 		super.onUpdate();
 		normalizeAssignmentForPersistence();
+	}
+
+	public Location getAdvancedLocation() {
+		return advancedLocation;
+	}
+
+	public void setAdvancedLocation(Location advancedLocation) {
+		if (advancedLocation == null) {
+			advancedLocation = new Location();
+		}
+		this.advancedLocation = advancedLocation;
 	}
 
 	

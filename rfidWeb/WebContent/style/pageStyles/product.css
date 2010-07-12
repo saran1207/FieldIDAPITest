@@ -21,11 +21,4 @@ h2 {
 }
 
 
-.locationSelection {
-	position:absolute;
-	left: -10000px;
-	background-color:#fff;
-	width:450px;
-	padding:4px;
-	border: 1px solid #333;
-}
+

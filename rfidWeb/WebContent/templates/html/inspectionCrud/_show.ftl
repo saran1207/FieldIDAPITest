@@ -66,7 +66,7 @@
 	
 	<p>
 		<label><@s.text name="label.location"/></label>
-		<span>${inspection.location!?html}</span>
+		<span>${helper.getFullNameOfLocation(inspection.advancedLocation)!?html}</span>
 	</p>
 	
 	<h2>${inspectionType.name?html} <@s.text name="label.information"/></h2>

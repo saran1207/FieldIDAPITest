@@ -89,7 +89,8 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				}
 
 				if (paramKey.equals("location")) {
-					updateJpql += ", location = :" + paramKey;
+					updateJpql += ", advancedLocation.freeformLocation = :" + paramKey;
+					updateJpql += ", advancedLocation.predefinedLocation = NULL";
 					bindParams.put(paramKey, inspectionSchedule.getLocation());
 				}
 				
@@ -288,7 +289,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	private void updateCompletedInspectionOwnership(List<Long> ids, Inspection inspection, Map<String, Boolean> fieldMap) throws UpdateFailureException {
 		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
 		
-		Map<String, Boolean> selectedAttributes = getOwnerShipSelectedAttributes(fieldMap);
+		Map<String, Boolean> selectedAttributes = getOwnershipSelectedAttributes(fieldMap);
 		
 		InspectionSchedule schedule = new InspectionSchedule();
 		
@@ -308,7 +309,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return keys;
 	}
 
-	private Map<String, Boolean> getOwnerShipSelectedAttributes(Map<String, Boolean> values) {
+	private Map<String, Boolean> getOwnershipSelectedAttributes(Map<String, Boolean> values) {
 		Map<String, Boolean> selectedAttributes = new HashMap<String, Boolean>();
 		selectedAttributes.put("owner", (values.get("owner") != null) ? values.get("owner") : false );
 		selectedAttributes.put("location", (values.get("location") != null) ? values.get("location") : false);

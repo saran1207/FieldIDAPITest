@@ -18,3 +18,4 @@ $('continueButton').observe("click", function(){
 });
 						 
 attachOrgEvents("#step2");
+

@@ -27,6 +27,7 @@
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<@n4.includeScript src="commentTemplates"/>
 		
 	<@n4.includeScript>

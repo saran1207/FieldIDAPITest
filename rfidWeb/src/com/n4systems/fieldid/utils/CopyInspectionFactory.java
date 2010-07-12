@@ -29,7 +29,7 @@ public class CopyInspectionFactory {
 		newInspection.setBook( inspection.getBook() );
 		newInspection.setGroup( inspection.getGroup() );
 		newInspection.setPerformedBy( inspection.getPerformedBy() );
-		newInspection.setLocation( inspection.getLocation() );
+		newInspection.setAdvancedLocation(inspection.getAdvancedLocation());
 		newInspection.setPrintable( inspection.isPrintable() );
 		if( inspection.isRetired() ) {
 			newInspection.retireEntity();

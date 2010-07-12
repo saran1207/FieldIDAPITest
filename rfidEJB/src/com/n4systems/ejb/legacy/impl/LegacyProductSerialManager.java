@@ -224,7 +224,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			InspectionSchedule schedule = persistenceManager.find(InspectionSchedule.class, id);
 			
 			schedule.setOwner(product.getOwner());
-			schedule.setLocation(product.getLocation());
+			schedule.setAdvancedLocation(product.getAdvancedLocation());
 			
 			persistenceManager.save(schedule);
 		}

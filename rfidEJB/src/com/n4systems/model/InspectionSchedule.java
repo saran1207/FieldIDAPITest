@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -87,7 +88,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	@OneToOne
 	private Inspection inspection;
 
-	private String location;
+	private Location advancedLocation = new Location();
 
 	@ManyToOne()
 	private Project project;
@@ -103,9 +104,9 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 
 	public InspectionSchedule(Product product, InspectionType inspectionType, Date scheduledDate) {
 		this.setTenant(product.getTenant());
-		setProduct(product);
+		this.setProduct(product);
 		this.inspectionType = inspectionType;
-		nextDate = scheduledDate;
+		this.nextDate = scheduledDate;
 	}
 
 	public InspectionSchedule(Inspection inspection) {
@@ -131,7 +132,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	private void updateOwnershipToProduct() {
-		setLocation(product.getLocation());
+		setAdvancedLocation(product.getAdvancedLocation());
 		setOwner(product.getOwner());
 	}
 
@@ -236,7 +237,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		this.inspection = inspection;
 		completedDate = new Date();
 		status = ScheduleStatus.COMPLETED;
-		location = inspection.getLocation();
+		advancedLocation = inspection.getAdvancedLocation();
 		setOwner(inspection.getOwner());
 	}
 
@@ -277,12 +278,9 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 
 	@NetworkAccessLevel(SecurityLevel.DIRECT)
 	public String getLocation() {
-		return location;
+		return advancedLocation.getFreeformLocation();
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
@@ -302,6 +300,16 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 	public void setMobileGUID(String mobileGUID) {
 		this.mobileGUID = mobileGUID;
+	}
+
+	
+	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	public Location getAdvancedLocation() {
+		return advancedLocation;
+	}
+
+	public void setAdvancedLocation(Location advancedLocation) {
+		this.advancedLocation = advancedLocation;
 	}
 	
 

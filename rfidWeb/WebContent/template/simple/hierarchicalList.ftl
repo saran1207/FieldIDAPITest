@@ -23,10 +23,8 @@
 	</#list>
   </ul> 
   
-  <script type="text/javascript" charset="utf-8">
-    jQuery(document).ready(function(){
-      jQuery('#${parameters.id}').columnview({defaultSelection:'${parameters.nameValue!"-1"}'});
-    });
-  </script>
+  <@n4.includeScript>
+    jQuery('#${parameters.id}').columnview({defaultSelection:'${parameters.nameValue!"-1"}'});
+  </@n4.includeScript>
 
 

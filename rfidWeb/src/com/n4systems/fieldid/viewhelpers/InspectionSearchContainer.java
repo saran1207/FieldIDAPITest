@@ -53,7 +53,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addStringTerm("product.shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("product.purchaseOrder", purchaseOrder);
 		addStringTerm("product.customerRefNumber", referenceNumber);
-		addWildcardTerm("location", location);
+		addWildcardTerm("advancedLocation.freeformLocation", location);
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);

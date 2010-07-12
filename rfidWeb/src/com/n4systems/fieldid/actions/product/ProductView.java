@@ -17,7 +17,6 @@ public class ProductView implements Serializable, HasOwner {
 	private Long assignedUser;
 	private Long productStatus;
 	private Long productTypeId;
-	private String location;
 	private String purchaseOrder;
 	private String nonIntegrationOrderNumber;
 	private String comments;
@@ -59,13 +58,6 @@ public class ProductView implements Serializable, HasOwner {
 		this.productTypeId = productTypeId;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
 
 	public String getPurchaseOrder() {
 		return purchaseOrder;

@@ -13,7 +13,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.inspection.viewmodel.WebModifiedableInspection;
+import com.n4systems.fieldid.actions.helpers.MultiInspectActionHelper;
+import com.n4systems.fieldid.actions.inspection.viewmodel.InspectionWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
@@ -57,7 +58,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private List<ProductStatusBean> productStatuses;
 	private CommonInspectionTypeHandler commonInspectionTypeHandler;
 	private CommonAssetValues commonAssetValues;
-	private WebModifiedableInspection modifiableInspection;
+	private InspectionWebModel modifiableInspection;
 	private MultiInspectGroupSorter multiInspectGroupSorter;
 	private List<Listable<Long>> employees;
 	
@@ -85,7 +86,8 @@ public class MultiInspectAction extends AbstractCrud {
 	protected void postInit() {
 		super.postInit();
 		commonInspectionTypeHandler = createCommonInspectionTypeHandler();
-		modifiableInspection = new WebModifiedableInspection(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter());
+		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
+		overrideHelper(new MultiInspectActionHelper(getLoaderFactory()));
 	}
 	
 	public void testDependancies() {
@@ -112,10 +114,13 @@ public class MultiInspectAction extends AbstractCrud {
 		
 		commonAssetValues = new CommonAssetValuesFinder(getAssets()).findCommonValues();
 		inspection.setOwner(commonAssetValues.owner);
-		inspection.setLocation(commonAssetValues.location);
+		if (commonAssetValues.hasCommonLocation()) {
+			inspection.setAdvancedLocation(commonAssetValues.location);
+		}
 		modifiableInspection.updateValuesToMatch(inspection);
 		
 		return SUCCESS;
+		
 	}
 	
 	
@@ -223,7 +228,7 @@ public class MultiInspectAction extends AbstractCrud {
 	
 
 	@VisitorFieldValidator(message="")
-	public WebModifiedableInspection getModifiableInspection() {
+	public InspectionWebModel getModifiableInspection() {
 		if (modifiableInspection == null) {
 			throw new NullPointerException("action has not been initialized.");
 		}

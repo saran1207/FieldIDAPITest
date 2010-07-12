@@ -41,7 +41,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addStringTerm("product.rfidNumber", rfidNumber);
 		addWildcardTerm("product.serialNumber", serialNumber);
 		addWildcardTerm("product.shopOrder.order.orderNumber", orderNumber);
-		addWildcardTerm("location", location);
+		addWildcardTerm("advancedLocation.freeformLocation", location);
 		addStringTerm("product.purchaseOrder", purchaseOrder);
 		addStringTerm("product.customerRefNumber", referenceNumber);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);

@@ -18,7 +18,9 @@
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.location"/></label>
-		<@s.textfield name="modifiableInspection.location" />
+		<div class="fieldHolder">
+			<@n4.location name="modifiableInspection.location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableInspection.location)}"  theme="simple"/>
+		</div>
 	</div>
 	
 	<h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>
