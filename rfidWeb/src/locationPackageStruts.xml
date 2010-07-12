@@ -5,6 +5,29 @@
 <struts><!-- Configuration for the default package. -->
 
 	<package name="location" extends="web" namespace="/">
+	
+		<action name="predefinedLocations" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
+		</action>		
+
+		<action name="predefinedLocationsAdd" method="add" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
+		</action>
+		
+		<action name="predefinedLocationEdit" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="freemarker">/templates/html/location/edit/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/location/edit/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/edit/edit.ftl</result>
+		</action>
+		
+		<action name="predefinedLocationDoEdit" method="edit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="redirectAction">predefinedLocationEdit</result>
+			<result name="input" type="freemarker">/templates/html/location/edit/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/edit/edit.ftl</result>
+		</action>
+	
 		<action name="predefinedLocationLevels" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>

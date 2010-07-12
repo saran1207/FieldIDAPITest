@@ -18,13 +18,10 @@ ${action.setPageType('predefined_locations', 'location_edit')!}
 		</script>
 	</head>	
 </#if>
-
-<div class="form">	
-	<@s.form action="predefinedLocationEdit" method="edit" id="predefinedLocationsEdit" theme="fieldid">
-		<label><@s.text name="label.edit_location_description"/></label>
-		<@s.textfield id="nodeFormEdit" name="name" />
-		<@s.hidden id="currentNode" name="nodeId"/>
-		<@s.submit id="editLocation" key="hbutton.edit_location" cssClass="saveButton save"/>
-	</@s.form> 
-</div>
-<button class="button" onclick="return redirect( '<@s.url action="predefinedLocations" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
+<label><@s.text name="label.edit_location_description"/></label>
+<@s.form action="predefinedLocationDoEdit" method="edit" id="predefinedLocationDoEdit" theme="fieldid">
+	<@s.textfield id="nodeFormEdit" name="name" />
+	<@s.hidden id="currentNode" name="nodeId"/>
+	<@s.submit id="editLocation" key="hbutton.edit_location" cssClass="saveButton save"/>
+	<button class="button" onclick="return redirect( '<@s.url action="predefinedLocations" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
+</@s.form> 

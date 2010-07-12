@@ -1028,22 +1028,6 @@
 			</result>
 		</action>
 
-		<action name="predefinedLocations" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
-			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
-		</action>		
-
-		<action name="predefinedLocationsAdd" method="add" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
-			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
-			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
-		</action>
-		
-		<action name="predefinedLocationEdit" method="edit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
-			<result name="success" type="freemarker">/templates/html/location/edit/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/location/edit/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/edit/edit.ftl</result>
-		</action>
-
 		<action name="inspectionBooks" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
 			<result name="success" type="freemarker">/templates/html/inspectionBook/list.ftl</result>
 		</action>
@@ -1060,7 +1044,6 @@
 				<param name="currentPage">${currentPage}</param>
 			</result>
 		</action>
-
 
 		<action name="inspectionBookEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
 			<result name="success" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>

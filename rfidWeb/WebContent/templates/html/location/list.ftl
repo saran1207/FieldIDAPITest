@@ -19,15 +19,10 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 			</script>
 		</head>	
 	</#if>
-<div class="form">
-	<@s.form action="predefinedLocationsAdd" method="add" id="predefinedLocationsAdd" theme="fieldid">
-		<label><@s.text name="label.add_new_location_description"/></label>
-		<@s.textfield id="nodeForm" name="name" />
-		<@s.hidden id="parent" name="parentId"/>
-		<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
-	</@s.form> 
-</div>
-
-
-<!--@s.submit class="button" key="hbutton.save" /-->
-
+	
+<label><@s.text name="label.add_new_location_description"/></label>
+<@s.form action="predefinedLocationsAdd" method="add" id="predefinedLocationsAdd" theme="fieldid">
+	<@s.textfield id="nodeForm" name="name" />
+	<@s.hidden id="parent" name="parentId"/>
+	<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
+</@s.form> 
