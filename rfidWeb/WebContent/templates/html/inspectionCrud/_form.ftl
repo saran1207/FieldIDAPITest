@@ -41,10 +41,10 @@
 	<#include "_attributes.ftl"/>
 
 	<#if inspection.id?exists && action.isParentProduct() >
-		<p>
-			<label><@s.text name="label.result"/></label>
-			<span><@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" /></span>
-		</p>
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.result"/></label>
+			<@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
+		</div>
 	</#if>
 	
 	<#assign formInspection=inspection>
@@ -57,5 +57,6 @@
 	
 	<#include "_postInspectionForm.ftl" />
 		
-	
-	<#include "../common/_attachedFilesForm.ftl" />
+	<div class="attachments">
+		<#include "../common/_attachedFilesForm.ftl" />
+	</div>

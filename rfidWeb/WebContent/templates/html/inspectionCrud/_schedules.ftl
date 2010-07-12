@@ -12,7 +12,7 @@
 </div>
 <div id="emptySchedules" class="infoSet" >
 	<div class="fieldHolder">
-	<@s.text name="label.no_schedules_have_been_created"/>
+		<@s.text name="label.no_schedules_have_been_created"/>
 	</div>
 </div>
 
