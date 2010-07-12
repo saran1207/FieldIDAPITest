@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.actions.location;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -24,7 +21,8 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	private PredefinedLocation parentNode;
 	private String name;
 	private Long parentId;
-	private PredefinedLocationSaver saver; 
+	private Long nodeId;
+	private PredefinedLocationSaver saver;
 
 	public PredefinedLocationCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -33,6 +31,7 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		predefinedLocation = new PredefinedLocation();
+		saver = new PredefinedLocationSaver();
 	}
 
 	@Override
@@ -46,19 +45,12 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
-	public String doEdit() {
-		return SUCCESS;
-	}
-
-	@SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}
 
-	public String doUpdate() {
-		// testRequiredEntities(false);
+	public String doAdd() {
 		try {
-			saver = new PredefinedLocationSaver();
 			predefinedLocation.setParent(getParentNode(getParentId()));
 			predefinedLocation.setName(getName());
 			predefinedLocation.setTenant(getTenant());
@@ -72,6 +64,31 @@ public class PredefinedLocationCrud extends AbstractCrud {
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+	
+	public String doUpdate(){
+		try {
+			predefinedLocation = loadLocation(getNodeId());	
+			predefinedLocation.setName(getName());
+			
+			predefinedLocation= saver.update(predefinedLocation);
+
+			addFlashMessageText("message.location_updated");
+		} catch (Exception e) {
+			logger.error("could not update predefined location", e);
+			addActionErrorText("error.updating_predefined_location");
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+
+	private PredefinedLocation loadLocation(Long nodeId) {
+		try{
+		return getLoaderFactory().createFilteredIdLoader(PredefinedLocation.class).setId(nodeId).load();
+		}catch (Exception e){
+			logger.error("Could Not Load Predefined Location", e);
+		}
+		return null;
 	}
 
 	@RequiredStringValidator(message = "", key = "error.titlerequired")
@@ -95,13 +112,16 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		if (parentId == null) {
 			parentNode = null;
 		} else {
-			parentNode = getLoaderFactory().createFilteredIdLoader(PredefinedLocation.class).setId(parentId).load();
+			parentNode = loadLocation(parentId); 
 		}
 		return parentNode;
 	}
-	
-	private List<PredefinedLocation> getEmpty(){
-		return new ArrayList<PredefinedLocation>();
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
 	}
 
+	public Long getNodeId() {
+		return nodeId;
+	}
 }
