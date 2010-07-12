@@ -13,6 +13,7 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.actions.helpers.MultiAddProductCrudHelper;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
@@ -76,6 +77,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		super.postInit();
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
 		setOwnerId(getSessionUserOwner().getId());
+		overrideHelper(new MultiAddProductCrudHelper(getLoaderFactory()));
 	}
 
 	public String doForm() {
