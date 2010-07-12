@@ -66,7 +66,7 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	public String doUpdate(){
+	public String doEdit(){
 		try {
 			predefinedLocation = loadLocation(getNodeId());	
 			predefinedLocation.setName(getName());
@@ -120,7 +120,7 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	public void setNodeId(Long nodeId) {
 		this.nodeId = nodeId;
 	}
-
+	
 	public Long getNodeId() {
 		return nodeId;
 	}
