@@ -58,6 +58,8 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	private String saveAndInspect;
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
+	private AssetWebModel asset = new AssetWebModel(this);
+	
 	public MultiAddProductCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyProductSerial legacyProductManager) {
 		super(persistenceManager);
 		this.orderManager = orderManager;
@@ -293,6 +295,10 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 
 	public List<Long> getListOfIds() {
 		return listOfIds;
+	}
+
+	public AssetWebModel getAsset() {
+		return asset;
 	}
 	
 }
