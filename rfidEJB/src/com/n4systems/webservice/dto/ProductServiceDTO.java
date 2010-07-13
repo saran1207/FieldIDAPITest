@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements ProductLookupable {
+public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements ProductLookupable, LocationServiceDTO {
 
 	private static final Long UNSET_ID = 0L;
 	private String serialNumber;
