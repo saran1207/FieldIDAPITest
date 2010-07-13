@@ -35,7 +35,7 @@ ${action.setPageType('product', 'traceability')!}
 		</#if>
 		<#include "../common/_displayTenantLogo.ftl"/>&nbsp;${linkedProduct.owner.internalOrg.name}
 	</h2>
-	<div class="viewSection" id="viewSection_${linkedProduct.id}" <#if moreThanOne>style="overflow: hidden; display:none;"</#if> >
+	<div class="viewSection" id="viewSection_${linkedProduct.identifier}" <#if moreThanOne>style="overflow: hidden; display:none;"</#if> >
 	
 		<div class="columnLeft">
 			<div class="viewSection smallViewSection">
