@@ -13,19 +13,19 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.fieldid.actions.helpers.MassUpdateInspectionHelper;
+import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
-import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
-@SuppressWarnings("deprecation")
 @UserPermissionFilter(userRequiresOneOf = { Permissions.EditInspection })
 public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +36,10 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private Inspection inspection = new Inspection();
 
 	private OwnerPicker ownerPicker;
+	
+	private final LocationWebModel location = new LocationWebModel(this); 
 
+	
 	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyProductSerial productSerialManager) {
 		super(massUpdateManager, persistenceManager);
 		this.productSerialManager = productSerialManager;
@@ -44,6 +47,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
+		overrideHelper(new MassUpdateInspectionHelper(getLoaderFactory()));
 	}
 
 	private void applyCriteriaDefaults() {
@@ -79,6 +83,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		}
 
 		try {
+			inspection.setAdvancedLocation(location.createLocation());
 			List<Long> inspectionIds = getSearchIds(criteria, criteria.getSecurityFilter());
 			Long results = massUpdateManager.updateInspections(inspectionIds, inspection, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
@@ -96,14 +101,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		return INPUT;
 	}
 
-	public String getLocation() {
-		return inspection.getAdvancedLocation().getFreeformLocation();
-	}
-
-	public void setLocation(String location) {
-		inspection.setAdvancedLocation(Location.onlyFreeformLocation(location));
-	}
-
+	
 	public Long getInspectionBook() {
 		return (inspection.getBook() == null) ? null : inspection.getBook().getId();
 	}
@@ -143,8 +141,8 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		ownerPicker.setOwnerId(id);
 	}
 
-	public Collection<ProductStatusBean> getProductStatuses() {
-		return productSerialManager.getAllProductStatus(getTenantId());
+	public List<ProductStatusBean> getProductStatuses() {
+		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 
 	public Long getProductStatus() {
@@ -157,5 +155,9 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		} else if (inspection.getProductStatus() == null || !productStatus.equals(inspection.getProductStatus().getUniqueID())) {
 			inspection.setProductStatus(productSerialManager.findProductStatus(productStatus, getTenantId()));
 		}
+	}
+
+	public LocationWebModel getLocation() {
+		return location;
 	}
 }

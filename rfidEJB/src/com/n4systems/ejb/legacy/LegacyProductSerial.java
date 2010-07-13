@@ -43,16 +43,6 @@ public interface LegacyProductSerial {
 		
 	public AddProductHistoryBean getAddProductHistory(Long rFieldidUser);
 	
-	/*########################################################
-	 * product Status crud
-	 #########################################################*/
-	/**
-	 * @deprecated use ProductStatusListLoader
-	 */
-	public List<ProductStatusBean> getAllProductStatus(Long tenantId);
-	public Long createProductStatus(ProductStatusBean productStatus);
-	public void removeProductStatus( ProductStatusBean obj );
-	public Long updateProductStatus(ProductStatusBean productStatus);
 	
 	public boolean rfidExists(String rfidNumber, Long tenantId);
 	public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID);

@@ -1,10 +1,18 @@
 <title><@s.text name="title.massupdateinspections" /></title>
 <head>
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
-		
+		onDocumentLoad(function() {
+			$('owner').observe("owner:change", function() {
+				selectField('owner');
+			});
+			
+			$('location').observe("location:change", function() {
+				selectField('location');
+			});
+		});
 		function selectField( fieldType ) {
 			var field = $('check_' + fieldType );
-			
 			field.checked = true;
 		}
 	</script>
@@ -13,13 +21,13 @@
 
 <h4 >Instructions </h4>
 <div class="help">
-	<p>
+	<div class="infoSet">
 		<@s.text name="instruction.massupdate" /> 
-	</p>
+	</div>
 	
 </div>
 
-<@s.form action="massUpdateInspectionsSave" theme="simple" cssClass="listForm">
+<@s.form action="massUpdateInspectionsSave" theme="fieldidSimple" cssClass="listForm">
 	<@s.hidden name="searchId" />
 	<@s.hidden name="currentPage" />
 	<table class="list">
@@ -31,50 +39,52 @@
 		<tr>
 			<td><@s.checkbox name="select['owner']" id="check_owner" /></td>
 			<td>
-				<p>
+				<div class="infoSet">
 					<label class="label" ><@s.text name="label.owner"/>:</label> 
-					<span class="field"><@n4.orgPicker name="owner" required="true"/></span>
-				</p>
+					<span class="field"><@n4.orgPicker name="owner" id="owner" required="true"/></span>
+				</div>
 			</td>
 		</tr>
 		
 		<tr>
 			<td><@s.checkbox name="select['productStatus']" id="check_productStatus" /></td>
 			<td>
-				<p>
+				<div class="infoSet">
 					<label class="label" ><@s.text name="label.productstatus"/>:</label> 
 					<span class="field"><@s.select  name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('productStatus');" /></span>
-				</p>
+				</div>
 			</td>
 		</tr>
 			
 		<tr>
 			<td><@s.checkbox name="select['inspectionBook']" id="check_inspectionBook"/></td>
 			<td>
-				<p>
+				<div class="infoSet">
 					<label class="label" ><@s.text name="label.inspectionbook"/>:</label> 
 					<span class="field"><@s.select  name="inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('inspectionBook');" /></span>
-				</p>
+				</div>
 			</td>
 		</tr>
 		
 		<tr>
 			<td><@s.checkbox name="select['location']" id="check_location"/></td>
 			<td>
-				<p>
+				<div class="infoSet">
 					<label class="label"><@s.text name="label.location"/>:</label> 
-					<span class="field"><@s.textfield name="location" onchange="selectField('location');"/></span>
-				</p>
+					<div class="field">
+					 	<@n4.location name="location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(location)}" />
+					 </div>
+				</div>
 			</td>
 		</tr>
 		
 		<tr>
 			<td><@s.checkbox name="select['printable']" id="check_printable"/></td>
 			<td>
-				<p>
+				<div class="infoSet">
 					<label class="label"><@s.text name="label.printable"/>:</label> 
 					<span class="field"><@s.checkbox name="printable" onchange="selectField('printable');"/></span>
-				</p>
+				</div>
 			</td>
 		</tr>
 	</table>	

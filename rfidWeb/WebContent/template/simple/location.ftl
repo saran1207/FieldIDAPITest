@@ -3,7 +3,7 @@
 <#if !nodesList?exists || nodesList.empty>
 	<@s.textfield id="${parameters.id}_freeformLocation" name="${parameters.name}.freeformLocation" theme="fieldidSimple"/>
 <#else>
-	<@s.hidden id="${parameters.id}_freeformLocation" name="${parameters.name}.freeformLocation" />
+	<@s.hidden id="${parameters.id}" name="${parameters.name}.freeformLocation" />
 	
 	<@s.textfield id="${parameters.id}_locationName" name="locate" theme="fieldidSimple" value="${parameters.fullName!}" readonly="true"/>
 	<a href="#" id="${parameters.id}_showLocationSelection"><@s.text name="label.choose"/></a>
@@ -30,15 +30,15 @@
 				
 				var node = jQuery('#${parameters.id}_predefinedLocationSelector').getSelectedNode();
 				$('${parameters.id}_predefinedLocationId').value = node.id;
-				$('${parameters.id}_freeformLocation').value = $('${parameters.id}_freeformInput').getValue();
+				$('${parameters.id}').value = $('${parameters.id}_freeformInput').getValue();
 				$('${parameters.id}_locationName').value = node.parentNames.join(" ") + " " + node.name + " " + $('${parameters.id}_freeformInput').getValue();
-				
+				$('${parameters.id}').fire("location:change");
 				
 			});
 			
 			$('${parameters.id}_locationSelection_cancel').observe('click', function(event) { event.stop(); 
 				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
-				$('${parameters.id}_freeformInput').value = $('${parameters.id}_freeformLocation').getValue();
+				$('${parameters.id}_freeformInput').value = $('${parameters.id}').getValue();
 				var predefinedLocationId = $('${parameters.id}_predefinedLocationId').getValue(); 
 				jQuery("#${parameters.id}_predefinedLocationSelector").selectNode(predefinedLocationId);
 				
@@ -48,6 +48,7 @@
 					event.stop();
 					$('${parameters.id}_locationSelection').removeClassName('offScreen');
 					translate($('${parameters.id}_locationSelection'), $('${parameters.id}_showLocationSelection'), 0, 0);
+					moveInsideViewPort($('${parameters.id}_locationSelection'));
 				});
 		
 	</@n4.includeScript>

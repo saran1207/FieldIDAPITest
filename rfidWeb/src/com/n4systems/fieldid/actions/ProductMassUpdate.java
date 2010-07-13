@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,6 +13,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.fieldid.actions.helpers.MassUpdateProductHelper;
+import com.n4systems.fieldid.actions.product.AssetWebModel;
 import com.n4systems.fieldid.actions.product.PublishedState;
 import com.n4systems.fieldid.actions.search.ProductSearchAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -21,9 +22,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
@@ -45,6 +44,8 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	private String identified;
 	private OwnerPicker ownerPicker;
 	
+	private AssetWebModel asset = new AssetWebModel(this);
+	
 	public ProductMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
 		this.productSerialManager = productSerialManager;
@@ -52,7 +53,9 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		overrideHelper(new MassUpdateProductHelper(getLoaderFactory()));
 	}
+	
 	
 	
 	private void applyCriteriaDefaults() {
@@ -74,6 +77,8 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		identified = convertDate(product.getIdentified());
 
 		applyCriteriaDefaults();
+		
+		asset.match(product);
 		return SUCCESS;
 	}
 
@@ -93,7 +98,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		try {
 			
 			product.setIdentified(convertDate(identified));
-			
+			asset.fillInAsset(product);
 			List<Long> ids = getSearchIds(criteria, criteria.getSecurityFilter());
 			
 			Long results = massUpdateManager.updateProducts(ids, product, select, fetchCurrentUser());
@@ -146,13 +151,6 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		}
 	}
 
-	public String getLocation() {
-		return product.getAdvancedLocation().getFreeformLocation();
-	}
-
-	public void setLocation(String location) {
-		product.setAdvancedLocation(Location.onlyFreeformLocation(location));
-	}
 
 	public String getPurchaseOrder() {
 		return product.getPurchaseOrder();
@@ -162,9 +160,8 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		product.setPurchaseOrder(purcahseOrder);
 	}
 
-	@SuppressWarnings("deprecation")
-	public Collection<ProductStatusBean> getProductStatuses() {
-		return productSerialManager.getAllProductStatus(getTenantId());
+	public List<ProductStatusBean> getProductStatuses() {
+		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 	
 	
@@ -176,7 +173,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		if(user == null) {
 			product.setAssignedUser(null);
 		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
-			product.setAssignedUser(persistenceManager.find(User.class, user, getTenantId()));
+			product.setAssignedUser(getLoaderFactory().createUserFilteredLoader().setId(user).load());
 		}
 	}
 	
@@ -219,5 +216,9 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	
 	public List<StringListingPair> getPublishedStates() {
 		return PublishedState.getPublishedStates(this);
+	}
+
+	public AssetWebModel getAsset() {
+		return asset;
 	}
 }

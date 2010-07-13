@@ -12,7 +12,12 @@ function showOrgPicker(element) {
 	$$('.orgFilter').each(function(filter) { filter.value = element.getAttribute('orgFilter'); });
 	
 	var orgSelector = $('orgSelector');
-	var orgPicker=element.up(".orgPicker");
+	var orgPicker;
+	if (element.hasClassName("searchOwner")) {
+		orgPicker = element;
+	} else {
+		element.up(".searchOwner");
+	}
 	orgSelector.setStyle("position:absolute");
 	translate(orgSelector, orgPicker, 0, 0);
 	orgSelector.show();

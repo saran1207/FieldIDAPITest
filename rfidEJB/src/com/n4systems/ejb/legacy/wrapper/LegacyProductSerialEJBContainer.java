@@ -80,21 +80,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long createProductStatus(ProductStatusBean productStatus) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createProductStatus(productStatus);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public Product createProductWithServiceTransaction(String transactionGUID, Product product, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -214,22 +200,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public List<ProductStatusBean> getAllProductStatus(Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getAllProductStatus(tenantId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	@SuppressWarnings("deprecation")
 	public Collection<ProductSerialExtensionBean> getProductSerialExtensions(Long tenantId) {
@@ -248,21 +219,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void removeProductStatus(ProductStatusBean obj) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			createManager(transaction.getEntityManager()).removeProductStatus(obj);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 
 	public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -314,19 +271,5 @@ Transaction transaction = transactionManager.startTransaction();
 
 
 
-	public Long updateProductStatus(ProductStatusBean productStatus) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateProductStatus(productStatus);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+	
 }

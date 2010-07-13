@@ -96,29 +96,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return query.getResultList();
 	}
 
-	public Long createProductStatus(ProductStatusBean productStatus) {
-		em.persist(productStatus);
-
-		return productStatus.getUniqueID();
-	}
-
-	public Long updateProductStatus(ProductStatusBean productStatus) {
-		productStatus.setDateModified(new Date());
-		em.merge(productStatus);
-		return productStatus.getUniqueID();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ProductStatusBean> getAllProductStatus(Long tenantId) {
-		Query query = em.createQuery("from ProductStatusBean ps where ps.tenant.id = :tenantId");
-		query.setParameter("tenantId", tenantId);
-
-		return query.getResultList();
-	}
-
-	
-
-
 
 	public boolean rfidExists(String rfidNumber, Long tenantId) {
 		return rfidExists(rfidNumber, tenantId, null);
@@ -345,10 +322,6 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	public void removeProductStatus(ProductStatusBean obj) {
-		ProductStatusBean target = (ProductStatusBean) em.find(ProductStatusBean.class, obj.getUniqueID());
-		em.remove(target);
-	}
 
 	@SuppressWarnings("unchecked")
 	public AddProductHistoryBean getAddProductHistory(Long rFieldidUser) {

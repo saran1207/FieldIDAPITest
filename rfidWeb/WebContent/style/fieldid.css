@@ -782,11 +782,11 @@ table.legend td,table.legend th {
 	background-position: bottom;
 }
 
-.listForm p {
+.listForm .infoSet {
 	overflow: auto;
 }
 
-.view .label,.listForm label {
+.view .label,.listForm .label {
 	display: block;
 	float: left;
 	width: 200px;

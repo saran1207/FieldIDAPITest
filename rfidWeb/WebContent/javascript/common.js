@@ -339,15 +339,7 @@ function showQuickView(elementId, event) {
 		left : (position['left'] + 25) + "px"
 	});
 
-	var viewPort = quickViewBox.viewportOffset();
-	var boxTopRightCorner = quickViewBox.getWidth()
-			+ quickViewBox.viewportOffset().left;
-	if (boxTopRightCorner > document.viewport.getWidth()) {
-		var offset = boxTopRightCorner - document.viewport.getWidth();
-		quickViewBox.setStyle( {
-			left : (position['left'] - offset) + "px"
-		});
-	}
+	moveInsideViewPort(quickViewBox);
 
 	quickViewBox.fx = function(event) {
 		var clickid;
@@ -369,6 +361,26 @@ function showQuickView(elementId, event) {
 	};
 	quickViewBox.bfx = quickViewBox.fx.bindAsEventListener(quickViewBox);
 	Element.extend(document).observe('click', quickViewBox.bfx);
+}
+
+function moveInsideViewPort(element) {
+	var position = findPos(element);
+	
+	var boxTopRightCorner = element.getWidth() + element.viewportOffset().left;
+	if (boxTopRightCorner > document.viewport.getWidth()) {
+		var offset = boxTopRightCorner - document.viewport.getWidth();
+		element.setStyle( {
+			left : (position[0] - offset) + "px"
+		});
+	}
+	
+	var boxBottomLeftCorner = element.getHeight() + element.viewportOffset().top;
+	if (boxBottomLeftCorner > document.viewport.getHeight()) {
+		var offset = boxBottomLeftCorner - document.viewport.getHeight();
+		element.setStyle( {
+			top : (position[1] - offset) + "px"
+		});
+	}
 }
 
 function hideAnyOpenQuickViewBoxes() {
@@ -475,13 +487,7 @@ function turnOffHighlightButton(event) {
 	element.removeClassName("activated");
 }
 
-Element.extend(document).observe("dom:loaded", function(event) {
-	$$('.secondaryNav li a').each( function(element) {
-		element.observe('mousedown', highlightButton);
-		element.observe('mouseup', turnOffHighlightButton);
-		element.observe('mouseout', turnOffHighlightButton);
-	});
-});
+
 
 function ajaxFormEvent(event) {
 	event.stop();
@@ -552,3 +558,12 @@ onDocumentLoad(function() {
 			element.removeClassName('hide');
 		});
 	});
+
+
+onDocumentLoad(function() {
+	$$('.secondaryNav li a').each( function(element) {
+		element.observe('mousedown', highlightButton);
+		element.observe('mouseup', turnOffHighlightButton);
+		element.observe('mouseout', turnOffHighlightButton);
+	});
+});

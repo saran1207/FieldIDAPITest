@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.product;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -22,7 +22,7 @@ public class ProductStatusCrud extends AbstractCrud {
 	private LegacyProductSerial productSerialManager;
 	private ProductStatusBean productStatus;
 	
-	private Collection<ProductStatusBean> productStatuses;
+	private List<ProductStatusBean> productStatuses;
 	
 	public ProductStatusCrud(LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -60,9 +60,9 @@ public class ProductStatusCrud extends AbstractCrud {
 		if ( productStatus.getUniqueID() == null ) {
 			productStatus.setTenant(getTenant());
 			
-			productSerialManager.createProductStatus(productStatus);
+			persistenceManager.saveAny(productStatus);
 		} else {
-			productSerialManager.updateProductStatus( productStatus );
+			persistenceManager.updateAny(productStatus );
 		}
 		
 		addActionMessage("Data has been updated.");
@@ -77,7 +77,7 @@ public class ProductStatusCrud extends AbstractCrud {
 			return ERROR;
 		}
 		try {
-			productSerialManager.removeProductStatus( productStatus );
+			persistenceManager.deleteAny(productStatus);
 		} catch ( Exception e ) {
 			addActionError("Product Status can not be removed");
 			return ERROR;
@@ -85,10 +85,10 @@ public class ProductStatusCrud extends AbstractCrud {
 		addActionMessage("Product Status has be removed");
 		return SUCCESS;
 	}
-	@SuppressWarnings("deprecation")
-	public Collection<ProductStatusBean> getProductStatuses() {
+	
+	public List<ProductStatusBean> getProductStatuses() {
 		if( productStatuses == null ) {
-			productStatuses = productSerialManager.getAllProductStatus( getTenantId() );
+			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
 		return productStatuses;
 	}
