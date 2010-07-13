@@ -5,19 +5,19 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 <head>
 	<@n4.includeStyle type="page" href="locationCrud" />
 	<#include "/templates/html/common/_columnView.ftl"/>
+	
+	<script type="text/javascript">
+	   onDocumentLoad(function() {
+		   		jQuery('#addLocation').click(function(){
+		       	jQuery('#parent').val(jQuery('#nodeList').getSelectedNode().id);
+	      	});
+	      
+	      });
+	</script>
+	
 </head>
 	<#if helper.hasPredefinedLocationTree()>
 		<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>
-		<head>
-			<script type="text/javascript">
-			   onDocumentLoad(function() {
-				   		jQuery('#addLocation').click(function(){
-				       	jQuery('#parent').val(jQuery('#nodeList').getSelectedNode().id);
-			      	});
-			      
-			      });
-			</script>
-		</head>	
 	</#if>
 	
 <label><@s.text name="label.add_new_location_description"/></label>
