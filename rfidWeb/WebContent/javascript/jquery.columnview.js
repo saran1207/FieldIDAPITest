@@ -102,7 +102,13 @@
     // Event handling functions
     $(container).bind("click keydown", function(event) {
       if ($(event.target).is("a") || $(event.target).parent('a')) {
-        var self = event.target;
+    	  
+        var self;
+        if ($(event.target).is("a")) {
+        	self = event.target;
+        } else {
+        	self = $(event.target).parent('a');
+        }
         if (!settings.multi) {
           delete event.shiftKey;
           delete event.metaKey;
@@ -226,7 +232,7 @@
       $("<span>&#9658;</span>").addClass('widget').css({'height':triheight,'width':10}).prependTo(item);
     }
     $('.widget').bind('click', function(event){
-      event.preventDefault();
+    	event.preventDefault();
     });
   }
 
