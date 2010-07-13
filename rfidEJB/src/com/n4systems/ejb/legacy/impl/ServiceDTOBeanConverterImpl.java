@@ -54,6 +54,7 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -68,7 +69,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
-import com.n4systems.servicedto.converts.LocationToLocationServiceDTOConverter;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantCache;
@@ -91,7 +91,6 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
-import com.n4systems.webservice.dto.LocationServiceDTO;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO;
 import com.n4systems.webservice.dto.ObservationServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
@@ -305,13 +304,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			productDTO.getSchedules().add(convert(schedule));
 		}
 
-		productDTO.setLocation(convert(product.getAdvancedLocation()));
-		
+		convertLocation(productDTO, product.getAdvancedLocation());
+
 		return productDTO;
 	}
-
-	private LocationServiceDTO convert(Location location) {
-		return new LocationToLocationServiceDTOConverter().convert(location);
+	
+	private void convertLocation(ProductServiceDTO productDTO, Location location) {
+		productDTO.setLocation(location.getFreeformLocation());
+		
+		Long predefinedLocationId = (location.getPredefinedLocation() != null) ? location.getPredefinedLocation().getId() : null;
+		productDTO.setPredefinedLocationId(predefinedLocationId);
 	}
 
 	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId) {
@@ -369,6 +371,15 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		if (targetProduct.isNew()) {
 			targetProduct.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
+		
+		Location location;
+		if (productServiceDTO.getPredefinedLocationId() != null) {
+			PredefinedLocation predefinedLocation = em.find(PredefinedLocation.class, productServiceDTO.getPredefinedLocationId());
+			location = new Location(predefinedLocation, productServiceDTO.getLocation());
+		} else {
+			location = Location.onlyFreeformLocation(productServiceDTO.getLocation());
+		}
+		targetProduct.setAdvancedLocation(location);
 		
 		return targetProduct;
 	}
