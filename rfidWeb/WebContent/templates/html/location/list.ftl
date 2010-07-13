@@ -20,9 +20,15 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 		<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>
 	</#if>
 	
-<label><@s.text name="label.add_new_location_description"/></label>
-<@s.form action="predefinedLocationsAdd" method="add" id="predefinedLocationsAdd" theme="fieldid">
-	<@s.textfield id="nodeForm" name="name" />
+<@s.form action="predefinedLocationsAdd" method="add" id="predefinedLocationsAdd" theme="fieldid" cssClass="crudForm">
+	<p>
+		<label><@s.text name="label.title"/></label>
+		<span>
+			<@s.textfield id="nodeForm" name="name" />
+		</span>
+	</p>
 	<@s.hidden id="parent" name="parentId"/>
-	<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
+		<div class="formAction">
+			<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
+		</div>
 </@s.form> 

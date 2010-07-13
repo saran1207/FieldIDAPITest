@@ -23,10 +23,16 @@ ${action.setPageType('predefined_locations', 'location_edit')!}
 <#if helper.hasPredefinedLocationTree()>
 	<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${nodeId!}"/>
 </#if>
-<label><@s.text name="label.edit_location_description"/></label>
-<@s.form action="predefinedLocationDoEdit" method="edit" id="predefinedLocationDoEdit" theme="fieldid">
-	<@s.textfield id="nodeFormEdit" name="name" />
+<@s.form action="predefinedLocationDoEdit" method="edit" id="predefinedLocationDoEdit" theme="fieldid" cssClass="crudForm">
+	<p>
+		<label><@s.text name="label.new_title"/></label>
+		<span>
+			<@s.textfield id="nodeFormEdit" name="name" />
+		</span>
+	</p>
 	<@s.hidden id="currentNode" name="nodeId"/>
-	<@s.submit id="editLocation" key="hbutton.edit_location" cssClass="saveButton save"/>
-	<button class="button" onclick="return redirect( '<@s.url action="predefinedLocations" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
+	<div class="formAction">
+		<button class="button" onclick="return redirect( '<@s.url action="predefinedLocations" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
+		<@s.submit id="editLocation" type="submit" key="hbutton.edit_location" cssClass="saveButton save"/>
+	</div>
 </@s.form> 
