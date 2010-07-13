@@ -98,14 +98,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		super(tenant);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
-	public String getLocation() {
-		return advancedLocation.getFreeformLocation();
-	}
 
-	public void setLocation(String location) {
-		advancedLocation = Location.onlyFreeformLocation(location);
-	}
 
 	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public Date getDate() {
@@ -365,6 +358,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		normalizeAssignmentForPersistence();
 	}
 
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}

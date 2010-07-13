@@ -276,11 +276,6 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		this.project = project;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
-	public String getLocation() {
-		return advancedLocation.getFreeformLocation();
-	}
-
 
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
@@ -303,7 +298,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}

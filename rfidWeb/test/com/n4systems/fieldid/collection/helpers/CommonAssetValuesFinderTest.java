@@ -41,7 +41,7 @@ public class CommonAssetValuesFinderTest {
 	
 	@Test
 	public void should_find_all_the_common_values_of_the_asset_when_there_is_only_one_asset() throws Exception {
-		Product asset = ProductBuilder.aProduct().withOwner(aPrimaryOrg().build()).inLocation("location").havingStatus(productStatus).build();
+		Product asset = ProductBuilder.aProduct().withOwner(aPrimaryOrg().build()).inFreeformLocation("location").havingStatus(productStatus).build();
 		
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset));
 		
@@ -55,7 +55,7 @@ public class CommonAssetValuesFinderTest {
 	@Test
 	public void should_find_all_the_common_values_of_the_asset_when_there_is_multiple_assets_that_have_the_same_field_values() throws Exception {
 		
-		ProductBuilder builder = ProductBuilder.aProduct().withOwner(aPrimaryOrg().build()).inLocation("location").havingStatus(productStatus);
+		ProductBuilder builder = ProductBuilder.aProduct().withOwner(aPrimaryOrg().build()).inFreeformLocation("location").havingStatus(productStatus);
 		Product asset1 = builder.build();
 		Product asset2 = builder.build();
 		
@@ -71,8 +71,8 @@ public class CommonAssetValuesFinderTest {
 	public void should_find_only_the_product_status_field_is_common_value_when_multiple_assets_only_have_the_product_status_in_common() throws Exception {
 		
 		ProductBuilder builder = ProductBuilder.aProduct().havingStatus(productStatus);
-		Product asset1 = builder.withOwner(aPrimaryOrg().build()).inLocation("location1").build();
-		Product asset2 = builder.withOwner(aPrimaryOrg().build()).inLocation("location2").assignedTo(anEmployee().build()).build();
+		Product asset1 = builder.withOwner(aPrimaryOrg().build()).inFreeformLocation("location1").build();
+		Product asset2 = builder.withOwner(aPrimaryOrg().build()).inFreeformLocation("location2").assignedTo(anEmployee().build()).build();
 		
 		CommonAssetValuesFinder sut = new CommonAssetValuesFinder(new FluentArrayList<Product>(asset1, asset2));
 		

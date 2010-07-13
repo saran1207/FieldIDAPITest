@@ -83,7 +83,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo,aSubProduct().build(), aSubProduct().build());
 	}
 	
-	public ProductBuilder inLocation(String location) {
+	public ProductBuilder inFreeformLocation(String location) {
 		return withAdvancedLocation(Location.onlyFreeformLocation(location));
 	}
 	

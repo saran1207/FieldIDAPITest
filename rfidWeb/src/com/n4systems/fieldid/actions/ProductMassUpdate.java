@@ -21,6 +21,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
 import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserListableLoader;
@@ -146,11 +147,11 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public String getLocation() {
-		return product.getLocation();
+		return product.getAdvancedLocation().getFreeformLocation();
 	}
 
 	public void setLocation(String location) {
-		product.setLocation(location);
+		product.setAdvancedLocation(Location.onlyFreeformLocation(location));
 	}
 
 	public String getPurchaseOrder() {

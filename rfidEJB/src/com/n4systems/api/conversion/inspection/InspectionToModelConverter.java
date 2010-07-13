@@ -11,6 +11,7 @@ import com.n4systems.model.InspectionType;
 import com.n4systems.model.Product;
 import com.n4systems.model.Status;
 import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.product.SmartSearchLoader;
@@ -44,7 +45,7 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		resolveType(model);
 		resolveOwner(view, model, transaction);
 		
-		model.setLocation(view.getLocation());
+		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
 		model.setDate(view.getDatePerformedAsDate());
 		model.setComments(view.getComments());
 		

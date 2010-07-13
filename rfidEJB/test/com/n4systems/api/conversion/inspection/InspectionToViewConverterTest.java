@@ -1,5 +1,6 @@
 package com.n4systems.api.conversion.inspection;
 
+import static com.n4systems.model.location.Location.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
@@ -19,6 +20,7 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 
 public class InspectionToViewConverterTest {
@@ -39,14 +41,14 @@ public class InspectionToViewConverterTest {
 		Inspection model = new Inspection();
 		model.setComments("comments");
 		model.setDate(new Date());
-		model.setLocation("location");
+		model.setAdvancedLocation(Location.onlyFreeformLocation("location"));
 		model.setPrintable(true);
 		
 		InspectionView view = converter.toView(model);
 		
 		assertEquals(model.getComments(), view.getComments());
 		assertEquals(model.getDate(), view.getDatePerformed());
-		assertEquals(model.getLocation(), view.getLocation());
+		assertEquals(model.getAdvancedLocation(), onlyFreeformLocation(view.getLocation()));
 		assertEquals(model.isPrintable(), view.isPrintable());
 	}
 	

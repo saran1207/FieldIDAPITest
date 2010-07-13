@@ -392,7 +392,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		inspection.setPerformedBy(performedBy);
 		inspection.setBook(book);
 		inspection.setComments(fileData.getComments());
-		inspection.setLocation(product.getLocation());
+		inspection.setAdvancedLocation(product.getAdvancedLocation());
 		
 		// find the first inspection that for this product that supports our file type
 		InspectionType inspType = findSupportedInspectionTypeForProduct(fileData.getFileType(), product);

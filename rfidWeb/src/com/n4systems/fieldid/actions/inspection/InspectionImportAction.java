@@ -27,6 +27,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionPassthruLoader;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
@@ -101,7 +102,7 @@ public class InspectionImportAction extends AbstractImportAction {
 		example.setStatus(Status.PASS);
 
 		example.setComments(getText("example.inspection.comments"));
-		example.setLocation(getText("example.inspection.location"));
+		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.inspection.location")));
 		
 		example.setBook(new InspectionBook());
 		example.getBook().setName(getText("example.inspection.book"));

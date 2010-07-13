@@ -232,7 +232,7 @@ public class ProductToModelConverterTest {
 		ProductView view = createView(null, null);
 		Product model =  converter.toModel(view, null);
 		
-		Asserts.assertMethodReturnValuesEqual(view, model, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getLocation", "getPurchaseOrder", "getComments", "getIdentified");
+		Asserts.assertMethodReturnValuesEqual(view, model, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 	}
 	
 	@Test

@@ -19,105 +19,104 @@ import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
-
 @SuppressWarnings("deprecation")
-@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+@UserPermissionFilter(userRequiresOneOf = { Permissions.EditInspection })
 public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger( InspectionMassUpdate.class );
-	
+	private static Logger logger = Logger.getLogger(InspectionMassUpdate.class);
+
 	private LegacyProductSerial productSerialManager;
 	private InspectionSearchContainer criteria;
 	private Inspection inspection = new Inspection();
-	
+
 	private OwnerPicker ownerPicker;
 
 	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyProductSerial productSerialManager) {
 		super(massUpdateManager, persistenceManager);
 		this.productSerialManager = productSerialManager;
 	}
-	
+
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
 	}
 
-	private void applyCriteriaDefaults() {	
+	private void applyCriteriaDefaults() {
 		setOwnerId(criteria.getOwnerId());
 		setInspectionBook(criteria.getInspectionBook());
 		setProductStatus(criteria.getProductStatus());
 	}
-	
+
 	private boolean findCriteria() {
 		criteria = getSession().getReportCriteria();
-		
-		if( criteria == null || searchId == null || !searchId.equals( criteria.getSearchId() ) ) {
+
+		if (criteria == null || searchId == null || !searchId.equals(criteria.getSearchId())) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	@SkipValidation
-	public String doEdit(){
-		if( !findCriteria() ) {
-			addFlashErrorText( "error.reportexpired" );
+	public String doEdit() {
+		if (!findCriteria()) {
+			addFlashErrorText("error.reportexpired");
 			return ERROR;
 		}
-		
+
 		applyCriteriaDefaults();
 		return SUCCESS;
 	}
-	
-	public String doSave(){
-		if( !findCriteria() ) {
-			addFlashErrorText( "error.reportexpired" );
+
+	public String doSave() {
+		if (!findCriteria()) {
+			addFlashErrorText("error.reportexpired");
 			return ERROR;
 		}
-		
+
 		try {
 			List<Long> inspectionIds = getSearchIds(criteria, criteria.getSecurityFilter());
 			Long results = massUpdateManager.updateInspections(inspectionIds, inspection, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
-			messageArgs.add( results.toString() );
-			addFlashMessage( getText( "message.inspectionmassupdatesuccessful", messageArgs ) ) ;
-			
+			messageArgs.add(results.toString());
+			addFlashMessage(getText("message.inspectionmassupdatesuccessful", messageArgs));
+
 			return SUCCESS;
-		} catch ( UpdateFailureException ufe) {
-			logger.error( "failed to run a mass update on inspections", ufe );
-		} 
-		catch (Exception e){
-			logger.error( "failed to run a mass update on inspections", e );
+		} catch (UpdateFailureException ufe) {
+			logger.error("failed to run a mass update on inspections", ufe);
+		} catch (Exception e) {
+			logger.error("failed to run a mass update on inspections", e);
 		}
-		
-		addActionError( getText( "error.failedtomassupdate" ) );
+
+		addActionError(getText("error.failedtomassupdate"));
 		return INPUT;
 	}
-	
+
 	public String getLocation() {
-		return inspection.getLocation();
+		return inspection.getAdvancedLocation().getFreeformLocation();
 	}
-	
+
 	public void setLocation(String location) {
-		inspection.setLocation( location );
+		inspection.setAdvancedLocation(Location.onlyFreeformLocation(location));
 	}
-	
+
 	public Long getInspectionBook() {
-		return ( inspection.getBook() == null ) ? null : inspection.getBook().getId();
+		return (inspection.getBook() == null) ? null : inspection.getBook().getId();
 	}
-	
+
 	public void setInspectionBook(Long inspectionBookId) {
-		if( inspectionBookId == null ) {
-			inspection.setBook( null );
-		} else if( inspection.getBook() == null || !inspectionBookId.equals( inspection.getBook().getId() ) ) {
-			InspectionBook inspectionBook = persistenceManager.find( InspectionBook.class, inspectionBookId );
-			inspection.setBook( inspectionBook );
+		if (inspectionBookId == null) {
+			inspection.setBook(null);
+		} else if (inspection.getBook() == null || !inspectionBookId.equals(inspection.getBook().getId())) {
+			InspectionBook inspectionBook = persistenceManager.find(InspectionBook.class, inspectionBookId);
+			inspection.setBook(inspectionBook);
 		}
 	}
-	
+
 	public Collection<ListingPair> getInspectionBooks() {
 		InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
 		loader.setOpenBooksOnly(true);
@@ -131,7 +130,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	public void setPrintable(boolean printable) {
 		inspection.setPrintable(printable);
 	}
-	
+
 	public Long getOwnerId() {
 		return ownerPicker.getOwnerId();
 	}
@@ -143,11 +142,11 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-	
+
 	public Collection<ProductStatusBean> getProductStatuses() {
 		return productSerialManager.getAllProductStatus(getTenantId());
 	}
-	
+
 	public Long getProductStatus() {
 		return (inspection.getProductStatus() == null) ? null : inspection.getProductStatus().getUniqueID();
 	}

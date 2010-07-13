@@ -24,6 +24,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Product;
 import com.n4systems.model.ProductType;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
@@ -90,7 +91,7 @@ public class ProductImportAction extends AbstractImportAction {
 		example.setRfidNumber(getText("example.product.rfidNumber"));
 		example.setCustomerRefNumber(getText("example.product.customerRefNumber"));
 		example.setOwner(getUser().getOwner());
-		example.setLocation(getText("example.product.location"));
+		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.product.location")));
 		example.setPurchaseOrder(getText("example.product.purchaseOrder"));
 		example.setComments(getText("example.product.comments"));
 		example.setIdentified(new Date());

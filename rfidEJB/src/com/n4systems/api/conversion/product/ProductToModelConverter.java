@@ -16,6 +16,7 @@ import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
@@ -63,7 +64,7 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		model.setSerialNumber(view.getSerialNumber());
 		model.setRfidNumber(view.getRfidNumber());
 		model.setCustomerRefNumber(view.getCustomerRefNumber());
-		model.setLocation(view.getLocation());
+		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
 		model.setPurchaseOrder(view.getPurchaseOrder());
 		model.setComments(view.getComments());		
 		model.setProductStatus(resolveProductStatus(view.getStatus(), transaction));

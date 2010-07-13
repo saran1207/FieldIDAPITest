@@ -30,7 +30,7 @@ public class ProductToViewConverter implements ModelToViewConverter<Product, Pro
 		view.setSerialNumber(model.getSerialNumber());
 		view.setRfidNumber(model.getRfidNumber());
 		view.setCustomerRefNumber(model.getCustomerRefNumber());
-		view.setLocation(model.getLocation());
+		view.setLocation(model.getAdvancedLocation().getFreeformLocation());
 		view.setPurchaseOrder(model.getPurchaseOrder());
 		view.setComments(model.getComments());
 		view.setIdentified(model.getIdentified());

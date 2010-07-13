@@ -212,7 +212,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		populateAbstractInspectionInfo(inspectionDTO, inspection);
 
 		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
-		inspectionDTO.setLocation( inspection.getLocation() );
+		inspectionDTO.setLocation( inspection.getAdvancedLocation().getFreeformLocation());
 		inspectionDTO.setPerformedById( inspection.getPerformedBy().getId() );
 		inspectionDTO.setStatus( inspection.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
@@ -466,7 +466,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		populate(inspection, inspectionServiceDTO, tenant);
 
-		inspection.setLocation(inspectionServiceDTO.getLocation());
+		inspection.setAdvancedLocation(Location.onlyFreeformLocation(inspectionServiceDTO.getLocation()));
 		inspection.setPrintable(inspectionServiceDTO.isPrintable());
 
 		// Check if utcDate is set, if not, dealing with a PRE 1.11 version: use

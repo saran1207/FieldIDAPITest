@@ -1,18 +1,12 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.ProductBuilder.*;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.builders.ProductBuilder;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
-@SuppressWarnings("unchecked")
 public class ProductTest {
 
 	Product product;
@@ -115,24 +109,4 @@ public class ProductTest {
 	}
 	
 	
-	
-	@Test
-	public void should_have_an_advanced_location_with_no_predefined_location_when_location_set_through_old_setter() {
-		PredefinedLocation somePredefinedLocation = new PredefinedLocation();
-		Location location  = new Location(somePredefinedLocation, "freeform location");
-		
-		Product productWithPredfinedLocation = aProduct().withAdvancedLocation(location).build();
-		
-		String differentFreeformLocation = "some different freeform location";
-		productWithPredfinedLocation.setLocation(differentFreeformLocation);
-		
-		assertThat(productWithPredfinedLocation.getAdvancedLocation(), onlyFreefromLocation(differentFreeformLocation));
-		
-		
-	}
-
-	
-	private Matcher<Object> onlyFreefromLocation(String differentFreeformLocation) {
-		return allOf(hasProperty("predefinedLocation", nullValue(PredefinedLocation.class)), hasProperty("freeformLocation", equalTo(differentFreeformLocation)));
-	}
 }

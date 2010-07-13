@@ -61,6 +61,7 @@ import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
 import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -657,7 +658,7 @@ public class DataServiceImpl implements DataService {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			} 
 			
-			product.setLocation(request.getLocation());
+			product.setAdvancedLocation(Location.onlyFreeformLocation(request.getLocation()));
 			
 			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
 			saver.setProduct(product).update();
@@ -687,7 +688,7 @@ public class DataServiceImpl implements DataService {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			} 
 			
-			product.setLocation(request.getLocation());
+			product.setAdvancedLocation(Location.onlyFreeformLocation(request.getLocation()));
 			product.setCustomerRefNumber(request.getCustomerRefNumber());
 			product.setPurchaseOrder(request.getPurchaseOrder());
 			

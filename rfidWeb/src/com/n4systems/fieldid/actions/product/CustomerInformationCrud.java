@@ -35,6 +35,8 @@ public class CustomerInformationCrud extends AbstractCrud {
 	
 	private List<Listable<Long>> divisions;
 	
+	private AssetWebModel asset = new AssetWebModel(this);
+	
 	public CustomerInformationCrud(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerial) {
 		super(persistenceManager);
 		this.productManager = productManager;
@@ -47,12 +49,14 @@ public class CustomerInformationCrud extends AbstractCrud {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		asset.match(product);
 	}
 	
 	@Override
 	protected void postInit() {
 		super.postInit();
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		overrideHelper(new CustomerInformationCrudHelper(getLoaderFactory()));
 	}
 
 	private void testRequiredEntities() {
@@ -91,9 +95,6 @@ public class CustomerInformationCrud extends AbstractCrud {
 		return product.getCustomerRefNumber();
 	}
 
-	public String getLocation() {
-		return product.getLocation();
-	}
 
 	public String getPurchaseOrder() {
 		return product.getPurchaseOrder();
@@ -103,16 +104,12 @@ public class CustomerInformationCrud extends AbstractCrud {
 		product.setCustomerRefNumber(customerRefNumber);
 	}
 
-	public void setLocation(String location) {
-		product.setLocation(location);
-	}
-
+	
 	public void setPurchaseOrder(String purchaseOrder) {
 		product.setPurchaseOrder(purchaseOrder);
 	}
 
-	
-	
+		
 	public Product getProduct() {
 		return product;
 	}

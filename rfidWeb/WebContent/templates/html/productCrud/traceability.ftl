@@ -43,19 +43,19 @@ ${action.setPageType('product', 'traceability')!}
 				<p>
 					
 					<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
-					<span class="fieldValue">${linkedProduct.serialNumber}</span>
+					<span class="fieldValue">${linkedProduct.serialNumber?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.rfidnumber"/></label>
-					<span class="fieldValue">${linkedProduct.rfidNumber!}</span>
+					<span class="fieldValue">${linkedProduct.rfidNumber!?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.producttype"/></label>
-					<span class="fieldValue">${linkedProduct.type.name}</span>
+					<span class="fieldValue">${linkedProduct.type.name?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.productstatus"/></label>
-					<span class="fieldValue">${(linkedProduct.productStatus.name)!}</span>
+					<span class="fieldValue">${(linkedProduct.productStatus.name)!?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.identified"/></label>
@@ -83,29 +83,29 @@ ${action.setPageType('product', 'traceability')!}
 				</#if>
 				<p>
 					<label><@s.text name="label.assignedto"/></label>
-					<span class="fieldValue">${(product.assignedUser.userLabel)!}</span>
+					<span class="fieldValue">${(product.assignedUser.userLabel)!?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.location"/></label>
-					<span class="fieldValue">${(product.location)!}</span>
+					<span class="fieldValue">${(helper.getFullNameOfLocation(product.advancedLocation))?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.referencenumber"/></label>
-					<span class="fieldValue">${product.customerRefNumber!}</span>
+					<span class="fieldValue">${product.customerRefNumber!?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.purchaseorder"/></label>
-					<span class="fieldValue">${product.purchaseOrder!}</span>
+					<span class="fieldValue">${product.purchaseOrder!?html}</span>
 				</p>
 			</div>
 		
 			<#if !linkedProduct.orderedInfoOptionList.isEmpty() >
 				<div class="viewSection smallViewSection" >
-					<h2>${linkedProduct.type.name} <@s.text name="label.attributes"/></h2>
+					<h2>${linkedProduct.type.name?html} <@s.text name="label.attributes"/></h2>
 					<#list linkedProduct.orderedInfoOptionList as infoOption >
 						<p>
-							<label>${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
-							<span class="fieldValue">${infoOption.name}</span>
+							<label>${infoOption.infoField.name?html} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
+							<span class="fieldValue">${infoOption.name?html}</span>
 						</p>
 					</#list>
 				</div>
@@ -117,7 +117,7 @@ ${action.setPageType('product', 'traceability')!}
 				<div class="viewSection smallViewSection" >
 					<h2><@s.text name="label.warnings"/></h2>
 					<p class="fieldValue">
-						${linkedProduct.type.warnings!}
+						${linkedProduct.type.warnings!?html}
 					</p>
 				</div>
 			</#if>
@@ -126,7 +126,7 @@ ${action.setPageType('product', 'traceability')!}
 				<div class="viewSection smallViewSection" >
 					<h2><@s.text name="label.instructions"/></h2>
 					<p class="fieldValue">
-						${linkedProduct.type.instructions!}
+						${linkedProduct.type.instructions!?html}
 					</p>
 				</div>
 			</#if>

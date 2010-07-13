@@ -87,6 +87,7 @@ public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWr
     }
 	
 	@Test
+	@Ignore
     public void should_work_with_enhanced_product() throws Exception {
 		Product asset = ProductBuilder.aProduct().build();
 		Product enhancedAsset = asset.enhance(SecurityLevel.DIRECT);

@@ -89,9 +89,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				}
 
 				if (paramKey.equals("location")) {
-					updateJpql += ", advancedLocation.freeformLocation = :" + paramKey;
-					updateJpql += ", advancedLocation.predefinedLocation = NULL";
-					bindParams.put(paramKey, inspectionSchedule.getLocation());
+					updateJpql += ", advancedLocation.freeformLocation = :" + paramKey + "_freeform";
+					updateJpql += ", advancedLocation.predefinedLocation = :" + paramKey + "_predefined";
+					bindParams.put(paramKey + "_freeform", inspectionSchedule.getAdvancedLocation().getFreeformLocation());
+					bindParams.put(paramKey + "_predefined", inspectionSchedule.getAdvancedLocation().getPredefinedLocation());
 				}
 				
 				if (paramKey.equals("owner")) {
@@ -212,7 +213,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					product.setOwner(productModificationData.getOwner());
 				}
 				if (entry.getKey().equals("location")) {
-					product.setLocation(productModificationData.getLocation());
+					product.setAdvancedLocation(productModificationData.getAdvancedLocation());
 				}
 
 				if (entry.getKey().equals("assignedUser")) {
@@ -264,7 +265,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 				if (updateKey.equals("location")) {
 					ownershipChanged = true;
-					changeTarget.setLocation(inspectionChanges.getLocation());
+					changeTarget.setAdvancedLocation(inspectionChanges.getAdvancedLocation());
 				}
 
 				if (updateKey.equals("printable")) {

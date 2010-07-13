@@ -20,7 +20,10 @@ ${action.setPageType('product', 'customer_edit')!}
 		</div>
 		<div class="infoSet">
 			<label><@s.text name="label.location"/></label>
-			<@s.textfield name="location"/>
+			<div class="fieldHolder">
+				<@n4.location name="asset.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(asset.location)}"  theme="fieldidSimple"/>
+			</div>
+	
 		</div>
 	</#if>
 	<div class="infoSet">

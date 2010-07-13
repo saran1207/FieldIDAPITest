@@ -1,5 +1,7 @@
 package com.n4systems.api.product;
 
+import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.location.Location.*;
 import static org.junit.Assert.*;
 
 import java.text.ParseException;
@@ -21,7 +23,6 @@ import com.n4systems.model.Product;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.builders.ProductTypeBuilder;
 import com.n4systems.test.helpers.Asserts;
 
@@ -29,10 +30,11 @@ public class ProductToViewConverterTest {
 	private ProductToViewConverter converter = new ProductToViewConverter();
 	
 	private Product createProduct() {
-		Product model = ProductBuilder.aProduct().ofType(ProductTypeBuilder.aProductType().build()).withOwner(OrgBuilder.aCustomerOrg().build()).withSerialNumber("12345").build();
+		Product model = aProduct().ofType(ProductTypeBuilder.aProductType().build())
+			.withOwner(OrgBuilder.aCustomerOrg().build()).withSerialNumber("12345")
+			.withAdvancedLocation(onlyFreeformLocation("loc123")).build();
 		model.setRfidNumber("rf1234");
 		model.setCustomerRefNumber("cr12345");
-		model.setLocation("loc123");
 		model.setPurchaseOrder("PO8282");
 		model.setComments("comments 12312");
 		model.setIdentified(new Date());
@@ -67,7 +69,7 @@ public class ProductToViewConverterTest {
 		
 		ProductView view = converter.toView(model);
 		
-		Asserts.assertMethodReturnValuesEqual(model, view, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getLocation", "getPurchaseOrder", "getComments", "getIdentified");
+		Asserts.assertMethodReturnValuesEqual(model, view, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 
 		assertEquals(model.getProductStatus().getName(), view.getStatus());
 		assertEquals(model.getShopOrder().getOrder().getOrderNumber(), view.getShopOrder());

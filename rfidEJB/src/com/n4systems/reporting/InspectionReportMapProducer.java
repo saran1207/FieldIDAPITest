@@ -27,7 +27,7 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 	protected void inspectionParameter() {
 		Inspection inspection = (Inspection) this.getInspection();
 		add("productLabel", null);
-		add("location", inspection.getLocation());
+		add("location", inspection.getAdvancedLocation().getFreeformLocation());
 		add("inspectionBook", (inspection.getBook() != null) ? inspection.getBook().getName() : null);
 		add("inspectionResult", inspection.getStatus().getDisplayName());
 		add("proofTestInfo", addProofTestInfoParams(inspection));
@@ -72,9 +72,5 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 		return inspection;
 	}
 
-
-	
-	
-	
 
 }
