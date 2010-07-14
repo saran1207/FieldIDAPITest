@@ -16,19 +16,18 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	</script>
 	
 </head>
-	<#if helper.hasPredefinedLocationTree()>
-		<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>
-	</#if>
+<#if helper.hasPredefinedLocationTree()>
+	<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>
+</#if>
 	
-<@s.form action="predefinedLocationsAdd" method="add" id="predefinedLocationsAdd" theme="fieldid" cssClass="crudForm">
-	<p>
-		<label><@s.text name="label.title"/></label>
-		<span>
-			<input type="text" id="nodeForm" name="name" />
-		</span>
-	</p>
+<@s.form action="predefinedLocationsAdd"  id="predefinedLocationsAdd" theme="fieldid" cssClass="fullForm fluidSets">
+	<div class="infoSet">
+		<label class='label'><@s.text name="label.title"/></label>
+		<@s.textfield id="nodeForm" name="name" />
+	</div>
+
 	<@s.hidden id="parent" name="parentId"/>
-		<div class="formAction">
+		<div class="actions">
 			<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
 		</div>
 </@s.form> 

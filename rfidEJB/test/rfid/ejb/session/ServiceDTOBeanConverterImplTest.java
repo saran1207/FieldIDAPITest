@@ -164,6 +164,7 @@ public class ServiceDTOBeanConverterImplTest {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void test_product_non_optional_fields( Product product, ProductServiceDTO productServiceDTO  ) {
 		ProductType foundProductType = new ProductType();
 		foundProductType.setId( 5L );
