@@ -24,7 +24,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	<p>
 		<label><@s.text name="label.title"/></label>
 		<span>
-			<@s.textfield id="nodeForm" name="name" />
+			<input type="text" id="nodeForm" name="name" />
 		</span>
 	</p>
 	<@s.hidden id="parent" name="parentId"/>

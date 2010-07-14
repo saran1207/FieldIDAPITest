@@ -27,7 +27,7 @@ ${action.setPageType('predefined_locations', 'location_edit')!}
 	<p>
 		<label><@s.text name="label.new_title"/></label>
 		<span>
-			<@s.textfield id="nodeFormEdit" name="name" />
+			<input type="text" id="nodeFormEdit" name="name" />
 		</span>
 	</p>
 	<@s.hidden id="currentNode" name="nodeId"/>
