@@ -13,17 +13,29 @@ public class InspectionServiceDTOConverter {
 	private ServiceDTOBeanConverter serviceDTOBeanconverter;
 	private SystemSecurityGuard systemSecurityGuard;
 	private AssignedUserConverter assignedUserConverter;
+	private LocationConverter locationConverter;
 
 	public InspectionServiceDTOConverter(SystemSecurityGuard systemSecurityGuard) {
 		this.systemSecurityGuard = systemSecurityGuard;
 		this.serviceDTOBeanconverter = getServiceDTOBeanConverter();
-		this.assignedUserConverter = createAssignedUserConverter(systemSecurityGuard);
+		
+		LoaderFactory loaderFactory = createLoaderFactory(systemSecurityGuard);
+		this.assignedUserConverter = createAssignedUserConverter(loaderFactory);
+		this.locationConverter = createLocationConverter(loaderFactory);
 	}
 
-	private AssignedUserConverter createAssignedUserConverter(SystemSecurityGuard systemSecurityGuard) {
-		return new AssignedUserConverterFactory(systemSecurityGuard, new LoaderFactory(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()))).getAssignedUserConverterForEvent();
+	private AssignedUserConverter createAssignedUserConverter(LoaderFactory loaderFactory) {
+		return new AssignedUserConverterFactory(systemSecurityGuard, loaderFactory).getAssignedUserConverterForEvent();
 	}
 
+	private LoaderFactory createLoaderFactory(SystemSecurityGuard securityGuard) {
+		return new LoaderFactory(new TenantOnlySecurityFilter(systemSecurityGuard.getTenantId()));
+	}
+	
+	private LocationConverter createLocationConverter(LoaderFactory loaderFactory) {
+		return new LocationServiceToContainerConverter(loaderFactory);
+	}
+	
 	public Inspection convert(InspectionServiceDTO inspectionServiceDTO) throws Exception {
 		
 		Inspection inspection = null;
@@ -31,6 +43,7 @@ public class InspectionServiceDTOConverter {
 			
 			inspection = serviceDTOBeanconverter.convert(inspectionServiceDTO, systemSecurityGuard.getTenantId());
 			inspection = assignedUserConverter.convert(inspectionServiceDTO, inspection);
+			locationConverter.convert(inspectionServiceDTO, inspection);
 			
 		} catch (Exception e) {
 			throw e;

@@ -91,7 +91,7 @@ import com.n4systems.servicedto.converts.DtoToModelConverterFactory;
 import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
 import com.n4systems.servicedto.converts.InspectionServiceDTOConverter;
 import com.n4systems.servicedto.converts.LocationConverter;
-import com.n4systems.servicedto.converts.ProductLocationConverter;
+import com.n4systems.servicedto.converts.LocationServiceToContainerConverter;
 import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
@@ -660,7 +660,7 @@ public class DataServiceImpl implements DataService {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			} 
 			
-			LocationConverter locationConverter = new ProductLocationConverter(createLoaderFactory(request));
+			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
 			locationConverter.convert(request, product);
 			
 			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);

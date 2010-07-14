@@ -12,16 +12,15 @@ public class ProductLocationConverterTest {
 
 	@Test
 	public void creates_freeform_only_when_predefined_location_is_null() {
-		ProductLocationConverter converter = new ProductLocationConverter(null);
+		LocationServiceToContainerConverter converter = new LocationServiceToContainerConverter(null);
 		
 		final String freeForm = "free_form"; 
 		
 		LocationServiceDTO location = new LocationServiceDTO() {
-			@Override
-			public Long getPredefinedLocationId() { return null; }
-			
-			@Override
-			public String getLocation() { return freeForm; }
+			public Long getPredefinedLocationId()	{ return null; }
+			public String getLocation()				{ return freeForm; }
+			public void setLocation(String freeFormLocation) {}
+			public void setPredefinedLocationId(Long predefinedLocationId) {}
 		};
 		
 		Product product = new Product();
@@ -39,18 +38,17 @@ public class ProductLocationConverterTest {
 		
 		final String freeForm = "free_form";
 		
-		ProductLocationConverter converter = new ProductLocationConverter(null) {
+		LocationServiceToContainerConverter converter = new LocationServiceToContainerConverter(null) {
 			protected PredefinedLocation loadPredefinedLocation(Long id) { 
 				return predefinedLocation;
 			}
 		};
 		
 		LocationServiceDTO location = new LocationServiceDTO() {
-			@Override
-			public Long getPredefinedLocationId() { return 10L; }
-			
-			@Override
-			public String getLocation() { return freeForm; }
+			public Long getPredefinedLocationId()	{ return 10L; }
+			public String getLocation() 			{ return freeForm; }
+			public void setLocation(String freeFormLocation) {}
+			public void setPredefinedLocationId(Long predefinedLocationId) {}
 		};
 		
 		Product product = new Product();

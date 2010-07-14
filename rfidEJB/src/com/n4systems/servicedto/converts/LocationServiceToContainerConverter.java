@@ -1,20 +1,20 @@
 package com.n4systems.servicedto.converts;
 
-import com.n4systems.model.Product;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.dto.LocationServiceDTO;
 
-public class ProductLocationConverter implements LocationConverter {
+public class LocationServiceToContainerConverter implements LocationConverter {
 	private final LoaderFactory loaderFactory;
 	
-	public ProductLocationConverter(LoaderFactory loaderFactory) {
+	public LocationServiceToContainerConverter(LoaderFactory loaderFactory) {
 		this.loaderFactory = loaderFactory;
 	}
 	
 	@Override
-	public void convert(LocationServiceDTO locationDTO, Product product) {
+	public void convert(LocationServiceDTO locationDTO, LocationContainer container) {
 		Location location;
 		if (locationDTO.getPredefinedLocationId() != null) {
 			PredefinedLocation predefinedLocation = loadPredefinedLocation(locationDTO.getPredefinedLocationId());
@@ -22,7 +22,7 @@ public class ProductLocationConverter implements LocationConverter {
 		} else {
 			location = Location.onlyFreeformLocation(locationDTO.getLocation());
 		}
-		product.setAdvancedLocation(location);
+		container.setAdvancedLocation(location);
 	}
 	
 	protected PredefinedLocation loadPredefinedLocation(Long id) { 

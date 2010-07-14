@@ -30,6 +30,7 @@ import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -42,7 +43,7 @@ import com.n4systems.model.utils.PlainDate;
 
 @Entity
 @Table(name = "products")
-public class Product extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Product>, Exportable {
+public class Product extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Product>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 	

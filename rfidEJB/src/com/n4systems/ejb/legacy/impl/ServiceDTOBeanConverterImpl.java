@@ -54,7 +54,7 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -91,6 +91,7 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
+import com.n4systems.webservice.dto.LocationServiceDTO;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO;
 import com.n4systems.webservice.dto.ObservationServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
@@ -212,12 +213,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		populateAbstractInspectionInfo(inspectionDTO, inspection);
 
 		inspectionDTO.setOwnerId(retrieveOwnerId(inspection.getOwner()));
-		inspectionDTO.setLocation( inspection.getAdvancedLocation().getFreeformLocation());
 		inspectionDTO.setPerformedById( inspection.getPerformedBy().getId() );
 		inspectionDTO.setStatus( inspection.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( inspection.getBook() != null ) ? inspection.getBook().getId() : 0L );
 		inspectionDTO.setUtcDate(inspection.getDate());
 
+		convertLocationToDTO(inspectionDTO, inspection);
+		
 		populateOwners(inspection.getOwner(), inspectionDTO);
 
 		// TODO convert date to their time zone
@@ -304,18 +306,29 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			productDTO.getSchedules().add(convert(schedule));
 		}
 
-		convertLocation(productDTO, product.getAdvancedLocation());
+		convertLocationToDTO(productDTO, product);
 
 		return productDTO;
 	}
 	
-	private void convertLocation(ProductServiceDTO productDTO, Location location) {
-		productDTO.setLocation(location.getFreeformLocation());
+	private void convertLocationToDTO(LocationServiceDTO locationDTO, LocationContainer locationContainer) {
+		Location location = locationContainer.getAdvancedLocation();
+		
+		if (location == null) {
+			return;
+		}
+		
+		locationDTO.setLocation(location.getFreeformLocation());
 		
 		Long predefinedLocationId = (location.getPredefinedLocation() != null) ? location.getPredefinedLocation().getId() : null;
-		productDTO.setPredefinedLocationId(predefinedLocationId);
+		locationDTO.setPredefinedLocationId(predefinedLocationId);
 	}
 
+	/**
+	 * WARNING: this will NOT convert assignedUser or AdvancedLocation fields as those have been moved to the ProductServiceDTOConverter
+	 * @deprecated Use the ProductServiceDTOConverter
+	 */
+	@Deprecated
 	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId) {
 
 		Tenant tenantOrganization = TenantCache.getInstance().findTenant(tenantId);
@@ -371,15 +384,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		if (targetProduct.isNew()) {
 			targetProduct.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
-		
-		Location location;
-		if (productServiceDTO.getPredefinedLocationId() != null) {
-			PredefinedLocation predefinedLocation = em.find(PredefinedLocation.class, productServiceDTO.getPredefinedLocationId());
-			location = new Location(predefinedLocation, productServiceDTO.getLocation());
-		} else {
-			location = Location.onlyFreeformLocation(productServiceDTO.getLocation());
-		}
-		targetProduct.setAdvancedLocation(location);
 		
 		return targetProduct;
 	}
@@ -458,6 +462,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 	}
 
+	/**
+	 * WARNING: this will NOT convert assignedUser or AdvancedLocation fields as those have been moved to the InspectionServiceDTOConverter
+	 * @deprecated Use the InspectionServiceDTOConverter
+	 */
+	@Deprecated
 	public Inspection convert(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
@@ -465,8 +474,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		Inspection inspection = new Inspection();
 
 		populate(inspection, inspectionServiceDTO, tenant);
-
-		inspection.setAdvancedLocation(Location.onlyFreeformLocation(inspectionServiceDTO.getLocation()));
+		
 		inspection.setPrintable(inspectionServiceDTO.isPrintable());
 
 		// Check if utcDate is set, if not, dealing with a PRE 1.11 version: use

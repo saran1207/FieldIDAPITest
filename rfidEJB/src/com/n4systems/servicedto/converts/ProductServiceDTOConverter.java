@@ -34,7 +34,7 @@ public class ProductServiceDTOConverter {
 	}
 	
 	private LocationConverter createLocationConverter(LoaderFactory loaderFactory) {
-		return new ProductLocationConverter(loaderFactory);
+		return new LocationServiceToContainerConverter(loaderFactory);
 	}
 	
 	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct) {
