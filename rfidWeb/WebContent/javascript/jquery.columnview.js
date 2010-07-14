@@ -30,7 +30,7 @@
           position:relative;\
         }\
         .containerobj div {\
-          height:100%;\
+          height:13em;\
           overflow-y:scroll;\
           overflow-x:hidden;\
           position:absolute;\
@@ -101,13 +101,13 @@
 
     // Event handling functions
     $(container).bind("click keydown", function(event) {
-      if ($(event.target).is("a") || $(event.target).parent('a')) {
+      if ($(event.target).is("a") || $(event.target).parent('a').length != 0) {
     	  
         var self;
         if ($(event.target).is("a")) {
         	self = event.target;
         } else {
-        	self = $(event.target).parent('a');
+        	self = $(event.target).parent('a').first();
         }
         if (!settings.multi) {
           delete event.shiftKey;
