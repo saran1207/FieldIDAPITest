@@ -24,7 +24,7 @@
           border: 1px solid #ccc;\
           background-color:#FFFFFF;\
           height:15em;\
-          overflow-x:auto;\
+          overflow-x:scroll;\
           overflow-y:hidden;\
           white-space:nowrap;\
           position:relative;\
@@ -145,7 +145,7 @@
           
           
           //Scroll to the right whenever a new node is selected.
-          $(container).scrollLeft("100000");
+          $(container).get(0).scrollLeft=10000;
           
         }
         // Handle Keyboard navigation
