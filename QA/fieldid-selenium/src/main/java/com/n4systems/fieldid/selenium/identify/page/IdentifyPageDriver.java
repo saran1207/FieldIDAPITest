@@ -77,7 +77,7 @@ public class IdentifyPageDriver {
 	private String orderDetailsLineItemsTableXpath = "//div[@id='resultsTable']/table";
 	private String orderDetailsLineItemsXpathCount = orderDetailsLineItemsTableXpath + "/tbody/tr/td[1]/..";
 	private String multiAddProductStatusSelectLocator = "xpath=//select[@id='step1form_productStatus']";
-	private String multiAddLocationTextFieldLocator = "xpath=//input[@id='location']";
+	private String multiAddLocationTextFieldLocator = "xpath=//input[@id='location_freeformLocation']";
 	private String multiAddPurchaseOrderTextFieldLocator = "xpath=//input[@id='step1form_purchaseOrder']";
 	private String multiAddIdentifiedTextFieldLocator = "xpath=//input[@id='identified']";
 	private String multiAddProductTypeSelectListLocator = "xpath=//select[@id='productType']";
