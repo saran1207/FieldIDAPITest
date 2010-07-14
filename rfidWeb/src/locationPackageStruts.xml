@@ -10,23 +10,33 @@
 			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>		
 
-		<action name="predefinedLocationsAdd" method="add" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
-			<result name="success" type="redirectAction">
-				<param name="actionName">predefinedLocations</param>
-				<param name="parentId">${parentId}</param>
-			</result>
-			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
+
+		<action name="predefinedLocationAdd" method="add" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="freemarker">/templates/html/location/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/location/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/add.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationEdit" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocationCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">predefinedLocationAdd</param>
+				<param name="parentId">${parentId}</param>
+			</result>
+			<result name="input" type="freemarker">/templates/html/location/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/add.ftl</result>
+		</action>
+		
+		<action name="predefinedLocationEdit" method="edit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="freemarker">/templates/html/location/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/location/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationDoEdit" method="edit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
-			<result name="success" type="redirectAction">predefinedLocationEdit</result>
+		<action name="predefinedLocationUpdate" method="update" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">predefinedLocationEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
 			<result name="input" type="freemarker">/templates/html/location/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit.ftl</result>
 		</action>

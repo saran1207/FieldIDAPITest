@@ -1,30 +1,8 @@
 ${action.setPageType('predefined_locations', 'location_edit')!}
-<#include "/templates/html/common/_formErrors.ftl"/>
 
-<head>
-	<@n4.includeStyle type="page" href="locationCrud" />
-	<#include "/templates/html/common/_columnView.ftl"/>
-	
-	<script type="text/javascript">
-		onDocumentLoad(function() {
-			jQuery('#nodeList').click(function(event){
-				 if (jQuery(event.target).is('a') || jQuery(event.target).parent('a')){
-				 	 jQuery('#name').attr("value",jQuery('#nodeList').getSelectedNode().name);
-				 }
-			});
-			
-	   		jQuery('#editLocation').click(function(){
-		       	jQuery('#currentNode').val(jQuery('#nodeList').getSelectedNode().id);
-	      	});
-	   });
-	</script>
-</head>
-
-<#if helper.hasPredefinedLocationTree()>
-	<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${nodeId!}"/>
-</#if>
-<@s.form action="predefinedLocationDoEdit" id="predefinedLocationDoEdit" theme="fieldid" cssClass="fullForm fluidSets">
-	<@s.hidden id="currentNode" name="nodeId"/>
+<@s.form action="predefinedLocationUpdate" theme="fieldid" cssClass="fullForm">
+	<#include "/templates/html/common/_formErrors.ftl"/>
+	<@s.hidden id="currentNode" name="uniqueID"/>
 	<div class="infoSet">
 		<label class='label'><@s.text name="label.title"/></label>
 		<@s.textfield id="name" name="name" />

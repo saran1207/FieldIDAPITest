@@ -8,8 +8,9 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	
 	<script type="text/javascript">
 	   onDocumentLoad(function() {
-		   		jQuery('#addLocation').click(function(){
-		       	jQuery('#parent').val(jQuery('#nodeList').getSelectedNode().id);
+		   		jQuery('#editLocation').click(function(){
+		       		var nodeId = jQuery('#nodeList').getSelectedNode().id;
+		       		redirect("<@s.url action="predefinedLocationEdit" />" + "?uniqueID="+nodeId);
 	      	});
 	      
 	      });
@@ -19,15 +20,6 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 <#if helper.hasPredefinedLocationTree()>
 	<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>
 </#if>
-	
-<@s.form action="predefinedLocationsAdd"  id="predefinedLocationsAdd" theme="fieldid" cssClass="fullForm fluidSets">
-	<div class="infoSet">
-		<label class='label'><@s.text name="label.title"/></label>
-		<@s.textfield id="nodeForm" name="name" />
-	</div>
-
-	<@s.hidden id="parent" name="parentId"/>
-		<div class="actions">
-			<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
-		</div>
-</@s.form> 
+<div class="blockSeparated">
+	<@s.submit id="editLocation" name="edit" key="label.edit_location"/>
+</div>
