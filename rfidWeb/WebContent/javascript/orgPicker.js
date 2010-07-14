@@ -65,7 +65,7 @@ function updateOwner(event) {
 	var containerContext = containerTarget.getAttribute("targetId");
 	var containerId = "";
 	
-	if (containerContext != null || containerContext != "") {
+	if (containerContext != null && containerContext != "") {
 		containerId = "#" + containerContext; 
 	}
 	setOwner(containerId,  element.getAttribute("org"), element.getAttribute("orgName"));
@@ -137,7 +137,7 @@ function selectOrg(event) {
 	var containerContext = containerTarget.getAttribute("targetId");
 	var containerId = "";
 	
-	if (containerContext != null || containerContext != "") {
+	if (containerContext != null && containerContext != "") {
 		containerId = "#" + containerContext; 
 	}
 	
