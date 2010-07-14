@@ -42,9 +42,9 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 
 	private List<String> collapseIntoList(Location advancedLocation) {
 		List<String> locationList = new ArrayList<String>();
-		
+
 		if (advancedLocation.hasPredefinedLocation()) {
-			
+
 			PredefinedLocation node = advancedLocation.getPredefinedLocation();
 			locationList.add(node.getName());
 			while (node.hasParent()) {
@@ -52,13 +52,10 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 				node = node.getParent();
 				locationList.add(node.getName());
 			}
-			
+
 			Collections.reverse(locationList);
-			return locationList;
-		} else {
-			locationList.add(advancedLocation.getFreeformLocation());
-			return locationList;
 		}
+		return locationList;
 
 	}
 
