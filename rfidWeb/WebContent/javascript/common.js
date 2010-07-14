@@ -544,7 +544,11 @@ function postForm(url, values) {
 		form.insert(new Element('input', { type:"hidden", name: name, value: values[name]}));
 	}
 	
+	form.hide();
+	$$('body').first().insert(form);
+
 	form.submit();
+	$$('body').first().remove(form);
 }
 
 function onDocumentLoad(functionToRun) {
