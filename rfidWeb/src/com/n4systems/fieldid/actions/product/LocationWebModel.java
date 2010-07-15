@@ -19,13 +19,8 @@ public class LocationWebModel {
 	
 	
 	public LocationWebModel matchLocation(Location location) {
-		if(location==null){
-			this.predefinedLocation = null;
-			this.freeformLocation = null;
-		}else{
-			this.predefinedLocation = location.getPredefinedLocation();
-			this.freeformLocation = location.getFreeformLocation();
-		}
+		this.predefinedLocation = location.getPredefinedLocation();
+		this.freeformLocation = location.getFreeformLocation();
 		return this;
 	}
 	
