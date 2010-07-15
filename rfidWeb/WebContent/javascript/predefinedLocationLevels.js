@@ -27,7 +27,7 @@ onDocumentLoad(function() {
 			
 			row.down('.name').hide();
 			row.down('.levelForm').show();
-			row.down('.levelForm').findFirstElement().focus().select();
+			row.down('.levelForm').findFirstElement().select();
 		}); 
 	});
 });
