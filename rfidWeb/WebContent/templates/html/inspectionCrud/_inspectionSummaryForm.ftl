@@ -32,14 +32,17 @@
 	<h2><@s.text name="label.customerinformation"/></h2>
 	
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.owner"/></label>
+		<label class="label" ><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="modifiableInspection.owner" required="true" id="ownerId" />
 	</div>	
 	
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.location"/></label>
-		<div class="fieldHolder"><@n4.location name="modifiableInspection.location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableInspection.location)}" theme="simple"/></div>
+		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
+		<div class="fieldHolder"><@n4.location name="modifiableInspection.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableInspection.location)}" theme="simple"/></div>
 	</div>
+
+
+
 </#if>
 
 <h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>
@@ -52,9 +55,9 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
 		<#if form_action="ADD">		
-			<@s.datetimepicker id="datePerformed" onchange="updateAutoSuggest();" name="modifiableInspection.datePerformed"  type="dateTime"/>
+			<@s.datetimepicker theme="fieldid" id="datePerformed" onchange="updateAutoSuggest();" name="modifiableInspection.datePerformed"  type="dateTime"/>
 		<#else>
-			<@s.datetimepicker id="datePerformed" name="modifiableInspection.datePerformed"  type="dateTime"/>
+			<@s.datetimepicker theme="fieldid" id="datePerformed" name="modifiableInspection.datePerformed"  type="dateTime"/>
 		</#if>
 		
 	</div>
