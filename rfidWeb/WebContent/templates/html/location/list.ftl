@@ -23,7 +23,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 </head>
 <#if helper.hasPredefinedLocationTree()>
 	<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>
+	<div class="blockSeparated">
+		<@s.submit id="editLocation" name="edit" key="label.edit_location"/>
+	</div>
 </#if>
-<div class="blockSeparated">
-	<@s.submit id="editLocation" name="edit" key="label.edit_location"/>
-</div>

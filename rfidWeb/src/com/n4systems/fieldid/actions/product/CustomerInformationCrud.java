@@ -36,7 +36,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	private List<Listable<Long>> divisions;
 	
 	private AssetWebModel asset = new AssetWebModel(this);
-	
+
 	public CustomerInformationCrud(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerial) {
 		super(persistenceManager);
 		this.productManager = productManager;
@@ -129,6 +129,10 @@ public class CustomerInformationCrud extends AbstractCrud {
 		ownerPicker.setOwnerId(id);
 	}
 	
+	public AssetWebModel getAsset() {
+		return asset;
+	}
+	
 	
 	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
@@ -139,4 +143,6 @@ public class CustomerInformationCrud extends AbstractCrud {
 	public boolean isLinked() {
 		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
 	}
+	
+	
 }
