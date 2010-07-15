@@ -141,7 +141,7 @@ public class PredefinedLocationCrud extends AbstractCrud {
 
 	private void testDependencies(){
 		if (predefinedLocation == null || predefinedLocation.isNew()) {
-			addActionErrorText("error.nopredefinedlocation");
+			addActionErrorText("error.no_predefinedlocation");
 			throw new MissingEntityException();
 		}
 	}

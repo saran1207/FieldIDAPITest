@@ -10,7 +10,11 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	   onDocumentLoad(function() {
 		   		jQuery('#editLocation').click(function(){
 		       		var nodeId = jQuery('#nodeList').getSelectedNode().id;
-		       		redirect("<@s.url action="predefinedLocationEdit" />" + "?uniqueID="+nodeId);
+		       		if(nodeId!=-1){
+		       			redirect("<@s.url action="predefinedLocationEdit" />" + "?uniqueID="+nodeId);
+		       		}else{
+		       			alert("<@s.text name="label.cannot_edit_root"/>")
+		       		}
 	      	});
 	      
 	      });
