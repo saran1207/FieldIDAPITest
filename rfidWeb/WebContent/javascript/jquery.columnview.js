@@ -28,6 +28,7 @@
           overflow-y:hidden;\
           white-space:nowrap;\
           position:relative;\
+          min-width:400px;\
         }\
         .containerobj div {\
           height:13em;\
