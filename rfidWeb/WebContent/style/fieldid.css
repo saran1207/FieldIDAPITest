@@ -1563,3 +1563,10 @@ input.description {
 	background-color:#EAEAEA;
 }
 
+
+#freeFormLabel{
+	display:inline;
+	float:none;
+	padding-left:0px;
+	}
+
