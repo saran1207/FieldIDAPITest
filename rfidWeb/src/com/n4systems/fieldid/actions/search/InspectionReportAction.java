@@ -23,6 +23,7 @@ import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
+import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
@@ -46,6 +47,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private final InspectionAttributeDynamicGroupGenerator attribGroupGen;
 	private final UserManager userManager;
 	
+	private OwnerPicker ownerPicker;
 	private InspectionReportType reportType;
 	private String savedReportName;
 	private List<Listable<Long>> employees;
@@ -55,8 +57,6 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private List<ListingPair> inspectionTypes;
 	private List<ProductStatusBean> statuses;
 	private List<ListingPair> eventJobs;
-	
-	private OwnerPicker ownerPicker;
 	
 	public InspectionReportAction(
 			final PersistenceManager persistenceManager,
@@ -71,11 +71,12 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		
 		attribGroupGen = new InspectionAttributeDynamicGroupGenerator(persistenceManager);
 	}
-
 	
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
+		
+		overrideHelper(new SearchHelper(getLoaderFactory()));
 	}
 	
 	@Override
@@ -90,7 +91,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	@Override
 	protected InspectionSearchContainer createSearchContainer() {
-		return new InspectionSearchContainer(getSecurityFilter());
+		return new InspectionSearchContainer(getSecurityFilter(), getLoaderFactory());
 	}
 	
 	@SkipValidation
@@ -268,7 +269,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			query.addSimpleWhere("user.id", getSessionUser().getId()).addSimpleWhere("id", getContainer().getSavedReportId());
 			
 			SavedReport savedReport = persistenceManager.find(query);  
-			return SavedReportHelper.isModified(getContainer(), savedReport, getSecurityFilter());
+			return SavedReportHelper.isModified(getContainer(), savedReport, getSecurityFilter(), getLoaderFactory());
 		} else {
 			return false;
 		} 
@@ -286,7 +287,16 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 		return eventJobs;
 	}
-
+	
+	public boolean isLocalInspection(int rowId) {
+		Inspection inspection = (Inspection)getEntityForRow(rowId);
+		return inspection.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
+	}
+	
+	public List<Status> getStatuses() {
+		return Arrays.asList(Status.values());
+	}
+	
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -298,14 +308,5 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());	
-	}
-	
-	public boolean isLocalInspection(int rowId) {
-		Inspection inspection = (Inspection)getEntityForRow(rowId);
-		return inspection.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
-	}
-	
-	public List<Status> getStatuses() {
-		return Arrays.asList(Status.values());
 	}
 }

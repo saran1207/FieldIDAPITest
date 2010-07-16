@@ -15,7 +15,6 @@ import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.ViewTree;
 import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SharedReportUserListLoader;
 import com.n4systems.model.user.User;
@@ -65,7 +64,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	@SkipValidation
 	public String doLoad() {
 		testRequiredEntities(true);
-		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getSecurityFilter());
+		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter());
 		
 		InspectionSearchContainer container = converter.convert(report);
 		
@@ -120,7 +119,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	}
 
 	private void convertReport(InspectionSearchContainer inspectionSearchContainer) {
-		report = new SavedReportSearchCriteriaConverter(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), getSecurityFilter()).convertInto(inspectionSearchContainer, report);
+		report = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter()).convertInto(inspectionSearchContainer, report);
 	}
 
 	@SkipValidation

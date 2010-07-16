@@ -64,15 +64,11 @@
 			
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
-				<@s.textfield name="criteria.location"/>
-
-				
-
+				<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
+			</div>
 			
-							
-			</div>	
 			<div class="infoSet">
-				<label for="owner"><@s.text name="label.owner"/></label>
+				<label for="owner"><@s.text name="label.owner" /></label>
 				<@n4.orgPicker name="owner"/>
 			</div>
 			

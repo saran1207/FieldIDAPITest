@@ -56,7 +56,7 @@
 			
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>
-				<@s.textfield name="criteria.location"/>
+				<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
 			</div>	
 		
 			<div class="infoSet">

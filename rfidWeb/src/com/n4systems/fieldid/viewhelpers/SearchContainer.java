@@ -6,13 +6,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.n4systems.fieldid.actions.api.LoaderFactoryProvider;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
+import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortTerm;
+import com.n4systems.util.persistence.search.JoinTerm.JoinTermType;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
 import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
@@ -21,34 +25,35 @@ import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTermOrNull;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 
-abstract public class SearchContainer implements BaseSearchDefiner, Serializable, ProductTypeFilteredSearchContainer {
+abstract public class SearchContainer implements BaseSearchDefiner, Serializable, ProductTypeFilteredSearchContainer, LoaderFactoryProvider {
 	private static final String STRUTS_VALUE_WHEN_YOU_SELECT_NO_VALUES_FROM_CHECKBOXES = "false";
 
 	private static final long serialVersionUID = 1L;
 	
+	private final LoaderFactory loaderFactory;
 	private final String searchClassIdField;
 	private final Class<?> searchClass;
 	private final SecurityFilter securityFilter;
-	private final String[] joinColumns;
 	private String searchId = String.valueOf(Math.abs((new Random()).nextLong()));
 	private List<String> selectedColumns = new ArrayList<String>();
 	private List<SortTerm> sortTerms = new ArrayList<SortTerm>();
 	private List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
-	private List<QueryFilter> searchFilters = new ArrayList<QueryFilter>(); 
+	private List<QueryFilter> searchFilters = new ArrayList<QueryFilter>();
+	private List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 	private String sortColumn;
 	private String sortDirection;
 	
-	public SearchContainer(Class<?> searchClass, String searchClassIdField, SecurityFilter securityFilter, String...joinColumns) {
+	public SearchContainer(Class<?> searchClass, String searchClassIdField, SecurityFilter securityFilter, LoaderFactory loaderFactory) {
 		this.searchClass = searchClass;
 		this.searchClassIdField = searchClassIdField;
 		this.securityFilter = securityFilter;
-		this.joinColumns = joinColumns;
-		
+		this.loaderFactory = loaderFactory;
 	}
 	
 	// XXX - I don't like this system ... need to find something better which actually requires you to setup the search/sort terms
 	abstract protected void evalSearchTerms();
 	abstract protected void evalSearchFilters();
+	abstract protected void evalJoinTerms();
 	abstract protected String defaultSortColumn();
 	abstract protected SortTerm.Direction defaultSortDirection();
 	
@@ -138,8 +143,14 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 		return searchTerms;
 	}
 	
-	public String[] getJoinColumns() {
-		return joinColumns;
+	public List<JoinTerm> getJoinTerms() {
+		joinTerms.clear();
+		evalJoinTerms();
+		return joinTerms;
+	}
+	
+	protected void addCustomTerm(SearchTermDefiner term) {
+		searchTerms.add(term);
 	}
 	
 	protected <T> void addSimpleTermOrNull(String field, T value) {
@@ -192,5 +203,24 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 		if (owner != null) {
 			searchFilters.add(new OwnerAndDownFilter(owner));
 		}
+	}
+	
+	protected void addRequiredLeftJoin(String path, String alias) {
+		joinTerms.add(new JoinTerm(JoinTermType.LEFT, path, alias, true));
+	}
+	
+	protected void addLeftJoinTerm(String path) {
+		joinTerms.add(new JoinTerm(JoinTermType.LEFT, path, null, false));
+	}
+	
+	protected void addLeftJoinTerms(String...paths) {
+		for (String path: paths) {
+			addLeftJoinTerm(path);
+		}
+	}
+	
+	@Override
+	public LoaderFactory getLoaderFactory() {
+		return loaderFactory;
 	}
 }

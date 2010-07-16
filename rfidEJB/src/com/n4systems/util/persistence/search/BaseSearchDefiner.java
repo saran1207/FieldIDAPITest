@@ -10,6 +10,6 @@ public interface BaseSearchDefiner extends Serializable {
 	public Class<?> getSearchClass();
 	public List<SearchTermDefiner> getSearchTerms();
 	public List<QueryFilter> getSearchFilters();
-	public String[] getJoinColumns();
+	public List<JoinTerm> getJoinTerms();
 	public List<SortTerm> getSortTerms();
 }

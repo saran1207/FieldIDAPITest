@@ -1205,7 +1205,7 @@ li.buttonGroupLabels {
 }
 
 .infoSet {
-	min-height: 32px;
+	min-height: 40px;
 }
 
 .crudForm .infoSet span.unitOfMeasure input,.crudForm .infoSet span.date input

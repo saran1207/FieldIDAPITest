@@ -8,14 +8,12 @@ import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 public class ImmutableBaseSearchDefiner implements BaseSearchDefiner {
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private List<SortTerm> sortTerms;
-	private String[] joinColumns;
 	private Class<?> searchClass;
 	private List<SearchTermDefiner> searchTerms;
 	private List<QueryFilter> searchFilters;
-	
+	private List<JoinTerm> joinTerms;
 	
 	public ImmutableBaseSearchDefiner() {
 		super();
@@ -24,8 +22,7 @@ public class ImmutableBaseSearchDefiner implements BaseSearchDefiner {
 	public ImmutableBaseSearchDefiner(BaseSearchDefiner definer) {
 		super();
 		sortTerms = new ArrayList<SortTerm>(definer.getSortTerms());
-		joinColumns = new String[definer.getJoinColumns().length];
-		System.arraycopy(definer.getJoinColumns(), 0, joinColumns, 0, definer.getJoinColumns().length);  // copy the array so that it doesn't get updated.
+		joinTerms = new ArrayList<JoinTerm>(definer.getJoinTerms());
 		searchClass = definer.getSearchClass();
 		searchTerms = new ArrayList<SearchTermDefiner>(definer.getSearchTerms());
 		searchFilters = new ArrayList<QueryFilter>(definer.getSearchFilters());
@@ -35,10 +32,10 @@ public class ImmutableBaseSearchDefiner implements BaseSearchDefiner {
 		return sortTerms;
 	}
 
-	public String[] getJoinColumns() {
-		return joinColumns;
+	public List<JoinTerm> getJoinTerms() {
+		return joinTerms;
 	}
-
+	
 	public Class<?> getSearchClass() {
 		return searchClass;
 	}
@@ -50,5 +47,4 @@ public class ImmutableBaseSearchDefiner implements BaseSearchDefiner {
 	public List<QueryFilter> getSearchFilters() {
 		return searchFilters;
 	}
-
 }

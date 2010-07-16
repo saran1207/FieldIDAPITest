@@ -2,18 +2,19 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.util.Date;
 
+import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.Product;
+import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.persistence.search.SortTerm;
 
 public class ProductSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"shopOrder.order", "productStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "type.group"};
-	
 	private String rfidNumber;
 	private String serialNumber;
-	private String location;
+	private LocationWebModel location = new LocationWebModel(this);
 	private String orderNumber;
 	private String referenceNumber;
 	private String purchaseOrder;
@@ -25,15 +26,21 @@ public class ProductSearchContainer extends SearchContainer {
 	private Date fromDate;
 	private Date toDate;
 	
-	public ProductSearchContainer(SecurityFilter filter) {
-		super(Product.class, "id", filter, joinColumns);
+	public ProductSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory) {
+		super(Product.class, "id", filter, loaderFactory);
 	}
 
+	@Override
+	protected void evalJoinTerms() {
+		addLeftJoinTerms("shopOrder.order", "productStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "type.group");
+		addPredefinedLocationJoin();
+	}
+	
 	@Override
 	protected void evalSearchTerms() {
 		addStringTerm("rfidNumber", rfidNumber);
 		addWildcardTerm("serialNumber", serialNumber);
-		addWildcardTerm("advancedLocation.freeformLocation", location);
+		addWildcardTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		addStringTerm("shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("customerRefNumber", referenceNumber);
 		addStringTerm("purchaseOrder", purchaseOrder);
@@ -42,8 +49,20 @@ public class ProductSearchContainer extends SearchContainer {
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
 		addDateRangeTerm("identified", fromDate, toDate);
 		
+		addPredefinedLocationTerm();
 		addAssignedUserTerm();
-		
+	}
+
+	private void addPredefinedLocationJoin() {
+		if (location.getPredefinedLocationId() != null) {
+			addRequiredLeftJoin("advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
+		}
+	}
+	
+	private void addPredefinedLocationTerm() {
+		if (location.getPredefinedLocationId() != null) {
+			addCustomTerm(new PredefinedLocationSearchTerm("preLocSearchId", location.getPredefinedLocationId()));
+		}
 	}
 
 	private void addAssignedUserTerm() {
@@ -86,12 +105,8 @@ public class ProductSearchContainer extends SearchContainer {
 		this.serialNumber = serialNumber;
 	}
 	
-	public String getLocation() {
+	public LocationWebModel getLocation() {
 		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public String getOrderNumber() {

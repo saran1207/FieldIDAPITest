@@ -32,6 +32,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
+import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -86,9 +87,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), convertToIdList(getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup())));
 	}
-	
-	
-	
+
 	abstract protected T createSearchContainer();
 	
 	private void initializeColumnMappings() {
@@ -244,8 +243,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return getContainer().getSearchTerms();
 	}
 	
-	public String[] getJoinColumns() {
-		return getContainer().getJoinColumns();
+	public List<JoinTerm> getJoinTerms() {
+		return getContainer().getJoinTerms();
 	}
 
 	public ResultTransformer<TableView> getTransformer() {
@@ -454,5 +453,4 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
 	}
 	
-
 }

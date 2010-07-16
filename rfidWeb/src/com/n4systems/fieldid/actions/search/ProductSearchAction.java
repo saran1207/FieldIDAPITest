@@ -17,7 +17,7 @@ import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAt
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
-import com.n4systems.fieldid.viewhelpers.ProductSearchHelper;
+import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.DateHelper;
@@ -29,26 +29,24 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	public static final String SEARCH_CRITERIA = "searchCriteria";
 	private static final long serialVersionUID = 1L;
 
-	private List<Listable<Long>> employees;
 	private OwnerPicker ownerPicker;
+	private List<Listable<Long>> employees;
 	private List<Long> searchIds;
 
 	public ProductSearchAction(final PersistenceManager persistenceManager, final ProductManager productManager) {
-
 		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
-
 	}
 
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
 		
-		overrideHelper(new ProductSearchHelper(getLoaderFactory()));
+		overrideHelper(new SearchHelper(getLoaderFactory()));
 	}
-
+	
 	@Override
 	protected ProductSearchContainer createSearchContainer() {
-		return new ProductSearchContainer(getSecurityFilter());
+		return new ProductSearchContainer(getSecurityFilter(), getLoaderFactory());
 	}
 
 	@SkipValidation
@@ -124,7 +122,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		}
 		return employees;
 	}
-
+	
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -135,8 +133,6 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
-		getContainer().setOwner(ownerPicker.getOwner());
+		getContainer().setOwner(ownerPicker.getOwner());	
 	}
-
-	
 }

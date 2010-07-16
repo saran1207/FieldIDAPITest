@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.viewhelpers;
 
 import java.util.List;
-import java.util.Stack;
 
 import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.persistence.Transaction;
@@ -43,7 +41,6 @@ public class LocationHelper {
 		});
 	}
 
-
 	public String getFullNameOfLocation(LocationWebModel location) {
 		return getFullNameOfLocation(location.createLocation());
 	}
@@ -52,55 +49,6 @@ public class LocationHelper {
 		if (location == null) {
 			return "";
 		}
-		
-		Stack<String> names = new Stack<String>();
-		
-		addFreeform(names, location);
-		
-		addPredefined(names, location);
-		
-		return convertStackToString(names);
+        return location.getFullName();
 	}
-	
-	
-	private String convertStackToString(Stack<String> names) {
-		String fullName = "";
-		while (!names.isEmpty()) {
-			fullName += names.pop();
-			if (!names.isEmpty()) {
-				fullName += " ";
-			}
-		}
-		return fullName;
-	}
-
-
-
-	private void addPredefined(Stack<String> names, Location location) {
-		if (location.hasPredefinedLocation()) {
-			PredefinedLocation predefinedLocation = location.getPredefinedLocation();
-			
-			names.push(predefinedLocation.getName());
-			
-			while (predefinedLocation.hasParent()) {
-				names.push(predefinedLocation.getParent().getName());
-				
-				predefinedLocation = predefinedLocation.getParent();
-			}
-		}
-	}
-
-
-
-	private void addFreeform(Stack<String> names, Location location) {
-		if (location.hasFreeform()) { 
-			names.push(location.getFreeformLocation());
-		}
-	}
-
-
-	
-
-	
-	
 }

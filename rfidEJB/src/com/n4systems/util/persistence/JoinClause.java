@@ -5,11 +5,16 @@ import com.n4systems.exceptions.InvalidQueryException;
 public class JoinClause implements ClauseArgument {
 	private static final long serialVersionUID = 1L;
 	
-	public enum JoinType {
-		LEFT("LEFT JOIN", true), RIGHT("RIGHT JOIN", true), FETCH("LEFT JOIN FETCH", false), INNER( "INNER JOIN", true ),
-		REQUIRED_LEFT("LEFT JOIN",true);
-		
+	public static JoinClause createFetchJoin(String param) {
+		return new JoinClause(JoinType.FETCH, param, null, false);
+	}
 	
+	public enum JoinType {
+		LEFT("LEFT JOIN", true), 
+		RIGHT("RIGHT JOIN", true), 
+		FETCH("LEFT JOIN FETCH", false), 
+		INNER("INNER JOIN", true);
+		
 		private String joinSql;
 		private boolean usesAlias;
 		
@@ -27,50 +32,34 @@ public class JoinClause implements ClauseArgument {
 		}
 	};
 	
-	private JoinType type;
-	private String param;
-	private String alias;
+	private final JoinType type;
+	private final String param;
+	private final String alias;
+	private final boolean required;
 	
-	public JoinClause() {}
-	
-	public JoinClause(String param) {
-		this(JoinType.FETCH, param, null);
-	}
-	
-	public JoinClause(String param, String alias) {
-		this(JoinType.LEFT, param, alias);
-	}
-	
-	public JoinClause(JoinType type, String param, String alias) {
+	public JoinClause(JoinType type, String param, String alias, boolean required) {
 		this.type = type;
 		this.param = param;
 		this.alias = alias;
+		this.required = required;
 	}
 
 	public String getParam() {
 		return param;
 	}
 
-	public void setParam(String param) {
-		this.param = param;
-	}
-
 	public JoinType getType() {
 		return type;
-	}
-
-	public void setType(JoinType type) {
-		this.type = type;
 	}
 
 	public String getAlias() {
 		return alias;
 	}
 
-	public void setAlias(String alias) {
-		this.alias = alias;
+	public boolean isRequired() {
+		return required;
 	}
-
+	
 	public String getClause(FromTable table) throws InvalidQueryException {
 		if(type == null || param == null || param.length() < 1) {
 			throw new InvalidQueryException("The fetch parameter and type and requried for a FetchClause");

@@ -392,19 +392,24 @@ public class QueryBuilder<E> {
 		return this;
 	}
 	
+	public QueryBuilder<E> addJoin(JoinClause join) {
+		joinArguments.add(join);
+		return this;
+	}
+	
 	public QueryBuilder<E> addLeftJoin(String param, String alias) {
-		joinArguments.add(new JoinClause(JoinType.LEFT, param, alias));
+		joinArguments.add(new JoinClause(JoinType.LEFT, param, alias, false));
 		return this;
 	}
 	
 	public QueryBuilder<E> addRequiredLeftJoin(String param, String alias) {
-		joinArguments.add(new JoinClause(JoinType.REQUIRED_LEFT, param, alias));
+		joinArguments.add(new JoinClause(JoinType.LEFT, param, alias, true));
 		return this;
 	}
 	
 	public QueryBuilder<E> addFetch(String ... params) {
 		for(String param: params) {
-			joinArguments.add(new JoinClause(param));
+			joinArguments.add(JoinClause.createFetchJoin(param));
 		}
 		return this;
 	}
@@ -465,7 +470,7 @@ public class QueryBuilder<E> {
 
 	private void removeNonRequiredJoins(Set<JoinClause> applicableJoins) {
 		for (JoinClause joinClause : joinArguments) {
-			if (joinClause.getType() != JoinType.REQUIRED_LEFT) {
+			if (!joinClause.isRequired()) {
 				applicableJoins.remove(joinClause);
 			}
 		}

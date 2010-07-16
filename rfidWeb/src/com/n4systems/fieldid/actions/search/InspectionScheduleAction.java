@@ -18,6 +18,7 @@ import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAt
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
+import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
@@ -36,10 +37,9 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	private final InspectionManager inspectionManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	
+	private OwnerPicker ownerPicker;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> eventJobs;
-	
-	private OwnerPicker ownerPicker;
 	
 	public InspectionScheduleAction(
 			final PersistenceManager persistenceManager, 
@@ -68,13 +68,13 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
+		
+		overrideHelper(new SearchHelper(getLoaderFactory()));
 	}
-	
-	
 	
 	@Override
 	protected InspectionScheduleSearchContainer createSearchContainer() {
-		return new InspectionScheduleSearchContainer(getSecurityFilter());
+		return new InspectionScheduleSearchContainer(getSecurityFilter(), getLoaderFactory());
 	}
 	
 	@Override
@@ -184,7 +184,6 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
-		getContainer().setOwner(ownerPicker.getOwner());
-		
+		getContainer().setOwner(ownerPicker.getOwner());	
 	}
 }

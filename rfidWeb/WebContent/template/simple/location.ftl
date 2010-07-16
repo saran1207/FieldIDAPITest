@@ -31,7 +31,11 @@
 				var node = jQuery('#${parameters.id}_predefinedLocationSelector').getSelectedNode();
 				$('${parameters.id}_predefinedLocationId').value = node.id;
 				$('${parameters.id}').value = $('${parameters.id}_freeformInput').getValue();
-				$('${parameters.id}_locationName').value = node.parentNames.join(" ") + " " + node.name + " " + $('${parameters.id}_freeformInput').getValue();
+				
+				
+				var freeFormValue = $('${parameters.id}_freeformInput').getValue();
+				
+				$('${parameters.id}_locationName').value = node.parentNames.join(" > ") + " > " + node.name + ((freeFormValue) ? ": " + freeFormValue : "") 
 				$('${parameters.id}').fire("location:change");
 				
 			});

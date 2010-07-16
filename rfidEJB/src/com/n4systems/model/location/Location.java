@@ -33,18 +33,23 @@ public class Location {
 	public Location(PredefinedLocation predefinedLocation, String freeformLocation) {
 		super();
 		this.predefinedLocation = predefinedLocation;
-		this.freeformLocation = freeformLocation == null ? "" : freeformLocation;
+		setFreeformLocation(freeformLocation);
 	}
 	
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public PredefinedLocation getPredefinedLocation() {
 		return predefinedLocation;
 	}
+	
 	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
 	public String getFreeformLocation() {
 		return freeformLocation;
 	}
 
+	protected void setFreeformLocation(String freeformLocation) {
+		this.freeformLocation = (freeformLocation == null) ? "" : freeformLocation;
+	}
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
@@ -59,7 +64,7 @@ public class Location {
 	}
 
 	public boolean hasFreeform() {
-		return freeformLocation != null && !freeformLocation.isEmpty();
+		return !freeformLocation.isEmpty();
 	}
 
 	public boolean hasPredefinedLocation() {
@@ -76,7 +81,16 @@ public class Location {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 	
-	
+	public String getFullName() {
+		String fullName = "";
+        if (hasPredefinedLocation()) {
+            fullName += predefinedLocation.getFullName();
 
+            if (hasFreeform())
+                fullName += ": ";
+        }
 
+        fullName += freeformLocation;
+        return fullName;
+	}
 }

@@ -21,6 +21,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
+import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
@@ -105,9 +106,9 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 		QueryBuilder<T> searchBuilder = new QueryBuilder<T>(definer.getSearchClass(), securityFilter);
 
 		// add all the left join columns
-		if (definer.getJoinColumns() != null) {
-			for (String column: definer.getJoinColumns()) {
-				searchBuilder.addLeftJoin(column, null);
+		if (definer.getJoinTerms() != null) {
+			for (JoinTerm join: definer.getJoinTerms()) {
+				searchBuilder.addJoin(join.toJoinClause());
 			}
 		}
 		

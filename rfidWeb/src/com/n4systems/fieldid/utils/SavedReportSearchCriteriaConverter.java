@@ -4,25 +4,21 @@ import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
 
 public class SavedReportSearchCriteriaConverter {
 
-	private final FilteredIdLoader<BaseOrg> loader;
+	private final LoaderFactory loaderFactory;
 	private final SecurityFilter filter;
-	
-
 		
-	public SavedReportSearchCriteriaConverter(FilteredIdLoader<BaseOrg> loader, SecurityFilter filter) {
-		this.loader = loader;
+	public SavedReportSearchCriteriaConverter(LoaderFactory loaderFactory, SecurityFilter filter) {
+		this.loaderFactory = loaderFactory;
 		this.filter = filter;
 	}
 
-
-
 	public InspectionSearchContainer convert(SavedReport savedReport) {
-		InspectionSearchContainer container = new InspectionSearchContainer(filter);
+		InspectionSearchContainer container = new InspectionSearchContainer(filter, loaderFactory);
 		container.setSelectedColumns(savedReport.getColumns());
 		container.setSortColumn(savedReport.getSortColumn());
 		container.setSortDirection(savedReport.getSortDirection());
@@ -32,8 +28,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setRfidNumber(savedReport.getStringCriteria(SavedReport.RFID_NUMBER));
 		container.setSerialNumber(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
 		container.setReferenceNumber(savedReport.getStringCriteria(SavedReport.REFERENCE_NUMBER));
-		container.setLocation(savedReport.getStringCriteria(SavedReport.LOCATION));
-		
+		container.getLocation().setFreeformLocation(savedReport.getStringCriteria(SavedReport.LOCATION));
 			
 		container.setInspectionBook(savedReport.getLongCriteria(SavedReport.INSPECTION_BOOK));
 		container.setInspectionTypeGroup(savedReport.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
@@ -50,7 +45,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setSavedReportId(savedReport.getId());
 		container.setSavedReportModified(false);
 		if (savedReport.getLongCriteria(SavedReport.OWNER_ID) != null) {
-			container.setOwner(loader.setId(savedReport.getLongCriteria(SavedReport.OWNER_ID)).load());
+			container.setOwner(loaderFactory.createFilteredIdLoader(BaseOrg.class).setId(savedReport.getLongCriteria(SavedReport.OWNER_ID)).load());
 		}
 		
 		return container;

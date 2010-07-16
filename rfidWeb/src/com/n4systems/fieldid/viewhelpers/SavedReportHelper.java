@@ -2,16 +2,15 @@ package com.n4systems.fieldid.viewhelpers;
 
 
 import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class SavedReportHelper {
 
-	public static boolean isModified(InspectionSearchContainer inspectionSearchContainer, SavedReport originalReport, SecurityFilter filter) {
-		SavedReport report = new SavedReportSearchCriteriaConverter(new FilteredIdLoader<BaseOrg>(filter, BaseOrg.class), filter).convertInto(inspectionSearchContainer, new SavedReport());
+	public static boolean isModified(InspectionSearchContainer inspectionSearchContainer, SavedReport originalReport, SecurityFilter filter, LoaderFactory loaderFactory) {
+		SavedReport report = new SavedReportSearchCriteriaConverter(loaderFactory, filter).convertInto(inspectionSearchContainer, new SavedReport());
 		return areReportsDifferent(originalReport, report);
 	}
 	

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.n4systems.ejb.SearchPerformer;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -13,6 +12,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ExcelBuilder;
 import com.n4systems.util.persistence.QueryFilter;
+import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -92,9 +92,9 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 	public List<SearchTermDefiner> getSearchTerms() {
 		return searchDefiner.getSearchTerms();
 	}
-
-	public String[] getJoinColumns() {
-		return searchDefiner.getJoinColumns();
+	
+	public List<JoinTerm> getJoinTerms() {
+		return searchDefiner.getJoinTerms();
 	}
 
 	public SearchDefiner<TableView> getSearchDefiner() {

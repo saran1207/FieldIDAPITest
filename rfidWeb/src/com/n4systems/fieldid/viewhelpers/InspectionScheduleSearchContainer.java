@@ -3,21 +3,23 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.util.Date;
 
+import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.persistence.search.SortTerm;
 
 public class InspectionScheduleSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
-	private static final String[] joinColumns = {"product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "product.type.group"};
-	
+
 	private String rfidNumber;
 	private String serialNumber;
 	private String orderNumber;
 	private String purchaseOrder;
-	private String location;
+	private LocationWebModel location = new LocationWebModel(this);
 	private String referenceNumber;
 	private Long productStatusId;
 	private Long productTypeId;
@@ -31,17 +33,22 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	private Date fromDate;
 	private CompressedScheduleStatus status = CompressedScheduleStatus.INCOMPLETE;
 	
-	public InspectionScheduleSearchContainer(SecurityFilter securityFilter) {
-		super(InspectionSchedule.class, "id", securityFilter, joinColumns);
-		
+	public InspectionScheduleSearchContainer(SecurityFilter securityFilter, LoaderFactory loaderFactory) {
+		super(InspectionSchedule.class, "id", securityFilter, loaderFactory);	
 	}
 
+	@Override
+	protected void evalJoinTerms() {
+		addLeftJoinTerms("product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "product.type.group");
+		addPredefinedLocationJoin();
+	}
+	
 	@Override
 	protected void evalSearchTerms() {
 		addStringTerm("product.rfidNumber", rfidNumber);
 		addWildcardTerm("product.serialNumber", serialNumber);
 		addWildcardTerm("product.shopOrder.order.orderNumber", orderNumber);
-		addWildcardTerm("advancedLocation.freeformLocation", location);
+		addWildcardTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		addStringTerm("product.purchaseOrder", purchaseOrder);
 		addStringTerm("product.customerRefNumber", referenceNumber);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
@@ -53,8 +60,20 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		addDateRangeTerm("nextDate", fromDate, toDate);
 		addSimpleInTerm("status", status.getScheduleStatuses());
 		
+		addPredefinedLocationTerm();
 		addAssigUserTerm();
-		
+	}
+	
+	private void addPredefinedLocationJoin() {
+		if (location.getPredefinedLocationId() != null) {
+			addRequiredLeftJoin("advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
+		}
+	}
+	
+	private void addPredefinedLocationTerm() {
+		if (location.getPredefinedLocationId() != null) {
+			addCustomTerm(new PredefinedLocationSearchTerm("preLocSearchId", location.getPredefinedLocationId()));
+		}
 	}
 
 	private void addAssigUserTerm() {
@@ -196,12 +215,8 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		this.jobAndNullId = jobAndNullId;
 	}
 
-	public String getLocation() {
+	public LocationWebModel getLocation() {
 		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public BaseOrg getOwner() {

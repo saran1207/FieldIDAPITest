@@ -2,21 +2,21 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.util.Date;
 
+import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Status;
+import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 
 
 public class InspectionSearchContainer extends SearchContainer implements ReportDefiner {
 	private static final long serialVersionUID = 1L;
-	
 	public static final long UNASSIGNED_USER = 0L;
-	
-	private static final String[] joinColumns = {"book", "product.shopOrder.order", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group", "productStatus"};
 	
 	private Long savedReportId;
 	private boolean savedReportModified;
@@ -26,7 +26,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private String orderNumber;
 	private String purchaseOrder;
 	private String referenceNumber;
-	private String location;
+	private LocationWebModel location = new LocationWebModel(this);
 	private BaseOrg owner;
 	private Long productTypeId;
 	private Long productTypeGroupId;
@@ -42,8 +42,14 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	
 	private Status status;
 	
-	public InspectionSearchContainer(SecurityFilter filter) {
-		super(Inspection.class, "id", filter, joinColumns);
+	public InspectionSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory) {
+		super(Inspection.class, "id", filter, loaderFactory);
+	}
+	
+	@Override
+	protected void evalJoinTerms() {
+		addLeftJoinTerms("book", "product.shopOrder.order", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group", "productStatus");
+		addPredefinedLocationJoin();
 	}
 	
 	@Override
@@ -53,7 +59,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		addStringTerm("product.shopOrder.order.orderNumber", orderNumber);
 		addStringTerm("product.purchaseOrder", purchaseOrder);
 		addStringTerm("product.customerRefNumber", referenceNumber);
-		addWildcardTerm("advancedLocation.freeformLocation", location);
+		addWildcardTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);
@@ -65,10 +71,19 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		
 		addInspectionBookTerm();
 		addAssignedToTerm();
-		
-		
-		
-
+		addPredefinedLocationTerm();
+	}
+	
+	private void addPredefinedLocationJoin() {
+		if (location.getPredefinedLocationId() != null) {
+			addRequiredLeftJoin("advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
+		}
+	}
+	
+	private void addPredefinedLocationTerm() {
+		if (location.getPredefinedLocationId() != null) {
+			addCustomTerm(new PredefinedLocationSearchTerm("preLocSearchId", location.getPredefinedLocationId()));
+		}
 	}
 
 	private void addInspectionBookTerm() {
@@ -255,12 +270,8 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		this.referenceNumber = referenceNumber;
 	}
 
-	public String getLocation() {
+	public LocationWebModel getLocation() {
 		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public BaseOrg getOwner() {
