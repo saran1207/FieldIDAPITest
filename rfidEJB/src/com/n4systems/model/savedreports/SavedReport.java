@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
-
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
@@ -44,6 +43,7 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String JOB_ID = "jobId";
 	public static final String REFERENCE_NUMBER = "referenceNumber";
 	public static final String LOCATION = "location";
+	public static final String PREDEFINED_LOCATION_ID = "predefinedLocationId";
 	public static final String OWNER_ID = "ownerId";
 	public static final String PRODUCT_TYPE_GROUP = "productTypeGroup";
 	

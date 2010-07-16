@@ -29,7 +29,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setSerialNumber(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
 		container.setReferenceNumber(savedReport.getStringCriteria(SavedReport.REFERENCE_NUMBER));
 		container.getLocation().setFreeformLocation(savedReport.getStringCriteria(SavedReport.LOCATION));
-			
+		container.getLocation().setPredefinedLocationId(savedReport.getLongCriteria(SavedReport.PREDEFINED_LOCATION_ID));
 		container.setInspectionBook(savedReport.getLongCriteria(SavedReport.INSPECTION_BOOK));
 		container.setInspectionTypeGroup(savedReport.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
 		container.setPerformedBy(savedReport.getLongCriteria(SavedReport.PERFORMED_BY));
@@ -75,8 +75,9 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.PRODUCT_TYPE_GROUP, container.getProductTypeGroup());
 		report.setInCriteria(SavedReport.ASSIGNED_USER, container.getAssignedUser());
 		report.setInCriteria(SavedReport.JOB_ID, container.getJob());
-		report.setInCriteria(SavedReport.LOCATION, container.getLocation());
-
+		report.setInCriteria(SavedReport.LOCATION, container.getLocation().getFreeformLocation());
+		report.setInCriteria(SavedReport.PREDEFINED_LOCATION_ID, container.getLocation().getPredefinedLocationId());
+		
 		if (container.getFromDate() != null) {
 			report.setInCriteria(SavedReport.FROM_DATE, DateHelper.date2String(SavedReport.DATE_FORMAT, container.getFromDate()));
 		}
