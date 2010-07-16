@@ -50,7 +50,7 @@ public class LocationHelperTest {
 	
 	
 	@Test
-	public void should_separate_names_by_a_space() throws Exception {
+	public void should_separate_names_by_a_greater_than_sign() throws Exception {
 		PredefinedLocation predefinedLocationParent = new PredefinedLocation();
 		predefinedLocationParent.setName("root");
 		
@@ -58,7 +58,7 @@ public class LocationHelperTest {
 		
 		
 		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(locationWithOnlyPredefined(predefinedLocationChild));
-		assertThat(generatedName, equalTo("root leaf"));
+		assertThat(generatedName, equalTo("root > leaf"));
 	}
 
 

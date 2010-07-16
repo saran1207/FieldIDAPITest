@@ -7,6 +7,7 @@
 		dynamicColumnUrl = '<@s.url action="reportDynamicColumns" namespace="/ajax" />';
 	</script>	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<style type="text/css">
 		
 		#criteriaForm {
