@@ -76,6 +76,8 @@ public class CustomerInformationCrud extends AbstractCrud {
 		testRequiredEntities();
 		
 		try {	
+			asset.fillInAsset(product);
+			
 			legacyProductManager.update(product, getUser());
 			addFlashMessageText("message.productupdated");
 			
@@ -132,7 +134,6 @@ public class CustomerInformationCrud extends AbstractCrud {
 	public AssetWebModel getAsset() {
 		return asset;
 	}
-	
 	
 	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
