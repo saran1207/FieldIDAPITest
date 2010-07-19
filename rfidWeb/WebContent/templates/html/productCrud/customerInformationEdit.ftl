@@ -4,6 +4,7 @@ ${action.setPageType('product', 'customer_edit')!}
 </head>
 <@s.form action="customerInformationUpdate" cssClass="crudForm" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<@s.hidden name="uniqueID"/>
 	<h2>
 		<#if securityGuard.jobSitesEnabled>
