@@ -72,12 +72,13 @@
 				<label><a href="<@s.url action="inspectionBooks"/>" ><@s.text name="title.manage_inspection_books.plural" /></a></label>
 				<span>Create inspection books to organize your inspections.</span>
 			</p>
-			
-			<p>
-				<label><a href="<@s.url action="predefinedLocations"/>" ><@s.text name="title.manage_predefined_locations.plural" /></a></label>
-				<span>Manage your location hierarchy.</span>
-			</p>
-			
+			<#if locationHeirarchyFeatureEnabled>
+				<p>
+					<label><a href="<@s.url action="predefinedLocations"/>" ><@s.text name="title.manage_predefined_locations.plural" /></a></label>
+					<span>Manage your location hierarchy.</span>
+				</p>
+			</#if>
+		
 		</div>
 	</#if>
 	

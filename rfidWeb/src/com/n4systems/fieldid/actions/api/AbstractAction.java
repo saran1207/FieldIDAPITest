@@ -31,6 +31,7 @@ import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
@@ -82,6 +83,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private DownloadCoordinator downloadCoordinator;
 	private boolean useContext = false;
 	
+	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 		helper = new BaseActionHelper();
@@ -124,6 +126,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		getSession().setSessionUser(new SessionUser(user));
 		getSession().setUserSecurityGuard(new SessionUserSecurityGuard(user));
 		new AbstractActionTenantContextInitializer(this).refreshSecurityGaurd();
+
 	}
 	
 	public Long getTenantId() {
@@ -482,7 +485,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		getSession().setVendorContext(vendorContext);
 	}
 	
-	
+	public boolean isLocationHeirarchyFeatureEnabled(){
+		return getPrimaryOrg().hasExtendedFeature(ExtendedFeature.MultiLocation);
+	}
 	
 	public Long getVendorContext() {
 		return getSession().getVendorContext();
