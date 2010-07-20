@@ -5,14 +5,25 @@ import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class AllPredefinedLocationsPaginatedLoader extends PaginatedLoader<PredefinedLocation> {
-
+	private boolean fetchSearchIds = false;;
+	
 	public AllPredefinedLocationsPaginatedLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
 	protected QueryBuilder<PredefinedLocation> createBuilder(SecurityFilter filter) {
-		return new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, filter);
+		QueryBuilder<PredefinedLocation> predefinedLocationBuilder = new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, filter);
+		
+		if (fetchSearchIds) {
+			predefinedLocationBuilder.addPostFetchPaths("searchIds");
+		}
+		
+		return predefinedLocationBuilder;
 	}
-
+	
+	public AllPredefinedLocationsPaginatedLoader withSearchIds() {
+		fetchSearchIds = true;
+		return this;
+	}
 }

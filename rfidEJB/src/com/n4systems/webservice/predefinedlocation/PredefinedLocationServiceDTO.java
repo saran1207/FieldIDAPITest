@@ -1,12 +1,16 @@
 package com.n4systems.webservice.predefinedlocation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
 
 public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 	private String name;
 	private String levelName;
 	private Long parentId;
-
+	private List<Long> searchIds = new ArrayList<Long>();
+	
 	public String getName() {
 		return name;
 	}
@@ -29,5 +33,13 @@ public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
+	}
+
+	public List<Long> getSearchIds() {
+		return searchIds;
+	}
+
+	public void setSearchIds(List<Long> searchIds) {
+		this.searchIds = searchIds;
 	}
 }
