@@ -4,12 +4,16 @@ import static com.n4systems.model.builders.PredefinedLocationBuilder.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.Test;
+import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.persistence.Transactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.uitags.views.HierarchicalNode;
 
 
 public class LocationHelperTest {
@@ -17,7 +21,11 @@ public class LocationHelperTest {
 	private static final LoaderFactory UNUSED_LOADER_FACTORY = null;
 	private static final Transactor UNUSED_TRANSACTOR = null;
 	private static final Location NULL_LOCATION = null;
-
+	private static final Long ID_TO_FIND = new Long(1);
+	private final Long SOME_ID = new Long(999999);
+	private final Long ANOTHER_ID = new Long(55555);
+	
+	
 	@Test
 	public void should_give_an_emtpy_string_as_the_name_of_a_null_location() throws Exception {
 		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(NULL_LOCATION);
@@ -89,6 +97,58 @@ public class LocationHelperTest {
 		
 		String generatedName = new LocationHelper(UNUSED_LOADER_FACTORY, UNUSED_TRANSACTOR).getFullNameOfLocation(Location.onlyFreeformLocation(freeformLocation));
 		assertThat(generatedName,  equalTo(freeformLocation));
+	}
+	
+	@Test
+	public void should_find_node_by_id(){
+		LocationHelper helper = new LocationHelper(null, null);
+	
+		HierarchicalNode nodeToFind = new HierarchicalNode();
+		HierarchicalNode parent = new HierarchicalNode();
+		HierarchicalNode parentOfParent = new HierarchicalNode();
+		HierarchicalNode someNode = new HierarchicalNode();
+		List<HierarchicalNode> nodes = new ArrayList<HierarchicalNode>();
+		
+		nodeToFind.setId(ID_TO_FIND);
+		
+		someNode.setId(SOME_ID);
+		parent.setId(SOME_ID);
+		parentOfParent.setId(SOME_ID);
+		
+		parent.addChild(nodeToFind);
+		parentOfParent.addChild(someNode);
+		parentOfParent.addChild(someNode);
+		parentOfParent.addChild(someNode);
+		parentOfParent.addChild(parent);
+		nodes.add(parentOfParent);
+		
+		assertThat(helper.findNodeById(ID_TO_FIND, nodes).getId(), equalTo(ID_TO_FIND));
+	}
+	
+	@Test
+	public void should_return_null_if_node_not_found(){
+		LocationHelper helper = new LocationHelper(null, null);
+	
+		HierarchicalNode nodeToFind = new HierarchicalNode();
+		HierarchicalNode parent = new HierarchicalNode();
+		HierarchicalNode parentOfParent = new HierarchicalNode();
+		HierarchicalNode someNode = new HierarchicalNode();
+		List<HierarchicalNode> nodes = new ArrayList<HierarchicalNode>();
+		
+		nodeToFind.setId(ID_TO_FIND);
+		
+		someNode.setId(SOME_ID);
+		parent.setId(SOME_ID);
+		parentOfParent.setId(SOME_ID);
+		
+		parent.addChild(nodeToFind);
+		parentOfParent.addChild(someNode);
+		parentOfParent.addChild(someNode);
+		parentOfParent.addChild(someNode);
+		parentOfParent.addChild(parent);
+		nodes.add(parentOfParent);
+		
+		assertThat(helper.findNodeById(new Long(ANOTHER_ID), nodes), equalTo(null));
 	}
 	
 }

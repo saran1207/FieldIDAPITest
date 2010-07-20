@@ -16,6 +16,7 @@ public class PredefinedLocationCrudHelper extends BaseActionHelper {
 	public PredefinedLocationCrudHelper(LoaderFactory factory) {
 		this.locationHelper = new LocationHelper(factory, new PersistenceManagerTransactor());
 	}
+
 	public String getFullNameOfLocation(Location location) {
 		return locationHelper.getFullNameOfLocation(location);
 	}
@@ -26,5 +27,9 @@ public class PredefinedLocationCrudHelper extends BaseActionHelper {
 
 	public boolean hasPredefinedLocationTree() {
 		return locationHelper.hasPredefinedLocationTree();
+	}
+
+	public List<HierarchicalNode> findSibblingsByParent(Long parentId) {
+		return locationHelper.findSiblingsByParent(parentId);
 	}
 }

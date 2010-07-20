@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.location;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -7,18 +9,25 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldid.viewhelpers.PredefinedLocationCrudHelper;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationSaver;
 import com.n4systems.security.Permissions;
+import com.n4systems.uitags.views.HierarchicalNode;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.Validation;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
+@Validation
 @UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
-public class PredefinedLocationCrud extends AbstractCrud {
+public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private Logger logger = Logger.getLogger(PredefinedLocationCrud.class);
 	private static final long serialVersionUID = 1L;
 	private PredefinedLocation predefinedLocation;
+
 	private PredefinedLocation parentNode;
 	private String name;
 	private Long parentId;
@@ -32,7 +41,6 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		predefinedLocation = new PredefinedLocation();
-	
 	}
 
 	@Override
@@ -56,9 +64,9 @@ public class PredefinedLocationCrud extends AbstractCrud {
 	public String doAdd() {
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
-	public String doEdit(){
+	public String doEdit() {
 		testDependencies();
 		name = predefinedLocation.getName();
 		return SUCCESS;
@@ -105,7 +113,8 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		return null;
 	}
 
-	@RequiredStringValidator(message = "", key = "error.titlerequired")
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.titlerequired")
+	@CustomValidator(type = "uniqueValue", message = "", key = "error.titleunique")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -131,6 +140,10 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		return parentNode;
 	}
 
+	public PredefinedLocation getParentNode() {
+		return parentNode;
+	}
+
 	public void setNodeId(Long nodeId) {
 		this.nodeId = nodeId;
 	}
@@ -139,11 +152,31 @@ public class PredefinedLocationCrud extends AbstractCrud {
 		return nodeId;
 	}
 
-	private void testDependencies(){
+	public PredefinedLocation getPredefinedLocation() {
+		return predefinedLocation;
+	}
+
+	private void testDependencies() {
 		if (predefinedLocation == null || predefinedLocation.isNew()) {
 			addActionErrorText("error.no_predefinedlocation");
 			throw new MissingEntityException();
 		}
 	}
-	
+
+	@Override
+	public boolean duplicateValueExists(String name) {
+		List<HierarchicalNode> sibblings = getLocationCrudHelper().findSibblingsByParent(parentId);
+
+		for (HierarchicalNode node : sibblings) {
+			if (name.equals(node.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private PredefinedLocationCrudHelper getLocationCrudHelper() {
+		return (PredefinedLocationCrudHelper) getHelper();
+	}
+
 }

@@ -22,17 +22,37 @@ public class LocationHelper {
 		this.transactor = transactor;
 	}
 
+	public List<HierarchicalNode> findSiblingsByParent(Long parentId) {
+		List<HierarchicalNode> firstLevel = getPredefinedLocationTree();
+
+		HierarchicalNode parentNode = findNodeById(parentId, firstLevel);
+
+		return (parentNode == null) ? firstLevel : parentNode.getChildren();
+	}
+
+	public HierarchicalNode findNodeById(Long id, List<HierarchicalNode> firstLevel) {
+		HierarchicalNode findNode = null;
+		for (HierarchicalNode node : firstLevel) {
+			findNode = node.findById(id);
+
+			if (findNode != null) {
+				break;
+			}
+		}
+		return findNode;
+	}
+
 	public List<HierarchicalNode> getPredefinedLocationTree() {
-		return  transactor.execute(new UnitOfWork<List<HierarchicalNode>>() {
+		return transactor.execute(new UnitOfWork<List<HierarchicalNode>>() {
 			public List<HierarchicalNode> run(Transaction transaction) {
 				PredefinedLocationTree locationTree = factory.createPredefinedLocationTreeLoader().load(transaction);
 				PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
 				return new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
 			}
 		});
-	 
+
 	}
-	
+
 	public boolean hasPredefinedLocationTree() {
 		return transactor.execute(new UnitOfWork<Boolean>() {
 			public Boolean run(Transaction transaction) {
@@ -44,11 +64,11 @@ public class LocationHelper {
 	public String getFullNameOfLocation(LocationWebModel location) {
 		return getFullNameOfLocation(location.createLocation());
 	}
-	
+
 	public String getFullNameOfLocation(Location location) {
 		if (location == null) {
 			return "";
 		}
-        return location.getFullName();
+		return location.getFullName();
 	}
 }
