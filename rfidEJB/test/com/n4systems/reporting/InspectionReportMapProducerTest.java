@@ -11,9 +11,6 @@ import static com.n4systems.test.helpers.Asserts.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 
 import com.n4systems.model.Inspection;
@@ -70,14 +67,13 @@ public class InspectionReportMapProducerTest {
 		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
 
 		Location advancedLocation = new Location(null, FREEFORM_LOCATION);
-		List<String> locationList = new ArrayList<String>();
 
 		targetInspection.setAdvancedLocation(advancedLocation);
 
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
-		expectedReportMap.put("predefinedLocations", locationList);
+		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
 		ReportMapProducer sut = new InspectionReportMapProducer(targetInspection, new DefaultedDateTimeDefiner());
 		ReportMap<Object> actualReportMap = sut.produceMap();
@@ -92,15 +88,13 @@ public class InspectionReportMapProducerTest {
 		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
 
 		Location advancedLocation = new Location(PredefinedLocationBuilder.aPredefinedLocation().build(), FREEFORM_LOCATION);
-		List<String> locationList = new ArrayList<String>();
-		locationList.add(advancedLocation.getPredefinedLocation().getName());
 
 		targetInspection.setAdvancedLocation(advancedLocation);
 
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
-		expectedReportMap.put("predefinedLocations", locationList);
+		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
 		ReportMapProducer sut = new InspectionReportMapProducer(targetInspection, new DefaultedDateTimeDefiner());
 		ReportMap<Object> actualReportMap = sut.produceMap();
@@ -119,17 +113,13 @@ public class InspectionReportMapProducerTest {
 		child.setParent(parent);
 
 		Location advancedLocation = new Location(child, FREEFORM_LOCATION);
-		List<String> locationList = new ArrayList<String>();
-
-		locationList.add(advancedLocation.getPredefinedLocation().getParent().getName());
-		locationList.add(advancedLocation.getPredefinedLocation().getName());
 
 		targetInspection.setAdvancedLocation(advancedLocation);
 
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
-		expectedReportMap.put("predefinedLocations", locationList);
+		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
 		ReportMapProducer sut = new InspectionReportMapProducer(targetInspection, new DefaultedDateTimeDefiner());
 		ReportMap<Object> actualReportMap = sut.produceMap();

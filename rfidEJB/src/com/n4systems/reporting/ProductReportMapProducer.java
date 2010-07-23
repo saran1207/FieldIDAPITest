@@ -38,6 +38,7 @@ public class ProductReportMapProducer extends ReportMapProducer {
 		add("dateOfIssue", formatDate(product.getCreated(), false));
 		add("productComment", product.getComments());
 		add("productLocation", product.getAdvancedLocation().getFreeformLocation());
+		add("predefinedLocationFullName", product.getAdvancedLocation().getFullName());
 		add("productIdentified", formatDate(product.getIdentified(),false));
 		add("currentProductStatus", productStatusName());
 		add("infoOptionMap", produceInfoOptionMap());

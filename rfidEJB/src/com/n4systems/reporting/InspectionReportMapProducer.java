@@ -30,7 +30,7 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 		Inspection inspection = (Inspection) this.getInspection();
 		add("productLabel", null);
 		add("location", inspection.getAdvancedLocation().getFreeformLocation());
-		add("predefinedLocations", collapseIntoList(inspection.getAdvancedLocation()));
+		add("predefinedLocationFullName", inspection.getAdvancedLocation().getFullName());
 		add("inspectionBook", (inspection.getBook() != null) ? inspection.getBook().getName() : null);
 		add("inspectionResult", inspection.getStatus().getDisplayName());
 		add("proofTestInfo", addProofTestInfoParams(inspection));
@@ -38,25 +38,6 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
 
 		fillInDate(inspection);
-	}
-
-	private List<String> collapseIntoList(Location advancedLocation) {
-		List<String> locationList = new ArrayList<String>();
-
-		if (advancedLocation.hasPredefinedLocation()) {
-
-			PredefinedLocation node = advancedLocation.getPredefinedLocation();
-			locationList.add(node.getName());
-			while (node.hasParent()) {
-
-				node = node.getParent();
-				locationList.add(node.getName());
-			}
-
-			Collections.reverse(locationList);
-		}
-		return locationList;
-
 	}
 
 	private String assignedUserName() {
