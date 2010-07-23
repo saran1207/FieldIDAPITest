@@ -11,9 +11,10 @@ function includeSubProduct( event ) {
 	var item = new Element( 'li', { id: "subProduct_" + subProduct.getValue() } );
 	var productNameSpan = new Element( 'span', {id: "productName_" + subProduct.getValue() } ).update(productName);
 	
-	item.insert( new Element( 'input', { type: "hidden", name: "subProductIds["+ numberOfSubTypes +"]", value: subProduct.getValue() } ) );	
+	item.insert( new Element( 'input', { type: "hidden", name: "subProductIds["+ numberOfSubTypes +"]", value: subProduct.getValue() } ) );
+	subProductId= subProduct.getValue();
 	numberOfSubTypes++;
-	var productLink = new Element( 'a', { id: "removeProductLink_" + subProduct.getValue(), href: "removeSubProduct" } ).update(removeString) ;
+	var productLink = new Element( 'a', { id: "removeProductLink_" + subProduct.getValue(), href: "removeSubProduct" , productTypeId: subProductId } ).update(removeString) ;
 	productLink.observe('click', removeProductEvent );
 	productLink.productId = subProduct.getValue();
 	item.insert( productNameSpan );
@@ -34,6 +35,7 @@ function removeSubProduct( subProductId, event ) {
 	
 	var subProductList = $( 'addSubProduct' );
 	var newOption = new Element( 'option' );
+
 	newOption.text= $( 'productName_' + subProductId ).innerHTML;
 	newOption.value= subProductId;
 	subProductList.options.add( newOption );
