@@ -15,12 +15,12 @@ import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.persistence.PersistenceManager;
 
 @SuppressWarnings("serial")
 @Entity(name = "predefinedlocations")
-public class PredefinedLocation extends EntityWithTenant implements NamedEntity, TreeNode {
+public class PredefinedLocation extends ArchivableEntityWithTenant implements NamedEntity, TreeNode  {
 
 	@Column(nullable = false, length = 255)
 	private String name;

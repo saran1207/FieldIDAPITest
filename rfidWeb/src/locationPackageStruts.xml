@@ -40,6 +40,13 @@
 			<result name="input" type="freemarker">/templates/html/location/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit.ftl</result>
 		</action>
+		
+		<action name="predefinedLocationDelete" method="delete" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
+		</action>
+		
 	
 		<action name="predefinedLocationLevels" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
@@ -64,6 +71,9 @@
 			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
 			<result name="success" type="redirectAction">predefinedLocationLevels</result>
 		</action>
+		
+		
+		
 	</package>
 </struts>
 		

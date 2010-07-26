@@ -33,7 +33,6 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 	private Long parentId;
 	private Long nodeId;
 	private PredefinedLocationSaver saver;
-
 	public PredefinedLocationCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -64,7 +63,23 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 	public String doAdd() {
 		return SUCCESS;
 	}
+	
+	@SkipValidation
+	public String doDelete(){
+		testDependencies();
+		try {
+			saver.remove(predefinedLocation);
 
+			addFlashMessageText("message.location_removed");
+		} catch (Exception e) {
+			logger.error("could not remove predefined location", e);
+			addActionErrorText("error.removing_predefined_location");
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	
 	@SkipValidation
 	public String doEdit() {
 		testDependencies();
