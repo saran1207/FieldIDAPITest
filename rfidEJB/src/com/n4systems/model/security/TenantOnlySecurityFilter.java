@@ -9,6 +9,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 	private final Long tenantId;
+	private boolean showArchived=false;
 	
 	public TenantOnlySecurityFilter(Long tenantId) {
 		this.tenantId = tenantId;
@@ -24,7 +25,7 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 	
 	@Override
 	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
-		if (definer.isStateFiltered()) {
+		if (definer.isStateFiltered() && !showArchived) {
 			addFilterParameter(builder, definer.getStatePath(), EntityState.ACTIVE);
 		}
 		
@@ -35,7 +36,7 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 
 	@Override
 	protected void applyParameters(Query query, SecurityDefiner definer) throws SecurityException {
-		if (definer.isStateFiltered()) {
+		if (definer.isStateFiltered() && !showArchived) {
 			setParameter(query, definer.getStatePath(), EntityState.ACTIVE);
 		}
 		
@@ -75,5 +76,9 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 
 	public boolean hasOwner() {
 		return false;
+	}
+	
+	public void toggleShowArchived(){
+		 showArchived=true;
 	}
 }

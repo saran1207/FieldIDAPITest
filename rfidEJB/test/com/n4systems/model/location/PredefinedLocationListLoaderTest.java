@@ -27,7 +27,7 @@ public class PredefinedLocationListLoaderTest {
 		}
 
 		@Override
-		protected QueryBuilder<PredefinedLocation> createQueryBuilder(SecurityFilter filter) {
+		protected QueryBuilder<PredefinedLocation> createQueryBuilder(TenantOnlySecurityFilter filter) {
 			queryBuilder = new TestingQueryBuilder<PredefinedLocation>(PredefinedLocation.class);
 			return queryBuilder;
 		}
@@ -44,8 +44,19 @@ public class PredefinedLocationListLoaderTest {
 		
 		
 		assertThat(sut.queryBuilder, hasOrderByClause("id", true));
-		
 	}
+	
+	@Test
+	public void should_create_query_builder_with_no_state_filter_archived_locations_are_required() throws Exception {
+		
+		PredefinedLocationListLoaderTestExtension sut = new PredefinedLocationListLoaderTestExtension(new TenantOnlySecurityFilter(1L));
+		
+		sut.withParentFirstOrder().load(new TestingTransaction());
+		
+		
+		//assertThat(sut.queryBuilder, hasOrderByClause("id", true));
+	}
+	
 
 	private Matcher<QueryBuilder<PredefinedLocation>> hasOrderByClause(final String field, final boolean ascending) {
 		return new TypeSafeMatcher<QueryBuilder<PredefinedLocation>>() {

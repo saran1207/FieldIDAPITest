@@ -5,33 +5,52 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class PredefinedLocationListLoader extends ListLoader<PredefinedLocation> {
 
 	private boolean parentFirstOrdering;
-
+	private boolean archivedState;
+	private TenantOnlySecurityFilter archivedFilter;
+	QueryBuilder<PredefinedLocation> builder;
+	
 	public PredefinedLocationListLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
 	protected List<PredefinedLocation> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<PredefinedLocation> builder = createQueryBuilder(filter);
+		archivedFilter = new TenantOnlySecurityFilter(filter);
+				
+		if(archivedState){
+			archivedFilter.toggleShowArchived();
+		}
+		
+		builder = createQueryBuilder(archivedFilter);
+		
 		if (parentFirstOrdering) {
 			builder.addOrder("id");
 		}
+		
 		return builder.getResultList(em);
 	}
 	
-	protected QueryBuilder<PredefinedLocation> createQueryBuilder(SecurityFilter filter) {
+	protected QueryBuilder<PredefinedLocation> createQueryBuilder(TenantOnlySecurityFilter filter) {
 		return new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, filter);
 	}
+	
 
 	public PredefinedLocationListLoader withParentFirstOrder() {
 		parentFirstOrdering = true;
 		return this;
 	}
+
+	public PredefinedLocationListLoader withArchivedState() {
+		archivedState = true;
+		return this;
+	}
+	
 
 }
