@@ -1,12 +1,12 @@
 package com.n4systems.model.location;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.savers.Saver;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class PredefinedLocationSaver extends Saver<PredefinedLocation> {
 
@@ -19,22 +19,28 @@ public class PredefinedLocationSaver extends Saver<PredefinedLocation> {
 
 	@Override
 	protected void remove(EntityManager em, PredefinedLocation location) {
+		SecurityFilter tenantFilter = createTenantOnlySecurityFilter(location);
+		
 		location.archiveEntity();
 		update(em, location);
 		
-		QueryBuilder<PredefinedLocation> builder = new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, createTenantOnlySecurityFilter(location));
-		builder.addWhere(WhereClauseFactory.create("parent", location));
-		
-		SecurityFilter tenantFilter = createTenantOnlySecurityFilter(location);
-		PredefinedLocationChildLoader childLoader = new PredefinedLocationChildLoader(tenantFilter);
-		
-		for (PredefinedLocation loc: childLoader.setParentId(location.getId()).load(em, tenantFilter)) {
-			remove(em, loc);
+		for (PredefinedLocation child: getChildren(location, em, tenantFilter)) {
+			remove(em, child);
 		}
 	}
 
-	private TenantOnlySecurityFilter createTenantOnlySecurityFilter(PredefinedLocation location) {
+	protected TenantOnlySecurityFilter createTenantOnlySecurityFilter(PredefinedLocation location) {
 		return new TenantOnlySecurityFilter(location.getTenant().getId());
+	}
+	
+	protected List<PredefinedLocation> getChildren(PredefinedLocation location, EntityManager entityManager, SecurityFilter tenantFilter){
+		PredefinedLocationChildLoader childLoader = getChildLoader(location, tenantFilter);
+		return childLoader.setParentId(location.getId()).load(entityManager, tenantFilter);
+	}
+	
+	protected PredefinedLocationChildLoader getChildLoader(PredefinedLocation location, SecurityFilter tenantFilter) {
+		PredefinedLocationChildLoader childLoader = new PredefinedLocationChildLoader(tenantFilter);
+		return childLoader;
 	}
 	
 

@@ -14,7 +14,6 @@ public class PredefinedLocationListLoader extends ListLoader<PredefinedLocation>
 	private boolean parentFirstOrdering;
 	private boolean archivedState;
 	private TenantOnlySecurityFilter archivedFilter;
-	QueryBuilder<PredefinedLocation> builder;
 	
 	public PredefinedLocationListLoader(SecurityFilter filter) {
 		super(filter);
@@ -28,7 +27,7 @@ public class PredefinedLocationListLoader extends ListLoader<PredefinedLocation>
 			archivedFilter.toggleShowArchived();
 		}
 		
-		builder = createQueryBuilder(archivedFilter);
+		QueryBuilder<PredefinedLocation> builder = createQueryBuilder(archivedFilter);
 		
 		if (parentFirstOrdering) {
 			builder.addOrder("id");
