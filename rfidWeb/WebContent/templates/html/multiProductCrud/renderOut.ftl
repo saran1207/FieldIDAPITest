@@ -1,3 +1,5 @@
+${action.setPageType('product', 'multi_add')!}
+
 <head>
 	<@n4.includeStyle href="loadingPage" type="page"/>
 </head>
@@ -9,7 +11,6 @@
 
 	<@n4.includeScript>
 		onDocumentLoad(function() {
-				document.getElementsByTagName('h1')[0].hide();			
 				$('performMultiInspect').submit();
 		});
 	</@n4.includeScript>
