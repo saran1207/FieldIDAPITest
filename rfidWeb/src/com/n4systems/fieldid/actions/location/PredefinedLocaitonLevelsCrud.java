@@ -3,11 +3,12 @@ package com.n4systems.fieldid.actions.location;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
-
+import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.location.LevelName;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationLevelsSaver;
 import com.n4systems.security.Permissions;
@@ -17,8 +18,11 @@ import com.n4systems.security.Permissions;
 public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 
 	private PredefinedLocationLevels predefinedLocationLevels;
-	
+	private Logger logger = Logger.getLogger(PredefinedLocaitonLevelsCrud.class);
 	private LevelNameWebModel levelName;
+	private int nodeLevel;
+	private int nodeId;
+
 
 	public PredefinedLocaitonLevelsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -111,6 +115,30 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 			
 		}
 		return predefinedLocationLevels;
+	}
+	
+	private PredefinedLocation loadLocation(Long nodeId) {
+		try {
+			return getLoaderFactory().createFilteredIdLoader(PredefinedLocation.class).setId(nodeId).load();
+		} catch (Exception e) {
+			logger.error("Could Not Load Predefined Location", e);
+		}
+		return null;
+	}
+	public int getNodeLevel() {
+		PredefinedLocation node =  loadLocation(getNodeId());
+		
+		nodeLevel=node.levelNumber();
+		return nodeLevel;
+	}
+	
+
+	public Long getNodeId() {
+		return new Long(nodeId);
+	}
+
+	public void setNodeId(int nodeId) {
+		this.nodeId = nodeId;
 	}
 
 }
