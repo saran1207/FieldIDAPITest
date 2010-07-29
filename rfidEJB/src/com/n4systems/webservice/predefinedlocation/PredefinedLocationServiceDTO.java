@@ -10,6 +10,7 @@ public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 	private String levelName;
 	private Long parentId;
 	private List<Long> searchIds = new ArrayList<Long>();
+	private boolean deleted;
 	
 	public String getName() {
 		return name;
@@ -42,4 +43,13 @@ public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 	public void setSearchIds(List<Long> searchIds) {
 		this.searchIds = searchIds;
 	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 }

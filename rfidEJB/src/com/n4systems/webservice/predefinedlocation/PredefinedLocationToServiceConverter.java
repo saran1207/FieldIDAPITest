@@ -28,6 +28,7 @@ public class PredefinedLocationToServiceConverter extends PaginatedModelToServic
 		
 		Long parentId = (model.getParent() != null) ? model.getParent().getId() : null;
 		dto.setParentId(parentId);
+		dto.setDeleted(!model.isActive());
 		
 		return dto;
 	}

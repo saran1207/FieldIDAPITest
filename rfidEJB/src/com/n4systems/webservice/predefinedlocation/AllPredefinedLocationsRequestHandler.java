@@ -30,7 +30,7 @@ public class AllPredefinedLocationsRequestHandler extends PaginatedRequestHandle
 	}
 
 	private PaginatedLoader<PredefinedLocation> createLoader(LoaderFactory loaderFactory, int currentPage, int pageSize) {
-		PaginatedLoader<PredefinedLocation> loader = loaderFactory.createAllPredefinedLocationsPaginatedLoader().withSearchIds();
+		PaginatedLoader<PredefinedLocation> loader = loaderFactory.createAllPredefinedLocationsPaginatedLoader().withSearchIds().withArchivedState();
 		loader.setPageSize(pageSize);
 		loader.setPage(currentPage);
 		return loader;
