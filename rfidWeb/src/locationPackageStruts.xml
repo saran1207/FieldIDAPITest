@@ -12,9 +12,9 @@
 
 
 		<action name="predefinedLocationAdd" method="add" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
-			<result name="success" type="freemarker">/templates/html/location/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/location/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>
 		
 		<action name="predefinedLocationCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
@@ -22,8 +22,8 @@
 				<param name="actionName">predefinedLocationAdd</param>
 				<param name="parentId">${parentId}</param>
 			</result>
-			<result name="input" type="freemarker">/templates/html/location/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>
 		
 		<action name="predefinedLocationEdit" method="edit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
@@ -66,13 +66,11 @@
 			<result name="success" type="redirectAction">predefinedLocationLevels</result>
 		</action>
 		
-		<action name="predefinedLocationLevelUpdate" method="update" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
-			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="success" type="redirectAction">predefinedLocationLevels</result>
+			<action name="predefinedLocationLevelUpdate" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
+			<result name="input" type="freemarker">/templates/html/location/edit_level.ftl</result>
+			<result name="error" type="freemarker">/templates/html/location/edit_level.ftl</result>
+			<result name="success" type="freemarker">/templates/html/location/edit_level.ftl</result>
 		</action>
-		
-		
 		
 	</package>
 </struts>
