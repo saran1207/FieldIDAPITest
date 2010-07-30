@@ -4,8 +4,8 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
 	   onDocumentLoad(function() {
+	  	 	var nodeId = jQuery('#nodeList').getSelectedNode().id;
 	   			jQuery('#editLocation').click(function(){
-		       		var nodeId = jQuery('#nodeList').getSelectedNode().id;
 		       		if(nodeId!=-1){
 		       			redirect("<@s.url action="predefinedLocationEdit" />" + "?uniqueID="+nodeId);
 		       		}else{
@@ -14,7 +14,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	      	});
 	 		  jQuery('#editLevel').click(function(){
 	 		  	var nodeId = jQuery('#nodeList').getSelectedNode().id;
-		       	redirect("<@s.url action="predefinedLocationLevelUpdate" />" + "?uniqueID="+nodeId);
+		       	redirect("<@s.url action="predefinedLocationLevels" />" + "?uniqueID="+nodeId);
 	      	});
 	   
 		   		jQuery('#addLocation').click(function(){

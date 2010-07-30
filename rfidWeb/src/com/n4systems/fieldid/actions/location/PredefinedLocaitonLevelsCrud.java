@@ -13,8 +13,7 @@ import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationLevelsSaver;
 import com.n4systems.security.Permissions;
 
-
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
 public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 
 	private PredefinedLocationLevels predefinedLocationLevels;
@@ -22,7 +21,6 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 	private LevelNameWebModel levelName;
 	private int nodeLevel;
 	private int nodeId;
-
 
 	public PredefinedLocaitonLevelsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -34,55 +32,53 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		
+
 	}
-	
-	
+
 	@SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}
-	
-	
-	
+
 	public String doCreate() {
 		PredefinedLocationLevels locationLevels = getPredefinedLocationLevels();
-		
-		
+		//locationLevels.getLevels().add(nodeLevel, new LevelName(levelName.getName().getTrimmedString()));
 		locationLevels.getLevels().add(levelName.getIndex(), new LevelName(levelName.getName().getTrimmedString()));
-		
+
 		updateLevels(locationLevels);
 		addFlashMessageText("label.level_added");
 		return SUCCESS;
 	}
-	
+
 	public String doUpdate() {
 		PredefinedLocationLevels locationLevels = getPredefinedLocationLevels();
-		
+
 		if (isIndexNotInList(locationLevels)) {
 			addActionErrorText("error.level_could_not_be_found");
 			return INPUT;
 		}
-		
+		//locationLevels.getLevels().set(nodeLevel, new LevelName(levelName.getName().getTrimmedString()));
 		locationLevels.getLevels().set(levelName.getIndex(), new LevelName(levelName.getName().getTrimmedString()));
-		
+
 		updateLevels(locationLevels);
-		
+
 		addFlashMessageText("label.level_updated");
 		return SUCCESS;
 	}
-	
+
 	public String doDelete() {
 		PredefinedLocationLevels locationLevels = getPredefinedLocationLevels();
 		if (isIndexNotInList(locationLevels)) {
 			addActionErrorText("error.level_could_not_be_found");
 			return INPUT;
 		}
-		
-		locationLevels.getLevels().remove(levelName.getIndex().intValue());
-		
+
+		//Instead of removing element from the list, pop in a dummy placeholder, otherwise
+		//the list collapses and messes up the order.
+		locationLevels.getLevels().set(levelName.getIndex().intValue(),  new LevelName(null));
+
 		updateLevels(locationLevels);
-		
+
 		addFlashMessageText("label.level_removed");
 		return SUCCESS;
 	}
@@ -94,11 +90,21 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 	private void updateLevels(PredefinedLocationLevels locationLevels) {
 		new PredefinedLocationLevelsSaver().update(locationLevels);
 	}
-	
+
 	public List<LevelName> getLevels() {
 		return getPredefinedLocationLevels().getLevels();
 	}
 
+	public LevelName getLevel(int index) {
+		PredefinedLocationLevels predefinedLocationLevels = getPredefinedLocationLevels();
+		List<LevelName> names = predefinedLocationLevels.getLevels();
+		int size=names.size();
+		if(size==0 || size <= index){
+			return null;
+		}
+		return names.get(index);
+	}
+	
 	public LevelNameWebModel getLevelName() {
 		return levelName;
 	}
@@ -107,16 +113,15 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 		this.levelName = levelName;
 	}
 
-
 	private PredefinedLocationLevels getPredefinedLocationLevels() {
 		if (predefinedLocationLevels == null) {
 			predefinedLocationLevels = getLoaderFactory().createPredefinedLocationLevelsLoader().load();
 			predefinedLocationLevels.setTenant(getTenant());
-			
+
 		}
 		return predefinedLocationLevels;
 	}
-	
+
 	private PredefinedLocation loadLocation(Long nodeId) {
 		try {
 			return getLoaderFactory().createFilteredIdLoader(PredefinedLocation.class).setId(nodeId).load();
@@ -125,13 +130,13 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 		}
 		return null;
 	}
-	public int getNodeLevel() {
-		PredefinedLocation node =  loadLocation(getNodeId());
-		
-		nodeLevel=node.levelNumber();
+
+	public int getNodeLevel(Long nodeId) {
+		PredefinedLocation node = loadLocation(nodeId);
+
+		nodeLevel = node.levelNumber();
 		return nodeLevel;
 	}
-	
 
 	public Long getNodeId() {
 		return new Long(nodeId);
@@ -141,4 +146,5 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 		this.nodeId = nodeId;
 	}
 
+	
 }
