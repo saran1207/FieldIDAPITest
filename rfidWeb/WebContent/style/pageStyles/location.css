@@ -9,3 +9,38 @@
 #initialPicture p{
 	
 }
+.addLocationBox{
+	background-color:#EAEAEA;
+	}
+
+.addLocationContent .infoSet{
+	padding:5px 0px 15px 15px;
+	clear:both;
+}
+
+#wwctrl_editLocation, #wwctrl_editLevel {
+	padding: 0px;
+}
+
+
+
+#editButtons{
+	padding: 5px 0 2px 0;
+}
+#addLocation{
+	margin:0 0 0 5px;
+	position: relative;
+	bottom:4px;
+	}
+
+#nodeForm, #addLocation{
+	float:left;
+}
+.treePreview{
+ padding: 0 0 0 0;
+ float:left;
+}
+
+#editLocation{
+	float:left;
+}

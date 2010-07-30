@@ -42,7 +42,6 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 
 	public String doCreate() {
 		PredefinedLocationLevels locationLevels = getPredefinedLocationLevels();
-		//locationLevels.getLevels().add(nodeLevel, new LevelName(levelName.getName().getTrimmedString()));
 		locationLevels.getLevels().add(levelName.getIndex(), new LevelName(levelName.getName().getTrimmedString()));
 
 		updateLevels(locationLevels);
@@ -57,7 +56,6 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 			addActionErrorText("error.level_could_not_be_found");
 			return INPUT;
 		}
-		//locationLevels.getLevels().set(nodeLevel, new LevelName(levelName.getName().getTrimmedString()));
 		locationLevels.getLevels().set(levelName.getIndex(), new LevelName(levelName.getName().getTrimmedString()));
 
 		updateLevels(locationLevels);
@@ -72,10 +70,7 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 			addActionErrorText("error.level_could_not_be_found");
 			return INPUT;
 		}
-
-		//Instead of removing element from the list, pop in a dummy placeholder, otherwise
-		//the list collapses and messes up the order.
-		locationLevels.getLevels().set(levelName.getIndex().intValue(),  new LevelName(null));
+		locationLevels.getLevels().set(levelName.getIndex().intValue(), new LevelName(null));
 
 		updateLevels(locationLevels);
 
@@ -95,16 +90,16 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 		return getPredefinedLocationLevels().getLevels();
 	}
 
-	public LevelName getLevel(int index) {
-		PredefinedLocationLevels predefinedLocationLevels = getPredefinedLocationLevels();
-		List<LevelName> names = predefinedLocationLevels.getLevels();
-		int size=names.size();
-		if(size==0 || size <= index){
+	public LevelName getLevel(int insertionIndex) {
+		List<LevelName> listOfLevelNames = getPredefinedLocationLevels().getLevels();
+		int sizeOfLevelsList = listOfLevelNames.size();
+
+		if (sizeOfLevelsList == 0 || sizeOfLevelsList <= insertionIndex) {
 			return null;
 		}
-		return names.get(index);
+		return listOfLevelNames.get(insertionIndex);
 	}
-	
+
 	public LevelNameWebModel getLevelName() {
 		return levelName;
 	}
@@ -146,5 +141,4 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 		this.nodeId = nodeId;
 	}
 
-	
 }
