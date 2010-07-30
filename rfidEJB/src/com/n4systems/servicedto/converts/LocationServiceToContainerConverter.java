@@ -26,6 +26,7 @@ public class LocationServiceToContainerConverter implements LocationConverter {
 	}
 	
 	protected PredefinedLocation loadPredefinedLocation(Long id) { 
-		return loaderFactory.createFilteredIdLoader(PredefinedLocation.class).setId(id).load();
+		return loaderFactory.createPredefinedLocationByIdLoader().setId(id).setShowArchived(true).load();
 	}
+	
 }

@@ -19,6 +19,7 @@ import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
 import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.location.PredefinedLocationListLoader;
 import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
@@ -108,6 +109,10 @@ public class LoaderFactory {
 		return new AllPredefinedLocationsPaginatedLoader(filter);
 	}
 
+	public PredefinedLocationByIdLoader createPredefinedLocationByIdLoader() {
+		return new PredefinedLocationByIdLoader(filter);
+	}
+	
 	public AssociatedInspectionTypesLoader createAssociatedInspectionTypesLoader() {
 		return new AssociatedInspectionTypesLoader(filter);
 	}
