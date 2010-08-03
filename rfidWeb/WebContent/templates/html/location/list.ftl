@@ -26,7 +26,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	      });
 	</script>
 </head>	
-<div class="addLocationBox">
+<div class="addBox">
 	<@s.form action="predefinedLocationCreate"  theme="fieldid" cssClass="fullForm ">
 		<@s.hidden id="parent" name="parentId"/>
 		<#include "/templates/html/common/_formErrors.ftl"/>

@@ -20,7 +20,7 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 	private Logger logger = Logger.getLogger(PredefinedLocaitonLevelsCrud.class);
 	private LevelNameWebModel levelName;
 	private int nodeLevel;
-	private int nodeId;
+	private long nodeId;
 
 	public PredefinedLocaitonLevelsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -134,11 +134,12 @@ public class PredefinedLocaitonLevelsCrud extends AbstractCrud {
 	}
 
 	public Long getNodeId() {
-		return new Long(nodeId);
+		return nodeId;
 	}
 
-	public void setNodeId(int nodeId) {
+	public void setNodeId(Long nodeId) {
 		this.nodeId = nodeId;
 	}
+
 
 }

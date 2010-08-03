@@ -9,9 +9,13 @@
 #initialPicture p{
 	
 }
-.addLocationBox{
+.addBox{
 	background-color:#EAEAEA;
-	}
+}
+
+.formActions.buttonGroup{
+	padding-top:10px;
+}
 
 .addLocationContent .infoSet{
 	padding:5px 0px 15px 15px;
