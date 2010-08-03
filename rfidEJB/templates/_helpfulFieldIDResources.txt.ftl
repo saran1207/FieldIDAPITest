@@ -3,7 +3,7 @@ Resources to help you with Field ID
 ++++++++++++++++++++++++++++++++++++++++++
 
 The Field ID Help System:
-https://www.fieldid.com/fieldid_help/index.html
+https://help.fieldid.com/fieldid_help/index.html
 
 For more information about Field ID:
 http://www.fieldid.com
