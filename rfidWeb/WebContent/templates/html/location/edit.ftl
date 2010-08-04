@@ -6,8 +6,8 @@ ${action.setPageType('predefined_locations', 'location_edit')!}
 	<@s.form action="predefinedLocationUpdate" theme="fieldid" cssClass="fullForm">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<@s.hidden id="currentNode" name="uniqueID"/>
-		<div class="addLocationContent">
-			<div class="infoSet">
+		<div class="editContent">
+			<div class="addLocationFields infoSet">
 				<label class='label'><@s.text name="label.location_name"/></label>
 				<@s.textfield id="name" name="name" />
 				

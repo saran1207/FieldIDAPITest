@@ -19,9 +19,8 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 		       		redirect("<@s.url action="predefinedLocationLevels" />" + "?uniqueID="+nodeId);
 	      	});
 	   
-		   	jQuery('.addLocation').click(function(){
-		   		alert("hurf");
-		       	jQuery('#parent').val(jQuery('#nodeList').getSelectedNode().id);
+		   	jQuery('#addLocation').click(function(){
+		       		jQuery('#parent').val(jQuery('#nodeList').getSelectedNode().id);
 	      	});
 	      
 	      });
@@ -34,7 +33,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 		<@s.hidden id="parent" name="parentId"/>
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<div class="addLocationContent">
-			<div class="infoSet">
+			<div id="addLocationFields" class="infoSet">
 				<label class='label'><@s.text name="label.location_name"/>	</label>
 				<@s.textfield id="nodeForm" name="name" />
 				<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
@@ -64,7 +63,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 			<@s.form action="predefinedLocationCreate"  theme="fieldid" cssClass="fullForm">
 				<@s.hidden id="parent" name="parentId"/>
 				<#include "/templates/html/common/_formErrors.ftl"/>
-				<div class="infoSet">
+				<div id="addLocationFields" class="infoSet intialAdd">
 					<@s.textfield id="addFirstForm" name="name" />
 					<@s.submit id="addFirstLocation" key="hbutton.create_first_location" cssClass="saveButton save"/>
 				</div>

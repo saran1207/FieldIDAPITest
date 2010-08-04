@@ -4,7 +4,7 @@
 	min-height:65px;
 	padding: 20px 10px 0 65px;
 	border:1px solid #CCCCCC;
-	background-position: 25% center;
+	background-position: 25% 33%;
 }
 
 #initialContent{
@@ -21,16 +21,37 @@
 
 .locationDesc{
 	padding: 0 0 10px 0;
+}
+
+#addLocationFields .infoSet{
+		padding:0 0 15px 15px;
+	}
+	
+#addLocationFields label{
+		padding: 0 0 5px 0;
 	}
 
-.addLocationContent .infoSet{
+#addLocationFields .fieldHolder{
+	display:inline;
+
+	}
+
+.editContent {
+	padding:5px 0px 15px 15px;
+}
+
+.addLocationContent{
 	padding:5px 0px 25px 15px;
-	clear:both;
+	display:inline;	
 }
 
 .intialHeading {
 	text-align:left;
 	padding: 0 0 10px 0;
+	}
+	
+#addLocationFields{
+	padding:0 0 15px 10px;
 	}
 
 #wwctrl_editLocation, #wwctrl_editLevel {
@@ -42,12 +63,10 @@
 }
 
 #addLocation, #addFirstLocation{
-	margin:0 0 0 5px;
-	position: relative;
-	bottom:4px;
+	margin:-5px 0 0 5px;
 }
 
-#nodeForm, #addLocation, #addFirstLocation, #addFirstForm{
+#nodeForm, #addFirstForm{
 	float:left;
 }
 

@@ -55,12 +55,6 @@
 		</action>
 		
 		<action name="predefinedLocationLevelCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
-			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
-			<result name="success" type="redirectAction">predefinedLocations</result>
-		</action>
-		
-		<action name="predefinedLocationLevelDelete" method="delete" class="com.n4systems.fieldid.actions.location.PredefinedLocaitonLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="success" type="redirectAction">predefinedLocations</result>
