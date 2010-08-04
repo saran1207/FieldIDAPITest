@@ -139,4 +139,8 @@ public class InspectionFormCrud extends AbstractCrud {
 	public boolean isNewForm() {
 		return (inspectionType.getSections().isEmpty());
 	}
+	
+	public String getName(){
+		return inspectionType.getName();
+	}
 }

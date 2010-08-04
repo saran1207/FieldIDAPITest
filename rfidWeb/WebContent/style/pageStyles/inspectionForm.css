@@ -88,6 +88,10 @@
 	width: 400px;
 }
 
+.formChangewarning p {
+	text-align:center;
+}
+
 .formChangewarning h2 {
 	text-align: center;
 	padding: 15px;

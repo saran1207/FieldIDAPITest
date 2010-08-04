@@ -44,8 +44,10 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		</div>
 		
 		<div id="formChangewarning" class="formChangewarning" style="display: none;">
-			<h2><@s.text name="warning.inspectionformchangewarning"/></h2>
-			
+			<h2><@s.text name="warning.inspectionformchangewarning_one"/>${name}?</h2>
+			<p><@s.text name="warning.inspectionformchangewarning_two"/></p>
+			<br/>
+			<p><@s.text name="warning.inspectionformchangewarning_three"/></p>
 			<div class="formAction" style="margin-left:auto; margin-right:auto;">
 				<button onclick="Lightview.hide(); return false;" ><@s.text name="label.cancel"/></button>
 				<button onclick="document.inspectionTypeForm.submit();" ><@s.text name="label.ok"/></button>
