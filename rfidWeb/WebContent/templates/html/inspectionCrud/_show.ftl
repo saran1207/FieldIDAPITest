@@ -82,6 +82,8 @@
 		<span>${action.formatDateTime(inspection.date)}</span>
 	</p>
 
+	<#include "_assigned_to.ftl"/>
+
 	<p> 
 		<label><@s.text name="label.scheduledon"/></label>
 		<span>
@@ -174,10 +176,6 @@
 			${(inspection.productStatus.name)!}
 		</span>
 	</p>
-	
-	<#include "_assigned_to.ftl"/>
-	
-	
 	
 	<#if !linkedInspection >
 		<#assign downloadAction="downloadAttachedFile"/>
