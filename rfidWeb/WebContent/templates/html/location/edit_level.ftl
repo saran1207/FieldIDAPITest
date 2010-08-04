@@ -13,15 +13,17 @@ ${action.setPageType('predefined_locations', 'level_list')!}
 	<@s.form action="predefinedLocationLevelCreate" theme="fieldid" cssClass="fullForm">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<@s.hidden name="levelName.index" value="${nodeIndex}"/>
-		<div class="infoSet">
+		<div class="infoSet location">
 			<label class="label"><@s.text name="label.name"/></label>
 			<@s.textfield name="levelName.name"/>
+			
+			<div class="formActions buttonGroup">
+				<@s.submit key="label.add" />
+				<@s.text name="label.or"/>
+				<a href="<@s.url action="predefinedLocations"/>"><@s.text name="label.cancel"/></a>
+			</div>
 		</div>
-		<div class="actions">
-			<@s.submit key="label.add" />
-			<@s.text name="label.or"/>
-			<a href="<@s.url action="predefinedLocations"/>"><@s.text name="label.cancel"/></a>
-		</div>
+		
 	</@s.form>
 <#else>
 	<div class="addBox">
@@ -29,7 +31,7 @@ ${action.setPageType('predefined_locations', 'level_list')!}
 			<#include "/templates/html/common/_formErrors.ftl"/>
 			<@s.hidden name="levelName.index" value="${nodeIndex}"/>
 			<div class="addLocationContent">
-				<div class="infoSet">
+				<div class="infoSet location">
 					<label class="label"><@s.text name="label.level_name"/></label>
 					<@s.textfield name="levelName.name" value="${action.getLevel(nodeIndex).name}"/>
 					<div class="formActions buttonGroup">

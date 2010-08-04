@@ -4,11 +4,13 @@
 	min-height:65px;
 	padding: 20px 10px 0 65px;
 	border:1px solid #CCCCCC;
+	background-position: 25% center;
 }
 
-#initialPicture p{
-	
+#initialContent{
+		padding:0 50px 0 250px;
 }
+
 .addBox{
 	background-color:#EAEAEA;
 }
@@ -17,10 +19,19 @@
 	padding-top:10px;
 }
 
+.locationDesc{
+	padding: 0 0 10px 0;
+	}
+
 .addLocationContent .infoSet{
-	padding:5px 0px 15px 15px;
+	padding:5px 0px 25px 15px;
 	clear:both;
 }
+
+.intialHeading {
+	text-align:left;
+	padding: 0 0 10px 0;
+	}
 
 #wwctrl_editLocation, #wwctrl_editLevel {
 	padding: 0px;
@@ -29,17 +40,18 @@
 #editButtons{
 	padding: 5px 0 2px 0;
 }
-#addLocation{
+
+#addLocation, #addFirstLocation{
 	margin:0 0 0 5px;
 	position: relative;
 	bottom:4px;
-	}
+}
 
-#nodeForm, #addLocation{
+#nodeForm, #addLocation, #addFirstLocation, #addFirstForm{
 	float:left;
 }
-.treePreview{
- padding: 0 0 0 0;
- float:left;
-}
 
+.treePreview{
+	 padding: 0 0 0 0;
+ 	float:left;
+}
