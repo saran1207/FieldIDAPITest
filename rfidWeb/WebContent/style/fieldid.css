@@ -1569,4 +1569,9 @@ input.description {
 	float:none;
 	padding-left:0px;
 	}
+	
+  .containerobj a {
+	color:#000000;
+	  text-decoration: none;
+	}
 
