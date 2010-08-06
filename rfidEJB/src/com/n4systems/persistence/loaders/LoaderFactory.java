@@ -14,6 +14,7 @@ import com.n4systems.model.fileattachment.FileAttachmentLoader;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.inspectionschedule.IncompleteInspectionSchedulesListLoader;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
 import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
@@ -424,5 +425,9 @@ public class LoaderFactory {
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
+	}
+	
+	public IncompleteInspectionSchedulesListLoader createIncompleteInspectionSchedulesListLoader() {
+		return new IncompleteInspectionSchedulesListLoader(filter);
 	}
 }

@@ -20,7 +20,6 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
-import com.n4systems.ejb.impl.ScheduleInTimeFrameLoader;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
@@ -32,9 +31,9 @@ import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.InspectionCrudHelper;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
+import com.n4systems.fieldid.actions.inspection.viewmodel.InspectionWebModel;
 import com.n4systems.fieldid.actions.inspection.viewmodel.ScheduleToWebInspectionScheduleConverter;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebInspectionScheduleToInspectionScheduleBundleConverter;
-import com.n4systems.fieldid.actions.inspection.viewmodel.InspectionWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
@@ -128,9 +127,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
 	
-	private ScheduleInTimeFrameLoader scheduleInTimeFrameLoader;
-	
-	
 	private User assignedTo;
 	private boolean assignToSomeone = false;
 	
@@ -146,8 +142,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
 		this.inspectionFormHelper = new InspectionFormHelper();
-		this.scheduleInTimeFrameLoader = new ScheduleInTimeFrameLoader(persistenceManager);
-
 	}
 
 	@Override
@@ -918,8 +912,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public List<InspectionSchedule> getAvailableSchedules() {
 		if (availableSchedules == null) {
-			
-			availableSchedules = scheduleInTimeFrameLoader.getSchedulesInTimeFrame(product, inspection.getType(), inspection.getDate());
+			availableSchedules = getLoaderFactory().createIncompleteInspectionSchedulesListLoader()
+					.setProduct(product)
+					.setInspectionType(inspection.getType())
+					.load();
 			if (inspectionSchedule != null && !availableSchedules.contains(inspectionSchedule)) {
 				availableSchedules.add(0, inspectionSchedule);  
 			}
