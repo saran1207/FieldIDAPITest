@@ -2,6 +2,8 @@ package com.n4systems.webservice.server;
 
 import java.util.List;
 
+import com.n4systems.webservice.assetdownload.AssetListResponse;
+import com.n4systems.webservice.assetdownload.AssetRequest;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.AutoAttributeCriteriaListResponse;
@@ -22,7 +24,9 @@ import com.n4systems.webservice.dto.JobSiteListResponse;
 import com.n4systems.webservice.dto.MobileUpdateInfo;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.dto.PaginatedUpdateRequestInfo;
+import com.n4systems.webservice.dto.AssetIdListResponse;
 import com.n4systems.webservice.dto.ProductListResponse;
+import com.n4systems.webservice.dto.AssetSearchRequest;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupListResponse;
 import com.n4systems.webservice.dto.ProductTypeListResponse;
@@ -95,7 +99,8 @@ public interface DataService {
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	public RequestResponse updateInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
 	public RequestResponse removeInspectionSchedule(InspectionScheduleRequest request) throws ServiceException;
-	
 	public RequestResponse createCompletedJobSchedule(CompletedJobScheduleRequest request) throws ServiceException;
 	
+	public AssetIdListResponse getAssetIds(AssetSearchRequest search) throws ServiceException;
+	public AssetListResponse getAssets(AssetRequest request) throws ServiceException;
 }

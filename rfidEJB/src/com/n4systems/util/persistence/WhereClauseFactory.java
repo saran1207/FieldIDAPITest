@@ -79,4 +79,8 @@ public class WhereClauseFactory {
 	public static WhereClause<Object> createNotNull(String param) {
 		return create(Comparator.NOTNULL, null, param, null, null, null);
 	}
+	
+	public static WhereClause<String> createNoVariable(String leftSize, String rightSide) {
+		return new NoVariableClause(leftSize+rightSide, Comparator.EQ, leftSize, rightSide, ChainOp.AND);
+	}
 }

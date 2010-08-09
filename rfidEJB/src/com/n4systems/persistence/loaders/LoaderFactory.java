@@ -11,6 +11,7 @@ import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
+import com.n4systems.model.inspection.LastInspectionLoader;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
@@ -40,6 +41,7 @@ import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
+import com.n4systems.model.product.ProductIdSearchListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
@@ -110,14 +112,10 @@ public class LoaderFactory {
 		return new AllPredefinedLocationsPaginatedLoader(filter);
 	}
 
-	public PredefinedLocationByIdLoader createPredefinedLocationByIdLoader() {
-		return new PredefinedLocationByIdLoader(filter);
-	}
-	
 	public AssociatedInspectionTypesLoader createAssociatedInspectionTypesLoader() {
 		return new AssociatedInspectionTypesLoader(filter);
 	}
-
+	
 	public AutoAttributeCriteriaByProductTypeIdLoader createAutoAttributeCriteriaByProductTypeIdLoader() {
 		return new AutoAttributeCriteriaByProductTypeIdLoader(filter);
 	}
@@ -198,6 +196,10 @@ public class LoaderFactory {
 		return new FilteredIdLoader<T>(filter, clazz);
 	}
 
+	public <T> FilteredInListLoader<T> createFilteredInListLoader(Class<T> clazz) {
+		return new FilteredInListLoader<T>(filter, clazz);
+	}
+
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
 		return new FilteredListableLoader(filter, clazz);
 	}
@@ -212,6 +214,10 @@ public class LoaderFactory {
 
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
 		return createUserListableLoader().employeesOnly();
+	}
+
+	public IncompleteInspectionSchedulesListLoader createIncompleteInspectionSchedulesListLoader() {
+		return new IncompleteInspectionSchedulesListLoader(filter);
 	}
 
 	public InspectionBookByNameLoader createInspectionBookByNameLoader() {
@@ -242,6 +248,9 @@ public class LoaderFactory {
 		return new InternalOrgListableLoader(filter);
 	}
 
+	public LastInspectionLoader createLastInspectionLoader() {
+		return new LastInspectionLoader(filter);
+	}
 	
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
@@ -250,7 +259,7 @@ public class LoaderFactory {
 	public NextInspectionDateByInspectionLoader createNextInspectionDateByInspectionLoader() {
 		return new NextInspectionDateByInspectionLoader(filter);
 	}
-	
+
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
 		return new NotificationSettingByUserListLoader(filter);
 	}
@@ -271,6 +280,10 @@ public class LoaderFactory {
 		return new PassthruListLoader<T>(entities);
 	}
 
+	public PredefinedLocationByIdLoader createPredefinedLocationByIdLoader() {
+		return new PredefinedLocationByIdLoader(filter);
+	}
+
 	public PredefinedLocationLevelsLoader createPredefinedLocationLevelsLoader() {
 		return new PredefinedLocationLevelsLoader(filter);
 	}
@@ -289,6 +302,10 @@ public class LoaderFactory {
 
 	public ProductAttachmentListLoader createProductAttachmentListLoader() {
 		return new ProductAttachmentListLoader(filter);
+	}
+
+	public ProductIdSearchListLoader createProductIdSearchListLoader() {
+		return new ProductIdSearchListLoader(filter);
 	}
 
 	public ProductsByNetworkId createProductsByNetworkId() {
@@ -378,15 +395,15 @@ public class LoaderFactory {
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}
-
+	
 	public SignupReferralListLoader createSignupReferralListLoader() {
 		return new SignupReferralListLoader(filter);
 	}
-
+	
 	public SmartSearchLoader createSmartSearchListLoader() {
 		return new SmartSearchLoader(filter);
 	}
-
+	
 	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
@@ -394,11 +411,11 @@ public class LoaderFactory {
 	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}
-	
+
 	public UnreadMessageCountLoader createUnreadMessageCountLoader() {
 		return new UnreadMessageCountLoader(filter);
 	}
-	
+
 	public UserByFullNameLoader createUserByFullNameLoader() {
 		return new UserByFullNameLoader(filter);
 	}
@@ -406,15 +423,15 @@ public class LoaderFactory {
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
-
+	
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
-
+	
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
 		return new VendorLinkedOrgListLoader(filter);
 	}
-
+	
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
@@ -425,9 +442,5 @@ public class LoaderFactory {
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
-	}
-	
-	public IncompleteInspectionSchedulesListLoader createIncompleteInspectionSchedulesListLoader() {
-		return new IncompleteInspectionSchedulesListLoader(filter);
 	}
 }

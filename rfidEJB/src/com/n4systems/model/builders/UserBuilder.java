@@ -33,9 +33,16 @@ public class UserBuilder extends BaseBuilder<User> {
 		return anEmployee().withAdministratorAccess();
 	}
 	
+	public static UserBuilder aSecondaryUser() {
+		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null);
+	}
 	
 	public static UserBuilder aCustomerUser() {
 		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null);
+	}
+	
+	public static UserBuilder aDivisionUser() {
+		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null);
 	}
 	
 	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess, String password, boolean resetPasswordKey, Long id) {

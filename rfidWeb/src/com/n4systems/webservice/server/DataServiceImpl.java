@@ -111,6 +111,8 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.ModelToServiceConverterFactory;
 import com.n4systems.webservice.RequestHandlerFactory;
+import com.n4systems.webservice.assetdownload.AssetListResponse;
+import com.n4systems.webservice.assetdownload.AssetRequest;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
@@ -133,8 +135,10 @@ import com.n4systems.webservice.dto.JobSiteListResponse;
 import com.n4systems.webservice.dto.MobileUpdateInfo;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.dto.PaginatedUpdateRequestInfo;
+import com.n4systems.webservice.dto.AssetIdListResponse;
 import com.n4systems.webservice.dto.ProductListResponse;
 import com.n4systems.webservice.dto.ProductLookupable;
+import com.n4systems.webservice.dto.AssetSearchRequest;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupListResponse;
 import com.n4systems.webservice.dto.ProductTypeListResponse;
@@ -179,7 +183,8 @@ public class DataServiceImpl implements DataService {
 	
 	private RequestHandlerFactory createResponseHandlerFactory(RequestInformation request) {
 		LoaderFactory loaderFactory = createLoaderFactory(request);
-		RequestHandlerFactory handlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), loaderFactory, new ModelToServiceConverterFactory(loaderFactory));
+		ModelToServiceConverterFactory converterFactory = new ModelToServiceConverterFactory(loaderFactory, ServiceLocator.getServiceDTOBeanConverter());
+		RequestHandlerFactory handlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), loaderFactory, converterFactory);
 		return handlerFactory;
 	}
 	
@@ -224,6 +229,8 @@ public class DataServiceImpl implements DataService {
 	public List<TransactionLogServiceDTO> getRecentTransactions(RequestInformation requestInformation, Long lastRevision) throws ServiceException {		
 		return new ArrayList<TransactionLogServiceDTO>();
 	}
+	
+
 	
 	public InspectionTypeListResponse getAllInspectionTypes(PaginatedRequestInformation paginatedRequestInformation) throws ServiceException {
 		
@@ -1555,6 +1562,16 @@ public class DataServiceImpl implements DataService {
 			logger.error( "failed while pulling down inspections by job", e );
 			throw new ServiceException();
 		}			
+	}
+	
+	public AssetIdListResponse getAssetIds(AssetSearchRequest request) throws ServiceException {
+		AssetIdListResponse response = createResponseHandlerFactory(request).createAssetIdSearchRequestHandler().getResponse(request);
+		return response;
+	}
+	
+	public AssetListResponse getAssets(AssetRequest request) throws ServiceException {
+		AssetListResponse response = createResponseHandlerFactory(request).createGetAssetRequestHandler().getResponse(request);
+		return response;
 	}
 	
 	private boolean isTransactionCompleted( RequestInformation requestInformation ) throws NamingException, InvalidTransactionGUIDException {

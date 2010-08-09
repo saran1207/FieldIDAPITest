@@ -7,11 +7,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table(name="subproducts")
-public class SubProduct extends AbstractEntity {
+public class SubProduct extends AbstractEntity implements UnsecuredEntity {
 
 	private static final long serialVersionUID = 1L;
 	

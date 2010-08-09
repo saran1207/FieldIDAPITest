@@ -32,7 +32,8 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private long assignedUserId;
 	private String location;
 	private Long predefinedLocationId;
-
+	private InspectionServiceDTO lastInspection; //these only go down, never up
+	
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
 	private long jobSiteId;
@@ -271,6 +272,14 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 
 	public void setPredefinedLocationId(Long predefinedLocationId) {
 		this.predefinedLocationId = predefinedLocationId;
+	}
+
+	public InspectionServiceDTO getLastInspection() {
+		return lastInspection;
+	}
+
+	public void setLastInspection(InspectionServiceDTO lastInspection) {
+		this.lastInspection = lastInspection;
 	}
 
 }

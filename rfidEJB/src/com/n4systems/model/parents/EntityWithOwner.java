@@ -15,6 +15,7 @@ import com.n4systems.model.security.SecurityLevel;
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class EntityWithOwner extends EntityWithTenant implements HasOwner {
+	public static final String OWNER_PATH = "owner";
 	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(EntityWithOwner.class);
