@@ -7,7 +7,10 @@
 		}
 	</style>
 		<script type="text/javascript">
-	  
+	
+		
+		
+
 		function selectOrg(inspectionId, productTypeId){
 	    		redirect("<@s.url action="inspectionFrequencyOverride" />" + "?inspectionTypeId="+inspectionId +"&productTypeId="+productTypeId);
 
@@ -61,8 +64,8 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 								</#if>
 							</div>	 
 							<div id="eventFrequencyOverrideForm_${inspectionType.id}" class="overrideForm">			
-								<input type="button" id="override" onclick="selectOrg(${inspectionType.id},${productTypeId})" value="hkey.override" />
-								<a href='<@s.url action="inspectionFrequencyOverride" productTypeId="${productTypeId}" inspectionTypeId="${inspectionType.id}"/>'  class='lightview' rel='iframe'  title=' :: :: scrolling:false,  width: 600, height: 450'>
+								<input id="override" type="button"  onclick="selectOrg(${inspectionType.id},${productTypeId})" value="hkey.override" />
+								<a href='<@s.url action="inspectionFrequencyOverride" productTypeId="${productTypeId}" inspectionTypeId="${inspectionType.id}"/>'  class='lightview' title=' :: :: scrolling:false,  width: 600, height: 510'>
 									<@s.text name="label.add_new_override"/>
 								</a>
 							</div>

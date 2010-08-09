@@ -1,13 +1,11 @@
 <span class="customer">
 	<#if (schedule.id)?exists && schedule.override >
-		${schedule.owner.name}
-	<#else>
-		<@s.text name="label.default"/> 
+		 <@s.text name="label.capital_for" /> ${schedule.owner.name}
 	</#if>
 </span>
 <span class="frequency">
 	<#if (schedule.id)?exists>
-		<@s.text name="label.every" /> ${(schedule.frequency)!} <@s.text name="label.days"/>, ${schedule.autoSchedule?string( action.getText( "label.autoscheduled" ), "" )}
+		 <@s.text name="label.schedule_a" /> ${inspectionType.name} <@s.text name="label.every"/> ${(schedule.frequency)!} <@s.text name="label.days"/>
 	<#else>
 		<@s.text name="label.notscheduled"/>
 	</#if> 

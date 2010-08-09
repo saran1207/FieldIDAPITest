@@ -14,18 +14,20 @@
 		<#else>
 			<#if schedule.override >
 				${schedule.owner.name}
-			<#else>
-				<@s.text name="label.default"/> 
 			</#if>
 			<@s.hidden name="ownerId"/>
 		</#if>
 	</span>
 	
 	<span class="frequency">
+		<@s.text name="label.capital_schedule_a"/> ${inspectionType.name} <@s.text name="label.every"/>
 		<@s.textfield name="frequency" /> <@s.text name="label.days"/>
 	</span>
+	<br/>
 	<span class="autoSchedule">
-			, <@s.text name="label.autoscheduled"/> <@s.checkbox name="autoSchedule" /> 			
+			<br/>
+			<@s.checkbox name="autoSchedule" /> <@s.text name="label.automatically_schedule_checkbox_1"/> ${productType.name}   	
+			<@s.text name="label.automatically_schedule_checkbox_2"/> ${inspectionType.name}		
 	</span>
 	<span class="actions">
 		<a href="javascript:void(0);" onclick="saveSchedule( ${formId} ); return false;" ><@s.text name="label.save" /></a> | 
