@@ -6,7 +6,14 @@
 			padding-left:3px;
 		}
 	</style>
-	<#include "/templates/html/common/_orgPicker.ftl"/>
+		<script type="text/javascript">
+	  
+		function selectOrg(inspectionId, productTypeId){
+	    		redirect("<@s.url action="inspectionFrequencyOverride" />" + "?inspectionTypeId="+inspectionId +"&productTypeId="+productTypeId);
+
+		  }
+	   </script>
+
 </head>
 
 ${action.setPageType('product_type', 'schedule_frequencies')!}
@@ -52,14 +59,14 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 										</div>
 									</#list>
 								</#if>
-								
 							</div>	 
 							<div id="eventFrequencyOverrideForm_${inspectionType.id}" class="overrideForm">			
-								<#assign schedule=action.newSchedule() />
-								<#include "_add.ftl" />
+								<input type="button" id="override" onclick="selectOrg(${inspectionType.id},${productTypeId})" value="hkey.override" />
+								<a href='<@s.url action="inspectionFrequencyOverride" productTypeId="${productTypeId}" inspectionTypeId="${inspectionType.id}"/>'  class='lightview' rel='iframe'  title=' :: :: scrolling:false,  width: 600, height: 450'>
+									<@s.text name="label.add_new_override"/>
+								</a>
 							</div>
 						</div>
-						 
 					</div>
 				</td>
 			</tr>
