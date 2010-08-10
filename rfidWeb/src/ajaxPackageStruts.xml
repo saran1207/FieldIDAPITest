@@ -83,7 +83,7 @@
 
 		<action name="productTypeScheduleCreateOverride" method="save"
 			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="input" type="freemarker">/templates/ajax/productTypeScheduleCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/ajax/productTypeScheduleCrud/ajaxOverride.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/create.ftl</result>
 		</action>
 

@@ -7,20 +7,21 @@
 		}
 	</style>
 		<script type="text/javascript">
-	
 		
+		function setId(newId){
+			$('hiddenId').value=newId;
+		}
 		
-
 		function selectOrg(inspectionId, productTypeId){
-	    		redirect("<@s.url action="inspectionFrequencyOverride" />" + "?inspectionTypeId="+inspectionId +"&productTypeId="+productTypeId);
-
+	    		//redirect("<@s.url action="inspectionFrequencyOverride" />" + "?inspectionTypeId="+inspectionId +"&productTypeId="+productTypeId);
 		  }
 	   </script>
-
+	   <#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 
 ${action.setPageType('product_type', 'schedule_frequencies')!}
-
+<@s.hidden id="hiddenId" name="inspectionTypeId"/>
+<#assign inspectionTypeId=0 />
 <#if !inspectionTypes.isEmpty() >
 	
 	<table class="list" >
@@ -64,10 +65,9 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 								</#if>
 							</div>	 
 							<div id="eventFrequencyOverrideForm_${inspectionType.id}" class="overrideForm">			
-								<input id="override" type="button"  onclick="selectOrg(${inspectionType.id},${productTypeId})" value="hkey.override" />
-								<a href='<@s.url action="inspectionFrequencyOverride" productTypeId="${productTypeId}" inspectionTypeId="${inspectionType.id}"/>'  class='lightview' title=' :: :: scrolling:false,  width: 600, height: 510'>
-									<@s.text name="label.add_new_override"/>
-								</a>
+							<@s.form id="schedule_${inspectionType.id}_customer" action="productTypeScheduleCreateOverride" namespace="/ajax" theme="fieldidSimple" >
+								<a href="javascript:void(0);" onclick="setId(${inspectionType.id}); saveSchedule( '${inspectionType.id}_customer', ${inspectionType.id} ); return false;" ><@s.text name="label.add" /></a>
+							</@s.form>
 							</div>
 						</div>
 					</div>
@@ -84,8 +84,9 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 		</p>
 	</div>
 </#if>
-
-
+	<div id="orgHolder">
+	
+	</div>
 <script type="text/javascript" >
 	editScheduleUrl =  '<@s.url action="productTypeScheduleEdit" namespace="/ajax"/>';
 	cancelScheduleUrl = '<@s.url action="productTypeScheduleShow" namespace="/ajax"/>';

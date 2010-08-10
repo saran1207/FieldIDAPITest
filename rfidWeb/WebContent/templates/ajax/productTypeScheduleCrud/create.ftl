@@ -1,2 +1,2 @@
-<#include "add.ftl"/>
+<#include "ajaxOverride.ftl"/>
 <#include "show.ftl"/>

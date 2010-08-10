@@ -25,4 +25,9 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 	</span>
 	<@s.text name="label.days"/>
 	<@s.submit id="saveOverride" key="labe.add_new_override" cssClass="saveButton save"/>
+	
+	<@s.fielderror>
+		<@s.param>owner</@s.param>
+		<@s.param>frequency</@s.param>				
+	</@s.fielderror>
 </@s.form>
