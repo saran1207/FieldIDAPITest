@@ -19,7 +19,7 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
-public class ProductSearchContainerTest extends SearchContainerTest {
+public class ProductSearchContainerTest extends SearchContainerTestCase {
 
 	private ProductSearchContainer productSearchContainer;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");

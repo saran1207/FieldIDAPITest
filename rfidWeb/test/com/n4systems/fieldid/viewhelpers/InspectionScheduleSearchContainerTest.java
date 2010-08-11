@@ -17,7 +17,7 @@ import com.n4systems.util.BitField;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-public class InspectionScheduleSearchContainerTest extends SearchContainerTest {
+public class InspectionScheduleSearchContainerTest extends SearchContainerTestCase {
 
 	private InspectionScheduleSearchContainer inspectionScheduleSearchContainer;
 	
@@ -27,6 +27,7 @@ public class InspectionScheduleSearchContainerTest extends SearchContainerTest {
 		inspectionScheduleSearchContainer = new InspectionScheduleSearchContainer(filter, new TestDoubleLoaderFactory(filter));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void no_search_terms_should_give_one_clause_of_status() {
 		// Set no fields on the container.

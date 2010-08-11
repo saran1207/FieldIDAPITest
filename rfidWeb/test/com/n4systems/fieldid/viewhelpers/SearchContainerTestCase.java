@@ -9,7 +9,7 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
-public abstract class SearchContainerTest {
+public abstract class SearchContainerTestCase {
 
 	protected WhereParameter<?> getSingleWhereClause(BaseSearchDefiner definer) {
 		SearchTermDefiner term = getSingleSearchTerm(definer);
