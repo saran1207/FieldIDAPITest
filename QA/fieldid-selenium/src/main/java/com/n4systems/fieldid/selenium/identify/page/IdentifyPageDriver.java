@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -126,7 +125,6 @@ public class IdentifyPageDriver {
 		assertTrue("Could not find the select list to Register Product on the Safety Network", selenium.isElementPresent(identifyAddPublishOverSafetyNetworkSelectListLocator));
 		assertTrue("Could not find the text field for Owner on Assets Add", selenium.isElementPresent(identifyAddOwnerTextFieldLocator));
 		assertTrue("Could not find the link for Choose Owner on Assets Add", selenium.isElementPresent(identifyAddChooseLinkLocator));
-		assertTrue("Could not find the text field for Location on Assets Add", selenium.isElementPresent(identifyAddLocationTextFieldLocator));
 		assertTrue("Could not find the select list for Product Status on Assets Add", selenium.isElementPresent(identifyAddProductStatusSelectListLocator));
 		assertTrue("Could not find the text field for Purchase Order on Assets Add", selenium.isElementPresent(identifyAddPurchaseOrderTextFieldLocator));
 		assertTrue("Could not find the text field for Identified on Assets Add", selenium.isElementPresent(identifyAddIdentifiedTextFieldLocator));
@@ -292,9 +290,7 @@ public class IdentifyPageDriver {
 	}
 
 	private void setRequiredTextFields(List<String> requiredTextFieldIDs) {
-		Iterator<String> i = requiredTextFieldIDs.iterator();
-		while(i.hasNext()) {
-			String id = i.next();
+		for (String id : requiredTextFieldIDs) {
 			String locator = "xpath=//INPUT[contains(@class,'" + classStringIdentifyingRequiredFields
 				+ "') and not(contains(@class,'" 
 				+ classStringIdentifyingUnitOfMeasureFields + "')) and @id='" 
@@ -307,9 +303,7 @@ public class IdentifyPageDriver {
 	}
 
 	private void setRequiredUnitsOfMeasure(List<String> requiredTextFieldIDs) {
-		Iterator<String> i = requiredTextFieldIDs.iterator();
-		while(i.hasNext()) {
-			String id = i.next();
+		for (String id : requiredTextFieldIDs) {
 			Random r = new Random();
 			String value = Integer.toString(Math.abs((r.nextInt(100)+1)));
 			setUnitOfMeasure(id, value);
@@ -356,9 +350,7 @@ public class IdentifyPageDriver {
 	}
 
 	private void setRequiredSelectLists(List<String> requiredSelectListsIDs) {
-		Iterator<String> i = requiredSelectListsIDs.iterator();
-		while(i.hasNext()) {
-			String id = i.next();
+		for (String id : requiredSelectListsIDs) {
 			String locator = "xpath=//SELECT[contains(@class,'" + classStringIdentifyingRequiredFields + "') and "
 				+ "@id='" + id + "']";
 			if(selenium.isElementPresent(locator)) {

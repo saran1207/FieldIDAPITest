@@ -33,7 +33,6 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 		selenium.open("/fieldid/chooseCompany.action");
 	}
 	
-	
 	@Test
 	public void should_forward_to_choose_company_page_from_root_of_www_domain() throws Exception {
 		String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot();
@@ -41,11 +40,7 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
 		choosePage.verifyChooseCompany();
-		assertEquals("regexp:" + (url + "chooseCompany.action").replaceAll("\\/", "\\\\/").replaceAll("\\.", "\\\\."), selenium.getLocation());
-		
-		selenium.getLocation();
 	}
-	
 	
 	@Test
 	public void should_show_warning_message_when_a_user_is_redirected_to_choose_company_page_when_they_enter_an_incorrect_tenant() throws Exception {
