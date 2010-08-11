@@ -1,27 +1,27 @@
 <head>
 	<script language="javascript" src="javascript/productTypeSchedule.js"> </script>
-	<style>
-		.actions {
-			margin:0;
-			padding-left:3px;
+		<style>
+			.actions {
+				margin:0;
+				padding-left:3px;
+			}
+		</style>
+	<script type="text/javascript">
+		function setId(newId, newName){
+			$('inspectionTypeIdToUpdate').value=newId;
+			$('inspectionTypeNameToUpdate').value=newName;
+			$('orgPickerForm').show();
 		}
-	</style>
-		<script type="text/javascript">
 		
-		function setId(newId){
-			$('hiddenId').value=newId;
+		function hideOrgPicker(){
+			$('orgPickerForm').hide();
 		}
-		
-		function selectOrg(inspectionId, productTypeId){
-	    		//redirect("<@s.url action="inspectionFrequencyOverride" />" + "?inspectionTypeId="+inspectionId +"&productTypeId="+productTypeId);
-		  }
-	   </script>
-	   <#include "/templates/html/common/_orgPicker.ftl"/>
+	</script>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 
 ${action.setPageType('product_type', 'schedule_frequencies')!}
-<@s.hidden id="hiddenId" name="inspectionTypeId"/>
-<#assign inspectionTypeId=0 />
+
 <#if !inspectionTypes.isEmpty() >
 	
 	<table class="list" >
@@ -37,7 +37,6 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 				<td class="name">${inspectionType.name} 
 					<#if inspectionType.discription?exists > - ${(inspectionType.description)!}</#if>
 				</td>
-				
 				<td>
 					<div id="eventFrequency_${inspectionType.id}" class="schedule">
 						<#if schedules[inspectionType.name]?exists >
@@ -50,8 +49,8 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 					
 					<div id="eventFrequencyOverrides_${inspectionType.id}_container" <#if !schedules[inspectionType.name]?exists >style="display:none"</#if> >
 						<p style="padding-top:10px;"><@s.text name="label.overrides"/> 
-							<a id="overrideExpand_${inspectionType.id}" href="javasript:void(0);" onclick="expandOverride( ${inspectionType.id} ); return false;"><img src="<@s.url value="/images/expand.gif" includeParams="none"/>" alt="[+]" title="show customer overrides"/></a>
-							<a style="display:none" id="overrideCollapse_${inspectionType.id}" href="javasript:void(0);" onclick="collapseOverride( ${inspectionType.id} ); return false;"><img src="<@s.url value="/images/collapse.gif" includeParams="none"/>" alt="[+]" title="hide customer overrides"/></a>
+							<a id="overrideExpand_${inspectionType.id}" href="javasript:void(0);" onclick="expandOverride( ${inspectionType.id} );  hideOrgPicker(); return false;"><img src="<@s.url value="/images/expand.gif" includeParams="none"/>" alt="[+]" title="show customer overrides"/></a>
+							<a style="display:none" id="overrideCollapse_${inspectionType.id}" href="javasript:void(0);" onclick="collapseOverride( ${inspectionType.id} ); hideOrgPicker(); return false;"><img src="<@s.url value="/images/collapse.gif" includeParams="none"/>" alt="[+]" title="hide customer overrides"/></a>
 						</p>
 						
 						<div id="overrides_${inspectionType.id}"  style="display:none">
@@ -65,9 +64,8 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 								</#if>
 							</div>	 
 							<div id="eventFrequencyOverrideForm_${inspectionType.id}" class="overrideForm">			
-							<@s.form id="schedule_${inspectionType.id}_customer" action="productTypeScheduleCreateOverride" namespace="/ajax" theme="fieldidSimple" >
-								<a href="javascript:void(0);" onclick="setId(${inspectionType.id}); saveSchedule( '${inspectionType.id}_customer', ${inspectionType.id} ); return false;" ><@s.text name="label.add" /></a>
-							</@s.form>
+								<#assign schedule=action.newSchedule() />
+								<a href="javascript:void(0);" onclick="setId('${inspectionType.id}','${inspectionType.name}'); return false;" ><@s.text name="label.add_override" /></a>
 							</div>
 						</div>
 					</div>
@@ -84,9 +82,44 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 		</p>
 	</div>
 </#if>
-	<div id="orgHolder">
+
+
+<div id="orgPickerForm"  style="display:none">	
+	<@s.form id="orgForm" action="inspectionFrequencyOverrideCreate" theme="fieldidSimple" >
+		<@s.hidden name="productTypeId" />
+		<@s.hidden name="uniqueID" />
+		<@s.hidden id="inspectionTypeIdToUpdate" name="inspectionTypeId"/>
+		<@s.hidden id="inspectionTypeNameToUpdate" name="inspectionTypeName" value=""/>
+		<#assign inspectionTypeName="" />
+		<h3><@s.text name="label.overrides_title"/></h3>
+		<br/>
+		<p><@s.text name="label.overrides_description"/></p>
+		<br/>
 	
-	</div>
+		<@s.text name="label.capital_for"/>
+		<span class="customer">
+			<#if !uniqueID?exists >
+				<@n4.orgPicker name="owner" required="true" orgType="non_primary"/>
+			<#else>
+				<@s.hidden name="ownerId" />
+			</#if>
+		</span>
+		
+		<@s.text name="label.schedule_a"/>
+		${inspectionTypeName}
+		<@s.text name="label.every"/>
+		<span class="frequency">
+			<@s.textfield name="frequency"/>
+		</span>
+		<@s.text name="label.days"/>
+		<@s.submit id="saveOverride" key="label.add_new_override" cssClass="saveButton save"/>
+		<a href="javascript:void(0);" onclick="javascript:$('orgPickerForm').hide(); return false;" ><@s.text name="label.hide" /></a>
+			<@s.fielderror>
+			<@s.param>owner</@s.param>
+			<@s.param>frequency</@s.param>				
+		</@s.fielderror>
+	</@s.form>
+</div>
 <script type="text/javascript" >
 	editScheduleUrl =  '<@s.url action="productTypeScheduleEdit" namespace="/ajax"/>';
 	cancelScheduleUrl = '<@s.url action="productTypeScheduleShow" namespace="/ajax"/>';

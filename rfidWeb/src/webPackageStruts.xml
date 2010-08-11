@@ -80,17 +80,15 @@
 			<result name="success" type="freemarker">/templates/html/productTypeScheduleCrud/list.ftl</result>
 		</action>
 		
-		<action name="inspectionFrequencyOverride" method="list" class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="success" type="freemarker">/templates/html/productTypeScheduleCrud/override.ftl</result>
-		</action>
-		
+
 		<action name="inspectionFrequencyOverrideCreate" method="save" class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-				<result name="input" type="freemarker">/templates/html/productTypeScheduleCrud/override.ftl</result>
-				<result name="error" type="freemarker">/templates/html/productTypeScheduleCrud/override.ftl</result>
-				<result name="success" type="redirectAction">
-					<param name="actionName">inspectionFrequencies</param>
-						<param name="productTypeId">${productTypeId}</param>
-				</result>
+			<result name="input" type="freemarker">/templates/html/productTypeScheduleCrud/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/productTypeScheduleCrud/list.ftl</result>
+			
+			<result name="success" type="redirectAction">
+				<param name="actionName">inspectionFrequencies</param>
+				<param name="productTypeId">${productTypeId}</param>
+			</result>
 		</action>
 
 		<action name="inspectionScheduleList" method="list" class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
