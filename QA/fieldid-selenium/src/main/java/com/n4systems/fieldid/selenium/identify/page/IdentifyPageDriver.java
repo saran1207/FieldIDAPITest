@@ -439,7 +439,9 @@ public class IdentifyPageDriver {
 		Owner owner = misc.getOwner();
 		misc.gotoCancelOwner();
 		p.setOwner(owner);
-		p.setLocation(selenium.getValue(identifyAddLocationTextFieldLocator));
+		if (selenium.isElementPresent(identifyAddLocationTextFieldLocator)) {
+			p.setLocation(selenium.getValue(identifyAddLocationTextFieldLocator));
+		}
 		p.setProductStatus(selenium.getSelectedLabel(identifyAddProductStatusSelectListLocator));
 		p.setPurchaseOrder(selenium.getValue(identifyAddPurchaseOrderTextFieldLocator));
 		p.setIdentified(selenium.getValue(identifyAddIdentifiedTextFieldLocator));
