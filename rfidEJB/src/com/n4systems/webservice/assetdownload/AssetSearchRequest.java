@@ -1,7 +1,9 @@
-package com.n4systems.webservice.dto;
+package com.n4systems.webservice.assetdownload;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.n4systems.webservice.dto.RequestInformation;
 
 public class AssetSearchRequest extends RequestInformation {
 	private List<Long> ownerIds = new ArrayList<Long>();

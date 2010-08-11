@@ -32,7 +32,7 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private long assignedUserId;
 	private String location;
 	private Long predefinedLocationId;
-	private InspectionServiceDTO lastInspection; //these only go down, never up
+	private List<InspectionServiceDTO> lastInspections; //these only go down, never up
 	
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
@@ -274,12 +274,12 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 		this.predefinedLocationId = predefinedLocationId;
 	}
 
-	public InspectionServiceDTO getLastInspection() {
-		return lastInspection;
+	public List<InspectionServiceDTO> getLastInspections() {
+		return lastInspections;
 	}
 
-	public void setLastInspection(InspectionServiceDTO lastInspection) {
-		this.lastInspection = lastInspection;
+	public void setLastInspections(List<InspectionServiceDTO> lastInspections) {
+		this.lastInspections = lastInspections;
 	}
 
 }

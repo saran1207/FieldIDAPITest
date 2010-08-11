@@ -1,5 +1,8 @@
 package com.n4systems.webservice.product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
@@ -12,6 +15,7 @@ public class ProductToServiceConverter implements ModelToServiceConverter<Produc
 	private final ServiceDTOBeanConverter serviceConverter;
 	private final LastInspectionLoader lastInspectionLoader;
 	private final ModelToServiceConverter<Inspection, InspectionServiceDTO> inspectionConverter;
+	private boolean withPreviosInspections;
 	
 	public ProductToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastInspectionLoader lastInspectionLoader, ModelToServiceConverter<Inspection, InspectionServiceDTO> inspectionConverter) {
 		this.serviceConverter = serviceConverter;
@@ -22,16 +26,26 @@ public class ProductToServiceConverter implements ModelToServiceConverter<Produc
 	@Override
 	public ProductServiceDTO toServiceDTO(Product model) {
 		ProductServiceDTO dto = serviceConverter.convert(model);
-		dto.setLastInspection(convertLastInspection(model.getId()));
+		
+		if (withPreviosInspections) {
+			dto.setLastInspections(convertLastInspections(model.getId()));
+		}
+		
 		return dto;
 	}
 	
-	private InspectionServiceDTO convertLastInspection(Long productId) {
-		Inspection inspection = lastInspectionLoader.setProductId(productId).load();
-		if (inspection == null) {
-			return null;
+	private List<InspectionServiceDTO> convertLastInspections(Long productId) {
+		List<Inspection> inspections = lastInspectionLoader.setProductId(productId).load();
+		
+		List<InspectionServiceDTO> dtos = new ArrayList<InspectionServiceDTO>();
+		for (Inspection insp: inspections) {
+			dtos.add(inspectionConverter.toServiceDTO(insp));
 		}
-		return inspectionConverter.toServiceDTO(inspection);
+		
+		return dtos;
 	}
 
+	public void setWithPreviosInspections(boolean withPreviosInspections) {
+		this.withPreviosInspections = withPreviosInspections;
+	}
 }

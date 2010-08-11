@@ -4,17 +4,18 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.product.ProductIdSearchListLoader;
+import com.n4systems.model.product.SyncAssetListLoader;
 import com.n4systems.webservice.RequestHandler;
-import com.n4systems.webservice.dto.AssetIdListResponse;
-import com.n4systems.webservice.dto.AssetSearchRequest;
+import com.n4systems.webservice.assetdownload.AssetIdListResponse;
+import com.n4systems.webservice.assetdownload.AssetSearchRequest;
+import com.n4systems.webservice.assetdownload.SyncAsset;
 import com.n4systems.webservice.exceptions.ServiceException;
 
 public class AssetIdSearchRequestHandler implements RequestHandler<AssetSearchRequest, AssetIdListResponse> {
 	private final Logger logger = Logger.getLogger(AssetIdSearchRequestHandler.class);
-	private final ProductIdSearchListLoader assetIdLoader;
+	private final SyncAssetListLoader assetIdLoader;
 	
-	public AssetIdSearchRequestHandler(ProductIdSearchListLoader productIdLoader) {
+	public AssetIdSearchRequestHandler(SyncAssetListLoader productIdLoader) {
 		this.assetIdLoader = productIdLoader;
 	}
 	
@@ -25,8 +26,8 @@ public class AssetIdSearchRequestHandler implements RequestHandler<AssetSearchRe
 		try {
 			setupProductIdLoader(request);
 			
-			List<Long> assetIds = assetIdLoader.load();
-			response.setAssetIds(assetIds);
+			List<SyncAsset> assetIds = assetIdLoader.load();
+			response.setAssets(assetIds);
 			
 		} catch(Exception e) {
 			logger.error("Unable to handle AssetSearchRequest", e);

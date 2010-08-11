@@ -41,7 +41,7 @@ import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.product.ProductAttachmentListLoader;
-import com.n4systems.model.product.ProductIdSearchListLoader;
+import com.n4systems.model.product.SyncAssetListLoader;
 import com.n4systems.model.product.ProductSerialExtensionListLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
@@ -304,8 +304,8 @@ public class LoaderFactory {
 		return new ProductAttachmentListLoader(filter);
 	}
 
-	public ProductIdSearchListLoader createProductIdSearchListLoader() {
-		return new ProductIdSearchListLoader(filter);
+	public SyncAssetListLoader createProductIdSearchListLoader() {
+		return new SyncAssetListLoader(filter);
 	}
 
 	public ProductsByNetworkId createProductsByNetworkId() {

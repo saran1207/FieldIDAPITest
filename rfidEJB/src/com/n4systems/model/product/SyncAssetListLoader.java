@@ -13,6 +13,7 @@ import com.n4systems.model.SubProduct;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameterGroup;
@@ -20,69 +21,74 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.customclauses.PredefinedLocationInClause;
 import com.n4systems.util.persistence.customclauses.SecondaryOrExternalOrgFilterClause;
+import com.n4systems.webservice.assetdownload.SyncAsset;
 
-public class ProductIdSearchListLoader extends ListLoader<Long> {
+public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	private final List<Long> ownerIds = new ArrayList<Long>();
 	private final List<Long> locationIds = new ArrayList<Long>();
 	private final List<Long> jobIds = new ArrayList<Long>();
 	
-	public ProductIdSearchListLoader(SecurityFilter filter) {
+	public SyncAssetListLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
-	protected List<Long> load(EntityManager em, SecurityFilter filter) {
-		List<Long> orgAndLocationProducts = findProductIdsByOrgAndLocation(em, filter);
-		List<Long> jobProducts = findProductIdsByJob(em, filter);
+	protected List<SyncAsset> load(EntityManager em, SecurityFilter filter) {
+		List<SyncAsset> orgAndLocationProducts = findProductIdsByOrgAndLocation(em, filter);
+		List<SyncAsset> jobProducts = findProductIdsByJob(em, filter);
 		
 		// use a set to remove duplicates
-		Set<Long> productIds = new HashSet<Long>();
+		Set<SyncAsset> productIds = new HashSet<SyncAsset>();
 		productIds.addAll(orgAndLocationProducts);
 		productIds.addAll(jobProducts);
 		
-		return new ArrayList<Long>(productIds);
+		return new ArrayList<SyncAsset>(productIds);
 	}
 
-	private List<Long> findProductIdsByJob(EntityManager em, SecurityFilter filter) {
+	private List<SyncAsset> findProductIdsByJob(EntityManager em, SecurityFilter filter) {
 		if (jobIds.isEmpty()) {
-			return new ArrayList<Long>();
+			return new ArrayList<SyncAsset>();
 		}
 		
-		List<Long> productIds = findMasterProductIdsByJob(em, filter);
-		List<Long> subProductIds = findSubProductIdsForMasters(em, productIds);
+		List<SyncAsset> productIds = findMasterProductIdsByJob(em, filter);
+		List<SyncAsset> subProductIds = findSubProductIdsForMasters(em, productIds);
 		
 		productIds.addAll(subProductIds);
 		return subProductIds;
 	}
 
-	private List<Long> findSubProductIdsForMasters(EntityManager em, List<Long> productIds) {
-		if (productIds.isEmpty()) {
-			return new ArrayList<Long>();
+	private List<SyncAsset> findSubProductIdsForMasters(EntityManager em, List<SyncAsset> masterSyncAssets) {
+		if (masterSyncAssets.isEmpty()) {
+			return new ArrayList<SyncAsset>();
 		}
 		
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(SubProduct.class);
-		builder.setSimpleSelect("product.id", true);
+		List<Long> productIds = new ArrayList<Long>();
+		for (SyncAsset asset: masterSyncAssets) {
+			productIds.add(asset.getId());
+		}
+		
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(SubProduct.class);
+		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "product.id", "product.modified"));
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "masterProduct.id", productIds));
 		
-		List<Long> subProductIds = builder.getResultList(em);
+		List<SyncAsset> subProductIds = builder.getResultList(em);
 		return subProductIds;
 	}
 	
-	private List<Long> findMasterProductIdsByJob(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, filter);
-		builder.setSimpleSelect("product.id", true);	
+	private List<SyncAsset> findMasterProductIdsByJob(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(InspectionSchedule.class, filter);
+		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "product.id", "product.modified"));
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "project.id", jobIds));
 		
-		List<Long> masterProductIds = builder.getResultList(em);
+		List<SyncAsset> masterProductIds = builder.getResultList(em);
 		return masterProductIds;
 	}
 	
-	private List<Long> findProductIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, filter);
-		builder.setSimpleSelect("id", true);
+	private List<SyncAsset> findProductIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Product.class, filter);
+		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "id", "modified"));
 
 		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
-		
 		for (long ownerId: ownerIds) {
 			BaseOrg org = em.find(BaseOrg.class, ownerId);
 			
@@ -101,7 +107,7 @@ public class ProductIdSearchListLoader extends ListLoader<Long> {
 			builder.addWhere(filterGroup);
 		}
 		
-		List<Long> productIds = builder.getResultList(em);
+		List<SyncAsset> productIds = builder.getResultList(em);
 		return productIds;
 	}
 
