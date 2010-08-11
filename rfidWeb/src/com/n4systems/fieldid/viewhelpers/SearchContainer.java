@@ -175,12 +175,20 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 		addSimpleTerm(field, StringUtils.clean(value));
 	}
 	
-	protected void addWildcardTerm(String field, String value) {
+	protected void addWildcardOrStringTerm(String field, String value) {
 		String valueString = StringUtils.clean(value);
 		
-		if(valueString != null) {
-			searchTerms.add(new WildcardTerm(field, valueString));
+		if(valueString != null && !"*".equals(value)) {
+			if (isWildcard(value)) {
+				searchTerms.add(new WildcardTerm(field, valueString));				
+			} else {
+				addSimpleTerm(field, valueString);
+			}
 		}
+	}
+	
+	private boolean isWildcard(String value) {
+		return value.startsWith("*") || value.endsWith("*");
 	}
 	
 	protected void addNullTerm(String field) {

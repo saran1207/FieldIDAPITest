@@ -54,12 +54,12 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	
 	@Override
 	protected void evalSearchTerms() {
-		addStringTerm("product.rfidNumber", rfidNumber);
-		addWildcardTerm("product.serialNumber", serialNumber);
-		addStringTerm("product.shopOrder.order.orderNumber", orderNumber);
-		addStringTerm("product.purchaseOrder", purchaseOrder);
-		addStringTerm("product.customerRefNumber", referenceNumber);
-		addWildcardTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
+		addWildcardOrStringTerm("product.rfidNumber", rfidNumber);
+		addWildcardOrStringTerm("product.serialNumber", serialNumber);
+		addWildcardOrStringTerm("product.shopOrder.order.orderNumber", orderNumber);
+		addWildcardOrStringTerm("product.purchaseOrder", purchaseOrder);
+		addWildcardOrStringTerm("product.customerRefNumber", referenceNumber);
+		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);

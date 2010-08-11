@@ -38,12 +38,12 @@ public class ProductSearchContainer extends SearchContainer {
 	
 	@Override
 	protected void evalSearchTerms() {
-		addStringTerm("rfidNumber", rfidNumber);
-		addWildcardTerm("serialNumber", serialNumber);
-		addWildcardTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
-		addStringTerm("shopOrder.order.orderNumber", orderNumber);
-		addStringTerm("customerRefNumber", referenceNumber);
-		addStringTerm("purchaseOrder", purchaseOrder);
+		addWildcardOrStringTerm("rfidNumber", rfidNumber);
+		addWildcardOrStringTerm("serialNumber", serialNumber);
+		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
+		addWildcardOrStringTerm("shopOrder.order.orderNumber", orderNumber);
+		addWildcardOrStringTerm("customerRefNumber", referenceNumber);
+		addWildcardOrStringTerm("purchaseOrder", purchaseOrder);
 		addSimpleTerm("type.id", productTypeId);
 		addSimpleTerm("type.group.id", productTypeGroupId);
 		addSimpleTerm("productStatus.uniqueID", productStatusId);

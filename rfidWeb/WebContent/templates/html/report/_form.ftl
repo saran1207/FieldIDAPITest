@@ -17,13 +17,19 @@
 	</style>
 </head>
 <div class="pageSection" id="criteriaForm">
-	<h2>
+	<div class="headerWithFootnote">
 		<#if listPage?exists>
 			<a href="javascript:void(0);" id="expandSection_reportForm" onclick="openSection('reportForm', 'expandSection_reportForm', 'collapseSection_reportForm');return false" ><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
 			<a href="javascript:void(0);" id="collapseSection_reportForm" onclick="closeSection('reportForm', 'collapseSection_reportForm', 'expandSection_reportForm');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif" />" /></a>
 		</#if>
-		<@s.text name="label.reportcriteria"/>
-	</h2>
+		<span class="headerText">
+			<@s.text name="label.reportcriteria"/>
+		</span>
+		<br>
+		<span class="footnoteText">
+			<@s.text name="label.wildcard_explanation"/>
+		</span>
+	</div>
 	<@s.form action="report!createSearch" id="reportForm" cssClass="crudForm twoColumns" theme="fieldid" cssStyle="${listPage?exists?string('display:none;','')}" >
 		<#include "../common/_formErrors.ftl"/>
 		<div class="sectionContent" >

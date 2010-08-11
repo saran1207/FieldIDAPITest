@@ -1576,3 +1576,21 @@ input.description {
 .frequency input{
 	width:25px;
 }
+
+.headerWithFootnote {
+	background-color: #D0DAFA;
+	padding: 5px 15px;
+	margin: 0;
+}
+
+.headerWithFootnote .headerText {
+	font-size: 1.2em;
+	line-height: 21px;
+	color: #333333;
+	font-weight: bold;
+	text-align: left;
+}
+
+.headerWithFootnote .footnoteText {
+	font-size: 10px;
+}

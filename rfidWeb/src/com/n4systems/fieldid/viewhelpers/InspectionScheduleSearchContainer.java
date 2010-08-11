@@ -45,12 +45,12 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	
 	@Override
 	protected void evalSearchTerms() {
-		addStringTerm("product.rfidNumber", rfidNumber);
-		addWildcardTerm("product.serialNumber", serialNumber);
-		addWildcardTerm("product.shopOrder.order.orderNumber", orderNumber);
-		addWildcardTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
-		addStringTerm("product.purchaseOrder", purchaseOrder);
-		addStringTerm("product.customerRefNumber", referenceNumber);
+		addWildcardOrStringTerm("product.rfidNumber", rfidNumber);
+		addWildcardOrStringTerm("product.serialNumber", serialNumber);
+		addWildcardOrStringTerm("product.shopOrder.order.orderNumber", orderNumber);
+		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
+		addWildcardOrStringTerm("product.purchaseOrder", purchaseOrder);
+		addWildcardOrStringTerm("product.customerRefNumber", referenceNumber);
 		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
 		addSimpleTerm("product.type.id", productTypeId);
 		addSimpleTerm("product.type.group.id", productTypeGroupId);
