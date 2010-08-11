@@ -13,21 +13,21 @@
 			<@n4.orgPicker name="owner" required="true" orgType="non_primary"/>
 		<#else>
 			<#if schedule.override >
-				${schedule.owner.name}
+				<@s.text name="label.capital_for"/> <b>${schedule.owner.name}</b>
 			</#if>
 			<@s.hidden name="ownerId"/>
 		</#if>
 	</span>
 	
 	<span class="frequency">
-		<@s.text name="label.capital_schedule_a"/> ${inspectionType.name} <@s.text name="label.every"/>
+		<@s.text name="label.capital_schedule_a"/> <b> ${inspectionType.name} </b><@s.text name="label.every"/>
 		<@s.textfield name="frequency" /> <@s.text name="label.days"/>
 	</span>
 	<br/>
 	<span class="autoSchedule">
 			<br/>
-			<@s.checkbox name="autoSchedule" /> <@s.text name="label.automatically_schedule_checkbox_1"/> ${productType.name}   	
-			<@s.text name="label.automatically_schedule_checkbox_2"/> ${inspectionType.name}		
+			<@s.checkbox name="autoSchedule" /> <@s.text name="label.automatically_schedule_checkbox_1"/> <b>${productType.name}</b>   	
+			<@s.text name="label.automatically_schedule_checkbox_2"/> <b>${inspectionType.name}</b>		
 	</span>
 	<span class="actions">
 		<a href="javascript:void(0);" onclick="saveSchedule( ${formId} ); return false;" ><@s.text name="label.save" /></a> | 

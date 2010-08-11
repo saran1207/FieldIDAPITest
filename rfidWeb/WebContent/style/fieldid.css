@@ -1563,15 +1563,16 @@ input.description {
 	background-color:#EAEAEA;
 }
 
-
 #freeFormLabel{
 	display:inline;
 	float:none;
 	padding-left:0px;
 	}
 	
-  .containerobj a {
-	color:#000000;
-	  text-decoration: none;
+#inspectionListTable tr:hover td{
+	background:none;
 	}
-
+	
+.frequency input{
+	width:25px;
+}

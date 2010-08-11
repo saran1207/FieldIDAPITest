@@ -81,12 +81,6 @@
 			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/delete.ftl</result>
 		</action>
 
-		<action name="productTypeScheduleCreateOverride" method="save"
-			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="input" type="freemarker">/templates/ajax/productTypeScheduleCrud/ajaxOverride.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/create.ftl</result>
-		</action>
-
 		<action name="inspectionScheduleEdit" method="edit"
 			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
 			<result name="input" type="freemarker">/templates/ajax/inspectionScheduleCrud/edit.ftl</result>

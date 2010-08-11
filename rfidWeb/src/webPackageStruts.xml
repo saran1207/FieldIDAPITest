@@ -83,8 +83,10 @@
 
 		<action name="inspectionFrequencyOverrideCreate" method="save" class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
 			<result name="input" type="freemarker">/templates/html/productTypeScheduleCrud/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/productTypeScheduleCrud/list.ftl</result>
-			
+			<result name="error" type="redirectAction">
+				<param name="actionName">inspectionFrequencies</param>
+				<param name="productTypeId">${productTypeId}</param>
+			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">inspectionFrequencies</param>
 				<param name="productTypeId">${productTypeId}</param>
