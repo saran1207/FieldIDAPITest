@@ -1558,10 +1558,6 @@ input.description {
 .altbox{
 	padding-left: 10px;
 }
-	
-.colorBox{
-	background-color:#EAEAEA;
-}
 
 #freeFormLabel{
 	display:inline;
@@ -1570,11 +1566,31 @@ input.description {
 	}
 	
 #inspectionListTable tr:hover td{
-	background:none;
+	background-color:white;
+	color:#333399;
 	}
-	
+
 .frequency input{
 	width:25px;
+
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.customer, .orgPickerFormActions a{
+	margin-left:1px;
+	margin-right:1px;
+}
+
+#orgFormContainer{
+	position:absolute;
+	width:550px;
+	border:2px solid #999999;
+	left: 1px 
+	top: 1px;
+	background:#EAEAEA;
+	padding:12px;
+
 }
 
 .headerWithFootnote {
@@ -1593,4 +1609,5 @@ input.description {
 
 .headerWithFootnote .footnoteText {
 	font-size: 10px;
+
 }
