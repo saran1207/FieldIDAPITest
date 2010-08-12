@@ -17,7 +17,6 @@
 </head>
 ${action.setPageType('product_type', 'schedule_frequencies')!}
 <#include "/templates/html/common/_formErrors.ftl"/>
-		<@s.hidden id="inspectionTypeNameToUpdate" name="inspectionTypeName" value=" d"/>
 <#if !inspectionTypes.isEmpty() >
 	<table id="inspectionListTable" class="list" >
 		<tr>
@@ -99,10 +98,10 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 			</#if>
 		</span>
 		
-		, <@s.text name="label.schedule_a"/>
-		<b><span id="inspectionTypeName"></span></b>
-		 
-		<@s.text name="label.every"/>
+		, <@s.text name="label.schedule_a"/> 
+		<b><span id="inspectionTypeName" ></span> </b>
+		
+		<@s.text name="label.every"/> 
 		<span class="frequency">
 			<@s.textfield name="frequency"/>
 		</span>
