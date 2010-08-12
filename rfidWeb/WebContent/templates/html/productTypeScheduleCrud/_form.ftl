@@ -13,14 +13,14 @@
 			<@n4.orgPicker name="owner" required="true" orgType="non_primary"/>
 		<#else>
 			<#if schedule.override >
-				<@s.text name="label.capital_for"/> <b>${schedule.owner.name} </b>
+				<@s.text name="label.capital_for"/> <b>${schedule.owner.name}&nbsp;</b>
 			</#if>
 			<@s.hidden name="ownerId"/>
 		</#if>
 	</span>
 	
 	<span class="frequency">
-		<@s.text name="label.capital_schedule_a"/> <b> ${inspectionType.name} </b> <@s.text name="label.every"/>
+		<@s.text name="label.capital_schedule_a"/> <b>${inspectionType.name}</b> &nbsp; <@s.text name="label.every"/>
 		<@s.textfield name="frequency" /> <@s.text name="label.days"/>
 	</span>
 	<br/>

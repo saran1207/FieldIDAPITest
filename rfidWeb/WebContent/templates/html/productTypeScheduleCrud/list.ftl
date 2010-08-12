@@ -99,9 +99,8 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 		</span>
 		
 		, <@s.text name="label.schedule_a"/> 
-		<b><span id="inspectionTypeName" ></span> </b>
 		
-		<@s.text name="label.every"/> 
+		<b><span id="inspectionTypeName" > </span> </b>&nbsp;<@s.text name="label.every"/> 
 		<span class="frequency">
 			<@s.textfield name="frequency"/>
 		</span>

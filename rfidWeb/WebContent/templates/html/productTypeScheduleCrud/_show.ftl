@@ -1,6 +1,6 @@
 <span class="customer">
 	<#if (schedule.id)?exists && schedule.override >
-		 <@s.text name="label.capital_for" /><b> <@s.text name=" ${schedule.owner.name}" /> </b> 
+		 <@s.text name="label.capital_for" /><b><@s.text name=" ${schedule.owner.name}" />&nbsp;</b> 
 	</#if>
 </span>
 <span class="frequency">
