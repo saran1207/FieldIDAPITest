@@ -99,4 +99,11 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 		return false;
 	}
 
+
+	@Override
+	public boolean isAdvancedLocationEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

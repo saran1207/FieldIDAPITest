@@ -23,6 +23,7 @@ public interface SystemSecurityGuard {
 	public boolean isJobSitesEnabled();
 	public boolean isAssignedToEnabled();
 	public boolean isUnlimitedLinkedAssetsEnabled();
+	public boolean isAdvancedLocationEnabled();
 	
 	public boolean isPlansAndPricingAvailable();
 }

@@ -103,8 +103,9 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		}
 		return false;
 	}
-	
-	
-	
+
+	public boolean isAdvancedLocationEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation);
+	}
 	
 }
