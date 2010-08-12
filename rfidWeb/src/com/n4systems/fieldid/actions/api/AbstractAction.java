@@ -486,7 +486,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 	
 	public boolean isLocationHeirarchyFeatureEnabled(){
-		return getPrimaryOrg().hasExtendedFeature(ExtendedFeature.MultiLocation);
+		return getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 	}
 	
 	public Long getVendorContext() {

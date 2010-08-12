@@ -25,6 +25,7 @@ public enum ExtendedFeature {
 	DedicatedProgramManager("feature.dedicated_program_manager", "Some individual will be assigned to this tenant."), 
 	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
 	AllowIntegration("feature.allow_integration", "Says that someone could have integration turned on."),
+	AdvancedLocation("feature.advanced_location", "Allows for a location hierarchy."),
 	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit");
 	
 	private String label;
