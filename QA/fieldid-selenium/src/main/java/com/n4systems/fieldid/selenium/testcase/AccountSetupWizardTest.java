@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageSystemSettings;
@@ -36,7 +36,6 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		sup = new SignUpPackages(selenium, misc);
 		create = new CreateAccount(selenium, misc);
@@ -129,11 +128,6 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		qsw.verifyQuickSetupWizardDonePageHeader();
 		qsw.verifyQuickSetupWizardDonePage();
 		return ss;
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
 	}
 
 }

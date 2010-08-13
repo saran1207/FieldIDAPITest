@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.home.page.Home;
@@ -22,7 +22,6 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		home = new Home(selenium, misc);
 		schedule = new Schedules(selenium, misc);
@@ -112,8 +111,4 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		videos.assertInstructionalVideosPageHeader();
 	}
 	
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 }

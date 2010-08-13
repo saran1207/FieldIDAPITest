@@ -31,15 +31,14 @@
 
     
     <target name="test.minimal.data.run" description="Run the tests" depends="init, app.compile" >
-        
         <antcall target="run.junit">
-        	<param name="test_package_target" value="minimaldata" />
+        	<param name="junit_test_suite" value="AllSecurityTests" />
 		</antcall>
     </target>
   
     <target name="test.full.data.run" description="Run the tests" depends="init, app.compile" >
         <antcall target="run.junit">
-        	<param name="test_package_target" value="testcase" />
+        	<param name="junit_test_suite" value="AllRegularTests" />
         </antcall>
     </target>
     
@@ -57,9 +56,9 @@
 			<sysproperty key="fieldid-domain" value="${fieldid-domain}"/>
         	
 			<formatter type="xml"/>
-            
+			
 			<batchtest todir="${reports.xml.dir}" failureProperty="junit.failure"	>
-                <fileset dir="${src.dir}" includes="**/${test_package_target}/**/*Test.java" />
+                <fileset dir="${src.dir}" includes="**/${junit_test_suite}.java" />
             </batchtest>
             
         </junit>

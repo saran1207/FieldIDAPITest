@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.home.page.QuickSetupWizard;
 import com.n4systems.fieldid.selenium.login.page.Login;
@@ -20,7 +20,6 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		qsw = new QuickSetupWizard(selenium, misc);
 	}
@@ -82,11 +81,6 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	private void assertSessionTimeoutLightboxAppeared() {
 		assertTrue("The session timeout lightbox is not present", misc.isSessionExpired());
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
 	}
 
 }

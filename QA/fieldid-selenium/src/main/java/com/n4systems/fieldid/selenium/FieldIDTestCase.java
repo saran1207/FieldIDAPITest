@@ -2,9 +2,8 @@ package com.n4systems.fieldid.selenium;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -18,127 +17,16 @@ import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestBase;
+import com.thoughtworks.selenium.Selenium;
 
 public abstract class FieldIDTestCase extends SeleneseTestBase {
+	
+	public static boolean runningInsideSuite = false;
+	private static Map<String, FieldIdSelenium> tenantToSelenium = new HashMap<String, FieldIdSelenium>();
 
 	// NOTE: if you have -Dfieldid-companyid=unirope tests will default to unirope
 	// Otherwise, they will default to fieldid.
 
-	/** 
-	 * A test case will require the following:
-	 * 
-	 * variable				default						define				comment
-	 * --------				-------						------				-------
-	 * host					localhost					selenium-server		the computer running the selenium remote control (RC) server
-	 * port					4444						selenium-port		the port the selenium remote control server is listening on
-	 * snapshots			C:\\selenium-snapshots\\	selenium-snapshots	the root location for screen captures to be stored. 
-	 * browser				*firefox					fieldid-browser		the selenium string for which browser to run the test case with
-	 * protocol				http						fieldid-protocol	either 'http' or 'https' for which ever protocol to run fieldid with
-	 * initCompany			fieldid						fieldid-companyid	the tenant to start fieldid with
-	 * domain				team.n4systems.net			fieldid-domain		the domain, i.e. the computer running fieldid on
-	 * contextRoot			/fieldid/					fieldid-context		the context root for the fieldid application
-	 * actionDelay			null						fieldid-delay		the number of milliseconds to delay between selenium actions
-	 * log4jConfig			log4j.xml					fieldid-log4j		the log4j configuration file to be used
-	 * 
-	 * The host and port are pretty straight forward. If I run Selenium RC on localhost
-	 * listening on port 4444 then host = "localhost" and port = 4444. You can override
-	 * the default values using command line -D options. For example, if the selenium
-	 * server is running on port 5656 I can use the following on the command line to
-	 * override the default:
-	 * 
-	 *  		-Dselenium-port=5656
-	 *  
-	 * or to change the default browser:
-	 *  
-	 *  		-Dfieldid-browser=*iehta
-	 *  
-	 * Remember to use quotes or escape things like * when using the command line.
-	 * 
-	 * The snapshots is the location for where to store screen captures. This is
-	 * location will have the current timestamp appended to it. This way if you
-	 * have multiple runs, the snapshots will not get overwritten. For MSDOS file
-	 * paths, don't forget to escape the slash character in the path. There will
-	 * be a different timestamp for each testcase.
-	 * 
-	 * The browser is defined by Selenium. At the time of creating this framework
-	 * Selenium has the following:
-	 * 
-	 * 		*firefox		http
-	 * 		*iexplore		http
-	 * 		*chrome			https
-	 * 		*iehta			https
-	 * 		*pifirefox	
-	 * 		*piiexplore
-	 * 		*custom c:\\program files\\internet explorer\\iexplore.exe
-	 * 
-	 * Which you use depends on how the Selenium RC server is running. If
-	 * it is running with https and non-proxy injection mode then *chrome
-	 * or *iehta should be used. If you are using proxy injection mode then
-	 * *piiexplore or *pifirefox. If you are using http then use *firefox
-	 * and *iexplore. If you want to run a browser that is not supported,
-	 * use the *custom option. See the Selenium documentation for more about
-	 * the browser strings.
-	 * 
-	 * The rest the of variables are for building the URL for opening the
-	 * browser. The default will be:
-	 * 
-	 * 		http://n4.team.n4systems.net/fieldid/
-	 * 
-	 * the general format is:
-	 * 
-	 * 		protocol + "://" + initCompany + "." + domain + contextRoot;
-	 * 
-	 * The fieldid-delay property should normally not be used. If you set
-	 * this to a numeric value, it will cause selenium to delay, by the
-	 * equivalent number of milliseconds, between each action. This property
-	 * was designed to slow down the play back, in case you wanted to watch
-	 * what was happening as it happened. Can be used for GUI testing. You
-	 * set this to 2000, run the test suite and watch the browser for any GUI
-	 * issues. You can set it to a higher amount but I have found 2 seconds
-	 * between selenium actions is usually fast enough that you won't get
-	 * bored but slow enough you can see what it is doing. Remember that some
-	 * pages will have 3 or more selenium calls, so a 2 second delay might
-	 * mean you are sitting on one page for 6 to 10 seconds. Obviously the
-	 * more there is on the page for the code to 'view' and validate, the
-	 * slow things will be BUT it probably means there is more on the page
-	 * for you to check visually as well.
-	 * 
-	 * Additional things to know about FieldIDTestCase:
-	 * 
-	 * If the class extending FieldIDTestCase is called Foo then this
-	 * code will attempt to load the property file Foo.properties. Then
-	 * getStringProperty, getIntegerProperty, etc. will use the properties
-	 * loaded from that file. If a property is not found it will default
-	 * to the value of badProperty, currently set to "INVALID".
-	 * 
-	 * If a property exists as a System property, it will override the
-	 * loaded properties. For example, if I have a property called 'userid'
-	 * in the file Foo.properties but I also have:
-	 * 
-	 * 		-Duserid=n4systems
-	 * 
-	 * then userid will equal n4systems. Note: if multiple test cases have
-	 * the same property, you can override all of them by setting the
-	 * System property. This can be helpful or this can be a problem. Be
-	 * careful.
-	 * 
-	 * The class variable misc can be used to log information. We are
-	 * using log4j. The Misc class wraps calls to info(), debug(), etc.
-	 * So test cases can output log messages using:
-	 * 
-	 * 		misc.debug("some debug message");
-	 * 		misc.info("some message");
-	 * 
-	 * The log4j.xml file determines which level of logging to output.
-	 * Set the priority value to which ever level suits you. Typically,
-	 * I have been using debug for debugging a test case and info for
-	 * printing the 'testcase' out.
-	 * 
-	 * The verify*() methods will not stop the execution of a test case.
-	 * It will set a flag so that during tearDown for a test case it will
-	 * send a failure to jUnit.
-	 * 
-	 */
 	private String host = System.getProperty("selenium-server", "localhost");
 	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
 //	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
@@ -150,25 +38,60 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	private String actionDelay = System.getProperty("fieldid-delay", null);
 	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
 
-	private SeleneseTestBase stb = new SeleneseTestBase();
-    public FieldIdSelenium selenium;
+    public static FieldIdSelenium selenium;
 	protected MiscDriver misc;
 	protected Properties p;
 	public static final String badProperty = "INVALID";
 	public SystemDriverFactory systemDriverFactory;
-	
 	
 	protected void setInitialCompany(String initCompany) {
 		this.initCompany = initCompany;
 	}
 	
 	@Before
-	public void setUp() throws Exception {
-		loadingProperties();
-		selenium = createWebBrowser();
+	public final void setupSelenium() {
+		loadProperties();
+		if (!runningInsideSuite) {
+			selenium = createWebBrowser();
+		} else if (selenium == null) {
+			selenium = createWebBrowser();
+		}
+		openBaseSite(selenium);
 		setWebBrowserSpeed();
 		initializeSystemDrivers();
+	}
+	
+	private void openBaseSite(Selenium selenium) {
+		String url = generateUrl();
+		selenium.open(url);
+		selenium.open(contextRoot);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.windowMaximize();
+	}
+	
+	protected FieldIdSelenium createOpenedWebBrowser() {
+		FieldIdSelenium sel = createWebBrowser();
+		openBaseSite(sel);
+		return sel;
+	}
 
+	@After
+	public final void tearDownSelenium() throws Exception {
+		if (!runningInsideSuite) {
+			shutDownSelenium(selenium);
+			selenium = null;
+		} else {
+			selenium.deleteAllVisibleCookies();
+		}
+	}
+	
+	public static void shutDownAllSeleniums() {
+		shutDownSelenium(selenium);
+	}
+
+	protected static void shutDownSelenium(FieldIdSelenium selenium) {
+		selenium.close();
+		selenium.stop();
 	}
 
 	private void initializeSystemDrivers() {
@@ -188,17 +111,6 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 		}
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		shutDownSelenium(selenium);
-        stb.tearDown();
-	}
-
-	protected void shutDownSelenium(FieldIdSelenium selenium) {
-		selenium.close();
-		selenium.stop();
-	}
-	
 	/**
 	 * If a property file exists, load the key/value pairs
 	 * into the Test accessible variable p. These properties
@@ -215,26 +127,20 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	 * 
 	 * The property file will be SmokeTests.properties.
 	 */
-	private void loadingProperties() {
-		InputStream in;
-		String propertyFile = "";
-		File f;
+	private void loadProperties() {
 		try {
 			p = new Properties();
 			// if className.properties exists, load it
-			propertyFile = getClass().getSimpleName() + ".properties";
-			f = new File(propertyFile);
+			String propertyFile = getClass().getSimpleName() + ".properties";
+			File f = new File(propertyFile);
 			if(f.exists()) {
-				in = new FileInputStream(propertyFile);
+				InputStream in = new FileInputStream(propertyFile);
 				p.load(in);
 				in.close();
 			}
-		} catch (FileNotFoundException e) {
-			fail("Could not find the file '" + propertyFile + "' when initializing the test case");
-		} catch (IOException e) {
-			fail("File I/O error while trying to load '" + propertyFile + "'.");
 		} catch(Exception e) {
-			fail("Unknown error while loading properties file.");
+			fail("Error while loading properties file.");
+			e.printStackTrace();
 		}
 	}
 	
@@ -273,7 +179,6 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	 * @see loadingProperties
 	 */
 	public boolean getBooleanProperty(String key) {
-		boolean result = false;
 		String s = System.getProperty(key, badProperty);
 		if(s.equals(badProperty)) {
 			s = p.getProperty(key, badProperty);
@@ -281,8 +186,7 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 		if(s.equals(badProperty)) {
 			fail("The key '" + key + "' was missing or set incorrectly.");
 		}
-		result = Boolean.parseBoolean(s);
-		return result;
+		return Boolean.parseBoolean(s);
 	}
 	
 	/**
@@ -312,73 +216,6 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 		return i;
 	}
 
-    /** Asserts that there were no verification errors during the current test, failing immediately if any are found */
-    public void checkForVerificationErrors() {
-        stb.checkForVerificationErrors();
-    }
-    
-    /** Clears out the list of verification errors */
-    public void clearVerificationErrors() {
-        stb.clearVerificationErrors();
-    }
-    
-    /** Returns the body text of the current page */
-    public String getText() {
-        return stb.getText();
-    }
-    
-    /** Sleeps for the specified number of milliseconds */
-    public void pause(int millisecs) {
-        stb.pause(millisecs);
-    }
-    
-    /** Like assertEquals, but fails at the end of the test (during tearDown) */
-    public void verifyEquals(boolean arg1, boolean arg2) {
-        stb.verifyEquals(arg1, arg2);
-    }
-    
-    /** Like assertEquals, but fails at the end of the test (during tearDown) */
-    public void verifyEquals(Object s1, Object s2) {
-        stb.verifyEquals(s1, s2);
-    }
-    
-    /** Like assertEquals, but fails at the end of the test (during tearDown) */
-    public void verifyEquals(String[] s1, String[] s2) {
-        stb.verifyEquals(s1, s2);
-    }
-    
-    /** Like assertFalse, but fails at the end of the test (during tearDown) */
-    public void verifyFalse(boolean b) {
-        stb.verifyFalse(b);
-    }
-    
-    /** Like assertNotEquals, but fails at the end of the test (during tearDown) */
-    public void verifyNotEquals(boolean s1, boolean s2) {
-        stb.verifyNotEquals(s1, s2);
-    }
-    
-    /** Like assertNotEquals, but fails at the end of the test (during tearDown) */
-    public void verifyNotEquals(Object s1, Object s2) {
-        stb.verifyNotEquals(s1, s2);
-    }
-    
-    /** Like assertTrue, but fails at the end of the test (during tearDown) */
-    public void verifyTrue(boolean b) {
-        stb.verifyTrue(b);
-    }
-    
-    
-
-    /** Like JUnit's assertEquals, but knows how to compare string arrays */
-    public static void assertEquals(Object s1, Object s2) {
-        SeleneseTestBase.assertEquals(s1, s2);
-    }
-    
-    /** Like JUnit's assertEquals, but handles "regexp:" strings like HTML Selenese */
-    public static void assertEquals(String s1, String s2) {
-        SeleneseTestBase.assertEquals(s1, s2);
-    }
-    
     public static void assertEquals(Map<String, String> expected, Map<String, String> actual) {
     	boolean equals = expected.equals(actual);
     	if(!equals) {
@@ -413,65 +250,6 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
     	}
     }
     
-    /** Like JUnit's assertEquals, but joins the string array with commas, and 
-     * handles "regexp:" strings like HTML Selenese
-     */
-    public static void assertEquals(String s1, String[] s2) {
-        SeleneseTestBase.assertEquals(s1, s2);
-    }
-    
-    /** Asserts that two string arrays have identical string contents */
-    public static void assertEquals(String[] s1, String[] s2) {
-        SeleneseTestBase.assertEquals(s1, s2);
-    }
-    
-    /** Asserts that two booleans are not the same */
-    public static void assertNotEquals(boolean b1, boolean b2) {
-        SeleneseTestBase.assertNotEquals(b1, b2);
-    }
-    
-    /** Asserts that two objects are not the same (compares using .equals()) */
-    public static void assertNotEquals(Object obj1, Object obj2) {
-        SeleneseTestBase.assertNotEquals(obj1, obj2);
-    }
-    
-    /** Compares two objects, but handles "regexp:" strings like HTML Selenese
-     * @see #seleniumEquals(String, String)
-     * @return true if actual matches the expectedPattern, or false otherwise
-     */
-    public static boolean seleniumEquals(Object expected, Object actual) {
-        return SeleneseTestBase.seleniumEquals(expected, actual);
-    }
-    
-    /** Compares two strings, but handles "regexp:" strings like HTML Selenese
-     * 
-     * @param expectedPattern
-     * @param actual
-     * @return true if actual matches the expectedPattern, or false otherwise
-     */
-    public static boolean seleniumEquals(String expected, String actual) {
-        return SeleneseTestBase.seleniumEquals(expected, actual);
-    }
-    
-    protected boolean isCaptureScreenShotOnFailure() {
-        return isCaptureScreenShotOnFailure();
-    }
-    
-    protected String runtimeBrowserString() {
-        return runtimeBrowserString();
-    }
-    
-    protected void setCaptureScreenShotOnFailure(boolean b) {
-        setCaptureScreenShotOnFailure(b);
-    }
-    
-    protected void setTestContext() {
-        selenium.setContext(getClass().getSimpleName() + "." + getClass().getName());
-    }
-    
-	
-	
-
 	/**
 	 * Create an instance of Selenium with the pre-determined web browser
 	 * pointing to the /fieldid/ application on the test machine. I also
@@ -479,18 +257,18 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	 * capture or someone wants to watch the automation run.
 	 */
 	protected FieldIdSelenium createWebBrowser() {
-		String url = protocol + "://" + initCompany + "." + domain;
+		String url = generateUrl();
 		FieldIdSelenium selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
 		
 		selenium.start();
 		selenium.setTimeout(MiscDriver.DEFAULT_TIMEOUT);
-		selenium.open(contextRoot);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
-		selenium.windowMaximize();
 		
 		return selenium;
 	}
-
+	
+	protected String generateUrl() {
+		return protocol + "://" + initCompany + "." + domain;
+	}
 	
 	/**
 	 * Get the domain we are currently using. This is typically
@@ -537,14 +315,13 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	 */
 	public void setCompany(String companyID) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
+		selenium.deleteAllVisibleCookies();
 		selenium.open(url);
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 	
-	
 	public String getSupportFileLocation() {
 		return supportFileLocation;
 	}
-	
 	
 }

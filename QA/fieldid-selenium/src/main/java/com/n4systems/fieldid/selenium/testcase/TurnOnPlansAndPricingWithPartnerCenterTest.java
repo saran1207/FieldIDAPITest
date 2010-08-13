@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.console.page.ConsoleLogin;
 import com.n4systems.fieldid.selenium.console.page.ConsoleOrganizations;
@@ -33,7 +33,6 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		console = new ConsoleLogin(selenium, misc);
 		consoleOrgs = new ConsoleOrganizations(selenium, misc);
@@ -47,54 +46,38 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 
 	@Test
 	public void partnerCenterOnEnablePlansAndPricingOffShowsRequestAnAccount() throws Exception {
-		try {
-			boolean partnerCenter = true;
-			boolean showPlansAndPricing = false;
-			setTenantFeatures(partnerCenter, showPlansAndPricing);
-			setCompany(t.getCompanyName());
-			verifyRequestAnAccountIsPresent();
-		} catch(Exception e) {
-			throw e;
-		}
+		boolean partnerCenter = true;
+		boolean showPlansAndPricing = false;
+		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setCompany(t.getCompanyName());
+		verifyRequestAnAccountIsPresent();
 	}
 	
 	@Test
 	public void partnerCenterOnEnablePlansAndPricingOnShowsRequestAnAccount() throws Exception {
-		try {
-			boolean partnerCenter = true;
-			boolean showPlansAndPricing = true;
-			setTenantFeatures(partnerCenter, showPlansAndPricing);
-			setCompany(t.getCompanyName());
-			verifyPlansAndPricingIsPresent();
-		} catch(Exception e) {
-			throw e;
-		}
+		boolean partnerCenter = true;
+		boolean showPlansAndPricing = true;
+		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setCompany(t.getCompanyName());
+		verifyPlansAndPricingIsPresent();
 	}
 	
 	@Test
 	public void partnerCenterOffEnablePlansAndPricingOnShowsRequestAnAccount() throws Exception {
-		try {
-			boolean partnerCenter = false;
-			boolean showPlansAndPricing = true;
-			setTenantFeatures(partnerCenter, showPlansAndPricing);
-			setCompany(t.getCompanyName());
-			verifyPlansAndPricingIsPresent();
-		} catch(Exception e) {
-			throw e;
-		}
+		boolean partnerCenter = false;
+		boolean showPlansAndPricing = true;
+		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setCompany(t.getCompanyName());
+		verifyPlansAndPricingIsPresent();
 	}
 	
 	@Test
 	public void partnerCenterOffEnablePlansAndPricingOffShowsRequestAnAccount() throws Exception {
-		try {
-			boolean partnerCenter = false;
-			boolean showPlansAndPricing = false;
-			setTenantFeatures(partnerCenter, showPlansAndPricing);
-			setCompany(t.getCompanyName());
-			verifyPlansAndPricingIsPresent();
-		} catch(Exception e) {
-			throw e;
-		}
+		boolean partnerCenter = false;
+		boolean showPlansAndPricing = false;
+		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setCompany(t.getCompanyName());
+		verifyPlansAndPricingIsPresent();
 	}
 	
 	private void setTenantFeatures(boolean partnerCenter, boolean showPlansAndPricing) {
@@ -138,8 +121,4 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 		return t;
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 }

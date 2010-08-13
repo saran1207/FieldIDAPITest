@@ -7,22 +7,17 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.home.page.Home;
-import com.n4systems.fieldid.selenium.lib.BrowserResitriction;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
-
-@BrowserResitriction(browsers={"*chrome","*firefox"})
 public class SessionBumpTest extends FieldIDTestCase {
 
-	
 	private FieldIdSelenium secondSession;
-	
 	
 	@Before
 	public void createSecondBrowserSession() throws Exception {
-		secondSession = createWebBrowser();
+		secondSession = createOpenedWebBrowser();
 	}
 	
 	@After
@@ -38,10 +33,11 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		loginSession1.signInAllTheWay("saunders", "makemore$");
 		
+		Thread.sleep(20000);
+		
 		loginSession2.submitSignIn("saunders", "makemore$");
 		loginSession2.assertOnConfirmSessionKick();
 	}
-	
 	
 	@Test
 	public void should_kick_out_first_account_if_the_second_user_confirms_session_kick() throws Exception {
@@ -58,10 +54,6 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		misc.gotoHome();
 		loginSession1.verifyLoginPageWithKickMessage();
-		
-		
-		
-		
 	}
 	
 	@Ignore
@@ -90,7 +82,6 @@ public class SessionBumpTest extends FieldIDTestCase {
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
 	}
 	
-	
 	@Test
 	public void should_not_boot_out_multiple_system_account_sign_ins() throws Exception {
 		Login loginSession1 = new Login(selenium, misc);
@@ -110,7 +101,6 @@ public class SessionBumpTest extends FieldIDTestCase {
 		secondSession.open("/fieldid/home.action");
 		secondSession.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		
 		home1.assertHomePage();
 		home2.assertHomePage();
 	}
@@ -125,15 +115,12 @@ public class SessionBumpTest extends FieldIDTestCase {
 		selenium.open("/fieldid/productAdd.action");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		
 		loginSession2.signInAllTheWay("sricci", "makemore$");
 		
 		selenium.click("css=.searchOwner");
 		selenium.waitForAjax(MiscDriver.AJAX_TIMEOUT);
 		
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
-	
 	}
-	
 	
 }

@@ -39,7 +39,6 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		admin = new Admin(selenium, misc);
@@ -49,8 +48,6 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 
 	@Test
 	public void attributesCanBeDeletedFromUnusedProductType() throws Exception {
-		 
-
 		setCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
 		ProductType productType = createAProductTypeWithAttributes();
@@ -92,7 +89,6 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInProductCodeMapping() throws Exception {
-
 		setCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
 		ProductType productType = createAProductTypeWithAttributes();
@@ -136,7 +132,5 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		}
 		return result;
 	}
-
-	
 	
 }

@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
@@ -28,7 +28,6 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		schedule = new Schedules(selenium, misc);
 		reporting = new Reporting(selenium, misc);
@@ -187,8 +186,4 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		identify.assertIdentifyAddWithOrderPage();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 }

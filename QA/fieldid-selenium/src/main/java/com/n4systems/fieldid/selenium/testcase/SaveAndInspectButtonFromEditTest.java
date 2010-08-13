@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.datatypes.Product;
@@ -25,7 +25,6 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		asset = new AssetPage(selenium, misc);
@@ -69,8 +68,4 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 		return p;
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 }

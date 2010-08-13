@@ -12,12 +12,10 @@ import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 @RunWith(value = Parameterized.class)
 public class ChangePasswordTest extends LoggedInTestCase {
-
 	
 	private String editUserFormId;
 
 	public ChangePasswordTest(String editUserFormId) {
-		super();
 		this.editUserFormId = editUserFormId;
 	}
 	
@@ -28,11 +26,9 @@ public class ChangePasswordTest extends LoggedInTestCase {
 		data.add(new String[]{"#customerUserUpdate"});
 		return data;
 	}
-	
 
 	@Test
 	public void should_cancel_back_to_edit_page_of_user() throws Exception {
-
 		// user the search filter to change from employee/customer
 		if(editUserFormId.contains("employee")) {
 			selenium.open("/fieldid/userList.action?currentPage=1&listFilter=&userType=EMPLOYEES&search=Search");

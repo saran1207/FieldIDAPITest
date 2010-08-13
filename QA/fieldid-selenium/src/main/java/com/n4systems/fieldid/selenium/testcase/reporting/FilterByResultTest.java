@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase.reporting;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,15 +11,12 @@ import org.junit.runners.Parameterized.Parameters;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
-
-@RunWith(value = Parameterized.class)
+@RunWith(Parameterized.class)
 public class FilterByResultTest extends LoggedInTestCase {
 
 	private String resultName;
 
-
 	public FilterByResultTest(String resultName) {
-		super();
 		this.resultName = resultName;
 	}
 	

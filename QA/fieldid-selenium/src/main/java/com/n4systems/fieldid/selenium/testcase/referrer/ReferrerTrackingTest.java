@@ -10,7 +10,6 @@ import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ReferrerTrackingTest extends FieldIDTestCase {
-
 	
 	@Test
 	public void should_find_users_referral_link_on_refer_fieldid_tab_of_my_account() throws Exception {
@@ -19,17 +18,14 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		assertReferrerLinkIsInTheCorrectForm(referralLink);
 	}
-
 	
 	@Test
 	public void should_send_us_to_plans_and_pricing_when_we_go_to_the_sign_up_link() throws Exception {
 		selenium.open("/signup/somerefcode");
 	}
 	
-	
 	@Test
 	public void should_allow_user_to_see_that_a_tenant_has_just_siged_up_through_their_referral() throws Exception {
-		
 		goToReferFieldId();
 		
 		String referralLink = getReferralLink();
@@ -44,9 +40,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
 		assertEquals(rowCount + 1, getNumberOfRowsInReferrerTable());
-		
 	}
-	
 	
 	@Test
 	public void should_find_new_companies_name_in_the_list_of_referred_accounts() throws Exception {
@@ -56,22 +50,17 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		signOutAndGoToReferalLink(referralLink);
 		
-		
 		CreateTenant t = createANewUnlimitedTenant("admin", "password");
-		
 		
 		goToReferFieldId();
 		
 		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
 		assertTrue(selenium.isTextPresent(t.getCompanyName()));
-		
 	}
-
 
 	private String getReferralLink() {
 		return selenium.getText("css=#referralLinkBox p");
 	}
-
 
 	private void signOutAndGoToReferalLink(String referralLink) {
 		selenium.open("/fieldid/logout.action");
@@ -97,18 +86,12 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		createANewUnlimitedTenant("admin", "password");
 		
-		
 		goToReferFieldId();
 		
 		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
 		assertEquals(rowCount, getNumberOfRowsInReferrerTable());
-		
 	}
 	
-	
-	
-
-
 	private int getNumberOfRowsInReferrerTable() {
 		return selenium.getXpathCount("//div[@id='referralsBottom']/table/tr").intValue();
 	}
@@ -132,12 +115,12 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		t.setPaymentType(CreateTenant.payByPurchaseOrder);
 		t.setpurchaseOrderNumber("88888");
 		
-		
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();
 		
 		return t;
 	}
+
 	@Test
 	public void should_hold_ref_code_to_sign_up_form_from_plans_and_pricing() throws Exception {
 		String refcode = "somerefcode";
@@ -146,7 +129,6 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		new SignUpPackages(selenium, misc).gotoSignUpNow("Free");
 		assertEquals(refcode, selenium.getValue("css=#refCode"));
 	}
-	
 	
 	private void goToReferFieldId() {
 		selenium.open("/fieldid/login.action");
@@ -157,8 +139,6 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		selenium.open("/fieldid/refer.action");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
-	
-	
 
 	private void assertReferrerLinkIsInTheCorrectForm(String referralLink) {
 		assertEquals("regexp:^https?\\:\\/\\/.*\\/signup\\/(\\w)+$", referralLink);
@@ -166,6 +146,6 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	
 	private String extractReferrerCodeFromUrl(String referrerLink) {
 		return referrerLink.split("\\/signup\\/")[1];
-		
 	}
+
 }

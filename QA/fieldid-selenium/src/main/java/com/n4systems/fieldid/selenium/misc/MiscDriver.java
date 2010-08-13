@@ -846,7 +846,6 @@ public class MiscDriver {
 	 * @param png
 	 */
 	public void checkForErrorMessages(String png) {
-
 		List<String> errors = getFormErrorMessages();
 		int otherErrors = getNonFormErrorMessages();
 		if(isOopsPage()) {
@@ -1230,11 +1229,10 @@ public class MiscDriver {
 	 * 
 	 * @param millis
 	 */
+	@Deprecated
 	public void sleep(long millis) {
 		try { Thread.sleep(millis); } catch (InterruptedException e) { }
 	}
-
-	
 
 	/**
 	 * Gets the Owner information from the Choose Owner dialog. It assumes
@@ -1245,7 +1243,6 @@ public class MiscDriver {
 	 * @return
 	 */
 	public Owner getOwner() {
-		
 		String organization = selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator);
 		String customer = null;
 		String division = null;
@@ -1297,7 +1294,6 @@ public class MiscDriver {
 		this.gotoAdministration();
 	}
 
-
 	public boolean isSessionExpired() {
 		boolean result = false;
 		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
@@ -1309,7 +1305,6 @@ public class MiscDriver {
 		int result = r.nextInt((high-low+1)) + low;
 		return result;
 	}
-
 
 	public String getContentTitle() {
 		return selenium.getText("css=#contentTitle");

@@ -10,9 +10,6 @@ import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class UserRegistrationTest extends FieldIDTestCase {
 
-	
-	
-
 	@Test
 	public void should_show_all_values_entered_on_the_registration_form_when_viewing_request_in_the_system() throws Exception {
 		String userId = "u_" + new Date().getTime();

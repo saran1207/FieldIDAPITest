@@ -23,15 +23,11 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		
 		return data;
 	}
-	
 
 	public SafetyNetworkLookup(String userName, String password) {
 		super(userName, password);
 		setInitialCompany("test-distributor");
 	}
-	
-	
-	
 
 	@Test
 	public void should_find_and_view_inspection_for_a_product_available_when_published_against_the_primary_org() throws Exception {
@@ -46,9 +42,7 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		assertInspectionIsDisplayed(serialNumber);
 		
 		closeViewOfInspection();
-		
 	}
-	
 
 	@Test
 	public void should_find_and_view_inspection_for_a_product_available_when_published_and_assigned_to_the_linked_customer() throws Exception {
@@ -82,7 +76,6 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		closeViewOfInspection();
 	}
 	
-	
 	@Test
 	public void should_find_and_view_inspection_for_a_product_published_against_the_primary_vendor_and_registerd_to_the_primary_distributor() throws Exception {
 		String serialNumber = "Vendor-00009-registerd";
@@ -115,7 +108,6 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		closeViewOfInspection();
 	}
 	
-	
 	@Test
 	public void should_find_and_view_inspection_for_a_product_available_when_published_against_the_secondary_org_and_registered_against_the_primary_distributor() throws Exception {
 		String serialNumber = "Vendor-00011-registerd-secondary";
@@ -131,7 +123,6 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		
 		closeViewOfInspection();
 	}
-
 	
 	private void assertInspectionIsDisplayed(String serialNumber) {
 		assertTrue("serial number was not displayed on the inspection", selenium.isTextPresent(serialNumber));

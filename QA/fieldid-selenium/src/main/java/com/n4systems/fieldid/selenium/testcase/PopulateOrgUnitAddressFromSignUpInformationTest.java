@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +32,6 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		sup = new SignUpPackages(selenium, misc);
 		create = new CreateAccount(selenium, misc);
@@ -74,11 +72,6 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 		verifyEquals(expected.getCompanyPhoneNumber(), actual.getCompanyPhoneNumber());
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
-	
 	private PrimaryOrganization getPrimaryOrganization() {
 		misc.gotoAdministration();
 		admin.verifyAdministrationPage();

@@ -14,11 +14,9 @@ public class SignUpProcessBrandingTest extends FieldIDTestCase {
 	@Override
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		signUpPackagePage = new SignUpPackages(selenium, misc);
 		createAccountPage = new CreateAccount(selenium, misc);
 	}
-
 	
 	@Test
 	public void should_have_a_system_logo_on_plans_and_pricing_page() throws Exception {

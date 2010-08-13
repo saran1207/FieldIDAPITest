@@ -32,21 +32,14 @@ public class ProductStatusCrudTest extends LoggedInTestCase {
 		
 		driver.assertStatusWasCreated(status);
 		
-		
-		
 		driver.editStatus(status, editedStatus);
 	
 		driver.assertStatusWasEdited(editedStatus, status);
 		
-		
-		
 		driver.removeStatus(editedStatus);
 		
 		driver.assertStatusWasRemoved(editedStatus);
-
 	}
-
-	
 	
 	@Test
 	public void should_require_a_new_product_status_to_have_name() throws Exception {
@@ -57,9 +50,6 @@ public class ProductStatusCrudTest extends LoggedInTestCase {
 		driver.createStatus(invalidNameInTempalte);
 		
 		driver.assertVaildationErrorFor(ManageProductStatusDriver.FieldName.NAME_FIELD, containsString("required"));
-		
-		
-		
 	}
 	
 	@Test
@@ -72,9 +62,5 @@ public class ProductStatusCrudTest extends LoggedInTestCase {
 		
 		driver.assertVaildationErrorFor(ManageProductStatusDriver.FieldName.NAME_FIELD, allOf(containsString("required"), containsString("name")));
 	}
-	
-	
-	
-	
 	
 }

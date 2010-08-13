@@ -11,12 +11,6 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 
 	private static final String VENDOR_CONTEXT_SELECTOR = "css=#vendorContextNameLink a";
 	
-	public QuickRegisterAssetTest() {
-		super();
-	}
-	
-	
-	
 	@Test
 	public void should_have_the_copy_and_register_asset_available_when_the_product_is_found_in_a_vendor_context_and_has_not_been_registered() throws Exception {
 		String contextToSwitchTo = "Unirope Ltd. Edmonton";
@@ -48,8 +42,6 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		assertFalse("there should not be any register or copy message on the screen", selenium.isElementPresent("registrationMessage"));
 	}
 	
-	
-	
 	@Test
 	public void should_have_product_registration_information_on_the_screen_when_following_the_copy_and_register_asset() throws Exception {
 		String contextToSwitchTo = "Unirope Ltd. Edmonton";
@@ -61,7 +53,6 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		assertTrue("linked product registration should be visible", selenium.isVisible("linkedProductContainer"));
 		assertEquals("alex-share-2", selenium.getText("linkedProductSerial"));
 	}
-	
 	
 	@Test
 	public void should_pushed_the_registration_information_to_the_local_when_following_the_copy_and_register_asset() throws Exception {
@@ -75,11 +66,9 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		assertEquals("alex-share-2", selenium.getValue("serialNumberText"));
 	}
 	
-
 	private void searchForSerialNumberInVendorContext(String serialNumber, String contextToSwitchTo) {
 		switchToVendorContext(contextToSwitchTo);
 		smartSearchFor(serialNumber);
-		
 	}
 
 	private void smartSearchFor(String serialNumber) {
@@ -94,8 +83,5 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		selenium.select("vendorContext", "label=" + contextToSwitchTo);
 		selenium.waitForPageToLoad("30000");
 	}
-	
-	
-	
 
 }

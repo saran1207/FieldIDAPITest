@@ -406,12 +406,9 @@ public class Login {
 
 	public void signInAllTheWay(String username, String password) {
 		submitSignIn(username, password);
-		
 		kickOtherSessionIfNeeded();
 		
 		acceptEULAIfNeed();
-		
-		
 		verifySignedIn();
 	}
 
@@ -443,19 +440,16 @@ public class Login {
 		signInAllTheWay(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
 	}
 	
-	
 	public void signOut() {
 		selenium.openAndWaitForPageLoad("/fieldid/logout.action"); 
 	}
 
 	public void assertOnConfirmSessionKick() {
 		assertTrue("not confirm page.", selenium.isElementPresent("css=#signInConfirm"));
-		
 	}
 
 	public void verifyLoginPageWithKickMessage() {
 		verifySignInPage();
 		assertTrue("message saying you were kicked out is not displayed", selenium.isTextPresent("signed in with the same username causing you to be signed out"));
-		
 	}
 }

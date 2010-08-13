@@ -8,11 +8,8 @@ import com.n4systems.fieldid.selenium.datatypes.InspectionBook;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 
 public class InspectionBookCrudTest extends LoggedInTestCase {
-
-	
 	
 	private ManageInspectionBookDriver driver;
-	
 	
 	@Before
 	public void createDrivers() {
@@ -32,7 +29,6 @@ public class InspectionBookCrudTest extends LoggedInTestCase {
 		driver.removeBook(book);
 		
 		driver.assertBookWasRemoved(book);
-
 	}
 
 }

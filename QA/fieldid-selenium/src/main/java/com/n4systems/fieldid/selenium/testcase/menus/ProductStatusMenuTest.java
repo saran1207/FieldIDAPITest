@@ -7,11 +7,6 @@ import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ProductStatusMenuTest extends LoggedInTestCase {
 
-	public ProductStatusMenuTest() {
-		super();
-	}
-
-	
 	@Test
 	public void should_be_able_to_go_back_to_the_list_of_product_status_from_the_view_all_link_on_the_menu() throws Exception {
 		selenium.open("/fieldid/productStatusEdit.action");
@@ -22,4 +17,5 @@ public class ProductStatusMenuTest extends LoggedInTestCase {
 		
 		assertEquals("Manage Product Statuses", selenium.getText("css=#contentTitle h1"));
 	}
+
 }

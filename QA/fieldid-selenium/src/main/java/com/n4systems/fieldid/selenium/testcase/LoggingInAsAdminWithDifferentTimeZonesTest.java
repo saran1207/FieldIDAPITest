@@ -2,12 +2,13 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
@@ -24,23 +25,16 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 	private String userId;
 	private String companyName;
 	
-	
-	
-	
 	public LoggingInAsAdminWithDifferentTimeZonesTest(String companyName, String userId) {
-		super();
 		this.userId = userId;
 		this.companyName = companyName;
 	}
 
-
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		// XXX: SQL code to update all users to have the same, known password
 	}
-	
 	
 	@Parameters
 	public static Collection<String[]> data() {
@@ -76,19 +70,10 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		// Assumes all users have had their password set to the same value
 		String password = "makemore$";
 		
-
-		
-		
 		setCompany(companyName);
 		login.signInAllTheWay(userId, password);
 		login.verifySignedIn();
 		misc.gotoSignOut();
-		
-		
 	}
-	
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
+
 }

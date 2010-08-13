@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static com.n4systems.fieldid.selenium.datatypes.Owner.*;
+import static com.n4systems.fieldid.selenium.datatypes.Owner.someOrg;
 
 import java.util.List;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageUsers;
@@ -24,7 +25,6 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mus = new ManageUsers(selenium, misc);
@@ -106,8 +106,4 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		mus.gotoAddEmployeeUser();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
 }

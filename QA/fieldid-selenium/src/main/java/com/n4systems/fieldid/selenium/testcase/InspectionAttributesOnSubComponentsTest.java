@@ -23,7 +23,6 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mits = new ManageInspectionTypes(selenium, misc);

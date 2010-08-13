@@ -10,13 +10,6 @@ import com.n4systems.fieldid.selenium.util.SeleniumJavaScriptInteraction;
 @Ignore
 public class ProuductRegistrationTest extends LoggedInTestCase {
 
-	public ProuductRegistrationTest() {
-		super();
-	}
-	
-
-	
-	
 	@Test
 	public void should_fill_in_serial_number_on_asset_when_regerstering_an_asset() throws Exception {
 		goToProductAdd();
@@ -50,9 +43,7 @@ public class ProuductRegistrationTest extends LoggedInTestCase {
 		selenium.click("saveButton");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		assertEquals("", selenium.getValue("serialNumberText"));
-		
 	}
-	
 	
 	@Test
 	public void should_fill_in_reference_number_on_asset_when_regerstering_an_asset() throws Exception {
@@ -63,13 +54,11 @@ public class ProuductRegistrationTest extends LoggedInTestCase {
 		assertEquals("CUSTOMER NUMBER-0000001", selenium.getValue("customerRefNumber"));
 	}
 
-
 	private void lookupRegisterAsset(String identifyingNumber) {
 		selenium.click("showSmartSearchLink");
 		selenium.type("snSmartSearchText", identifyingNumber);
 		selenium.click("snSmartSearchSubmit");
 		selenium.waitForCondition("!" + SeleniumJavaScriptInteraction.CURRENT_WINDOW_IN_JAVASCRIPT + "$('networkSmartSearchContainer').visible()", MiscDriver.DEFAULT_TIMEOUT);
 	}
-
 
 }

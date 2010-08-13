@@ -12,26 +12,21 @@ public class SystemDriverFactory {
 	private final MiscDriver misc;
 	
 	public SystemDriverFactory(FieldIdSelenium selenium) {
-		super();
 		this.selenium = selenium;
 		this.misc = new MiscDriver(selenium);
 	}
-	
 	
 	public ManageCommentTemplatesDriver createCommentTemplateDriver() {
 		return new ManageCommentTemplatesDriver(selenium);
 	}
 
-
 	public MiscDriver createMiscDriver() {
 		return misc;
 	}
 
-
 	public ManageProductStatusDriver createProductStatusDriver() {
 		return new ManageProductStatusDriver(selenium);
 	}
-
 
 	public ManageInspectionBookDriver createInspectionBookDriver() {
 		return new ManageInspectionBookDriver(selenium, misc);

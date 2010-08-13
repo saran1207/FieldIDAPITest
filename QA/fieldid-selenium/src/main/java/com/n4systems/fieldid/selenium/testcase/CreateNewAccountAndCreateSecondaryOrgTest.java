@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.List;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageOrganizations;
@@ -31,7 +32,6 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
 		login = new Login(selenium, misc);
 		sup = new SignUpPackages(selenium, misc);
 		create = new CreateAccount(selenium, misc);
@@ -39,7 +39,6 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		admin = new Admin(selenium, misc);
 		mos = new ManageOrganizations(selenium, misc);
 	}
-	
 	
 	@Test
 	public void create_unlimited_account_type_tenant_and_it_should_be_able_to_create_secondary_org() throws Exception {
@@ -77,11 +76,6 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		return o.getName();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
-	
 	private void logIntoNewTenant(String username, String password) {
 		login.setUserName(username);
 		login.setPassword(password);

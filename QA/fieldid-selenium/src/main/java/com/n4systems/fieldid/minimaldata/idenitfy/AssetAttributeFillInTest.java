@@ -15,9 +15,7 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 	private AssetPage assetPage;
 	private IdentifyPageDriver identifyPage;
 
-
 	public AssetAttributeFillInTest() {
-		super();
 		setInitialCompany("write-company");
 	}
 	
@@ -30,11 +28,9 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 	
 	@Test
 	public void should_store_a_value_in_a_text_field_during_asset_identify() throws Exception {
-		
 		Product asset = new Product();
 		asset.setSerialNumber("TEST-" + new Date().getTime());
 		asset.setProductType("Simple Multi Attribute Asset");
-		
 		
 		identifyPage.setAddAssetForm(asset, false);
 		
@@ -46,16 +42,13 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 		assetPage.verifyAssetViewPageDynamicContents(asset);
 		
 		assetPage.verifyAttribute("Text field", "Filling in text field value");
-		
 	}
 	
 	@Test
 	public void should_store_a_value_in_a_select_field_during_asset_identify() throws Exception {
-		
 		Product asset = new Product();
 		asset.setSerialNumber("TEST-" + new Date().getTime());
 		asset.setProductType("Simple Multi Attribute Asset");
-		
 		
 		identifyPage.setAddAssetForm(asset, false);
 		
@@ -68,16 +61,13 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 		assetPage.verifyAssetViewPageDynamicContents(asset);
 		
 		assetPage.verifyAttribute("select field", "option 1");
-		
 	}
 	
 	@Test
 	public void should_store_a_value_in_a_combo_field_with_a_static_value_during_asset_identify() throws Exception {
-		
 		Product asset = new Product();
 		asset.setSerialNumber("TEST-" + new Date().getTime());
 		asset.setProductType("Simple Multi Attribute Asset");
-		
 		
 		identifyPage.setAddAssetForm(asset, false);
 		
@@ -90,9 +80,7 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 		assetPage.verifyAssetViewPageDynamicContents(asset);
 		
 		assetPage.verifyAttribute("select field", "option 1");
-		
 	}
-
 
 	private void goToAsset(Product asset) {
 		misc.setSmartSearch(asset.getSerialNumber());

@@ -69,7 +69,6 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	}
 
 	public MinimalSecurityTest(String user, String password, Integer numberOfProductsVisible, Collection<String> serialNumberThatCanBeViewed) {
-		super();
 		this.user = user;
 		this.password = password;
 		this.numberOfProductsVisible = numberOfProductsVisible;
@@ -88,8 +87,6 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 		
 		assertThat(numberOfProductsVisible, equalTo(serialNumberThatCanBeViewed.size()));
 		assertThat(serialNumberList.size(), equalTo(this.serailNumberThatCanBeViewed.size() + this.serailNumberThatCanNotBeViewed.size()));
-		
-		
 	}
 
 	@Before
@@ -147,7 +144,6 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 		schedules.runSchedules();
 		Assert.assertEquals((numberOfCompleteSchedulesVisible + numberOfIncompleteSchedulesVisible), schedules.totalResults());
 	}
-	
 	
 	@Test
 	public void should_be_able_to_load_each_asset_in_the_visible_list() throws Exception {
