@@ -481,6 +481,7 @@ td.formAction {
 
 .listOfLinks {
 	text-align: left;
+
 }
 
 .listOfLinks li {
@@ -519,8 +520,7 @@ ul.navOptions li.last {
 
 table.inputForm tr {
 	background-image: url( ../images/grayline.gif );
-	background-repeat: repeat-x;
-	background-position: bottom;
+	
 }
 
 /* form styling */
@@ -1590,7 +1590,6 @@ input.description {
 	top: 1px;
 	background:#EAEAEA;
 	padding:12px;
-
 }
 
 .headerWithFootnote {
@@ -1609,6 +1608,17 @@ input.description {
 
 .headerWithFootnote .footnoteText {
 	font-size: 10px;
-
 }
 
+#headerBackground {
+	background:  url(../images/header-bg.png) no-repeat 117% 3px;
+}
+
+#headerBackground .listOfLinks a {
+	color: #e28500;
+	hover: color: #bc6f00;
+}
+
+#headerBackground .listOfLinks li {
+	border:none;
+}

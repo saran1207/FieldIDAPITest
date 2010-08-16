@@ -1,24 +1,46 @@
+
 <div id="pageHeader">
-	<div id="pageActions" style="float:none;">
-		<ul class="listOfLinks">				
-			<li class="first">
-				<@s.text name="label.welcome"/>, ${sessionUser.userID} 
-			</li>
-	  		<li>
-	  			<a href="<@s.url action="myAccount" namespace="/"/>"><@s.text name="label.myaccount"/></a>
-			</li>
-	  		<li>
-	  			<a href="http://www.n4systems.com/support" target="_blank"><@s.text name="label.help_support"/></a>
-			</li>
-			<#if userSecurityGuard.allowedAccessWebStore>
-			<li>
-	  			<a href="<@s.url action="redirectToWebStore"  namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
-	  		</li>
-			</#if>	  		
-	  		<li>
-				<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
-			</li>
-  		</ul>
+	<div id="headerBackground">
+		<div id="pageActions" style="float:none;">
+			<ul class="listOfLinks">				
+				<li class="first">
+					<@s.text name="label.welcome"/>, ${sessionUser.userID} 
+				</li>
+		  		<li>
+		  			<a href="<@s.url action="myAccount" namespace="/"/>"><@s.text name="label.myaccount"/></a>
+				</li>
+					<#if sessionUser.employeeUser>
+						<li>
+		  					<a href="http://www.fieldid.com/partners" onclick:target="_blank"><@s.text name="label.invite"/></a>
+						</li>
+					<#elseif sessionUser.anEndUser>
+						<li>
+		  					<a href="http://www.fieldid.com/upgrade" target="_blank"><@s.text name="label.upgrade"/></a>
+						</li>
+					</#if>
+				<li>
+		  			<a href="http://www.n4systems.com/support" target="_blank"><@s.text name="label.support"/></a>
+				</li>
+				<#if userSecurityGuard.allowedAccessWebStore>
+					<script type="text/javascript">
+						 $('headerBackground').setStyle({backgroundPosition: '107%' });
+					 	if (Prototype.Browser.IE) {
+							 $('headerBackground').setStyle({backgroundPosition: '108%' });
+						}
+						
+					 </script>
+					<li>
+			  			<a href="<@s.url action="redirectToWebStore"  namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
+			  		</li>
+				</#if>
+				<li>
+		  			<a href="http://blog.fieldid.com/" target="_blank" ><@s.text name="label.blog"/></a>
+		  		</li>	  		
+		  		<li>
+					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
+				</li>
+	  		</ul>
+  		</div>
   	</div> 
 
 	<#include "_companyLogo.ftl"/>
