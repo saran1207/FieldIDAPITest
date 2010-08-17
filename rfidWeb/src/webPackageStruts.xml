@@ -1205,6 +1205,22 @@
 		<action name="adminEditPassword" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="success" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 		</action>
+		
+		<action name="adminEditRfid" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangeSecurityCard">
+			<result name="success" type="freemarker">/templates/html/changeSecurityCard/adminRfidForm.ftl</result>
+		</action>
+		
+		<action name="adminUpdateSecurityCard" method="update" class="com.n4systems.fieldid.actions.users.AdminChangeSecurityCard">
+			<result name="input" type="freemarker">/templates/html/changeSecurityCard/adminRfidForm.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">adminEditRfid</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">adminEditRfid</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
 
 		<action name="adminUpdatePassword" method="update" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>

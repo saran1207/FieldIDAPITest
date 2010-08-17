@@ -19,11 +19,11 @@ public class ChangeSecurityCard extends AbstractCrud {
 
 	private static final Logger logger = Logger.getLogger( ChangePasswordCrud.class );
 	
-	private UserManager userManager;
-	
+	protected UserManager userManager;
+	protected User user;
 	
 	private String securityCardNumber;
-	
+
 	public ChangeSecurityCard(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -44,18 +44,14 @@ public class ChangeSecurityCard extends AbstractCrud {
 	
 	
 	public String doUpdate() {
-		User user = persistenceManager.find(User.class, getSessionUserId(), getTenantId() );
+		 user = persistenceManager.find(User.class, getSessionUserId(), getTenantId() );
 		
-		if( user != null ) {
-			
-			user.assignSecruityCardNumber(securityCardNumber);
-			try {
-				userManager.updateUser(user);
-			} catch (DuplicateUserException e) {}
-						
-			logger.info("security card number updated for " + getSessionUser().getUserID());
-			addFlashMessageText("message.securityupdated");
-		}
+		try {
+			updateSecurityCard();
+		} catch (DuplicateUserException e) {}
+					
+		logger.info("security card number updated for " + getSessionUser().getUserID());
+		addFlashMessageText("message.securityupdated");
 		
 		return SUCCESS;
 	}
@@ -63,7 +59,13 @@ public class ChangeSecurityCard extends AbstractCrud {
 	public String getSecurityCardNumber() {
 		return securityCardNumber;
 	}
-	
+
+	protected void updateSecurityCard() {
+		if (user!=null){
+			user.assignSecruityCardNumber(securityCardNumber);
+			userManager.updateUser(user);
+		}
+	}
 	
 	@StringLengthFieldValidator(type=ValidatorType.FIELD, message = "" , key = "errors.securitycardlength", minLength="16")
 	public void setSecurityCardNumber(String securityCardNumber) {
@@ -72,5 +74,9 @@ public class ChangeSecurityCard extends AbstractCrud {
 		} else {
 			this.securityCardNumber = securityCardNumber;
 		}
+	}
+	
+	public User getUser() {
+		return user;
 	}
 }
