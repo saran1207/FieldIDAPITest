@@ -35,8 +35,6 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		loginSession1.signInAllTheWay("saunders", "makemore$");
 		
-		Thread.sleep(20000);
-		
 		loginSession2.submitSignIn("saunders", "makemore$");
 		loginSession2.assertOnConfirmSessionKick();
 	}
