@@ -85,8 +85,8 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	}
 	
 	private List<SyncAsset> findProductIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Product.class, filter);
-		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "id", "modified"));
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Product.class, filter, "p");
+		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "p.id", "p.modified"));
 
 		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
 		for (long ownerId: ownerIds) {
