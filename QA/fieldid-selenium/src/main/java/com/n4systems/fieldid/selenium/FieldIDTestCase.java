@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.selenium;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,24 +16,22 @@ import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestBase;
 import com.thoughtworks.selenium.Selenium;
 
-public abstract class FieldIDTestCase extends SeleneseTestBase {
+public abstract class FieldIDTestCase {
 	
 	public static boolean runningInsideSuite = false;
-	private static Map<String, FieldIdSelenium> tenantToSelenium = new HashMap<String, FieldIdSelenium>();
 
 	// NOTE: if you have -Dfieldid-companyid=unirope tests will default to unirope
 	// Otherwise, they will default to fieldid.
 
-	private String host = System.getProperty("selenium-server", "localhost");
+	private String host = System.getProperty("selenium-server", "tools.n4systems.net");
 	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
 //	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");
 	private String initCompany = System.getProperty("fieldid-companyid", "n4");
-	private String domain = System.getProperty("fieldid-domain", "team.n4systems.net");
+	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
 	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
@@ -166,91 +164,6 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	}
 	
 	/**
-	 * If a System property exists, this will return the System property.
-	 * Otherwise it will check to see if the property was loaded by the
-	 * loadProperties() method. If the key is not set it will cause the
-	 * test case to <STRONG>fail</STRONG>.
-	 * 
-	 * If the key is set to something other than "true" this will
-	 * return <STRONG>false</STRONG>.
-	 * 
-	 * @param key
-	 * @return the key value or false if not set or set incorrectly.
-	 * @see loadingProperties
-	 */
-	public boolean getBooleanProperty(String key) {
-		String s = System.getProperty(key, badProperty);
-		if(s.equals(badProperty)) {
-			s = p.getProperty(key, badProperty);
-		}
-		if(s.equals(badProperty)) {
-			fail("The key '" + key + "' was missing or set incorrectly.");
-		}
-		return Boolean.parseBoolean(s);
-	}
-	
-	/**
-	 * If a System property exists, this will return the System property.
-	 * Otherwise it will check to see if the property was loaded by the
-	 * loadProperties() method. If the key is not set or it is not a valid
-	 * integer this will cause the test case to <STRONG>fail</STRONG>.
-	 * 
-	 * @param key
-	 * @return the key value or fail if not set or set incorrectly.
-	 * @see loadingProperties
-	 */
-	public int getIntegerProperty(String key) {
-		String s = System.getProperty(key, badProperty);
-		if(s.equals(badProperty)) {
-			s = p.getProperty(key, badProperty);
-		}
-		if(s.equals(badProperty)) {
-			fail("The key '" + key + "' was missing.");
-		}
-		int i = -1;
-		try {
-			i = Integer.parseInt(s);
-		} catch(NumberFormatException nfe) {
-			fail("The key '" + key + "' is not a valid integer.");
-		}
-		return i;
-	}
-
-    public static void assertEquals(Map<String, String> expected, Map<String, String> actual) {
-    	boolean equals = expected.equals(actual);
-    	if(!equals) {
-	    	StringBuffer mismatchKeys = new StringBuffer("\n");
-	    	StringBuffer failureMsg = new StringBuffer("\n\n");
-	    	
-	    	Set<String> expectedKeys = expected.keySet();
-	    	Iterator<String> i = expectedKeys.iterator();
-	    	while(i.hasNext()) {
-	    		String expectedKey = i.next();
-	    		String expectedValue = expected.get(expectedKey);
-	    		if(!actual.containsKey(expectedKey)) {
-	    			failureMsg.append("Expected key '");
-	    			failureMsg.append(expectedKey);
-	    			failureMsg.append("' was not found in Actual list of keys.\n");
-	    		} else {
-	    			String actualValue = actual.get(expectedKey);
-	    			if(!actualValue.equals(expectedValue)) {
-	    				mismatchKeys.append("For key '");
-	    				mismatchKeys.append(expectedKey);
-	    				mismatchKeys.append("' expected '");
-	    				mismatchKeys.append(expectedValue);
-	    				mismatchKeys.append("' but saw '");
-	    				mismatchKeys.append(actualValue);
-	    				mismatchKeys.append("'\n");
-	    			}
-	    		}
-	    	}
-	    	failureMsg.append(mismatchKeys.toString());
-	    	failureMsg.append("\n");
-	    	fail(failureMsg.toString());
-    	}
-    }
-    
-	/**
 	 * Create an instance of Selenium with the pre-determined web browser
 	 * pointing to the /fieldid/ application on the test machine. I also
 	 * have this method maximize the window in case we want to do a screen
@@ -316,6 +229,13 @@ public abstract class FieldIDTestCase extends SeleneseTestBase {
 	public void setCompany(String companyID) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.deleteAllVisibleCookies();
+		selenium.open(url);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+	}
+	
+	protected void gotoReferralLink(String companyID, String referralCode) {
+		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() +  "/signup/" + referralCode;
+		System.out.println("GOING TO: " + url);
 		selenium.open(url);
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}

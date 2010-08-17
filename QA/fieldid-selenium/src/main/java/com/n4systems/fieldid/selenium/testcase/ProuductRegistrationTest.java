@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Ignore;
 import org.junit.Test;
 

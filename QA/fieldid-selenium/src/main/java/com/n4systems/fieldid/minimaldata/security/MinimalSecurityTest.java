@@ -149,7 +149,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	public void should_be_able_to_load_each_asset_in_the_visible_list() throws Exception {
 		for (String serialNumber : serailNumberThatCanBeViewed) {
 			loadAsset(serialNumber);
-			verifyEquals(serialNumber, selenium.getText("css=.serialNumber"));
+			assertEquals(serialNumber, selenium.getText("css=.serialNumber"));
 		}
 	}
 	
@@ -157,7 +157,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	public void should_not_be_able_to_load_each_asset_in_the_not_visible_list() throws Exception {
 		for (String serialNumber : serailNumberThatCanNotBeViewed) {
 			loadAsset(serialNumber);
-			verifyEquals("There are no products with the given serial, RFID or customer reference number.", selenium.getText("css=.emptyList p"));
+			assertEquals("There are no products with the given serial, RFID or customer reference number.", selenium.getText("css=.emptyList p"));
 		}
 	}
 

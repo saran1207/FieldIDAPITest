@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
 import static com.n4systems.fieldid.selenium.datatypes.Owner.someOrg;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 

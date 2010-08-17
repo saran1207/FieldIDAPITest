@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,12 +66,12 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 	 * @param prime
 	 */
 	private void verifyEquals(CreateTenant expected, Organization actual) {
-		verifyEquals(expected.getCompanyAddress(), actual.getCompanyStreetAddress());
-		verifyEquals(expected.getCompanyCity(), actual.getCompanyCity());
-		verifyEquals(expected.getCompanyState(), actual.getCompanyState());
-		verifyEquals(expected.getCompanyCountry(), actual.getCompanyCountry());
-		verifyEquals(expected.getCompanyZipCode(), actual.getCompanyZipCode());
-		verifyEquals(expected.getCompanyPhoneNumber(), actual.getCompanyPhoneNumber());
+		assertEquals(expected.getCompanyAddress(), actual.getCompanyStreetAddress());
+		assertEquals(expected.getCompanyCity(), actual.getCompanyCity());
+		assertEquals(expected.getCompanyState(), actual.getCompanyState());
+		assertEquals(expected.getCompanyCountry(), actual.getCompanyCountry());
+		assertEquals(expected.getCompanyZipCode(), actual.getCompanyZipCode());
+		assertEquals(expected.getCompanyPhoneNumber(), actual.getCompanyPhoneNumber());
 	}
 
 	private PrimaryOrganization getPrimaryOrganization() {

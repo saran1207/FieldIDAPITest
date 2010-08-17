@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.selenium.testcase.referrer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.regex.Pattern;
+
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -43,6 +48,18 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	}
 	
 	@Test
+	public void stupid_test() throws Exception {
+		selenium.open("/fieldid/login.action");
+		selenium.waitForPageToLoad("20000");
+		selenium.open("http://msa.grumpy.n4systems.net/fieldid/");
+		selenium.waitForPageToLoad("20000");
+		Thread.sleep(10000);
+		selenium.open("/fieldid/login.action");
+		selenium.waitForPageToLoad("20000");
+		Thread.sleep(10000);
+	}
+	
+	@Test
 	public void should_find_new_companies_name_in_the_list_of_referred_accounts() throws Exception {
 		goToReferFieldId();
 		
@@ -78,11 +95,11 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		selenium.open("/fieldid/logout.action");
 		misc.waitForPageToLoadAndCheckForOopsPage();
+		selenium.deleteAllVisibleCookies();
 		
 		String aCompanyThatTheReferrerIsNotPartOf = "msa";
-		setCompany(aCompanyThatTheReferrerIsNotPartOf);
-		selenium.open("/signup/" + extractReferrerCodeFromUrl(referralLink));
-		misc.waitForPageToLoadAndCheckForOopsPage();
+		gotoReferralLink(aCompanyThatTheReferrerIsNotPartOf, extractReferrerCodeFromUrl(referralLink));
+		Thread.sleep(10000);
 		
 		createANewUnlimitedTenant("admin", "password");
 		
@@ -93,7 +110,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	}
 	
 	private int getNumberOfRowsInReferrerTable() {
-		return selenium.getXpathCount("//div[@id='referralsBottom']/table/tr").intValue();
+		return selenium.getXpathCount("//div[@id='referralsBottom']/table//tr").intValue();
 	}
 	
 	private CreateTenant createANewUnlimitedTenant(String username, String password) {
@@ -141,7 +158,8 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	}
 
 	private void assertReferrerLinkIsInTheCorrectForm(String referralLink) {
-		assertEquals("regexp:^https?\\:\\/\\/.*\\/signup\\/(\\w)+$", referralLink);
+		Pattern linkMatcher = Pattern.compile("https?:\\/\\/.*\\/signup\\/(\\w)+$");
+		assertTrue(linkMatcher.matcher(referralLink).matches());
 	}
 	
 	private String extractReferrerCodeFromUrl(String referrerLink) {

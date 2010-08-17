@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;

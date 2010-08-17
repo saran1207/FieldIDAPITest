@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,14 +96,14 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		admin.gotoManageSystemSettings();
 		boolean hasVendors = (expected.getDefaultVendorContext() != null);
 		SystemSettings ss = mss.getSystemSettings(hasVendors);
-		verifyTrue(expected.getPreferredDateFormat().equals(ss.getPreferredDateFormat()));
+			assertTrue(expected.getPreferredDateFormat().equals(ss.getPreferredDateFormat()));
 		if(hasVendors) {
-			verifyTrue(expected.getDefaultVendorContext().equals(ss.getDefaultVendorContext()));
+			assertTrue(expected.getDefaultVendorContext().equals(ss.getDefaultVendorContext()));
 		}
 		if(expected.getWebSiteAddress() != null) {
-			verifyTrue(expected.getWebSiteAddress().equals(ss.getWebSiteAddress()));
+			assertTrue(expected.getWebSiteAddress().equals(ss.getWebSiteAddress()));
 		} else
-			verifyTrue(ss.getWebSiteAddress() == null);
+			assertTrue(ss.getWebSiteAddress() == null);
 	}
 
 	private SystemSettings acceptDefaultSettingsForSetupWizardWorks(boolean referrer) {

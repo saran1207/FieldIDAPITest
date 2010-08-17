@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.minimaldata.security;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -9,7 +11,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-
 
 @RunWith(Parameterized.class)
 public class SafetyNetworkLookup extends LoggedInTestCase {

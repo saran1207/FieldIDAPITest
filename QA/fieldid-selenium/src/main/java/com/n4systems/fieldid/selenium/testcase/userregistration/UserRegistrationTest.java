@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.userregistration;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 
 import org.junit.Test;
@@ -37,16 +39,16 @@ public class UserRegistrationTest extends FieldIDTestCase {
 	}
 
 	private void verifyRegistrationInformationIsShown(String userId) {
-		verifyTrue(selenium.isTextPresent(userId));
-		verifyTrue(selenium.isTextPresent("dev@fieldid.com"));
-		verifyTrue(selenium.isTextPresent("Test"));
-		verifyTrue(selenium.isTextPresent("User"));
-		verifyTrue(selenium.isTextPresent("some position"));
-		verifyTrue(selenium.isTextPresent("Toronto"));
-		verifyTrue(selenium.isTextPresent("Canada:Ontario - Toronto"));
-		verifyTrue(selenium.isTextPresent("company_name"));
-		verifyTrue(selenium.isTextPresent("647-202-2789"));
-		verifyTrue(selenium.isTextPresent("This is a comment"));
+		assertTrue(selenium.isTextPresent(userId));
+		assertTrue(selenium.isTextPresent("dev@fieldid.com"));
+		assertTrue(selenium.isTextPresent("Test"));
+		assertTrue(selenium.isTextPresent("User"));
+		assertTrue(selenium.isTextPresent("some position"));
+		assertTrue(selenium.isTextPresent("Toronto"));
+		assertTrue(selenium.isTextPresent("Canada:Ontario - Toronto"));
+		assertTrue(selenium.isTextPresent("company_name"));
+		assertTrue(selenium.isTextPresent("647-202-2789"));
+		assertTrue(selenium.isTextPresent("This is a comment"));
 	}
 
 	private void registerUser(String userId) throws InterruptedException {

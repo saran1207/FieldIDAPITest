@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.signup;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,7 +9,6 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
-
 
 public class TenantNameValidationTest extends FieldIDTestCase {
 
@@ -35,8 +36,8 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 		
 		createAccountPage.submitCreateYourAccountForm();
 		
-		verifyTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
-		verifyTrue(selenium.isTextPresent("The domain name must be at between 3 and"));
+		assertTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
+		assertTrue(selenium.isTextPresent("The domain name must be at between 3 and"));
 	}
 	
 	@Test
@@ -46,8 +47,8 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 		
 		createAccountPage.submitCreateYourAccountForm();
 		
-		verifyTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
-		verifyTrue(selenium.isTextPresent("You must choose a domain name"));
+		assertTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
+		assertTrue(selenium.isTextPresent("You must choose a domain name"));
 	}
 	
 	@Test
@@ -56,8 +57,8 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 		createAccountPage.setCreateYourAccountForm(signUpForm);
 		createAccountPage.submitCreateYourAccountForm();
 		
-		verifyTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
-		verifyTrue(selenium.isTextPresent("The domain name is not in the correct format. You may only user letters, numbers and dashes"));
+		assertTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
+		assertTrue(selenium.isTextPresent("The domain name is not in the correct format. You may only user letters, numbers and dashes"));
 	}
 	
 	@Test
@@ -67,8 +68,8 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 		
 		createAccountPage.submitCreateYourAccountForm();
 		
-		verifyTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
-		verifyTrue(selenium.isTextPresent("This domain name is already in use"));
+		assertTrue(selenium.isElementPresent(TENANT_NAME_INPUT_WITH_ERROR));
+		assertTrue(selenium.isTextPresent("This domain name is already in use"));
 	}
 	
 }

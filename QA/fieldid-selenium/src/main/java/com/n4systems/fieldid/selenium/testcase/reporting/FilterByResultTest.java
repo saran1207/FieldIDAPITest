@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.reporting;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -52,7 +54,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 	}
 
 	private void verifyInspectionResultsAreCorrectOnThisPage() {
-		verifyEquals(resultName, selenium.getText("css=#inspection_search_inspectionresult_0"));
+		assertEquals(resultName, selenium.getText("css=#inspection_search_inspectionresult_0"));
 		
 		String pageNumber = selenium.getText("css=.currentPage span");
 		String totalResults = selenium.getText("css=.total:contains('Total Inspections')");
@@ -62,7 +64,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 		
 		int lastResultOnPage = total - (20 * (page - 1));
 		
-		verifyEquals(resultName, selenium.getText("css=#inspection_search_inspectionresult_" + ((lastResultOnPage > 20) ? 19 : lastResultOnPage - 1)  ));
+		assertEquals(resultName, selenium.getText("css=#inspection_search_inspectionresult_" + ((lastResultOnPage > 20) ? 19 : lastResultOnPage - 1)  ));
 	}
 
 	private void goToLastPage() {

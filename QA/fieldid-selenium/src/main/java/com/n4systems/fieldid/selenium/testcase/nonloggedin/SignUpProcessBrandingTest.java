@@ -8,10 +8,10 @@ import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 
 public class SignUpProcessBrandingTest extends FieldIDTestCase {
+
 	private SignUpPackages signUpPackagePage;
 	private CreateAccount createAccountPage;
 	
-	@Override
 	@Before
 	public void setUp() throws Exception {
 		signUpPackagePage = new SignUpPackages(selenium, misc);

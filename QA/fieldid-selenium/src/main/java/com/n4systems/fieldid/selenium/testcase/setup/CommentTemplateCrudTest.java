@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-
 import static com.n4systems.fieldid.selenium.datatypes.CommentTemplate.randomStatusComment;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -71,7 +70,7 @@ public class CommentTemplateCrudTest extends LoggedInTestCase {
 		driver.gotoAddTemplate();
 		
 		driver.createTemplate(existingTemplate);
-		
+
 		driver.assertVaildationErrorFor(ManageCommentTemplatesDriver.FieldName.NAME_FIELD, allOf(containsString("duplicate"), containsString("name")));
 	}
 	

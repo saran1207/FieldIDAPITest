@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;

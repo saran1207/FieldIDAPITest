@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.menus;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
