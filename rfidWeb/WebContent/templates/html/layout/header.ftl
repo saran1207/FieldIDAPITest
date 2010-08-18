@@ -1,7 +1,8 @@
 
 <div id="pageHeader">
-	<div id="headerBackground">
+	
 		<div id="pageActions" style="float:none;">
+		<div id="headerBackground" >
 			<ul class="listOfLinks">				
 				<li class="first">
 					<@s.text name="label.welcome"/>, ${sessionUser.userID} 
@@ -22,13 +23,6 @@
 		  			<a href="http://www.n4systems.com/support" target="_blank"><@s.text name="label.support"/></a>
 				</li>
 				<#if userSecurityGuard.allowedAccessWebStore>
-					<script type="text/javascript">
-						 $('headerBackground').setStyle({backgroundPosition: '107%' });
-					 	if (Prototype.Browser.IE) {
-							 $('headerBackground').setStyle({backgroundPosition: '108%' });
-						}
-						
-					 </script>
 					<li>
 			  			<a href="<@s.url action="redirectToWebStore"  namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
 			  		</li>
