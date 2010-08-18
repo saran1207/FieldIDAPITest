@@ -1,19 +1,13 @@
 package com.n4systems.fieldid.selenium.identify.page;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.tidy.Tidy;
 
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.datatypes.LineItem;
@@ -55,7 +49,7 @@ public class IdentifyPageDriver {
 	private String identifyAddPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productCreate_publishedState']";
 	private String identifyAddCommentsTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 	private String productTypeAttributesUpdatingLocator = "xpath=//SPAN[id='productTypeIndicator' and not(contains(@style,'visibility: hidden'))]";
-	private CharSequence classStringIdentifyingRequiredFields = "requiredField";
+	private String classStringIdentifyingRequiredFields = "requiredField";
 	private String classStringIdentifyingUnitOfMeasureFields = "unitOfMeasure";
 	private String registerThisAssetOverTheSafetyNetworkLinkLocator = "xpath=//A[@id='showSmartSearchLink']";
 	private String registerAssetVendorSelectListLocator = "xpath=//select[@id='snSmartSearchVendors']";
@@ -360,53 +354,26 @@ public class IdentifyPageDriver {
 	}
 
 	private List<String> getRequiredTextFieldIDs(String source) {
-		return getRequiredFieldsByTagType(source, "input");
+		return getRequiredFieldsByTagTypeUsingXpath(source, "input");
 	}
 
-	public List<String> getRequiredSelectListIDs(String source) {
-		return getRequiredFieldsByTagType(source, "select");
+	private List<String> getRequiredSelectListIDs(String source) {
+		return getRequiredFieldsByTagTypeUsingXpath(source, "select");
 	}
 	
-	List<String> getRequiredFieldsByTagType(String source, String tagType) {
+	private List<String> getRequiredFieldsByTagTypeUsingXpath(String source, String tagType) {
 		List<String> result = new ArrayList<String>();
+		String baseXpath = "//"+tagType+"[contains(@class,'"+classStringIdentifyingRequiredFields+"')]";
+		int number = selenium.getXpathCount(baseXpath).intValue();
 		
-		StringReader sr = new StringReader(source);
-		BufferedReader br = new BufferedReader(sr);
-		Tidy tidy = new Tidy();
-		boolean required = false;
-		String id = "";
-
-		// hide all the output from JTidy
-		tidy.setQuiet(true);
-		tidy.setShowWarnings(false);
-		tidy.setShowErrors(0);
-
-		Document htmlDoc = tidy.parseDOM(br, new OutputStreamWriter(System.out));
-		NodeList tags = htmlDoc.getElementsByTagName(tagType);
-		for(int i = 0; i < tags.getLength(); i++) {
-			Node tag = tags.item(i);
-			NamedNodeMap attributes = tag.getAttributes();
-			for(int j = 0; j < attributes.getLength(); j++) {
-				Node attribute = attributes.item(j);
-				String attributeText = attribute.getNodeName();
-				if(attributeText.equals("class")) {
-					String attributeValue = attribute.getNodeValue();
-					if(attributeValue.contains(classStringIdentifyingRequiredFields)) {
-						required = true;
-					}
-				} else if(attributeText.equals("id")) {
-					id = attribute.getNodeValue();
-				}
-			}
-			if(required) {
-				result.add(id);
-				required = false;
-			}
+		for (int i = 1; i <= number; i++) {
+			String id = selenium.getAttribute("xpath=(//"+tagType+"[contains(@class,'"+classStringIdentifyingRequiredFields+"')])["+i+"]/@id");
+			result.add(id);
 		}
-
+		
 		return result;
 	}
-
+	
 	public void setRegisterThisAssetOverTheSafetyNetwork(SafetyNetworkRegistration registration) throws InterruptedException {
 		if(selenium.isElementPresent(registerThisAssetOverTheSafetyNetworkLinkLocator)) {
 			selenium.click(registerThisAssetOverTheSafetyNetworkLinkLocator);
