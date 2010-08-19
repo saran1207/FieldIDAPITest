@@ -3,7 +3,6 @@ package com.n4systems.webservice.server;
 import static com.n4systems.model.builders.ProductBuilder.*;
 import static com.n4systems.model.builders.SubProductBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;

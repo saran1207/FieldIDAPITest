@@ -21,7 +21,7 @@ public class PredefinedLocationByIdLoader extends SecurityFilteredLoader<Predefi
 		
 		TenantOnlySecurityFilter securityFilter = new TenantOnlySecurityFilter(filter);
 		if (showArchived) {
-			securityFilter.toggleShowArchived();
+			securityFilter.enableShowArchived();
 		}
 		
 		QueryBuilder<PredefinedLocation> query = new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, securityFilter);

@@ -1,6 +1,6 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import static org.easymock.classextension.EasyMock.*;
+import static org.easymock.EasyMock.*;
 
 import org.junit.Test;
 

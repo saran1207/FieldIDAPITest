@@ -3,14 +3,12 @@ package com.n4systems.commandprocessors;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -28,8 +26,6 @@ import com.n4systems.testutils.NoCommitAndRollBackTransaction;
 import com.n4systems.testutils.TestDoubleNonSecuredLoaderFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
-
-
 
 public class CreateSafetyNetworkConnectionCommandProcessorTest {
 

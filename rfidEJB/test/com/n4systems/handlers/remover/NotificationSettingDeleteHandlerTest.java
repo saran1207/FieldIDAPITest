@@ -2,7 +2,6 @@ package com.n4systems.handlers.remover;
 
 import static com.n4systems.model.builders.InspectionTypeBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.List;

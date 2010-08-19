@@ -1,8 +1,7 @@
 package com.n4systems.webservice;
 
 import static junit.framework.Assert.*;
-
-import static org.easymock.classextension.EasyMock.*;
+import static org.easymock.EasyMock.*;
 
 import org.junit.Before;
 import org.junit.Test;

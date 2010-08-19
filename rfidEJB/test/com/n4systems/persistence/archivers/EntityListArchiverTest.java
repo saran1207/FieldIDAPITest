@@ -1,7 +1,6 @@
 package com.n4systems.persistence.archivers;
 
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import java.util.Arrays;
 import java.util.HashSet;

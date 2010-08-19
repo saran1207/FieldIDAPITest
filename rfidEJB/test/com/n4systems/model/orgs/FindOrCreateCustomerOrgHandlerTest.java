@@ -3,7 +3,6 @@ package com.n4systems.model.orgs;
 import static com.n4systems.model.builders.CustomerOrgBuilder.*;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;

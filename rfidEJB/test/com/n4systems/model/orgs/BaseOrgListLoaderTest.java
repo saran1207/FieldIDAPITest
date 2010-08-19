@@ -1,7 +1,6 @@
 package com.n4systems.model.orgs;
 
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import java.util.ArrayList;
 

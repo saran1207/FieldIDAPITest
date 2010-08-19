@@ -30,12 +30,9 @@ public class NavOptionsController {
 	private String entityIdentifier;
 	private boolean onSafetyNetwork = false;
 
-
-
-	public NavOptionsController(SessionUser user, SystemSecurityGuard securityGaurd) {
+	public NavOptionsController(SessionUser user, SystemSecurityGuard securityGuard) {
 		this.user = user;
-		this.securityGuard = securityGaurd;
-		
+		this.securityGuard = securityGuard;
 	}
 
 	public NavOptionsController(SessionUser user, SystemSecurityGuard securityGaurd, String pageType, String currentAction) {
@@ -69,7 +66,6 @@ public class NavOptionsController {
 			returnToReport = commonProps.getBoolean("returnToReport");
 			title =  commonProps.getString("title");
 			entityIdentifier =  commonProps.getString("title.entity_identifier");
-			
 			
 			for (HierarchicalProperties props : p.getPropertiesList("option")) {
 				Map<String, String> urlParams = new HashMap<String, String>();
@@ -118,6 +114,7 @@ public class NavOptionsController {
 		}
 		return filteredNavOptions;
 	}
+	
 	private boolean userHasRequiredPermissionForOption(NavOption option) {
 		if (user != null) {
 			if (option.getPermissionRequired() == null) {

@@ -28,6 +28,7 @@ import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
+import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
@@ -442,5 +443,9 @@ public class LoaderFactory {
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
+	}
+
+	public  <T extends AbstractEntity> EntityByIdIncludingArchivedLoader<T> createEntityByIdLoader(Class<T> clazz) {
+		return new EntityByIdIncludingArchivedLoader<T>(filter, clazz);
 	}
 }

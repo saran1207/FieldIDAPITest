@@ -1,7 +1,6 @@
 package com.n4systems.api.conversion.orgs;
 
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

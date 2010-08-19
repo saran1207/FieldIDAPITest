@@ -6,7 +6,6 @@ import static com.n4systems.model.builders.UserBuilder.*;
 import static com.n4systems.servicedto.builders.InspectionServiceDTOBuilder.*;
 import static com.n4systems.servicedto.builders.ProductServiceDTOBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 

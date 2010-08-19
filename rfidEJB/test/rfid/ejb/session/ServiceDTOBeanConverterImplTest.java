@@ -3,7 +3,6 @@ package rfid.ejb.session;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.text.DateFormat;

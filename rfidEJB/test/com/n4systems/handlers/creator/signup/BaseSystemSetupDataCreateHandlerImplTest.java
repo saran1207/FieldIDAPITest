@@ -2,7 +2,6 @@ package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import org.junit.Before;
 import org.junit.Test;

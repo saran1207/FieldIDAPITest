@@ -1,6 +1,5 @@
 package com.n4systems.taskscheduling.task;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

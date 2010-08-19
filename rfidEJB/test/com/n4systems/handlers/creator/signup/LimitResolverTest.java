@@ -2,7 +2,6 @@ package com.n4systems.handlers.creator.signup;
 
 import static com.n4systems.test.helpers.creationmethods.PromoCodeCreationMethods.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;

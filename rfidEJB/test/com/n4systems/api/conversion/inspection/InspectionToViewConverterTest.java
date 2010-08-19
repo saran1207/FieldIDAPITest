@@ -2,7 +2,6 @@ package com.n4systems.api.conversion.inspection;
 
 import static com.n4systems.model.location.Location.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.Date;

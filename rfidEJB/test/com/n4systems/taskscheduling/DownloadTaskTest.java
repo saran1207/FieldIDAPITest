@@ -7,7 +7,7 @@ import java.io.File;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 

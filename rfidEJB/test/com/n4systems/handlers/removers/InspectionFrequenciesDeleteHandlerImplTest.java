@@ -1,7 +1,6 @@
 package com.n4systems.handlers.removers;
 import static com.n4systems.model.builders.InspectionTypeBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import org.junit.Before;
 import org.junit.Test;

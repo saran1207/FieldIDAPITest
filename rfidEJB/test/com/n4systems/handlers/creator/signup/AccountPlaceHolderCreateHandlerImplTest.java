@@ -1,7 +1,6 @@
 package com.n4systems.handlers.creator.signup;
 
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import org.easymock.Capture;
 import org.junit.Before;

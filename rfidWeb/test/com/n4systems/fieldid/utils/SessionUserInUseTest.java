@@ -2,13 +2,12 @@ package com.n4systems.fieldid.utils;
 
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import org.easymock.Capture;
 import org.easymock.IAnswer;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.n4systems.model.activesession.ActiveSession;

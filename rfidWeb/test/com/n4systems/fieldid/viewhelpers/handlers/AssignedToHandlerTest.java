@@ -3,7 +3,6 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import static com.n4systems.model.builders.ProductBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 

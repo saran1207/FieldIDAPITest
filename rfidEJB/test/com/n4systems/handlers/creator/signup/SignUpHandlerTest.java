@@ -5,7 +5,6 @@ import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

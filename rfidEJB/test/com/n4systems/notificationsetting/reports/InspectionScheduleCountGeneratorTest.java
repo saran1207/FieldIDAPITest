@@ -2,7 +2,6 @@ package com.n4systems.notificationsetting.reports;
 
 import static com.n4systems.model.builders.NotificationSettingBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;

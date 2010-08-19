@@ -3,7 +3,6 @@ package com.n4systems.handlers.creator.signup;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.test.helpers.Asserts.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;

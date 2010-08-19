@@ -5,21 +5,22 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.jboss.logging.Logger;
 
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
+import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
@@ -41,6 +42,8 @@ public class CustomerCrud extends AbstractCrud {
 	
 	private final UserManager userManager;
 	private final OrgSaver saver;
+	
+	private boolean archivedOnly;
 	
 	private CustomerOrg customer;
 	private Pager<CustomerOrg> customerPage;
@@ -64,7 +67,7 @@ public class CustomerCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		customer = getLoaderFactory().createFilteredIdLoader(CustomerOrg.class).setId(uniqueId).load();
+		customer = getLoaderFactory().createEntityByIdLoader(CustomerOrg.class).setId(uniqueId).load();
 		if (customer.getAddressInfo() == null) {
 			customer.setAddressInfo(new AddressInfo());
 		}
@@ -75,6 +78,15 @@ public class CustomerCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doList() {
+		archivedOnly = false;
+		setPageType("customer", "list");
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doListArchived() {
+		archivedOnly = true;
+		setPageType("customer", "list_archived");
 		return SUCCESS;
 	}
 
@@ -99,7 +111,30 @@ public class CustomerCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
-	public String doRemove() {
+	public String doArchive() {
+		String result = setCustomerActive(false);
+		addFlashMessage("Customer archived successfully");
+		return result;
+	}
+	
+	@SkipValidation
+	public String doUnarchive() {
+		String result = setCustomerActive(true);
+		addFlashMessage("Customer unarchived successfully");
+		return result;
+	}
+
+	private String setCustomerActive(boolean active) {
+		EntityState newState = active ? EntityState.ACTIVE : EntityState.ARCHIVED;
+		
+		if (!active) {
+			List<User> usersList = getUserList();
+			for (User user : usersList) {
+				user.archiveUser();
+				userManager.updateUser(user);
+			}
+		}
+
 		if (customer == null) {
 			addFlashError("Customer not found");
 			return ERROR;
@@ -112,14 +147,21 @@ public class CustomerCrud extends AbstractCrud {
 				customer.setAddressInfo(null);
 			}
 			
-			saver.remove(customer);
-			addFlashMessage("Customer deleted successfully");
-		} catch (EntityStillReferencedException e) {
-			addFlashErrorText("error.customerinuse");
-			return ERROR;
+			customer.setState(newState);
+			
+			DivisionOrgByCustomerListLoader divisionsLoader = getLoaderFactory().createDivisionOrgByCustomerListLoader();
+			divisionsLoader.setCustomer(customer);
+			List<DivisionOrg> divisions = divisionsLoader.load();
+			for (DivisionOrg division : divisions) {
+				division.setState(newState);
+				saver.update(division);
+			}
+			
+			saver.update(customer);
+			
 		} catch (Exception e) {
-			logger.error("Failed deleteing customer", e);
-			addFlashErrorText("error.savingcustomer");
+			logger.error("Failed updating customer", e);
+			addFlashErrorText("error.updatingcustomer");
 			return ERROR;
 		}
 		
@@ -168,6 +210,7 @@ public class CustomerCrud extends AbstractCrud {
 			CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
 			loader.setPage(getCurrentPage()).setPageSize(CRUD_RESULTS_PER_PAGE);
 			loader.setNameFilter(listFilter);
+			loader.setArchivedOnly(archivedOnly);
 			customerPage = loader.load();
 		}
 		
@@ -252,4 +295,12 @@ public class CustomerCrud extends AbstractCrud {
 		return customer;
 	}
 	
+	public String getFilterAction() {
+		if (archivedOnly) {
+			return "archivedCustomerList";
+		} else {
+			return "customerList";
+		}
+	}
+
 }

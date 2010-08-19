@@ -3,7 +3,6 @@ package com.n4systems.handlers.creator.signup;
 import static com.n4systems.handlers.creator.signup.model.builder.AccountPlaceHolderBuilder.*;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.easymock.Capture;

@@ -2,7 +2,6 @@ package com.n4systems.fieldid.actions.helpers;
 
 import static com.n4systems.model.builders.ProductTypeBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 

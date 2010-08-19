@@ -1,6 +1,6 @@
 package com.n4systems.reporting.mapbuilders;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.n4systems.model.builders.OrgBuilder;

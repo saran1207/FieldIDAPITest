@@ -4,7 +4,6 @@ import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
 import static com.n4systems.model.builders.InspectionTypeBuilder.*;
 import static com.n4systems.model.builders.ProductBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;

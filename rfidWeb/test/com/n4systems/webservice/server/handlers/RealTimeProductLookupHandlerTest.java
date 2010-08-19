@@ -2,7 +2,7 @@ package com.n4systems.webservice.server.handlers;
 
 import static com.n4systems.model.builders.ProductBuilder.*;
 import static org.junit.Assert.*;
-import static org.easymock.classextension.EasyMock.*;
+import static org.easymock.EasyMock.*;
 
 import java.util.ArrayList;
 import java.util.Date;

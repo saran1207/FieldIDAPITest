@@ -19,14 +19,9 @@ public class AddressInfo extends AbstractEntity {
 	private String phone2;
 	private String fax1;
 	
-	
-	
-	public AddressInfo() {
-		super();
-	}
+	public AddressInfo() {}
 	
 	public AddressInfo(AddressInfo addressInfo) {
-		super();
 		streetAddress = addressInfo.streetAddress;
 		city = addressInfo.city;
 		state = addressInfo.state;
@@ -35,8 +30,6 @@ public class AddressInfo extends AbstractEntity {
 		phone1 = addressInfo.phone1;
 		phone2 = addressInfo.phone2;
 		fax1 = addressInfo.fax1;
-		
-		
 	}
 
 	public String getStreetAddress() {
@@ -145,10 +138,5 @@ public class AddressInfo extends AbstractEntity {
 		return "AddressInfo [city=" + city + ", country=" + country + ", fax1=" + fax1 + ", phone1=" + phone1 + ", phone2=" + phone2 + ", state=" + state + ", streetAddress=" + streetAddress
 				+ ", zip=" + zip + "]";
 	}
-	
-	
-	
-	
-	
 	
 }

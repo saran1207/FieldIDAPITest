@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.actions.projects;
 
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;

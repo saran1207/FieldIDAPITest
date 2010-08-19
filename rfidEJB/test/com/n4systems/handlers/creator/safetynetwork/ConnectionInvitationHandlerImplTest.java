@@ -3,7 +3,6 @@ package com.n4systems.handlers.creator.safetynetwork;
 import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;

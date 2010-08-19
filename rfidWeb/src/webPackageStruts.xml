@@ -151,7 +151,26 @@
 			<result name="input" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
 		</action>
 
-		<action name="customerRemove" method="remove" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="archivedCustomerList" method="listArchived" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+			<result name="success" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
+		</action>
+		
+		<action name="customerArchive" method="archive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">customerList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+
+			<result name="error" type="redirectAction">
+				<param name="actionName">customerList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+		
+		<action name="customerUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">customerList</param>
 				<param name="currentPage">${currentPage}</param>

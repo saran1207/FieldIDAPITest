@@ -2,7 +2,6 @@ package com.n4systems.notifiers;
 
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import javax.mail.MessagingException;
@@ -18,7 +17,6 @@ import com.n4systems.util.mail.TemplateMailMessage;
 
 
 public class EmailNotifierTest {
-
 	
 	private final class TestNotification extends Notification {
 		
@@ -62,7 +60,6 @@ public class EmailNotifierTest {
 		assertEquals("some_notification_name", message.getTemplatePath());
 	}
 	
-	
 	@Test
 	public void should_send_email_to_the_user_in_the_notification() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
@@ -77,7 +74,6 @@ public class EmailNotifierTest {
 		assertEquals(new FluentHashSet<String>("me@me.com"), message.getToAddresses());
 	}
 	
-	
 	@Test
 	public void should_send_a_template_email_with_the_subject_from_the_notification() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
@@ -89,7 +85,6 @@ public class EmailNotifierTest {
 		
 		assertEquals("subject", message.getSubject());
 	}
-	
 
 	@Test
 	public void should_send_a_template_email_with_the_notification_handed_to_the_template_map() throws Exception {
@@ -104,7 +99,6 @@ public class EmailNotifierTest {
 		assertEquals(notification, message.getTemplateMap().get("notification"));
 	}
 	
-	
 	@Test
 	public void should_return_true_if_there_were_no_errors_from_the_mail_manager() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
@@ -112,7 +106,6 @@ public class EmailNotifierTest {
 		EmailNotifier sut = new EmailNotifier(mailManager);
 		
 		assertTrue(sut.notify(new TestNotification()));
-		
 	}
 	
 	@Test
@@ -126,10 +119,5 @@ public class EmailNotifierTest {
 		
 		assertFalse(sut.notify(new TestNotification()));
 	}
-	
-	
-	
-	
-	
 	
 }

@@ -1,10 +1,9 @@
 package com.n4systems.taskscheduling.task;
 
-import static org.easymock.classextension.EasyMock.*;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+import static org.easymock.EasyMock.*;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.TenantBuilder;

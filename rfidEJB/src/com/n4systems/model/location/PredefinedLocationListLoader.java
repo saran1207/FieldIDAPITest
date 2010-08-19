@@ -24,7 +24,7 @@ public class PredefinedLocationListLoader extends ListLoader<PredefinedLocation>
 		archivedFilter = new TenantOnlySecurityFilter(filter);
 				
 		if(archivedState){
-			archivedFilter.toggleShowArchived();
+			archivedFilter.enableShowArchived();
 		}
 		
 		QueryBuilder<PredefinedLocation> builder = createQueryBuilder(archivedFilter);

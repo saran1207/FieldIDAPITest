@@ -12,7 +12,6 @@ public class OwnerPicker {
 
 
 	public OwnerPicker(FilteredIdLoader<BaseOrg> loader, HasOwner entity) {
-		super();
 		this.loader = loader;
 		this.entity = entity;
 	}

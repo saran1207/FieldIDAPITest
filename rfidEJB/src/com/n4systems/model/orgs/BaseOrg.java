@@ -3,6 +3,8 @@ package com.n4systems.model.orgs;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -12,10 +14,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
@@ -26,14 +30,15 @@ import com.n4systems.model.utils.GlobalID;
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable  {
+public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable {
+
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
 	public static final String CUSTOMER_ID_FILTER_PATH = "customerOrg.id";
 	public static final String DIVISION_ID_FILTER_PATH = "divisionOrg.id";
 	
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("tenant.id", "", null, null);
+		return new SecurityDefiner("tenant.id", "", null, "state");
 	}
 	
 	@Column(name="name", nullable = false, length = 255)
@@ -61,6 +66,9 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	@Column(name="global_id", nullable=false, unique=true)
 	private String globalId;
 	
+	@Enumerated(EnumType.STRING)
+	private EntityState state = EntityState.ACTIVE;
+
 	public BaseOrg() {}
 	
 	@Override
@@ -236,5 +244,49 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
 		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, this);
+	}
+	
+	public void activateEntity() {
+		state = EntityState.ACTIVE;
+	}
+
+	public void archiveEntity() {
+		state = EntityState.ARCHIVED;
+	}
+
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public EntityState getEntityState() {
+		return state;
+	}
+
+	public void retireEntity() {
+		state = EntityState.RETIRED;
+	}
+	
+	public void setRetired( boolean retired ) {
+		if( retired ) {
+			retireEntity();
+		} else  {
+			activateEntity();
+		}
+	}
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isRetired() {
+		return state == EntityState.RETIRED;
+	}
+
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isActive() {
+		return state == EntityState.ACTIVE;
+	}
+	
+	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	public boolean isArchived() {
+		return state == EntityState.ARCHIVED;
+	}
+	
+	public void setState(EntityState state) {
+		this.state = state;
 	}
 }

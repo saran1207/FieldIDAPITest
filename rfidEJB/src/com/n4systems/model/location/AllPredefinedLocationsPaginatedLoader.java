@@ -18,7 +18,7 @@ public class AllPredefinedLocationsPaginatedLoader extends PaginatedLoader<Prede
 		
 		archivedFilter = new TenantOnlySecurityFilter(filter);
 		if (archivedState) {
-			archivedFilter.toggleShowArchived();
+			archivedFilter.enableShowArchived();
 		}
 		
 		QueryBuilder<PredefinedLocation> predefinedLocationBuilder = new QueryBuilder<PredefinedLocation>(PredefinedLocation.class, archivedFilter);

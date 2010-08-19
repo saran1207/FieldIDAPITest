@@ -45,7 +45,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setSavedReportId(savedReport.getId());
 		container.setSavedReportModified(false);
 		if (savedReport.getLongCriteria(SavedReport.OWNER_ID) != null) {
-			container.setOwner(loaderFactory.createFilteredIdLoader(BaseOrg.class).setId(savedReport.getLongCriteria(SavedReport.OWNER_ID)).load());
+			container.setOwner(loaderFactory.createEntityByIdLoader(BaseOrg.class).setId(savedReport.getLongCriteria(SavedReport.OWNER_ID)).load());
 		}
 		
 		return container;

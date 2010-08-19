@@ -1,7 +1,7 @@
 package com.n4systems.model.safetynetwork;
 
-import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
+import static org.easymock.EasyMock.*;
 
 import org.junit.After;
 import org.junit.Before;

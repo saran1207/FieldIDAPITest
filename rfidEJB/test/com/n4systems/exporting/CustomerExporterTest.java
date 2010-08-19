@@ -2,7 +2,6 @@ package com.n4systems.exporting;
 
 
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import java.util.Arrays;
 import java.util.HashMap;

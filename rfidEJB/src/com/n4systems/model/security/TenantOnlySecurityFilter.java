@@ -9,7 +9,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 	private final Long tenantId;
-	private boolean showArchived=false;
+	private boolean showArchived = false;
 	
 	public TenantOnlySecurityFilter(Long tenantId) {
 		this.tenantId = tenantId;
@@ -78,7 +78,12 @@ public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 		return false;
 	}
 	
-	public void toggleShowArchived(){
-		 showArchived=true;
+	public void enableShowArchived(){
+		 showArchived = true;
+	}
+	
+	public TenantOnlySecurityFilter setShowArchived(boolean showArchived) {
+		this.showArchived = showArchived;
+		return this;
 	}
 }

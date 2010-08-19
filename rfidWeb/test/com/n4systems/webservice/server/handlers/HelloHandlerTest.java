@@ -2,7 +2,6 @@ package com.n4systems.webservice.server.handlers;
 
 import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
-import static org.easymock.classextension.EasyMock.*;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;

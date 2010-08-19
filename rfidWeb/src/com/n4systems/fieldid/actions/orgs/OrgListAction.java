@@ -30,12 +30,11 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		super(persistenceManager);
 	}
 
-	
 	public void prepare() throws Exception {
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), ownerHolder);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), ownerHolder);
+		
 		ownerPicker.setOwnerId(getPrimaryOrg().getId());
 	}
-	
 	
 	public String doShow() {
 		if (getOwner() == null) {
@@ -44,21 +43,17 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		return SUCCESS;
 	}
 
-
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
-
 
 	public Long getOwnerId() {
 		return ownerPicker.getOwnerId();
 	}
 
-
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-	
 	
 	public List<ListingPair> getOrgs() {
 		List<Listable<Long>> orgList = new InternalOrgLister(getOrgType(), getLoaderFactory().createFilteredListableLoader(SecondaryOrg.class), getPrimaryOrg()).getInternalOrgs();
@@ -69,14 +64,9 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		
 		return ListHelper.longListableToListingPair(orgList);
 	}
-
-
-	
 	
 	public List<ListingPair> getCustomers() {
-		
 		List<Listable<Long>> customerList = new CustomerOrgLister(getOrgType(), getLoaderFactory().createBaseParentFilterLoader()).getCustomerList(getOwner());
-		
 		
 		if (getOwner().getCustomerOrg() != null && !customerList.contains(new SimpleListable<Long>(getOwner().getCustomerOrg()))) {
 			customerList.add(new SimpleListable<Long>(getOwner().getCustomerOrg()));
@@ -88,16 +78,11 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		return ListHelper.longListableToListingPair(customerList);
 	}
 
-
 	private boolean selectFirstCustomer(List<Listable<Long>> customerList) {
 		return !isCustomerBlankValueRequired() && getOwner().isInternal() && !customerList.isEmpty();
 	}
-	
-	
-	
 
 	private boolean isCustomerBlankValueRequired() {
-		
 		if (orgTypeFilter.equalsIgnoreCase("customer")) {
 			return false;
 		}
@@ -106,7 +91,6 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		}		
 		return true;
 	}
-
 
 	public List<ListingPair> getDivisions() {
 		List<Listable<Long>> divisionList = new ArrayList<Listable<Long>>();
@@ -122,15 +106,11 @@ public class OrgListAction extends AbstractAction implements Preparable {
 			divisionList.add(getOwner().getDivisionOrg());
 		}
 		return ListHelper.longListableToListingPair(divisionList);
-		
 	}
-
 
 	private List<Listable<Long>> divisionListForCustomer(CustomerOrg customer) {
 		return getLoaderFactory().createBaseParentFilterLoader().setClazz(DivisionOrg.class).setParent(customer).load();
 	}
-
-	
 
 	private boolean isDivisionListRequired() {
 		if (orgTypeFilter.equalsIgnoreCase("internal") || orgTypeFilter.equalsIgnoreCase("customer") || orgTypeFilter.equalsIgnoreCase("primary") || orgTypeFilter.equalsIgnoreCase("secondary")) {
@@ -138,7 +118,6 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		}
 		return true;
 	}
-
 
 	private boolean isDivisionBlankValueRequired() {
 		if (getOwner().isInternal()) {
@@ -150,16 +129,13 @@ public class OrgListAction extends AbstractAction implements Preparable {
 		return false;
 	}
 
-
 	private SimpleListable<Long> getBlankValue() {
 		return new SimpleListable<Long>(-1L, "");
 	}
 
-
 	public String getOrgTypeFilter() {
 		return orgTypeFilter;
 	}
-
 
 	public void setOrgTypeFilter(String orgTypeFilter) {
 		if (orgTypeFilter == null || orgTypeFilter.trim().length() == 0) {
