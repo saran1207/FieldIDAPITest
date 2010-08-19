@@ -3,8 +3,6 @@ package com.n4systems.model.orgs;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -19,8 +17,7 @@ import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
@@ -30,7 +27,7 @@ import com.n4systems.model.utils.GlobalID;
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable {
+public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable {
 
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
@@ -66,9 +63,6 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 	@Column(name="global_id", nullable=false, unique=true)
 	private String globalId;
 	
-	@Enumerated(EnumType.STRING)
-	private EntityState state = EntityState.ACTIVE;
-
 	public BaseOrg() {}
 	
 	@Override
@@ -246,47 +240,4 @@ public abstract class BaseOrg extends EntityWithTenant implements NamedEntity, L
 		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, this);
 	}
 	
-	public void activateEntity() {
-		state = EntityState.ACTIVE;
-	}
-
-	public void archiveEntity() {
-		state = EntityState.ARCHIVED;
-	}
-
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public EntityState getEntityState() {
-		return state;
-	}
-
-	public void retireEntity() {
-		state = EntityState.RETIRED;
-	}
-	
-	public void setRetired( boolean retired ) {
-		if( retired ) {
-			retireEntity();
-		} else  {
-			activateEntity();
-		}
-	}
-	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public boolean isRetired() {
-		return state == EntityState.RETIRED;
-	}
-
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public boolean isActive() {
-		return state == EntityState.ACTIVE;
-	}
-	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public boolean isArchived() {
-		return state == EntityState.ARCHIVED;
-	}
-	
-	public void setState(EntityState state) {
-		this.state = state;
-	}
 }

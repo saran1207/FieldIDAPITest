@@ -18,12 +18,9 @@ import com.opensymphony.xwork2.validator.ActionValidatorManager;
 import com.opensymphony.xwork2.validator.ActionValidatorManagerFactory;
 
 public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
-
 	
 	private ActionValidatorManager avm;
 	private SignUpCrudExtension signUpCrud;
-
-
 
 	@Before
 	public void createObjectFactory() {
@@ -46,19 +43,14 @@ public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
 		signUpCrud.setSignUp(signUpRequest);
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_validate_tenant_name_invalid_with_characters() throws Exception {
-		
 		signUpCrud.getSignUp().setTenantName("a_a");
 		avm.validate(signUpCrud,"");
-	    
 		
 		assertThat(signUpCrud.getFieldErrors(), hasKey("signUp.tenantName"));
 	}
-
-	
 	
 	@SuppressWarnings("unchecked")
 	@Test
@@ -73,8 +65,6 @@ public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_validate_tenant_to_not_blank_required() throws Exception {
-		
-		
 		signUpCrud.getSignUp().setTenantName("");
 		avm.validate(signUpCrud,"");
 	    
@@ -84,7 +74,6 @@ public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_validate_tenant_is_required() throws Exception {
-		
 		signUpCrud.getSignUp().setTenantName(null);
 		avm.validate(signUpCrud,"");
 	    
@@ -93,22 +82,15 @@ public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
 		// ensure multiple validations.
 		assertThat(signUpCrud.getFieldErrors().size(), greaterThan(1));
 	}
-	
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_validate_tenant_as_valid() throws Exception {
-		
 		signUpCrud.getSignUp().setTenantName("agoodtenantname");
 		avm.validate(signUpCrud,"");
 	    
 		assertThat(signUpCrud.getFieldErrors(), not(hasKey("signUp.tenantName")));
 	}
-	
-
-
-	
-	
 	
 	private final class SignUpCrudExtension extends SignUpCrud {
 		private SignUpCrudExtension(PersistenceManager persistenceManager) {
@@ -120,18 +102,10 @@ public class VaildiationsForSignUpCrud extends ConfigContextRequiredTestCase {
 		}
 	}
 
-
-
-
-
-
 	private class SuccessfulTenantUniqueAvailableNameLoader extends TenantNameAvailabilityChecker {
-
 		@Override
 		public boolean isAvailable(String name) {
 			return true;
 		}
-
-		
 	}
 }

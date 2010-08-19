@@ -62,4 +62,8 @@ abstract public class ArchivableEntityWithTenant extends EntityWithTenant implem
 	public boolean isArchived() {
 		return state == EntityState.ARCHIVED;
 	}
+	
+	public void setState(EntityState state) {
+		this.state = state;
+	}
 }
