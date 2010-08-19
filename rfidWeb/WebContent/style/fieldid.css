@@ -1610,33 +1610,28 @@ input.description {
 	font-size: 10px;
 }
 
-#headerBackground {
-	background: url(../images/header-bg.png) repeat-x;
+#listContainer {
 	float:right;
-	clear:both;
-	max-width: 44.003em;
-	margin-bottom:0.8em;
+    overflow: hidden;
+    display: inline-block;
 }
 
-
-#headerBackground .listOfLinks {
-	position:relative;
-	top:7px;
-	margin-top:0px;
-	text-align:center;
-	margin-left:auto;
-	margin-right:auto;
+#listContainer .listOfLinks {
+	background: url(../images/header-bg.png);
+	padding: 0.5em;
+	margin: 0 0 0.5em 0;
+	float:right;
 }
 
-#headerBackground .listOfLinks a, #headerBackground .listOfLinks a:visited {
+#listContainer .listOfLinks a, #listContainer .listOfLinks a:visited {
 	color: #E28500;
 }
 
-#headerBackground .listOfLinks a:hover {
+#listContainer .listOfLinks a:hover {
 	color: #BC6F00;
 }
 
-#headerBackground .listOfLinks li {
+#listContainer .listOfLinks li {
 	border:none;
 }
 

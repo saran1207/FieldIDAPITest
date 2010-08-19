@@ -2,7 +2,7 @@
 <div id="pageHeader">
 	
 		<div id="pageActions" style="float:none;">
-		<div id="headerBackground" >
+		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
 					<@s.text name="label.welcome"/>, ${sessionUser.userID} 
@@ -12,7 +12,7 @@
 				</li>
 					<#if sessionUser.employeeUser>
 						<li>
-		  					<a href="http://www.fieldid.com/partners" onclick:target="_blank"><@s.text name="label.invite"/></a>
+		  					<a href="<@s.url action="invite" namespace="/"/>" onclick:target="_blank"><@s.text name="label.invite"/></a>
 						</li>
 					<#elseif sessionUser.anEndUser>
 						<li>
@@ -24,7 +24,7 @@
 				</li>
 				<#if userSecurityGuard.allowedAccessWebStore>
 					<li>
-			  			<a href="<@s.url action="redirectToWebStore"  namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
+			  			<a href="<@s.url action="redirectToWebStore" namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
 			  		</li>
 				</#if>
 				<li>
@@ -34,7 +34,7 @@
 					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
 				</li>
 	  		</ul>
-  		</div>
+	  	</div>
   	</div> 
 
 	<#include "_companyLogo.ftl"/>
