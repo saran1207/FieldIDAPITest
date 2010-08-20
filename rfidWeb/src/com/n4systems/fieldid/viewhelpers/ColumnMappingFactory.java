@@ -9,13 +9,15 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.log4j.Logger;
+
 import com.n4systems.model.Tenant;
 import com.n4systems.util.properties.HierarchicalProperties;
 import com.n4systems.util.properties.HirarchicalPropertiesLoader;
 
 public class ColumnMappingFactory {
 	private static final ConcurrentMap<Class<?>, SortedSet<ColumnMappingGroup>> classDataMap = new ConcurrentHashMap<Class<?>, SortedSet<ColumnMappingGroup>>();
-	
+	private static final Logger logger = Logger.getLogger(ColumnMappingFactory.class);
 	
 	// all methods static, hide constructor
 	private ColumnMappingFactory() {}
@@ -70,19 +72,23 @@ public class ColumnMappingFactory {
 		String groupId;
 		for(HierarchicalProperties props: properties.getPropertiesList("mapping")) {
 			groupId = props.getString("group");
-			groups.get(groupId).getMappings().add(
-				new ColumnMapping(
-					props.getParent(), 
-					props.getString("label"), 
-					props.getString("pathExpression"),
-					props.getString("sortExpression"),
-					props.getString("outputHandler"),
-					props.getBoolean("sortable"), 
-					props.getBoolean("onByDefault"), 
-					props.getInteger("order"), 
-					props.getString("requiredExtendedFeature")
-				)
-			);
+			try {
+				groups.get(groupId).getMappings().add(
+					new ColumnMapping(
+						props.getParent(), 
+						props.getString("label"), 
+						props.getString("pathExpression"),
+						props.getString("sortExpression"),
+						props.getString("outputHandler"),
+						props.getBoolean("sortable"), 
+						props.getBoolean("onByDefault"), 
+						props.getInteger("order"), 
+						props.getString("requiredExtendedFeature")
+					)
+				);
+			} catch (NullPointerException e) {
+				logger.error(String.format("Unable to create column mapping: group=%s, properties=%s", groupId, props), e);
+			}
 		}
 		
 		// convert the values of our map into a treeset
