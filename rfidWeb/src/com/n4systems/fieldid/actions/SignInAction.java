@@ -82,7 +82,8 @@ public class SignInAction extends AbstractAction {
 		if (signIn.isNormalLogin()) {
 			loginUser = userManager.findUser(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
 		} else {
-			loginUser = userManager.findUser(getSecurityGuard().getTenantName(), signIn.getSecureRfid());
+			//Being uppercased since that's what happens on the user before we hash the rfid value. 
+			loginUser = userManager.findUser(getSecurityGuard().getTenantName(), signIn.getSecureRfid().toUpperCase());
 		}
 		return loginUser;
 	}
