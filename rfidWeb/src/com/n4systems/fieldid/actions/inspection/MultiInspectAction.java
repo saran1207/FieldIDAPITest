@@ -47,9 +47,6 @@ public class MultiInspectAction extends AbstractCrud {
 	private Inspection inspection;
 	
 	private final InspectionFormHelper inspectionFormHelper;
-	
-	
-	
 	private List<Product> assets;
 
 	private UserManager userManager;
@@ -61,7 +58,6 @@ public class MultiInspectAction extends AbstractCrud {
 	private InspectionWebModel modifiableInspection;
 	private MultiInspectGroupSorter multiInspectGroupSorter;
 	private List<Listable<Long>> employees;
-	
 
 	public MultiInspectAction(PersistenceManager persistenceManager, UserManager userManager) {
 		super(persistenceManager);
@@ -69,7 +65,6 @@ public class MultiInspectAction extends AbstractCrud {
 		this.inspectionFormHelper = new InspectionFormHelper();
 	}
 	
-
 	@Override
 	protected void initMemberFields() {
 		inspection = new Inspection();
@@ -86,21 +81,20 @@ public class MultiInspectAction extends AbstractCrud {
 	protected void postInit() {
 		super.postInit();
 		commonInspectionTypeHandler = createCommonInspectionTypeHandler();
-		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
+		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
 		overrideHelper(new MultiInspectActionHelper(getLoaderFactory()));
 	}
 	
-	public void testDependancies() {
+	public void testDependencies() {
 		if (getAssets() == null || getAssets().isEmpty()) {
 			addActionErrorText("error.no_assets_given");
 			throw new MissingEntityException("no assets given");
 		}
 	}
 	
-	
 	@SkipValidation
 	public String doInspectionTypes() {
-		testDependancies();
+		testDependencies();
 		return SUCCESS;
 	}
 
@@ -110,7 +104,7 @@ public class MultiInspectAction extends AbstractCrud {
 
 	@SkipValidation
 	public String doPerformEvent() {
-		testDependancies();
+		testDependencies();
 		
 		commonAssetValues = new CommonAssetValuesFinder(getAssets()).findCommonValues();
 		inspection.setOwner(commonAssetValues.owner);
@@ -120,14 +114,11 @@ public class MultiInspectAction extends AbstractCrud {
 		modifiableInspection.updateValuesToMatch(inspection);
 		
 		return SUCCESS;
-		
 	}
-	
 	
 	public String doInspectionCheck() {
 		return SUCCESS;
 	}
-	
 
 	public List<Long> getAssetIds() {
 		return assetIds;
@@ -139,7 +130,6 @@ public class MultiInspectAction extends AbstractCrud {
 		}
 		return eventTypes;
 	}
-
 
 	public Long getType() {
 		return inspectionType != null ? inspectionType.getId() : null;
@@ -188,16 +178,13 @@ public class MultiInspectAction extends AbstractCrud {
 		return inspection;
 	}
 
-	
 	public void setInspection(Inspection inspection) {
 		this.inspection = inspection;
 	}
-	
 
 	public InspectionFormHelper getInspectionFormHelper() {
 		return inspectionFormHelper;
 	}
-	
 	
 	public List<Listable<Long>> getCommentTemplates() {
 		if (commentTemplates == null) {
@@ -205,7 +192,6 @@ public class MultiInspectAction extends AbstractCrud {
 		}
 		return commentTemplates;
 	}
-
 
 	public List<ProductStatusBean> getProductStatuses() {
 		if (productStatuses == null) {
@@ -226,7 +212,6 @@ public class MultiInspectAction extends AbstractCrud {
 		return commonAssetValues.productStatus != null ? commonAssetValues.productStatus.getUniqueID() : null;
 	}
 	
-
 	@VisitorFieldValidator(message="")
 	public InspectionWebModel getModifiableInspection() {
 		if (modifiableInspection == null) {

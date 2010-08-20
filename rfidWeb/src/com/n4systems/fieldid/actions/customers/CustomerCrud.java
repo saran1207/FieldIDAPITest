@@ -302,5 +302,9 @@ public class CustomerCrud extends AbstractCrud {
 			return "customerList";
 		}
 	}
+	
+	public void setArchivedOnly(boolean archivedOnly) {
+		this.archivedOnly = archivedOnly;
+	}
 
 }

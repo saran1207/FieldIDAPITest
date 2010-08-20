@@ -9,7 +9,6 @@
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
-
 		</global-results>
 
 		<action name="setup" class="com.n4systems.fieldid.actions.SetupAction">
@@ -17,8 +16,6 @@
 			<result name="error" type="freemarker">/templates/html/setup/view.ftl</result>
 			<result name="input" type="freemarker">/templates/html/setup/view.ftl</result>
 		</action>
-
-
 
 		<action name="productTypes" method="list" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
 			<result name="success" type="freemarker">/templates/html/productTypeCrud/list.ftl</result>
@@ -32,7 +29,6 @@
 		<action name="productTypeEdit" method="loadEdit" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
 			<result name="input" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productTypeCrud/form.ftl</result>
-
 		</action>
 
 		<action name="productTypeUpdate" method="save" class="com.n4systems.fieldid.actions.product.ProductTypeCrud">

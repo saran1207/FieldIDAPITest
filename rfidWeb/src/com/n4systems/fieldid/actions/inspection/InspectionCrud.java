@@ -88,7 +88,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected final InspectionHelper inspectionHelper;
 	protected final InspectionFormHelper inspectionFormHelper; 
 	
-	
 	private InspectionGroup inspectionGroup;
 	protected Product product;
 	protected Inspection inspection;
@@ -124,12 +123,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private String proofTestDirectory;
 	private boolean newFile = false;
 	
-	
 	private List<WebInspectionSchedule> nextSchedules = new ArrayList<WebInspectionSchedule>();
 	
 	private User assignedTo;
 	private boolean assignToSomeone = false;
-	
 	
 	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager,
 			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
@@ -179,12 +176,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@Override
 	protected void postInit() {
 		super.postInit();
-		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
+		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
 		overrideHelper(new InspectionCrudHelper(getLoaderFactory()));
 	}
 	
-
-	protected void testDependices() throws MissingEntityException {
+	protected void testDependencies() throws MissingEntityException {
 		if (inspection == null) {
 			addActionError(getText("error.noinspection"));
 			throw new MissingEntityException();
@@ -259,7 +255,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doAdd() {
-		testDependices();
+		testDependencies();
 
 		// set defaults.
 		inspection.setProductStatus(product.getProductStatus());
@@ -313,7 +309,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@NetworkAwareAction
 	public String doShow() {
 		product = inspection != null ? inspection.getProduct() : null;
-		testDependices();
+		testDependencies();
 
 		inspectionGroup = inspection.getGroup();
 		return SUCCESS;
@@ -324,7 +320,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public String doEdit() {
 		try {
 			setProductId(inspection.getProduct().getId());
-			testDependices();
+			testDependencies();
 		} catch (NullPointerException e) {
 			return MISSING;
 		}
@@ -358,7 +354,6 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 	}
 
-	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doCreate() {
 		return save();
@@ -366,13 +361,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doUpdate() {
-		
 		return save();
 	}
 	
 	private String save() {
 		try {
-			testDependices();
+			testDependencies();
 		} catch (MissingEntityException e) {
 			return MISSING;
 		}
@@ -552,7 +546,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doDelete() {
 		try {
-			testDependices();
+			testDependencies();
 		} catch (MissingEntityException e) {
 			return MISSING;
 		}

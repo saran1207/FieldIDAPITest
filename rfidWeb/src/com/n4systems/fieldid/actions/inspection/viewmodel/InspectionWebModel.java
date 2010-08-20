@@ -19,27 +19,21 @@ public class InspectionWebModel implements UserDateFormatValidator {
 	private final OwnerPicker ownerPicker;
 	private final SessionUserDateConverter dateConverter;
 	
-	
 	private LocationWebModel location;
 	
 	private Date utcDatePerformed;
 	private String datePerformed;
 	
-	
-
 	public InspectionWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
-		super();
 		this.ownerPicker = ownerPicker;
 		this.dateConverter = dateConverter;
 		this.location = new LocationWebModel(loaderFactoryProvider);
 	}
 
-
 	public Long getOwnerId() {
 		return ownerPicker.getOwnerId();
 	}
 
-	
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
@@ -48,21 +42,16 @@ public class InspectionWebModel implements UserDateFormatValidator {
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
-	
-	
-	
 
 	public LocationWebModel getLocation() {
 		return location;
 	}
-	
 	
 	public void updateValuesToMatch(Inspection inspection) {
 		location = location.matchLocation(inspection.getAdvancedLocation());
 		ownerPicker.updateOwner(inspection.getOwner());
 		utcDatePerformed = inspection.getDate();
 	}
-	
 	
 	public void pushValuesTo(Inspection inspection) {
 		inspection.setAdvancedLocation(location.createLocation());

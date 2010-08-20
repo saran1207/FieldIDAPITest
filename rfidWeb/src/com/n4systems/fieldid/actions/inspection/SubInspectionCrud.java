@@ -96,7 +96,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 		
 		try {
-			testDependices();
+			testDependencies();
 		} catch (MissingEntityException e) {
 			return MISSING;
 		}
