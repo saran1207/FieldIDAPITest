@@ -1138,6 +1138,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private void populate(BaseOrg baseOrg, AbstractBaseOrgServiceDTO baseOrgDto) {
 		baseOrgDto.setId(baseOrg.getId());
 		baseOrgDto.setName(baseOrg.getName());
+		baseOrgDto.setDeleted(!baseOrg.isActive());
 	}
 
 	private void populate(BaseOrg baseOrg, AbstractExternalOrgServiceDTO baseOrgDto) {

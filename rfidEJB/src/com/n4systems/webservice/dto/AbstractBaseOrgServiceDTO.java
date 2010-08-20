@@ -4,6 +4,7 @@ public class AbstractBaseOrgServiceDTO {
 
 	private Long id;
 	private String name;
+	private boolean deleted;
 	
 	public Long getId() {
 		return id;
@@ -16,5 +17,11 @@ public class AbstractBaseOrgServiceDTO {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

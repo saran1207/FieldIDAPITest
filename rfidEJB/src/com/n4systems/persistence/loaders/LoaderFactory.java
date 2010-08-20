@@ -28,6 +28,7 @@ import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
+import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
 import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
@@ -167,6 +168,10 @@ public class LoaderFactory {
 
 	public CustomerOrgPaginatedLoader createCustomerOrgPaginatedLoader() {
 		return new CustomerOrgPaginatedLoader(filter);
+	}
+
+	public CustomerOrgWithArchivedPaginatedLoader createCustomerOrgWithArchivedPaginatedLoader() {
+		return new CustomerOrgWithArchivedPaginatedLoader(filter);
 	}
 
 	public DivisionOrgByCustomerListLoader createDivisionOrgByCustomerListLoader() {

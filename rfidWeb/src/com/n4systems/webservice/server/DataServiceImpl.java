@@ -64,6 +64,7 @@ import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.InternalOrg;
@@ -545,9 +546,10 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 									
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
-			CustomerOrgPaginatedLoader loader = loaderFactory.createCustomerOrgPaginatedLoader();
+			CustomerOrgWithArchivedPaginatedLoader loader = loaderFactory.createCustomerOrgWithArchivedPaginatedLoader();
 			loader.setPageSize(getSetupDataPageSize());
 			loader.setPage(currentPage);
+			loader.withArchivedState();
 			
 			Pager<CustomerOrg> pager = loader.load();
 			
@@ -574,6 +576,7 @@ public class DataServiceImpl implements DataService {
 			DivisionOrgPaginatedLoader loader = loaderFactory.createDivisionOrgPaginatedLoader();
 			loader.setPageSize(getSetupDataPageSize());
 			loader.setPage(currentPage);
+			loader.withArchivedState();
 			
 			Pager<DivisionOrg> pager = loader.load();
 			
