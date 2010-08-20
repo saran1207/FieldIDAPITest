@@ -12,7 +12,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldid.viewhelpers.PredefinedLocationCrudHelper;
 import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
@@ -28,7 +27,6 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 	private Logger logger = Logger.getLogger(PredefinedLocationCrud.class);
 	private static final long serialVersionUID = 1L;
 	private PredefinedLocation predefinedLocation;
-	private PredefinedLocationLevels predefinedLocationLevels;
 	private PredefinedLocation parentNode;
 	private String name;
 	private Long parentId;

@@ -9,11 +9,13 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.users.ChangePasswordCrud;
+import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.model.user.User;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-public class ChangeSecurityCard extends AbstractCrud {
+public class ChangeSecurityCard extends AbstractCrud implements HasDuplicateRfidValidator {
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,17 +62,24 @@ public class ChangeSecurityCard extends AbstractCrud {
 		return SUCCESS;
 	}
 
+	
 	public String getSecurityCardNumber() {
 		return securityCardNumber;
 	}
 	
 	
 	@StringLengthFieldValidator(type=ValidatorType.FIELD, message = "" , key = "errors.securitycardlength", minLength="16")
+	@CustomValidator(type = "duplicateRfidValidator", message = "", key = "errors.data.rfidduplicate")
 	public void setSecurityCardNumber(String securityCardNumber) {
 		if (securityCardNumber == null || securityCardNumber.trim().length() == 0) {
 			this.securityCardNumber = null;
 		} else {
 			this.securityCardNumber = securityCardNumber;
 		}
+	}
+
+	@Override
+	public boolean validateRfid(String formValue) {
+		return !userManager.userRfidIsUnique(getTenantId(), formValue, getSessionUserId());
 	}
 }

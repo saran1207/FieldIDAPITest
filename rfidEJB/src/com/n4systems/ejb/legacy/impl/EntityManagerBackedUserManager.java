@@ -23,6 +23,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
@@ -117,7 +118,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		}
 
 		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
-		queryBuilder.addSimpleWhere("hashSecurityCardNumber", userRfid);
+		queryBuilder.addSimpleWhere("hashSecurityCardNumber",  EncryptionUtility.getSHA1HexHash(userRfid.toUpperCase()));
 
 		if (currentUserId != null) {
 			queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);

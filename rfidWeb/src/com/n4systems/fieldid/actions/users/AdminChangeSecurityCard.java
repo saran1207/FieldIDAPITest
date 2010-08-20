@@ -10,13 +10,15 @@ import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.users.ChangePasswordCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
-public class AdminChangeSecurityCard extends AbstractCrud {
+public class AdminChangeSecurityCard extends AbstractCrud  implements HasDuplicateRfidValidator  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,6 +27,7 @@ public class AdminChangeSecurityCard extends AbstractCrud {
 	private User user;
 
 	private String securityCardNumber;
+
 
 	private UserManager userManager;
 
@@ -55,7 +58,7 @@ public class AdminChangeSecurityCard extends AbstractCrud {
 		if( getSessionUser().hasAccess("managesystemusers") && user != null) {
 			try {
 				
-				user.assignSecruityCardNumber(securityCardNumber);
+				user.assignSecruityCardNumber(getSecurityCardNumber());
 				userManager.updateUser(user);
 			} catch (DuplicateUserException e) {}
 				
@@ -76,6 +79,16 @@ public class AdminChangeSecurityCard extends AbstractCrud {
 		} else {
 			this.securityCardNumber = securityCardNumber;
 		}
+	}
+	
+	@CustomValidator(type = "duplicateRfidValidator", message = "", key = "errors.data.rfidduplicate")
+	public String getSecurityCardNumber() {
+		return securityCardNumber;
+	}
+
+	@Override
+	public boolean validateRfid(String formValue) {
+		return !userManager.userRfidIsUnique(getTenantId(), formValue, uniqueID);
 	}
 	
 }
