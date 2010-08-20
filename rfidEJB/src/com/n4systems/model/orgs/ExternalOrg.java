@@ -21,9 +21,6 @@ abstract public class ExternalOrg extends BaseOrg {
 	
 	private String code;
 	
-	@Column(name="legacy_id", nullable=true)
-	private Long legacyId;
-	
 	@Embedded
 	@AttributeOverrides({ 
 		@AttributeOverride(name="name", column = @Column(name="contactname")),
@@ -92,11 +89,6 @@ abstract public class ExternalOrg extends BaseOrg {
 
 	public void setLinkedOrg(InternalOrg linkedOrg) {
 		this.linkedOrg = linkedOrg;
-	}
-
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
-	public Long getLegacyId() {
-		return legacyId;
 	}
 	
 }

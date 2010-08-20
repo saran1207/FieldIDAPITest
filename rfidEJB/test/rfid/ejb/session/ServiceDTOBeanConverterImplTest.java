@@ -15,7 +15,6 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +35,9 @@ import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.SecondaryOrgBuilder;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.FindOwnerByLegacyIds;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
@@ -174,17 +173,19 @@ public class ServiceDTOBeanConverterImplTest {
 		Tenant foundTenant = aTenant().build();
 		productServiceDTO.setProductTypeId( foundProductType.getId() );
 		
-		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
+		EntityManager mockEntityManager = createMock( EntityManager.class );
 		
-		EasyMock.expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
+		expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
 		if (productServiceDTO.identifiedByExists()) {
-			EasyMock.expect(mockEntityManager.find(User.class, foundUser.getId())).andReturn(foundUser);
+			expect(mockEntityManager.find(User.class, foundUser.getId())).andReturn(foundUser);
 		} 
-		EasyMock.replay( mockEntityManager );
-		converter.setEntityManager(mockEntityManager);
-		
 		
 		PrimaryOrg primaryOrg = aPrimaryOrg().onTenant(foundTenant).build();
+		expect(mockEntityManager.find(BaseOrg.class, productServiceDTO.getOwnerId())).andReturn(primaryOrg);
+		
+		
+		replay( mockEntityManager );
+		converter.setEntityManager(mockEntityManager);
 
 		TenantCache mockCache = createMock(TenantCache.class);
 		expect(mockCache.findTenant(foundTenant.getId())).andReturn(foundTenant);
@@ -192,17 +193,11 @@ public class ServiceDTOBeanConverterImplTest {
 		replay(mockCache);
 		TenantCache.setInstance(mockCache);
 		
-		FindOwnerByLegacyIds mockFindOwners = createNiceMock(FindOwnerByLegacyIds.class);	
-		expect(mockFindOwners.retrieveOwner()).andReturn(primaryOrg);
-		replay(mockFindOwners);
-		
-		converter.setFindOwner(mockFindOwners);
-		
 		product = converter.convert( productServiceDTO, product, foundTenant.getId() );
 		
 		assertAssignedValuesWereCopiedToProduct( productServiceDTO, product, foundProductType, foundTenant, primaryOrg );
 		
-		EasyMock.verify( mockEntityManager );
+		verify( mockEntityManager );
 	}
 
 	private void populateServiceDTO(ProductServiceDTO productServiceDTO) {
@@ -225,9 +220,9 @@ public class ServiceDTOBeanConverterImplTest {
 		InfoFieldBean foundInfoField = new InfoFieldBean();
 		foundInfoField.setUniqueID( 4L );
 		
-		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
-		EasyMock.expect( mockEntityManager.find( InfoFieldBean.class, foundInfoField.getUniqueID() ) ).andReturn( foundInfoField );
-		EasyMock.replay( mockEntityManager );
+		EntityManager mockEntityManager = createMock( EntityManager.class );
+		expect( mockEntityManager.find( InfoFieldBean.class, foundInfoField.getUniqueID() ) ).andReturn( foundInfoField );
+		replay( mockEntityManager );
 		converter.setEntityManager(mockEntityManager);
 		
 		infoOptionDTO.setInfoFieldId( foundInfoField.getUniqueID() );
@@ -241,7 +236,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertFalse( infoOption.isStaticData() );
 		assertEquals( new Long( 0 ), infoOption.getWeight() );
 		
-		EasyMock.verify( mockEntityManager );
+		verify( mockEntityManager );
 	}
 	
 	
@@ -259,9 +254,9 @@ public class ServiceDTOBeanConverterImplTest {
 		existingOption.setName( "static option" );
 		existingOption.setStaticData( true );
 		
-		EntityManager mockEntityManager = EasyMock.createMock( EntityManager.class );
-		EasyMock.expect( mockEntityManager.find( InfoOptionBean.class, existingOption.getUniqueID() ) ).andReturn( existingOption );
-		EasyMock.replay( mockEntityManager );
+		EntityManager mockEntityManager = createMock( EntityManager.class );
+		expect( mockEntityManager.find( InfoOptionBean.class, existingOption.getUniqueID() ) ).andReturn( existingOption );
+		replay( mockEntityManager );
 		converter.setEntityManager(mockEntityManager);
 		
 		infoOptionDTO.setInfoFieldId( foundInfoField.getUniqueID() - 1L );
@@ -276,7 +271,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals( new Long( 5 ), infoOption.getWeight() );
 		assertEquals( new Long( 20 ), infoOption.getUniqueID() );
 		
-		EasyMock.verify( mockEntityManager );
+		verify( mockEntityManager );
 	}
 	
 	private void assertValuesForANewProductAreAssigned(ProductServiceDTO productServiceDTO, Product product) {

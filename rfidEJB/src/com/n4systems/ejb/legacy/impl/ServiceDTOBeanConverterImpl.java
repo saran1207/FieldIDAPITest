@@ -58,7 +58,6 @@ import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.FindOwnerByLegacyIds;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
@@ -346,20 +345,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		} else {
 			targetProduct.setSerialNumber(productServiceDTO.getSerialNumber());
 		}
-
-		BaseOrg owner = null;
-		if (productServiceDTO.ownerIdExists()) {
-			owner = persistenceManager.find(BaseOrg.class, productServiceDTO.getOwnerId(), new TenantOnlySecurityFilter(tenantId));
-		} else {
-			// This is here to support mobiles before version 1.14
-			FindOwnerByLegacyIds ownerFinder = getFindOwnerByLegacyIds(tenantId);
-			ownerFinder.setLegacyCustomerId(productServiceDTO.customerExists() ? productServiceDTO.getCustomerId() : null);
-			ownerFinder.setLegacyDivisionId(productServiceDTO.divisionExists() ? productServiceDTO.getDivisionId() : null);
-			ownerFinder.setLegacyJobSiteId(productServiceDTO.jobSiteExists() ? productServiceDTO.getJobSiteId() : null);
-
-			owner = ownerFinder.retrieveOwner();
-		}
-		targetProduct.setOwner(owner);
+		
+		targetProduct.setOwner(em.find(BaseOrg.class, productServiceDTO.getOwnerId()));
 
 		targetProduct.setProductStatus(convertField(ProductStatusBean.class, productServiceDTO.getProductStatusId(), targetProduct.getProductStatus()));
 
@@ -398,11 +385,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}
 		}
 		return infoOptions;
-	}
-
-	protected FindOwnerByLegacyIds getFindOwnerByLegacyIds(long tenantId) {
-		FindOwnerByLegacyIds ownerFinder = new FindOwnerByLegacyIds(persistenceManager, tenantId);
-		return ownerFinder;
 	}
 
 	public InfoOptionBean convert(com.n4systems.webservice.dto.InfoOptionServiceDTO infoOptionServiceDTO) {
@@ -491,18 +473,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspection.setModifiedBy( performedBy );		
 		inspection.setPerformedBy( performedBy );
 
-
-		BaseOrg owner = null;
-		if (inspectionServiceDTO.ownerIdExists()) {
-			owner = persistenceManager.find(BaseOrg.class, inspectionServiceDTO.getOwnerId(), new TenantOnlySecurityFilter(tenantId));
-		} else {
-			// This is for mobile versions PRE 1.14
-			FindOwnerByLegacyIds ownerFinder = new FindOwnerByLegacyIds(persistenceManager, tenantId);
-			ownerFinder.setLegacyCustomerId(inspectionServiceDTO.customerExists() ? inspectionServiceDTO.getCustomerId() : null);
-			ownerFinder.setLegacyDivisionId(inspectionServiceDTO.divisionExists() ? inspectionServiceDTO.getDivisionId() : null);
-			ownerFinder.setLegacyJobSiteId(inspectionServiceDTO.jobSiteExists() ? inspectionServiceDTO.getJobSiteId() : null);
-			owner = ownerFinder.retrieveOwner();
-		}
+		BaseOrg owner = em.find(BaseOrg.class, inspectionServiceDTO.getOwnerId());
 		inspection.setOwner(owner);
 
 		if (inspectionServiceDTO.inspectionBookExists()) {
