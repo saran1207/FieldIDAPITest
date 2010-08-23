@@ -26,7 +26,7 @@ public class ProductSubProductsLoader extends ListLoader<Product> {
 		QueryBuilder<SubProduct> subProductQuery = null;
 		
 		for (Product product : products) {
-			subProductQuery = new QueryBuilder<SubProduct>(SubProduct.class, filter);
+			subProductQuery = new QueryBuilder<SubProduct>(SubProduct.class);
 			subProductQuery.addSimpleWhere("masterProduct", product);
 			product.setSubProducts(subProductQuery.getResultList(em));
 			productsWithSubProducts.add(product);
