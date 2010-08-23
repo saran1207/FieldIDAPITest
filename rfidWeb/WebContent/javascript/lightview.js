@@ -44,7 +44,7 @@ var Lightview = {
     menubarPadding: 6,                                     // Space between menubar and content in px
     overlay: {                                             // Overlay
       background: '#000',                                  // Background color, Mac Firefox & Mac Safari use overlay.png
-      close: true,
+      close: false,
       opacity: 0.85,
       display: true
     },

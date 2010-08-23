@@ -72,8 +72,10 @@
 	border: 1px solid #B5BACC;
 }
 
+div .treeHeading {
+	margin: 0;
+}
 
 .top .treeHeading {
 	margin:0px 0px;
-	}
-
+}
