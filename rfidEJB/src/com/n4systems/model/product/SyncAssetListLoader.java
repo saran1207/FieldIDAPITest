@@ -85,6 +85,10 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	}
 	
 	private List<SyncAsset> findProductIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
+		if (ownerIds.isEmpty() && locationIds.isEmpty()) {
+			return new ArrayList<SyncAsset>();
+		}
+		
 		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Product.class, filter, "p");
 		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "p.id", "p.modified"));
 
