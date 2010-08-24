@@ -22,7 +22,7 @@
     
     <target name="app.compile" depends="init">
     	
-        <javac destdir="${app.classes.dir}" srcdir="${src.dir}" debug="true" debuglevel="lines,source">
+        <javac destdir="${app.classes.dir}" srcdir="${src.dir}" debug="${javac.debug}" debuglevel="${javac.debuglevel}">
         	<classpath>
                 <path refid="app.lib.path" />
             </classpath>

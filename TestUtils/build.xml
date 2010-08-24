@@ -8,16 +8,15 @@
 		<delete dir="${build.test}" />
 		<delete dir="${dist}" />
 	</target>
+
 	<target name="init-dirs" depends="clean-dirs">
 		<mkdir dir="${build}" />
 		<mkdir dir="${build.test}" />
 		<mkdir dir="${dist}" />
 	</target>
 	
-	
-	
 	<target name="build" depends="init-dirs">
-		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}" debug="${javac.debug}" debuglevel="${javac.debuglevel}">
 			<classpath >
 				<fileset dir="${ear_home.test_lib}" includes="*.jar" />
 			</classpath>
@@ -27,8 +26,5 @@
 			
 		</jar>
 	</target>
-
-	
-	
 	
 </project>

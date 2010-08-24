@@ -69,7 +69,7 @@
 	</target>
 
 	<target name="compile-jar" depends="init-jar">
-		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}" debug="${javac.debug}" debuglevel="${javac.debuglevel}">
 			<classpath refid="classpath.ear" />
 			<classpath refid="classpath.jboss" />
 			<classpath >
@@ -80,7 +80,7 @@
 	</target>
 
 	<target name="compile-war" depends="init-war">
-		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}">
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}" debug="${javac.debug}" debuglevel="${javac.debuglevel}">
 			<classpath refid="classpath.deps" />
 			<classpath refid="classpath.webinf" />
 			<classpath refid="classpath.ear" />
@@ -94,7 +94,7 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}" target="${source.level}">
+		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}" target="${source.level}" debug="${javac.debug}" debuglevel="${javac.debuglevel}">
 			<classpath refid="classpath.deps" />
 			
 			<classpath path="${build}"/>
@@ -124,8 +124,6 @@
 			</batchtest>
 			
 		</junit>
-		
-		
 		
 		<fail if="junit.failure" message="Test case(s) failed. See ${reports.xml.dir}."/>
 	</target>

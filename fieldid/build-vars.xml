@@ -8,6 +8,9 @@
 
 	<property name="source.level" value="1.6" />
 
+	<property name="javac.debug" value="true" />
+	<property name="javac.debuglevel" value="lines,vars,source" />
+
 	<property name="build.home" value="../" />
 	<property name="fieldidEar.home" location="${build.home}/fieldid" />
 	<property name="fieldidEjb.home" location="${build.home}/rfidEJB" />

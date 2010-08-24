@@ -9,14 +9,13 @@
 	
 	<target name="default" depends="clean, package-jar" />
 	
-	
 	<target name="compile-tests" depends="compile-war" >
 		<copy todir="${build.test}">
 			<fileset id="test.resources" dir="${test}">
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}">
+		<javac srcdir="${test}" destdir="${build.test}" source="${source.level}" debug="${javac.debug}" debuglevel="${javac.debuglevel}">
 			<classpath refid="classpath.deps" />
 			<classpath path="${build}"/>
 			<classpath refid="classpath.ear" />
@@ -43,12 +42,8 @@
 			</batchtest>
 		</junit>
 		
-		
-		
 		<fail if="junit.failure" message="Test case(s) failed. See ${reports.xml.dir}."/>
 		
-		
 	</target>
-	
 	
 </project>

@@ -9,18 +9,13 @@
 	
 	<target name="default" depends="clean, compile-jar" />
 	
-	
 	<target name="compile-jar" depends="init-dirs">
-		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}"/>
+		<javac srcdir="${src}" destdir="${build}" source="${source.level}" target="${source.level}" debug="${javac.debug}" debuglevel="${javac.debuglevel}"/>
 						
 		<jar jarfile="${dist}/${certificateData}" basedir="${build}" level="9"/>
-			
-		
 	</target>
-	
-	
+
 	<target name="test" depends="" >
 	</target>
-	
 	
 </project>
