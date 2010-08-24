@@ -54,7 +54,7 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 		List<SyncAsset> subProductIds = findSubProductIdsForMasters(em, productIds);
 		
 		productIds.addAll(subProductIds);
-		return subProductIds;
+		return productIds;
 	}
 
 	private List<SyncAsset> findSubProductIdsForMasters(EntityManager em, List<SyncAsset> masterSyncAssets) {
