@@ -19,9 +19,11 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
@@ -37,7 +39,6 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 public class CustomerCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
-	private static final int USER_RESULTS_MAX = 100000;
 	private static Logger logger = Logger.getLogger(CustomerCrud.class);
 	
 	private final UserManager userManager;
@@ -125,39 +126,23 @@ public class CustomerCrud extends AbstractCrud {
 	}
 
 	private String setCustomerActive(boolean active) {
-		EntityState newState = active ? EntityState.ACTIVE : EntityState.ARCHIVED;
-		
-		if (!active) {
-			List<User> usersList = getUserList();
-			for (User user : usersList) {
-				user.archiveUser();
-				userManager.updateUser(user);
-			}
-		}
 
 		if (customer == null) {
 			addFlashError("Customer not found");
 			return ERROR;
 		}
 
+		// if the address info was created by our loadMemberFields, 
+		// we need to nullify it or it'll screw with the delete process
+		if (customer.getAddressInfo().isNew()) {
+			customer.setAddressInfo(null);
+		}
+
 		try {
-			// if the address info was created by our loadMemberFields, 
-			// we need to nullify it or it'll screw with the delete process
-			if (customer.getAddressInfo().isNew()) {
-				customer.setAddressInfo(null);
-			}
 			
-			customer.setState(newState);
-			
-			DivisionOrgByCustomerListLoader divisionsLoader = getLoaderFactory().createDivisionOrgByCustomerListLoader();
-			divisionsLoader.setCustomer(customer);
-			List<DivisionOrg> divisions = divisionsLoader.load();
-			for (DivisionOrg division : divisions) {
-				division.setState(newState);
-				saver.update(division);
-			}
-			
-			saver.update(customer);
+			UserSaver userSaver = new UserSaver();
+			CustomerOrgArchiver archiver = new CustomerOrgArchiver();
+			archiver.archiveCustomer(customer, userManager, saver, userSaver, getLoaderFactory(), getSecurityFilter(), active);
 			
 		} catch (Exception e) {
 			logger.error("Failed updating customer", e);
@@ -284,13 +269,6 @@ public class CustomerCrud extends AbstractCrud {
 		return internalOrgList;
 	}
 	
-	public List<User> getUserList() {
-		if (userList == null) {
-			userList = userManager.getUsers(getSecurityFilter(), true, 1, USER_RESULTS_MAX, null, UserType.CUSTOMERS, customer);
-		}
-		return userList.getList();
-	}
-
 	public CustomerOrg getCustomer() {
 		return customer;
 	}

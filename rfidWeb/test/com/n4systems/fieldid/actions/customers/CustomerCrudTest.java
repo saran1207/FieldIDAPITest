@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.actions.customers;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -87,6 +85,8 @@ public class CustomerCrudTest {
 		assertEquals(2, results.size());
 		assertEquals("CustomerOne", results.get(0).getName());
 		assertEquals("CustomerTwo", results.get(1).getName());
+		
+		verify(loaderFactory, loader);
 	}
 
 	private void setUpLoaderExpectations() {
