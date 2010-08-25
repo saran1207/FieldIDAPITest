@@ -82,7 +82,12 @@
 		<span>${action.formatDateTime(inspection.date)}</span>
 	</p>
 
-	<#include "_assigned_to.ftl"/>
+	<#if inspection.hasAssignToUpdate()>
+	<p>
+		<label><@s.text name="label.assigned_to"/></label>
+		<span>${(inspection.assignedTo.assignedUser.userLabel)!action.getText('label.unassigned')}</span>
+	</p>
+	</#if>
 
 	<p> 
 		<label><@s.text name="label.scheduledon"/></label>
