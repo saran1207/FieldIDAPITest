@@ -36,8 +36,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.assertHomePage();
 	}
 	
@@ -47,8 +47,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("adminpassword");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.assertHomePageQuickSetupWizard();
 	}
 	
@@ -58,8 +58,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("jobscompanyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.assertHomePageJobsSection();
 	}
 	
@@ -69,8 +69,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.clickViewUpcomingInspections();
 		schedule.assertSchedulesSearchResultsPageHeader();
 	}
@@ -81,8 +81,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.clickViewInspectionHistoryForAProduct();
 		reporting.assertReportingPageHeader();
 	}
@@ -93,8 +93,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.clickFindAProduct();
 		assets.assertAssetsPage();
 	}
@@ -105,8 +105,8 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		home.clickMoreForInstructionalVideos();
 		videos.assertInstructionalVideosPageHeader();
 	}

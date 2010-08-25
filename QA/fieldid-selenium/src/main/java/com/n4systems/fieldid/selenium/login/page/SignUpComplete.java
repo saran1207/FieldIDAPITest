@@ -2,8 +2,10 @@ package com.n4systems.fieldid.selenium.login.page;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
 
 public class SignUpComplete {
 	FieldIdSelenium selenium;
@@ -39,13 +41,9 @@ public class SignUpComplete {
 		assertTrue("Could not find '" + headerText + "'", selenium.isElementPresent(signUpCompleteHeaderLocator));
 	}
 
-	public void gotoSignInNow() {
-		if(selenium.isElementPresent(signInNowLinkLocator)) {
-			selenium.click(signInNowLinkLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			fail("Could not find the link 'Sign In Now'");
-		}
+	public LoginPage gotoSignInNow() {
+		selenium.click(signInNowLinkLocator);
+		return new LoginPage(selenium);
 	}
 
 	public String getAdminFirstName() {

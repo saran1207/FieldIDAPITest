@@ -70,8 +70,8 @@ public class LoggingInAsAdminWithDifferentTimeZonesTest extends FieldIDTestCase 
 		// Assumes all users have had their password set to the same value
 		String password = "makemore$";
 		
-		setCompany(companyName);
-		login.signInAllTheWay(userId, password);
+		startAsCompany(companyName);
+		login.signInAllTheWayToHome(userId, password);
 		login.verifySignedIn();
 		misc.gotoSignOut();
 	}

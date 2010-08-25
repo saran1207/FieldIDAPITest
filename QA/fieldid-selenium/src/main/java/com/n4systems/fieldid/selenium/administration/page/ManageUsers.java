@@ -14,9 +14,9 @@ public class ManageUsers {
 	FieldIdSelenium selenium;
 	MiscDriver misc;
 
-	public final static String UserTypeAll = "All";
-	public final static String UserTypeCustomer = "Customer";
-	public final static String UserTypeEmployee = "Employee";
+	public final static String USER_TYPE_ALL = "All";
+	public final static String USER_TYPE_CUSTOMER = "Customers";
+	public final static String USER_TYPE_EMPLOYEE = "Employee";
 	
 	private String manageUsersPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Users')]";
 	private String addEmployeeUserLinkLocator = "xpath=//A[contains(text(),'Add Employee User')]";

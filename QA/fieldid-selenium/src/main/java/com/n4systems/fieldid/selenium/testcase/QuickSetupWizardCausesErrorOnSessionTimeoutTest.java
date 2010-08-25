@@ -28,8 +28,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard() {
-		setCompany("n4");
-		login.signInAllTheWay("saunders", "makemore$");
+		startAsCompany("n4");
+		login.signInAllTheWayToHome("saunders", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		misc.forceSessionTimeout(getFieldIDDomain());
 		assertSessionTimeoutLightboxAppeared();
@@ -37,8 +37,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step1() {
-		setCompany("n4");
-		login.signInAllTheWay("saunders", "makemore$");
+		startAsCompany("n4");
+		login.signInAllTheWayToHome("saunders", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		misc.forceSessionTimeout(getFieldIDDomain());
@@ -47,8 +47,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step2() {
-		setCompany("n4");
-		login.signInAllTheWay("saunders", "makemore$");
+		startAsCompany("n4");
+		login.signInAllTheWayToHome("saunders", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
@@ -58,8 +58,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step3() {
-		setCompany("n4");
-		login.signInAllTheWay("saunders", "makemore$");
+		startAsCompany("n4");
+		login.signInAllTheWayToHome("saunders", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
@@ -70,8 +70,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_you_are_done() {
-		setCompany("n4");
-		login.signInAllTheWay("saunders", "makemore$");
+		startAsCompany("n4");
+		login.signInAllTheWayToHome("saunders", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();

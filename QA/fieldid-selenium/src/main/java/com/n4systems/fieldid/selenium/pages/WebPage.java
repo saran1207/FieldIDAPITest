@@ -1,0 +1,45 @@
+package com.n4systems.fieldid.selenium.pages;
+
+import static org.junit.Assert.*;
+
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.thoughtworks.selenium.Selenium;
+
+public class WebPage extends WebEntity {
+	
+	public static final String DEFAULT_TIMEOUT = "20000";
+
+	public WebPage(Selenium selenium, boolean waitForLoad) {
+		super(selenium);
+		if (waitForLoad) {
+			selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+			if (isOopsPage()) {
+				fail("Loaded oops page");
+			}
+		}
+	}
+
+	public WebPage(Selenium selenium) {
+		this(selenium, true);
+	}
+	
+	protected boolean isOopsPage() {
+		return selenium.isTextPresent("Oops - Page does not exist");
+	}
+	
+	protected void waitForPageToLoad() {
+		selenium.waitForPageToLoad(DEFAULT_TIMEOUT);
+		if(isOopsPage()) {
+			fail("Got an Oops page. Check Field ID logs.");
+		}
+	}
+
+	protected void waitForAjax() {
+		waitForAjax(MiscDriver.AJAX_TIMEOUT);
+	}
+
+	protected void waitForAjax(String timeout)  {
+		selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
+	}
+	
+}

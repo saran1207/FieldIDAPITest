@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 
@@ -14,7 +14,7 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 
 	private static final String TENANT_NAME_INPUT_WITH_ERROR = "css=#mainContent_signUp_tenantName.inputError";
 	private CreateAccount createAccountPage;
-	private CreateTenant signUpForm;
+	private TenantInfo signUpForm;
 	
 	@Before
 	public void getToSignUpPage() {
@@ -26,7 +26,7 @@ public class TenantNameValidationTest extends FieldIDTestCase {
 	@Before
 	public void createSignUpPageAndForm() {
 		createAccountPage = new CreateAccount(selenium, misc);
-		signUpForm = new CreateTenant("alex", "makemore$", "test Company", "a");
+		signUpForm = new TenantInfo("alex", "makemore$", "test Company", "a");
 	}
 	
 	@Test

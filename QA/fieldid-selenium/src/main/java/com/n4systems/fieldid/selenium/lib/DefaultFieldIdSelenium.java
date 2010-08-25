@@ -8,12 +8,8 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 	private final Selenium delegateSelenium;
 
 	public DefaultFieldIdSelenium(Selenium delegateSelenium) {
-		super();
 		this.delegateSelenium = delegateSelenium;
 	}
-	
-	
-	
 
 	public void waitForAjax() {
 		waitForAjax(MiscDriver.AJAX_TIMEOUT);

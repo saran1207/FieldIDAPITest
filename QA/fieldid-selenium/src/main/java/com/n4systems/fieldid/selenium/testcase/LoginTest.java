@@ -30,7 +30,7 @@ public class LoginTest extends FieldIDTestCase {
 		// this has to be a valid company ID
 		String companyID = getStringProperty("companyid");
 
-		setCompany(companyID);
+		startAsCompany(companyID);
 		login.verifyLoginPageWithNoErrors();
 	}
 	
@@ -70,10 +70,10 @@ public class LoginTest extends FieldIDTestCase {
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
-		setCompany(company);
+		startAsCompany(company);
 		login.setUserName(username);
 		login.setPassword(password);
-		login.gotoSignIn();
+		login.submitSignIn();
 		login.verifySignedIn();
 	}
 	

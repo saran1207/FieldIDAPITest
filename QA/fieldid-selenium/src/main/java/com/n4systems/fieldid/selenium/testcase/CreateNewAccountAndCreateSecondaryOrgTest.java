@@ -8,38 +8,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.page.Admin;
-import com.n4systems.fieldid.selenium.administration.page.ManageOrganizations;
-import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
 import com.n4systems.fieldid.selenium.datatypes.Organization;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
-import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.EULAPage;
+import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
+import com.n4systems.fieldid.selenium.pages.SignUpCompletePage;
+import com.n4systems.fieldid.selenium.pages.SignUpPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 
-/**
- * WEB-1498
- * 
- *
- */
 public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
-
-	Login login;
-	SignUpPackages sup;
+	
+	LoginPage loginPage;
 	CreateAccount create;
-	SignUpComplete complete;
-	Admin admin;
-	ManageOrganizations mos;
 	
 	@Before
 	public void setUp() throws Exception {
-		login = new Login(selenium, misc);
-		sup = new SignUpPackages(selenium, misc);
+		loginPage = start();
 		create = new CreateAccount(selenium, misc);
-		complete = new SignUpComplete(selenium, misc);
-		admin = new Admin(selenium, misc);
-		mos = new ManageOrganizations(selenium, misc);
 	}
 	
 	@Test
@@ -47,75 +36,57 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		String username = "darrell";
 		String password = "makemore$";
 
-		
-		createANewUnlimitedTenant(username, password);
-		returnToLogin();
-		logIntoNewTenant(username, password);
-		String orgName = addASecondaryOrganization();
-		verifySecondaryOrganizationWasAddedOkay(orgName);
-	
+		SignUpCompletePage completePage = createANewUnlimitedTenant(username, password);
+		completePage.clickSignInNow();
+		HomePage homePage = logIntoNewTenant(username, password);
+		ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOranizations();
+		String orgName = addASecondaryOrganization(orgsPage);
+		verifySecondaryOrganizationWasAdded(orgsPage, orgName);
 	}
 
-	private void verifySecondaryOrganizationWasAddedOkay(String orgName) {
-		List<String> orgs = mos.getSecondaryOrganizationNames();
+	private void verifySecondaryOrganizationWasAdded(ManageOrganizationsPage orgsPage, String orgName) {
+		List<String> orgs = orgsPage.getOrganizationNames();
 		if(!orgs.contains(orgName)) {
-			fail("Did not find newly created Secondary Organization '" + orgName + "'");
+			fail("Did not find newly created Secondary Organization '" + orgName + "' in list: " + orgs);
 		}
 	}
 
-	private String addASecondaryOrganization() {
-		misc.gotoAdministration();
-		admin.verifyAdministrationPage();
-		admin.gotoManageOrganizations();
+	private String addASecondaryOrganization(ManageOrganizationsPage orgsPage) {
+		orgsPage.clickAdd();
 		
-		mos.verifyManageOrganizationsPage();
-		mos.gotoAddSecondaryOrganization();
-		mos.waitForTenantSettingsToBeCreated();
 		String name = MiscDriver.getRandomString(15);
 		Organization o = new Organization(name);
-		mos.setSecondaryOrganization(o);
-		mos.gotoSaveAddSecondaryOrganization();
+		orgsPage.fillOrganizationForm(o);
+		orgsPage.clickSave();
 		return o.getName();
 	}
 
-	private void logIntoNewTenant(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.gotoSignIn();
-		
-		login.verifySignedInWithEULA();
-		misc.scrollToBottomOfEULA();
-		misc.gotoAcceptEULA();
-		login.verifySignedInHomePage();
+	private HomePage logIntoNewTenant(String username, String password) {
+		EULAPage eulaPage = loginPage.loginToEula(username, password);
+		eulaPage.scrollToBottomOfEULA();
+		return eulaPage.clickAcceptEULAToWizard().clickNoThanks();
 	}
 
-	private void returnToLogin() {
-		complete.gotoSignInNow();
-	}
-
-	private CreateTenant createANewUnlimitedTenant(String username, String password) {
+	private SignUpCompletePage createANewUnlimitedTenant(String username, String password) {
 		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
-		if(!login.isPlansAndPricingAvailable()) {
-			setCompany("msa");
+		if(!loginPage.isPlansAndPricingAvailable()) {
+			loginPage = startAsCompany("msa");
 		}
-		login.gotoPlansAndPricing();
+		SelectPackagePage selectPackagePage = loginPage.clickPlansAndPricingLink();
 		String packageName = "Unlimited";	// must be unlimited
-		sup.gotoSignUpNow(packageName);
-		create.verifyCreateAccountPage(packageName);
+		SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
 
-		CreateTenant t = new CreateTenant(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
 		t.setNumberOfUsers(2);
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
-		t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
-		t.setPaymentType(CreateTenant.payByPurchaseOrder);
-		t.setpurchaseOrderNumber("88888");
+		t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
+		t.setPaymentType(TenantInfo.payByPurchaseOrder);
+		t.setPurchaseOrderNumber("88888");
 
-		create.setCreateYourAccountForm(t);
-		create.submitCreateYourAccountForm();
-		
-		return t;
+		signUpPage.enterCreateAccountForm(t);
+		return signUpPage.submitCreateYourAccountForm();
 	}
 }

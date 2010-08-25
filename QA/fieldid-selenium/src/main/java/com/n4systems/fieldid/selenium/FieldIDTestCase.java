@@ -5,8 +5,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import org.junit.After;
@@ -15,6 +13,7 @@ import org.junit.Before;
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 
@@ -214,23 +213,15 @@ public abstract class FieldIDTestCase {
 		return contextRoot;
 	}
 
-	/**
-	 * The test suite will start up with whatever the System property
-	 * fieldid-companyid is set to. If it is not set it will default to
-	 * n4. If you need to change the company, use this method. This is
-	 * helpful in situations were you need to log in and out as different
-	 * tenants.
-	 * 
-	 * NOTE: if you need a tenant who is guaranteed to have a link to
-	 * Plans and Pricing, use "msa".
-	 * 
-	 * @param companyID
-	 */
-	public void setCompany(String companyID) {
+	protected LoginPage startAsCompany(String companyID) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.deleteAllVisibleCookies();
 		selenium.open(url);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		return new LoginPage(selenium);
+	}
+	
+	public LoginPage start() {
+		return startAsCompany("n4");
 	}
 	
 	protected void gotoReferralLink(String companyID, String referralCode) {

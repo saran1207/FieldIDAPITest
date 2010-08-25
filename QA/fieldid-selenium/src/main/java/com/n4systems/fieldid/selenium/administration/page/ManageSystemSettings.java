@@ -139,11 +139,9 @@ public class ManageSystemSettings {
 	}
 
 	public long getDiskSpaceCurrent() {
-		long result = 0;
 		String s = selenium.getText(currentDiskUsageLocator);
 		s = s.replaceFirst(" bytes of .*", "");					// x bytes of y MB -> x
-		result = Long.parseLong(s);
-		return result;
+		return Long.parseLong(s);
 	}
 
 	private void verifySystemSettingsPage() {

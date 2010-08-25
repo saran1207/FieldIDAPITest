@@ -9,46 +9,44 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageUsers;
 import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.SystemUser;
-import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 
 public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 
-	private Login login;
-	private Admin admin;
-	private ManageUsers mus;
+	private HomePage homePage;
 	
 	@Before
 	public void setUp() throws Exception {
-		login = new Login(selenium, misc);
-		admin = new Admin(selenium, misc);
-		mus = new ManageUsers(selenium, misc);
 		String company = getStringProperty("company");
-		setCompany(company);
-		login.signInWithSystemAccount();
+		LoginPage loginPage = startAsCompany(company);
+		homePage = loginPage.systemLogin();
 	}
 	
 	@Test
 	public void should_be_able_to_add_an_employee_user() throws Exception {
-		gotoAddAnEmployeeUser();
-		EmployeeUser eu = addAnEmployeeUser();
-		assertUserWasAdded(eu);
+		ManageUsersPage manageUsersPage = homePage.clickSetupLink().clickManageUsers();
+		manageUsersPage.clickAddEmployeeUserTab();
+		EmployeeUser eu = addAnEmployeeUser(manageUsersPage);
+		verifyUserWasAdded(manageUsersPage, eu);
 	}
 	
 	@Test
 	public void should_be_able_to_add_a_customer_user() throws Exception {
-		gotoAddACustomerUser();
-		CustomerUser cu = addACustomerUser();
-		assertUserWasAdded(cu);
+		ManageUsersPage manageUsersPage = homePage.clickSetupLink().clickManageUsers();
+		manageUsersPage.clickAddCustomerUserTab();
+		CustomerUser cu = addACustomerUser(manageUsersPage);
+		verifyUserWasAdded(manageUsersPage, cu);
 	}
 	
-	private CustomerUser addACustomerUser() {
+	private CustomerUser addACustomerUser(ManageUsersPage manageUsersPage) {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("customer-password");
 		Owner owner = someOrg();
@@ -56,37 +54,27 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		String lastName = MiscDriver.getRandomString(10);
 		String userid = firstName.toLowerCase();
 		CustomerUser cu = new CustomerUser(userid, email, password, password, owner, firstName, lastName);
-		mus.setAddCustomerUser(cu);
-		mus.gotoSaveCustomerUser();
+		manageUsersPage.setCustomerFormFields(cu);
+		manageUsersPage.clickSaveCustomerUser();
 		return cu;
 	}
 
-	private void gotoAddACustomerUser() {
-		gotoManageUsers();
-		mus.gotoAddCustomerUser();
-	}
-
-	private void gotoManageUsers() {
-		misc.gotoSetup();
-		admin.gotoManageUsers();
-	}
-
-	private void assertUserWasAdded(SystemUser user) {
+	private void verifyUserWasAdded(ManageUsersPage manageUsersPage, SystemUser user) {
 		assertTrue(user != null);
 		List<String> success = misc.getActionMessages();
 		List<String> errors = misc.getFormErrorMessages();
 		assertTrue("There were errors on the page: " + misc.convertListToString(errors), errors.size() == 0);
 		String successMessage = "User Saved";
 		assertTrue("Did not get the expected '" + successMessage + "'", success.contains(successMessage));
-		mus.gotoViewAll();
-		mus.setUserType(ManageUsers.UserTypeAll);
-		mus.setNameFilter(user.getUserid());
-		mus.gotoSearchFilter();
-		List<String> users = mus.getListOfUserIDsOnCurrentPage();
+		manageUsersPage.clickViewAllTab();
+		manageUsersPage.selectSearchUserType(ManageUsers.USER_TYPE_ALL);
+		manageUsersPage.enterSearchNameFilter(user.getUserid());
+		manageUsersPage.clickSearchButton();
+		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
 		assertTrue("Did not find the newly created user in the list of users: " + user, users.contains(user.getUserid()));
 	}
 
-	private EmployeeUser addAnEmployeeUser() {
+	private EmployeeUser addAnEmployeeUser(ManageUsersPage manageUsersPage) {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("employee-password");
 		Owner owner = someOrg();
@@ -97,14 +85,9 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		employeeUser.addPermission(EmployeeUser.create);
 		employeeUser.addPermission(EmployeeUser.safety);
 		employeeUser.addPermission(EmployeeUser.tag);
-		mus.setAddEmployeeUser(employeeUser);
-		mus.gotoSaveEmployeeUser();
+		manageUsersPage.setAddEmployeeUser(employeeUser);
+		manageUsersPage.clickSaveEmployeeUser();
 		return employeeUser;
-	}
-
-	private void gotoAddAnEmployeeUser() {
-		gotoManageUsers();
-		mus.gotoAddEmployeeUser();
 	}
 
 }

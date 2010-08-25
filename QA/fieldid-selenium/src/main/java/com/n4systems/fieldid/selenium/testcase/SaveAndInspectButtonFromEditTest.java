@@ -36,7 +36,7 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 		String companyID = getStringProperty("company");
 
 		try {
-			setCompany(companyID);
+			startAsCompany(companyID);
 			login.signInWithSystemAccount();
 			Product p = gotoEditAnAsset();
 			verifyEditAnAssetHasASaveAndInspectButtonWhichWorks(p.getSerialNumber());

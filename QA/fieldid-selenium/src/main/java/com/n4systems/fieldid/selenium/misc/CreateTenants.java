@@ -1,13 +1,16 @@
 package com.n4systems.fieldid.selenium.misc;
 
 import static org.junit.Assert.assertNotNull;
+
 import java.util.Random;
-import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
+
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
 
 public class CreateTenants {
 
@@ -34,7 +37,7 @@ public class CreateTenants {
 	 * @param promoCode
 	 * @return
 	 */
-	public CreateTenant createARandomNewTenant(String packageName, String promoCode) {
+	public TenantInfo createARandomNewTenant(String packageName, String promoCode) {
 		assertNotNull("Need a package name", packageName);
 		if(promoCode == null) {
 			promoCode = "";
@@ -49,20 +52,21 @@ public class CreateTenants {
 		create.verifyCreateAccountPage(packageName);
 
 		// most the tenant information is preset to some default
-		CreateTenant t = new CreateTenant(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
 		t.setPromoCode(promoCode);
 		if(packageName.equals(SignUpPackages.packageTypeFree)) {
-			t.setNumberOfUsers(CreateTenant.numUsersFreeAccountFlag);
+			t.setNumberOfUsers(TenantInfo.numUsersFreeAccountFlag);
 		} else {
 			t.setNumberOfUsers(r.nextInt(5)+1);	// pick a random number from 1 to 5
 			t.setPhoneSupport(r.nextBoolean());
-			t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
-			t.setPaymentType(CreateTenant.payByPurchaseOrder);
-			t.setpurchaseOrderNumber(MiscDriver.getRandomString(5));
+			t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
+			t.setPaymentType(TenantInfo.payByPurchaseOrder);
+			t.setPurchaseOrderNumber(MiscDriver.getRandomString(5));
 		}
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();
-		complete.gotoSignInNow();
+		LoginPage page = complete.gotoSignInNow();
+		t.setLoginPage(page);
 		
 		return t;
 	}

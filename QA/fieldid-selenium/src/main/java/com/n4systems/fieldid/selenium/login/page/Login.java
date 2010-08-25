@@ -4,12 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import java.util.List;
+
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.AccountSetupWizardPage;
+import com.n4systems.fieldid.selenium.pages.HomePage;
 
 public class Login {
+	
 	FieldIdSelenium selenium;
 	MiscDriver misc;
 	
@@ -49,11 +54,7 @@ public class Login {
 	 * @return tenant id or null of the tenant id could not be found.
 	 */
 	public String getCompanyName() {
-		String s = null;
-		if(selenium.isElementPresent(companyNameLocator)) {
-			s = selenium.getText(companyNameLocator);
-		}
-		return s;
+		return selenium.getText(companyNameLocator);
 	}
 	
 	/**
@@ -68,30 +69,11 @@ public class Login {
 	 * @param s the user name you want to put in text field
 	 */
 	public void setUserName(String s) {
-		if(selenium.isElementPresent(userNameLocator) && selenium.isVisible(userNameLocator)) {
-			selenium.type(userNameLocator, s);
-		} else {
-			fail("Could not locate the User Name field");
-		}
+		selenium.type(userNameLocator, s);
 	}
 
-	/**
-	 * Sets the Password field to the given string. If the Password field
-	 * cannot be located this method will call fail(). If you want to clear
-	 * the Password, call this method with a blank string, e.g. "".
-	 * 
-	 * Additionally, if the Password field is not visible this method will
-	 * call fail(). Basic logic is if the user could not do it then it should
-	 * be a fail.
-	 * 
-	 * @param s the password you want to put in text field
-	 */
 	public void setPassword(String s) {
-		if(selenium.isElementPresent(passwordLocator) && selenium.isVisible(passwordLocator)) {
-			selenium.type(passwordLocator, s);
-		} else {
-			fail("Could not locate the Password field");
-		}
+		selenium.type(passwordLocator, s);
 	}
 
 	/**
@@ -102,47 +84,22 @@ public class Login {
 	 * @return the contents of the User Name field.
 	 */
 	public String getUserName() {
-		String s = null;
-		if(selenium.isElementPresent(userNameLocator)) {
-			s = selenium.getValue(userNameLocator);
-		} else {
-			fail("Could not locate the User Name field");
-		}
-		return s;
+		return selenium.getValue(userNameLocator);
 	}
 	
-	/**
-	 * Sets the Security RFID field to the given string. If the Security RFID
-	 * field cannot be located this method will call fail(). If you want to
-	 * clear the Security RFID, call this method with a blank string, e.g. "".
-	 * 
-	 * Additionally, if the Security RFID field is not visible this method will
-	 * call fail(). Basic logic is if the user could not do it then it should
-	 * be a fail.
-	 * 
-	 * @param s the Security RFID you want to put in text field
-	 */
 	public void setSecurityRFIDNumber(String s) {
-		if(selenium.isElementPresent(securityRFIDNumberLocator )) {
-			selenium.type(securityRFIDNumberLocator, s);
-		} else {
-			fail("Could not locate the Security RFID Number field");
-		}
+		selenium.type(securityRFIDNumberLocator, s);
 	}
 	
 	/**
 	 * Check the box for remember my sign in information if input is true.
 	 * Otherwise, uncheck the box.
 	 * 
-	 * @param b
+	 * @param isRememberSignin
 	 */
-	public void setRememberMySignInInformation(boolean b) {
-		if(selenium.isElementPresent(rememberMySignInInformationLocator)) {
-			if(b)	selenium.check(rememberMySignInInformationLocator);
-			else	selenium.uncheck(rememberMySignInInformationLocator);
-		} else {
-			fail("Could not locate the remember my sign in information check box");
-		}
+	public void setRememberMySignInInformation(boolean isRememberSignin) {
+		if(isRememberSignin)	selenium.check(rememberMySignInInformationLocator);
+		else	selenium.uncheck(rememberMySignInInformationLocator);
 	}
 
 	/**
@@ -151,14 +108,8 @@ public class Login {
 	 * @return true if checked, false if unchecked
 	 */
 	public boolean getRememberMySignInInformation() {
-		boolean b = false;
-		if(selenium.isElementPresent(rememberMySignInInformationLocator)) {
-			String s = selenium.getValue(rememberMySignInInformationLocator);
-			b = s.equals("on");
-		} else {
-			fail("Could not locate the remember my sign in information check box");
-		}
-		return b;
+		String s = selenium.getValue(rememberMySignInInformationLocator);
+		return s.equals("on");
 	}
 	
 	/**
@@ -243,13 +194,12 @@ public class Login {
 	 * Clicks the Sign In button. If you want to actually sign in, you need to
 	 * make sure that the username/password or security RFID are filled in with
 	 * proper information before calling this method.
+	 * @return 
 	 * 
 	 */
-	public void gotoSignIn() {
-		if(selenium.isElementPresent(signInButtonLocator)) {
-			selenium.click(signInButtonLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		}
+	public void submitSignIn() {
+		selenium.click(signInButtonLocator);
+		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
 	/**
@@ -303,8 +253,7 @@ public class Login {
 	 * @return true if link exists, i.e. PartnerCenter is on.
 	 */
 	public boolean isRequestAnAccountAvailable() {
-		boolean b = selenium.isElementPresent(requestAnAccountLinkLocator);
-		return b;
+		return selenium.isElementPresent(requestAnAccountLinkLocator);
 	}
 	
 	/**
@@ -316,8 +265,7 @@ public class Login {
 	 * @return true if link exists, i.e. PartnerCenter is off.
 	 */
 	public boolean isPlansAndPricingAvailable() {
-		boolean b = selenium.isElementPresent(planAndPricingLinkLocator);
-		return b;
+		return selenium.isElementPresent(planAndPricingLinkLocator);
 	}
 	
 	/**
@@ -377,7 +325,7 @@ public class Login {
 		s = getUserName();
 		assertEquals("Did not get the user name I just set", username, s);
 		setPassword(password);
-		gotoSignIn();
+		submitSignIn();
 		verifySignedIn();
 	}
 
@@ -404,18 +352,28 @@ public class Login {
 		assertTrue(selenium.isElementPresent(forgotMyPasswordLinkLocator));
 	}
 
-	public void signInAllTheWay(String username, String password) {
-		submitSignIn(username, password);
+	public HomePage signInAllTheWayToHome(String username, String password) {
+		signIn(username, password);
+		return new HomePage(selenium, false);
+	}
+
+	public AccountSetupWizardPage signInAllTheWayToWizard(String username, String password) {
+		signIn(username, password);
+		return new AccountSetupWizardPage(selenium, false);
+	}
+	
+	private void signIn(String username, String password) {
+		doSignIn(username, password);
 		kickOtherSessionIfNeeded();
 		
 		acceptEULAIfNeed();
 		verifySignedIn();
 	}
 
-	public void submitSignIn(String username, String password) {
+	public void doSignIn(String username, String password) {
 		setUserName(username);
 		setPassword(password);
-		gotoSignIn();
+		submitSignIn();
 	}
 
 	private void kickOtherSessionIfNeeded() {
@@ -436,8 +394,8 @@ public class Login {
 		}
 	}
 	
-	public void signInWithSystemAccount() {
-		signInAllTheWay(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
+	public HomePage signInWithSystemAccount() {
+		return signInAllTheWayToHome(LoggedInTestCase.SYSTEM_USER_NAME, LoggedInTestCase.SYSTEM_USER_PASSWORD);
 	}
 	
 	public void signOut() {

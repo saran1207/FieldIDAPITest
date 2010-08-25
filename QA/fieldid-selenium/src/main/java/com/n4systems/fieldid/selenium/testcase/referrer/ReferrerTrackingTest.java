@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
@@ -46,19 +46,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
 		assertEquals(rowCount + 1, getNumberOfRowsInReferrerTable());
 	}
-	
-	@Test
-	public void stupid_test() throws Exception {
-		selenium.open("/fieldid/login.action");
-		selenium.waitForPageToLoad("20000");
-		selenium.open("http://msa.grumpy.n4systems.net/fieldid/");
-		selenium.waitForPageToLoad("20000");
-		Thread.sleep(10000);
-		selenium.open("/fieldid/login.action");
-		selenium.waitForPageToLoad("20000");
-		Thread.sleep(10000);
-	}
-	
+
 	@Test
 	public void should_find_new_companies_name_in_the_list_of_referred_accounts() throws Exception {
 		goToReferFieldId();
@@ -67,7 +55,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		signOutAndGoToReferalLink(referralLink);
 		
-		CreateTenant t = createANewUnlimitedTenant("admin", "password");
+		TenantInfo t = createANewUnlimitedTenant("admin", "password");
 		
 		goToReferFieldId();
 		
@@ -113,7 +101,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		return selenium.getXpathCount("//div[@id='referralsBottom']/table//tr").intValue();
 	}
 	
-	private CreateTenant createANewUnlimitedTenant(String username, String password) {
+	private TenantInfo createANewUnlimitedTenant(String username, String password) {
 		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
@@ -126,11 +114,11 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		
 		create.verifyCreateAccountPage(packageName);
 
-		CreateTenant t = new CreateTenant(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
 		
-		t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
-		t.setPaymentType(CreateTenant.payByPurchaseOrder);
-		t.setpurchaseOrderNumber("88888");
+		t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
+		t.setPaymentType(TenantInfo.payByPurchaseOrder);
+		t.setPurchaseOrderNumber("88888");
 		
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();

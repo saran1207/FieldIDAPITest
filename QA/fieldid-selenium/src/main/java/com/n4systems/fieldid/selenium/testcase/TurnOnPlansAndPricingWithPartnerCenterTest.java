@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.console.page.ConsoleLogin;
 import com.n4systems.fieldid.selenium.console.page.ConsoleOrganizations;
-import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
@@ -29,7 +29,7 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 	SignUpPackages sup;
 	CreateAccount create;
 	SignUpComplete complete;
-	CreateTenant t;
+	TenantInfo t;
 	String username = "darrell";
 	String password = "makemore$";
 	
@@ -51,7 +51,7 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 		boolean partnerCenter = true;
 		boolean showPlansAndPricing = false;
 		setTenantFeatures(partnerCenter, showPlansAndPricing);
-		setCompany(t.getCompanyName());
+		startAsCompany(t.getCompanyName());
 		verifyRequestAnAccountIsPresent();
 	}
 	
@@ -60,7 +60,7 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 		boolean partnerCenter = true;
 		boolean showPlansAndPricing = true;
 		setTenantFeatures(partnerCenter, showPlansAndPricing);
-		setCompany(t.getCompanyName());
+		startAsCompany(t.getCompanyName());
 		verifyPlansAndPricingIsPresent();
 	}
 	
@@ -69,7 +69,7 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 		boolean partnerCenter = false;
 		boolean showPlansAndPricing = true;
 		setTenantFeatures(partnerCenter, showPlansAndPricing);
-		setCompany(t.getCompanyName());
+		startAsCompany(t.getCompanyName());
 		verifyPlansAndPricingIsPresent();
 	}
 	
@@ -78,7 +78,7 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 		boolean partnerCenter = false;
 		boolean showPlansAndPricing = false;
 		setTenantFeatures(partnerCenter, showPlansAndPricing);
-		setCompany(t.getCompanyName());
+		startAsCompany(t.getCompanyName());
 		verifyPlansAndPricingIsPresent();
 	}
 	
@@ -98,24 +98,24 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 		assertTrue(login.isRequestAnAccountAvailable());
 	}
 
-	private CreateTenant createANewTenant(String username, String password) {
+	private TenantInfo createANewTenant(String username, String password) {
 		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
-		setCompany("msa");
+		startAsCompany("msa");
 		login.gotoPlansAndPricing();
 		String packageName = "Unlimited";
 		sup.gotoSignUpNow(packageName);
 		create.verifyCreateAccountPage(packageName);
 
-		CreateTenant t = new CreateTenant(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
 		
 		t.setNumberOfUsers(2);
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
-		t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
-		t.setPaymentType(CreateTenant.payByPurchaseOrder);
-		t.setpurchaseOrderNumber("88888");
+		t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
+		t.setPaymentType(TenantInfo.payByPurchaseOrder);
+		t.setPurchaseOrderNumber("88888");
 
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();

@@ -102,8 +102,6 @@ public class MiscDriver {
 		}
 	}
 	
-	
-	
 	/**
 	 * Select the link on the Login page for the N4 System Inc. web page.
 	 * This will open the web page in a new window, confirm it was found then
@@ -419,147 +417,25 @@ public class MiscDriver {
 		return b;
 	}
 	
-	/**
-	 * Check to see if the Schedule icon is present.
-	 * 
-	 * @return true if Schedule icon is present.
-	 */
-	public boolean isSchedule() {
-		boolean b = selenium.isElementPresent(scheduleIconLocator);
-		return b;
-	}
-	
-	/**
-	 * Check to see if the Safety Network icon is present.
-	 * 
-	 * @return true if Safety Network icon is present.
-	 */
-	public boolean isSafetyNetwork() {
-		boolean b = selenium.isElementPresent(safetyNetworkIconLocator);
-		return b;
-	}
-	
-	/**
-	 * Check to see if the Jobs icon is present.
-	 * 
-	 * @return true if Jobs icon is present.
-	 */
-	public boolean isJobs() {
-		boolean b = selenium.isElementPresent(projectsIconLocator);
-		return b;
-	}
-	
-	/**
-	 * Check to see if the Administration icon is present.
-	 * 
-	 * @return true if Administration icon is present.
-	 */
-	public boolean isAdministration() {
-		boolean b = selenium.isElementPresent(adminIconLocator);
-		return b;
-	}
-	
-	/**
-	 * Check to see if the Field ID Store link is present.
-	 * 
-	 * @return true if Field ID Store link is present.
-	 */
-	public boolean isFieldIDStore() {
-		boolean b = true;
-		return b;
-	}
-	
-	/**
-	 * Check to see if we got an Oops page.
-	 * 
-	 * @return true if Oops page.
-	 */
 	public boolean isOopsPage() {
-		boolean b = true;
-		if(!selenium.isTextPresent("Oops - Page does not exist"))
-			b = false;
-		return b;
+		return selenium.isTextPresent("Oops - Page does not exist");
 	}
 	
-	/**
-	 * Check to see if the Home icon is present.
-	 * 
-	 * @return true if Home icon is present.
-	 */
 	public boolean isHome() {
-		boolean b = selenium.isElementPresent(homeIconLocator);
-		return b;
+		return selenium.isElementPresent(homeIconLocator);
 	}
 	
-	/**
-	 * Look for the Windows process 'iexplore.exe' and kill it.
-	 */
-	public void killInternetExplorer() {
-		String imageName = "iexplore.exe";
-		killProcess(imageName);
-	}
-	
-	/**
-	 * Look for the Windows process 'firefox.exe' and kill it.
-	 */
-	public void killFirefox() {
-		String imageName = "firefox.exe";
-		killProcess(imageName);
-	}
-	
-	private void killProcess(String imageName) {
-		Runtime r = Runtime.getRuntime();
-		// check to see if the process is running
-		Process p = null;
-		String listCommand = "tasklist /FI \"IMAGENAME eq " + imageName + "\" /NH /FO CSV";
-		String killCommand = "taskkill /f /im " + imageName + " /t";
-		try {
-			p = r.exec(listCommand);
-		} catch (IOException e) {
-			fail("An IOException occurred while trying to exec '" + listCommand + "'");
-		}
-		
-		try {
-			// if running, error stream will be empty, i.e. null
-			BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-			if(err.readLine() == null) {
-				// if it is running, kill it
-				r.exec(killCommand);
-				Thread.sleep(5000);	// give it 5 seconds to die
-			}
-		} catch (IOException e) {
-			fail("An IOException occurred while trying to exec '" + killCommand + "'");
-		} catch (InterruptedException e) {
-			// Do nothing of the sleep gets interrupted.
-		} catch (Exception e) {
-			fail("Some unknown error occurred in misc.killProcess(" + imageName + ")");
-		}
-	}
-	
-	/**
-	 * Get today's date in the format MM/dd/yy.
-	 * 
-	 * @return
-	 */
 	public String getDateString() {
-		String today = getSimpleDateFormat("MM/dd/yy");
-		return today;
+		return getSimpleDateFormat("MM/dd/yy");
 	}
 	
-	/**
-	 * Get today's date in the format MM/dd/yy h:mm aa
-	 * 
-	 * @return
-	 */
 	public String getDateTimeString() {
-		String today = getSimpleDateFormat("MM/dd/yy h:mm aa");
-		return today;
+		return getSimpleDateFormat("MM/dd/yy h:mm aa");
 	}
 	
 	private String getSimpleDateFormat(String format) {
 		SimpleDateFormat now = new SimpleDateFormat(format);
-		String today = now.format(new Date());
-		return today;
+		return now.format(new Date());
 	}
 	
 	/**
@@ -797,11 +673,7 @@ public class MiscDriver {
 	 * @return
 	 */
 	public boolean isEULA() {
-		boolean result = false;
-		if(selenium.isElementPresent(fieldIDEndUserLicenseAgreementHeaderLocator)) {
-			result = true;
-		}
-		return result;
+		return selenium.isElementPresent(fieldIDEndUserLicenseAgreementHeaderLocator);
 	}
 
 	/**
@@ -904,11 +776,6 @@ public class MiscDriver {
 		return result;
 	}
 
-	/**
-	 * Go to the '< Previous' page on any paginated page.
-	 * 
-	 * @return true if it found a 'previous' page link.
-	 */
 	public boolean gotoPrevPage() {
 		boolean result = true;
 		if(selenium.isElementPresent(prevPageLinkLocator)) {
@@ -994,31 +861,14 @@ public class MiscDriver {
 	 * @return
 	 */
 	public boolean getCheckBoxValue(String locator) {
-		boolean result = false;
-		if(selenium.isElementPresent(locator)) {
-			result = selenium.getValue(locator).equals("on") ? true : false;
-		} else {
-			fail("Could not locate the checkbox");
-		}
-		return result;
+		return selenium.getValue(locator).equals("on") ? true : false;
 	}
 	
-	/**
-	 * Sets the checkbox to the given boolean value. If b is true then check
-	 * the checkbox. Otherwise, uncheck the checkbox.
-	 * 
-	 * @param locator
-	 * @param b
-	 */
-	public void setCheckBoxValue(String locator, boolean b) {
-		if(selenium.isElementPresent(locator)) {
-			if(b){
-				selenium.check(locator);
-			} else {
-				selenium.uncheck(locator);
-			}
+	public void setCheckBoxValue(String locator, boolean checked) {
+		if(checked){
+			selenium.check(locator);
 		} else {
-			fail("Could not locate the checkbox");
+			selenium.uncheck(locator);
 		}
 	}
 
@@ -1120,6 +970,7 @@ public class MiscDriver {
 	 * @param maxMilliseconds
 	 */
 	private void waitForLoadingToFinish(String maxMilliseconds) {
+		// TODO: Refactor into ConditionWaiter pattern.
 		int maxSeconds = Integer.parseInt(maxMilliseconds) / 1000;
 		assertTrue("Must give a positive timeout for waitForLoadingToFinish", maxSeconds > 0);
 		boolean loading  = true;
@@ -1160,15 +1011,11 @@ public class MiscDriver {
 	}
 	
 	/**
-	 * After you have opend the Choose owner dialog, calling this method will
+	 * After you have opened the Choose owner dialog, calling this method will
 	 * click the Cancel button.
 	 */
 	public void gotoCancelOwner() {
-		if(selenium.isElementPresent(chooseOwnerCancelButtonLocator)) {
-			selenium.click(chooseOwnerCancelButtonLocator);
-		} else {
-			fail("Could not find the Cancel button to choose the owner");
-		}
+		selenium.click(chooseOwnerCancelButtonLocator);
 	}
 
 	/**
@@ -1189,20 +1036,16 @@ public class MiscDriver {
 	 */
 	public void setCheckBoxByAssociatedLabel(String label, boolean b) {
 		String labelLocator = "xpath=//LABEL[text()='" + label + "']";
-		if(selenium.isElementPresent(labelLocator)) {
-			String checkboxLocator = labelLocator + "/../INPUT[@type='checkbox']";
-			if(!selenium.isElementPresent(checkboxLocator)) {
-				String errorMsg = "Could not find an associated checkbox with the label '" + label + "'.\n";
-				errorMsg += "Or there are multiple labels with the same text.";
-				fail(errorMsg);
-			}
-			if(b) {
-				selenium.check(checkboxLocator);
-			} else {
-				selenium.uncheck(checkboxLocator);
-			}
+		String checkboxLocator = labelLocator + "/../INPUT[@type='checkbox']";
+		if(!selenium.isElementPresent(checkboxLocator)) {
+			String errorMsg = "Could not find an associated checkbox with the label '" + label + "'.\n";
+			errorMsg += "Or there are multiple labels with the same text.";
+			fail(errorMsg);
+		}
+		if(b) {
+			selenium.check(checkboxLocator);
 		} else {
-			fail("Could not find a checkbox with the associated label '" + label + "'");
+			selenium.uncheck(checkboxLocator);
 		}
 	}
 
@@ -1226,6 +1069,7 @@ public class MiscDriver {
 
 	/**
 	 * A wrapper to Thread.sleep(millis) so we don't have to wrap it in a try/catch block.
+	 * Sleeping in test cases is bad practice. Please do not use this.
 	 * 
 	 * @param millis
 	 */
@@ -1278,12 +1122,8 @@ public class MiscDriver {
 	 * Click the Load button on the Find text field.
 	 */
 	public void submitSmartSearch() {
-		if(selenium.isElementPresent(smartSearchLoadButtonLocator)) {
-			selenium.click(smartSearchLoadButtonLocator);
-			waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			fail("Could not find the Load button for the Smart Search (Find:) text field");
-		}
+		selenium.click(smartSearchLoadButtonLocator);
+		waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	/**
@@ -1295,15 +1135,12 @@ public class MiscDriver {
 	}
 
 	public boolean isSessionExpired() {
-		boolean result = false;
 		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
-		result = selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
-		return result;
+		return selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
 	}
 
 	public int getRandomNumber(int low, int high) {
-		int result = r.nextInt((high-low+1)) + low;
-		return result;
+		return r.nextInt((high-low+1)) + low;
 	}
 
 	public String getContentTitle() {

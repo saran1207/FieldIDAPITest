@@ -48,7 +48,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 
 	@Test
 	public void attributesCanBeDeletedFromUnusedProductType() throws Exception {
-		setCompany(companyWithIntegration);
+		startAsCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
 		ProductType productType = createAProductTypeWithAttributes();
 		verifyEditProductTypeHasDeleteAttribute(productType);
@@ -89,7 +89,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 
 	@Test
 	public void attributesCanOnlyBeRetiredIfUsedInProductCodeMapping() throws Exception {
-		setCompany(companyWithIntegration);
+		startAsCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
 		ProductType productType = createAProductTypeWithAttributes();
 		useProductTypeInProductCodeMapping(productType);

@@ -28,7 +28,7 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 	}
 
 	private void gotoChooseCompanyPage() {
-		setCompany("www");
+		startAsCompany("www");
 		selenium.open("/fieldid/chooseCompany.action");
 	}
 	
@@ -43,7 +43,7 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 	
 	@Test
 	public void should_show_warning_message_when_a_user_is_redirected_to_choose_company_page_when_they_enter_an_incorrect_tenant() throws Exception {
-		setCompany("some-tenant-not-registered");
+		startAsCompany("some-tenant-not-registered");
 		
 		assertTrue("error messages should be present", selenium.isVisible("css=#error"));
 	}

@@ -45,8 +45,8 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		misc.gotoIdentify();
 		assertWeAreOnAddWithOrderPage();
 	}
@@ -58,8 +58,8 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String company = getStringProperty("integrationcompanyid");
 		String orderNumber = getStringProperty("integrationordernumber");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		String serialNumber = identifyAssetWithOrderNumber(orderNumber);
 		assertAssetIdentified(serialNumber);
 	}
@@ -70,8 +70,8 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("notintegrationpassword");
 		String company = getStringProperty("notintegrationcompanyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		String serialNumber = identifyAssetNoIntegration();
 		assertAssetIdentified(serialNumber);
 	}
@@ -82,8 +82,8 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		String serialNumber = identifySingleAssetIntegrationTenant();
 		assertAssetIdentified(serialNumber);
 	}
@@ -94,8 +94,8 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);
@@ -107,8 +107,8 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("notintegrationpassword");
 		String company = getStringProperty("notintegrationcompanyid");
 
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);

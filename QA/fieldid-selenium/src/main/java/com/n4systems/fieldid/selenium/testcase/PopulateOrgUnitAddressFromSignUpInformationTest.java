@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageOrganizations;
-import com.n4systems.fieldid.selenium.datatypes.CreateTenant;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.datatypes.PrimaryOrganization;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
@@ -48,7 +48,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 		String password = "makemore$";
 
 		try {
-			CreateTenant t = createANewTenant(username, password);
+			TenantInfo t = createANewTenant(username, password);
 			returnToLogin();
 			logIntoNewTenant(username, password);
 			PrimaryOrganization p = getPrimaryOrganization();
@@ -65,7 +65,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 	 * @param t
 	 * @param prime
 	 */
-	private void verifyEquals(CreateTenant expected, Organization actual) {
+	private void verifyEquals(TenantInfo expected, Organization actual) {
 		assertEquals(expected.getCompanyAddress(), actual.getCompanyStreetAddress());
 		assertEquals(expected.getCompanyCity(), actual.getCompanyCity());
 		assertEquals(expected.getCompanyState(), actual.getCompanyState());
@@ -88,7 +88,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 	private void logIntoNewTenant(String username, String password) {
 		login.setUserName(username);
 		login.setPassword(password);
-		login.gotoSignIn();
+		login.submitSignIn();
 		
 		login.verifySignedInWithEULA();
 		misc.scrollToBottomOfEULA();
@@ -100,25 +100,25 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 		complete.gotoSignInNow();
 	}
 
-	private CreateTenant createANewTenant(String username, String password) {
+	private TenantInfo createANewTenant(String username, String password) {
 		String tenantName = MiscDriver.getRandomString(8);
 		String tenantID = tenantName.toLowerCase();
 
 		if(!login.isPlansAndPricingAvailable()) {
-			setCompany("msa");
+			startAsCompany("msa");
 		}
 		login.gotoPlansAndPricing();
 		String packageName = "Unlimited";
 		sup.gotoSignUpNow(packageName);
 		create.verifyCreateAccountPage(packageName);
 
-		CreateTenant t = new CreateTenant(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
 		t.setNumberOfUsers(2);
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
-		t.setPaymentOptions(CreateTenant.paymentOptionsTwoYear);
-		t.setPaymentType(CreateTenant.payByPurchaseOrder);
-		t.setpurchaseOrderNumber("88888");
+		t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
+		t.setPaymentType(TenantInfo.payByPurchaseOrder);
+		t.setPurchaseOrderNumber("88888");
 
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();

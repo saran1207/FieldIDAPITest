@@ -91,9 +91,9 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 
 	@Before
 	public void signIn() throws Exception {
-		setCompany("security-check");
+		startAsCompany("security-check");
 		login = new Login(selenium, misc);
-		login.signInAllTheWay(user, password);
+		login.signInAllTheWayToHome(user, password);
 	}
 
 	@After

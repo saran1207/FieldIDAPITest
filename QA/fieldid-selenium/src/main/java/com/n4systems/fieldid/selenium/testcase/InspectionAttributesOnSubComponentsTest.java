@@ -31,8 +31,8 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		String company = getStringProperty("company");
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
-		setCompany(company);
-		login.signInAllTheWay(username, password);
+		startAsCompany(company);
+		login.signInAllTheWayToHome(username, password);
 	}
 	
 	@Test

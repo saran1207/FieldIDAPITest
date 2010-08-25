@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
-public class CreateTenant {
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+
+public class TenantInfo {
 	// About You
 	String firstName;
 	String lastName;
@@ -25,6 +27,8 @@ public class CreateTenant {
 	
 	// Promo Code
 	String promoCode;
+	
+	private LoginPage loginPage;
 	
 	// All class variables below this point do not apply to Free accounts
 	
@@ -59,7 +63,7 @@ public class CreateTenant {
 	String expiryYear;
 	String purchaseOrderNumber;
 	
-	public CreateTenant(String username, String password, String tenantName, String tenantID) {
+	public TenantInfo(String username, String password, String tenantName, String tenantID) {
 		
 		this.setFirstName("Darrell");
 		this.setLastName("Grainger");
@@ -211,15 +215,15 @@ public class CreateTenant {
 		this.cardNumber = s;
 	}
 	
-	public void setexpiryMonth(String s) {
+	public void setExpiryMonth(String s) {
 		this.expiryMonth = s;
 	}
 	
-	public void setexpiryYear(String s) {
+	public void setExpiryYear(String s) {
 		this.expiryYear = s;
 	}
 	
-	public void setpurchaseOrderNumber(String s) {
+	public void setPurchaseOrderNumber(String s) {
 		this.purchaseOrderNumber = s;
 	}
 
@@ -329,5 +333,13 @@ public class CreateTenant {
 	
 	public String getPurchaseOrderNumber() {
 		return purchaseOrderNumber;
+	}
+
+	public void setLoginPage(LoginPage loginPage) {
+		this.loginPage = loginPage;
+	}
+
+	public LoginPage getLoginPage() {
+		return loginPage;
 	}
 }

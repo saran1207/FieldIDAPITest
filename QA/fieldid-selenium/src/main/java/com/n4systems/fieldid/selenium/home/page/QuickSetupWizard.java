@@ -48,21 +48,13 @@ public class QuickSetupWizard {
 	}
 	
 	public void gotoNoThanks() {
-		if(selenium.isElementPresent(noThanksLinkLocator)) {
-			selenium.click(noThanksLinkLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			fail("Could not find the 'No Thanks' link");
-		}
+		selenium.click(noThanksLinkLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	public void gotoImReadyLetsGo() {
-		if(selenium.isElementPresent(readyLetsGoButtonLocator)) {
-			selenium.click(readyLetsGoButtonLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			fail("Could not find the I'm Ready - Lets Go! button");
-		}
+		selenium.click(readyLetsGoButtonLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	public void verifyQuickSetupWizardStep1PageHeader() {
@@ -71,12 +63,8 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoQuickSetupWizardStep2() {
-		if(selenium.isElementPresent(step1CompleteButtonLocator)) {
-			selenium.click(step1CompleteButtonLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			fail("Could not find the 'Next ->' button");
-		}
+		selenium.click(step1CompleteButtonLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	public void verifyCompanyProfileSetup() {
@@ -99,12 +87,8 @@ public class QuickSetupWizard {
 	}
 
 	public void gotoQuickSetupWizardStep3() {
-		if(selenium.isElementPresent(step2CompleteButtonLocator)) {
-			selenium.click(step2CompleteButtonLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			fail("Could not find the 'Next ->' button");
-		}
+		selenium.click(step2CompleteButtonLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	public void verifySystemSettingsUpdated() {

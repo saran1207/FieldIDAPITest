@@ -33,9 +33,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
 		
-		loginSession1.signInAllTheWay("saunders", "makemore$");
+		loginSession1.signInAllTheWayToHome("saunders", "makemore$");
 		
-		loginSession2.submitSignIn("saunders", "makemore$");
+		loginSession2.doSignIn("saunders", "makemore$");
 		loginSession2.assertOnConfirmSessionKick();
 	}
 	
@@ -45,9 +45,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
 		
-		loginSession1.signInAllTheWay("saunders", "makemore$");
+		loginSession1.signInAllTheWayToHome("saunders", "makemore$");
 		
-		loginSession2.submitSignIn("saunders", "makemore$");
+		loginSession2.doSignIn("saunders", "makemore$");
 		loginSession2.assertOnConfirmSessionKick();
 		loginSession2.confirmKickingSession();
 		loginSession2.verifySignedIn();
@@ -63,9 +63,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
 		
-		loginSession1.signInAllTheWay("sricci", "makemore$");
+		loginSession1.signInAllTheWayToHome("sricci", "makemore$");
 		
-		loginSession2.signInAllTheWay("sricci", "makemore$");
+		loginSession2.signInAllTheWayToHome("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
@@ -111,11 +111,11 @@ public class SessionBumpTest extends FieldIDTestCase {
 		Login loginSession1 = new Login(selenium, misc);
 		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
 		
-		loginSession1.signInAllTheWay("sricci", "makemore$");
+		loginSession1.signInAllTheWayToHome("sricci", "makemore$");
 		selenium.open("/fieldid/productAdd.action");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		loginSession2.signInAllTheWay("sricci", "makemore$");
+		loginSession2.signInAllTheWayToHome("sricci", "makemore$");
 		
 		selenium.click("css=.searchOwner");
 		selenium.waitForAjax(MiscDriver.AJAX_TIMEOUT);

@@ -231,11 +231,10 @@ public class ManageOrganizations {
 	}
 
 	public String getLimitWarningMessage() {
-		String result = null;
 		if(selenium.isElementPresent(limitWarningMessageLocator)) {
-			result = selenium.getText(limitWarningMessageLocator);
+			return selenium.getText(limitWarningMessageLocator);
 		}
-		return result;
+		return null;
 	}
 
 	/**
