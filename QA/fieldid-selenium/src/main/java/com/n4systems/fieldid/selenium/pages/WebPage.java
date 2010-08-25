@@ -42,4 +42,8 @@ public class WebPage extends WebEntity {
 		selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
 	
+	protected String getCurrentTab() {
+		return selenium.getText("//ul[@class='options ']/li[@class = ' selected']").trim();
+	}
+	
 }

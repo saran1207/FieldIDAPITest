@@ -30,6 +30,11 @@ public class FieldIDPage extends WebPage {
 		return new SetupPage(selenium);
 	}
 	
+	public IdentifyPage clickIdentifyLink() {
+		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Identify')]");
+		return new IdentifyPage(selenium);
+	}
+	
 	protected void gotoNextPage() {
 		selenium.click("//a[contains(.,'Next')]");
 		waitForPageToLoad();

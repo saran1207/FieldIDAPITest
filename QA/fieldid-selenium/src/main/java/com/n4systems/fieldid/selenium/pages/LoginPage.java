@@ -1,13 +1,14 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.fail;
-
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
 public class LoginPage extends WebPage {
+	
+	public static final String SYSTEM_USER_NAME = "n4systems";
+	public static final String SYSTEM_USER_PASSWORD = "Xk43g8!@";
 	
 	private Login legacyLogin;
 	
@@ -18,6 +19,10 @@ public class LoginPage extends WebPage {
 	public LoginPage(Selenium selenium, boolean waitForPageToLoad) {
 		super(selenium, waitForPageToLoad);
 		legacyLogin = new Login(new DefaultFieldIdSelenium(selenium), new MiscDriver(new DefaultFieldIdSelenium(selenium)));
+	}
+	
+	public HomePage login() {
+		return legacyLogin.signInAllTheWayToHome(SYSTEM_USER_NAME, SYSTEM_USER_PASSWORD);
 	}
 	
 	public HomePage login(String username, String password) {

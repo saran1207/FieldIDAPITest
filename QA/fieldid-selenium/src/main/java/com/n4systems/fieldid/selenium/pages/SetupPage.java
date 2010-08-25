@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.pages;
 
 import static org.junit.Assert.fail;
 
+import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
@@ -35,6 +36,11 @@ public class SetupPage extends FieldIDPage {
 	public ManageOrganizationsPage clickManageOranizations() {
 		selenium.click("//a[.='Manage Organizations']");
 		return new ManageOrganizationsPage(selenium);
+	}
+
+	public AutoAttributeWizardPage clickAutoAttributeWizard() {
+		selenium.click("//a[.='Auto Attribute Wizard']");
+		return new AutoAttributeWizardPage(selenium);
 	}
 	
 }

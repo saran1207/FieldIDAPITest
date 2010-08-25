@@ -226,7 +226,6 @@ public abstract class FieldIDTestCase {
 	
 	protected void gotoReferralLink(String companyID, String referralCode) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() +  "/signup/" + referralCode;
-		System.out.println("GOING TO: " + url);
 		selenium.open(url);
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
