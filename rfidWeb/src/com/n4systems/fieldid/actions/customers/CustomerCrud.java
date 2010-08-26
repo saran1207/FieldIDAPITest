@@ -12,23 +12,19 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
-import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
-import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
@@ -114,14 +110,14 @@ public class CustomerCrud extends AbstractCrud {
 	@SkipValidation
 	public String doArchive() {
 		String result = setCustomerActive(false);
-		addFlashMessage("Customer archived successfully");
+		if (SUCCESS.equals(result)) addFlashMessage("Archive successful");
 		return result;
 	}
 	
 	@SkipValidation
 	public String doUnarchive() {
 		String result = setCustomerActive(true);
-		addFlashMessage("Customer unarchived successfully");
+		if (SUCCESS.equals(result)) addFlashMessage("Unarchive successful");
 		return result;
 	}
 

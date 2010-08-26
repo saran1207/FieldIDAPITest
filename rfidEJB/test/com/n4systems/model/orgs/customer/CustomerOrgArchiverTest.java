@@ -1,6 +1,9 @@
 package com.n4systems.model.orgs.customer;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +22,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
 import com.n4systems.util.UserType;
@@ -31,23 +33,26 @@ public class CustomerOrgArchiverTest {
 	private UserManager userManager;
 	private OrgSaver orgSaver;
 	private UserSaver userSaver;
-	private LoaderFactory loaderFactory;
 	private DivisionOrgByCustomerListLoader divisionLoader;
 	private SecurityFilter securityFilter;		
 	private Transaction transaction;
 	
-	
 	@Before
 	public void setUp(){
-		archiver = new CustomerOrgArchiver();
 		customer = OrgBuilder.aCustomerOrg().buildCustomer();
 		userManager = createMock(UserManager.class);
 		orgSaver = createMock(OrgSaver.class);
 		userSaver = createMock(UserSaver.class);
-		loaderFactory = createMock(LoaderFactory.class);
 		divisionLoader = createMock(DivisionOrgByCustomerListLoader.class);
 		securityFilter = createMock(SecurityFilter.class);		
 		transaction = createMock(Transaction.class);
+		archiver = new CustomerOrgArchiver(){
+			@Override
+			protected DivisionOrgByCustomerListLoader createDivisionsLoader(SecurityFilter filter) {
+				return divisionLoader;
+			}
+		};
+
 	}
 
 	@Test
@@ -66,7 +71,7 @@ public class CustomerOrgArchiverTest {
 		
 		replayExpectations();
 		
-		archiver.doArchive(customer, userManager, orgSaver, userSaver, loaderFactory, securityFilter, false, transaction );
+		archiver.doArchive(customer, userManager, orgSaver, userSaver, securityFilter, false, transaction );
 		
 		verifyExpectations();
 	}
@@ -83,15 +88,14 @@ public class CustomerOrgArchiverTest {
 		
 		replayExpectations();
 		
-		archiver.doArchive(customer, userManager, orgSaver, userSaver, loaderFactory, securityFilter, true, transaction );
+		archiver.doArchive(customer, userManager, orgSaver, userSaver, securityFilter, true, transaction );
 		
 		verifyExpectations();
 	}
 	
 	private void setDivisionExpectations(List<DivisionOrg> divisionList) {
-		expect(loaderFactory.createDivisionOrgByCustomerListLoader()).andReturn(divisionLoader);
 		expect(divisionLoader.setCustomer(customer)).andReturn(divisionLoader);
-		expect(divisionLoader.load()).andReturn(divisionList);
+		expect(divisionLoader.load(transaction)).andReturn(divisionList);
 		for(int i = 0; i < divisionList.size(); i++) {
 			BaseOrg divisionOrg = divisionList.get(i);
 			expect(orgSaver.update(transaction, divisionOrg )).andReturn(divisionOrg);
@@ -100,18 +104,18 @@ public class CustomerOrgArchiverTest {
 
 	private void setUserManagerExpectations(Pager<User> pager) {
 		expect(userManager.getUsers(securityFilter, true, 1, 100000, null, UserType.CUSTOMERS, customer)).andReturn(pager);
+		
 		for (int i = 0; i < pager.getList().size(); i++) {
-			userSaver.save(transaction, pager.getList().get(i));
+			userManager.updateUser(pager.getList().get(i));
 		}
 	}
 	
 	private void replayExpectations() {
-		replay(userManager, userSaver,loaderFactory, divisionLoader, orgSaver);
+		replay(userManager, userSaver, divisionLoader, orgSaver);
 	}
 	
 	private void verifyExpectations() {
-		verify(userManager, userSaver,loaderFactory, divisionLoader, orgSaver);
+		verify(userManager, userSaver, divisionLoader, orgSaver);
 	}
-	
 	
 }
