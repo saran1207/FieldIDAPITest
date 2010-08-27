@@ -33,9 +33,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
 		
-		loginSession1.signInAllTheWayToHome("saunders", "makemore$");
+		loginSession1.signInAllTheWayToHome("aaitkens", "makemore$");
 		
-		loginSession2.doSignIn("saunders", "makemore$");
+		loginSession2.doSignIn("aaitkens", "makemore$");
 		loginSession2.assertOnConfirmSessionKick();
 	}
 	
@@ -45,9 +45,9 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
 		
-		loginSession1.signInAllTheWayToHome("saunders", "makemore$");
+		loginSession1.signInAllTheWayToHome("aaitkens", "makemore$");
 		
-		loginSession2.doSignIn("saunders", "makemore$");
+		loginSession2.doSignIn("aaitkens", "makemore$");
 		loginSession2.assertOnConfirmSessionKick();
 		loginSession2.confirmKickingSession();
 		loginSession2.verifySignedIn();

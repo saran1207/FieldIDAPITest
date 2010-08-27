@@ -29,7 +29,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard() {
 		startAsCompany("n4");
-		login.signInAllTheWayToHome("saunders", "makemore$");
+		login.signInAllTheWayToHome("aaitkens", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		misc.forceSessionTimeout(getFieldIDDomain());
 		assertSessionTimeoutLightboxAppeared();
@@ -38,7 +38,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step1() {
 		startAsCompany("n4");
-		login.signInAllTheWayToHome("saunders", "makemore$");
+		login.signInAllTheWayToHome("aaitkens", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		misc.forceSessionTimeout(getFieldIDDomain());
@@ -48,7 +48,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step2() {
 		startAsCompany("n4");
-		login.signInAllTheWayToHome("saunders", "makemore$");
+		login.signInAllTheWayToHome("aaitkens", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
@@ -59,7 +59,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step3() {
 		startAsCompany("n4");
-		login.signInAllTheWayToHome("saunders", "makemore$");
+		login.signInAllTheWayToHome("aaitkens", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
@@ -71,7 +71,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_you_are_done() {
 		startAsCompany("n4");
-		login.signInAllTheWayToHome("saunders", "makemore$");
+		login.signInAllTheWayToHome("aaitkens", "makemore$");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
