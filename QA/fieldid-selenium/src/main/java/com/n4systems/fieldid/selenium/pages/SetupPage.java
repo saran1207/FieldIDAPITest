@@ -9,6 +9,7 @@ import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
+import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -44,6 +45,11 @@ public class SetupPage extends FieldIDPage {
 	public AutoAttributeWizardPage clickAutoAttributeWizard() {
 		selenium.click("//a[.='Auto Attribute Wizard']");
 		return new AutoAttributeWizardPage(selenium);
+	}
+
+	public MangageEventTypeGroupsPage clickManageEventTypeGroups() {
+		selenium.click("//a[.='Manage Event Type Groups']");
+		return new MangageEventTypeGroupsPage(selenium);
 	}
 	
 	public ManageCommentTemplatesPage clickManageCommentTemplates() {

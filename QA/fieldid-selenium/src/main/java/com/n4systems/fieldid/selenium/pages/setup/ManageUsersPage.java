@@ -10,7 +10,6 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -207,7 +206,7 @@ public class ManageUsersPage extends FieldIDPage {
 		String locator = "xpath=//table[@id='userList']/tbody/tr[3]/td[1]/a";
 		String userName = selenium.getText(locator);
 		selenium.click(locator);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		waitForPageToLoad();
 		return userName;
 	}
 

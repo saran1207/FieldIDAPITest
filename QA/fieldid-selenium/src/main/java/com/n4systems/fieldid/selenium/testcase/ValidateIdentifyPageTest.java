@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -20,13 +19,8 @@ import com.n4systems.fieldid.selenium.pages.LoginPage;
 
 public class ValidateIdentifyPageTest extends FieldIDTestCase {
 
-	
 	private HomePage homePage;
-	
-	@Before
-	public void setUp() throws Exception {
-	}
-	
+		
 	@Test
 	public void validate_identify_with_integration_enabled() throws Exception {
 		String username = getStringProperty("integrationusername");
