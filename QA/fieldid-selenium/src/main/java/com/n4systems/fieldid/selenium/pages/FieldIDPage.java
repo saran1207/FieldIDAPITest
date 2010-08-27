@@ -146,8 +146,7 @@ public class FieldIDPage extends WebPage {
 		int numRows = selenium.getXpathCount(tableXpath+"//tr").intValue();
 		for (int i = startingAtRow; i <= numRows; i++) {
 			String cellXpath = tableXpath+"//tr["+i+"]/td["+columnNumber+"]";
-			String value = selenium.getText(cellXpath);
-			columnValues.add(selenium.getText(cellXpath));
+			columnValues.add(selenium.getText(cellXpath).trim());
 		}
 		
 		return columnValues;
