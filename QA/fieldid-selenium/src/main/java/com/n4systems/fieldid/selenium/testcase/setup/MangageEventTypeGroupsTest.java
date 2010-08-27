@@ -66,16 +66,33 @@ public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 	}
 	
 	@Test
+	public void testAddEventTypeWithErrors() throws Exception {
+		manageEventTypeGroupsPage.clickAddTab();
+		assertEquals("Add", manageEventTypeGroupsPage.getCurrentTab());
+		manageEventTypeGroupsPage.clickSaveButton();
+		assertEquals(2, manageEventTypeGroupsPage.getFormErrorMessages().size());
+	}
+	
+	@Test
 	public void testAddAndDeleteEventTypeGroup() throws Exception {
+		deleteEventTypeIfExists("Test");
+		
 		manageEventTypeGroupsPage.clickAddTab();
 		assertEquals("Add", manageEventTypeGroupsPage.getCurrentTab());
 		EventTypeGroup eventTypeGroup = new EventTypeGroup("Test", "Test", "Basic Visual Inspection ", "Full Observation Report");
 		manageEventTypeGroupsPage.setEventTypeGroupFormFields(eventTypeGroup);
 		manageEventTypeGroupsPage.clickSaveButton();
+		
 		assertEquals("View", manageEventTypeGroupsPage.getCurrentTab());
 		manageEventTypeGroupsPage.clickViewAllTab();
 		assertTrue(manageEventTypeGroupsPage.listItemExists("Test"));
 		manageEventTypeGroupsPage.deleteListItem("Test");
 		assertFalse(manageEventTypeGroupsPage.listItemExists("Test"));
+	}
+
+	private void deleteEventTypeIfExists(String eventName) {
+		if(manageEventTypeGroupsPage.listItemExists(eventName)){
+			manageEventTypeGroupsPage.deleteListItem(eventName);			
+		}
 	}
 }

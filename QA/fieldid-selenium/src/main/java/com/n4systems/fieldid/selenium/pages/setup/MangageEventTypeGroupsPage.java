@@ -13,7 +13,7 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 	public MangageEventTypeGroupsPage(Selenium selenium) {
 		super(selenium);
 		if(!checkOnManageEventTypeGroupsPage()){
-			fail("Expected to be on identify page!");
+			fail("Expected to be on Manage Event Type Group page!");
 		}
 	}
 	
