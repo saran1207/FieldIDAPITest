@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
@@ -69,6 +70,11 @@ public class FieldIDPage extends WebPage {
 		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
 		waitForPageToLoad();
 	}
+	
+	protected void clickNavOption(String navOption, String timeout) {
+		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
+		waitForPageToLoad(timeout);
+	}
 
 	protected void waitForElementToBePresent(String locator)  {
 		waitForElementToBePresent(locator, MiscDriver.DEFAULT_TIMEOUT);
@@ -117,6 +123,20 @@ public class FieldIDPage extends WebPage {
 		}
 
 		return result;
+	}
+
+	public String getCurrentTab() {
+		return selenium.getText("//ul[@class='options ']/li[@class[contains(.,' selected')]]").trim();
+	}
+
+	public OrgPicker getOrgPicker() {
+		return new OrgPicker(selenium);
+	}
+	
+	public AssetPage search(String criteria) {
+		selenium.type("//input[@id='searchText']", criteria);
+		selenium.click("//input[@id='smartSearchButton']");
+		return new AssetPage(selenium);
 	}
 
 }

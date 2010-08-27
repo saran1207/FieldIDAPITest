@@ -10,13 +10,10 @@ import com.thoughtworks.selenium.Selenium;
 
 public class OrgPicker extends WebEntity {
 	
-	private static final String selectOwnerOrganizationSelectListLocator = "//SELECT[@id='orgList']";
-	private static final String orgBrowserLoadingImageLocator = "//DIV[@id='orgBrowserLoading' and not(contains(@style,'display: none'))]";
-	private static final String selectOwnerCustomerSelectListLocator = "//SELECT[@id='customerList']";
-	private static final String selectOwnerDivisionSelectListLocator = "//SELECT[@id='divisionList']";
-	private static final String chooseOwnerLinkLocator = "//A[@class='searchOwner' and contains(text(),'Choose')]";
-	private static final String chooseOwnerSelectButtonLocator = "xpath=//INPUT[@id='selectOrg']";
-
+	private static final String selectOwnerOrganizationSelectListLocator = "//select[@id='orgList']";
+	private static final String selectOwnerCustomerSelectListLocator = "//select[@id='customerList']";
+	private static final String selectOwnerDivisionSelectListLocator = "//select[@id='divisionList']";
+	
 	public OrgPicker(Selenium selenium) {
 		super(selenium);
 	}
@@ -25,7 +22,7 @@ public class OrgPicker extends WebEntity {
 		new ConditionWaiter(new Predicate() {
 			@Override
 			public boolean evaluate() {
-				return !selenium.isElementPresent(orgBrowserLoadingImageLocator);
+				return !selenium.isElementPresent("//div[@id='orgBrowserLoading' and not(contains(@style,'display: none'))]");
 			}
 		}).run("Org picker loading image never went away");
 	}
@@ -70,12 +67,35 @@ public class OrgPicker extends WebEntity {
 	}
 
 	public void clickChooseOwner() {
-		selenium.click(chooseOwnerLinkLocator);
+		selenium.click("//a[@class='searchOwner' and contains(text(),'Choose')]");
 		waitForOrgPickerLoadingToFinish();
 	}
 
 	public void clickSelectOwner() {
-		selenium.click(chooseOwnerSelectButtonLocator);
+		selenium.click("xpath=//input[@id='selectOrg']");
+	}
+
+	public Owner getOwner() {
+		String organization = selenium.getSelectedLabel(selectOwnerOrganizationSelectListLocator);
+		String customer = null;
+		String division = null;
+		
+		String[] s = selenium.getSelectOptions(selectOwnerCustomerSelectListLocator);
+		;
+		if(s.length > 0 && !s.equals("")) {
+			String customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
+			customer = customerOrganization.replace(" (" + organization + ")", "").trim();
+		}
+		s = selenium.getSelectOptions(selectOwnerDivisionSelectListLocator);
+		if(s.length > 0 && !s[0].equals("")) {
+			String divisionCustomerOrganization = selenium.getSelectedLabel(selectOwnerDivisionSelectListLocator);
+			division = divisionCustomerOrganization.replace(", " + customer, "").replace(" (" + organization + ")", "").trim();
+		}
+		return new Owner(organization.trim(), customer, division);
+	}
+
+	public void clickCancelOwner() {
+		selenium.click("//input[@id='cancelOrgSelect']");
 	}
 
 }

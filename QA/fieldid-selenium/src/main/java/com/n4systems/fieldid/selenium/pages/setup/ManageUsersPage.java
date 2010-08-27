@@ -45,10 +45,6 @@ public class ManageUsersPage extends FieldIDPage {
 		clickNavOption("View All");
 	}
 	
-	public OrgPicker getOrgPicker() {
-		return new OrgPicker(selenium);
-	}
-	
 	public void setCustomerFormFields(CustomerUser cu) {
 		assertNotNull(cu);
 		if(cu.getUserid() != null) {
@@ -224,10 +220,6 @@ public class ManageUsersPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public String getCurrentTab() {
-		return selenium.getText("//ul[@class='options ']/li[@class=' selected']").trim();
-	}
-	
 	public String getUserId() {
 		return selenium.getValue("//div[@class='infoBlock']//input[@name='userId']").trim();
 	}

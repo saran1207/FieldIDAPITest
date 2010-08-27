@@ -11,32 +11,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.assets.page.AssetPage;
-import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.datatypes.Product;
-import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.reporting.page.Reporting;
-import com.n4systems.fieldid.selenium.schedule.page.Schedules;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.IdentifyPage;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
 
 public class ValidateIdentifyPageTest extends FieldIDTestCase {
 
-	Login login;
-	Schedules schedule;
-	Reporting reporting;
-	AssetSearch assets;
-	IdentifyPageDriver identify;
-	AssetPage asset;
+	
+	private HomePage homePage;
 	
 	@Before
 	public void setUp() throws Exception {
-		login = new Login(selenium, misc);
-		schedule = new Schedules(selenium, misc);
-		reporting = new Reporting(selenium, misc);
-		assets = new AssetSearch(selenium, misc);
-		identify = new IdentifyPageDriver(selenium, misc);
-		asset = new AssetPage(selenium, misc);
 	}
 	
 	@Test
@@ -44,11 +32,12 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String username = getStringProperty("integrationusername");
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
-
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
-		misc.gotoIdentify();
-		assertWeAreOnAddWithOrderPage();
+		
+		LoginPage loginPage = startAsCompany(company);		
+		homePage = loginPage.login(username, password);
+		IdentifyPage identifyPage = homePage.clickIdentifyLink();
+		
+		assertEquals(identifyPage.getCurrentTab(), "Add with Order");
 	}
 	
 	@Test
@@ -57,11 +46,13 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
 		String orderNumber = getStringProperty("integrationordernumber");
+		
+		LoginPage loginPage = startAsCompany(company);		
+		homePage = loginPage.login(username, password);
+		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
-		String serialNumber = identifyAssetWithOrderNumber(orderNumber);
-		assertAssetIdentified(serialNumber);
+		String serialNumber = identifyAssetWithOrderNumber(identifyPage, orderNumber);
+		checkAssetIdentified(identifyPage, serialNumber);
 	}
 	
 	@Test
@@ -70,10 +61,11 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("notintegrationpassword");
 		String company = getStringProperty("notintegrationcompanyid");
 
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
-		String serialNumber = identifyAssetNoIntegration();
-		assertAssetIdentified(serialNumber);
+		LoginPage loginPage = startAsCompany(company);		
+		homePage = loginPage.login(username, password);
+		IdentifyPage identifyPage = homePage.clickIdentifyLink();
+		String serialNumber = identifyProduct(identifyPage);
+		checkAssetIdentified(identifyPage, serialNumber);
 	}
 	
 	@Test
@@ -82,10 +74,11 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
 
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
-		String serialNumber = identifySingleAssetIntegrationTenant();
-		assertAssetIdentified(serialNumber);
+		LoginPage loginPage = startAsCompany(company);		
+		homePage = loginPage.login(username, password);
+		IdentifyPage identifyPage = homePage.clickIdentifyLink();
+		String serialNumber = identifySingleAssetIntegrationTenant(identifyPage);
+		checkAssetIdentified(identifyPage,serialNumber);
 	}
 	
 	@Test
@@ -94,10 +87,11 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
 
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
+		LoginPage loginPage = startAsCompany(company);		
+		homePage = loginPage.login(username, password);
+		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		int quantity = misc.getRandomNumber(2, 10);
-		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
+		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);
 	}
 	
@@ -107,86 +101,76 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		String password = getStringProperty("notintegrationpassword");
 		String company = getStringProperty("notintegrationcompanyid");
 
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
+		LoginPage loginPage = startAsCompany(company);		
+		homePage = loginPage.login(username, password);
+		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		int quantity = misc.getRandomNumber(2, 10);
-		List<Identifier> identifiers = identifyMultipleAssetsRange(quantity, "*");
+		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
 		assertMultiAddWasSuccessful(identifiers);
 	}
 	
 	private void assertMultiAddWasSuccessful(List<Identifier> identifiers) {
 		for(Identifier identifier : identifiers) {
-			assertAssetIdentified(identifier.getSerialNumber());
+			checkAssetIdentified(null,identifier.getSerialNumber());
 		}
 	}
 
-	private List<Identifier> identifyMultipleAssetsRange(int quantity, String productType) {
+	private List<Identifier> identifyMultipleAssetsRange(IdentifyPage identifyPage, int quantity, String productType) {
 		Calendar now = new GregorianCalendar();
 		String prefix = String.format("%1$04d%2$02d%3$02d-", now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 		String start = "1";	// start must be a number
 		String suffix = String.format("-%1$02d%2$02d%3$02d%4$04d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND), now.get(Calendar.MILLISECOND));
-		misc.gotoIdentify();
-		identify.gotoMultiAdd();
+		
+		identifyPage.clickMultiAdd();
+		
 		Product product = new Product();
 		product.setLocation("here");
-		List<String> productStatuses = identify.getProductStatusesFromMultiAddForm();
+		List<String> productStatuses = identifyPage.getProductStatusesFromMultiAddForm();
 		assertTrue("There were no product status options available", productStatuses.size() > 0);
 		product.setProductStatus(productStatuses.get(0));
 		product.setProductType(productType);
 		product.setPurchaseOrder("PO #888");
 		product.setComments("This asset created via Multi Add test automation.");
-		identify.setMultiAddStep1Form(product);
-		identify.clickContinueButtonMultiAddStep1();
-		identify.setMultiAddStep2Form(quantity);
-		identify.clickContinueButtonMultiAddStep2();
-		identify.setMultiAddStep3FormRange(prefix, start, suffix);
-		identify.clickContinueButtonMultiAddStep3();
+		identifyPage.setMultiAddStep1Form(product);
+		identifyPage.clickContinueButtonMultiAddStep1();
+		identifyPage.setMultiAddStep2Form(quantity);
+		identifyPage.clickContinueButtonMultiAddStep2();
+		identifyPage.setMultiAddStep3FormRange(prefix, start, suffix);
+		identifyPage.clickContinueButtonMultiAddStep3();
+			
 		List<Identifier> identifiers = null;
-		identifiers = identify.setMultiAddStep4Form(identifiers);
-		identify.clickSaveAndCreateButtonMultiAddStep4();
+
+		identifiers = identifyPage.setMultiAddStep4Form(identifiers);
+		identifyPage.clickSaveAndCreateButtonMultiAddStep4();
 		
 		return identifiers;
 	}
 
-	private String identifyAssetNoIntegration() throws Exception {
-		misc.gotoIdentify();
-		return identifyProduct();
-	}
-
-	private String identifyProduct() throws Exception {
+	private String identifyProduct(IdentifyPage identifyPage) throws Exception {
 		Product product = new Product();
-		product = identify.setAddAssetForm(product, true);
-		identify.saveNewAsset();
+		product = identifyPage.setAddAssetForm(product, true);
+		identifyPage.saveNewAsset();
+
 		return product.getSerialNumber();
 	}
 
-	private String identifySingleAssetIntegrationTenant() throws Exception {
-		misc.gotoIdentify();
-		identify.gotoAdd();
-		return identifyProduct();
+	private String identifySingleAssetIntegrationTenant(IdentifyPage identifyPage) throws Exception {
+		identifyPage.clickAdd();
+		return identifyProduct(identifyPage);
 	}
 
-	private void assertAssetIdentified(String serialNumber) {
-		misc.setSmartSearch(serialNumber);
-		misc.submitSmartSearch();
-		asset.verifyAssetViewPage(serialNumber);
+	private void checkAssetIdentified(IdentifyPage identifyPage, String serialNumber) {
+		AssetPage assetPage = identifyPage.search(serialNumber);
+		assertTrue(assetPage.checkHeader(serialNumber));
 	}
 
-	private String identifyAssetWithOrderNumber(String orderNumber) throws Exception {
-		misc.gotoIdentify();
-		identify.setOrderNumber(orderNumber);
-		identify.clickLoadOrderNumberButton();
-		int index = identify.getNumberOfLineItemsInOrder();
-		identify.clickIdentifyForOrderLineItem(index-1);
-		identify.assertIdentifyWithOrderNumberPage(orderNumber);
-		return identifyProduct();
-	}
-
-	private void assertWeAreOnAddWithOrderPage() {
-		identify.assertIdentifyPageHeader();
-		String tabText = "Add with Order";
-		assertEquals(identify.getSelectedTab(), tabText);
-		identify.assertIdentifyAddWithOrderPage();
+	private String identifyAssetWithOrderNumber(IdentifyPage identifyPage, String orderNumber) throws Exception {
+		identifyPage.setOrderNumber(orderNumber);
+		identifyPage.clickLoadOrderNumberButton();
+		int index = identifyPage.getNumberOfLineItemsInOrder();
+		identifyPage.clickIdentifyForOrderLineItem(index);
+		identifyPage.checkIdentifyWithOrderNumberPage(orderNumber);
+		return identifyProduct(identifyPage);
 	}
 
 }

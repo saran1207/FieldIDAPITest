@@ -28,7 +28,11 @@ public class WebPage extends WebEntity {
 	}
 	
 	protected void waitForPageToLoad() {
-		selenium.waitForPageToLoad(DEFAULT_TIMEOUT);
+		waitForPageToLoad(DEFAULT_TIMEOUT);
+	}
+	
+	protected void waitForPageToLoad(String timeout) {
+		selenium.waitForPageToLoad(timeout);
 		if(isOopsPage()) {
 			fail("Got an Oops page. Check Field ID logs.");
 		}
