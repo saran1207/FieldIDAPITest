@@ -71,7 +71,7 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@sf.text name="label.emptyinspectiontypesselected" />
+			<@s.text name="label.emptyinspectiontypesselected" />
 			<a href="<@s.url action="selectInspectionTypes" includeParams="none" productTypeId="${productTypeId}" />"><@s.text name="label.clickheretoselectinspectiontypes"/></a>
 		</p>
 	</div>
