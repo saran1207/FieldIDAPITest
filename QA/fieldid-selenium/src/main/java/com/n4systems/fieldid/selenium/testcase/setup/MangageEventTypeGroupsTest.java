@@ -58,12 +58,11 @@ public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void testAddAndCancelEventTypeGroupt() throws Exception {
+	public void testAddAndCancelEventTypeGroup() throws Exception {
 		manageEventTypeGroupsPage.clickAddTab();
 		assertEquals("Add", manageEventTypeGroupsPage.getCurrentTab());
 		manageEventTypeGroupsPage.clickCancelButton();
 		assertEquals("View All", manageEventTypeGroupsPage.getCurrentTab());
-		
 	}
 	
 	@Test
