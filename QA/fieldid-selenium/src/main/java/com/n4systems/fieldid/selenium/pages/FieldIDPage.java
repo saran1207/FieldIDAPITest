@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.selenium.pages;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -100,7 +103,7 @@ public class FieldIDPage extends WebPage {
 		return selenium.getXpathCount(ERROR_MESSAGE_COUNT_XPATH).intValue();
 	}
 	
-	protected List<String> getFormErrorMessages() {	// gets class="errorMessage"
+	public List<String> getFormErrorMessages() {	// gets class="errorMessage"
 		List<String> result = new ArrayList<String>();
 		
 		int maxIndex = selenium.getXpathCount(ERROR_MESSAGE_COUNT_XPATH).intValue();
@@ -123,6 +126,31 @@ public class FieldIDPage extends WebPage {
 		}
 
 		return result;
+	}
+	
+	public String getValidationErrorFor(String fieldInputId) {
+		String fieldErrorLocator = "css=*[errorfor='" + fieldInputId + "']";
+		assertThat("there is no error message for field " + fieldInputId, selenium.isElementPresent(fieldErrorLocator), is(true));
+		
+		assertThat(selenium.getAttribute(fieldErrorLocator + "@class"), containsString("errorMessage"));
+		return selenium.getText(fieldErrorLocator);
+	}
+	
+	protected List<String> getColumnFromTableStartingAtRow(String tableXpath, Integer columnNumber, Integer startingAtRow) {
+		if (startingAtRow == null) {
+			startingAtRow = 1;
+		}
+		
+		List<String> columnValues = new ArrayList<String>();
+		
+		int numRows = selenium.getXpathCount(tableXpath+"//tr").intValue();
+		for (int i = startingAtRow; i <= numRows; i++) {
+			String cellXpath = tableXpath+"//tr["+i+"]/td["+columnNumber+"]";
+			String value = selenium.getText(cellXpath);
+			columnValues.add(selenium.getText(cellXpath));
+		}
+		
+		return columnValues;
 	}
 
 	public String getCurrentTab() {

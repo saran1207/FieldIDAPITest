@@ -3,8 +3,11 @@ package com.n4systems.fieldid.selenium.pages;
 import static org.junit.Assert.fail;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypeGroupsPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
 import com.thoughtworks.selenium.Selenium;
@@ -41,6 +44,21 @@ public class SetupPage extends FieldIDPage {
 	public AutoAttributeWizardPage clickAutoAttributeWizard() {
 		selenium.click("//a[.='Auto Attribute Wizard']");
 		return new AutoAttributeWizardPage(selenium);
+	}
+	
+	public ManageCommentTemplatesPage clickManageCommentTemplates() {
+		selenium.click("//a[.='Manage Comment Templates']");
+		return new ManageCommentTemplatesPage(selenium);
+	}
+	
+	public ManageProductTypeGroupsPage clickManageProductTypeGroups() {
+		selenium.click("//a[.='Manage Product Type Groups']");
+		return new ManageProductTypeGroupsPage(selenium);
+	}
+	
+	public ManageProductTypesPage clickManageProductTypes() {
+		selenium.click("//a[.='Manage Product Types']");
+		return new ManageProductTypesPage(selenium);
 	}
 	
 }
