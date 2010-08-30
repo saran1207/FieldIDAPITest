@@ -81,7 +81,6 @@ public class OrgPicker extends WebEntity {
 		String division = null;
 		
 		String[] s = selenium.getSelectOptions(selectOwnerCustomerSelectListLocator);
-		;
 		if(s.length > 0 && !s.equals("")) {
 			String customerOrganization = selenium.getSelectedLabel(selectOwnerCustomerSelectListLocator);
 			customer = customerOrganization.replace(" (" + organization + ")", "").trim();

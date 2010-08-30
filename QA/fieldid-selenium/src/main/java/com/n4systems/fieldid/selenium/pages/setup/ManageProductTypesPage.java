@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.n4systems.fieldid.selenium.components.OrgPicker;
+import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
 
 public class ManageProductTypesPage extends FieldIDPage {
@@ -190,7 +194,7 @@ public class ManageProductTypesPage extends FieldIDPage {
 	}
 	
 	public boolean isInspectionFrequencyScheduledForType(String inspectionType) {
-		return selenium.isElementPresent("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[position() = 2 and contains(., 'Not Scheduled')]");
+		return !selenium.isElementPresent("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[position() = 2 and contains(., 'Not Scheduled')]");
 	}
 	
 	public int getScheduledFrequencyForInspectionType(String inspectionType) {
@@ -199,6 +203,24 @@ public class ManageProductTypesPage extends FieldIDPage {
 		Matcher m = frequencyPattern.matcher(freqStr);
 		if (!m.matches()) fail("Bad frequency pattern, could not parse: " + freqStr);
 		return Integer.parseInt(m.group(1).trim());
+	}
+
+	public void addOverrideForOwner(String inspectionType, Owner owner, int frequency) {
+		String cellXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]";
+		if (selenium.isElementPresent(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']")) {
+			selenium.click(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']");
+		}
+		waitForElementToBePresent(cellXpath + "//a[.='Add override']");
+		selenium.click(cellXpath + "//a[.='Add override']");
+		new ConditionWaiter(new Predicate() {
+			@Override
+			public boolean evaluate() {
+				return selenium.isVisible("//form[@id='orgForm']");
+			}
+		}).run("Organization form did not appear!");
+		OrgPicker orgPicker = new OrgPicker(selenium);
+		orgPicker.clickChooseOwner();
+		orgPicker.setOwner(owner);
 	}
 	
 }

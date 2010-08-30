@@ -32,13 +32,13 @@
     
     <target name="test.minimal.data.run" description="Run the tests" depends="init, app.compile" >
         <antcall target="run.junit">
-        	<param name="junit_test_suite" value="AllSecurityTests" />
+        	<param name="junit_test_suite" value="AllSecuritySeleniumTests" />
 		</antcall>
     </target>
   
     <target name="test.full.data.run" description="Run the tests" depends="init, app.compile" >
         <antcall target="run.junit">
-        	<param name="junit_test_suite" value="AllRegularTests" />
+        	<param name="junit_test_suite" value="AllRegularSeleniumTests" />
         </antcall>
     </target>
     

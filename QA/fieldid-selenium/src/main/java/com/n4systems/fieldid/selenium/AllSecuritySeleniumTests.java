@@ -8,7 +8,7 @@ import com.n4systems.fieldid.selenium.PackageJunitRunner.SuitePackage;
 
 @RunWith(PackageJunitRunner.class)
 @SuitePackage("com.n4systems.fieldid.selenium.testcase")
-public class AllRegularTests {
+public class AllSecuritySeleniumTests {
 
 	@BeforePackage
 	public static void setupSeleniumForSuite() {
