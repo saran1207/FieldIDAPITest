@@ -43,6 +43,7 @@
           white-space:nowrap;\
           min-width:185px;\
           padding-right:15px;\
+          text-decoration:none;\
         }\
         .containerobj a:focus {\
           outline:none;\
@@ -72,6 +73,7 @@
           right:0;\
           text-decoration:none;\
           font-size:0.7em;\
+          padding-top:0;\
         }\
         .treeHeading{\
         	background-color:#D0DAFA;\
