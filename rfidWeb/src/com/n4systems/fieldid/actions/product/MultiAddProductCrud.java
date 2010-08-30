@@ -56,6 +56,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	private OwnerPicker ownerPicker;
 	private String saveAndInspect;
+	private Integer maxProducts;
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
 	private AssetWebModel asset = new AssetWebModel(this);
@@ -202,18 +203,18 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	}
 	
 	public Integer getMaxProducts() {
-		Integer result;
-		
-		if (getLimits().isAssetsMaxed()) {
-			result = 0;
-		} else {
-			Integer configMax = getConfigContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
-			Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
+		if (maxProducts == null) {
+			if (getLimits().isAssetsMaxed()) {
+				maxProducts = 0;
+			} else {
+				Integer configMax = getConfigContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
+				Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
 
-			result = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;
+				maxProducts = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;
+			}
 		}
-		
-		return result;
+
+		return maxProducts;
 	}
 	
 	/*************** Form input get/set's go below here **********************/
