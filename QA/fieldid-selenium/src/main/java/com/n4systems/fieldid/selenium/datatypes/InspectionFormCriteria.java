@@ -1,13 +1,11 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class InspectionFormCriteria {
 	String criteriaLabel;
 	String buttonGroup;
 	boolean setsResult;
-	List<InspectionFormObservations> observations = new ArrayList<InspectionFormObservations>();
+	InspectionFormObservations observations;
 	
 	public InspectionFormCriteria(String criteriaLabel, String buttonGroup) {
 		this.criteriaLabel = criteriaLabel;
@@ -38,22 +36,11 @@ public class InspectionFormCriteria {
 		this.setsResult = setsResult;
 	}
 
-	public List<InspectionFormObservations> getObservations() {
+	public InspectionFormObservations getObservations() {
 		return observations;
 	}
 	
-	public InspectionFormObservations getObservation(int index) {
-		if(observations.size() < index) {
-			return null;
-		}
-		return observations.get(index);
-	}
-
-	public void setObservations(List<InspectionFormObservations> observations) {
+	public void setObservations(InspectionFormObservations observations) {
 		this.observations = observations;
-	}
-
-	public void addObservation(int index, InspectionFormObservations element) {
-		observations.add(index, element);
 	}
 }

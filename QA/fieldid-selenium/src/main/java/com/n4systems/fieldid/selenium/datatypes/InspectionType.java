@@ -8,6 +8,7 @@ public class InspectionType {
 	String group;
 	boolean printable;
 	boolean masterInspection;
+	boolean assignedToAvailable;
 	List<String> supportedProofTestTypes = new ArrayList<String>();
 	List<String> inspectionAttributes = new ArrayList<String>();
 	InspectionForm inspectionForm = null;
@@ -46,6 +47,14 @@ public class InspectionType {
 
 	public void setMasterInspection(boolean masterInspection) {
 		this.masterInspection = masterInspection;
+	}
+
+	public boolean isAssignedToAvailable() {
+		return assignedToAvailable;
+	}
+
+	public void setAssignedToAvailable(boolean assignedToAvailable) {
+		this.assignedToAvailable = assignedToAvailable;
 	}
 
 	public List<String> getSupportedProofTestTypes() {

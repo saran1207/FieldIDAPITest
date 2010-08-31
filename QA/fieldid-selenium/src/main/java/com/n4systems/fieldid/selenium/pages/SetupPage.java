@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypesPage;
@@ -65,6 +66,11 @@ public class SetupPage extends FieldIDPage {
 	public ManageProductTypesPage clickManageProductTypes() {
 		selenium.click("//a[.='Manage Product Types']");
 		return new ManageProductTypesPage(selenium);
+	}
+	
+	public ManageInspectionTypesPage clickManageInspectionTypes() {
+		selenium.click("//a[.='Manage Inspection Types']");
+		return new ManageInspectionTypesPage(selenium);
 	}
 	
 }
