@@ -1,6 +1,10 @@
 package com.n4systems.fieldid.selenium.pages.setup;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import com.n4systems.fieldid.selenium.datatypes.EventTypeGroup;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
@@ -98,6 +102,18 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 	
 	public boolean listItemExists(String name) {
 		return selenium.isElementPresent("//table[@class='list']//td[text()='" + name + "']");
+	}
+
+	public void verifyEventTypeSaved() {
+		List <String> actionMessages = getActionMessages();
+		assertFalse(actionMessages.isEmpty());
+		assertEquals("Event Type Group saved.", actionMessages.get(0).trim());
+	}
+
+	public void verifyEventTypeDeleted() {
+		List <String> actionMessages = getActionMessages();
+		assertFalse(actionMessages.isEmpty());
+		assertEquals("Event Type Group deleted.", actionMessages.get(0).trim());
 	}
 
 }

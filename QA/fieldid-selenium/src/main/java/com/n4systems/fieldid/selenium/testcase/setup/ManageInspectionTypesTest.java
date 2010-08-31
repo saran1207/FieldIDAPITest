@@ -27,26 +27,26 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testViewAllInspectionTypes() throws Exception {
+	public void test_view_all_inspection_types() throws Exception {
 		assertEquals("View All", manageInspectionTypesPage.getCurrentTab());
 	}
 	
 	@Test
-	public void testViewInspectionType() throws Exception {
+	public void test_view_inspection_type() throws Exception {
 		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
 		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
 		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));
 	}
 	
 	@Test
-	public void testEditInspectionTypeFromList() throws Exception {
+	public void test_edit_inspection_type_from_list() throws Exception {
 		String inspectionName = manageInspectionTypesPage.clickFirstListItemEdit();
 		assertEquals("Edit", manageInspectionTypesPage.getCurrentTab());
 		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));		
 	}
 
 	@Test
-	public void testEditInspectionTypeFromTab() throws Exception {
+	public void test_edit_inspection_type_from_tab() throws Exception {
 		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
 		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
 		manageInspectionTypesPage.clickEditTab();
@@ -55,7 +55,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testViewInspectionForm() throws Exception {
+	public void test_view_inspection_form() throws Exception {
 		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
 		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
 		manageInspectionTypesPage.clickInspectionFormTab();
@@ -64,7 +64,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void testImportInspectionType() throws Exception {
+	public void test_import_inspection_type() throws Exception {
 		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
 		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
 		manageInspectionTypesPage.clickImportTab();
@@ -73,7 +73,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testAddInspectionTypeSaveWithError() throws Exception {
+	public void test_add_inspection_type_save_with_error() throws Exception {
 		manageInspectionTypesPage.clickAddTab();
 		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
 		manageInspectionTypesPage.clickSave();
@@ -81,7 +81,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testAddInspectionTypeSaveAndAddWithError() throws Exception {
+	public void test_add_inspection_type_save_and_add_with_error() throws Exception {
 		manageInspectionTypesPage.clickAddTab();
 		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
 		manageInspectionTypesPage.clickSaveAndAdd();
@@ -89,7 +89,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testAddInspectionTypeCancel() throws Exception {
+	public void test_add_inspection_type_cancel() throws Exception {
 		manageInspectionTypesPage.clickAddTab();
 		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
 		manageInspectionTypesPage.clickCancel();
@@ -97,7 +97,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void testAddAndDeleteInspectionType() throws Exception {
+	public void test_add_and_delete_inspection_type() throws Exception {
 		if(manageInspectionTypesPage.listItemExists(TEST_INSPECTION_NAME)) {
 			manageInspectionTypesPage.clickListItem(TEST_INSPECTION_NAME);
 			deleteTestInspection();
@@ -115,7 +115,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void testAddInspectionTypeAndInspectionForm() throws Exception {
+	public void test_add_inspection_type_and_inspection_form() throws Exception {
 		if(manageInspectionTypesPage.listItemExists(TEST_INSPECTION_NAME)) {
 			manageInspectionTypesPage.clickListItem(TEST_INSPECTION_NAME);
 			deleteTestInspection();
@@ -137,7 +137,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void testAddInspectionFormWithErrors() throws Exception {
+	public void test_add_inspection_form_with_errors() throws Exception {
 		if(manageInspectionTypesPage.listItemExists(TEST_INSPECTION_NAME)) {
 			manageInspectionTypesPage.clickListItem(TEST_INSPECTION_NAME);
 			deleteTestInspection();
