@@ -1635,3 +1635,7 @@ input.description {
 	border:none;
 }
 
+.containerobj p {
+	min-height:18px;
+	padding:0;
+}
