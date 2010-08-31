@@ -1,0 +1,24 @@
+.serialNumberStatus {
+	margin-left: 25px;
+	font-weight: bold;
+	padding:0px
+}
+
+.subProductAdd {
+	margin-left: 15px;
+}
+
+#commentTemplateSelection {
+	margin-bottom:5px;
+}
+
+h2 {
+	background-color:#DADFFA;
+}
+
+#registerOverNetworkLinkContainer {
+	padding: 5px;
+}
+
+
+

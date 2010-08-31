@@ -1,0 +1,39 @@
+.emptyAssets, .emptyEvents, .emptyNotes, .emptyResources {
+	padding: 5px 15px;
+	border-bottom:1px solid #D0DAFD;
+}
+#eventCounts {
+	padding: 5px 15px;
+	border-bottom:1px solid #D0DAFD;
+	}
+	
+#eventCounts a {
+	padding-right: 10px
+}
+
+
+.jobResource {
+	border-bottom: 1px solid #D0DAFD;
+	overflow: hidden;
+	padding:5px;
+	padding-left:15px;
+}
+
+.jobResource:hover {
+	background-color: #D0DAFD
+}
+.jobResourceName, .jobResourcePosition {
+	width: 200px;
+	display:block;
+	float:left; 
+}
+
+.jobResourceText {
+	margin-bottom: 5px;
+}
+
+.jobResourceRemoval {
+	width: 100px;
+	float:left;
+	margin-top:0.5em;
+}

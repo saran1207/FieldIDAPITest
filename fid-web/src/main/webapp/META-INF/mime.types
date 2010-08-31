@@ -1,0 +1,5 @@
+application/pdf				pdf PDF
+application/msword			doc DOC
+application/vnd.ms-excel	xls XLS
+application/zip				zip ZIP
+image/png					png	PNG

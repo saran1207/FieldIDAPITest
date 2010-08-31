@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<!-- Struts 2.0 -->
+	<filter>
+		<filter-name>struts-cleanup</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp
+		</filter-class>
+	</filter>
+	<filter>
+		<filter-name>sitemesh</filter-name>
+		<filter-class>org.apache.struts2.sitemesh.FreeMarkerPageFilter
+		</filter-class>
+	</filter>
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher
+		</filter-class>
+		<init-param>
+			<param-name>actionPackages</param-name>
+			<param-value>com.n4systems.fieldid.actions
+			</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts-cleanup</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>sitemesh</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<!-- end:Struts 2.0 -->
+
+	<!-- Log4J -->
+	<servlet>
+		<servlet-name>log4j-init</servlet-name>
+		<servlet-class>com.n4systems.fieldid.log4j.Log4jInit
+		</servlet-class>
+		<init-param>
+			<param-name>log4j-init-file</param-name>
+			<param-value>WEB-INF/classes/log4j.properties
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- end:Log4J -->
+	<servlet>
+		<servlet-name>ApplicationBootstrap</servlet-name>
+		<servlet-class>com.n4systems.fieldid.servlets.ApplicationBootstrap
+		</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>XFireServlet</servlet-name>
+		<servlet-class>
+			org.codehaus.xfire.transport.http.XFireConfigurableServlet
+		</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>JspSupportServlet</servlet-name>
+		<servlet-class>org.apache.struts2.views.JspSupportServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>XFireServlet</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<mime-mapping>
+		<extension>pdf</extension>
+		<mime-type>application/pdf</mime-type>
+	</mime-mapping>
+
+	<welcome-file-list>
+		<welcome-file>other_html/index.html</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+		<error-code>400</error-code>
+		<location>/static/html/400.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>401</error-code>
+		<location>/static/html/401.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/static/html/403.html</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/static/html/404.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/static/html/500.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>503</error-code>
+		<location>/static/html/503.html</location>
+	</error-page>
+
+	<mime-mapping>
+		<extension>htc</extension>
+		<mime-type>text/x-component</mime-type>
+	</mime-mapping>
+
+	<jsp-config>
+
+	</jsp-config>
+
+</web-app>

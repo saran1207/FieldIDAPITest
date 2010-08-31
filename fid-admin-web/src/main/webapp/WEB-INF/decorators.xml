@@ -1,0 +1,14 @@
+<decorators defaultdir="/templates/html"> 
+    <excludes> 
+        <pattern>/styles/*</pattern> 
+        <pattern>/scripts/*</pattern> 
+        <pattern>/images/*</pattern> 
+        <pattern>/templates/ajax_pieces/*</pattern>
+        <pattern>/ajax/*</pattern>
+        <pattern>/signIn.action</pattern>
+    </excludes> 
+ 
+    <decorator name="layout" page="/templates/html/layout.ftl"> 
+        <pattern>*.action</pattern> 
+    </decorator> 
+</decorators> 

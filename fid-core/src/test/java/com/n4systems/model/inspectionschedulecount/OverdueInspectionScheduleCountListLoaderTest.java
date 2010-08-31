@@ -1,0 +1,87 @@
+package com.n4systems.model.inspectionschedulecount;
+
+import static com.n4systems.model.builders.NotificationSettingBuilder.*;
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.TestingQueryBuilder;
+import com.n4systems.util.persistence.TestingTransaction;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.time.Clock;
+import com.n4systems.util.time.StoppedClock;
+
+
+public class OverdueInspectionScheduleCountListLoaderTest {
+
+	private NotificationSetting notificationSettings;
+
+
+	@Before
+	public void createNotificationSettings() throws Exception {
+		notificationSettings = aNotificationSetting().build();
+	}
+
+	@Test
+	public void should_apply_non_completed_schedule_filter_to_query_builder() throws Exception {
+		OverdueInspectionScheduleCountListLoaderExtention sut = new OverdueInspectionScheduleCountListLoaderExtention(new OpenSecurityFilter());
+		sut.setClock(new StoppedClock()).setNotificationSetting(notificationSettings);
+		
+		sut.load(new TestingTransaction());
+		
+		WhereParameter<?> whereParameter = (WhereParameter<?>)sut.queryBuilder.getWhereParameter("status");
+		assertEquals(Comparator.NE, whereParameter.getComparator());
+		assertEquals(ScheduleStatus.COMPLETED, whereParameter.getValue());
+	}
+	
+	@Test
+	public void should_apply_a_filter_to_find_all_schedules_before_today() throws Exception {
+		Clock clock = new StoppedClock();
+		
+		OverdueInspectionScheduleCountListLoaderExtention sut = new OverdueInspectionScheduleCountListLoaderExtention(new OpenSecurityFilter());
+		sut.setClock(clock).setNotificationSetting(notificationSettings);
+
+		sut.load(new TestingTransaction());
+		
+		WhereParameter<?> whereParameter = (WhereParameter<?>)sut.queryBuilder.getWhereParameter("toDate");
+		assertEquals(Comparator.LT, whereParameter.getComparator());
+		assertEquals(clock.currentTime(), whereParameter.getValue());
+	}
+	
+	
+	@Test(expected=InvalidArgumentException.class)
+	public void should_not_allow_use_if_a_clock_is_not_handed_in() throws Exception {
+		OverdueInspectionScheduleCountListLoaderExtention sut = new OverdueInspectionScheduleCountListLoaderExtention(new OpenSecurityFilter());
+		sut.setNotificationSetting(notificationSettings);
+		
+		sut.load(new TestingTransaction());
+	}
+	
+	
+	private class OverdueInspectionScheduleCountListLoaderExtention extends OverdueInspectionScheduleCountListLoader {
+
+		private TestingQueryBuilder<InspectionScheduleCount> queryBuilder;
+
+		public OverdueInspectionScheduleCountListLoaderExtention(SecurityFilter filter) {
+			super(filter);
+		}
+
+
+
+		@Override
+		protected QueryBuilder<InspectionScheduleCount> getQueryBuilder(SecurityFilter filter) {
+			queryBuilder = new TestingQueryBuilder<InspectionScheduleCount>(InspectionSchedule.class);
+			return queryBuilder;
+		}
+		
+	}
+}

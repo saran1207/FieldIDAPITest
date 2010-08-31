@@ -1,0 +1,349 @@
+<CountryList>
+  <Country name="Afghanistan" code="AF">
+    <Region name="Kabul" zone="Asia/Kabul"/>
+  </Country>
+  <Country name="Algeria" code="DZ">
+    <Region name="Algiers" zone="Africa/Algiers"/>
+  </Country>
+  <Country name="Argentina" code="AR">
+    <Region name="Buenos Aires" zone="America/Argentina/Buenos_Aires"/>
+  </Country>
+  <Country name="Australia" code="AU">
+    <Region name="Australian Capital Territory - Canberra" zone="Australia/Canberra"/>
+    <Region name="New South Wales - Sydney" zone="Australia/Sydney"/>
+    <Region name="Northern Territory - Darwin" zone="Australia/Darwin"/>
+    <Region name="Queensland - Brisbane" zone="Australia/Brisbane"/>
+    <Region name="South Australia - Adelaide" zone="Australia/Adelaide"/>
+    <Region name="Victoria - Melbourne" zone="Australia/Melbourne"/>
+    <Region name="Western Australia - Perth" zone="Australia/Perth"/>
+  </Country>
+  <Country name="Austria" code="AT">
+    <Region name="Vienna" zone="Europe/Vienna"/>
+  </Country>
+  <Country name="Bahamas" code="BS">
+    <Region name="Nassau" zone="America/Nassau"/>
+  </Country>
+  
+  <Country name="Bangladesh" code="BD">
+    <Region name="Dhaka" zone="Asia/Dhaka"/>
+  </Country>
+  <Country name="Belarus" code="BY">
+    <Region name="Minsk" zone="Europe/Minsk"/>
+  </Country>
+  <Country name="Belgium" code="BE">
+    <Region name="Brussels" zone="Europe/Brussels"/>
+  </Country>
+  <Country name="Bolivia" code="BO">
+    <Region name="La Paz" zone="America/La_Paz"/>
+  </Country>
+  <Country name="Brazil" code="BR">
+    <Region name="Distrito Federal - Brasilia" zone="America/Sao_Paulo"/>
+    <Region name="Rio de Janeiro - Rio de Janeiro" zone="America/Sao_Paulo"/>
+    <Region name="São Paulo - Sao Paulo" zone="America/Sao_Paulo"/>
+    <Region name="Santarem" zone="America/Santarem"/>
+  </Country>
+  <Country name="Bulgaria" code="BG">
+    <Region name="Sofia" zone="Europe/Sofia"/>
+  </Country>
+  <Country name="Canada" code="CA">
+    <Region name="Alberta - Edmonton" zone="America/Edmonton"/>
+    <Region name="British Columbia - Vancouver" zone="America/Vancouver"/>
+    <Region name="Manitoba - Winnipeg" zone="America/Winnipeg"/>
+    <Region name="Newfoundland and Labrador - St. John&apos;s" zone="America/St_Johns"/>
+    <Region name="Nova Scotia - Halifax" zone="America/Halifax"/>
+    <Region name="Ontario - Ottawa" zone="America/Toronto"/>
+    <Region name="Ontario - Toronto" zone="America/Toronto"/>
+    <Region name="Quebec - Montreal" zone="America/Montreal"/>
+  </Country>
+  <Country name="Cayman Islands" code="KY">
+    <Region name="Cayman Islands" zone="America/Cayman"/>
+  </Country>
+  <Country name="Chile" code="CL">
+    <Region name="Santiago" zone="America/Santiago"/>
+  </Country>
+  <Country name="China" code="CN">
+    <Region name="Beijing" zone="Asia/Shanghai"/>
+    <Region name="Hong Kong" zone="Asia/Hong_Kong"/>
+    <Region name="Shanghai" zone="Asia/Shanghai"/>
+  </Country>
+  <Country name="Colombia" code="CO">
+    <Region name="Bogota" zone="America/Bogota"/>
+  </Country>
+  <Country name="Croatia" code="HR">
+    <Region name="Zagreb" zone="Europe/Zagreb"/>
+  </Country>
+  <Country name="Cuba" code="CU">
+    <Region name="Havana" zone="America/Havana"/>
+  </Country>
+  <Country name="Czech Republic" code="CZ">
+    <Region name="Prague" zone="Europe/Prague"/>
+  </Country>
+  <Country name="Denmark" code="DK">
+    <Region name="Copenhagen" zone="Europe/Copenhagen"/>
+  </Country>
+  <Country name="Dominican Republic" code="DO">
+    <Region name="Santo Domingo" zone="America/Santo_Domingo"/>
+  </Country>
+  <Country name="Egypt" code="EG">
+    <Region name="Cairo" zone="Africa/Cairo"/>
+  </Country>
+  <Country name="El Salvador" code="SV">
+    <Region name="San Salvador" zone="America/El_Salvador"/>
+  </Country>
+  <Country name="Estonia" code="EE">
+    <Region name="Tallinn" zone="Europe/Tallinn"/>
+  </Country>
+  <Country name="Ethiopia" code="ET">
+    <Region name="Addis Ababa" zone="Africa/Addis_Ababa"/>
+  </Country>
+  <Country name="Finland" code="FI">
+    <Region name="Helsinki" zone="Europe/Helsinki"/>
+  </Country>
+  <Country name="France" code="FR">
+    <Region name="Paris" zone="Europe/Paris"/>
+  </Country>
+  <Country name="Germany" code="DE">
+    <Region name="Berlin - Berlin" zone="Europe/Berlin"/>
+    <Region name="Hesse - Frankfurt" zone="Europe/Berlin"/>
+  </Country>
+  <Country name="Greece" code="GR">
+    <Region name="Athens" zone="Europe/Athens"/>
+  </Country>
+  <Country name="Guatemala" code="GT">
+    <Region name="Guatemala" zone="America/Guatemala"/>
+  </Country>
+  <Country name="Honduras" code="HN">
+    <Region name="Tegucigalpa" zone="America/Tegucigalpa"/>
+  </Country>
+  <Country name="Hungary" code="HU">
+    <Region name="Budapest" zone="Europe/Budapest"/>
+  </Country>
+  <Country name="Iceland" code="IS">
+    <Region name="Reykjavik" zone="Atlantic/Reykjavik"/>
+  </Country>
+  <Country name="India" code="IN">
+    <Region name="Delhi - New Delhi" zone="Asia/Calcutta"/>
+    <Region name="Maharashtra - Mumbai" zone="Asia/Calcutta"/>
+    <Region name="West Bengal - Kolkata" zone="Asia/Calcutta"/>
+  </Country>
+  <Country name="Indonesia" code="ID">
+    <Region name="Java - Jakarta" zone="Asia/Jakarta"/>
+  </Country>
+  <Country name="Iran" code="IR">
+    <Region name="Tehran" zone="Asia/Tehran"/>
+  </Country>
+  <Country name="Iraq" code="IQ">
+    <Region name="Baghdad" zone="Asia/Baghdad"/>
+  </Country>
+  <Country name="Ireland" code="IE">
+    <Region name="Dublin" zone="Europe/Dublin"/>
+  </Country>
+  <Country name="Israel" code="IL">
+    <Region name="Jerusalem" zone="Asia/Jerusalem"/>
+  </Country>
+  <Country name="Italy" code="IT">
+    <Region name="Rome" zone="Europe/Rome"/>
+  </Country>
+  <Country name="Jamaica" code="JM">
+    <Region name="Kingston" zone="America/Jamaica"/>
+  </Country>
+  <Country name="Japan" code="JP">
+    <Region name="Tokyo" zone="Asia/Tokyo"/>
+  </Country>
+  <Country name="Jordan" code="JO">
+    <Region name="Amman" zone="Asia/Amman"/>
+  </Country>
+  <Country name="Kazakstan" code="KZ">
+    <Region name="Almaty" zone="Asia/Almaty"/>
+  </Country>
+  <Country name="Kenya" code="KE">
+    <Region name="Nairobi" zone="Africa/Nairobi"/>
+  </Country>
+  <Country name="Kiribati" code="KI">
+    <Region name="Christmas Islands - Kiritimati" zone="Pacific/Kiritimati"/>
+  </Country>
+  <Country name="Kuwait" code="KW">
+    <Region name="Kuwait City" zone="Asia/Kuwait"/>
+  </Country>
+  <Country name="Lebanon" code="LB">
+    <Region name="Beirut" zone="Asia/Beirut"/>
+  </Country>
+  <Country name="Madagascar" code="MG">
+    <Region name="Antananarivo" zone="Indian/Antananarivo"/>
+  </Country>
+  <Country name="Malaysia" code="MY">
+    <Region name="Kuala Lumpur" zone="Asia/Kuala_Lumpur"/>
+  </Country>
+  <Country name="Mexico" code="MX">
+    <Region name="Federal District - Mexico City" zone="America/Mexico_City"/>
+  </Country>
+  <Country name="Morocco" code="MA">
+    <Region name="Casablanca" zone="Africa/Casablanca"/>
+  </Country>
+  <Country name="Netherlands" code="NL">
+    <Region name="Amsterdam" zone="Europe/Amsterdam"/>
+  </Country>
+  <Country name="New Zealand" code="NZ">
+    <Region name="Auckland" zone="Pacific/Auckland"/>
+    <Region name="Chatham Island" zone="Pacific/Chatham"/>
+  </Country>
+  <Country name="Nicaragua" code="NI">
+    <Region name="Managua" zone="America/Managua"/>
+  </Country>
+  <Country name="Nigeria" code="NG">
+    <Region name="Lagos" zone="Africa/Lagos"/>
+  </Country>
+  <Country name="Norway" code="NO">
+    <Region name="Oslo" zone="Europe/Oslo"/>
+  </Country>
+  <Country name="Pakistan" code="PK">
+    <Region name="Islamabad" zone="Asia/Karachi"/>
+    <Region name="Karachi" zone="Asia/Karachi"/>
+    <Region name="Lahore" zone="Asia/Karachi"/>
+  </Country>
+  <Country name="Paraguay" code="PY">
+    <Region name="Asuncion" zone="America/Asuncion"/>
+  </Country>
+  <Country name="Peru" code="PE">
+    <Region name="Lima - Lima" zone="America/Lima"/>
+  </Country>
+  <Country name="Philippines" code="PH">
+    <Region name="Manila" zone="Asia/Manila"/>
+  </Country>
+  <Country name="Poland" code="PL">
+    <Region name="Warsaw" zone="Europe/Warsaw"/>
+  </Country>
+  <Country name="Portugal" code="PT">
+    <Region name="Lisbon" zone="Europe/Lisbon"/>
+  </Country>
+  <Country name="Puerto Rico" code="PR">
+    <Region name="San Juan" zone="America/Argentina/San_Juan"/>
+  </Country>
+  <Country name="Romania" code="RO">
+    <Region name="Bucharest" zone="Europe/Bucharest"/>
+  </Country>
+  <Country name="Russia" code="RU">
+    <Region name="Anadyr" zone="Asia/Anadyr"/>
+    <Region name="Kamchatka" zone="Asia/Kamchatka"/>
+    <Region name="Moscow" zone="Europe/Moscow"/>
+    <Region name="Vladivostok" zone="Asia/Vladivostok"/>
+  </Country>
+  <Country name="Saudi Arabia" code="SA">
+    <Region name="Riyadh" zone="Asia/Riyadh"/>
+  </Country>
+  <Country name="Serbia" code="XS">
+    <Region name="Belgrade" zone="Europe/Belgrade"/>
+  </Country>
+  <Country name="Singapore" code="SG">
+    <Region name="Singapore" zone="Asia/Singapore"/>
+  </Country>
+  <Country name="South Africa" code="ZA">
+    <Region name="Cape Town" zone="Africa/Johannesburg"/>
+    <Region name="Johannesburg" zone="Africa/Johannesburg"/>
+  </Country>
+  <Country name="South Korea" code="KR">
+    <Region name="Seoul" zone="Asia/Seoul"/>
+  </Country>
+  <Country name="Spain" code="ES">
+    <Region name="Barcelona - Barcelona" zone="Europe/Madrid"/>
+    <Region name="Madrid" zone="Europe/Madrid"/>
+  </Country>
+  <Country name="Sudan" code="SD">
+    <Region name="Khartoum" zone="Africa/Khartoum"/>
+  </Country>
+  <Country name="Sweden" code="SE">
+    <Region name="Stockholm" zone="Europe/Stockholm"/>
+  </Country>
+  <Country name="Switzerland" code="CH">
+    <Region name="Geneva" zone="Europe/Zurich"/>
+    <Region name="Z�rich" zone="Europe/Zurich"/>
+  </Country>
+  <Country name="Taiwan" code="TW">
+    <Region name="Taipei" zone="Asia/Taipei"/>
+  </Country>
+  <Country name="Thailand" code="TH">
+    <Region name="Bangkok" zone="Asia/Bangkok"/>
+  </Country>
+  <Country name="Turkey" code="TR">
+    <Region name="Ankara" zone="Asia/Istanbul"/>
+    <Region name="Istanbul" zone="Asia/Istanbul"/>
+  </Country>
+  <Country name="United Arab Emirates" code="AE">
+    <Region name="Dubai - Dubai" zone="Asia/Dubai"/>
+  </Country>
+  <Country name="United Kingdom" code="UK">
+    <Region name="England - Liverpool" zone="Europe/London"/>
+    <Region name="England - London" zone="Europe/London"/>
+    <Region name="Scotland - Edinburgh" zone="Europe/London"/>
+    <Region name="Scotland - Glasgow" zone="Europe/London"/>
+  </Country>
+  <Country name="United States" code="US">
+    <Region name="Alabama - Birmingham" zone="America/Chicago"/>
+    <Region name="Alabama - Mobile" zone="America/Chicago"/>
+    <Region name="Alabama - Montgomery" zone="America/Chicago"/>
+    <Region name="Alaska - Adak" zone="America/Adak"/>
+    <Region name="Alaska - Anchorage" zone="America/Anchorage"/>
+    <Region name="Alaska - Fairbanks" zone="America/Anchorage"/>
+    <Region name="Alaska - Juneau" zone="America/Anchorage"/>
+    <Region name="Alaska - Nome" zone="America/Anchorage"/>
+    <Region name="Arizona - Mesa" zone="America/Phoenix"/>
+    <Region name="Arizona - Phoenix" zone="America/Phoenix"/>
+    <Region name="Arizona - Tucson" zone="America/Phoenix"/>
+    <Region name="Arkansas - Little Rock" zone="America/Chicago"/>
+    <Region name="California - Anaheim" zone="America/Los_Angeles"/>
+    <Region name="California - Fresno" zone="America/Los_Angeles"/>
+    <Region name="California - Long Beach" zone="America/Los_Angeles"/>
+    <Region name="California - Los Angeles" zone="America/Los_Angeles"/>
+    <Region name="California - Oakland" zone="America/Los_Angeles"/>
+    <Region name="California - Sacramento" zone="America/Los_Angeles"/>
+    <Region name="California - San Diego" zone="America/Los_Angeles"/>
+    <Region name="California - San Francisco" zone="America/Los_Angeles"/>
+    <Region name="California - San Jose" zone="America/Los_Angeles"/>
+    <Region name="Colorado - Denver" zone="America/Denver"/>
+    <Region name="Connecticut - Hartford" zone="America/Detroit"/>
+    <Region name="Delaware - Dover" zone="America/Detroit"/>
+    <Region name="District of Columbia - Washington DC" zone="America/Detroit"/>
+    <Region name="Florida - Jacksonville" zone="America/Detroit"/>
+    <Region name="Florida - Miami" zone="America/Detroit"/>
+    <Region name="Florida - Orlando" zone="America/Detroit"/>
+    <Region name="Florida - Pensacola" zone="America/Chicago"/>
+    <Region name="Florida - Tampa" zone="America/Detroit"/>
+    <Region name="Georgia - Atlanta" zone="America/Detroit"/>
+    <Region name="Hawaii - Honolulu" zone="Pacific/Honolulu"/>
+    <Region name="Idaho - Boise" zone="America/Denver"/>
+    <Region name="Illinois - Chicago" zone="America/Chicago"/>
+    <Region name="Indiana - Indianapolis" zone="America/Indiana/Indianapolis"/>
+    <Region name="Iowa - Des Moines" zone="America/Chicago"/>
+    <Region name="Kansas - Topeka" zone="America/Chicago"/>
+    <Region name="Kansas - Wichita" zone="America/Chicago"/>
+    <Region name="Kentucky - Frankfort" zone="America/Kentucky/Louisville"/>
+    <Region name="Kentucky - Louisville" zone="America/Kentucky/Louisville"/>
+    <Region name="Louisiana - Baton Rouge" zone="America/Chicago"/>
+    <Region name="Louisiana - New Orleans" zone="America/Chicago"/>
+    <Region name="Maine - Augusta" zone="America/Chicago"/>
+    <Region name="Massachusetts - Boston" zone="America/New_York"/>
+    <Region name="Michigan - Detroit" zone="America/Detroit"/>
+    <Region name="Minnesota - Minneapolis" zone="America/Chicago"/>
+    <Region name="Minnesota - St. Paul" zone="America/Chicago"/>
+    <Region name="North Dakota - Bismarck" zone="America/Chicago"/>
+    <Region name="New York - New York" zone="America/New_York"/>
+    <Region name="Pennsylvania - Philadelphia" zone="America/New_York"/>
+    <Region name="Texas - Houston" zone="America/Chicago"/>
+    <Region name="Washington - Seattle" zone="America/Los_Angeles"/>
+  </Country>
+  <Country name="Uruguay" code="UY">
+    <Region name="Montevideo" zone="America/Montevideo"/>
+  </Country>
+  <Country name="Uzbekistan" code="UZ">
+    <Region name="Tashkent" zone="Asia/Tashkent"/>
+  </Country>
+  <Country name="Venezuela" code="VE">
+    <Region name="Caracas" zone="America/Caracas"/>
+  </Country>
+  <Country name="Yemen" code="YE">
+    <Region name="Aden" zone="America/Denver"/>
+  </Country>
+  <Country name="Zimbabwe" code="ZW">
+    <Region name="Harare" zone="Africa/Harare"/>
+  </Country>
+</CountryList>

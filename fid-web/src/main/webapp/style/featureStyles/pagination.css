@@ -1,0 +1,33 @@
+.paginationWrapper {
+	overflow:hidden;
+	width:100%;
+	clear:both;
+}
+.pagination {
+	text-align: right;
+	margin: 10px 5px;
+	clear:both;
+	float:right;
+}
+.pagination li {
+	float:left;
+	padding: 0 3px;
+}
+.pagination a, .pagination span {
+	display:block;
+	padding:3px 5px;
+}
+.pagination span {
+	padding:5px 7px;
+}
+.pagination .gotoPage {
+	padding: 2px;
+}
+.pagination a {
+	border: 1px solid #D0DAFA;
+	text-decoration: none;
+}
+.pagination a:hover {
+	color: #000;
+	background-color: #D0DAFA;
+}

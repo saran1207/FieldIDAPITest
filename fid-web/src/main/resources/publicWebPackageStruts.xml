@@ -1,0 +1,81 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<package name="publicWeb" extends="default" namespace="/public">
+		<default-interceptor-ref name="brandedFlashPublicStack" />
+		<global-results>
+			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
+		</global-results>
+		
+		<action name="signUpPackages" method="showPlansAndPricing" class="com.n4systems.fieldid.actions.subscriptions.PlansAndPricingAction">
+			<result name="external" type="redirect">
+				<param name="location">${externalUrl}</param>
+			</result>
+			
+			<result name="internal" type="redirectAction">
+				<param name="actionName">localPlansAndPricing</param>
+				<param name="refCode">${refCode}</param>
+			</result>
+			
+			<result name="error" type="redirectAction">localPlansAndPricing</result>
+			<result name="input" type="redirectAction">localPlansAndPricing</result>
+		</action>
+
+		<action name="localPlansAndPricing" method="list" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
+		</action>
+
+		<action name="signUpAdd" method="add" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
+			<result name="missing" type="redirectAction">signUpPackages</result>
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
+		</action>
+
+		<action name="signUpCreate" method="create"	class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
+			<result name="missing" type="redirectAction">signUpPackages</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
+			<result name="serious_error" type="redirectAction">
+				<param name="actionName">signUpComplete</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">signUpComplete</param>
+			</result>
+		</action>
+		
+		<action name="signUpComplete" method="show" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
+			<result name="missing" type="redirectAction">signUpPackages</result>
+			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/show.ftl</result>
+		</action>
+		
+	</package>
+	
+	<package name="publicAjax" extends="default" namespace="/public/ajax">
+		<default-interceptor-ref name="brandedFlashPublicStack" />
+		
+		<global-results>
+			<result name="error" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+			<result name="input" type="freemarker">/templates/ajax/ajax/error.ftl</result>
+		</global-results>
+	
+		<action name="signUpPackagePrice" method="show" class="com.n4systems.fieldid.actions.subscriptions.SignUpPackagePriceCrud">
+			<result name="success" type="freemarker">/templates/ajax/subscriptions/signUpPackagePrice/show.ftl</result>
+		</action>
+		<action name="validPromoCode" method="show" class="com.n4systems.fieldid.actions.subscriptions.ValidPromoCodeCrud">
+			<result name="success" type="freemarker">/templates/ajax/subscriptions/validPromoCode/show.ftl</result>
+		</action>
+		
+		<action name="getRegions" method="list" class="com.n4systems.fieldid.actions.user.RegionListAction">
+			<result name="success" type="freemarker">/templates/ajax/userCrud/regions.ftl</result>
+		</action>
+	</package>
+</struts>

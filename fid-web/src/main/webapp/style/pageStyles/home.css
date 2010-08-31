@@ -1,0 +1,63 @@
+.dashboardBlock {
+	overflow:hidden;
+	padding: 20px 5px 20px 5px;
+	border-bottom: 1px solid #9C9CBD;
+}
+
+.dashboardSection {
+	width: 450px;
+	margin-right:40px;
+	float: left;
+}
+
+h3 {
+	font-size: 1.4em;
+}
+
+#quickLinkList li {
+	list-style-image: url(/fieldid/images/listMarkerCircle.gif);
+	list-style-position: inside;
+	/*margin: 10px 0 10px 5px;*/
+	margin: 10px 0 10px 5px;
+}
+
+#quickLinkList a, #quickLinkList a:hover, #quickLinkList a:visited, #quickLinkList a:active {
+	font-size:1.2em;
+	padding-left:10px;
+	position: relative;
+	top: -3.5px;
+	
+}
+
+.informationList li {
+	list-style: disc;
+	list-style-position: inside;
+	margin: 8px 0;
+	margin-left: 25px;
+	
+	font-size: 1.2em;
+}
+
+
+
+.dashboardBoardBottom {
+	border-bottom: none;
+}
+
+
+
+.moreLink {
+	font-size:0.8em
+	
+}
+
+.easyForm input {
+	font-size: 1em;
+	padding: 1px 0;
+}
+
+
+
+#introVideo {
+	
+}

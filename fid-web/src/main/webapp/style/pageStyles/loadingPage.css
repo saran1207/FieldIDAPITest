@@ -1,0 +1,15 @@
+.centerWheel {
+	margin-left: auto;
+   	margin-right: auto;
+   	margin-top: 125px;
+   	width: 2em;
+}
+
+.loadingText h1 {
+	margin-left: auto;
+   	margin-right: auto;
+   	margin-bottom: 125px;
+   	padding: 15px;
+   	text-align: center;
+   	width: 10em;
+}

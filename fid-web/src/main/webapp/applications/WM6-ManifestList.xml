@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ManifestList>
+  <Manifests>
+    <Manifest Downloader="HTTPDownloader" ApplicationId="{ed83be04-9ace-4a72-a1b1-2c06ef92e699}" ManifestUri="http://www.fieldid.com/applications/fieldidmobile-wm6/manifests.xml">
+    </Manifest>
+  </Manifests>
+</ManifestList>
+<!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:schemas-q4tech-com:engineering:updaterGui">-->

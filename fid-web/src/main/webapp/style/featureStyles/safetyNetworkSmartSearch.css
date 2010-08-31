@@ -1,0 +1,38 @@
+
+
+#linkedProductContainer, #registrationMessage {
+	padding:10px 20px 10px 70px;
+	background-color: #fdf1d8;
+	border: 1px solid #fce1a9;
+	background-image:url(../../images/safety_network_company_registered.png);
+	background-repeat: no-repeat;
+	background-position:  center left;
+	margin-left:5px;
+}
+
+
+#networkSmartSearchContainer { 
+	border: 2px solid #999;
+	background-color:#fff;
+	padding: 5px;
+	max-width:500px;
+}
+#registrationMessage {
+	overflow:hidden;
+	width:700px;
+	margin-left:0;
+}
+#registerThisAssetMessage, #registerThisAction, #alreadyRegisteredMessage {
+	padding: 10px 10px; 
+	float:left;
+}
+
+#registerThisAssetMessage {
+	width:365px;
+}
+#copyAsset {
+	font-size: 1.5em;
+	margin-top: 5px;
+	padding: 5px;
+}
+

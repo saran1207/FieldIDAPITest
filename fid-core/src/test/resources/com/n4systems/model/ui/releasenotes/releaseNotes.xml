@@ -1,0 +1,7 @@
+<ReleaseNotes title="New Features in Release 2010.3" url="http://www.fieldid.com/something.pdf">
+  <bullets>
+    <BulletPoint point="Point 1"/>
+    <BulletPoint point="Point 2"/>
+    <BulletPoint point="Point 3"/>
+  </bullets>
+</ReleaseNotes>

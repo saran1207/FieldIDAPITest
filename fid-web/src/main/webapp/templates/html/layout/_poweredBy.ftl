@@ -1,0 +1,1 @@
+<div class="poweredBy"><a href="http://www.n4systems.com/" target="_blank"><img src="<@s.url value="/images/poweredByFieldID.jpg"/>" border="0"/></a></div>

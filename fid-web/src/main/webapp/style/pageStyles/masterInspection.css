@@ -1,0 +1,88 @@
+#masterInspection { 
+	width: 450px;
+	float:left;
+	
+}
+
+.inspectionHeader {
+	border: 1px solid #ddd;
+	border-left: 0;
+	border-right: 0;
+	padding: 5px 5px 5px 15px;
+}
+
+#addComponents {
+	float: left;
+}
+#masterInspection div.infoSet {
+	border: 1px solid #ddd;
+	padding: 5px 5px 5px 15px;
+	margin: 10px 0;
+}
+
+#masterInspection div.infoSet label {
+		padding-right: 15px;
+		font-weight
+}
+
+h3 {
+	font-size: 1.1em;
+}
+
+
+.componentTypes {
+	float:none;
+}
+
+.done { background-color: #eeffed; }
+
+.masterProduct, .subComponent, .component {
+	border: 1px solid #dddddd;
+	margin: 10px 0;
+}
+.definition, .performedInspection, .addComponent, .labelForm {
+	overflow:hidden;
+	padding: 5px 0;
+	margin: 5px 5px 5px 15px;
+}
+.definition, .labelForm {
+	border-bottom: 1px solid #dddddd;
+}
+.masterProduct .subProductActions, .subComponent .subProductActions {
+	float:right;
+	width:120px;
+}
+.masterProduct .identifier, .component .identifier, .subComponent .identifier {
+	float:left;
+	width: 280px;
+	
+}
+div.subProductAction {
+	float:left;
+	padding-left: 10px;
+}
+.identifier div.productType {
+	font-size: 1.1em;
+	font-weight:bold;
+	border-right:1px solid #333;
+	padding-right:5px;
+	margin-right:5px;
+}
+
+.identifier div {
+	float:left;
+}
+
+.createOptions {
+	float:right;
+	padding-left: 10px;
+}
+
+.subComponent li {
+	padding: 5px 0;
+}
+
+div.removeSubProduct {
+	float:right;
+	margin-right:5px;
+}

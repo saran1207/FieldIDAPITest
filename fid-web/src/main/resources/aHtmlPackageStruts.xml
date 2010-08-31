@@ -1,0 +1,131 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="ajaxHTMLAction" extends="default" namespace="/aHtml">
+		<default-interceptor-ref name="secureStack" />
+
+		<global-results>
+			<result name="login" type="freemarker">/templates/aHtml/common/login.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/common/error.ftl</result>
+			<result name="missing" type="freemarker">/templates/aHtml/common/error.ftl</result>
+			<result name="input" type="freemarker">/templates/aHtml/common/error.ftl</result>
+			<result name="invalid_security" type="freemarker">/templates/aHtml/common/error.ftl</result>
+			<result name="user_permission_required" type="freemarker">/templates/aHtml/common/error.ftl</result>
+			<result name="feature_required" type="freemarker">/templates/aHtml/common/error.ftl</result>
+			<result name="sessionBooted" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
+		</global-results>
+
+
+		<action name="reportResults" method="export" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+
+		<action name="searchResults" method="export" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloxadNotificationLightBox.ftl</result>
+		</action>
+
+		<action name="scheduleResults" method="export" class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+
+		<action name="customerExport" method="export" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+
+		<action name="autoAttributeExport" method="export" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+		
+		<action name="searchPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+
+		<action name="reportPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+
+		<action name="printReport" method="print" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="input" type="freemarker">/templates/aHtml/report/expired.ftl</result>
+		</action>
+		
+		<action name="generateSerialNumber" method="generateSerialNumber" class="com.n4systems.fieldid.actions.product.ProductUtilAction">
+			<result name="success" type="freemarker">/templates/aHtml/productUtil/generateSerialNumber.ftl</result>
+		</action>
+		
+		<action name="inspection" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/aHtml/inspectionCrud/show.ftl</result>
+			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
+		</action>
+		
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction">
+			<interceptor-ref name="brandedPublicStack" />
+			<result name="success" type="freemarker">/templates/aHtml/login/form.ftl</result>
+		</action>
+		
+		<action name="createSession" method="create" class="com.n4systems.fieldid.actions.SignInAction">
+			<interceptor-ref name="brandedPublicStack" />
+			<result name="input" type="freemarker">/templates/aHtml/login/form.ftl</result>
+			<result name="redirect" type="freemarker">/templates/aHtml/login/complete.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/login/complete.ftl</result>
+			<result name="eula" type="freemarker">/templates/aHtml/login/complete.ftl</result>
+			<result name="confirmKick" type="freemarker">/templates/aHtml/login/confirmKick.ftl</result>
+		</action>
+		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.SignInAction">
+			<interceptor-ref name="brandedPublicStack" />
+			<result name="error" type="freemarker">/templates/aHtml/login/form.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/login/complete.ftl</result>
+		</action>
+		
+		<action name="showKick" class="com.n4systems.fieldid.actions.SimpleAction">
+			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
+		</action>
+		
+		<action name="products" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="error" type="freemarker">/templates/aHtml/productCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/productCrud/list.ftl</result>
+			<result name="oneFound" type="freemarker">/templates/aHtml/productCrud/list.ftl</result>
+		</action>
+		
+		<action name="orders" method="list" class="com.n4systems.fieldid.actions.integration.OrderUtilAction">
+			<result name="success" type="freemarker">/templates/html/orders/list.ftl</result>
+		</action>
+	</package>
+	
+	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />
+	
+	<package name="fileUploadsHtml" extends="ajaxHTMLAction" namespace="/aHtml/fileUploads">
+		<global-results>
+			<result name="sessionBooted" type="freemarker">/templates/aHtml/common/fileUploadSessionKick.ftl</result>
+		</global-results>
+
+		<action name="uploadForm" method="form"	class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+			<result name="success" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
+		</action>
+
+		<action name="uploadFile" method="upload" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+			<result name="error" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
+			<result name="input" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/uploadFile/uploaded.ftl</result>
+		</action>
+		
+		<action name="uploadImageForm" method="form" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+			<result name="success" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
+		</action>
+
+		<action name="uploadImage" method="upload" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+			<result name="error" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
+			<result name="input" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/uploadFile/imageUploaded.ftl</result>
+		</action>
+	</package>
+</struts>

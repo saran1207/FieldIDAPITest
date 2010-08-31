@@ -1,0 +1,11 @@
+asset = new Object();
+asset.id = ${asset.id};
+asset.ownerId = ${asset.owner.id};
+asset.location = "${(asset.location?js_string)!}";
+asset.productStatusId = "${(asset.productStatus.id)!}"; 
+asset.serialNumber = '${asset.serialNumber?html?js_string}';
+asset.owner = '${asset.owner.name?html?js_string}';
+asset.rfidNumber = '${(asset.rfidNumber?html?js_string)!}';
+asset.type = '${asset.type.name?html?js_string}';
+asset.identifiedDate = '${action.formatDate(asset.identified, false)?html?js_string}';
+asset.customerReferenceNumber = '${(asset.customerRefNumber?html?js_string)!}';	

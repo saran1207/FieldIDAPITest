@@ -1,0 +1,150 @@
+	
+#manage_connections p {
+	background: no-repeat url(../../images/connections.png) -10px 5px;
+}
+
+#inbox p {
+	background: no-repeat url(../../images/inbox.png) -6px 5px;
+}
+
+#manage_catalog p {
+	background: no-repeat url(../../images/manage_catalog.png) -10px 5px;
+}
+
+#privacy_settings p {
+	background: no-repeat url(../../images/privacy.png) -13px 5px;
+}
+
+#sideBox {
+	overflow: hidden;
+	border: 1px solid;
+	background: #F8F8F8 none repeat scroll 0 0;
+	height: 200px;
+	padding: 10px;
+}
+
+#sideBox h2 {
+	padding: 0;
+}
+
+#sideBox p {
+	padding-top: 15px;
+}
+
+#sideBox a {
+	min-height:25px;
+	margin-top: 15px;
+	padding-left: 20px;
+	display: block;
+}
+
+#help_link {
+	background: no-repeat url(../../images/small-help-logo.png);
+}
+
+#video_link {
+	background: no-repeat url(../../images/small-video-logo.png);
+}
+
+#settings_privacy_heading {
+	min-height: 35px;
+	padding: 8px 0 0 35px;
+	background: no-repeat url(../../images/privacy-small.png);
+}
+
+#manage_connections_heading {
+	min-height: 20px;
+	padding: 5px 0 0 35px;
+	background: no-repeat url(../../images/connections-small.png);
+}
+
+#manage_catalog_heading {
+	min-height: 27px;
+	padding: 5px 0 0 38px;
+	background: no-repeat url(../../images/manage_catalog-small.png);
+}
+
+#inbox_heading {
+	min-height: 27px;
+	padding: 5px 0 0 38px;
+	background: no-repeat url(../../images/inbox-small.png);
+}
+
+.infoSet {
+	min-height: 40px;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	border-top: 1px solid #D0DAFA;
+}
+
+.infoSet .desc {
+	float: left;
+	width: 500px;
+}
+
+.infoSet .desc p {
+	padding: 5px 50px 0 0;
+}
+
+.infoSet .desc {
+	float: left;
+	width: 500px;
+}
+
+.infoSet .check {
+	overflow: hidden;
+	padding-top: 10px;
+}
+
+.infoSet .check span {
+	float: left;
+}
+
+.infoSet .check label {
+	overflow: hidden;
+	padding-left: 10px;
+}
+
+#messageInput .infoField .inline {
+	display: inline;
+}
+
+#messageInput .infoField .field_tip {
+	color: #444;
+	padding-left: 10px;
+}
+
+#body_desc_text {
+	width: 400px;
+}
+
+#messageInput {
+	float: left;
+	width: 500px
+}
+
+#messageSample {
+	background: #F8F8F8 none repeat scroll 0 0;
+	border: 1px solid;
+	overflow: hidden;
+	padding: 10px;
+	height: 330px;
+}
+
+#messageSample h4 {
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+#messageSample .sampleDesc {
+	font-weight: bold;
+	padding: 5px 0;
+}
+
+#sampleMessage {
+	border: 2px solid #888888;
+	height: 230px;
+	overflow: auto;
+	padding: 5px;
+}

@@ -1,0 +1,129 @@
+h2 {
+	padding:0;
+}
+
+a, a:hover, a:visited, a:active {
+	color: #333;
+}
+
+#otherActions li{
+	padding: 5px 0;
+}
+#otherActions {
+	padding-top:5px;
+	border-top: 1px dotted #999;
+}
+
+
+#page {
+	width: 900px;
+}
+#pageHeader {
+	background-image: none;
+	padding: 30px 0 10px 0;
+}
+#companyLogo, #systemLogo {
+	padding:11px 0 0 10px;
+}
+
+#notifications {
+	width:660px;
+	float:right;
+}
+
+#error, #message {
+	margin-top: 10px;
+}
+
+.error ul, .message ul {
+	padding: 10px 15px;
+}
+
+#pageContent {
+	width: 888px;
+}
+
+#mainContent {
+	width: 564px;
+	float:left;
+}
+
+#secondaryContent {
+	width: 264px;
+	float:right;
+	padding:15px;
+}
+.titleBlock {
+	margin-bottom: 20px;
+}
+.titleSummary  {
+	color:#666;
+	padding:5px 0px;
+	font-size:1.2em;
+}	
+
+.actionButton {
+	margin: 20px 0;	
+}
+#pageFooter #sslCert {
+	float:right;
+	text-align: center;
+}
+
+#sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active {
+	font-size: 8px;
+}
+
+div.oneLine span, div.oneLine label {
+	display: inline;
+}
+div.oneLine {
+	padding: 5px 0 0 0;
+}
+
+#pageFooter {
+	border:none;
+}
+
+.imageButton a span {
+	position:absolute;
+	left: -10000px;
+}
+.imageButton a {
+	border:none;
+	text-decoration:none;
+}
+
+
+.formErrors {
+	margin:10px 0;
+}
+
+
+#requestAccountButton a {
+	display: block;
+	width: 252px;
+	height: 62px;
+	background-image: url(../images/request_account_button.png);
+	background-repeat: no-repeat;
+}
+
+
+#requestAccountButton a {background-position: 0 0;}
+#requestAccountButton a:hover {background-position: 0 -62px;}
+#requestAccountButton a:active {background-position: 0 -124px;}
+
+
+#plansPricingButton a {
+	display: block;
+	width: 252px;
+	height: 62px;
+	background-image: url(../images/plans_and_pricing_button.png);
+	background-repeat: no-repeat;
+}
+
+
+#plansPricingButton a {background-position: 0 0;}
+#plansPricingButton a:hover {background-position: 0 -62px;}
+#plansPricingButton a:active {background-position: 0 -124px;}
+

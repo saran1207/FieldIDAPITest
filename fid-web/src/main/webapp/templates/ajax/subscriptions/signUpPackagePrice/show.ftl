@@ -1,0 +1,1 @@
+if ($('totalPrice') != null) $('totalPrice').update('${price?string.currency}');

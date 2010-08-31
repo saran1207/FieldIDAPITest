@@ -1,0 +1,1 @@
+<img alt="<@s.text name="label.loading"/>" src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/> 
