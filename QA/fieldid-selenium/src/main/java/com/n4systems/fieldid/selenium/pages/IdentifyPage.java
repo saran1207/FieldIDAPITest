@@ -33,7 +33,7 @@ public class IdentifyPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Identify')]");
 	}
 	
-		public void selectProductType(String productType) {
+	public void selectProductType(String productType) {
 		selenium.select("//select[@id='productType']", productType);
 		selenium.fireEvent("//select[@id='productType']", "change");
 		waitForAjax();
@@ -122,7 +122,8 @@ public class IdentifyPage extends FieldIDPage {
 		}
 		if(p.getProductType() != null) {
 			selenium.select("//select[@id='productType']", p.getProductType());
-			waitForProductTypeAttributesToChange();
+			selenium.fireEvent("//select[@id='productType']", "change");
+			waitForAjax();
 		}
 		setRequiredProductAttributes();
 		
@@ -180,15 +181,6 @@ public class IdentifyPage extends FieldIDPage {
 			UnitOfMeasurePicker picker = new UnitOfMeasurePicker(selenium, id);
 			picker.setUnitOfMeasure(id, value);
 		}
-	}
-		
-	private void waitForProductTypeAttributesToChange() {		
-		new ConditionWaiter(new Predicate() {
-			@Override
-			public boolean evaluate() {
-				return !selenium.isElementPresent("//span[id='productTypeIndicator' and not(contains(@style,'visibility: hidden'))]");
-			}
-		}).run();
 	}
 		
 	private List<String> getRequiredSelectListIDs() {
@@ -293,7 +285,8 @@ public class IdentifyPage extends FieldIDPage {
 		}
 		if(p.getProductType() != null) {
 			selenium.select("//select[@id='productType']", p.getProductType());
-			waitForProductTypeAttributesToChange();
+			selenium.fireEvent("//select[@id='productType']", "change");
+			waitForAjax();
 		}
 		
 		setRequiredProductAttributes();

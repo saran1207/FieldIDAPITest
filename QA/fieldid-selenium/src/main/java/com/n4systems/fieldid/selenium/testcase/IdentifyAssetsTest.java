@@ -17,12 +17,12 @@ import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 
-public class ValidateIdentifyPageTest extends FieldIDTestCase {
+public class IdentifyAssetsTest extends FieldIDTestCase {
 
 	private HomePage homePage;
 		
 	@Test
-	public void validate_identify_with_integration_enabled() throws Exception {
+	public void identify_with_integration_enabled() throws Exception {
 		String username = getStringProperty("integrationusername");
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
@@ -35,7 +35,7 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void validate_identifying_an_asset_using_add_with_order() throws Exception {
+	public void identify_an_asset_using_add_with_order() throws Exception {
 		String username = getStringProperty("integrationusername");
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
@@ -50,7 +50,7 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void validate_identifying_a_single_asset_non_integration_tenant() throws Exception {
+	public void identify_a_single_asset_non_integration_tenant() throws Exception {
 		String username = getStringProperty("notintegrationusername");
 		String password = getStringProperty("notintegrationpassword");
 		String company = getStringProperty("notintegrationcompanyid");
@@ -63,7 +63,7 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void validate_identifying_a_single_asset_integration_tenant() throws Exception {
+	public void identify_a_single_asset_integration_tenant() throws Exception {
 		String username = getStringProperty("integrationusername");
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
@@ -76,7 +76,7 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void validate_identifying_multiple_assets_integration_tenant() throws Exception {
+	public void identify_multiple_assets_integration_tenant() throws Exception {
 		String username = getStringProperty("integrationusername");
 		String password = getStringProperty("integrationpassword");
 		String company = getStringProperty("integrationcompanyid");
@@ -86,11 +86,11 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
-		assertMultiAddWasSuccessful(identifiers);
+		verifyMultiAddWasSuccessful(identifiers);
 	}
 	
 	@Test
-	public void validate_identifying_multiple_assets_non_integration_tenant() throws Exception {
+	public void identifying_multiple_assets_non_integration_tenant() throws Exception {
 		String username = getStringProperty("notintegrationusername");
 		String password = getStringProperty("notintegrationpassword");
 		String company = getStringProperty("notintegrationcompanyid");
@@ -100,10 +100,10 @@ public class ValidateIdentifyPageTest extends FieldIDTestCase {
 		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
-		assertMultiAddWasSuccessful(identifiers);
+		verifyMultiAddWasSuccessful(identifiers);
 	}
 	
-	private void assertMultiAddWasSuccessful(List<Identifier> identifiers) {
+	private void verifyMultiAddWasSuccessful(List<Identifier> identifiers) {
 		for(Identifier identifier : identifiers) {
 			checkAssetIdentified(null,identifier.getSerialNumber());
 		}

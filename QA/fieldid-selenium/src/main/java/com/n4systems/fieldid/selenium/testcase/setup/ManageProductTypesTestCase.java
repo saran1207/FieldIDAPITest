@@ -41,7 +41,6 @@ public abstract class ManageProductTypesTestCase extends PageNavigatingTestCase<
 	}
 	
 	private void removeTestProductTypeIfNecessary(String typeName) {
-		System.out.println("Testing remove product type if necessary: " + page.getProductTypes());
 		if(page.getProductTypes().contains(typeName)) {
 			page.clickEditProductType(typeName);
 			page.deleteProductType();

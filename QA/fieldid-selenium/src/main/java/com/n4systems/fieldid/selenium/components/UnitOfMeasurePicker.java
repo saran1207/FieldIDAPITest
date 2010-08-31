@@ -5,7 +5,7 @@ import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
 
-public class UnitOfMeasurePicker extends WebEntity{
+public class UnitOfMeasurePicker extends WebEntity {
 	
 	final static String ID_PREFIX = "unitOfMeasureId_";
 
@@ -47,6 +47,7 @@ public class UnitOfMeasurePicker extends WebEntity{
 			}
 			String submitButton = "css=#unitOfMeasureForm_" + id + "_hbutton_submit";
 			selenium.click(submitButton);
+			waitForAjax();
 		}
 	}
 

@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.selenium.misc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -483,6 +482,7 @@ public class MiscDriver {
 	 * of 16 characters and hexidecimal.
 	 * @return
 	 */
+	@Deprecated
 	public String getRandomRFIDNumber() {
 		int maxLength = 16;
 		String validCharacters = "01234567890ABCDEF";
@@ -490,6 +490,7 @@ public class MiscDriver {
 		return s.toString();
 	}
 	
+	@Deprecated
 	private static StringBuffer getRandomString(String validCharacters, int maxLength) {
 		StringBuffer s = new StringBuffer(maxLength);
 		for(int i = 0; i < maxLength; i++) {
@@ -507,6 +508,7 @@ public class MiscDriver {
 	 * @param length
 	 * @return
 	 */
+	@Deprecated
 	public static String getRandomString(int length) {
 		String validCharacters = "abcdefghijklmnopqrstuvwxyz";
 		StringBuffer s = getRandomString(validCharacters, length);
@@ -766,25 +768,21 @@ public class MiscDriver {
 	 * @return true if it found a 'next' page link.
 	 */
 	public boolean gotoNextPage() {
-		boolean result = true;
 		if(selenium.isElementPresent(nextPageLinkLocator)) {
 			selenium.click(nextPageLinkLocator);
 			waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			result = false;
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	public boolean gotoPrevPage() {
-		boolean result = true;
 		if(selenium.isElementPresent(prevPageLinkLocator)) {
 			selenium.click(prevPageLinkLocator);
 			waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			result = false;
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	/**
@@ -793,14 +791,12 @@ public class MiscDriver {
 	 * @return true if it found a 'First' page link.
 	 */
 	public boolean gotoFirstPage() {
-		boolean result = true;
 		if(selenium.isElementPresent(firstPageLinkLocator)) {
 			selenium.click(firstPageLinkLocator);
 			waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			result = false;
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	/**
@@ -809,14 +805,12 @@ public class MiscDriver {
 	 * @return true if it found a 'Last' page link.
 	 */
 	public boolean gotoLastPage() {
-		boolean result = true;
 		if(selenium.isElementPresent(lastPageLinkLocator)) {
 			selenium.click(lastPageLinkLocator);
 			waitForPageToLoadAndCheckForOopsPage();
-		} else {
-			result = false;
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	/**
@@ -843,13 +837,12 @@ public class MiscDriver {
 	 * @return
 	 */
 	public int getNumberOfPages() {
-		int result = -1;
 		if(selenium.isElementPresent(labelForLastPageLocator)) {
 			String s = selenium.getText(labelForLastPageLocator);
 			String numStr = s.replaceAll("\\D", "");
-			result = Integer.parseInt(numStr);
+			return Integer.parseInt(numStr);
 		}
-		return result;
+		return -1;
 	}
 
 	/**
@@ -1139,6 +1132,7 @@ public class MiscDriver {
 		return selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
 	}
 
+	@Deprecated
 	public int getRandomNumber(int low, int high) {
 		return r.nextInt((high-low+1)) + low;
 	}

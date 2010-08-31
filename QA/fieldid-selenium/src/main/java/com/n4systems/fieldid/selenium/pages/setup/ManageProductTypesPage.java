@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.pages.setup;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +49,11 @@ public class ManageProductTypesPage extends FieldIDPage {
 	
 	public ManageProductTypesPage clickInspectionFrequenciesTab() {
 		clickNavOption("Inspection Frequencies");
+		return this;
+	}
+	
+	public ManageProductTypesPage clickSubComponentsTab() {
+		clickNavOption("Sub-Components");
 		return this;
 	}
 	
@@ -206,11 +212,9 @@ public class ManageProductTypesPage extends FieldIDPage {
 	}
 
 	public void addOverrideForOwner(String inspectionType, Owner owner, int frequency) {
-		String cellXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]";
-		if (selenium.isElementPresent(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']")) {
-			selenium.click(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']");
-		}
-		waitForElementToBePresent(cellXpath + "//a[.='Add override']");
+		String cellXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]"; 
+		expandOverridesSectionIfNecessary(inspectionType);
+		
 		selenium.click(cellXpath + "//a[.='Add override']");
 		new ConditionWaiter(new Predicate() {
 			@Override
@@ -218,9 +222,72 @@ public class ManageProductTypesPage extends FieldIDPage {
 				return selenium.isVisible("//form[@id='orgForm']");
 			}
 		}).run("Organization form did not appear!");
+		
 		OrgPicker orgPicker = new OrgPicker(selenium);
 		orgPicker.clickChooseOwner();
 		orgPicker.setOwner(owner);
+		orgPicker.clickSelectOwner();
+		
+		selenium.type("//input[@id='orgForm_frequency']", frequency+"");
+		selenium.click("//span[@class='orgPickerFormActions']//a[.=' Save']");
+		waitForPageToLoad();
+	}
+
+	private String expandOverridesSectionIfNecessary(String inspectionType) {
+		String cellXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]";
+		if (selenium.isElementPresent(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']")) {
+			selenium.click(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']");
+		}
+		waitForElementToBePresent(cellXpath + "//a[.='Add override']");
+		return cellXpath;
 	}
 	
+	public List<InspectionFrequencyOverride> getInspectionFrequencyOverrides(String inspectionType) {
+		expandOverridesSectionIfNecessary(inspectionType);
+		
+		List<InspectionFrequencyOverride> overrides = new ArrayList<InspectionFrequencyOverride>();
+		
+		String overrideXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]"
+			+"//div[contains(@class, 'customerOverride')]";
+		int countOverrides = selenium.getXpathCount(overrideXpath).intValue();
+		for (int i = 1; i <= countOverrides; i++) {
+			InspectionFrequencyOverride override = new InspectionFrequencyOverride();
+			override.customer = selenium.getText("xpath=("+overrideXpath+")["+i+"]/span[@class='customer']/b").trim();
+			override.frequency = Integer.parseInt(selenium.getText("xpath=("+overrideXpath+")["+i+"]/span[@class='frequency']/b[2]").trim());
+			overrides.add(override);
+		}
+		return overrides;
+	}
+	
+	public static class InspectionFrequencyOverride {
+		public String customer;
+		public int frequency;
+	}
+
+	public List<String> getSubComponents() {
+		List<String> subComponents = new ArrayList<String>();
+		
+		int numSubComponents = selenium.getXpathCount("//ul[@id='subProducts']/li").intValue();
+		for (int i = 1; i <= numSubComponents; i++) {
+			String subComponent = selenium.getText("//ul[@id='subProducts']/li["+i+"]/span[starts-with(@id, 'productName_')]");
+			subComponents.add(subComponent);
+		}
+		
+		return subComponents;
+	}
+	
+	public void addSubComponent(String subcomponentName) {
+		selenium.select("//select[@id='addSubProduct']", subcomponentName);
+		selenium.click("//button[@id='addSubProductButton']");
+	}
+	
+	public void saveSubComponents() {
+		selenium.click("//input[@id='productTypeConfigurationUpdate_label_save']");
+		waitForPageToLoad();
+	}
+
+	public void removeSubComponent(String componentName) {
+		selenium.click("//ul[@id='subProducts']//span[.='"+componentName+"']/../a[.='Remove']");
+	}
+
 }

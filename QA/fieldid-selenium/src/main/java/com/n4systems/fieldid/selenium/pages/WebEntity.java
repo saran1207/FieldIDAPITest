@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium.pages;
 
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
 public class WebEntity {
@@ -44,6 +45,14 @@ public class WebEntity {
 			}
 		}
 		return false;
+	}
+	
+	protected void waitForAjax() {
+		waitForAjax(MiscDriver.AJAX_TIMEOUT);
+	}
+
+	protected void waitForAjax(String timeout)  {
+		selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
 
 }

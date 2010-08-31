@@ -38,14 +38,6 @@ public class WebPage extends WebEntity {
 		}
 	}
 
-	protected void waitForAjax() {
-		waitForAjax(MiscDriver.AJAX_TIMEOUT);
-	}
-
-	protected void waitForAjax(String timeout)  {
-		selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
-	}
-	
 	protected String getCurrentTab() {
 		return selenium.getText("//ul[@class='options ']/li[@class = ' selected']").trim();
 	}
