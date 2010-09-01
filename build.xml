@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-  <project name="fieldid" default="default">
-    <target name="default">
-      <ant dir="fieldid" inheritAll="false" />
-    </target>
-  </project>
- 
