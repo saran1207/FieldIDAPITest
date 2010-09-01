@@ -8,6 +8,7 @@
 	</parent>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fid-test-utils</artifactId>
+	<name>Test Utils</name>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

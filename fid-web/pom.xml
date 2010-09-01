@@ -9,6 +9,7 @@
 	<groupId>com.fieldid</groupId>
 	<artifactId>fid-web</artifactId>
 	<packaging>war</packaging>
+	<name>Web</name>
 	<build>
 		<plugins>
 			<plugin>

@@ -7,4 +7,5 @@
   </parent>
   <groupId>com.fieldid</groupId>
   <artifactId>fid-cert-data</artifactId>
+  <name>Cert Model</name>
 </project>

@@ -5,12 +5,11 @@
 	<artifactId>fieldid-root</artifactId>
 	<version>2010.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Field ID Parent Project</name>
+	<name>Field ID Parent POM</name>
 	<modules>
 		<module>fid-core</module>
 		<module>fid-test-utils</module>
 		<module>fid-cert-data</module>
-		<module>fid-admin-web</module>
 		<module>fid-web</module>
 	</modules>
 	<repositories>
