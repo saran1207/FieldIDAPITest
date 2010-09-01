@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.lib;
 
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.SeleniumException;
 
 public class DefaultFieldIdSelenium implements FieldIdSelenium {
 
@@ -492,7 +493,14 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 	}
 
 	public void open(String url) {
-		delegateSelenium.open(url);
+		try{
+			delegateSelenium.open(url);
+		} catch (SeleniumException e){
+			if (!e.getMessage().contains("XHR ERROR")) {
+				throw e;
+			}
+		}
+
 	}
 
 	public void openWindow(String url, String windowID) {
