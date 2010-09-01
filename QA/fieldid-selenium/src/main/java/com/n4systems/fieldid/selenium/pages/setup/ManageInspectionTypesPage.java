@@ -68,20 +68,27 @@ public class ManageInspectionTypesPage extends FieldIDPage {
 		waitForAjax();
 	}
 	
-	public String getFirstListItemName(){
+	public String getFirstListItemName() {
 		return selenium.getText(FIRST_LIST_ITEM);
 	}
 
-	public String clickFirstListItem(){
+	public String clickFirstListItem() {
 		String eventName = getFirstListItemName();
 		selenium.click(FIRST_LIST_ITEM);
 		waitForPageToLoad();
 		return eventName;
 	}
 		
-	public String clickFirstListItemEdit(){
+	public String clickFirstListItemEdit() {
 		String eventName = getFirstListItemName();		
 		selenium.click("//table[@class='list']//tr[3]//a[text()='Edit']");
+		waitForPageToLoad();
+		return eventName;
+	}
+	
+	public String clickFirstListItemCopy() {
+		String eventName = getFirstListItemName();		
+		selenium.click("//table[@class='list']//tr[3]//a[text()='Copy']");
 		waitForPageToLoad();
 		return eventName;
 	}
@@ -229,6 +236,11 @@ public class ManageInspectionTypesPage extends FieldIDPage {
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Inspection Type is currently being deleted for you. This may take some time for the process to complete.", actionMessages.get(0).trim());
 	}
-	
+
+	public void validateCopiedInspection(String inspectionName) {
+		List <String> actionMessages = getActionMessages();
+		assertFalse(actionMessages.isEmpty());
+		assertEquals("Your Inspection Type has been copied and will appear below with the name - " + inspectionName, actionMessages.get(0).trim());
+	}
 	
 }

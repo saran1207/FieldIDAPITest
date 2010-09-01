@@ -98,10 +98,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 
 	@Test
 	public void test_add_and_delete_inspection_type() throws Exception {
-		if(manageInspectionTypesPage.listItemExists(TEST_INSPECTION_NAME)) {
-			manageInspectionTypesPage.clickListItem(TEST_INSPECTION_NAME);
-			deleteTestInspection();
-		}
+		deleteTestInspection(TEST_INSPECTION_NAME);
 		
 		manageInspectionTypesPage.clickAddTab();
 		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
@@ -111,15 +108,12 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 		manageInspectionTypesPage.verifyInspectionTypeSaved();		
 		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
 		
-		deleteTestInspection();
+		deleteTestInspection(TEST_INSPECTION_NAME);
 	}
 
 	@Test
 	public void test_add_inspection_type_and_inspection_form() throws Exception {
-		if(manageInspectionTypesPage.listItemExists(TEST_INSPECTION_NAME)) {
-			manageInspectionTypesPage.clickListItem(TEST_INSPECTION_NAME);
-			deleteTestInspection();
-		}
+		deleteTestInspection(TEST_INSPECTION_NAME);
 
 		manageInspectionTypesPage.clickAddTab();
 		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
@@ -133,15 +127,12 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 		manageInspectionTypesPage.clickSaveInspectionForm();
 		manageInspectionTypesPage.verifyInspectionFormSaved();
 		
-		deleteTestInspection();
+		deleteTestInspection(TEST_INSPECTION_NAME);
 	}
 	
 	@Test
 	public void test_add_inspection_form_with_errors() throws Exception {
-		if(manageInspectionTypesPage.listItemExists(TEST_INSPECTION_NAME)) {
-			manageInspectionTypesPage.clickListItem(TEST_INSPECTION_NAME);
-			deleteTestInspection();
-		}
+		deleteTestInspection(TEST_INSPECTION_NAME);
 
 		manageInspectionTypesPage.clickAddTab();
 		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
@@ -157,18 +148,29 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 		manageInspectionTypesPage.clickSaveInspectionForm();
 		assertEquals(3, manageInspectionTypesPage.getFormErrorMessages().size());
 		
-		deleteTestInspection();
+		deleteTestInspection(TEST_INSPECTION_NAME);
 	}
 	
-	private void deleteTestInspection() {
-		manageInspectionTypesPage.clickEditTab();
-		assertEquals("Edit", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickDelete();
-		manageInspectionTypesPage.clickConfirmDelete();		
-		assertEquals("View All", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.verifyInspectionFormDeleted();		
+	@Test
+	public void test_copy_existing_inpection_type() throws Exception {
+		String inspectionName = manageInspectionTypesPage.clickFirstListItemCopy() + " - 1";
+		manageInspectionTypesPage.validateCopiedInspection(inspectionName);
+		
+		deleteTestInspection(inspectionName);
 	}
+	
+	private void deleteTestInspection(String name) {
+		if(manageInspectionTypesPage.listItemExists(name)) {
+			manageInspectionTypesPage.clickListItem(name);
+			manageInspectionTypesPage.clickEditTab();
+			assertEquals("Edit", manageInspectionTypesPage.getCurrentTab());
+			manageInspectionTypesPage.clickDelete();
+			manageInspectionTypesPage.clickConfirmDelete();		
+			assertEquals("View All", manageInspectionTypesPage.getCurrentTab());
+			manageInspectionTypesPage.verifyInspectionFormDeleted();		
+		}
 
+	}
 
 	private InspectionType getInspectionType() {
 		InspectionType inspectionType = new InspectionType(TEST_INSPECTION_NAME);
@@ -181,7 +183,7 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 		return inspectionType;
 	}
 
-	private InspectionForm getInspectionForm(){
+	private InspectionForm getInspectionForm() {
 		InspectionForm form = new InspectionForm();
 		
 		InspectionFormSection section1 = new InspectionFormSection("Section1");

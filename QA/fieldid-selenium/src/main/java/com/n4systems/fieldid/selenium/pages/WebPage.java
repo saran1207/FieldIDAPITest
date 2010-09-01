@@ -42,4 +42,8 @@ public class WebPage extends WebEntity {
 		return selenium.getText("//ul[@class='options ']/li[@class = ' selected']").trim();
 	}
 	
+	public String getAlert() {
+		return selenium.getAlert();
+	}
+	
 }
