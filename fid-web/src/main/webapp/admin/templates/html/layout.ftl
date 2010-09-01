@@ -18,21 +18,21 @@
 	<div id="nav">
 		<label for="navSelect">Action: </label>
 		<select id="navSelect" onchange="window.location = this.options[this.selectedIndex].value;">
-			<option value="admin/organizations.action">Organizations</option>
-			<option value="admin/eulas.action">EULA</option>
-			<option value="admin/releaseNotes.action">Release Notes</option>
-			<option value="admin/instructionalVideos.action">Instructional Videos</option>
-			<option value="admin/findProductOptionList.action">Find Product Option</option>
-			<option value="admin/unitOfMeasureList.action">Unit of Measures</option>
-			<option value="admin/orderMappingList.action">Order Mappings</option>
-			<option value="admin/importObservations.action">Observation Importer</option>
-			<option value="admin/mailTest.action">Mail</option>
-			<option value="admin/configCrud.action">Configuration</option>
-			<option value="admin/certSelection.action">Certs</option>
-			<option value="admin/taskCrud.action">Tasks</option>
-			<option value="admin/changeAdminPass.action">Change System Pass</option>
-			<option value="admin/promoCodes.action">Promo Codes</option>
-			<option value="admin/cacheShow.action">Cache Control</option>
+			<option value="organizations.action">Organizations</option>
+			<option value="eulas.action">EULA</option>
+			<option value="releaseNotes.action">Release Notes</option>
+			<option value="instructionalVideos.action">Instructional Videos</option>
+			<option value="findProductOptionList.action">Find Product Option</option>
+			<option value="unitOfMeasureList.action">Unit of Measures</option>
+			<option value="orderMappingList.action">Order Mappings</option>
+			<option value="importObservations.action">Observation Importer</option>
+			<option value="mailTest.action">Mail</option>
+			<option value="configCrud.action">Configuration</option>
+			<option value="certSelection.action">Certs</option>
+			<option value="taskCrud.action">Tasks</option>
+			<option value="changeAdminPass.action">Change System Pass</option>
+			<option value="promoCodes.action">Promo Codes</option>
+			<option value="cacheShow.action">Cache Control</option>
 		</select>
 	</div>
 	
