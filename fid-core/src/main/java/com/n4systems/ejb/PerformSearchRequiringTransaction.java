@@ -6,8 +6,6 @@ package com.n4systems.ejb;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -149,9 +147,7 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 		
 		return (int)Math.ceil(count.doubleValue() / (double)pageSize);
 	}
-	
-	
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
+
 	public List<Long> idSearch(BaseSearchDefiner definer, SecurityFilter filter) {
 		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
 		QueryBuilder<Long> idBuilder = createBaseSearchQueryBuilder(definer, filter);
