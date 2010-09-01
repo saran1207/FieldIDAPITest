@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<!-- Struts 2.0 -->
 	<filter>
 		<filter-name>struts-cleanup</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp
-		</filter-class>
+		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
 	</filter>
 	<filter>
 		<filter-name>sitemesh</filter-name>
-		<filter-class>org.apache.struts2.sitemesh.FreeMarkerPageFilter
-		</filter-class>
+		<filter-class>org.apache.struts2.sitemesh.FreeMarkerPageFilter</filter-class>
 	</filter>
 	<filter>
 		<filter-name>struts2</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher
-		</filter-class>
+		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
 		<init-param>
 			<param-name>actionPackages</param-name>
-			<param-value>com.n4systems.fieldid.actions
-			</param-value>
+			<param-value>com.n4systems.fieldid.actions,com.n4systems.fieldidadmin.actions</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -112,7 +109,7 @@
 		<error-code>403</error-code>
 		<location>/static/html/403.html</location>
 	</error-page>
-	
+
 	<error-page>
 		<error-code>404</error-code>
 		<location>/static/html/404.html</location>

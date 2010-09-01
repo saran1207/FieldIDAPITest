@@ -1,0 +1,584 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<!--
+		constant name="struts.objectFactory" value="spring" /> <constant
+		name="struts.devMode" value="true" /> <constant
+		name="struts.url.includeParams" value="none" /
+	-->
+
+	<package name="admin" extends="struts-default" namespace="/admin">
+
+		<interceptors>
+			<interceptor name="signedIn"
+				class="com.n4systems.fieldidadmin.utils.LoginInterceptor" />
+			<interceptor-stack name="secureStack">
+				<interceptor-ref name="signedIn" />
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="secureStack" />
+
+		<global-results>
+			<result name="signIn" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">signIn</param>
+			</result>
+		</global-results>
+
+		<action name="signIn" method="add"
+			class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
+			<result name="success" type="freemarker">/admin/templates/html/login.ftl
+			</result>
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="signIntoSystem" method="create"
+			class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">organizations</param>
+			</result>
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+		<action name="organizations" method="list"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/html/organization/list.ftl
+			</result>
+		</action>
+
+
+		<action name="organizationEdit" method="edit"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
+			</result>
+			<result name="success" type="freemarker">/admin/templates/html/organization/edit.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/organization/list.ftl
+			</result>
+		</action>
+
+		<action name="organizationUpdate" method="update"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">organizations</param>
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/organization/list.ftl
+			</result>
+		</action>
+
+		<action name="organization" method="show"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/html/organization/show.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/organization/show.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/organization/show.ftl
+			</result>
+		</action>
+
+		<action name="organizationNote" method="note"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/html/organization/edit.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
+			</result>
+		</action>
+
+		<action name="findProductOptionList" method="list"
+			class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
+			<result name="success" type="freemarker">/admin/templates/html/findproductoption/list.ftl
+			</result>
+		</action>
+
+		<action name="findProductOptionCrud" method="formInput"
+			class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
+			<result name="input" type="freemarker">/admin/templates/html/findproductoption/findProductOptionForm.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">findProductOptionList</param>
+			</result>
+		</action>
+
+		<action name="unitOfMeasureList" method="list"
+			class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
+			<result name="success" type="freemarker">/admin/templates/html/unitofmeasure/list.ftl
+			</result>
+		</action>
+
+		<action name="unitOfMeasureCrud" method="formInput"
+			class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
+			<result name="input" type="freemarker">/admin/templates/html/unitofmeasure/unitOfMeasureForm.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">unitOfMeasureList</param>
+			</result>
+		</action>
+
+		<action name="orderMappingList" method="list"
+			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<result name="success" type="freemarker">/admin/templates/html/ordermapping/list.ftl
+			</result>
+		</action>
+
+		<action name="uploadOrderMappingXml" method="fileFormInput"
+			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<interceptor-ref name="fileUpload" />
+			<interceptor-ref name="basicStack" />
+			<result name="input" type="freemarker">/admin/templates/html/ordermapping/list.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">orderMappingList</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">orderMappingList</param>
+			</result>
+		</action>
+
+		<action name="orderMappingCrud" method="formInput"
+			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<result name="input" type="freemarker">/admin/templates/html/ordermapping/orderMappingForm.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">orderMappingList</param>
+			</result>
+		</action>
+
+		<action name="orderMappingDelete" method="delete"
+			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">orderMappingList</param>
+			</result>
+		</action>
+		<action name="mailTest" method="input"
+			class="com.n4systems.fieldidadmin.actions.MailAction">
+			<result name="input" type="freemarker">/admin/templates/html/mail/mail.ftl
+			</result>
+			<result name="success" type="freemarker">/admin/templates/html/mail/mail.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/mail/mail.ftl
+			</result>
+		</action>
+
+		<action name="configCrud" method="load"
+			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
+			<result name="success" type="freemarker">/admin/templates/html/config/config.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/config/config.ftl
+			</result>
+		</action>
+
+		<action name="importObservations" method="show"
+			class="com.n4systems.fieldidadmin.actions.ObservationImporterAction">
+			<result name="success" type="freemarker">/admin/templates/html/observations/show.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/observations/show.ftl
+			</result>
+		</action>
+
+		<action name="instructionalVideos" method="list"
+			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success" type="freemarker">/admin/templates/html/instructionalVideos/list.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/instructionalVideos/list.ftl
+			</result>
+		</action>
+
+		<action name="instructionalVideoAdd" method="add"
+			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success" type="freemarker">/admin/templates/html/instructionalVideos/add.ftl
+			</result>
+		</action>
+
+		<action name="instructionalVideoEdit" method="edit"
+			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success" type="freemarker">/admin/templates/html/instructionalVideos/edit.ftl
+			</result>
+		</action>
+
+		<action name="instructionalVideoCreate" method="save"
+			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="error" type="freemarker">/admin/templates/html/instructionalVideos/add.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/instructionalVideos/add.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">instructionalVideos</param>
+			</result>
+		</action>
+
+		<action name="instructionalVideoUpdate" method="save"
+			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="error" type="freemarker">/admin/templates/html/instructionalVideos/edit.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/instructionalVideos/edit.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">instructionalVideos</param>
+			</result>
+		</action>
+		
+		<action name="instructionalVideoDelete" method="delete"
+			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">instructionalVideos</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">instructionalVideos</param>
+			</result>
+		</action>
+
+		<action name="certSelection" class="com.n4systems.fieldidadmin.actions.SimpleAction">
+			<result name="success" type="freemarker">/admin/templates/html/certSelection/show.ftl
+			</result>
+		</action>
+
+		<action name="defaultPrintOuts" method="list"
+			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success" type="freemarker">/admin/templates/html/defaultPrintOuts/list.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/defaultPrintOuts/list.ftl
+			</result>
+		</action>
+
+		<action name="defaultPrintOutAdd" method="add"
+			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success" type="freemarker">/admin/templates/html/defaultPrintOuts/add.ftl
+			</result>
+		</action>
+
+		<action name="defaultPrintOutEdit" method="edit"
+			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success" type="freemarker">/admin/templates/html/defaultPrintOuts/edit.ftl
+			</result>
+		</action>
+
+		<action name="defaultPrintOutCreate" method="create"
+			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="error" type="freemarker">/admin/templates/html/defaultPrintOuts/add.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/defaultPrintOuts/add.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">defaultPrintOuts</param>
+			</result>
+		</action>
+
+
+
+		<action name="defaultPrintOutUpdate" method="update"
+			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="error" type="freemarker">/admin/templates/html/defaultPrintOuts/edit.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/defaultPrintOuts/edit.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">defaultPrintOuts</param>
+			</result>
+		</action>
+		<action name="defaultPrintOutDelete" method="delete"
+			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">defaultPrintOuts</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">defaultPrintOuts</param>
+			</result>
+		</action>
+
+		<action name="customPrintOuts" method="list"
+			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success" type="freemarker">/admin/templates/html/customPrintOuts/list.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/customPrintOuts/list.ftl
+			</result>
+		</action>
+
+		<action name="customPrintOutAdd" method="add"
+			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success" type="freemarker">/admin/templates/html/customPrintOuts/add.ftl
+			</result>
+		</action>
+
+		<action name="customPrintOutEdit" method="edit"
+			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success" type="freemarker">/admin/templates/html/customPrintOuts/edit.ftl
+			</result>
+		</action>
+
+		<action name="customPrintOutCreate" method="create"
+			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="error" type="freemarker">/admin/templates/html/customPrintOuts/add.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/customPrintOuts/add.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">customPrintOuts</param>
+			</result>
+		</action>
+
+
+
+		<action name="customPrintOutUpdate" method="update"
+			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="error" type="freemarker">/admin/templates/html/customPrintOuts/edit.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/customPrintOuts/edit.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">customPrintOuts</param>
+			</result>
+		</action>
+		<action name="customPrintOutDelete" method="delete"
+			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">customPrintOuts</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">customPrintOuts</param>
+			</result>
+		</action>
+
+		<action name="taskCrud" method="load"
+			class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="freemarker">/admin/templates/html/tasks/tasks.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/tasks/tasks.ftl
+			</result>
+		</action>
+
+		<action name="enableDisableTask" method="enableDisableTask"
+			class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+		</action>
+
+		<action name="enableDisableScheduler" method="enableDisableScheduler"
+			class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+		</action>
+
+		<action name="reloadScheduler" method="reloadScheduler"
+			class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+		</action>
+
+		<action name="changeAdminPass" method="load"
+			class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
+			<result name="success" type="freemarker">/admin/templates/html/changeadminpass/form.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/changeadminpass/form.ftl
+			</result>
+		</action>
+
+		<action name="eulas" method="list"
+			class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="success" type="freemarker">/admin/templates/html/eula/list.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/eula/list.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/eula/list.ftl
+			</result>
+		</action>
+
+
+		<action name="eulaAdd" method="add"
+			class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="success" type="freemarker">/admin/templates/html/eula/add.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/eula/add.ftl
+			</result>
+		</action>
+
+		<action name="eulaCreate" method="create"
+			class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="input" type="freemarker">/admin/templates/html/eula/add.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/eula/add.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">eulas</param>
+			</result>
+		</action>
+
+		<action name="eulaEdit" method="edit"
+			class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="success" type="freemarker">/admin/templates/html/eula/edit.ftl
+			</result>
+			<result name="input" type="freemarker">/admin/templates/html/eula/edit.ftl
+			</result>
+		</action>
+
+		<action name="eulaUpdate" method="update"
+			class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="input" type="freemarker">/admin/templates/html/eula/edit.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/eula/edit.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">eulas</param>
+			</result>
+		</action>
+
+
+		<action name="eulaDelete" method="delete"
+			class="com.n4systems.fieldidadmin.actions.EulaCrud">
+			<result name="input" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">eulas</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">eulas</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">eulas</param>
+			</result>
+		</action>
+
+		<action name="promoCodes" method="list"
+			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="success" type="freemarker">/admin/templates/html/promocodes/list.ftl
+			</result>
+		</action>
+
+		<action name="promoCodeEdit" method="showForm"
+			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="input" type="freemarker">/admin/templates/html/promocodes/edit.ftl
+			</result>
+		</action>
+
+		<action name="promoCodeSave" method="save"
+			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">promoCodes</param>
+			</result>
+		</action>
+		<action name="promoCodeDelete" method="delete"
+			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">promoCodes</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">promoCodes</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">promoCodes</param>
+			</result>
+		</action>
+
+		<action name="cacheShow" method="show"
+			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl
+			</result>
+		</action>
+
+		<action name="reloadTenantCache" method="reloadTenantCache"
+			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl
+			</result>
+		</action>
+
+		<action name="reloadSetupDataLastModDatesCache" method="reloadSetupDataLastModDatesCache"
+			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl
+			</result>
+		</action>
+
+		<action name="reloadSafetyNetworkConnectionCache" method="reloadSafetyNetworkConnectionCachae"
+			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
+			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl
+			</result>
+		</action>
+
+		<action name="releaseNotes" method="show"
+			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
+			<result name="success" type="freemarker">/admin/templates/html/releaseNotes/show.ftl
+			</result>
+		</action>
+		<action name="releaseNotesEdit" method="edit"
+			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
+			<result name="success" type="freemarker">/admin/templates/html/releaseNotes/edit.ftl
+			</result>
+		</action>
+
+		<action name="releaseNotesUpdate" method="update"
+			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
+			<result name="input" type="freemarker">/admin/templates/html/releaseNotes/edit.ftl
+			</result>
+			<result name="error" type="freemarker">/admin/templates/html/releaseNotes/edit.ftl
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">releaseNotes</param>
+			</result>
+		</action>
+	</package>
+
+
+	<package name="adminAjaxAction" extends="admin" namespace="/adminAjax">
+		<action name="getConfigValue" method="getConfiguration"
+			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
+			<result name="success" type="freemarker">/admin/templates/html/config/ajaxConfigValue.ftl</result>
+		</action>
+
+		<action name="createSuperUser" method="createUser"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/createUser.ftl</result>
+		</action>
+
+	</package>
+</struts>

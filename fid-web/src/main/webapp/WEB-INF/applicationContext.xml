@@ -49,4 +49,19 @@
     
      <bean id="populatorLog"     	class="com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer"    />
     
+    
+    <!--  FROM FIELDID ADMIN -->
+    <bean id="userSecurityManager" class="com.n4systems.fieldidadmin.managers.UserSecurityManagerImpl" />
+	
+	<!-- bean id="configManager" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer" />
+	<bean id="persistenceManager" class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer" />
+	<bean id="productTypeManager" class="com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer" />
+	<bean id="productSerialManager" class="com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer" />
+	<bean id="optionManager" class="com.n4systems.ejb.legacy.wrapper.OptionEJBContainer" />
+	<bean id="userManager" class="com.n4systems.ejb.legacy.wrapper.UserEJBContainer" />
+	<bean id="orderMappingManager" class="com.n4systems.ejb.legacy.wrapper.OrderMappingEJBContainer" />
+	<bean id="serialNumberCounterManager" class="com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer" />
+	<bean id="productCodeMappingMnager" class="com.n4systems.ejb.legacy.wrapper.ProductCodeMappingEJBContainer" />
+	<bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/-->
+    
 </beans>
