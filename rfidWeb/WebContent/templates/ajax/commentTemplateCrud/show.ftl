@@ -1,1 +1,0 @@
-updateComments(${json.toJson(comment)});

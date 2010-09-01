@@ -1,9 +1,0 @@
-package com.n4systems.handlers.remover;
-
-import com.n4systems.handlers.remover.summary.AssociatedInspectionTypeDeleteSummary;
-import com.n4systems.model.AssociatedInspectionType;
-
-public interface AssociatedInspectionTypeDeleteHandler extends RemovalHandler<AssociatedInspectionTypeDeleteSummary> {
-
-	public AssociatedInspectionTypeDeleteHandler setAssociatedInspectionType(AssociatedInspectionType associatedInspectionType);
-}

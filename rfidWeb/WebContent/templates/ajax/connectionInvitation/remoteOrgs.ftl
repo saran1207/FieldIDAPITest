@@ -1,1 +1,0 @@
-updateDropDown($('remoteOrgList'),  ${action.json.toJson(remoteOrgs)}); 

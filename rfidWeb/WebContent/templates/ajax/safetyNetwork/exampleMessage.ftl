@@ -1,1 +1,0 @@
-$('sampleMessage').update('${messageBody?js_string}');

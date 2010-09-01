@@ -1,1 +1,0 @@
-<th colspan="2"><@s.text name="label.links"/></th>

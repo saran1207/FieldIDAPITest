@@ -1,1 +1,0 @@
-<img title="${sessionUser.displayDateFormat}" alt="${sessionUser.dateFormat}" src="images/tooltip.gif" />

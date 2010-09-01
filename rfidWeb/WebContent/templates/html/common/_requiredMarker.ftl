@@ -1,1 +1,0 @@
-<span class="required"><@s.text name="indicator.required"/></span>

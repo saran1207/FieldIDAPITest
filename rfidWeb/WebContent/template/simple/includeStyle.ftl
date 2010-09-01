@@ -1,1 +1,0 @@
-<link type="text/css" href="${parameters.href}" rel="stylesheet" media="${parameters.media}"/>

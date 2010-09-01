@@ -1,1 +1,0 @@
-updateInspectionBookList( ${json.toJson(books)} );
