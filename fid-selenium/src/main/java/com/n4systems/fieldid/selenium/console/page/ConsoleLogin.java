@@ -11,7 +11,7 @@ public class ConsoleLogin {
 	
 	
 	// Locators
-	private String adminConsoleURL = "/fieldidadmin/";
+	private String adminConsoleURL = "/fieldid/admin/";
 	private String userNameTextFieldLocator = "xpath=//INPUT[@id='signIntoSystem_username']";
 	private String passwordTextFieldLocator = "xpath=//INPUT[@id='signIntoSystem_password']";
 	private String submitButtonLocator = "xpath=//INPUT[@id='signIntoSystem_0']";
@@ -30,7 +30,7 @@ public class ConsoleLogin {
 	 * 
 	 */
 	public void gotoAdminConsole() {
-		gotoPage("");
+		gotoPage("signIn.action");
 	}
 	
 	/**

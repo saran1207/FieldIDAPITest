@@ -14,6 +14,7 @@ import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.testcase.IdentifyAssetsTest;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 
@@ -129,9 +130,8 @@ public abstract class FieldIDTestCase {
 			p = new Properties();
 			// if className.properties exists, load it
 			String propertyFile = getClass().getSimpleName() + ".properties";
-			File f = new File(propertyFile);
-			if(f.exists()) {
-				InputStream in = new FileInputStream(propertyFile);
+			InputStream in = getClass().getResourceAsStream("/"+propertyFile);
+			if (in != null) {
 				p.load(in);
 				in.close();
 			}
@@ -139,6 +139,11 @@ public abstract class FieldIDTestCase {
 			fail("Error while loading properties file.");
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		InputStream resourceAsStream = new IdentifyAssetsTest().getClass().getResourceAsStream("/ValidateHomePageTest.properties");
+		System.out.println(resourceAsStream);
 	}
 	
 	/**
