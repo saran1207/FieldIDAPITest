@@ -109,3 +109,10 @@ h2 {
 .list th {
 	background-color: #e0e0e0;
 }
+
+#loginForm .label {
+	float: left;
+	padding: 4px 0;
+	width: 6em;
+	font-size: 1.2em;
+}
