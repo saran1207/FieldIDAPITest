@@ -5,7 +5,7 @@
 <@s.if  test="%{page.hasResults() && page.validPage()}" >
 	
 	
-	<#include "/templates/html/common/_pagination.ftl" />
+	<#include "/admin/templates/html/common/_pagination.ftl" />
 	<table class="list">
 		<tr>
 			<th>version</th>
