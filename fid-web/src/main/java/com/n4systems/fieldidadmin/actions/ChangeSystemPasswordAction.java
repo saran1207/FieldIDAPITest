@@ -13,7 +13,7 @@ public class ChangeSystemPasswordAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ChangeSystemPasswordAction.class);
 
-	private ConfigManager configManager;
+	private ConfigManager configEJBContainer;
 
 	private String pass1;
 	private String pass2;
@@ -32,7 +32,7 @@ public class ChangeSystemPasswordAction extends AbstractAdminAction {
 		
 		try {
 			
-			SystemAccountPasswordSynchronizer passSync = new SystemAccountPasswordSynchronizer(persistenceManager, configManager, new PasswordComplexityChecker(8, 1, 1, 1, 1));
+			SystemAccountPasswordSynchronizer passSync = new SystemAccountPasswordSynchronizer(persistenceEJBContainer, configEJBContainer, new PasswordComplexityChecker(8, 1, 1, 1, 1));
 			passSync.setNewPassword(pass1);
 			accountsUpdated = passSync.synchronize();
 			
@@ -52,8 +52,8 @@ public class ChangeSystemPasswordAction extends AbstractAdminAction {
 		return SUCCESS;
 	}
 
-	public void setConfigManager(ConfigManager configManager) {
-		this.configManager = configManager;
+	public void setConfigEJBContainer(ConfigManager configManager) {
+		this.configEJBContainer = configManager;
 	}
 
 	

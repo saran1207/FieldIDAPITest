@@ -22,7 +22,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 		queryBuilder.addSimpleWhere("custom", true);
 		queryBuilder.addOrder("type");
 		queryBuilder.addOrder("name");
-		page = persistenceManager.findAllPaged(queryBuilder, getPageNumber(), 20);
+		page = persistenceEJBContainer.findAllPaged(queryBuilder, getPageNumber(), 20);
 		return SUCCESS;
 	}
 
@@ -31,7 +31,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 		
 		printOut.setCustom(true);
 		try {
-			persistenceManager.save(printOut);
+			persistenceEJBContainer.save(printOut);
 		} catch (Exception e) {
 			addActionError("could not save print out.");
 			return ERROR;
@@ -45,7 +45,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 		if (tenants == null) {
 			QueryBuilder<Tenant> tenantQuery = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 			tenantQuery.addOrder("name");
-			tenants = persistenceManager.findAll(tenantQuery);
+			tenants = persistenceEJBContainer.findAll(tenantQuery);
 		}
 		return tenants;
 	}
@@ -59,7 +59,7 @@ public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 		if (tenantId == null) {
 			printOut.setTenant(null);
 		} else if (printOut.getTenant() == null || !tenantId.equals(printOut.getTenant())) {
-			printOut.setTenant(persistenceManager.find(Tenant.class, tenantId));
+			printOut.setTenant(persistenceEJBContainer.find(Tenant.class, tenantId));
 		}
 	}
 }

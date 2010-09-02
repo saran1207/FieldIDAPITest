@@ -12,7 +12,7 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected  PersistenceManager persistenceManager;
+	protected  PersistenceManager persistenceEJBContainer;
 	
 	private Map<String, Object> session;
 	private CreateHandlerFactory createHandlerFactory;
@@ -27,8 +27,8 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 		return session;
 	}
 
-	public void setPersistenceManager(PersistenceManager persistenceManager) {
-		this.persistenceManager = persistenceManager;
+	public void setPersistenceEJBContainer(PersistenceManager persistenceManager) {
+		this.persistenceEJBContainer = persistenceManager;
 	}
 
 	protected CreateHandlerFactory getCreateHandlerFactory() {

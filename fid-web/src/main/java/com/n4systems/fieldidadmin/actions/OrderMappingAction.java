@@ -17,7 +17,7 @@ import com.n4systems.util.ListHelper;
 public class OrderMappingAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
-	private OrderMapping orderMappingManager;
+	private OrderMapping orderMappingEJBContainer;
 	
 	private Long id;
 	private OrderMappingBean orderMapping;
@@ -29,14 +29,14 @@ public class OrderMappingAction extends AbstractAdminAction {
 	private String orderMappingXmlContentType;
 	
 	public String doList() {
-		orderMappings = orderMappingManager.getOrganizationMappings();
+		orderMappings = orderMappingEJBContainer.getOrganizationMappings();
 		
 		return SUCCESS;
 	}
 	
 	public String doFormInput() {
 		if (id != null) {
-			orderMapping = orderMappingManager.getOrderMapping(id);
+			orderMapping = orderMappingEJBContainer.getOrderMapping(id);
 		}
 		
 		return INPUT;
@@ -49,9 +49,9 @@ public class OrderMappingAction extends AbstractAdminAction {
 	public String doSave() {
 		if (id != null) {
 			orderMapping.setUniqueID(id);
-			orderMappingManager.update(orderMapping);
+			orderMappingEJBContainer.update(orderMapping);
 		} else {
-			orderMappingManager.save(orderMapping);
+			orderMappingEJBContainer.save(orderMapping);
 		}
 		
 		return SUCCESS;
@@ -59,18 +59,18 @@ public class OrderMappingAction extends AbstractAdminAction {
 	
 	public String doDelete() {
 		if (id != null) {
-			orderMappingManager.delete(id);
+			orderMappingEJBContainer.delete(id);
 		}
 		
 		return SUCCESS;
 	}
 
-	public OrderMapping getOrderMappingManager() {
-		return orderMappingManager;
+	public OrderMapping getOrderMappingEJBContainer() {
+		return orderMappingEJBContainer;
 	}
 
-	public void setOrderMappingManager(OrderMapping orderMappingManager) {
-		this.orderMappingManager = orderMappingManager;
+	public void setOrderMappingEJBContainer(OrderMapping orderMappingManager) {
+		this.orderMappingEJBContainer = orderMappingManager;
 	}
 
 	public Long getId() {
@@ -101,7 +101,7 @@ public class OrderMappingAction extends AbstractAdminAction {
 		if (orderMappingXml != null && orderMappingXmlFileName.length() > 0) {
 			try {
 				String orderMapXml = getFileContents(orderMappingXml);
-				orderMappingManager.importXmlOrderMappings(orderMapXml);
+				orderMappingEJBContainer.importXmlOrderMappings(orderMapXml);
 				orderMappingXml.delete();
 			} catch (Exception e) {
 				e.printStackTrace();

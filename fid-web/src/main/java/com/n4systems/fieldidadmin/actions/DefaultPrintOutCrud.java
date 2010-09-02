@@ -28,7 +28,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 			printOut = new PrintOut();
 			printOut.setType(PrintOut.PrintOutType.CERT);
 		} else {
-			printOut = persistenceManager.find(PrintOut.class, uniqueID);
+			printOut = persistenceEJBContainer.find(PrintOut.class, uniqueID);
 		}
 	}
 		
@@ -46,7 +46,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 		queryBuilder.addSimpleWhere("custom", false);
 		queryBuilder.addOrder("type");
 		queryBuilder.addOrder("name");
-		page = persistenceManager.findAllPaged(queryBuilder, getPageNumber(), 20);
+		page = persistenceEJBContainer.findAllPaged(queryBuilder, getPageNumber(), 20);
 		return SUCCESS;
 	}
 
@@ -61,7 +61,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 		printOut.setTenant(null);
 		printOut.setCustom(false);
 		try {
-			persistenceManager.save(printOut);
+			persistenceEJBContainer.save(printOut);
 		} catch (Exception e) {
 			addActionError("could not save print out.");
 			return ERROR;
@@ -78,7 +78,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 	public String doUpdate() {
 		testRequiredEntities(true);
 		try {
-			persistenceManager.update(printOut);
+			persistenceEJBContainer.update(printOut);
 		} catch (Exception e) {
 			addActionError("could not save print out.");
 			return ERROR;
@@ -91,13 +91,13 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 		testRequiredEntities(true);
 		QueryBuilder<InspectionTypeGroup> printOutUsedQuery = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class, new OpenSecurityFilter());
 		printOutUsedQuery.addSimpleWhere("printOut", printOut);
-		Long numberOfInspectionGroupsUsingPrintOut = persistenceManager.findCount(printOutUsedQuery);
+		Long numberOfInspectionGroupsUsingPrintOut = persistenceEJBContainer.findCount(printOutUsedQuery);
 		if (numberOfInspectionGroupsUsingPrintOut != 0 ) {
 			addActionError("this can not be deleted, it is being used by " + numberOfInspectionGroupsUsingPrintOut);
 			return INPUT;
 		}
 		try {
-			persistenceManager.delete(printOut);
+			persistenceEJBContainer.delete(printOut);
 		} catch (Exception e) {
 			addActionError("could not remove the print out");
 			return ERROR;

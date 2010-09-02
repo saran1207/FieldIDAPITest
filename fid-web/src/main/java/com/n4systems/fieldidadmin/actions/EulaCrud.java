@@ -30,7 +30,7 @@ public class EulaCrud extends AbstractAdminAction implements Preparable {
 
 	public void prepare() throws Exception {
 		if (id != null) {
-			eula = persistenceManager.find(EULA.class, id);
+			eula = persistenceEJBContainer.find(EULA.class, id);
 		} else {
 			eula = new EULA();
 		}
@@ -49,7 +49,7 @@ public class EulaCrud extends AbstractAdminAction implements Preparable {
 	public String doList() {
 		try {
 			QueryBuilder<EULA> query = new QueryBuilder<EULA>(EULA.class, new OpenSecurityFilter()).addOrder("effectiveDate", false);
-			page = persistenceManager.findAllPaged(query, getPageNumber(), 10);
+			page = persistenceEJBContainer.findAllPaged(query, getPageNumber(), 10);
 			return SUCCESS;
 		} catch (InvalidQueryException iqe) {
 			logger.error("couldn't load the list of eulas ", iqe);
@@ -69,7 +69,7 @@ public class EulaCrud extends AbstractAdminAction implements Preparable {
 	public String doCreate() {
 		testRequiredEntities(false);
 		try {
-			persistenceManager.save(eula);
+			persistenceEJBContainer.save(eula);
 			addActionMessage("Saved EULA");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -89,7 +89,7 @@ public class EulaCrud extends AbstractAdminAction implements Preparable {
 	public String doUpdate() {
 		testRequiredEntities(true);
 		try {
-			persistenceManager.update(eula);
+			persistenceEJBContainer.update(eula);
 			addActionMessage("Saved EULA");
 			return SUCCESS;
 		} catch (Exception e) {

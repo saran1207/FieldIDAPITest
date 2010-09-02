@@ -12,18 +12,18 @@ import com.n4systems.util.ListHelper;
 public class ConfigurationAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 
-	private ConfigManager configManager;
+	private ConfigManager configEJBContainer;
 	
 	private ConfigEntry key;
 	private Long tenantId;
 	private String value;
 	
-	public ConfigManager getConfigManager() {
-		return configManager;
+	public ConfigManager getConfigEJBContainer() {
+		return configEJBContainer;
 	}
 
-	public void setConfigManager(ConfigManager configManager) {
-		this.configManager = configManager;
+	public void setConfigEJBContainer(ConfigManager configManager) {
+		this.configEJBContainer = configManager;
 	}
 	
 
@@ -46,7 +46,7 @@ public class ConfigurationAction extends AbstractAdminAction {
 	
 	public String doSave() {
 		try {
-			configManager.saveEntry(key, tenantId, value);
+			configEJBContainer.saveEntry(key, tenantId, value);
 		} catch(Exception e) {
 			e.printStackTrace(System.err);
 			addActionError("Failed to save/update key: [" + key + "] with value: [" + value + "]");
@@ -59,7 +59,7 @@ public class ConfigurationAction extends AbstractAdminAction {
 	
 	public String doRemove() {
 		try {
-			configManager.removeEntry(key, tenantId);
+			configEJBContainer.removeEntry(key, tenantId);
 		} catch(Exception e) {
 			e.printStackTrace(System.err);
 			addActionError("Failed to delete: " + key);

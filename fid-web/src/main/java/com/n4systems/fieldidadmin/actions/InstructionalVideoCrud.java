@@ -25,7 +25,7 @@ public class InstructionalVideoCrud extends AbstractAdminAction implements Prepa
 	
 	public void prepare() throws Exception {
 		if( id != null ) {
-			video = persistenceManager.find( InstructionalVideo.class, id );
+			video = persistenceEJBContainer.find( InstructionalVideo.class, id );
 		} else {
 			video = new InstructionalVideo();
 		}
@@ -33,7 +33,7 @@ public class InstructionalVideoCrud extends AbstractAdminAction implements Prepa
 
 	public String doList(){
 		try {
-			page = new InstructionalVidoeHelper( persistenceManager ).getPage( getPageNumber(), 10 );
+			page = new InstructionalVidoeHelper( persistenceEJBContainer ).getPage( getPageNumber(), 10 );
 			return SUCCESS;
 		} catch( InvalidQueryException iqe ) {
 			logger.error( "couldn't load the list of instructionalvideos ", iqe );
@@ -55,9 +55,9 @@ public class InstructionalVideoCrud extends AbstractAdminAction implements Prepa
 	public String doSave(){
 		try {
 			if( video.isNew() ) {
-				persistenceManager.save( video );
+				persistenceEJBContainer.save( video );
 			} else {
-				video = persistenceManager.update( video );
+				video = persistenceEJBContainer.update( video );
 			}
 			
 			return SUCCESS;
@@ -70,7 +70,7 @@ public class InstructionalVideoCrud extends AbstractAdminAction implements Prepa
 	
 	public String doDelete(){
 		try {
-			persistenceManager.delete( video );
+			persistenceEJBContainer.delete( video );
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error( "could not delete video", e );

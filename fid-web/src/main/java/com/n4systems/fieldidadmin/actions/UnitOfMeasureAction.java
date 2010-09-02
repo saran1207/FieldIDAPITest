@@ -13,17 +13,17 @@ public class UnitOfMeasureAction extends AbstractAdminAction {
 	private Collection<UnitOfMeasure> unitOfMeasures;
 
 	public String doList() {
-		unitOfMeasures = persistenceManager.findAll( UnitOfMeasure.class );
+		unitOfMeasures = persistenceEJBContainer.findAll( UnitOfMeasure.class );
 
 		return SUCCESS;
 	}
 
 	public String doFormInput() {
 		if (id != null) {
-			unitOfMeasure = persistenceManager.find( UnitOfMeasure.class, id );
+			unitOfMeasure = persistenceEJBContainer.find( UnitOfMeasure.class, id );
 		}
 
-		unitOfMeasures = persistenceManager.findAll( UnitOfMeasure.class );
+		unitOfMeasures = persistenceEJBContainer.findAll( UnitOfMeasure.class );
 
 		return INPUT;
 	}
@@ -31,9 +31,9 @@ public class UnitOfMeasureAction extends AbstractAdminAction {
 	public String doSave() {
 		if (id != null) {
 			unitOfMeasure.setId(id);
-			persistenceManager.update( unitOfMeasure );
+			persistenceEJBContainer.update( unitOfMeasure );
 		} else {
-			persistenceManager.save( unitOfMeasure );
+			persistenceEJBContainer.save( unitOfMeasure );
 		}
 
 		return SUCCESS;

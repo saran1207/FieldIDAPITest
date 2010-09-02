@@ -45,13 +45,15 @@
     <bean id="orderEJBContainer"    	class="com.n4systems.ejb.wrapper.OrderManagerEJBContainer"    />
     
     <bean id="productEJBContainer"     	class="com.n4systems.ejb.wrapper.ProductManagerEJBContainer"    />
+    
     <bean id="projectEJBContainer"     	class="com.n4systems.ejb.wrapper.ProjectManagerEJBContainer"    />
     
-     <bean id="populatorLog"     	class="com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer"    />
+    <bean id="populatorLog"     	class="com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer"    />
     
     
     <!--  FROM FIELDID ADMIN -->
     <bean id="userSecurityManager" class="com.n4systems.fieldidadmin.managers.UserSecurityManagerImpl" />
+	<bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/>
 	
 	<!-- bean id="configManager" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer" />
 	<bean id="persistenceManager" class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer" />

@@ -9,21 +9,21 @@ import rfid.ejb.entity.FindProductOptionManufactureBean;
 public class FindProductOptionAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	
-	private Option optionManager;
+	private Option optionEJBContainer;
 	
 	private FindProductOptionManufactureBean findProductOption;
 	private Collection<FindProductOptionManufactureBean> findProductOptions;
 	private Long id;
 	
 	public String doList() {
-		findProductOptions = optionManager.getAllFindProductOptionManufacture();
+		findProductOptions = optionEJBContainer.getAllFindProductOptionManufacture();
 		
 		return SUCCESS;
 	}
 	
 	public String doFormInput() {
 		if (id != null) {
-			findProductOption = optionManager.getFindProductOptionManufacture(id);
+			findProductOption = optionEJBContainer.getFindProductOptionManufacture(id);
 		}
 		
 		return INPUT;
@@ -32,7 +32,7 @@ public class FindProductOptionAction extends AbstractAdminAction {
 	public String doSave() {
 		if (id != null) {
 			findProductOption.setUniqueID(id);
-			optionManager.updateFindProductOptionManufacture(findProductOption);
+			optionEJBContainer.updateFindProductOptionManufacture(findProductOption);
 		} else {
 			// not implemented
 			return ERROR;
@@ -43,12 +43,12 @@ public class FindProductOptionAction extends AbstractAdminAction {
 	
 
 
-	public Option getOptionManager() {
-		return optionManager;
+	public Option getOptionEJBContainer() {
+		return optionEJBContainer;
 	}
 
-	public void setOptionManager(Option optionManager) {
-		this.optionManager = optionManager;
+	public void setOptionEJBContainer(Option optionManager) {
+		this.optionEJBContainer = optionManager;
 	}
 
 	public FindProductOptionManufactureBean getFindProductOption() {
