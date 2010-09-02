@@ -35,7 +35,7 @@ Total Tenants: ${primaryOrgs?size}
 	<td>
 		<a href="#" onclick="createSuper('${primaryOrg.tenant.id}'); return false;">Create Super User</a> 
 		<div id="superUser_${primaryOrg.tenant.id}" class="superUserForm" style="display:none">
-			<@s.form action="createSuperUser" namespace="/adminAjax" method="post">
+			<@s.form action="createSuperUser" namespace="/adminAjax" method="post" theme="xhtml">
 				<input type="hidden" name="id" value="${primaryOrg.tenant.id}" />
 				<@s.textfield name="userName" label="Default User Name" />
 				<@s.password name="password" label="Default User Password" />

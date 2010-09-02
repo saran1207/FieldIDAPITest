@@ -1,5 +1,5 @@
 
-<@s.form action="promoCodeSave" namespace="/admin" method="post">
+<@s.form action="promoCodeSave" namespace="/admin" method="post" theme="xhtml">
 	<@s.hidden name="id" value="%{id}" />
 	<@s.textfield name="promoCode.code" value="%{promoCode.code}" label="Code" />
 	<@s.textfield name="diskSpaceMB" label="Max Disk Space (MB) (-1 for Unlimited)" />

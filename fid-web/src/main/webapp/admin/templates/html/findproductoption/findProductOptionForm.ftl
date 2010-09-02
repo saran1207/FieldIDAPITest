@@ -1,5 +1,5 @@
 
-<@s.form action="findProductOptionCrud!save" namespace="/admin" method="post">
+<@s.form action="findProductOptionCrud!save" namespace="/admin" method="post" theme="xhtml">
 	<@s.hidden name="id" value="%{id}" />
 	<@s.label name="findProductOption.findProductOption.description" value="%{findProductOption.findProductOption.description}" label="Description: " />
 	<@s.label name="findProductOption.findProductOption.value" value="%{findProductOption.findProductOption.value}" label="Value: " />

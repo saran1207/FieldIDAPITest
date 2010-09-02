@@ -1,5 +1,5 @@
 
-<@s.form action="unitOfMeasureCrud!save" namespace="/admin" method="post">
+<@s.form action="unitOfMeasureCrud!save" namespace="/admin" method="post" theme="xhtml">
 	<@s.hidden name="id" value="%{id}" />
 	<@s.textfield name="unitOfMeasure.name" value="%{unitOfMeasure.name}" label="Name" />
 	<@s.textfield name="unitOfMeasure.type" value="%{unitOfMeasure.type}" label="Type" />

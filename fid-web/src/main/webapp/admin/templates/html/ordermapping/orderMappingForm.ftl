@@ -1,5 +1,5 @@
 
-<@s.form action="orderMappingCrud!save" namespace="/admin" method="post">
+<@s.form action="orderMappingCrud!save" namespace="/admin" method="post" theme="xhtml">
 	<@s.hidden name="id" value="%{id}" />
 	<@s.textfield name="orderMapping.organizationID" value="%{orderMapping.organizationID}" label="Organization ID" />
 	<@s.textfield name="orderMapping.externalSourceID" value="%{orderMapping.externalSourceID}" label="External Source ID" />

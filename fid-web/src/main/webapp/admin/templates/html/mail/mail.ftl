@@ -2,7 +2,7 @@
 
 <h2>Mail Test</h2>
 
-<@s.form action="mailTest!send" namespace="/admin" method="post">
+<@s.form action="mailTest!send" namespace="/admin" method="post" theme="xhtml">
 	<@s.textfield name="toAddress" value="%{toAddress}" label="To Address" size="40" />
 	<@s.textfield name="subject" value="%{subject}" label="Subject" size="60" />
 	<@s.textarea name="body" value="%{body}" label="Body" cols="80" rows="20"/>

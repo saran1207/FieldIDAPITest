@@ -1,5 +1,5 @@
  <p> you can only have integration or job sites selected as extended features.</p>
-<@s.form action="organizationUpdate" namespace="/admin" method="post">
+<@s.form action="organizationUpdate" namespace="/admin" method="post" theme="xhtml">
 	<@s.hidden name="id" value="%{id}" /> 
 	<@s.fielderror/>
 	
