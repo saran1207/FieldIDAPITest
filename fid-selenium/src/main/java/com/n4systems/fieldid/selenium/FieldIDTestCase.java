@@ -34,7 +34,6 @@ public abstract class FieldIDTestCase {
 	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
-	private String supportFileLocation = System.getProperty("supportFileLocation", "file:///T:");
 
     public static FieldIdSelenium selenium;
 	protected MiscDriver misc;
@@ -233,10 +232,6 @@ public abstract class FieldIDTestCase {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() +  "/signup/" + referralCode;
 		selenium.open(url);
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
-	}
-	
-	public String getSupportFileLocation() {
-		return supportFileLocation;
 	}
 	
 }
