@@ -10,7 +10,7 @@
 		  		<li>
 		  			<a href="<@s.url action="myAccount" namespace="/"/>"><@s.text name="label.myaccount"/></a>
 				</li>
-					<#if sessionUser.employeeUser>
+					<#if sessionUser.employeeUser && userSecurityGuard.allowedManageSafetyNetwork>
 						<li>
 		  					<a href="<@s.url action="invite" namespace="/"/>" onclick:target="_blank"><@s.text name="label.invite"/></a>
 						</li>
