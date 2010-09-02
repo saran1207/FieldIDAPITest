@@ -13,6 +13,7 @@
 		<module>fid-web</module>
 	</modules>
 	<repositories>
+
 		<repository>
 			<id>JBoss</id>
 			<name>JBoss Repsitory</name>
@@ -20,19 +21,19 @@
 			<url>http://repository.jboss.org/maven2</url>
 		</repository>
 
-                <repository>
-                        <id>N4Int</id>
-                        <name>N4 Internal</name>
-                        <layout>default</layout>
-                        <url>http://archiva.n4systems.net/archiva/repository/internal/</url>
-                </repository>
+        <repository>
+            <id>N4Int</id>
+            <name>N4 Internal</name>
+            <layout>default</layout>
+            <url>http://archiva.n4systems.net/archiva/repository/internal/</url>
+        </repository>
 
-                <repository>
-                        <id>N4Snap</id>
-                        <name>N4 Snapshots</name>
-                        <layout>default</layout>
-                        <url>http://archiva.n4systems.net/archiva/repository/snapshots/</url>
-                </repository>
+        <repository>
+            <id>N4Snap</id>
+            <name>N4 Snapshots</name>
+            <layout>default</layout>
+            <url>http://archiva.n4systems.net/archiva/repository/snapshots/</url>
+        </repository>
 
 	</repositories>
 	<build>
