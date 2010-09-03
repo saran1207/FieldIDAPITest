@@ -3,7 +3,7 @@
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 </head>
 
-<div id="leftConnectionsColumn" class="borderRight linkDecoration">
+<div id="leftConnectionsColumn">
 	<ul>
 		<li id="inbox">
 			<a href="<@s.url action="messages"/>"><@s.text name="label.inbox"/> (${unreadMessageCount})</a>
@@ -32,7 +32,7 @@
 
 <div id="safetyNetworkSplash">
 	<h1><@s.text name="label.safety_network"/></h1>
-	<p>
+	<p id="safetyNetworkDescription">
 		<@s.text name="label.safety_network_info.2"/>
 	</p>
 	
@@ -42,14 +42,14 @@
 	</p>
 	<@s.form action="findConnections" theme="fieldid" cssClass="fullForm">
 		<p>
-			<@s.text name="label.find_a_company"/>
-			<@s.textfield id="snSmartSearchText" name="searchText"/>
+			<span class="splashHeading"><@s.text name="label.find_a_company"/></span>
+			<@s.textfield id="companySearchBox" name="searchText"/>
+			<@s.submit id="searchForCompany" key="hbutton.search" cssClass="saveButton save"/>
 		</p>
 	</@s.form>
 	<p id="inviteCompany">
-		<@s.text name="label.invite_a_company"/>
-		<br/>
-		<a><@s.text name="label.invite_a_company.full"/></a>		
+		<span class="safetyHeading"><a href="<@s.url action="invite"/>"><@s.text name="label.invite_a_company"/></a></span>
+		<a href="<@s.url action="invite"/>"><@s.text name="label.invite_a_company.full"/></a>
 	</p>
 </div>
 
