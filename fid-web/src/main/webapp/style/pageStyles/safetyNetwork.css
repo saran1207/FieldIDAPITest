@@ -148,3 +148,60 @@
 	overflow: auto;
 	padding: 5px;
 }
+
+#leftConnectionsColumn{
+	display: block;
+	float: left;
+	border-right: 1px solid #999999;
+	overflow: hidden;
+	padding: 2.0em 0 2.0em 0;
+	margin: 0;
+}
+
+#yourConnections{
+	border-top: 1px solid #999999;
+	border-bottom: 1px solid #999999;
+	padding-right: 2.0em;
+	margin: 0.75em 0;
+}
+
+#safetyNetworkSplash {
+	display: block;
+	float: left;
+	padding: 2em 0 3em 2em;
+}
+
+#findConnections{
+	display:block;
+	width: 30em;
+	float:left;
+}
+
+#findConnections p{
+	padding: 1em 0 2em 6em;
+	background: no-repeat url(../../images/connections.png) left center;
+}
+
+#inviteCompany{
+	display:block;
+	float:left;
+	max-width:27em;
+	padding: 2em 0 1em 6.5em;
+	background: no-repeat url(../../images/inbox.png) left center;
+}
+
+#safetyNetworkVendorList{
+	margin-top:1em;
+}
+
+.linkDecoration a{
+	text-decoration:none;
+	color:#556DA5;
+}
+
+.videoLinks a {
+	min-height:25px;
+	margin-top: 15px;
+	padding-left: 20px;
+	display: block;
+}
