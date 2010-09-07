@@ -72,10 +72,23 @@ public class TypedOrgConnection extends EntityWithOwner {
 	public ConnectionType getConnectionType() {
 		return connectionType;
 	}
-
-
+	
+	public boolean isCustomerConnection(){
+		return connectionType.equals(ConnectionType.CUSTOMER);
+	}
+	
+	public boolean isVendorConnection(){
+		return connectionType.equals(ConnectionType.VENDOR);
+	}
+	
+	public boolean isCatalogOnlyConnection(){
+		return connectionType.equals(ConnectionType.CATALOG_ONLY);
+	}
+	
 	public void setConnectionType(ConnectionType connectionType) {
 		this.connectionType = connectionType;
 	}
+	
+
 
 }
