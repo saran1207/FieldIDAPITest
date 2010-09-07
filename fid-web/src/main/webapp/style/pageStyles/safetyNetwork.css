@@ -1,10 +1,10 @@
 
 #help_link {
-	background: no-repeat url(../../images/small-help-logo.png);
+	background: no-repeat url(../../images/rec.png);
 }
 
 #video_link {
-	background: no-repeat url(../../images/small-video-logo.png);
+	background: no-repeat url(../../images/rec.png);
 }
 
 #manage_catalog_heading {
@@ -108,11 +108,11 @@
 	display: block;
 	float: left;
 	overflow: hidden;
-	padding: 2.0em 0 2.0em 0;
-	margin: 0;
+	padding: 2em 0;
+	font-size: 1.1em;
 }
 
-#leftConnectionsColumn a{
+.safetyNetworkCustomerList li{
 	font-size: 1.1em;
 }
 
@@ -122,10 +122,10 @@
 }
 
 #yourConnections{
-	background: no-repeat url(../../images/manage_catalog-small.png) left center;
+	background: no-repeat url(../../images/connections-small.png) left center;
 	border-top: 1px solid #999999;
 	border-bottom: 1px solid #999999;
-	padding: 1em 2em 1em 0
+	padding: 0.8em 2em 0.8em 2.7em;
 	margin: 0.75em 0;
 	font-size:1.2em;
 	font-weight:bold;
@@ -174,23 +174,23 @@
 	float: left;
 	height: 1.5em;
 	margin-top:0.5em;
+	padding:2px;
 	}
 
 .inputAlign { 
 	vertical-align: middle;
 	*vertical-align: text-bottom;
 } 
-
-#searchForCompany{
+	
+#searchForCompanyButton{
 	margin-left:0.5em;
-	margin-top:0.4em;
+	margin-top:0.5em;
 	}
 
 #findConnections p{
-	display: block;
+	background: no-repeat url(../../images/connections.png) -12px center;
 	width: 30em;
 	padding: 1.4em 0 2em 4.55em;
-	background: no-repeat url(../../images/connections.png) -12px center;
 }
 
 #findConnections .fieldHolder{
@@ -198,11 +198,13 @@
 }
 
 #inviteCompany{
+	background: no-repeat url(../../images/inbox.png) left 15px;
 	display: block;
 	float: left;
 	max-width: 27em;
 	padding: 2em 0 2em 6.5em;
-	background: no-repeat url(../../images/inbox.png) left 15px;
+	margin-left:1em;
+
 }
 
 #inviteCompany a{
@@ -214,10 +216,10 @@
 }
 
 .videoLinks a {
+	display: block;
 	min-height: 25px;
 	margin-top: 1em;
 	padding-left: 1.8em;
-	display: block;
 	font-size:1.2em;
 }
 

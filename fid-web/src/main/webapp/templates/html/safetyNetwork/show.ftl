@@ -16,16 +16,23 @@
 		</li>
 	</ul>
 	
-	<div>
-		<p id="yourConnections">
-			<@s.text name="label.your_connections"/>
-		</p>
-	</div>
+	<p id="yourConnections">
+		<@s.text name="label.your_connections"/>
+	</p>
 	
-	<ul id="safetyNetworkCustomerList">
+	<ul id="safetyNetworkCustomerList" class="safetyNetworkCustomerList">
 		<@s.text name="label.customers"/>
+		<#list connections.list as connection>
+			<li>
+				<#if action.hasAPublishedCatalog(connection.connectedOrg)>
+					<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">	${(connection.connectedOrg.primaryOrg.name?html)!}</a>
+				<#else>
+						${(connection.connectedOrg.primaryOrg.name?html)!}
+				</#if>
+			</li>
+		</#list>
 	</ul>
-	<ul id="safetyNetworkVendorList">
+	<ul id="safetyNetworkVendorList" class="safetyNetworkCustomerList">
 		<@s.text name="label.vendors"/>
 	</ul>
 </div>
@@ -44,7 +51,7 @@
 		<p>
 			<span class="splashHeading"><@s.text name="label.find_a_company"/></span><br/>
 			<@s.textfield id="companySearchBox"  name="searchText" cssClass="inputAlign"/>
-			<@s.submit id="searchForCompany"  key="hbutton.search" cssClass="saveButton save inputAlign"/>
+			<@s.submit id="searchForCompanyButton"  key="hbutton.search" cssClass="saveButton save inputAlign"/>
 		</p>
 	</@s.form>
 	<p id="inviteCompany">
