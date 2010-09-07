@@ -16,10 +16,10 @@
 		</li>
 	</ul>
 	
-	<div id="yourConnections">
-		<h3>
+	<div>
+		<p id="yourConnections">
 			<@s.text name="label.your_connections"/>
-		</h3>
+		</p>
 	</div>
 	
 	<ul id="safetyNetworkCustomerList">
@@ -42,9 +42,9 @@
 	</p>
 	<@s.form action="findConnections" theme="fieldid" cssClass="fullForm">
 		<p>
-			<span class="splashHeading"><@s.text name="label.find_a_company"/></span>
-			<@s.textfield id="companySearchBox" name="searchText"/>
-			<@s.submit id="searchForCompany" key="hbutton.search" cssClass="saveButton save"/>
+			<span class="splashHeading"><@s.text name="label.find_a_company"/></span><br/>
+			<@s.textfield id="companySearchBox"  name="searchText" cssClass="inputAlign"/>
+			<@s.submit id="searchForCompany"  key="hbutton.search" cssClass="saveButton save inputAlign"/>
 		</p>
 	</@s.form>
 	<p id="inviteCompany">

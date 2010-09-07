@@ -116,11 +116,19 @@
 	font-size: 1.1em;
 }
 
+#leftConnectionsColumn li{
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+}
+
 #yourConnections{
+	background: no-repeat url(../../images/manage_catalog-small.png) left center;
 	border-top: 1px solid #999999;
 	border-bottom: 1px solid #999999;
-	padding-right: 2.0em;
+	padding: 1em 2em 1em 0
 	margin: 0.75em 0;
+	font-size:1.2em;
+	font-weight:bold;
 }
 
 #safetyNetworkSplash {
@@ -135,6 +143,7 @@
  	font-size: 1.25em;
 	padding-bottom: 0.5em;
 	width: 45em;
+	line-height:1.5em;
 }
 
 #safetyNetworkSplash h1{
@@ -159,18 +168,33 @@
 	float: left;
 }
 
-#findConnections input{
+#companySearchBox{
+	font-size: 1.2em;
 	display: block;
 	float: left;
-	height: 2em;
+	height: 1.5em;
+	margin-top:0.5em;
+	}
+
+.inputAlign { 
+	vertical-align: middle;
+	*vertical-align: text-bottom;
+} 
+
+#searchForCompany{
+	margin-left:0.5em;
+	margin-top:0.4em;
 	}
 
 #findConnections p{
 	display: block;
 	width: 30em;
-	float: left;
 	padding: 1.4em 0 2em 4.55em;
 	background: no-repeat url(../../images/connections.png) -12px center;
+}
+
+#findConnections .fieldHolder{
+	display:inline;
 }
 
 #inviteCompany{
@@ -200,5 +224,4 @@
 .splashHeading{
 	font-size: 1.3em;
 	font-weight: bold;
-	margin-bottom:0.5em;
 }
