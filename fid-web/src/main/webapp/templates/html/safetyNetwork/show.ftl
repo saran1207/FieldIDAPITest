@@ -1,11 +1,6 @@
 <title><@s.text name="label.safety_network" /></title>
 <head>
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
-	<script type="text/javascript">
-		function removeEmptyLi(tagIdToRemove){
-	
-		}
-	</script>
 </head>
 
 <div id="leftConnectionsColumn">
@@ -27,61 +22,62 @@
 
 	<ul id="safetyNetworkVendorList" class="safetyNetworkCustomerList">
 		<@s.text name="label.vendors"/>
-		<li id="emptyVendors" class="emptyLi">
-			<@s.text name="label.none"/>			
-		</li>
-		<#list connections.list as connection>
-			<#if connection.vendorConnection>
-				<script type="text/javascript">removeEmptyLi(emptyVendors);</script>
+		<#if !vendorConnections?has_content>
+			<li class="emptyLi">
+				<@s.text name="label.none"/>			
+			</li>
+		<#else>
+			<#list vendorConnections as connection>
 				<li>
 					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
 						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">	${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					<#else>
-							${(connection.connectedOrg.primaryOrg.name?html)!}
+						<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					</#if>
 				</li>
-			</#if>
-		</#list>
+			</#list>
+		</#if>
 	</ul>
 
 	<ul id="safetyNetworkCustomerList" class="safetyNetworkCustomerList">
 		<@s.text name="label.customers"/>
-		<li id="emptyCustomers" class="emptyLi">
-			<@s.text name="label.none"/>			
-		</li>
-		<#list connections.list as connection>
-			<#if connection.customerConnection>
-				<script type="text/javascript">	$('emptyCustomers').remove();</script>
+		<#if !customerConnections?has_content>
+			<li class="emptyLi">
+				<@s.text name="label.none"/>			
+			</li>
+		<#else>
+			<#list customerConnections as connection>
 				<li>
 					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
 						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">	${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					<#else>
-							${(connection.connectedOrg.primaryOrg.name?html)!}
+						<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					</#if>
 				</li>
-			</#if>
-		</#list>
+			</#list>
+		</#if>
 	</ul>
 	
 	<ul id="safetyNetworkCatalogOnlyList" class="safetyNetworkCustomerList">
 		<@s.text name="label.catalog_only"/>
-		<li id="emptyCatalogOnly" class="emptyLi">
-			<@s.text name="label.none"/>			
-		</li>
-		<#list connections.list as connection>
-			<#if connection.catalogOnlyConnection>
-				<script type="text/javascript">	$('emptyCatalogOnly').remove();</script>
-				<li>
-					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
-						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">	${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-					<#else>
-							${(connection.connectedOrg.primaryOrg.name?html)!}
-					</#if>
-				</li>
-			</#if>
-		</#list>
+		<#if !catalogOnlyConnections?has_content>
+			<li id="emptyCatalogOnly" class="emptyLi">
+				<@s.text name="label.none"/>			
+			</li>
+		<#else>
+			<#list catalogOnlyConnections as connection>
+				<#if connection.catalogOnlyConnection>
+					<li>
+						<#if action.hasAPublishedCatalog(connection.connectedOrg)>
+							<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">	${(connection.connectedOrg.primaryOrg.name?html)!}</a>
+						<#else>
+							<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
+						</#if>
+					</li>
+				</#if>
+			</#list>
+		</#if>
 	</ul>
-	
 </div>
 
 <div id="safetyNetworkSplash">
