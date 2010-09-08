@@ -1,7 +1,7 @@
 ${action.setPageType('safety_network_connections', 'import')!}
 <head>
 	<@n4.includeScript>
-		var yourDoneUrl = '<@s.url action="connections" />';
+		var yourDoneUrl = '<@s.url action="safetyNetwork" />';
 		var yourCancelUrl = yourDoneUrl;
 		var importDoneName;
 	</@n4.includeScript>

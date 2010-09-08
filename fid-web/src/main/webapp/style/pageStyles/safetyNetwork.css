@@ -1,22 +1,10 @@
 
 #help_link {
-	background: no-repeat url(../../images/rec.png);
+	background: no-repeat url(../../images/info.png);
 }
 
 #video_link {
-	background: no-repeat url(../../images/rec.png);
-}
-
-#manage_catalog_heading {
-	min-height: 27px;
-	padding: 5px 0 0 38px;
-	background: no-repeat url(../../images/manage_catalog-small.png);
-}
-
-#inbox_heading {
-	min-height: 27px;
-	padding: 5px 0 0 38px;
-	background: no-repeat url(../../images/inbox-small.png);
+	background: no-repeat url(../../images/info.png);
 }
 
 .infoSet {
@@ -141,7 +129,6 @@
 
 #safetyNetworkDescription{
  	font-size: 1.25em;
-	padding-bottom: 0.5em;
 	width: 45em;
 	line-height:1.5em;
 }
@@ -161,6 +148,10 @@
 #safetyNetworkSplash .safetyHeading a:hover{
 	text-decoration: underline;
 }
+
+#findConnections, #inviteCompany{
+	margin-top:1.4em;
+	}
 
 #findConnections{
 	display: block;
@@ -190,7 +181,7 @@
 #findConnections p{
 	background: no-repeat url(../../images/connections.png) -12px center;
 	width: 30em;
-	padding: 1.4em 0 2em 4.55em;
+	padding: 1.4em 0 2em 5em;
 }
 
 #findConnections .fieldHolder{
@@ -198,32 +189,37 @@
 }
 
 #inviteCompany{
-	background: no-repeat url(../../images/inbox.png) left 15px;
+	background: no-repeat url(../../images/inbox-safety-network.png) left 15px;
 	display: block;
 	float: left;
 	max-width: 27em;
-	padding: 2em 0 2em 6.5em;
+	padding: 2em 0 2em 7.6em;
 	margin-left:1em;
 
 }
 
 #inviteCompany a{
 	color: #333333;	
+	font-size:1.1em;
 }
 
-#safetyNetworkVendorList, #safetyNetworkCatalogOnlyList {
-	margin-top: 1.5em;
+#safetyNetworkCustomerList, #safetyNetworkCatalogOnlyList {
+	margin-top: 1.25em;
 }
 
 .videoLinks a {
 	display: block;
-	min-height: 25px;
-	margin-top: 1em;
-	padding-left: 1.8em;
+	line-height:35px;
+	margin-top: 0.8em;
+	padding-left: 2.8em;
 	font-size: 1.2em;
 }
 
 .splashHeading{
 	font-size: 1.3em;
 	font-weight: bold;
+}
+
+.emptyLi {
+	color: #999999;
 }
