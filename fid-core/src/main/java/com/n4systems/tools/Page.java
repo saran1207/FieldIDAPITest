@@ -15,7 +15,7 @@ import javax.persistence.Query;
 
 public class Page<k> implements Pager<k> {
 
-	protected static final Integer startingPageNumber = 0;
+	protected static final Integer START_PAGE_NUMBER = 0;
 	
 	private List<k> results;
 	protected Integer pageSize;
@@ -25,26 +25,21 @@ public class Page<k> implements Pager<k> {
 	private Map<String,Object> resultContextMappings;
 	private String resultContextMappingGetStringWeb;
 	
-	
 	@SuppressWarnings("unchecked")
 	public Page(Query query, Query countQuery, Integer page, Integer pageSize) {
-		
 		Long totalResults = (Long)countQuery.getSingleResult();
 		this.totalResults = totalResults.longValue();
 		this.totalPages = totalResults / pageSize;
-		if (totalResults % pageSize > startingPageNumber ) {
+		if (totalResults % pageSize > START_PAGE_NUMBER) {
 			this.totalPages++;
 		}
-		
-		
-		this.page = (page != null ) ? page - 1 : startingPageNumber;
-		
-			
+
+		this.page = (page != null ) ? page - 1 : START_PAGE_NUMBER;
+
 		this.pageSize = pageSize;
 		
 		// We set the page size to +1 so we know if there is a next page
 		results = query.setFirstResult( this.page * this.pageSize ).setMaxResults( this.pageSize + 1 ).getResultList();
-		
 	}
 	
 	public boolean isHasNextPage() {
@@ -52,7 +47,7 @@ public class Page<k> implements Pager<k> {
 	}
 	
 	public boolean isHasPreviousPage() {
-		return page > startingPageNumber;
+		return page > START_PAGE_NUMBER;
 	}
 	
 	public List<k> getList() {
@@ -94,7 +89,7 @@ public class Page<k> implements Pager<k> {
 	}
 	
 	public boolean validPage() {
-		return ( page <= getLastPage() && page >= startingPageNumber );
+		return ( page <= getLastPage() && page >= START_PAGE_NUMBER);
 	}
 		
 	public long getLastPage() {
@@ -112,12 +107,10 @@ public class Page<k> implements Pager<k> {
 	public String getResultContextMappingGetStringWeb() {
 		if( resultContextMappingGetStringWeb == null ) {
 			resultContextMappingGetStringWeb = buildGetString( resultContextMappings );
-		} 
+		}
 		return resultContextMappingGetStringWeb;
 	}
-	
 
-	
 	private static String buildGetString( Map<String, Object> getStringPairs ) {
 		StringBuffer getString = new StringBuffer();
 		if( getStringPairs != null ) {
@@ -135,5 +128,5 @@ public class Page<k> implements Pager<k> {
 		}
 		return getString.toString();
 	}
-	
+
 }

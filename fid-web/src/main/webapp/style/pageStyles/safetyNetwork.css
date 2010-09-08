@@ -226,3 +226,22 @@
 .emptyLi {
 	color: #999999;
 }
+
+div#sendAnInvite {
+    background: url("../../images/mail-send.png") no-repeat scroll 0.5em 1em #D0DAFD;
+    padding: 0.5em 0 0.5em 1.8em;
+    width: 60em;
+}
+
+#sendAnInvite a {
+    display: inline;
+    font-size: 1.1em;
+}
+
+#sendAnInvite p {
+    padding: 0 15px;
+}
+
+#sendAnInvite h2 {
+    padding: 0 15px;
+}

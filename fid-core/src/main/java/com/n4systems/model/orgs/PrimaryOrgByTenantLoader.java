@@ -9,10 +9,6 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class PrimaryOrgByTenantLoader extends Loader<PrimaryOrg>  {
 	private Long tenantId;
 	
-	public PrimaryOrgByTenantLoader() {
-		super();
-	}
-
 	@Override
 	protected PrimaryOrg load(EntityManager em) {
 		QueryBuilder<PrimaryOrg> builder = new QueryBuilder<PrimaryOrg>(PrimaryOrg.class, new OpenSecurityFilter());
@@ -22,7 +18,8 @@ public class PrimaryOrgByTenantLoader extends Loader<PrimaryOrg>  {
 		return org;
 	}
 
-	public void setTenantId(Long tenantId) {
+	public PrimaryOrgByTenantLoader setTenantId(Long tenantId) {
 		this.tenantId = tenantId;
+        return this;
 	}
 }

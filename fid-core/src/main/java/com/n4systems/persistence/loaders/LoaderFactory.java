@@ -82,6 +82,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signup.SignupReferralListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
+import com.n4systems.model.tenant.PrimaryOrgsWithNameLikeLoader;
 import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.model.user.UserFilteredLoader;
@@ -450,7 +451,12 @@ public class LoaderFactory {
 		return new VendorOrgConnectionsListLoader(filter);
 	}
 
-	public  <T extends AbstractEntity> EntityByIdIncludingArchivedLoader<T> createEntityByIdLoader(Class<T> clazz) {
+	public <T extends AbstractEntity> EntityByIdIncludingArchivedLoader<T> createEntityByIdLoader(Class<T> clazz) {
 		return new EntityByIdIncludingArchivedLoader<T>(filter, clazz);
 	}
+
+    public PrimaryOrgsWithNameLikeLoader createPrimaryOrgsWithNameLikeLoader() {
+        return new PrimaryOrgsWithNameLikeLoader(filter);
+    }
+    
 }

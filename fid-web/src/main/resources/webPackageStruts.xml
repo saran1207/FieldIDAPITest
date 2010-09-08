@@ -1819,9 +1819,13 @@
 			</result>
 		</action>
 
-		<action name="safetyNetwork" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork">
-			<result name="success" type="freemarker">/templates/html/safetyNetwork/show.ftl</result>
-		</action>
+        <action name="safetyNetwork" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork">
+            <result name="success" type="freemarker">/templates/html/safetyNetwork/show.ftl</result>
+        </action>
+
+        <action name="findConnections" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.FindConnectionsAction">
+            <result name="success" type="freemarker">/templates/html/findConnections/list.ftl</result>
+        </action>
 
 		<action name="messages" method="list" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="success" type="freemarker">/templates/html/messages/list.ftl</result>
@@ -1985,7 +1989,8 @@
 			<result name="input" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
-		</action>		
+		</action>
+
 	</package>
 	
 	<include file="locationPackageStruts.xml"/>

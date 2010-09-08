@@ -49,7 +49,6 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 	 */
 	protected void postInit() {}
 	
-	
 	protected byte[] convertToByteArray(File file) {
 		byte[] byteArray = null;
 
@@ -64,16 +63,12 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 		return byteArray;
 	}
 	
-	
-	
-	
 	public Integer getCurrentPage() {
 		if (currentPage == null) {
 			currentPage = 1;
 		}
 		return currentPage;
 	}
-
 
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
