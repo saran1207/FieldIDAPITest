@@ -22,12 +22,11 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	// Product Types
 	private static final String PRODUCT_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
 
-	public void test_not_null() throws Exception {
+	@Test
+	public void test_static_page_contents() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("msa").login().clickSafetyNetworkLink();
 		assertTrue(safetyNetworkPage != null);
-	}
-
-	public void test_static_page_contents() {
+		
 		assertTrue("Could not find the Safety Network main page", selenium.isElementPresent(safetyNetworkPageHeaderLocator));
 		assertTrue("Could not find the link for Inbox", selenium.isElementPresent(safetyNetworkInboxLocator));
 		assertTrue("Could not find the link for Catalog", selenium.isElementPresent(safetyNetworkCatalogLocator));
@@ -36,6 +35,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		assertTrue("Could not find the link for Video", selenium.isElementPresent(safetyNetworkVideoLocator));
 	}
 
+	
 	public void test_select_vendor() {
 		// Need connections
 	}
@@ -47,7 +47,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	@Test
 	public void test_publish_catalog() {
 		SafetyNetworkCatalogPage safetyNetworkCatalogPage = startAsCompany("msa").login().clickSafetyNetworkLink().goToCatalog();
-
+			
 		safetyNetworkCatalogPage.checkProductTypeCheckBox(PRODUCT_TYPE_CHECKBOX_NAME_1);
 
 		safetyNetworkCatalogPage.submitForm();
