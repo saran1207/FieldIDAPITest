@@ -4,12 +4,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 
-public class LinkedOrgLoader extends SecurityFilteredLoader<InternalOrg> {
+public class LinkedOrgLoader extends SecurityFilteredLoader<PrimaryOrg> {
 	private final OrgConnectionByLinkedOrgLoader connectionLoader;
 	
 	public LinkedOrgLoader(SecurityFilter filter, OrgConnectionByLinkedOrgLoader connectionLoader) {
@@ -22,7 +21,7 @@ public class LinkedOrgLoader extends SecurityFilteredLoader<InternalOrg> {
 	}
 
 	@Override
-	protected InternalOrg load(EntityManager em, SecurityFilter filter) {
+	protected PrimaryOrg load(EntityManager em, SecurityFilter filter) {
 		List<OrgConnection> connections = connectionLoader.load(em, filter);
 		
 		if (connections == null || connections.isEmpty()) {
@@ -30,7 +29,7 @@ public class LinkedOrgLoader extends SecurityFilteredLoader<InternalOrg> {
 		}
 		
 		// These connections will all be for the same linked org and same connection type, so we can use the first
-		InternalOrg org = connections.get(0).getByConnectionType(connectionLoader.getConnectionType());
+		PrimaryOrg org = connections.get(0).getByConnectionType(connectionLoader.getConnectionType());
 		return org;
 	}
 

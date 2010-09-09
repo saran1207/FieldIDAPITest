@@ -86,11 +86,11 @@
 	padding: 5px;
 }
 
-#safetyNetworkSplash a, #leftConnectionsColumn a{
+#safetyNetworkSplash a, #leftConnectionsColumn a, #leftColumn a{
 	text-decoration: none;
 	color: #556DA5;
 	display: block;
-	}
+}
 
 #leftConnectionsColumn{
 	display: block;
@@ -104,7 +104,7 @@
 }
 
 
-#leftConnectionsColumn li{
+#leftConnectionsColumn li, #leftColumn li{
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 }
@@ -133,7 +133,7 @@
 	line-height:1.5em;
 }
 
-#safetyNetworkSplash h1{
+#safetyNetworkSplash h1, #mainContext h1{
 	font-size:1.75em;	
 	padding-bottom:0.5em;
 }
@@ -197,7 +197,6 @@
 	max-width: 25em;
 	padding: 1.75em 0 1.75em 7.6em;
 	margin-left: 1em;
-
 }
 
 #inviteCompany a{
@@ -243,4 +242,70 @@ div#sendAnInvite {
 
 #sendAnInvite h2 {
     padding: 0 15px;
+}
+
+#leftColumn{
+    display: block;
+	float: left;
+    max-width: 220px;
+    width:220px;
+	overflow: hidden;
+	padding: 2em 0;
+	font-size: 1.1em;
+	border-right:1px solid #999999;
+}
+
+#leftColumn img {
+	padding-bottom:1em;
+    width: 80%;
+}
+
+#leftColumn p {
+	padding:2px;
+}
+#mainContent{
+	display: block;
+	padding: 1.5em 0 3em 2em;
+	margin-top: 5px;
+	overflow: hidden;
+}
+
+#mainContent p{
+ 	font-size: small;
+	line-height:1.5em;	
+	font-weight:normal;
+}
+
+#mainContent a{
+	text-decoration: none;
+	color: #556DA5;
+}
+
+#registerAssets{
+	background: no-repeat url(../../images/search-connection-assets.png) left 15px;
+}
+
+#preAssignedAssets{
+	background: no-repeat url(../../images/view-pre-assigned-assets.png) left 15px;
+}
+
+#registerAssets, #preAssignedAssets{
+	float: left;
+	width: 30em;
+	padding: 1em 0 2em 4.5em;
+	margin-left:1em;
+}
+
+#preAssignedAssets a{
+    display: block;
+}
+
+#companyInfo{
+	background: no-repeat url(../../images/company-info-icon.png) left;
+	border-top: 1px solid #999999;
+	border-bottom: 1px solid #999999;
+	padding: 0.8em 2em 0.8em 2.7em;
+	margin: 0.75em 0;
+	font-size:1.1em;
+	font-weight:bold;
 }
