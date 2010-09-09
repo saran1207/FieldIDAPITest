@@ -40,7 +40,7 @@
 	</ul>
 
 	<ul id="safetyNetworkCustomerList" class="safetyNetworkCustomerList">
-		<@s.text name="label.customers"/>
+		<@s.text name="label.safety_network_customers"/>
 		<#if !customerConnections?has_content>
 			<li class="emptyLi">
 				<@s.text name="label.none"/>
