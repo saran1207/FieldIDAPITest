@@ -13,6 +13,9 @@ public class Organization {
 	String companyPhoneNumber;
 	String companyFaxNumber;
 	String certificateImageFileName;
+    String companyWebsite;
+
+    public Organization(){}
 
 	public Organization(String name) {
 		this.name = name;
@@ -113,4 +116,12 @@ public class Organization {
 	public String getcertificateImageFileName() {
 		return certificateImageFileName;
 	}
+
+    public String getCompanyWebsite() {
+        return companyWebsite;
+    }
+
+    public void setCompanyWebsite(String companyWebsite) {
+        this.companyWebsite = companyWebsite;
+    }
 }

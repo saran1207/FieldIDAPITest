@@ -28,7 +28,12 @@ public class FieldIDPage extends WebPage {
 		selenium.click("//div[@id='pageNavigation']//a[.='Home']");
 		return new HomePage(selenium);
 	}
-	
+
+	public SafetyNetworkPage clickSafetyNetworkLink() {
+		selenium.click("//div[@id='pageNavigation']//a[.='Safety Network']");
+		return new SafetyNetworkPage(selenium);
+	}
+
 	public SetupPage clickSetupLink() {
 		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Setup')]");
 		return new SetupPage(selenium);
@@ -39,35 +44,75 @@ public class FieldIDPage extends WebPage {
 		return new IdentifyPage(selenium);
 	}
 	
-	protected void gotoNextPage() {
-		selenium.click("//a[contains(.,'Next')]");
+	public void gotoNextPage() {
+		selenium.click("//div[@class='paginationWrapper'][1]//a[contains(.,'Next')]");
 		waitForPageToLoad();
 	}
 
-	protected void gotoPrevPage() {
-		selenium.click("//a[contains(text(),'Previous')]");
+	public void gotoPrevPage() {
+		selenium.click("//div[@class='paginationWrapper'][1]//a[contains(text(),'Previous')]");
 		waitForPageToLoad();
 	}
 
-	protected void gotoFirstPage() {
-		selenium.click("//a[contains(text(),'First')]");
+	public void gotoFirstPage() {
+		selenium.click("//div[@class='paginationWrapper'][1]//a[contains(text(),'First')]");
 		waitForPageToLoad();
 	}
 	
-	protected void gotoPage(Integer pageNumber) {
-		selenium.type("//input[@id='toPage']", pageNumber.toString());
-		waitForPageToLoad();
+	public void gotoPage(int pageNumber) {
+        if (getNumberOfPages() != 1 && getCurrentPage() != pageNumber) {
+            selenium.type("//div[@class='paginationWrapper'][1]//input[@id='toPage']", pageNumber+"");
+            waitForPageToLoad();
+        }
 	}
+
+    public int getCurrentPage() {
+        if (getNumberOfPages() == 1) {
+            return 1;
+        } else {
+            return Integer.parseInt(selenium.getValue("//div[@class='paginationWrapper'][1]//input[@id='toPage']"));
+        }
+    }
 	
-	protected int getNumberOfPages() {
-		if (!selenium.isElementPresent("//label[@for='lastPage']")) {
+	public int getNumberOfPages() {
+		if (!selenium.isElementPresent("//div[@class='paginationWrapper'][1]//label[@for='lastPage']")) {
 			return 1;
 		} else {
-			String lastPageLabel = selenium.getText("//label[@for='lastPage']");
+			String lastPageLabel = selenium.getText("//div[@class='paginationWrapper'][1]//label[@for='lastPage']");
 			String numStr = lastPageLabel.replaceAll("\\D", "");
 			return Integer.parseInt(numStr);
 		}
 	}
+
+    protected List<String> collectTableValuesUnderCellForCurrentPage(int firstRow, int cellNumber, String subXpath) {
+        int numRows = selenium.getXpathCount("//table[@class='list']/tbody/tr").intValue();
+        List<String> values = new ArrayList<String>(numRows - firstRow + 1);
+
+        for (int i = firstRow; i <= numRows; i++) {
+            String value = selenium.getText("//table[@class='list']/tbody/tr["+i+"]/td["+cellNumber+"]/"+subXpath);
+            values.add(value);
+        }
+
+        return values;
+    }
+
+    protected List<String> collectTableAttributesUnderCellForCurrentPage(int firstRow, int cellNumber, String attrXpath) {
+        int numRows = selenium.getXpathCount("//table[@class='list']/tbody/tr").intValue();
+        List<String> attrs = new ArrayList<String>(numRows - firstRow + 1);
+
+        for (int i = firstRow; i <= numRows; i++) {
+            String completeAttributeXpath = "//table[@class='list']/tbody/tr["+i+"]/td["+cellNumber+"]/"+attrXpath;
+            String xpathUpToAttribute = completeAttributeXpath.substring(0, completeAttributeXpath.lastIndexOf("@"));
+            if (selenium.isElementPresent(xpathUpToAttribute)) {
+                String attr = selenium.getAttribute(completeAttributeXpath);
+                attrs.add(attr);
+            } else {
+                attrs.add(null);
+            }
+        }
+
+        return attrs;
+    }
 	
 	protected void clickNavOption(String navOption) {
 		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
