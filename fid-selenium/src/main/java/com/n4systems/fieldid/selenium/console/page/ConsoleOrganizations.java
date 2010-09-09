@@ -33,24 +33,16 @@ public class ConsoleOrganizations {
 	 * @return
 	 */
 	public List<String> getListOfTenantIDs() {
-		List<String> result = new ArrayList<String>();
+		List<String> tenantIds = new ArrayList<String>();
 		Number n = selenium.getXpathCount(numberOfTenantsXpath);
 		int numTenants = n.intValue();
 		String tenantIDCellLocator = "xpath=" + organizationsTableXpath + ".0.1";
 		for(int i = 0; i < numTenants; i++) {
 			String tenant = selenium.getTable(tenantIDCellLocator);
-			result.add(tenant);
+			tenantIds.add(tenant);
 			tenantIDCellLocator = tenantIDCellLocator.replaceFirst("\\." + i, "." + (i+1));
 		}
-		return result;
-	}
-	
-	public int getNumberOfTenants() {
-		int result = -1;
-		String s = selenium.getText(totalTenantsTextLocator);
-		s = s.replaceFirst("[^0-9]*([0-9]*).*$", "$1");
-		result = Integer.parseInt(s);
-		return result;
+		return tenantIds;
 	}
 	
 	public void gotoEditTenant(String tenantID) {
@@ -63,20 +55,6 @@ public class ConsoleOrganizations {
 		} else {
 			fail("Could not find the link to Edit '" + tenantID + "'");
 		}
-	}
-	
-	public void gotoCreateSuperUser() {
-		fail("Not implemented yet");
-	}
-	
-	public void setTenantInformation(ConsoleTenant ct) {
-		fail("Not implemented yet");
-	}
-	
-	public ConsoleTenant getTenantInformation() {
-		ConsoleTenant ct = new ConsoleTenant();
-		fail("Not implemented yet");
-		return ct;
 	}
 	
 	public void gotoSubmitTenantInformation() {
@@ -97,10 +75,6 @@ public class ConsoleOrganizations {
 		}
 	}
 	
-	public void gotoCreateSuperUser(String defaultUserName, String defaultassword) {
-		fail("Not implemented yet");
-	}
-
 	public void setPartnerCenter(boolean partnerCenter) {
 		if(selenium.isElementPresent(partnerCenterCheckBoxLocator)) {
 			if(partnerCenter) {

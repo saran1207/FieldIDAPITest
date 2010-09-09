@@ -12,9 +12,9 @@ public class ConsoleLogin {
 	
 	// Locators
 	private String adminConsoleURL = "/fieldid/admin/";
-	private String userNameTextFieldLocator = "xpath=//INPUT[@id='signIntoSystem_username']";
-	private String passwordTextFieldLocator = "xpath=//INPUT[@id='signIntoSystem_password']";
-	private String submitButtonLocator = "xpath=//INPUT[@id='signIntoSystem_0']";
+	private String userNameTextFieldLocator = "//form[@id='loginForm']//input[@id='loginForm_username']";
+	private String passwordTextFieldLocator = "//form[@id='loginForm']//input[@id='loginForm_password']";
+	private String submitButtonLocator = "//form[@id='loginForm']/input[@type='submit']";
 	private String organizationLinkLocator = "xpath=//UL[@id='nav']/LI/A[contains(text(),'Organizations')]";
 
 	public ConsoleLogin(FieldIdSelenium selenium, MiscDriver misc) {
@@ -24,7 +24,7 @@ public class ConsoleLogin {
 	
 	/**
 	 * Goes to the Administration Console. Currently this is the context root
-	 * /fieldidadmin/. This area is accessed by N4 Systems employees only.
+	 * /fieldid/admin/. This area is accessed by N4 Systems employees only.
 	 * It assumes you do the right thing. It is not bullet proof. You can do
 	 * serious harm to the system by doing the wrong things in this area.
 	 * 
@@ -50,19 +50,15 @@ public class ConsoleLogin {
 	 * @param password
 	 */
 	public void setPassword(String password) {
-		if(selenium.isElementPresent(passwordTextFieldLocator)) {
-			selenium.type(passwordTextFieldLocator, password);
-		}
+        selenium.type(passwordTextFieldLocator, password);
 	}
 	
 	/**
 	 * Click the submit button on the Login page for Administration Console.
 	 */
-	public void gotoLogin() {
-		if(selenium.isElementPresent(submitButtonLocator)) {
-			selenium.click(submitButtonLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		}
+	public void clickLogin() {
+        selenium.click(submitButtonLocator);
+        misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 	
 	/**
@@ -70,10 +66,8 @@ public class ConsoleLogin {
 	 * you to the login page.
 	 */
 	public void gotoOrganizations() {
-		if(selenium.isElementPresent(organizationLinkLocator)) {
-			selenium.click(organizationLinkLocator);
-			misc.waitForPageToLoadAndCheckForOopsPage();
-		}
+        selenium.click(organizationLinkLocator);
+        misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
 	/**
@@ -89,7 +83,7 @@ public class ConsoleLogin {
 		gotoAdminConsole();
 		setUserName(LoggedInTestCase.SYSTEM_USER_NAME);
 		setPassword(LoggedInTestCase.SYSTEM_USER_PASSWORD);
-		gotoLogin();
+		clickLogin();
 		verifyLogin();
 		return this;
 	}
