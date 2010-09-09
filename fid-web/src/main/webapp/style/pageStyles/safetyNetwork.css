@@ -99,6 +99,8 @@
 	padding: 2em 0;
 	font-size: 1.1em;
 	border-right:1px solid #999999;
+	width:210px;
+	max-width:220px;
 }
 
 .safetyNetworkCustomerList li{
@@ -114,7 +116,7 @@
 	background: no-repeat url(../../images/connections-small.png) left center;
 	border-top: 1px solid #999999;
 	border-bottom: 1px solid #999999;
-	padding: 0.8em 2em 0.8em 2.7em;
+	padding: 0.8em 0 0.8em 2.7em;
 	margin: 0.75em 0;
 	font-size:1.2em;
 	font-weight:bold;
