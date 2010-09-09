@@ -1,11 +1,14 @@
 <div id="leftColumn">
 <#if vendor??>
-	<img src="<@s.url value="/file/downloadTenantLogo.action" uniqueID="${vendor.id}"/>"/>
+    <a href="<@s.url value="showVendor.action" uniqueID="${vendor.id}" />" >
+    	<#assign tenant = vendor>
+		<#include "../common/_displayTenantLogo.ftl"/>
+	</a>
 	
 	<ul>
-		<li><a><@s.text name="label.register_asset"/></a></li>
+		<li><a href="<@s.url value="showVendor.action" uniqueID="${vendor.id}" />" > <@s.text name="label.register_asset"/></a></li>
 		<li><a href="<@s.url value="preAssignedAssets.action" uniqueID="${vendor.id}" />" > <@s.text name="label.view_pre_assigned_asset"/></a></li>
-		<li><a><@s.text name="label.view_catalog"/></a></li>
+		<li><a href="<@s.url value="publishedCatalog.action" uniqueID="${vendor.id}"/>" ><@s.text name="label.view_catalog"/></a></li>
 	</ul>	
 	<h3 id="companyInfo"><@s.text name="label.companyinfo"/></h3>
 	<p>${vendor.name}</p>

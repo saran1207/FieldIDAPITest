@@ -66,6 +66,7 @@ import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionL
 import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkPreAssignedAssetLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
@@ -459,4 +460,7 @@ public class LoaderFactory {
         return new PrimaryOrgsWithNameLikeLoader(filter);
     }
     
+    public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader(){
+    	return new SafetyNetworkPreAssignedAssetLoader(filter);
+    }
 }
