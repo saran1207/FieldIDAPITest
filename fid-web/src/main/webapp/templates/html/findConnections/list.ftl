@@ -17,10 +17,10 @@
                         <#include "../common/_displayTenantLogo.ftl"/>
                     </td>
                     <td>
-                        ${(org.name?html)!}
+                        <span>${(org.name?html)!}</span>
                         <#if org.webSite?exists>
                             <br/>
-                            <a href="${org.webSite}">${org.webSite}</a>
+                            <a href="${action.createHref(org.webSite)}">${org.webSite}</a>
                         </#if>
                     </td>
                     <td>

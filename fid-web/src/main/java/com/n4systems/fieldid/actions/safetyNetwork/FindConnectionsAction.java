@@ -63,4 +63,11 @@ public class FindConnectionsAction extends SafetyNetwork {
         this.searchText = searchText;
     }
 
+    public String createHref(String siteUrl) {
+        if (!siteUrl.startsWith("http://") && !siteUrl.startsWith("https://")) {
+            return "http://" + siteUrl;
+        }
+        return siteUrl;
+    }
+
 }

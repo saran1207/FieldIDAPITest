@@ -10,7 +10,7 @@
 		<a id="help_link" href="${helpUrl}" target="_blank"><@s.text name="label.safety_network_info.help"/></a>
 		<a id="video_link" href="${videoUrl}" target="_blank"><@s.text name="label.safety_network_info.video"/></a>
 	</p>
-	<@s.form action="findConnections" theme="fieldid" cssClass="fullForm">
+	<@s.form action="findConnections" theme="fieldid" cssClass="fullForm" method="get">
 		<p>
 			<span class="splashHeading"><@s.text name="label.find_a_company"/></span><br/>
 			<@s.textfield id="companySearchBox"  name="searchText" cssClass="inputAlign"/>
