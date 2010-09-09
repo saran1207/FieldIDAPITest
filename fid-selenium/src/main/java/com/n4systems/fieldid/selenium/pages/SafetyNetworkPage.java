@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.selenium.pages;
 
 import com.n4systems.fieldid.selenium.pages.safetynetwork.FindConnectionResultsPage;
+import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
+import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkSettingsPage;
 import com.thoughtworks.selenium.Selenium;
 
 public class SafetyNetworkPage extends FieldIDPage {
@@ -14,5 +16,14 @@ public class SafetyNetworkPage extends FieldIDPage {
         selenium.click("//input[@id='searchForCompanyButton']");
         return new FindConnectionResultsPage(selenium);
     }
+	
+	public SafetyNetworkCatalogPage goToCatalog(){
+		selenium.click("//*[@id='manageCatalog']");
+		return new SafetyNetworkCatalogPage(selenium);
+	}
 
+	public SafetyNetworkSettingsPage goToSettings() {
+		selenium.click("//a[@id='privacySettings']");
+		return new SafetyNetworkSettingsPage(selenium);
+	}
 }
