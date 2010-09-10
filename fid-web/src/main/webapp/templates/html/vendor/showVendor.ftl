@@ -7,6 +7,7 @@
 
 <div id="mainContent">
 	<h1>${vendor.name}<h1>
+	<p><@s.text name="label.vendor_connection"/></p>
 	<div id="registerAssets">
 		<h3>
 			<@s.text name="label.register_assets">
