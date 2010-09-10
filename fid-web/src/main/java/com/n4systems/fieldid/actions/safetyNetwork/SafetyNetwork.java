@@ -14,12 +14,20 @@ import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSafetyNetwork })
 public class SafetyNetwork extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	public SafetyNetwork(PersistenceManager persistenceManager) {
 		super(persistenceManager);
+	}
+
+	@Override
+	protected void loadMemberFields(Long uniqueId) {
+	}
+
+	@Override
+	protected void initMemberFields() {
 	}
 	
 	public String doShow() {
@@ -37,8 +45,7 @@ public class SafetyNetwork extends AbstractCrud {
 	public Long getUnreadMessageCount() {
 		return getLoaderFactory().createUnreadMessageCountLoader().load();
 	}
-	
-	
+
 	public Pager<TypedOrgConnection> getConnections() {
 		return getLoaderFactory().createPaginatedConnectionListLoader().load();
 	}
@@ -54,37 +61,44 @@ public class SafetyNetwork extends AbstractCrud {
 
 	public List<TypedOrgConnection> getCustomerConnections() {
 		List<TypedOrgConnection> customerConnections = new ArrayList<TypedOrgConnection>();
-		for (TypedOrgConnection connection : getConnections().getList()) {
-			if (connection.isCustomerConnection()) {
-				customerConnections.add(connection);
+		Pager<TypedOrgConnection> pager = getConnections();
+		for (int i =0; i <= pager.getTotalPages(); i++) {
+			for (TypedOrgConnection connection : pager.getList()) {
+				if (connection.isCustomerConnection()) {
+					customerConnections.add(connection);
+				}
 			}
+			pager.getNextPage();
 		}
 		return customerConnections;
 	}
 
 	public List<TypedOrgConnection> getVendorConnections() {
 		List<TypedOrgConnection> vendorConnections = new ArrayList<TypedOrgConnection>();
-		for (TypedOrgConnection connection : getConnections().getList()) {
-			if (connection.isVendorConnection()) {
-				vendorConnections.add(connection);
+		Pager<TypedOrgConnection> pager = getConnections();
+		for (int i =0; i <= pager.getTotalPages(); i++) {
+			for (TypedOrgConnection connection : getConnections().getList()) {
+				if (connection.isVendorConnection()) {
+					vendorConnections.add(connection);
+				}
 			}
+			pager.getNextPage();
 		}
 		return vendorConnections;
 	}
 
 	public List<TypedOrgConnection> getCatalogOnlyConnections() {
 		List<TypedOrgConnection> catalogOnlyConnections = new ArrayList<TypedOrgConnection>();
-		for (TypedOrgConnection connection : getConnections().getList()) {
-			if (connection.isCatalogOnlyConnection()) {
-				catalogOnlyConnections.add(connection);
+		Pager<TypedOrgConnection> pager = getConnections();
+		for (int i =0; i <= pager.getTotalPages(); i++) {
+			for (TypedOrgConnection connection : getConnections().getList()) {
+				if (connection.isCatalogOnlyConnection()) {
+					catalogOnlyConnections.add(connection);
+				}
 			}
+			pager.getNextPage();
 		}
 		return catalogOnlyConnections;
 	}
 
-    @Override
-    protected void loadMemberFields(Long uniqueId) { }
-
-    @Override
-    protected void initMemberFields() { }
 }
