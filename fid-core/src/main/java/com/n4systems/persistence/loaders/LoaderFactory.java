@@ -75,6 +75,7 @@ import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectio
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
+import com.n4systems.model.safetynetwork.TypedOrgConnectionListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
@@ -462,5 +463,9 @@ public class LoaderFactory {
     
     public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader(){
     	return new SafetyNetworkPreAssignedAssetLoader(filter);
+    }
+
+    public TypedOrgConnectionListLoader createdTypedOrgConnectionListLoader() {
+        return new TypedOrgConnectionListLoader(filter);
     }
 }
