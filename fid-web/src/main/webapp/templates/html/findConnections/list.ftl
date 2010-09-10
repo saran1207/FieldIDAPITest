@@ -4,9 +4,9 @@
 <div id="safetyNetworkSplash">
 	<h1>Search Results</h1>
 
-    <#include '../common/_pagination.ftl' />
-
     <#if page.hasResults() && page.validPage() >
+
+        <#include '../common/_pagination.ftl' />
 
         <table class="list" style="width: 700px;">
 
@@ -53,7 +53,7 @@
             <h2><@s.text name="label.invalidpage"/></h2>
             <p>
                 <@s.text name="message.invalidpage" />
-                <a href="<@s.url action="findConnections" currentPage="1" />" ><@s.text name="message.backtopageone"/></a>
+                <a href="<@s.url action="findConnections" includeParams="get" currentPage="1" />" ><@s.text name="message.backtopageone"/></a>
             </p>
         </div>
     </#if>
