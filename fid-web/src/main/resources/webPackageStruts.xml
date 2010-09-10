@@ -1998,6 +1998,11 @@
 		<action name="showVendor" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
 			<result name="success" type="freemarker">/templates/html/vendor/showVendor.ftl</result>		
 		</action>
+		
+		<action name="showNetworkProduct" method="traceability" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkProduct">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/traceability.ftl</result>
+		</action>
 
 	</package>
 	

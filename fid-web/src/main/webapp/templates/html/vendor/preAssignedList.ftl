@@ -23,7 +23,7 @@
 		<#list page.list as product>
 		<tr>
 			<td>
-				<a href="<@s.url value="product.action" uniqueID="${product.id}" />" >${product.serialNumber}</a>
+				<a href="<@s.url value="showNetworkProduct.action" uniqueID="${product.id}" useContext="true"/>" >${product.serialNumber}</a>
 			</td>
 			<#if product.rfidNumber??>
 				<td>${product.rfidNumber}</td>

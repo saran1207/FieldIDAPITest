@@ -137,7 +137,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	protected List<Product> linkedProducts;
 	protected Map<Long, List<ProductAttachment>> linkedProductAttachments;
 	
-	private AssetWebModel asset = new AssetWebModel(this);
+	protected AssetWebModel asset = new AssetWebModel(this);
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
