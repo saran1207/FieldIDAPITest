@@ -377,7 +377,8 @@ form#privacySettingsSave .check {
 }
 
 #assetSearchBox{
-	font-size: 1em;
+	font-size: small;
+	font-weight:normal;
 	float: left;
 	height: 1.5em;
 	margin-top:0.5em;
@@ -389,7 +390,7 @@ form#privacySettingsSave .check {
 	margin-top: 0.5em;
 	font-size: small;
 	font-weight:normal;
-	padding:2px;
+	padding:1.5px;
 }
 
 #registerAssets .fieldHolder{

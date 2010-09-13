@@ -19,7 +19,7 @@
 	<p><@s.text name="label.fax"/>: ${vendor.addressInfo.fax1}</p>		
 	<ul>
 		<#if vendor.webSite??>
-			<li><a href="<@s.url value="${vendor.webSite}"/>">${vendor.webSite}</a></li>
+			<li><a href="<@s.url value="${vendor.webSite}"/>" target="_blank">${vendor.webSite}</a></li>
 		</#if>
 	</ul>		
 </#if>
