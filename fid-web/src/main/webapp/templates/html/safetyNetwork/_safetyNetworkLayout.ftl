@@ -4,6 +4,9 @@
 </head>
 <div id="leftConnectionsColumn">
 	<ul>
+        <li>
+            <a id="home" href="<@s.url action="safetyNetwork"/>"><@s.text name="label.safetynetworkhome"/></a>
+        </li>
 		<li>
 			<a id="inbox" href="<@s.url action="messages"/>"><@s.text name="label.inbox"/> (${unreadMessageCount})</a>
 		</li>

@@ -4,6 +4,8 @@
 <div id="safetyNetworkSplash">
 	<h1>Search Results</h1>
 
+    <a id="backToLink" href="<@s.url action="safetyNetwork"/>">&#171; <@s.text name="label.back_to_search"/></a>
+
     <#if page.hasResults() && page.validPage() >
 
         <#include '../common/_pagination.ftl' />
