@@ -26,20 +26,16 @@
                         </#if>
                     </td>
                     <td>
-                        <div class="addConnectionLinkOrText">
-                            <#if action.isConnectedCustomer(org)>
-                                <@s.text name="label.added_as_customer"/><br/>
-                            <#else>
-                                <a href='<@s.url action="connectionInvitationAdd"/>'><@s.text name="label.add_as_customer"/></a>
-                            </#if>
-                        </div>
-                        <div class="addConnectionLinkOrText">
-                            <#if action.isConnectedVendor(org)>
-                                <@s.text name="label.added_as_vendor"/>
-                            <#else>
-                                <a href='<@s.url action="connectionInvitationAdd"/>'><@s.text name="label.add_as_vendor"/></a>
-                            </#if>
-                        </div>
+                        <#if action.isConnectedCustomer(org)>
+                            <@s.text name="label.added_as_customer"/><br/>
+                        <#else>
+                      		 <a href="<@s.url action="connectionInvitationAdd" uniqueID="${org.id}" type="Customer"/>"><@s.text name="label.add_as_customer"/></a>
+                        </#if>
+                        <#if action.isConnectedVendor(org)>
+                            <@s.text name="label.added_as_vendor"/>
+                        <#else>
+                        	 <a href="<@s.url action="connectionInvitationAdd" uniqueID="${org.id}" type="Vendor"/>"><@s.text name="label.add_as_vendor"/></a>
+                        </#if>
                     </td>
                 </tr>
             </#list>

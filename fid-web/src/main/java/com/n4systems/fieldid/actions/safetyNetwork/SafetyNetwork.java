@@ -89,5 +89,13 @@ public class SafetyNetwork extends AbstractCrud {
 	public List<TypedOrgConnection> getCatalogOnlyConnections() {
 		return catalogOnlyConnections;
 	}
+	
+
+    public String createHref(String siteUrl) {
+        if (!siteUrl.startsWith("http://") && !siteUrl.startsWith("https://")) {
+            return "http://" + siteUrl;
+        }
+        return siteUrl;
+    }
 
 }

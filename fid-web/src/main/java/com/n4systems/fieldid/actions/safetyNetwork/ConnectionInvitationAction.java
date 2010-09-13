@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
-import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.safetynetwork.ConnectionInvitationHandlerImpl;
 import com.n4systems.model.Tenant;
@@ -31,7 +30,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
-public class ConnectionInvitationAction extends AbstractAction {
+public class ConnectionInvitationAction extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ConnectionInvitationAction.class);
 	
@@ -52,7 +51,7 @@ public class ConnectionInvitationAction extends AbstractAction {
 	private Tenant remoteTenant;
 	private PrimaryOrg remoteOrg;
 	private ConnectionType connectionType = ConnectionType.VENDOR;
-	
+
 	private String personalizedBody;
 	
 	public ConnectionInvitationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
@@ -176,7 +175,13 @@ public class ConnectionInvitationAction extends AbstractAction {
 		}
 	}
 
-
+	public PrimaryOrg getRemoteOrg(String id){
+		if (id == null) {
+			return null;
+		} else  {
+			return (PrimaryOrg)getNonSecureLoaderFactory().createNonSecureIdLoader(PrimaryOrg.class).setId(Long.parseLong(id.trim())).load();
+		}
+	}
 	
 	public List<StringListingPair> getConnectionTypes() {
 		if (connectionTypes == null) {

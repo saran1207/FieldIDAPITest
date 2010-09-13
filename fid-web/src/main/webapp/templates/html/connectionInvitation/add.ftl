@@ -1,70 +1,36 @@
+<#assign currentAction="connectionInvitationAdd.action" />
+<#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
 
-${action.setPageType('safety_network_connections', 'add')!}
-
-<head>
-	<@n4.includeScript src="connectionInvitations"/>
-	<@n4.includeScript>
-		var remoteTenantUrl = '<@s.url action="remoteOrgList" namespace="/ajax" />';
-	</@n4.includeScript>
-</head>
-<@s.url id="cancelUrl" action="connections"/>
-
-<div id="chooseTenant" >	
-	<@s.form action="findRemoteOrg" namespace="/ajax" id="findRemoteOrg" cssClass="fullForm contentBlock" theme="fieldid">	
+<#assign organization=action.getRemoteOrg(request.getParameter("uniqueID"))/>
+<#assign connectionType=request.getParameter("type")/>
+<div id="safetyNetworkSplash">
+	<h1> <@s.text name="label.add"/>&nbsp;${organization.name}&nbsp;<@s.text name="label.as_a_lowercase"/>&nbsp;${connectionType}&nbsp;<@s.text name="label.connection"/>?</h1>
 	
-		<h2 class="clean"><@s.text name="label.find_a_company"/></h2>
-		<div class="singleColumn fluidSets">
-			<div class="infoSet infoBlock">
-				<label for="remoteTenantId" class="label"><@s.text name="label.access_code"/></label>
-				<span class="fieldHolder">
-					<@s.textfield name="name" theme="fieldidSimple"/>
-					<span class="errorMessage hide" id="remoteCompanyError">
-						<@s.text name="error.company_does_not_exist"/>
-					</span>
-				</span>
-				<@s.submit key="label.search"/>
-			</div>
-		</div>
-		
-		<div class="actions">
-			<a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
-		</div>
-	
-	</@s.form>
-</div>
-	
-<@s.form action="connectionInvitationCreate" cssClass="fullForm contentBlock" theme="fieldid">
-	<@s.hidden id="remoteTenantId" name="remoteTenantId"/>
-	<#include "../common/_formErrors.ftl"/>
-	<div id="chooseConnection">
-		<h2 class="clean"><@s.text name="label.choose_connections"/></h2>
-		<div class="singleColumn fluidSets">
-			<div class="infoSet infoBlock">
-				<label for="remoteOrg" class="label"><@s.text name="label.add_other_company"/></label>
-				<@s.select name="remoteOrgId" list="remoteOrgs" listKey="id" listValue="name" id="remoteOrgList" />
-			</div>
-			
-			<div class="infoSet infoBlock">
-				<label for="connectionType" class="label"><@s.text name="label.as_a"/></label>
-				<span class="fieldHolder"><@s.radio name="connectionType" list="connectionTypes" listKey="id" listValue="name" /></span>
-			</div>
-			<div class="infoSet infoBlock">
-				<label for="localOrg" class="label"><@s.text name="label.to_my_org"/></label>
-				<span class="fieldHolder">
-					${primaryOrg.name}
-					<@s.hidden name="localOrgName" id="localOrgName_orgName" value="${primaryOrg.name}"/>
-				</span>
-			</div>
-			
-		</div>
-		
-		<div class="actions">
-			<@s.submit key="label.continue" id="continueButton"/> <@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
-		</div>
+	<div id="inviteCompanyLogo" class="companyInvite">
+		<#assign tenant = organization.tenant>
+		<#include "../common/_displayTenantLogo.ftl"/>
 	</div>
 	
+	<div id="inviteCompanyInfo" class="companyInvite">
+    	${(organization.name?html)!}
+        <#if organization.webSite?exists>
+            <a href="${action.createHref(organization.webSite)}">${organization.webSite}</a>
+        </#if>
+	</div>
 	
-	<#include "../messages/_add.ftl"/>
+	<@s.url id="cancelUrl" action="safetyNetwork"/>
 	
+	<@s.form id="connectionInvitationCreate" action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
 	
-</@s.form>
+		<textarea id="invitationMessage" ></textarea>
+	
+		<@s.hidden name="connectionType" value=connectionType/>
+		
+		<div class="actions">
+			<@s.submit key="label.search" id="inviteButton"/> <@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
+		</div>
+	</@s.form>	
+		
+	
+	<@s.url id="cancelUrl" action="safetyNetwork"/>
+</div>

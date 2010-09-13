@@ -2,7 +2,6 @@
 <head>
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 </head>
-
 <div id="leftConnectionsColumn">
 	<ul>
 		<li>
