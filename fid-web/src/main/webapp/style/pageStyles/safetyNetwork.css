@@ -316,6 +316,10 @@ div#sendAnInvite {
 	font-weight:bold;
 }
 
+#companyInfoContainer{
+	display:block;
+	clear:both;	
+	}
 
 .companyInvite{
 	display: block;
@@ -325,19 +329,29 @@ div#sendAnInvite {
 	
 #inviteCompanyInfo{
 	margin-left: 2.5em;	
-	clear:	right;
 	}
 
 #stretchContainer{
 	min-height:100%;
 	}
+
+.italic{
+	font-style: italic;
+}
+
+#invitationMessageHeading{
+	clear:both;
+	display: block;
+	padding-top: 1.5em;
+	padding-bottom: 0.5em;
+	font-size:1.1em;
+	}	
 	
 #invitationMessage{
-	display:inline;
-	margin-top: 2.5em;
-	height:200px;
+	height:150px;
 	width:400px;
-	padding-bottom: 2.5em;
+	overflow: auto;
+	font-size:1.1em;
 	}
 
 form#privacySettingsSave h2 {
