@@ -15,7 +15,7 @@
 			</@s.text>
 		</h3>
 			<p>	
-				<@s.text name="label.register_assets.msg"/><a><@s.text name="label.tell_me_more"/></a>
+				<@s.text name="label.register_assets.msg"/><a>&nbsp;<@s.text name="label.tell_me_more"/></a>
 				<@s.form action="findAssets" theme="fieldid" cssClass="fullForm" method="get">
 					<@s.textfield name="searchText" id="assetSearchBox" cssClass="inputAlign"/>
 					<@s.submit key="hbutton.search" id="searchForAssetButton" cssClass="saveButton save inputAlign" />

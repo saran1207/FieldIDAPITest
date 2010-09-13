@@ -290,6 +290,10 @@ div#sendAnInvite {
 	background: no-repeat url(../../images/view-pre-assigned-assets.png) left 15px;
 }
 
+#registerAssets h3{
+	padding: 2px;
+}
+
 #registerAssets, #preAssignedAssets{
 	float: left;
 	width: 30em;
