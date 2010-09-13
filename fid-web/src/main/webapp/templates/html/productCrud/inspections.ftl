@@ -1,5 +1,3 @@
-${action.setPageType('product', 'inspections')!}
-
 <#if !inspections.isEmpty() >
 	<table class="list">
 		<tr>

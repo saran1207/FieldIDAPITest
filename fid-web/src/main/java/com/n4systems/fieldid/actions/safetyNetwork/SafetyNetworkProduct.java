@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -26,16 +28,31 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
 	}
 	
 	protected AssetWebModel asset = new AssetWebModel(this);
+	
+	@Override
+	protected void postInit() {
+		setNetworkProduct(true);
+		super.postInit();
+	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		product = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
 		asset.match(product);
 	}
-
+	
 	@Override
 	public boolean isInVendorContext() {
 		return true;
+	}
+
+	@SkipValidation
+	@Override
+	public String doInspections() {
+		setPageType("network_product", "inspections");
+		testExistingProduct();
+
+		return SUCCESS;
 	}
 
 	

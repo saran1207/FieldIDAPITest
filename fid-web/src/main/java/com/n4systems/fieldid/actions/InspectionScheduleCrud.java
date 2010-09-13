@@ -35,7 +35,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	private LegacyProductSerial legacyProductManager;
 	private InspectionScheduleManager inspectionScheduleManager;
-	private InspectionSchedule inspectionSchedule;
+	protected InspectionSchedule inspectionSchedule;
 	
 	private InspectionType inspectionType;
 	private List<ListingPair> jobs;
@@ -63,7 +63,8 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	private void testRequiredEntities(boolean existing) {
 		testRequiredEntities(existing, false);
 	}
-	private void testRequiredEntities(boolean existing, boolean inspectionTypeRequired) {
+	
+	protected void testRequiredEntities(boolean existing, boolean inspectionTypeRequired) {
 		if (inspectionSchedule == null) {
 			addActionErrorText("error.noschedule");
 			throw new MissingEntityException();
@@ -142,6 +143,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	@SkipValidation
 	@UserPermissionFilter(open=true)
 	public String doList() {
+		setPageType("product", "inspection_schedules");
 		testRequiredEntities(false, false);
 		return SUCCESS;
 	}

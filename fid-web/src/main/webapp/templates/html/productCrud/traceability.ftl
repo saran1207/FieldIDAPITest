@@ -1,4 +1,3 @@
-${action.setPageType('product', 'traceability')!}
 <head>
 	<@n4.includeStyle href="safetyNetworkSmartSearch" type="feature"/>
 	

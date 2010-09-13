@@ -20,6 +20,8 @@ import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoade
 
 public class TraceabilityCrud extends ProductCrud {
 
+	private boolean networkProduct;
+
 	public TraceabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, 
 			ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(productTypeManager, legacyProductSerialManager, persistenceManager, productCodeMappingManager, productManager, orderManager, projectManager, inspectionScheduleManager);
@@ -28,6 +30,8 @@ public class TraceabilityCrud extends ProductCrud {
 		
 	@SkipValidation
 	public String doTraceability() {
+		setPageType();
+		
 		testExistingProduct();
 		
 		ProductsByNetworkId loader = getLoaderFactory().createProductsByNetworkId();
@@ -52,6 +56,15 @@ public class TraceabilityCrud extends ProductCrud {
 		
 		return SUCCESS;
 	}
+
+
+	private void setPageType() {
+		if(!networkProduct) {
+			setPageType("product", "traceability");
+		}else {
+			setPageType("network_product", "traceability");
+		}
+	}
 	
 	
 	public boolean isHasRegisteredProduct() {
@@ -66,5 +79,15 @@ public class TraceabilityCrud extends ProductCrud {
 	
 	public Long getContextProductId() {
 		return isInVendorContext() ? product.getId() : null;
+	}
+
+
+	public boolean isNetworkProduct() {
+		return networkProduct;
+	}
+
+
+	public void setNetworkProduct(boolean networkProduct) {
+		this.networkProduct = networkProduct;
 	}
 }

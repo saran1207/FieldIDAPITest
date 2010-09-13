@@ -406,7 +406,6 @@
 		<action name="productInspections" method="inspections" class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productCrud/inspections.ftl</result>
-
 		</action>
 
 		<action name="product" method="show" class="com.n4systems.fieldid.actions.product.ProductCrud">
@@ -1992,16 +1991,26 @@
 		</action>		
 
 		<action name="preAssignedAssets" method="listPreAssigned" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
-			<result name="success" type="freemarker">/templates/html/vendor/preAssignedList.ftl</result>		
+			<result name="success" type="freemarker">/templates/html/vendor/list.ftl</result>		
 		</action>
 
 		<action name="showVendor" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
-			<result name="success" type="freemarker">/templates/html/vendor/showVendor.ftl</result>		
+			<result name="success" type="freemarker">/templates/html/vendor/show.ftl</result>		
 		</action>
 		
 		<action name="showNetworkProduct" method="traceability" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkProduct">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/productCrud/traceability.ftl</result>
+		</action>
+		
+		<action name="networkProductInspections" method="inspections" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkProduct">
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/productCrud/inspections.ftl</result>
+		</action>
+
+		<action name="networkInspectionScheduleList" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkInspectionSchedule">
+			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
+			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/list.ftl</result>
 		</action>
 
 	</package>

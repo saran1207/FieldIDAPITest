@@ -14,10 +14,13 @@
 				<@s.param>${vendor.name}</@s.param>
 			</@s.text>
 		</h3>
-		<p>	
-			<@s.text name="label.register_assets.msg"/><a><@s.text name="label.tell_me_more"/></a>
-			<input id="searchText" type="text"/><input type="button" value="<@s.text name="hbutton.search"/>"/>
-		</p>
+			<p>	
+				<@s.text name="label.register_assets.msg"/><a><@s.text name="label.tell_me_more"/></a>
+				<@s.form action="findAssets" theme="fieldid" cssClass="fullForm" method="get">
+					<@s.textfield name="searchText" id="assetSearchBox" cssClass="inputAlign"/>
+					<@s.submit key="hbutton.search" id="searchForAssetButton" cssClass="saveButton save inputAlign" />
+				</@s.form>
+			</p>
 	</div>
 	<div id="preAssignedAssets">
 		<h3>

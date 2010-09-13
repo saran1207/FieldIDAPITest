@@ -348,6 +348,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// - AA
 	@SkipValidation
 	public String doInspections() {
+		setPageType("product", "inspections");
 		testExistingProduct();
 
 		return SUCCESS;

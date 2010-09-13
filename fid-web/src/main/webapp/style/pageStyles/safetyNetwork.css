@@ -167,7 +167,7 @@
 	height: 1.5em;
 	margin-top:0.5em;
 	padding:2px;
-	}
+}
 
 .inputAlign { 
 	vertical-align: middle;
@@ -177,7 +177,7 @@
 #searchForCompanyButton{
 	margin-left: 0.5em;
 	margin-top: 0.5em;
-	}
+}
 
 #findConnections p{
 	display:block;
@@ -331,4 +331,30 @@ form#privacySettingsSave .fieldHolder {
 
 form#privacySettingsSave .check {
     margin: 10px;
+}
+
+#assetSearchBox{
+	font-size: 1em;
+	float: left;
+	height: 1.5em;
+	margin-top:0.5em;
+	padding:2px;
+}
+
+#searchForAssetButton{
+	margin-left: 0.5em;
+	margin-top: 0.5em;
+	font-size: small;
+	font-weight:normal;
+	padding:2px;
+}
+
+#registerAssets .fieldHolder{
+	display:inline;
+}
+
+#findAssets{
+	display: block;
+	width: 22em;
+	float: left;
 }
