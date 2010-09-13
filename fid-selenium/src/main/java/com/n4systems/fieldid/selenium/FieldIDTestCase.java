@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.thoughtworks.selenium.SeleniumException;
 import org.junit.After;
 import org.junit.Before;
 
@@ -24,6 +25,9 @@ public abstract class FieldIDTestCase {
 
 	// NOTE: if you have -Dfieldid-companyid=unirope tests will default to unirope
 	// Otherwise, they will default to fieldid.
+
+    private static final int SHUTDOWN_ATTEMPTS = 5;
+    private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
 
 	private String host = System.getProperty("selenium-server", "tools.n4systems.net");
 	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
@@ -83,7 +87,22 @@ public abstract class FieldIDTestCase {
 	}
 	
 	public static void shutDownAllSeleniums() {
-		shutDownSelenium(selenium);
+        boolean shutdownSuccess = false;
+        for (int i = 0; i < SHUTDOWN_ATTEMPTS; i++) {
+            try {
+                shutDownSelenium(selenium);
+                shutdownSuccess = true;
+                break;
+            } catch (SeleniumException e) {
+                System.out.println("Exception shutting down selenium on attempt " + (i+1));
+                e.printStackTrace();
+                try { Thread.sleep(SHUTDOWN_RETRY_INTERVAL_MS); } catch (InterruptedException e1) { }
+            }
+        }
+
+        if (!shutdownSuccess) {
+            throw new RuntimeException("Unable to shutdown selenium after " + SHUTDOWN_ATTEMPTS + " attempts.");
+        }
 	}
 
 	protected static void shutDownSelenium(FieldIdSelenium selenium) {

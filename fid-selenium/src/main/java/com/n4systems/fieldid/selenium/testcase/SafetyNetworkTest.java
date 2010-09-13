@@ -103,13 +103,13 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	@Test
 	public void test_settings_and_privacy() {
-		SafetyNetworkSettingsPage safetyNetworkSettingsPage = startAsCompany("msa").login().clickSafetyNetworkLink().goToSettings();
+		SafetyNetworkSettingsPage safetyNetworkSettingsPage = startAsCompany("msa").login().clickSafetyNetworkLink().clickSettings();
 
 		// Starts out checked, so uncheck for testing.
 		safetyNetworkSettingsPage.unCheckAutoAcceptCheckBox();
 		safetyNetworkSettingsPage.unCheckAutoPublishCheckBox();
 
-		safetyNetworkSettingsPage.submitForm();
+		safetyNetworkSettingsPage.saveSettings();
 
 		assertTrue("Could not toggle Auto Accept", !safetyNetworkSettingsPage.isAutoAcceptChecked());
 		assertTrue("Could not toggle Auto Publish", !safetyNetworkSettingsPage.isAutoPublishChecked());
@@ -118,7 +118,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		safetyNetworkSettingsPage.checkPublishAssetsBox();
 		safetyNetworkSettingsPage.checkAutoAcceptBox();
 
-		safetyNetworkSettingsPage.submitForm();
+		safetyNetworkSettingsPage.saveSettings();
 	}
 
 }

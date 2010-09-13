@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.selenium.safetynetwork.page;
 
-import static org.junit.Assert.fail;
-
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -12,18 +10,16 @@ public class SafetyNetworkSettingsPage extends FieldIDPage {
 	}
 
 	public void checkPublishAssetsBox() {
-		if (!selenium.isElementPresent("//input[@id='chkAutoPublish']")) {
-			fail("Could not find the Auto Publish Checkbox in the Settings page");
-		}
 		selenium.check("//input[@id='chkAutoPublish']");
 	}
 
 	public void checkAutoAcceptBox() {
-		if (!selenium.isElementPresent("//input[@id='chkAutoAcceptConnections']")) {
-			fail("Could not find the Auto Accept Checkbox in the Settings page");
-		}
 		selenium.check("//input[@id='chkAutoAcceptConnections']");
 	}
+
+    public void checkVisibilityBox() {
+        selenium.check("//input[@id='chkSearchable']");
+    }
 
 	public void unCheckAutoPublishCheckBox() {
 		selenium.uncheck("//input[@id='chkAutoPublish']");
@@ -33,7 +29,11 @@ public class SafetyNetworkSettingsPage extends FieldIDPage {
 		selenium.uncheck("//input[@id='chkAutoAcceptConnections']");
 	}
 
-	public void submitForm() {
+    public void unCheckVisibilityBox() {
+        selenium.uncheck("//input[@id='chkSearchable']");
+    }
+
+	public void saveSettings() {
 		selenium.click("//input[@id='privacySettingsSave_hbutton_save']");
 		waitForPageToLoad();
 	}
@@ -45,4 +45,8 @@ public class SafetyNetworkSettingsPage extends FieldIDPage {
 	public boolean isAutoAcceptChecked() {
 		return selenium.isChecked("//input[@id='chkAutoAcceptConnections']");
 	}
+
+    public boolean isVisibilityChecked() {
+        return selenium.isChecked("//input[@id='chkSearchable']");   
+    }
 }

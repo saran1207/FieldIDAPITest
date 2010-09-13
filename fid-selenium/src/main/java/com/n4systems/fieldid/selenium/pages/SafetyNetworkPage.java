@@ -24,7 +24,7 @@ public class SafetyNetworkPage extends FieldIDPage {
 		return new SafetyNetworkCatalogPage(selenium);
 	}
 
-	public SafetyNetworkSettingsPage goToSettings() {
+	public SafetyNetworkSettingsPage clickSettings() {
 		selenium.click("//a[@id='privacySettings']");
 		return new SafetyNetworkSettingsPage(selenium);
 	}

@@ -125,6 +125,7 @@
 	padding: 1.5em 0 3em 2em;
 	margin-top: 5px;
 	overflow: hidden;
+    max-width: 760px;
 }
 
 #safetyNetworkDescription{
@@ -308,4 +309,26 @@ div#sendAnInvite {
 	margin: 0.75em 0;
 	font-size:1.1em;
 	font-weight:bold;
+}
+
+form#privacySettingsSave h2 {
+    font-weight: normal;
+    background-color: #EAEAEA;
+}
+
+form#privacySettingsSave label {
+    display: inline;
+    font-weight: normal;
+}
+
+form#privacySettingsSave a {
+    display: inline;
+}
+
+form#privacySettingsSave .fieldHolder {
+    display: inline;
+}
+
+form#privacySettingsSave .check {
+    margin: 10px;
 }

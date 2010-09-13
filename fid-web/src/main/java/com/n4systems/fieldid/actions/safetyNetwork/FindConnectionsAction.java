@@ -20,6 +20,7 @@ public class FindConnectionsAction extends SafetyNetwork {
     public Pager<PrimaryOrg> getPage() {
         return getLoaderFactory().createPrimaryOrgsWithNameLikeLoader()
                 .setName(searchText)
+                .setSearchableOnly(true)
                 .setPage(getCurrentPage())
                 .setPageSize(10)
                 .load();
