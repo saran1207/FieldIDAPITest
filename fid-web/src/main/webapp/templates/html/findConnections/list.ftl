@@ -8,32 +8,38 @@
 
         <#include '../common/_pagination.ftl' />
 
-        <table class="list" style="width: 700px;">
+        <table id="companySearchResults" class="list" style="width: 700px;">
 
             <#list page.list as org>
                 <tr>
                     <td>
-                        <#assign tenant = org.tenant>
-                        <#include "../common/_displayTenantLogo.ftl"/>
+                        <span class="companyName">
+                            <#assign tenant = org.tenant>
+                            <#include "../common/_displayTenantLogo.ftl"/>
+                        </span>
                     </td>
                     <td>
-                        <span>${(org.name?html)!}</span>
+                        <span class="companyName">${(org.name?html)!}</span>
                         <#if org.webSite?exists>
                             <br/>
-                            <a href="${action.createHref(org.webSite)}">${org.webSite}</a>
+                            <a class="companyWebsite" href="${action.createHref(org.webSite)}">${org.webSite}</a>
                         </#if>
                     </td>
                     <td>
-                        <#if action.isConnectedCustomer(org)>
-                            <@s.text name="label.added_as_customer"/><br/>
-                        <#else>
-                            <a href='<@s.url action="connectionInvitationAdd"/>'><@s.text name="label.add_as_customer"/></a>
-                        </#if>
-                        <#if action.isConnectedVendor(org)>
-                            <@s.text name="label.added_as_vendor"/>
-                        <#else>
-                            <a href='<@s.url action="connectionInvitationAdd"/>'><@s.text name="label.add_as_vendor"/></a>
-                        </#if>
+                        <div class="addConnectionLinkOrText">
+                            <#if action.isConnectedCustomer(org)>
+                                <@s.text name="label.added_as_customer"/><br/>
+                            <#else>
+                                <a href='<@s.url action="connectionInvitationAdd"/>'><@s.text name="label.add_as_customer"/></a>
+                            </#if>
+                        </div>
+                        <div class="addConnectionLinkOrText">
+                            <#if action.isConnectedVendor(org)>
+                                <@s.text name="label.added_as_vendor"/>
+                            <#else>
+                                <a href='<@s.url action="connectionInvitationAdd"/>'><@s.text name="label.add_as_vendor"/></a>
+                            </#if>
+                        </div>
                     </td>
                 </tr>
             </#list>
@@ -45,7 +51,7 @@
         <div class="emptyList" >
             <h2><@s.text name="label.noresults"/></h2>
             <p>
-                <@s.text name="message.emptysearch" />
+                <@s.text name="message.nocompaniesfound" />
             </p>
         </div>
     <#else>

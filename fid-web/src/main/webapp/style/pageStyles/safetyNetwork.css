@@ -227,8 +227,8 @@
 }
 
 div#sendAnInvite {
-    background: url("../../images/mail-send.png") no-repeat scroll 0.5em 1em #D0DAFD;
-    padding: 0.5em 0 0.5em 1.8em;
+    background: url("../../images/search-invite-company-icon.png") no-repeat scroll 0.5em 1em #EDEDED;
+    padding: 0.5em 0 0.5em 2.8em;
     width: 60em;
 }
 
@@ -357,4 +357,26 @@ form#privacySettingsSave .check {
 	display: block;
 	width: 22em;
 	float: left;
+}
+
+div#safetyNetworkSplash table.list tr:hover {
+    background-color: #ffffff;
+}
+
+div#safetyNetworkSplash table.list tr:hover td {
+    color: #333399;
+}
+
+div.addConnectionLinkOrText {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color: #444444;
+}
+
+#companySearchResults a.companyWebsite {
+    color: #666666;
+}
+
+#companySearchResults span.companyName {
+    color: #222222;
 }
