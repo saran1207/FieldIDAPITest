@@ -65,10 +65,6 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	
 	@SkipValidation
 	public String doAdd() {
-		
-		
-		personalizedBody = getDefautMessageBody();
-		
 		return SUCCESS;
 	}
 	

@@ -316,6 +316,10 @@ div#sendAnInvite {
 	font-weight:bold;
 }
 
+#inviteCompanyLogo #safetyNetworkTenantLogo{
+	width: 175px;
+	}
+
 #companyInfoContainer{
 	display:block;
 	clear:both;	
@@ -323,12 +327,14 @@ div#sendAnInvite {
 
 .companyInvite{
 	display: block;
-	margin-top: 2.5em;
+	margin-top: 1.25em;
 	float: left;
 	}
 	
 #inviteCompanyInfo{
-	margin-left: 2.5em;	
+	margin-left: 2.5em;
+	position: relative;
+	top: 12px;
 	}
 
 #stretchContainer{

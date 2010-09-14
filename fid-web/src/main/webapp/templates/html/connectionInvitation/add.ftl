@@ -31,7 +31,7 @@
 		<@s.textarea  id="invitationMessage" name="personalizedBody"/>
 		
 		<div class="actions">
-			<@s.submit key="label.submit" id="inviteButton"/> <@s.text name="label.or"/> <a style="display: inline;" href="${cancelUrl}"><@s.text name="label.cancel"/></a>
+			<@s.submit key="label.send_request" id="inviteButton"/> <@s.text name="label.or"/> <a style="display: inline;" href="${cancelUrl}"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>	
 		
