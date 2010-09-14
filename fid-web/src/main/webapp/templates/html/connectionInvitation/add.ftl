@@ -1,21 +1,18 @@
-<#assign currentAction="connectionInvitationCreate.action" />
+<#assign currentAction="connectionInvitationAdd.action" />
 <#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
 
 <div id="safetyNetworkSplash">
 	
 	<@s.form action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
-	<@s.hidden id="remoteOrgId" name="remoteOrgId" value="${uniqueID}"/>
-	<#assign organization=action.getRemoteOrg(uniqueID) />		
-	<#assign orgTenant = organization.tenant>
-	<@s.hidden id="remoteTenantId" name="remoteTenantId" value="${orgTenant.id}"/>
-
-
+	<@s.hidden id="uniqueID" name="uniqueID" value=uniqueID/>
+	<@s.hidden id="remoteOrgId" name="remoteOrgId" value=uniqueID/>
+	<#assign organization = action.getRemoteOrg(uniqueID) />		
+	<@s.hidden id="remoteTenantId" name="remoteTenantId" value="${organization.tenant.id}"/>
 	
 	<h1> <@s.text name="label.add"/>&nbsp;${organization.name}&nbsp;<@s.text name="label.as_a_lowercase"/>&nbsp;${connectionType?lower_case}&nbsp;<@s.text name="label.connection"/>?</h1>
+
 	<div id="companyInfoContainer">
-	
 		<div id="inviteCompanyLogo" class="companyInvite">
-		
 			<#include "../common/_displayTenantLogo.ftl"/>
 		</div>
 		
@@ -31,8 +28,7 @@
 	<p id="invitationMessageHeading"><@s.text name="label.personal_message"/>&nbsp;<span class="italic"><@s.text name="label.optional"/></span></p>
 	
 		<#include "../common/_formErrors.ftl"/>
-
-		<textarea id="invitationMessage" ></textarea>
+		<@s.textarea  id="invitationMessage" name="personalizedBody"/>
 		
 		<div class="actions">
 			<@s.submit key="label.submit" id="inviteButton"/> <@s.text name="label.or"/> <a style="display: inline;" href="${cancelUrl}"><@s.text name="label.cancel"/></a>

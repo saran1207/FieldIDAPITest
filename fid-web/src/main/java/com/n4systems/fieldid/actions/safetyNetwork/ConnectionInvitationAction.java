@@ -26,7 +26,6 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.uri.ActionURLBuilder;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
@@ -161,8 +160,6 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	public Long getLocalOrgId() {
 		return getPrimaryOrg().getId();
 	}
-
-
 	
 	public Long getRemoteOrgId() {
 		return (remoteOrg != null) ? remoteOrg.getId() : null;
