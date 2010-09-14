@@ -6,6 +6,7 @@
 	<@s.form id="connectionInvitationCreate" action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
 	<@s.hidden id="uniqueID" name="uniqueID" value=uniqueID/>
 	<@s.hidden id="remoteOrgId" name="remoteOrgId" value=uniqueID/>
+	<@s.hidden id="searchText" name="searchText" value=searchText/>
 	<#assign organization = action.getRemoteOrg(uniqueID) />		
 	<@s.hidden id="remoteTenantId" name="remoteTenantId" value="${organization.tenant.id}"/>
 	
