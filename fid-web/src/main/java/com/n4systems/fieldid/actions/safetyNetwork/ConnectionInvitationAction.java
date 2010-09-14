@@ -50,6 +50,7 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	private List<ListingPair> remoteOrgs;
 	private Tenant remoteTenant;
 	private PrimaryOrg remoteOrg;
+
 	private ConnectionType connectionType = ConnectionType.VENDOR;
 
 	private String personalizedBody;
@@ -150,7 +151,7 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	}
 
 	public void setConnectionType(String connectionType) {
-		this.connectionType = ConnectionType.valueOf(connectionType);
+		this.connectionType = ConnectionType.valueOf(connectionType.toUpperCase());
 	}
 	
 	public PrimaryOrg getLocalOrg() {
@@ -166,6 +167,10 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	public Long getRemoteOrgId() {
 		return (remoteOrg != null) ? remoteOrg.getId() : null;
 	}
+	
+	public PrimaryOrg getRemoteOrg(){
+		return remoteOrg;
+	}
 
 	public void setRemoteOrgId(Long id) {
 		if (id == null) {
@@ -175,11 +180,11 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 		}
 	}
 
-	public PrimaryOrg getRemoteOrg(String id){
+	public PrimaryOrg getRemoteOrg(Long id){
 		if (id == null) {
 			return null;
 		} else  {
-			return (PrimaryOrg)getNonSecureLoaderFactory().createNonSecureIdLoader(PrimaryOrg.class).setId(Long.parseLong(id.trim())).load();
+			return (PrimaryOrg)getNonSecureLoaderFactory().createNonSecureIdLoader(PrimaryOrg.class).setId(id).load();
 		}
 	}
 	
@@ -227,7 +232,6 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 		return personalizedBody;
 	}
 
-	@RequiredStringValidator(message="", key="error.body_is_required")
 	public void setPersonalizedBody(String personalizedBody) {
 		this.personalizedBody = personalizedBody;
 	}

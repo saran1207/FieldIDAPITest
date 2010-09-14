@@ -1812,9 +1812,13 @@
 		<action name="connectionInvitationCreate" method="create"
 			class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
 			<result name="input" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">connectionInvitationAdd</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="type">${connectionType}</param>
+			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">connections</param>
+				<param name="actionName">safetyNetwork</param>
 			</result>
 		</action>
 

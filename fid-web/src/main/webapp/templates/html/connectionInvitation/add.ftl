@@ -1,15 +1,21 @@
-<#assign currentAction="connectionInvitationAdd.action" />
+<#assign currentAction="connectionInvitationCreate.action" />
 <#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
 
-<#assign organization=action.getRemoteOrg(request.getParameter("uniqueID"))/>
-<#assign connectionType=request.getParameter("type")/>
 <div id="safetyNetworkSplash">
-	<h1> <@s.text name="label.add"/>&nbsp;${organization.name}&nbsp;<@s.text name="label.as_a_lowercase"/>&nbsp;${connectionType}&nbsp;<@s.text name="label.connection"/>?</h1>
 	
+	<@s.form action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
+	<@s.hidden id="remoteOrgId" name="remoteOrgId" value="${uniqueID}"/>
+	<#assign organization=action.getRemoteOrg(uniqueID) />		
+	<#assign orgTenant = organization.tenant>
+	<@s.hidden id="remoteTenantId" name="remoteTenantId" value="${orgTenant.id}"/>
+
+
+	
+	<h1> <@s.text name="label.add"/>&nbsp;${organization.name}&nbsp;<@s.text name="label.as_a_lowercase"/>&nbsp;${connectionType?lower_case}&nbsp;<@s.text name="label.connection"/>?</h1>
 	<div id="companyInfoContainer">
 	
 		<div id="inviteCompanyLogo" class="companyInvite">
-			<#assign tenant = organization.tenant>
+		
 			<#include "../common/_displayTenantLogo.ftl"/>
 		</div>
 		
@@ -22,13 +28,11 @@
 	</div>
 	
 	<@s.url id="cancelUrl" action="safetyNetwork"/>
-	<br/>
 	<p id="invitationMessageHeading"><@s.text name="label.personal_message"/>&nbsp;<span class="italic"><@s.text name="label.optional"/></span></p>
-	<@s.form id="connectionInvitationCreate" action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
 	
+		<#include "../common/_formErrors.ftl"/>
+
 		<textarea id="invitationMessage" ></textarea>
-	
-		<@s.hidden name="connectionType" value=connectionType/>
 		
 		<div class="actions">
 			<@s.submit key="label.submit" id="inviteButton"/> <@s.text name="label.or"/> <a style="display: inline;" href="${cancelUrl}"><@s.text name="label.cancel"/></a>
