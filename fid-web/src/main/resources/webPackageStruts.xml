@@ -1999,7 +1999,9 @@
 		</action>
 
 		<action name="searchNetworkProduct" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
-			<result name="success" type="freemarker">/templates/html/vendor/listSearchResult.ftl</result>		
+			<result name="input" type="freemarker">/templates/html/vendor/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/vendor/listSearchResult.ftl</result>
+			<result name="error" type="freemarker">/templates/html/vendor/show.ftl</result>		
 		</action>
 
 		<action name="showVendor" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">

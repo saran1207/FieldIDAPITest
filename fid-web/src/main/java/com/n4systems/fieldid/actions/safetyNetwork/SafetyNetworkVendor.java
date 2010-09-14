@@ -12,7 +12,11 @@ import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.persistence.SimplePager;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.Validation;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
+@Validation
 @SuppressWarnings("serial")
 public class SafetyNetworkVendor extends AbstractCrud{
 	
@@ -27,7 +31,6 @@ public class SafetyNetworkVendor extends AbstractCrud{
 
 	@Override
 	protected void initMemberFields() {
-		
 	}
 
 	@Override
@@ -52,6 +55,7 @@ public class SafetyNetworkVendor extends AbstractCrud{
 		return new SimplePager<Product>(1, pageSize, list.size(), list);
 	}
 
+	@SkipValidation
 	public String doShow() {
 		return SUCCESS;
 	}
@@ -73,6 +77,11 @@ public class SafetyNetworkVendor extends AbstractCrud{
 		smartSearchLoader.setVendorOrgId(vendor.getId());
 		smartSearchLoader.setSearchText(searchText);
 		return smartSearchLoader;
+	}
+	
+	@RequiredStringValidator(type = ValidatorType.SIMPLE, message = "", key = "error.search_text_required")
+	public String getSearchText() {
+		return searchText;
 	}
 	
 	public void setSearchText(String searchText) {

@@ -9,15 +9,19 @@ public class VendorConnectionProfilePage extends FieldIDPage {
 		super(selenium);
 	}
 
-	public SafetyNetworkPreAssignedAssetsListPage clickViewPreassignedAssets() {
+	public SafetyNetworkVendorAssetListPage clickViewPreassignedAssets() {
 		selenium.click("//div[@id='preAssignedAssets']/p/a");
-		return new SafetyNetworkPreAssignedAssetsListPage(selenium);
+		return new SafetyNetworkVendorAssetListPage(selenium);
 	}
 
 	public void setAssetToSearchFor(String assetName) {
-		selenium.type("//input[@id='searchText']", assetName);
+		selenium.type("//input[@id='assetSearchBox']", assetName);
 	}
 
+	public SafetyNetworkVendorAssetListPage clickSearch() {
+		selenium.click("//input[@id='searchForAssetButton']");
+		return new SafetyNetworkVendorAssetListPage(selenium);
+	}
 	
 	
 }

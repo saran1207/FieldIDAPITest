@@ -6,6 +6,7 @@
 <#include '_vendorinfo.ftl'>
 
 <div id="mainContent">
+	<#include "../common/_formErrors.ftl"/>
 	<h1>${vendor.name}<h1>
 	<p><@s.text name="label.vendor_connection"/></p>
 	<div id="registerAssets">
