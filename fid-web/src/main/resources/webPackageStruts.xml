@@ -1991,11 +1991,11 @@
 		</action>		
 
 		<action name="preAssignedAssets" method="listPreAssigned" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
-			<result name="success" type="freemarker">/templates/html/vendor/list.ftl</result>		
+			<result name="success" type="freemarker">/templates/html/vendor/listPreAssigned.ftl</result>		
 		</action>
 
 		<action name="searchNetworkProduct" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
-			<result name="success" type="freemarker">/templates/html/vendor/list.ftl</result>		
+			<result name="success" type="freemarker">/templates/html/vendor/listSearchResult.ftl</result>		
 		</action>
 
 		<action name="showVendor" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
