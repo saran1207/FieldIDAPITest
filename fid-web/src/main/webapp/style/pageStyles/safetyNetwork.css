@@ -325,6 +325,10 @@ div#sendAnInvite {
 	clear:both;	
 	}
 
+#safetyNetworkSplash .actions a{
+	display: inline;	
+}
+
 .companyInvite{
 	display: block;
 	margin-top: 1.25em;

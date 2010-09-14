@@ -17,13 +17,14 @@ import java.util.List;
 public class SafetyNetwork extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
+	private String searchText;
+	private List<TypedOrgConnection> customerConnections;
+	private List<TypedOrgConnection> vendorConnections;
+	private List<TypedOrgConnection> catalogOnlyConnections;
+
 	public SafetyNetwork(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
-
-    private List<TypedOrgConnection> customerConnections;
-    private List<TypedOrgConnection> vendorConnections;
-    private List<TypedOrgConnection> catalogOnlyConnections;
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
@@ -33,23 +34,23 @@ public class SafetyNetwork extends AbstractCrud {
 	protected void initMemberFields() {
 	}
 
-    @Override
-    protected void postInit() {
+	@Override
+	protected void postInit() {
 		customerConnections = new ArrayList<TypedOrgConnection>();
-        vendorConnections = new ArrayList<TypedOrgConnection>();
-        catalogOnlyConnections = new ArrayList<TypedOrgConnection>();
-        for (TypedOrgConnection connection : getConnections()) {
-            if (connection.isCustomerConnection()) {
-                customerConnections.add(connection);
-            } else if (connection.isVendorConnection()) {
-                vendorConnections.add(connection);
-            } else if (connection.isCatalogOnlyConnection()) {
-                catalogOnlyConnections.add(connection);
-            }
-        }
-    }
+		vendorConnections = new ArrayList<TypedOrgConnection>();
+		catalogOnlyConnections = new ArrayList<TypedOrgConnection>();
+		for (TypedOrgConnection connection : getConnections()) {
+			if (connection.isCustomerConnection()) {
+				customerConnections.add(connection);
+			} else if (connection.isVendorConnection()) {
+				vendorConnections.add(connection);
+			} else if (connection.isCatalogOnlyConnection()) {
+				catalogOnlyConnections.add(connection);
+			}
+		}
+	}
 
-    public String doShow() {
+	public String doShow() {
 		return SUCCESS;
 	}
 
@@ -89,13 +90,23 @@ public class SafetyNetwork extends AbstractCrud {
 	public List<TypedOrgConnection> getCatalogOnlyConnections() {
 		return catalogOnlyConnections;
 	}
-	
 
-    public String createHref(String siteUrl) {
-        if (!siteUrl.startsWith("http://") && !siteUrl.startsWith("https://")) {
-            return "http://" + siteUrl;
-        }
-        return siteUrl;
-    }
+	public String createHref(String siteUrl) {
+		if (!siteUrl.startsWith("http://") && !siteUrl.startsWith("https://")) {
+			return "http://" + siteUrl;
+		}
+		return siteUrl;
+	}
+
+	public String getSearchText() {
+		if (searchText==null){
+			return "";
+		}
+		return searchText;
+	}
+
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
 
 }

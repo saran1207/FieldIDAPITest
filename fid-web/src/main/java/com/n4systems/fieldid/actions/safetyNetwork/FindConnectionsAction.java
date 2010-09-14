@@ -10,8 +10,6 @@ public class FindConnectionsAction extends SafetyNetwork {
     public FindConnectionsAction(PersistenceManager persistenceManager) {
         super(persistenceManager);
     }
-
-    private String searchText;
     
     public String doSearch() {
         return SUCCESS;
@@ -19,7 +17,7 @@ public class FindConnectionsAction extends SafetyNetwork {
 
     public Pager<PrimaryOrg> getPage() {
         return getLoaderFactory().createPrimaryOrgsWithNameLikeLoader()
-                .setName(searchText)
+                .setName(getSearchText())
                 .setSearchableOnly(true)
                 .setPage(getCurrentPage())
                 .setPageSize(10)
@@ -42,14 +40,6 @@ public class FindConnectionsAction extends SafetyNetwork {
             }
         }
         return false;
-    }
-
-    public String getSearchText() {
-        return searchText;
-    }
-
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
     }
 
 }

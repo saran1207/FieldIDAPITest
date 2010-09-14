@@ -3,7 +3,7 @@
 
 <div id="safetyNetworkSplash">
 	
-	<@s.form action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
+	<@s.form id="connectionInvitationCreate" action="connectionInvitationCreate" cssClass="fullForm" theme="fieldid">
 	<@s.hidden id="uniqueID" name="uniqueID" value=uniqueID/>
 	<@s.hidden id="remoteOrgId" name="remoteOrgId" value=uniqueID/>
 	<#assign organization = action.getRemoteOrg(uniqueID) />		
@@ -31,7 +31,8 @@
 		<@s.textarea  id="invitationMessage" name="personalizedBody"/>
 		
 		<div class="actions">
-			<@s.submit key="label.send_request" id="inviteButton"/> <@s.text name="label.or"/> <a style="display: inline;" href="${cancelUrl}"><@s.text name="label.cancel"/></a>
+			<@s.url id="cancelUrl" action="findConnections" searchText="${searchText}"/>
+			<@s.submit key="label.send_request" id="inviteButton"/> <@s.text name="label.or"/> <a href="#" onclick="redirect('${cancelUrl}'); return false;"/><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>	
 		
