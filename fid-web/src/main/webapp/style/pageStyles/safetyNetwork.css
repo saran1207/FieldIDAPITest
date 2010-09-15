@@ -434,5 +434,10 @@ div.addConnectionLinkOrText {
 .safetyNetworkHeadings{
 	font-size: 1.75em;
 	padding-bottom: 0.5em; 
-	}
+}
+
+.safetyNetworkFont{
+	font-size: 1.3em;
+	color: #666666
+}
 
