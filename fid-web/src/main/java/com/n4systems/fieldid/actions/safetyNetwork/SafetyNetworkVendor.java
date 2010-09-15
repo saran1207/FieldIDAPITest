@@ -40,7 +40,7 @@ public class SafetyNetworkVendor extends AbstractCrud{
 		
 	@SkipValidation
 	public String doListPreAssigned() {
-		page = getLoaderFactory().createSafetyNetworkPreAssignedAssetLoader().setVendor(vendor).setOwner(getPrimaryOrg()).load();
+		page = getLoaderFactory().createSafetyNetworkPreAssignedAssetLoader().setVendor(vendor).setOwner(getPrimaryOrg()).setPage(getCurrentPage()).load();
 		return SUCCESS;
 	}
 	
@@ -91,5 +91,5 @@ public class SafetyNetworkVendor extends AbstractCrud{
 	public void setVendorId(Long vendorId) {
 		vendor = getLoaderFactory().createVendorLinkedOrgLoader().setLinkedOrgId(vendorId).load();
 	}
-	
+
 }
