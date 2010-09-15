@@ -36,7 +36,7 @@ ${action.setPageType('safety_network_connections', 'invite')!}
 	<div class="actions">
 		<@s.submit key="label.sendinvitation" id="sendinvitation"/>
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="messages"/>"><@s.text name="label.cancel"/></a> 
+		<a href="<@s.url action="safetyNetwork"/>"><@s.text name="label.cancel"/></a> 
 	</div>
 </div>
 

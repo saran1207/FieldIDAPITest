@@ -23,7 +23,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
-public class CatalogCrud extends AbstractCrud {
+public class CatalogCrud extends SafetyNetwork {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(CatalogCrud.class);

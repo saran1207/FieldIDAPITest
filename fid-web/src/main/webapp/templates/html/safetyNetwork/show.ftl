@@ -1,7 +1,7 @@
 <#include '_safetyNetworkLayout.ftl'>
 
-<div id="safetyNetworkSplash">
-	<h1><@s.text name="label.safety_network"/></h1>
+<div id="safetyNetworkSplash" class="safetyNetworkSplash">
+	<h1 class="safetyNetworkHeadings"><@s.text name="label.safety_network"/></h1>
 	<p id="safetyNetworkDescription">
 		<@s.text name="label.safety_network_info.2"/>
 	</p>

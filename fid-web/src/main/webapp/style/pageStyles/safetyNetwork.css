@@ -120,24 +120,20 @@
 	font-weight: bold;
 }
 
-#safetyNetworkSplash {
+
+.safetyNetworkSplash{
 	display: block;
 	float: left;
 	padding: 1.5em 0 0 2em;
 	margin-top: 5px;
 	overflow: hidden;
     max-width: 760px;
-}
+	}
 
 #safetyNetworkDescription{
  	font-size: 1.25em;
 	width: 45em;
 	line-height:1.5em;
-}
-
-#safetyNetworkSplash h1, #mainContext h1{
-	font-size:1.75em;	
-	padding-bottom:0.5em;
 }
 
 #safetyNetworkSplash .safetyHeading a{
@@ -434,3 +430,9 @@ div.addConnectionLinkOrText {
 #companySearchResults span.companyName {
     color: #222222;
 }
+
+.safetyNetworkHeadings{
+	font-size: 1.75em;
+	padding-bottom: 0.5em; 
+	}
+

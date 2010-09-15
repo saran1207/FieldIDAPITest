@@ -1,6 +1,6 @@
 <#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
-<div id="safetyNetworkSplash">
-	<h1>Settings</h1>
+<div id="safetyNetworkSplash" class="safetyNetworkSplash">
+	<h1 class="safetyNetworkHeadings">Settings</h1>
 
     <@s.form action="privacySettingsSave" cssClass="fullForm" theme="fieldid" >
 

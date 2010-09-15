@@ -1,7 +1,7 @@
 <#assign currentAction="findConnections.action" />
 <#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
 
-<div id="safetyNetworkSplash">
+<div id="safetyNetworkSplash" class="safetyNetworkSplash">
 	<h1>Search Results</h1>
 
     <a id="backToLink" href="<@s.url action="safetyNetwork"/>">&#171; <@s.text name="label.back_to_search"/></a>
