@@ -20,6 +20,7 @@ public class SafetyNetworkPreAssignedAssetLoader extends PaginatedLoader<Product
 	protected QueryBuilder<Product> createBuilder(SecurityFilter filter) {
 		QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, new OrgOnlySecurityFilter(vendor));
 		queryBuilder.addSimpleWhere("owner.customerOrg.linkedOrg", owner);
+		queryBuilder.addSimpleWhere("published", true);
 		queryBuilder.addPostFetchPaths("infoOptions");
 		return queryBuilder;
 	}
