@@ -3,6 +3,7 @@
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 </head>
 <div id="leftConnectionsColumn">
+
 	<ul>
         <li>
             <a id="home" href="<@s.url action="safetyNetwork"/>"><@s.text name="label.safetynetworkhome"/></a>
