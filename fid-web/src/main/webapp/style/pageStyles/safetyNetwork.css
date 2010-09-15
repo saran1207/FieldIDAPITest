@@ -86,7 +86,7 @@
 	padding: 5px;
 }
 
-#safetyNetworkSplash a, #leftConnectionsColumn a, #leftColumn a{
+#safetyNetworkSplash a, #leftConnectionsColumn a{
 	text-decoration: none;
 	color: #556DA5;
 	display: block;
@@ -120,15 +120,14 @@
 	font-weight: bold;
 }
 
-
-.safetyNetworkSplash{
+#safetyNetworkSplash {
 	display: block;
 	float: left;
 	padding: 1.5em 0 0 2em;
 	margin-top: 5px;
 	overflow: hidden;
     max-width: 760px;
-	}
+}
 
 #safetyNetworkDescription{
  	font-size: 1.25em;
@@ -242,76 +241,6 @@ div#sendAnInvite {
     padding: 0 15px;
 }
 
-#leftColumn{
-    display: block;
-	float: left;
-    max-width: 220px;
-    width:220px;
-	overflow: hidden;
-	padding: 2em 0;
-	font-size: 1.1em;
-	border-right:1px solid #999999;
-}
-
-#leftColumn img {
-	padding-bottom:1em;
-    width: 80%;
-}
-
-#leftColumn p {
-	padding:2px;
-}
-#mainContent{
-	display: block;
-	padding: 1.5em 0 3em 2em;
-	margin-top: 5px;
-	overflow: hidden;
-}
-
-#mainContent p{
- 	font-size: small;
-	line-height:1.5em;	
-	font-weight:normal;
-}
-
-#mainContent a{
-	text-decoration: none;
-	color: #556DA5;
-}
-
-#registerAssets{
-	background: no-repeat url(../../images/search-connection-assets.png) left 15px;
-}
-
-#preAssignedAssets{
-	background: no-repeat url(../../images/view-pre-assigned-assets.png) left 15px;
-}
-
-#registerAssets h3{
-	padding: 2px;
-}
-
-#registerAssets, #preAssignedAssets{
-	float: left;
-	width: 30em;
-	padding: 1em 0 2em 4.5em;
-	margin-left:1em;
-}
-
-#preAssignedAssets a{
-    display: block;
-}
-
-#companyInfo{
-	background: no-repeat url(../../images/company-info-icon.png) left;
-	border-top: 1px solid #999999;
-	border-bottom: 1px solid #999999;
-	padding: 0.8em 2em 0.8em 2.7em;
-	margin: 0.75em 0;
-	font-size:1.1em;
-	font-weight:bold;
-}
-
 #inviteCompanyLogo #safetyNetworkTenantLogo{
 	width: 175px;
 	}
@@ -380,33 +309,6 @@ form#privacySettingsSave .fieldHolder {
 
 form#privacySettingsSave .check {
     margin: 10px;
-}
-
-#assetSearchBox{
-	font-size: small;
-	font-weight:normal;
-	float: left;
-	height: 1.5em;
-	margin-top:0.5em;
-	padding:2px;
-}
-
-#searchForAssetButton{
-	margin-left: 0.5em;
-	margin-top: 0.5em;
-	font-size: small;
-	font-weight:normal;
-	padding:1.5px;
-}
-
-#registerAssets .fieldHolder{
-	display:inline;
-}
-
-#findAssets{
-	display: block;
-	width: 22em;
-	float: left;
 }
 
 div#safetyNetworkSplash table.list tr:hover {

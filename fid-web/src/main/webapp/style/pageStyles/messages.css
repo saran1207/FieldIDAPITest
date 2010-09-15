@@ -9,3 +9,16 @@
 .unread {
 	font-weight: bold;
 }
+
+#leftConnectionsColumn a{
+	text-decoration: none;
+	color: #556DA5;
+	display: block;
+}
+
+#mainContent{
+	display: block;
+	padding: 1.5em 0 3em 2em;
+	margin-top: 5px;
+	overflow: hidden;
+}

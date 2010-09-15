@@ -1,6 +1,6 @@
 <title><@s.text name="title.safety_network"/></title>
 <head>
-	<@n4.includeStyle href="safetyNetwork" type="page"/>
+	<@n4.includeStyle href="vendor" type="page"/>
 </head>
 
 <#include '_vendorinfo.ftl'>

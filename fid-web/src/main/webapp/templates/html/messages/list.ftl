@@ -1,10 +1,10 @@
-${action.setPageType('inbox', 'list')!}
-
 <head>
-	<@n4.includeStyle href="safetyNetwork" type="page"/>
 	<@n4.includeStyle href="messages" type="page"/>
 </head>
-	
+
+<#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
+
+<div id="mainContent">
 <#if  page.hasResults() && page.validPage() >
 	<h2 id="inbox_heading" class="clean"><@s.text name="label.inbox"/></h2>
 	<#assign currentAction="messages" />
@@ -43,4 +43,5 @@ ${action.setPageType('inbox', 'list')!}
 		</p>
 	</div>
 </#if>
+</div>
 	

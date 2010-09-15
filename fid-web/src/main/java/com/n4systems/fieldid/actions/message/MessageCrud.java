@@ -6,21 +6,22 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
-import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
+import com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
+import com.n4systems.tools.Pager;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
-public class MessageCrud extends AbstractPaginatedCrud<Message> {
+public class MessageCrud extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger logger = Logger.getLogger(MessageCrud.class);
 	
 	private Message message;
-	
+	private Pager<Message> page;
 	
 	public MessageCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -36,7 +37,6 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 	protected void loadMemberFields(Long uniqueId) {
 		message = getLoaderFactory().createFilteredIdLoader(Message.class).setId(uniqueId).load();
 	}
-	
 	
 	private void testRequiredEntities(boolean existing) {
 		if (message == null) {
@@ -120,9 +120,6 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		}
 	}
 
-	
-
-
 	@SkipValidation
 	public String doDelete() {
 		testRequiredEntities(true);
@@ -139,4 +136,11 @@ public class MessageCrud extends AbstractPaginatedCrud<Message> {
 		return message;
 	}
 	
+	public Long getUnreadMessageCount() {
+		return getLoaderFactory().createUnreadMessageCountLoader().load();
+	}
+	
+	public Pager<Message> getPage() {
+		return page;
+	}
 }

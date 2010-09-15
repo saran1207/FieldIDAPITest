@@ -1,10 +1,9 @@
-${action.setPageType('inbox', 'show')!}
-
 <head>
 	<@n4.includeStyle href="messages" type="page"/>
 </head>
 	
-
+<#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
+<div id="mainContent">
 <div class="fullForm" >
 	
 	<div class="infoField">
@@ -43,5 +42,5 @@ ${action.setPageType('inbox', 'show')!}
 			<a href="<@s.url action="messages"/>"><@s.text name="label.cancel"/></a> 
 		</@s.form> 
 	</div>
-		
+</div>
 </div>
