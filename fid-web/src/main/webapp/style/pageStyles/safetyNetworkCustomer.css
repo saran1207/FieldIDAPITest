@@ -23,6 +23,7 @@ div.countExplanation {
   display: block;
   float: left;
   padding: 0 0 0 10px;
+  max-width: 550px;
 }
 
 div.countExplanation h2 {
