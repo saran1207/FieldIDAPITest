@@ -37,6 +37,7 @@ public class UnregisteredAssetQueryHelper {
 
         String query = "FROM " + Product.class.getName() + " obj RIGHT OUTER JOIN obj.linkedProduct lp "
                 +   " WHERE lp.owner.customerOrg.linkedOrg = :owner"
+                +   " AND lp.published = true"
                 +   " AND obj.id IS NULL";
 
         String securityConditions = filter.produceWhereClause(Product.class, "lp");

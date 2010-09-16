@@ -28,16 +28,20 @@
                         </#if>
                     </td>
                     <td>
-                        <#if action.isConnectedCustomer(org)>
-                            <@s.text name="label.added_as_customer"/><br/>
-                        <#else>
-                      		 <a href="<@s.url action="connectionInvitationAdd" searchText="${searchText}" uniqueID="${org.id}" connectionType="Customer"/>"><@s.text name="label.add_as_customer"/></a>
-                        </#if>
-                        <#if action.isConnectedVendor(org)>
-                            <@s.text name="label.added_as_vendor"/>
-                        <#else>
-                        	 <a href="<@s.url action="connectionInvitationAdd" searchText="${searchText}" uniqueID="${org.id}" connectionType="Vendor"/>"><@s.text name="label.add_as_vendor"/></a>
-                        </#if>
+                        <div class="addConnectionLinkOrText">
+                            <#if action.isConnectedCustomer(org)>
+                                <@s.text name="label.added_as_customer"/><br/>
+                            <#else>
+                                 <a href="<@s.url action="connectionInvitationAdd" searchText="${searchText}" uniqueID="${org.id}" connectionType="Customer"/>"><@s.text name="label.add_as_customer"/></a>
+                            </#if>
+                        </div>
+                        <div class="addConnectionLinkOrText">
+                            <#if action.isConnectedVendor(org)>
+                                <@s.text name="label.added_as_vendor"/>
+                            <#else>
+                                 <a href="<@s.url action="connectionInvitationAdd" searchText="${searchText}" uniqueID="${org.id}" connectionType="Vendor"/>"><@s.text name="label.add_as_vendor"/></a>
+                            </#if>
+                        </div>
                     </td>
                 </tr>
             </#list>

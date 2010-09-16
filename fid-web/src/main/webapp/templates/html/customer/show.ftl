@@ -2,6 +2,7 @@
 <head>
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
 	<@n4.includeStyle href="safetyNetworkCustomer" type="page"/>
+    <@n4.includeStyle href="vendor" type="page"/>
 </head>
 
 <#include '_customerInfo.ftl'>
