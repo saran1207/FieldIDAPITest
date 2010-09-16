@@ -1,0 +1,30 @@
+div.assetsCount {
+  width: 150px;
+  height: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 2.2em;
+  display: block;
+  float: left;
+  font-weight: bold;
+}
+
+div.registeredAssetsCount {
+  background: url("../../images/assets-registered-bg.png") no-repeat scroll 0 0 transparent;
+  color: #B7B7B7;
+}
+
+div.preassignedAssetsCount {
+  background: url("../../images/assets-preassigned-bg.png") no-repeat scroll 0 0 transparent;
+  color: #3D91B3;
+}
+
+div.countExplanation {
+  display: block;
+  float: left;
+  padding: 0 0 0 10px;
+}
+
+div.countExplanation h2 {
+  padding: 0 0 5px 0;
+}

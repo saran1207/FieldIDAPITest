@@ -52,7 +52,7 @@
 			<#list customerConnections as connection>
 				<li>
 					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
-						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
+						<a href="<@s.url action="showCustomer" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					<#else>
 						<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					</#if>
