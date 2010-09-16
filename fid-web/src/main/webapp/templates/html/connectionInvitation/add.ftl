@@ -7,6 +7,7 @@
 		<@s.hidden id="remoteOrgId" name="remoteOrgId" value=uniqueID/>
 		<@s.hidden id="searchText" name="searchText" value=searchText/>
 		<#assign organization = action.getRemoteOrg(uniqueID) />		
+		<#assign tenant = organization.tenant />		
 		<@s.hidden id="remoteTenantId" name="remoteTenantId" value="${organization.tenant.id}"/>
 		
 		<h1 class="safetyNetworkHeadings"> <@s.text name="label.add"/>&nbsp;${organization.name}&nbsp;<@s.text name="label.as_a_lowercase"/>&nbsp;${connectionType?lower_case}&nbsp;<@s.text name="label.connection"/>?</h1>
