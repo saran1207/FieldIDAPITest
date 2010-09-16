@@ -15,7 +15,7 @@ public class SafetyNetworkUnregisteredAssetCountLoader extends Loader<Long> {
     protected Long load(EntityManager em) {
         UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer);
 
-        String hql = "SELECT COUNT(*) " + helper.createBaseQuery();
+        String hql = helper.createCountQueryString();
 
         Query query = em.createQuery(hql);
         helper.applyParameters(query);

@@ -464,7 +464,7 @@ public class LoaderFactory {
     }
     
     public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader(){
-    	return new SafetyNetworkPreAssignedAssetLoader(filter);
+    	return new SafetyNetworkPreAssignedAssetLoader();
     }
 
     public TypedOrgConnectionListLoader createdTypedOrgConnectionListLoader() {

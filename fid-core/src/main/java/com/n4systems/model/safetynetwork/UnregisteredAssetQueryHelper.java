@@ -17,7 +17,7 @@ public class UnregisteredAssetQueryHelper {
         filter = new OrgOnlySecurityFilter(vendor);
     }
 
-    public String createBaseQuery() {
+    protected String createBaseQueryString() {
 
         // A pre assigned product is as-yet unregistered if there are no product entries out there whose linkedProduct
         // property points to it (when registered something preassigned, you get a new Product entry with linkedProduct
@@ -43,6 +43,15 @@ public class UnregisteredAssetQueryHelper {
         String securityConditions = filter.produceWhereClause(Product.class, "lp");
 
         return query + " AND " + securityConditions;
+    }
+
+    public String createCountQueryString() {
+        return "SELECT COUNT (*) " + createBaseQueryString();
+
+    }
+
+    public String createListQueryString() {
+        return "SELECT lp " + createBaseQueryString();
     }
 
     public void applyParameters(Query query) {

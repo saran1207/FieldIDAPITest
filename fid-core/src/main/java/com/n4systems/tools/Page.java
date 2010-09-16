@@ -1,5 +1,8 @@
 package com.n4systems.tools;
 
+import com.n4systems.persistence.utils.PostFetcher;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -24,9 +27,14 @@ public class Page<k> implements Pager<k> {
 	private long totalPages;
 	private Map<String,Object> resultContextMappings;
 	private String resultContextMappingGetStringWeb;
+
+    @SuppressWarnings("unchecked")
+	public Page(Query query, Query countQuery, Integer page, Integer pageSize) {
+        this(query, countQuery, page, pageSize, Collections.<String>emptyList());
+    }
 	
 	@SuppressWarnings("unchecked")
-	public Page(Query query, Query countQuery, Integer page, Integer pageSize) {
+	public Page(Query query, Query countQuery, Integer page, Integer pageSize, List<String> postFetchPaths) {
 		Long totalResults = (Long)countQuery.getSingleResult();
 		this.totalResults = totalResults.longValue();
 		this.totalPages = totalResults / pageSize;
@@ -40,6 +48,7 @@ public class Page<k> implements Pager<k> {
 		
 		// We set the page size to +1 so we know if there is a next page
 		results = query.setFirstResult( this.page * this.pageSize ).setMaxResults( this.pageSize + 1 ).getResultList();
+        PostFetcher.postFetchFields(results, postFetchPaths);
 	}
 	
 	public boolean isHasNextPage() {
