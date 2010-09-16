@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkImportPage;
+import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkInvitePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkSettingsPage;
@@ -24,12 +25,21 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	// Product Types
 	private static final String PRODUCT_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
-
+	
 	// Connection names
-	private static final String CONNECTION_NAME_1 = "Sea-Fit";
+	private static final String CONNECTION_UNIQUEID_1 = "15511513";
 	private static final String CONNECTION_NAME_2 = "CM";
 	private static final String ASSET_SERIAL_1 = "A09";
 
+	@Test
+	public void test_invite_page(){
+		SafetyNetworkPage safetyNetworkPage = startAsCompany("cglift").login().clickSafetyNetworkLink();
+		SafetyNetworkInvitePage invitePage= safetyNetworkPage.clickInvite();
+		invitePage.sendEmail();
+		assertTrue("Could not open Invitation page", invitePage!=null);		
+		
+	}
+	
 	@Test
 	public void test_static_page_contents() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("msa").login().clickSafetyNetworkLink();
@@ -45,7 +55,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	@Test
 	public void test_select_vendor() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("halo").login().clickSafetyNetworkLink();
-		safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
+		safetyNetworkPage.selectVendorConnection(CONNECTION_UNIQUEID_1);
 		assertTrue("Could open vendor connection profile", selenium.isElementPresent(connectionProfileName));
 	}
 	
@@ -68,7 +78,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	// TODO Wait for functionality.
 	public void test_search_for_assets_to_register_from_vendor() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("halo").login().clickSafetyNetworkLink();
-		VendorConnectionProfilePage connectionProfilePage = safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
+		VendorConnectionProfilePage connectionProfilePage = safetyNetworkPage.selectVendorConnection(CONNECTION_UNIQUEID_1);
 
 		connectionProfilePage.setAssetToSearchFor(ASSET_SERIAL_1);
 
@@ -77,7 +87,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	// TODO Wait for functionality.
 	public void test_view_all_assets_to_register_from_vendor() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("halo").login().clickSafetyNetworkLink();
-		VendorConnectionProfilePage connectionProfilePage = safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
+		VendorConnectionProfilePage connectionProfilePage = safetyNetworkPage.selectVendorConnection(CONNECTION_UNIQUEID_1);
 
 		connectionProfilePage.clickViewPreassignedAssets();
 	}
@@ -120,5 +130,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 		safetyNetworkSettingsPage.saveSettings();
 	}
+	
+
 
 }

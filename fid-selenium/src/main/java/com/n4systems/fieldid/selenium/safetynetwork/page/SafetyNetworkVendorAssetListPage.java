@@ -13,9 +13,9 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 		super(selenium);
 	}
 
-	public SafetyNetworkTraceabilityPage clickAsset(String serialNumber){
+	public SafetyNetworkVendorPage clickAsset(String serialNumber){
 		selenium.click("//a[.='" + serialNumber + "']");
-		return new SafetyNetworkTraceabilityPage(selenium);
+		return new SafetyNetworkVendorPage(selenium);
 	}
 	
 	public boolean hasAssetList() {
