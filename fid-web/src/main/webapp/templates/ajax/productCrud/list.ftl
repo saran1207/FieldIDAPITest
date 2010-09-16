@@ -4,6 +4,8 @@
 	<#include "/templates/html/inspectionGroup/_productList.ftl"/>
 </#assign>
 
+$$('input[name="search"]')[1].clear();
+$$('input[name="search"]')[1].focus();
 
 updateResults('${html?js_string}');
 $$('#searchResults .productLink').each(function(element) { element.observe('click', selectAsset) });
