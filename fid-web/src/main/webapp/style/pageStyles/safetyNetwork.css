@@ -56,16 +56,30 @@
 }
 
 #messageInput {
+	display:	block;
 	float: left;
-	width: 500px
+	width: 300px;
+}
+
+#messageInput .actions{
+	display: block;
+		margin-top: 30px;
+	}
+
+#messageInput a{
+	text-decoration: none;
+	color: #556DA5;
 }
 
 #messageSample {
+	display: block;
+	float: right;
 	background: #F8F8F8 none repeat scroll 0 0;
 	border: 1px solid;
 	overflow: hidden;
 	padding: 10px;
-	height: 330px;
+	height: 238px;
+	width: 410px;
 }
 
 #messageSample h4 {
@@ -81,7 +95,7 @@
 
 #sampleMessage {
 	border: 2px solid #888888;
-	height: 230px;
+	height: 140px;
 	overflow: auto;
 	padding: 5px;
 }
