@@ -6,7 +6,7 @@
 
 <div id="mainContent">
 <#if  page.hasResults() && page.validPage() >
-	<h2 id="inbox_heading" class="clean"><@s.text name="label.inbox"/></h2>
+	<h1 id="inbox_heading" class="clean"><@s.text name="label.inbox"/></h1>
 	<#assign currentAction="messages" />
 	<#include '../common/_pagination.ftl' />
 	<table class="list">

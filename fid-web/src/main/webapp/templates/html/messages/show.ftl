@@ -5,28 +5,40 @@
 <#include '../safetyNetwork/_safetyNetworkLayout.ftl'>
 <div id="mainContent">
 <div class="fullForm" >
-	
-	<div class="infoField">
-		<label for="from" class="label"><@s.text name="label.from"/></label>
-		<span class="fieldHolder">${message.sender?html}</span> 
-	</div>
 
-	<div class="infoField">
-		<label for="receiver" class="label"><@s.text name="label.to"/></label>
-		<span class="fieldHolder">${message.receiver?html}</span>
-	</div>
+	<h1><@s.text name="label.messagetitle"/></h1>
 	
-	<div class="infoField">
-		<label for="sentDate" class="label"><@s.text name="label.date"/></label>
-		<span class="fieldHolder">${action.formatDateTime(message.sentTime)}</span>
+	<div id="messageHeader">
+		
+		<div class="viewSection smallViewSection">
+			<p id="subject">${message.subject?html}</p>
+		</div>
+		<div class="viewSection smallViewSection">
+			<p>
+				<label for="from" class="label"><@s.text name="label.from"/></label>
+				<span class="fieldHolder">${message.sender?html}</span>
+			</p> 
+		</div>
+	
+		<div class="viewSection smallViewSection">
+			<p>
+				<label for="receiver" class="label"><@s.text name="label.to"/></label>
+				<span class="fieldHolder">${message.receiver?html}</span>
+			</p>
+		</div>
+		
+		<div class="viewSection smallViewSection">
+			<p>
+				<label for="sentDate" class="label"><@s.text name="label.date"/></label>
+				<span class="fieldHolder">${action.formatDateTime(message.sentTime)}</span>
+			</p>
+		</div>
+	
 	</div>
-	<div class="infoField">
-		<label for="subject" class="label"><@s.text name="label.subject"/></label>
-		<span class="fieldHolder">${message.subject?html}</span>
-	</div>
-	<div class="infoField">
-		<label for="body" class="label"><@s.text name="label.body"/></label>
-		<p class="fieldHolder">${action.replaceCR(message.body?html)}</p>
+	<div id="messageBody">
+		<div class="viewSection smallViewSection">
+			<p class="fieldHolder">${action.replaceCR(message.body?html)}</p>
+		</div>
 	</div>
 	<div class="actions">
 		<#if !message.command.processed>
