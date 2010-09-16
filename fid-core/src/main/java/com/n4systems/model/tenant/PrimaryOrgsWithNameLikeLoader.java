@@ -5,12 +5,14 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 
 public class PrimaryOrgsWithNameLikeLoader extends PaginatedLoader<PrimaryOrg> {
 
     private String name;
     private boolean searchableOnly;
+    private PrimaryOrg excludeOrg;
 
     public PrimaryOrgsWithNameLikeLoader(SecurityFilter filter) {
         super(filter);
@@ -22,8 +24,13 @@ public class PrimaryOrgsWithNameLikeLoader extends PaginatedLoader<PrimaryOrg> {
 
         queryBuilder.addWhere(WhereParameter.Comparator.LIKE, "name", "name", name, WhereParameter.WILDCARD_BOTH);
 
-        if (searchableOnly)
+        if (searchableOnly) {
             queryBuilder.addSimpleWhere("searchableOnSafetyNetwork", true);
+        }
+
+        if (excludeOrg != null) {
+            queryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "id", excludeOrg.getId()));
+        }
 
         return queryBuilder;
     }
@@ -38,4 +45,8 @@ public class PrimaryOrgsWithNameLikeLoader extends PaginatedLoader<PrimaryOrg> {
         return this;
     }
 
+    public PrimaryOrgsWithNameLikeLoader setExcludeOrg(PrimaryOrg excludeOrg) {
+        this.excludeOrg = excludeOrg;
+        return this;
+    }
 }
