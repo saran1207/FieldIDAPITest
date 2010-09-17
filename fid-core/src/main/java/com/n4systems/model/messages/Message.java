@@ -2,26 +2,32 @@ package com.n4systems.model.messages;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name="messages")
 public class Message extends EntityWithOwner {
 
-	private boolean unread = true;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "createdBy", nullable = false)
+	private User createdBy;
 	
-	@Column(nullable = false, length=255)
-	private String sender;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "sender_id")
+	private PrimaryOrg sender;
 	
-	@Column(nullable = false, length=255)
-	private String receiver;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "recipient_id")
+	private PrimaryOrg recipient;
 	
 	@Column(nullable = false, length=1000)
 	private String subject;
@@ -29,10 +35,21 @@ public class Message extends EntityWithOwner {
 	@Column(nullable = false)
 	private String body;
 	
-	@OneToOne(optional=false, cascade=CascadeType.REMOVE)
-	private MessageCommand command;
+	private boolean unread = true;
+	
+	private boolean vendorConnection;
+	
+	private boolean processed;
 	
 	public Message() {
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
 	}
 
 	public boolean isRead() {
@@ -51,20 +68,20 @@ public class Message extends EntityWithOwner {
 		unread = true;
 	}
 
-	public String getSender() {
+	public PrimaryOrg getSender() {
 		return sender;
 	}
 
-	public void setSender(InternalOrg sender) {
-		this.sender = sender.getName();
+	public void setSender(PrimaryOrg sender) {
+		this.sender = sender;
 	}
 
-	public String getReceiver() {
-		return receiver;
+	public PrimaryOrg getRecipient() {
+		return recipient;
 	}
 
-	public void setReceiver(InternalOrg receiver) {
-		this.receiver = receiver.getName();
+	public void setRecipient(PrimaryOrg receiver) {
+		this.recipient = receiver;
 		setOwner(receiver);
 		setTenant(receiver.getTenant());
 	}
@@ -88,13 +105,21 @@ public class Message extends EntityWithOwner {
 	public void setBody(String body) {
 		this.body = body;
 	}
-
-	public MessageCommand getCommand() {
-		return command;
+	
+	public boolean isProcessed() {
+		return processed;
 	}
 
-	public void setCommand(MessageCommand command) {
-		this.command = command;
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
+
+	public boolean isVendorConnection() {
+		return vendorConnection;
+	}
+
+	public void setVendorConnection(boolean vendorConnection) {
+		this.vendorConnection = vendorConnection;
 	}
 
 }

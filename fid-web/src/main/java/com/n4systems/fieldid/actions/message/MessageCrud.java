@@ -3,11 +3,11 @@ package com.n4systems.fieldid.actions.message;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.handlers.creator.safetynetwork.CreateConnectionHandler;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.persistence.Transaction;
@@ -83,9 +83,12 @@ public class MessageCrud extends SafetyNetwork {
 
 	public String doUpdate() {
 		testRequiredEntities(true);
-		if (!message.getCommand().isProcessed()) {
+		if (!message.isProcessed()) {
 			try {
 				processMessage();
+				message.setProcessed(true);
+				message.setModifiedBy(getUser());
+				new MessageSaver().update(message);
 				addFlashMessageText("message.connection_accepted");
 				return SUCCESS;
 			} catch (Exception e) {
@@ -108,11 +111,9 @@ public class MessageCrud extends SafetyNetwork {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
-			CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext(), getDefaultNotifier());
-			processor.setActor(getUser()).setNonSecureLoaderFactory(getNonSecureLoaderFactory());
-			
-			processor.process(message.getCommand(), transaction);
-			
+			CreateConnectionHandler handler = new CreateConnectionHandler(getConfigContext(), getDefaultNotifier(), getNonSecureLoaderFactory());
+			handler.withMessage(message).create(transaction);
+						
 			transaction.commit();
 		} catch (Exception e) {
 			transaction.rollback();

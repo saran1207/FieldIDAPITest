@@ -6,12 +6,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.commandprocessors.CreateSafetyNetworkConnectionCommandProcessor;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.handlers.creator.safetynetwork.ConnectionInvitationHandlerImpl;
+import com.n4systems.handlers.creator.safetynetwork.ConnectionInvitationHandler;
+import com.n4systems.handlers.creator.safetynetwork.CreateConnectionHandler;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.messages.CreateSafetyNetworkConnectionMessageCommand;
-import com.n4systems.model.messages.MessageCommandSaver;
+import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -88,57 +87,49 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	}
 
 	private void invite(Transaction transaction) {
-		CreateSafetyNetworkConnectionMessageCommand command = createCommand(transaction);
+		Message message = createMessage();
 		if (remoteOrg.getPrimaryOrg().isAutoAcceptConnections()) {
-			autoAcceptConnection(command, transaction);
+			autoAcceptConnection(transaction, message);
 		} else {
-			
-			sendInvitationMessage(command, transaction);
+			sendInvitationMessage(transaction, message);
 		}
 	}
 
-	private void autoAcceptConnection(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
-		CreateSafetyNetworkConnectionCommandProcessor processor = new CreateSafetyNetworkConnectionCommandProcessor(getConfigContext(), getDefaultNotifier());
-		processor.setNonSecureLoaderFactory(getNonSecureLoaderFactory());
-		processor.setActor(getUser());
-		processor.process(command, transaction);
+	private Message createMessage() {
+		Message message = new Message();
+		
+		message.setSender(getPrimaryOrg());
+		message.setRecipient(remoteOrg);
+		message.setVendorConnection(connectionType.equals(ConnectionType.VENDOR));
+		message.setCreatedBy(fetchCurrentUser());
+		message.setSubject(getDefaultMessageSubject());
+		message.setBody(getBody());
+		
+		return message;
 	}
 
-	private void sendInvitationMessage(CreateSafetyNetworkConnectionMessageCommand command, Transaction transaction) {
-		ConnectionInvitationHandlerImpl connectionCreator = new ConnectionInvitationHandlerImpl(new MessageSaver(), 
-				getDefaultNotifier(), 
-				getDefaultMessageSubject(), new AdminUserListLoader(new TenantOnlySecurityFilter(remoteOrg.getTenant())), new ActionURLBuilder(getBaseURI(), getConfigContext()));
+	private String getBody() {
+		return getPersonalizedBody().isEmpty() ? getDefautMessageBody() : getPersonalizedBody();
+	}
+
+	private void autoAcceptConnection(Transaction transaction, Message message) {
+		CreateConnectionHandler handler = new CreateConnectionHandler(getConfigContext(), getDefaultNotifier(), getNonSecureLoaderFactory());
+		handler.withMessage(message).create(transaction);
+	}
+
+	private void sendInvitationMessage(Transaction transaction, Message message) {
+		ConnectionInvitationHandler connectionCreator = new ConnectionInvitationHandler(new MessageSaver(),	getDefaultNotifier(), 
+				new AdminUserListLoader(new TenantOnlySecurityFilter(remoteOrg.getTenant())), new ActionURLBuilder(getBaseURI(), getConfigContext()));
 		
-		connectionCreator.withCommand(command).from(getPrimaryOrg()).to(remoteOrg).personalizeBody(personalizedBody);
-		
-		connectionCreator.create(transaction);
+		connectionCreator.withMessage(message).create(transaction);
 	}
 
 	public String getDefaultMessageSubject() {
 		return getText("label.invite_connection_subject.default");
 	}
-
+	
 	private String getDefautMessageBody() {
 		return getText("label.invite_connection_body.default", new String[]{getSessionUser().getName()});
-	}
-
-	private CreateSafetyNetworkConnectionMessageCommand createCommand(Transaction transaction) {
-		CreateSafetyNetworkConnectionMessageCommand command = new CreateSafetyNetworkConnectionMessageCommand();
-		
-		switch (connectionType) {
-			case CUSTOMER:
-				command.setCustomerOrgId(remoteOrg.getId());
-				command.setVendorOrgId(getPrimaryOrg().getId());
-				break;
-			case VENDOR:
-				command.setCustomerOrgId(getPrimaryOrg().getId());
-				command.setVendorOrgId(remoteOrg.getId());
-				break;
-		}
-		command.setCreatedBy(fetchCurrentUser());
-		
-		new MessageCommandSaver().save(transaction, command);
-		return command;
 	}
 
 	public String getConnectionType() {

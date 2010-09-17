@@ -49,6 +49,14 @@
 	padding: 1.5em;
 }
 
+#messageHeader img {
+	float:left;
+	display: block;
+	padding: 2em 1em 2em 0;
+	width: 150px
+}
+
+
 #messageBody {
 	padding: 1.5em;
 }

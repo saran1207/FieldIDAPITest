@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.n4systems.model.builders.PrimaryOrgBuilder;
-import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 
 public class MessageTest {
@@ -15,7 +15,7 @@ public class MessageTest {
 	@Test
 	public void should_set_the_senders_name_as_the_name_of_the_sender_org() throws Exception {
 		// fixture setup
-		InternalOrg sender = PrimaryOrgBuilder.aPrimaryOrg().withName("sender").build();
+		PrimaryOrg sender = PrimaryOrgBuilder.aPrimaryOrg().withName("sender").build();
 		
 		Message sut = new Message();
 		
@@ -23,30 +23,30 @@ public class MessageTest {
 		sut.setSender(sender);
 		
 		// verify
-		assertEquals(sender.getName(), sut.getSender());
+		assertEquals(sender.getName(), sut.getSender().getName());
 	}
 	
 	@Test
 	public void should_set_the_recievers_name_as_the_name_of_the_receiver() throws Exception {
 		// fixture setup
-		InternalOrg receiver = PrimaryOrgBuilder.aPrimaryOrg().withName("receiver").build();
+		PrimaryOrg receiver = PrimaryOrgBuilder.aPrimaryOrg().withName("receiver").build();
 		Message sut = new Message();
 		
 		// exercise
-		sut.setReceiver(receiver);
+		sut.setRecipient(receiver);
 		
 		// verify
-		assertEquals(receiver.getName(), sut.getReceiver());
+		assertEquals(receiver.getName(), sut.getRecipient().getName());
 	}
 	
 	@Test
 	public void should_set_the_owner_to_match_the_receiver() throws Exception {
 		// fixture setup
-		InternalOrg receiver = PrimaryOrgBuilder.aPrimaryOrg().withName("receiver").build();
+		PrimaryOrg receiver = PrimaryOrgBuilder.aPrimaryOrg().withName("receiver").build();
 		Message sut = new Message();
 		
 		// exercise
-		sut.setReceiver(receiver);
+		sut.setRecipient(receiver);
 		
 		// verify
 		assertEquals(receiver, sut.getOwner());
@@ -56,11 +56,11 @@ public class MessageTest {
 	@Test
 	public void should_set_the_tenat_to_match_the_receivers_tenant() throws Exception {
 		// fixture setup
-		InternalOrg receiver = PrimaryOrgBuilder.aPrimaryOrg().withName("receiver").build();
+		PrimaryOrg receiver = PrimaryOrgBuilder.aPrimaryOrg().withName("receiver").build();
 		Message sut = new Message();
 		
 		// exercise
-		sut.setReceiver(receiver);
+		sut.setRecipient(receiver);
 		
 		// verify
 		assertEquals(receiver.getTenant(), sut.getTenant());

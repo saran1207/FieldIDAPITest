@@ -9,21 +9,22 @@
 	<h1><@s.text name="label.messagetitle"/></h1>
 	
 	<div id="messageHeader">
-		
+		<#assign tenant = message.sender>
+		<#include "../common/_displayTenantLogo.ftl"/>
 		<div class="viewSection smallViewSection">
 			<p id="subject">${message.subject?html}</p>
 		</div>
 		<div class="viewSection smallViewSection">
 			<p>
 				<label for="from" class="label"><@s.text name="label.from"/></label>
-				<span class="fieldHolder">${message.sender?html}</span>
+				<span class="fieldHolder">${message.sender.name?html}</span>
 			</p> 
 		</div>
 	
 		<div class="viewSection smallViewSection">
 			<p>
 				<label for="receiver" class="label"><@s.text name="label.to"/></label>
-				<span class="fieldHolder">${message.receiver?html}</span>
+				<span class="fieldHolder">${message.recipient.name?html}</span>
 			</p>
 		</div>
 		
@@ -41,7 +42,7 @@
 		</div>
 	</div>
 	<div class="actions">
-		<#if !message.command.processed>
+		<#if !message.processed>
 			<@s.form action="messageUpdate" theme="fieldid" >
 				<@s.hidden name="uniqueID"/>
 				<@s.submit key="label.accept" id="accept"/>

@@ -18,8 +18,8 @@
 		</tr>
 		<#list page.getList() as message > 
 			<tr id="message_${message.id}" <#if message.unread>class="unread"</#if>>
-				<td>${message.sender?html}</td>
-				<td>${message.receiver?html}</td>
+				<td>${message.sender.name?html}</td>
+				<td>${message.recipient.name?html}</td>
 				<td><a href="<@s.url action="message" uniqueID="${message.id}"/>">${helper.trimString(message.subject, 150)?html}</a></td>
 				<td>${action.formatDateTime(message.sentTime)}</td>
 			</tr>
