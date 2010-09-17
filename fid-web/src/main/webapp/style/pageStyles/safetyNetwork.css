@@ -135,7 +135,6 @@
 
 .safetyNetworkSplash {
 	display: block;
-	float: left;
 	padding: 1.5em 0 0 2em;
 	margin-top: 5px;
 	overflow: hidden;
@@ -305,6 +304,18 @@ div#sendAnInvite {
 form#privacySettingsSave h2 {
     font-weight: normal;
     background-color: #EAEAEA;
+}
+
+form#privacySettingsSave div.settingsHeader {
+    width: 100%;
+    font-weight: normal;
+    background-color: #EAEAEA;
+    display: block;
+    font-size: 1.2em;
+    line-height: 21px;
+    padding: 5px 15px;
+    text-align: left;
+    margin: 0;
 }
 
 form#privacySettingsSave label {

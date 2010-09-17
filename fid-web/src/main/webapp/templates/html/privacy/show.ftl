@@ -4,21 +4,21 @@
 
     <@s.form action="privacySettingsSave" cssClass="fullForm" theme="fieldid" >
 
-        <h2><@s.text name="label.searchable" /></h2>
+        <div class="settingsHeader"><@s.text name="label.searchable" /></div>
 
         <div class="check">
             <@s.checkbox id="chkSearchable" name="searchableOnSafetyNetwork" />
             <label for="chkSearchable" class="label"><@s.text name="label.searchable_info" /></label>
         </div>
 
-        <h2><@s.text name="label.autopublish" /></h2>
+        <div class="settingsHeader"><@s.text name="label.autopublish" /></div>
 
         <div class="check">
             <@s.checkbox id="chkAutoPublish" name="autoPublish" />
             <label for="chkAutoPublish" class="label"><@s.text name="label.autopublish_info" /></label>
         </div>
 
-        <h2><@s.text name="label.autoaccept" /></h2>
+        <div class="settingsHeader"><@s.text name="label.autoaccept" /></div>
 
         <div class="check">
             <@s.checkbox id="chkAutoAcceptConnections" name="autoAcceptConnections" />
