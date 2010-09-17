@@ -30,6 +30,7 @@ function promptForLogin() {
 		options: {
 			topclose: false,
 			closeButton: false,
+			keyboard: false,
 			width: 500,
 			height: 300,
 			ajax: {
@@ -53,6 +54,7 @@ function quickLoginSubmit( event ) {
 		title: loginWindowTitle,
 		options: {
 			topclose: false,
+			closeButton: false,
 			width: 500,
 			height: 300,
 			ajax: {

@@ -22,6 +22,8 @@
 	<@s.password name="signIn.password" id="password"/>
 	<div class="formAction">
 		<@s.submit name="hbutton.login" id="loginButton"/>
+		<@s.url action="login" namespace="/" id="cancelUrl"/>
+		<@s.submit key="hbutton.back_to_login" onclick="redirect('${cancelUrl}');"/>
 	</div>
 		
 </@s.form>
