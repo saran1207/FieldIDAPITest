@@ -8,8 +8,10 @@ import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
 import java.net.URI;
 
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.AdminUserListLoader;
@@ -22,17 +24,17 @@ import com.n4systems.util.uri.ActionURLBuilder;
 
 public class ConnectionInvitationHandlerTest {
 	
-	private ConnectionInvitationHandler handler;
 	private MessageSaver saver;
 	private User adminUser;
 	private PrimaryOrg remoteOrg;
 	private PrimaryOrg localOrg;
+	private Transaction transaction;
 	
 	private static final String BASE_URI = "https://n4.fielid.com/";
 	
+	@Before
 	public void setUp() {
 		saver = createMock(MessageSaver.class);
-		handler = new ConnectionInvitationHandler(saver, new NullNotifier(), getAdminLoader(), getActionURLBuilder());
 		adminUser = anAdminUser().build();
 		remoteOrg = aPrimaryOrg().withName("receiving org").build();
 		localOrg = aPrimaryOrg().withName("sending org").build();
@@ -40,10 +42,45 @@ public class ConnectionInvitationHandlerTest {
 	
 	
 	@Test
-	public void testname() throws Exception {
+	public void test_save_message_and_notification() throws Exception {
+		Message message = createMessage();
+		saver.save(transaction, message);
+		replay(saver);
 		
+		ConnectionInvitationHandler handler = getHandler();
+		
+		handler.withMessage(message).create(transaction);
+		
+		verify(saver);
 	}
 	
+	@Test
+	public void test_null_message_and_notification() throws Exception {
+
+		ConnectionInvitationHandler handler = getHandler();
+
+		try {
+			handler.create(transaction);
+		} catch (Exception e) {
+			return;
+		}
+		fail();
+	}
+	
+	private ConnectionInvitationHandler getHandler() {
+		return new ConnectionInvitationHandler(saver, new NullNotifier(), getAdminLoader(), getActionURLBuilder());
+	}
+	
+	private Message createMessage() {
+		Message message = new Message();
+		message.setSender(localOrg);
+		message.setRecipient(remoteOrg);
+		message.setSubject("test");
+		message.setBody("test");
+		message.setVendorConnection(true);
+		return message;
+	}
+
 	private AdminUserListLoader getAdminLoader() {
 		AdminUserListLoader adminLoader = createMock(AdminUserListLoader.class);
 		

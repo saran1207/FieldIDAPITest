@@ -40,6 +40,12 @@ public class ConnectionInvitationHandler implements CreateHandler {
 		if (message == null) { 
 			throw new InvalidArgumentException("you must give a message to create an invitation.");
 		}
+		if (message.getSender() == null) { 
+			throw new InvalidArgumentException("message must have a sender.");
+		}
+		if (message.getRecipient() == null) { 
+			throw new InvalidArgumentException("message must have a recipient");
+		}
 	}
 
 	private void saveMessage(Transaction transaction, Message message) {

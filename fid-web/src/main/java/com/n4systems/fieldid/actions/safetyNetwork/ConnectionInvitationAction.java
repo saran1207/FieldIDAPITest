@@ -109,7 +109,7 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	}
 
 	private String getBody() {
-		return getPersonalizedBody().isEmpty() ? getDefautMessageBody() : getPersonalizedBody();
+		return getPersonalizedBody().trim().isEmpty() ? getDefautMessageBody() : getPersonalizedBody();
 	}
 
 	private void autoAcceptConnection(Transaction transaction, Message message) {
