@@ -52,7 +52,7 @@ function getResponseNonInteractive(url, method, parameters) {
 	if (parameters == undefined) {
 		parameters = null;
 	}
-	getResponse(url, method, parameters);
+	getResponse(url, method, parameters, true);
 }
 
 function getStandardCallbacks() {

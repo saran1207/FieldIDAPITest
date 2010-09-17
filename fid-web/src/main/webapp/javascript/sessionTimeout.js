@@ -29,6 +29,7 @@ function promptForLogin() {
 		title: loginWindowTitle,
 		options: {
 			topclose: false,
+			closeButton: false,
 			width: 500,
 			height: 300,
 			ajax: {
