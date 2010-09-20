@@ -21,7 +21,8 @@
 			<div id="inviteCompanyInfo" class="companyInvite">
 		    	${(organization.name?html)!}
 		        <#if organization.webSite?exists>
-		            <a href="${action.createHref(organization.webSite)}">${organization.webSite}</a>
+		        	<br/>
+		       		<a href="${action.createHref(organization.webSite)}">${organization.webSite}</a>
 		        </#if>
 			</div>
 		</div>

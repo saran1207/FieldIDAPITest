@@ -100,7 +100,7 @@
 	padding: 5px;
 }
 
-#safetyNetworkSplash a, #leftConnectionsColumn a{
+.safetyHeading a, .addConnectionLinkOrText a, #leftConnectionsColumn a{
 	text-decoration: none;
 	color: #556DA5;
 	display: block;
@@ -154,7 +154,7 @@
 	margin-bottom:0.35em
 }	
 
-#safetyNetworkSplash .safetyHeading a:hover{
+#inviteCompany a:hover{
 	text-decoration: underline;
 }
 
@@ -211,6 +211,7 @@
 #inviteCompany a{
 	color: #333333;	
 	font-size:1.1em;
+	text-decoration: none;
 }
 
 #safetyNetworkCustomerList, #safetyNetworkCatalogOnlyList {
