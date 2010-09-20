@@ -5,7 +5,8 @@
 		<#include "../common/_displayTenantLogo.ftl"/>
 	</a>
 	<ul>
-		<li><a href="<@s.url action="publishedCatalog" uniqueID="${customer.tenant.id}"/>" ><@s.text name="label.view_catalog"/></a></li>
+		<li><a href="<@s.url action="safetyNetwork"/>" ><@s.text name="label.safetynetworkhome"/></a></li>
+		<li><a href="<@s.url action="customerCatalog" uniqueID="${customer.tenant.id}"/>" ><@s.text name="label.view_catalog"/></a></li>
 	</ul>
 	<h3 id="companyInfo"><@s.text name="label.companyinfo"/></h3>
     <#assign org = customer/>

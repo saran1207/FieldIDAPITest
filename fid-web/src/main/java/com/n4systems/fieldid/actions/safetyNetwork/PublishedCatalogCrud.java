@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantCache;
 import org.apache.log4j.Logger;
 
 
@@ -63,6 +65,18 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		linkedTenant = persistenceManager.find(Tenant.class, uniqueId);
 		
 	}
+
+    public PrimaryOrg getCustomer() {
+        return getPrimaryOrgForThisTenant();
+    }
+
+    public PrimaryOrg getVendor() {
+        return getPrimaryOrgForThisTenant();
+    }
+
+    protected PrimaryOrg getPrimaryOrgForThisTenant() {
+        return TenantCache.getInstance().findPrimaryOrg(uniqueID);
+    }
 	
 	public String doShow() {
 		testPreconditions();

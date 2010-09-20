@@ -11,7 +11,7 @@ div.assetsCount {
 
 div.registeredAssetsCount {
   background: url("../../images/assets-registered-bg.png") no-repeat scroll 0 0 transparent;
-  color: #B7B7B7;
+  color: #777777;
 }
 
 div.preassignedAssetsCount {

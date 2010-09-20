@@ -8,7 +8,7 @@
 	<ul>
 		<li><a href="<@s.url value="showVendor.action" uniqueID="${vendor.id}" />" > <@s.text name="label.register_asset"/></a></li>
 		<li><a href="<@s.url value="preAssignedAssets.action" uniqueID="${vendor.id}" />" > <@s.text name="label.view_pre_assigned_asset"/></a></li>
-		<li><a href="<@s.url value="publishedCatalog.action" uniqueID="${vendor.tenant.id}"/>" ><@s.text name="label.view_catalog"/></a></li>
+		<li><a href="<@s.url value="vendorCatalog.action" uniqueID="${vendor.tenant.id}"/>" ><@s.text name="label.view_catalog"/></a></li>
 	</ul>	
 	<h3 id="companyInfo"><@s.text name="label.companyinfo"/></h3>
 	<p>${vendor.name}</p>

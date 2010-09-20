@@ -1583,7 +1583,21 @@
 			<result name="input" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
 		</action>
 
+		<action name="customerCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+			<result name="success" type="freemarker">/templates/html/publishedCatalog/show_customer.ftl</result>
+			<result name="input" type="freemarker">/templates/html/publishedCatalog/show_customer.ftl</result>
+		</action>
 
+		<action name="vendorCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+			<result name="success" type="freemarker">/templates/html/publishedCatalog/show_vendor.ftl</result>
+			<result name="input" type="freemarker">/templates/html/publishedCatalog/show_vendor.ftl</result>
+		</action>
+
+        <action name="publishedCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+            <result name="success" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
+            <result name="input" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
+        </action>
+        
 		<action name="organizations" method="list" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
