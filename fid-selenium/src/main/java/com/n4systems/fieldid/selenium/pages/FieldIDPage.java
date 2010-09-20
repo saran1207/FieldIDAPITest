@@ -29,6 +29,11 @@ public class FieldIDPage extends WebPage {
 		return new HomePage(selenium);
 	}
 
+    public LoginPage clickSignOut() {
+        selenium.click("//div[@id='pageActions']//a[.='Sign Out']");
+        return new LoginPage(selenium);
+    }
+
 	public SafetyNetworkPage clickSafetyNetworkLink() {
 		selenium.click("//div[@id='pageNavigation']//a[.='Safety Network']");
 		return new SafetyNetworkPage(selenium);

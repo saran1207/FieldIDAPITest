@@ -2,10 +2,10 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertTrue;
 
+import com.n4systems.fieldid.selenium.safetynetwork.page.CustomerConnectionProfilePage;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkImportPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkInvitePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
@@ -62,7 +62,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	@Test
 	public void test_select_customer() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("cglift").login().clickSafetyNetworkLink();
-		SafetyNetworkImportPage safetyNetworkImportPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_2);
+		CustomerConnectionProfilePage safetyNetworkImportPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_2);
 		assertTrue("Could open customer Import page", safetyNetworkImportPage!=null);
 	}
 

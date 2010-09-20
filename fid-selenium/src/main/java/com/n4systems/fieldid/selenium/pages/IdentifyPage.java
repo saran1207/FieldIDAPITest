@@ -81,7 +81,7 @@ public class IdentifyPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Identify')][contains(text(),'Order Number " + orderNumber + "')]");
 	}
 	
-	public Product setAddAssetForm(Product p, boolean generate) throws InterruptedException {
+	public Product setAddAssetForm(Product p, boolean generate) {
 		if(generate) {
 			selenium.click("//a[contains(text(),'generate')]");
 		}
@@ -138,7 +138,7 @@ public class IdentifyPage extends FieldIDPage {
 		return p;
 	}
 	
-	public void setRegisterThisAssetOverTheSafetyNetwork(SafetyNetworkRegistration registration) throws InterruptedException {
+	public void setRegisterThisAssetOverTheSafetyNetwork(SafetyNetworkRegistration registration) {
 		if(selenium.isElementPresent("//a[@id='showSmartSearchLink']")) {
 			selenium.click("//a[@id='showSmartSearchLink']");
 			String vendor = registration.getVendor();

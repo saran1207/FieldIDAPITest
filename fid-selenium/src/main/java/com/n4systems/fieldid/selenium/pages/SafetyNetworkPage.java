@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.pages;
 
 import com.n4systems.fieldid.selenium.pages.safetynetwork.FindConnectionResultsPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkImportPage;
+import com.n4systems.fieldid.selenium.safetynetwork.page.CustomerConnectionProfilePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkInvitePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
@@ -35,9 +35,9 @@ public class SafetyNetworkPage extends FieldIDPage {
 		return new VendorConnectionProfilePage(selenium);
 	}
 
-	public SafetyNetworkImportPage selectCustomerConnection(String connectionName) {
+	public CustomerConnectionProfilePage selectCustomerConnection(String connectionName) {
 		selenium.click("//ul[@id='safetyNetworkCustomerList']/li/a[.='" + connectionName + "']");
-		return new SafetyNetworkImportPage(selenium);
+		return new CustomerConnectionProfilePage(selenium);
 	}
 	
 	public SafetyNetworkInvitePage clickInvite(){

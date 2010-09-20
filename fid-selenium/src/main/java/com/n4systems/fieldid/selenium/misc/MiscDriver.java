@@ -118,55 +118,15 @@ public class MiscDriver {
 		}
 	}
 	
-	/**
-	 * Clicks the Secured By Thawte logo on the login page.
-	 * @deprecated times out for some reason. don't use it!
-	 */
-	public void popupThawteSiteSeal() {
-		if(selenium.isElementPresent(securedByThawteLinkLocator)) {
-			selenium.click(securedByThawteLinkLocator);
-			if(!confirmPopupWindow(thawteSiteSealWindowLocator)) {
-				fail("Could not find the Thawte siteseal window");
-			}
-		}
-	}
-	
 	private boolean confirmPopupWindow(String locator) {
 		try {
 			selenium.waitForPopUp("", DEFAULT_TIMEOUT);
 			selenium.selectWindow(locator);
 			selenium.close();
 			selenium.selectWindow("");
+            return true;
 		} catch (Exception e) {
 			return false;
-		}
-		return true;
-	}
-	
-	public String promptForUserInput(String timeout) {
-		String jsFunctionName = "promptUser()";
-		String jsFunction = "function " + jsFunctionName + " { var result = prompt(\"Input: \", \"\"); return result; }";
-		selenium.setTimeout(timeout);
-		selenium.addScript(jsFunction, "");
-		return selenium.getEval(jsFunctionName);
-	}
-	
-	/**
-	 * If present this will click the link "ABOUT SSL CERTIFICATES" on the
-	 * login page. This link is only present when the domain is *.fieldid.com.
-	 * If this link is not present, this method will do nothing.
-	 * 
-	 * To simulate this on a test machine, set www.field.com to the IP address
-	 * of the test machine in the test machine's hosts file. Then run the
-	 * tests with the host set to fieldid.fieldid.com.
-	 * 
-	 */
-	public void popupThawteDotCom() {
-		if(selenium.isElementPresent(thawteAboutSSLCertificatesLinkLocator)) {
-			selenium.click(thawteAboutSSLCertificatesLinkLocator);
-			if(!confirmPopupWindow(thawteWindowLocator)) {
-				fail("Could not find the Thawte Products window");
-			}
 		}
 	}
 	
