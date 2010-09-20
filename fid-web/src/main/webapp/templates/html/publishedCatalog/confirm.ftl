@@ -48,6 +48,6 @@
 		
 	<div class="stepAction">
 		<@s.submit key="label.start_import_now" id="import" onclick="$('step3Form').request(getStandardCallbacks());  toStep(4, 'step4Loading'); return false;"/>
-		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
+		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="scroll(0,0); backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
 	</div>
 </@s.form>

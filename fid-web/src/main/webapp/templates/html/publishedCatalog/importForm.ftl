@@ -20,7 +20,7 @@
 	
 		<div class="stepAction">
 			<@s.submit key="label.continue" id="continue" onclick="$('step2Form').request(getStandardCallbacks()); toStep(3, 'step3Loading'); return false;"/>
-			<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(1)"><@s.text name="label.back_to_step"/> 1</a>
+			<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="scroll(0,0); backToStep(1)"><@s.text name="label.back_to_step"/> 1</a>
 		</div>	
 	</@s.form>
 </#if>
