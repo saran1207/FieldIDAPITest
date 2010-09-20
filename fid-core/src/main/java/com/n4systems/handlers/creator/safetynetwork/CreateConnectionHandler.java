@@ -10,21 +10,19 @@ import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.notifications.ConnectionInvitationAcceptedNotification;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
 public class CreateConnectionHandler implements CreateHandler{
 	
-	private final ConfigContext currentContext;
+	private OrgConnectionSaver saver;
 	private final Notifier notifier;
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
 	private Message message;
 	private PrimaryOrg customer;
 	private PrimaryOrg vendor;
 	
-	public CreateConnectionHandler(ConfigContext currentContext, 
+	public CreateConnectionHandler(OrgConnectionSaver saver, 
 			Notifier notifier, NonSecureLoaderFactory nonSecureLoaderFactory) {
-		this.currentContext = currentContext;
+		this.saver = saver;
 		this.notifier = notifier;
 		this.nonSecureLoaderFactory = nonSecureLoaderFactory;
 	}
@@ -51,7 +49,6 @@ public class CreateConnectionHandler implements CreateHandler{
 	}
 
 	private void saveConnection(OrgConnection connection, Transaction transaction) {
-		OrgConnectionSaver saver = new OrgConnectionSaver(currentContext.getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID));
 		saver.save(transaction, connection);
 	}
 

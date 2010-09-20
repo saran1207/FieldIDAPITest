@@ -15,12 +15,14 @@ import com.n4systems.model.messages.MessageSaver;
 import com.n4systems.model.orgs.InternalOrgListableLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgListableLoader;
+import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -113,7 +115,9 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	}
 
 	private void autoAcceptConnection(Transaction transaction, Message message) {
-		CreateConnectionHandler handler = new CreateConnectionHandler(getConfigContext(), getDefaultNotifier(), getNonSecureLoaderFactory());
+		OrgConnectionSaver saver = new OrgConnectionSaver(getConfigContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID));
+		CreateConnectionHandler handler = new CreateConnectionHandler(saver, getDefaultNotifier(), getNonSecureLoaderFactory());
+		
 		handler.withMessage(message).create(transaction);
 	}
 

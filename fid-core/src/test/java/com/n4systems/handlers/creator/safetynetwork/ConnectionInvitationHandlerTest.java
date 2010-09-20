@@ -19,6 +19,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.notifiers.NullNotifier;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.FluentArrayList;
+import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
 import com.n4systems.util.uri.ActionURLBuilder;
 
@@ -38,6 +39,7 @@ public class ConnectionInvitationHandlerTest {
 		adminUser = anAdminUser().build();
 		remoteOrg = aPrimaryOrg().withName("receiving org").build();
 		localOrg = aPrimaryOrg().withName("sending org").build();
+		transaction = new DummyTransaction();
 	}
 	
 	

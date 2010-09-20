@@ -10,9 +10,11 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.safetynetwork.CreateConnectionHandler;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.messages.MessageSaver;
+import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.ConfigEntry;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class MessageCrud extends SafetyNetwork {
@@ -111,7 +113,9 @@ public class MessageCrud extends SafetyNetwork {
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		
 		try {
-			CreateConnectionHandler handler = new CreateConnectionHandler(getConfigContext(), getDefaultNotifier(), getNonSecureLoaderFactory());
+			OrgConnectionSaver saver = new OrgConnectionSaver(getConfigContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID));
+			
+			CreateConnectionHandler handler = new CreateConnectionHandler(saver, getDefaultNotifier(), getNonSecureLoaderFactory());
 			handler.withMessage(message).create(transaction);
 						
 			transaction.commit();
