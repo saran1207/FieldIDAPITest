@@ -42,6 +42,9 @@
 					</div>
 					<div class="stepAction">
 						<@s.submit key="label.publish" id="publish"/>
+						<@s.url id="cancelUrl" action="safetyNetwork"/>
+						<@s.text name="label.or"/> 
+						<a href="#" onclick="redirect('${cancelUrl}'); return false;"/><@s.text name="label.cancel"/></a>
 					</div>
 				</@s.form>
 			</div>

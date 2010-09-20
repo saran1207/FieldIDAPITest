@@ -42,6 +42,10 @@
 	padding-left: 10px;
 }
 
+.stepAction{
+	font-size: 1.1em;	
+}
+
 #messageInput .infoField .inline {
 	display: inline;
 }
