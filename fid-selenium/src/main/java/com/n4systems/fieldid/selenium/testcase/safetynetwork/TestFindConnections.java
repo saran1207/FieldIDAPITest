@@ -46,11 +46,7 @@ public class TestFindConnections extends PageNavigatingTestCase<SafetyNetworkPag
 
         List<Organization> orgs = resultsPage.getOrganizationSearchResults();
 
-        for (Organization org : orgs) {
-            System.out.println("Org: " + org.getName());
-        }
-
-        assertEquals(19, orgs.size());
+        assertEquals(18, orgs.size());
 
         assertNotNull(findOrgNamed("Key Constructors Inc.", orgs));
         assertNotNull(findOrgNamed("Peintre inc", orgs));
