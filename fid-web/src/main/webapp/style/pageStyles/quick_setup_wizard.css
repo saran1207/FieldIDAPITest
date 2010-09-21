@@ -1,14 +1,14 @@
-h2 {
-	font-size: 2em;
-}
-
 .setupWizardContent {
 	width:680px;
-	float:right;
 	margin:20px 0px;
 	padding-left: 70px;
 }
 
+#pageContent #steps{
+	display: block;
+	clear:both;
+	float: left;
+	}
 
 #setupWizardComplete {
 	background: no-repeat url(../../images/small-check.png);
