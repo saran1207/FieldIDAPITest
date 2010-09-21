@@ -68,10 +68,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		SystemSettingsPage settingsPage = wizardPage.clickSetupLink().clickSystemSettings();
 		boolean hasVendors = (expected.getDefaultVendorContext() != null);
 		SystemSettings systemSettings = settingsPage.getSystemSettings(hasVendors);
-			assertTrue(expected.getPreferredDateFormat().equals(systemSettings.getPreferredDateFormat()));
-		if(hasVendors) {
-			assertTrue(expected.getDefaultVendorContext().equals(systemSettings.getDefaultVendorContext()));
-		}
+		assertTrue(expected.getPreferredDateFormat().equals(systemSettings.getPreferredDateFormat()));
 		assertEquals(expected.getWebSiteAddress(), systemSettings.getWebSiteAddress());
 	}
 
@@ -86,10 +83,6 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		page.verifyQuickSetupWizardSystemSettingsPage(referrer);
 		String prefDateFormat = page.getPreferredDateFormat();
 		systemSettings.setPreferredDateFormat(prefDateFormat);
-		if(referrer) {
-			String dvc = page.getDefaultVendorContext();
-			systemSettings.setDefaultVendorContext(dvc);
-		}
 		String wsa = page.getWebSiteAddress();
 		systemSettings.setWebSiteAddress(wsa);
 		page.gotoQuickSetupWizardStep3();
