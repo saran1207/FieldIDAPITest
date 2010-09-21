@@ -30,8 +30,8 @@ public class SafetyNetworkPage extends FieldIDPage {
 		return new SafetyNetworkSettingsPage(selenium);
 	}
 
-	public VendorConnectionProfilePage selectVendorConnection(String uniqueID) {
-		selenium.click("//a[@href='/fieldid/showVendor.action?uniqueID="+ uniqueID +"']");
+	public VendorConnectionProfilePage selectVendorConnection(String connectionName) {
+        selenium.click("//ul[@id='safetyNetworkVendorList']/li/a[.='" + connectionName + "']");
 		return new VendorConnectionProfilePage(selenium);
 	}
 

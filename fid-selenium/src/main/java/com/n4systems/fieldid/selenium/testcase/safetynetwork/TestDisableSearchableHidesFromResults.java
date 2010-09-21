@@ -15,25 +15,29 @@ public class TestDisableSearchableHidesFromResults extends PageNavigatingTestCas
 
     @Override
     protected SafetyNetworkPage navigateToPage() {
-        return startAsCompany("aacm").login().clickSafetyNetworkLink();
+        return startAsCompany("allway").login().clickSafetyNetworkLink();
     }
 
     @Test
     public void should_find_company_when_searchable_is_on() throws Exception {
         ensureVisibilityIsSetTo(true, page);
 
-        FindConnectionResultsPage resultsPage = page.findConnections("all american");
+        page = startAsCompany("n4").login().clickSafetyNetworkLink();
+
+        FindConnectionResultsPage resultsPage = page.findConnections("all-way");
 
         List<Organization> matchingOrgs = resultsPage.getOrganizationSearchResults();
         assertEquals(1, matchingOrgs.size());
-        assertEquals("All American Crane Maintenance", matchingOrgs.get(0).getName());
+        assertEquals("All-Way Wire Rope and Splicing Inc.", matchingOrgs.get(0).getName());
     }
 
     @Test
     public void should_not_find_company_when_searchable_is_off() throws Exception {
         ensureVisibilityIsSetTo(false, page);
 
-        FindConnectionResultsPage resultsPage = page.findConnections("all american");
+        page = startAsCompany("n4").login().clickSafetyNetworkLink();
+
+        FindConnectionResultsPage resultsPage = page.findConnections("all-way");
 
         List<Organization> matchingOrgs = resultsPage.getOrganizationSearchResults();
         assertEquals(0, matchingOrgs.size());
