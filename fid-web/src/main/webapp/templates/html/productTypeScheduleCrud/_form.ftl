@@ -21,7 +21,7 @@
 	
 	<span class="frequency">
 		<@s.text name="label.capital_schedule_a"/> <b>${inspectionType.name}</b> &nbsp; <@s.text name="label.every"/>
-		<@s.textfield name="frequency" /> <@s.text name="label.days"/>
+		<@s.textfield name="frequency" onkeypress="if (event.keyCode==13) {saveSchedule( ${formId} ); return false;} return true;" /> <@s.text name="label.days"/>
 	</span>
 	<br/>
 	<span class="autoSchedule">
