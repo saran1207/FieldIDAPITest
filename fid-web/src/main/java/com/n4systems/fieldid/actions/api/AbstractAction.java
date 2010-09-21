@@ -477,10 +477,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return DownloadLinkAction.buildDownloadUrl(this);
 	}
 	
-	public List<ListingPair> getVendorContextList() {
-		return Cache.getVendorListStore().getAsListingPair(getSessionUserOwner().getInternalOrg());
-	}
-	
 	public void setVendorContext(Long vendorContext) {
 		getSession().setVendorContext(vendorContext);
 	}
@@ -509,21 +505,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return Boolean.toString(useContext);
 	}
 	
-	public String getCurrentVendorContextName() {
-		if (getVendorContext() == null) {
-			return "label.my_company";
-		}
-		
-		Long contextId = getVendorContext();
-		String name = null;
-		for (ListingPair vendor: getVendorContextList()) {
-			if (contextId.equals(vendor.getId())) {
-				name = vendor.getName();
-				break;
-			}
-		}
-		return name;
-	}
 
 	/**
 	 * used for the on radio button list

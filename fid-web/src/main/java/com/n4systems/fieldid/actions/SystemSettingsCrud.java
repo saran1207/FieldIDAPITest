@@ -38,7 +38,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private PrimaryOrg primaryOrg;
 
 	private String dateFormat;
-	private Long defaultVendorContext;
 
 	private String webSite;
 	private File uploadedImage;
@@ -73,7 +72,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@SkipValidation
 	public String doEdit() {
 		dateFormat = primaryOrg.getDateFormat();
-		defaultVendorContext = primaryOrg.getDefaultVendorContext();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
 		webSite = primaryOrg.getWebSite();
 
@@ -122,7 +120,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 		}
 		
 		primaryOrg.setDateFormat(dateFormat);
-		primaryOrg.setDefaultVendorContext(defaultVendorContext);
 		
 		
 	}
@@ -240,31 +237,5 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	public UpgradePackageFilter currentPackageFilter() {
 		return accountHelper.currentPackageFilter();
-	}
-
-	public Long getDefaultVendorContext() {
-		return defaultVendorContext;
-	}
-
-	@FieldExpressionValidator(message = "", key = "error.selected_company_is_not_one_of_your_vendors", expression = "(validVendor == true)")
-	public void setDefaultVendorContext(Long defaultVendorContext) {
-		if (defaultVendorContext == null || defaultVendorContext.equals(getPrimaryOrg().getId())) {
-			this.defaultVendorContext = null;
-		} else {
-			this.defaultVendorContext = defaultVendorContext;
-		}
-	}
-
-	public boolean isValidVendor() {
-		if (defaultVendorContext == null) {
-			return true;
-		}
-
-		for (ListingPair vendor : getVendorContextList()) {
-			if (vendor.getId().equals(defaultVendorContext)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

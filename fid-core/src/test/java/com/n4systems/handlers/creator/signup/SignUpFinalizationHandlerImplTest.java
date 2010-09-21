@@ -52,42 +52,6 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 	
 	
 	@Test
-	public void should_set_default_vendor_context_to_refering_org_if_refering_org_is_not_the_house_account() throws Exception {
-		PrimaryOrg referrerOrg = aPrimaryOrg().build();
-		AccountPlaceHolder accountPlaceHolder = anAccountPlaceHolder().build();
-		
-		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(createSuccessfulExtendedFeatureResolver(SIGN_UP_PACKAGE_BEING_USED, null, new HashSet<ExtendedFeature>()), createSuccessfulOrgSaver(accountPlaceHolder), createSuccessfulUserSaver(accountPlaceHolder), createSuccessfulLimitResolver(SIGN_UP_PACKAGE_BEING_USED, null, new TenantLimit()), createSuccessfulLinkTenantHandler(accountPlaceHolder, referrerOrg));
-		sut.setAccountInformation(new AccountCreationInformationStub(SIGN_UP_PACKAGE_BEING_USED)).setSubscriptionApproval(new SignUpTenantResponseStub());
-		
-		sut.setAccountPlaceHolder(accountPlaceHolder).setReferrerOrg(referrerOrg);
-	
-		// exercise
-		sut.finalizeSignUp(mockTransaction);
-		
-		
-		assertEquals(referrerOrg.getId(), accountPlaceHolder.getPrimaryOrg().getDefaultVendorContext());
-	}
-	
-	@Test
-	public void should_not_set_default_vendor_context_when_refering_org_is_the_house_account() throws Exception {
-		PrimaryOrg houseAccountReferrerOrg = aPrimaryOrg().build();
-		houseAccountReferrerOrg.setId(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID));
-		
-		AccountPlaceHolder accountPlaceHolder = anAccountPlaceHolder().build();
-		
-		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(createSuccessfulExtendedFeatureResolver(SIGN_UP_PACKAGE_BEING_USED, null, new HashSet<ExtendedFeature>()), createSuccessfulOrgSaver(accountPlaceHolder), createSuccessfulUserSaver(accountPlaceHolder), createSuccessfulLimitResolver(SIGN_UP_PACKAGE_BEING_USED, null, new TenantLimit()), createSuccessfulLinkTenantHandler(accountPlaceHolder, houseAccountReferrerOrg));
-		sut.setAccountInformation(new AccountCreationInformationStub(SIGN_UP_PACKAGE_BEING_USED)).setSubscriptionApproval(new SignUpTenantResponseStub());
-		
-		sut.setAccountPlaceHolder(accountPlaceHolder).setReferrerOrg(houseAccountReferrerOrg);
-	
-		// exercise
-		sut.finalizeSignUp(mockTransaction);
-		
-		
-		assertNull(accountPlaceHolder.getPrimaryOrg().getDefaultVendorContext());
-	}
-	
-	@Test
 	public void should_find_tenant_list_from_list_resolver_and_have_them_turned_on() {
 		AccountCreationInformationStub accountCreationInformationStub = new AccountCreationInformationStub();
 		accountCreationInformationStub.setSignUpPackage(new SignUpPackage(SIGN_UP_PACKAGE_BEING_USED, new ArrayList<ContractPricing>()));

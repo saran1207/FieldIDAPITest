@@ -120,7 +120,6 @@ public abstract class TenantContextInitializer {
 		rememberSecurityGuard(securityGuard);
 		
 		tenantLanguageLoad(tenant);
-		getSession().setVendorContext(securityGuard.getPrimaryOrg().getDefaultVendorContext());
 	}
 
 	private void tenantLanguageLoad(Tenant tenant) {

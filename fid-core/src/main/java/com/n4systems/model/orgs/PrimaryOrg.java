@@ -75,8 +75,6 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
     @Column(name="searchable_on_safety_network", nullable=false)
     private boolean searchableOnSafetyNetwork;
 	
-	private Long defaultVendorContext;
-
 	public PrimaryOrg() {}
 	
 	@Override
@@ -226,14 +224,6 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 
 	public void setPlansAndPricingAvailable(boolean plansAndPricingAvailable) {
 		this.plansAndPricingAvailable = plansAndPricingAvailable;
-	}
-
-	public Long getDefaultVendorContext() {
-		return defaultVendorContext;
-	}
-
-	public void setDefaultVendorContext(Long defaultVendorContext) {
-		this.defaultVendorContext = defaultVendorContext;
 	}
 
     public boolean isSearchableOnSafetyNetwork() {

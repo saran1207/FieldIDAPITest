@@ -56,17 +56,8 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		processExtendedFeatures(transaction);
 		processLimits(transaction);
 		applyExternalIds();
-		setDefaultVendorContext();
 		saveChanges(transaction);
 	}
-
-
-	private void setDefaultVendorContext() {
-		if (!getConfigContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID).equals(referrerOrg.getId())) {
-			getPrimaryOrg().setDefaultVendorContext(referrerOrg.getId());
-		}
-	}
-
 
 	private ConfigContext getConfigContext() {
 		return ConfigContext.getCurrentContext();
