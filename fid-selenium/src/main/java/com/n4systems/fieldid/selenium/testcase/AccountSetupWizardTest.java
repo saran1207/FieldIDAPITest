@@ -40,18 +40,6 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		verifyDefaultSettingsConfiguredProperly(wizardPage, defaults);
 	}
 	
-	@Test
-	public void msa_referral_basic_admin_logs_in_accepts_all_defaults_for_setup_wizard() {
-		TenantInfo t = createARandomNewBasicTenant("msa");
-		AccountSetupWizardPage wizardPage = t.getLoginPage().signInAllTheWayToWizard(t.getUserName(), t.getPassword());
-		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(wizardPage, true);
-		verifyDefaultSettingsConfiguredProperly(wizardPage, defaults);
-		assertDefaultVendorIsMSA(defaults);
-	}
-	
-	private void assertDefaultVendorIsMSA(SystemSettings ss) {
-		assertTrue(ss.getDefaultVendorContext().equals("MSA"));
-	}
 
 	private void assertNoThanksWorks(AccountSetupWizardPage wizardPage) {
 		wizardPage.verifyQuickSetupWizardPageHeader();
