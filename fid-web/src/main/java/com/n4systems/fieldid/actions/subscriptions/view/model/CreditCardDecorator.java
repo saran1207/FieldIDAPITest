@@ -8,8 +8,8 @@ import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.CreditCardType;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RegexFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 
 public class CreditCardDecorator extends CreditCard {
 
@@ -63,13 +63,13 @@ public class CreditCardDecorator extends CreditCard {
 
 	@RequiredStringValidator(message="", key="error.cc_name_required")
 	public void setName(String name) {
-		delegateCard.setName(name);
+		delegateCard.setName(name.trim());
 	}
 
+	@RegexFieldValidator(expression="^((4\\d{3})|(5[1-5]\\d{2}))(-?\\s?\\d{4}){3}|(3[4,7])\\d{2}-?\\s?\\d{6}-?\\s?\\d{5}$", message = "", key="error.invalid_cc_number")
 	@RequiredStringValidator(message="", key="error.valid_cc_number_required")
-	@StringLengthFieldValidator(message="", key="error.valid_cc_number_required", minLength="13")
 	public void setNumber(String number) {
-		delegateCard.setNumber(number);
+		delegateCard.setNumber(number.trim());
 	}
 
 	@RequiredStringValidator(message="", key="error.cc_type_required")

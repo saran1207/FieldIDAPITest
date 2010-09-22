@@ -140,7 +140,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 
 	@RequiredStringValidator(message="", key="error.company_name_required")
 	public void setCompanyName(String companyName) {
-		signUpRequest.setCompanyName(companyName);
+		signUpRequest.setCompanyName(companyName.trim());
 	}
 
 	public void setCountryId(String countryId) {
@@ -150,19 +150,19 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	@RequiredStringValidator(message="", key="error.email")
 	@EmailValidator(message="", key="error.email")
 	public void setEmail(String email) {
-		signUpRequest.setEmail(email);
+		signUpRequest.setEmail(email.trim());
 	}
 
 	@RequiredStringValidator(message="", key="error.first_name_required")
 	@StringLengthFieldValidator(message="", key="error.first_name_length", maxLength="255")
 	public void setFirstName(String firstName) {
-		signUpRequest.setFirstName(firstName);
+		signUpRequest.setFirstName(firstName.trim());
 	}
 
 	@RequiredStringValidator(message="", key="error.last_name_required")
 	@StringLengthFieldValidator(message="", key="error.last_name_length", maxLength="255")
 	public void setLastName(String lastName) {
-		signUpRequest.setLastName(lastName);
+		signUpRequest.setLastName(lastName.trim());
 	}
 
 	@RequiredFieldValidator(message="", key="error.number_of_users_required")
@@ -192,7 +192,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	@RequiredStringValidator(message="", key="error.phone_number_required")
 	@RegexFieldValidator(expression="^(1\\s*[-\\/\\.]?)?(\\((\\d{3})\\)|(\\d{3}))\\s*[-\\/\\.]?\\s*(\\d{3})\\s*[-\\/\\.]?\\s*(\\d{4})\\s*(([xX]|[eE][xX][tT])\\.?\\s*(\\d+))*$", message = "", key="error.phonenumberinvalid")	
 	public void setPhoneNumber(String phoneNumber) {
-		signUpRequest.setPhoneNumber(phoneNumber);
+		signUpRequest.setPhoneNumber(phoneNumber.trim());
 	}
 
 	public void setSignUpPackage(SignUpPackage signUpPackageId) {
@@ -204,7 +204,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	@FieldExpressionValidator(expression="validTenantName", message = "", key="error.tenant_name_format")
 	@CustomValidator(type="uniqueValue", message = "", key="error.name_already_used")
 	public void setTenantName(String tenantName) {
-		signUpRequest.setTenantName(tenantName);
+		signUpRequest.setTenantName(tenantName.trim());
 	}
 	
 	public boolean isValidTenantName() {
@@ -222,7 +222,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	@FieldExpressionValidator(expression="(username != restrictedUsername)", message="", key="error.reserved_username")
 	@StringLengthFieldValidator(message = "" , key="errors.useridlength", maxLength="15")
 	public void setUsername(String username) {
-		signUpRequest.setUsername(username);
+		signUpRequest.setUsername(username.trim());
 		ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME);
 	}
 	
@@ -286,7 +286,7 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	
 	@FieldExpressionValidator(message="", key="error.ponumberrequired", expression="(purchaseOrderNumberValid == true)")	
 	public void setPurchaseOrderNumber(String purchaseOrderNumber) {
-		signUpRequest.setPurchaseOrderNumber(purchaseOrderNumber);
+		signUpRequest.setPurchaseOrderNumber(purchaseOrderNumber.trim());
 	}	
 
 	public boolean isPurchaseOrderNumberValid() {
