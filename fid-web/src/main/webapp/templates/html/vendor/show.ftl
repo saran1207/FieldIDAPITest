@@ -10,7 +10,7 @@
 	<h1 class="safetyNetworkHeadings">${vendor.name}<h1>
 	<p><@s.text name="label.vendor_connection"/></p>
 	<div id="registerAssets">
-		<h3>
+		<h3 class="vendorHeadings">
 			<@s.text name="label.register_assets">
 				<@s.param>${vendor.name}</@s.param>
 			</@s.text>
@@ -25,7 +25,7 @@
 			</p>
 	</div>
 	<div id="preAssignedAssets">
-		<h3>
+		<h3 class="vendorHeadings">
 			<@s.text name="label.pre_assigned_assets">
 				<@s.param>${vendor.name}</@s.param>
 			</@s.text>
