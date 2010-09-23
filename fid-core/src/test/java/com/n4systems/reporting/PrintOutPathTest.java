@@ -78,7 +78,7 @@ public class PrintOutPathTest {
 	@Test
 	public void test_get_preview_image_for_default_print_out() {
 		File file = PathHandler.getPreviewImage(printOut);
-		assertEquals(getAbsolutePathFor(DEFAULT_DIR + "/default_inspection_cert_preview.jpg"), file.getAbsolutePath());
+		assertEquals(getAbsolutePathFor(DEFAULT_DIR + "/default_inspection_cert.pdf"), file.getAbsolutePath());
 	}
 	
 	@Test
@@ -86,14 +86,14 @@ public class PrintOutPathTest {
 		createCustomPrintOut();
 		File file = PathHandler.getPreviewImage(printOut);
 		
-		assertEquals(getAbsolutePathFor(REPORT_DIR + "/" + tenant.getName() +"/custom_inspection_cert_preview.jpg"), file.getAbsolutePath());
+		assertEquals(getAbsolutePathFor(REPORT_DIR + "/" + tenant.getName() +"/custom_inspection_cert.pdf"), file.getAbsolutePath());
 	}
 	
 	
 	@Test
 	public void test_get_preview_thumb_for_default_print_out() {
 		File file = PathHandler.getPreviewThumb(printOut);
-		assertEquals(getAbsolutePathFor(DEFAULT_DIR + "/default_inspection_cert_thumb.jpg"), file.getAbsolutePath());
+		assertEquals(getAbsolutePathFor(DEFAULT_DIR + "/default_inspection_cert.jpg"), file.getAbsolutePath());
 	}
 	
 	@Test
@@ -101,7 +101,7 @@ public class PrintOutPathTest {
 		createCustomPrintOut();
 		File file = PathHandler.getPreviewThumb(printOut);
 		
-		assertEquals(getAbsolutePathFor(REPORT_DIR + "/" + tenant.getName() +"/custom_inspection_cert_thumb.jpg"), file.getAbsolutePath());
+		assertEquals(getAbsolutePathFor(REPORT_DIR + "/" + tenant.getName() +"/custom_inspection_cert.jpg"), file.getAbsolutePath());
 	}
 	
 	
