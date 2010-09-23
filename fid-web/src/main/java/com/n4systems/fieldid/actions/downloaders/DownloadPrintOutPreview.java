@@ -28,7 +28,7 @@ public class DownloadPrintOutPreview extends DownloadAction {
 
 		if (printOutAvailable()) {
 			previewFile = PathHandler.getPreviewImage(printOut);
-			fileName = printOut.getFullImage();
+			fileName = printOut.getFullPdfImage();
 			
 			return sendFile();
 		}

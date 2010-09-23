@@ -279,7 +279,7 @@ public class PathHandler {
 	}
 	
 	private static String getPrintOutPreveiwPath(PrintOut printOut) {
-		return mergePaths(getReportPathBase(printOut), printOut.getFullImage());
+		return mergePaths(getReportPathBase(printOut), printOut.getFullPdfImage());
 	}
 	private static String getPrintOutPreveiwThumbPath(PrintOut printOut) {
 		return mergePaths(getReportPathBase(printOut), printOut.getThumbNailImage());

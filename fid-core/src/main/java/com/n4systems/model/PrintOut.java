@@ -78,11 +78,11 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 	}
 
 	public String getThumbNailImage() {
-		return pdfTemplate + "_thumb.jpg";
+		return pdfTemplate + ".jpg";
 	}
-
-	public String getFullImage() {
-		return pdfTemplate + "_preview.jpg";
+	
+	public String getFullPdfImage() {
+		return pdfTemplate + ".pdf";
 	}
 
 	public String getPdfTemplate() {
