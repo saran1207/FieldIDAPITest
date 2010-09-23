@@ -39,6 +39,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	private Long id;
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
+
 	private User adminUser = new User();
 	private String title;
 	private String note;
@@ -169,9 +170,6 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		UserSaver saver = new UserSaver();
 		saver.save(transaction, user);
 	}
-	
-	
-	
 
 	public String doCreateUser() {
 		Transaction transaction = null;
@@ -212,6 +210,10 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	}
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
+	}
+	
+	public void setPrimaryOrg(PrimaryOrg primaryOrg) {
+		this.primaryOrg = primaryOrg;
 	}
 
 	public Collection<PrimaryOrg> getPrimaryOrgs() {
