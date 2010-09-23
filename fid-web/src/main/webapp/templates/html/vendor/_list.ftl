@@ -1,6 +1,8 @@
 <#if page.hasResults() && page.validPage() >	
 	<#assign currentAction="preAssignedAssets.action" />
 	<#include '../common/_pagination.ftl' />
+    <#include "../common/_lightView.ftl" />
+    <#include '_lightViewBoxOptions.ftl'>
 	<table class="list" id="productTable">
 		<tr>
 			<th><@s.text name="label.serialnumber" /></th>
@@ -13,7 +15,7 @@
 		<#list page.list as product>
 		<tr>
 			<td>
-				<a href="<@s.url value="showNetworkProduct.action" uniqueID="${product.id}" useContext="true"/>" >${product.serialNumber}</a>
+				<a href='<@s.url value="showNetworkProduct.action" uniqueID="${product.id}" useContext="true"/>' >${product.serialNumber}</a>
 			</td>
 			<#if product.rfidNumber??>
 				<td>${product.rfidNumber}</td>
@@ -22,7 +24,11 @@
 			</#if>			
 			<td>${product.type.name}</td>				
 			<td>${product.description}</td>	
-			<td><@s.text name="label.registerasset"/></td>
+			<td>
+			
+				<a href='<@s.url action="registerProduct.action" namespace="/aHtml/iframe" uniqueID="${product.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+				
+			</td>
 		</tr>
 		</#list>			
 	</table>

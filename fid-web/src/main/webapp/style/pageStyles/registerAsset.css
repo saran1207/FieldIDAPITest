@@ -1,0 +1,51 @@
+#basicDetails .infoSet .label, #extraDetails .infoSet .label {
+	font-weight:normal;
+}
+
+#basicDetails .infoSet, #extraDetails .infoSet {
+	border-top: none;
+	min-height: 0;
+}
+
+#basicDetails .infoSet .label, 
+#basicDetails .infoSet .fieldHolder, 
+#extraDetails .infoSet .label,  
+#extraDetails .infoSet .fieldHolder{
+	padding-bottom: 0;
+}
+
+.formTitle {
+	border-bottom:1px solid #D0DAFA;
+	padding:5px 0;
+}
+
+#infoOptions h2{
+	display: none;
+}
+
+
+#formHeader h1 {
+	font-size:2em;
+	padding: 10px 0;
+}
+
+#formHeader img {
+	width: 15%;
+	border:1px solid #000000;
+	margin-bottom:20px;
+}
+
+.expand p {
+ 	background-color: #EBEBEB;
+ 	padding: 10px;
+ 	text-align: center;
+}
+
+.expand a {
+ 	color: #5CACEE;
+ 	font-weight: bold;
+}
+
+#detailedForm {
+ 	padding: 10px, 0;
+}

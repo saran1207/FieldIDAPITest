@@ -99,6 +99,13 @@
 		<action name="orders" method="list" class="com.n4systems.fieldid.actions.integration.OrderUtilAction">
 			<result name="success" type="freemarker">/templates/html/orders/list.ftl</result>
 		</action>
+		
+		<action name="registerProduct" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
+			<result name="error" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
+			<result name="input" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
+			<result name="success" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
+		</action>
+		
 	</package>
 	
 	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />
@@ -127,5 +134,6 @@
 			<result name="input" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/imageUploaded.ftl</result>
 		</action>
+		
 	</package>
 </struts>
