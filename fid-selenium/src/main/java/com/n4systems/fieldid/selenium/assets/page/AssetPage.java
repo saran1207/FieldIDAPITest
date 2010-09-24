@@ -128,7 +128,7 @@ public class AssetPage {
 			}
 			String customer = p.getOwner().getCustomer();
 			if(customer != null && !customer.equals("")) {
-				String locator = customerNameLabelLocator + "/../SPAN[contains(text(),'" + customer + "')]";
+				String locator = customerNameLabelLocator + "/../SPAN[contains(text(), \"" + customer + "\")]";
 				assertTrue(selenium.isElementPresent(locator));
 			}
 			String division = p.getOwner().getDivision();
