@@ -21,7 +21,6 @@ public abstract class DownloadAction extends AbstractAction {
 	protected String fileName;
 	protected Integer fileSize;
 	protected Long attachmentID;
-	protected boolean forceDownload = true;
 
 	public DownloadAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -32,10 +31,8 @@ public abstract class DownloadAction extends AbstractAction {
 	protected String sendFile(InputStream stream) throws IOException {
 		HttpServletResponse response = getServletResponse();
 		response.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(fileName));
-
-		if (forceDownload) {
-			response.addHeader("Content-Disposition:", "attachment; filename=\"" + fileName + "\"");
-		}
+		response.addHeader("Content-Disposition:", "attachment; filename=\"" + fileName + "\"");
+		
 		if (fileSize != null) {
 		response.setContentLength(fileSize);
 		}

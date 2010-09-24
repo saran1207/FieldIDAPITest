@@ -102,8 +102,12 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 		this.type = type;
 	}
 
-	public boolean isPreviewFileThere(){
-		return PathHandler.getPreviewImage(this).exists();
+	public boolean isThumbPreviewFileThere(){
+		return PathHandler.getPreviewThumb(this).exists();
+	}
+	
+	public boolean isPrintOutFileThere(){
+		return  PathHandler.getPreviewImage(this).exists();
 	}
 	
 	public boolean isCustom() {

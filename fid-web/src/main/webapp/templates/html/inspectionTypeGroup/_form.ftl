@@ -24,44 +24,42 @@
 	<ul class="printOutSelection">
 		<#list certPrintOuts as printOut >
 			<li>
-				<#if printOut.previewFileThere>
+				<#if printOut.thumbPreviewFileThere>
 					<div class="printOutThumbnail" >
 						<img src="<@s.url action="downloadPrintOutThumb" namespace="/file" uniqueID="${printOut.id}" />" alt="<@s.text name="label.thumbnail"/>"/>
+					</div>
+					<div class="printOutDetails">
+						<@s.radio name="certPrintOutId" list="%{getSingleMapElement(${printOut.id})}" theme="simple" />
+						${printOut.name?html}
+						<br/>
+						<#if printOut.printOutFileThere>
+							<a href="<@s.url action="downloadPrintOutPreview" namespace="/file" uniqueID="${printOut.id}"/>"  title="<@s.text name="label.preview"/>">
+								<@s.text name="label.preview"/>
+							</a>
+						</#if>
 					</div>
 				<#else>
 					<div class="noImageContainer">
 						<div class="noImage">
 						</div>
 					</div>
+					<div class="printOutDetails">
+						<@s.radio name="certPrintOutId" list="%{getSingleMapElement(${printOut.id})}" theme="simple" />
+						${printOut.name?html}
+						<br/>
+						<#if printOut.printOutFileThere>
+							<a href="<@s.url action="downloadPrintOutPreview" namespace="/file" uniqueID="${printOut.id}"/>"  title="<@s.text name="label.preview"/>">
+								<@s.text name="label.preview"/>
+							</a>
+						</#if>
+					</div>
 				</#if>
-				<div class="printOutDetails">
-					<@s.radio name="certPrintOutId" list="%{getSingleMapElement(${printOut.id})}" theme="simple" />
-					${printOut.name?html}
-					<br/>
-					<a href="<@s.url action="downloadPrintOutPreview" namespace="/file" uniqueID="${printOut.id}"/>" class="lightview" title="">
-					<@s.text name="label.preview"/>
-					</a>
-				</div>
-				
 			</li>
 		</#list>
-		<li>
-			<div class="printOutThumbnail">
-				<img src="<@s.url value="/images/newCustomPrintOut.jpg" />" alt="<@s.text name="label.newcustomprintout"/>"/>
-			</div>
-			<div class="printOutDescription">
-				<@s.text name="label.newcustomprintout"/><br/>
-				<a href="javascript:void(0);" id="contactUs_button"><@s.text name="label.contactus"/></a>
-				<div id="contactUs" class="hidden" style="border :1px solid black"><@s.text name="label.contactusinformation"/></div>
-				<script type="text/javascript">
-					$("contactUs_button").observe( 'click', function(event) { showQuickView('contactUs', event); } );
-				</script>
-			</div>
-		</li>
 	</ul>
 	<div>
-		<@s.text name="label.no_certificate"/>
 		<@s.radio name="certPrintOutId" list="%{getSingleMapElement(0)}" />
+		<@s.text name="label.no_certificate"/>
 	</div>
 </div>
 
@@ -80,7 +78,7 @@
 		<#list observationPrintOuts as printOut >
 			<li>
 				<div class="printOutThumbnail" >
-				<a href="<@s.url action="downloadPrintOutPreview" namespace="/file" uniqueID="${printOut.id}"/>" class="lightview" title="<@s.text name="label.preview"/>">
+				<a href="<@s.url action="downloadPrintOutPreview" namespace="/file" uniqueID="${printOut.id}"/>" title="<@s.text name="label.preview"/>">
 					<img src="<@s.url action="downloadPrintOutThumb" namespace="/file" uniqueID="${printOut.id}" />" alt="<@s.text name="label.thumbnail"/>"/>
 				</a>
 				</div>

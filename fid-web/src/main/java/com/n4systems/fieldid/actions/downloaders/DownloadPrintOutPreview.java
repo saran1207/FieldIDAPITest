@@ -19,7 +19,6 @@ public class DownloadPrintOutPreview extends DownloadAction {
 
 	public DownloadPrintOutPreview(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		forceDownload = false;
 	}
 
 	@Override
