@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.reporting.PathHandler;
 
 @Entity
 @Table(name = "printouts")
@@ -101,7 +102,10 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 		this.type = type;
 	}
 
-
+	public boolean isPreviewFileThere(){
+		return PathHandler.getPreviewImage(this).exists();
+	}
+	
 	public boolean isCustom() {
 		return custom;
 	}

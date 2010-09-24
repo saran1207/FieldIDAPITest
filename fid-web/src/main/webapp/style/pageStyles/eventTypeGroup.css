@@ -17,13 +17,62 @@
 }
 
 .printOutSelection li {
-	width: 120px;
+	width: 200px;
+	height: 200px;
+	margin:5px;
+	border: 2px solid #D0DAFD;
+	padding: 5px 5px 0 5px;
 }
+
+.printOutDetails{
+	text-align: left;
+	margin-top: 1em;
+	height: 100%;
+}
+
+.printOutDetails a{
+	background: no-repeat url(../../images/pdf_small.gif) left 5px;
+	display: block;
+	border-top: 1px solid #D0DAFD;
+	margin-top: 5px;
+	padding-top: 5px;
+	padding-left: 20px;
+	height: 25px;
+	overflow: hidden;
+	}
+
 .printOutThumbnail {
-	height:96px; 
+	background-color: #EAEAEA;
+	width: 100%;
+	height: 65%;
+	margin-left: auto;
+	margin-right: auto;
+	}
+
+.printOutThumbnail img{
+	width: 90%;
+	height: 100%;
 }
+
 .printOutDescription {
 	padding-top:2px;
 	min-height:4.5em;
-	
+}
+
+.noImageContainer{
+	background-color: none;
+	width: 100%;
+	height: 65%;
+	margin-left: auto;
+	margin-right: auto;
+	}
+
+.noImage {
+	background: no-repeat url(../../images/nopreview.png) center center;
+	backround-color: none;
+	height: 100%;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
 }
