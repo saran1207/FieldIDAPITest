@@ -1,6 +1,5 @@
 
 <head>
-	<@n4.includeStyle href="safetyNetwork" type="page"/>
 	<@n4.includeStyle type="page" href="publishedCatalog"/>
 	<@n4.includeStyle href="steps"/>
 </head>

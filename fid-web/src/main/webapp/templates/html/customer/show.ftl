@@ -10,7 +10,7 @@
 <div id="mainContent">
 
 	<h1>${customer.name}</h1>
-	<p>
+	<p class="customerConnection">
         <@s.text name="label.customer_connection"/>
     </p>
     <br/><br/>

@@ -8,7 +8,7 @@
 <div id="mainContent">
 	<#include "../common/_formErrors.ftl"/>
 	<h1 class="safetyNetworkHeadings">${vendor.name}<h1>
-	<p><@s.text name="label.vendor_connection"/></p>
+	<p class="vendorConnection"><@s.text name="label.vendor_connection"/></p>
 	<div id="registerAssets">
 		<h3 class="vendorHeadings">
 			<@s.text name="label.register_assets">

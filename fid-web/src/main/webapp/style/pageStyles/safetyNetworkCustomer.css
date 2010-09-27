@@ -29,3 +29,9 @@ div.countExplanation {
 div.countExplanation h2 {
   padding: 0 0 5px 0;
 }
+
+.customerConnection{
+	margin-top: 5px;
+	font-size: 15px;
+	font-weight: normal;
+}

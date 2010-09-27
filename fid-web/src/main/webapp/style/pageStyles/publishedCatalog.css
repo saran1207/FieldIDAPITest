@@ -1,9 +1,11 @@
 .catalogPackage {
 	padding: 5px 0;
 }
-.catalogPackage, .catalogPackage ul {
+
+.catalogPackage,.catalogPackage ul {
 	margin-left: 15px;
 }
+
 .main {
 	margin-left: 15px;
 }
@@ -11,9 +13,10 @@
 .main li {
 	margin: 5px 0;
 }
+
 .catalogItem {
 	padding: 0 5px;
-	overflow:hidden;
+	overflow: hidden;
 	font-size: 1.2em;
 	font-weight: bold;
 }
@@ -21,17 +24,15 @@
 .catalogItemName {
 	width: 200px;
 	float: left;
-	display: block; 
+	display: block;
 }
 
-
-
-li.listValues{
-	color:black;
+li.listValues {
+	color: black;
 }
 
-li.listTitle  {
-	color:blue;
+li.listTitle {
+	color: blue;
 	list-style-type: none;
 }
 
@@ -39,15 +40,14 @@ li.listTitle  {
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 5px;
 }
-.selectOptions, .importSelection, #renamedElements {
+
+.selectOptions,.importSelection,#renamedElements {
 	margin: 5px 0;
-	overflow:hidden;
+	overflow: hidden;
 }
 
-
-
 .attention {
-	font-weight:bold;
+	font-weight: bold;
 	color: #C63;
 }
 
@@ -58,9 +58,7 @@ li.listTitle  {
 }
 
 .list {
-	
 	margin: 5px 0px;
-	
 }
 
 #renamedElements th,#renamedElements td {
@@ -75,17 +73,47 @@ li.listTitle  {
 }
 
 .customSelection {
-	float:left;
+	float: left;
 	width: 325px;
 }
+
 .customSelection h3 {
 	margin-bottom: 5px;
 }
+
 .customSelectionType {
 	padding: 5px 5px 5px 15px;
 	border-bottom: 1px solid #ddd;
 }
 
-#publishForm #catalogContents{
+#publishForm #catalogContents {
 	border-bottom: none;
+}
+
+.safetyNetworkSplash h2{
+font-size:14px;
+}
+
+.safetyNetworkSplash h3{
+	font-size: 13px;
+	font-weight: bold;
+	}
+
+.selectOptions{
+	font-size: 12px;
+	font-weight: none;
+}
+
+.safetyNetworkFont{
+	font-size: 14.5px;
+	color: #666666
+}
+
+#publishForm .stepAction{
+	font-size: 13px;
+	font-weight: normal;
+	}
+
+#publish, .stepAction a, .stepAction input{
+	font-size: 13.5px;
 	}
