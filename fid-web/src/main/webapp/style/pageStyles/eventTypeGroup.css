@@ -7,7 +7,6 @@
 	float:left;
 	text-align: center;
 	min-height: 150px;
-	
 	margin: 0px 3px 5px 0; 
 	
 }
@@ -17,9 +16,11 @@
 }
 
 .printOutSelection li {
+	float: left;
 	width: 200px;
 	height: 200px;
-	margin:5px;
+	margin: 8px;
+	margin-bottom: 20px;
 	border: 1px solid #D0DAFD;
 	padding: 5px 5px 0 5px;
 }
@@ -69,10 +70,25 @@
 
 .noImage {
 	background: no-repeat url(../../images/nopreview.png) center center;
-	backround-color: none;
+	background-color: none;
 	height: 100%;
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	overflow: hidden;
+}
+
+.infoSet label{
+	font-weight: bold;
+}
+
+.noneSelected input{
+	clear:both;
+}
+.certFormTitle span{
+	padding-left: 15px;	
+}
+
+.certFormTitle h2{
+	background-color: transparent;
 }
