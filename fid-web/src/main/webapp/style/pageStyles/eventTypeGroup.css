@@ -17,12 +17,14 @@
 	margin: 8px;
 	border: 1px solid #D0DAFD;
 	padding: 5px 5px 0 5px;
+	overflow: hidden;
 }
 
 .printOutDetails {
-	text-align: left;
+	text-align: center;
 	margin-top: 1em;
 }
+
 
 .printOutDetails a {
 	background: no-repeat url(../../images/pdf_small.gif) left 5px;
@@ -31,17 +33,18 @@
 	margin-top: 5px;
 	padding-top: 5px;
 	padding-left: 20px;
-	height: 25px;
+	height: 28px;
 	overflow: hidden;
-	line-height: 
+	text-align: left;
 }
 
 .printOutThumbnail {
-	background-color: #999999;
+	background-color: #F7F7F7;
 	width: 100%;
 	height: 65%;
 	margin-left: auto;
 	margin-right: auto;
+	border: 1px solid #DDDDDD;
 }
 
 .printOutThumbnail img {
@@ -91,4 +94,10 @@
 
 .certFormTitle h2 {
 	background-color: transparent;
+}
+
+#eventTypeGroupUpdate .formAction{
+	text-align: left;
+	border-top: 1px solid #D0DAFD;
+	border-bottom: none;
 }
