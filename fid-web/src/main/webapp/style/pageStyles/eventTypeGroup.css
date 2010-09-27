@@ -1,36 +1,30 @@
 .printOutSelection {
-	list-style: none;
-	overflow:hidden;
+	margin-top: 5px;
+	overflow: hidden;
 }
 
-.printOutSelection li {
-	float:left;
-	text-align: center;
-	min-height: 150px;
-	margin: 0px 3px 5px 0; 
-	
-}
-	
 .infoSet .printOutSelection li label {
-	display:none;
+	display: none;
 }
 
 .printOutSelection li {
+	list-style-position: none inside none;
+	text-align: center;
+	display: inline;
 	float: left;
 	width: 200px;
 	height: 200px;
 	margin: 8px;
-	margin-bottom: 20px;
 	border: 1px solid #D0DAFD;
 	padding: 5px 5px 0 5px;
 }
 
-.printOutDetails{
+.printOutDetails {
 	text-align: left;
 	margin-top: 1em;
 }
 
-.printOutDetails a{
+.printOutDetails a {
 	background: no-repeat url(../../images/pdf_small.gif) left 5px;
 	display: block;
 	border-top: 1px solid #D0DAFD;
@@ -39,34 +33,34 @@
 	padding-left: 20px;
 	height: 25px;
 	overflow: hidden;
-    line-height: 
-	}
+	line-height: 
+}
 
 .printOutThumbnail {
-	background-color: #EAEAEA;
+	background-color: #999999;
 	width: 100%;
 	height: 65%;
 	margin-left: auto;
 	margin-right: auto;
-	}
+}
 
-.printOutThumbnail img{
+.printOutThumbnail img {
 	width: 90%;
 	height: 100%;
 }
 
 .printOutDescription {
-	padding-top:2px;
-	min-height:4.5em;
+	padding-top: 2px;
+	min-height: 4.5em;
 }
 
-.noImageContainer{
+.noImageContainer {
 	background-color: none;
 	width: 100%;
 	height: 65%;
 	margin-left: auto;
 	margin-right: auto;
-	}
+}
 
 .noImage {
 	background: no-repeat url(../../images/nopreview.png) center center;
@@ -78,17 +72,23 @@
 	overflow: hidden;
 }
 
-.infoSet label{
+.infoSet label {
 	font-weight: bold;
 }
 
-.noneSelected input{
-	clear:both;
-}
-.certFormTitle span{
-	padding-left: 15px;	
+.noneSelected {
+	margin: 5px;
+	padding-bottom: 10px;
 }
 
-.certFormTitle h2{
+.noneSelectedBorder {
+	border-bottom: 2px solid #D0DAFD;
+}
+
+.certFormTitle span {
+	padding-left: 15px;
+}
+
+.certFormTitle h2 {
 	background-color: transparent;
 }
