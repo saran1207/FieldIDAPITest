@@ -56,6 +56,17 @@ public class DownloadManufacturerCert extends DownloadAction {
 		return generateCertificate();
 	}
 
+    public String doDownloadSafetyNetwork() {
+        product = getLoaderFactory().createSafetyNetworkProductLoader().setProductId(uniqueID).withAllFields().load();
+
+		if (product == null) {
+			addActionError(getText("error.noproduct"));
+			return MISSING;
+		}
+
+        return generateCertificate();
+    }
+
 	@Override
 	public String doDownload() {
 		product = productManager.findProductAllFields(uniqueID, getSecurityFilter());

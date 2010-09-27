@@ -60,6 +60,7 @@ import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
 import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
+import com.n4systems.model.safetynetwork.InspectionsByProductIdLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionLoader;
@@ -376,7 +377,7 @@ public class LoaderFactory {
 	}
 
 	public SafetyNetworkProductAttachmentLoader createSafetyNetworkProductAttachmentLoader() {
-		return new SafetyNetworkProductAttachmentLoader();
+		return new SafetyNetworkProductAttachmentLoader(filter);
 	}
 
 	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
@@ -477,6 +478,10 @@ public class LoaderFactory {
 
     public SafetyNetworkRegisteredAssetCountLoader createRegisteredAssetCountLoader() {
         return new SafetyNetworkRegisteredAssetCountLoader();
+    }
+
+    public InspectionsByProductIdLoader createInspectionsByProductIdLoader() {
+        return new InspectionsByProductIdLoader(filter);
     }
 
 }

@@ -41,13 +41,13 @@
 	overflow: hidden;
 }
 
-#mainContent p{
+p.vendorParagraph {
  	font-size: small;
 	line-height:1.5em;	
 	font-weight:normal;
 }
 
-#mainContent a{
+a.vendorLink {
 	text-decoration: none;
 	color: #556DA5;
 }

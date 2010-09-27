@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
+import com.n4systems.model.Inspection;
+import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.services.TenantCache;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -12,6 +17,8 @@ import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.fieldid.actions.product.AssetWebModel;
 import com.n4systems.fieldid.actions.product.TraceabilityCrud;
+
+import java.util.List;
 
 public class SafetyNetworkProduct extends TraceabilityCrud{
 
@@ -28,6 +35,7 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
 	}
 	
 	protected AssetWebModel asset = new AssetWebModel(this);
+    protected List<InspectionSchedule> inspectionSchedules;
 	
 	@Override
 	protected void postInit() {
@@ -46,14 +54,45 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
 		return true;
 	}
 
+    public PrimaryOrg getVendor() {
+        return TenantCache.getInstance().findPrimaryOrg(product.getTenant().getId());
+    }
+
 	@SkipValidation
 	@Override
 	public String doInspections() {
-		setPageType("network_product", "inspections");
 		testExistingProduct();
 
 		return SUCCESS;
 	}
 
+    @SkipValidation
+	public String doSchedules() {
+		testExistingProduct();
+
+		return SUCCESS;
+	}
+
+    @Override
+	public List<ProductAttachment> getProductAttachments() {
+		if (productAttachments == null) {
+			productAttachments = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader()
+                    .setProductId(product.getId())
+                    .setNetworkId(product.getNetworkId())
+                    .load();
+		}
+		return productAttachments;
+	}
+
+    public List<InspectionSchedule> getInspectionSchedules() {
+        if (inspectionSchedules == null) {
+            inspectionSchedules = inspectionScheduleManager.getAvailableSchedulesFor(product);
+        }
+        return inspectionSchedules;
+    }
+
+    public List<Inspection> getInspections() {
+        return getLoaderFactory().createInspectionsByProductIdLoader().setProductId(product.getId()).load();
+    }
 	
 }

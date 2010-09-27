@@ -192,6 +192,9 @@
 		<action name="downloadLinkedManufacturerCert" method="downloadLinked" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
 		</action>
+        <action name="downloadSafetyNetworkManufacturerCert" method="downloadSafetyNetwork" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+            <result name="cantprint" type="httpheader"><param name="error">404</param></result>
+        </action>
 		<action name="downloadTenantLogo" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" >
 			<interceptor-ref name="publicStack" />
 		</action>				

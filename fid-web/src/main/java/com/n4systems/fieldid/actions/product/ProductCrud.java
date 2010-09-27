@@ -80,7 +80,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private List<Product> products;
 	private List<Listable<Long>> employees;
 
-	private List<ProductAttachment> productAttachments;
+	protected List<ProductAttachment> productAttachments;
 
 	// form inputs
 	private List<InfoOptionInput> productInfoOptions;
@@ -126,7 +126,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private LegacyProductSerial legacyProductSerialManager;
 
 	private ProductCodeMapping productCodeMappingManager;
-	private InspectionScheduleManager inspectionScheduleManager;
+	protected InspectionScheduleManager inspectionScheduleManager;
 	private ProductManager productManager;
 	private OrderManager orderManager;
 	private ProjectManager projectManager;
@@ -635,7 +635,6 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 		return productStatuses;
 	}
-
 
 	public Product getProduct() {
 		return product;

@@ -66,6 +66,11 @@
 			<result name="success" type="freemarker">/templates/aHtml/inspectionCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
+
+		<action name="networkInspection" method="show" class="com.n4systems.fieldid.actions.inspection.NetworkInspectionCrud">
+			<result name="success" type="freemarker">/templates/aHtml/inspectionCrud/show.ftl</result>
+			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
+		</action>
 		
 		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedPublicStack" />

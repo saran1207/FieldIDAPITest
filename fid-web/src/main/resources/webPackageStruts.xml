@@ -2024,20 +2024,20 @@
 		
 		<action name="showNetworkProduct" method="traceability" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkProduct">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/productCrud/traceability.ftl</result>
+			<result name="success" type="freemarker">/templates/html/networkProduct/show.ftl</result>
 		</action>
 		
 		<action name="networkProductInspections" method="inspections" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkProduct">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/productCrud/inspections.ftl</result>
+			<result name="success" type="freemarker">/templates/html/networkProduct/inspections.ftl</result>
 		</action>
 
-		<action name="networkInspectionScheduleList" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkInspectionSchedule">
+		<action name="networkInspectionScheduleList" method="schedules" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkProduct">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/networkProduct/schedules.ftl</result>
 		</action>
 
 	</package>
-	
+
 	<include file="locationPackageStruts.xml"/>
 </struts>

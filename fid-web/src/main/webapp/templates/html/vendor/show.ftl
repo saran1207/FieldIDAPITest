@@ -15,8 +15,8 @@
 				<@s.param>${vendor.name}</@s.param>
 			</@s.text>
 		</h3>
-			<p>	
-				<@s.text name="label.register_assets.msg"/><a>&nbsp;<@s.text name="label.tell_me_more"/></a>
+			<p class="vendorParagraph">
+				<@s.text name="label.register_assets.msg"/><a class="vendorLink">&nbsp;<@s.text name="label.tell_me_more"/></a>
 				<@s.form action="searchNetworkProduct" theme="fieldid" cssClass="fullForm" method="get">
 					<@s.textfield name="searchText" id="assetSearchBox" cssClass="inputAlign"/>
 					<@s.hidden name="vendorId" value="%{vendor.id}" />
@@ -30,9 +30,9 @@
 				<@s.param>${vendor.name}</@s.param>
 			</@s.text>
 		</h3>
-		<p>
+		<p class="vendorParagraph">
 			<@s.text name="label.pre_assigned_assets.msg"/>
-			<a href="<@s.url value="preAssignedAssets.action" uniqueID="${vendor.id}" />" > <@s.text name="label.view_pre_assigned_asset"/></a>
+			<a class="vendorLink" href="<@s.url value="preAssignedAssets.action" uniqueID="${vendor.id}" />" > <@s.text name="label.view_pre_assigned_asset"/></a>
 		</p>
 	</div>
 </div>
