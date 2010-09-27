@@ -32,6 +32,11 @@
 			class="com.n4systems.fieldid.actions.product.ProductCrud">
 			<result name="success" type="freemarker">/templates/ajax/productCrud/changeProductType.ftl</result>
 		</action>
+		
+				<action name="regProductTypeChange" method="productTypeChange"
+			class="com.n4systems.fieldid.actions.product.ProductCrud">
+			<result name="success" type="freemarker">/templates/ajax/registerAsset/changeProductType.ftl</result>
+		</action>
 
 		<action name="productAdd" method="addNoHistory"
 			class="com.n4systems.fieldid.actions.product.ProductCrud">

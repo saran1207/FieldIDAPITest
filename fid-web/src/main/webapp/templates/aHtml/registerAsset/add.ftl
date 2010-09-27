@@ -8,7 +8,7 @@
 	<#include "/templates/html/common/_lightView.ftl"/>
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<script type="text/javascript">
-	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
+	    updateProductTypeUrl = '<@s.url action="regProductTypeChange" namespace="/ajax"/>';
 	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 	</script>
