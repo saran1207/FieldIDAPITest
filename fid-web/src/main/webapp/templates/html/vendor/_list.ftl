@@ -26,7 +26,7 @@
 			<td>${product.description}</td>	
 			<td>
 			
-				<a href='<@s.url action="registerProduct.action" namespace="/aHtml/iframe" uniqueID="${product.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+				<a href='<@s.url action="regNetworkProduct.action" namespace="/aHtml/iframe" uniqueID="${product.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
 				
 			</td>
 		</tr>

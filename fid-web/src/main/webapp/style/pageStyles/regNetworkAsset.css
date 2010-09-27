@@ -23,14 +23,19 @@
 	display: none;
 }
 
-
 #formHeader h1 {
 	font-size:2em;
 	padding: 10px 0;
 }
 
+#formHeader p {
+	margin-top: 20px;
+	margin-left: 120px;
+}
+
 #formHeader img {
-	width: 15%;
+	float: left;
+	width: 100px;
 	border:1px solid #000000;
 	margin-bottom:20px;
 }
@@ -44,6 +49,10 @@
 .expand a {
  	color: #5CACEE;
  	font-weight: bold;
+}
+
+.formBody {
+	float: left;
 }
 
 #detailedForm {

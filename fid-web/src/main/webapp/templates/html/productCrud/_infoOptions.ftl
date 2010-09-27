@@ -1,3 +1,4 @@
+<#-- /templates/ahtml/registerAsset also contains a version of this template -->
 <head>
 	<script language="javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"> </script>
 	<script language="javascript" src="<@s.url value="/javascript/combobox.js"/>"> </script>

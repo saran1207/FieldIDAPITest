@@ -39,6 +39,7 @@
 		<pattern>*aHtml/fileUploads/*.action*</pattern>
 	</decorator>
 	
+	<!-- FIXME: These patterns are too generic -->
 	<decorator name="brandedLayout" page="brandedPublicLayout.ftl">
 		<pattern>*eulaAcceptance*.action*</pattern>
 		<pattern>*chooseCompany.action*</pattern>

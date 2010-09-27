@@ -1,13 +1,22 @@
 <head>
-	<@n4.includeStyle href="registerAsset" type="page"/>
+	<@n4.includeStyle href="regNetworkAsset" type="page"/>
 	<@n4.includeScript src="product.js" />
+	<@n4.includeScript src="commentTemplates.js" />
+	<@n4.includeScript src="updateAttributes.js"/>
+	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
-		<script type="text/javascript">
+	<#include "/templates/html/common/_lightView.ftl"/>
+	<#include "/templates/html/common/_calendar.ftl"/>
+	<script type="text/javascript">
 	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
+	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
+	    autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 	</script>
 </head>
+<#include "/templates/html/common/_formErrors.ftl"/>
+<@s.hidden name="currentPage"/>
+<@s.hidden name="uniqueID"/>
 <div class="form">
-
 	<div id="formHeader">
 		<h1><@s.text name="label.registerasset"/> - ${linkedProduct.serialNumber}</h1>
 		
@@ -22,5 +31,7 @@
 	</div>
 
 	<#include '_form.ftl'/>
+	
+	<div id="fieldidBody"> </div>
 
 </div>

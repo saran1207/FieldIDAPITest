@@ -1,3 +1,4 @@
+<#-- /templates/ahtml/registerAsset also contains a version of this template -->
 <#if !fieldPrefix?exists>
 	<#assign fieldPrefix= 'product' />
 </#if>
