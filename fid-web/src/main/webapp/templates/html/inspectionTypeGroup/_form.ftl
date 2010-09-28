@@ -3,18 +3,27 @@
 	
 	<script type"text/javascript">
 	Event.observe(window, 'load', function() {
-		$$('li input').each( function(elt) { 
+	
+		$$('.printOutDetails input').each( function(elt) { 
 			elt.observe('click', function() { 
-				clearOtherBorders();
-				elt.up('li').setStyle({'padding': '4px','border' : '2px solid #D0DAFD'});
+				clearAndSetBorders(elt);
+			 });
+		 });
+	
+		$$('.printOutThumbnail', '.noImageContainer').each( function(elt) { 
+			elt.observe('click', function() { 
+				clearAndSetBorders(elt);
+				elt.adjacent('.printOutDetails').first().down('input').click();
 			 });
 		 });
 	});
 	
-	function clearOtherBorders(){
+	function clearAndSetBorders(selectedElement){
 		$$('.printOutSelection li').each(function(elt) { 
 			elt.setStyle({'padding': '5px', 'border' : '1px solid #D0DAFD'});
 		});
+		
+		selectedElement.up('li').setStyle({'padding': '4px','border' : '2px solid #D0DAFD'});
 	}
 	</script>
 </head>
