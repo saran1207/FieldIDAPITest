@@ -190,7 +190,6 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	}
 
 	@RequiredStringValidator(message="", key="error.phone_number_required")
-	@RegexFieldValidator(expression="^(1\\s*[-\\/\\.]?)?(\\((\\d{3})\\)|(\\d{3}))\\s*[-\\/\\.]?\\s*(\\d{3})\\s*[-\\/\\.]?\\s*(\\d{4})\\s*(([xX]|[eE][xX][tT])\\.?\\s*(\\d+))*$", message = "", key="error.phonenumberinvalid")	
 	public void setPhoneNumber(String phoneNumber) {
 		signUpRequest.setPhoneNumber(phoneNumber.trim());
 	}

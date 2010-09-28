@@ -66,7 +66,7 @@ public class CreditCardDecorator extends CreditCard {
 		delegateCard.setName(name.trim());
 	}
 
-	@RegexFieldValidator(expression="^((4\\d{3})|(5[1-5]\\d{2}))(-?\\s?\\d{4}){3}|(3[4,7])\\d{2}-?\\s?\\d{6}-?\\s?\\d{5}$", message = "", key="error.invalid_cc_number")
+	@RegexFieldValidator(expression="^\\b(?:\\d[ -]*?){13,16}\\b$", message = "", key="error.invalid_cc_number")
 	@RequiredStringValidator(message="", key="error.valid_cc_number_required")
 	public void setNumber(String number) {
 		delegateCard.setNumber(number.trim());
