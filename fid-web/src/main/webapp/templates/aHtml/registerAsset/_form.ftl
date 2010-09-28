@@ -16,7 +16,7 @@
 			<p>
 				<@s.submit id="saveButton" key="label.registerasset" />
 				<@s.text name="label.or"/>
-				<button onclick="closeLightBox();return false;"><@s.text name="label.cancel"/></button>
+				<a href="" onclick="closeLightBox();return false;"><@s.text name="label.cancel"/></a>
 			</p>
 		</div>
 	</@s.form>
