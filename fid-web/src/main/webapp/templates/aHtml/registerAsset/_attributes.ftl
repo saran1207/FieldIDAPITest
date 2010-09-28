@@ -91,6 +91,4 @@
 			</div>
 		</#if>
 	</@s.iterator>
-<#else>
-    <div>Will Not Be Executed productInfoFields </div>
 </#if>

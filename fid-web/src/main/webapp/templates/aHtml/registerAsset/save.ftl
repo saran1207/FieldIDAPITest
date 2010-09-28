@@ -5,4 +5,4 @@
 
 <p>Asset Registered<p>
 
-<button onclick="closeLightBox();return false;"><@s.text name="label.ok"/></button>
+<button onclick="closeLightBox();window.parent.location.reload(true);return false;"><@s.text name="label.ok"/></button>

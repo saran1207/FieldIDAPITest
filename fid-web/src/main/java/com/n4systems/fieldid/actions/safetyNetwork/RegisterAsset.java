@@ -1,14 +1,11 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.OrderManager;
@@ -17,76 +14,91 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.product.AssetWebModel;
+import com.n4systems.fieldid.actions.product.ProductIdentifierView;
+import com.n4systems.fieldid.actions.product.ProductView;
+import com.n4systems.fieldid.actions.product.ProductViewModeConverter;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductCrudHelper;
-import com.n4systems.model.Order;
+import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.user.User;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
+import com.n4systems.services.product.ProductSaveService;
+import com.n4systems.util.DateHelper;
 
 public class RegisterAsset extends AbstractCrud{
 	
 	Logger logger = Logger.getLogger(RegisterAsset.class);
 
 	private Product linkedProduct;
-	private Product product;
-	private ProductTypeLister productTypes;
-	private List<ProductStatusBean> productStatuses;
-	private Product parentProduct;
-	private boolean lookedUpParent;
+	private Long linkedProductId;
+	
+	//Drop down lists
+	private ProductTypeLister productTypeLister;
 	private List<Listable<Long>> employees;
-	private OwnerPicker ownerPicker;
-	private ProductType productType;
-	private List<InfoOptionInput> productInfoOptions;
+	private List<ProductStatusBean> productStatuses;
 	private List<Listable<Long>> commentTemplates;
+	private OwnerPicker ownerPicker;
+	private AutoAttributeCriteria autoAttributeCriteria;
+
+	private Product parentProduct;
 
 	private ProductManager productManager;
-	private LegacyProductSerial legacyProductSerialManager;
-	private OrderManager orderManager;
 	
+    //Form Inputs
+	private ProductIdentifierView identifiers;
+	private ProductView productView;
 	private AssetWebModel asset = new AssetWebModel(this);
+
+	private OrderManager orderManager;
+
+	private LegacyProductSerial legacyProductManager;
 	
-	public RegisterAsset(PersistenceManager persistenceManager, ProductManager productManager, OrderManager orderManager,
-			LegacyProductSerial legacyProductSerialManager) {
+	public RegisterAsset(PersistenceManager persistenceManager, ProductManager productManager,
+			OrderManager orderManager, LegacyProductSerial legacyProductManager) {
 		super(persistenceManager);
 		this.productManager = productManager;
 		this.orderManager = orderManager;
-		this.legacyProductSerialManager = legacyProductSerialManager;
+		this.legacyProductManager = legacyProductManager;
+
 	}
 
 	@Override
 	protected void initMemberFields() {
-		product = new Product();
+		productView = new ProductView();
+		identifiers = new ProductIdentifierView();
+		linkedProduct = lookUpLinkedProduct(linkedProductId);
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		product = new Product();
-		linkedProduct = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		productView = new ProductView();
+		identifiers = new ProductIdentifierView();
+		linkedProduct = lookUpLinkedProduct(uniqueId);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
 		if(linkedProduct != null) {
-			product.setSerialNumber(linkedProduct.getSerialNumber());
-			product.setRfidNumber(linkedProduct.getRfidNumber());
+			identifiers.setSerialNumber(linkedProduct.getSerialNumber());
+			identifiers.setRfidNumber(linkedProduct.getRfidNumber());
 			// set the default product id.
 			getProductTypes();
-			Long productId = productTypes.getProductTypes().iterator().next().getId();
+			Long productId = productTypeLister.getProductTypes().iterator().next().getId();
 			setProductTypeId(productId);
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
 	}
 	
+	private Product lookUpLinkedProduct(Long uniqueId) {
+		return getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
+	}
+
 	@Override
 	protected void postInit() {
 		super.postInit();
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
 		overrideHelper(new ProductCrudHelper(getLoaderFactory()));
 	}
 	
@@ -96,42 +108,34 @@ public class RegisterAsset extends AbstractCrud{
 	}
 
 	public String doSave(){
+		
+		ProductViewModeConverter converter = new ProductViewModeConverter(getLoaderFactory(), orderManager, getUser());
+		
+		Product product = converter.viewToModel(productView);
+		product.setSerialNumber(identifiers.getSerialNumber());
+		product.setCustomerRefNumber(identifiers.getReferenceNumber());
+		product.setRfidNumber(identifiers.getRfidNumber());
 		product.setLinkedProduct(linkedProduct);
-		logger.info(product);
+		asset.fillInAsset(product);
+		
+		ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
+		saver.setProduct(product);
+		product = saver.create();
+		
+		logger.info("Registered : " + product);
 		return SUCCESS;
 	}
-	
+
 	public Product getLinkedProduct() {
 		return linkedProduct;
 	}
-
-	public Product getProduct() {
-		return product;
-	}
-	
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-	
-	public Long getOwnerId() {
-		return ownerPicker.getOwnerId();
-	}
-
-	public void setOwnerId(Long id) {
-		ownerPicker.setOwnerId(id);
-	}
-	
-	//@RequiredFieldValidator(message="", key="error.owner_required")
-	public BaseOrg getOwner() {
-		return ownerPicker.getOwner();
-	}
-	
+		
 	public ProductTypeLister getProductTypes() {
-		if (productTypes == null) {
-			productTypes = new ProductTypeLister(persistenceManager, getSecurityFilter());
+		if (productTypeLister == null) {
+			productTypeLister = new ProductTypeLister(persistenceManager, getSecurityFilter());
 		}
 
-		return productTypes;
+		return productTypeLister;
 	}
 	
 	public Collection<ProductStatusBean> getProductStatuses() {
@@ -142,11 +146,9 @@ public class RegisterAsset extends AbstractCrud{
 	}
 
 	public Product getParentProduct() {
-		if (!lookedUpParent && !product.isNew()) {
-			parentProduct = productManager.parentProduct(product);
-			lookedUpParent = true;
+		if (parentProduct == null) {
+			parentProduct = productManager.parentProduct(linkedProduct);
 		}
-
 		return parentProduct;
 	}
 	
@@ -157,78 +159,18 @@ public class RegisterAsset extends AbstractCrud{
 		}
 		return employees;
 	}
-	
-	public String getNonIntegrationOrderNumber() {
-		if (!getSecurityGuard().isIntegrationEnabled()) {
-			if (product.getShopOrder() != null) {
-				return product.getShopOrder().getOrder().getOrderNumber();
-			}
+			
+	public AutoAttributeCriteria getAutoAttributeCriteria() {
+		if (autoAttributeCriteria == null && productView.getProductTypeId() != null) {
+			AutoAttributeCriteriaByProductTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByProductTypeIdLoader();
+			
+			loader.setProductTypeId(productView.getProductTypeId());
+			
+			autoAttributeCriteria = loader.load();
 		}
-
-		return null;
-	}
-
-	public void setNonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
-		if (nonIntegrationOrderNumber != null) {
-			String orderNumber = nonIntegrationOrderNumber.trim();
-			// only do this for customers without integration
-			if (!getSecurityGuard().isIntegrationEnabled()) {
-				// if the product doesn't have a shop order, we need to create
-				// one
-				if (product.getShopOrder() == null) {
-					product.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
-				} else {
-					// otherwise we'll just change the order number
-					Order order = product.getShopOrder().getOrder();
-					order.setOrderNumber(orderNumber);
-					persistenceManager.update(order);
-				}
-			}
-		}
+		return autoAttributeCriteria;
 	}
 	
-	//@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")
-	public List<InfoOptionInput> getProductInfoOptions() {
-		if (productInfoOptions == null) {
-			productInfoOptions = new ArrayList<InfoOptionInput>();
-			if (product.getType() != null) {
-				List<InfoOptionBean> tmpOptions = new ArrayList<InfoOptionBean>();
-				if (product.getInfoOptions() != null) {
-					tmpOptions.addAll(product.getInfoOptions());
-				}
-				productInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getProductInfoFields());
-			}
-		}
-		return productInfoOptions;
-	}
-	
-	public Collection<InfoFieldBean> getProductInfoFields() {
-		if (getProductTypeId() != null) {
-			if (product.getId() == null) {
-				return productType.getAvailableInfoFields();
-			} else {
-				return productType.getInfoFields();
-			}
-		}
-		return null;
-	}
-	
-	//@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
-	public Long getProductTypeId() {
-		return (product.getType() != null) ? product.getType().getId() : null;
-	}
-	
-	public void setProductTypeId(Long productTypeId) {
-		productType = null;
-		if (productTypeId != null) {
-			QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
-			query.addSimpleWhere("tenant", getTenant()).addSimpleWhere("id", productTypeId).addSimpleWhere("state", EntityState.ACTIVE);
-			query.addPostFetchPaths("infoFields", "inspectionTypes", "attachments", "subTypes");
-			productType = persistenceManager.find(query);
-		}
-		this.product.setType(productType);
-	}
-
 	public List<Listable<Long>> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
@@ -240,77 +182,105 @@ public class RegisterAsset extends AbstractCrud{
 		return 0L;
 	}
 	
-	//@RequiredStringValidator(message = "", key = "error.identifiedrequired")
-	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
+	/* Form setters and getters */
+	
+	public void setAssignedUser(Long userId) {
+		productView.setAssignedUser(userId);
+		
+	}
+	
+	public void setProductStatus(Long statusId) {
+		productView.setProductStatus(statusId);
+	}
+	
+	public void setProductTypeId(Long typeId) {
+		productView.setProductTypeId(typeId);
+	}
+	
+	public Long getProductTypeId() {
+		return productView.getProductTypeId();
+	}
+	
+	public void setPurchaseOrder(String purchaseOrder) {
+		productView.setPurchaseOrder(purchaseOrder);
+	}
+	
 	public void setIdentified(String identified) {
-		product.setIdentified(convertDate(identified));
+		productView.setIdentified(convertDate(identified));
 	}
-
+	
 	public String getIdentified() {
-		return convertDate(product.getIdentified());
+		if (productView.getIdentified() == null) {
+			return convertDate(DateHelper.getToday());
+		}
+		return convertDate(productView.getIdentified());
 	}
 	
-	public Long getProductStatus() {
-		return (product.getProductStatus() != null) ? product.getProductStatus().getUniqueID() : null;
+	public void setNonIntegrationOrderNumber(String orderNumber) {
+		productView.setNonIntegrationOrderNumber(orderNumber);
+	}
+	
+	public void setComments(String comments) {
+		productView.setComments(comments);
+	}
+	
+	public List<ProductExtensionValueInput> getProductExtentionValues() {
+		return productView.getProductExtentionValues();
+	}
+	
+	public List<InfoOptionInput> getProductInfoOptions() {
+		return productView.getProductInfoOptions();
+	}
+	
+	public void setProductInfoOptions(List<InfoOptionInput> infoOptions) {
+		productView.setProductInfoOptions(infoOptions);
+	}
+	
+	public ProductIdentifierView getIdentifiers() {
+		return identifiers;
 	}
 
-	public void setProductStatus(Long productStatusId) {
-		ProductStatusBean productStatus = null;
-		if (productStatusId != null) {
-			productStatus = legacyProductSerialManager.findProductStatus(productStatusId, getTenantId());
-		}
-		this.product.setProductStatus(productStatus);
+	public BaseOrg getOwner() {
+		return ownerPicker.getOwner();
 	}
-	
-	public String getSerialNumber() {
-		return product.getSerialNumber();
+
+	public Long getOwnerId() {
+		return ownerPicker.getOwnerId();
+	}
+
+	public void setOwnerId(Long id) {
+		ownerPicker.setOwnerId(id);
 	}
 
 	public void setSerialNumber(String serialNumber) {
-		product.setSerialNumber(serialNumber);
+		identifiers.setSerialNumber(serialNumber);
 	}
 
-	public String getRfidNumber() {
-		return product.getRfidNumber();
+	public String getSerialNumber() {
+		return identifiers.getSerialNumber();
 	}
 
 	public void setRfidNumber(String rfidNumber) {
-		product.setRfidNumber(rfidNumber);
+		identifiers.setRfidNumber(rfidNumber);
 	}
 
-	public String getCustomerRefNumber() {
-		return product.getCustomerRefNumber();
+	public String getRfidNumber() {
+		return identifiers.getRfidNumber();
 	}
 
-	public void setCustomerRefNumber(String customerRefNumber) {
-		product.setCustomerRefNumber(customerRefNumber);
+	public void setReferenceNumber(String referenceNumber) {
+		identifiers.setReferenceNumber(referenceNumber);
 	}
 	
-	public void setAsset(AssetWebModel asset) {
-		this.asset = asset;
+	public String getReferenceNumber() {
+		return identifiers.getReferenceNumber();
 	}
-
+	
 	public AssetWebModel getAsset() {
 		return asset;
-	}
+	}	
 	
-	public String getComments() {
-		return product.getComments();
-	}
-
-	public void setComments(String comments) {
-		product.setComments(comments);
-	}
-	
-	public Long getAssignedUser() {
-		return (product.getAssignedUser() != null) ? product.getAssignedUser().getId() : null;
-	}
-
-	public void setAssignedUser(Long user) {
-		if (user == null) {
-			product.setAssignedUser(null);
-		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
-			product.setAssignedUser(persistenceManager.find(User.class, user, getTenantId()));
-		}
+	public void setLinkedProductId(Long linkedProductId) {
+		this.linkedProductId = linkedProductId;
 	}
 }
