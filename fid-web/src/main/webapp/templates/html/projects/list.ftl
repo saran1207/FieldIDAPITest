@@ -1,29 +1,25 @@
 <head>
 	<style type="text/css">
-		#filter {
-			float: left;
-			margin-top: 5px;
+		#filter h3{
+			margin: 7px 0 0 0;
 		}
 		
 		#filter .listOfLinks{
-			margin-left: 15px;
+			margin: 7px 20px 0 10px;		
 		}
 		
-		.filterHeading{
-			display: inline;
+		#filter .listOfLinks, #filter h3 {
 			float: left;
 		}
-		
-		.textbox, .searchContainer label {
-			display: block;
-			float: left;
-		}
-		
+
 		.searchContainer label {
-			margin: 6px 8px 0 0;
+			margin: 0 10px 3px 0;
 			font-size: 13px;
 			font-weight: bold;
-			
+		}
+		
+		#searchJobButton{
+			padding: 2px;
 		}
 		
 		.fieldHolder .textbox{
@@ -31,39 +27,21 @@
 			border:1px solid #666666;
 			padding: 3px;
 			margin-right: 7px;
+			width: 200px;
 		}
-		
-		#searchJob{
-			padding: 0 1px 0 1px;
-		}
-		
-		#searchJob, .textbox{
-			vertical-align: middle;
-			*vertical-align: text-bottom;
-		}
-		
-		.searchContainer{
-			margin-left: 50px;
-			width: 450px;
-			float: left;
-		}
-		
-		.searchContainer .fieldHolder{
-			display: inline;
-		}
-		
+	
 		.headerContents{
-			background-color: #E8E8E8;
-			padding: 5px;
+			background-color: #eeeeee;
+			padding: 10px;
 		}
-		
 	</style>
 </head>
 ${action.setPageType('job', 'list')!}
 <div class="headerContents">
-	<h3 class="filterHeading"><@s.text name="label.filter"/>:</h3>
+	
 	<div id="filter">
-		<ul class="listOfLinks">
+	<h3 class="filterHeading"><@s.text name="label.filter"/>:</h3>
+		<ul class="listOfLinks inline">
 			<li class="first <#if !justAssignedOn?exists || !justAssignedOn >selected</#if>">
 				<#if justAssignedOn?exists && justAssignedOn >
 					<a href="<@s.url action="jobs"/>"><@s.text name="label.all_jobs"/></a>
@@ -79,15 +57,14 @@ ${action.setPageType('job', 'list')!}
 				</#if>
 			</li>
 		</ul>
-	</div>
-		
-	<@s.form action="jobsSearch" id="jobSearchForm"  theme="fieldid" cssClass="fullForm">
 		<div class="searchContainer">
-			<label for="searchID"><@s.text name="label.find"/>:</label> 
-			<@s.textfield name="searchID"/>
-			<@s.submit id="searchJob" key="hbutton.search" cssClass="saveButton"/>
+			<@s.form action="jobsSearch" id="jobSearchForm"  theme="fieldid">
+				<label for="searchID"><@s.text name="label.find"/>:</label> 
+				<@s.textfield name="searchID"/>
+				<@s.submit id="searchJobButton" key="hbutton.search"/>
+			</@s.form >
 		</div>
-	</@s.form >
+	</div>
 </div>
 
 <#if  page.hasResults() && page.validPage() >
