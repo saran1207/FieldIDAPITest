@@ -99,3 +99,14 @@ div.productInfoText {
 a.backToResults {
     text-decoration: none;
 }
+
+div.moreFromTheWeb {
+    display: block;
+    float: right;
+}
+
+div.moreFromTheWeb a {
+    color: #5fa3d9;
+    font-size: 1em;
+    font-weight:normal;
+}

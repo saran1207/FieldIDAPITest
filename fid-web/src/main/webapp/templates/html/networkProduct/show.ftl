@@ -137,13 +137,16 @@
 
         <div class="productInformationSection">
             <@s.text name="label.additionalinformation"/>
+
+            <div class="moreFromTheWeb">
+                <#if product.type.cautions?exists && product.type.cautions?length gt 0 >
+                    <p>
+                        <a href="${product.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/> &#187;</a>
+                    </p>
+                </#if>
+            </div>
         </div>
 
-        <#if product.type.cautions?exists && product.type.cautions?length gt 0 >
-            <p>
-                <a href="${product.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
-            </p>
-        </#if>
 
         <#if !productAttachments.isEmpty() >
             <#assign downloadAction="downloadProductAttachedFileSafetyNetwork"/>
