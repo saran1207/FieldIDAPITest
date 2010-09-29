@@ -95,3 +95,7 @@ div.productInfoText {
     color: #888888;
     font-size: 1.1em;
 }
+
+a.backToResults {
+    text-decoration: none;
+}

@@ -8,11 +8,13 @@
                 <@s.url id="document_icon_url" value="/images/document-icon.png"/>
                 <#if attachedFile.image>
                     <#assign preview_image = attachment_url/>
+                    <#assign image_width = '63'/>
                 <#else>
                     <#assign preview_image = document_icon_url/>
+                    <#assign image_width = '55'/>
                 </#if>
                 <a href="${attachment_url}" target="_blank">
-                    <img class="additionalInfoImage" width="63" height="65" src="${preview_image}"/>
+                    <img class="additionalInfoImage" width="${image_width}" height="65" src="${preview_image}"/>
                 </a>
             </div>
             <div class="attachmentText">

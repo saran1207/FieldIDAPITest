@@ -8,18 +8,7 @@
 
 <div id="mainContent">
 
-    <h1>Asset - ${product.serialNumber}</h1>
-
-    <p></p><br/>
-
-    <div class="registerThisNow">
-        <p>
-            <a href="#">Register this asset now</a><br/>
-            By registering this asset you will be able to enter your own asset information and perform events.
-        </p>
-    </div>
-
-    <p></p><br/>
+    <#include '_topLayout.ftl'/>
 
     <ul class="options" id="innerList">
         <li>
