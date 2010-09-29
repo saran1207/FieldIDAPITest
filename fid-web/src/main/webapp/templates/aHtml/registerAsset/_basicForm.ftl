@@ -3,7 +3,7 @@
 		<h3><@s.text name="nav.asset_information" /></h3>
 	</div>
 	<div class="infoSet">
-		<label for="serialNumber" class="label"><@s.text name="label.serialnumber"/></label>
+		<label for="serialNumber" class="label"><@s.text name="label.serialnumber"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 		<@s.textfield name="serialNumber"/>
 	</div>
 	<div class="infoSet">
@@ -16,8 +16,8 @@
 	</div>
 
 	<div class="infoSet">
-		<label for="productTypeId" class="label"><@s.text name="label.producttype"/></label>
-		<@s.select id="productType" name="productTypeId" onchange="updateProductType(this)">
+		<label for="productTypeId" class="label"><@s.text name="label.producttype"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+		<@s.select id="productType" name="productTypeId" onchange="updateProductType(this);showSuggestedAttributes();">
 			<#include "/templates/html/common/_productTypeOptions.ftl"/>
 		</@s.select>
 		<span class="fieldHolder updating" id="productTypeIndicator">

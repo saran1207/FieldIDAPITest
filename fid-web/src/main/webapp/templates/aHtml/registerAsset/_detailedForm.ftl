@@ -54,7 +54,26 @@
 		<h3><@s.text name="label.attributes"/></h3>
 	</div>
 	<#include "_infoOptions.ftl">
-	
+
+	<#if !linkedProduct.orderedInfoOptionList.isEmpty()>
+		<#if autoAttributeCriteria?exists>
+		<div id="suggestedAttributes">
+		<#else>
+		<div id="suggestedAttributes" style="display:none">
+		</#if>
+		   <h3> ${linkedProduct.tenant.name} <@s.text name="label.attributes"/></h3>
+		   <p class="gray"><@s.text name="label.registerasset.linkedattributes"/></p>
+			<#list linkedProduct.orderedInfoOptionList as infoOption >
+				<div class="infoSet">
+					<label class="label">${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
+					<span class="fieldHolder" infoFieldName="${infoOption.infoField.name?j_string}">
+						<p class="blue">${infoOption.name}</p>
+					</span>
+				</div>
+			</#list>
+		</div>
+	</#if>
+		
 	<div class="infoSet">
 		<label for="comments" class="label"><@s.text name="label.comments"/></label>
 		<span class="fieldHolder">
@@ -62,4 +81,7 @@
 			<@s.textarea id="comments"  name="comments" theme="fieldidSimple"/>
 		</span>
 	</div>
+	
+
+		
 </div>

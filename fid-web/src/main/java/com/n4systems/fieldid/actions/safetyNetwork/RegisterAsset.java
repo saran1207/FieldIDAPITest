@@ -29,6 +29,11 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class RegisterAsset extends AbstractCrud{
 	
@@ -36,6 +41,12 @@ public class RegisterAsset extends AbstractCrud{
 
 	private Product linkedProduct;
 	private Long linkedProductId;
+	private Product parentProduct;
+	private Product newProduct;
+	
+	private ProductManager productManager;
+	private LegacyProductSerial legacyProductManager;
+	private OrderManager orderManager;
 	
 	//Drop down lists
 	private ProductTypeLister productTypeLister;
@@ -45,26 +56,17 @@ public class RegisterAsset extends AbstractCrud{
 	private OwnerPicker ownerPicker;
 	private AutoAttributeCriteria autoAttributeCriteria;
 
-	private Product parentProduct;
-
-	private ProductManager productManager;
-	
     //Form Inputs
 	private ProductIdentifierView identifiers;
 	private ProductView productView;
 	private AssetWebModel asset = new AssetWebModel(this);
 
-	private OrderManager orderManager;
-
-	private LegacyProductSerial legacyProductManager;
-	
 	public RegisterAsset(PersistenceManager persistenceManager, ProductManager productManager,
 			OrderManager orderManager, LegacyProductSerial legacyProductManager) {
 		super(persistenceManager);
 		this.productManager = productManager;
 		this.orderManager = orderManager;
 		this.legacyProductManager = legacyProductManager;
-
 	}
 
 	@Override
@@ -120,16 +122,20 @@ public class RegisterAsset extends AbstractCrud{
 		
 		ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
 		saver.setProduct(product);
-		product = saver.create();
-		
-		logger.info("Registered : " + product);
+		newProduct = saver.create();
+			
+		logger.info("Registered : " + newProduct);
 		return SUCCESS;
 	}
 
 	public Product getLinkedProduct() {
 		return linkedProduct;
 	}
-		
+	
+	public Product getNewProduct() {
+		return newProduct;
+	}
+	
 	public ProductTypeLister getProductTypes() {
 		if (productTypeLister == null) {
 			productTypeLister = new ProductTypeLister(persistenceManager, getSecurityFilter());
@@ -170,7 +176,7 @@ public class RegisterAsset extends AbstractCrud{
 		}
 		return autoAttributeCriteria;
 	}
-	
+		
 	public List<Listable<Long>> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
@@ -197,6 +203,7 @@ public class RegisterAsset extends AbstractCrud{
 		productView.setProductTypeId(typeId);
 	}
 	
+	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
 	public Long getProductTypeId() {
 		return productView.getProductTypeId();
 	}
@@ -228,6 +235,7 @@ public class RegisterAsset extends AbstractCrud{
 		return productView.getProductExtentionValues();
 	}
 	
+	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")
 	public List<InfoOptionInput> getProductInfoOptions() {
 		return productView.getProductInfoOptions();
 	}
@@ -256,6 +264,8 @@ public class RegisterAsset extends AbstractCrud{
 		identifiers.setSerialNumber(serialNumber);
 	}
 
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength = "50")
 	public String getSerialNumber() {
 		return identifiers.getSerialNumber();
 	}

@@ -106,12 +106,12 @@
 		</action>
 		
 		<action name="regNetworkProduct" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
-			<result name="error" type="freemarker">/templates/aHtml/registerAsset/error.ftl</result>
-			<result name="input" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
 		</action>
 		
 		<action name="saveRegNetworkAsset" method="save" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
+			<result name="error" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
+			<result name="input" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/registerAsset/save.ftl</result>
 		</action>
 	</package>

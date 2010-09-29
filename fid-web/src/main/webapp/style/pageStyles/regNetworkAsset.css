@@ -1,10 +1,7 @@
-#basicDetails .infoSet .label, #extraDetails .infoSet .label {
-	font-weight:normal;
-}
 
 #basicDetails .infoSet, #extraDetails .infoSet {
 	border-top: none;
-	min-height: 0;
+	border-bottom:1px solid #D0DAFA;
 }
 
 #basicDetails .infoSet .label, 
@@ -12,11 +9,17 @@
 #extraDetails .infoSet .label,  
 #extraDetails .infoSet .fieldHolder{
 	padding-bottom: 0;
+	width: 150;
 }
 
 .formTitle {
-	border-bottom:1px solid #D0DAFA;
-	padding:5px 0;
+	margin-top: 30px;
+	border-bottom:1px solid #B0B0B0;
+	padding-bottom: 5px;
+}
+
+.formTitle h3{
+	font-size:1.1em;
 }
 
 #infoOptions h2{
@@ -25,29 +28,32 @@
 
 #formHeader h1 {
 	font-size:2em;
-	padding: 10px 0;
 }
 
-#formHeader p {
-	margin-top: 20px;
-	margin-left: 120px;
+#formHeader h1, #formHeader p {
+	margin-top: 10px;
+	margin-left: 100px;
+}
+
+#imageHolder {
+	float: left;
+	height: 75px;
+	width: 75px;
+	overflow: hidden; 
+	border:1px solid #B0B0B0;
 }
 
 #formHeader img {
-	float: left;
-	width: 100px;
-	border:1px solid #000000;
-	margin-bottom:20px;
+	max-width: 75px;
 }
 
 .expand p {
- 	background-color: #EBEBEB;
  	padding: 10px;
- 	text-align: center;
+ 	border-bottom:1px solid #D0DAFA;
 }
 
 .expand a {
- 	color: #5CACEE;
+ 	color: #556DA5;
  	font-weight: bold;
 }
 
@@ -58,3 +64,80 @@
 #actions p{
  	padding: 10px 0;
 }
+
+#suggestedAttributes {
+	background: no-repeat url(../../images/arrow.png) 0% 12%;
+	padding: 0 0 0 30px;
+}
+
+#infoOptions, #suggestedAttributes {
+	float:left;
+}
+#suggestedAttributes h3{
+	padding-top: 10px;
+}
+
+#suggestedAttributes .infoSet .label,  
+#suggestedAttributes .infoSet .fieldHolder{
+	line-height: normal;
+	width: 120px;
+}
+
+#suggestedAttributes .infoSet {
+	min-width: 180px;
+	border-bottom: none;
+	padding: 0;
+	min-height: 0;
+}
+
+#infoOptions .infoSet {
+	min-width: 320px;
+}
+.blue{
+	color: #556DA5;
+}
+
+.gray {
+	color: #B0B0B0; 
+}
+
+#confirm {
+	background: no-repeat url(../../images/register-conf-bg.png) center center;
+	margin-top: 15px;
+	padding: 30px;
+	height: 390px;
+	width: 540px;
+}
+
+#confirm p, #confirm h1 {
+	text-align:center;
+	padding: 10px;
+}
+
+#confirm button {
+	width: 70px;
+}
+
+.center
+{
+margin:auto;
+width:70%;
+}
+
+.confirmBody
+{
+	margin-top: 50px;
+}
+
+#links {
+	border-top: 1px solid #D0DAFA;
+	border-bottom:1px solid #D0DAFA;
+	width: 250px;
+	margin-left: 150px;
+	margin-top: 20px;
+}
+
+#links p {
+	text-align: left;
+}
+
