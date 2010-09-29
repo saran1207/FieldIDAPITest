@@ -7,6 +7,7 @@
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_lightView.ftl"/>
 	<#include "/templates/html/common/_calendar.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
 	    updateProductTypeUrl = '<@s.url action="regProductTypeChange" namespace="/ajax"/>';
 	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
