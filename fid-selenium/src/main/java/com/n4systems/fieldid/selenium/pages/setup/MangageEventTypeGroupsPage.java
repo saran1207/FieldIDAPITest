@@ -88,10 +88,10 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 			selenium.type("//input[@id='eventTypeGroupCreate_reportTitle']", eventTypeGroup.getReportName());
 		}
 		if(eventTypeGroup.getPdfReportStyle() !=  null) {
-			selenium.check("//ul[@class='printOutSelection']//div[contains(text(), '"+ eventTypeGroup.getPdfReportStyle() +"')]/../div/input");
+			selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ eventTypeGroup.getPdfReportStyle() +"')]/input");
 		}
 		if(eventTypeGroup.getObservationReportStyle() !=  null) {
-			selenium.check("//ul[@class='printOutSelection']//div[contains(text(), '"+ eventTypeGroup.getObservationReportStyle() +"')]/../div/input");
+			selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ eventTypeGroup.getObservationReportStyle() +"')]/input");
 		}
 	}
 	

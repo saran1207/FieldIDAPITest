@@ -78,7 +78,7 @@ public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 		
 		manageEventTypeGroupsPage.clickAddTab();
 		assertEquals("Add", manageEventTypeGroupsPage.getCurrentTab());
-		EventTypeGroup eventTypeGroup = new EventTypeGroup("Test", "Test", "Basic Visual Inspection ", "Full Observation Report");
+		EventTypeGroup eventTypeGroup = new EventTypeGroup("Test", "Test", "Basic Visual Inspection", "Full Observation Report");
 		manageEventTypeGroupsPage.setEventTypeGroupFormFields(eventTypeGroup);
 		manageEventTypeGroupsPage.clickSaveButton();
 		manageEventTypeGroupsPage.verifyEventTypeSaved();
