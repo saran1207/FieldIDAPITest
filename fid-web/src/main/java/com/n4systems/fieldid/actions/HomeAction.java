@@ -38,8 +38,7 @@ public class HomeAction extends AbstractAction {
 	public String execute() {
 		jobListService = new JobListService(persistenceManager, getSecurityFilter(), Constants.SUMMARY_SIZE);
 		jobListService.setPageNumber(1);
-		jobListService.setOrderBy("started");
-		jobListService.setAscendingOrderBy();
+		jobListService.setOrderBy("created");
 		return SUCCESS;
 	}
 

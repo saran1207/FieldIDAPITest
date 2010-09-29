@@ -1,7 +1,8 @@
 <head>
 	<style type="text/css">
 		#filter h3{
-			margin: 7px 0 0 0;
+			margin: 5px 0 0 0;
+			font-size:1.2em;
 		}
 		
 		#filter .listOfLinks{
@@ -18,7 +19,7 @@
 			font-weight: bold;
 		}
 		
-		#searchJobButton{
+		.searchJobButtons{
 			padding: 2px;
 		}
 		
@@ -61,7 +62,9 @@ ${action.setPageType('job', 'list')!}
 			<@s.form action="jobsSearch" id="jobSearchForm"  theme="fieldid">
 				<label for="searchID"><@s.text name="label.find"/>:</label> 
 				<@s.textfield name="searchID"/>
-				<@s.submit id="searchJobButton" key="hbutton.search"/>
+				<@s.submit cssClass="searchJobButtons" key="hbutton.search"/>
+				<@s.url id="cancelUrl" action="jobs"/>
+				<@s.reset cssClass="searchJobButtons" key="label.reset" onclick="return redirect( '${cancelUrl}' );" />
 			</@s.form >
 		</div>
 	</div>

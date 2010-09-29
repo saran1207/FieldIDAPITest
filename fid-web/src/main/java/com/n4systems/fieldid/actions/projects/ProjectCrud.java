@@ -101,12 +101,22 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 			JobListService jobListService = new JobListService(persistenceManager, getSecurityFilter(), Constants.PAGE_SIZE);
 			jobListService.setPageNumber(getCurrentPage());
 			page = jobListService.getList(justAssignedOn, false, searchID);
-
 		} catch (InvalidQueryException iqe) {
 			logger.error(getLogLinePrefix() + "bad search query", iqe);
 			return ERROR;
 		}
-		return SUCCESS;
+
+		return jobFound() ? SUCCESS : ERROR;
+	}
+
+	private boolean jobFound() {
+		/* If size == 1 search was successful and found exactly one match */
+		if (page.getList().size() == 1) {
+			uniqueID = page.getList().get(0).getID();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@SkipValidation
@@ -259,7 +269,11 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	public void setSearchID(String searchID) {
-		this.searchID = searchID;
+		if (searchID.equals("")) {
+			this.searchID = null;
+		} else {
+			this.searchID = searchID;
+		}
 	}
 
 	public void setDuration(String duration) {

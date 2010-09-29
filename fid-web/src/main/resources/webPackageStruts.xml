@@ -1288,7 +1288,10 @@
 		<action name="jobsSearch" method="search" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="input" type="freemarker">/templates/html/projects/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projects/list.ftl</result>
-		<result name="success" type="freemarker">/templates/html/projects/list.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">job</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
 		</action>
 
 		<action name="identify" method="search" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">

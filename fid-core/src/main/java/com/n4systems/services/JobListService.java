@@ -23,8 +23,8 @@ public class JobListService {
 		this.filter = filter;
 		this.pageSize = pageSize;
 		this.pageNumber = 1;
-		this.orderBy = "projectID";
-		this.ascendingOrderBy = true;
+		this.orderBy = "created";
+		this.ascendingOrderBy = false;
 	}
 
 	public Pager<Project> getList(boolean justAssignedOn, boolean onlyOpen, String projectID) {
