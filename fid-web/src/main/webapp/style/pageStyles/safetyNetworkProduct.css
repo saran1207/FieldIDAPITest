@@ -14,10 +14,10 @@ div.registerThisNow {
     font-size: 11px;
 }
 
-.productInformation {
+table.productInformation {
 	width: 100%;
-	border-collapse: separate;
 	border-spacing: 2px 2px;
+    border-collapse: collapse;
 }
 
 table.productInformation td {
