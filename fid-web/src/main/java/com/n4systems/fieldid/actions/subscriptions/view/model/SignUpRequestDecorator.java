@@ -177,7 +177,6 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 		return getUsers() <= getSignUpPackage().getUsers();
 	}
 	
-
 	@RequiredStringValidator(message="", key="error.passwordrequired")
 	@StringLengthFieldValidator(message="", key="errors.passwordlength", minLength="5") 
 	public void setPassword(String password) {

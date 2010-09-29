@@ -1,30 +1,95 @@
 <head>
 	<style type="text/css">
 		#filter {
-			margin-top:5px;
+			float: left;
+			margin-top: 5px;
 		}
+		
+		#filter .listOfLinks{
+			margin-left: 15px;
+		}
+		
+		.filterHeading{
+			display: inline;
+			float: left;
+		}
+		
+		.textbox, .searchContainer label {
+			display: block;
+			float: left;
+		}
+		
+		.searchContainer label {
+			margin: 6px 8px 0 0;
+			font-size: 13px;
+			font-weight: bold;
+			
+		}
+		
+		.fieldHolder .textbox{
+			font-size:1.2em;
+			border:1px solid #666666;
+			padding: 3px;
+			margin-right: 7px;
+		}
+		
+		#searchJob{
+			padding: 0 1px 0 1px;
+		}
+		
+		#searchJob, .textbox{
+			vertical-align: middle;
+			*vertical-align: text-bottom;
+		}
+		
+		.searchContainer{
+			margin-left: 50px;
+			width: 450px;
+			float: left;
+		}
+		
+		.searchContainer .fieldHolder{
+			display: inline;
+		}
+		
+		.headerContents{
+			background-color: #E8E8E8;
+			padding: 5px;
+		}
+		
 	</style>
 </head>
 ${action.setPageType('job', 'list')!}
-<div id="filter">
-	<h3 class="inline"><@s.text name="label.filter"/>:</h3>
-	<ul class="listOfLinks inline">
-		<li class="first <#if !justAssignedOn?exists || !justAssignedOn >selected</#if>">
-			<#if justAssignedOn?exists && justAssignedOn >
-				<a href="<@s.url action="jobs"/>"><@s.text name="label.all_jobs"/></a>
-			<#else>
-				<@s.text name="label.all_jobs"/>
-			</#if>
-		</li>
-		<li <#if justAssignedOn?exists && justAssignedOn >class="selected"</#if>>
-			<#if !justAssignedOn?exists || !justAssignedOn >
-				<a href="<@s.url action="jobs" justAssignedOn="true"/>"><@s.text name="label.only_jobs_im_assigned_to"/></a>
-			<#else>
-				<@s.text name="label.only_jobs_im_assigned_to"/>
-			</#if>
-		</li>
-	</ul>
+<div class="headerContents">
+	<h3 class="filterHeading"><@s.text name="label.filter"/>:</h3>
+	<div id="filter">
+		<ul class="listOfLinks">
+			<li class="first <#if !justAssignedOn?exists || !justAssignedOn >selected</#if>">
+				<#if justAssignedOn?exists && justAssignedOn >
+					<a href="<@s.url action="jobs"/>"><@s.text name="label.all_jobs"/></a>
+				<#else>
+					<@s.text name="label.all_jobs"/>
+				</#if>
+			</li>
+			<li <#if justAssignedOn?exists && justAssignedOn >class="selected"</#if>>
+				<#if !justAssignedOn?exists || !justAssignedOn >
+					<a href="<@s.url action="jobs" justAssignedOn="true"/>"><@s.text name="label.only_jobs_im_assigned_to"/></a>
+				<#else>
+					<@s.text name="label.only_jobs_im_assigned_to"/>
+				</#if>
+			</li>
+		</ul>
+	</div>
+		
+	<@s.form action="jobsSearch" id="jobSearchForm"  theme="fieldid" cssClass="fullForm">
+		<div class="searchContainer">
+			<label for="searchID"><@s.text name="label.find"/>:</label> 
+			<@s.textfield name="searchID"/>
+			<@s.submit id="searchJob" key="hbutton.search" cssClass="saveButton"/>
+		</div>
+	</@s.form >
 </div>
+
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="jobs"/>
 	<#include '../common/_pagination.ftl' />

@@ -35,8 +35,8 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
+@ExtendedFeatureFilter(requiredFeature = ExtendedFeature.Projects)
+@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageJobs })
 public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	private ProjectManager projectManager;
 	private JobResourcesCrud jobResources;
-	
+
 	private OwnerPicker ownerPicker;
 
 	private Project project;
@@ -57,8 +57,8 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	private Pager<FileAttachment> notesPaged;
 	private Pager<Product> assetsPaged;
 	private Pager<InspectionSchedule> schedulesPaged;
-	
-	
+
+	private String searchID;
 
 	public ProjectCrud(PersistenceManager persistenceManager, ProjectManager projectManager) {
 		super(persistenceManager);
@@ -87,7 +87,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(open=true)
+	@UserPermissionFilter(open = true)
 	public String doShow() {
 		testRequiredEntities(true);
 		jobResources.setJobId(uniqueID);
@@ -95,13 +95,28 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(open=true)
+	@UserPermissionFilter(open = true)
+	public String doSearch() {
+		try {
+			JobListService jobListService = new JobListService(persistenceManager, getSecurityFilter(), Constants.PAGE_SIZE);
+			jobListService.setPageNumber(getCurrentPage());
+			page = jobListService.getList(justAssignedOn, false, searchID);
+
+		} catch (InvalidQueryException iqe) {
+			logger.error(getLogLinePrefix() + "bad search query", iqe);
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	@UserPermissionFilter(open = true)
 	public String doList() {
 		try {
 			JobListService jobListService = new JobListService(persistenceManager, getSecurityFilter(), Constants.PAGE_SIZE);
-			jobListService.setPageNumber(getCurrentPage());	
-			page = jobListService.getList(justAssignedOn, false);
-			
+			jobListService.setPageNumber(getCurrentPage());
+			page = jobListService.getList(justAssignedOn, false, null);
+
 		} catch (InvalidQueryException iqe) {
 			logger.error(getLogLinePrefix() + "bad search query", iqe);
 			return ERROR;
@@ -189,7 +204,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	public Project getProject() {
 		return project;
 	}
-	
+
 	public Project getJob() {
 		return project;
 	}
@@ -242,9 +257,10 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	public void setActualCompletion(String actualCompletion) {
 		this.actualCompletion = actualCompletion;
 	}
-	
-	
-	
+
+	public void setSearchID(String searchID) {
+		this.searchID = searchID;
+	}
 
 	public void setDuration(String duration) {
 		project.setDuration(duration);
@@ -362,8 +378,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		this.justAssignedOn = justAssignedOn;
 	}
 
-	
-	@RequiredFieldValidator(message="", key="error.owner_required")
+	@RequiredFieldValidator(message = "", key = "error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -372,7 +387,6 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return ownerPicker.getOwnerId();
 	}
 
-	
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}

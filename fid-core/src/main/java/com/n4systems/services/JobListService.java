@@ -16,8 +16,7 @@ public class JobListService {
 	private int pageNumber;
 	private String orderBy;
 	private boolean ascendingOrderBy;
-	
-	
+
 	public JobListService(PersistenceManager persistenceManager, SecurityFilter filter, int pageSize) {
 		super();
 		this.persistenceManager = persistenceManager;
@@ -27,9 +26,8 @@ public class JobListService {
 		this.orderBy = "projectID";
 		this.ascendingOrderBy = true;
 	}
-	
-	
-	public Pager<Project> getList(boolean justAssignedOn, boolean onlyOpen) {
+
+	public Pager<Project> getList(boolean justAssignedOn, boolean onlyOpen, String projectID) {
 		QueryBuilder<Project> qBuilder = new QueryBuilder<Project>(Project.class, filter);
 		qBuilder.setSimpleSelect().addOrder(orderBy, ascendingOrderBy).addSimpleWhere("retired", false);
 		if (justAssignedOn) {
@@ -39,10 +37,14 @@ public class JobListService {
 		if (onlyOpen) {
 			qBuilder.addSimpleWhere("open", true);
 		}
-		
+
+		if (projectID != null && !projectID.equals("")) {
+			qBuilder.addSimpleWhere("projectID", projectID);
+		}
+
 		return persistenceManager.findAllPaged(qBuilder, pageNumber, pageSize);
 	}
-		
+
 	public void setPageNumber(Integer pageNumber) {
 		this.pageNumber = (pageNumber == null) ? 1 : pageNumber;
 	}
@@ -54,7 +56,7 @@ public class JobListService {
 	public void setAscendingOrderBy() {
 		this.ascendingOrderBy = true;
 	}
-	
+
 	public void setDescendingOrderBy() {
 		this.ascendingOrderBy = false;
 	}
