@@ -44,6 +44,11 @@ public class FieldIDPage extends WebPage {
 		return new SetupPage(selenium);
 	}
 	
+	public JobsListPage clickJobsLink() {
+		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Jobs')]");
+		return new JobsListPage(selenium);
+	}
+	
 	public IdentifyPage clickIdentifyLink() {
 		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Identify')]");
 		return new IdentifyPage(selenium);
