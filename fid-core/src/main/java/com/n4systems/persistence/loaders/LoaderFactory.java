@@ -73,6 +73,7 @@ import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductTypeLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetCountLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredOrAssignedInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkUnregisteredAssetCountLoader;
@@ -370,6 +371,10 @@ public class LoaderFactory {
 
 	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(boolean forAssignedProduct) {
 		return (forAssignedProduct) ? createSafetyNetworkAssignedProductInspectionLoader() : createSafetyNetworkRegisteredProductInspectionLoader();
+	}
+
+	public SafetyNetworkRegisteredOrAssignedInspectionLoader createSafetyNetworkInspectionLoaderAssignedOrRegistered() {
+		return new SafetyNetworkRegisteredOrAssignedInspectionLoader(filter);
 	}
 
 	public SafetyNetworkProductAttachmentListLoader createSafetyNetworkProductAttachmentListLoader() {

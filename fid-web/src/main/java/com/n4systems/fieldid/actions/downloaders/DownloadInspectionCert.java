@@ -33,7 +33,7 @@ public class DownloadInspectionCert extends DownloadAction {
 	public String doDownload() {
 		
 		// if we're in a vendor context we need to look inspections for assigned products rather than registered products
-		Inspection inspection = getLoaderFactory().createSafetyNetworkInspectionLoader(isInVendorContext()).setId(uniqueID).load();
+		Inspection inspection = getLoaderFactory().createSafetyNetworkInspectionLoaderAssignedOrRegistered().setId(uniqueID).load();
 		
 		return printCert(inspection);
 	}
