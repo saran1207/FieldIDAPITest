@@ -108,7 +108,7 @@
     </div>
     <#if product.type.imageName?exists >
         <div class="rightProduct">
-            <img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${product.type.uniqueID}" networkId="${product.id}" />" alt="<@s.text name="label.productimage"/>" width="300"/>
+            <img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${product.type.uniqueID}" networkId="${product.id}" />" width="300"/>
         </div>
     </#if>
 
