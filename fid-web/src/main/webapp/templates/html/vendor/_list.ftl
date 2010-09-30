@@ -45,4 +45,14 @@
 			</#if>
 		</p>
 	</div>
+<#else>
+	<#if isSearch>
+		<@s.url value="searchNetworkProduct.action" uniqueID="${uniqueID}" id="url"/>				
+	<#else>
+		<@s.url value="preAssignedAssets.action" uniqueID="${uniqueID}" id="url"/>				
+	</#if>
+		
+	<script type="text/javascript">
+		window.location.replace("${url}");
+	</script>
 </#if>
