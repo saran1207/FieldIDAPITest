@@ -90,6 +90,7 @@ public class RegisterAsset extends AbstractCrud{
 			Long productId = productTypeLister.getProductTypes().iterator().next().getId();
 			setProductTypeId(productId);
 			setOwnerId(getSessionUser().getOwner().getId());
+			productView.setIdentified(DateHelper.getToday());
 		}
 	}
 	
@@ -125,6 +126,7 @@ public class RegisterAsset extends AbstractCrud{
 		newProduct = saver.create();
 			
 		logger.info("Registered : " + newProduct);
+		
 		return SUCCESS;
 	}
 
@@ -216,10 +218,9 @@ public class RegisterAsset extends AbstractCrud{
 		productView.setIdentified(convertDate(identified));
 	}
 	
+	@RequiredStringValidator(message = "", key = "error.identifiedrequired")
+	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public String getIdentified() {
-		if (productView.getIdentified() == null) {
-			return convertDate(DateHelper.getToday());
-		}
 		return convertDate(productView.getIdentified());
 	}
 	
@@ -248,6 +249,7 @@ public class RegisterAsset extends AbstractCrud{
 		return identifiers;
 	}
 
+	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}

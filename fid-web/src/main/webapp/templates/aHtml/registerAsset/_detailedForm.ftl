@@ -3,7 +3,7 @@
 		<h3><@s.text name="label.indentifiers" /></h3>
 	</div>
 	<div class="infoSet">
-		<label for="identified" class="label"><@s.text name="label.identifieddate"/></label>
+		<label for="identified" class="label"><@s.text name="label.identifieddate"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 		<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
 	</div>
 	
@@ -20,7 +20,7 @@
 		<h3><@s.text name="label.ownership" /></h3>
 	</div>
 	<div class="infoSet">
-		<label for="owner" class="label"><@s.text name="label.owner"/></label>
+		<label for="owner" class="label"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 		<#if !parentProduct?exists >
 			<@n4.orgPicker name="owner" theme="fieldid"/>
 		<#else>
