@@ -22,7 +22,7 @@
 	<div class="infoSet">
 		<label for="owner" class="label"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 		<#if !parentProduct?exists >
-			<@n4.orgPicker name="owner" theme="fieldid"/>
+			<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 		<#else>
 			<span class="fieldHolder" id="owner">${(product.owner.name?html)!}</span>
 		</#if>
