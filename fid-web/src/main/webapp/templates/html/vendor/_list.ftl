@@ -51,8 +51,8 @@
 	<#else>
 		<@s.url value="preAssignedAssets.action" uniqueID="${uniqueID}" id="url"/>				
 	</#if>
-		
 	<script type="text/javascript">
-		window.location.replace("${url}");
+		var lastPage = ${page.lastPage} + 1
+		window.location.href = '${url}' + '\&currentPage=' + lastPage;
 	</script>
 </#if>
