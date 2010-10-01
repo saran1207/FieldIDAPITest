@@ -1820,11 +1820,6 @@
 			</result>
 		</action>
 
-		<action name="connections" method="list" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkConnectionCrud">
-			<result name="success" type="freemarker">/templates/html/connections/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/connections/list.ftl</result>
-		</action>
-
 		<action name="connectionInvitationAdd" method="add"
 			class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
 			<result name="input" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>

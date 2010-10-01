@@ -32,11 +32,7 @@
 		<#else>
 			<#list vendorConnections as connection>
 				<li>
-					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
-						<a href="<@s.url action="showVendor.action" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-					<#else>
-						<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-					</#if>
+					<a href="<@s.url action="showVendor.action" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 				</li>
 			</#list>
 		</#if>
@@ -51,11 +47,7 @@
 		<#else>
 			<#list customerConnections as connection>
 				<li>
-					<#if action.hasAPublishedCatalog(connection.connectedOrg)>
-						<a href="<@s.url action="showCustomer" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-					<#else>
-						<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-					</#if>
+					<a href="<@s.url action="showCustomer" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 				</li>
 			</#list>
 		</#if>
@@ -71,11 +63,7 @@
 			<#list catalogOnlyConnections as connection>
 				<#if connection.catalogOnlyConnection>
 					<li>
-						<#if action.hasAPublishedCatalog(connection.connectedOrg)>
-							<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-						<#else>
-							<a href="#">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-						</#if>
+						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 					</li>
 				</#if>
 			</#list>

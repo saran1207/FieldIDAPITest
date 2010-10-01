@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.security.Permissions;
@@ -70,15 +71,6 @@ public class SafetyNetwork extends AbstractCrud {
 		return getLoaderFactory().createdTypedOrgConnectionListLoader().load();
 	}
 
-	public boolean hasAPublishedCatalog(BaseOrg org) {
-		try {
-			CatalogService catalogService = new CatalogServiceImpl(persistenceManager, org.getTenant());
-			return catalogService.hasCatalog();
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
 	public List<TypedOrgConnection> getCustomerConnections() {
 		return customerConnections;
 	}
@@ -99,7 +91,7 @@ public class SafetyNetwork extends AbstractCrud {
 	}
 
 	public String getSearchText() {
-		if (searchText==null){
+		if (searchText == null) {
 			return "";
 		}
 		return searchText;
@@ -109,4 +101,12 @@ public class SafetyNetwork extends AbstractCrud {
 		this.searchText = searchText;
 	}
 
+	public boolean isPublishedCatalog(Tenant tenant) {
+		try {
+			CatalogService catalogService = new CatalogServiceImpl(persistenceManager, tenant);
+			return catalogService.hasCatalog();
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }
