@@ -126,7 +126,6 @@ public class RegisterAsset extends AbstractCrud{
 		newProduct = saver.create();
 			
 		logger.info("Registered : " + newProduct);
-		
 		return SUCCESS;
 	}
 
@@ -218,7 +217,7 @@ public class RegisterAsset extends AbstractCrud{
 		productView.setIdentified(convertDate(identified));
 	}
 	
-	@RequiredStringValidator(message = "", key = "error.identifiedrequired")
+	@RequiredStringValidator(message = "", key = "error.dateidentifiedrequired")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public String getIdentified() {
 		return convertDate(productView.getIdentified());
