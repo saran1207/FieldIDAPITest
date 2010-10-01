@@ -2,9 +2,12 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.services.TenantCache;
+import com.n4systems.services.safetyNetwork.CatalogService;
+import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -94,5 +97,14 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
     public List<Inspection> getInspections() {
         return getLoaderFactory().createInspectionsByProductIdLoader().setProductId(product.getId()).load();
     }
-	
+
+	public boolean isPublishedCatalog(Tenant tenant) {
+		try {
+			CatalogService catalogService = new CatalogServiceImpl(persistenceManager, tenant);
+			return catalogService.hasCatalog();
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 }
