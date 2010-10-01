@@ -24,8 +24,8 @@
 		<@s.url action="inspectionGroups" uniqueID="${newProduct.id}" namespace="/" id="performFirstEventUrl"/>
 		<@s.url action="product" uniqueID="${newProduct.id}" namespace="/" id="viewAssetUrl"/>
 		<p><@s.text name="label.whatsnext"/></p>
-		<p><a href="#" onclick="redirect('${performFirstEventUrl}');return false;" ><@s.text name="label.performfirstevent"/></a></p>
-		<p><a href="#" onclick="redirect('${viewAssetUrl}');return false;"> <@s.text name="label.viewassetinfo"/></a></p>
+		<p><a id="performFirstEvent" href="#" onclick="redirect('${performFirstEventUrl}');return false;" ><@s.text name="label.performfirstevent"/></a></p>
+		<p><a id="viewAsset" href="#" onclick="redirect('${viewAssetUrl}');return false;"> <@s.text name="label.viewassetinfo"/></a></p>
 	</div>
 	<p>
 		<button onclick="reload();return false;"><@s.text name="label.ok"/></button>
