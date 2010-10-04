@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.Initializer;
-import com.n4systems.services.SafetyNetworkConnectionCacheInitializer;
 import com.n4systems.services.SetupDataLastModUpdateServiceInitializer;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.TenantCachePreloader;
@@ -34,11 +33,6 @@ public class CacheControlAction extends AbstractAdminAction {
 		return doShow();
 	}
 
-	public String doReloadSafetyNetworkConnectionCachae() {
-		reload(new SafetyNetworkConnectionCacheInitializer(), "Safety Network Connection Cache");
-		return doShow();
-	}
-	
 	private void reload(Initializer init, String name) {
 		try {
 			init.uninitialize();

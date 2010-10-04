@@ -538,12 +538,6 @@
 			</result>
 		</action>
 
-		<action name="reloadSafetyNetworkConnectionCache" method="reloadSafetyNetworkConnectionCachae"
-			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
-			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl
-			</result>
-		</action>
-
 		<action name="releaseNotes" method="show"
 			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
 			<result name="success" type="freemarker">/admin/templates/html/releaseNotes/show.ftl

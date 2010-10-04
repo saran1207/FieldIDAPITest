@@ -6,8 +6,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.StringUtils;
 
@@ -21,7 +21,7 @@ public class SubInspection extends AbstractInspection implements SecurityEnhance
 	@Column( length = 255 )
 	private String name;
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
 	}

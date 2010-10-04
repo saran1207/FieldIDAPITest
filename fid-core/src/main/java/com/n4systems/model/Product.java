@@ -33,13 +33,11 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
-
 
 @Entity
 @Table(name = "products")
@@ -184,12 +182,12 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Long getUniqueID() {
 		return getId();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public LineItem getShopOrder() {
 		return shopOrder;
 	}
@@ -198,7 +196,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.shopOrder = orderMaster;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getRfidNumber() {
 		return rfidNumber;
 	}
@@ -207,7 +205,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.rfidNumber = rfidNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getSerialNumber() {
 		return serialNumber;
 	}
@@ -216,7 +214,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.serialNumber = serialNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getComments() {
 		return comments;
 	}
@@ -225,7 +223,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.comments = comments;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductType getType() {
 		return type;
 	}
@@ -235,13 +233,13 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 	
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductType getProductType() {
 		return getType();
 	}
 
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductType getProductInfo() {
 		return getType();
 	}
@@ -255,7 +253,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.infoOptions = infoOptions;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Set<InfoOptionBean> getInfoOptions() {
 		return infoOptions;
 	}
@@ -272,12 +270,12 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		}
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getDescription() {
 		return type.prepareDescription(infoOptions);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public ProductStatusBean getProductStatus() {
 		return productStatus;
 	}
@@ -286,7 +284,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.productStatus = productStatusBean;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public String getMobileGUID() {
 		return mobileGUID;
 	}
@@ -295,7 +293,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.mobileGUID = mobileGUID;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Set<ProductSerialExtensionValueBean> getProductSerialExtensionValues() {
 		return productSerialExtensionValues;
 	}
@@ -305,7 +302,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.productSerialExtensionValues = productSerialExtensionValues;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
 	public String getCustomerRefNumber() {
 		return customerRefNumber;
 	}
@@ -314,7 +310,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.customerRefNumber = customerRefNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public User getIdentifiedBy() {
 		return identifiedBy;
 	}
@@ -323,7 +318,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.identifiedBy = identifiedBy;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public Order getCustomerOrder() {
 		return customerOrder;
 	}
@@ -332,7 +326,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.customerOrder = customerOrder;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public List<InfoOptionBean> getOrderedInfoOptionList() {
 		ArrayList<InfoOptionBean> orderedList = new ArrayList<InfoOptionBean>();
 		orderedList.addAll(this.infoOptions);
@@ -341,7 +335,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return orderedList;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Date getLastInspectionDate() {
 		return lastInspectionDate;
 	}
@@ -350,7 +344,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.lastInspectionDate = lastInspectionDate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getPurchaseOrder() {
 		return purchaseOrder;
 	}
@@ -359,7 +353,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.purchaseOrder = purchaseOrder;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getProductExtensionValue( String name ) {
 		if ( productSerialExtensionValues != null) {
 			for (ProductSerialExtensionValueBean productSerialExtensionValue : productSerialExtensionValues ) {
@@ -371,7 +364,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return null;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public PlainDate getIdentified() {
 		return (identified != null) ? new PlainDate(identified) : null;
 	}
@@ -386,7 +379,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	
 
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
     public User getAssignedUser() {
 		return assignedUser;
 	}
@@ -399,17 +392,17 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return assignedUser != null;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isMasterProduct( ) {
 		return !subProducts.isEmpty();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return getSerialNumber();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public long getNextInfoOptionWeight() {
 		long highestWeight = -1L;
 		
@@ -429,12 +422,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		serialNumber = UUID.randomUUID().toString();
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getArchivedSerialNumber() {
 		return archivedSerialNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public List<Project> getProjects() {
 		return projects;
 	}
@@ -445,7 +437,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	    return String.format("%s (%d) tenant %s", getSerialNumber(), getId(), tenantName);
     }
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public List<SubProduct> getSubProducts() {
 		return subProducts;
 	}
@@ -454,7 +446,6 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.subProducts = subProducts;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public boolean isPublished() {
 		return published;
 	}
@@ -463,7 +454,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.published = published;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Product getLinkedProduct() {
 		return linkedProduct;
 	}
@@ -473,12 +464,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.linked_id = (linkedProduct != null) ? linkedProduct.getId() : null;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isLinked() {
 		return (linkedProduct != null);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isCountsTowardsLimit() {
 		return countsTowardsLimit;
 	}
@@ -487,7 +477,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.countsTowardsLimit = countsTowardsLimit;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Long getNetworkId() {
 		return networkId;
 	}
@@ -496,9 +486,9 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return (last_linked_id != linked_id);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner());
+		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
 	public Product enhance(SecurityLevel level) {
@@ -520,7 +510,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	@Override
 	public void setGlobalId(String globalId) {}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}

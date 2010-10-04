@@ -30,9 +30,8 @@ import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
@@ -101,12 +100,12 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 
 
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Date getDate() {
 		return date;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Date getDateInUserTime(TimeZone timeZone) {
 		return DateHelper.convertToUserTimeZone(date, timeZone);
 	}
@@ -115,7 +114,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.date = date;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isPrintable() {
 		return printable;
 	}
@@ -124,7 +123,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.printable = printable;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public User getPerformedBy() {
 		return performedBy;
 	}
@@ -134,7 +133,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.performedBy = performedBy;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public InspectionGroup getGroup() {
 		return group;
 	}
@@ -144,7 +143,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.group = group;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public InspectionBook getBook() {
 		return book;
 	}
@@ -153,7 +152,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.book = book;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public BaseOrg getOwner() {
 		return owner;
 	}
@@ -162,7 +161,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.owner = owner;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public ProofTestInfo getProofTestInfo() {
 		return proofTestInfo;
 	}
@@ -171,7 +170,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.proofTestInfo = proofTestInfo;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Status getStatus() {
 		return status;
 	}
@@ -189,7 +188,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return ( compare == 0 ) ? getCreated().compareTo( inspection.getCreated() ) : compare;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public List<SubInspection> getSubInspections() {
 		return subInspections;
 	}
@@ -206,7 +205,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		state = EntityState.ARCHIVED;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public EntityState getEntityState() {
 		return state;
 	}
@@ -223,22 +222,22 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		}
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isRetired() {
 		return state == EntityState.RETIRED;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isActive() {
 		return state == EntityState.ACTIVE;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isArchived() {
 		return state == EntityState.ARCHIVED;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isPrintableForReportType(InspectionReportType reportType) { 
 		if (!printable) {
 			return false;
@@ -248,17 +247,17 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return (printOut != null);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isInspectionCertPrintable() { 
 		return isPrintableForReportType(InspectionReportType.INSPECTION_CERT);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isObservationCertPrintable() { 
 		return isPrintableForReportType(InspectionReportType.OBSERVATION_CERT);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isAnyCertPrintable() {
 		boolean isAnyPrintable = false;
 		for (InspectionReportType reportType: InspectionReportType.values()) {
@@ -288,14 +287,14 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	    		"\nSubInspections: " + StringUtils.indent(subInspectionString, 1);
     }
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public InspectionSchedule getSchedule() {
 		return schedule;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner());
+		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
 	public Inspection enhance(SecurityLevel level) {
@@ -359,7 +358,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		normalizeAssignmentForPersistence();
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}

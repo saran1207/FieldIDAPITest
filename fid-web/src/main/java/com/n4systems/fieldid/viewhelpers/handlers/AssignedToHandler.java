@@ -4,7 +4,6 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.user.User;
 
 public class AssignedToHandler extends WebOutputHandler {
-	private static final User UNASSIGNED_USER = null;
 
 	public AssignedToHandler(AbstractAction action) {
 		super(action);
@@ -22,7 +21,7 @@ public class AssignedToHandler extends WebOutputHandler {
 	}
 
 	private User translateValueToUser(Object value) {
-		User assignedUser = UNASSIGNED_USER;
+		User assignedUser = null;
 		if (value instanceof User) {
 			assignedUser = (User)value;
 		}

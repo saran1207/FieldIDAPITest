@@ -14,8 +14,8 @@ import javax.persistence.Table;
 
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
@@ -35,12 +35,12 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 		this.inspections = inspections;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Set<Inspection> getInspections() {
 		return inspections;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public String getMobileGuid() {
 		return mobileGuid;
 	}
@@ -49,7 +49,7 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 		this.mobileGuid = mobileGuid;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Date getFirstDate() {
 		Date minDate = null;
 		for (Inspection inspection : getAvailableInspections()) {
@@ -63,7 +63,7 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 		return minDate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Date getLastDate() {
 		Date maxDate = null;
 		for (Inspection inspection : getAvailableInspections()) {
@@ -77,7 +77,7 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 		return maxDate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public List<Inspection> getAvailableInspections() {
 		List<Inspection> availableInspections = new ArrayList<Inspection>();
 

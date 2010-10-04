@@ -79,7 +79,7 @@ public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWr
 	@Test
     public void should_work_with_enhanced_class() throws Exception {
 		ImplementationWithInterface implementation = new ImplementationWithInterface();
-		ImplementationWithInterface enhanced = EntitySecurityEnhancer.enhanceEntity(implementation, SecurityLevel.DIRECT);
+		ImplementationWithInterface enhanced = EntitySecurityEnhancer.enhanceEntity(implementation, SecurityLevel.SAFETY_NETWORK);
         
 		BeanModel beanModel = new BeanModel(enhanced, new BeansWrapper());
         assertThat(beanModel.get("id"), is(notNullValue()));
@@ -90,7 +90,7 @@ public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWr
 	@Ignore
     public void should_work_with_enhanced_product() throws Exception {
 		Product asset = ProductBuilder.aProduct().build();
-		Product enhancedAsset = asset.enhance(SecurityLevel.DIRECT);
+		Product enhancedAsset = asset.enhance(SecurityLevel.SAFETY_NETWORK);
         
 		BeanModel beanModel = new BeanModel(enhancedAsset, new BeansWrapper());
         assertThat(beanModel.get("id"), is(notNullValue()));

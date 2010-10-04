@@ -8,9 +8,8 @@ import javax.persistence.MappedSuperclass;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -34,7 +33,7 @@ abstract public class EntityWithOwner extends EntityWithTenant implements HasOwn
 		this.owner = owner;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public BaseOrg getOwner() {
 		return owner;
 	}

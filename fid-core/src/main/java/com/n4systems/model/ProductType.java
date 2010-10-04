@@ -23,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -34,7 +35,6 @@ import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 
@@ -115,12 +115,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 	
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Long getUniqueID() {
 		return getId();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getDescriptionTemplate() {
 		return descriptionTemplate;
 	}
@@ -133,13 +133,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.name = name;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
 	}
 	
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getProductType() {
 		return getName();
 	}
@@ -153,7 +153,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.warnings = safetyLocationPath;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getWarnings() {
 		return warnings;
 	}
@@ -162,13 +162,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.cautionUrl = externalURL;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getCautionUrl() {
 		return cautionUrl;
 	}
 	
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getCautions() {
 		return getCautionUrl();
 	}
@@ -182,13 +182,13 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.instructions = instructions;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getInstructions() {
 		return instructions;
 	}
 
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Set<InspectionType> getInspectionTypes() {
 		Set<InspectionType> types = new HashSet<InspectionType>();
 		for (AssociatedInspectionType inspectionType : inspectionTypes) {
@@ -197,7 +197,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return types;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Collection<InfoFieldBean> getInfoFields() {
 		return infoFields;
 	}
@@ -214,7 +214,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		}
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public boolean isHasManufactureCertificate() {
 		return hasManufactureCertificate;
 	}
@@ -223,7 +223,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.hasManufactureCertificate = hasManufactureCertificate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getManufactureCertificateText() {
 		return manufactureCertificateText;
 	}
@@ -232,7 +232,6 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.manufactureCertificateText = manufactureCertificateText;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
 		return autoAttributeCriteria;
 	}
@@ -241,12 +240,11 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.autoAttributeCriteria = autoAttributeCriteria;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean hasCriteria() {
 		return autoAttributeCriteria != null;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Collection<InfoFieldBean> getAvailableInfoFields() {
 		ArrayList<InfoFieldBean> availableFields = new ArrayList<InfoFieldBean>(); 
 		for( InfoFieldBean infoField : infoFields ) {
@@ -310,7 +308,6 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return desc.toString();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isDescriptionTemplateValid() {
 		List<String> fieldNames = new ArrayList<String>();
 		for(InfoFieldBean field: infoFields) {
@@ -321,13 +318,11 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 	
 	// XXX - we should pull this to a util/handler class at some point
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public static boolean isDescriptionTemplateValid(String descriptionTemplate, Collection<String> infoFieldNames) {
 		return (getInvalidDescriptionTemplateVariables(descriptionTemplate, infoFieldNames).size() > 0);
 	}
 	
 	// XXX - we should pull this to a util/handler class at some point
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public static List<String> getInvalidDescriptionTemplateVariables(String descriptionTemplate, Collection<String> infoFieldNames) {
 		String description = "" + descriptionTemplate;
 		
@@ -348,7 +343,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return invalidVariables;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Set<ProductTypeSchedule> getSchedules() {
 		return schedules;
 	}
@@ -365,7 +360,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	 * @param owner	Owner
 	 * @return		ProductTypeSchedule or null if no schedule was found
 	 */
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {
 		ProductTypeSchedule scheduleForOrg = null;
 		
@@ -398,7 +393,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return null;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, BaseOrg owner) {
 		Date returnDate = fromDate;
 		
@@ -410,7 +405,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return returnDate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public List<FileAttachment> getAttachments() {
 		return attachments;
 	}
@@ -419,7 +414,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.attachments = attachments;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getImageName() {
 		return imageName;
 	}
@@ -428,12 +423,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.imageName = imageName;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public boolean hasImage() {
 		return (imageName != null);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Set<ProductType> getSubTypes() {
 		return subTypes;
 	}
@@ -442,12 +437,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		this.subTypes = subTypes;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return name;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isMaster() {
 		return !subTypes.isEmpty();
 	}
@@ -460,12 +455,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		name += UUID.randomUUID().toString();
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public String getArchivedName() {
 		return archivedName;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductTypeGroup getGroup() {
 		return group;
 	}

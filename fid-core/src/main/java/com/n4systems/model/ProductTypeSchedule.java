@@ -10,8 +10,8 @@ import javax.persistence.Table;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.DateHelper;
 
@@ -33,7 +33,7 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 	
 	public ProductTypeSchedule() {}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductType getProductType() {
 		return productType;
 	}
@@ -42,7 +42,7 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 		this.productType = productType;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public InspectionType getInspectionType() {
 		return inspectionType;
 	}
@@ -51,7 +51,6 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 		this.inspectionType = inspectionType;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Long getFrequency() {
 		return frequencyInDays;
 	}
@@ -60,12 +59,10 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 		this.frequencyInDays = frequency;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public Date getNextDate(Date startDate) {
 		return DateHelper.addDaysToDate(startDate, frequencyInDays);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isAutoSchedule() {
 		return autoSchedule;
 	}
@@ -74,7 +71,6 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 		this.autoSchedule = autoSchedule;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public boolean isOverride() {
 		return !getOwner().isPrimary();
 	}

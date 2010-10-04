@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
@@ -26,7 +27,6 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
@@ -103,7 +103,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 	    return name + " (" + getId() +")";
     }
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return getName();
 	}
@@ -128,7 +128,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		return criteriaSection;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
 	}
@@ -137,7 +137,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.name = name;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public InspectionTypeGroup getGroup() {
 		return group;
 	}
@@ -146,7 +146,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.group = group;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public List<String> getInfoFieldNames() {
 		return infoFieldNames;
 	}
@@ -155,7 +155,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.infoFieldNames = infoFieldNames;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public List<CriteriaSection> getSections() {
 		return sections;
 	}
@@ -164,7 +164,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.sections = sections;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public Set<ProofTestType> getSupportedProofTests() {
 		return supportedProofTests;
 	}
@@ -173,12 +173,12 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.supportedProofTests = supportedProofTests;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public boolean supports(ProofTestType proofTestType) {
 		return supportedProofTests.contains(proofTestType);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getDescription() {
 		return description;
 	}
@@ -187,7 +187,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.description = description;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public boolean isPrintable() {
 		return printable;
 	}
@@ -196,7 +196,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.printable = printable;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isRetired() {
 		return retired;
 	}
@@ -205,7 +205,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.retired = retired;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isMaster() {
 		return master;
 	}
@@ -214,7 +214,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.master = master;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Long getLegacyEventId() {
 		return legacyEventId;
 	}
@@ -223,7 +223,7 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		this.legacyEventId = legacyEventId;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public long getFormVersion() {
     	return formVersion;
     }
@@ -239,7 +239,6 @@ public class InspectionType extends ArchivableEntityWithTenant implements NamedE
 		}
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
 	public String getArchivedName() {
 		return archivedName;
 	}

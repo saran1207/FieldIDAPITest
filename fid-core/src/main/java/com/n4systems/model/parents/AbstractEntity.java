@@ -13,8 +13,7 @@ import javax.persistence.TemporalType;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.user.User;
 
 @SuppressWarnings("serial")
@@ -48,7 +47,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		modified = new Date();
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Date getCreated() {
 		return created;
 	}
@@ -57,7 +56,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.created = dateCreated;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Date getModified() {
 		return modified;
 	}
@@ -66,7 +65,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.modified = dateModified;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public User getModifiedBy() {
 		return modifiedBy;
 	}

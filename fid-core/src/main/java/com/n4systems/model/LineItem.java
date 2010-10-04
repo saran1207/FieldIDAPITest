@@ -8,8 +8,8 @@ import javax.persistence.Table;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
@@ -39,7 +39,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		setOrder(order);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Order getOrder() {
 		return order;
 	}
@@ -48,7 +48,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.order = order;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public int getIndex() {
 		return idx;
 	}
@@ -61,7 +61,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		return ++idx;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public long getQuantity() {
 		return quantity;
 	}
@@ -70,7 +70,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.quantity = quantity;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getProductCode() {
 		return productCode;
 	}
@@ -79,7 +79,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.productCode = productIdent;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getLineId() {
 		return lineId;
 	}
@@ -88,7 +88,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.lineId = ident;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getDescription() {
 		return description;
 	}
@@ -97,12 +97,12 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		this.description = description;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return getProductCode();
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isIndexSet() {
 		return (idx >= 0);
 	}

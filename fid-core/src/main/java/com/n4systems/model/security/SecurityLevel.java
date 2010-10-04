@@ -1,39 +1,24 @@
 package com.n4systems.model.security;
 
-public enum SecurityLevel {
-	ALLOWED			(0),
-	LOCAL			(1),	// from a network distance perspective LOCAL and LOCAL_ENDUSER are the same thing
-	LOCAL_ENDUSER	(1),	
-	DIRECT			(2),
-	ONE_AWAY		(3),
-	MANY_AWAY		(4),
-	DENIED			(5);
+import com.n4systems.model.orgs.BaseOrg;
 
-	private int level;
-	
-	SecurityLevel(int level) {
-		this.level = level;
-	}
-	
+public enum SecurityLevel {
+
+	LOCAL, LOCAL_ENDUSER, SAFETY_NETWORK;
+
 	public boolean isLocal() {
-		return (this.equals(ALLOWED) || this.equals(LOCAL));
+		return this == LOCAL;
 	}
-	
-	public boolean isFromNetwork() {
-		return !isLocal();
-	}
-	
-	public boolean allows(SecurityLevel other) {
-		// ALLOWED on either side is always allowed
-		if (this.equals(ALLOWED) || other.equals(ALLOWED)) {
-			return true;
+
+	public static SecurityLevel calculateSecurityLevel(BaseOrg from, BaseOrg to) {
+		if (from.getTenant().equals(to.getTenant())) {
+            if (from.isExternal()) {
+			    return SecurityLevel.LOCAL_ENDUSER;
+            } else {
+                return SecurityLevel.LOCAL;
+            }
 		}
-		
-		// DENIED on either side is never allowed
-		if (this.equals(DENIED) || other.equals(DENIED)) {
-			return false;
-		}
-		
-		return (level >= other.level);
-	}	
+        return SecurityLevel.SAFETY_NETWORK;
+    }
+	
 }

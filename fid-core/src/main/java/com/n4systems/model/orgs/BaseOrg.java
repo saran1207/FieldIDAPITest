@@ -1,5 +1,18 @@
 package com.n4systems.model.orgs;
 
+import com.n4systems.model.AddressInfo;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.Exportable;
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.utils.GlobalID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,19 +23,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.n4systems.model.AddressInfo;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.api.Exportable;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SafetyNetworkSecurityCache;
-import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.model.utils.GlobalID;
 
 @Entity
 @Table(name = "org_base")
@@ -91,12 +91,14 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		}
 	}
 	
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+	@AllowSafetyNetworkAccess
+    @DenyCustomerUsersAccess
 	public String getDisplayName() {
 		return name;
 	}
 	
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+	@AllowSafetyNetworkAccess
+    @DenyCustomerUsersAccess
 	public String getName() {
 		return name;
 	}
@@ -105,7 +107,8 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		this.name = (displayName != null) ? displayName.trim() : null;
 	}
 
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+	@AllowSafetyNetworkAccess
+    @DenyCustomerUsersAccess
 	public AddressInfo getAddressInfo() {
 		return addressInfo;
 	}
@@ -134,37 +137,37 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		return (cmp != 0) ? cmp : getId().compareTo(other.getId());
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isInternal() {
 		return (this instanceof InternalOrg);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isExternal() {
 		return (this instanceof ExternalOrg);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isPrimary() {
 		return (this instanceof PrimaryOrg);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isSecondary() {
 		return (this instanceof SecondaryOrg);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isCustomer() {
 		return (this instanceof CustomerOrg);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isDivision() {
 		return (this instanceof DivisionOrg);
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isLinked() {
 		return (isExternal() && ((ExternalOrg)this).getLinkedOrg() != null);
 	}
@@ -202,7 +205,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	/**
 	 * @return The bean path used for security filtering
 	 */
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	abstract public String getFilterPath();
 	
 	abstract public BaseOrg getParent();
@@ -235,9 +238,9 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		}
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, this);
+		return SecurityLevel.calculateSecurityLevel(fromOrg, this);
 	}
 	
 }

@@ -19,9 +19,8 @@ import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SafetyNetworkSecurityCache;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.PlainDate;
@@ -119,7 +118,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		this(product, typeSchedule.getInspectionType());
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Product getProduct() {
 		return product;
 	}
@@ -136,7 +135,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		setOwner(product.getOwner());
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public InspectionType getInspectionType() {
 		return inspectionType;
 	}
@@ -153,12 +152,12 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		this.nextDate = new PlainDate(nextDate);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public PlainDate getNextDate() {
 		return (nextDate != null) ? new PlainDate(nextDate) : null;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public boolean isPastDue() {
 		return (status != ScheduleStatus.COMPLETED && isPastDue(nextDate));
 	}
@@ -172,12 +171,12 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	 * @return True if nextInspectionDate is after {@link DateHelper#getToday()
 	 *         today}
 	 */
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public static boolean isPastDue(Date nextInspectionDate) {
 		return DateHelper.getToday().after(nextInspectionDate);
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Long getDaysPastDue() {
 		Long daysPast = null;
 		if (isPastDue()) {
@@ -186,7 +185,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		return daysPast;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Long getDaysToDue() {
 		Long daysTo = null;
 		if (!isPastDue()) {
@@ -220,12 +219,12 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Date getCompletedDate() {
 		return completedDate;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public ScheduleStatus getStatus() {
 		return status;
 	}
@@ -255,7 +254,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		status = ScheduleStatus.SCHEDULED;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Inspection getInspection() {
 		return inspection;
 	}
@@ -267,7 +266,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		updateOwnershipToProduct();
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public Project getProject() {
 		return project;
 	}
@@ -276,10 +275,9 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		this.project = project;
 	}
 
-
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SafetyNetworkSecurityCache.getSecurityLevel(fromOrg, getOwner());
+		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
 	public InspectionSchedule enhance(SecurityLevel level) {
@@ -298,7 +296,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}

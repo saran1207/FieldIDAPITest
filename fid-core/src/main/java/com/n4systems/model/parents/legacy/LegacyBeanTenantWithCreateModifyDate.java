@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
-import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -26,7 +26,7 @@ abstract public class LegacyBeanTenantWithCreateModifyDate extends LegacyEntityC
 	@JoinColumn(name = "tenant_id")
 	private Tenant tenant;
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Tenant getTenant() {
 		return tenant;
 	}

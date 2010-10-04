@@ -18,14 +18,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import org.hibernate.annotations.CollectionOfElements;
 
 import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.StringUtils;
 
 @Entity
@@ -61,7 +60,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	
 	private String mobileGUID;
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public String getMobileGUID() {
 		return mobileGUID;
 	}
@@ -90,12 +89,12 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	    		"\nResults: " + StringUtils.indent(resultString, 1);
     }
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public boolean isEditable() {
 		return (formVersion == type.getFormVersion());
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public InspectionType getType() {
 		return type;
 	}
@@ -104,7 +103,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.type = type;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Product getProduct() {
 		return product;
 	}
@@ -113,7 +112,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.product = product;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public ProductStatusBean getProductStatus() {
 		return productStatus;
 	}
@@ -122,7 +121,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.productStatus = productStatus;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public Set<CriteriaResult> getResults() {
 		return results;
 	}
@@ -131,7 +130,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.results = results;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public List<FileAttachment> getAttachments() {
 		return attachments;
 	}
@@ -140,7 +139,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.attachments = attachments;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public Map<String, String> getInfoOptionMap() {
 		return infoOptionMap;
 	}
@@ -149,7 +148,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.infoOptionMap = infoOptionMap;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getComments() {
 		return comments;
 	}
@@ -158,7 +157,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.comments = comments;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public long getFormVersion() {
     	return formVersion;
     }

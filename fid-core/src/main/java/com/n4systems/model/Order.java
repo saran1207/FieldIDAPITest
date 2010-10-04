@@ -13,8 +13,8 @@ import javax.persistence.TemporalType;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
@@ -67,7 +67,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.orderNumber = orderNumber;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public OrderType getOrderType() {
 		return orderType;
 	}
@@ -76,7 +76,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.orderType = orderType;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getOrderNumber() {
 		return orderNumber;
 	}
@@ -85,7 +85,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.orderNumber = orderNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public Date getOrderDate() {
 		return orderDate;
 	}
@@ -94,7 +94,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.orderDate = date;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getPoNumber() {
 		return poNumber;
 	}
@@ -103,7 +103,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.poNumber = poNumber;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getDescription() {
 		return description;
 	}
@@ -112,7 +112,7 @@ public class Order extends EntityWithOwner implements Listable<Long>, SecurityEn
 		this.description = description;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return getOrderNumber();
 	}

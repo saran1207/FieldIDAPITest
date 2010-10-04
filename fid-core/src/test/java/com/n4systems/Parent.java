@@ -3,12 +3,11 @@
  */
 package com.n4systems;
 
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 
 public abstract class Parent {
 	@UseThis
-	@NetworkAccessLevel(value=SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Long getId() {
 		return 10L;
 	}

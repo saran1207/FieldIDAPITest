@@ -4,12 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SecurityLevel;
 
 @Embeddable
 public class Location {
@@ -36,12 +34,12 @@ public class Location {
 		setFreeformLocation(freeformLocation);
 	}
 	
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
+	@AllowSafetyNetworkAccess
 	public PredefinedLocation getPredefinedLocation() {
 		return predefinedLocation;
 	}
 	
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=true)
+	@AllowSafetyNetworkAccess
 	public String getFreeformLocation() {
 		return freeformLocation;
 	}

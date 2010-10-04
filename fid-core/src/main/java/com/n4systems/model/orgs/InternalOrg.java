@@ -3,8 +3,7 @@ package com.n4systems.model.orgs;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import com.n4systems.model.security.NetworkAccessLevel;
-import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 
 
 @SuppressWarnings("serial")
@@ -19,7 +18,7 @@ abstract public class InternalOrg extends BaseOrg {
 	
 	public InternalOrg() {}
 
-	@NetworkAccessLevel(SecurityLevel.MANY_AWAY)
+	@AllowSafetyNetworkAccess
 	public String getCertificateName() {
 		if (certificateName != null && certificateName.trim().length() > 0) {
 			return certificateName;

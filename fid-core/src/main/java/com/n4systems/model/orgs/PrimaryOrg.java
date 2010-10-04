@@ -15,12 +15,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.DenyCustomerUsersAccess;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.ExternalCredentialProvider;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.tenant.TenantLimit;
 
@@ -78,31 +79,32 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	public PrimaryOrg() {}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+	@AllowSafetyNetworkAccess
+    @DenyCustomerUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return this;
 	}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public InternalOrg getInternalOrg() {
 		return this;
 	}
 
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public SecondaryOrg getSecondaryOrg() {
 		return null;
 	}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -112,7 +114,6 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	}
 
 	@Override
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
 	public BaseOrg getParent() {
 		return null;
 	}

@@ -11,7 +11,8 @@ import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
-import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.DenyCustomerUsersAccess;
 import com.n4systems.model.security.SecurityLevel;
 
 
@@ -64,7 +65,8 @@ abstract public class ExternalOrg extends BaseOrg {
 		}
 	}
 	
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+	@AllowSafetyNetworkAccess
+    @DenyCustomerUsersAccess
 	public String getCode() {
 		return code;
 	}
@@ -73,7 +75,7 @@ abstract public class ExternalOrg extends BaseOrg {
 		this.code = code;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public Contact getContact() {
 		return contact;
 	}
@@ -82,7 +84,7 @@ abstract public class ExternalOrg extends BaseOrg {
 		this.contact = contact;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public InternalOrg getLinkedOrg() {
 		return (InternalOrg)linkedOrg;
 	}

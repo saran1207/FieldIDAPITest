@@ -7,9 +7,8 @@ import javax.persistence.MappedSuperclass;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.NetworkAccessLevel;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -38,7 +37,7 @@ public class ArchivableEntityWithOwner extends EntityWithOwner implements Archiv
 		state = EntityState.ARCHIVED;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public EntityState getEntityState() {
 		return state;
 	}
@@ -55,17 +54,17 @@ public class ArchivableEntityWithOwner extends EntityWithOwner implements Archiv
 		}
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isRetired() {
 		return state == EntityState.RETIRED;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isActive() {
 		return state == EntityState.ACTIVE;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.ALLOWED)
+	@AllowSafetyNetworkAccess
 	public boolean isArchived() {
 		return state == EntityState.ARCHIVED;
 	}

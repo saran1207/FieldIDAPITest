@@ -13,8 +13,8 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
@@ -56,7 +56,7 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 	    return name + " (" + getId() + ")";
     }
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
 	}
@@ -69,12 +69,12 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 		this.open = open;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public boolean isOpen() {
 		return open;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public Set<Inspection> getInspections() {
 		return inspections;
 	}
@@ -83,13 +83,13 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 		this.inspections = inspections;
 	}
 
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		String ownerName = (getOwner() != null) ? " (" + getOwner().getName() + ")" : "";
 		return getName() + ownerName;
 	}
 	
-	@NetworkAccessLevel(SecurityLevel.LOCAL)
+	@AllowSafetyNetworkAccess
 	public Long getLegacyId() {
 		return legacyId;
 	}

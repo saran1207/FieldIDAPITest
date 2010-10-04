@@ -33,13 +33,11 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 			return passthrough(method, args);
 		}
 		
-		NetworkAccessLevel accessAnnotation = method.getAnnotation(NetworkAccessLevel.class);
-		
-		boolean accessAllowed;
-		if (userSecurityLevel.equals(SecurityLevel.LOCAL_ENDUSER)) {
-			accessAllowed = handleCustomerUserSecurity(accessAnnotation);
-		} else {
-			accessAllowed = handleSafetyNetworkSecurity(accessAnnotation);
+		boolean accessAllowed = false;
+        if (userSecurityLevel == SecurityLevel.LOCAL_ENDUSER) {
+			accessAllowed = method.getAnnotation(DenyCustomerUsersAccess.class) == null;
+		} else if (userSecurityLevel == SecurityLevel.SAFETY_NETWORK) {
+			accessAllowed = method.getAnnotation(AllowSafetyNetworkAccess.class) != null;
 		}
 		
 		if (!accessAllowed && logger.isTraceEnabled()) {
@@ -49,24 +47,6 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 		
 		// if access is allowed, let is passthough, otherwise get the default
 		return (accessAllowed) ? passthrough(method, args) : getDefaultValue(method); 	
-	}
-	
-	private boolean handleCustomerUserSecurity(NetworkAccessLevel accessAnnotation) {
-		// customers users work the opposite of the safety network, allowing access if the annotation was not present
-		boolean accessAllowed = true;
-		if (accessAnnotation != null && !accessAnnotation.allowCustomerUsers()) {
-			accessAllowed = false;
-		}
-		
-		return accessAllowed;
-	}
-	
-	private boolean handleSafetyNetworkSecurity(NetworkAccessLevel accessAnnotation) {
-		// default to DENIED if no annotation was present
-		SecurityLevel methodSecurityLevel = (accessAnnotation != null) ? accessAnnotation.value() : SecurityLevel.DENIED;
-		
-		// check to see if this method allows for this users security level
-		return methodSecurityLevel.allows(userSecurityLevel);
 	}
 	
 	private Object passthrough(Method method, Object[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {

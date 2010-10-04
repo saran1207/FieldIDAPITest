@@ -5,7 +5,6 @@
 
 <@s.url id="reloadTenantCacheUrl" namespace="/admin" value="reloadTenantCache.action" />
 <@s.url id="reloadModDateCacheUrl" namespace="/admin" value="reloadSetupDataLastModDatesCache.action" />
-<@s.url id="reloadSafetyNetworkCacheUrl" namespace="/admin" value="reloadSafetyNetworkConnectionCache.action" />
 
 <style>
 	.cacheReload {
@@ -31,11 +30,6 @@
 	<div>Mod Date Cache: </div>
 	<button type="button" onclick="window.location = '<@s.text name="%{reloadModDateCacheUrl}" />';">Reload</button>
 </div>	
-
-<div class="cacheReload">
-	<div>Safety Network Conn Cache: </div>
-	<button type="button" onclick="window.location = '<@s.text name="%{reloadSafetyNetworkCacheUrl}" />';">Reload</button>
-</div>
 
 <div class="cacheTable">
 	<h2>Tenant Cache - Tenants</h2>

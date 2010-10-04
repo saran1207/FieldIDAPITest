@@ -7,8 +7,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.DenyCustomerUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.NetworkAccessLevel;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
@@ -24,31 +25,31 @@ public class DivisionOrg extends ExternalOrg {
 	public DivisionOrg() {}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public InternalOrg getInternalOrg() {
 		return parent.getInternalOrg();
 	}
 
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public CustomerOrg getCustomerOrg() {
 		return parent;
 	}
 
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public DivisionOrg getDivisionOrg() {
 		return this;
 	}
@@ -59,7 +60,7 @@ public class DivisionOrg extends ExternalOrg {
 	}
 	
 	@Override
-	@NetworkAccessLevel(value=SecurityLevel.DIRECT, allowCustomerUsers=false)
+    @DenyCustomerUsersAccess
 	public CustomerOrg getParent() {
 		return parent;
 	}
@@ -69,7 +70,7 @@ public class DivisionOrg extends ExternalOrg {
 	}
 	
 	@Deprecated
-	@NetworkAccessLevel(SecurityLevel.DIRECT)
+	@AllowSafetyNetworkAccess
 	public String getDivisionId() {
 		return getCode();
 	}
