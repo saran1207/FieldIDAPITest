@@ -5,9 +5,10 @@
 		
 		<div class="expand">
 			<p>
-				<img src="<@s.url value="/images/plus.png"/>" alt"+">
-				<a id="expand_details" onclick="openSection('extraDetails', 'expand_details', 'collapse_details');return false" href="javascript:void(0);" ><@s.text name="label.addmoredetails"/></a>
-				<a id="collapse_details" onclick="closeSection('extraDetails', 'collapse_details', 'expand_details');return false" href="javascript:void(0);" style="display:none"><@s.text name="label.addlessdetails"/></a>
+				<img id="plus" src="<@s.url value="/images/plus.png"/>" alt="+" />
+				<img id="minus" src="<@s.url value="/images/minus.png"/>" alt="-" style="display:none"/>
+				<a id="expand_details" onclick="openSection('extraDetails', 'expand_details', 'collapse_details');plus.style.display='none';minus.style.display='';return false" href="javascript:void(0);" ><@s.text name="label.addmoredetails"/></a>
+				<a id="collapse_details" onclick="closeSection('extraDetails', 'collapse_details', 'expand_details');plus.style.display='';minus.style.display='none';return false" href="javascript:void(0);" style="display:none"><@s.text name="label.addlessdetails"/></a>
 			</p>
 		</div>
 		
