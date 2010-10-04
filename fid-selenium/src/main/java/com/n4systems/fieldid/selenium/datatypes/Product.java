@@ -13,6 +13,7 @@ public class Product {
 	String purchaseOrder;
 	String identified;
 	String productType;
+	String nonIntegrationOrderNumber;
 	
 	String comments;
 	
@@ -111,6 +112,14 @@ public class Product {
 	
 	public String getComments() {
 		return comments;
+	}
+
+	public String getNonIntegrationOrderNumber() {
+		return nonIntegrationOrderNumber;
+	}
+
+	public void setNonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
+		this.nonIntegrationOrderNumber = nonIntegrationOrderNumber;
 	}
 
 	

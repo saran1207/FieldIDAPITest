@@ -36,4 +36,9 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 		return results;
 	}
 	
+	public SafetyNetworkRegisterAssetForm clickRegister(int line) {
+		selenium.click("//tr[" + ++line + "]//a[.='Register']");
+		waitForElementToBePresent("//iframe[@id='lightviewContent']");
+		return new SafetyNetworkRegisterAssetForm(selenium);
+	}
 }
