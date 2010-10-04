@@ -62,6 +62,7 @@ import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
 import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.safetynetwork.InspectionsByProductIdLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
+import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
@@ -487,6 +488,10 @@ public class LoaderFactory {
 
     public InspectionsByProductIdLoader createInspectionsByProductIdLoader() {
         return new InspectionsByProductIdLoader(filter);
+    }
+
+    public ProductAlreadyRegisteredLoader createProductAlreadyRegisteredLoader() {
+        return new ProductAlreadyRegisteredLoader(filter);
     }
 
 }

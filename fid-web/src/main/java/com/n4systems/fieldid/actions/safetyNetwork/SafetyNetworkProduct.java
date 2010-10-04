@@ -2,9 +2,11 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Product;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
@@ -106,5 +108,11 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
 			return false;
 		}
 	}
+
+    public boolean isProductAlreadyRegistered(Product product) {
+        ProductAlreadyRegisteredLoader loader = getLoaderFactory().createProductAlreadyRegisteredLoader();
+        Product p = loader.setNetworkId(product.getNetworkId()).load();
+        return p != null;
+    }
 
 }

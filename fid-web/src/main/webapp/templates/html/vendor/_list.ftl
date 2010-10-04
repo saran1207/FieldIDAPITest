@@ -25,8 +25,12 @@
 			<td>${product.type.name}</td>				
 			<td>${product.description}</td>	
 			<td>
-			
-				<a href='<@s.url action="regNetworkProduct.action" namespace="/aHtml/iframe" uniqueID="${product.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+			    <#if action.isProductAlreadyRegistered(product)>
+                    <@s.text name="label.already_registered"/>
+                <#else>
+                    <a href='<@s.url action="regNetworkProduct.action" namespace="/aHtml/iframe" uniqueID="${product.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+                </#if>
+
 				
 			</td>
 		</tr>
