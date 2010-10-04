@@ -23,6 +23,7 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 	private Pager<Product> page;
 	private String searchText;
 	private int pageSize = 10;
+	private Long assetID;
 
 	public SafetyNetworkVendor(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -45,7 +46,16 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 
 	public String doSearch() {
 		page = getPagedSearchResults();
-		return SUCCESS;
+		return (isSingleAssetResult()) ? "oneFound" : SUCCESS;
+	}
+
+	private boolean isSingleAssetResult() {
+
+		if (page.getList().size() == 1) {
+			assetID = page.getList().get(0).getId();
+			return true;
+		}
+		return false;
 	}
 
 	private Pager<Product> getPagedSearchResults() {
@@ -91,4 +101,9 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 		vendor = getLoaderFactory().createVendorLinkedOrgLoader().setLinkedOrgId(vendorId).load();
 	}
 
+	public Long getAssetID() {
+		return assetID;
+	}
+
+	
 }

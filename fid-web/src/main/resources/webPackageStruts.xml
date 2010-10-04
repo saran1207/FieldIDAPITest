@@ -2015,7 +2015,11 @@
 		<action name="searchNetworkProduct" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
 			<result name="input" type="freemarker">/templates/html/vendor/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/vendor/listSearchResult.ftl</result>
-			<result name="error" type="freemarker">/templates/html/vendor/show.ftl</result>		
+			<result name="error" type="freemarker">/templates/html/vendor/show.ftl</result>	
+			<result name="oneFound" type="redirectAction">
+				<param name="actionName">showNetworkProduct</param>
+				<param name="uniqueID">${assetID}</param>
+			</result>	
 		</action>
 
 		<action name="showVendor" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
