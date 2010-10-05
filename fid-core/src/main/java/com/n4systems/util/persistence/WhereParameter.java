@@ -46,6 +46,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 	private ChainOp chainOp = ChainOp.AND;
 	private int options = 0;
 	private boolean dropAlias = false;
+    private boolean literalParameter = false;
 	
 	public WhereParameter() {}
 	
@@ -141,6 +142,9 @@ public class WhereParameter<T> implements WhereClause<T> {
 	}
 	
 	public void bind(Query query) throws InvalidQueryException {
+        if (literalParameter)
+            return;
+        
 		switch(comparator) {
 			case EQ:
 			case NE:
@@ -184,7 +188,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 			case LE:
 			case LIKE:
 			case NOTLIKE:
-				comparison += " :" + getName();
+				comparison += literalParameter ? getName() : " :" + getName();
 				break;
 			case IN:
 			case NOTIN:
@@ -241,4 +245,8 @@ public class WhereParameter<T> implements WhereClause<T> {
 		
 		return prepValue;
 	}
+
+    public void setLiteralParameter(boolean literalParameter) {
+        this.literalParameter = literalParameter;
+    }
 }

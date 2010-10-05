@@ -7,7 +7,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 import javax.persistence.EntityManager;
 
-public class ProductAlreadyRegisteredLoader extends SecurityFilteredLoader<Product> {
+public class ProductAlreadyRegisteredLoader extends SecurityFilteredLoader<Boolean> {
 
     private long networkId;
 
@@ -16,13 +16,12 @@ public class ProductAlreadyRegisteredLoader extends SecurityFilteredLoader<Produ
     }
 
     @Override
-    protected Product load(EntityManager em, SecurityFilter filter) {
+    protected Boolean load(EntityManager em, SecurityFilter filter) {
         QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, filter);
-
 
         queryBuilder.addSimpleWhere("networkId", networkId);
 
-        return queryBuilder.getSingleResult(em);
+        return queryBuilder.getCount(em) > 0;
     }
 
     public ProductAlreadyRegisteredLoader setNetworkId(long networkId) {

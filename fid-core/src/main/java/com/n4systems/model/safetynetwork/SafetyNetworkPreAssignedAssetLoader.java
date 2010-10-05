@@ -32,15 +32,8 @@ public class SafetyNetworkPreAssignedAssetLoader extends Loader<Pager<Product>> 
     @Override
     protected Pager<Product> load(EntityManager em) {
         UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer);
-        Query countQuery = em.createQuery(helper.createCountQueryString());
-        Query listQuery = em.createQuery(helper.createListQueryString());
 
-        helper.applyParameters(countQuery);
-        helper.applyParameters(listQuery);
-
-        List<String> postFetchFields = Arrays.asList("infoOptions");
-
-        return new Page<Product>(listQuery, countQuery, page, pageSize, postFetchFields);
+        return helper.getList(em, page, pageSize, new String[] { "infoOptions" });
     }
 
     public SafetyNetworkPreAssignedAssetLoader setPage(Integer page) {

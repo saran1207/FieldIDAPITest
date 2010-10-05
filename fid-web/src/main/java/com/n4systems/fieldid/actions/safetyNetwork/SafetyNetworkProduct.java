@@ -111,8 +111,7 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
 
     public boolean isProductAlreadyRegistered(Product product) {
         ProductAlreadyRegisteredLoader loader = getLoaderFactory().createProductAlreadyRegisteredLoader();
-        Product p = loader.setNetworkId(product.getNetworkId()).load();
-        return p != null;
+        return loader.setNetworkId(product.getNetworkId()).load();
     }
 
 }

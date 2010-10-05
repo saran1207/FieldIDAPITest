@@ -4,7 +4,6 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.Loader;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class SafetyNetworkUnregisteredAssetCountLoader extends Loader<Long> {
 
@@ -15,12 +14,7 @@ public class SafetyNetworkUnregisteredAssetCountLoader extends Loader<Long> {
     protected Long load(EntityManager em) {
         UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer);
 
-        String hql = helper.createCountQueryString();
-
-        Query query = em.createQuery(hql);
-        helper.applyParameters(query);
-
-        return (Long) query.getSingleResult();
+        return helper.getCount(em);
     }
 
     public SafetyNetworkUnregisteredAssetCountLoader setVendor(PrimaryOrg vendor) {
