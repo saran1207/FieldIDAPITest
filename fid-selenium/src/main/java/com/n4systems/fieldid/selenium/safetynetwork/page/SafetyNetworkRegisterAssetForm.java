@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.safetynetwork.page;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Product;
-import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.AssetPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.InspectPage;
 import com.thoughtworks.selenium.Selenium;

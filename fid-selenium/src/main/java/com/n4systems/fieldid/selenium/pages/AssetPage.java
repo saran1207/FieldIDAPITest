@@ -15,16 +15,12 @@ public class AssetPage extends FieldIDPage {
 	
 	public boolean checkOnAssetPage() {
 		checkForErrorMessages(null);
-		if(selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Safety Network')]")) {
-			return selenium.isElementPresent("//div[@id='mainContent']/h1[contains(text(),'Asset')]");
-		}else {
-			return false;
-		}
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Asset')]");
 	}
 
 	public boolean checkHeader(String serialNumber) {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='mainContent']/h1[contains(text(),'" + serialNumber + "')]");		
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + serialNumber + "')]");		
 	}
 
 }

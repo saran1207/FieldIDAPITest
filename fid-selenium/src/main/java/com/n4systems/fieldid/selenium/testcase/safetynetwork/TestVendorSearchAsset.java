@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.AssetPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkVendorAssetListPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
 
