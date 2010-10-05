@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkVendorAssetListPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
 
@@ -18,17 +19,16 @@ public class TestVendorSearchAsset extends PageNavigatingTestCase<VendorConnecti
 	@Test
 	public void test_search_with_no_result() throws Exception {
 		page.setAssetToSearchFor("g");
-		SafetyNetworkVendorAssetListPage result = page.clickSearch();
+		SafetyNetworkVendorAssetListPage result = page.clickSearchWithListResult();
 		assertFalse(result.hasAssetList());
 	}
 	
 	@Test
 	public void test_search_with_result() throws Exception {
 		page.setAssetToSearchFor("A04");
-		SafetyNetworkVendorAssetListPage result = page.clickSearch();
-		assertTrue(result.hasAssetList());	
-		assertEquals(1, result.getAssetList().size());
-		assertEquals("A04", result.getAssetList().get(0).getSerialNumber());
+		AssetPage result = page.clickSearchWithSingleResult();
+
+		assertTrue(result.checkHeader("A04"));
 	}
 	
 	@Test
