@@ -27,10 +27,54 @@ public class AssetPage extends FieldIDPage {
 		clickNavOption("Schedules");
 	}
 
-	public AssetPage clickSaveSchedule() {
+	public void clickSaveSchedule() {
 		selenium.click("//input[@id='newSchedule_label_save']");
-		waitForPageToLoad();
-		return this;
+		waitForAjax();
+	}
+	
+	public void setSchedule(String date, String inspectionType, String job) {
+		if (date != null) {
+			selenium.type("//input[@id='newSchedule_nextDate']", date);
+		}
+		if (inspectionType != null) {
+			selenium.select("//select[@id='newSchedule_type']", inspectionType);
+		}
+		if (job != null) {
+			selenium.select("//select[@id='newSchedule_project']", job);
+		}
 	}
 
+	public boolean checkScheduleExists(String date, String inspectionType, String job) {
+		return selenium.isElementPresent("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//span[text()='" + date 
+				+ "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) + "']");
+	}
+
+	public void clickRemoveSchdeule(String date, String inspectionType,	String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//span[text()='" + date 
+				+ "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) 
+				+ "']/..//a[text()='Remove']");
+		waitForAjax();
+	}
+
+	public void clickEditSchedule(String date, String inspectionType, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//span[text()='" + date 
+				+ "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) 
+				+ "']/..//a[text()='Edit']");
+		waitForAjax();
+	}
+
+	public void editScheduleDate(String oldDate, String inspectionType, String newDate) {
+		selenium.type("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//input[@value='" + oldDate 
+				+ "']", newDate);
+	}
+
+	public void clickEditSaveSchedule(String inspectionType) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//a[text()='Save']");
+		waitForAjax();
+	}
 }
