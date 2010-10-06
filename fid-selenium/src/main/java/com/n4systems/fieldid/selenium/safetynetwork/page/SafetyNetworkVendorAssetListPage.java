@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.safetynetwork.page;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,14 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 
 	public SafetyNetworkVendorAssetListPage(Selenium selenium) {
 		super(selenium);
+		if(!checkOnAssetListPage()){
+			fail("Expected to be on asset list page!");
+		}
+	}
+
+	private boolean checkOnAssetListPage() {
+		return (selenium.isElementPresent("//table[@id='productTable']") ||
+				selenium.isElementPresent("//div[@id='emptyList']"));
 	}
 
 	public SafetyNetworkVendorPage clickAsset(String serialNumber){
@@ -40,5 +50,10 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 		selenium.click("//tr[" + ++line + "]//a[.='Register']");
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
 		return new SafetyNetworkRegisterAssetForm(selenium);
+	}
+
+	public void clickLastPage() {
+		selenium.click("//a[text()='Last']");
+		waitForPageToLoad();
 	}
 }

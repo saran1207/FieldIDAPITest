@@ -22,5 +22,15 @@ public class AssetPage extends FieldIDPage {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + serialNumber + "')]");		
 	}
+	
+	public void clickSchedulesTab() {
+		clickNavOption("Schedules");
+	}
+
+	public AssetPage clickSaveSchedule() {
+		selenium.click("//input[@id='newSchedule_label_save']");
+		waitForPageToLoad();
+		return this;
+	}
 
 }
