@@ -63,7 +63,7 @@ import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
 import com.n4systems.model.safetynetwork.InspectionsByProductIdLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
-import com.n4systems.model.safetynetwork.ProductsByNetworkId;
+import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
@@ -322,8 +322,8 @@ public class LoaderFactory {
 		return new SyncAssetListLoader(filter);
 	}
 
-	public ProductsByNetworkId createProductsByNetworkId() {
-		return new ProductsByNetworkId(filter);
+	public ProductsByNetworkIdLoader createProductsByNetworkIdLoader() {
+		return new ProductsByNetworkIdLoader(filter);
 	}
 
 	public ProductSerialExtensionListLoader createProductSerialExtensionListLoader() {

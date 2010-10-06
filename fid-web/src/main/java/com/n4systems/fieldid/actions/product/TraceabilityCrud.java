@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.product;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -15,7 +16,6 @@ import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
-import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
 
 public class TraceabilityCrud extends ProductCrud {
@@ -34,7 +34,7 @@ public class TraceabilityCrud extends ProductCrud {
 		
 		testExistingProduct();
 		
-		ProductsByNetworkId loader = getLoaderFactory().createProductsByNetworkId();
+		ProductsByNetworkIdLoader loader = getLoaderFactory().createProductsByNetworkIdLoader();
 		loader.setNetworkId(product.getNetworkId());
 		
 		if (!isInVendorContext()) {

@@ -10,16 +10,16 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 
 public class SafetyNetworkAssignedProductInspectionLoader extends SafetyNetworkInspectionLoader {
-	private final ProductsByNetworkId productsByNetworkIdLoader;
+	private final ProductsByNetworkIdLoader productsByNetworkIdLoader;
 
-	public SafetyNetworkAssignedProductInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Inspection> inspectionLoader, ProductsByNetworkId productsByNetworkIdLoader) {
+	public SafetyNetworkAssignedProductInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Inspection> inspectionLoader, ProductsByNetworkIdLoader productsByNetworkIdLoader) {
 		super(filter, inspectionLoader);
 		this.productsByNetworkIdLoader = productsByNetworkIdLoader;
 	}
 	
 	public SafetyNetworkAssignedProductInspectionLoader(SecurityFilter filter) {
 		super(filter);
-		this.productsByNetworkIdLoader = new ProductsByNetworkId(filter);
+		this.productsByNetworkIdLoader = new ProductsByNetworkIdLoader(filter);
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions.helpers;
 import java.util.Collections;
 import java.util.List;
 
-
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Product;
@@ -22,12 +21,10 @@ public class AllInspectionHelper {
 	private Inspection lastInspection; 
 	
 	public AllInspectionHelper(LegacyProductSerial legacyProductSerialManager, Product product, SecurityFilter filter) {
-		super();
 		this.legacyProductSerialManager = legacyProductSerialManager;
 		this.product = product;
 		this.filter = filter;
 	}
-	
 	
 	public Long getInspectionCount() {
 		if (inspectionCount == null) {
@@ -52,13 +49,11 @@ public class AllInspectionHelper {
 		return lastInspection;
 	}
 
-
 	public Long getLocalInspectionCount() {
 		if (localInspectionCount == null) {
 			localInspectionCount = legacyProductSerialManager.countAllLocalInspections(product, filter);
 		}
 		return localInspectionCount;
 	}
-
 
 }

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
@@ -11,7 +12,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.model.Product;
-import com.n4systems.model.safetynetwork.ProductsByNetworkId;
 import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.ProductCertificateGenerator;
 
@@ -42,7 +42,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 			return MISSING;
 		}
 
-		ProductsByNetworkId loader = new ProductsByNetworkId(getSecurityFilter());
+		ProductsByNetworkIdLoader loader = new ProductsByNetworkIdLoader(getSecurityFilter());
 		loader.setNetworkId(ownedProduct.getNetworkId());
 		
 		List<Product> linkedProducts = loader.load();
