@@ -21,7 +21,7 @@ public interface WhereClause<T> extends ClauseArgument {
 		}
 		
 	}
-	
+	public String getKey();
 	public String getName(); 
 	public T getValue();
 	public ChainOp getChainOperator();

@@ -80,4 +80,9 @@ public class WhereParameterGroup implements WhereClause<List<WhereClause<?>>> {
 		return clauseString.toString();
 	}
 
+	@Override
+	public String getKey() {
+		return getName();
+	}
+
 }

@@ -295,7 +295,7 @@ public class QueryBuilder<E> {
 	}
 	
 	public <T> QueryBuilder<E> addWhere(WhereClause<T> where) {
-		whereParameters.put(where.getName(), where);
+		whereParameters.put(where.getKey(), where);
 		return this;
 	}
 	

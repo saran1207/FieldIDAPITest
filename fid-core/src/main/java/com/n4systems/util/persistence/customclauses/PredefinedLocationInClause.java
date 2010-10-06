@@ -45,4 +45,9 @@ public class PredefinedLocationInClause implements WhereClause<List<Long>> {
 	public String getClause(FromTable table) throws InvalidQueryException {
 		return String.format("%s IN (:%s)", joinAlias, getName());
 	}
+
+	@Override
+	public String getKey() {
+		return getName();
+	}
 }

@@ -28,7 +28,7 @@ public class WhereParameterGroupTest {
 			public WhereClause.ChainOp getChainOperator() {
 				return ChainOp.AND;
 			}
-
+			public String getKey() { return null; }
 			public String getName() { return null; }
 			public Object getValue() { return null; }
 
@@ -53,7 +53,7 @@ public class WhereParameterGroupTest {
 				public WhereClause.ChainOp getChainOperator() {
 					return ChainOp.AND;
 				}
-	
+				public String getKey() { return null; }
 				public String getName() { return null; }
 				public Object getValue() { return null; }
 	

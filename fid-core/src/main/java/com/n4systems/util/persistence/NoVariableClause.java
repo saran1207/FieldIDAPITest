@@ -33,6 +33,10 @@ public class NoVariableClause implements WhereClause<String> {
 		return name;
 	}
 
+	public String getKey() { 
+		return getName(); 
+	}
+	
 	@Override
 	public String getClause(FromTable table) throws InvalidQueryException {
 		String comparison = table.prepareField(left) + " " + comparator.getOperator() + " " + table.prepareField(right);

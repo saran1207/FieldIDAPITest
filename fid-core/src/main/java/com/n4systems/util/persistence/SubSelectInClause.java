@@ -69,4 +69,9 @@ public class SubSelectInClause implements WhereClause<QueryBuilder<?>> {
 	public void bind(Query query) throws InvalidQueryException {
 		subSelect.bindParams(query);
 	}
+
+	@Override
+	public String getKey() {
+		return getName();
+	}
 }

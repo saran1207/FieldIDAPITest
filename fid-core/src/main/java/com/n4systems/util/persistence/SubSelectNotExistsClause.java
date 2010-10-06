@@ -42,4 +42,9 @@ public class SubSelectNotExistsClause implements WhereClause<QueryBuilder<?>> {
 
 		return " NOT EXISTS ( " + subQuery.getQueryString() + " )";
     }
+
+	@Override
+	public String getKey() {
+		return getName();
+	}
 }

@@ -67,4 +67,9 @@ public class PassthruWhereClause implements WhereClause<Map<String, Object>> {
 		return clause;
 	}
 
+	@Override
+	public String getKey() {
+		return getName();
+	}
+
 }

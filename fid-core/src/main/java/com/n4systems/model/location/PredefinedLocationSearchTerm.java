@@ -48,4 +48,9 @@ public class PredefinedLocationSearchTerm extends SingleTermDefiner implements W
 		return String.format("%s = :%s", joinAlias, getName());
 	}
 
+	@Override
+	public String getKey() {
+		return getName();
+	}
+
 }
