@@ -20,7 +20,7 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 
 	private boolean checkOnAssetListPage() {
 		return (selenium.isElementPresent("//table[@id='productTable']") ||
-				selenium.isElementPresent("//div[@id='emptyList']"));
+				selenium.isElementPresent("//div[@class='emptyList']"));
 	}
 
 	public SafetyNetworkVendorPage clickAsset(String serialNumber){
