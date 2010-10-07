@@ -12,7 +12,7 @@ public class SafetyNetworkUnregisteredAssetCountLoader extends Loader<Long> {
 
     @Override
     protected Long load(EntityManager em) {
-        UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer);
+        UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer, true);
 
         return helper.getCount(em);
     }

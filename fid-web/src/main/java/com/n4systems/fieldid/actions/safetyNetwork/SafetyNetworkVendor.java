@@ -83,6 +83,8 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 
 	private SafetyNetworkSmartSearchLoader setupLoader() {
 		SafetyNetworkSmartSearchLoader smartSearchLoader = getLoaderFactory().createSafetyNetworkSmartSearchLoader();
+		smartSearchLoader.setVendor(vendor);
+		smartSearchLoader.setCustomer(getPrimaryOrg());
 		smartSearchLoader.setVendorOrgId(vendor.getId());
 		smartSearchLoader.setSearchText(searchText);
 		return smartSearchLoader;
