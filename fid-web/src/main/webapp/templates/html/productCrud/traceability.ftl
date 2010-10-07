@@ -73,31 +73,6 @@
 				</#if>	
 			</div>
 		
-			<div class="viewSection smallViewSection" id="customerInformation" >
-				<#if securityGuard.jobSitesEnabled >
-					<h2><@s.text name="label.siteinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
-					
-				<#else>	
-					<h2><@s.text name="label.customerinformation"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${product.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
-				</#if>
-				<p>
-					<label><@s.text name="label.assignedto"/></label>
-					<span class="fieldValue">${(product.assignedUser.userLabel)!?html}</span>
-				</p>
-				<p>
-					<label><@s.text name="label.location"/></label>
-					<span class="fieldValue">${(helper.getFullNameOfLocation(product.advancedLocation))?html}</span>
-				</p>
-				<p>
-					<label><@s.text name="label.referencenumber"/></label>
-					<span class="fieldValue">${product.customerRefNumber!?html}</span>
-				</p>
-				<p>
-					<label><@s.text name="label.purchaseorder"/></label>
-					<span class="fieldValue">${product.purchaseOrder!?html}</span>
-				</p>
-			</div>
-		
 			<#if !linkedProduct.orderedInfoOptionList.isEmpty() >
 				<div class="viewSection smallViewSection" >
 					<h2>${linkedProduct.type.name?html} <@s.text name="label.attributes"/></h2>

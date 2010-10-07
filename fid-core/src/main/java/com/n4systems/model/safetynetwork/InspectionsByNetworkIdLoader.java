@@ -9,7 +9,10 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SubSelectInClause;
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameterGroup;
 
 import java.util.List;
 
@@ -29,11 +32,15 @@ public class InspectionsByNetworkIdLoader extends ListLoader<Inspection> {
 		connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
 
         SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("product.owner.tenant", connectedTenantsQuery);
+
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause(insideSafetyNetworkSubClause);
+        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "product.owner.tenant.id", filter.getTenantId(), WhereClause.ChainOp.OR));
         
 		QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("product.networkId", networkId));
-        builder.addWhere(insideSafetyNetworkSubClause);
-		
+        builder.addWhere(wpg);
+
 		List<Inspection> unsecuredInspections = builder.getResultList(em);
 		
 		PersistenceManager.setSessionReadOnly(em);
