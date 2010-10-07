@@ -143,7 +143,6 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.group = group;
 	}
 
-	@AllowSafetyNetworkAccess
 	public InspectionBook getBook() {
 		return book;
 	}
