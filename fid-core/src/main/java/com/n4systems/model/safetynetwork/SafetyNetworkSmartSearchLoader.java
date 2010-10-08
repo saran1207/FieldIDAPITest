@@ -7,6 +7,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.SmartSearchWhereClause;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.persistence.utils.PostFetcher;
 
 public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
 	private final VendorLinkedOrgLoader linkedOrgLoader;
@@ -32,7 +33,9 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
 
 		createUnregisteredAssetLoader();
 		List<Product> unsecuredProducts = unregisteredAssetQueryHelper.getList(em);
-
+		
+		PostFetcher.postFetchFields(unsecuredProducts, "infoOptions");
+		
 		// our product list may contain products which are set to a customer who is not me.
 		SafetyNetworkProductSecurityManager securityManager = new SafetyNetworkProductSecurityManager(filter.getOwner());
 		List<Product> securedProducts = securityManager.filterOutExternalNotAssignedProducts(unsecuredProducts);
