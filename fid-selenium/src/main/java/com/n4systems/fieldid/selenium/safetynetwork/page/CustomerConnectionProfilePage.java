@@ -18,5 +18,10 @@ public class CustomerConnectionProfilePage extends FieldIDPage {
         String numStr = selenium.getText("//div[contains(@class, 'preassignedAssetsCount')]").trim();
         return Integer.parseInt(numStr);
     }
-	
+    
+    public SafetyNetworkCatalogImportPage clickViewCatalog(){
+    	selenium.click("//a[contains(text(), 'View Catalog')]");
+    	return new SafetyNetworkCatalogImportPage(selenium);
+    }
+    
 }

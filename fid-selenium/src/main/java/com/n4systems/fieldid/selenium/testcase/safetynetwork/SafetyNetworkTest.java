@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.testcase;
+package com.n4systems.fieldid.selenium.testcase.safetynetwork;
 
 import static org.junit.Assert.assertTrue;
 
@@ -6,6 +6,7 @@ import com.n4systems.fieldid.selenium.safetynetwork.page.CustomerConnectionProfi
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogImportPage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkInvitePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
 import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
@@ -25,21 +26,22 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	// Product Types
 	private static final String PRODUCT_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
-	
+
 	// Connection names
-    private static final String CONNECTION_NAME_1 = "Sea-Fit";
+	private static final String CONNECTION_NAME_1 = "Sea-Fit";
 	private static final String CONNECTION_NAME_2 = "CM";
+	private static final String CONNECTION_NAME_3 = "NIS Chain";
 	private static final String ASSET_SERIAL_1 = "A09";
 
 	@Test
-	public void test_invite_page(){
+	public void test_invite_page() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("cglift").login().clickSafetyNetworkLink();
-		SafetyNetworkInvitePage invitePage= safetyNetworkPage.clickInvite();
+		SafetyNetworkInvitePage invitePage = safetyNetworkPage.clickInvite();
 		invitePage.sendEmail();
-		assertTrue("Could not open Invitation page", invitePage!=null);		
-		
+		assertTrue("Could not open Invitation page", invitePage != null);
+
 	}
-	
+
 	@Test
 	public void test_static_page_contents() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("msa").login().clickSafetyNetworkLink();
@@ -58,43 +60,31 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
 		assertTrue("Could open vendor connection profile", selenium.isElementPresent(connectionProfileName));
 	}
-	
+
 	@Test
 	public void test_select_customer() {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany("cglift").login().clickSafetyNetworkLink();
-		CustomerConnectionProfilePage safetyNetworkImportPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_2);
-		assertTrue("Could open customer Import page", safetyNetworkImportPage!=null);
+		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_2);
+		assertTrue("Could open customer connection profile", safetyNetworkCustomerPage != null);
 	}
 
-	//TODO wait for functionality.
-	public void register_an_asset() {
-
-	}
-
-	public void test_view_preassigned_assets() {
-
-	}
-
-	// TODO Wait for functionality.
-	public void test_search_for_assets_to_register_from_vendor() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("halo").login().clickSafetyNetworkLink();
-		VendorConnectionProfilePage connectionProfilePage = safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
-
-		connectionProfilePage.setAssetToSearchFor(ASSET_SERIAL_1);
-
-	}
-
-	// TODO Wait for functionality.
-	public void test_view_all_assets_to_register_from_vendor() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("halo").login().clickSafetyNetworkLink();
-		VendorConnectionProfilePage connectionProfilePage = safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
-
-		connectionProfilePage.clickViewPreassignedAssets();
-	}
-
-	// TODO Next.
+	@Test
 	public void test_view_catalog_and_import() {
+		SafetyNetworkPage safetyNetworkPage = startAsCompany("seafit").login().clickSafetyNetworkLink();
+		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_3);
 
+		SafetyNetworkCatalogImportPage safetyNetworkCatalogImportPage = safetyNetworkCustomerPage.clickViewCatalog();
+		
+		safetyNetworkCatalogImportPage.clickSelectItemsToImportButton();
+		
+		safetyNetworkCatalogImportPage.clickFirstProductTypeCheckBox();
+		
+		safetyNetworkCatalogImportPage.clickContinue();
+		
+		safetyNetworkCatalogImportPage.clickStartImport();
+		
+		assertTrue("Could not complete catalog import", selenium.isElementPresent("//input[@id='importDone']"));
+		
 	}
 
 	@Test
@@ -130,7 +120,5 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 		safetyNetworkSettingsPage.saveSettings();
 	}
-	
-
 
 }
