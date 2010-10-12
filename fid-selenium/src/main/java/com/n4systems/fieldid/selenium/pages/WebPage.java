@@ -45,5 +45,10 @@ public class WebPage extends WebEntity {
 	public String getAlert() {
 		return selenium.getAlert();
 	}
+
+    public void goBack() {
+        selenium.goBack();
+        waitForPageToLoad();
+    }
 	
 }

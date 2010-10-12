@@ -53,6 +53,11 @@ public class FieldIDPage extends WebPage {
 		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Identify')]");
 		return new IdentifyPage(selenium);
 	}
+
+    public AssetsSearchPage clickAssetsLink() {
+        selenium.click("//div[@id='pageNavigation']//a[contains(.,'Assets')]");
+        return new AssetsSearchPage(selenium);
+    }
 	
 	public void gotoNextPage() {
 		selenium.click("//div[@class='paginationWrapper'][1]//a[contains(.,'Next')]");

@@ -77,4 +77,12 @@ public class AssetPage extends FieldIDPage {
 				+ "']/..//a[text()='Save']");
 		waitForAjax();
 	}
+
+    public String getProductStatus() {
+        return selenium.getText("//label[.='Product Status']/../span");
+    }
+
+    public String getPurchaseOrder() {
+        return selenium.getText("//label[.='Purchase Order']/../span");
+    }
 }
