@@ -13,7 +13,7 @@ public class TestVendorSearchAsset extends PageNavigatingTestCase<VendorConnecti
 
 	@Override
 	protected VendorConnectionProfilePage navigateToPage() {
-        return startAsCompany("halo").login().clickSafetyNetworkLink().selectVendorConnection("Sea-Fit");
+        return startAsCompany("seafit").login().clickSafetyNetworkLink().selectVendorConnection("HALO");
     }
 	
 	@Test
@@ -25,10 +25,10 @@ public class TestVendorSearchAsset extends PageNavigatingTestCase<VendorConnecti
 	
 	@Test
 	public void test_search_with_result() throws Exception {
-		page.setAssetToSearchFor("A04");
+		page.setAssetToSearchFor("seaFitAsset");
 		AssetPage result = page.clickSearchWithSingleResult();
 
-		assertTrue(result.checkHeader("A04"));
+		assertTrue(result.checkHeader("seaFitAsset"));
 	}
 	
 	@Test
