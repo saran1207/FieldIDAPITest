@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.selenium.pages.assets;
 
-import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.n4systems.fieldid.selenium.pages.MassUpdatePage;
 import com.thoughtworks.selenium.Selenium;
 
-public class AssetsMassUpdatePage extends FieldIDPage {
+public class AssetsMassUpdatePage extends MassUpdatePage<AssetsSearchResultsPage> {
 
     public AssetsMassUpdatePage(Selenium selenium) {
-        super(selenium);
+        super(selenium, AssetsSearchResultsPage.class);
     }
 
     public void setProductStatus(String newStatus) {
@@ -17,13 +17,6 @@ public class AssetsMassUpdatePage extends FieldIDPage {
     public void setPurchaseOrder(String newPurchaseOrder) {
         selenium.type("//input[@id='massUpdateProductsSave_purchaseOrder']", newPurchaseOrder);
         selenium.fireEvent("//input[@id='massUpdateProductsSave_purchaseOrder']", "change");
-    }
-
-    public AssetsSearchResultsPage clickSaveButton() {
-        selenium.chooseOkOnNextConfirmation();
-        selenium.click("//input[@type='submit' and @value='Save']");
-        selenium.getConfirmation();
-        return new AssetsSearchResultsPage(selenium); 
     }
 
 }

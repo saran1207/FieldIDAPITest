@@ -39,6 +39,11 @@ public class FieldIDPage extends WebPage {
 		return new SafetyNetworkPage(selenium);
 	}
 
+	public SchedulesSearchPage clickSchedulesLink() {
+		selenium.click("//div[@id='pageNavigation']//a[.='Schedules']");
+		return new SchedulesSearchPage(selenium);
+	}
+
 	public SetupPage clickSetupLink() {
 		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Setup')]");
 		return new SetupPage(selenium);
