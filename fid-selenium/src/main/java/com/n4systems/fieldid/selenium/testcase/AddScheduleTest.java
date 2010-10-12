@@ -6,10 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.InspectPage;
 
 public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 	
@@ -20,6 +22,13 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 	String testInspectionType = "Check In";
 	
 	String testJob = "001";
+	
+	@Before
+	public void setUp() {
+		if (page.checkScheduleExists(testDate, testInspectionType, testJob)) {
+			page.clickRemoveSchdeule(testDate, testInspectionType, testJob);
+		}
+	}
 
 	@Override
 	protected AssetPage navigateToPage() {
@@ -60,6 +69,20 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 		assertFalse(page.checkScheduleExists(newDate, testInspectionType, testJob));
 	}
 	
+	@Test
+	public void schedule_inspect_now_stop_progress_test() {
+		page.clickSchedulesTab();
+		page.setSchedule(testDate, testInspectionType, testJob);
+		page.clickSaveSchedule();
+		assertTrue(page.checkScheduleExists(testDate, testInspectionType, testJob));
+		InspectPage inspectPage = page.clickInpectNow(testDate, testInspectionType, testJob);
+		inspectPage.clickAssetInformationTab();
+		page.clickSchedulesTab();
+		page.clickStopProgress(testDate, testInspectionType, testJob);
+		
+		page.clickRemoveSchdeule(testDate, testInspectionType, testJob);
+		assertFalse(page.checkScheduleExists(testDate, testInspectionType, testJob));
+	}
 	private String getNewdate() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());

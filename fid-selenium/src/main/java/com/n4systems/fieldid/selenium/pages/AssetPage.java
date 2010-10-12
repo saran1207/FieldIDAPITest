@@ -85,4 +85,21 @@ public class AssetPage extends FieldIDPage {
     public String getPurchaseOrder() {
         return selenium.getText("//label[.='Purchase Order']/../span");
     }
+
+	public InspectPage clickInpectNow(String date, String inspectionType, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//span[text()='" + date 
+				+ "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) 
+				+ "']/..//a[text()='inspect now']");
+		return new InspectPage(selenium);
+	}
+
+	public void clickStopProgress(String date, String inspectionType, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType
+				+ "']/..//span[text()='" + date 
+				+ "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) 
+				+ "']/..//a[text()='Stop Progress']");
+	}
+
+	
 }
