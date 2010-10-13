@@ -18,7 +18,7 @@
 			<p class="vendorParagraph">
 				<@s.text name="label.register_assets.msg"/>
 				
-				<a class="vendorLink lightview" title="<@s.text name="label.instructional_video"/> ::  :: width: 900, height: 570"rel="iframe" href='/videos/instructions/safetynetwork/register.html'>&nbsp;<@s.text name="label.tell_me_more"/></a>
+				<a class="vendorLink lightview" title="::  :: width: 900, height: 570" rel="iframe" href='/videos/instructions/safetynetwork/register.html'>&nbsp;<@s.text name="label.tell_me_more"/></a>
 				<@s.form action="searchNetworkProduct" theme="fieldid" cssClass="fullForm" method="get">
 					<@s.textfield name="searchText" id="assetSearchBox" cssClass="inputAlign"/>
 					<@s.hidden name="vendorId" value="%{vendor.id}" />
