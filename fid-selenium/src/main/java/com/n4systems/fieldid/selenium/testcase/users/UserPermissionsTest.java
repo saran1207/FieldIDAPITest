@@ -6,10 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.JobsListPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.ManageInspectionsPage;
+import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.reporting.page.ReportingSearchResultsPage;
 
@@ -96,6 +98,16 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 		assertFalse("Shouldn't be able to see edit tab", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
+	}
+	
+	public void verify_customers_can_only_edit_four_unrestricted_fields_on_asset(){
+		AssetPage assetPage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1);
+		
+		assertEquals(selenium.getXpathCount("//div[@class='infoSet']"), 4);
+		assertTrue("Coudln't find wner field", selenium.isElementPresent("//label[contains(.,'Owner')]"));
+		assertTrue("Coudln't find Location field", selenium.isElementPresent("//label[contains(.,'Location')]"));
+		assertTrue("Coudln't find Reference Number field", selenium.isElementPresent("//label[contains(.,'Reference Number')]"));
+		assertTrue("Coudln't find Purchase Order field", selenium.isElementPresent("//label[contains(.,'Purchase Order')]"));
 	}
 
 }
