@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fieldid-root</artifactId>
-	<version>2010.9.0</version>
+	<version>2010.10.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Field ID Parent POM</name>
 	<modules>
@@ -106,8 +106,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<scm>
-		<connection>scm:svn:https://fieldid.jira.com/svn/WEB/tags/tag_2010.9.0</connection>
-		<developerConnection>scm:svn:https://fieldid.jira.com/svn/WEB/tags/tag_2010.9.0</developerConnection>
-		<tag>HEAD</tag>
+		<connection>scm:svn:https://fieldid.jira.com/svn/WEB</connection>
+		<developerConnection>scm:svn:https://fieldid.jira.com/svn/WEB</developerConnection>
 	</scm>
 </project>
