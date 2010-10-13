@@ -17,6 +17,7 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
+import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
@@ -29,7 +30,7 @@ public class PackageJunitRunner extends ParentRunner<Runner> {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
 	@Inherited
-	public @interface SuitePackage {
+	public static @interface SuitePackage {
 		/**
 		 * @return the package containing the test cases to be run
 		 */
@@ -39,7 +40,7 @@ public class PackageJunitRunner extends ParentRunner<Runner> {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.METHOD)
 	@Inherited
-	public @interface BeforePackage { }
+	public static @interface BeforePackage { }
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.METHOD)
@@ -130,19 +131,19 @@ public class PackageJunitRunner extends ParentRunner<Runner> {
 
 	@Override
 	public void run(RunNotifier notifier) {
-		runMethodsWithAnnotation(BeforePackage.class);
+		runMethodsWithAnnotation(BeforePackage.class, notifier);
 		super.run(notifier);
-		runMethodsWithAnnotation(AfterPackage.class);
+		runMethodsWithAnnotation(AfterPackage.class, notifier);
 	}
 
-	private void runMethodsWithAnnotation(Class<? extends Annotation> annot) {
+	private void runMethodsWithAnnotation(Class<? extends Annotation> annot, RunNotifier notifier) {
 		Class<?> clazz = getTestClass().getJavaClass();
 		for (Method method : clazz.getDeclaredMethods()) {
 			if (Modifier.isStatic(method.getModifiers()) && method.getAnnotation(annot) != null) {
 				try {
 					method.invoke(null);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+				} catch (Throwable e) {
+                    notifier.fireTestFailure(new Failure(getDescription(), e));
 				}
 			}
 		}
