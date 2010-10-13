@@ -106,4 +106,9 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<scm>
+		<connection>scm:svn:https://fieldid.jira.com/svn/WEB</connection>
+		<developerConnection>scm:svn:https://fieldid.jira.com/svn/WEB</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 </project>
