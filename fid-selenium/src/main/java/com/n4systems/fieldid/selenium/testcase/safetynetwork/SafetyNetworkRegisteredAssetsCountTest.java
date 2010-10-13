@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.testcase;
+package com.n4systems.fieldid.selenium.testcase.safetynetwork;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.Owner;

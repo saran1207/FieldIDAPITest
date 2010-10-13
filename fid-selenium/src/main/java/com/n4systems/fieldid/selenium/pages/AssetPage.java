@@ -23,6 +23,11 @@ public class AssetPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + serialNumber + "')]");		
 	}
 	
+	public void clickInspectionsTab() {
+		clickNavOption("Inspections");
+	}
+	
+
 	public void clickSchedulesTab() {
 		clickNavOption("Schedules");
 	}
