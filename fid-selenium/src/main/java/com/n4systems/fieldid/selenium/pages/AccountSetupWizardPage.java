@@ -18,7 +18,7 @@ public class AccountSetupWizardPage extends FieldIDPage {
 	private static final String WEBSITE_ADDRESS_TEXT_FIELD_XPATH = "//input[@id='step2Complete_webSite']";
 	private static final String STEP_2_COMPLETE_BUTTON_XPATH = "//input[@id='step2Complete_label_next']";
 	private static final String STEP_3_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard - Step 3 of 3')]";
-	private static final String IMPORT_DESCRIPTION_STRING = "Field ID provides suggested templates for a wide range of equipment.";
+	private static final String IMPORT_DESCRIPTION_STRING = "provides suggested templates for a wide range of equipment.";
 	private static final String IMPORT_RADIO_BUTTON_XPATH = "//td[contains(text(),'" + IMPORT_DESCRIPTION_STRING + "')]/../TD[1]/INPUT[contains(@id,'step3Import_uniqueID')]";
 	private static final String STEP_3_COMPLETE_LINK_XPATH = "//a[contains(text(),'Skip')]";
 	private static final String WIZARD_DONE_PAGE_HEADER_XPATH = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard - Done')]";

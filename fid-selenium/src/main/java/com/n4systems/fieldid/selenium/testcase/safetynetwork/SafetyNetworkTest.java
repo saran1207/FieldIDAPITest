@@ -29,7 +29,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	// Connection names
 	private static final String CONNECTION_NAME_1 = "Sea-Fit";
-	private static final String CONNECTION_NAME_2 = "CM";
+	private static final String CONNECTION_NAME_2 = "N4 Systems";
 	private static final String CONNECTION_NAME_3 = "NIS Chain";
 	private static final String ASSET_SERIAL_1 = "A09";
 
