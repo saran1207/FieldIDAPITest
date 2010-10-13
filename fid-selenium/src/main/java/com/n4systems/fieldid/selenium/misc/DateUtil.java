@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.selenium.misc;
 
-import com.ibm.icu.util.Calendar;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
