@@ -237,7 +237,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 	
 	public void enableManageSystemConfigPermission(){
-		selenium.click("//input[@name='userPermissions['2']']");
+		selenium.click("//tr[3]/td[2]/input");
 	}
 	
 }

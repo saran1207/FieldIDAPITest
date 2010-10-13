@@ -22,11 +22,6 @@ public class AssetPage extends FieldIDPage {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + serialNumber + "')]");		
 	}
-	
-	public void clickInspectionsTab() {
-		clickNavOption("Inspections");
-	}
-	
 
 	public void clickSchedulesTab() {
 		clickNavOption("Schedules");
@@ -106,5 +101,8 @@ public class AssetPage extends FieldIDPage {
 				+ "']/..//a[text()='Stop Progress']");
 	}
 
-	
+	public InspectionsPerformedPage clickInspectionsTab() {
+		selenium.click("//a[contains(.,'Inspections')]");
+		return new InspectionsPerformedPage(selenium);
+	}
 }
