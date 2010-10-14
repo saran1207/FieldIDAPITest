@@ -15,7 +15,7 @@ import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.testcase.IdentifyAssetsTest;
+import com.n4systems.fieldid.selenium.testcase.assets.IdentifyAssetsTest;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 

@@ -8,9 +8,15 @@ public class ManageInspectionsPage extends FieldIDPage {
 		super(selenium);
 	}
 
-	public InspectPage clickFirstInspectionLink(){
+	public InspectPage clickFirstInspectionLink() {
 		selenium.click("//span[@class='inspectionType']/a");
 		return new InspectPage(selenium);
 	}
-	
+
+	public InspectPage clickStartNewInspection(String inspectionType) {
+		selenium.click("//a[contains(., 'Start New Inspection')]");
+		selenium.click("//a[contains(., '" + inspectionType + "')]");
+		return new InspectPage(selenium);
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.testcase;
+package com.n4systems.fieldid.selenium.testcase.assets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

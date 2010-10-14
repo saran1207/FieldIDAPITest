@@ -22,5 +22,4 @@ public class InspectPage extends FieldIDPage {
 	public void clickAssetInformationTab() {
 		clickNavOption("Asset Information");
 	}
-
 }
