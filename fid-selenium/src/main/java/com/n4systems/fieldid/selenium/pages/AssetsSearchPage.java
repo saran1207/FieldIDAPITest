@@ -114,4 +114,24 @@ public class AssetsSearchPage extends FieldIDPage {
 	public List<String> getResultColumnHeaders() {
 		return collectTableHeaders();
 	}
+	
+	public List<String> getResultSerialNumbers() {
+		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
+	}
+	
+	public AssetPage clickResultSerialNumber(String serialNumber) {
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/..//a");
+		return new AssetPage(selenium);
+	}
+
+	public AssetPage clickResultInfo(String serialNumber) {
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Info')]/..//a");		
+		return new AssetPage(selenium);
+	}
+
+	public InspectPage clickResultInspection(String serialNumber) {
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'inspections')]/..//a");	
+		return new InspectPage(selenium);
+	}
+
 }

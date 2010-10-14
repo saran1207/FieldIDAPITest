@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchDisplayColumns;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 
 public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
@@ -97,6 +100,42 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 				"Purchase Order", "Links");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
 	}
+	
+	@Test
+	public void search_results_serial_number_link() throws Exception {
+		page.clickRunSearchButton();
+		assertTrue(page.hasSearchResults());
+		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
+		
+		String serialNumber = page.getResultSerialNumbers().get(0);
+		
+		AssetPage assetPage = page.clickResultSerialNumber(serialNumber);
+		assertTrue(assetPage.checkHeader(serialNumber));
+	}
+	
+	@Test
+	public void search_results_info_link() throws Exception {
+		page.clickRunSearchButton();
+		assertTrue(page.hasSearchResults());
+		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
+		
+		String serialNumber = page.getResultSerialNumbers().get(0);
+		
+		AssetPage assetPage = page.clickResultInfo(serialNumber);
+		assertTrue(assetPage.checkHeader(serialNumber));
+	}
+	
+	@Test
+	public void search_results_inspections_link() throws Exception {
+		page.clickRunSearchButton();
+		assertTrue(page.hasSearchResults());
+		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
+		
+		String serialNumber = page.getResultSerialNumbers().get(0);
+		
+		page.clickResultInspection(serialNumber);
+	}
+	
 	
 	private List<String> getDefaultColumnHeaders() {
 		return Arrays.asList("Serial Number", "Reference Number", "Job Site Name", "Location", 
