@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
@@ -138,6 +139,18 @@ public class FieldIDPage extends WebPage {
 
         return attrs;
     }
+    
+    protected List<String> collectTableHeaders() {
+    	int numColumns = selenium.getXpathCount("//table[@class='list']/tbody/tr/th").intValue();
+		List<String> headers = new ArrayList<String>(numColumns);
+		
+		for (int i = 1; i <= numColumns; i++) {
+			String headerXpath = "//table[@class='list']/tbody/tr/th[" + i + "]";
+			headers.add(selenium.getText(headerXpath));
+		}
+		
+		return headers;
+	}
 	
 	protected void clickNavOption(String navOption) {
 		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
@@ -230,10 +243,22 @@ public class FieldIDPage extends WebPage {
 		return new OrgPicker(selenium);
 	}
 	
+	public LocationPicker getLocationPicker(){
+		return new LocationPicker(selenium);
+	}
+	
 	public AssetPage search(String criteria) {
 		selenium.type("//input[@id='searchText']", criteria);
 		selenium.click("//input[@id='smartSearchButton']");
 		return new AssetPage(selenium);
+	}
+	
+	public void setCheckBoxValue(String locator, boolean checked) {
+		if(checked){
+			selenium.check(locator);
+		} else {
+			selenium.uncheck(locator);
+		}
 	}
 
 }

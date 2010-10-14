@@ -1,18 +1,19 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
 public class AssetSearchCriteria {
-	String rfidNumber;
-	String serialNumber;
-	String orderNumber;
-	String purchaseOrder;
-	String referenceNumber;
-	String productStatus;
-	String productTypeGroup;
-	String productType;
-	String location;
-	Owner owner;
-	String fromDate;
-	String toDate;
+	private String rfidNumber;
+	private String serialNumber;
+	private String orderNumber;
+	private String purchaseOrder;
+	private String assignedTo;
+	private String referenceNumber;
+	private String productStatus;
+	private String productTypeGroup;
+	private String productType;
+	private String location;
+	private Owner owner;
+	private String fromDate;
+	private String toDate;
 	
 	public AssetSearchCriteria() {
 	}
@@ -111,5 +112,13 @@ public class AssetSearchCriteria {
 	
 	public void setToDate(String s) {
 		this.toDate = s;
+	}
+
+	public String getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(String assignedTo) {
+		this.assignedTo = assignedTo;
 	}
 }
