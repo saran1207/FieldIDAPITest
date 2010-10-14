@@ -2,9 +2,26 @@ package com.n4systems.fieldid.selenium.pages;
 
 import static org.junit.Assert.fail;
 
+import com.n4systems.fieldid.selenium.datatypes.Product;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
+// TODO: Merge the two AssetPage classes.
 public class AssetPage extends FieldIDPage {
+
+	MiscDriver misc;
+
+	// Locators
+	private String editAssetSerialNumberTextFieldLocator = "xpath=//INPUT[@id='serialNumberText']";
+	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
+	private String editAssetReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
+	private String editAssetLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
+	private String editAssetProductStatusSelectListLocator = "xpath=//SELECT[@id='productUpdate_productStatus']";
+	private String editAssetPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='productUpdate_purchaseOrder']";
+	private String editAssetIdentifiedTextFieldLocator = "xpath=//INPUT[@id='identified']";
+	private String editAssetProductTypeTextFieldLocator = "xpath=//SELECT[@id='productType']";
+	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productUpdate_publishedState']";
+	private String editAssetCommentTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 
 	public AssetPage(Selenium selenium) {
 		super(selenium);
@@ -73,6 +90,10 @@ public class AssetPage extends FieldIDPage {
 		return selenium.getText("//label[.='Product Status']/../span");
 	}
 
+	public String getSerialNumber() {
+		return selenium.getText("//label[.='Serial Number']/../span");
+	}
+
 	public String getPurchaseOrder() {
 		return selenium.getText("//label[.='Purchase Order']/../span");
 	}
@@ -120,7 +141,7 @@ public class AssetPage extends FieldIDPage {
 
 	public void attachExistingSubcomponent(String serialNumber) {
 		selenium.click("//a[contains(.,'Find Existing')]");
-		//waitForElementToBePresent("//iframe[@id='lightviewContent']");
+		// waitForElementToBePresent("//iframe[@id='lightviewContent']");
 		selenium.type("//input[@id='subProductSearchForm_search']", serialNumber);
 		selenium.click("//input[@id='subProductSearchForm_load']");
 	}
@@ -133,5 +154,59 @@ public class AssetPage extends FieldIDPage {
 	public void clickViewTab() {
 		selenium.click("//a[contains(.,'View')]");
 		waitForPageToLoad();
+	}
+
+	public void setAssetForm(Product p) {
+
+		if (p.getPublished() == true) {
+			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish");
+		} else {
+			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Do Not Publish");
+		}
+		if (p.getSerialNumber() != null) {
+			selenium.type(editAssetSerialNumberTextFieldLocator, p.getSerialNumber());
+		}
+		if (p.getRFIDNumber() != null) {
+			selenium.type(editAssetRFIDNumberTextFieldLocator, p.getRFIDNumber());
+		}
+		if (p.getReferenceNumber() != null) {
+			selenium.type(editAssetReferenceNumberTextFieldLocator, p.getReferenceNumber());
+		}
+		if (p.getOwner() != null) {
+			misc.gotoChooseOwner();
+			misc.setOwner(p.getOwner());
+			misc.gotoSelectOwner();
+		}
+		if (p.getLocation() != null) {
+			selenium.type(this.editAssetLocationTextFieldLocator, p.getLocation());
+		}
+		if (p.getProductStatus() != null) {
+			if (misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
+				selenium.select(this.editAssetProductStatusSelectListLocator, p.getProductStatus());
+			} else {
+				fail("Could not find the product status '" + p.getProductStatus() + "'");
+			}
+		}
+		if (p.getPurchaseOrder() != null) {
+			selenium.type(this.editAssetPurchaseOrderTextFieldLocator, p.getPurchaseOrder());
+		}
+		if (p.getIdentified() != null) {
+			selenium.type(this.editAssetIdentifiedTextFieldLocator, p.getIdentified());
+		}
+		if (p.getProductType() != null) {
+			selenium.type(this.editAssetProductTypeTextFieldLocator, p.getProductType());
+		}
+		if (p.getComments() != null) {
+			selenium.type(editAssetCommentTextFieldLocator, p.getComments());
+		}
+	}
+
+	public void clickSave() {
+		selenium.click("//input[@id='saveButton']");
+		waitForPageToLoad();
+	}
+
+	public void setMiscDriver(MiscDriver misc) {
+		this.misc = misc;
 	}
 }
