@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
-public class AssetSearchDisplayColumns {
+public class SearchDisplayColumns {
 	
 	private boolean serialNumber;
 	
@@ -45,6 +45,24 @@ public class AssetSearchDisplayColumns {
 	private boolean orderNumber;
 	
 	private boolean purchaseOrder;
+	
+	private boolean datePreformed;
+	
+	private boolean inpectionType;
+	
+	private boolean result;
+	
+	private boolean inspectionBook;
+	
+	private boolean performedBy;
+	
+	private boolean peakLoad;
+	
+	private boolean testDuration;
+	
+	private boolean peakLoadDuration;
+	
+	private boolean partNumber;
 
 	public boolean isSerialNumber() {
 		return serialNumber;
@@ -222,6 +240,78 @@ public class AssetSearchDisplayColumns {
 		this.purchaseOrder = purchaseOrder;
 	}
 
+	public boolean isDatePreformed() {
+		return datePreformed;
+	}
+
+	public void setDatePreformed(boolean datePreformed) {
+		this.datePreformed = datePreformed;
+	}
+
+	public boolean isInpectionType() {
+		return inpectionType;
+	}
+
+	public void setInpectionType(boolean inpectionType) {
+		this.inpectionType = inpectionType;
+	}
+
+	public boolean isResult() {
+		return result;
+	}
+
+	public void setResult(boolean result) {
+		this.result = result;
+	}
+
+	public boolean isInspectionBook() {
+		return inspectionBook;
+	}
+
+	public void setInspectionBook(boolean inspectionBook) {
+		this.inspectionBook = inspectionBook;
+	}
+
+	public boolean isPerformedBy() {
+		return performedBy;
+	}
+
+	public void setPerformedBy(boolean performedBy) {
+		this.performedBy = performedBy;
+	}
+
+	public boolean isPeakLoad() {
+		return peakLoad;
+	}
+
+	public void setPeakLoad(boolean peakLoad) {
+		this.peakLoad = peakLoad;
+	}
+
+	public boolean isTestDuration() {
+		return testDuration;
+	}
+
+	public void setTestDuration(boolean testDuration) {
+		this.testDuration = testDuration;
+	}
+
+	public boolean isPeakLoadDuration() {
+		return peakLoadDuration;
+	}
+
+	public void setPeakLoadDuration(boolean peakLoadDuration) {
+		this.peakLoadDuration = peakLoadDuration;
+	}
+
+	public boolean isPartNumber() {
+		return partNumber;
+	}
+
+	public void setPartNumber(boolean partNumber) {
+		this.partNumber = partNumber;
+	}
+	
 	public void selectAllColumns() {
 		serialNumber = true;	
 		referenceNumber = true;	
@@ -245,5 +335,14 @@ public class AssetSearchDisplayColumns {
 		orderDescription = true;	
 		orderNumber = true;	
 		purchaseOrder = true;
+		datePreformed = true;		
+		inpectionType = true;		
+		result = true;		
+		inspectionBook = true;		
+		performedBy = true;		
+		peakLoad = true;		
+		testDuration = true;		
+		peakLoadDuration = true;
+		partNumber = true;
 	}
 }

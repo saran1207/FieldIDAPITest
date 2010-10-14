@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
-import com.n4systems.fieldid.selenium.datatypes.AssetSearchDisplayColumns;
+import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 
@@ -66,14 +66,14 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	
 	@Test
 	public void search_with_no_display_columns_selected() throws Exception {
-		page.setDisplayColumns(new AssetSearchDisplayColumns());
+		page.setDisplayColumns(new SearchDisplayColumns());
 		page.clickRunSearchButton();
 		assertEquals(1, page.getFormErrorMessages().size());
 	}
 	
 	@Test
 	public void search_with_custom_display_columns_selected() throws Exception {
-		AssetSearchDisplayColumns displayColumns = new AssetSearchDisplayColumns();
+		SearchDisplayColumns displayColumns = new SearchDisplayColumns();
 		displayColumns.setProductType(true);
 		displayColumns.setAssignedTo(true);
 		displayColumns.setSafetyNetwork(true);
@@ -87,7 +87,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	
 	@Test
 	public void search_with_all_display_columns_selected() throws Exception {
-		AssetSearchDisplayColumns displayColumns = new AssetSearchDisplayColumns();
+		SearchDisplayColumns displayColumns = new SearchDisplayColumns();
 		displayColumns.selectAllColumns();
 		
 		page.setDisplayColumns(displayColumns);
