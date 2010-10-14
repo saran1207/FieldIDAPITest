@@ -1,15 +1,18 @@
 package com.n4systems.service.ordermapper;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Map;
 
 import org.jboss.soa.esb.actions.AbstractActionLifecycle;
 import org.jboss.soa.esb.helpers.ConfigTree;
 import org.jboss.soa.esb.message.Message;
 
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.rmi.RemoteOrderManager;
 
 public class OrderJMSListenerAction extends AbstractActionLifecycle {
+	private static final String RMI_NAME = "RemoteOrderManager";
+	private static final int RMI_PORT = 6666;
 	
 	protected ConfigTree	_config;
 
@@ -23,14 +26,11 @@ public class OrderJMSListenerAction extends AbstractActionLifecycle {
 		
 		Map<String, Object> mainMessage = (Map<String, Object>)message.getBody().get();
 
-		
-		try {
-			OrderManager orderManager = ServiceLocator.getOrderManager();
 
-			System.out.println("Processing message..");
-			
-			orderManager.processOrders(mainMessage);
-			
+		try {
+			Registry registry = LocateRegistry.getRegistry(RMI_PORT);
+			RemoteOrderManager orderManager = (RemoteOrderManager)registry.lookup(RMI_NAME);
+			orderManager.processRemoteOrders(mainMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -3,7 +3,7 @@
 
     <providers>
           <jms-provider name="JBossMQ" connection-factory="ConnectionFactory"
-                        jndi-URL="jnp://66.11.155.202:1099" jndi-context-factory="org.jnp.interfaces.NamingContextFactory"
+                        jndi-URL="jnp://192.168.100.154:1099" jndi-context-factory="org.jnp.interfaces.NamingContextFactory"
                         jndi-pkg-prefix="org.jboss.naming:org.jnp.interfaces">
                       
               <jms-bus busid="orderMapperGwChannel">

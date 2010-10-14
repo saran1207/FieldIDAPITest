@@ -11,7 +11,7 @@
 	<dirname property="thispwd" file="${ant.file.base-build}" />
 	
 	<property name="projects.dir" location="${thispwd}/.." />
-	<property name="rfidejb.project.dir" location="${projects.dir}/rfidejb" />
+	<!--property name="rfidejb.project.dir" location="${projects.dir}/rfidejb" /-->
 
 	<!-- Import the base Ant build script... -->
 	<import file="${quickstart.conf}/base-build.xml"/>
@@ -30,7 +30,7 @@
 				<fileset dir="${org.jboss.esb.server.home}/client" includes="hibernate-client.jar" /> <!-- Required for jbpm Client Code. -->
 				<path refid="deployment-classpath" />
 				<fileset dir="${org.jboss.esb.server.home}/client" includes="*.jar" /> <!-- Required for JMS Client Code. -->
-				<fileset dir="${rfidejb.project.dir}/dist/" includes="*.jar" /> 
+				<!--fileset dir="${rfidejb.project.dir}/dist/" includes="*.jar" /--> 
 			</path>
 
 			<path id="exec-classpath">
@@ -47,24 +47,4 @@
 	            <pathelement location="${pwd}/anttasks/classes" />
 		</path>
 		</target>
-
-	<target name="runtest" depends="compile" 
-		description="sends a JMS message to queue/eclipse_quickstart_helloworld_Request_gw">
-		<echo>Runs Test JMS Sender</echo>
-		<java fork="yes" classname="com.n4systems.service.ordermapper.test.SendJMSMessage" failonerror="true">
-			<arg value="Hello World"/>
-			<classpath refid="exec-classpath"/>
-		</java>
-	</target>  
-	
-	<target name="sendesb" depends="compile"
-		description="Will send an esb Message">
-		<echo>Runs Test ESB Message Sender</echo>
-		<java fork="yes" classname="org.jboss.soa.esb.samples.quickstart.helloworld.test.SendEsbMessage" failonerror="true">
-			<arg value="FirstEclipseServiceESB"/> <!--  service category -->
-			<arg value="SimpleListener"/>  <!--  service name -->
-			<arg value="Hello World - Straight to ESB listener - no Gateway"/> <!--  Message text -->
-			<classpath refid="exec-classpath"/>
-		</java>
-	</target>
 </project>
