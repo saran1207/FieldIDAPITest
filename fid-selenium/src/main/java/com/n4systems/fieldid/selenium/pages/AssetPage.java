@@ -105,4 +105,9 @@ public class AssetPage extends FieldIDPage {
 		selenium.click("//a[contains(.,'Inspections')]");
 		return new InspectionsPerformedPage(selenium);
 	}
+	
+	public AssetPage clickEditTab(){
+		selenium.click("//a[contains(.,'Edit')]");
+		return new AssetPage(selenium);
+	}
 }

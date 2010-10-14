@@ -59,13 +59,13 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void verify_job_actions_are_disabled_for_employee_user() {
+	public void verify_employee_user_job_actions_are_disabled() {
 		JobsListPage jobsListPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickJobsLink().clickJobsLink();
 		assertFalse("Shouldn't have job addition permission", selenium.isElementPresent("//a[contains(.,'Add')]"));
 	}
 
 	@Test
-	public void verify_job_actions_are_disabled_for_customer_user() {
+	public void verify_customer_user_job_actions_are_disabled() {
 		JobsListPage jobsListPage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER).clickJobsLink().clickJobsLink();
 		assertFalse("Shouldn't have job addition permission", selenium.isElementPresent("//a[contains(.,'Add')]"));
 	}
@@ -84,6 +84,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 	}
 
+	@Test
 	public void verify_edit_inspections_is_disabled() {
 		HomePage homePage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
 		ReportingSearchResultsPage reportingSearchResultsPage = homePage.clickReportingLink().clickRunSearchButton();
@@ -100,14 +101,23 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 	}
 	
+	@Test
 	public void verify_customers_can_only_edit_four_unrestricted_fields_on_asset(){
-		AssetPage assetPage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1);
+		AssetPage assetPage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1).clickEditTab();
 		
-		assertEquals(selenium.getXpathCount("//div[@class='infoSet']"), 4);
-		assertTrue("Coudln't find wner field", selenium.isElementPresent("//label[contains(.,'Owner')]"));
-		assertTrue("Coudln't find Location field", selenium.isElementPresent("//label[contains(.,'Location')]"));
-		assertTrue("Coudln't find Reference Number field", selenium.isElementPresent("//label[contains(.,'Reference Number')]"));
-		assertTrue("Coudln't find Purchase Order field", selenium.isElementPresent("//label[contains(.,'Purchase Order')]"));
+		//Check for 4 fields + 3 fields inside orgpicker.
+		assertEquals(7, selenium.getXpathCount("//div[@class='infoSet']/label"));
+		assertTrue("Coudldn't find owner field", selenium.isElementPresent("//label[contains(.,'Owner')]"));
+		assertTrue("Coudldn't find Location field", selenium.isElementPresent("//label[contains(.,'Location')]"));
+		assertTrue("Coudldn't find Reference Number field", selenium.isElementPresent("//label[contains(.,'Reference Number')]"));
+		assertTrue("Coudldn't find Purchase Order field", selenium.isElementPresent("//label[contains(.,'Purchase Order')]"));
+	}
+	
+	@Test
+	public void verify_employee_users_with_no_edit_permissions_cannot_view_asset_edit_tab(){
+		AssetPage assetPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1);
+	
+		assertFalse("Shouldn't be able to see edit tab on asset page", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 	}
 
 }
