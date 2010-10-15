@@ -4,14 +4,14 @@ import static org.junit.Assert.fail;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
-public class Inspect {
+public class InspectPage {
 	FieldIdSelenium selenium;
 	MiscDriver misc;
 	
 	// Locators
 	private String inspectHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Inspect - ')]";
 
-	public Inspect(FieldIdSelenium selenium, MiscDriver misc) {
+	public InspectPage(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
 	}

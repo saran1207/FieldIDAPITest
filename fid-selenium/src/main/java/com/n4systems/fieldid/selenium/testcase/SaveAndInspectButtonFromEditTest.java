@@ -7,7 +7,7 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
-import com.n4systems.fieldid.selenium.inspect.page.Inspect;
+import com.n4systems.fieldid.selenium.inspect.page.InspectPage;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
 /**
@@ -21,14 +21,14 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 	Login login;
 	IdentifyPageDriver identify;
 	AssetPage asset;
-	Inspect inspect;
+	InspectPage inspect;
 	
 	@Before
 	public void setUp() throws Exception {
 		login = new Login(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		asset = new AssetPage(selenium, misc);
-		inspect = new Inspect(selenium, misc);
+		inspect = new InspectPage(selenium, misc);
 	}
 
 	@Test
