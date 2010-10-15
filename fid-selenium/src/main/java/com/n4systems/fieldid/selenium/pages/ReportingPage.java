@@ -8,17 +8,12 @@ import com.n4systems.fieldid.selenium.reporting.page.ReportingSearchResultsPage;
 import com.n4systems.fieldid.selenium.testcase.SaveReportForm;
 import com.thoughtworks.selenium.Selenium;
 
-public class ReportingPage extends SearchPage {
+public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> {
 
 	public ReportingPage(Selenium selenium) {
-		super(selenium);
+		super(selenium, ReportingSearchResultsPage.class);
 	}
 	
-    public ReportingSearchResultsPage clickRunSearchButton() {
-        selenium.click("//input[@type='submit' and @value='Run']");
-        return new ReportingSearchResultsPage(selenium);
-    }
-
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
 		setCheckBoxValue("//input[@id='chk_inspection_search_date_performed']", displayColumns.isDatePreformed());
 		setCheckBoxValue("//input[@id='chk_inspection_search_inspectiontype']", displayColumns.isInpectionType());

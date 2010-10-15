@@ -4,16 +4,11 @@ import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class AssetsSearchPage extends SearchPage {
-
-    public AssetsSearchPage(Selenium selenium) {
-        super(selenium);
-    }
-
-    public AssetsSearchResultsPage clickRunSearchButton() {
-        selenium.click("//input[@type='submit' and @value='Run']");
-        return new AssetsSearchResultsPage(selenium);
-    }
+public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> {
+	
+	public AssetsSearchPage(Selenium selenium) {
+		super(selenium, AssetsSearchResultsPage.class);
+	}
 
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
 		setCheckBoxValue("//input[@id='chk_product_search_serialnumber']", displayColumns.isSerialNumber());
