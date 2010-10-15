@@ -28,7 +28,7 @@ public class InspectPage extends FieldIDPage {
 	}
 
 	public void clickStore() {
-		selenium.click("//input[@id='baseInspectionCreate_hbutton_store']");
+		selenium.click("//input[@value='Store']");
 		waitForPageToLoad();
 	}
 
@@ -39,9 +39,7 @@ public class InspectPage extends FieldIDPage {
 
 	public void clickSubStartEventLink() {
 		selenium.click("//a[contains(.,'Start Event')]");
-		selenium.click("//a[contains(.,'Bridge-Short')]");
-		waitForPageToLoad();
-		
+		selenium.click("//a[contains(.,'Bridge - Short')]");
 	}
 
 }
