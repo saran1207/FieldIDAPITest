@@ -18,7 +18,6 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 	private HomePage page;
 	private String masterSerial;
 	private String subSerial;
-	private static String INSPECTION_TYPE = "Gantry Crane - Cab Controlled";
 
 	@Before
 	public void setUp() {
@@ -29,12 +28,12 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 
 	@After
 	public void cleanUp() {
-		// Remove sub asset.
-		AssetPage assetToRemove = page.search(subSerial);
+		// Remove master asset
+		AssetPage assetToRemove = page.search(masterSerial);
 		assetToRemove.clickEditTab().clickDelete();
 
-		// Remove master asset
-		assetToRemove = page.search(masterSerial);
+		// Remove sub asset.
+		assetToRemove = page.search(subSerial);
 		assetToRemove.clickEditTab().clickDelete();
 	}
 
@@ -54,8 +53,8 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 
 	@Test
 	public void detach_a_subproduct() {
-
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+		
 		AssetPage masterAssetPage = page.search(masterSerial);
 
 		masterAssetPage.clickSubComponentsTab();
@@ -63,10 +62,11 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 
 		masterAssetPage.clickRemoveSubComponent();
 		masterAssetPage.clickViewTab();
+		
 		assertFalse("Subcomponent wasn't successfully detached", selenium.isElementPresent("//h2[contains(., 'Sub-Products')]"));
 	}
 
-	// Lightbox is timing out after clicking find existing link...
+	@Test
 	public void attach_an_existing_subproduct() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
 		identifyAssetWithSerialNumber(subSerial, "Bridge", "PO 3", "OMG PLS");

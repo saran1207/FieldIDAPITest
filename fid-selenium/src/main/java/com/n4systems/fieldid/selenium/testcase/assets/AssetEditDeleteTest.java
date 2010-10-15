@@ -16,6 +16,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	private HomePage page;
 	private String masterSerial;
+	private String masterSerialToMergeInto;
 	private Product asset;
 	private AssetPage assetPage;
 	private static String NEW_SERIAL = "newSerial";
@@ -23,18 +24,20 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 	private static String NEW_STATUS = "Out of Service";
 	private static String NEW_PRODUCT_TYPE = "Bridge";
 	private static String NEW_MAKEMODEL = "newAttribute1";
-	private static String NEW_TYPE = "newAttribute2";
-	private static String NEW_DRIVETYPE = "newAttribute3";
+	private static String NEW_TYPE = "Single Girder";
+	private static String NEW_DRIVETYPE = "Push";
 
 	@Before
 	public void setUp() {
 		page = startAsCompany("illinois").login();
 		masterSerial = MiscDriver.getRandomString(10);
+		masterSerialToMergeInto = masterSerial + "_toMergeInto";
 	}
 
 	@Test
 	public void delete_asset() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+
 		assetPage = page.search(masterSerial);
 		assetPage.clickEditTab().clickDelete();
 
@@ -44,6 +47,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 	@Test
 	public void edit_asset() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+
 		assetPage = page.search(masterSerial).clickEditTab();
 		assetPage.setMiscDriver(misc);
 
@@ -57,14 +61,43 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 		masterAssetPage.clickEditTab().clickDelete();
 	}
 
+	@Test
 	public void edit_asset_attributes() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
-		
+
 		assetPage = page.search(masterSerial).clickEditTab();
-		
+
 		prepareNewAssetAttributes();
-		
+
 		assetPage.clickSave();
+		assertTrue("Asset attribute was not succesfully edited.", (selenium.getText("//span[@infofieldname='Make/Model']")).equals(NEW_MAKEMODEL));
+		assertTrue("Asset attribute was not succesfully edited.", (selenium.getText("//span[@infofieldname='Type']")).equals(NEW_TYPE));
+		assertTrue("Asset attribute was not succesfully edited.", (selenium.getText("//span[@infofieldname='Drive Type']")).equals(NEW_DRIVETYPE));
+
+		AssetPage masterAssetPage = page.search(masterSerial);
+		masterAssetPage.clickEditTab().clickDelete();
+	}
+
+	@Test
+	public void merge_two_assets() {
+		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+		identifyAssetWithSerialNumber(masterSerialToMergeInto, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+
+		assetPage = page.search(masterSerial).clickEditTab();
+
+		assetPage.clickMerge();
+
+		assetPage.loadAssetToMergeIntoAndSubmit(masterSerialToMergeInto);
+
+		assertTrue("Merge was not successful.", selenium.isElementPresent("//h1[contains(.,'Merge Products - " + masterSerial + " into " + masterSerialToMergeInto + "')]"));
+
+		AssetPage masterAssetPage = page.search(masterSerialToMergeInto);
+		masterAssetPage.clickEditTab().clickDelete();
+	}
+
+	// TODO: Write this after setting up Inspection pages.
+	public void merged_asset_contains_inspections_of_both_assets() {
+
 	}
 
 	private void identifyAssetWithSerialNumber(String serial, String productType, String purchaseOrder, String status) {
@@ -90,7 +123,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	private void prepareNewAssetAttributes() {
 		selenium.type("//div[@infofieldname='Make/Model']/span/input", NEW_MAKEMODEL);
-		selenium.type("//div[@infofieldname='Type']/span/input", NEW_TYPE);
-		selenium.type("//div[@infofieldname='Drive Type']/span/input", NEW_DRIVETYPE);
+		selenium.select("//select[@id='4500']", NEW_TYPE);
+		selenium.select("//select[@id='4501']", NEW_DRIVETYPE);
 	}
 }

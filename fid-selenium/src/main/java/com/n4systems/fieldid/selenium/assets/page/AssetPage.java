@@ -8,7 +8,7 @@ import com.n4systems.fieldid.selenium.misc.MiscDriver;
 public class AssetPage {
 	FieldIdSelenium selenium;
 	MiscDriver misc;
-	
+
 	// Locators
 	private String assetHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset - ')]";
 	private String assetEditTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[not(contains(@class,'selected'))]/A[contains(text(),'Edit')]";
@@ -55,97 +55,97 @@ public class AssetPage {
 		this.selenium = selenium;
 		this.misc = misc;
 	}
-	
+
 	/**
-	 * Checks to see if there are any error messages on the page and checks
-	 * for the header containing "Asset - ${serialNumber}" on the page. Does
-	 * not check the dynamic contents of the Asset View page. For checking
-	 * the dynamic portion is verifyAssetViewPageDynamicContents().
+	 * Checks to see if there are any error messages on the page and checks for
+	 * the header containing "Asset - ${serialNumber}" on the page. Does not
+	 * check the dynamic contents of the Asset View page. For checking the
+	 * dynamic portion is verifyAssetViewPageDynamicContents().
 	 * 
-	 * @param serialNumber 
+	 * @param serialNumber
 	 */
 	public void verifyAssetViewPage(String serialNumber) {
 		misc.checkForErrorMessages("verifyAssetViewPage");
 		verifyAssetPageHeader(serialNumber);
 		verifyAssetViewPageStaticContents();
 		String serialNumberSpanLocator = "xpath=//SPAN[contains(text(),'" + serialNumber + "')]";
-		if(!selenium.isElementPresent(serialNumberSpanLocator)) {
+		if (!selenium.isElementPresent(serialNumberSpanLocator)) {
 			fail("Could not find the serial number '" + serialNumber + "' in the Product Summary");
 		}
 	}
-	
+
 	/**
 	 * Checks to see if the Asset - ${serialNumber}" header exists.
 	 * 
 	 * @param serialNumber
 	 */
 	private void verifyAssetPageHeader(String serialNumber) {
-		if(!(selenium.isElementPresent(assetHeaderLocator) && selenium.getText(assetHeaderLocator).contains(serialNumber))) {
+		if (!(selenium.isElementPresent(assetHeaderLocator) && selenium.getText(assetHeaderLocator).contains(serialNumber))) {
 			fail("Could not find the header for 'Asset - " + serialNumber + "'.");
 		}
 	}
-	
+
 	/**
-	 * Compares the given Product information to the text on the Asset View page.
-	 * If any field in the Product object is null or the string is empty it will
-	 * not be checked.
-	 *  
+	 * Compares the given Product information to the text on the Asset View
+	 * page. If any field in the Product object is null or the string is empty
+	 * it will not be checked.
+	 * 
 	 * @param p
 	 */
 	public void verifyAssetViewPageDynamicContents(Product p) {
-		if(p.getSerialNumber() != null && !p.getSerialNumber().equals("")) {
+		if (p.getSerialNumber() != null && !p.getSerialNumber().equals("")) {
 			String locator = serialNumberLabelLocator + "/../SPAN[contains(text(),'" + p.getSerialNumber() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getRFIDNumber() != null && !p.getRFIDNumber().equals("")) {
+		if (p.getRFIDNumber() != null && !p.getRFIDNumber().equals("")) {
 			String locator = rfidNumberLabelLocator + "/../SPAN[contains(text(),'" + p.getRFIDNumber() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getPublished()) {
+		if (p.getPublished()) {
 			String locator = publishedLabelLocator + "/../SPAN[contains(text(),'Published') and not(contains(text(),'Not'))]";
 			assertTrue(selenium.isElementPresent(locator));
 		} else {
 			String locator = publishedLabelLocator + "/../SPAN[contains(text(),'Not Published')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getProductType() != null && !p.getProductType().equals("")) {
+		if (p.getProductType() != null && !p.getProductType().equals("")) {
 			String locator = productTypeLabelLocator + "/../SPAN[contains(text(),'" + p.getProductType() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getProductStatus() != null && !p.getProductStatus().equals("")) {
+		if (p.getProductStatus() != null && !p.getProductStatus().equals("")) {
 			String locator = productStatusLabelLocator + "/../SPAN[contains(text(),'" + p.getProductStatus() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getIdentified() != null && !p.getIdentified().equals("")) {
+		if (p.getIdentified() != null && !p.getIdentified().equals("")) {
 			String locator = identifiedLabelLocator + "/../SPAN[contains(text(),'" + p.getIdentified() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getOwner() != null) {
+		if (p.getOwner() != null) {
 			String organization = p.getOwner().getOrganization();
-			if(organization != null && !organization.equals("")) {
+			if (organization != null && !organization.equals("")) {
 				String locator = organizationLabelLocator + "/../SPAN[contains(text(),'" + organization + "')]";
 				assertTrue(selenium.isElementPresent(locator));
 			}
 			String customer = p.getOwner().getCustomer();
-			if(customer != null && !customer.equals("")) {
+			if (customer != null && !customer.equals("")) {
 				String locator = customerNameLabelLocator + "/../SPAN[contains(text(), \"" + customer + "\")]";
 				assertTrue(selenium.isElementPresent(locator));
 			}
 			String division = p.getOwner().getDivision();
-			if(division != null && !division.equals("")) {
+			if (division != null && !division.equals("")) {
 				String locator = divisionLabelLocator + "/../SPAN[contains(text(),'" + division + "')]";
 				assertTrue(selenium.isElementPresent(locator));
 			}
 		}
-		if(p.getLocation() != null && !p.getLocation().equals("")) {
+		if (p.getLocation() != null && !p.getLocation().equals("")) {
 			String locator = locationLabelLocator + "/../SPAN[contains(text(),'" + p.getLocation() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getReferenceNumber() != null && !p.getReferenceNumber().equals("")) {
+		if (p.getReferenceNumber() != null && !p.getReferenceNumber().equals("")) {
 			String locator = referenceNumberLabelLocator + "/../SPAN[contains(text(),'" + p.getReferenceNumber() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if(p.getPurchaseOrder() != null && !p.getPurchaseOrder().equals("")) {
+		if (p.getPurchaseOrder() != null && !p.getPurchaseOrder().equals("")) {
 			String locator = purchaseOrderLabelLocator + "/../SPAN[contains(text(),'" + p.getPurchaseOrder() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
@@ -173,18 +173,18 @@ public class AssetPage {
 	}
 
 	public void gotoEdit() {
-		if(selenium.isElementPresent(assetEditTabLinkLocator)) {
+		if (selenium.isElementPresent(assetEditTabLinkLocator)) {
 			selenium.click(assetEditTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
 			fail("Could not find the Edit tab for the current asset");
 		}
 	}
-	
+
 	public void gotoTraceability() {
 		selenium.click(assetTraceablityLinkLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
-		
+
 	}
 
 	public void verifyAssetEditPage(String serialNumber) {
@@ -218,7 +218,7 @@ public class AssetPage {
 	}
 
 	public void gotoSaveAndInspect() {
-		if(selenium.isElementPresent(editAssetSaveAndInspectButtonLocator)) {
+		if (selenium.isElementPresent(editAssetSaveAndInspectButtonLocator)) {
 			selenium.click(editAssetSaveAndInspectButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
@@ -228,51 +228,51 @@ public class AssetPage {
 
 	public void setAssetForm(Product p) {
 		verifyAssetEditPageContents();
-		
-		if(p.getPublished() == true) {
+
+		if (p.getPublished() == true) {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish");
 		} else {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Do Not Publish");
 		}
-		if(p.getSerialNumber() != null) {
+		if (p.getSerialNumber() != null) {
 			selenium.type(editAssetSerialNumberTextFieldLocator, p.getSerialNumber());
 		}
-		if(p.getRFIDNumber() != null) {
+		if (p.getRFIDNumber() != null) {
 			selenium.type(editAssetRFIDNumberTextFieldLocator, p.getRFIDNumber());
 		}
-		if(p.getReferenceNumber() != null) {
+		if (p.getReferenceNumber() != null) {
 			selenium.type(editAssetReferenceNumberTextFieldLocator, p.getReferenceNumber());
 		}
-		if(p.getOwner() != null) {
+		if (p.getOwner() != null) {
 			misc.gotoChooseOwner();
 			misc.setOwner(p.getOwner());
 			misc.gotoSelectOwner();
 		}
-		if(p.getLocation() != null) {
+		if (p.getLocation() != null) {
 			selenium.type(this.editAssetLocationTextFieldLocator, p.getLocation());
 		}
-		if(p.getProductStatus() != null) {
-			if(misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
+		if (p.getProductStatus() != null) {
+			if (misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
 				selenium.select(this.editAssetProductStatusSelectListLocator, p.getProductStatus());
 			} else {
 				fail("Could not find the product status '" + p.getProductStatus() + "'");
 			}
 		}
-		if(p.getPurchaseOrder() != null) {
+		if (p.getPurchaseOrder() != null) {
 			selenium.type(this.editAssetPurchaseOrderTextFieldLocator, p.getPurchaseOrder());
 		}
-		if(p.getIdentified() != null) {
+		if (p.getIdentified() != null) {
 			selenium.type(this.editAssetIdentifiedTextFieldLocator, p.getIdentified());
 		}
-		if(p.getProductType() != null) {
+		if (p.getProductType() != null) {
 			selenium.type(this.editAssetProductTypeTextFieldLocator, p.getProductType());
 		}
-		if(p.getComments() != null) {
+		if (p.getComments() != null) {
 			selenium.type(editAssetCommentTextFieldLocator, p.getComments());
 		}
 	}
 
 	public void verifyAttribute(String fieldName, String value) {
-		assertEquals(value, selenium.getText("css=#attributes .fieldValue[infoFieldName='"+ fieldName.replace("'", "/'") + "']"));
+		assertEquals(value, selenium.getText("css=#attributes .fieldValue[infoFieldName='" + fieldName.replace("'", "/'") + "']"));
 	}
 }

@@ -141,9 +141,13 @@ public class AssetPage extends FieldIDPage {
 
 	public void attachExistingSubcomponent(String serialNumber) {
 		selenium.click("//a[contains(.,'Find Existing')]");
-		// waitForElementToBePresent("//iframe[@id='lightviewContent']");
+		waitForElementToBePresent("//form[@id='subProductSearchForm']");
 		selenium.type("//input[@id='subProductSearchForm_search']", serialNumber);
 		selenium.click("//input[@id='subProductSearchForm_load']");
+		waitForElementToBePresent("//div[@id='resultsTable']");
+		selenium.click("//button[@class='productLink']");
+		waitForAjax();
+
 	}
 
 	public void clickRemoveSubComponent() {
@@ -208,5 +212,20 @@ public class AssetPage extends FieldIDPage {
 
 	public void setMiscDriver(MiscDriver misc) {
 		this.misc = misc;
+	}
+
+	public void clickMerge() {
+		selenium.click("//a[contains(.,'Merge')]");
+		waitForPageToLoad();
+		selenium.click("//input[@id='label_confirm_as_losing_asset']");
+	}
+	
+	public void loadAssetToMergeIntoAndSubmit(String serialNumber){
+		selenium.type("//input[@id='mergeSmartSearch_search']", serialNumber);
+		selenium.click("//input[@id='mergeSmartSearch_load']");
+		waitForAjax();
+		selenium.click("//button[@class='productLink']");
+		selenium.click("//input[@id='merge']");
+		waitForPageToLoad();
 	}
 }
