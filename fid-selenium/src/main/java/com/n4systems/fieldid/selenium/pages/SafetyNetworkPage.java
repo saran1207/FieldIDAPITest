@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.selenium.pages;
 
+import com.n4systems.fieldid.selenium.pages.safetynetwork.CustomerConnectionProfilePage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.FindConnectionResultsPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.CustomerConnectionProfilePage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkInvitePage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkSettingsPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkInvitePage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkSettingsPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.VendorConnectionProfilePage;
 import com.thoughtworks.selenium.Selenium;
 
 public class SafetyNetworkPage extends FieldIDPage {

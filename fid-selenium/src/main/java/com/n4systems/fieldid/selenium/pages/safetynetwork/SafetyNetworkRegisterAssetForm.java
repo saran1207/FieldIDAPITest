@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.safetynetwork.page;
+package com.n4systems.fieldid.selenium.pages.safetynetwork;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Product;

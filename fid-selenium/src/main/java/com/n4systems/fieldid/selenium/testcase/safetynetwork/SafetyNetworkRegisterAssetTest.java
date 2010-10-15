@@ -9,8 +9,8 @@ import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkRegisterAssetForm;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkVendorAssetListPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkRegisterAssetForm;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkVendorAssetListPage;
 
 public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<SafetyNetworkPage> {
 	

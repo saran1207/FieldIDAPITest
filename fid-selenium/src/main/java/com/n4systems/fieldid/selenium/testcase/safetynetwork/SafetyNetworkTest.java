@@ -2,16 +2,16 @@ package com.n4systems.fieldid.selenium.testcase.safetynetwork;
 
 import static org.junit.Assert.assertTrue;
 
-import com.n4systems.fieldid.selenium.safetynetwork.page.CustomerConnectionProfilePage;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogImportPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkInvitePage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.VendorConnectionProfilePage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkCatalogPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkSettingsPage;
 import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.CustomerConnectionProfilePage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogImportPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkInvitePage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkSettingsPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.VendorConnectionProfilePage;
 
 public class SafetyNetworkTest extends FieldIDTestCase {
 

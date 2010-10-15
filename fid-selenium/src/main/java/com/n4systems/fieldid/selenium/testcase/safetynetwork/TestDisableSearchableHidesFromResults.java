@@ -4,7 +4,8 @@ import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.FindConnectionResultsPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.SafetyNetworkSettingsPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkSettingsPage;
+
 import org.junit.Test;
 
 import java.util.List;

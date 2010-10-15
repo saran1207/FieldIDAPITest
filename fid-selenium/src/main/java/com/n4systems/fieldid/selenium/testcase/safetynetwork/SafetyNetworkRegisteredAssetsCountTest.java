@@ -6,7 +6,8 @@ import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
-import com.n4systems.fieldid.selenium.safetynetwork.page.CustomerConnectionProfilePage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.CustomerConnectionProfilePage;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
