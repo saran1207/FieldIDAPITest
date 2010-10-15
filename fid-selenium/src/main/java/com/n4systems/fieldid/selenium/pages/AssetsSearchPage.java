@@ -42,12 +42,12 @@ public class AssetsSearchPage extends SearchPage {
 	}
 
 	public AssetPage clickResultInfo(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Info')]/..//a");		
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Info')]");		
 		return new AssetPage(selenium);
 	}
 
 	public InspectPage clickResultInspection(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'inspections')]/..//a");	
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'inspections')]");	
 		return new InspectPage(selenium);
 	}
 

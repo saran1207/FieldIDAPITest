@@ -198,7 +198,7 @@ public class FieldIDPage extends WebPage {
 		return result;
 	}
 	
-	protected List<String> getActionMessages() {
+	public List<String> getActionMessages() {
 		List<String> result = new ArrayList<String>();
 		
 		int maxIndex = selenium.getXpathCount("//*[@class='actionMessage']").intValue();

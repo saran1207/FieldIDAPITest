@@ -1,8 +1,11 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
+import java.util.List;
+
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
+import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.reporting.page.ReportingSearchResultsPage;
+import com.n4systems.fieldid.selenium.testcase.SaveReportForm;
 import com.thoughtworks.selenium.Selenium;
 
 public class ReportingPage extends SearchPage {
@@ -72,7 +75,37 @@ public class ReportingPage extends SearchPage {
 	}
 	
 	public void clickViewInspection(String serialNumber){
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'View')]/..//a");	
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'View')]");	
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
+	}
+	
+	public InspectPage clickEditInspection(String serialNumber) {
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Edit')]");		
+		return new InspectPage(selenium);
+	}
+	
+	public SaveReportForm clickSaveReport() {
+		selenium.click("//a[text()='Save Report']");
+		return new SaveReportForm(selenium);
+	}
+	
+	public void clickStartNewReport() {
+		selenium.click("//a[text()='Start New Report']");
+		waitForPageToLoad();
+	}
+	
+	public List<String> getSaveReportList() {
+		return collectTableValuesUnderCellForCurrentPage(1, 2, "");
+	}
+
+	public void clickRunSavedReport(String reportName) {
+		int i = getSaveReportList().indexOf(reportName) + 1;
+		selenium.click("//table[@id='savedReportList']/tbody/tr[" + i + "]/td[1]/a");
+		waitForPageToLoad();
+	}
+
+	public MyAccountPage clickSaveReportsMore() {
+		selenium.click("//a[text()='more']");
+		return new MyAccountPage(selenium);
 	}
 }
