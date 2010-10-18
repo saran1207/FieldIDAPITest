@@ -148,8 +148,8 @@
 		</action>
 
 		<action name="archivedCustomerList" method="listArchived" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
-			<result name="success" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
+			<result name="success" type="freemarker">/templates/html/customerCrud/archivedCustomerList.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerCrud/archivedCustomerList.ftl</result>
 		</action>
 		
 		<action name="customerArchive" method="archive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
