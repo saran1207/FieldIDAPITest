@@ -45,7 +45,7 @@
 			<#if preRowTemplate?exists ><#include "${preRowTemplate}" /></#if>
 		
 			<#list 0..resultsTable.columnSize -1 as colIdx>
-				<td id="${selectedColumns.get(colIdx)}_${rowIdx}">${action.getCell(rowIdx, colIdx)}</td>
+				<td id="${selectedColumns.get(colIdx)}_${rowIdx}">${action.getCell(rowIdx, colIdx)}&nbsp;</td>
 			</#list>
 			
 			<#if postRowTemplate?exists ><#include "${postRowTemplate}" /></#if>

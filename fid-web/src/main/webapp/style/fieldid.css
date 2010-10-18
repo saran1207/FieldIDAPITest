@@ -258,28 +258,26 @@ h2 a {
 	width: 100%;
 	margin: 5px 0px;
 	border-collapse: separate;
-	border-spacing: 2px 2px;
 	border-bottom: 1px solid #D0DAFD;
 }
 
 .list th,.list td {
-	padding: 5px 5px 5px 10px;
+	padding: 9px 5px 9px 10px;
 	empty-cells: show;
 }
 
 .list th {
-	background-color: #D0DAFD;
+	background-color: #EEEEEE;
 	font-size: 1.1em;
 	font-weight: bold;
 }
 
 .list td {
-	border-top: 1px solid #D0DAFD;
-	color: #333399;
+	border-top: 1px solid #CACACA;
 }
 
 .list tr:hover {
-	background-color: #D0DAFD;
+	background-color: #EEEEEE;
 }
 
 .list tr:hover td {
@@ -298,7 +296,7 @@ h2 a {
 	padding-right: 17px;
 	background-repeat: no-repeat;
 	background-position: right;
-	background-color: #c6cbdd;
+	background-color: #CCCCCC;
 	overflow: hidden;
 }
 
@@ -1302,6 +1300,10 @@ li.buttonGroupLabels {
 	background-color: #D0DAFA;
 }
 
+.searchPageSection h2{
+	background-color: #EEEEEE;
+	}
+
 .sectionContent {
 	margin-top: 5px;
 	border-top: 1px solid #D0DAFD;
@@ -1593,7 +1595,7 @@ input.description {
 }
 
 .headerWithFootnote {
-	background-color: #D0DAFA;
+	background-color: #EEEEEE;
 	padding: 5px 15px;
 	margin: 0;
 }

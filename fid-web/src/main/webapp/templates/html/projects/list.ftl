@@ -96,13 +96,13 @@ ${action.setPageType('job', 'list')!}
 				<td>${project.eventJob?string(action.getText("label.eventjob"), action.getText("label.assetjob"))}</td>
 				<td>${project.projectID?html}</td>
 				<td><a href="<@s.url action="job" uniqueID="${project.id}" />" >${project.name?html}</td>
-				<td>${(project.owner.internalOrg.name?html)!}</td>
-				<td>${(project.owner.customerOrg.name?html)!}</td>
-				<td>${(project.owner.divisionOrg.name?html)!}</td>
-				<td>${action.formatDateTime(project.started)}</td>
-				<td>${action.formatDateTime(project.estimatedCompletion)}</td>
-				<td>${action.formatDateTime(project.actualCompletion)}</td>
-				<td>${project.status?html}</td>
+				<td>${(project.owner.internalOrg.name?html)!}&nbsp;</td>
+				<td>${(project.owner.customerOrg.name?html)!}&nbsp;</td>
+				<td>${(project.owner.divisionOrg.name?html)!}&nbsp;</td>
+				<td>${action.formatDateTime(project.started)}&nbsp;</td>
+				<td>${action.formatDateTime(project.estimatedCompletion)}&nbsp;</td>
+				<td>${action.formatDateTime(project.actualCompletion)}&nbsp;</td>
+				<td>${project.status?html}&nbsp;</td>
 				<td><#if project.open><@s.text name="label.open" /><#else><@s.text name="label.closed" /></#if></td>
 				<#if sessionUser.hasAccess("managejobs") >
 					<td>

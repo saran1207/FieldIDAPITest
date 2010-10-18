@@ -16,7 +16,7 @@
 		}
 	</style>
 </head>
-<div class="pageSection" id="criteriaForm">
+<div class="pageSection searchPageSection" id="criteriaForm">
 	<div class="headerWithFootnote">
 		<#if listPage?exists>
 			<a href="javascript:void(0);" id="expandSection_reportForm" onclick="openSection('reportForm', 'expandSection_reportForm', 'collapseSection_reportForm');return false" ><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
