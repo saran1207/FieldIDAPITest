@@ -102,7 +102,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	@Override
-	public User build() {
+	public User createObject() {
 		User user = new User();
 		user.setId(id);
 		user.setFirstName(firstName);

@@ -6,11 +6,9 @@ import com.n4systems.util.RandomString;
 
 public class PredefinedLocationBuilder extends BaseBuilder<PredefinedLocation> {
 
-	
 	private final PredefinedLocation parent;
 	private final String name;
 	private final Tenant tenant;
-
 
 	public static PredefinedLocationBuilder aPredefinedLocation() {
 		return aRootPredefinedLocation();
@@ -26,7 +24,6 @@ public class PredefinedLocationBuilder extends BaseBuilder<PredefinedLocation> {
 		this.tenant = tenant;
 	}
 
-	
 	public PredefinedLocationBuilder withName(String name) {
 		return new PredefinedLocationBuilder(parent, name, tenant);
 	}
@@ -34,10 +31,9 @@ public class PredefinedLocationBuilder extends BaseBuilder<PredefinedLocation> {
 	public PredefinedLocationBuilder withParent(PredefinedLocation parent) {
 		return new PredefinedLocationBuilder(parent, name, tenant);
 	}
-
 	
 	@Override
-	public PredefinedLocation build() {
+	public PredefinedLocation createObject() {
 		PredefinedLocation predefinedLocation = new PredefinedLocation(tenant, parent);
 		predefinedLocation.setId(id);
 		predefinedLocation.setName(name);

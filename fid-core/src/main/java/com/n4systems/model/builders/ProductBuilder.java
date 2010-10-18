@@ -19,28 +19,27 @@ import com.n4systems.model.user.User;
 
 public class ProductBuilder extends BaseBuilder<Product>{
 	private static final User NOT_ASSIGNED = null;
-	
-	
-	private final Tenant tenant;
-	private final BaseOrg owner;
-	private final ProductType type;
 
-	private final String serialNumber;
-	private final Date modified;
+	private Tenant tenant;
+	private BaseOrg owner;
+	private ProductType type;
+
+	private String serialNumber;
+	private Date modified;
 	
-	private final SubProduct[] subProducts;
-	private final Location location;
-	private final ProductStatusBean productStatus;
-	private final User assignedTo;
+	private SubProduct[] subProducts;
+	private Location location;
+	private ProductStatusBean productStatus;
+	private User assignedTo;
+    private boolean published;
 	
 	public static ProductBuilder aProduct() {
-		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, new Location(), null, NOT_ASSIGNED);
+		return new ProductBuilder(TenantBuilder.n4(), OrgBuilder.aPrimaryOrg().build(), aProductType().build(), null, null, new Location(), null, NOT_ASSIGNED, true);
 	}
-	
-	
 
+    public ProductBuilder(){}
 
-	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, Location location, ProductStatusBean productStatus, User assignedTo, SubProduct... subProducts) {
+	private ProductBuilder(Tenant tenant, BaseOrg owner, ProductType type, String serialNumber, Date modified, Location location, ProductStatusBean productStatus, User assignedTo, boolean published, SubProduct... subProducts) {
 		super();
 		this.tenant = tenant;
 		this.owner = owner;
@@ -51,36 +50,35 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		this.productStatus = productStatus;
 		this.assignedTo = assignedTo;
 		this.subProducts = subProducts;
+        this.published = published;
 	}
 
-
 	public ProductBuilder ofType(ProductType type) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
 	
 	public ProductBuilder forTenant(Tenant tenant) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
 	
 	public ProductBuilder withOwner(BaseOrg owner) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
 	
 	public ProductBuilder withSerialNumber(String serialNumber) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
 	
 	public ProductBuilder withModifiedDate(Date modified) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
 	
 	public ProductBuilder withOneSubProduct() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, aSubProduct().build());
-		
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, aSubProduct().build()));
 	}
 	
 	public ProductBuilder withTwoSubProducts() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo,aSubProduct().build(), aSubProduct().build());
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, aSubProduct().build(), aSubProduct().build()));
 	}
 	
 	public ProductBuilder inFreeformLocation(String location) {
@@ -88,26 +86,27 @@ public class ProductBuilder extends BaseBuilder<Product>{
 	}
 	
 	public ProductBuilder withAdvancedLocation(Location location) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
-
 	
 	public ProductBuilder havingStatus(ProductStatusBean productStatus) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, assignedTo, published, subProducts));
 	}
 	
 	public ProductBuilder assignedTo(User employee) {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, employee, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, employee, published, subProducts));
 	}
 	
 	public ProductBuilder unassigned() {
-		return new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, null, subProducts);
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, null, published, subProducts));
+	}
+
+    public ProductBuilder published(boolean published) {
+		return makeBuilder(new ProductBuilder(tenant, owner, type, serialNumber, modified, location, productStatus, null, published, subProducts));
 	}
 	
-	
-	
 	@Override
-	public Product build() {
+	public Product createObject() {
 		Product product = generate();
 		product.setId(id);
 		populateMasterProductInSubProducts(product);
@@ -126,6 +125,7 @@ public class ProductBuilder extends BaseBuilder<Product>{
 		product.setProductStatus(productStatus);
 		product.setAssignedUser(assignedTo);
 		product.setAdvancedLocation(location);
+        product.setPublished(published);
 		return product;
 	}
 	
@@ -136,11 +136,5 @@ public class ProductBuilder extends BaseBuilder<Product>{
 			}
 		}
 	}
-
-
-
-
-
-
 	
 }

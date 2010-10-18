@@ -32,11 +32,7 @@ public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
 		return new InspectionScheduleBuilder(product,inspectionType,new Date(), inspection, null);
 	}
 
-
-	
-
 	public InspectionScheduleBuilder(Product product, InspectionType inspectionType, Date nextDate, Inspection inspection, Project job) {
-		super();
 		this.product = product;
 		this.inspectionType = inspectionType;
 		this.nextDate = nextDate;
@@ -65,7 +61,7 @@ public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
 	}
 	
 	@Override
-	public InspectionSchedule build() {
+	public InspectionSchedule createObject() {
 		InspectionSchedule inspectionSchedule = new InspectionSchedule(product, inspectionType);
 		inspectionSchedule.setNextDate(nextDate);
 		inspectionSchedule.setId(id);
@@ -81,7 +77,5 @@ public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
 		}
 		return inspectionSchedule;
 	}
-
-	
 	
 }

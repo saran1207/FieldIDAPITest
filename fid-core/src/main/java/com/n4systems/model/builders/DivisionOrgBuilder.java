@@ -38,7 +38,7 @@ public class DivisionOrgBuilder extends BaseBuilder<DivisionOrg> {
 	}
 	
 	@Override
-	public DivisionOrg build() {
+	public DivisionOrg createObject() {
 		DivisionOrg divisionOrg = new DivisionOrg();
 		divisionOrg.setId(id);
 		divisionOrg.setName(name);
@@ -46,6 +46,5 @@ public class DivisionOrgBuilder extends BaseBuilder<DivisionOrg> {
 		divisionOrg.setTenant(customerOrg.getTenant());
 		return divisionOrg;
 	}
-	
 
 }

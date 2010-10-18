@@ -22,7 +22,6 @@ public class AddressInfoBuilder extends BaseBuilder<AddressInfo> {
 	}
 	
 	public AddressInfoBuilder(String streetAddress, String city, String state, String country, String zip, String phone1, String phone2, String fax1) {
-		super();
 		this.streetAddress = streetAddress;
 		this.city = city;
 		this.state = state;
@@ -66,7 +65,7 @@ public class AddressInfoBuilder extends BaseBuilder<AddressInfo> {
 	}
 
 	@Override
-	public AddressInfo build() {
+	public AddressInfo createObject() {
 		AddressInfo address = new AddressInfo();
 		address.setId(id);
 		address.setStreetAddress(streetAddress);

@@ -21,15 +21,12 @@ public class JobBuilder extends BaseBuilder<Project> {
 	public static JobBuilder aJob() {
 		return new JobBuilder(aTenant().build());
 	}
-	
-	
-	
-	private JobBuilder(Tenant tenant) {
+
+    private JobBuilder(Tenant tenant) {
 		this(tenant, true, null, RandomString.getString(10), RandomString.getString(10));
 	}
 	
 	private JobBuilder(Tenant tenant, boolean eventJob, User[] employees, String title, String identifier) {
-		super();
 		this.eventJob = eventJob;
 		this.tenantOrganization = tenant;
 		this.title = title;
@@ -40,8 +37,6 @@ public class JobBuilder extends BaseBuilder<Project> {
 			this.employees = employees;
 		}
 	}
-	
-	
 
 	public JobBuilder withTitle(String title) {
 		return new JobBuilder(tenantOrganization, eventJob, employees, title, identifier);
@@ -54,10 +49,9 @@ public class JobBuilder extends BaseBuilder<Project> {
 	public JobBuilder withProjectID(String identifier) {
 		return new JobBuilder(tenantOrganization, eventJob, employees, title, identifier);
 	}
-	
-	
+
 	@Override
-	public Project build() {
+	public Project createObject() {
 		Project job = new Project();
 		job.setId(id);
 		job.setTenant(tenantOrganization);
@@ -68,11 +62,5 @@ public class JobBuilder extends BaseBuilder<Project> {
 		job.getResources().addAll(Arrays.asList(employees));
 		return job;
 	}
-
-
-
-
-
-
 
 }

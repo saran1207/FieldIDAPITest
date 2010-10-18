@@ -11,16 +11,12 @@ public class ContractPricingBuilder extends BaseBuilder<ContractPricing> {
 	private final PaymentOption paymentOption;
 	private final Float pricePerUserPerMonth;
 
-
-
 	public static ContractPricingBuilder aContractPricing() {
 		return new ContractPricingBuilder(-1L, SignUpPackageDetails.Basic, PaymentOption.preferredOption(), 100F);
 	}
-	
-	
-	public ContractPricingBuilder(Long externalId,
+
+    public ContractPricingBuilder(Long externalId,
 			SignUpPackageDetails signUpPackage, PaymentOption paymentOption, Float pricePerUserPerMonth) {
-		super();
 		this.externalId = externalId;
 		this.signUpPackage = signUpPackage;
 		this.paymentOption = paymentOption;
@@ -35,7 +31,6 @@ public class ContractPricingBuilder extends BaseBuilder<ContractPricing> {
 		return new ContractPricingBuilder(externalId, signUpPackage, paymentOption, pricePerUserPerMonth);
 	}
 
-
 	public ContractPricingBuilder withPaymentOption(PaymentOption paymentOption) {
 		return new ContractPricingBuilder(externalId, signUpPackage, paymentOption, pricePerUserPerMonth);
 	}
@@ -45,7 +40,7 @@ public class ContractPricingBuilder extends BaseBuilder<ContractPricing> {
 	}
 	
 	@Override
-	public ContractPricing build() {
+	public ContractPricing createObject() {
 		ContractPricing contract = new ContractPricing();
 		
 		contract.setId(id);

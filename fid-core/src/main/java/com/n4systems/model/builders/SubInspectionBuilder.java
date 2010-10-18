@@ -15,9 +15,7 @@ public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
 	public static SubInspectionBuilder aSubInspection(String name) {
 		return new SubInspectionBuilder(name, anInspectionType().build(), aProduct().build());
 	}
-	
-	
-	
+
 	public SubInspectionBuilder(String name, InspectionType inspectionType, Product product) {
 		this.name = name;
 		this.inspectionType = inspectionType;
@@ -32,9 +30,8 @@ public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
 		return new SubInspectionBuilder(name, inspectionType, product);
 	}
 	
-	
 	@Override
-	public SubInspection build() {
+	public SubInspection createObject() {
 		SubInspection subInspection = new SubInspection();
 		subInspection.setId(id);
 		subInspection.setName(name);

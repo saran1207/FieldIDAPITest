@@ -7,7 +7,6 @@ public class ContactBuilder extends BaseBuilder<Contact> {
 	private String email;
 	
 	protected ContactBuilder(String name, String email) {
-		super();
 		this.name = name;
 		this.email = email;
 	}
@@ -25,7 +24,7 @@ public class ContactBuilder extends BaseBuilder<Contact> {
 	}
 	
 	@Override
-	public Contact build() {
+	public Contact createObject() {
 		return new Contact(name, email);
 	}
 

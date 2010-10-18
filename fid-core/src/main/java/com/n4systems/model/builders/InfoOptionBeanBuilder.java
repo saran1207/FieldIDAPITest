@@ -8,8 +8,6 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 	private final boolean dynamicOption;
 	private final String name;
 	private final InfoFieldBean field;
-	
-	
 
 	public static InfoOptionBeanBuilder aStaticInfoOption() {
 		return anInfoOption(false); 
@@ -24,12 +22,10 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 	}
 	
 	private InfoOptionBeanBuilder(boolean dynamicOption, String name, InfoFieldBean field) {
-		super();
 		this.dynamicOption = dynamicOption;
 		this.name = name;
 		this.field = field;
 	}
-	
 	
 	public InfoOptionBeanBuilder withName(String name) {
 		return new InfoOptionBeanBuilder(dynamicOption, name, field);
@@ -39,9 +35,8 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 		return new InfoOptionBeanBuilder(dynamicOption, name, field);
 	}
 	
-	
 	@Override
-	public InfoOptionBean build() {
+	public InfoOptionBean createObject() {
 		InfoOptionBean option = new InfoOptionBean();
 		
 		option.setName(name);
@@ -51,12 +46,5 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 		
 		return option;
 	}
-
-	
-
-	
-
-	
-
 	
 }

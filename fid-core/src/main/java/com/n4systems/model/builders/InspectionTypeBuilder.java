@@ -17,7 +17,6 @@ public class InspectionTypeBuilder extends EntityWithTenantBuilder<InspectionTyp
 	
 	
 	private InspectionTypeBuilder(String name, String description, boolean printable, boolean retired, boolean master, long formVersion, InspectionTypeGroup group, boolean assignedToAvailable) {
-		super();
 		this.name = name;
 		this.description = description;
 		this.printable = printable;
@@ -70,7 +69,7 @@ public class InspectionTypeBuilder extends EntityWithTenantBuilder<InspectionTyp
 	}
 	
 	@Override
-	public InspectionType build() {
+	public InspectionType createObject() {
 		InspectionType type = assignAbstractFields(new InspectionType());
 		type.setName(name);
 		type.setDescription(description);

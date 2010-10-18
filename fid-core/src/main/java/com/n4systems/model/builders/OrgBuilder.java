@@ -42,7 +42,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 	
 	public OrgBuilder(OrgType type, Tenant tenant, String name, AddressInfo addressInfo, String code, Contact contact, BaseOrg parent) {
-		super();
 		this.type = type;
 		this.tenant = tenant;
 		this.name = name;
@@ -73,7 +72,7 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 	
 	@Override
-	public BaseOrg build() {
+	public BaseOrg createObject() {
 		BaseOrg org = null;
 		
 		switch (type) {

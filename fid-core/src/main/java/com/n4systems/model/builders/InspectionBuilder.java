@@ -24,7 +24,6 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	
 	private final Date datePerformed;
 	private final AssignedToUpdate assignedTo;
-	
 		
 	public static InspectionBuilder anInspection() {
 		return new InspectionBuilder(anInspectionType().build(), aProduct().build(), new ArrayList<SubInspection>(), new Date(), new ArrayList<FileAttachment>(), true, null);
@@ -51,7 +50,6 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	public InspectionBuilder withSubInspections(List<SubInspection> subInspections) {
 		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable, assignedTo);
 	}
-	
 
 	public InspectionBuilder performedOn(Date datePerformed) {
 		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable, assignedTo);
@@ -60,7 +58,6 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	public InspectionBuilder withAttachment(List<FileAttachment> attachments) {
 		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable, assignedTo);
 	}
-	
 
 	public InspectionBuilder withNoAssignedToUpdate() {
 		return new InspectionBuilder(inspectionType, product, subInspections, datePerformed, attachments, printable, null);
@@ -71,7 +68,7 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 	}
 	
 	@Override
-	public Inspection build() {
+	public Inspection createObject() {
 		Inspection inspection = new Inspection();
 		inspection.setId(id);
 		inspection.setType(inspectionType);
@@ -83,8 +80,5 @@ public class InspectionBuilder extends BaseBuilder<Inspection> {
 		inspection.setAssignedTo(assignedTo);
 		return inspection;
 	}
-
-	
-	
 
 }

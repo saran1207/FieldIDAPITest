@@ -13,7 +13,6 @@ public class FileAttachmentBuilder extends BaseBuilder<FileAttachment> {
 	private String comments;
 	
 	public FileAttachmentBuilder(Tenant tenant, String fileName, String comments) {
-		super();
 		this.tenant = tenant;
 		this.fileName = fileName;
 		this.comments = comments;
@@ -26,7 +25,6 @@ public class FileAttachmentBuilder extends BaseBuilder<FileAttachment> {
 	public static FileAttachmentBuilder anImageFile() {
 		return aFileAttachmentBuilder(TestHelper.randomString() + "." + IMAGE_EXTENTION);
 	}
-
 	
 	public static FileAttachmentBuilder aNonImageFile() {
 		return aFileAttachmentBuilder(TestHelper.randomString() + "." + NON_IMAGE_EXTENTION);
@@ -45,7 +43,7 @@ public class FileAttachmentBuilder extends BaseBuilder<FileAttachment> {
 	}
 	
 	@Override
-	public FileAttachment build() {
+	public FileAttachment createObject() {
 		FileAttachment attachment = new FileAttachment();
 		
 		attachment.setId(id);

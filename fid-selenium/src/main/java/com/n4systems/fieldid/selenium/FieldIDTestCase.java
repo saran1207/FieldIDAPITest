@@ -7,6 +7,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.n4systems.fieldid.selenium.persistence.MinimalTenantDataSetup;
+import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
+import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
+import com.n4systems.persistence.Transaction;
 import com.thoughtworks.selenium.SeleniumException;
 import org.junit.After;
 import org.junit.Before;
@@ -78,6 +84,9 @@ public abstract class FieldIDTestCase {
 
 	@After
 	public final void tearDownSelenium() throws Exception {
+        if (selenium == null)
+            return;
+
 		if (!runningInsideSuite) {
 			shutDownSelenium(selenium);
 			selenium = null;
@@ -252,5 +261,46 @@ public abstract class FieldIDTestCase {
 		selenium.open(url);
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
-	
+
+    public static final long[] TEST_TENANT_IDS = { 15511513L, 15511654L };
+
+    public static final String TEST_PRODUCT_TYPE_1 = "TestType1";
+    public static final String TEST_PRODUCT_TYPE_2 = "TestType2";
+    public static final String[] TEST_PRODUCT_TYPES = { TEST_PRODUCT_TYPE_1, TEST_PRODUCT_TYPE_2 };
+
+    @Before
+    public void doDatabaseSetup() throws Exception {
+        //TODO: Uncomment when persistence.xml / autodetection / classpath stuff is figured out
+//        new PersistenceTemplate(new PersistenceCallback() {
+//            @Override
+//            public void doInTransaction(Transaction transaction) throws Exception {
+//                for (long tenantId : TEST_TENANT_IDS) {
+//                    TenantCleaner cleaner = new TenantCleaner();
+//                    cleaner.cleanTenant(transaction.getEntityManager(), tenantId);
+//                }
+//            }
+//        }).execute();
+//
+//        new PersistenceTemplate(new PersistenceCallback() {
+//            @Override
+//            public void doInTransaction(Transaction transaction) throws Exception {
+//                for (long tenantId : TEST_TENANT_IDS) {
+//                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantId);
+//                    dataSetup.setupMinimalData();
+//                    dataSetup.createTestProductTypes(TEST_PRODUCT_TYPES);
+//
+//                }
+//            }
+//        }).execute();
+//
+//        new PersistenceTemplate(new PersistenceCallback() {
+//            @Override
+//            public void doInTransaction(Transaction transaction) throws Exception {
+//                setupScenario(new Scenario(transaction));
+//            }
+//        }).execute();
+    }
+
+    public void setupScenario(Scenario scenario) {}
+
 }

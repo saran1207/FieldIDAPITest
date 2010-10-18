@@ -27,14 +27,12 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 	}
 	
 	private InfoFieldBeanBuilder(String name, String type, boolean required, Set<InfoOptionBean> options) {
-		super();
 		this.name = name;
 		this.type = type;
 		this.required = required;
 		this.options = options;
 	}
 
-	
 	public InfoFieldBeanBuilder named(String name) {
 		return new InfoFieldBeanBuilder(name, type, required, options);
 	}
@@ -48,7 +46,7 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 	}
 	
 	@Override
-	public InfoFieldBean build() {
+	public InfoFieldBean createObject() {
 		InfoFieldBean field =  new InfoFieldBean();
 		field.setName(name);
 		field.setFieldType(type);

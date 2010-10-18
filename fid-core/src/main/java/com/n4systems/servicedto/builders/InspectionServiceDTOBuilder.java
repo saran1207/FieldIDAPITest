@@ -9,19 +9,14 @@ public class InspectionServiceDTOBuilder extends BaseBuilder<InspectionServiceDT
 	private final boolean assignmentIncluded;
 	private final long assignedUserId;
 
-
 	public InspectionServiceDTOBuilder(boolean assignmentIncluded, long assignedUserId) {
 		this.assignmentIncluded = assignmentIncluded;
 		this.assignedUserId = assignedUserId;
 	}
 
-
-
-
 	public static InspectionServiceDTOBuilder anInspectionServiceDTO() {
 		return new InspectionServiceDTOBuilder(false, UNASSIGNED_USER_ID);
 	}
-	
 	
 	public InspectionServiceDTOBuilder withNoAssignmentIncluded() {
 		return new InspectionServiceDTOBuilder(false, UNASSIGNED_USER_ID);
@@ -31,12 +26,8 @@ public class InspectionServiceDTOBuilder extends BaseBuilder<InspectionServiceDT
 		return new InspectionServiceDTOBuilder(true, id);
 	}
 	
-	
-
-	
-	
 	@Override
-	public InspectionServiceDTO build() {
+	public InspectionServiceDTO createObject() {
 		InspectionServiceDTO dto = new InspectionServiceDTO();
 		
 		dto.setAssignmentIncluded(assignmentIncluded);
@@ -44,7 +35,5 @@ public class InspectionServiceDTOBuilder extends BaseBuilder<InspectionServiceDT
 		
 		return dto;
 	}
-
-
 
 }

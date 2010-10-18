@@ -34,7 +34,7 @@ public class SecondaryOrgBuilder extends BaseBuilder<SecondaryOrg> {
 	}
 	
 	@Override
-	public SecondaryOrg build() {
+	public SecondaryOrg createObject() {
 		SecondaryOrg secondaryOrg = new SecondaryOrg();
 		secondaryOrg.setName(name);
 		secondaryOrg.setTenant(primaryOrg.getTenant());

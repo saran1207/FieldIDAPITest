@@ -15,7 +15,6 @@ public class SubProductBuilder extends BaseBuilder<SubProduct> {
 	}
 	
 	public SubProductBuilder(Product product, Product masterProduct) {
-		super();
 		this.product = product;
 		this.masterProduct = masterProduct;
 	}
@@ -29,7 +28,7 @@ public class SubProductBuilder extends BaseBuilder<SubProduct> {
 	}
 	
 	@Override
-	public SubProduct build() {
+	public SubProduct createObject() {
 		SubProduct subProduct = new SubProduct();
 		subProduct.setId(id);
 		subProduct.setProduct(product);

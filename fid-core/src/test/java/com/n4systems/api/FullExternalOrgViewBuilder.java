@@ -41,7 +41,7 @@ public class FullExternalOrgViewBuilder extends BaseBuilder<FullExternalOrgView>
 	}
 	
 	@Override
-	public FullExternalOrgView build() {
+	public FullExternalOrgView createObject() {
 		FullExternalOrgView view = (isCustomer) ? FullExternalOrgView.newCustomer() : FullExternalOrgView.newDivision();
 		
 		if (withTestData) {

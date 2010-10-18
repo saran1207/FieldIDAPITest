@@ -27,7 +27,6 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
     private final Collection<InfoFieldBean> infoFields;
     private final Set<ProductType> subTypes;
 	private final InspectionType[] inspectionTypes;
-     
 	
 	public static ProductTypeBuilder aProductType() {
 		return new ProductTypeBuilder();
@@ -50,8 +49,6 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 		this.group = group;
 		this.inspectionTypes = inspectionTypes;
 	}
-	
-	
 
 	public ProductTypeBuilder named(String name) {
 		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, inspectionTypes);
@@ -67,7 +64,6 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 	
 	public ProductTypeBuilder withGroup(ProductTypeGroup group) {
 		return new ProductTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, inspectionTypes);
-		
 	}
 	
 	public ProductTypeBuilder withInspectionTypes(InspectionType...inspectionTypes) {
@@ -75,7 +71,7 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 	}
 	
 	@Override
-	public ProductType build() {
+	public ProductType createObject() {
 		ProductType productType = new ProductType();
 		productType.setId(id);
 		productType.setName(name);
@@ -111,9 +107,5 @@ public class ProductTypeBuilder extends BaseBuilder<ProductType> {
 			throw new Defect("something in the field changed", e);
 		}
 	}
-
-	
-
-
 
 }

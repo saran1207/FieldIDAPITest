@@ -11,8 +11,6 @@ public class TenantBuilder extends BaseBuilder<Tenant> {
 	private final String name;
 	private List<Tenant> linkedTenants = new ArrayList<Tenant>();
 	
-	
-	
 	public static Tenant n4() {
 		return new TenantBuilder("n4", new ArrayList<Tenant>()).withId(1L).build();
 	}
@@ -20,7 +18,6 @@ public class TenantBuilder extends BaseBuilder<Tenant> {
 	public static TenantBuilder aTenant() {
 		return new TenantBuilder("first_tenant", new ArrayList<Tenant>());
 	}
-	
 
 	public TenantBuilder(String name, List<Tenant> linkedTenants) {
 		this(name, linkedTenants, null);
@@ -44,9 +41,8 @@ public class TenantBuilder extends BaseBuilder<Tenant> {
 		return new TenantBuilder(name, linkedTenants, id);
 	}
 	
-	
 	@Override
-	public Tenant build() {
+	public Tenant createObject() {
 		return new Tenant(id, name);
 	}
 

@@ -10,7 +10,6 @@ public class ProductTypeScheduleBuilder extends BaseBuilder<ProductTypeSchedule>
 	private final InspectionType inspectionType;
 	private final Long frequencyInDays;
 	
-	
 	public static ProductTypeScheduleBuilder aProductTypeSchedule() {
 		return new ProductTypeScheduleBuilder(ProductTypeBuilder.aProductType().build(), InspectionTypeBuilder.anInspectionType().build(), 365L);
 	}
@@ -22,7 +21,7 @@ public class ProductTypeScheduleBuilder extends BaseBuilder<ProductTypeSchedule>
 	}
 
 	@Override
-	public ProductTypeSchedule build() {
+	public ProductTypeSchedule createObject() {
 		ProductTypeSchedule schedule = new ProductTypeSchedule();
 		
 		schedule.setId(generateNewId());

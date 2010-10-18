@@ -8,7 +8,7 @@ public class ProductServiceDTOBuilder extends BaseBuilder<ProductServiceDTO> {
 	private final long assignedUserId;
 	
 	@Override
-	public ProductServiceDTO build() {
+	public ProductServiceDTO createObject() {
 		ProductServiceDTO productServiceDTO = new ProductServiceDTO();
 		productServiceDTO.setId(id);
 		productServiceDTO.setAssignedUserId(assignedUserId);
@@ -28,6 +28,5 @@ public class ProductServiceDTOBuilder extends BaseBuilder<ProductServiceDTO> {
 	public ProductServiceDTOBuilder withAssignedUserId(long assisgnedUserId) {
 		return new ProductServiceDTOBuilder(assisgnedUserId);
 	}
-	
 
 }

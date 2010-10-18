@@ -9,20 +9,17 @@ public class InspectionTypeGroupBuilder extends BaseBuilder<InspectionTypeGroup>
 	public static InspectionTypeGroupBuilder anInspectionTypeGroup() {
 		return new InspectionTypeGroupBuilder("some name");
 	}
-	
-	
+
 	private InspectionTypeGroupBuilder(String name) {
 		this.name = name;
 	}
 
-	
 	public InspectionTypeGroupBuilder withName(String name) {
 		return new InspectionTypeGroupBuilder(name);
 	}
 	
-	
 	@Override
-	public InspectionTypeGroup build() {
+	public InspectionTypeGroup createObject() {
 		InspectionTypeGroup inspectionTypeGroup = new InspectionTypeGroup();
 		inspectionTypeGroup.setId(generateNewId());
 		inspectionTypeGroup.setName(name);

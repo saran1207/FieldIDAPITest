@@ -36,7 +36,7 @@ public class CatalogBuilder extends BaseBuilder<Catalog> {
 	}
 
 	@Override
-	public Catalog build() {
+	public Catalog createObject() {
 		Catalog catalog = new Catalog();
 		catalog.setId(id);
 		catalog.setPublishedProductTypes(publishedProductTypes);

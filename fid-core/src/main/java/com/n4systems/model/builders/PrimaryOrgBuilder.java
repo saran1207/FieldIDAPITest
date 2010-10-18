@@ -26,7 +26,6 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 	private final Long employeeLimit;
 	private final boolean plansAndPricingAvailable;
 	
-	
 	public static PrimaryOrgBuilder aPrimaryOrg() {
 		return new PrimaryOrgBuilder("first_primary_org", null, aTenant().build(), new HashSet<ExtendedFeature>(), 0L, 0L, 0L, new Random().nextLong(), false);
 	}
@@ -53,7 +52,6 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 	public PrimaryOrgBuilder withNoExtendedFeatures() {
 		return new PrimaryOrgBuilder(name, id, tenant, new HashSet<ExtendedFeature>(), employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
 	}
-
 	
 	public PrimaryOrgBuilder onTenant(Tenant tenant) {
 		return new PrimaryOrgBuilder(name, id, tenant, features, employeeLimit, assetLimit, diskSpaceInBytes, externalId, plansAndPricingAvailable);
@@ -81,7 +79,7 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 	}
 	
 	@Override
-	public PrimaryOrg build() {
+	public PrimaryOrg createObject() {
 		PrimaryOrg primaryOrg = new PrimaryOrg();
 		
 		primaryOrg.setName(name);
@@ -95,12 +93,5 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 		primaryOrg.setLimits(new TenantLimit(diskSpaceInBytes, assetLimit, employeeLimit, 0));
 		return primaryOrg;
 	}
-
-	
-
-	
-
-	
-
 	
 }

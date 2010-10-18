@@ -15,16 +15,11 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 	private final User user;
 	private final UpcomingEventReport upcomingReport;
 	
-	
-	
-	
 	public static NotificationSettingBuilder aNotificationSetting() {
 		return new NotificationSettingBuilder(PrimaryOrgBuilder.aPrimaryOrg().build(), "name", true, false, UserBuilder.aUser().build());
 	}
 	
-	
 	private NotificationSettingBuilder(PrimaryOrg owner, String name, Boolean includeUpcoming, Boolean includeOverdue, User user) {
-		super();
 		this.owner = owner;
 		this.name = name;
 		this.upcomingReport = new UpcomingEventReport(RelativeTime.TODAY, RelativeTime.NEXT_WEEK, includeUpcoming);
@@ -36,7 +31,6 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), true, user);
 	}
 
-
 	public NotificationSettingBuilder doNotIncludeOverdue() {
 		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), false, user);
 	}
@@ -45,13 +39,12 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 		return new NotificationSettingBuilder(owner, name, true, includeOverdue, user);
 	}
 
-
 	public NotificationSettingBuilder doNotIncludeUpcoming() {
 		return new NotificationSettingBuilder(owner, name, false, includeOverdue, user);
 	}
 	
 	@Override
-	public NotificationSetting build() {
+	public NotificationSetting createObject() {
 		NotificationSetting notificationSettings = new NotificationSetting();
 		notificationSettings.setOwner(owner);
 		notificationSettings.setName(name);

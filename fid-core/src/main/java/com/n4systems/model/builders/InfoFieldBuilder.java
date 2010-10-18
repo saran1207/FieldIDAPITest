@@ -16,7 +16,6 @@ public class InfoFieldBuilder extends BaseLegacyBuilder<InfoFieldBean> {
 	}
 	
 	public InfoFieldBuilder(String name, Long weight, String infoFieldType) {
-		super();
 		this.name = name;
 		this.weight = weight;
 		this.infoFieldType = infoFieldType;

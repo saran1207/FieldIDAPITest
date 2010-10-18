@@ -14,7 +14,6 @@ public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSect
 	private List<Criteria> criteria;
 	
 	public CriteriaSectionBuilder(String title, boolean retired, List<Criteria> criteria) {
-		super();
 		this.title = title;
 		this.retired = retired;
 		this.criteria = criteria;
@@ -37,7 +36,7 @@ public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSect
 	}
 	
 	@Override
-	public CriteriaSection build() {
+	public CriteriaSection createObject() {
 		CriteriaSection section = assignAbstractFields(new CriteriaSection());
 		section.setTitle(title);
 		section.setRetired(retired);

@@ -26,7 +26,6 @@ public class CustomerOrgBuilder extends BaseBuilder<CustomerOrg>{
 		return new CustomerOrgBuilder(null, "some customer", "some", aSecondaryOrg().build());
 	}
 	
-	
 	public CustomerOrgBuilder(Long id, String name, String code, InternalOrg parent) {
 		super(id);
 		this.name = name;
@@ -45,11 +44,9 @@ public class CustomerOrgBuilder extends BaseBuilder<CustomerOrg>{
 	public CustomerOrgBuilder withParent(InternalOrg parent) {
 		return new CustomerOrgBuilder(id, name, code, parent);		
 	}
-	
-	
-	
-	@Override
-	public CustomerOrg build() {
+
+    @Override
+	public CustomerOrg createObject() {
 		CustomerOrg customerOrg = new CustomerOrg();
 		customerOrg.setId(id);
 		customerOrg.setName(name);

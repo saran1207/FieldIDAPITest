@@ -32,7 +32,7 @@ public class CriteriaBuilder extends EntityWithTenantBuilder<Criteria> {
 	}
 	
 	@Override
-	public Criteria build() {
+	public Criteria createObject() {
 		Criteria criteria = assignAbstractFields(new Criteria());
 		criteria.setRetired(retired);
 		criteria.setPrincipal(principal);
