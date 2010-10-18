@@ -258,6 +258,7 @@ h2 a {
 	width: 100%;
 	margin: 5px 0px;
 	border-collapse: separate;
+	border-spacing: 2px 0;
 	border-bottom: 1px solid #D0DAFD;
 }
 
