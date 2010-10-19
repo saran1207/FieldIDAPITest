@@ -15,7 +15,9 @@ public class InspectPage extends FieldIDPage {
 
 	public boolean checkOnInspectPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Inspect')]") || selenium.isElementPresent("//form[@id='inspectionCreate']");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Inspect')]") 
+			|| selenium.isElementPresent("//form[@id='inspectionCreate']") 
+			|| selenium.isElementPresent("//form[@id='inspectionUpdate']");
 	}
 
 	public void clickAssetInformationTab() {
