@@ -98,13 +98,15 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		
 		logger.info("Resolving fields on base product");
 		ProductViewModeConverter converter = new ProductViewModeConverter(getLoaderFactory(), orderManager, getUser());
-		Product product = converter.viewToModel(productView);
-		asset.fillInAsset(product);
+		
 		try {
 			ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
 			int i = 1;
 			for (ProductIdentifierView productIdent: identifiers) {
 				logger.info("Saving product " + i + " of " + identifiers.size());
+				
+				Product product = converter.viewToModel(productView);
+				asset.fillInAsset(product);
 				
 				product.setSerialNumber(productIdent.getSerialNumber());
 				product.setCustomerRefNumber(productIdent.getReferenceNumber());
