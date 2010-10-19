@@ -1,0 +1,52 @@
+<beans>
+
+	<service xmlns="http://xfire.codehaus.org/config/1.0">
+		<name>UserService</name>
+		<serviceClass>fieldid.web.services.IUserService</serviceClass>
+		<implementationClass>
+			fieldid.web.services.UserServiceImpl
+		</implementationClass>
+		<style>wrapped</style>
+		<use>literal</use>
+		<scope>application</scope>
+	</service>
+	
+	<service xmlns="http://xfire.codehaus.org/config/1.0">
+		<name>MobileUpdaterService</name>
+		<serviceClass>
+			fieldid.web.services.IMobileUpdaterService
+		</serviceClass>
+		<implementationClass>
+			fieldid.web.services.MobileUpdaterServiceImpl
+		</implementationClass>
+		<style>wrapped</style>
+		<use>literal</use>
+		<scope>application</scope>
+	</service>
+
+	<service xmlns="http://xfire.codehaus.org/config/1.0">
+		<name>InspectionService</name>
+		<serviceClass>
+			com.n4systems.webservice.server.InspectionService
+		</serviceClass>
+		<implementationClass>
+			com.n4systems.webservice.server.InspectionServiceImpl
+		</implementationClass>
+		<style>wrapped</style>
+		<use>literal</use>
+		<scope>application</scope>
+	</service>
+	
+	<service xmlns="http://xfire.codehaus.org/config/1.0">
+		<name>DataService</name>
+		<serviceClass>
+			com.n4systems.webservice.server.DataService
+		</serviceClass>
+		<implementationClass>
+			com.n4systems.webservice.server.DataServiceImpl
+		</implementationClass>
+		<style>wrapped</style>
+		<use>literal</use>
+		<scope>application</scope>
+	</service>
+</beans>
