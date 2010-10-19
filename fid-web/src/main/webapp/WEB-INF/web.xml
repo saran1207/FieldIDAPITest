@@ -35,6 +35,9 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+	<listener>
+		<listener-class>com.n4systems.fieldid.servlets.UnexportRMIOnShutdownListener</listener-class>
+	</listener>
 	<!-- end:Struts 2.0 -->
 
 	<!-- Log4J -->

@@ -27,7 +27,7 @@ public class TaskThreadFactory implements ThreadFactory, UncaughtExceptionHandle
 		String threadName = THREAD_NAME_PREFIX + poolName + "-" + taskClassName + "-" + threadNumber.getAndIncrement();
 		
 		Thread thread = new Thread(threadGroup, task, threadName);
-		thread.setDaemon(false);
+		thread.setDaemon(true);
 		thread.setUncaughtExceptionHandler(this);
 		
 		logger.info("Created thread: " + threadName);

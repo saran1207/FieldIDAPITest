@@ -35,6 +35,7 @@ public class TaskScheduler {
 	
 	public TaskScheduler(Scheduler scheduler) {
 		this.scheduler = scheduler;
+        scheduler.setDaemon(true);
 	}
 	
 	public void start() {

@@ -22,7 +22,7 @@ public class RemoteOrderManagerServiceInitializer implements Initializer {
         try {
         	orderManager = new RemoteOrderManagerImpl();
         	RemoteOrderManager orderManagerStub = (RemoteOrderManager)UnicastRemoteObject.exportObject(orderManager, 0);
-        	
+            
             Registry registry = LocateRegistry.createRegistry(RMI_REGISTRY_PORT);
             registry.bind(RMI_NAME, orderManagerStub);
 
@@ -35,5 +35,9 @@ public class RemoteOrderManagerServiceInitializer implements Initializer {
 	@Override
 	public void uninitialize() {
 	}
+
+    public static RemoteOrderManager getRemoteOrderManager() {
+        return orderManager;
+    }
 
 }
