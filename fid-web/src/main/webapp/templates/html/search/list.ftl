@@ -1,5 +1,14 @@
-<title><@s.text name="title.assetsearch"/> <@s.text name="title.results"/></title>
+<head>
+	<@n4.includeStyle type="page" href="inspection" />
+	<script type="text/javascript">
+		function positionDropdown( a ) {
+			var list = $(a.id + "_list");
+			translate(list, a, -55, -100);
+			}
+	</script>
+</head>
 
+<title><@s.text name="title.assetsearch"/> <@s.text name="title.results"/></title>
 <#assign listPage=true/>
 <#include '_form.ftl' >
 
