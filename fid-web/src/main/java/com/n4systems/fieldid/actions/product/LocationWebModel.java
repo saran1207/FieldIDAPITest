@@ -4,7 +4,9 @@ import com.n4systems.fieldid.actions.api.LoaderFactoryProvider;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 
-public class LocationWebModel {
+import java.io.Serializable;
+
+public class LocationWebModel implements Serializable {
 
 	
 	private String freeformLocation;

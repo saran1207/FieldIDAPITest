@@ -1,5 +1,6 @@
 package com.n4systems.persistence.loaders;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.n4systems.model.api.Exportable;
@@ -99,7 +100,7 @@ import com.n4systems.tools.Pager;
 /**
  * Provides simple access to creation of loaders.
  */
-public class LoaderFactory {
+public class LoaderFactory implements Serializable {
 	private final SecurityFilter filter;
 
 	/*

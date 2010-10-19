@@ -3,8 +3,10 @@ package com.n4systems.util.persistence.search;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 
-public class JoinTerm {
-	public enum JoinTermType { LEFT, RIGHT, INNER };
+import java.io.Serializable;
+
+public class JoinTerm implements Serializable {
+	public enum JoinTermType { LEFT, RIGHT, INNER }
 	
 	private final JoinTermType type;
 	private final String path;

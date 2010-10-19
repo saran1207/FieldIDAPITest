@@ -2,7 +2,9 @@ package com.n4systems.util.persistence.search;
 
 import com.n4systems.util.persistence.OrderClause;
 
-public class SortTerm {
+import java.io.Serializable;
+
+public class SortTerm implements Serializable {
 	public enum Direction { 
 		ASC(true, "asc"), DESC(false, "desc");
 		
@@ -21,7 +23,7 @@ public class SortTerm {
 		public String getDisplayName() {
 			return displayName;
 		}
-	};
+	}
 	
 	private String path;
 	private Direction direction = Direction.DESC;
