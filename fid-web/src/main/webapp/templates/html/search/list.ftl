@@ -1,10 +1,9 @@
 <head>
-	<@n4.includeStyle type="page" href="inspection" />
 	<script type="text/javascript">
-		function positionDropdown( a ) {
-			var list = $(a.id + "_list");
-			translate(list, a, -55, -100);
-			}
+		function positionDropdown( a , entityId) {
+			var list = $(a.id + "_list_"+entityId );
+			translate(list, a, 14, -34);
+		}
 	</script>
 </head>
 
