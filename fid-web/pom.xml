@@ -13,13 +13,7 @@
         <resources>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>com/package.properties</include>
-                </includes>
             </resource>
         </resources>
 		<plugins>
