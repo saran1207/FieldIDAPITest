@@ -1,9 +1,9 @@
 <head>
 	<script type="text/javascript">
 		function positionDropdown( a , entityId) {
-			var list = $(a.id + "_list_"+entityId );
-			translate(list, a, 14, -34);
-		}
+			var list = $(a.id + "_list_" + entityId );
+			translate(list, a, 12, -52);
+		} 
 	</script>
 </head>
 
@@ -30,9 +30,6 @@
 			<#if sessionUser.hasAccess('createinspection') >
 				| <a href="#multiEvent" name="multiEvent" id="multiInspect" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
 			</#if>
-			
-			
-			
 		</div>
 	<#else>
 		<div class="emptyList" >
@@ -68,4 +65,3 @@
 		});
 	</@n4.includeScript>
 </#if>
-

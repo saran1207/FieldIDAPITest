@@ -6,7 +6,6 @@
 	<script type="text/javascript">
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="searchDynamicColumns" namespace="/ajax" />';
-		
 	</script>
 	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
@@ -76,6 +75,10 @@
 			<div class="infoSet">
 				<label for="owner"><@s.text name="label.owner" /></label>
 				<@n4.orgPicker name="owner"/>
+			</div>
+			
+			<div class="infoSet">
+				<label>&nbsp;</label>
 			</div>
 			
 			<div class="container">
