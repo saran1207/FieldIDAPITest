@@ -2,7 +2,7 @@
 	<script type="text/javascript">
 		function positionDropdown( a , entityId) {
 			var list = $(a.id + "_list_" + entityId );
-			translate(list, a, 12, -52);
+			translate(list, a, 12, -76);
 		} 
 	</script>
 </head>

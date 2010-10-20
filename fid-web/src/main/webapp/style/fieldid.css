@@ -1700,3 +1700,7 @@ input.description {
 	top: -4px;
 	right: -2px;
 }
+
+.reducedLineHeight .infoSet label{
+	line-height: 0;
+}
