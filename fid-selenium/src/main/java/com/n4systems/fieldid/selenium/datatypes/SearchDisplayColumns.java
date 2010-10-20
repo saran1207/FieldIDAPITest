@@ -63,6 +63,12 @@ public class SearchDisplayColumns {
 	private boolean peakLoadDuration;
 	
 	private boolean partNumber;
+	
+	private boolean scheduledDate;
+	
+	private boolean status;
+	
+	private boolean daysPastDue;
 
 	public boolean isSerialNumber() {
 		return serialNumber;
@@ -344,5 +350,29 @@ public class SearchDisplayColumns {
 		testDuration = true;		
 		peakLoadDuration = true;
 		partNumber = true;
+	}
+
+	public boolean isScheduledDate() {
+		return scheduledDate;
+	}
+
+	public void setScheduledDate(boolean scheduledDate) {
+		this.scheduledDate = scheduledDate;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public boolean isDaysPastDue() {
+		return daysPastDue;
+	}
+
+	public void setDaysPastDue(boolean daysPastDue) {
+		this.daysPastDue = daysPastDue;
 	}
 }
